@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.108 2004-04-15 15:49:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.109 2004-04-16 01:13:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1717,6 +1717,27 @@
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                            -3))
+      (4
+       (compile-form (first args))
+       (unless (remove-store-value)
+         (emit-push-value))
+       (maybe-emit-clear-values (first args))
+       (compile-form (second args))
+       (unless (remove-store-value)
+         (emit-push-value))
+       (maybe-emit-clear-values (second args))
+       (compile-form (third args))
+       (unless (remove-store-value)
+         (emit-push-value))
+       (maybe-emit-clear-values (third args))
+       (compile-form (fourth args))
+       (unless (remove-store-value)
+         (emit-push-value))
+       (maybe-emit-clear-values (fourth args))
+       (emit-invokevirtual +lisp-object-class+
+                           "execute"
+                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                           -4))
       (t
        (emit 'sipush (length args))
        (emit 'anewarray "org/armedbear/lisp/LispObject")
@@ -2543,6 +2564,7 @@
     (1 #.(format nil "(~A)~A" +lisp-object+ +lisp-object+))
     (2 #.(format nil "(~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+))
     (3 #.(format nil "(~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
+    (4 #.(format nil "(~A~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
     (t (setq *using-arg-array* t)
        #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
 
