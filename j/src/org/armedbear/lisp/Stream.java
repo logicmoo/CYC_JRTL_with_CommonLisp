@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.67 2004-05-11 14:30:47 piso Exp $
+ * $Id: Stream.java,v 1.68 2004-05-12 19:08:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,6 @@ public class Stream extends LispObject
     protected int lineNumber;
 
     // Character output.
-    private static final String lineSeparator = System.getProperty("line.separator");
     private Writer writer;
 
     // The number of characters on the current line of output (-1 if unknown).
@@ -1003,7 +1002,7 @@ public class Stream extends LispObject
 
     public LispObject terpri() throws ConditionThrowable
     {
-        _writeString(lineSeparator);
+        _writeChar('\n');
         return NIL;
     }
 
@@ -1011,7 +1010,7 @@ public class Stream extends LispObject
     {
         if (charPos == 0)
             return NIL;
-        _writeString(lineSeparator);
+        _writeChar('\n');
         return T;
     }
 
@@ -1176,7 +1175,7 @@ public class Stream extends LispObject
     {
         try {
             writer.write(s);
-            writer.write(lineSeparator);
+            writer.write('\n');
             writer.flush();
             charPos = 0;
         }
@@ -1273,7 +1272,7 @@ public class Stream extends LispObject
         t.printStackTrace(pw);
         try {
             writer.write(sw.toString());
-            writer.write(lineSeparator);
+            writer.write('\n');
             writer.flush();
             charPos = 0;
         }
