@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.13 2003-12-19 03:24:02 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: debug.lisp,v 1.14 2004-01-27 14:04:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,6 +65,12 @@
       (funcall hook-function condition hook-function)))
   (when condition
     (fresh-line *debug-io*)
+    (when (and *load-truename* (streamp *load-stream*))
+      (%format *debug-io*
+               "Error in ~A at line ~D (offset ~D).~%"
+               *load-truename*
+               (stream-line-number *load-stream*)
+               (stream-offset *load-stream*)))
     (%format *debug-io* "Debugger invoked on condition of type ~A:~%" (type-of condition))
     (%format *debug-io* "  ~A~%" condition))
   (let ((*debug-condition* condition)
