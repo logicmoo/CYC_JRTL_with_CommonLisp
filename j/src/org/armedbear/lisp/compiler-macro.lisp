@@ -1,7 +1,7 @@
 ;;; compiler-macro.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler-macro.lisp,v 1.2 2003-11-11 19:34:59 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: compiler-macro.lisp,v 1.3 2004-04-26 16:20:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,5 +32,5 @@
                                     :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body))))
     `(progn
-       (sys::%put ',name 'compiler-macro-expander (compile nil ,expander))
+       (sys::%put ',name 'compiler-macro-expander (%compile nil ,expander))
        ',name)))
