@@ -408,6 +408,7 @@ string>=
 stringp
 subseq
 subst
+subtypep
 svref
 sxhash
 symbol-function
