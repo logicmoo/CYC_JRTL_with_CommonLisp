@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.97 2004-08-21 18:07:05 piso Exp $
+ * $Id: LispObject.java,v 1.98 2004-09-21 00:37:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -668,6 +668,13 @@ public class LispObject extends Lisp
     }
 
     public char[] chars() throws ConditionThrowable
+    {
+        signal(new TypeError(this, Symbol.STRING));
+        // Not reached.
+        return null;
+    }
+
+    public char[] getStringChars() throws ConditionThrowable
     {
         signal(new TypeError(this, Symbol.STRING));
         // Not reached.

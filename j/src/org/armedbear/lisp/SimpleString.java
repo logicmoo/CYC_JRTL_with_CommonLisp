@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.17 2004-09-05 18:37:11 piso Exp $
+ * $Id: SimpleString.java,v 1.18 2004-09-21 00:38:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,11 @@ public final class SimpleString extends AbstractString
     }
 
     public char[] chars()
+    {
+        return chars;
+    }
+
+    public char[] getStringChars()
     {
         return chars;
     }

@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.17 2004-09-20 20:15:19 piso Exp $
+ * $Id: ComplexString.java,v 1.18 2004-09-21 00:39:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,6 +123,15 @@ public final class ComplexString extends AbstractString
         char[] chars = new char[capacity];
         System.arraycopy(array.chars(), displacement, chars, 0, capacity);
         return chars;
+    }
+
+    public char[] getStringChars() throws ConditionThrowable
+    {
+        if (fillPointer < 0)
+            return chars();
+        char[] ret = new char[fillPointer];
+        System.arraycopy(chars(), 0, ret, 0, fillPointer);
+        return ret;
     }
 
     public boolean equal(LispObject obj) throws ConditionThrowable

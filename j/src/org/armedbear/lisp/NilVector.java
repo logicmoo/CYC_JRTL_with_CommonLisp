@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.11 2004-06-04 16:14:50 piso Exp $
+ * $Id: NilVector.java,v 1.12 2004-09-21 00:38:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,13 @@ public final class NilVector extends AbstractString
     }
 
     public char[] chars() throws ConditionThrowable
+    {
+        if (capacity != 0)
+            accessError();
+        return new char[0];
+    }
+
+    public char[] getStringChars() throws ConditionThrowable
     {
         if (capacity != 0)
             accessError();
