@@ -2,7 +2,7 @@
  * MessageDialog.java
  *
  * Copyright (C) 1999-2003 Peter Graves
- * $Id: MessageDialog.java,v 1.2 2003-06-13 15:35:11 piso Exp $
+ * $Id: MessageDialog.java,v 1.3 2003-07-23 16:11:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.j;
 
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
@@ -59,7 +60,7 @@ public class MessageDialog extends AbstractDialog
         setModal(true);
         setTitle(title);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(18, 18, 6, 18));
-        JTextArea textArea = new JTextArea(text);
+        TextArea textArea = new TextArea(text);
         textArea.setAlignmentX(LEFT_ALIGNMENT);
         textArea.setEditable(false);
         textArea.setBorder(BorderFactory.createEmptyBorder());
@@ -96,5 +97,19 @@ public class MessageDialog extends AbstractDialog
     public void windowActivated(WindowEvent e)
     {
         requestFocus();
+    }
+
+    private static class TextArea extends JTextArea
+    {
+        public TextArea(String text)
+        {
+            super(text);
+        }
+
+        public void paintComponent(Graphics g)
+        {
+            Display.setRenderingHints(g);
+            super.paintComponent(g);
+        }
     }
 }
