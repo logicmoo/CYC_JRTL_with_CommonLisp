@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.73 2003-03-04 03:11:20 piso Exp $
+ * $Id: Primitives.java,v 1.74 2003-03-04 15:26:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -460,8 +460,7 @@ public final class Primitives extends Module
                 LispObject function = arg.getSymbolFunction();
                 if (function != null)
                     return function;
-                throw new LispError(String.valueOf(arg).concat(
-                    " has no global function definition"));
+                throw new UndefinedFunctionError(arg);
             }
             case SYMBOL_PLIST:                  // ### symbol-plist
                 return Symbol.getPropertyList(arg);
