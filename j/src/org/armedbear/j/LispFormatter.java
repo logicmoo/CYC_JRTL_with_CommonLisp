@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.26 2003-03-28 18:08:53 piso Exp $
+ * $Id: LispFormatter.java,v 1.27 2003-03-28 21:17:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,7 @@ public final class LispFormatter extends Formatter
     private static final int LISP_FORMAT_SECONDARY_KEYWORD = 9;
 
     private static final RE condRE = new UncheckedRE("cond[ \t]*\\(\\(");
+    private static final RE dolistRE = new UncheckedRE("dolist[ \t]*\\(");
 
     private static final LispMode lispMode = (LispMode) LispMode.getMode();
 
@@ -195,6 +196,10 @@ public final class LispFormatter extends Formatter
                                 return false;
                         }
                     }
+                } else {
+                    REMatch m = dolistRE.getMatch(text);
+                    if (m != null && m.getEndIndex() == offset)
+                        return false;
                 }
             }
         }
