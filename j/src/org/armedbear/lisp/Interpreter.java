@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.56 2004-03-24 15:22:14 piso Exp $
+ * $Id: Interpreter.java,v 1.57 2004-04-02 03:18:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,10 @@ public final class Interpreter extends Lisp
     {
         if (!lispInitialized) {
             try {
+                if (jlisp) {
+                    _FEATURES_.setSymbolValue(new Cons(Keyword.J,
+                                                       _FEATURES_.getSymbolValue()));
+                }
                 Load.loadSystemFile("boot.lisp", false, false, false);
                 if (jlisp) {
                     Class.forName("org.armedbear.j.LispAPI");
