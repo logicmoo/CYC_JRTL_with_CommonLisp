@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: arrays.lisp,v 1.3 2003-03-19 00:37:15 piso Exp $
+;;; $Id: arrays.lisp,v 1.4 2003-04-04 02:19:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,3 +72,4 @@
                              new-value))))
 
 (defsetf aref %aset)
+(defsetf row-major-aref %set-row-major-aref)
