@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.71 2003-06-26 15:26:43 piso Exp $
+ * $Id: Editor.java,v 1.72 2003-06-27 14:28:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7618,6 +7618,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             end = end.next();
         for (Line line = begin; line != end; line = line.next())
             line.show();
+        buffer.renumber();
         for (int i = 0; i < Editor.getEditorCount(); i++) {
             Editor ed = Editor.getEditor(i);
             if (ed.getBuffer() == buffer)
