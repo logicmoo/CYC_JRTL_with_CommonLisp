@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.11 2004-09-27 02:17:32 piso Exp $
+ * $Id: MathFunctions.java,v 1.12 2004-10-12 16:22:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -459,7 +459,7 @@ public final class MathFunctions extends Lisp
     }
 
     // ### sqrt
-    private static final Primitive1 SQRT = new Primitive1("sqrt", "number")
+    private static final Primitive SQRT = new Primitive("sqrt", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -469,19 +469,15 @@ public final class MathFunctions extends Lisp
 
     private static final LispObject sqrt(LispObject obj) throws ConditionThrowable
     {
-        if (obj.realp() && !obj.minusp()) {  // returning real
-            LispFloat f = LispFloat.coerceToFloat(obj);
-            return new LispFloat(Math.sqrt(f.getValue()));
-        } else {  // returning Complex
-            if (obj.realp()) {
+        if (obj.realp()) {
+            if (obj.minusp())
                 return Complex.getInstance(new LispFloat(0),
                                            sqrt(Fixnum.ZERO.subtract(obj)));
-            } else if (obj instanceof Complex) {
-                return exp(log(obj).divideBy(Fixnum.TWO));
-            }
+            return new LispFloat(Math.sqrt(LispFloat.coerceToFloat(obj).getValue()));
         }
-        signal(new TypeError(obj, "number"));
-        return NIL;
+        if (obj instanceof Complex)
+            return exp(log(obj).divideBy(Fixnum.TWO));
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     // ### log
