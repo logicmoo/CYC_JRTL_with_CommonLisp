@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.325 2004-12-28 02:21:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.326 2004-12-28 12:29:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3610,11 +3610,7 @@
         (emit-move-from-stack target))))))
 
 (defun compile-cons (form &key (target *val*) representation)
-  (unless (= (length form) 3)
-    (error "Wrong number of arguments for CONS."))
-  (let ((new-form (rewrite-function-call form)))
-    (when (neq new-form form)
-      (return-from compile-cons (compile-form new-form :target target))))
+  (require-args form 2)
   (emit 'new +lisp-cons-class+)
   (emit 'dup)
   (process-args (cdr form))
