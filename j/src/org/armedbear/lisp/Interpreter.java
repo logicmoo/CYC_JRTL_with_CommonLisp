@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.9 2003-02-16 14:34:28 piso Exp $
+ * $Id: Interpreter.java,v 1.10 2003-02-16 20:05:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,10 +33,16 @@ import java.util.List;
 
 public final class Interpreter extends Lisp
 {
+    private static final int MAX_HISTORY = 30;
+
     // There can only be one interpreter.
     public static Interpreter interpreter;
 
     public static boolean initialized;
+
+    private static String ldArgs;
+    private static ArrayList history;
+    private static int commandNumber;
 
     private final boolean jlisp;
 
@@ -107,6 +113,8 @@ public final class Interpreter extends Lisp
     {
         Debug.assertTrue(inputStream != null);
         LispReader reader = new LispReader(inputStream);
+        if (history == null)
+            history = new ArrayList();
         done = false;
         try {
             CharacterOutputStream out = getStandardOutput();
@@ -116,22 +124,44 @@ public final class Interpreter extends Lisp
                 try {
                     resetStack();
                     dynEnv = null;
+                    ++commandNumber;
                     out.writeString(prompt());
                     out.finishOutput();
-                    LispObject obj = reader.readObject(false); // Top level read.
-                    if (obj == EOF)
-                        break;
-                    // Check for keyword command.
-                    String command = getCommand(obj);
-                    if (command != null) {
-                        executeCommand(command, reader);
-                        if (done)
-                            return;
-                        else
-                            continue;
+                    char c = reader.peekCharNonWhitespace();
+                    if (c == '\n') {
+                        // Blank line.
+                        reader.readChar();
+                        --commandNumber;
+                        continue;
                     }
+                    LispObject object = null;
+                    if (c == ':') {
+                        String s = reader.readLine();
+                        Object obj = getHistory(s);
+                        if (obj instanceof String) {
+                            s = (String) obj;
+                            out.writeLine(s);
+                        } else if (obj instanceof LispObject) {
+                            object = (LispObject) obj;
+                            s = null;
+                            out.writeLine(object.toString());
+                        }
+                        if (s != null) {
+                            if (doCommand(s))
+                                addHistory(commandNumber, s);
+                            if (done)
+                                return;
+                            else
+                                continue;
+                        }
+                    }
+                    if (object == null)
+                        object = reader.readObject(false); // Top level read.
+                    if (object == EOF)
+                        break;
+                    addHistory(commandNumber, object);
                     out.setCharPos(0);
-                    LispObject result = eval(obj, environment);
+                    LispObject result = eval(object, environment);
                     if (done)
                         return;
                     out = getStandardOutput();
@@ -143,6 +173,7 @@ public final class Interpreter extends Lisp
                             out.writeLine(String.valueOf(values[i]));
                     } else
                         out.writeLine(String.valueOf(result));
+                    out.finishOutput();
                 }
                 catch (StackOverflowError e) {
                     out.writeLine("Stack overflow");
@@ -166,68 +197,92 @@ public final class Interpreter extends Lisp
         }
     }
 
-    private static String getCommand(LispObject obj)
+    private static Object getHistory(String s) throws LispError
     {
-        if (obj instanceof Symbol) {
-            Symbol symbol = (Symbol) obj;
-            if (symbol.getPackage() == PACKAGE_KEYWORD) {
-                String command = symbol.getName().toLowerCase();
-                if (command.equals("ld") ||
-                    command.equals("cd") ||
-                    command.equals("pwd"))
-                    return command;
-                if (command.length() >= 2) {
-                    if ("package".startsWith(command))
-                        return "package";
-                    if ("exit".startsWith(command))
-                        return "exit";
+        s = s.trim();
+        if (s.startsWith(":"))
+            s = s.substring(1);
+        String command, args;
+        int index = s.indexOf(' ');
+        if (index >= 0) {
+            command = s.substring(0, index);
+            args = s.substring(index).trim();
+        } else {
+            command = s;
+            args = null;
+        }
+        if (command == null || command.length() == 0)
+            return null;
+        if (Character.isDigit(command.charAt(0))) {
+            try {
+                int n = Integer.parseInt(command);
+                for (int i = history.size(); i-- > 0;) {
+                    HistoryEntry entry = (HistoryEntry) history.get(i);
+                    if (entry.commandNumber == n)
+                        return entry.obj;
                 }
+            }
+            catch (NumberFormatException e) {
+                Debug.trace(e);
             }
         }
         return null;
     }
 
-    private static String ldArgs;
-
-    private static void executeCommand(String command, LispReader reader)
-        throws LispError
+    private static boolean doCommand(String s) throws LispError
     {
+        s = s.trim();
+        String command, args;
+        int index = s.indexOf(' ');
+        if (index >= 0) {
+            command = getCommand(s.substring(0, index));
+            args = s.substring(index).trim();
+        } else {
+            command = getCommand(s);
+            args = null;
+        }
+        if (command == null || command.length() == 0)
+            return false;
         if (command.equals("ld")) {
-            String s = reader.readLine().trim();
-            if (s.length() == 0) {
+            if (args == null || args.length() == 0) {
                 if (ldArgs != null)
-                    s = ldArgs;
+                    args = ldArgs;
                 else
                     throw new LispError("ld: no previous file");
             }
-            if (s.length() > 0) {
-                ldArgs = s;
+            if (args != null && args.length() > 0) {
+                ldArgs = args;
                 LispObject result = NIL;
-                List args = tokenize(s);
-                for (Iterator it = args.iterator(); it.hasNext();) {
+                List tokens = tokenize(args);
+                for (Iterator it = tokens.iterator(); it.hasNext();) {
                     String filename = (String) it.next();
                     result = Load.load(filename);
                     if (result == NIL)
                         break;
                 }
             }
-        } else if (command.equals("exit")) {
+            return true;
+        }
+        if (command.equals("exit")) {
             exit();
-        } else if (command.equals("pwd")) {
+            return true;
+        }
+        if (command.equals("pwd")) {
             LispString string =
                 checkString(_DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue());
             getStandardOutput().writeLine(string.getValue());
-        } else if (command.equals("cd")) {
-            String s = reader.readLine().trim();
-            if (s.length() == 0)
-                s = System.getProperty("user.home");
+            return true;
+        }
+        if (command.equals("cd")) {
+            if (args == null || args.length() == 0)
+                args = System.getProperty("user.home");
             String oldDir = LispString.getValue(
                 _DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue());
             File file;
-            if (Utilities.isFilenameAbsolute(s))
-                file = new File(s);
+            if (Utilities.isFilenameAbsolute(args))
+                file = new File(args);
             else
-                file = new File(oldDir, s);
+                file = new File(oldDir, args);
             if (file.isDirectory()) {
                 try {
                     _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(
@@ -240,24 +295,25 @@ public final class Interpreter extends Lisp
             LispString string =
                 checkString(_DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue());
             getStandardOutput().writeLine(string.getValue());
-        } else if (command.equals("package")) {
-            String s = reader.readLine().trim();
-            if (s.length() == 0) {
+            return true;
+        }
+        if (command.equals("package")) {
+            if (args == null || args.length() == 0) {
                 Package pkg = (Package) _PACKAGE_.getSymbolValue();
                 getStandardOutput().writeString("The ");
                 getStandardOutput().writeString(pkg.getName());
                 getStandardOutput().writeLine(" package is current.");
             } else {
-                if (s.charAt(0) == ':')
-                    s = s.substring(1);
-                s = s.toUpperCase();
-                Package pkg = Packages.findPackage(s);
+                if (args.charAt(0) == ':')
+                    args = args.substring(1);
+                args = args.toUpperCase();
+                Package pkg = Packages.findPackage(args);
                 if (pkg != null) {
                     if (dynEnv != null) {
                         Binding binding = dynEnv.getBinding(_PACKAGE_);
                         if (binding != null) {
                             binding.value = pkg;
-                            return;
+                            return true;
                         }
                     }
                     // No dynamic binding.
@@ -267,7 +323,48 @@ public final class Interpreter extends Lisp
                     getStandardOutput().writeLine(s);
                 }
             }
+            return true;
         }
+        if (command.equals("history")) {
+            addHistory(commandNumber, s);
+            for (int i = history.size(); i-- > 0;) {
+                HistoryEntry entry = (HistoryEntry) history.get(i);
+                StringBuffer sb = new StringBuffer();
+                sb.append(entry.commandNumber);
+                while (sb.length() < 6)
+                    sb.append(' ');
+                sb.append(entry.obj);
+                getStandardOutput().writeLine(sb.toString());
+            }
+            return false;
+        }
+        return false;
+    }
+
+    private static String getCommand(String s)
+    {
+        if (s == null || s.length() == 0)
+            return null;
+        Debug.assertTrue(s.charAt(0) == ':');
+        s = s.substring(1);
+        if (s.length() == 0)
+            return null;
+        String command = s.toLowerCase();
+        if (command.equals("ld") ||
+            command.equals("cd") ||
+            command.equals("pwd"))
+            return command;
+        if (command.length() >= 3) {
+            if ("history".startsWith(command))
+                return "history";
+        }
+        if (command.length() >= 2) {
+            if ("package".startsWith(command))
+                return "package";
+            if ("exit".startsWith(command))
+                return "exit";
+        }
+        return null;
     }
 
     private static List tokenize(String s)
@@ -413,6 +510,33 @@ public final class Interpreter extends Lisp
         String pkgName = pkg.getNickname();
         if (pkgName == null)
             pkgName = pkg.getName();
-        return pkgName + "> ";
+        StringBuffer sb = new StringBuffer();
+        sb.append(pkgName);
+        sb.append('(');
+        sb.append(commandNumber);
+        sb.append(")> ");
+        return sb.toString();
+    }
+
+    // History.
+    private static void addHistory(int commandNumber, Object obj)
+    {
+        history.add(0, new HistoryEntry(commandNumber, obj));
+        while (history.size() > MAX_HISTORY)
+            history.remove(history.size() - 1);
+    }
+
+    // A history entry consists of a command number and either a String or a
+    // LispObject.
+    private static final class HistoryEntry
+    {
+        int commandNumber;
+        Object obj;
+
+        HistoryEntry(int commandNumber, Object obj)
+        {
+            this.commandNumber = commandNumber;
+            this.obj = obj;
+        }
     }
 }
