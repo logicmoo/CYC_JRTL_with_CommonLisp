@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.162 2003-10-05 15:09:01 piso Exp $
+ * $Id: Lisp.java,v 1.163 2003-10-12 18:20:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,7 +79,8 @@ public abstract class Lisp
 
     // argv must not be null!
     public static final LispObject funcall(LispObject fun, LispObject[] argv,
-        LispThread thread) throws ConditionThrowable
+                                           LispThread thread)
+        throws ConditionThrowable
     {
         if (fun instanceof Autoload) {
             Autoload autoload = (Autoload) fun;
@@ -137,7 +138,8 @@ public abstract class Lisp
     }
 
     public static final LispObject funcall1(LispObject fun, LispObject arg,
-        LispThread thread) throws ConditionThrowable
+                                            LispThread thread)
+        throws ConditionThrowable
     {
         if (fun instanceof Autoload) {
             Autoload autoload = (Autoload) fun;
@@ -160,7 +162,8 @@ public abstract class Lisp
     }
 
     public static final LispObject funcall2(LispObject fun, LispObject first,
-        LispObject second, LispThread thread) throws ConditionThrowable
+                                            LispObject second, LispThread thread)
+        throws ConditionThrowable
     {
         if (fun instanceof Autoload) {
             Autoload autoload = (Autoload) fun;
@@ -184,7 +187,9 @@ public abstract class Lisp
     }
 
     public static final LispObject funcall3(LispObject fun, LispObject first,
-        LispObject second, LispObject third, LispThread thread) throws ConditionThrowable
+                                            LispObject second, LispObject third,
+                                            LispThread thread)
+        throws ConditionThrowable
     {
         if (fun instanceof Autoload) {
             Autoload autoload = (Autoload) fun;
