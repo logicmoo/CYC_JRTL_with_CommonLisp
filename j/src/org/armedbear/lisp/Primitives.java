@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.422 2003-09-21 23:06:29 piso Exp $
+ * $Id: Primitives.java,v 1.423 2003-09-22 12:22:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -550,7 +550,7 @@ public final class Primitives extends Module
 
     // ### fixnump
     private static final Primitive1 FIXNUMP =
-        new Primitive1("fixnump", PACKAGE_SYS, false) {
+        new Primitive1("fixnump", PACKAGE_EXT, true) {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg instanceof Fixnum ? T : NIL;
