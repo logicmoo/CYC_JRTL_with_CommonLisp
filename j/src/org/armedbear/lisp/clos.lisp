@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.5 2003-11-03 02:53:42 piso Exp $
+;;; $Id: clos.lisp,v 1.6 2003-11-04 19:38:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -690,6 +690,8 @@
                                 (method-class the-class-standard-method)
                                 (method-combination 'standard)
                                 &allow-other-keys)
+  (when (autoloadp function-name)
+    (resolve function-name))
   (if (find-generic-function function-name nil)
       (find-generic-function function-name)
       (progn
