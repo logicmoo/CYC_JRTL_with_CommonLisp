@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.343 2005-01-10 17:46:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.344 2005-01-13 01:58:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5481,7 +5481,7 @@
                                   "processArgs"
                                   "fastProcessArgs")
                               "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
-                              -1)
+                              -2)
          (emit 'astore (compiland-argument-register compiland)))
         )
        (*hairy-arglist-p*
