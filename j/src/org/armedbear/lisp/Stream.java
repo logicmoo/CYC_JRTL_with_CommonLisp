@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.104 2005-02-05 18:39:23 piso Exp $
+ * $Id: Stream.java,v 1.105 2005-02-05 18:41:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -354,8 +354,12 @@ public class Stream extends LispObject
                     return signal(new EndOfFile(this));
                 char nextChar = (char) n;
                 if (isTokenDelimiter(nextChar)) {
-                    if (last == null)
-                        return signal(new ReaderError("Nothing appears before . in list."));
+                    if (last == null) {
+                        if (_READ_SUPPRESS_.symbolValue() != NIL)
+                            return NIL;
+                        else
+                            return signal(new ReaderError("Nothing appears before . in list."));
+                    }
                     LispObject obj = read(true, NIL, true);
                     last.setCdr(obj);
                     continue;
