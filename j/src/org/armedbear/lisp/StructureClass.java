@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureClass.java,v 1.3 2003-09-22 12:05:41 piso Exp $
+ * $Id: StructureClass.java,v 1.4 2003-11-20 18:41:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class StructureClass extends LispClass
+public class StructureClass extends SlotClass
 {
     private StructureClass(Symbol symbol)
     {
@@ -56,14 +56,17 @@ public class StructureClass extends LispClass
     }
 
     // ### make-structure-class
-    private static final Primitive1 MAKE_STRUCTURE_CLASS =
-        new Primitive1("make-structure-class", PACKAGE_SYS, false)
+    private static final Primitive2 MAKE_STRUCTURE_CLASS =
+        new Primitive2("make-structure-class", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            Symbol symbol = checkSymbol(arg);
+            Symbol symbol = checkSymbol(first);
+            LispObject directSlots = checkList(second);
             StructureClass c = new StructureClass(symbol);
             c.setCPL(c, BuiltInClass.STRUCTURE_OBJECT, BuiltInClass.CLASS_T);
+            c.setDirectSlots(directSlots);
             addClass(symbol, c);
             return c;
         }
