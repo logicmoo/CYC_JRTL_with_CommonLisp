@@ -29,24 +29,6 @@
       (push (list sym (cadr l)) bindings)
       (push (list 'setq (car l) sym) forms))))
 
-(defmacro the (type form) form)
-
-;; FIXME
-(defmacro declare (&rest ignored)
-  nil)
-
-;; FIXME
-(defmacro declaim (&rest ignored)
-  nil)
-
-;; FIXME Should be a special operator.
-(defmacro locally (&rest forms)
-  `(progn ,@forms))
-
-;; FIXME
-(defmacro eval-when (situation &rest forms)
-  `(progn ,@forms))
-
 (defmacro time (form)
   `(sys:%time #'(lambda () ,form)))
 

@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.88 2003-08-10 17:48:33 piso Exp $
+;;; $Id: boot.lisp,v 1.89 2003-08-15 15:31:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -83,6 +83,7 @@
 (%load "backquote.lisp")
 (%load "setf.lisp")
 (%load "macros.lisp")
+(%load "fixme.lisp")
 (%load "destructuring-bind.lisp")
 (%load "arrays.lisp")
 (%load "compiler.lisp")
@@ -138,11 +139,6 @@
 (defconstant char-code-limit 128)
 
 (defconstant internal-time-units-per-second 1000)
-
-
-;; FIXME
-(defun proclaim (decl)
-  nil)
 
 
 ;; AND, OR (from CMUCL)
@@ -283,31 +279,6 @@
            ,@decls
            (tagbody
             ,@forms))))))
-
-
-;; FIXME
-(defun compute-restarts (&optional condition)
-  nil)
-
-;; FIXME
-(defun restart-name (restart)
-  nil)
-
-;; FIXME
-(defmacro check-type (place typespec &optional string)
-  nil)
-
-;; FIXME
-(defun warn (&rest args)
-  nil)
-
-;; FIXME
-(defmacro assert (form &rest stuff)
-   `(if (not ,form) (error "assertion failed: ~S" ',form)))
-
-;; FIXME
-(defun compile-file (&rest args)
-  (values nil nil nil))
 
 
 ;;; From CMUCL.
