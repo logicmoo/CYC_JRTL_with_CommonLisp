@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.260 2003-06-23 19:07:43 piso Exp $
+ * $Id: Primitives.java,v 1.261 2003-06-23 19:41:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1972,37 +1972,80 @@ public final class Primitives extends Module
         {
             AbstractArray array = checkArray(first);
             LispObject[] subscripts = second.copyToArray();
-            final int rank = array.getRank();
-            if (rank != subscripts.length) {
-                StringBuffer sb = new StringBuffer("%ARRAY-ROW-MAJOR-INDEX: ");
-                sb.append("wrong number of subscripts (");
-                sb.append(subscripts.length);
-                sb.append(") for array of rank ");
-                sb.append(rank);
-                throw new ProgramError(sb.toString());
-            }
-            if (rank == 0)
-                return Fixnum.ZERO;
-            long sum = 0;
-            long size = 1;
-            for (int i = rank; i-- > 0;) {
-                int dim = array.getDimension(i);
-                long lastSize = size;
-                size *= dim;
-                LispObject subscript = subscripts[i];
-                if (subscript instanceof Fixnum) {
-                    int n = ((Fixnum)subscript).getValue();
-                    if (n < 0 || n >= array.getDimension(i))
-                        throw new ProgramError();
-                    sum += n * lastSize;
-                } else if (subscript instanceof Bignum) {
-                    throw new ProgramError();
-                } else
-                    throw new TypeError(subscript, "integer");
-            }
-            return number(sum);
+            return number(arrayRowMajorIndex(array, subscripts));
         }
     };
+
+    // ### aref
+    // aref array &rest subscripts => element
+    private static final Primitive AREF = new Primitive("aref") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            AbstractArray array = checkArray(arg);
+            if (array.getRank() == 0)
+                return array.getRowMajor(0);
+            StringBuffer sb = new StringBuffer("AREF: ");
+            sb.append("wrong number of subscripts (0) for array of rank ");
+            sb.append(array.getRank());
+            throw new ProgramError(sb.toString());
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            AbstractArray array = checkArray(first);
+            if (array.getRank() == 1)
+                return array.getRowMajor(Fixnum.getValue(second));
+            StringBuffer sb = new StringBuffer("AREF: ");
+            sb.append("wrong number of subscripts (1) for array of rank ");
+            sb.append(array.getRank());
+            throw new ProgramError(sb.toString());
+        }
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length < 1)
+                throw new WrongNumberOfArgumentsException(this);
+            AbstractArray array = checkArray(args[0]);
+            LispObject[] subscripts = new LispObject[args.length - 1];
+            for (int i = subscripts.length; i-- > 0;)
+                subscripts[i] = args[i+1];
+            int rowMajorIndex = arrayRowMajorIndex(array, subscripts);
+            return array.getRowMajor(rowMajorIndex);
+        }
+    };
+
+    private static final int arrayRowMajorIndex(AbstractArray array,
+                                                LispObject[] subscripts) throws LispError
+    {
+        final int rank = array.getRank();
+        if (rank != subscripts.length) {
+            StringBuffer sb = new StringBuffer("%ARRAY-ROW-MAJOR-INDEX: ");
+            sb.append("wrong number of subscripts (");
+            sb.append(subscripts.length);
+            sb.append(") for array of rank ");
+            sb.append(rank);
+            throw new ProgramError(sb.toString());
+        }
+        if (rank == 0)
+            return 0;
+        int sum = 0;
+        int size = 1;
+        for (int i = rank; i-- > 0;) {
+            int dim = array.getDimension(i);
+            int lastSize = size;
+            size *= dim;
+            LispObject subscript = subscripts[i];
+            if (subscript instanceof Fixnum) {
+                int n = ((Fixnum)subscript).getValue();
+                if (n < 0 || n >= array.getDimension(i))
+                    throw new ProgramError();
+                sum += n * lastSize;
+            } else if (subscript instanceof Bignum) {
+                throw new ProgramError();
+            } else
+                throw new TypeError(subscript, "integer");
+        }
+        return sum;
+    }
 
     // ### row-major-aref
     // row-major-aref array index => element
