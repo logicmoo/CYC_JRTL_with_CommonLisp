@@ -2,7 +2,7 @@
  * MethodBreakpoint.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: MethodBreakpoint.java,v 1.2 2003-05-12 17:08:17 piso Exp $
+ * $Id: MethodBreakpoint.java,v 1.3 2003-05-18 19:25:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,6 +141,8 @@ public final class MethodBreakpoint extends ResolvableBreakpoint
             if (buffer != null)
                 buffer.repaint();
         }
+        if (line != null)
+            line.setAnnotation(new BreakpointAnnotation(this));
         jdb.log("Breakpoint resolved: " + getLocationString());
     }
 
