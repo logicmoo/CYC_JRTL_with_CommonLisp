@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: arglist.java,v 1.2 2003-12-09 20:38:53 asimon Exp $
+ * $Id: arglist.java,v 1.3 2003-12-10 08:04:17 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,11 @@ public final class arglist extends Lisp
         {
             LispThread thread = LispThread.currentThread();
             Function function = coerceToFunction(arg);
+            if (function instanceof Autoload) {
+                Autoload autoload = (Autoload) function;
+                autoload.load();
+                function = (Function)autoload.getSymbol().getSymbolFunction();
+	    }
             LispObject arglist = function.getArglist();
             final LispObject value1, value2;
             if (arglist instanceof LispString) {
