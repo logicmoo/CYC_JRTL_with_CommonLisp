@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: format.lisp,v 1.7 2004-03-04 01:19:39 piso Exp $
+;;; $Id: format.lisp,v 1.8 2004-06-07 18:07:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -60,7 +60,8 @@
 (in-package "FORMAT")
 
 #+armedbear
-(require '#:collect)
+(eval-when (:compile-toplevel :execute)
+  (require '#:collect))
 
 #+armedbear
 (require 'loop)
