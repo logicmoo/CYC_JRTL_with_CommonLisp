@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.15 2003-10-29 09:24:49 asimon Exp $
+ * $Id: Java.java,v 1.16 2003-10-30 08:16:11 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@ public final class Java extends Module
                     className = c.getName(); //needed only for the error message
                 }
                 f = c.getField(fieldName);
-                Class requiredType = f.getType();
+
                 switch (args.length) {
                     case 2:
                         // Cases 1 and 6.
@@ -119,16 +119,8 @@ public final class Java extends Module
                                 break;
                             } else {
                                 // Case 3.
-                                if (args[2] instanceof Fixnum)
-                                    f.set(instance, new Integer(((Fixnum)args[2]).getValue()));
-                                else if (args[2] instanceof LispFloat)
-                                    f.set(instance, new Double(((LispFloat)args[2]).getValue()));
-                                else if (args[2] instanceof LispCharacter)
-                                    f.set(instance, new Character(((LispCharacter)args[2]).getValue()));
-                                else
-                                    throw new ConditionThrowable(new TypeError(
-                                        "unsupported type in jfield"));
-                                return args[2];
+			      f.set(null,args[2].javaInstance());
+			      return args[2];
                             }
                         } else {
                             // Case 7.
