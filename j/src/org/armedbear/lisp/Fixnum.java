@@ -1,8 +1,8 @@
 /*
  * Fixnum.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.107 2004-12-23 12:30:04 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: Fixnum.java,v 1.108 2005-02-10 01:55:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -594,27 +594,30 @@ public final class Fixnum extends LispObject
 
     public LispObject MOD(LispObject divisor) throws ConditionThrowable
     {
-        if (divisor instanceof Fixnum) {
-            final int d = ((Fixnum)divisor).value;
-            final int r;
-            try {
-                r = value % d;
-            }
-            catch (ArithmeticException e) {
-                return signal(new ArithmeticError("Division by zero."));
-            }
-            if (r == 0)
-                return Fixnum.ZERO;
-            if (d < 0) {
-                if (value > 0)
-                    return new Fixnum(r + d);
-            } else {
-                if (value < 0)
-                    return new Fixnum(r + d);
-            }
-            return new Fixnum(r);
-        }
+        if (divisor instanceof Fixnum)
+            return MOD(((Fixnum)divisor).value);
         return super.MOD(divisor);
+    }
+
+    public LispObject MOD(int divisor) throws ConditionThrowable
+    {
+        final int r;
+        try {
+            r = value % divisor;
+        }
+        catch (ArithmeticException e) {
+            return signal(new ArithmeticError("Division by zero."));
+        }
+        if (r == 0)
+            return Fixnum.ZERO;
+        if (divisor < 0) {
+            if (value > 0)
+                return new Fixnum(r + divisor);
+        } else {
+            if (value < 0)
+                return new Fixnum(r + divisor);
+        }
+        return new Fixnum(r);
     }
 
     public LispObject ash(int shift)
