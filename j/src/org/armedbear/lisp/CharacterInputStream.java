@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.33 2003-05-27 02:12:57 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.34 2003-05-27 16:01:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,11 +190,12 @@ public class CharacterInputStream extends LispStream
                     continue;
                 }
                 if (first == null) {
-                    first = new Cons(obj, NIL);
+                    first = new Cons(obj);
                     last = first;
                 } else {
-                    last.setCdr(new Cons(obj, NIL));
-                    last = (Cons) last.cdr();
+                    Cons newCons = new Cons(obj);
+                    last.setCdr(newCons);
+                    last = newCons;
                 }
             }
         }
