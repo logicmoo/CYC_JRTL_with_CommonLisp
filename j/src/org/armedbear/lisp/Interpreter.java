@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.57 2004-04-02 03:18:42 piso Exp $
+ * $Id: Interpreter.java,v 1.58 2004-04-22 15:16:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,6 @@ public final class Interpreter extends Lisp
                     Autoload autoload = (Autoload) tplFun;
                     autoload.load();
                 }
-                _LOAD_VERBOSE_.setSymbolValue(T);
                 String userHome = System.getProperty("user.home");
                 File file = new File(userHome, ".ablrc");
                 if (file.isFile())
@@ -264,6 +263,16 @@ public final class Interpreter extends Lisp
         System.err.println("Interpreter.finalize");
     }
 
+    private static final Primitive2 _DEBUGGER_HOOK_FUNCTION =
+        new Primitive2("%debugger-hook-function", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            throw new ConditionThrowable((Condition)first);
+        }
+    };
+
     // Used only by org.armedbear.j.Editor.executeCommand().
     public static LispObject evaluate(String s) throws ConditionThrowable
     {
@@ -273,7 +282,15 @@ public final class Interpreter extends Lisp
         LispObject obj = stream.read(false, EOF, false);
         if (obj == EOF)
             return signal(new EndOfFile(stream));
-        return eval(obj, new Environment(), LispThread.currentThread());
+        final LispThread thread = LispThread.currentThread();
+        final Environment oldDynEnv = thread.getDynamicEnvironment();
+        thread.bindSpecial(_DEBUGGER_HOOK_, _DEBUGGER_HOOK_FUNCTION);
+        try {
+            return eval(obj, new Environment(), thread);
+        }
+        finally {
+            thread.setDynamicEnvironment(oldDynEnv);
+        }
     }
 
     // Used only by the JUnit test suite (Tests.java).
