@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: arrays.lisp,v 1.10 2003-06-23 18:16:49 piso Exp $
+;;; $Id: arrays.lisp,v 1.11 2003-06-23 19:08:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,29 +30,6 @@
   (%make-array dimensions element-type initial-element initial-element-p
                initial-contents adjustable fill-pointer displaced-to
                displaced-index-offset))
-
-(defun %array-row-major-index (array subscripts)
-  (let ((rank  (array-rank array))
-        (nsubs (length subscripts))
-        (sum 0))
-    (unless (eql rank nsubs)
-      (error 'program-error
-             "wrong number of subscripts (~A) for array of rank ~A"
-             nsubs rank))
-    (if (eql 0 rank)
-        0
-        (do* ((i (1- rank) (1- i))
-              (dim (array-dimension array i) (array-dimension array i))
-              (last-size 1 size)
-              (size dim (* dim size)))
-          (nil)
-          (let ((s (elt subscripts i)))
-            (unless (integerp s)
-              (error 'type-error))
-            (when (or (< s 0) (>= s dim))
-              (error 'program-error))
-            (incf sum (* s last-size))
-            (when (eql i 0) (return sum)))))))
 
 (defun array-row-major-index (array &rest subscripts)
   (%array-row-major-index array subscripts))
