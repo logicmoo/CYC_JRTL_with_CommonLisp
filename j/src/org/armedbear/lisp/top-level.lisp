@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.42 2005-02-27 03:06:10 piso Exp $
+;;; $Id: top-level.lisp,v 1.43 2005-03-07 18:59:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -171,7 +171,7 @@
 
 (defun cd-command (args)
   (cond ((null args)
-         (setf args (if (sys::featurep :windows)
+         (setf args (if (featurep :windows)
                         "C:\\"
                         (namestring (user-homedir-pathname)))))
         ((string= args "-")
@@ -195,7 +195,7 @@
 
 (defun ls-command (args)
   (let ((args (if (stringp args) args ""))
-        (ls-program (if (sys::featurep :windows) "dir" "ls")))
+        (ls-program (if (featurep :windows) "dir" "ls")))
     (run-shell-command (concatenate 'string ls-program " " args)
                        :directory *default-pathname-defaults*))
   (values))
@@ -397,7 +397,7 @@
           *inspect-break* nil)
     (with-simple-restart (top-level
                           "Return to top level.")
-      (if (sys::featurep :j)
+      (if (featurep :j)
           (handler-case
               (repl)
             (stream-error (c) (return-from top-level-loop)))

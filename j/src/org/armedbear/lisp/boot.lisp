@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.205 2005-02-11 19:38:14 piso Exp $
+;;; $Id: boot.lisp,v 1.206 2005-03-07 18:58:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -96,9 +96,11 @@
 (defun make-keyword (symbol)
   (intern (symbol-name symbol) +keyword-package+))
 
+(in-package #:extensions)
+
 (defun featurep (form)
   (cond ((atom form)
-         (ext:memq form *features*))
+         (memq form *features*))
         ((eq (car form) :not)
          (not (featurep (cadr form))))
         ((eq (car form) :and)
@@ -110,7 +112,9 @@
         (t
          (error "READ-FEATURE"))))
 
-(export 'featurep '#:system)
+(export 'featurep '#:extensions)
+
+(in-package #:system)
 
 ;;; READ-CONDITIONAL (from OpenMCL)
 (defun read-feature (stream)
