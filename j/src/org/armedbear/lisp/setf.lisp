@@ -39,7 +39,7 @@
 (defmacro decf (place &optional (delta 1))
   (list 'setf place (list '- place delta)))
 
-(defconstant *setf-expander* (make-symbol "setf-expander"))
+(defconstant *setf-expander* (make-symbol "SETF-EXPANDER"))
 
 (%put 'car *setf-expander* '%rplaca)
 (%put 'cdr *setf-expander* '%rplacd)
