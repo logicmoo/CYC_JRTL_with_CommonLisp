@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.138 2003-09-24 14:23:52 piso Exp $
+;;; $Id: rt.lisp,v 1.139 2003-10-06 00:36:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -203,6 +203,7 @@
                               "ctypecase"
                               "cxr"
                               "defconstant"
+                              "define-modify-macro"
                               "defmacro"
                               "defparameter"
                               "defun"
