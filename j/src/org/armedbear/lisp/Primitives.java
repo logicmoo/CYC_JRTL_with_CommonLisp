@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.692 2004-10-22 15:52:35 piso Exp $
+ * $Id: Primitives.java,v 1.693 2004-10-22 17:03:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2094,19 +2094,24 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return funcall0(requireFunction(arg), LispThread.currentThread());
+            return funcall0(arg, LispThread.currentThread());
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return funcall1(requireFunction(first), second,
-                            LispThread.currentThread());
+            return funcall1(first, second, LispThread.currentThread());
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            return funcall2(requireFunction(first), second, third,
+            return funcall2(first, second, third, LispThread.currentThread());
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
+        {
+            return funcall3(first, second, third, fourth,
                             LispThread.currentThread());
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -2115,36 +2120,10 @@ public final class Primitives extends Lisp
                 signal(new WrongNumberOfArgumentsException(this));
                 return NIL;
             }
-            LispObject fun = requireFunction(args[0]);
             final int length = args.length - 1; // Number of arguments.
-            if (length == 3) {
-                return funcall3(fun, args[1], args[2], args[3],
-                                LispThread.currentThread());
-            } else {
-                LispObject[] funArgs = new LispObject[length];
-                System.arraycopy(args, 1, funArgs, 0, length);
-                return funcall(fun, funArgs, LispThread.currentThread());
-            }
-        }
-        private LispObject requireFunction(LispObject arg) throws ConditionThrowable
-        {
-//             if (arg instanceof Function || arg instanceof GenericFunction)
-//                 return arg;
-//             if (arg instanceof Symbol) {
-//                 LispObject function = arg.getSymbolFunction();
-//                 if (function instanceof Function || function instanceof GenericFunction)
-//                     return function;
-//                 return signal(new UndefinedFunction(arg));
-//             }
-            if (arg.listp() && arg.car() == Symbol.LAMBDA) {
-                LispObject rest = arg.cdr();
-                Closure closure = new Closure(rest.car(), rest.cdr(),
-                                              new Environment());
-                return closure;
-            }
-//             return signal(new TypeError(arg, list3(Symbol.OR, Symbol.FUNCTION,
-//                                                    Symbol.SYMBOL)));
-            return arg;
+            LispObject[] newArgs = new LispObject[length];
+            System.arraycopy(args, 1, newArgs, 0, length);
+            return funcall(args[0], newArgs, LispThread.currentThread());
         }
     };
 
