@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.261 2003-06-23 19:41:26 piso Exp $
+ * $Id: Primitives.java,v 1.262 2003-06-23 20:14:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3366,28 +3366,20 @@ public final class Primitives extends Module
         public LispObject execute(LispObject args, Environment env)
             throws Condition
         {
-            switch (args.length()) {
-                case 0:
-                    return T;
-                case 1:
-                    return eval(args.car(), env, LispThread.currentThread());
-                default: {
-                    final LispThread thread = LispThread.currentThread();
-                    while (true) {
-                        LispObject result = eval(args.car(), env, thread);
-                        if (result == NIL) {
-                            if (args.cdr() != NIL) {
-                                // Not the last form.
-                                thread.clearValues();
-                            }
-                            return NIL;
-                        }
-                        args = args.cdr();
-                        if (args == NIL)
-                            return result;
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = T;
+            while (args != NIL) {
+                result = eval(args.car(), env, thread);
+                if (result == NIL) {
+                    if (args.cdr() != NIL) {
+                        // Not the last form.
+                        thread.clearValues();
                     }
+                    break;
                 }
+                args = args.cdr();
             }
+            return result;
         }
     };
 
@@ -3397,28 +3389,20 @@ public final class Primitives extends Module
         public LispObject execute(LispObject args, Environment env)
             throws Condition
         {
-            switch (args.length()) {
-                case 0:
-                    return NIL;
-                case 1:
-                    return eval(args.car(), env, LispThread.currentThread());
-                default: {
-                    final LispThread thread = LispThread.currentThread();
-                    while (true) {
-                        LispObject result = eval(args.car(), env, thread);
-                        if (result != NIL) {
-                            if (args.cdr() != NIL) {
-                                // Not the last form.
-                                thread.clearValues();
-                            }
-                            return result;
-                        }
-                        args = args.cdr();
-                        if (args == NIL)
-                            return NIL;
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = NIL;
+            while (args != NIL) {
+                result = eval(args.car(), env, thread);
+                if (result != NIL) {
+                    if (args.cdr() != NIL) {
+                        // Not the last form.
+                        thread.clearValues();
                     }
+                    break;
                 }
+                args = args.cdr();
             }
+            return result;
         }
     };
 
@@ -3429,12 +3413,10 @@ public final class Primitives extends Module
         public LispObject execute(LispObject args, Environment env)
             throws Condition
         {
-            final int length = args.length();
-            if (length != 1)
+            if (args.length() != 1)
                 throw new WrongNumberOfArgumentsException(this);
-            LispObject form = args.car();
-            if (eval(form, env, LispThread.currentThread()) == NIL)
-                throw new LispError("assertion failed: " + form);
+            if (eval(args.car(), env, LispThread.currentThread()) == NIL)
+                throw new LispError("assertion failed: " + args.car());
             return NIL;
         }
     };
