@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.29 2004-02-26 01:44:20 piso Exp $
+ * $Id: Stream.java,v 1.30 2004-03-02 18:34:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -816,7 +816,28 @@ public class Stream extends LispObject
         return ((Package)_PACKAGE_.symbolValueNoThrow(thread)).intern(token);
     }
 
-    private static LispObject makeNumber(String token) throws ConditionThrowable
+    private static final int getReadBase() throws ConditionThrowable
+    {
+        final int readBase;
+        try {
+            readBase = ((Fixnum)_READ_BASE_.symbolValue()).value;
+        }
+        catch (ClassCastException e) {
+            // The value of *READ-BASE* is not a Fixnum.
+            signal(new LispError("The value of *READ-BASE* is not of type '(INTEGER 2 36)."));
+            // Not reached.
+            return 10;
+        }
+        if (readBase < 2 || readBase > 36) {
+            signal(new LispError("The value of *READ-BASE* is not of type '(INTEGER 2 36)."));
+            // Not reached.
+            return 10;
+        }
+        return readBase;
+    }
+
+    private static final LispObject makeNumber(String token)
+        throws ConditionThrowable
     {
         if (token.indexOf('/') >= 0)
             return makeRatio(token);
@@ -825,33 +846,46 @@ public class Stream extends LispObject
         LispObject number = makeFloat(token);
         if (number != null)
             return number;
+        final int readBase = getReadBase();
         // The first character was checked in makeObject().
-        for (int i = token.length(); i-- > 1;) {
-            char c = token.charAt(i);
-            if (c < '0' || c > '9')
-                return null;
+        if (readBase == 10) {
+            for (int i = token.length(); i-- > 1;) {
+                char c = token.charAt(i);
+                if (c < '0' || c > '9')
+                    return null;
+            }
+        } else {
+            for (int i = token.length(); i-- > 1;) {
+                char c = token.charAt(i);
+                if (Character.digit(c, readBase) < 0)
+                    return null;
+            }
         }
         try {
-            return new Fixnum(Integer.parseInt(token));
+            return new Fixnum(Integer.parseInt(token, readBase));
         }
         catch (NumberFormatException e) {}
         // parseInt() failed.
         try {
-            return new Bignum(new BigInteger(token));
+            return new Bignum(new BigInteger(token, readBase));
         }
         catch (NumberFormatException e) {}
         // Not a number.
         return null;
     }
 
-    private static LispObject makeRatio(String token) throws ConditionThrowable
+    private static final LispObject makeRatio(String token)
+        throws ConditionThrowable
     {
         final int index = token.indexOf('/');
         if (index < 0)
             return null;
+        final int readBase = getReadBase();
         try {
-            BigInteger numerator = new BigInteger(token.substring(0, index));
-            BigInteger denominator = new BigInteger(token.substring(index + 1));
+            BigInteger numerator =
+                new BigInteger(token.substring(0, index), readBase);
+            BigInteger denominator =
+                new BigInteger(token.substring(index + 1), readBase);
             return number(numerator, denominator);
         }
         catch (NumberFormatException e) {}
