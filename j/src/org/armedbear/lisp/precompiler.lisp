@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.74 2004-07-28 13:30:43 piso Exp $
+;;; $Id: precompiler.lisp,v 1.75 2004-08-01 12:47:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -814,9 +814,6 @@
   (if (and name (fboundp name) (%typep (symbol-function name) 'generic-function))
       (values name nil nil)
       (precompile name definition)))
-
-(defun compile (name &optional definition)
-  (%compile name definition))
 
 ;; Redefine EVAL to precompile its argument.
 (defun eval (form)

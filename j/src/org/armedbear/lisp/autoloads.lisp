@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.151 2004-07-28 17:54:41 asimon Exp $
+;;; $Id: autoloads.lisp,v 1.152 2004-08-01 12:47:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,6 +155,7 @@
 (autoload 'dribble)
 (autoload-macro 'step)
 (autoload 'load)
+(autoload 'compile "jvm")
 
 (autoload-macro '(case ccase ecase typecase ctypecase etypecase) "case")
 (autoload-macro '(and cond dolist dotimes

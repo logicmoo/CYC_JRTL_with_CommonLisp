@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.179 2004-06-17 10:49:43 piso Exp $
+;;; $Id: boot.lisp,v 1.180 2004-08-01 12:48:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -174,11 +174,9 @@
 (defvar jvm::*auto-compile* nil)
 (export 'jvm::*auto-compile* "JVM")
 
+;; SYS::%COMPILE is redefined in precompiler.lisp.
 (defun sys::%compile (name definition)
   (values (if name name definition) nil nil))
-
-(defun compile (name &optional definition)
-  (sys::%compile name definition))
 
 (sys::load-system-file "macros")
 (sys::load-system-file "fixme")
