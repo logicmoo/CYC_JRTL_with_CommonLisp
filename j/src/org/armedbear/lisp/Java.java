@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.34 2004-01-04 20:06:57 asimon Exp $
+ * $Id: Java.java,v 1.35 2004-01-09 19:00:58 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -486,23 +486,18 @@ public final class Java extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof JavaObject)
-                return T;
-            else
-                return NIL;
+                return (arg instanceof JavaObject) ? T : NIL;
         }
     };
 
     // ### jobject-lisp-value
     // jobject-lisp-value java-object
-    private static final Primitive JOBJECT_LISP_VALUE =
-        new Primitive("jobject-lisp-value", PACKAGE_JAVA, true, "java-object")
+    private static final Primitive1 JOBJECT_LISP_VALUE =
+        new Primitive1("jobject-lisp-value", PACKAGE_JAVA, true, "java-object")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-	    if (args.length != 1)
-                signal(new WrongNumberOfArgumentsException(this));
-	    return makeLispObject(args[0].javaInstance());
+	    return makeLispObject(arg.javaInstance());
         }
     };
 
