@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.41 2005-02-26 17:49:57 piso Exp $
+;;; $Id: top-level.lisp,v 1.42 2005-02-27 03:06:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,6 +65,28 @@
 (defun apropos-command (args)
   (when args (apropos args)))
 
+(defun continue-command (args)
+  (when args
+    (let ((n (read-from-string args)))
+      (let ((restarts (compute-restarts)))
+        (when (< -1 n (length restarts))
+          (invoke-restart-interactively (nth n restarts)))))))
+
+(defun describe-command (args)
+  (let ((obj (eval (read-from-string args))))
+    (describe obj)))
+
+(defun error-command (args)
+  (when *debug-condition*
+    (let* ((s (%format nil "~A" *debug-condition*))
+           (len (length s)))
+      (when (plusp len)
+        (setf (schar s 0) (char-upcase (schar s 0)))
+        (unless (eql (schar s (1- len)) #\.)
+          (setf s (concatenate 'string s "."))))
+      (%format *debug-io* "~A~%" s))
+    (show-restarts (compute-restarts) *debug-io*)))
+
 (defun backtrace-command (args)
   (let ((count (or (and args (ignore-errors (parse-integer args)))
                    8))
@@ -87,27 +109,26 @@
             (return))))))
   (values))
 
-(defun continue-command (args)
-  (when args
-    (let ((n (read-from-string args)))
-      (let ((restarts (compute-restarts)))
-        (when (< -1 n (length restarts))
-          (invoke-restart-interactively (nth n restarts)))))))
-
-(defun describe-command (args)
-  (let ((obj (eval (read-from-string args))))
-    (describe obj)))
-
-(defun error-command (args)
-  (when *debug-condition*
-    (let* ((s (%format nil "~A" *debug-condition*))
-           (len (length s)))
-      (when (plusp len)
-        (setf (schar s 0) (char-upcase (schar s 0)))
-        (unless (eql (schar s (1- len)) #\.)
-          (setf s (concatenate 'string s "."))))
-      (%format *debug-io* "~A~%" s))
-    (show-restarts (compute-restarts) *debug-io*)))
+(defun frame-command (args)
+  (let* ((n (or (and args (ignore-errors (parse-integer args)))
+                0))
+         (frame (nth n *saved-backtrace*)))
+    (when frame
+      (with-standard-io-syntax
+        (let ((*print-pretty* t)
+              (*print-readably* nil)
+              (*print-structure* nil))
+          (fresh-line *debug-io*)
+          (pprint-logical-block (*debug-io* nil :prefix "(" :suffix ")")
+            (prin1 (car frame) *debug-io*)
+            (let ((args (cdr frame)))
+              (if (listp args)
+                  (format *debug-io* "~{ ~_~S~}" args)
+                  (format *debug-io* " ~S" args))))))
+      (setf *** **
+            ** *
+            * frame)))
+  (values))
 
 (defun inspect-command (args)
   (let ((obj (eval (read-from-string args))))
@@ -268,6 +289,7 @@
     ("describe" "de" describe-command "describe an object")
     ("error" "err" error-command "print the current error message")
     ("exit" "ex" exit-command "exit lisp")
+    ("frame" "fr" frame-command "set the value of cl:* to be frame n (default 0)")
     ("help" "he" help-command "print this help")
     ("inspect" "in" inspect-command "inspect an object")
     ("istep" "i" istep-command "navigate within inspection of an object")
