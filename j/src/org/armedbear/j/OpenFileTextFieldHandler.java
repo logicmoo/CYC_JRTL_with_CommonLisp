@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.14 2002-12-07 12:23:44 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.15 2002-12-07 19:29:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -418,7 +418,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 long start = System.currentTimeMillis();
                 completions = getCompletions(prefix);
                 long elapsed = System.currentTimeMillis() - start;
-                Log.debug("getCompletions " + elapsed + " ms");
+                Log.debug("getCompletions " + elapsed + " ms " +
+                    completions.size() + " completions");
                 index = 0;
                 if (completions.size() == 1) {
                     String completion = (String) completions.get(0);
@@ -477,15 +478,12 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             final int limit = files.size();
             for (int i = 0; i < limit; i++) {
                 File file = (File) files.get(i);
-                // We don't want the file we're currently looking at.
-                if (file.equals(currentFile))
-                    continue;
                 String name;
-                if (currentDirectory != null &&
+                if (currentDirectory != null && currentDirectory.isLocal() &&
                     currentDirectory.equals(file.getParentFile())) {
                     name = file.getName();
                 } else {
-                    name = file.canonicalPath();
+                    name = file.netPath();
                 }
                 if (file.isDirectory()) {
                     addCompletion(completions,
