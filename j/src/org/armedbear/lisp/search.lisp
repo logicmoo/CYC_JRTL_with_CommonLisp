@@ -1,7 +1,7 @@
 ;;; search.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: search.lisp,v 1.3 2003-06-22 20:20:52 piso Exp $
+;;; $Id: search.lisp,v 1.4 2003-06-24 18:22:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,10 +25,10 @@
 
 (defmacro compare-elements (elt1 elt2)
   `(if test-not
-       (if (funcall test-not (apply-key key ,elt1) (apply-key key ,elt2))
+       (if (funcall test-not (funcall-key key ,elt1) (funcall-key key ,elt2))
            (return nil)
            t)
-       (if (funcall test (apply-key key ,elt1) (apply-key key ,elt2))
+       (if (funcall test (funcall-key key ,elt1) (funcall-key key ,elt2))
            t
            (return nil))))
 
@@ -101,6 +101,8 @@
                          (start1 0) end1 (start2 0) end2 key)
   (let ((end1 (or end1 (length sequence1)))
 	(end2 (or end2 (length sequence2))))
+    (when key
+      (setq key (coerce-to-function key)))
     (if (listp sequence2)
         (list-search sequence2 sequence1)
         (vector-search sequence2 sequence1))))

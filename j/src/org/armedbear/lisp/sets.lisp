@@ -1,7 +1,7 @@
 ;;; sets.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sets.lisp,v 1.1 2003-06-10 17:37:41 piso Exp $
+;;; $Id: sets.lisp,v 1.2 2003-06-24 18:23:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,10 +19,6 @@
 
 (in-package "COMMON-LISP")
 
-(export '(union nunion intersection nintersection
-          set-difference nset-difference
-          set-exclusive-or nset-exclusive-or subsetp))
-
 ;;; From CMUCL.
 
 (defmacro with-set-keys (funcall)
@@ -32,9 +28,11 @@
 (defun union (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
     (error "test and test-not both supplied"))
+  (when key
+    (setq key (coerce-to-function key)))
   (let ((res list2))
     (dolist (elt list1)
-      (unless (with-set-keys (member (apply-key key elt) list2))
+      (unless (with-set-keys (member (funcall-key key elt) list2))
 	(push elt res)))
     res))
 
@@ -47,11 +45,13 @@
 (defun nunion (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
     (error "test and test-not both supplied"))
+  (when key
+    (setq key (coerce-to-function key)))
   (let ((res list2)
 	(list1 list1))
     (do ()
         ((endp list1))
-      (if (not (with-set-keys (member (apply-key key (car list1)) list2)))
+      (if (not (with-set-keys (member (funcall-key key (car list1)) list2)))
 	  (steve-splice list1 res)
 	  (setf list1 (cdr list1))))
     res))
@@ -61,9 +61,11 @@
 			   (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
     (error "test and test-not both supplied"))
+  (when key
+    (setq key (coerce-to-function key)))
   (let ((res nil))
     (dolist (elt list1)
-      (if (with-set-keys (member (apply-key key elt) list2))
+      (if (with-set-keys (member (funcall-key key elt) list2))
 	  (push elt res)))
     res))
 
@@ -71,10 +73,12 @@
 			    (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
     (error "test and test-not both supplied"))
+  (when key
+    (setq key (coerce-to-function key)))
   (let ((res nil)
 	(list1 list1))
     (do () ((endp list1))
-      (if (with-set-keys (member (apply-key key (car list1)) list2))
+      (if (with-set-keys (member (funcall-key key (car list1)) list2))
 	  (steve-splice list1 res)
 	  (setq list1 (cdr list1))))
     res))
@@ -83,11 +87,13 @@
 			     (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
     (error "test and test-not both supplied"))
+  (when key
+    (setq key (coerce-to-function key)))
   (if (null list2)
       list1
       (let ((res nil))
 	(dolist (elt list1)
-	  (if (not (with-set-keys (member (apply-key key elt) list2)))
+	  (if (not (with-set-keys (member (funcall-key key elt) list2)))
 	      (push elt res)))
 	res)))
 
@@ -96,10 +102,12 @@
 			      (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
     (error "test and test-not both supplied"))
+  (when key
+    (setq key (coerce-to-function key)))
   (let ((res nil)
 	(list1 list1))
     (do () ((endp list1))
-      (if (not (with-set-keys (member (apply-key key (car list1)) list2)))
+      (if (not (with-set-keys (member (funcall-key key (car list1)) list2)))
 	  (steve-splice list1 res)
 	  (setq list1 (cdr list1))))
     res))
@@ -109,12 +117,14 @@
                                (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
     (error "test and test-not both supplied"))
+  (when key
+    (setq key (coerce-to-function key)))
   (let ((result nil)
         (key (when key (coerce key 'function)))
         (test (coerce test 'function))
         (test-not (if test-not (coerce test-not 'function) #'eql)))
     (dolist (elt list1)
-      (unless (with-set-keys (member (apply-key key elt) list2))
+      (unless (with-set-keys (member (funcall-key key elt) list2))
 	(setq result (cons elt result))))
     (let ((test (if testp
                     (lambda (x y) (funcall test y x))
@@ -123,13 +133,15 @@
                         (lambda (x y) (funcall test-not y x))
                         test-not)))
       (dolist (elt list2)
-        (unless (with-set-keys (member (apply-key key elt) list1))
+        (unless (with-set-keys (member (funcall-key key elt) list1))
           (setq result (cons elt result)))))
     result))
 
 
 (defun nset-exclusive-or (list1 list2 &key (test #'eql) (test-not nil notp)
 				key)
+  (when key
+    (setq key (coerce-to-function key)))
   (do ((list1 list1)
        (list2 list2)
        (x list1 (cdr x))
@@ -142,8 +154,8 @@
     (do ((y list2 (cdr y))
 	 (splicey ()))
         ((endp y) (setq splicex x))
-      (cond ((let ((key-val-x (apply-key key (car x)))
-		   (key-val-y (apply-key key (car y))))
+      (cond ((let ((key-val-x (funcall-key key (car x)))
+		   (key-val-y (funcall-key key (car y))))
 	       (if notp
 		   (not (funcall test-not key-val-x key-val-y))
 		   (funcall test key-val-x key-val-y)))
@@ -159,7 +171,9 @@
 (defun subsetp (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
     (error "test and test-not both supplied"))
+  (when key
+    (setq key (coerce-to-function key)))
   (dolist (elt list1)
-    (unless (with-set-keys (member (apply-key key elt) list2))
+    (unless (with-set-keys (member (funcall-key key elt) list2))
       (return-from subsetp nil)))
   T)
