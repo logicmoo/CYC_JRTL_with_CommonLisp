@@ -27,6 +27,7 @@
 #define __USE_XOPEN
 #endif
 
+#include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -109,6 +110,10 @@ int main(int argc, char *argv[])
         set_noecho(STDIN_FILENO);
 
         putenv("TERM=dumb");
+	
+	/* Ignore SIGHUP to work around Linux kernel bug (2.6.9). 
+	 * http://lkml.org/lkml/2004/10/21/119 */
+	signal(SIGHUP, SIG_IGN);
 
         execvp(argv[i], &argv[i]);
 
