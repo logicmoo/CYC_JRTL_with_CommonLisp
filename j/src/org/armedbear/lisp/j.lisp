@@ -116,13 +116,15 @@
 
 (defun set-variable-value (name kind &rest rest)
   (let (where new-value)
-    (ecase (length rest)
+    (case (length rest)
       (1
        (setq where nil
              new-value (car rest)))
       (2
        (setq where (car rest)
-             new-value (cadr rest))))
+             new-value (cadr rest)))
+      (t
+       (error 'program-error "SET-VARIABLE-VALUE: wrong number of arguments")))
     (%set-variable-value name kind where new-value)))
 
 (defsetf variable-value set-variable-value)
