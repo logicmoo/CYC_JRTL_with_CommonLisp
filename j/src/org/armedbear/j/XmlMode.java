@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.6 2003-06-12 01:21:17 piso Exp $
+ * $Id: XmlMode.java,v 1.7 2003-06-12 13:50:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,7 +143,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         menuBar.add(new Menu("View", 'V'));
         menuBar.add(new Menu("Search", 'S'));
         menuBar.add(new Menu("Go", 'G'));
-        menuBar.add(new Menu("XML", 'X'));
+        menuBar.add(new Menu("Mode", 'M'));
         menuBar.add(new Menu("Help", 'H'));
         return menuBar;
     }
@@ -151,12 +151,17 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
     public void populateMenu(Editor editor, Menu menu)
     {
         final String text = menu.getText();
-        if (menu.getText().equals("XML")) {
+        if (menu.getText().equals("Mode")) {
             menu.add(editor, "Insert Element", 'I', "xmlInsertTag");
             menu.add(editor, "End Current Element", 'E', "xmlInsertMatchingEndTag");
             menu.addSeparator();
             menu.add(editor, "Parse Buffer", 'P', "xmlParseBuffer");
             menu.add(editor, "Validate Buffer", 'V', "xmlValidateBuffer");
+            boolean enabled = errorBuffer != null;
+            menu.addSeparator();
+            menu.add(editor, "Next Error", 'N', "nextError", enabled);
+            menu.add(editor, "Previous Error", 'R', "previousError", enabled);
+            menu.add(editor, "Show Error Message", 'S', "showMessage", enabled);
         }
         else
             super.populateMenu(editor, menu);
@@ -699,7 +704,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                 // be output...
                 if (output != null && output.length() > 0) {
                     errorBuffer =
-                        new XmlErrorBuffer(output);
+                        new XmlErrorBuffer(buffer.getFile(), output);
                     Editor otherEditor = editor.getOtherEditor();
                     if (otherEditor != null) {
                         errorBuffer.setUnsplitOnClose(
@@ -745,7 +750,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                 String output = parser.getOutput();
                 if (output != null && output.length() > 0) {
                     errorBuffer =
-                        new XmlErrorBuffer(output);
+                        new XmlErrorBuffer(buffer.getFile(), output);
                     Editor otherEditor = editor.getOtherEditor();
                     if (otherEditor != null) {
                         errorBuffer.setUnsplitOnClose(
