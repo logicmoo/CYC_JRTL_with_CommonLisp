@@ -275,6 +275,7 @@
     <li><a href="commands.html#sendMailBackTab">sendMailBackTab</a></li>
     <li><a href="commands.html#sendMailTab">sendMailTab</a></li>
     <li><a href="commands.html#setEncoding">setEncoding</a></li>
+    <li><a href="commands.html#shellCommand">shellCommand</a></li>
     <li><a href="commands.html#shellEscape">shellEscape</a></li>
     <li><a href="commands.html#shellHome">shellHome</a></li>
     <li><a href="commands.html#shellTab">shellTab</a></li>
@@ -3671,12 +3672,26 @@ perspective of Java 1.4 is available here:
 <br><br>
 </dl><!--<hr>-->
 
+<a name="shellCommand">shellCommand</a><dl><dd>
+<p>
+Prompts for a shell command and then executes that command using /bin/sh. The
+output of the command (if any) is presented in a transient output buffer.
+<p>
+The specified shell command is executed in the editor's current directory,
+which is normally the parent directory of the file associated with the current
+buffer, or the user's home directory if the current file is remote or if there
+is no file associated with the current buffer.
+<p> 
+<b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
 <a name="shellEscape">shellEscape</a><dl><dd>
 <p>
 In a shell buffer, if a selection is marked, clears it.  Otherwise, if the
 caret is on the command line, clears any text past the end of the command
 prompt and moves the caret to the end of the prompt.
-<br><br>
+<p>
 <b>Default key mapping:</b> Escape in Shell mode
 <br><br>
 </dl><!--<hr>-->
@@ -3686,7 +3701,7 @@ prompt and moves the caret to the end of the prompt.
 In a shell buffer, if the current line begins with a prompt, and if the caret
 is to the right of the prompt, moves the caret to the end of prompt.  Otherwise,
 moves the caret to the beginning of the current line.
-<br><br>
+<p>
 <b>Default key mapping:</b> Home in Shell mode
 <br><br>
 </dl><!--<hr>-->
