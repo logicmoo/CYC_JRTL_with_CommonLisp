@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.11 2003-10-30 18:40:53 piso Exp $
+;;; $Id: top-level.lisp,v 1.12 2003-11-13 17:50:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,12 +21,6 @@
 
 ;;; A few things we're gonna be needing...
 (mapc #'sys::resolve '(sort position break write make-sequence))
-
-(in-package "EXTENSIONS")
-
-(export '(*saved-backtrace*))
-
-(defvar *saved-backtrace* nil)
 
 (in-package "TOP-LEVEL")
 
