@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.172 2004-05-30 19:07:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.173 2004-05-31 02:10:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,11 +30,12 @@
 (defvar *debug* nil)
 
 (defvar *pool* nil)
+(defvar *pool-count* 1)
+(defvar *pool-entries* nil)
 
 (defvar *stream* nil)
 (defvar *defun-name* nil)
 (defvar *this-class* nil)
-(defvar *pool-count* 1)
 
 (defvar *code* ())
 (defvar *static-code* ())
@@ -85,11 +86,11 @@
 
 (defvar *val* nil) ; index of value register
 
-(defun clear ()
-  (setf *pool* nil
-        *pool-count* 1
-        *code* nil)
-  t)
+;; (defun clear ()
+;;   (setf *pool* nil
+;;         *pool-count* 1
+;;         *code* nil)
+;;   t)
 
 (defun dump-pool ()
   (let ((pool (reverse *pool*))
@@ -114,19 +115,15 @@
 
 ;; Returns index of entry (1-based).
 (defun pool-add (entry)
-  (setq *pool* (cons entry *pool*))
-  (prog1
-    *pool-count*
-    (incf *pool-count*)))
+  (let ((index *pool-count*))
+    (push entry *pool*)
+    (setf (gethash entry *pool-entries*) *pool-count*)
+    (incf *pool-count*)
+    index))
 
 ;; Returns index of entry (1-based).
 (defun pool-find-entry (entry)
-  (do* ((remaining *pool* (cdr remaining))
-        (i 0 (1+ i))
-        (current (car remaining) (car remaining)))
-       ((null remaining) nil)
-    (when (equal current entry)
-      (return-from pool-find-entry (- *pool-count* 1 i)))))
+  (values (gethash entry *pool-entries*)))
 
 ;; Adds entry if not already in pool. Returns index of entry (1-based).
 (defun pool-get (entry)
@@ -411,150 +408,170 @@
                       0)
   (emit-store-value))
 
-;; CODE is a list.
-(defun resolve-args (instruction)
-  (let ((opcode (instruction-opcode instruction))
-        (args (instruction-args instruction)))
-    (case opcode
-      (203 ; PUSH-VALUE
-       (case *val*
-         (0
-          (inst 42)) ; ALOAD_0
-         (1
-          (inst 43)) ; ALOAD_1
-         (2
-          (inst 44)) ; ALOAD_2
-         (3
-          (inst 45)) ; ALOAD_3
-         (t
-          (inst 25 *val*))))
-      (204 ; STORE-VALUE
-       (case *val*
-         (0
-          (inst 75)) ; ASTORE_0
-         (1
-          (inst 76)) ; ASTORE_1
-         (2
-          (inst 77)) ; ASTORE_2
-         (3
-          (inst 78)) ; ASTORE_3
-         (t
-          (inst 58 *val*))))
-      ((1 ; ACONST_NULL
-        2 ; ICONST_M1
-        3 ; ICONST_0
-        4 ; ICONST_1
-        5 ; ICONST_2
-        6 ; ICONST_3
-        7 ; ICONST_4
-        8 ; ICONST_5
-        42 ; ALOAD_0
-        43 ; ALOAD_1
-        44 ; ALOAD_2
-        45 ; ALOAD_3
-        50 ; AALOAD
-        75 ; ASTORE_0
-        76 ; ASTORE_1
-        77 ; ASTORE_2
-        78 ; ASTORE_3
-        83 ; AASTORE
-        87 ; POP
-        89 ; DUP
-        91 ; DUP_X2
-        95 ; SWAP
-        153 ; IFEQ
-        154 ; IFNE
-        166 ; IF_ACMPNE
-        165 ; IF_ACMPEQ
-        167 ; GOTO
-        176 ; ARETURN
-        177 ; RETURN
-        202 ; LABEL
-        )
-       instruction)
-      (25 ; ALOAD
-       (let ((index (car args)))
-         (cond ((= index 0)
-                (inst 42)) ; ALOAD_O
-               ((= index 1)
-                (inst 43)) ; ALOAD_1
-               ((= index 2)
-                (inst 44)) ; ALOAD_2
-               ((= index 3)
-                (inst 45)) ; ALOAD_3
-               ((<= 0 index 255)
-                (inst 25 index))
-               (t
-                (error "ALOAD unsupported case")))))
-      (58 ; ASTORE
-       (let ((index (car args)))
-         (cond ((= index 0)
-                (inst 75)) ; ASTORE_O
-               ((= index 1)
-                (inst 76)) ; ASTORE_1
-               ((= index 2)
-                (inst 77)) ; ASTORE_2
-               ((= index 3)
-                (inst 78)) ; ASTORE_3
-               ((<= 0 index 255)
-                (inst 58 index))
-               (t
-                (error "ASTORE unsupported case")))))
-      ((178 ; GETSTATIC class-name field-name type-name
-        179 ; PUTSTATIC class-name field-name type-name
-        )
-       (let ((index (pool-field (first args) (second args) (third args))))
-         (inst opcode (u2 index))))
-      ((180 ; GETFIELD
-        181 ; PUTFIELD class-name field-name type-name
-        )
-       (let ((index (pool-field (first args) (second args) (third args))))
-         (inst opcode (u2 index))))
-      ((182 ; INVOKEVIRTUAL class-name method-name descriptor
-        183 ; INVOKESPECIAL class-name method-name descriptor
-        184 ; INVOKESTATIC class-name method-name descriptor
-        )
-       (let ((index (pool-method (first args) (second args) (third args))))
-;;          (inst opcode (u2 index))))
-         (setf (instruction-args instruction) (u2 index))
-         instruction))
-      ((187 ; NEW class-name
-        189 ; ANEWARRAY class-name
-        192 ; CHECKCAST class-name
-        193 ; INSTANCEOF class-name
-        )
-       (let ((index (pool-class (first args))))
-         (inst opcode (u2 index))))
-      ((16 ; BIPUSH
-        17 ; SIPUSH
-        )
-       (let ((n (first args)))
-         (cond ((= n 0)
-                (inst 3)) ; ICONST_0
-               ((= n 1)
-                (inst 4)) ; ICONST_1
-               ((= n 2)
-                (inst 5)) ; ICONST_2
-               ((= n 3)
-                (inst 6)) ; ICONST_3
-               ((= n 4)
-                (inst 7)) ; ICONST_4
-               ((= n 5)
-                (inst 8)) ; ICONST_5
-               ((<= -128 n 127)
-                (inst 16 (logand n #xff))) ; BIPUSH
-               (t ; SIPUSH
-                (inst 17 (u2 n))))))
-      (18 ; LDC
-       (unless (= (length args) 1)
-         (error "wrong number of args for LDC"))
-       (if (> (car args) 255)
-           (inst 19 (u2 (car args))) ; LDC_W
-           (inst opcode args)))
-      (t
-       (error "RESOLVE-ARGS unsupported opcode ~D" opcode)))))
+(defparameter *resolvers* (make-hash-table :test #'eql))
 
-;; CODE is a list of INSTRUCTIONs.
+(dolist (n '(1 ; ACONST_NULL
+             2 ; ICONST_M1
+             3 ; ICONST_0
+             4 ; ICONST_1
+             5 ; ICONST_2
+             6 ; ICONST_3
+             7 ; ICONST_4
+             8 ; ICONST_5
+             42 ; ALOAD_0
+             43 ; ALOAD_1
+             44 ; ALOAD_2
+             45 ; ALOAD_3
+             50 ; AALOAD
+             75 ; ASTORE_0
+             76 ; ASTORE_1
+             77 ; ASTORE_2
+             78 ; ASTORE_3
+             83 ; AASTORE
+             87 ; POP
+             89 ; DUP
+             91 ; DUP_X2
+             95 ; SWAP
+             153 ; IFEQ
+             154 ; IFNE
+             166 ; IF_ACMPNE
+             165 ; IF_ACMPEQ
+             167 ; GOTO
+             176 ; ARETURN
+             177 ; RETURN
+             202 ; LABEL
+             ))
+  (setf (gethash n *resolvers*) #'identity))
+
+(defmacro assign-resolver (opcodes resolver)
+  (if (listp opcodes)
+      `(dolist (op ',opcodes)
+         (setf (gethash op *resolvers*) ,resolver))
+      `(setf (gethash ',opcodes *resolvers*) ,resolver)))
+
+;; (defmacro define-resolver (opcodes args &body body)
+;;   (unless (listp opcodes)
+;;     (setf opcodes (list opcodes)))
+;;   `(dolist (op ',opcodes)
+;;      (setf (gethash op *resolvers*) #'(lambda ,args ,@body))))
+(defmacro define-resolver (opcodes args &body body)
+  (unless (listp opcodes)
+    (setf opcodes (list opcodes)))
+  `(let ((resolver #'(lambda ,args ,@body)))
+     (dolist (op ',opcodes)
+       (setf (gethash op *resolvers*) resolver))))
+
+;; PUSH-VALUE
+;; (define-resolver 203 (instruction)
+(defun resolve-push-value (instruction)
+  (let ((val *val*))
+    (if (<= 0 val 3)
+        (inst (+ val 42))
+        (inst 25 val))))
+;; (setf (gethash 203 *resolvers*) #'resolve-push-value)
+(assign-resolver 203 #'resolve-push-value)
+
+;; STORE-VALUE
+;; (define-resolver 204 (instruction)
+(defun resolve-store-value (instruction)
+  (let ((val *val*))
+  (if (<= 0 val 3)
+      (inst (+ val 75))
+      (inst 58 val))))
+;; (setf (gethash 204 *resolvers*) #'resolve-store-value)
+(assign-resolver 204 #'resolve-store-value)
+
+;; ALOAD
+;; (define-resolver 25 (instruction)
+(defun resolve-aload (instruction)
+ (let* ((args (instruction-args instruction))
+        (index (car args)))
+   (cond ((<= 0 index 3)
+          (inst (+ index 42)))
+         ((<= 0 index 255)
+          (inst 25 index))
+         (t
+          (error "ALOAD unsupported case")))))
+;; (setf (gethash 25 *resolvers*) #'resolve-aload)
+(assign-resolver 25 #'resolve-aload)
+
+;; ASTORE
+;; (define-resolver 58 (instruction)
+(defun resolve-astore (instruction)
+  (let* ((args (instruction-args instruction))
+         (index (car args)))
+    (cond ((<= 0 index 3)
+           (inst (+ index 75)))
+          ((<= 0 index 255)
+           (inst 58 index))
+          (t
+           (error "ASTORE unsupported case")))))
+;; (setf (gethash 58 *resolvers*) #'resolve-astore)
+(assign-resolver 58 #'resolve-astore)
+
+;; GETSTATIC, PUTSTATIC
+(define-resolver (178 179) (instruction)
+  (let* ((args (instruction-args instruction))
+         (index (pool-field (first args) (second args) (third args))))
+    (inst (instruction-opcode instruction) (u2 index))))
+
+;; BIPUSH, SIPUSH
+(define-resolver (16 17) (instruction)
+  (let* ((args (instruction-args instruction))
+         (n (first args)))
+   (cond ((= n 0)
+          (inst 3)) ; ICONST_0
+         ((= n 1)
+          (inst 4)) ; ICONST_1
+         ((= n 2)
+          (inst 5)) ; ICONST_2
+         ((= n 3)
+          (inst 6)) ; ICONST_3
+         ((= n 4)
+          (inst 7)) ; ICONST_4
+         ((= n 5)
+          (inst 8)) ; ICONST_5
+         ((<= -128 n 127)
+          (inst 16 (logand n #xff))) ; BIPUSH
+         (t ; SIPUSH
+          (inst 17 (u2 n))))))
+
+;; INVOKEVIRTUAL, INVOKESPECIAL, INVOKESTATIC class-name method-name descriptor
+;; (define-resolver (182 183 184) (instruction)
+(defun resolve-invoke* (instruction)
+  (let* ((args (instruction-args instruction))
+         (index (pool-method (first args) (second args) (third args))))
+    (setf (instruction-args instruction) (u2 index))
+    instruction))
+(assign-resolver (182 183 184) #'resolve-invoke*)
+
+;; LDC
+(define-resolver 18 (instruction)
+  (let* ((args (instruction-args instruction)))
+    (unless (= (length args) 1)
+      (error "Wrong number of args for LDC."))
+    (if (> (car args) 255)
+        (inst 19 (u2 (car args))) ; LDC_W
+        (inst 18 args))))
+
+;; GETFIELD, PUTFIELD class-name field-name type-name
+(define-resolver (180 181) (instruction)
+  (let* ((args (instruction-args instruction))
+         (index (pool-field (first args) (second args) (third args))))
+    (inst (instruction-opcode instruction) (u2 index))))
+
+;; NEW, ANEWARRAY, CHECKCAST, INSTANCEOF class-name
+(define-resolver (187 189 192 193) (instruction)
+  (let* ((args (instruction-args instruction))
+         (index (pool-class (first args))))
+    (inst (instruction-opcode instruction) (u2 index))))
+
+(defun resolve-args (instruction)
+  (let ((resolver (gethash (instruction-opcode instruction) *resolvers*)))
+    (if resolver
+        (funcall resolver instruction)
+        (error "RESOLVE-ARGS: unsupported opcode ~D." (instruction-opcode instruction)))))
+
 (defun resolve-opcodes (code)
 ;;   (map 'vector #'resolve-args code))
   (let ((vector (make-array 512 :fill-pointer 0 :adjustable t)))
@@ -2430,31 +2447,35 @@
 
 (defun compile-values (form for-effect)
   (let ((args (cdr form)))
-    (cond ((= (length args) 2)
-           (ensure-thread-var-initialized)
-           (emit 'aload *thread*)
-           (cond ((and (eq (car args) t)
-                       (eq (cadr args) t))
-                  (emit-push-t)
-                  (emit 'dup))
-                 ((and (eq (car args) nil)
-                       (eq (cadr args) nil))
-                  (emit-push-nil)
-                  (emit 'dup))
-                 (t
-                  (compile-form (car args))
-                  (unless (remove-store-value)
-                    (emit-push-value))
-                  (compile-form (cadr args))
-                  (unless (remove-store-value)
-                    (emit-push-value))))
-           (emit-invokevirtual +lisp-thread-class+
-                               "setValues"
-                               "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                               -2)
-           (emit-store-value))
-          (t
-           (compile-function-call form for-effect)))))
+    (case (length args)
+      (1
+       (compile-form (car args))
+       (maybe-emit-clear-values (car args)))
+      (2
+       (ensure-thread-var-initialized)
+       (emit 'aload *thread*)
+       (cond ((and (eq (car args) t)
+                   (eq (cadr args) t))
+              (emit-push-t)
+              (emit 'dup))
+             ((and (eq (car args) nil)
+                   (eq (cadr args) nil))
+              (emit-push-nil)
+              (emit 'dup))
+             (t
+              (compile-form (car args))
+              (unless (remove-store-value)
+                (emit-push-value))
+              (compile-form (cadr args))
+              (unless (remove-store-value)
+                (emit-push-value))))
+       (emit-invokevirtual +lisp-thread-class+
+                           "setValues"
+                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                           -2)
+       (emit-store-value))
+      (t
+       (compile-function-call form for-effect)))))
 
 (defun compile-variable-ref (var)
   (let ((v (find-variable var)))
@@ -2610,6 +2631,7 @@
          (*variables* ())
          (*pool* ())
          (*pool-count* 1)
+         (*pool-entries* (make-hash-table :test #'equal))
          (*val* nil)
          (*thread* nil)
          (*thread-var-initialized* nil))
@@ -2842,11 +2864,16 @@
   (jvm-compile name definition))
 
 (eval-when (:execute)
-  (let ((*auto-compile* nil))
-    (mapc #'jvm-compile '(pool-add
-                          pool-find-entry
-                          pool-name
-                          pool-get
-                          compile-form))))
+  (mapc #'jvm-compile '(pool-add
+                        pool-find-entry
+                        pool-name
+                        pool-get
+                        compile-form)))
+
+(eval-when (:load-toplevel :execute)
+  (dotimes (n 256)
+    (let ((resolver (gethash n *resolvers*)))
+      (when (and resolver (not (compiled-function-p resolver)))
+        (setf (gethash n *resolvers*) (compile nil resolver))))))
 
 (provide 'jvm)
