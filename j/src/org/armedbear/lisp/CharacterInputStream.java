@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CharacterInputStream.java,v 1.61 2004-01-02 19:07:47 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.62 2004-01-04 01:43:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,19 +190,12 @@ public class CharacterInputStream extends LispInputStream
 
     private LispObject readPathname() throws ConditionThrowable
     {
-        int n;
-        try {
-            n = read();
-        }
-        catch (IOException e) {
-            return signal(new StreamError(e));
-        }
-        if (n < 0)
-            return signal(new EndOfFile());
-        char nextChar = (char) n;
-        if (nextChar == '"')
-            return Pathname.parseNamestring(_readString());
-        return signal(new TypeError("#p requires a string argument"));
+        LispObject obj = read(true, NIL, false);
+        if (obj instanceof LispString)
+            return new Pathname(((LispString)obj).getValue());
+        if (obj.listp())
+            return Pathname.makePathname(obj);
+        return signal(new TypeError("#p requires a string or list argument."));
     }
 
     private LispObject readQuote() throws ConditionThrowable
