@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.279 2003-07-06 16:21:34 piso Exp $
+ * $Id: Primitives.java,v 1.280 2003-07-06 17:59:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2616,8 +2616,13 @@ public final class Primitives extends Module
                 return pkg != null ? pkg : NIL;
             }
             if (arg instanceof Symbol) {
-                Package pkg =
-                    Packages.findPackage(arg.getName());
+                Package pkg = Packages.findPackage(arg.getName());
+                return pkg != null ? pkg : NIL;
+            }
+            if (arg instanceof LispCharacter) {
+                String packageName =
+                    String.valueOf(new char[] {((LispCharacter)arg).getValue()});
+                Package pkg = Packages.findPackage(packageName);
                 return pkg != null ? pkg : NIL;
             }
             return NIL;
