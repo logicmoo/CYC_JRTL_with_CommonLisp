@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.103 2004-04-08 14:49:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.104 2004-04-14 15:26:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -316,13 +316,6 @@
 (defun find-variable (var)
   (find var *variables* :key 'variable-name))
 
-;; (defun specialp (var)
-;;   (let ((info (find-variable var)))
-;;     (if info
-;;         (cdr info)
-;;         ;; Not found in variables list.
-;;         (special-variable-p var))))
-
 (defvar *local-functions* ())
 
 (defstruct local-function
@@ -426,6 +419,9 @@
 (defun pool-string (string)
   (pool-get (list 8 (pool-name string))))
 
+(defun pool-int (n)
+  (pool-get (list 3 n)))
+
 (defun u2 (n)
   (list (ash n -8) (logand n #xff)))
 
@@ -504,6 +500,7 @@
 (defconstant +lisp-symbol-class+ "org/armedbear/lisp/Symbol")
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
 (defconstant +lisp-cons-class+ "org/armedbear/lisp/Cons")
+(defconstant +lisp-fixnum-class+ "org/armedbear/lisp/Fixnum")
 (defconstant +lisp-environment-class+ "org/armedbear/lisp/Environment")
 
 (defun emit-push-nil ()
@@ -1080,12 +1077,14 @@
       (incf len (if (eql (char string i) #\null) 2 1)))
     len))
 
-(defun write-cp-entry (entry)
+(defun write-constant-pool-entry (entry)
   (write-u1 (first entry))
   (case (first entry)
     (1 ; UTF8
      (write-u2 (utf8-length (third entry)))
      (write-utf8 (third entry)))
+    (3 ; int
+     (write-u4 (second entry)))
     ((5 6)
      (write-u4 (second entry))
      (write-u4 (third entry)))
@@ -1098,10 +1097,10 @@
      (error "WRITE-CP-ENTRY unhandled tag ~D~%" (car entry)))
   ))
 
-(defun write-pool ()
+(defun write-constant-pool ()
   (write-u2 *pool-count*)
   (dolist (entry (reverse *pool*))
-    (write-cp-entry entry)))
+    (write-constant-pool-entry entry)))
 
 (defstruct field
   access-flags
@@ -1288,6 +1287,24 @@
     (setq *static-code* *code*)
     g))
 
+(defun declare-fixnum (n)
+  (let ((g (symbol-name (gensym)))
+        (s (format nil "~S" n))
+        (*code* *static-code*))
+    (declare-field g +lisp-object+)
+
+    (emit 'ldc (pool-int n))
+    (emit-invokestatic +lisp-fixnum-class+
+                       "getInstance"
+                       "(I)Lorg/armedbear/lisp/Fixnum;"
+                       0)
+    (emit 'putstatic
+          *this-class*
+          g
+          +lisp-object+)
+    (setq *static-code* *code*)
+    g))
+
 (defun declare-object-as-string (obj)
   (let ((g (symbol-name (gensym)))
         (s (format nil "~S" obj))
@@ -1373,7 +1390,7 @@
                    "Lorg/armedbear/lisp/Fixnum;")
              (emit-store-value))
             (t
-             (let ((g (declare-object-as-string n)))
+             (let ((g (declare-fixnum n)))
                (emit 'getstatic
                      *this-class*
                      g
@@ -1430,14 +1447,10 @@
   (compile-form (first args))
   (unless (remove-store-value)
     (emit-push-value))
-;;   (unless (single-valued-p (first args))
-;;     (emit-clear-values))
   (maybe-emit-clear-values (first args))
   (compile-form (second args))
   (unless (remove-store-value)
     (emit-push-value))
-;;   (unless (single-valued-p (second args))
-;;     (emit-clear-values))
   (maybe-emit-clear-values (second args))
   (emit-invokevirtual +lisp-object-class+
                       op
@@ -2646,7 +2659,7 @@
         (write-u4 #xCAFEBABE)
         (write-u2 3)
         (write-u2 45)
-        (write-pool)
+        (write-constant-pool)
         ;; access flags
         (write-u2 #x21)
         (write-u2 this-index)
