@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.7 2003-10-12 03:37:52 piso Exp $
+ * $Id: StandardObject.java,v 1.8 2003-10-12 16:13:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ public class StandardObject extends LispObject
     {
     }
 
-    private StandardObject(LispClass cls, LispObject slots)
+    protected StandardObject(LispClass cls, LispObject slots)
     {
         this.cls = cls;
         this.slots = slots;
@@ -104,8 +104,12 @@ public class StandardObject extends LispObject
         {
             if (first == BuiltInClass.STANDARD_CLASS)
                 return new StandardClass();
-            if (first instanceof LispClass)
+            if (first instanceof LispClass) {
+                Symbol symbol = ((LispClass)first).getSymbol();
+                if (symbol == Symbol.STANDARD_GENERIC_FUNCTION)
+                    return new GenericFunction((LispClass)first, second);
                 return new StandardObject((LispClass)first, second);
+            }
             throw new ConditionThrowable(new TypeError(first, "class"));
         }
     };
