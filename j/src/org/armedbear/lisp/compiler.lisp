@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.23 2003-06-10 00:42:57 piso Exp $
+;;; $Id: compiler.lisp,v 1.24 2003-06-20 14:15:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@
   (let ((name (car def))
         (arglist (cadr def))
         (body (cddr def)))
-    (append (list name arglist) (compile-progn body))))
+    (list* name arglist (compile-progn body))))
 
 (defun compile-let-vars (vars)
   (let ((result nil))
@@ -139,11 +139,11 @@
        (let ((second (second form))
              (third (third form))
              (body (cdddr form)))
-         (append (list first second third) (compile-progn body))))
+         (list* first second third (compile-progn body))))
       (DOTIMES
        (let ((args (cadr form))
              (body (cddr form)))
-         (append (list first args) (compile-progn body))))
+         (list* first args (compile-progn body))))
       (TAGBODY
        (let ((body (cdr form)))
          (cons 'tagbody (compile-tagbody body))))
@@ -180,8 +180,8 @@
         (unless (and (symbolp first) (fboundp first))
           (return-from compile-sexp form))
         (cond ((eq first 'LAMBDA)
-               (append (list 'LAMBDA (second form))
-                       (mapcar #'compile-sexp (cddr form))))
+               (list* 'LAMBDA (second form)
+                      (mapcar #'compile-sexp (cddr form))))
               ((special-operator-p first)
                (compile-special form))
               ((macro-function first)
