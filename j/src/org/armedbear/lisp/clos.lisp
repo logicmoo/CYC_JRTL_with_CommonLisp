@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.37 2003-12-15 17:11:38 piso Exp $
+;;; $Id: clos.lisp,v 1.38 2003-12-15 17:28:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1598,7 +1598,6 @@
   (let ((parent-types (or parent-types '(condition)))
         (report nil))
     (dolist (option options)
-      (format t "option = ~S~%" option)
       (when (eq (car option) :report)
         (let ((arg (cadr option)))
           (setf report
