@@ -60,14 +60,11 @@ public final class CppTagger extends JavaTagger implements Constants
                 continue;
             }
             if (pos.lookingAt("/*")) {
-                skipComment();
+                skipComment(pos);
                 continue;
             }
             if (pos.lookingAt("//")) {
-                Line nextLine = pos.getNextLine();
-                if (nextLine == null)
-                    break;
-                pos.moveTo(nextLine, 0);
+                skipSingleLineComment(pos);
                 continue;
             }
             if (c == '#' && pos.getOffset() == 0) {

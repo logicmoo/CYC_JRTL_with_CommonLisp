@@ -2,7 +2,7 @@
  * CTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CTagger.java,v 1.4 2002-11-05 02:24:53 piso Exp $
+ * $Id: CTagger.java,v 1.5 2002-11-09 18:17:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,14 +59,11 @@ public final class CTagger extends JavaTagger
                 continue;
             }
             if (pos.lookingAt("/*")) {
-                skipComment();
+                skipComment(pos);
                 continue;
             }
             if (pos.lookingAt("//")) {
-                Line nextLine = pos.getNextLine();
-                if (nextLine == null)
-                    break;
-                pos.moveTo(nextLine, 0);
+                skipSingleLineComment(pos);
                 continue;
             }
             if (c == '#' && pos.getOffset() == 0) {
@@ -164,7 +161,7 @@ public final class CTagger extends JavaTagger
         }
         return sb.toString();
     }
-    
+
     private static boolean isDefunStart(String s)
     {
         if (s.length() < 5)

@@ -2,7 +2,7 @@
  * JavaTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaTagger.java,v 1.1.1.1 2002-09-24 16:08:08 piso Exp $
+ * $Id: JavaTagger.java,v 1.2 2002-11-09 18:17:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,14 +75,11 @@ public class JavaTagger extends Tagger implements Constants
                 continue;
             }
             if (pos.lookingAt("/*")) {
-                skipComment();
+                skipComment(pos);
                 continue;
             }
             if (pos.lookingAt("//")) {
-                Line next = pos.getNextLine();
-                if (next == null)
-                    break;
-                pos.moveTo(next, 0);
+                skipSingleLineComment(pos);
                 continue;
             }
             if (state == STATIC_INITIALIZER) {
@@ -301,12 +298,21 @@ public class JavaTagger extends Tagger implements Constants
             tags.add(new JavaTag(token, tokenStart, type, visibility));
     }
 
-    protected void skipComment()
+    protected static final void skipComment(Position pos)
     {
         while (!pos.lookingAt("*/") && pos.next())
             ;
         if (pos.lookingAt("*/"))
             pos.skip(2);
+    }
+
+    protected static final void skipSingleLineComment(Position pos)
+    {
+        Line next = pos.getNextLine();
+        if (next != null)
+            pos.moveTo(next, 0);
+        else
+            pos.setOffset(pos.getLineLength());
     }
 
     // If canonical is true, strings like "java.lang.String" are considered to
@@ -338,14 +344,11 @@ public class JavaTagger extends Tagger implements Constants
             int count = 1;
             while (true) {
                 if (pos.lookingAt("/*")) {
-                    skipComment();
+                    skipComment(pos);
                     continue;
                 }
                 if (pos.lookingAt("//")) {
-                    Line nextLine = pos.getNextLine();
-                    if (nextLine == null)
-                        break;
-                    pos.moveTo(nextLine, 0);
+                    skipSingleLineComment(pos);
                     continue;
                 }
                 char c = pos.getChar();
@@ -371,18 +374,12 @@ public class JavaTagger extends Tagger implements Constants
             int count = 1;
             while (true) {
                 if (pos.lookingAt("/*")) {
-                    skipComment();
+                    skipComment(pos);
                     continue;
                 }
                 if (pos.lookingAt("//")) {
-                    Line nextLine = pos.getNextLine();
-                    if (nextLine != null) {
-                        pos.moveTo(nextLine, 0);
-                        continue;
-                    }
-                    // Next line is null.  Reached end of buffer.
-                    pos.setOffset(pos.getLineLength());
-                    break;
+                    skipSingleLineComment(pos);
+                    continue;
                 }
                 char c = pos.getChar();
                 if (c == '"' || c == '\'') {
@@ -413,19 +410,12 @@ public class JavaTagger extends Tagger implements Constants
     {
         while (!pos.atEnd()) {
             if (pos.lookingAt("/*")) {
-                skipComment();
+                skipComment(pos);
                 continue;
             }
             if (pos.lookingAt("//")) {
-                Line nextLine = pos.getNextLine();
-                if (nextLine == null) {
-                    // Next line is null.  Reached end of buffer.
-                    pos.setOffset(pos.getLineLength());
-                    break;
-                } else {
-                    pos.moveTo(nextLine, 0);
-                    continue;
-                }
+                skipSingleLineComment(pos);
+                continue;
             }
             char c = pos.getChar();
             if (c == '"' || c == '\'') {
