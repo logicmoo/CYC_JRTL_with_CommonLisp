@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.230 2003-06-03 14:05:39 piso Exp $
+ * $Id: Primitives.java,v 1.231 2003-06-06 18:19:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2365,6 +2365,10 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
+            if (first == NIL)
+                return T;
+            if (second == NIL)
+                return NIL;
             Type type1 = Type.getInstance(first);
             Type type2 = Type.getInstance(second);
             return type1.subtypep(type2);
