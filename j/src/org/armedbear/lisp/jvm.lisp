@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.328 2004-12-29 05:34:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.329 2004-12-30 18:29:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -115,6 +115,9 @@
 
 ;; All variables seen so far.
 (defvar *all-variables* ())
+
+;; Undefined variables that we've already warned about.
+(defvar *undefined-variables* ())
 
 (defvar *dump-variables* nil)
 
@@ -924,12 +927,29 @@
     (emit-unbox-fixnum))
   (emit-move-from-stack target representation))
 
-(defun require-args (form n)
+(defvar *style-warnings* nil)
+(defvar *warnings* nil)
+(defvar *errors* nil)
+
+(defun compiler-style-warn (format-control &rest format-arguments)
+  (incf *style-warnings*)
+  (warn 'style-warning
+        :format-control format-control
+        :format-arguments format-arguments))
+
+(defun compiler-warn (format-control &rest format-arguments)
+  (incf *warnings*)
+  (warn 'warning
+        :format-control format-control
+        :format-arguments format-arguments))
+
+(defun check-args (form n)
   (declare (type fixnum n))
-  (unless (= (length form) (1+ n))
-    (error 'program-error
-           :format-control "Wrong number of arguments for ~A."
-           :format-arguments (list (car form)))))
+  (cond ((= (length form) (1+ n))
+         t)
+        (t
+         (compiler-style-warn "Wrong number of arguments for ~A." (car form))
+         nil)))
 
 (defparameter *resolvers* (make-hash-table :test #'eql))
 
@@ -2558,7 +2578,8 @@
          (let ((sym (cadr fun)))
            (if (and (symbolp sym)
                     (eq (symbol-package sym) (find-package "CL"))
-                    (not (special-operator-p sym)))
+                    (not (special-operator-p sym))
+                    (not (macro-function sym)))
                `(,(cadr fun) ,@args)
                form)))
         (t
@@ -2566,12 +2587,13 @@
 
 (defun compile-funcall (form &key (target *val*) representation)
   (unless (> (length form) 1)
-    (error "Wrong number of arguments for FUNCALL."))
+    (compiler-style-warn "Wrong number of arguments for ~A." (car form))
+    (compile-function-call form target representation))
   (when (> *debug* *speed*)
     (return-from compile-funcall (compile-function-call form target representation)))
-  (let ((new-form (rewrite-function-call form)))
-    (when (neq new-form form)
-      (return-from compile-funcall (compile-form new-form :target target))))
+;;   (let ((new-form (rewrite-function-call form)))
+;;     (when (neq new-form form)
+;;       (return-from compile-funcall (compile-form new-form :target target))))
   (compile-form (cadr form) :target :stack)
   (maybe-emit-clear-values (cadr form))
   (compile-call (cddr form))
@@ -2897,9 +2919,9 @@
   ;; Use a Java boolean if possible.
   (when (and (consp form)
              (not (special-operator-p (car form))))
-    (let ((new-form (rewrite-function-call form)))
-      (when (neq new-form form)
-        (return-from compile-test (compile-test new-form negatep))))
+;;     (let ((new-form (rewrite-function-call form)))
+;;       (when (neq new-form form)
+;;         (return-from compile-test (compile-test new-form negatep))))
     (case (length form)
       (2
        (return-from compile-test (compile-test-2 form negatep)))
@@ -3611,7 +3633,9 @@
         (emit-move-from-stack target))))))
 
 (defun compile-cons (form &key (target *val*) representation)
-  (require-args form 2)
+  (unless (check-args form 2)
+    (compile-function-call form target representation)
+    (return-from compile-cons))
   (emit 'new +lisp-cons-class+)
   (emit 'dup)
   (process-args (cdr form))
@@ -3684,9 +3708,9 @@
             (error "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
 (defun compile-rplacd (form &key (target *val*) representation)
-  (let ((new-form (rewrite-function-call form)))
-    (when (neq new-form form)
-      (return-from compile-rplacd (compile-form new-form :target target))))
+;;   (let ((new-form (rewrite-function-call form)))
+;;     (when (neq new-form form)
+;;       (return-from compile-rplacd (compile-form new-form :target target))))
   (let ((args (cdr form)))
     (unless (= (length args) 2)
       (error "wrong number of arguments for RPLACD"))
@@ -3963,14 +3987,15 @@
 
 (defun p2-ash (form &key (target *val*) representation)
   (dformat t "p2-ash form = ~S representation = ~S~%" form representation)
-  (require-args form 2)
+  (unless (check-args form 2)
+    (compile-function-call form target representation)
+    (return-from p2-ash))
   (let* ((args (cdr form))
          (len (length args))
          (arg1 (first args))
          (arg2 (second args))
          (var1 (unboxed-fixnum-variable arg1))
-         (var2 (unboxed-fixnum-variable arg2))
-         )
+         (var2 (unboxed-fixnum-variable arg2)))
     (cond
      ((and (numberp arg1) (numberp arg2))
       (dformat t "p2-ash case 1~%")
@@ -4108,7 +4133,7 @@
   t)
 
 (defun compile-length (form &key (target *val*) representation)
-  (require-args form 1)
+  (check-args form 1)
   (let ((arg (cadr form)))
     (compile-form arg :target :stack)
     (maybe-emit-clear-values arg)
@@ -4126,7 +4151,9 @@
     (emit-move-from-stack target representation)))
 
 (defun compile-nth (form &key (target *val*) representation)
-  (require-args form 2)
+  (unless (check-args form 2)
+    (compile-function-call form target representation)
+    (return-from compile-nth))
   (let ((index-form (second form))
         (list-form (third form)))
     (compile-form index-form :target :stack :representation :unboxed-fixnum)
@@ -4490,8 +4517,9 @@
             (compile-constant value :target target :representation representation)
             (return-from compile-variable-reference))))
       (unless (special-variable-p name)
-        ;; FIXME This should be a warning!
-        (%format t "~A Note: undefined variable ~S~%" (load-verbose-prefix) name))
+        (unless (memq name *undefined-variables*)
+          (compiler-warn "Undefined variable ~S" name)
+          (push name *undefined-variables*)))
       (compile-special-reference name target representation))
      ((eq (variable-representation variable) :unboxed-fixnum)
       (dformat t "compile-variable-reference unboxed-fixnum case~%")
@@ -4919,11 +4947,7 @@
     ;; Pass 1.
     (setf precompiled-form (p1 precompiled-form))
     ;; Pass 2.
-    (let* (
-;;            (*speed* *speed*)
-;;            (*safety* *safety*)
-;;            (*debug* *debug*)
-           (*declared-symbols* (make-hash-table :test 'eq))
+    (let* ((*declared-symbols* (make-hash-table :test 'eq))
            (*declared-functions* (make-hash-table :test 'equal))
            (*declared-strings* (make-hash-table :test 'eq))
            (*declared-fixnums* (make-hash-table :test 'eql))
@@ -4962,8 +4986,8 @@
            (*context-register* *context-register*)
 
            (*visible-variables* *visible-variables*)
-
            (*all-variables* *all-variables*)
+           (*undefined-variables* *undefined-variables*)
 
            (parameters ())
 
@@ -5162,12 +5186,17 @@
     (return-from compile-defun nil))
   (unless (or (null environment) (sys::empty-environment-p environment))
     (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
-  ;;   (prog1
-  (let ((precompiled-form (precompile-form form t)))
-    (compile-1 (make-compiland :name name
-                               :lambda-expression precompiled-form
-                               :classfile classfile
-                               :parent *current-compiland*))))
+  (handler-bind ((warning #'handle-warning))
+    (let ((precompiled-form (precompile-form form t)))
+      (compile-1 (make-compiland :name name
+                                 :lambda-expression precompiled-form
+                                 :classfile classfile
+                                 :parent *current-compiland*)))))
+
+(defun handle-warning (condition)
+  (fresh-line)
+  (format t "; Caught ~A:~%;   ~A~%" (type-of condition) condition)
+  (muffle-warning))
 
 (defun get-lambda-to-compile (definition-designator)
   (if (and (consp definition-designator)
@@ -5187,6 +5216,22 @@
     s))
 
 (defvar *catch-errors* t)
+
+(defmacro with-compilation-unit (&body body)
+  `(let ((*style-warnings* 0)
+         (*warnings* 0)
+         (*errors* 0))
+     (unwind-protect
+      (progn ,@body)
+      (unless (and (zerop *warnings*) (zerop *style-warnings*))
+        (format t "~%; Compilation unit finished~%")
+        (unless (zerop *warnings*)
+          (format t ";   Caught ~D WARNING condition~P~%"
+                  *warnings* *warnings*))
+        (unless (zerop *style-warnings*)
+          (format t ";   Caught ~D STYLE-WARNING condition~P~%"
+                  *style-warnings* *style-warnings*))
+        (terpri)))))
 
 (defun %jvm-compile (name definition)
   (let ((prefix (load-verbose-prefix)))
@@ -5209,25 +5254,37 @@
     (when (compiled-function-p definition)
       (when (and *compile-print* name)
         (%format t "~A Already compiled ~S~%" prefix name))
-      (return-from %jvm-compile (values definition nil nil)))
+      (return-from %jvm-compile (values name nil nil)))
     (multiple-value-bind (expr env) (get-lambda-to-compile definition)
       (let* ((*package* (if (and name (symbol-package name))
                             (symbol-package name)
                             *package*))
-             (classfile (compile-defun name expr env))
-             (compiled-definition (sys:load-compiled-function classfile)))
-        (when (and name (functionp compiled-definition))
-          (sys::%set-lambda-name compiled-definition name)
-          (sys:set-call-count compiled-definition (sys:call-count definition))
-          (sys::%set-arglist compiled-definition (sys::arglist definition))
-          (if (macro-function name)
-              (setf (fdefinition name) (sys::make-macro name compiled-definition))
-              (setf (fdefinition name) compiled-definition)))
-        (when *compile-print*
-          (if name
-              (%format t "~A Compiled ~S~%" prefix name)
-              (%format t "~A Compiled top-level form~%" prefix)))
-        (values (or name compiled-definition) nil nil)))))
+             classfile
+             compiled-definition
+             (warnings-p t)
+             (failure-p t))
+;;              (classfile (compile-defun name expr env))
+;;              (compiled-definition (sys:load-compiled-function classfile)))
+        (with-compilation-unit
+          (setf classfile (compile-defun name expr env))
+          (setf compiled-definition (sys:load-compiled-function classfile))
+          (when (and name (functionp compiled-definition))
+            (sys::%set-lambda-name compiled-definition name)
+            (sys:set-call-count compiled-definition (sys:call-count definition))
+            (sys::%set-arglist compiled-definition (sys::arglist definition))
+            (if (macro-function name)
+                (setf (fdefinition name) (sys::make-macro name compiled-definition))
+                (setf (fdefinition name) compiled-definition)))
+          (cond
+           ((zerop (+ jvm::*errors* jvm::*warnings* jvm::*style-warnings*))
+            (setf warnings-p nil failure-p nil))
+           ((zerop (+ jvm::*errors* jvm::*warnings*))
+            (setf failure-p nil)))
+          (when *compile-print*
+            (if name
+                (%format t "~A Compiled ~S~%" prefix name)
+                (%format t "~A Compiled top-level form~%" prefix))))
+        (values (or name compiled-definition) warnings-p failure-p)))))
 
 (defun jvm-compile (name &optional definition)
   (if *catch-errors*
