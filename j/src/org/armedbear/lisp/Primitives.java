@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.321 2003-08-11 18:03:15 piso Exp $
+ * $Id: Primitives.java,v 1.322 2003-08-11 18:39:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -569,10 +569,12 @@ public final class Primitives extends Module
                 return ((Fixnum)arg).getValue() == 0 ? T : NIL;
             }
             catch (ClassCastException e) {
-                if (arg instanceof LispFloat)
-                    return ((LispFloat)arg).getValue() == 0 ? T : NIL;
                 if (arg instanceof Bignum)
                     return NIL;
+                if (arg instanceof Ratio)
+                    return NIL;
+                if (arg instanceof LispFloat)
+                    return ((LispFloat)arg).getValue() == 0 ? T : NIL;
                 throw new TypeError(arg, "number");
             }
         }
