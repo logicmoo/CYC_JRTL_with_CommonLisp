@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.92 2003-10-16 02:19:14 piso Exp $
+ * $Id: Autoload.java,v 1.93 2003-10-16 15:00:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,33 +58,46 @@ public class Autoload extends Function
             }
         }
         symbol.setSymbolFunction(new Autoload(symbol, null,
-            "org.armedbear.lisp.".concat(className)));
+                                              "org.armedbear.lisp.".concat(className)));
     }
 
     public void load() throws ConditionThrowable
     {
         if (className != null) {
+            final LispThread thread = LispThread.currentThread();
+            final Environment oldDynEnv = thread.getDynamicEnvironment();
+            int loadDepth = Fixnum.getInt(_LOAD_DEPTH_.symbolValue());
+            thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
             try {
-                CharacterOutputStream out = getStandardOutput();
-                out.writeString("; Loading ");
-                out.writeString(className);
-                out.writeLine(" ...");
-                out.flushOutput();
-                long start = System.currentTimeMillis();
-                Class.forName(className);
-                long elapsed = System.currentTimeMillis() - start;
-                out.writeString("; Loaded ");
-                out.writeString(className);
-                out.writeString(" (");
-                out.writeString(String.valueOf(((float)elapsed)/1000));
-                out.writeLine(" seconds)");
-                out.flushOutput();
+                if (_AUTOLOAD_VERBOSE_.symbolValueNoThrow() != NIL) {
+                    final String prefix = Load.getLoadVerbosePrefix(loadDepth);
+                    CharacterOutputStream out = getStandardOutput();
+                    out.writeString(prefix);
+                    out.writeString(" Autoloading ");
+                    out.writeString(className);
+                    out.writeLine(" ...");
+                    out.flushOutput();
+                    long start = System.currentTimeMillis();
+                    Class.forName(className);
+                    long elapsed = System.currentTimeMillis() - start;
+                    out.writeString(prefix);
+                    out.writeString(" Autoloaded ");
+                    out.writeString(className);
+                    out.writeString(" (");
+                    out.writeString(String.valueOf(((float)elapsed)/1000));
+                    out.writeLine(" seconds)");
+                    out.flushOutput();
+                } else
+                    Class.forName(className);
             }
             catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
         } else
-            Load._load(getFileName(), true, false);
+            Load._load(getFileName(), true);
     }
 
     public final Symbol getSymbol()
