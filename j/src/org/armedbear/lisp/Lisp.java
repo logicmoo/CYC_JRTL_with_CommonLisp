@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.305 2004-11-28 15:43:49 piso Exp $
+ * $Id: Lisp.java,v 1.306 2004-11-30 05:28:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1251,41 +1251,6 @@ public abstract class Lisp
                     Debug.assertTrue(false);
                 }
             }
-        }
-        return sb.toString();
-    }
-
-    public static final String invert(String s)
-    {
-        // "When the readtable case is :INVERT, the case of all alphabetic
-        // characters in single case symbol names is inverted. Mixed-case
-        // symbol names are printed as is." (22.1.3.3.2)
-        final int limit = s.length();
-        final int LOWER = 1;
-        final int UPPER = 2;
-        int state = 0;
-        for (int i = 0; i < limit; i++) {
-            char c = s.charAt(i);
-            if (Character.isUpperCase(c)) {
-                if (state == LOWER)
-                    return s; // Mixed case.
-                state = UPPER;
-            }
-            if (Character.isLowerCase(c)) {
-                if (state == UPPER)
-                    return s; // Mixed case.
-                state = LOWER;
-            }
-        }
-        StringBuffer sb = new StringBuffer(limit);
-        for (int i = 0; i < limit; i++) {
-            char c = s.charAt(i);
-            if (Character.isUpperCase(c))
-                sb.append(Character.toLowerCase(c));
-            else if (Character.isLowerCase(c))
-                sb.append(Character.toUpperCase(c));
-            else
-                sb.append(c);
         }
         return sb.toString();
     }
