@@ -396,6 +396,8 @@
                               "eql"
                               "eval"
                               "every"
+                              "fboundp"
+                              "fdefinition"
                               "fill-pointer"
                               "find"
                               "find-if"
