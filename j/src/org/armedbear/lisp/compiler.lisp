@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.26 2003-06-24 18:22:56 piso Exp $
+;;; $Id: compiler.lisp,v 1.27 2003-07-02 13:52:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,12 +64,11 @@
 (defun compile-tagbody (body)
   (let ((rest body)
         (result ()))
-    (while rest
+    (do () ((null rest) result)
       (if (atom (car rest))
           (setq result (nconc result (list (car rest))))
           (setq result (append result (list (compile-sexp (car rest))))))
-      (setq rest (cdr rest)))
-    result))
+      (setq rest (cdr rest)))))
 
 (defun compile-locals (locals)
   (let ((result nil))
