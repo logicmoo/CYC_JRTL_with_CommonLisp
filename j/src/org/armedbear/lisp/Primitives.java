@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.556 2004-02-02 13:00:34 piso Exp $
+ * $Id: Primitives.java,v 1.557 2004-02-02 18:15:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1547,7 +1547,8 @@ public final class Primitives extends Lisp
     };
 
     // ### case
-    private static final SpecialOperator CASE = new SpecialOperator("case") {
+    private static final SpecialOperator CASE = new SpecialOperator("case")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -1584,7 +1585,8 @@ public final class Primitives extends Lisp
     };
 
     // ### ecase
-    private static final SpecialOperator ECASE = new SpecialOperator("ecase") {
+    private static final SpecialOperator ECASE = new SpecialOperator("ecase")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -1595,7 +1597,7 @@ public final class Primitives extends Lisp
                 LispObject clause = args.car();
                 LispObject keys = clause.car();
                 boolean match = false;
-                if (keys instanceof Cons) {
+                if (keys.listp()) {
                     while (keys != NIL) {
                         LispObject candidate = keys.car();
                         if (key.eql(candidate)) {
@@ -3959,7 +3961,7 @@ public final class Primitives extends Lisp
     };
 
     // ### nreverse
-    public static final Primitive1 NREVERSE = new Primitive1("nreverse","sequence")
+    public static final Primitive1 NREVERSE = new Primitive1("nreverse", "sequence")
     {
         public LispObject execute (LispObject arg) throws ConditionThrowable
         {
@@ -3968,8 +3970,9 @@ public final class Primitives extends Lisp
     };
 
     // ### nreconc
-    // From CLISP.
-    private static final Primitive2 NRECONC = new Primitive2("nreconc","list tail") {
+    // Adapted from CLISP.
+    private static final Primitive2 NRECONC = new Primitive2("nreconc", "list tail")
+    {
         public LispObject execute(LispObject list, LispObject obj)
             throws ConditionThrowable
         {
@@ -4003,7 +4006,7 @@ public final class Primitives extends Lisp
     };
 
     // ### reverse
-    private static final Primitive1 REVERSE = new Primitive1("reverse","sequence")
+    private static final Primitive1 REVERSE = new Primitive1("reverse", "sequence")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
