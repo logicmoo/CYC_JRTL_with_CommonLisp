@@ -2,7 +2,7 @@
  * Platform.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Platform.java,v 1.6 2005-02-16 19:45:01 piso Exp $
+ * $Id: Platform.java,v 1.7 2005-04-05 01:13:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,8 @@ public final class Platform
         osName.startsWith("AIX");
     private static final boolean isPlatformWindows =
         osName.startsWith("Windows");
+    private static final boolean isPlatformMacOSX =
+        osName.startsWith("Mac OS X");
     private static final boolean isJava13 =
         System.getProperty("java.version").startsWith("1.3");
     private static final boolean isJava14 =
@@ -61,7 +63,7 @@ public final class Platform
 
     public static final boolean isPlatformMacOSX()
     {
-        return osName.startsWith("Mac OS X");
+        return isPlatformMacOSX;
     }
 
     public static final boolean isPlatformWindows5()
