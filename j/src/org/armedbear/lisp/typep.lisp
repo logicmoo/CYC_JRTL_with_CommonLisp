@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: typep.lisp,v 1.17 2004-02-10 15:54:46 piso Exp $
+;;; $Id: typep.lisp,v 1.18 2004-02-10 16:20:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@
             (or (endp i)
                 (eq (car i) '*)
                 (and (eq (car i) t) (not (stringp object)) (not (bit-vector-p object)))
-                (and (stringp object) (subtypep (car i) 'character))
+                (and (stringp object) (%subtypep (car i) 'character))
                 (equal (array-element-type object) (car i)))
             (or (endp (cdr i)) (match-dimensions (array-dimensions object) (cdr i)))))
       (SIMPLE-ARRAY
