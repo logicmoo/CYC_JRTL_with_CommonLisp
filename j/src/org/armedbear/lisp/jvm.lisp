@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.244 2004-07-26 15:38:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.245 2004-07-26 18:30:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -56,6 +56,10 @@
 (defvar *fields* ())
 
 (defvar *blocks* ())
+
+;; All tags visible at the current point of compilation, some of which may not
+;; be in the current compiland.
+(defvar *visible-tags* ())
 
 ;; Next available register.
 (defvar *register* 0)
@@ -168,6 +172,16 @@
   non-local-return-p ; True if there is a non-local RETURN from this block.
   )
 
+(defstruct tag
+  name
+  label
+  tagbody
+  (compiland *current-compiland*))
+
+(defstruct (tagbody-node (:conc-name tagbody-) (:include node))
+  non-local-go-p ; True if a tag in this tagbody is the target of a non-local GO.
+  )
+
 ;;; Pass 1.
 
 (defun p1-let/let*-vars (varlist)
@@ -185,27 +199,15 @@
   (list* (car form) (p1-let/let*-vars (cadr form)) (mapcar #'p1 (cddr form))))
 
 (defun p1-block (form)
-  (cond
-;;    ((= (length form) 2) ; (block foo)
-;;          nil)
-        (t
-         (let ((*blocks* *blocks*)
-               (block (make-block-node :name (cadr form))))
-           (push block *blocks*)
-;;            (%format t "(cddr form) = ~S~%" (cddr form))
-           (setf form (list* 'BLOCK (cadr form) (mapcar #'p1 (cddr form))))
-;;            (make-block-node :form form :name (cadr form))
-           (setf (block-form block) form)
-           block
-           )
-         )))
+  (let* ((block (make-block-node :name (cadr form)))
+         (*blocks* (cons block *blocks*)))
+    (setf (block-form block) (list* 'BLOCK (cadr form) (mapcar #'p1 (cddr form))))
+    block))
 
 (defun p1-return-from (form)
-;;   (%format t "P1-RETURN-FROM form = ~S~%" form)
   (let* ((name (second form))
          (result-form (third form))
          (block (find name *blocks* :key #'block-name)))
-;;     (%format t "P1-RETURN-FROM block = ~S~%" block)
     (cond ((null block)
            (error "P1-RETURN-FROM: no block named ~S is currently visible." name))
           ((eq (block-compiland block) *current-compiland*)
@@ -213,12 +215,42 @@
           (t
            (setf (block-return-p block) t)
            (setf (block-non-local-return-p block) t))))
-;;     (%format t "P1-RETURN-FROM block-return-p = ~S~%" (block-return-p block)))
-  (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
+  (list* 'RETURN-FROM (cadr form) (mapcar #'p1 (cddr form))))
+
+(defun p1-tagbody (form)
+;;   (format t "P1-TAGBODY form = ~S~%" form)
+  (let ((*visible-tags* *visible-tags*)
+        (body (cdr form))
+        (tagbody (make-tagbody-node)))
+    (dolist (subform body)
+      (when (or (symbolp subform) (integerp subform))
+        (let* ((tag (make-tag :name subform :label (gensym) :tagbody tagbody)))
+          (push tag *visible-tags*))))
+    (setf (tagbody-form tagbody) (list* 'TAGBODY (mapcar #'p1 (cdr form))))
+    tagbody))
+
+(defun p1-go (form)
+;;   (format t "P1-GO form = ~S~%" form)
+;;   (format t "*current-compiland* = ~S~%" *current-compiland*)
+  (let* ((name (cadr form))
+         (tag (find-tag name)))
+    (unless tag
+      (error "COMPILE-GO: tag not found: ~S" name))
+;;     (format t "tag-compiland = ~S~%" (tag-compiland tag))
+    (unless (eq (tag-compiland tag) *current-compiland*)
+      (setf (tagbody-non-local-go-p (tag-tagbody tag)) t)))
+  form)
 
 (defun p1-flet/labels (form)
+;;   (format t "P1-FLET/LABELS form = ~S~%" form)
   (incf (compiland-children *current-compiland*) (length (cadr form)))
-;;   form)
+  ;; Do pass 1 on the local definitions, discarding the result (we're just
+  ;; checking for non-local RETURNs and GOs.)
+  (let ((*current-compiland* nil))
+    (dolist (definition (cadr form))
+      (setf definition (list* 'BLOCK (car definition) (cadr definition) (cddr definition)))
+;;       (format t "definition = ~S~%" definition)
+      (p1 definition)))
   (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
 
 (defun p1-function (form)
@@ -231,7 +263,6 @@
     (when *current-compiland*
       (unless (or (compiland-contains-lambda *current-compiland*)
                   (eq form (compiland-lambda-expression *current-compiland*)))
-;;         (format t "P1-LAMBDA form = ~S~%" form)
         (do ((compiland *current-compiland* (compiland-parent compiland)))
             ((null compiland))
           (setf (compiland-contains-lambda compiland) t)))))
@@ -241,9 +272,6 @@
   (unless (= (length form) 3)
     (error "Too many arguments for SETQ."))
   (list 'SETQ (second form) (p1 (third form))))
-
-(defun p1-tagbody (form)
-  (list* (car form) (mapcar #'p1 (cdr form))))
 
 (defun p1-default (form)
   (list* (car form) (mapcar #'p1 (cdr form))))
@@ -294,7 +322,7 @@
 (install-p1-handler 'eval-when            'p1-lambda)
 (install-p1-handler 'flet                 'p1-flet/labels)
 (install-p1-handler 'function             'p1-function)
-(install-p1-handler 'go                   'identity)
+(install-p1-handler 'go                   'p1-go)
 (install-p1-handler 'if                   'p1-default)
 (install-p1-handler 'labels               'p1-flet/labels)
 (install-p1-handler 'lambda               'p1-lambda)
@@ -2488,44 +2516,57 @@
                ((null forms))
              (compile-form (car forms) :target (if (cdr forms) nil target)))))))
 
-;; Tags defined in the current compiland that are visible at the current point
-;; of compilation.
-(defvar *local-tags* ())
-
-;; All tags visible at the current point of compilation, some of which may not
-;; be in the current compiland.
-(defvar *all-tags* ())
-
-(defstruct tag
-  name
-  label
-  (compiland *current-compiland*))
-
 (defun find-tag (name)
-  (dolist (tag *all-tags*)
+  (dolist (tag *visible-tags*)
     (when (eql name (tag-name tag))
       (return tag))))
 
-;; (defun label-for-tag (name)
-;;   (dolist (tag *local-tags*)
-;;     (when (eql name (tag-name tag))
-;;       (return (tag-label tag)))))
-
+#+nil
 (defun compile-tagbody (form &key (target *val*))
-  (let ((*local-tags* *local-tags*)
-        (*all-tags* *all-tags*)
+  (format t "COMPILE-TAGBODY called~S~%")
+  (assert nil)
+  (let ((*visible-tags* *visible-tags*)
         (body (cdr form)))
     ;; Scan for tags.
     (dolist (subform body)
-;;       (when (atom subform)
       (when (or (symbolp subform) (integerp subform))
         (let* ((tag (make-tag :name subform :label (gensym))))
-          (push tag *local-tags*)
-          (push tag *all-tags*))))
+          (push tag *visible-tags*))))
     (do* ((rest body (cdr rest))
           (subform (car rest) (car rest)))
          ((null rest))
-;;       (cond ((atom subform)
+      (cond ((or (symbolp subform) (integerp subform))
+             (let ((tag (find-tag subform)))
+               (unless tag
+                 (error "COMPILE-TAGBODY: tag not found: ~S~%" subform))
+               (label (tag-label tag))))
+            (t
+             (when (and (null (cdr rest)) ;; Last subform.
+                        (consp subform)
+                        (eq (car subform) 'GO))
+               (generate-interrupt-check))
+             (compile-form subform :target nil)
+             (maybe-emit-clear-values subform)))))
+  ;; TAGBODY returns NIL.
+  (emit-clear-values)
+  (when target
+    (emit-push-nil)
+    (emit-move-from-stack target)))
+
+(defun compile-tagbody-node (tagbody target)
+  (let* ((*visible-tags* *visible-tags*)
+         (form (tagbody-form tagbody))
+         (body (cdr form)))
+;;     (format t "COMPILE-TAGBODY-NODE non-local-go-p = ~S~%"
+;;             (tagbody-non-local-go-p tagbody))
+    ;; Scan for tags.
+    (dolist (subform body)
+      (when (or (symbolp subform) (integerp subform))
+        (let* ((tag (make-tag :name subform :label (gensym) :tagbody tagbody)))
+          (push tag *visible-tags*))))
+    (do* ((rest body (cdr rest))
+          (subform (car rest) (car rest)))
+         ((null rest))
       (cond ((or (symbolp subform) (integerp subform))
              (let ((tag (find-tag subform)))
                (unless tag
@@ -2596,7 +2637,9 @@
 (defun compile-block-node (block target)
 ;;   (%format t "COMPILE-BLOCK-NODE ~S block-return-p = ~S~%"
 ;;            (block-name block) (block-return-p block))
-  (assert (node-p block))
+  (unless (block-node-p block)
+    (format t "type-of block = ~S~%" (type-of block))
+    (assert (block-node-p block)))
   (let* ((*blocks* *blocks*)
          (*register* *register*)
          env-register)
@@ -3561,6 +3604,9 @@
         ((block-node-p form)
 ;;          (%format t "COMPILE-FORM block-node case~S~%")
          (compile-block-node form target))
+        ((tagbody-node-p form)
+;;          (%format t "COMPILE-FORM tagbody-node case~S~%")
+         (compile-tagbody-node form target))
         ((constantp form)
          (compile-constant form :target target))
         (t
@@ -3588,19 +3634,6 @@
     (4 #.(format nil "(~A~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
     (t (setq *using-arg-array* t)
        #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
-
-;; (defun contains-lambda (form)
-;;   (cond ((node-p form)
-;;          (contains-lambda (node-form form)))
-;;         ((atom form)
-;;          nil)
-;;         ((eq (car form) 'QUOTE)
-;;          nil)
-;;         ((eq (car form) 'LAMBDA)
-;;          t)
-;;         (t
-;;          (or (contains-lambda (car form))
-;;              (contains-lambda (cdr form))))))
 
 (defun compile-defun (name form environment &optional (classfile "out.class"))
   (unless (eq (car form) 'LAMBDA)
@@ -3638,17 +3671,6 @@
              (*child-p* (if *context* t nil))
 
              (*use-locals-vector*
-;;               (progn
-;;                 (when obstacles
-;;                   (assert (> (compiland-children *current-compiland*) 0)))
-;;                 (%format t "compiland ~A contains-lambda = ~S~%"
-;;                          (compiland-name *current-compiland*)
-;;                          (compiland-contains-lambda *current-compiland*))
-;;                 (%format t "body = ~S~%" body)
-;;                 (assert (eq (contains-lambda body)
-;;                             (compiland-contains-lambda *current-compiland*)))
-;; ;;                 (or obstacles (contains-lambda body))))
-;;                 (or obstacles (compiland-contains-lambda *current-compiland*))))
               (or (> (compiland-children *current-compiland*) 0)
                   (compiland-contains-lambda *current-compiland*)))
 
@@ -3659,7 +3681,7 @@
              (*static-code* ())
              (*fields* ())
 
-             (*local-tags* nil)
+;;              (*local-tags* nil)
 
              (*register* 0)
              (*registers-allocated* 0)
@@ -4004,7 +4026,7 @@
                              return-from
                              rplacd
                              setq
-                             tagbody
+;;                              tagbody
                              throw
                              unwind-protect
                              values))
