@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.35 2003-04-09 12:45:11 piso Exp $
+ * $Id: Symbol.java,v 1.36 2003-04-09 23:23:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,11 +88,13 @@ public class Symbol extends LispObject
     // Condition types.
     public static final Symbol SIMPLE_CONDITION     = export("SIMPLE-CONDITION");
 
+    public static final Symbol END_OF_FILE          = export("END-OF-FILE");
     public static final Symbol ERROR                = export("ERROR");
     public static final Symbol CONTROL_ERROR        = export("CONTROL-ERROR");
     public static final Symbol PACKAGE_ERROR        = export("PACKAGE-ERROR");
     public static final Symbol PROGRAM_ERROR        = export("PROGRAM-ERROR");
     public static final Symbol SIMPLE_ERROR         = export("SIMPLE-ERROR");
+    public static final Symbol STREAM_ERROR         = export("STREAM-ERROR");
     public static final Symbol TYPE_ERROR           = export("TYPE-ERROR");
     public static final Symbol UNDEFINED_FUNCTION   = export("UNDEFINED-FUNCTION");
 
