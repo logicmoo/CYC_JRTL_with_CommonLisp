@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.3 2005-02-13 04:17:42 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.4 2005-02-20 14:43:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,9 +22,11 @@
 (defun check-redefinition (name)
   (when (and *warn-on-redefinition* (fboundp name) (not (autoloadp name)))
     (cond ((symbolp name)
-           (let ((old-definition (symbol-function name))
-                 (old-source (source-pathname name))
-                 (current-source (or *fasl-source* *load-truename* :top-level)))
+           (let ((old-source (source-pathname name))
+                 (current-source (or *fasl-source*
+                                     *load-truename*
+                                     *compile-file-truename*
+                                     :top-level)))
              (unless (equal old-source current-source)
                (if (eq current-source :top-level)
                    (style-warn "redefining ~S at top level" name)
@@ -33,7 +35,10 @@
 
 (defun record-source-information (name &optional source-pathname source-position)
   (unless source-pathname
-    (setf source-pathname (or *fasl-source* *load-truename* :top-level)))
+    (setf source-pathname (or *fasl-source*
+                              *load-truename*
+                              *compile-file-truename*
+                              :top-level)))
   (let ((source (if source-position
                     (cons source-pathname source-position)
                     source-pathname)))
