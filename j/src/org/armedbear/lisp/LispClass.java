@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.11 2003-09-17 14:48:52 piso Exp $
+ * $Id: LispClass.java,v 1.12 2003-09-17 19:19:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,12 +68,14 @@ public final class LispClass extends LispObject
     public static final LispClass CLASS_T          = addClass(T);
 
     public static final LispClass ARRAY            = addClass(Symbol.ARRAY);
+    public static final LispClass BIGNUM           = addClass(Symbol.BIGNUM);
     public static final LispClass BIT_VECTOR       = addClass(Symbol.BIT_VECTOR);
     public static final LispClass BUILT_IN_CLASS   = addClass(Symbol.BUILT_IN_CLASS);
     public static final LispClass CHARACTER        = addClass(Symbol.CHARACTER);
     public static final LispClass CLASS            = addClass(Symbol.CLASS);
     public static final LispClass COMPLEX          = addClass(Symbol.COMPLEX);
     public static final LispClass CONS             = addClass(Symbol.CONS);
+    public static final LispClass FIXNUM           = addClass(Symbol.FIXNUM);
     public static final LispClass FLOAT            = addClass(Symbol.FLOAT);
     public static final LispClass FUNCTION         = addClass(Symbol.FUNCTION);
     public static final LispClass HASH_TABLE       = addClass(Symbol.HASH_TABLE);
@@ -86,6 +88,7 @@ public final class LispClass extends LispObject
     public static final LispClass RANDOM_STATE     = addClass(Symbol.RANDOM_STATE);
     public static final LispClass RATIO            = addClass(Symbol.RATIO);
     public static final LispClass RATIONAL         = addClass(Symbol.RATIONAL);
+    public static final LispClass REAL             = addClass(Symbol.REAL);
     public static final LispClass SEQUENCE         = addClass(Symbol.SEQUENCE);
     public static final LispClass STANDARD_CLASS   = addClass(Symbol.STANDARD_CLASS);
     public static final LispClass STANDARD_OBJECT  = addClass(Symbol.STANDARD_OBJECT);
