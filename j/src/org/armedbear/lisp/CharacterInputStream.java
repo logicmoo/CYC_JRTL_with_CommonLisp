@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.34 2003-05-27 16:01:55 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.35 2003-06-02 22:45:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,13 +86,23 @@ public class CharacterInputStream extends LispStream
         LispObject eofValue, boolean recursive) throws Condition
     {
         while (true) {
-            LispObject obj = readChar(eofError, EOF);
-            if (obj == EOF)
-                return eofValue;
-            LispCharacter character = (LispCharacter) obj;
-            if (character.isWhitespace())
+            int n;
+            try {
+                n = read();
+            }
+            catch (IOException e) {
+                throw new StreamError(e);
+            }
+            if (n < 0) {
+                if (eofError)
+                    throw new EndOfFileException();
+                else
+                    return eofValue;
+            }
+            char c = (char) n;
+            if (Character.isWhitespace(c))
                 continue;
-            LispObject result = processChar(character.getValue());
+            LispObject result = processChar(c);
             if (result != null)
                 return result;
         }
