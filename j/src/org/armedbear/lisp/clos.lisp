@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.80 2004-02-09 20:05:20 piso Exp $
+;;; $Id: clos.lisp,v 1.81 2004-02-10 00:25:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1734,11 +1734,6 @@
 (defmethod initialize-instance :after ((gf standard-generic-function) &key)
   (finalize-generic-function gf))
 
-;;; Methods having to do with method metaobjects.
-
-(defmethod initialize-instance :after ((method standard-method) &key)
-  (setf (method-function method) (compute-method-function method)))
-
 ;;; Methods having to do with generic function invocation.
 
 (defgeneric compute-discriminating-function (gf))
@@ -1755,10 +1750,6 @@
 (defgeneric compute-effective-method-function (gf methods))
 (defmethod compute-effective-method-function ((gf standard-generic-function) methods)
   (std-compute-effective-method-function gf methods))
-
-(defgeneric compute-method-function (method))
-(defmethod compute-method-function ((method standard-method))
-  (std-compute-method-function method))
 
 (defgeneric compute-applicable-methods (gf args))
 (defmethod compute-applicable-methods ((gf standard-generic-function) args)
