@@ -1,8 +1,8 @@
 /*
  * DirectoryFormatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: DirectoryFormatter.java,v 1.1.1.1 2002-09-24 16:09:27 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: DirectoryFormatter.java,v 1.2 2003-05-12 02:07:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,22 +41,15 @@ public final class DirectoryFormatter extends Formatter
 
     public LineSegmentList formatLine(Line line)
     {
-        REMatch match;
-        if (directory.isUsingNativeFormat())
-            match = Directory.getNativeMoveToFilenameRegExp().getMatch(line.getText());
-        else
-            match = Directory.getInternalMoveToFilenameRegExp().getMatch(line.getText());
-        int nameOffset = line.length();
-        if (match != null)
-            nameOffset = match.getEndIndex();
         clearSegmentList();
         if (line == null || line.length() == 0) {
             addSegment("", DIRECTORY_FORMAT_TEXT);
             return segmentList;
         }
         final String text = line.getText();
-        if (line.charAt(0) == 'T') {
+        if (text.charAt(0) == 'T') {
             // Tagged file.
+            int nameOffset = getNameOffset(text);
             addSegment("T", DIRECTORY_FORMAT_TAGGED);
             addSegment(text, 1, nameOffset, DIRECTORY_FORMAT_TEXT);
             addSegment(text, nameOffset, DIRECTORY_FORMAT_TAGGED);
@@ -65,6 +58,7 @@ public final class DirectoryFormatter extends Formatter
         final int index = text.indexOf(" -> ");
         if (index >= 0) {
             // Symbolic link.
+            int nameOffset = getNameOffset(text);
             addSegment(text, 0, nameOffset, DIRECTORY_FORMAT_TEXT);
             addSegment(text, nameOffset, index, DIRECTORY_FORMAT_SYMLINK);
             addSegment(text, index, DIRECTORY_FORMAT_TEXT);
@@ -73,12 +67,23 @@ public final class DirectoryFormatter extends Formatter
         final String trim = text.trim();
         if (trim.startsWith("d") || trim.startsWith("<DIR>")) {
             // Directory.
+            int nameOffset = getNameOffset(text);
             addSegment(text, 0, nameOffset, DIRECTORY_FORMAT_TEXT);
             addSegment(text, nameOffset, DIRECTORY_FORMAT_DIRECTORY);
             return segmentList;
         }
         addSegment(text, DIRECTORY_FORMAT_TEXT);
         return segmentList;
+    }
+
+    private int getNameOffset(String text)
+    {
+        REMatch match;
+        if (directory.isUsingNativeFormat())
+            match = Directory.getNativeMoveToFilenameRegExp().getMatch(text);
+        else
+            match = Directory.getInternalMoveToFilenameRegExp().getMatch(text);
+        return (match != null) ? match.getEndIndex() : text.length();
     }
 
     public FormatTable getFormatTable()
