@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Display.java,v 1.3 2002-10-12 00:39:42 piso Exp $
+ * $Id: Display.java,v 1.4 2002-11-18 14:49:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1856,6 +1856,8 @@ public final class Display extends JComponent implements Constants
 
     public static void resetDisplay()
     {
+        if (plainFont == null)
+            return; // Not initialized yet. Nothing to do.
         initializeStaticValues();
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
             Display display = it.nextEditor().getDisplay();
