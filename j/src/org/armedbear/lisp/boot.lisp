@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.63 2003-06-21 01:28:51 piso Exp $
+;;; $Id: boot.lisp,v 1.64 2003-06-22 18:34:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -85,8 +85,7 @@
 (set-dispatch-macro-character #\# #\- #'read-conditional)
 
 
-(dolist (name '("exports.lisp"
-                "early-defuns.lisp"
+(dolist (name '("early-defuns.lisp"
                 "backquote.lisp"
                 "setf.lisp"
                 "macros.lisp"
