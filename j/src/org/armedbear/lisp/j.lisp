@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: j.lisp,v 1.34 2004-09-04 02:19:13 piso Exp $
+;;; $Id: j.lisp,v 1.35 2004-09-05 00:08:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,7 +39,9 @@
           with-editor
           with-other-editor
           with-single-undo
-          save-excursion))
+          save-excursion
+          search-forward
+          search-backward))
 
 (defun set-global-property (&rest args)
   (let ((count (length args)) key value)
@@ -172,10 +174,16 @@
 
 (defmacro save-excursion (&rest forms)
   (let ((old-point (gensym)))
-    `(let ((,old-point (point)))
+    `(let ((,old-point (current-point)))
        (unwind-protect
         (progn ,@forms)
         (goto-char ,old-point)))))
+
+(defun search-forward (string &key buffer start ignore-case whole-words-only)
+  (%search-forward string buffer start ignore-case whole-words-only))
+
+(defun search-backward (string &key buffer start ignore-case whole-words-only)
+  (%search-backward string buffer start ignore-case whole-words-only))
 
 (in-package "COMMON-LISP-USER")
 
