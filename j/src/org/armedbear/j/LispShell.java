@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.19 2002-12-29 16:29:13 piso Exp $
+ * $Id: LispShell.java,v 1.20 2003-01-02 19:07:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,7 +138,7 @@ public final class LispShell extends Shell
             editor.insertLineSeparator();
             editor.getDotLine().setFlags(0);
         } else
-            editor.insertLineSeparator();
+            editor.newline();
         if (needsRenumbering)
             renumber();
         editor.moveCaretToDotCol();
