@@ -2,7 +2,7 @@
  * ToolBar.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: ToolBar.java,v 1.4 2003-06-25 18:21:17 piso Exp $
+ * $Id: ToolBar.java,v 1.5 2003-07-24 19:39:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,11 @@
 
 package org.armedbear.j;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import javax.swing.JToolBar;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -54,6 +56,7 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
         this.frame = frame;
         this.style = style;
         setFloatable(false);
+        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
     }
 
     public ToolBarButton addButton(String text, String iconFile, String methodName)
