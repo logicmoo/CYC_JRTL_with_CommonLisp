@@ -2,7 +2,7 @@
  * StackPanel.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: StackPanel.java,v 1.3 2003-05-25 00:51:19 piso Exp $
+ * $Id: StackPanel.java,v 1.4 2003-06-09 16:33:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,12 +92,6 @@ public final class StackPanel implements ContextListener, MouseListener
                             selectedIndex = index - 1;
                         Location location = frame.location();
                         Method method = location.method();
-                        String sourceName = null;
-                        try {
-                            sourceName = location.sourceName();
-                        }
-                        catch (AbsentInformationException ignored) {}
-                        int lineNumber = location.lineNumber();
                         FastStringBuffer sb = new FastStringBuffer();
                         if (index < 10)
                             sb.append(' ');
@@ -106,14 +100,24 @@ public final class StackPanel implements ContextListener, MouseListener
                         sb.append(getSimpleName(method.declaringType()));
                         sb.append('.');
                         sb.append(method.name());
-                        if (sourceName != null && sourceName.length() > 0) {
-                            sb.append(" (");
-                            sb.append(sourceName);
-                            if (lineNumber > 0) {
-                                sb.append(':');
-                                sb.append(lineNumber);
+                        if (method.isNative()) {
+                            sb.append(" (native method)");
+                        } else {
+                            String sourceName = null;
+                            try {
+                                sourceName = location.sourceName();
                             }
-                            sb.append(')');
+                            catch (AbsentInformationException ignored) {}
+                            int lineNumber = location.lineNumber();
+                            if (sourceName != null && sourceName.length() > 0) {
+                                sb.append(" (");
+                                sb.append(sourceName);
+                                if (lineNumber > 0) {
+                                    sb.append(':');
+                                    sb.append(lineNumber);
+                                }
+                                sb.append(')');
+                            }
                         }
                         v.add(sb.toString());
                     }
@@ -163,35 +167,38 @@ public final class StackPanel implements ContextListener, MouseListener
                 StackFrame stackFrame = (StackFrame) frames.get(index);
                 jdb.setCurrentStackFrame(stackFrame);
                 Location location = stackFrame.location();
-                String className = location.declaringType().name();
-                int i = className.indexOf('$');
-                if (i > 0)
-                    className = className.substring(0, i);
-                File file =
-                    JavaSource.findSource(className, jdb.getSourcePath());
-                if (file != null) {
-                    Buffer buffer = Editor.getBuffer(file);
-                    if (buffer != null) {
-                        Editor editor = null;
-                        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-                            Editor ed = it.nextEditor();
-                            if (ed.getBuffer() instanceof Jdb) {
-                                editor = ed;
-                                break;
+                Method method = location.method();
+                if (method != null && !method.isNative()) {
+                    String className = location.declaringType().name();
+                    int i = className.indexOf('$');
+                    if (i > 0)
+                        className = className.substring(0, i);
+                    File file =
+                        JavaSource.findSource(className, jdb.getSourcePath());
+                    if (file != null) {
+                        Buffer buffer = Editor.getBuffer(file);
+                        if (buffer != null) {
+                            Editor editor = null;
+                            for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+                                Editor ed = it.nextEditor();
+                                if (ed.getBuffer() instanceof Jdb) {
+                                    editor = ed;
+                                    break;
+                                }
                             }
-                        }
-                        if (editor != null) {
-                            editor.makeNext(buffer);
-                            editor = editor.activateInOtherWindow(buffer);
-                        } else {
-                            editor = Editor.currentEditor();
-                            editor.makeNext(buffer);
-                            editor.activate(buffer);
-                        }
-                        int lineNumber = location.lineNumber();
-                        if (lineNumber > 0) {
-                            editor.jumpToLine(lineNumber - 1);
-                            editor.updateDisplay();
+                            if (editor != null) {
+                                editor.makeNext(buffer);
+                                editor = editor.activateInOtherWindow(buffer);
+                            } else {
+                                editor = Editor.currentEditor();
+                                editor.makeNext(buffer);
+                                editor.activate(buffer);
+                            }
+                            int lineNumber = location.lineNumber();
+                            if (lineNumber > 0) {
+                                editor.jumpToLine(lineNumber - 1);
+                                editor.updateDisplay();
+                            }
                         }
                     }
                 }

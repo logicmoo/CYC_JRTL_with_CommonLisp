@@ -2,7 +2,7 @@
  * ThreadPanel.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: ThreadPanel.java,v 1.4 2003-05-18 01:27:19 piso Exp $
+ * $Id: ThreadPanel.java,v 1.5 2003-06-09 16:33:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j.jdb;
 
 import com.sun.jdi.IncompatibleThreadStateException;
 import com.sun.jdi.Location;
+import com.sun.jdi.Method;
 import com.sun.jdi.StackFrame;
 import com.sun.jdi.ThreadReference;
 import com.sun.jdi.VirtualMachine;
@@ -143,33 +144,36 @@ public final class ThreadPanel implements ContextListener, MouseListener
                     if (frames.size() > 0) {
                         StackFrame stackFrame = threadRef.frame(0);
                         Location location = stackFrame.location();
-                        String className = location.declaringType().name();
-                        final int lineNumber = location.lineNumber();
-                        Log.debug(className.concat(":").concat(String.valueOf(lineNumber)));
-                        File file =
-                            JavaSource.findSource(className, jdb.getSourcePath());
-                        if (file != null) {
-                            Buffer buffer = Editor.getBuffer(file);
-                            if (buffer != null) {
-                                Editor editor = null;
-                                for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-                                    Editor ed = it.nextEditor();
-                                    if (ed.getBuffer() instanceof Jdb) {
-                                        editor = ed;
-                                        break;
+                        Method method = location.method();
+                        if (method != null && !method.isNative()) {
+                            String className = location.declaringType().name();
+                            final int lineNumber = location.lineNumber();
+                            Log.debug(className.concat(":").concat(String.valueOf(lineNumber)));
+                            File file =
+                                JavaSource.findSource(className, jdb.getSourcePath());
+                            if (file != null) {
+                                Buffer buffer = Editor.getBuffer(file);
+                                if (buffer != null) {
+                                    Editor editor = null;
+                                    for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+                                        Editor ed = it.nextEditor();
+                                        if (ed.getBuffer() instanceof Jdb) {
+                                            editor = ed;
+                                            break;
+                                        }
                                     }
-                                }
-                                if (editor != null) {
-                                    editor.makeNext(buffer);
-                                    editor = editor.activateInOtherWindow(buffer);
-                                } else {
-                                    editor = Editor.currentEditor();
-                                    editor.makeNext(buffer);
-                                    editor.activate(buffer);
-                                }
-                                if (lineNumber > 0) {
-                                    editor.jumpToLine(lineNumber - 1);
-                                    editor.updateDisplay();
+                                    if (editor != null) {
+                                        editor.makeNext(buffer);
+                                        editor = editor.activateInOtherWindow(buffer);
+                                    } else {
+                                        editor = Editor.currentEditor();
+                                        editor.makeNext(buffer);
+                                        editor.activate(buffer);
+                                    }
+                                    if (lineNumber > 0) {
+                                        editor.jumpToLine(lineNumber - 1);
+                                        editor.updateDisplay();
+                                    }
                                 }
                             }
                         }
