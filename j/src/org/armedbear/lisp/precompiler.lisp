@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.20 2003-12-10 21:35:17 asimon Exp $
+;;; $Id: precompiler.lisp,v 1.21 2003-12-13 20:36:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -472,6 +472,7 @@
 (install-handler 'ecase                'precompile-case)
 
 (install-handler 'and                  'precompile-cons)
+(install-handler 'catch                'precompile-cons)
 (install-handler 'locally              'precompile-cons)
 (install-handler 'multiple-value-call  'precompile-cons)
 (install-handler 'multiple-value-prog1 'precompile-cons)
@@ -493,7 +494,6 @@
 
 (install-handler 'load-time-value      'precompile-load-time-value)
 
-(install-handler 'catch                'precompile-identity)
 (install-handler 'declare              'precompile-identity)
 (install-handler 'go                   'precompile-identity)
 (install-handler 'handler-bind         'precompile-identity)
