@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.9 2003-08-24 16:18:49 piso Exp $
+ * $Id: LispClass.java,v 1.10 2003-09-14 01:40:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,11 @@ public final class LispClass extends LispObject
     public String getName()
     {
         return symbol.getName();
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.BUILT_IN_CLASS;
     }
 
     public String toString()
