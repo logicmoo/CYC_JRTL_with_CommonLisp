@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.9 2004-02-25 15:24:20 piso Exp $
+ * $Id: ComplexString.java,v 1.10 2004-02-25 15:44:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -333,14 +333,12 @@ public final class ComplexString extends AbstractString
                                  Math.min(capacity, newCapacity));
                 chars = newElements;
             }
-            // Initialize new elements (if any).
-            final char c;
-            if (initialElement != NIL)
-                c = LispCharacter.getValue(initialElement);
-            else
-                c = 0;
-            for (int i = capacity; i < newCapacity; i++)
-                chars[i] = c;
+            if (initialElement != NIL && capacity < newCapacity) {
+                // Initialize new elements.
+                final char c = LispCharacter.getValue(initialElement);
+                for (int i = capacity; i < newCapacity; i++)
+                    chars[i] = c;
+            }
         }
         capacity = newCapacity;
         array = null;

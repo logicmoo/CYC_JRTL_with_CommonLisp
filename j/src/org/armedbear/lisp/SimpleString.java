@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.9 2004-02-25 13:50:54 piso Exp $
+ * $Id: SimpleString.java,v 1.10 2004-02-25 15:44:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,12 @@ public final class SimpleString extends AbstractString
     {
         chars = new char[capacity = sb.length()];
         sb.getChars(0, capacity, chars, 0);
+    }
+
+    private SimpleString(char[] chars)
+    {
+        this.chars = chars;
+        capacity = chars.length;
     }
 
     public char[] chars()
@@ -314,42 +320,6 @@ public final class SimpleString extends AbstractString
         return capacity;
     }
 
-    public AbstractVector adjustVector(int size, LispObject initialElement,
-                                       LispObject initialContents)
-        throws ConditionThrowable
-    {
-        SimpleString s = new SimpleString(size);
-        if (initialContents != NIL) {
-            if (initialContents.listp()) {
-                LispObject list = initialContents;
-                for (int i = 0; i < size; i++) {
-                    s.chars[i] = LispCharacter.getValue(list.car());
-                    list = list.cdr();
-                }
-            } else if (initialContents.vectorp()) {
-                for (int i = 0; i < size; i++)
-                    s.chars[i] = LispCharacter.getValue(initialContents.elt(i));
-            } else
-                signal(new TypeError(initialContents, Symbol.SEQUENCE));
-        } else if (initialElement != NIL) {
-            System.arraycopy(chars, 0, s.chars, 0, Math.min(size, capacity));
-            if (size > capacity) {
-                char c = LispCharacter.getValue(initialElement);
-                for (int i = size; i-- > capacity;)
-                    s.chars[i] = c;
-            }
-        } else
-            System.arraycopy(chars, 0, s.chars, 0, Math.min(size, capacity));
-        return s;
-    }
-
-    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
-                                       int displacement)
-        throws ConditionThrowable
-    {
-        return new ComplexString(size, displacedTo, displacement);
-    }
-
     public final int length()
     {
         return capacity;
@@ -391,6 +361,48 @@ public final class SimpleString extends AbstractString
         for (int i = 0; i < capacity; i++)
             hashCode = hashCode * 31 + chars[i];
         return cachedHashCode = hashCode;
+    }
+
+    public AbstractVector adjustVector(int newCapacity,
+                                       LispObject initialElement,
+                                       LispObject initialContents)
+        throws ConditionThrowable
+    {
+        if (initialContents != NIL) {
+            char[] newChars = new char[newCapacity];
+            if (initialContents.listp()) {
+                LispObject list = initialContents;
+                for (int i = 0; i < newCapacity; i++) {
+                    newChars[i] = LispCharacter.getValue(list.car());
+                    list = list.cdr();
+                }
+            } else if (initialContents.vectorp()) {
+                for (int i = 0; i < newCapacity; i++)
+                    newChars[i] = LispCharacter.getValue(initialContents.elt(i));
+            } else
+                signal(new TypeError(initialContents, Symbol.SEQUENCE));
+            return new SimpleString(newChars);
+        }
+        if (capacity != newCapacity) {
+            char[] newChars = new char[newCapacity];
+            System.arraycopy(chars, 0, newChars, 0, Math.min(newCapacity, capacity));
+            if (initialElement != NIL && capacity < newCapacity) {
+                final char c = LispCharacter.getValue(initialElement);
+                for (int i = capacity; i < newCapacity; i++)
+                    newChars[i] = c;
+            }
+            return new SimpleString(newChars);
+        }
+        // No change.
+        return this;
+    }
+
+    public AbstractVector adjustVector(int newCapacity,
+                                       AbstractArray displacedTo,
+                                       int displacement)
+        throws ConditionThrowable
+    {
+        return new ComplexString(newCapacity, displacedTo, displacement);
     }
 
     // ### schar
