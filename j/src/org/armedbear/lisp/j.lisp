@@ -16,7 +16,6 @@
           location-bar-cancel-input
           restore-focus
           status
-          log
           defcommand
           key-pressed-hook))
 
@@ -84,11 +83,6 @@
   (let ((method (jmethod "org.armedbear.j.Editor" "status" "java.lang.String"))
         (ed (or ed (current-editor))))
     (jcall method ed string)))
-
-(defmacro log (&rest args)
-  (when args
-    `(let ((method (jmethod "org.armedbear.j.Log" "debug" "java.lang.String")))
-       (jstatic method nil (format nil ,@args)))))
 
 ;; Internal.
 (defun execute-command (command &optional ed)
