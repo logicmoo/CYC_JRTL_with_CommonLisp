@@ -2,7 +2,7 @@
  * WebBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: WebBuffer.java,v 1.5 2003-05-18 15:39:31 piso Exp $
+ * $Id: WebBuffer.java,v 1.6 2003-06-04 02:32:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -400,6 +400,11 @@ public final class WebBuffer extends Buffer implements WebConstants
                         if (pos == null)
                             pos = new Position(wb.getFirstLine(), 0);
                         wb.update(pos);
+                    }
+                    for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+                        Editor ed = it.nextEditor();
+                        if (ed != null && ed.getBuffer() == wb)
+                            ed.setDefaultCursor();
                     }
                 }
             };
