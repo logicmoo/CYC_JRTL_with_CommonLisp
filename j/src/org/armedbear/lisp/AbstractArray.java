@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.18 2004-02-26 01:34:47 piso Exp $
+ * $Id: AbstractArray.java,v 1.19 2004-02-26 01:36:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,7 +97,7 @@ public abstract class AbstractArray extends LispObject
     public abstract void fill(LispObject obj) throws ConditionThrowable;
 
     // FIXME Detect overflow!
-    protected static int computeTotalSize(int[] dimensions)
+    protected static final int computeTotalSize(int[] dimensions)
     {
         int size = 1;
         for (int i = dimensions.length; i-- > 0;)
