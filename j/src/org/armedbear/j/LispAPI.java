@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.47 2004-09-06 13:21:48 piso Exp $
+ * $Id: LispAPI.java,v 1.48 2004-09-06 18:43:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -206,7 +206,7 @@ public final class LispAPI extends Lisp
 
     // ### buffer-name
     private static final Primitive BUFFER_NAME =
-        new Primitive("buffer-name", PACKAGE_J, true)
+        new Primitive("buffer-name", PACKAGE_J, true, "&optional buffer")
     {
         public LispObject execute()
         {
@@ -223,7 +223,7 @@ public final class LispAPI extends Lisp
 
     // ### buffer-pathname
     private static final Primitive BUFFER_PATHNAME =
-        new Primitive("buffer-pathname", PACKAGE_J, true)
+        new Primitive("buffer-pathname", PACKAGE_J, true, "&optional buffer")
     {
         public LispObject execute()
         {
@@ -250,7 +250,7 @@ public final class LispAPI extends Lisp
 
     // ### buffer-string
     private static final Primitive BUFFER_STRING =
-        new Primitive("buffer-string", PACKAGE_J, true)
+        new Primitive("buffer-string", PACKAGE_J, true, "&optional buffer")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -263,7 +263,7 @@ public final class LispAPI extends Lisp
     };
 
     // ### goto-char
-    // goto-char position &optional mark
+    // goto-char position
     private static final Primitive GOTO_CHAR =
         new Primitive("goto-char", PACKAGE_J, true)
     {
@@ -284,7 +284,8 @@ public final class LispAPI extends Lisp
 
     // ### move-to-position mark charpos &optional line
     private static final Primitive MOVE_TO_POSITION =
-        new Primitive("move-to-position", PACKAGE_J, true)
+        new Primitive("move-to-position", PACKAGE_J, true,
+                      "mark charpos &optional line")
     {
         public LispObject execute(LispObject mark, LispObject charpos)
             throws ConditionThrowable
@@ -306,10 +307,9 @@ public final class LispAPI extends Lisp
         }
     };
 
-
     // ### point
     private static final Primitive0 CURRENT_POINT =
-        new Primitive0("current-point", PACKAGE_J, true)
+        new Primitive0("current-point", PACKAGE_J, true, "")
     {
         public LispObject execute()
         {
