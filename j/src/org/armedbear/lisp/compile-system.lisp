@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.35 2004-10-17 19:34:39 piso Exp $
+;;; $Id: compile-system.lisp,v 1.36 2004-11-21 05:38:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -91,6 +91,7 @@
                                   "loop.lisp"))
 ;;      (mapc #'maybe-compile-file '("pprint.lisp"
 ;;                                   "format.lisp"))
+     (load (maybe-compile-file "backquote.lisp"))
      (load (maybe-compile-file "typep.lisp"))
      (load (maybe-compile-file "print.lisp"))
      (load (maybe-compile-file "pprint-dispatch.lisp"))
@@ -110,7 +111,7 @@
                                   "assoc.lisp"
                                   "autoloads.lisp"
                                   "aver.lisp"
-                                  "backquote.lisp"
+                                  ;;"backquote.lisp"
                                   "bit-array-ops.lisp"
                                   "boole.lisp"
                                   ;;"boot.lisp"
