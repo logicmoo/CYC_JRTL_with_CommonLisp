@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: probe_file.java,v 1.12 2004-01-08 16:34:06 piso Exp $
+ * $Id: probe_file.java,v 1.13 2004-01-08 17:42:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,21 +33,7 @@ public final class probe_file extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Pathname pathname = Pathname.coerceToPathname(arg);
-            if (pathname.isWild())
-                signal(new FileError("Bad place for a wild pathname."));
-            File file = Utilities.getFile(pathname);
-            if (file.isDirectory())
-                return Utilities.getDirectoryPathname(file);
-            if (file.exists()) {
-                try {
-                    return new Pathname(file.getCanonicalPath());
-                }
-                catch (IOException e) {
-                    return signal(new LispError(e.getMessage()));
-                }
-            }
-            return NIL;
+            return Pathname.truename(arg, false);
         }
     };
 
@@ -58,24 +44,7 @@ public final class probe_file extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Pathname pathname = Pathname.coerceToPathname(arg);
-            if (pathname.isWild())
-                signal(new FileError("Bad place for a wild pathname."));
-            File file = Utilities.getFile(pathname);
-            if (file.isDirectory())
-                return Utilities.getDirectoryPathname(file);
-            if (file.exists()) {
-                try {
-                    return new Pathname(file.getCanonicalPath());
-                }
-                catch (IOException e) {
-                    return signal(new LispError(e.getMessage()));
-                }
-            }
-            StringBuffer sb = new StringBuffer("The file ");
-            sb.append(pathname);
-            sb.append(" does not exist.");
-            return signal(new FileError(sb.toString()));
+            return Pathname.truename(arg, true);
         }
     };
 
