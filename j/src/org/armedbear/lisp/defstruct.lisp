@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.39 2003-11-21 15:58:30 piso Exp $
+;;; $Id: defstruct.lisp,v 1.40 2003-11-21 18:29:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -102,9 +102,24 @@
     (setf elements (nreverse elements))
     (when *dd-named*
       (push (list 'quote *dd-name*) elements))
-    (when *dd-initial-offset*
-      (dotimes (i *dd-initial-offset*)
-        (push nil elements)))
+;;     (when *dd-initial-offset*
+;;       (dotimes (i *dd-initial-offset*)
+;;         (push nil elements)))
+    (setf elements ())
+    (let ((index 0))
+      (dolist (slot *dd-slots*)
+        (loop
+          (when (= index (dsd-index slot))
+            (return))
+;;           (format t "index = ~S slot = ~S dsd-index = ~S~%" index (dsd-name slot) (dsd-index slot))
+          (push nil elements)
+          (incf index))
+        (push (dsd-name slot) elements)
+        (incf index)))
+    (setf elements (nreverse elements))
+    (when *dd-named*
+      (push (list 'quote *dd-name*) elements))
+
     (cond ((eq *dd-type* 'list)
            `((defun ,constructor-name ,keys
                (list ,@elements))))
@@ -154,41 +169,41 @@
              `((defun ,pred (object)
                  (typep object ',*dd-name*))))))))
 
-(defun get-slot-accessor (slot)
-  (when *dd-initial-offset*
-    (incf slot *dd-initial-offset*))
+(defun get-slot-accessor (index)
+;;   (when *dd-initial-offset*
+;;     (incf index *dd-initial-offset*))
   (when *dd-named*
-    (incf slot))
+    (incf index))
   (cond ((eq *dd-type* 'list)
-         `(lambda (instance) (elt instance ,slot)))
+         `(lambda (instance) (elt instance ,index)))
         ((or (eq *dd-type* 'vector)
              (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
-         `(lambda (instance) (aref instance ,slot)))
+         `(lambda (instance) (aref instance ,index)))
         (t
-         (case slot
+         (case index
            (0 #'%structure-ref-0)
            (1 #'%structure-ref-1)
            (2 #'%structure-ref-2)
            (t
-            `(lambda (instance) (%structure-ref instance ,slot)))))))
+            `(lambda (instance) (%structure-ref instance ,index)))))))
 
-(defun get-slot-mutator (slot)
-  (when *dd-initial-offset*
-    (incf slot *dd-initial-offset*))
+(defun get-slot-mutator (index)
+;;   (when *dd-initial-offset*
+;;     (incf index *dd-initial-offset*))
   (when *dd-named*
-    (incf slot))
+    (incf index))
   (cond ((eq *dd-type* 'list)
-         `(lambda (instance value) (%set-elt instance ,slot value)))
+         `(lambda (instance value) (%set-elt instance ,index value)))
         ((or (eq *dd-type* 'vector)
              (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
-         `(lambda (instance value) (%aset instance ,slot value)))
+         `(lambda (instance value) (%aset instance ,index value)))
         (t
-         (case slot
+         (case index
            (0 #'%structure-set-0)
            (1 #'%structure-set-1)
            (2 #'%structure-set-2)
            (t
-            `(lambda (instance value) (%structure-set instance ,slot value)))))))
+            `(lambda (instance value) (%structure-set instance ,index value)))))))
 
 (defun define-access-function (slot-name index)
   (let ((accessor
@@ -202,9 +217,12 @@
   (let ((index 0)
         (result ()))
     (dolist (slot *dd-slots*)
-;;       (let ((slot-name (getf slot :name)))
-      (let ((slot-name (dsd-name slot)))
-        (setf result (nconc result (define-access-function slot-name index))))
+      (let ((slot-name (dsd-name slot))
+            (expected (dsd-index slot)))
+        (unless (eql index expected)
+          (format t "index = ~S expected = ~S~%" index expected))
+;;         (setf result (nconc result (define-access-function slot-name index))))
+        (setf result (nconc result (define-access-function slot-name expected))))
       (incf index))
     result))
 
@@ -304,11 +322,23 @@
                                                                    :index 0))))
         (push slot-description *dd-direct-slots*)))
     (setf *dd-direct-slots* (nreverse *dd-direct-slots*))
-    (if *dd-include*
-        (let* ((def (get (car *dd-include*) 'structure-definition))
-               (included-slots (dd-slots def)))
-          (setf *dd-slots* (append included-slots *dd-direct-slots*)))
-        (setf *dd-slots* *dd-direct-slots*))
+
+    (let ((index 0))
+      (if *dd-include*
+          (let* ((dd (get (car *dd-include*) 'structure-definition))
+                 (initial-offset (dd-initial-offset dd))
+                 (included-slots (dd-slots dd)))
+            (when initial-offset
+              (incf index initial-offset))
+            (setf *dd-slots* (append included-slots *dd-direct-slots*))
+            (incf index (length included-slots)))
+          (setf *dd-slots* *dd-direct-slots*))
+      (when *dd-initial-offset*
+        (incf index *dd-initial-offset*))
+      (dolist (slot *dd-direct-slots*)
+        (setf (dsd-index slot) index)
+        (incf index)))
+
     `(progn
        (setf (get ',*dd-name* 'structure-definition)
              (make-defstruct-description :name ',*dd-name*
