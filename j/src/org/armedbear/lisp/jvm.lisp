@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.15 2003-11-08 14:41:21 piso Exp $
+;;; $Id: jvm.lisp,v 1.16 2003-11-08 16:09:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -463,12 +463,10 @@
       t)))
 
 (defconstant +lisp-class+ "org/armedbear/lisp/Lisp")
-
 (defconstant +lisp-object-class+ "org/armedbear/lisp/LispObject")
 (defconstant +lisp-object+ "Lorg/armedbear/lisp/LispObject;")
-
 (defconstant +lisp-string+ "Lorg/armedbear/lisp/LispString;")
-
+(defconstant +lisp-symbol-class+ "org/armedbear/lisp/Symbol")
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
 
 (defun emit-push-nil ()
@@ -503,21 +501,24 @@
       (setf *code* (append code *code*)))
     (setf *thread-var-initialized* t)))
 
+(defun emit-invokevirtual (class-name method-name descriptor)
+  (emit 'invokevirtual class-name method-name descriptor))
+
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
   (emit 'aload *thread*)
-  (emit 'invokevirtual
-        +lisp-thread-class+
-        "clearValues"
-        "()V"))
+;;   (emit 'invokevirtual
+;;         +lisp-thread-class+
+;;         "clearValues"
+;;         "()V"))
+  (emit-invokevirtual +lisp-thread-class+ "clearValues" "()V"))
 
 (defun emit-invoke-method (method-name)
   (unless (remove-store-value)
     (emit-push-value))
-  (emit 'invokevirtual
-        +lisp-object-class+
-        method-name
-        "()Lorg/armedbear/lisp/LispObject;")
+  (emit-invokevirtual +lisp-object-class+
+                      method-name
+                      "()Lorg/armedbear/lisp/LispObject;")
   (emit-store-value))
 
 ;; CODE is a list.
@@ -625,7 +626,7 @@
 (defun resolve-opcodes (code)
   (map 'vector #'resolve-args code))
 
-(defun is-branch-opcode (opcode)
+(defun branch-opcode-p (opcode)
   (member opcode
     '(153 ; IFEQ
       154 ; IFNE
@@ -633,6 +634,10 @@
       165 ; IF_ACMPEQ
       167 ; GOTO
       )))
+
+(defun analyze-stack (code)
+  (require-type code vector)
+  )
 
 ;; CODE is a list of INSTRUCTIONs.
 (defun code-bytes (code)
@@ -649,7 +654,7 @@
 ;;   (let ((branch-targets ()))
 ;;     (dotimes (i (length code))
 ;;       (let ((instruction (svref code i)))
-;;         (when (is-branch-opcode (instruction-opcode instruction))
+;;         (when (branch-opcode-p (instruction-opcode instruction))
 ;;           (push branch-targets (car (instruction-args instruction))))))
 ;;     (format t "branch-targets = ~S~%" branch-targets)
 
@@ -695,32 +700,28 @@
     (let ((index 0))
       (dotimes (i (length code))
         (let ((instruction (aref code i)))
-;;           (case (instruction-opcode instruction)
-;;             ((153 ; IFEQ
-;;               154 ; IFNE
-;;               166 ; IF_ACMPNE
-;;               165 ; IF_ACMPEQ
-;;               167 ; GOTO
-;;               )
-          (when (is-branch-opcode (instruction-opcode instruction))
+          (when (branch-opcode-p (instruction-opcode instruction))
             (let* ((label (car (instruction-args instruction)))
                    (offset (- (symbol-value `,label) index)))
               (setf (instruction-args instruction) (u2 offset))))
           (unless (= (instruction-opcode instruction) 202) ; LABEL
             (incf index (opcode-size (instruction-opcode instruction)))))))
+
     ;; FIXME Do stack analysis here!
-    ;; Convert list to vector.
-    (let ((vector (make-array length))
+    (analyze-stack code)
+
+    ;; Expand instructions into bytes, skipping LABEL pseudo-instructions.
+    (let ((bytes (make-array length))
           (index 0))
       (dotimes (i (length code))
         (let ((instruction (aref code i)))
           (unless (= (instruction-opcode instruction) 202) ; LABEL
-            (setf (svref vector index) (instruction-opcode instruction))
+            (setf (svref bytes index) (instruction-opcode instruction))
             (incf index)
             (dolist (byte (instruction-args instruction))
-              (setf (svref vector index) byte)
+              (setf (svref bytes index) byte)
               (incf index)))))
-      vector)))
+      bytes)))
 
 (defun write-u1 (n)
   (write-byte (logand n #xFF) *stream*))
@@ -913,10 +914,9 @@
                      "internInPackage"
                      "(Ljava/lang/String;Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;")))
         (declare-field f "Lorg/armedbear/lisp/LispObject;")
-        (emit 'invokevirtual
-              "org/armedbear/lisp/Symbol"
-              "getSymbolFunctionOrDie"
-              "()Lorg/armedbear/lisp/LispObject;")
+        (emit-invokevirtual +lisp-symbol-class+
+                            "getSymbolFunctionOrDie"
+                            "()Lorg/armedbear/lisp/LispObject;")
         (emit 'putstatic
               *this-class*
               f
@@ -1080,10 +1080,9 @@
   (compile-form (second args))
   (unless (remove-store-value)
     (emit-push-value))
-  (emit 'invokevirtual
-        "org/armedbear/lisp/LispObject"
-        op
-        "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+  (emit-invokevirtual +lisp-object-class+
+                      op
+                      "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
   (emit-store-value))
 
 (defparameter unary-operators (make-hash-table))
@@ -1265,24 +1264,21 @@
               *this-class*
               g
               "Lorg/armedbear/lisp/Symbol;"))
-      (emit 'invokevirtual
-            "org/armedbear/lisp/Symbol"
-            "getSymbolFunctionOrDie"
-            "()Lorg/armedbear/lisp/LispObject;")))
+      (emit-invokevirtual +lisp-symbol-class+
+                          "getSymbolFunctionOrDie"
+                          "()Lorg/armedbear/lisp/LispObject;")))
     (case numargs
       (0
-       (emit 'invokevirtual
-             "org/armedbear/lisp/LispObject"
-             "execute"
-             "()Lorg/armedbear/lisp/LispObject;"))
+       (emit-invokevirtual +lisp-object-class+
+                           "execute"
+                           "()Lorg/armedbear/lisp/LispObject;"))
       (1
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
-       (emit 'invokevirtual
-             "org/armedbear/lisp/LispObject"
-             "execute"
-             "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"))
+       (emit-invokevirtual +lisp-object-class+
+                           "execute"
+                           "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"))
       (2
        (compile-form (first args))
        (unless (remove-store-value)
@@ -1290,10 +1286,9 @@
        (compile-form (second args))
        (unless (remove-store-value)
          (emit-push-value))
-       (emit 'invokevirtual
-             "org/armedbear/lisp/LispObject"
-             "execute"
-             "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"))
+       (emit-invokevirtual +lisp-object-class+
+                           "execute"
+                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"))
       (3
        (compile-form (first args))
        (unless (remove-store-value)
@@ -1304,10 +1299,9 @@
        (compile-form (third args))
        (unless (remove-store-value)
          (emit-push-value))
-       (emit 'invokevirtual
-             "org/armedbear/lisp/LispObject"
-             "execute"
-             "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"))
+       (emit-invokevirtual +lisp-object-class+
+                           "execute"
+                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"))
       (t
        (emit 'sipush (length args))
        (emit 'anewarray "org/armedbear/lisp/LispObject")
@@ -1321,10 +1315,9 @@
            (emit 'aastore) ; store value in array
            (incf i))) ; array left on stack here
        ;; Stack: function array-ref
-       (emit 'invokevirtual
-             "org/armedbear/lisp/LispObject"
-             "execute"
-             "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")))
+       (emit-invokevirtual +lisp-object-class+
+                           "execute"
+                           "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")))
     (if for-effect
         (emit 'pop)
         (emit-store-value))))
@@ -1358,10 +1351,9 @@
              (compile-form (second form))
              (unless (remove-store-value)
                (emit-push-value))
-             (emit 'invokevirtual
-                   +lisp-object-class+
-                   s
-                   "()Z")
+             (emit-invokevirtual +lisp-object-class+
+                                 s
+                                 "()Z")
              (return-from compile-test 'ifeq))))
       (3 (when (eq (car form) 'EQ)
            (compile-form (second form))
@@ -1389,10 +1381,9 @@
              (compile-form (third form))
              (unless (remove-store-value)
                (emit-push-value))
-             (emit 'invokevirtual
-                   +lisp-object-class+
-                   s
-                   "(Lorg/armedbear/lisp/LispObject;)Z")
+             (emit-invokevirtual +lisp-object-class+
+                                 s
+                                 "(Lorg/armedbear/lisp/LispObject;)Z")
              (return-from compile-test 'ifeq))))))
   ;; Otherwise...
   (compile-form form)
@@ -1444,10 +1435,9 @@
       (setq *max-locals* (max *max-locals* (fill-pointer *locals*)))
       (ensure-thread-var-initialized)
       (emit 'aload *thread*)
-      (emit 'invokevirtual
-            +lisp-thread-class+
-            "getDynamicEnvironment"
-            "()Lorg/armedbear/lisp/Environment;")
+      (emit-invokevirtual +lisp-thread-class+
+                          "getDynamicEnvironment"
+                          "()Lorg/armedbear/lisp/Environment;")
       (emit 'astore env-var))
     (ecase (car form)
       (LET
@@ -1463,10 +1453,9 @@
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
       (emit 'aload env-var)
-      (emit 'invokevirtual
-            +lisp-thread-class+
-            "setDynamicEnvironment"
-            "(Lorg/armedbear/lisp/Environment;)V"))
+      (emit-invokevirtual +lisp-thread-class+
+                          "setDynamicEnvironment"
+                          "(Lorg/armedbear/lisp/Environment;)V"))
     ;; Restore fill pointer to its saved value so the slots used by these
     ;; bindings will again be available.
     (setf (fill-pointer *locals*) saved-fp)))
@@ -1682,10 +1671,9 @@
                     *this-class*
                     g
                     "Lorg/armedbear/lisp/Symbol;")
-              (emit 'invokevirtual
-                    +lisp-object-class+
-                    "getSymbolFunctionOrDie"
-                    "()Lorg/armedbear/lisp/LispObject;")
+              (emit-invokevirtual +lisp-object-class+
+                                  "getSymbolFunctionOrDie"
+                                  "()Lorg/armedbear/lisp/LispObject;")
               (emit-store-value)))
            #+nil
            ((and (consp obj) (eq (car obj) 'LAMBDA))
@@ -1775,10 +1763,9 @@
           *this-class*
           g
           "Lorg/armedbear/lisp/Symbol;")
-    (emit 'invokevirtual
-          "org/armedbear/lisp/Symbol"
-          "symbolValue"
-          "()Lorg/armedbear/lisp/LispObject;")
+    (emit-invokevirtual +lisp-symbol-class+
+                        "symbolValue"
+                        "()Lorg/armedbear/lisp/LispObject;")
     (emit-store-value)
     (return-from compile-variable-ref)))
 
@@ -1900,10 +1887,9 @@
     (when *hairy-arglist-p*
       (emit 'aload_0)
       (emit 'aload_1)
-      (emit 'invokevirtual
-            *this-class*
-            "processArgs"
-            "([Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;")
+      (emit-invokevirtual *this-class*
+                          "processArgs"
+                          "([Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;")
       (emit 'astore_1))
     (dolist (f body)
       (compile-form f))
