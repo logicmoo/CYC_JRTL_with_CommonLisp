@@ -44,6 +44,7 @@
 (%put 'car *setf-expander* '%rplaca)
 (%put 'cdr *setf-expander* '%rplacd)
 (%put 'nth *setf-expander* '%setnth)
+(%put 'aref *setf-expander* '%aset)
 (%put 'svref *setf-expander* '%svset)
 (%put 'fill-pointer *setf-expander* '%set-fill-pointer)
 (%put 'symbol-function *setf-expander* 'fset)
