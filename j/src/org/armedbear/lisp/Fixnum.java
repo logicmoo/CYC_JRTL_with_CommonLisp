@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.46 2003-08-13 01:14:00 piso Exp $
+ * $Id: Fixnum.java,v 1.47 2003-08-15 13:08:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,15 +102,11 @@ public final class Fixnum extends LispObject
 
     public boolean equalp(LispObject obj)
     {
-        try {
+        if (obj instanceof Fixnum)
             return value == ((Fixnum)obj).value;
-        }
-        catch (ClassCastException e) {
-            // obj is not a fixnum.
-            if (obj instanceof LispFloat)
-                return (float) value == ((LispFloat)obj).getValue();
-            return false;
-        }
+        if (obj instanceof LispFloat)
+            return (float) value == ((LispFloat)obj).getValue();
+        return false;
     }
 
     public LispObject ABS()
@@ -191,217 +187,179 @@ public final class Fixnum extends LispObject
 
     public LispObject add(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof Fixnum)
             return number((long) value + ((Fixnum)obj).value);
+        if (obj instanceof Bignum)
+            return number(getBigInteger().add(Bignum.getValue(obj)));
+        if (obj instanceof Ratio) {
+            BigInteger numerator = ((Ratio)obj).numerator();
+            BigInteger denominator = ((Ratio)obj).denominator();
+            return number(
+                getBigInteger().multiply(denominator).add(numerator),
+                denominator);
         }
-        catch (ClassCastException e) {
-            // obj is not a fixnum.
-            if (obj instanceof Bignum)
-                return number(getBigInteger().add(Bignum.getValue(obj)));
-            if (obj instanceof Ratio) {
-                BigInteger numerator = ((Ratio)obj).numerator();
-                BigInteger denominator = ((Ratio)obj).denominator();
-                return number(
-                    getBigInteger().multiply(denominator).add(numerator),
-                    denominator);
-            }
-            if (obj instanceof LispFloat)
-                return new LispFloat(value + LispFloat.getValue(obj));
-            if (obj instanceof Complex) {
-                Complex c = (Complex) obj;
-                return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
-            }
-            throw new TypeError(obj, "number");
+        if (obj instanceof LispFloat)
+            return new LispFloat(value + LispFloat.getValue(obj));
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
+        throw new TypeError(obj, "number");
     }
 
     public LispObject subtract(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof Fixnum)
             return number((long) value - ((Fixnum)obj).value);
+        if (obj instanceof Bignum)
+            return number(getBigInteger().subtract(Bignum.getValue(obj)));
+        if (obj instanceof Ratio) {
+            BigInteger numerator = ((Ratio)obj).numerator();
+            BigInteger denominator = ((Ratio)obj).denominator();
+            return number(
+                getBigInteger().multiply(denominator).subtract(numerator),
+                denominator);
         }
-        catch (ClassCastException e) {
-            // obj is not a fixnum.
-            if (obj instanceof Bignum)
-                return number(getBigInteger().subtract(Bignum.getValue(obj)));
-            if (obj instanceof Ratio) {
-                BigInteger numerator = ((Ratio)obj).numerator();
-                BigInteger denominator = ((Ratio)obj).denominator();
-                return number(
-                    getBigInteger().multiply(denominator).subtract(numerator),
-                    denominator);
-            }
-            if (obj instanceof LispFloat)
-                return new LispFloat(value - LispFloat.getValue(obj));
-            if (obj instanceof Complex) {
-                Complex c = (Complex) obj;
-                return Complex.getInstance(subtract(c.getRealPart()),
-                                           ZERO.subtract(c.getImaginaryPart()));
-            }
-            throw new TypeError(obj, "number");
+        if (obj instanceof LispFloat)
+            return new LispFloat(value - LispFloat.getValue(obj));
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(subtract(c.getRealPart()),
+                                       ZERO.subtract(c.getImaginaryPart()));
         }
+        throw new TypeError(obj, "number");
     }
 
     public LispObject multiplyBy(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof Fixnum)
             return number((long) value * ((Fixnum)obj).value);
+        if (obj instanceof Bignum)
+            return number(getBigInteger().multiply(Bignum.getValue(obj)));
+        if (obj instanceof Ratio) {
+            BigInteger numerator = ((Ratio)obj).numerator();
+            BigInteger denominator = ((Ratio)obj).denominator();
+            return number(
+                getBigInteger().multiply(numerator),
+                denominator);
         }
-        catch (ClassCastException e) {
-            // obj is not a fixnum.
-            if (obj instanceof Bignum)
-                return number(getBigInteger().multiply(Bignum.getValue(obj)));
-            if (obj instanceof Ratio) {
-                BigInteger numerator = ((Ratio)obj).numerator();
-                BigInteger denominator = ((Ratio)obj).denominator();
-                return number(
-                    getBigInteger().multiply(numerator),
-                    denominator);
-            }
-            if (obj instanceof LispFloat)
-                return new LispFloat(value * LispFloat.getValue(obj));
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof LispFloat)
+            return new LispFloat(value * LispFloat.getValue(obj));
+        throw new TypeError(obj, "number");
     }
 
     public LispObject divideBy(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof Fixnum) {
             final int divisor = ((Fixnum)obj).value;
             if (value % divisor == 0)
                 return new Fixnum(value / divisor);
             return number(BigInteger.valueOf(value),
                 BigInteger.valueOf(divisor));
         }
-        catch (ClassCastException e) {
-            // obj is not a fixnum.
-            if (obj instanceof Bignum)
-                return number(getBigInteger(), ((Bignum)obj).getValue());
-            if (obj instanceof Ratio) {
-                BigInteger numerator = ((Ratio)obj).numerator();
-                BigInteger denominator = ((Ratio)obj).denominator();
-                return number(
-                    getBigInteger().multiply(denominator),
-                    numerator);
-            }
-            if (obj instanceof LispFloat)
-                return new LispFloat(value / LispFloat.getValue(obj));
-            throw new TypeError(obj, "number");
+        if (obj instanceof Bignum)
+            return number(getBigInteger(), ((Bignum)obj).getValue());
+        if (obj instanceof Ratio) {
+            BigInteger numerator = ((Ratio)obj).numerator();
+            BigInteger denominator = ((Ratio)obj).denominator();
+            return number(
+                getBigInteger().multiply(denominator),
+                numerator);
         }
+        if (obj instanceof LispFloat)
+            return new LispFloat(value / LispFloat.getValue(obj));
+        throw new TypeError(obj, "number");
     }
 
     public boolean isEqualTo(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof Fixnum)
             return value == ((Fixnum)obj).value;
-        }
-        catch (ClassCastException e) {
-            // obj is not a fixnum.
-            if (obj instanceof LispFloat)
-                return (float) value == LispFloat.getValue(obj);
-            if (obj instanceof Complex)
-                return obj.isEqualTo(this);
-            if ((obj.getType() & TYPE_NUMBER) != 0)
-                return false;
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof LispFloat)
+            return (float) value == LispFloat.getValue(obj);
+        if (obj instanceof Complex)
+            return obj.isEqualTo(this);
+        if ((obj.getType() & TYPE_NUMBER) != 0)
+            return false;
+        throw new TypeError(obj, "number");
     }
 
     public boolean isNotEqualTo(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof Fixnum)
             return value != ((Fixnum)obj).value;
-        }
-        catch (ClassCastException e) {
             // obj is not a fixnum.
-            if (obj instanceof LispFloat)
-                return (float) value != LispFloat.getValue(obj);
-            if (obj instanceof Complex)
-                return obj.isNotEqualTo(this);
-            if ((obj.getType() & TYPE_NUMBER) != 0)
-                return true;
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof LispFloat)
+            return (float) value != LispFloat.getValue(obj);
+        if (obj instanceof Complex)
+            return obj.isNotEqualTo(this);
+        if ((obj.getType() & TYPE_NUMBER) != 0)
+            return true;
+        throw new TypeError(obj, "number");
     }
 
     public boolean isLessThan(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof Fixnum)
             return value < ((Fixnum)obj).value;
+        if (obj instanceof Bignum)
+            return getBigInteger().compareTo(Bignum.getValue(obj)) < 0;
+        if (obj instanceof Ratio) {
+            BigInteger n =
+                getBigInteger().multiply(((Ratio)obj).denominator());
+            return n.compareTo(((Ratio)obj).numerator()) < 0;
         }
-        catch (ClassCastException e) {
-            // obj is not a fixnum.
-            if (obj instanceof Bignum)
-                return getBigInteger().compareTo(Bignum.getValue(obj)) < 0;
-            if (obj instanceof Ratio) {
-                BigInteger n =
-                    getBigInteger().multiply(((Ratio)obj).denominator());
-                return n.compareTo(((Ratio)obj).numerator()) < 0;
-            }
-            if (obj instanceof LispFloat)
-                return (float) value < LispFloat.getValue(obj);
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof LispFloat)
+            return (float) value < LispFloat.getValue(obj);
+        throw new TypeError(obj, "number");
     }
 
     public boolean isGreaterThan(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof Fixnum)
             return value > ((Fixnum)obj).value;
+        if (obj instanceof Bignum)
+            return getBigInteger().compareTo(Bignum.getValue(obj)) > 0;
+        if (obj instanceof Ratio) {
+            BigInteger n =
+                getBigInteger().multiply(((Ratio)obj).denominator());
+            return n.compareTo(((Ratio)obj).numerator()) > 0;
         }
-        catch (ClassCastException e) {
-            // obj is not a fixnum.
-            if (obj instanceof Bignum)
-                return getBigInteger().compareTo(Bignum.getValue(obj)) > 0;
-            if (obj instanceof Ratio) {
-                BigInteger n =
-                    getBigInteger().multiply(((Ratio)obj).denominator());
-                return n.compareTo(((Ratio)obj).numerator()) > 0;
-            }
-            if (obj instanceof LispFloat)
-                return (float) value > LispFloat.getValue(obj);
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof LispFloat)
+            return (float) value > LispFloat.getValue(obj);
+        throw new TypeError(obj, "number");
     }
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof Fixnum)
             return value <= ((Fixnum)obj).value;
+        if (obj instanceof Bignum)
+            return getBigInteger().compareTo(Bignum.getValue(obj)) <= 0;
+        if (obj instanceof Ratio) {
+            BigInteger n =
+                getBigInteger().multiply(((Ratio)obj).denominator());
+            return n.compareTo(((Ratio)obj).numerator()) <= 0;
         }
-        catch (ClassCastException e) {
-            // obj is not a fixnum.
-            if (obj instanceof Bignum)
-                return getBigInteger().compareTo(Bignum.getValue(obj)) <= 0;
-            if (obj instanceof Ratio) {
-                BigInteger n =
-                    getBigInteger().multiply(((Ratio)obj).denominator());
-                return n.compareTo(((Ratio)obj).numerator()) <= 0;
-            }
-            if (obj instanceof LispFloat)
-                return (float) value <= LispFloat.getValue(obj);
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof LispFloat)
+            return (float) value <= LispFloat.getValue(obj);
+        throw new TypeError(obj, "number");
     }
 
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof Fixnum)
             return value >= ((Fixnum)obj).value;
+        if (obj instanceof Bignum)
+            return getBigInteger().compareTo(Bignum.getValue(obj)) >= 0;
+        if (obj instanceof Ratio) {
+            BigInteger n =
+                getBigInteger().multiply(((Ratio)obj).denominator());
+            return n.compareTo(((Ratio)obj).numerator()) >= 0;
         }
-        catch (ClassCastException e) {
-            // obj is not a fixnum.
-            if (obj instanceof Bignum)
-                return getBigInteger().compareTo(Bignum.getValue(obj)) >= 0;
-            if (obj instanceof Ratio) {
-                BigInteger n =
-                    getBigInteger().multiply(((Ratio)obj).denominator());
-                return n.compareTo(((Ratio)obj).numerator()) >= 0;
-            }
-            if (obj instanceof LispFloat)
-                return (float) value >= LispFloat.getValue(obj);
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof LispFloat)
+            return (float) value >= LispFloat.getValue(obj);
+        throw new TypeError(obj, "number");
     }
 
     public LispObject truncate(LispObject obj) throws LispError
