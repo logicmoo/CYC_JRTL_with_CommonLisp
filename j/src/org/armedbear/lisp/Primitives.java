@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.288 2003-07-07 16:21:39 piso Exp $
+ * $Id: Primitives.java,v 1.289 2003-07-07 18:28:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3388,6 +3388,60 @@ public final class Primitives extends Module
                 body = body.cdr();
             }
             thread.setDynamicEnvironment(oldDynEnv);
+            return result;
+        }
+    };
+
+    // ### multiple-value-seq
+    // multiple-value-setq vars form => result
+    // Result is the primary value returned by the form.
+    // Should be a macro.
+    private static final SpecialOperator MULTIPLE_VALUE_SETQ =
+        new SpecialOperator("multiple-value-setq") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            if (args.length() != 2)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject vars = args.car();
+            LispObject form = args.cadr();
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = eval(form, env, thread);
+            LispObject[] values = thread.getValues();
+            if (values == null) {
+                // eval() did not return multiple values.
+                values = new LispObject[1];
+                values[0] = result;
+            }
+            final Environment dynEnv = thread.getDynamicEnvironment();
+            final int limit = values.length;
+            int i = 0;
+            while (vars != NIL) {
+                Symbol symbol = checkSymbol(vars.car());
+                LispObject value = i < limit ? values[i] : NIL;
+                ++i;
+                if (symbol.isSpecialVariable()) {
+                    if (dynEnv != null) {
+                        Binding binding = dynEnv.getBinding(symbol);
+                        if (binding != null) {
+                            binding.value = value;
+                            vars = vars.cdr();
+                            continue;
+                        }
+                    }
+                    symbol.setSymbolValue(value);
+                    vars = vars.cdr();
+                    continue;
+                }
+                // Not special.
+                Binding binding = env.getBinding(symbol);
+                if (binding != null)
+                    binding.value = value;
+                else
+                    symbol.setSymbolValue(value);
+                vars = vars.cdr();
+            }
+            thread.clearValues();
             return result;
         }
     };
