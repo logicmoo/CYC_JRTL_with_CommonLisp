@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.27 2003-03-30 15:55:30 piso Exp $
+ * $Id: Fixnum.java,v 1.28 2003-03-30 16:11:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -372,72 +372,4 @@ public final class Fixnum extends LispObject
     {
         return String.valueOf(value);
     }
-
-    // ### ash
-    // ash integer count => shifted-integer
-    private static final Primitive2 ASH = new Primitive2("ash") {
-        public LispObject execute(LispObject first, LispObject second)
-            throws LispError
-        {
-            BigInteger n;
-            if (first instanceof Fixnum)
-                n = BigInteger.valueOf(((Fixnum)first).getValue());
-            else if (first instanceof Bignum)
-                n = ((Bignum)first).getValue();
-            else
-                throw new TypeError(first, "integer");
-            if (second instanceof Fixnum) {
-                int count = Fixnum.getInt(second);
-                if (count == 0)
-                    return first;
-                // BigInteger.shiftLeft() succumbs to a stack overflow if count
-                // is Integer.MIN_VALUE, so...
-                if (count == Integer.MIN_VALUE)
-                    return n.signum() >= 0 ? ZERO : new Fixnum(-1);
-                return number(n.shiftLeft(count));
-            }
-            if (second instanceof Bignum) {
-                BigInteger count = ((Bignum)second).getValue();
-                if (count.signum() > 0)
-                    throw new LispError("can't represent result of left shift");
-                if (count.signum() < 0)
-                    return Fixnum.ZERO;
-                Debug.bug(); // Shouldn't happen.
-            }
-            throw new TypeError(second, "integer");
-        }
-    };
-
-    // ### expt
-    // expt base-number power-number => result
-    private static final Primitive2 EXPT = new Primitive2("expt") {
-        public LispObject execute(LispObject n, LispObject power)
-            throws LispError
-        {
-            if (power instanceof Fixnum) {
-                LispObject result = null;
-                if (n instanceof Fixnum || n instanceof Bignum)
-                    result = new Fixnum(1);
-                else
-                    result = new LispFloat((float)1);
-                int count = Fixnum.getInt(power);
-                if (count > 0) {
-                    for (int i = count; i-- > 0;)
-                        result = result.multiplyBy(n);
-                } else if (count < 0) {
-                    for (int i = -count; i-- > 0;)
-                        result = result.divideBy(n);
-                }
-                return result;
-            }
-            if (power instanceof LispFloat) {
-                if (n instanceof Fixnum) {
-                    double d = Math.pow(((Fixnum)n).getValue(),
-                        ((LispFloat)power).getValue());
-                    return new LispFloat(new Float(d).floatValue());
-                }
-            }
-            throw new LispError("EXPT: unsupported case");
-        }
-    };
 }
