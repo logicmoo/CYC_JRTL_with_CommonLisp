@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.28 2003-06-08 14:28:39 piso Exp $
+ * $Id: Closure.java,v 1.29 2003-06-08 15:08:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ public class Closure extends Function
     private final LispObject function;
     private final boolean allowOtherKeys;
     private final boolean restp;
+    private Symbol restVar;
     private int arity;
     private int required;
     private int keywordParameterCount;
@@ -69,12 +70,11 @@ public class Closure extends Function
             ArrayList arrayList = new ArrayList();
             ArrayList keywordParameters = new ArrayList();
             ArrayList auxVars = null;
-            LispObject remaining = parameterList;
             boolean optional = false;
-            boolean rest = false;
             boolean key = false;
             boolean aux = false;
-            for (int i = 0; i < length; i++) {
+            LispObject remaining = parameterList;
+            while (remaining != NIL) {
                 LispObject obj = remaining.car();
                 if (obj instanceof Symbol) {
                     if (aux) {
@@ -89,15 +89,11 @@ public class Closure extends Function
                         envVar = checkSymbol(remaining.car());
                         arity = -1;
                         // FIXME maxArgs?
-                        remaining = remaining.cdr();
-                        ++i;
-                        continue;
                     } else if (obj == Symbol.AND_OPTIONAL) {
                         optional = true;
                         arity = -1;
                     } else if (obj == Symbol.AND_REST || obj == Symbol.AND_BODY) {
                         restp = true;
-                        rest = true;
                         optional = false;
                         key = false;
                         arity = -1;
@@ -106,12 +102,12 @@ public class Closure extends Function
                         if (remaining == NIL)
                             throw new LispError(
                                 "&REST/&BODY must be followed by a variable");
-                        obj = remaining.car();
-                        arrayList.add(new Parameter((Symbol)obj, NIL, REST));
+                        Debug.assertTrue(restVar == null);
+                        restVar = (Symbol) remaining.car();
+                        arrayList.add(new Parameter(restVar, NIL, REST));
                     } else if (obj == Symbol.AND_KEY) {
                         key = true;
                         optional = false;
-                        rest = false;
                         arity = -1;
                     } else if (obj == Symbol.AND_ALLOW_OTHER_KEYS) {
                         allowOtherKeys = true;
@@ -184,7 +180,7 @@ public class Closure extends Function
                             maxArgs += 2;
                     } else
                         invalidParameter(obj);
-                } else if (obj != NIL)
+                } else
                     invalidParameter(obj);
                 remaining = remaining.cdr();
             }
@@ -451,6 +447,7 @@ public class Closure extends Function
                 Parameter parameter = parameterArray[i];
                 if (parameter.type == REST) {
                     Symbol symbol = parameter.var;
+                    Debug.assertTrue(symbol == restVar);
                     LispObject rest = NIL;
                     for (int j = args.length; j-- > i;)
                         rest = new Cons(args[j], rest);
