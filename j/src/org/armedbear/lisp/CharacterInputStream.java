@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CharacterInputStream.java,v 1.62 2004-01-04 01:43:44 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.63 2004-01-10 15:48:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -218,7 +218,11 @@ public class CharacterInputStream extends LispInputStream
                     if (n < 0)
                         return signal(new EndOfFile());
                     char nextChar = (char) n;
-                    if (isTokenDelimiter(nextChar)) {
+                    if (nextChar == ',') {
+                        LispObject obj = readComma();
+                        last.setCdr(obj);
+                        continue;
+                    } else if (isTokenDelimiter(nextChar)) {
                         if (last == null)
                             return signal(new LispError("nothing appears before . in list"));
                         LispObject obj = read(true, NIL, true);
