@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.33 2003-12-10 18:20:57 piso Exp $
+;;; $Id: clos.lisp,v 1.34 2003-12-11 19:17:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -69,6 +69,7 @@
             (mapplist fun (cddr x)))))
 
 (defsetf class-name %set-class-name)
+(defsetf class-layout %set-class-layout)
 (defsetf class-direct-superclasses %set-class-direct-superclasses)
 (defsetf class-direct-subclasses %set-class-direct-subclasses)
 (defsetf class-direct-methods %set-class-direct-methods)
@@ -77,7 +78,7 @@
 (defsetf class-direct-default-initargs %set-class-direct-default-initargs)
 (defsetf class-default-initargs %set-class-default-initargs)
 (defsetf class-precedence-list %set-class-precedence-list)
-(defsetf std-instance-class %set-std-instance-class)
+(defsetf std-instance-layout %set-std-instance-layout)
 (defsetf std-instance-slots %set-std-instance-slots)
 
 (defun (setf find-class) (new-value symbol &optional errorp environment)
@@ -251,19 +252,21 @@
                      #'std-compute-slots
                      #'compute-slots)
                  class))
-  (let ((location 0))
+  (let ((length 0))
     (dolist (slot (class-slots class))
       (case (slot-definition-allocation slot)
         (:instance
-         (setf (slot-definition-location slot) location)
-         (incf location))
+         (setf (slot-definition-location slot) length)
+         (incf length))
         (:class
          (unless (slot-definition-location slot)
            (let ((allocation-class (slot-definition-allocation-class slot)))
              (setf (slot-definition-location slot)
                    (if (eq class allocation-class)
                        (cons (slot-definition-name slot) +slot-unbound+)
-                       (slot-location allocation-class (slot-definition-name slot))))))))))
+                       (slot-location allocation-class (slot-definition-name slot)))))))))
+    (setf (class-layout class)
+          (make-layout class length)))
   (setf (class-default-initargs class)
         (compute-class-default-initargs class))
   (values))
@@ -395,11 +398,6 @@
      :allocation (slot-definition-allocation (car direct-slots))
      :allocation-class (slot-definition-allocation-class (car direct-slots)))))
 
-;;; Simple vectors are used for slot storage.
-
-(defun allocate-slot-storage (size initial-value)
-  (make-array size :initial-element initial-value))
-
 ;;; Standard instance slot access
 
 ;;; N.B. The location of the effective-slots slots in the class metaobject for
@@ -497,16 +495,27 @@
       (std-slot-exists-p object slot-name)
       (slot-exists-p-using-class (class-of object) object slot-name)))
 
-;;; Standard instance allocation
-
 (defun instance-slot-p (slot)
   (eq (slot-definition-allocation slot) :instance))
 
+;;; Simple vectors are used for slot storage.
+
+(defun allocate-slot-storage (size initial-value)
+  (make-array size :initial-element initial-value))
+
+;;; Standard instance allocation
+
 (defun std-allocate-instance (class)
-  (allocate-std-instance
-   class
-   (allocate-slot-storage (count-if #'instance-slot-p (class-slots class))
-                          +slot-unbound+)))
+  (let* ((layout (class-layout class))
+         (length (and layout (layout-length layout))))
+    (unless layout
+      (format t "no layout for class ~S~%" class)
+      (backtrace))
+    (unless length
+      (format t "no layout length for class ~S~%" class)
+      (setf length (count-if #'instance-slot-p (class-slots class))))
+    (allocate-std-instance class
+                           (allocate-slot-storage length +slot-unbound+))))
 
 (defun make-instance-standard-class (metaclass
                                      &key name direct-superclasses direct-slots
@@ -657,6 +666,7 @@
 (defun classes-to-emf-table (gf)
 ;;   (slot-value gf 'classes-to-emf-table))
   (slot-contents (std-instance-slots gf) *sgf-classes-to-emf-table-index*))
+
 (defun (setf classes-to-emf-table) (new-value gf)
   (setf (slot-value gf 'classes-to-emf-table) new-value))
 
@@ -1487,10 +1497,8 @@
 
 (defgeneric change-class (instance new-class &key))
 
-(defmethod change-class
-  ((old-instance standard-object)
-   (new-class standard-class)
-   &rest initargs)
+(defmethod change-class ((old-instance standard-object) (new-class standard-class)
+                         &rest initargs)
   (let ((new-instance (allocate-instance new-class)))
     (dolist (slot-name (mapcar #'slot-definition-name
                                (class-slots new-class)))
@@ -1500,14 +1508,13 @@
               (slot-value old-instance slot-name))))
     (rotatef (std-instance-slots new-instance)
              (std-instance-slots old-instance))
-    (rotatef (std-instance-class new-instance)
-             (std-instance-class old-instance))
+    (rotatef (std-instance-layout new-instance)
+             (std-instance-layout old-instance))
     (apply #'update-instance-for-different-class
            new-instance old-instance initargs)
     old-instance))
 
-(defmethod change-class
-  ((instance standard-object) (new-class symbol) &rest initargs)
+(defmethod change-class ((instance standard-object) (new-class symbol) &rest initargs)
   (apply #'change-class instance (find-class new-class) initargs))
 
 (defgeneric update-instance-for-different-class (old new &key))
