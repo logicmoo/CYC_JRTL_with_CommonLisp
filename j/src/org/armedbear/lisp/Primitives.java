@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.498 2003-11-16 15:03:45 piso Exp $
+ * $Id: Primitives.java,v 1.499 2003-11-16 15:32:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,14 +75,13 @@ public final class Primitives extends Module
     private static final int SYMBOL_PLIST               = 41;
     private static final int THIRD                      = 42;
     private static final int UPPER_CASE_P               = 43;
-    private static final int VALUES_LIST                = 44;
-    private static final int VECTORP                    = 45;
+    private static final int VECTORP                    = 44;
 
     // Primitive2
-    private static final int MEMBER                     = 46;
-    private static final int RPLACA                     = 47;
-    private static final int RPLACD                     = 48;
-    private static final int SET                        = 49;
+    private static final int MEMBER                     = 45;
+    private static final int RPLACA                     = 46;
+    private static final int RPLACD                     = 47;
+    private static final int SET                        = 48;
 
     private Primitives()
     {
@@ -130,7 +129,6 @@ public final class Primitives extends Module
         definePrimitive1("symbol-plist", SYMBOL_PLIST);
         definePrimitive1("third", THIRD);
         definePrimitive1("upper-case-p", UPPER_CASE_P);
-        definePrimitive1("values-list", VALUES_LIST);
         definePrimitive1("vectorp", VECTORP);
 
         definePrimitive2("member", MEMBER);
@@ -301,8 +299,6 @@ public final class Primitives extends Module
                 return arg.incr();
             case PREDECESSOR:                   // ### 1-
                 return arg.decr();
-            case VALUES_LIST:                   // ### values-list
-                return values(arg.copyToArray());
             case EVAL:                          // ### eval
                 return eval(arg, new Environment(), LispThread.currentThread());
             default:
@@ -404,6 +400,17 @@ public final class Primitives extends Module
         }
     };
 
+    // ### values-list
+    // values-list list => element*
+    // Returns the elements of the list as multiple values.
+    private static final Primitive1 VALUES_LIST = new Primitive1("values-list")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return LispThread.currentThread().setValues(arg.copyToArray());
+        }
+    };
+
     // ### cons
     private static final Primitive2 CONS = new Primitive2("cons") {
         public LispObject execute(LispObject first, LispObject second)
@@ -431,12 +438,14 @@ public final class Primitives extends Module
     };
 
     // ### constantp
-    private static final Primitive CONSTANTP = new Primitive("constantp") {
+    private static final Primitive CONSTANTP = new Primitive("constantp")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.CONSTANTP();
         }
-        public LispObject execute(LispObject first, LispObject second) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
             return first.CONSTANTP();
         }
