@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.36 2004-03-18 01:09:48 piso Exp $
+ * $Id: Load.java,v 1.37 2004-03-24 01:05:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 
 public final class Load extends Lisp
 {
@@ -39,7 +40,7 @@ public final class Load extends Lisp
     }
 
     public static final LispObject load(final String filename,
-                                         boolean verbose, boolean print)
+                                        boolean verbose, boolean print)
         throws ConditionThrowable
     {
         File file = null;
@@ -127,31 +128,44 @@ public final class Load extends Lisp
                                          boolean auto)
         throws ConditionThrowable
     {
+        ArrayList candidates = new ArrayList();
+        String extension = getExtension(filename);
+        if (extension == null) {
+            // No extension specified.
+            candidates.add(filename.concat(".fasl"));
+            candidates.add(filename.concat(".lisp"));
+        } else
+            candidates.add(filename);
         InputStream in = null;
         String truename = null;
-        URL url = Lisp.class.getResource(filename);
-        if (url != null) {
-            try {
-                in = url.openStream();
-                truename = url.getPath();
-            }
-            catch (IOException e) {
-                in = null;
-            }
-        } else {
-            final String dir = Site.getLispHome();
-            if (dir != null) {
-                File file = new File(dir, filename);
-                if (file.isFile()) {
-                    try {
-                        in = new FileInputStream(file);
-                        truename = file.getCanonicalPath();
-                    }
-                    catch (IOException e) {
-                        in = null;
+        for (int i = 0; i < candidates.size(); i++) {
+            String s = (String) candidates.get(i);
+            URL url = Lisp.class.getResource(s);
+            if (url != null) {
+                try {
+                    in = url.openStream();
+                    truename = url.getPath();
+                }
+                catch (IOException e) {
+                    in = null;
+                }
+            } else {
+                final String dir = Site.getLispHome();
+                if (dir != null) {
+                    File file = new File(dir, s);
+                    if (file.isFile()) {
+                        try {
+                            in = new FileInputStream(file);
+                            truename = file.getCanonicalPath();
+                        }
+                        catch (IOException e) {
+                            in = null;
+                        }
                     }
                 }
             }
+            if (in != null)
+                break;
         }
         if (in != null) {
             LispObject result =
