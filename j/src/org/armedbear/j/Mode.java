@@ -2,7 +2,7 @@
  * Mode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Mode.java,v 1.5 2003-06-12 15:57:20 piso Exp $
+ * $Id: Mode.java,v 1.6 2003-06-13 14:26:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,27 +90,6 @@ public interface Mode
      * @see     KeyMapping
      */
     public File getKeyMapFile();
-
-    /**
-     * Returns any overrides that this Mode may have. Overrides are optional.
-     *
-     * @return  a <code>KeyMap</code> of overrides if they exist, null
-     *          otherwise.
-     */
-    public KeyMap getOverrides();
-
-    /**
-     * Returns any overrides that this Mode may have.  Overrides are optional.
-     * If create is true, then an empty <code>KeyMap</code> of overrides
-     * should be created if none already exists.
-     *
-     * @param create Whether or not to create an overrides <code>KeyMap</code>
-     *        if one does not already exist.
-     * @return If overrides exist, then the corresponding <code>KeyMap</code>,
-     *         otherwise null if <code>create</code> is false, and an empty
-     *         KeyMap if <code>create</code> is <code>true</code>.
-     */
-    public KeyMap getOverrides(boolean create);
 
     /**
      * Returns an identifier for the <code>MenuBar</code> that is to

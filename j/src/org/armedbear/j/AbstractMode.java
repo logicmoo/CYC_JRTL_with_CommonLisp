@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.10 2003-06-12 16:36:47 piso Exp $
+ * $Id: AbstractMode.java,v 1.11 2003-06-13 14:27:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,23 +137,13 @@ public abstract class AbstractMode implements Constants, Mode
     // Should never return null.
     public synchronized final KeyMap getKeyMap()
     {
-        if (keyMap == null)
-            if (!loadKeyMapForMode())
-                keyMap = getDefaultKeyMap();
-
+        if (keyMap == null) {
+            if (!loadKeyMapForMode()) {
+                keyMap = new KeyMap();
+                setKeyMapDefaults(keyMap);
+            }
+        }
         return keyMap;
-    }
-
-    public synchronized final KeyMap getOverrides()
-    {
-        return overrides;
-    }
-
-    public synchronized final KeyMap getOverrides(boolean create)
-    {
-        if (create && overrides == null)
-            overrides = new KeyMap();
-        return overrides;
     }
 
     private boolean loadKeyMapForMode()
@@ -171,13 +161,6 @@ public abstract class AbstractMode implements Constants, Mode
         keyMap = null;
         keyMapFile = null;
         return false;
-    }
-
-    private KeyMap getDefaultKeyMap()
-    {
-        KeyMap km = new KeyMap();
-        setKeyMapDefaults(km);
-        return km;
     }
 
     protected void setKeyMapDefaults(KeyMap km)
