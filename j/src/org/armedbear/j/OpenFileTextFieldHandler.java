@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.11 2002-12-06 16:07:03 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.12 2002-12-06 17:32:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -406,7 +406,14 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         if (prefix == null)
             return;
         editor.setWaitCursor();
-        if (Editor.preferences().getBooleanProperty(Property.SHOW_COMPLETION_LIST)) {
+        final boolean showCompletionList;
+        if (textField.getOwner() instanceof OpenFileDialog) {
+            showCompletionList = false;
+        } else {
+            showCompletionList = Editor.preferences().getBooleanProperty(
+                Property.SHOW_COMPLETION_LIST);
+        }
+        if (showCompletionList) {
             if (popup == null) {
                 completions = getCompletions(prefix);
                 index = 0;
@@ -415,10 +422,10 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     textField.setText(completion);
                     textField.setCaretPosition(completion.length());
                 } else if (completions.size() > 1) {
+                    showCompletionsPopup();
                     originalText = textField.getText();
                     String completion = (String) completions.get(0);
                     textField.setText(completion);
-                    showCompletionsPopup();
                 }
             } else
                 tabPopup(+1, true);
@@ -635,9 +642,10 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         popup = null;
         File file = File.getInstance(editor.getCompletionDirectory(),
             textField.getText());
-        if (file != null && file.isFile())
+        if (file != null && file.isFile()) {
+            editor.repaintNow();
             enter();
-        else {
+        } else {
             textField.requestFocus();
             end();
         }
@@ -677,16 +685,16 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         }
 
         public void processMouseEvent(MouseEvent e, MenuElement[] path,
-            MenuSelectionManager manager)
-        {
-        }
+            MenuSelectionManager manager) {}
 
         public void processKeyEvent(KeyEvent e, MenuElement[] path,
             MenuSelectionManager manager)
         {
+            final int keyCode = e.getKeyCode();
             final int modifiers = e.getModifiers();
-            if (e.getID() == KeyEvent.KEY_PRESSED) {
-                switch (e.getKeyCode()) {
+            final int id = e.getID();
+            if (id == KeyEvent.KEY_PRESSED) {
+                switch (keyCode) {
                     case KeyEvent.VK_TAB:
                         if (modifiers == 0)
                             tabPopup(+1, true);
@@ -732,13 +740,27 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     default:
                         break;
                 }
+            } else if (id == KeyEvent.KEY_TYPED) {
+                char c = e.getKeyChar();
+                if (c >= ' ') {
+                    popup.setVisible(false);
+                    popup = null;
+                    String text = textField.getText();
+                    text += e.getKeyChar();
+                    textField.setText(text);
+                    textField.requestFocus();
+                    end();
+                    e.consume();
+                    return;
+                } else {
+                    e.consume();
+                    return;
+                }
             }
             super.processKeyEvent(e);
         }
 
-        public void menuSelectionChanged(boolean isIncluded)
-        {
-        }
+        public void menuSelectionChanged(boolean isIncluded) {}
 
         public MenuElement[] getSubElements()
         {
@@ -765,6 +787,13 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     popup = null;
                     textField.setText(originalText);
                     textField.requestFocus();
+                    e.consume();
+                    return;
+                case KeyEvent.VK_TAB:
+                    if (modifiers == 0)
+                        tabPopup(+1, true);
+                    else if (modifiers == SHIFT_MASK)
+                        tabPopup(-1, true);
                     e.consume();
                     return;
                 case KeyEvent.VK_UP:
