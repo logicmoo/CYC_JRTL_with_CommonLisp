@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.46 2003-02-23 02:37:15 piso Exp $
+ * $Id: Primitives.java,v 1.47 2003-02-25 16:42:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 package org.armedbear.lisp;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -713,26 +715,26 @@ public final class Primitives extends Module
         }
     };
 
-    private static final Primitive1 REVERSE = new Primitive1("reverse") {
-        public LispObject execute(LispObject obj) throws LispError
-        {
-            if (obj == NIL)
-                return NIL;
-            if (obj instanceof Cons) {
-                final int length = obj.length();
-                LispObject[] array = new LispObject[length];
-                for (int i = 0; i < length; i++) {
-                    array[i] = obj.car();
-                    obj = obj.cdr();
-                }
-                LispObject result = NIL;
-                for (int i = 0; i < length; i++)
-                    result = new Cons(array[i], result);
-                return result;
-            }
-            throw new LispError();
-        }
-    };
+//     private static final Primitive1 REVERSE = new Primitive1("reverse") {
+//         public LispObject execute(LispObject obj) throws LispError
+//         {
+//             if (obj == NIL)
+//                 return NIL;
+//             if (obj instanceof Cons) {
+//                 final int length = obj.length();
+//                 LispObject[] array = new LispObject[length];
+//                 for (int i = 0; i < length; i++) {
+//                     array[i] = obj.car();
+//                     obj = obj.cdr();
+//                 }
+//                 LispObject result = NIL;
+//                 for (int i = 0; i < length; i++)
+//                     result = new Cons(array[i], result);
+//                 return result;
+//             }
+//             throw new LispError();
+//         }
+//     };
 
     // Numeric equality.
     private static final Primitive EQUALS = new Primitive("=") {
@@ -3277,6 +3279,19 @@ public final class Primitives extends Module
             }
             catch (IOException e) {
                 throw new LispError(e.getMessage());
+            }
+        }
+    };
+
+    private static final Primitive1 _OPEN_OUTPUT_FILE =
+        new Primitive1("%open-output-file") {
+        public LispObject execute (LispObject arg) throws LispError {
+            String pathname = LispString.getValue(arg);
+            try {
+                return new CharacterOutputStream(new FileOutputStream(pathname));
+            }
+            catch (FileNotFoundException e) {
+                throw new LispError(" file not found: " + pathname);
             }
         }
     };
