@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.2 2003-01-25 16:54:39 piso Exp $
+ * $Id: Interpreter.java,v 1.3 2003-01-26 18:09:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,8 @@ public final class Interpreter extends Lisp
 
     public static boolean initialized;
 
+    private final boolean jlisp;
+
     public static synchronized Interpreter getInstance()
     {
         return interpreter;
@@ -64,6 +66,7 @@ public final class Interpreter extends Lisp
         _STANDARD_OUTPUT_.setSymbolValue(out);
         _ERROR_OUTPUT_.setSymbolValue(out);
         _TRACE_OUTPUT_.setSymbolValue(out);
+        jlisp = false;
     }
 
     private Interpreter(InputStream inputStream, OutputStream outputStream,
@@ -76,13 +79,16 @@ public final class Interpreter extends Lisp
         _TRACE_OUTPUT_.setSymbolValue(out);
         _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(
             new LispString(initialDirectory));
+        jlisp = true;
     }
 
-    public static synchronized void initialize()
+    public static synchronized void initialize(boolean jlisp)
     {
         if (!initialized) {
             try {
-                Load._load("boot", true, false);
+                Load._load("boot.lisp", true, false);
+                if (jlisp)
+                    Load._load("j.lisp", true, false);
             }
             catch (Throwable t) {
                 t.printStackTrace();
@@ -101,7 +107,7 @@ public final class Interpreter extends Lisp
         try {
             CharacterOutputStream out = getStandardOutput();
             out.writeString(banner());
-            initialize();
+            initialize(jlisp);
             while (true) {
                 try {
                     out.writeString(prompt());
