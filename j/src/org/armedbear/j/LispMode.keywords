@@ -81,6 +81,7 @@ char<=
 char=
 char>
 char>=
+character
 characterp
 check-type
 clear-output
