@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.104 2003-08-23 01:47:56 piso Exp $
+;;; $Id: rt.lisp,v 1.105 2003-08-23 02:11:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -204,7 +204,9 @@
                               "eval"
                               "every"
                               "fboundp"
+                              "fceiling"
                               "fdefinition"
+                              "ffloor"
                               "fill"
                               "fill-pointer"
                               "fill-strings"
@@ -214,6 +216,8 @@
                               "flet"
                               "floor"
                               "fmakunbound"
+                              "fround"
+                              "ftruncate"
                               "funcall"
                               "function"
                               "function-lambda-expression"
