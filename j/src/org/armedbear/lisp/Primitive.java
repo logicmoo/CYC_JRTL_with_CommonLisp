@@ -2,7 +2,7 @@
  * Primitive.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive.java,v 1.11 2004-10-20 00:13:11 piso Exp $
+ * $Id: Primitive.java,v 1.12 2004-11-03 18:11:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,12 @@ public class Primitive extends Function
         super(name, pkg, exported, arglist);
     }
 
+    public Primitive(String name, Package pkg, boolean exported,
+                     String arglist, String docstring)
+    {
+        super(name, pkg, exported, arglist, docstring);
+    }
+    
     public LispObject typeOf()
     {
         return Symbol.COMPILED_FUNCTION;
