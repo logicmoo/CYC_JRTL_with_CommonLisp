@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.589 2004-03-04 02:01:45 piso Exp $
+ * $Id: Primitives.java,v 1.590 2004-03-05 18:32:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3648,7 +3648,10 @@ public final class Primitives extends Lisp
 
     // ### read
     // read &optional input-stream eof-error-p eof-value recursive-p => object
-    private static final Primitive READ = new Primitive("read","&optional input-stream eof-error-p eof-value recursive-p") {
+    private static final Primitive READ =
+        new Primitive("read",
+                      "&optional input-stream eof-error-p eof-value recursive-p")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
@@ -3660,6 +3663,26 @@ public final class Primitives extends Lisp
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
             return stream.read(eofError, eofValue, recursive);
+        }
+    };
+
+    // ### read-preserving-whitespace
+    // read &optional input-stream eof-error-p eof-value recursive-p => object
+    private static final Primitive READ_PRESERVING_WHITESPACE =
+        new Primitive("read-preserving-whitespace",
+                      "&optional input-stream eof-error-p eof-value recursive-p")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            int length = args.length;
+            if (length > 4)
+                signal(new WrongNumberOfArgumentsException(this));
+            Stream stream =
+                length > 0 ? checkCharacterInputStream(args[0]) : getStandardInput();
+            boolean eofError = length > 1 ? (args[1] != NIL) : true;
+            LispObject eofValue = length > 2 ? args[2] : NIL;
+            boolean recursive = length > 3 ? (args[3] != NIL) : false;
+            return stream.readPreservingWhitespace(eofError, eofValue, recursive);
         }
     };
 
