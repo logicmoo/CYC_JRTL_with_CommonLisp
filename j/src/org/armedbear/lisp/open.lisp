@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.7 2004-01-26 15:26:26 piso Exp $
+;;; $Id: open.lisp,v 1.8 2004-01-26 15:27:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,8 +16,6 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-;;; Adapted from SBCL.
 
 (in-package "SYSTEM")
 
@@ -51,7 +49,6 @@
                    :format-arguments (list (namestring pathname)))))
          (nil
           (when (probe-file pathname)
-            (format t "file exists, returning NIL~%")
             (return-from open nil)))
          (:supersede) ; OK to proceed.
          (t
