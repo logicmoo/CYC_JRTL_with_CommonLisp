@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.162 2004-04-22 14:46:34 piso Exp $
+;;; $Id: boot.lisp,v 1.163 2004-04-24 12:41:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -52,6 +52,10 @@
 
 (defmacro defparameter (name initial-value &optional docstring)
   (list 'sys::%defparameter (list 'QUOTE name) initial-value docstring))
+
+;; SYS::OUTPUT-OBJECT is redefined in print.lisp.
+(defun sys::output-object (object stream)
+  (sys::%output-object object stream))
 
 ;; INVOKE-DEBUGGER is redefined in debug.lisp.
 (defun invoke-debugger (condition)
@@ -179,6 +183,7 @@
 (sys::load-system-file "restart")
 (sys::load-system-file "late-setf")
 (sys::load-system-file "debug")
+(sys::load-system-file "print")
 
 (unless (sys::featurep :j)
   (format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000))))
