@@ -2,7 +2,7 @@
  * XmlParserImpl.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: XmlParserImpl.java,v 1.4 2003-06-04 18:14:42 piso Exp $
+ * $Id: XmlParserImpl.java,v 1.5 2003-06-06 15:44:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -230,14 +230,12 @@ public final class XmlParserImpl extends DefaultHandler implements Runnable,
             xmlReader.setContentHandler(this);
             xmlReader.setErrorHandler(this);
             xmlReader.setEntityResolver(this);
-            buffer.exception = null;
             long start = System.currentTimeMillis();
             try {
                 xmlReader.parse(inputSource);
             }
             catch (Exception e) {
                 exception = e;
-                buffer.exception = e;
             }
             long elapsed = System.currentTimeMillis() - start;
             output.append('\n');
