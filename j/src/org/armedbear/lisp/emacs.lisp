@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.1 2005-03-03 14:06:56 piso Exp $
+;;; $Id: emacs.lisp,v 1.2 2005-03-03 15:01:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,14 +58,6 @@
 ;; mapKey(KeyEvent.VK_W, CTRL_MASK, "killBuffer");
 (define-key *control-x-map* "k" "killBuffer")
 ;; mapKey(KeyEvent.VK_P, ALT_MASK, "properties");
-;; mapKey(KeyEvent.VK_RIGHT, ALT_MASK, "nextBuffer");
-(define-key *global-map* "Alt Right" "nextBuffer")
-;; mapKey(KeyEvent.VK_KP_RIGHT, ALT_MASK, "nextBuffer");
-(define-key *global-map* "Alt NumPad Right" "nextBuffer")
-;; mapKey(KeyEvent.VK_LEFT, ALT_MASK, "prevBuffer");
-(define-key *global-map* "Alt Left" "prevBuffer")
-;; mapKey(KeyEvent.VK_KP_LEFT, ALT_MASK, "prevBuffer");
-(define-key *global-map* "Alt NumPad Left" "prevBuffer")
 ;; mapKey(KeyEvent.VK_N, CTRL_MASK | SHIFT_MASK, "newFrame");
 ;; mapKey(KeyEvent.VK_X, ALT_MASK, "executeCommand");
 (define-key *global-map* "Alt X" "executeCommand");
@@ -158,62 +150,64 @@
     ("Ctrl Shift Home"          "selectBob")
     ("Ctrl End"                 "eob")
     ("Ctrl Shift End"           "selectEob")
+    ("Ctrl P"                   "up")
     ("Up"                       "up")
     ("NumPad Up"                "up")
+    ("Ctrl N"                   "down")
     ("Down"                     "down")
     ("NumPad Down"              "down")
     ("Shift Up"                 "selectUp")
     ("Shift NumPad Up"          "selectUp")
     ("Shift Down"               "selectDown")
     ("Shift NumPad Down"        "selectDown")
+    ("Ctrl B"                   "left")
     ("Left"                     "left")
     ("NumPad Left"              "left")
+    ("Ctrl F"                   "right")
     ("Right"                    "right")
     ("NumPad Right"             "right")
     ("Shift Left"               "selectLeft")
     ("Shift NumPad Left"        "selectLeft")
     ("Shift Right"              "selectRight")
-    ("Shift NumPad Right"       "selectRight")))
+    ("Shift NumPad Right"       "selectRight")
+    ("Alt B"                    "wordLeft")
+    ("Ctrl Left"                "wordLeft")
+    ("Ctrl NumPad Left"         "wordLeft")
+    ("Ctrl Right"               "wordRight")
+    ("Ctrl NumPad Right"        "wordRight")
+    ("Ctrl Shift Left"          "selectWordLeft")
+    ("Ctrl Shift NumPad Left"   "selectWordLeft")
+    ("Ctrl Shift Right"         "selectWordRight")
+    ("Ctrl Shift NumPad Right"  "selectWordRight")
+    ("Alt V"                    "pageUp")
+    ("Page Up"                  "pageUp")
+    ("Ctrl V"                   "pageDown")
+    ("Page Down"                "pageDown")))
 
-;; NOTE Emacs uses Ctrl Up for backward-paragraph.
-;; (define-key *global-map* "Ctrl Up" "windowUp")
-;; (define-key *global-map* "Ctrl NumPad Up" "windowUp")
+;; Emacs uses Ctrl Up for backward-paragraph, which j doesn't have.
 (define-keys *global-map*
   '(("Ctrl Up"          "windowUp")
     ("Ctrl NumPad Up"   "windowUp")))
-;; NOTE Emacs uses Ctrl Down for forward-paragraph.
-;; (define-key *global-map* "Ctrl Down" "windowDown")
-;; (define-key *global-map* "Ctrl NumPad Up" "windowDown")
+;; Emacs uses Ctrl Down for forward-paragraph, which j doesn't have.
 (define-keys *global-map*
   '(("Ctrl Down"        "windowDown")
     ("Ctrl NumPad Down" "windowDown")))
 
-;; mapKey(KeyEvent.VK_PAGE_UP, 0, "pageUp");
-(define-key *global-map* "Page Up" "pageUp")
+;; Emacs uses Alt Left for backward-word, which is also on Alt B and Ctrl Left.
+(define-keys *global-map*
+  '(("Alt Left" "prevBuffer")
+    ("Alt NumPad Left" "prevBuffer")))
+;; Emacs uses Alt Right for forward-word, which is also on Alt F and Ctrl Right.
+(define-keys *global-map*
+  '(("Alt Right" "nextBuffer")
+    ("Alt NumPad Right" "nextBuffer")))
+
 ;; mapKey(KeyEvent.VK_PAGE_UP, ALT_MASK, "pageUpOtherWindow");
 ;; mapKey(KeyEvent.VK_PAGE_UP, SHIFT_MASK, "selectPageUp");
-;; mapKey(KeyEvent.VK_PAGE_DOWN, 0, "pageDown");
-(define-key *global-map* "Page Down" "pageDown")
 ;; mapKey(KeyEvent.VK_PAGE_DOWN, ALT_MASK, "pageDownOtherWindow");
 ;; mapKey(KeyEvent.VK_PAGE_DOWN, SHIFT_MASK, "selectPageDown");
 ;; mapKey(KeyEvent.VK_PAGE_UP, CTRL_MASK, "top");
 ;; mapKey(KeyEvent.VK_PAGE_DOWN, CTRL_MASK, "bottom");
-;; mapKey(KeyEvent.VK_LEFT, CTRL_MASK, "wordLeft");
-(define-key *global-map* "Ctrl Left" "wordLeft")
-;; mapKey(KeyEvent.VK_KP_LEFT, CTRL_MASK, "wordLeft");
-(define-key *global-map* "Ctrl NumPad Left" "wordLeft")
-;; mapKey(KeyEvent.VK_RIGHT, CTRL_MASK, "wordRight");
-(define-key *global-map* "Ctrl Right" "wordRight")
-;; mapKey(KeyEvent.VK_KP_RIGHT, CTRL_MASK, "wordRight");
-(define-key *global-map* "Ctrl NumPad Right" "wordRight")
-;; mapKey(KeyEvent.VK_LEFT, CTRL_MASK | SHIFT_MASK, "selectWordLeft");
-(define-key *global-map* "Ctrl Shift Left" "selectWordLeft")
-;; mapKey(KeyEvent.VK_KP_LEFT, CTRL_MASK | SHIFT_MASK, "selectWordLeft");
-(define-key *global-map* "Ctrl Shift NumPad Left" "selectWordLeft")
-;; mapKey(KeyEvent.VK_RIGHT, CTRL_MASK | SHIFT_MASK, "selectWordRight");
-(define-key *global-map* "Ctrl Shift Right" "selectWordRight")
-;; mapKey(KeyEvent.VK_KP_RIGHT, CTRL_MASK | SHIFT_MASK, "selectWordRight");
-(define-key *global-map* "Ctrl Shift NumPad Right" "selectWordRight")
 ;; mapKey(KeyEvent.VK_DELETE, 0, "delete");
 (define-key *global-map* "Delete" "delete")
 (define-key *global-map* "Ctrl D" "delete")
@@ -439,6 +433,9 @@
 
 (defun emacs ()
   (use-global-map *global-map*)
+  ;; FIXME This is the right idea (so mappings like Alt F will be possible),
+  ;; but it doesn't quite work.
+  (set-global-property "useMenuMnemonics" "false")
   (j::%execute-command "reloadKeyMaps"))
 
 (defun java-mode-map ()
