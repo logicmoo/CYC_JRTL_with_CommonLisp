@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.10 2003-10-11 20:40:53 piso Exp $
+ * $Id: BuiltInClass.java,v 1.11 2003-10-29 18:51:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass CLASS                            = addClass(Symbol.CLASS);
     public static final BuiltInClass COMPLEX                          = addClass(Symbol.COMPLEX);
     public static final BuiltInClass CONCATENATED_STREAM              = addClass(Symbol.CONCATENATED_STREAM);
-    public static final BuiltInClass CONDITION                        = addClass(Symbol.CONDITION);
+//     public static final BuiltInClass CONDITION                        = addClass(Symbol.CONDITION);
     public static final BuiltInClass CONS                             = addClass(Symbol.CONS);
     public static final BuiltInClass CONTROL_ERROR                    = addClass(Symbol.CONTROL_ERROR);
     public static final BuiltInClass DIVISION_BY_ZERO                 = addClass(Symbol.DIVISION_BY_ZERO);
@@ -142,22 +142,25 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass WARNING                          = addClass(Symbol.WARNING);
 
     public static final StandardClass STANDARD_CLASS =
-        new StandardClass(Symbol.STANDARD_CLASS,
-                          list1(CLASS_T));
+        new StandardClass(Symbol.STANDARD_CLASS, list1(CLASS_T));
     static {
         addClass(Symbol.STANDARD_CLASS, STANDARD_CLASS);
     }
 
     public static final StandardClass STANDARD_OBJECT =
-        new StandardClass(Symbol.STANDARD_OBJECT,
-                          list1(CLASS_T));
+        new StandardClass(Symbol.STANDARD_OBJECT, list1(CLASS_T));
     static {
         addClass(Symbol.STANDARD_OBJECT, STANDARD_OBJECT);
     }
 
+    public static final StandardClass CONDITION =
+        new StandardClass(Symbol.CONDITION, list1(CLASS_T));
+    static {
+        addClass(Symbol.CONDITION, CONDITION);
+    }
+
     public static final StandardClass GENERIC_FUNCTION =
-        new StandardClass(Symbol.GENERIC_FUNCTION,
-                          list1(FUNCTION));
+        new StandardClass(Symbol.GENERIC_FUNCTION, list1(FUNCTION));
     static {
         addClass(Symbol.GENERIC_FUNCTION, GENERIC_FUNCTION);
     }
