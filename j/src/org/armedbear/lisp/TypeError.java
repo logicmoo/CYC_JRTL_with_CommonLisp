@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: TypeError.java,v 1.18 2004-03-27 05:46:31 piso Exp $
+ * $Id: TypeError.java,v 1.19 2004-04-24 15:16:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,12 +103,12 @@ public class TypeError extends LispError
             if (s != null)
                 return s;
             StringBuffer sb = new StringBuffer();
-            String name = datum != null ? String.valueOf(datum) : null;
+            String name = datum != null ? datum.writeToString() : null;
             String type = null;
             if (typeString != null)
                 type = typeString;
             else if (expectedType != null)
-                type = String.valueOf(expectedType);
+                type = expectedType.writeToString();
             if (type != null) {
                 if (name != null) {
                     sb.append("The value ");
@@ -123,6 +123,11 @@ public class TypeError extends LispError
             }
             sb.append('.');
             return sb.toString();
+        }
+        catch (Throwable t) {
+            // FIXME
+            Debug.trace(t);
+            return toString();
         }
         finally {
             thread.setDynamicEnvironment(oldDynEnv);
