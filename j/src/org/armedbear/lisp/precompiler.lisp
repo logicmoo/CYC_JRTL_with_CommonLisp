@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.71 2004-07-12 17:11:43 piso Exp $
+;;; $Id: precompiler.lisp,v 1.72 2004-07-19 14:26:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -572,6 +572,7 @@
   (let ((*local-functions-and-macros* *local-functions-and-macros*)
         (locals (cadr form))
         (body (cddr form)))
+    (pushnew 'LABELS *obstacles*)
     (list* (car form)
            (precompile-local-functions locals)
            (mapcar #'precompile1 body))))
