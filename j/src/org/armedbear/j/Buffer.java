@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.51 2003-09-15 16:27:00 piso Exp $
+ * $Id: Buffer.java,v 1.52 2004-08-30 17:13:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,11 @@ public class Buffer extends SystemBuffer
     public final boolean needsRenumbering()
     {
         return needsRenumbering;
+    }
+
+    public final void needsRenumbering(boolean b)
+    {
+        needsRenumbering = b;
     }
 
     private int visibleLineCount;
