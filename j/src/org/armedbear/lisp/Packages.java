@@ -2,7 +2,7 @@
  * Packages.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Packages.java,v 1.4 2003-03-05 19:42:15 piso Exp $
+ * $Id: Packages.java,v 1.5 2003-04-06 16:01:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,15 +30,20 @@ public final class Packages extends Lisp
     private static final ArrayList packages = new ArrayList();
     private static final HashMap map = new HashMap();
 
-    // Creates package if it doesn't already exist.
-    public static final synchronized Package getPackage(String name)
+    public static final synchronized Package createPackage(String name)
+    {
+        return createPackage(name, 0);
+    }
+
+    public static final synchronized Package createPackage(String name, int size)
     {
         Package pkg = (Package) map.get(name);
         if (pkg == null) {
-            pkg = new Package(name);
+            pkg = size != 0 ? new Package(name, size) : new Package(name);
             packages.add(pkg);
             map.put(name, pkg);
-        }
+        } else
+            Debug.trace("package " + name + " already exists");
         return pkg;
     }
 

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.50 2003-04-01 19:26:51 piso Exp $
+ * $Id: Lisp.java,v 1.51 2003-04-06 16:02:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -805,10 +805,12 @@ public abstract class Lisp
     }
 
     // Packages.
-    public static final Package PACKAGE_CL = Packages.getPackage("COMMON-LISP");
+    public static final Package PACKAGE_CL =
+        Packages.createPackage("COMMON-LISP", 1024);
     public static final Package PACKAGE_CL_USER =
-        Packages.getPackage("COMMON-LISP-USER");
-    public static final Package PACKAGE_JAVA = Packages.getPackage("JAVA");
+        Packages.createPackage("COMMON-LISP-USER", 1024);
+    public static final Package PACKAGE_JAVA =
+        Packages.createPackage("JAVA");
     static {
         try {
             PACKAGE_CL.addNickname("CL");
@@ -823,7 +825,7 @@ public abstract class Lisp
         }
     }
     public static final Package PACKAGE_KEYWORD =
-        Packages.getPackage("KEYWORD");
+        Packages.createPackage("KEYWORD", 1024);
 
     public static final Symbol intern(String name, Package pkg)
     {

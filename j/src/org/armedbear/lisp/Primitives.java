@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.158 2003-04-06 15:24:50 piso Exp $
+ * $Id: Primitives.java,v 1.159 2003-04-06 16:02:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2602,7 +2602,7 @@ public final class Primitives extends Module
             if (pkg != null)
                 throw new LispError("package " + packageName +
                     " already exists");
-            pkg = Packages.getPackage(packageName);
+            pkg = Packages.createPackage(packageName);
 
             // Defaults.
             LispObject nicknames = null;
