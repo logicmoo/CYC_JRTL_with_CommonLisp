@@ -1,8 +1,8 @@
 /*
  * CompilationCommands.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: CompilationCommands.java,v 1.7 2003-07-24 15:05:39 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: CompilationCommands.java,v 1.8 2004-06-09 23:45:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,11 +73,17 @@ public final class CompilationCommands implements Constants
 
     private static boolean checkPlatform(String command)
     {
-        if (Platform.isPlatformWindows() && !Platform.isPlatformWindows5()) {
-            MessageDialog.showMessageDialog(
-                "This feature requires Windows 2000 or Windows XP.",
-                command);
-            return false;
+        if (Platform.isPlatformWindows()) {
+            if (Platform.isPlatformWindows5())
+                ; // OK (Windows 2000, Windows XP)
+            else if (Platform.isPlatformWindowsNT4())
+                ; // OK (NT 4)
+            else {
+                MessageDialog.showMessageDialog(
+                    "This feature requires Windows NT 4, Windows 2000 or Windows XP.",
+                    command);
+                return false;
+            }
         }
         return true;
     }
