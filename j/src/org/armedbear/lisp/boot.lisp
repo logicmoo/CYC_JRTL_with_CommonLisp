@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.23 2003-03-10 19:51:09 piso Exp $
+;;; $Id: boot.lisp,v 1.24 2003-03-11 13:51:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 (export '(lambda
           defun
           *features*
+          make-hash-table
           plusp minusp integerp
           character
           open
@@ -29,7 +30,8 @@
           call-arguments-limit
           lambda-parameters-limit
           multiple-values-limit
-          char-code-limit))
+          char-code-limit
+          proclaim))
 
 
 (defmacro lambda (lambda-list &rest body)
@@ -77,6 +79,12 @@
 
 (set-dispatch-macro-character #\# #\+ #'read-conditional)
 (set-dispatch-macro-character #\# #\- #'read-conditional)
+
+
+(defun make-hash-table (&key (test 'eql) (size 11) (rehash-size nil)
+			     (rehash-threshold nil))
+  (setq test (coerce test 'function))
+  (%make-hash-table test size rehash-size rehash-threshold))
 
 
 (dolist (name '("documentation.lisp"
@@ -136,6 +144,11 @@
 (defconstant multiple-values-limit 20)
 
 (defconstant char-code-limit 96)
+
+
+;; FIXME
+(defun proclaim (decl)
+  nil)
 
 
 (format t "; Compiling definitions ... ")
