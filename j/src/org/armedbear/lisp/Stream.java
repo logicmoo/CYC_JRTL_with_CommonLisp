@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.112 2005-02-14 00:49:40 piso Exp $
+ * $Id: Stream.java,v 1.113 2005-02-20 19:13:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -331,8 +331,10 @@ public class Stream extends LispObject
                                               " is not a defined structure type."));
             }
             LispObject args = obj.cdr();
-            Package pkg = checkPackage(structure.getPackage());
-            Symbol constructor = pkg.intern("MAKE-" + structure.getName());
+            Symbol DEFSTRUCT_DEFAULT_CONSTRUCTOR =
+                PACKAGE_SYS.intern("DEFSTRUCT-DEFAULT-CONSTRUCTOR");
+            LispObject constructor =
+                DEFSTRUCT_DEFAULT_CONSTRUCTOR.getSymbolFunctionOrDie().execute(structure);
             return funcall(constructor.getSymbolFunctionOrDie(),
                            args.copyToArray(), LispThread.currentThread());
         }
