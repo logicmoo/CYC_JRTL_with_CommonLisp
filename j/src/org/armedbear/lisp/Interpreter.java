@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.4 2003-01-28 01:41:06 piso Exp $
+ * $Id: Interpreter.java,v 1.5 2003-01-29 02:08:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,13 +110,14 @@ public final class Interpreter extends Lisp
             initialize(jlisp);
             while (true) {
                 try {
+                    resetStack();
+                    dynEnv = null;
                     out.writeString(prompt());
                     out.finishOutput();
                     LispObject obj = reader.readObject(false); // Top level read.
                     if (obj == EOF)
                         break;
                     out.setCharPos(0);
-                    resetStack();
                     LispObject result = eval(obj, environment);
                     if (done)
                         return;
