@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.6 2004-06-05 00:48:51 piso Exp $
+ * $Id: MathFunctions.java,v 1.7 2004-06-06 19:31:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,16 @@
 
 package org.armedbear.lisp;
 
+import java.lang.reflect.Method;
+
 public final class MathFunctions extends Lisp
 {
+    // Java 1.5 provides native implementations of sinh and tanh.
+    private static final boolean isJava15;
+    static {
+        isJava15 = System.getProperty("java.version").startsWith("1.5");
+    }
+
     // ### sin
     private static final Primitive1 SIN = new Primitive1("sin", "radians")
     {
@@ -98,6 +106,8 @@ public final class MathFunctions extends Lisp
                 return Complex.getInstance(asin(((Complex)arg).getRealPart()),
                                            im);
         }
+        if (arg instanceof LispFloat)
+            return new LispFloat(Math.asin(((LispFloat)arg).value));
         LispObject result = arg.multiplyBy(arg);
         result = Fixnum.ONE.subtract(result);
         result = sqrt(result);
@@ -133,6 +143,8 @@ public final class MathFunctions extends Lisp
                 return Complex.getInstance(acos(((Complex)arg).getRealPart()),
                                            im);
         }
+        if (arg instanceof LispFloat)
+            return new LispFloat(Math.acos(((LispFloat)arg).value));
         LispObject result = LispFloat.PI.divideBy(Fixnum.TWO);
         result = result.subtract(asin(arg));
         if (result instanceof Complex) {
@@ -192,6 +204,8 @@ public final class MathFunctions extends Lisp
         }
     };
 
+    private static Method sinhMethod = null;
+
     private static LispObject sinh(LispObject arg) throws ConditionThrowable
     {
         if (arg instanceof Complex) {
@@ -199,6 +213,27 @@ public final class MathFunctions extends Lisp
             if (im.zerop())
                 return Complex.getInstance(sinh(((Complex)arg).getRealPart()),
                                            im);
+        }
+        if (isJava15 && arg instanceof LispFloat) {
+            try {
+                if (sinhMethod == null) {
+                    Class c = Class.forName("java.lang.Math");
+                    Class[] parameterTypes = new Class[1];
+                    parameterTypes[0] = Double.TYPE;
+                    sinhMethod = c.getMethod("sinh", parameterTypes);
+                }
+                if (sinhMethod != null) {
+                    Object[] args;
+                    args = new Object[1];
+                    args[0] = new Double(((LispFloat)arg).value);
+                    Double d = (Double) sinhMethod.invoke(null, args);
+                    return new LispFloat(d.doubleValue());
+                }
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+                // Fall through...
+            }
         }
         LispObject result = exp(arg);
         result = result.subtract(exp(arg.multiplyBy(Fixnum.MINUS_ONE)));
@@ -222,6 +257,8 @@ public final class MathFunctions extends Lisp
         }
     };
 
+    private static Method coshMethod = null;
+
     private static LispObject cosh(LispObject arg) throws ConditionThrowable
     {
         if (arg instanceof Complex) {
@@ -229,6 +266,27 @@ public final class MathFunctions extends Lisp
             if (im.zerop())
                 return Complex.getInstance(cosh(((Complex)arg).getRealPart()),
                                            im);
+        }
+        if (isJava15 && arg instanceof LispFloat) {
+            try {
+                if (coshMethod == null) {
+                    Class c = Class.forName("java.lang.Math");
+                    Class[] parameterTypes = new Class[1];
+                    parameterTypes[0] = Double.TYPE;
+                    coshMethod = c.getMethod("cosh", parameterTypes);
+                }
+                if (tanhMethod != null) {
+                    Object[] args;
+                    args = new Object[1];
+                    args[0] = new Double(((LispFloat)arg).value);
+                    Double d = (Double) coshMethod.invoke(null, args);
+                    return new LispFloat(d.doubleValue());
+                }
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+                // Fall through...
+            }
         }
         LispObject result = exp(arg);
         result = result.add(exp(arg.multiplyBy(Fixnum.MINUS_ONE)));
@@ -243,19 +301,37 @@ public final class MathFunctions extends Lisp
         return result;
     }
 
+    private static Method tanhMethod = null;
+
     // ### tanh
     private static final Primitive1 TANH = new Primitive1("tanh", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return tanh(arg);
+            if (isJava15 && arg instanceof LispFloat) {
+                try {
+                    if (tanhMethod == null) {
+                        Class c = Class.forName("java.lang.Math");
+                        Class[] parameterTypes = new Class[1];
+                        parameterTypes[0] = Double.TYPE;
+                        tanhMethod = c.getMethod("tanh", parameterTypes);
+                    }
+                    if (tanhMethod != null) {
+                        Object[] args;
+                        args = new Object[1];
+                        args[0] = new Double(((LispFloat)arg).value);
+                        Double d = (Double) tanhMethod.invoke(null, args);
+                        return new LispFloat(d.doubleValue());
+                    }
+                }
+                catch (Throwable t) {
+                    Debug.trace(t);
+                    // Fall through...
+                }
+            }
+            return sinh(arg).divideBy(cosh(arg));
         }
     };
-
-    private static LispObject tanh(LispObject arg) throws ConditionThrowable
-    {
-        return sinh(arg).divideBy(cosh(arg));
-    }
 
     // ### asinh
     private static final Primitive1 ASINH = new Primitive1("asinh", "number")
@@ -367,10 +443,11 @@ public final class MathFunctions extends Lisp
 
     private static LispObject exp(LispObject arg) throws ConditionThrowable
     {
-        if (arg.realp()) {  // return real
-            LispFloat argf = LispFloat.coerceToFloat(arg);
-            return new LispFloat(Math.exp(argf.getValue()));
-        } else if (arg instanceof Complex) {
+        if (arg instanceof LispFloat)
+            return new LispFloat(Math.exp(((LispFloat)arg).value));
+        if (arg.realp())
+            return new LispFloat(Math.exp(LispFloat.coerceToFloat(arg).value));
+        if (arg instanceof Complex) {
             Complex argc = (Complex)arg;
             double re = LispFloat.coerceToFloat(argc.getRealPart()).getValue();
             double im = LispFloat.coerceToFloat(argc.getImaginaryPart()).getValue();
@@ -378,7 +455,7 @@ public final class MathFunctions extends Lisp
             LispFloat resY = new LispFloat(Math.exp(re) * Math.sin(im));
             return Complex.getInstance(resX, resY);
         }
-        return signal(new TypeError(arg, "number"));
+        return signal(new TypeError(arg, Symbol.NUMBER));
     }
 
     // ### sqrt
