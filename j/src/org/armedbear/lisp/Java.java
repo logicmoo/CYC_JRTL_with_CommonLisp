@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.45 2004-11-03 15:38:52 piso Exp $
+ * $Id: Java.java,v 1.46 2005-01-22 09:57:06 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,9 +27,32 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Array;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public final class Java extends Lisp
 {
+
+    private static final Map registeredExceptions = new WeakHashMap();
+
+    // ### register-java-exception
+    // register-java-exception exception-name condition-symbol
+    private static final Primitive REGISTER_JAVA_EXCEPTION =
+        new Primitive("register-java-exception", PACKAGE_JAVA, true, "exception-name condition-symbol")
+    {
+        public LispObject execute(LispObject className, LispObject symbol) throws ConditionThrowable
+        {
+            try {
+                registeredExceptions.put(classForName(className.getStringValue()),symbol);
+            }
+            catch (ClassNotFoundException e) {
+                signal(new LispError("exception not found: " + className));
+            }
+            return T;
+        }
+    };
+
+
     // ### jclass
     private static final Primitive JCLASS = new Primitive("jclass", PACKAGE_JAVA, true, "name")
     {
@@ -307,7 +330,7 @@ public final class Java extends Lisp
                             Method method = methods[i];
                             if (!Modifier.isStatic(method.getModifiers())
                                 || method.getParameterTypes().length != argCount)
-			        continue;
+                                continue;
                             if (method.getName().equals(methodName)) {
                                 m = method;
                                 break;
@@ -331,6 +354,10 @@ public final class Java extends Lisp
                 return new JavaObject(result);
             }
             catch (Throwable t) {
+                Class tClass = t.getClass();
+                if (registeredExceptions.containsKey(tClass)) {
+                    signal((Symbol)registeredExceptions.get(tClass));
+                }
                 signal(new LispError(getMessage(t)));
             }
             // Not reached.
@@ -363,6 +390,10 @@ public final class Java extends Lisp
                 return new JavaObject(constructor.newInstance(initargs));
             }
             catch (Throwable t) {
+                Class tClass = t.getClass();
+                if (registeredExceptions.containsKey(tClass)) {
+                    signal((Symbol)registeredExceptions.get(tClass));
+                }
                 signal(new LispError(getMessage(t)));
             }
             // Not reached.
@@ -424,6 +455,10 @@ public final class Java extends Lisp
                 return new JavaObject(Array.get(a, ((Integer)args[args.length - 1].javaInstance()).intValue()));
             }
             catch (Throwable t) {
+                Class tClass = t.getClass();
+                if (registeredExceptions.containsKey(tClass)) {
+                    signal((Symbol)registeredExceptions.get(tClass));
+                }
                 signal(new LispError(getMessage(t)));
             }
             // Not reached.
@@ -449,6 +484,10 @@ public final class Java extends Lisp
                 return v;
             }
             catch (Throwable t) {
+                Class tClass = t.getClass();
+                if (registeredExceptions.containsKey(tClass)) {
+                    signal((Symbol)registeredExceptions.get(tClass));
+                }
                 signal(new LispError(getMessage(t)));
             }
             // Not reached.
@@ -496,6 +535,10 @@ public final class Java extends Lisp
                 return new JavaObject(result);
             }
             catch (Throwable t) {
+                Class tClass = t.getClass();
+                if (registeredExceptions.containsKey(tClass)) {
+                    signal((Symbol)registeredExceptions.get(tClass));
+                }
                 signal(new LispError(getMessage(t)));
             }
             // Not reached.
@@ -541,7 +584,7 @@ public final class Java extends Lisp
     };
 
     private static final Primitive JAVA_OBJECT_P = new Primitive("java-object-p", PACKAGE_JAVA, true,
-                                                                   "object")
+                                                                 "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
