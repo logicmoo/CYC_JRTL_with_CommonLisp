@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.27 2003-09-20 17:02:04 piso Exp $
+ * $Id: LispCharacter.java,v 1.28 2003-09-28 16:28:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ public final class LispCharacter extends LispObject
         if (obj instanceof LispCharacter) {
             if (c == ((LispCharacter)obj).c)
                 return true;
-            return Character.toLowerCase(c) == Character.toLowerCase(((LispCharacter)obj).c);
+            return Utilities.toLowerCase(c) == Utilities.toLowerCase(((LispCharacter)obj).c);
         }
         return false;
     }

@@ -2,7 +2,7 @@
  * CharacterFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterFunctions.java,v 1.4 2003-09-28 15:59:15 piso Exp $
+ * $Id: CharacterFunctions.java,v 1.5 2003-09-28 16:24:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public final class CharacterFunctions extends Lisp
                 return T;
             if (Utilities.toUpperCase(c1) == Utilities.toUpperCase(c2))
                 return T;
-            if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
+            if (Utilities.toLowerCase(c1) == Utilities.toLowerCase(c2))
                 return T;
             return NIL;
         }
@@ -74,7 +74,7 @@ public final class CharacterFunctions extends Lisp
                         continue;
                     if (Utilities.toUpperCase(c0) == Utilities.toUpperCase(c))
                         continue;
-                    if (Character.toLowerCase(c0) == Character.toLowerCase(c))
+                    if (Utilities.toLowerCase(c0) == Utilities.toLowerCase(c))
                         continue;
                     return NIL;
                 }

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.449 2003-09-28 16:00:24 piso Exp $
+ * $Id: Primitives.java,v 1.450 2003-09-28 16:25:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -320,7 +320,7 @@ public final class Primitives extends Module
             case UPPER_CASE_P:                  // ### upper-case-p
                 return Character.isUpperCase(LispCharacter.getValue(arg)) ? T : NIL;
             case CHAR_DOWNCASE:                 // ### char-downcase
-                return LispCharacter.getInstance(Character.toLowerCase(LispCharacter.getValue(arg)));
+                return LispCharacter.getInstance(Utilities.toLowerCase(LispCharacter.getValue(arg)));
             case CHAR_UPCASE:                   // ### char-upcase
                 return LispCharacter.getInstance(Utilities.toUpperCase(LispCharacter.getValue(arg)));
             case STRINGP:                       // ### stringp

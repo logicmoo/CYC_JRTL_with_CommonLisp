@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.60 2003-09-19 14:44:10 piso Exp $
+ * $Id: LispString.java,v 1.61 2003-09-28 16:26:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,7 +123,7 @@ public final class LispString extends AbstractVector
                 return false;
             for (int i = length(); i-- > 0;) {
                 if (string.array[i] != array[i]) {
-                    if (Character.toLowerCase(string.array[i]) != Character.toLowerCase(array[i]))
+                    if (Utilities.toLowerCase(string.array[i]) != Utilities.toLowerCase(array[i]))
                         return false;
                 }
             }

@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringFunctions.java,v 1.6 2003-09-28 16:00:52 piso Exp $
+ * $Id: StringFunctions.java,v 1.7 2003-09-28 16:25:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@ public final class StringFunctions extends Lisp
                     continue;
                 if (Utilities.toUpperCase(c1) == Utilities.toUpperCase(c2))
                     continue;
-                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
+                if (Utilities.toLowerCase(c1) == Utilities.toLowerCase(c2))
                     continue;
                 return NIL;
             }
@@ -129,7 +129,7 @@ public final class StringFunctions extends Lisp
                     continue;
                 if (Utilities.toUpperCase(c1) == Utilities.toUpperCase(c2))
                     continue;
-                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
+                if (Utilities.toLowerCase(c1) == Utilities.toLowerCase(c2))
                     continue;
                 return new Fixnum(i);
             }
@@ -436,7 +436,7 @@ public final class StringFunctions extends Lisp
             for (i = 0; i < start; i++)
                 sb.append(array[i]);
             for (i = start; i < end; i++)
-                sb.append(Character.toLowerCase(array[i]));
+                sb.append(Utilities.toLowerCase(array[i]));
             for (i = end; i < length; i++)
                 sb.append(array[i]);
             return new LispString(sb.toString());
@@ -475,7 +475,7 @@ public final class StringFunctions extends Lisp
                     sb.append(lastCharWasAlphanumeric ? c : Utilities.toUpperCase(c));
                     lastCharWasAlphanumeric = true;
                 } else if (Character.isUpperCase(c)) {
-                    sb.append(lastCharWasAlphanumeric ? Character.toLowerCase(c) : c);
+                    sb.append(lastCharWasAlphanumeric ? Utilities.toLowerCase(c) : c);
                     lastCharWasAlphanumeric = true;
                 } else {
                     sb.append(c);
@@ -537,7 +537,7 @@ public final class StringFunctions extends Lisp
                 throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             char[] array = s.chars();
             for (int i = start; i < end; i++)
-                array[i] = Character.toLowerCase(array[i]);
+                array[i] = Utilities.toLowerCase(array[i]);
             return s;
         }
     };
@@ -572,7 +572,7 @@ public final class StringFunctions extends Lisp
                     lastCharWasAlphanumeric = true;
                 } else if (Character.isUpperCase(c)) {
                     if (lastCharWasAlphanumeric)
-                        array[i] = Character.toLowerCase(c);
+                        array[i] = Utilities.toLowerCase(c);
                     lastCharWasAlphanumeric = true;
                 } else
                     lastCharWasAlphanumeric = Character.isDigit(c);
