@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2000 Peter Graves
-# $Id: Makefile.in,v 1.15 2004-04-28 01:47:41 piso Exp $
+# $Id: Makefile.in,v 1.16 2004-05-02 01:16:53 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ distdir:
 	chmod +x configure
 	chmod +x install-sh
 	chmod +x mkinstalldirs
-	cp -p  j.in abl.in configure configure.ac Makefile.in install-sh mkinstalldirs COPYING $(distdir)
+	cp -p  j.in abcl.in configure configure.ac Makefile.in install-sh mkinstalldirs COPYING $(distdir)
 	cp -p  build.properties build.xml $(distdir)
 	mkdir $(distdir)/src
 	cp -p  src/Makefile.in src/manifest src/*.java $(distdir)/src
@@ -105,7 +105,7 @@ distdir:
 	mkdir $(distdir)/src/org/armedbear/j/images
 	-cp -p  src/org/armedbear/j/images/*.png $(distdir)/src/org/armedbear/j/images
 	mkdir $(distdir)/src/org/armedbear/lisp
-	-cp -p  src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml src/org/armedbear/lisp/*.java src/org/armedbear/lisp/Site.java.in src/org/armedbear/lisp/*.lisp $(distdir)/src/org/armedbear/lisp
+	-cp -p  src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml src/org/armedbear/lisp/*.java src/org/armedbear/lisp/Site.java.in src/org/armedbear/lisp/*.c src/org/armedbear/lisp/*.lisp $(distdir)/src/org/armedbear/lisp
 	rm -f $(distdir)/src/org/armedbear/lisp/Site.java
 	mkdir $(distdir)/src/org/armedbear/lisp/java
 	mkdir $(distdir)/src/org/armedbear/lisp/java/awt
@@ -169,7 +169,7 @@ install:
 	./mkinstalldirs $(datadir)/j $(datadir)/j/themes $(datadir)/doc/j $(bindir)
 	$(INSTALL_DATA) j.jar $(datadir)/j
 	$(INSTALL_SCRIPT) j $(bindir)
-	$(INSTALL_SCRIPT) abl $(bindir)
+	$(INSTALL_SCRIPT) abcl $(bindir)
 	if [ -f src/jpty/$(JPTY) ]; then $(INSTALL_PROGRAM) src/jpty/$(JPTY) $(bindir); fi
 	for i in themes/* ; do test -f $$i && $(INSTALL_DATA) $$i $(datadir)/j/themes ; done
 	$(INSTALL_DATA) doc/*.html $(datadir)/doc/j
@@ -178,7 +178,7 @@ install:
 uninstall:
 	-rm -f $(datadir)/j/j.jar
 	-rm -f $(bindir)/j
-	-rm -f $(bindir)/abl
+	-rm -f $(bindir)/abcl
 	-rm -f $(bindir)/jpty.exe
 	-rm -f $(bindir)/jpty
 	-rm -f $(datadir)/j/themes/*
@@ -209,7 +209,7 @@ clean:
 	-rm -f classes.stamp
 
 distclean: clean
-	-rm -f config.status config.log config.cache Makefile j abl
+	-rm -f config.status config.log config.cache Makefile j abcl
 	-rm -f src/Makefile
 	-rm -f src/jpty/Makefile
 	-rm -f src/gnu/regexp/Makefile
@@ -228,7 +228,7 @@ j.zip:
 	chmod +x install-sh
 	chmod +x mkinstalldirs
 	zip -q j.zip \
-		j.in abl.in configure configure.ac Makefile.in \
+		j.in abcl.in configure configure.ac Makefile.in \
 		install-sh mkinstalldirs COPYING \
 		build.xml build.properties \
 		src/Makefile.in src/manifest src/*.java \
@@ -242,6 +242,7 @@ j.zip:
 		src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml \
 		src/org/armedbear/lisp/*.java \
 		src/org/armedbear/lisp/Site.java.in \
+		src/org/armedbear/lisp/*.c \
 		src/org/armedbear/lisp/*.lisp \
 		src/org/armedbear/lisp/java/awt/Makefile.in \
 		src/org/armedbear/lisp/java/awt/*.java \
