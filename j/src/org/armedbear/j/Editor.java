@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.78 2003-06-28 16:11:40 piso Exp $
+ * $Id: Editor.java,v 1.79 2003-06-28 19:10:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -430,8 +430,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 Sidebar sidebar = currentEditor.getSidebar();
                 if (sidebar != null)
                     sidebar.setUpdateFlag(SIDEBAR_ALL);
-                currentEditor.setFocusToDisplay();
-                IdleThread.startIdleThread();
             }
         };
         SwingUtilities.invokeLater(r);
@@ -6603,6 +6601,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         if (buffer == null)
             return; // Avoid NPE.
+        if (!displayReady)
+            return;
         updateVerticalScrollBar();
         updateHorizontalScrollBar();
     }
