@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.322 2003-08-11 18:39:19 piso Exp $
+ * $Id: Primitives.java,v 1.323 2003-08-12 02:08:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -563,23 +563,13 @@ public final class Primitives extends Module
 
     // ### zerop
     private static final Primitive1 ZEROP = new Primitive1("zerop") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws TypeError
         {
-            try {
-                return ((Fixnum)arg).getValue() == 0 ? T : NIL;
-            }
-            catch (ClassCastException e) {
-                if (arg instanceof Bignum)
-                    return NIL;
-                if (arg instanceof Ratio)
-                    return NIL;
-                if (arg instanceof LispFloat)
-                    return ((LispFloat)arg).getValue() == 0 ? T : NIL;
-                throw new TypeError(arg, "number");
-            }
+            return arg.ZEROP();
         }
     };
 
+    // ### fixnump
     private static final Primitive1 FIXNUMP =
         new Primitive1("fixnump", PACKAGE_SYS, true) {
         public LispObject execute(LispObject arg) throws LispError
@@ -4696,6 +4686,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### streamp
     private static final Primitive1 STREAMP = new Primitive1("STREAMP")
     {
         public LispObject execute(LispObject arg)
@@ -4704,6 +4695,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### realp
     private static final Primitive1 REALP = new Primitive1("REALP")
     {
         public LispObject execute(LispObject arg)
