@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.26 2004-04-04 14:54:35 asimon Exp $
+;;; $Id: numbers.lisp,v 1.27 2004-04-04 17:17:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -133,7 +133,8 @@
   (declare (type unsigned-byte natural) (values unsigned-byte))
   (unless (and (integerp natural) (not (minusp natural)))
     ;;FIXME
-    (error 'type-error "wrong type: ~A is not a non-negative real number" n))
+    (error 'type-error "Wrong type: ~A is not a non-negative real number."
+           natural))
   ;; theoretically (> n 7) ,i.e., n-len-quarter > 0
   (if (and (fixnump natural) (<= natural 24))
       (cond ((> natural 15) 4)
