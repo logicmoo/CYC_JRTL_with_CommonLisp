@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.438 2003-09-25 16:33:18 piso Exp $
+ * $Id: Primitives.java,v 1.439 2003-09-25 18:20:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3954,8 +3954,14 @@ public final class Primitives extends Module
             AbstractVector v = checkVector(first);
             int start = Fixnum.getValue(second);
             int end = third != NIL ? Fixnum.getValue(third) : v.length();
-            if (start > end)
-                throw new ConditionThrowable(new TypeError("start is greater than end"));
+            if (start > end) {
+                StringBuffer sb = new StringBuffer("start (");
+                sb.append(start);
+                sb.append(") is greater than end (");
+                sb.append(end);
+                sb.append(')');
+                throw new ConditionThrowable(new TypeError(sb.toString()));
+            }
             return v.subseq(start, end);
         }
     };
