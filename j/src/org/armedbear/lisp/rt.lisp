@@ -158,13 +158,18 @@
   "Return t if xcopy were produced from x by make-scaffold-copy,
    and none of the cons cells in the tree rooted at x have been
    changed."
-
   (and (eq x (scaffold-node xcopy))
        (or
 	(not (consp x))
 	(and
 	 (check-scaffold-copy (car x) (scaffold-car xcopy))
 	 (check-scaffold-copy (cdr x) (scaffold-cdr xcopy))))))
+
+(defun evendigitp (c)
+  (notnot (find c "02468")))
+
+(defun odddigitp (c)
+  (notnot (find c "13579")))
 
 (defun check-sublis (a al &key (key 'no-key) test test-not)
   "Apply sublis al a with various keys.  Check that
@@ -347,6 +352,8 @@
                               "unless"
                               "unwind-protect"
                               "values"
+                              "vector"
+                              "vectorp"
                               "when"))))
     (dolist (test tests)
              (load (concatenate 'string prefix test suffix)))
