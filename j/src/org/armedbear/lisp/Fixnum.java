@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.7 2003-03-01 20:32:19 piso Exp $
+ * $Id: Fixnum.java,v 1.8 2003-03-08 02:12:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,28 @@ public final class Fixnum extends LispObject
     public final long getValue()
     {
         return value;
+    }
+
+    public static Fixnum sum(LispObject first, LispObject second)
+        throws LispError
+    {
+        try {
+            return new Fixnum(((Fixnum)first).value + ((Fixnum)second).value);
+        }
+        catch (ClassCastException e) {
+            throw new TypeError("SUM");
+        }
+    }
+
+    public static Fixnum difference(LispObject first, LispObject second)
+        throws LispError
+    {
+        try {
+            return new Fixnum(((Fixnum)first).value - ((Fixnum)second).value);
+        }
+        catch (ClassCastException e) {
+            throw new TypeError("DIFFERENCE");
+        }
     }
 
     public String toString()
