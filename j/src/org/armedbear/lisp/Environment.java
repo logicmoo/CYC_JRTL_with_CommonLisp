@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Environment.java,v 1.17 2004-11-03 15:38:52 piso Exp $
+ * $Id: Environment.java,v 1.18 2004-11-04 18:35:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,7 +192,7 @@ public final class Environment extends LispObject
             vars.specialp = true;
     }
 
-    public boolean isDeclaredSpecial(Symbol var)
+    public boolean isDeclaredSpecial(LispObject var)
     {
         Binding binding = getBinding(var);
         return binding != null ? binding.specialp : false;
