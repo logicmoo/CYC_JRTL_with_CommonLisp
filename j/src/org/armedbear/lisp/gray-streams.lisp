@@ -1,7 +1,7 @@
 ;;; gray-streams.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: gray-streams.lisp,v 1.4 2004-06-13 18:26:25 asimon Exp $
+;;; $Id: gray-streams.lisp,v 1.5 2004-06-13 18:45:29 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,16 +155,15 @@
 (defvar *old-unread-char* #'unread-char)
 (defvar *old-listen* nil)
 (defvar *old-read-line* #'read-line)
-(defvar *old-clear-input* #'clear-input)
 (defvar *old-read-char-no-hang* #'read-char-no-hang)
 (defvar *old-write-char* #'write-char)
 (defvar *old-fresh-line* #'fresh-line)
 (defvar *old-terpri* #'terpri)
 (defvar *old-write-string* #'write-string)
 (defvar *old-write-line* #'write-line)
-(defvar *old-force-output* #'force-output)
-(defvar *old-finish-output* #'finish-output)
-(defvar *old-clear-output* #'clear-output)
+(defvar *old-force-output* #'sys::%force-output)
+(defvar *old-finish-output* #'sys::%finish-output)
+(defvar *old-clear-output* #'sys::%clear-output)
 (defvar *old-read-byte* #'read-byte)
 (defvar *old-write-byte* #'write-byte)
 (defvar *old-stream-element-type* #'cl::stream-element-type)
@@ -672,9 +671,9 @@
 (setf (symbol-function 'common-lisp::terpri) #'gray-terpri)
 (setf (symbol-function 'common-lisp::write-string) #'gray-write-string)
 (setf (symbol-function 'common-lisp::write-line) #'gray-write-line)
-(setf (symbol-function 'common-lisp::force-output) #'gray-force-output)
-(setf (symbol-function 'common-lisp::finish-output) #'gray-finish-output)
-(setf (symbol-function 'common-lisp::clear-output) #'gray-clear-output)
+(setf (symbol-function 'sys::%force-output) #'gray-force-output)
+(setf (symbol-function 'sys::%finish-output) #'gray-finish-output)
+(setf (symbol-function 'sys::%clear-output) #'gray-clear-output)
 (setf (symbol-function 'common-lisp::read-byte) #'gray-read-byte)
 (setf (symbol-function 'common-lisp::write-byte) #'gray-write-byte)
 (setf (symbol-function 'common-lisp::stream-column) #'gray-stream-column)
