@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.24 2003-08-16 18:33:06 piso Exp $
+ * $Id: LispFloat.java,v 1.25 2003-08-22 13:59:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -329,6 +329,18 @@ public final class LispFloat extends LispObject
                 LispThread.currentThread().setValues(values);
                 return values[0];
             }
+            throw new TypeError(arg, "float");
+        }
+    };
+
+    // ### float-radix
+    // float-radix float => float-radix
+    private static final Primitive1 FLOAT_RADIX =
+        new Primitive1("float-radix") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof LispFloat)
+                return Fixnum.TWO;
             throw new TypeError(arg, "float");
         }
     };
