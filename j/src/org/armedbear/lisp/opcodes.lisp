@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: opcodes.lisp,v 1.16 2004-12-28 02:09:27 piso Exp $
+;;; $Id: opcodes.lisp,v 1.17 2004-12-29 01:25:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -156,14 +156,14 @@
 (define-opcode lneg 117 1 nil)
 (define-opcode fneg 118 1 nil)
 (define-opcode dneg 119 1 nil)
-(define-opcode ishl 120 1 nil)
+(define-opcode ishl 120 1 -1)
 (define-opcode lshl 121 1 -1)
-(define-opcode ishr 122 1 nil)
+(define-opcode ishr 122 1 -1)
 (define-opcode lshr 123 1 -1)
 (define-opcode iushr 124 1 nil)
 (define-opcode lushr 125 1 nil)
-(define-opcode iand 126 1 nil)
-(define-opcode land 127 1 nil)
+(define-opcode iand 126 1 -1)
+(define-opcode land 127 1 -2)
 (define-opcode ior 128 1 nil)
 (define-opcode lor 129 1 nil)
 (define-opcode ixor 130 1 nil)
