@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.706 2004-11-21 14:17:01 piso Exp $
+ * $Id: Primitives.java,v 1.707 2004-11-21 16:00:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3471,6 +3471,22 @@ public final class Primitives extends Lisp
             if (n < values.length)
                 return values[n];
             return NIL;
+        }
+    };
+
+    // ### out-synonym-of stream-designator => stream
+    private static final Primitive OUT_SYNONYM_OF =
+        new Primitive("out-synonym-of", PACKAGE_SYS, true, "stream-designator")
+    {
+        public LispObject execute (LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof Stream)
+                return arg;
+            if (arg == T)
+                return _TERMINAL_IO_.symbolValue();
+            if (arg == NIL)
+                return _STANDARD_OUTPUT_.symbolValue();
+            return arg;
         }
     };
 
