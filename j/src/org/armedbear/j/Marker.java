@@ -1,8 +1,8 @@
 /*
  * Marker.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Marker.java,v 1.5 2003-08-07 17:56:06 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Marker.java,v 1.6 2004-10-25 01:21:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,9 +74,9 @@ public final class Marker implements Constants
 
     public void gotoMarker(Editor editor)
     {
-        if (file == null)
-            return;
-        if (file.equals(editor.getBuffer().getFile())) {
+        if (buffer == editor.getBuffer() ||
+            (file != null && file.equals(editor.getBuffer().getFile())))
+        {
             // Marker is in current buffer.
             editor.addUndo(SimpleEdit.MOVE);
             editor.unmark();
@@ -92,6 +92,8 @@ public final class Marker implements Constants
             editor.moveCaretToDotCol();
             editor.updateDotLine();
             editor.setUpdateFlag(REFRAME);
+        } else if (file == null) {
+            return;
         } else {
             // Marker is not in current buffer.
             Buffer buf = Editor.getBufferList().findBuffer(file);
@@ -163,9 +165,9 @@ public final class Marker implements Constants
 
     private void selectToMarker(Editor editor)
     {
-        if (file == null)
-            return;
-        if (file.equals(editor.getBuffer().getFile())) {
+        if (buffer == editor.getBuffer() ||
+            (file != null && file.equals(editor.getBuffer().getFile())))
+        {
             // Marker is in current buffer.
             editor.addUndo(SimpleEdit.MOVE);
             editor.unmark();
@@ -185,7 +187,7 @@ public final class Marker implements Constants
         } else {
             // Marker is not in current buffer.
             MessageDialog.showMessageDialog(editor,
-                                            "Marker is not in this buffer",
+                                            "Marker is not in this buffer.",
                                             "Select To Marker");
         }
     }
