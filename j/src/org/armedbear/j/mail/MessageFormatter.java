@@ -1,8 +1,8 @@
 /*
  * MessageFormatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: MessageFormatter.java,v 1.2 2002-10-01 19:12:02 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: MessageFormatter.java,v 1.3 2003-04-19 18:29:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ import gnu.regexp.RE;
 import gnu.regexp.UncheckedRE;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Debug;
+import org.armedbear.j.DiffFormatter;
 import org.armedbear.j.Editor;
 import org.armedbear.j.FormatTable;
 import org.armedbear.j.Formatter;
@@ -34,12 +35,17 @@ import org.armedbear.j.Utilities;
 
 public final class MessageFormatter extends Formatter
 {
-    private static final byte MESSAGE_FORMAT_TEXT         = 0;
-    private static final byte MESSAGE_FORMAT_COMMENT      = 1;
-    private static final byte MESSAGE_FORMAT_HEADER_NAME  = 2;
-    private static final byte MESSAGE_FORMAT_HEADER_VALUE = 3;
-    private static final byte MESSAGE_FORMAT_QUOTE        = 4;
-    private static final byte MESSAGE_FORMAT_SIGNATURE    = 5;
+    // Message formats must not overlap with diff formats!
+    private static final int MESSAGE_FORMAT_FIRST =
+        DiffFormatter.DIFF_FORMAT_LAST + 1;
+
+    private static final byte MESSAGE_FORMAT_TEXT         = MESSAGE_FORMAT_FIRST;
+    private static final byte MESSAGE_FORMAT_COMMENT      = MESSAGE_FORMAT_FIRST + 1;
+    private static final byte MESSAGE_FORMAT_HEADER_NAME  = MESSAGE_FORMAT_FIRST + 2;
+    private static final byte MESSAGE_FORMAT_HEADER_VALUE = MESSAGE_FORMAT_FIRST + 3;
+    private static final byte MESSAGE_FORMAT_QUOTE        = MESSAGE_FORMAT_FIRST + 4;
+    private static final byte MESSAGE_FORMAT_SIGNATURE    = MESSAGE_FORMAT_FIRST + 5;
+    private static final byte MESSAGE_FORMAT_DIFF         = MESSAGE_FORMAT_FIRST + 6;
 
     private static final RE quoteRE = new UncheckedRE("^[a-zA-Z]*>");
 
@@ -49,13 +55,18 @@ public final class MessageFormatter extends Formatter
     private Line startOfBody;
     private Line startOfSignature;
 
+    private final DiffFormatter diffFormatter;
+
     public MessageFormatter(Buffer buffer)
     {
         this.buffer = buffer;
+        diffFormatter = new DiffFormatter(buffer);
     }
 
     public synchronized LineSegmentList formatLine(Line line)
     {
+        if (line.flags() == MESSAGE_FORMAT_DIFF)
+            return diffFormatter.formatLine(line);
         final String text = getDetabbedText(line);
         clearSegmentList();
         String trim = text.trim();
@@ -115,6 +126,9 @@ public final class MessageFormatter extends Formatter
     {
         startOfBody = null;
         startOfSignature = null;
+        boolean inDiff = false;
+        if (buffer.needsRenumbering())
+            buffer.renumber();
         for (Line line = buffer.getFirstLine(); line != null; line = line.next()) {
             if (buffer instanceof MessageBuffer) {
                 if (line.lineNumber() == ((MessageBuffer)buffer).getHeaderLineCount()) {
@@ -125,8 +139,6 @@ public final class MessageFormatter extends Formatter
             }
             String text = line.getText();
             if (text == null)
-                continue;
-            if (text.length() == 0)
                 continue;
             if (startOfBody == null) {
                 if (buffer instanceof SendMail && text.equals(SendMail.getHeaderSeparator()))
@@ -146,9 +158,30 @@ public final class MessageFormatter extends Formatter
             } else {
                 // We're in the body of the message.
                 line.setFlags(0);
+                if (text.equals("-- ")) {
+                    startOfSignature = line;
+                    break;
+                }
+                if (inDiff) {
+                    if (isDiffContinuation(line)) {
+                        line.setFlags(MESSAGE_FORMAT_DIFF);
+                        continue;
+                    }
+                    inDiff = false;
+                    // Fall through...
+                } else {
+                    // Not in diff.
+                    if (isDiffStart(line)) {
+                        inDiff = true;
+                        line.setFlags(MESSAGE_FORMAT_DIFF);
+                        continue;
+                    }
+                }
                 text = text.trim();
-                if (text.length() > 0 && buffer.getLineCount() - line.lineNumber() < 16) {
-                    char c = text.charAt(0);
+                if (text.length() == 0)
+                    continue;
+                final char c = text.charAt(0);
+                if (buffer.getLineCount() - line.lineNumber() < 16) {
                     if (c == '_' || c == '-') {
                         // See if line is all underscores or all hyphens.
                         boolean all = true;
@@ -159,7 +192,7 @@ public final class MessageFormatter extends Formatter
                             }
                         }
                         // '-' by itself may be part of a diff.
-                        if (all && text.length() > 1) {
+                        if (all /*&& text.length() > 1*/) {
                             startOfSignature = line;
                             break;
                         }
@@ -171,10 +204,64 @@ public final class MessageFormatter extends Formatter
         return true;
     }
 
+    public static boolean isDiffStart(Line line)
+    {
+        String text = line.trim();
+        if (text.startsWith("+++ "))
+            return true;
+        if (text.startsWith("--- "))
+            return true;
+        if (text.startsWith("@@ "))
+            return true;
+        if (text.startsWith("diff ")) {
+            Line nextLine = line.next();
+            if (nextLine != null && nextLine.trim().startsWith("---"))
+                return true;
+        } else if (text.startsWith("Index: ")) {
+            Line nextLine = line.next();
+            if (nextLine != null) {
+                String s = nextLine.trim();
+                if (s.startsWith("diff ") || s.startsWith("========"))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isDiffContinuation(Line line)
+    {
+        if (line.length() == 0)
+            return true;
+        final char c = line.charAt(0);
+        if (c == ' ')
+            return true;
+        if (c == '+')
+            return true;
+        if (c == '-') {
+            Line nextLine = line.next();
+            return (nextLine != null && isDiffContinuation(nextLine));
+        }
+        String text = line.getText();
+        if (text.startsWith("diff "))
+            return true;
+        if (text.startsWith("Index: "))
+            return true;
+        if (text.startsWith("========"))
+            return true;
+        if (text.startsWith("RCS file: "))
+            return true;
+        if (text.startsWith("retrieving "))
+            return true;
+        if (text.startsWith("@@"))
+            return true;
+        return false;
+    }
+
     public FormatTable getFormatTable()
     {
         if (formatTable == null) {
-            formatTable = new FormatTable("MessageMode");
+            formatTable = diffFormatter.getFormatTable();
+            formatTable.setModeName("MessageMode");
             formatTable.addEntryFromPrefs(MESSAGE_FORMAT_TEXT, "text");
             formatTable.addEntryFromPrefs(MESSAGE_FORMAT_COMMENT, "comment");
             formatTable.addEntryFromPrefs(MESSAGE_FORMAT_HEADER_NAME, "headerName", "keyword");
