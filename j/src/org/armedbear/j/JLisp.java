@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.1 2003-01-17 19:53:21 piso Exp $
+ * $Id: JLisp.java,v 1.2 2003-01-25 16:55:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,7 +190,8 @@ public final class JLisp extends CommandInterpreter
 
     public static void runStartupScript(File file) throws LispException
     {
-        StringBuffer sb = new StringBuffer("(load \"");
+        Interpreter.initialize();
+        FastStringBuffer sb = new FastStringBuffer("(load \"");
         sb.append(file.canonicalPath());
         sb.append("\")");
         Interpreter.evaluate(sb.toString());
