@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.15 2003-02-20 19:47:38 piso Exp $
+ * $Id: Property.java,v 1.16 2003-04-03 16:55:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,7 +173,7 @@ public final class Property implements Comparable, Constants
     public static final Property REMOVE_TRAILING_WHITESPACE =
         createProperty("removeTrailingWhitespace", false);
     public static final Property RESTRICT_CARET =
-        createProperty("restrictCaret", false);
+        createProperty("restrictCaret", true);
     public static final Property SAVE_IN_PLACE =
         createProperty("saveInPlace", false);
     public static final Property SELECT_COMPLETION =
