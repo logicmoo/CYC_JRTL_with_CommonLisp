@@ -2,7 +2,7 @@
  * UndoBoundary.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: UndoBoundary.java,v 1.1 2003-08-01 16:04:23 piso Exp $
+ * $Id: UndoBoundary.java,v 1.2 2003-08-01 16:21:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,4 +26,14 @@ import javax.swing.undo.AbstractUndoableEdit;
 // A marker class.
 public final class UndoBoundary extends AbstractUndoableEdit
 {
+    private static final UndoBoundary instance = new UndoBoundary();
+
+    private UndoBoundary()
+    {
+    }
+
+    public static final UndoBoundary getInstance()
+    {
+        return instance;
+    }
 }
