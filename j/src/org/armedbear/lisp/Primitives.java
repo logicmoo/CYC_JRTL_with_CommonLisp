@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.316 2003-08-09 23:45:04 piso Exp $
+ * $Id: Primitives.java,v 1.317 2003-08-10 00:55:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3809,41 +3809,6 @@ public final class Primitives extends Module
             if (n < values.length)
                 return values[n];
             return NIL;
-        }
-    };
-
-    // ### probe-file
-    private static final Primitive1 PROBE_FILE = new Primitive1("probe-file") {
-        public LispObject execute(LispObject arg) throws LispError
-        {
-            String pathname = LispString.getValue(arg);
-            boolean absolute = false;
-            if (System.getProperty("os.name").startsWith("Windows")) {
-                if (pathname.length() >= 3) {
-                    if (pathname.charAt(1) == ':')
-                        if (pathname.charAt(2) == '\\')
-                            absolute = true;
-                }
-            } else if (pathname.length() > 0) {
-                if (pathname.charAt(0) == '/')
-                    absolute = true;
-            }
-            final File file;
-            if (absolute)
-                file = new File(pathname);
-            else {
-                String dirname =
-                    LispString.getValue(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
-                file = new File(dirname, pathname);
-            }
-            if (!file.exists())
-                return NIL;
-            try {
-                return new LispString(file.getCanonicalPath());
-            }
-            catch (IOException e) {
-                throw new LispError(e.getMessage());
-            }
         }
     };
 
