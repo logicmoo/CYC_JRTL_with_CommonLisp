@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.581 2004-02-24 15:05:02 piso Exp $
+ * $Id: Primitives.java,v 1.582 2004-02-25 17:26:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1783,9 +1783,10 @@ public final class Primitives extends Lisp
             AbstractArray array = checkArray(arg);
             if (array.getRank() == 0)
                 return array.getRowMajor(0);
-            StringBuffer sb = new StringBuffer("AREF: ");
-            sb.append("wrong number of subscripts (0) for array of rank ");
+            StringBuffer sb =
+                new StringBuffer("Wrong number of subscripts (0) for array of rank ");
             sb.append(array.getRank());
+            sb.append('.');
             signal(new ProgramError(sb.toString()));
             return NIL;
         }
@@ -1813,11 +1814,11 @@ public final class Primitives extends Lisp
     {
         final int rank = array.getRank();
         if (rank != subscripts.length) {
-            StringBuffer sb = new StringBuffer("%ARRAY-ROW-MAJOR-INDEX: ");
-            sb.append("wrong number of subscripts (");
+            StringBuffer sb = new StringBuffer("Wrong number of subscripts (");
             sb.append(subscripts.length);
             sb.append(") for array of rank ");
             sb.append(rank);
+            sb.append('.');
             signal(new ProgramError(sb.toString()));
         }
         if (rank == 0)
