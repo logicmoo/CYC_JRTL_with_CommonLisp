@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.709 2004-11-29 18:08:06 piso Exp $
+ * $Id: Primitives.java,v 1.710 2004-12-07 01:04:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2271,18 +2271,18 @@ public final class Primitives extends Lisp
     private static final Primitive MACROEXPAND =
         new Primitive("macroexpand", "form &optional env")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            final int length = args.length;
-            if (length < 1 || length > 2)
-                signal(new WrongNumberOfArgumentsException(this));
-            LispObject form = args[0];
-            final Environment env;
-            if (length == 2 && args[1] != NIL)
-                env = checkEnvironment(args[1]);
-            else
-                env = new Environment();
-            return macroexpand(form, env, LispThread.currentThread());
+            return macroexpand(arg,
+                               new Environment(),
+                               LispThread.currentThread());
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return macroexpand(first,
+                               checkEnvironment(second),
+                               LispThread.currentThread());
         }
     };
 
@@ -2361,7 +2361,7 @@ public final class Primitives extends Lisp
             if (binding != null)
                 binding.value = Fixnum.ZERO;
             else
-                _GENSYM_COUNTER_.setSymbolValue(Fixnum.ZERO);            
+                _GENSYM_COUNTER_.setSymbolValue(Fixnum.ZERO);
             signal(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: " +
                                  oldValue.writeToString() + " New value: 0"));
         }
@@ -4525,7 +4525,7 @@ public final class Primitives extends Lisp
             }
         }
     };
-    
+
     // ### find-class
     // find-class symbol &optional errorp environment => class
     private static final Primitive FIND_CLASS =
@@ -4839,7 +4839,7 @@ public final class Primitives extends Lisp
             return arg instanceof LispClass ? T : NIL;
         }
     };
-    
+
     static {
         new Primitives();
     }
