@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.14 2004-06-07 17:37:34 piso Exp $
+;;; $Id: pprint.lisp,v 1.15 2004-06-07 18:08:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,7 +21,8 @@
 (in-package "XP" :use '("LISP"))
 
 #+armedbear
-(require 'format)
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (require 'format))
 
 ;This is the November, 26 1991 version of
 ;Richard C. Waters' XP pretty printer.
@@ -2642,7 +2643,7 @@
 	                    #+:symbolics (list nil)) ;turned off
 
 (defun bq-vector-print (xp obj)
-  (funcall (xp:formatter "`#~W") xp (car (bqtify obj))))
+  (funcall (formatter "`#~W") xp (car (bqtify obj))))
 
 (defstruct bq-struct code data)
 
