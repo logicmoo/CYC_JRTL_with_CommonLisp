@@ -1,8 +1,8 @@
 /*
  * function_info.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: function_info.java,v 1.4 2004-11-03 15:39:02 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: function_info.java,v 1.5 2005-02-09 18:30:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,17 +38,77 @@ public final class function_info extends Lisp
         }
     };
 
-    // ### %set-function-info name value
+    // ### %set-function-info name info
     private static final Primitive _SET_FUNCTION_INFO =
         new Primitive("%set-function-info", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject first, LispObject second)
+        public LispObject execute(LispObject name, LispObject info)
             throws ConditionThrowable
         {
-            if (second == NIL)
-                FUNCTION_TABLE.remhash(first);
-            FUNCTION_TABLE.put(first, second);
-            return second;
+            if (info == NIL)
+                FUNCTION_TABLE.remhash(name);
+            else
+                FUNCTION_TABLE.put(name, info);
+            return info;
+        }
+    };
+
+    // ### get-function-info-value name indicator => value
+    private static final Primitive GET_FUNCTION_INFO_VALUE =
+        new Primitive("get-function-info-value", PACKAGE_SYS, true,
+                      "name indicator")
+    {
+        public LispObject execute(LispObject name, LispObject indicator)
+            throws ConditionThrowable
+        {
+            // info is an alist
+            LispObject info = FUNCTION_TABLE.get(name);
+            if (info != null) {
+                while (info != NIL) {
+                    LispObject cons = info.car();
+                    if (cons instanceof Cons) {
+                        if (cons.car().eql(indicator)) {
+                            // Found it.
+                            return LispThread.currentThread().setValues(cons.cdr(), T);
+                        }
+                    } else if (cons != NIL)
+                        signal(new TypeError(cons, Symbol.LIST));
+                    info = info.cdr();
+                }
+            }
+            return LispThread.currentThread().setValues(NIL, NIL);
+        }
+    };
+
+    // ### set-function-info-value name indicator value => value
+    private static final Primitive SET_FUNCTION_INFO_VALUE =
+        new Primitive("set-function-info-value", PACKAGE_SYS, true,
+                      "name indicator value")
+    {
+        public LispObject execute(LispObject name, LispObject indicator,
+                                  LispObject value)
+            throws ConditionThrowable
+        {
+            // info is an alist
+            LispObject info = FUNCTION_TABLE.get(name);
+            if (info == null)
+                info = NIL;
+            LispObject alist = info;
+            while (alist != NIL) {
+                LispObject cons = alist.car();
+                if (cons instanceof Cons) {
+                    if (cons.car().eql(indicator)) {
+                        // Found it.
+                        cons.setCdr(value);
+                        return value;
+                    }
+                } else if (cons != NIL)
+                    signal(new TypeError(cons, Symbol.LIST));
+                alist = alist.cdr();
+            }
+            // Not found.
+            FUNCTION_TABLE.put(name, info.push(new Cons(indicator, value)));
+            return value;
         }
     };
 }

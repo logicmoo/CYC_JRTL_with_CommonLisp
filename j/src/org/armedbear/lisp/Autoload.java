@@ -1,8 +1,8 @@
 /*
  * Autoload.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.210 2004-11-28 15:43:49 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Autoload.java,v 1.211 2005-02-09 18:32:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,7 +114,7 @@ public class Autoload extends Function
                     Debug.trace("Unable to autoload " + symbol.writeToString());
                     System.exit(-1);
                 }
-            }       
+            }
         }
     }
 
@@ -490,6 +490,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
         autoload(PACKAGE_SYS, "function-info", "function_info");
         autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction");
+        autoload(PACKAGE_SYS, "get-function-info-value", "function_info");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
         autoload(PACKAGE_SYS, "instance-ref", "StandardObjectFunctions");
@@ -510,6 +511,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
+        autoload(PACKAGE_SYS, "set-function-info-value", "function_info");
         autoload(PACKAGE_SYS, "std-instance-slots", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "std-slot-boundp", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "std-slot-value", "StandardObjectFunctions");

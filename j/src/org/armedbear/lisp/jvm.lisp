@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.393 2005-02-08 16:42:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.394 2005-02-09 18:33:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -48,14 +48,10 @@
     (apply #'sys::%format destination control-string args)))
 
 (defun inline-expansion (name)
-  (let ((info (sys::function-info name)))
-    (and info (getf info :inline-expansion))))
+  (sys:get-function-info-value name :inline-expansion))
 
 (defun (setf inline-expansion) (expansion name)
-  (let ((info (sys::function-info name)))
-    (setf info (sys::%putf info :inline-expansion expansion))
-    (setf (sys::function-info name) info))
-  expansion)
+  (sys:set-function-info-value name :inline-expansion expansion))
 
 ;; Just an experiment...
 (defmacro defsubst (name lambda-list &rest body)
