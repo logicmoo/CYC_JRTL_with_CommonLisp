@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.1 2003-09-28 00:44:44 piso Exp $
+ * $Id: SpecialOperators.java,v 1.2 2003-09-28 01:16:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -147,6 +147,76 @@ public final class SpecialOperators extends Lisp
             return result;
         }
     };
+
+    // ### progn
+    private static final SpecialOperator PROGN = new SpecialOperator("progn")
+    {
+        public LispObject execute(LispObject args, Environment env)
+            throws ConditionThrowable
+        {
+            LispThread thread = LispThread.currentThread();
+            LispObject result = NIL;
+            while (args != NIL) {
+                result = eval(args.car(), env, thread);
+                args = args.cdr();
+            }
+            return result;
+        }
+    };
+
+    private static final SpecialOperator FLET = new SpecialOperator("flet")
+    {
+        public LispObject execute(LispObject args, Environment env)
+            throws ConditionThrowable
+        {
+            return _flet(args, env, false);
+        }
+    };
+
+    private static final SpecialOperator LABELS = new SpecialOperator("labels")
+    {
+        public LispObject execute(LispObject args, Environment env)
+            throws ConditionThrowable
+        {
+            return _flet(args, env, true);
+        }
+    };
+
+    private static final LispObject _flet(LispObject args, Environment env,
+                                          boolean recursive)
+        throws ConditionThrowable
+    {
+        // First argument is a list of local function definitions.
+        LispObject defs = checkList(args.car());
+        final LispThread thread = LispThread.currentThread();
+        LispObject result;
+        if (defs != NIL) {
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Environment ext = new Environment(env);
+            while (defs != NIL) {
+                LispObject def = checkList(defs.car());
+                Symbol symbol = checkSymbol(def.car());
+                LispObject rest = def.cdr();
+                LispObject parameters = rest.car();
+                LispObject body = rest.cdr();
+                body = new Cons(symbol, body);
+                body = new Cons(Symbol.BLOCK, body);
+                body = new Cons(body, NIL);
+                Closure closure;
+                if (recursive)
+                    closure = new Closure(parameters, body, ext);
+                else
+                    closure = new Closure(parameters, body, env);
+                closure.setLambdaName(list2(Symbol.FLET, symbol));
+                ext.bindFunctional(symbol, closure);
+                defs = defs.cdr();
+            }
+            result = progn(args.cdr(), ext, thread);
+            thread.setDynamicEnvironment(oldDynEnv);
+        } else
+            result = progn(args.cdr(), env, thread);
+        return result;
+    }
 
     // ### symbol-macrolet
     private static final SpecialOperator SYMBOL_MACROLET =
