@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.80 2004-06-28 01:04:42 piso Exp $
+ * $Id: Closure.java,v 1.81 2004-06-28 14:28:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -595,13 +595,14 @@ public class Closure extends Function
             // Fixed arity.
             if (argsLength != arity)
                 signal(new WrongNumberOfArgumentsException(this));
-            return args;
+            if (extra == 0)
+                return args;
         }
-        // Not fixed arity.
+        // Not fixed arity, or extra != 0.
         if (argsLength < minArgs)
             signal(new WrongNumberOfArgumentsException(this));
         final LispThread thread = LispThread.currentThread();
-        LispObject[] array = new LispObject[variables.length + extra];
+        final LispObject[] array = new LispObject[variables.length + extra];
         int index = 0;
         // The bindings established here (if any) are lost when this function
         // returns. They are used only in the evaluation of initforms for
