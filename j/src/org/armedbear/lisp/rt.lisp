@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.136 2003-09-21 00:54:23 piso Exp $
+;;; $Id: rt.lisp,v 1.137 2003-09-21 13:05:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -178,6 +178,7 @@
                               "catch"
                               "ccase"
                               "ceiling"
+                              "cell-error-name"
                               "char-compare"
                               "char-schar"
                               "character"
