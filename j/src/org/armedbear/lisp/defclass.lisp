@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.19 2003-10-12 19:14:23 piso Exp $
+;;; $Id: defclass.lisp,v 1.20 2003-10-13 12:08:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1239,3 +1239,99 @@
                     (mapcar #'slot-definition-name
                             (class-slots (class-of new))))))
     (apply #'shared-initialize new added-slots initargs)))
+
+;;;
+;;;  Methods having to do with class metaobjects.
+;;;
+
+(defmethod print-object ((class standard-class) stream)
+  (print-unreadable-object (class stream :identity t)
+                           (format stream "~:(~S~) ~S"
+                                   (class-name (class-of class))
+                                   (class-name class)))
+  class)
+
+(defmethod initialize-instance :after ((class standard-class) &rest args)
+  (apply #'std-after-initialization-for-classes class args))
+
+;;; Finalize inheritance
+
+(defgeneric finalize-inheritance (class))
+(defmethod finalize-inheritance ((class standard-class))
+  (std-finalize-inheritance class)
+  (values))
+
+;;; Class precedence lists
+
+(defgeneric compute-class-precedence-list (class))
+(defmethod compute-class-precedence-list ((class standard-class))
+  (std-compute-class-precedence-list class))
+
+;;; Slot inheritance
+
+(defgeneric compute-slots (class))
+(defmethod compute-slots ((class standard-class))
+  (std-compute-slots class))
+
+(defgeneric compute-effective-slot-definition (class direct-slots))
+(defmethod compute-effective-slot-definition
+  ((class standard-class) direct-slots)
+  (std-compute-effective-slot-definition class direct-slots))
+
+;;;
+;;; Methods having to do with generic function metaobjects.
+;;;
+
+(defmethod print-object ((gf standard-generic-function) stream)
+  (print-unreadable-object (gf stream :identity t)
+                           (format stream "~:(~S~) ~S"
+                                   (class-name (class-of gf))
+                                   (generic-function-name gf)))
+  gf)
+
+(defmethod initialize-instance :after ((gf standard-generic-function) &key)
+  (finalize-generic-function gf))
+
+;;;
+;;; Methods having to do with method metaobjects.
+;;;
+
+(defmethod print-object ((method standard-method) stream)
+  (print-unreadable-object (method stream :identity t)
+                           (format stream "~:(~S~) ~S~{ ~S~} ~S"
+                                   (class-name (class-of method))
+                                   (generic-function-name
+                                    (method-generic-function method))
+                                   (method-qualifiers method)
+                                   (mapcar #'class-name
+                                           (method-specializers method))))
+  method)
+
+(defmethod initialize-instance :after ((method standard-method) &key)
+  (setf (method-function method) (compute-method-function method)))
+
+;;;
+;;; Methods having to do with generic function invocation.
+;;;
+
+(defgeneric compute-discriminating-function (gf))
+(defmethod compute-discriminating-function ((gf standard-generic-function))
+  (std-compute-discriminating-function gf))
+
+(defgeneric method-more-specific-p (gf method1 method2 required-classes))
+(defmethod method-more-specific-p
+  ((gf standard-generic-function) method1 method2 required-classes)
+  (std-method-more-specific-p gf method1 method2 required-classes))
+
+(defgeneric compute-effective-method-function (gf methods))
+(defmethod compute-effective-method-function
+  ((gf standard-generic-function) methods)
+  (std-compute-effective-method-function gf methods))
+
+(defgeneric compute-method-function (method))
+(defmethod compute-method-function ((method standard-method))
+  (std-compute-method-function method))
+
+(defgeneric compute-applicable-methods (gf args))
+(defmethod compute-applicable-methods ((gf standard-generic-function) args)
+  (compute-applicable-methods-using-classes gf (mapcar #'class-of args)))
