@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.16 2004-02-14 18:58:02 piso Exp $
+ * $Id: StringFunctions.java,v 1.17 2004-02-22 15:58:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -750,6 +750,157 @@ public final class StringFunctions extends Lisp
                         lastCharWasAlphanumeric = Character.isDigit(c);
                 }
             }
+            return first;
+        }
+    };
+
+    // ### string-p
+    public static final Primitive1 STRINGP = new Primitive1("stringp", "object")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            // Displaced arrays might be strings.
+            return arg.STRINGP();
+        }
+    };
+
+    // ### simple-string-p
+    public static final Primitive1 SIMPLE_STRING_P =
+        new Primitive1("simple-string-p", "object")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.SIMPLE_STRING_P();
+        }
+    };
+
+    // ### %make-string
+    // %make-string size initial-element element-type => string
+    // Returns a simple string.
+    private static final Primitive3 _MAKE_STRING =
+        new Primitive3("%make-string", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject size, LispObject initialElement,
+                                  LispObject elementType) throws ConditionThrowable
+        {
+            final int n = Fixnum.getValue(size);
+            final int limit =
+                Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
+            if (n < 0 || n >= limit) {
+                StringBuffer sb = new StringBuffer();
+                sb.append("the size specified for this string (");
+                sb.append(n);
+                sb.append(')');
+                if (n >= limit) {
+                    sb.append(" is >= ARRAY-DIMENSION-LIMIT (");
+                    sb.append(limit);
+                    sb.append(')');
+                } else
+                    sb.append(" is negative");
+                return signal(new LispError(sb.toString()));
+            }
+            // Ignore elementType.
+            LispString string = new LispString(n);
+            if (initialElement != NIL) {
+                // Initial element was specified.
+                char c = checkCharacter(initialElement).getValue();
+                string.fill(c);
+            }
+            return string;
+        }
+    };
+
+    // ### char
+    private static final Primitive2 CHAR = new Primitive2("char", "string index")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first.stringp())
+                return ((AbstractArray)first).getRowMajor(Fixnum.getInt(second));
+            return signal(new TypeError(first, Symbol.STRING));
+        }
+    };
+
+    // ### %set-char
+    private static final Primitive3 _SET_CHAR =
+        new Primitive3("%set-char", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third) throws ConditionThrowable
+        {
+            if (first.stringp()) {
+                ((AbstractArray)first).setRowMajor(Fixnum.getInt(second),
+                                                   checkCharacter(third));
+                return third;
+            }
+            return signal(new TypeError(first, Symbol.STRING));
+        }
+    };
+
+    // ### schar
+    private static final Primitive2 SCHAR = new Primitive2("schar", "string index")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return checkString(first).get(Fixnum.getInt(second));
+        }
+    };
+
+    // ### %set-schar
+    private static final Primitive3 _SET_SCHAR =
+        new Primitive3("%set-schar", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third) throws ConditionThrowable
+        {
+            checkString(first).set(Fixnum.getInt(second), checkCharacter(third));
+            return third;
+        }
+    };
+
+    // ### string-position
+    private static final Primitive3 STRING_POSITION =
+        new Primitive3("string-position", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            char c = LispCharacter.getValue(first);
+            LispString string = checkString(second);
+            int start = Fixnum.getValue(third);
+            char[] chars = string.chars();
+            for (int i = start, limit = chars.length; i < limit; i++) {
+                if (chars[i] == c)
+                    return number(i);
+            }
+            return NIL;
+        }
+    };
+
+    // ### simple-string-search pattern string => position
+    // Searches string for a substring that matches pattern.
+    private static final Primitive2 SIMPLE_STRING_SEARCH =
+        new Primitive2("simple-string-search", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            int index = LispString.getValue(second).indexOf(LispString.getValue(first));
+            return index >= 0 ? new Fixnum(index) : NIL;
+        }
+    };
+
+    // ### simple-string-fill string character => string
+    private static final Primitive2 STRING_FILL =
+        new Primitive2("simple-string-fill", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            checkString(first).fill(LispCharacter.getValue(second));
             return first;
         }
     };

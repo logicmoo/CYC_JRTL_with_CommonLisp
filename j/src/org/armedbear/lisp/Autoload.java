@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.159 2004-02-15 18:47:23 piso Exp $
+ * $Id: Autoload.java,v 1.160 2004-02-22 15:58:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -217,6 +217,7 @@ public class Autoload extends Function
         autoload("atanh", "MathFunctions");
         autoload("broadcast-stream-streams", "BroadcastStream");
         autoload("cell-error-name", "cell_error_name");
+        autoload("char", "StringFunctions");
         autoload("char-equal", "CharacterFunctions");
         autoload("char-greaterp", "CharacterFunctions");
         autoload("char-lessp", "CharacterFunctions");
@@ -296,13 +297,16 @@ public class Autoload extends Function
         autoload("remhash", "HashTable");
         autoload("rename-package", "PackageFunctions");
         autoload("room", "room");
+        autoload("schar", "StringFunctions");
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
+        autoload("simple-string-p", "StringFunctions");
         autoload("sin", "MathFunctions");
         autoload("sinh", "MathFunctions");
         autoload("sqrt", "MathFunctions");
         autoload("stream-element-type", "stream_element_type");
         autoload("stream-external-format", "stream_external_format");
+        autoload("stringp", "StringFunctions");
         autoload("sxhash", "HashTable");
         autoload("synonym-stream-symbol", "SynonymStream");
         autoload("tan", "MathFunctions");
@@ -317,12 +321,15 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file", true);
         autoload(PACKAGE_EXT, "gc", "gc", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
+        autoload(PACKAGE_EXT, "simple-string-fill", "StringFunctions");
+        autoload(PACKAGE_EXT, "simple-string-search", "StringFunctions");
         autoload(PACKAGE_EXT, "string-input-stream-current", "StringInputStream", true);
-        autoload(PACKAGE_JAVA, "%load-java-class-from-byte-array", "RuntimeClass");
+        autoload(PACKAGE_EXT, "string-position", "StringFunctions");
         autoload(PACKAGE_JAVA, "%jnew-proxy", "JProxy");
         autoload(PACKAGE_JAVA, "%jnew-runtime-class", "RuntimeClass");
         autoload(PACKAGE_JAVA, "%jredefine-method", "RuntimeClass");
         autoload(PACKAGE_JAVA, "%jregister-handler", "JHandler");
+        autoload(PACKAGE_JAVA, "%load-java-class-from-byte-array", "RuntimeClass");
         autoload(PACKAGE_PROF, "%start-profiler", "Profiler", true);
         autoload(PACKAGE_PROF, "stop-profiler", "Profiler", true);
         autoload(PACKAGE_SYS, "%adjust-array", "adjust_array");
@@ -330,6 +337,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%make-array", "make_array");
         autoload(PACKAGE_SYS, "%make-condition", "make_condition");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
+        autoload(PACKAGE_SYS, "%make-string", "StringFunctions");
         autoload(PACKAGE_SYS, "%make-string-output-stream", "StringOutputStream");
         autoload(PACKAGE_SYS, "%make-structure", "StructureObject");
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
@@ -337,11 +345,13 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%run-shell-command", "ShellCommand");
         autoload(PACKAGE_SYS, "%set-arglist", "arglist");
+        autoload(PACKAGE_SYS, "%set-char", "StringFunctions");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObject");
         autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
+        autoload(PACKAGE_SYS, "%set-schar", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-equal", "StringFunctions");
