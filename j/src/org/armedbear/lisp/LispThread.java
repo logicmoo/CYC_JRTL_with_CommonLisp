@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.69 2004-12-07 18:03:01 piso Exp $
+ * $Id: LispThread.java,v 1.70 2004-12-16 14:05:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,6 +114,7 @@ public final class LispThread extends LispObject
         javaThread = new Thread(r);
         put(javaThread, this);
         this.name = name;
+        javaThread.setDaemon(true);
         javaThread.start();
     }
 
