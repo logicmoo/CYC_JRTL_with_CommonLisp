@@ -2,7 +2,7 @@
  * JavaClassLoader.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: JavaClassLoader.java,v 1.9 2004-08-24 18:22:35 asimon Exp $
+ * $Id: JavaClassLoader.java,v 1.10 2004-09-15 13:20:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,10 +24,9 @@ package org.armedbear.lisp;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Collections;
-
+import java.util.HashSet;
+import java.util.Set;
 
 public class JavaClassLoader extends ClassLoader
 {
@@ -65,7 +64,7 @@ public class JavaClassLoader extends ClassLoader
             packages.add(packageName);
         }
     }
-    
+
 
     protected Class loadClassFromFile(File file)
     {
@@ -115,6 +114,22 @@ public class JavaClassLoader extends ClassLoader
 	catch (LinkageError e) {
             throw e;
 	}
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
+        return null;
+    }
+
+    public Class loadClassFromByteArray(String className, byte[] bytes,
+                                        int offset, int length)
+    {
+        try {
+            Class c = defineClass(className, bytes, offset, length);
+            if (c != null) {
+                resolveClass(c);
+                return c;
+            }
+        }
         catch (Throwable t) {
             Debug.trace(t);
         }
