@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.1.1.1 2002-09-24 16:10:00 piso Exp $
+ * $Id: MessageBuffer.java,v 1.2 2002-10-04 23:54:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ import org.armedbear.j.Line;
 import org.armedbear.j.LineSequence;
 import org.armedbear.j.Log;
 import org.armedbear.j.MessageDialog;
+import org.armedbear.j.MessageHeaderLine;
 import org.armedbear.j.ProgressNotifier;
 import org.armedbear.j.Property;
 import org.armedbear.j.SaveFileDialog;
@@ -71,6 +72,7 @@ public class MessageBuffer extends Buffer
     protected String rawBody;
     protected String body;
     protected String mimeBody;
+    protected MimePart selectedPart;
     protected int headerLineCount;
 
     protected MessageBuffer()
@@ -770,6 +772,16 @@ public class MessageBuffer extends Buffer
             MimePart part = (MimePart) it.next();
             final String contentType = part.getContentType();
             if (contentType == null || contentType.equals("text/plain")) {
+                selectedPart = part;
+                mimeBody = part.getDecodedBody();
+                return;
+            }
+        }
+        for (Iterator it = parts.iterator(); it.hasNext();) {
+            MimePart part = (MimePart) it.next();
+            final String contentType = part.getContentType();
+            if (contentType == null || contentType.equals("text/html")) {
+                selectedPart = part;
                 mimeBody = part.getDecodedBody();
                 return;
             }
@@ -793,11 +805,7 @@ public class MessageBuffer extends Buffer
             sb.append(i+1);
             MimePart part = (MimePart) parts.get(i);
             final String contentType = part.getContentType();
-            if (shown < 0) {
-                if (contentType == null || contentType.equals("text/plain"))
-                    shown = i;
-            }
-            if (i == shown) {
+            if (part == selectedPart) {
                 sb.append(" Shown");
             } else {
                 String filename = part.getAttachmentFileName();
@@ -849,7 +857,7 @@ public class MessageBuffer extends Buffer
             headers = getBeautifiedHeaders();
         else
             headers = defaultHeaders;
-        String contentType = message.getContentType();
+        final String contentType = message.getContentType();
         if (contentType != null) {
             if (contentType.startsWith("image/")) {
                 File cache = message.cacheDecoded();
@@ -886,16 +894,16 @@ public class MessageBuffer extends Buffer
                 return;
             }
         }
-        setText(headers);
+        appendHeaderLines(headers);
         headerLineCount = Utilities.countLines(headers);
         List attachmentLines = getAttachmentLines();
         if (attachmentLines != null) {
-            appendLine("");
+            appendHeaderLine("");
             ++headerLineCount;
             Iterator iter = attachmentLines.iterator();
             while (iter.hasNext()) {
                 Line line = (Line) iter.next();
-                appendLine(line);
+                appendHeaderLine(line.getText());
                 ++headerLineCount;
             }
         }
@@ -903,21 +911,32 @@ public class MessageBuffer extends Buffer
             body = mimeBody;
         else
             body = rawBody;
-        body = Utilities.wrap(body,
-            Editor.currentEditor().getDisplay().getColumns(), 8);
-        appendLine("");
-        append(body);
+        if (selectedPart != null && "text/html".equals(selectedPart.getContentType())) {
+            appendLine("");
+            StringReader reader = new StringReader(mimeBody);
+            WebLoader loader = new WebLoader(reader);
+            LineSequence lines = loader.load();
+            Line lastLine = getLastLine();
+            lastLine.setNext(lines.getFirstLine());
+            lines.getFirstLine().setPrevious(lastLine);
+            setFormatter(new org.armedbear.j.WebFormatter(this));
+        } else {
+            body = Utilities.wrap(body,
+                Editor.currentEditor().getDisplay().getColumns(), 8);
+            appendLine("");
+            append(body);
+        }
         // Don't try to display images inline if the message is too big.
         if (message.getSize() < 1024 * 1024) {
             List parts = message.getParts();
             if (parts != null) {
                 for (int i = 0; i < parts.size(); i++) {
                     MimePart part = (MimePart) parts.get(i);
-                    contentType = part.getContentType();
-                    if (contentType == null)
+                    String partContentType = part.getContentType();
+                    if (partContentType == null)
                         continue;
                     File cache = null;
-                    if (contentType.equals("application/octet-stream")) {
+                    if (partContentType.equals("application/octet-stream")) {
                         String filename = part.getAttachmentFileName();
                         if (filename == null)
                             continue;
@@ -927,7 +946,7 @@ public class MessageBuffer extends Buffer
                             filename.endsWith(".png") ||
                             filename.endsWith(".gif"))
                             cache = part.cacheDecoded();
-                    } else if (contentType.startsWith("image/"))
+                    } else if (partContentType.startsWith("image/"))
                         cache = part.cacheDecoded();
                     if (cache != null && cache.isFile()) {
                         ImageLoader loader = new ImageLoader(cache);
@@ -951,6 +970,21 @@ public class MessageBuffer extends Buffer
             }
         }
         renumber();
+    }
+
+    private void appendHeaderLines(String headers)
+    {
+        if (headers != null) {
+            FastStringReader reader = new FastStringReader(headers);
+            String s;
+            while ((s = reader.readLine()) != null)
+                appendHeaderLine(s);
+        }
+    }
+
+    private void appendHeaderLine(String s)
+    {
+        appendLine(new MessageHeaderLine(s));
     }
 
     public String toString()
