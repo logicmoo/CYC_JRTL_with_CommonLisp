@@ -31,6 +31,11 @@ For Linux:
 The <code>--with-jdk</code> option is <b>always</b> required,
 in order to specify which JDK to use (give the full path of its top-level directory).
 <p>
+On Mac OS X, the --with-jdk option should be specified like this:
+<pre>
+    --with-jdk=/System/Library/Frameworks/JavaVM.framework
+</pre>
+<p>
 You can use the <code>--with-extensions</code> option to specify extensions to
 the <code>CLASSPATH</code>. For example, you may want to build j with XML
 parser support:
@@ -50,7 +55,7 @@ For Windows, you'll need the
 to be running bash as your shell.  You can use the Cygwin drive notation (if
 need be) to specify the location of your JDK:
 <pre>
-    $ ./configure --with-jdk=//c/jdk1.3
+    $ ./configure --with-jdk=//c/jdk1.5.0
 </pre>
 
 In addition, you must specify the --unix option when invoking make:
@@ -78,45 +83,14 @@ command line by just typing
 </pre>
 if /usr/local/bin is in your PATH.
 <p>
-<b>If you're not using Java 1.4...</b>
-<p>
-If you're not using Java 1.4 to build j, you'll get errors compiling the files
-MouseWheelListener.java and WindowStateListener.java (in src/org/armedbear/j).
-These files contain code specific to Java 1.4. These errors can safely be
-ignored. The classes in question will be loaded dynamically if they exist, but
-they are not required.
-<p>
-If you don't like the compilation errors, you can delete
-MouseWheelListener.java and WindowStateListener.java, use Java 1.4, or use the
-Ant-based build system (see below).
-<p>
 <b>Using Ant</b>
 <p>
 Starting with version 0.11.2, j also comes with an
 <a href="http://jakarta.apache.org/ant">Ant</a>-based build system. Version
-1.4.1 of Ant is required.
+1.4.1 or later of Ant is required.
 <p>
 Change into the root directory of the j source distribution and edit the file
-build.properties to suit your situation:
-<dl>
-  <dd>
-      <p>
-      If you're not planning to use Java 1.4, you can leave jdk14 unset in
-      build.properties; the source files that require 1.4
-      (MouseWheelListener.java and WindowStateListener.java) just won't get
-      built in that case.
-      <p>
-      If you want to use Java 1.4 and you don't care about earlier versions of
-      Java, the simplest thing to do is to point both jdk and jdk14 at your
-      Java 1.4 JDK.
-      <p>
-      You can also point jdk at your Java 1.3 JDK and jdk14 at your Java 1.4
-      JDK, and the resulting j.jar will work with either 1.3 or 1.4; the
-      distribution binaries are built this way.
-  </dd>
-</dl>
-<p>
-Then:
+build.properties to suit your situation. Then:
 <pre>
     $ ant all
     $ ant install
