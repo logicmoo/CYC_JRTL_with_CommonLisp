@@ -2,7 +2,7 @@
  * IntegerTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: IntegerTypeSpecifier.java,v 1.2 2003-09-11 16:19:25 piso Exp $
+ * $Id: IntegerTypeSpecifier.java,v 1.3 2003-09-11 23:20:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,12 +93,12 @@ public final class IntegerTypeSpecifier extends CompoundTypeSpecifier
             AtomicTypeSpecifier ats = (AtomicTypeSpecifier) ts;
             Type type = ats.TYPE();
             if (type == Type.INTEGER)
-                return T;
+                return values(T, T);
             if (type == Type.FIXNUM) {
                 if (lowerLimit.isLessThan(MOST_NEGATIVE_FIXNUM.getSymbolValue()))
-                    return values(NIL, NIL);
+                    return values(NIL, T);
                 if (upperLimit.isGreaterThan(MOST_POSITIVE_FIXNUM.getSymbolValue()))
-                    return values(NIL, NIL);
+                    return values(NIL, T);
                 return values(T, T);
             }
             if (type == Type.BIGNUM) {
@@ -109,7 +109,7 @@ public final class IntegerTypeSpecifier extends CompoundTypeSpecifier
                     if (upperLimit.isGreaterThan(lowerLimit))
                         return values(T, T);
             }
-            return values(NIL, NIL);
+            return values(NIL, T);
         }
         if (ts instanceof IntegerTypeSpecifier) {
             IntegerTypeSpecifier its = (IntegerTypeSpecifier) ts;
@@ -117,6 +117,6 @@ public final class IntegerTypeSpecifier extends CompoundTypeSpecifier
                 if (upperLimit.isLessThanOrEqualTo(its.upperLimit))
                     return values(T, T);
         }
-        return values(NIL, NIL);
+        return values(NIL, T);
     }
 }
