@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.72 2003-05-31 20:22:04 piso Exp $
+ * $Id: Lisp.java,v 1.73 2003-06-01 01:09:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,11 +171,8 @@ public abstract class Lisp
             LispObject first = obj.car();
             if (first instanceof Symbol) {
                 LispObject fun = env.lookupFunctional(first);
-                if (fun == null) {
-                    fun = first.getSymbolFunction();
-                    if (fun == null)
-                        throw new UndefinedFunctionError(first);
-                }
+                if (fun == null)
+                    throw new UndefinedFunctionError(first);
                 switch (fun.getType()) {
                     case TYPE_SPECIAL_OPERATOR: {
                         if (profiling)
