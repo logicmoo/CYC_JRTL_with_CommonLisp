@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.11 2004-03-10 01:56:15 piso Exp $
+ * $Id: FileStream.java,v 1.12 2004-05-12 17:01:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,12 +22,8 @@
 package org.armedbear.lisp;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.RandomAccessFile;
 
 public final class FileStream extends Stream
@@ -123,12 +119,24 @@ public final class FileStream extends Stream
 
     public LispObject fileLength() throws ConditionThrowable
     {
-        String namestring = pathname.getNamestring();
-        if (namestring == null)
-            return signal(new SimpleError("Pathname has no namestring: " +
-                                          pathname + '.'));
-        File file = new File(namestring);
-        long length = file.length(); // in 8-bit bytes
+        final long length;
+        if (isOpen()) {
+            try {
+                length = raf.length();
+            }
+            catch (IOException e) {
+                signal(new StreamError(this, e));
+                // Not reached.
+                return NIL;
+            }
+        } else {
+            String namestring = pathname.getNamestring();
+            if (namestring == null)
+                return signal(new SimpleError("Pathname has no namestring: " +
+                                              pathname.writeToString()));
+            File file = new File(namestring);
+            length = file.length(); // in 8-bit bytes
+        }
         if (isCharacterStream)
             return number(length);
         // "For a binary file, the length is measured in units of the
