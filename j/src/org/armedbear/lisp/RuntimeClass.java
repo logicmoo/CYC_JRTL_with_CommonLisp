@@ -2,7 +2,7 @@
  * RuntimeClass.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: RuntimeClass.java,v 1.5 2004-01-16 02:19:59 piso Exp $
+ * $Id: RuntimeClass.java,v 1.6 2004-02-23 00:09:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,9 +42,9 @@ public class RuntimeClass extends Lisp
             if (length < 3 || length % 2 != 1)
                 return signal(new WrongNumberOfArgumentsException(this));
 	    RuntimeClass rc = new RuntimeClass();
-	    String className = LispString.getValue(args[0]);
+	    String className = args[0].getStringValue();
             for (int i = 1; i < length; i = i+2) {
-                String methodName = LispString.getValue(args[i]);
+                String methodName = args[i].getStringValue();
                 rc.addLispMethod(methodName, (Function)args[i+1]);
 	    }
             classes.put(className, rc);
@@ -61,8 +61,8 @@ public class RuntimeClass extends Lisp
             throws ConditionThrowable
         {
 
-	    String cn = LispString.getValue(className);
-	    String mn = LispString.getValue(methodName);
+	    String cn = className.getStringValue();
+	    String mn = methodName.getStringValue();
 	    Function def = (Function) methodDef;
 	    RuntimeClass rc = null;
 	    if (classes.containsKey(cn)) {
@@ -84,8 +84,8 @@ public class RuntimeClass extends Lisp
     {
         public LispObject execute(LispObject className, LispObject classBytes) throws ConditionThrowable
         {
-            String cn = LispString.getValue(className);
-	    byte[] cb = (byte[])classBytes.javaInstance();
+            String cn = className.getStringValue();
+	    byte[] cb = (byte[]) classBytes.javaInstance();
             try {
                 JavaClassLoader loader = JavaClassLoader.getPersistentInstance();
                 Class c = loader.loadClassFromByteArray(cn, cb);

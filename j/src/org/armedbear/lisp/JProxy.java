@@ -1,8 +1,8 @@
 /*
  * JProxy.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: JProxy.java,v 1.3 2003-12-24 16:09:29 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: JProxy.java,v 1.4 2004-02-23 00:05:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public final class JProxy extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             Map lispDefinedMethods = new HashMap();
             for (int i = 1; i < length; i = i+2)
-                lispDefinedMethods.put(LispString.getValue(args[i]),(Function)args[i+1]);
+                lispDefinedMethods.put(args[i].getStringValue(),(Function)args[i+1]);
             Class iface = (Class) args[0].javaInstance();
             Object proxy =
                 Proxy.newProxyInstance(iface.getClassLoader(), new Class[] { iface }, new LispHandler(table));

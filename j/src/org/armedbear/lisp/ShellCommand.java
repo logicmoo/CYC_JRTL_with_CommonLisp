@@ -2,7 +2,7 @@
  * ShellCommand.java
  *
  * Copyright (C) 2000-2004 Peter Graves
- * $Id: ShellCommand.java,v 1.1 2004-02-01 20:40:07 piso Exp $
+ * $Id: ShellCommand.java,v 1.2 2004-02-23 00:09:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,7 +224,7 @@ public final class ShellCommand extends Lisp implements Runnable
         {
             if (args.length != 3)
                 signal(new WrongNumberOfArgumentsException(this));
-            String command = LispString.getValue(args[0]);
+            String command = args[0].getStringValue();
             LispObject directory = args[1];
             LispObject output = args[2];
             String namestring = null;

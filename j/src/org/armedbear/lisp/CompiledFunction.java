@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CompiledFunction.java,v 1.18 2004-01-05 16:32:09 piso Exp $
+ * $Id: CompiledFunction.java,v 1.19 2004-02-23 00:02:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@ public class CompiledFunction extends Closure
             if (first == NIL)
                 name = null;
             else
-                name = LispString.getValue(first);
+                name = first.getStringValue();
             LispObject lambdaList = second;
             LispObject body = third;
             return new CompiledFunction(name, lambdaList, body,

@@ -1,8 +1,8 @@
 /*
  * AutoloadMacro.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: AutoloadMacro.java,v 1.8 2003-12-13 00:58:50 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: AutoloadMacro.java,v 1.9 2004-02-23 00:00:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,7 +70,7 @@ public final class AutoloadMacro extends Autoload
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            final String fileName = LispString.getValue(second);
+            final String fileName = second.getStringValue();
             if (first instanceof Symbol) {
                 Symbol symbol = (Symbol) first;
                 symbol.setSymbolFunction(new AutoloadMacro(symbol, fileName));

@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: PackageFunctions.java,v 1.24 2004-02-14 18:55:30 piso Exp $
+ * $Id: PackageFunctions.java,v 1.25 2004-02-23 00:08:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -253,7 +253,7 @@ public final class PackageFunctions extends Lisp
         {
             if (args.length != 10)
                 return signal(new WrongNumberOfArgumentsException(this));
-            final String packageName = LispString.getValue(args[0]);
+            final String packageName = args[0].getStringValue();
             LispObject nicknames = checkList(args[1]);
             LispObject size = args[2];
             LispObject shadows = checkList(args[3]);
@@ -284,7 +284,7 @@ public final class PackageFunctions extends Lisp
                 nicknames = nicknames.cdr();
             }
             while (shadows != NIL) {
-                String symbolName = LispString.getValue(shadows.car());
+                String symbolName = shadows.car().getStringValue();
                 pkg.shadow(symbolName);
                 shadows = shadows.cdr();
             }
@@ -293,7 +293,7 @@ public final class PackageFunctions extends Lisp
                 Package otherPkg = coerceToPackage(si.car());
                 LispObject symbolNames = si.cdr();
                 while (symbolNames != NIL) {
-                    String symbolName = LispString.getValue(symbolNames.car());
+                    String symbolName = symbolNames.car().getStringValue();
                     Symbol sym = otherPkg.findAccessibleSymbol(symbolName);
                     if (sym != null)
                         pkg.shadowingImport(sym);
@@ -324,7 +324,7 @@ public final class PackageFunctions extends Lisp
                 Package otherPkg = coerceToPackage(si.car());
                 LispObject symbolNames = si.cdr();
                 while (symbolNames != NIL) {
-                    String symbolName = LispString.getValue(symbolNames.car());
+                    String symbolName = symbolNames.car().getStringValue();
                     Symbol sym = otherPkg.findAccessibleSymbol(symbolName);
                     if (sym != null)
                         pkg.importSymbol(sym);
@@ -337,13 +337,13 @@ public final class PackageFunctions extends Lisp
                 imports = imports.cdr();
             }
             while (interns != NIL) {
-                String symbolName = LispString.getValue(interns.car());
+                String symbolName = interns.car().getStringValue();
                 pkg.intern(symbolName);
                 interns = interns.cdr();
             }
             while (exports != NIL) {
                 LispObject obj = exports.car();
-                String symbolName = LispString.getValue(exports.car());
+                String symbolName = exports.car().getStringValue();
                 pkg.export(pkg.intern(symbolName));
                 exports = exports.cdr();
             }

@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java,v 1.13 2004-01-31 13:43:09 piso Exp $
+ * $Id: StringInputStream.java,v 1.14 2004-02-23 00:10:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,12 +121,12 @@ public final class StringInputStream extends Stream
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new StringInputStream(LispString.getValue(arg));
+            return new StringInputStream(arg.getStringValue());
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            String s = LispString.getValue(first);
+            String s = first.getStringValue();
             int start = Fixnum.getValue(second);
             return new StringInputStream(s.substring(start));
         }
@@ -134,7 +134,7 @@ public final class StringInputStream extends Stream
                                   LispObject third)
             throws ConditionThrowable
         {
-            String s = LispString.getValue(first);
+            String s = first.getStringValue();
             int start = Fixnum.getValue(second);
             if (third == NIL)
                 return new StringInputStream(s.substring(start));

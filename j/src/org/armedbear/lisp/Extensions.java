@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.20 2004-01-24 19:15:54 piso Exp $
+ * $Id: Extensions.java,v 1.21 2004-02-23 00:03:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,7 @@ public final class Extensions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            String host = LispString.getValue(first);
+            String host = first.getStringValue();
             int port = Fixnum.getValue(second);
             try {
                 Socket socket = new Socket(host, port);
@@ -134,7 +134,7 @@ public final class Extensions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            String host = LispString.getValue(first);
+            String host = first.getStringValue();
             int port = Fixnum.getValue(second);
             try {
                 Socket socket = new Socket(host, port);
