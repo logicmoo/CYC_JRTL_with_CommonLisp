@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.30 2003-02-09 13:05:36 piso Exp $
+ * $Id: Buffer.java,v 1.31 2003-02-10 19:25:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -158,12 +158,10 @@ public class Buffer extends SystemBuffer
         isNewFile = b;
     }
 
-    // Note that this constructor is protected!
     protected Buffer()
     {
         // Add new buffer to global buffer list.
         Editor.getBufferList().add(this);
-        Debug.assertTrue(Editor.getBufferList().contains(this));
     }
 
     // Called only by Editor.newBuffer().
