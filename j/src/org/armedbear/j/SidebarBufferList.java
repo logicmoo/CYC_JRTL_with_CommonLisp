@@ -1,8 +1,8 @@
 /*
  * SidebarBufferList.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: SidebarBufferList.java,v 1.3 2002-12-21 15:32:35 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: SidebarBufferList.java,v 1.4 2003-03-20 15:54:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,17 +92,22 @@ public final class SidebarBufferList extends SidebarList implements Constants,
 
     public String getLabelText()
     {
-        int count = 0;
+        int total = 0;
+        int modified = 0;
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+            ++total;
             if (it.nextBuffer().isModified())
-                ++count;
+                ++modified;
         }
         FastStringBuffer sb = new FastStringBuffer("Buffers");
-        if (count > 0) {
-            sb.append(" (");
-            sb.append(count);
-            sb.append(" modified)");
+        sb.append(" (");
+        sb.append(total);
+        if (modified > 0) {
+            sb.append("; ");
+            sb.append(modified);
+            sb.append(" modified");
         }
+        sb.append(')');
         return sb.toString();
     }
 
