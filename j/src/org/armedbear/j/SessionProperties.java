@@ -2,7 +2,7 @@
  * SessionProperties.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SessionProperties.java,v 1.1.1.1 2002-09-24 16:08:26 piso Exp $
+ * $Id: SessionProperties.java,v 1.2 2002-11-14 15:35:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -243,7 +243,7 @@ public final class SessionProperties
             properties.store(out, null);
             out.flush();
             out.close();
-            if (!Utilities.deleteRename(file, backupFile)) {
+            if (file.exists() && !Utilities.deleteRename(file, backupFile)) {
                 Log.error("SessionProperties.save deleteRename failed");
                 Log.error("source = " + file);
                 Log.error("destination = " + backupFile);
