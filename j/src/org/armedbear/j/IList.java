@@ -2,7 +2,7 @@
  * IList.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: IList.java,v 1.1.1.1 2002-09-24 16:09:06 piso Exp $
+ * $Id: IList.java,v 1.2 2002-10-08 02:48:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,6 +99,7 @@ public final class IList implements BackgroundProcess, Constants
         finally {
             Log.debug("calling sourceBuffer.unlockRead");
             sourceBuffer.unlockRead();
+            sourceBuffer.setBusy(false);
             SwingUtilities.invokeLater(completionRunnable);
         }
     }
@@ -201,6 +202,7 @@ public final class IList implements BackgroundProcess, Constants
                     Log.error(e);
                     return;
                 }
+                buffer.setBusy(true);
                 new Thread(ilist).start();
             }
         }
