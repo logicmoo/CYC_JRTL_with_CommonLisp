@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: TwoWayStream.java,v 1.6 2003-09-28 20:17:06 piso Exp $
+ * $Id: TwoWayStream.java,v 1.7 2003-11-02 19:58:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,11 +47,18 @@ public final class TwoWayStream extends LispStream
         return Symbol.TWO_WAY_STREAM;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
+    public LispClass classOf()
     {
-        if (typeSpecifier == Symbol.TWO_WAY_STREAM)
+        return BuiltInClass.TWO_WAY_STREAM;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.TWO_WAY_STREAM)
             return T;
-        return super.typep(typeSpecifier);
+        if (type == BuiltInClass.TWO_WAY_STREAM)
+            return T;
+        return super.typep(type);
     }
 
     public LispObject close(LispObject abort) throws ConditionThrowable
