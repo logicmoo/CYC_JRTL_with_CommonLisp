@@ -96,6 +96,7 @@
       classpath="${basedir}:${jdk}/jre/lib/rt.jar:${junit}"
       includeAntRuntime="no"
       includes="org/armedbear/lisp/*"
+      excludes="org/armedbear/lisp/Test*"
       debug="${debug}"
     />
     <echo message="${build}&#10;" file="${basedir}/org/armedbear/lisp/build"/>
