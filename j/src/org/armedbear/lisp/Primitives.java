@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.371 2003-09-04 04:52:58 piso Exp $
+ * $Id: Primitives.java,v 1.372 2003-09-04 14:41:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1830,6 +1830,10 @@ public final class Primitives extends Module
             return c instanceof LispError;
         if (type == Symbol.SIMPLE_CONDITION)
             return c instanceof SimpleCondition;
+        if (type == Symbol.DIVISION_BY_ZERO)
+            return c instanceof DivisionByZero;
+        if (type == Symbol.ARITHMETIC_ERROR)
+            return c instanceof ArithmeticError;
 
         return false;
     }
