@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: JLisp.java,v 1.18 2004-05-21 22:43:13 piso Exp $
+ * $Id: JLisp.java,v 1.19 2004-08-31 23:24:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,8 +128,10 @@ public final class JLisp extends LispShell
                 notify();
             }
             Socket socket = serverSocket.accept(); // Blocks.
-            interpreter = Interpreter.createInstance(socket.getInputStream(),
-                socket.getOutputStream(), initialDir.canonicalPath());
+            interpreter =
+                Interpreter.createInstance(socket.getInputStream(),
+                                           socket.getOutputStream(),
+                                           initialDir.canonicalPath());
             if (interpreter != null) {
                 // Print j version banner.
                 interpreter.getStandardOutput()._writeLine(
