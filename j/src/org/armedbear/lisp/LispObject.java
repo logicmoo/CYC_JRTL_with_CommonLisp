@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.19 2003-06-23 11:08:56 piso Exp $
+ * $Id: LispObject.java,v 1.20 2003-07-29 18:03:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,6 +116,11 @@ public class LispObject extends Lisp
     public boolean listp()
     {
         return false;
+    }
+
+    public LispObject LISTP()
+    {
+        return NIL;
     }
 
     public boolean isSpecialVariable()
