@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.716 2004-12-07 04:16:39 piso Exp $
+ * $Id: Primitives.java,v 1.717 2004-12-07 16:05:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -815,6 +815,30 @@ public final class Primitives extends Lisp
                 first = first.cdr();
             }
             splice.setCdr(second);
+            return result;
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            if (first == NIL)
+                return execute(second, third);
+            Cons result = new Cons(first.car());
+            Cons splice = result;
+            first = first.cdr();
+            while (first != NIL) {
+                Cons temp = new Cons(first.car());
+                splice.setCdr(temp);
+                splice = temp;
+                first = first.cdr();
+            }
+            while (second != NIL) {
+                Cons temp = new Cons(second.car());
+                splice.setCdr(temp);
+                splice = temp;
+                second = second.cdr();
+            }
+            splice.setCdr(third);
             return result;
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
