@@ -2,7 +2,7 @@
  * ModeList.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: ModeList.java,v 1.11 2003-06-09 17:55:08 piso Exp $
+ * $Id: ModeList.java,v 1.12 2003-06-18 15:40:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -161,16 +161,6 @@ public final class ModeList implements Constants
     public synchronized final Iterator iterator()
     {
         return list.iterator();
-    }
-
-    public synchronized void resetModes()
-    {
-        for (int i = list.size(); i-- > 0;) {
-            ModeListEntry entry = (ModeListEntry) list.get(i);
-            Mode mode = entry.getMode(false);
-            if (mode != null)
-                mode.reset();
-        }
     }
 
     // Does not check for duplicate entries.
