@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.12 2003-06-01 19:56:31 piso Exp $
+ * $Id: Cons.java,v 1.13 2003-06-23 11:51:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,7 +94,18 @@ public final class Cons extends LispObject
         if (this == obj)
             return true;
         if (obj instanceof Cons) {
-            if (car.equal(obj.car()) && cdr.equal(obj.cdr()))
+            if (car.equalp(((Cons)obj).car) && cdr.equal(((Cons)obj).cdr))
+                return true;
+        }
+        return false;
+    }
+
+    public final boolean equalp(LispObject obj) throws LispError
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof Cons) {
+            if (car.equalp(((Cons)obj).car) && cdr.equalp(((Cons)obj).cdr))
                 return true;
         }
         return false;
