@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.18 2003-11-08 16:43:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.19 2003-11-08 18:08:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -410,7 +410,7 @@
 (defun inst (opcode &optional args)
   (unless (listp args)
     (setq args (list args)))
-  (make-instruction :opcode opcode :args args :stack 0))
+  (make-instruction :opcode opcode :args args :stack nil))
 
 (defun emit (instr &rest args)
   (unless (numberp instr)
@@ -483,6 +483,20 @@
         "T"
         "Lorg/armedbear/lisp/Symbol;"))
 
+(defun emit-invokestatic (class-name method-name descriptor stack)
+  (assert stack)
+  (let ((instruction (emit 'invokestatic class-name method-name descriptor)))
+    (setf (instruction-stack instruction) stack)
+    (assert (eql (instruction-stack instruction) stack))))
+
+(defun emit-invokespecial (class-name method-name descriptor stack)
+  (let ((instruction (emit 'invokespecial class-name method-name descriptor)))
+    (setf (instruction-stack instruction) stack)))
+
+(defun emit-invokevirtual (class-name method-name descriptor stack)
+  (let ((instruction (emit 'invokevirtual class-name method-name descriptor)))
+    (setf (instruction-stack instruction) stack)))
+
 ;; Index of local variable used to hold the current thread.
 (defvar *thread* nil)
 (defvar *thread-var-initialized* nil)
@@ -495,16 +509,13 @@
     ;; referenced elsewhere too.
     (let ((code *code*))
       (setf *code* ())
-      (emit 'invokestatic
-            +lisp-thread-class+
-            "currentThread"
-            "()Lorg/armedbear/lisp/LispThread;")
+      (emit-invokestatic +lisp-thread-class+
+                         "currentThread"
+                         "()Lorg/armedbear/lisp/LispThread;"
+                         1)
       (emit 'astore *thread*)
       (setf *code* (append code *code*)))
     (setf *thread-var-initialized* t)))
-
-(defun emit-invokevirtual (class-name method-name descriptor stack)
-  (emit 'invokevirtual class-name method-name descriptor))
 
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
@@ -587,7 +598,9 @@
         184 ; INVOKESTATIC class-name method-name descriptor
         )
        (let ((index (pool-method (first args) (second args) (third args))))
-         (inst opcode (u2 index))))
+;;          (inst opcode (u2 index))))
+         (setf (instruction-args instruction) (u2 index))
+         instruction))
       ((189 ; ANEWARRAY class-name
         )
        (let ((index (pool-class (first args))))
@@ -629,14 +642,78 @@
   (member opcode
     '(153 ; IFEQ
       154 ; IFNE
-      166 ; IF_ACMPNE
       165 ; IF_ACMPEQ
+      166 ; IF_ACMPNE
       167 ; GOTO
       )))
 
+(defun stack-effect (opcode)
+  (case opcode
+    ((25 ; ALOAD
+      42 ; ALOAD_0
+      43 ; ALOAD_1
+      44 ; ALOAD_2
+      45 ; ALOAD_3
+      )
+     1)
+    ((58 ; ASTORE
+      75 ; ASTORE_0
+      76 ; ASTORE_1
+      77 ; ASTORE_2
+      78 ; ASTORE_3
+      )
+     -1)
+    (50 ; AALOAD
+     -1)
+    (83 ; AASTORE
+     -3)
+    ((1 ; ACONST_NULL
+      3 4 5 6 7 8 ; ICONST_0 ... ICONST_5
+      16 ; BIPUSH
+      17 ; SIPUSH
+      )
+     1)
+    (18 ; LDC
+     1)
+    (178 ; GETSTATIC
+     1)
+    (179 ; PUTSTATIC
+     -1)
+    (189 ; ANEWARRAY
+     0)
+    ((153 ; IFEQ
+      )
+     -1)
+    ((165 ; IF_ACMPEQ
+      166 ; IF_ACMPNE
+      )
+     -2)
+    ((167 ; GOTO
+      202 ; LABEL
+      )
+     0)
+    (89 ; DUP
+     1)
+    (95 ; SWAP
+     0)
+    (87 ; POP
+     -1)
+    (176 ; ARETURN
+     -1)
+    (177 ; RETURN
+     0)
+    (t
+     (format t "ANALYZE-STACK unsupported opcode ~S~%"
+             (instruction-opcode instruction))
+     0)))
+
 (defun analyze-stack (code)
   (sys::require-type code 'vector)
-  )
+  (dotimes (i (length code))
+    (let ((instruction (svref code i)))
+      (unless (instruction-stack instruction)
+        (setf (instruction-stack instruction)
+              (stack-effect (instruction-opcode instruction)))))))
 
 ;; CODE is a list of INSTRUCTIONs.
 (defun code-bytes (code)
@@ -790,22 +867,22 @@
            (let ((s (format nil "~S" args)))
              (emit 'ldc
                    (pool-string s))
-             (emit 'invokestatic
-                   "org/armedbear/lisp/Lisp"
-                   "readObjectFromString"
-                   "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"))
+             (emit-invokestatic "org/armedbear/lisp/Lisp"
+                                "readObjectFromString"
+                                "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
+                                0))
            (emit-push-nil) ;; body
            (emit 'aconst_null) ;; environment
-           (emit 'invokespecial
-                 super
-                 "<init>"
-                 "(Ljava/lang/String;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/Environment;)V"))
+           (emit-invokespecial super
+                               "<init>"
+                               "(Ljava/lang/String;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/Environment;)V"
+                               -4))
           (t
            (emit 'aload_0)
-           (emit 'invokespecial
-                 super
-                 "<init>"
-                 "()V")))
+           (emit-invokespecial super
+                               "<init>"
+                               "()V"
+                               0)))
     (setq *code* (append *static-code* *code*))
     (emit 'return)
     (setf (method-code constructor) (code-bytes *code*))
@@ -877,10 +954,10 @@
               (pool-string (symbol-name symbol)))
         (emit 'ldc
               (pool-string (package-name (symbol-package symbol))))
-        (emit 'invokestatic
-              +lisp-class+
-              "internInPackage"
-              "(Ljava/lang/String;Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;")
+        (emit-invokestatic +lisp-class+
+                           "internInPackage"
+                           "(Ljava/lang/String;Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;"
+                           -1)
         (emit 'putstatic
               *this-class*
               g
@@ -908,10 +985,10 @@
                      (pool-string (symbol-name symbol)))
                (emit 'ldc
                      (pool-string (package-name (symbol-package symbol))))
-               (emit 'invokestatic
-                     +lisp-class+
-                     "internInPackage"
-                     "(Ljava/lang/String;Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;")))
+               (emit-invokestatic +lisp-class+
+                                  "internInPackage"
+                                  "(Ljava/lang/String;Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;"
+                                  -1)))
         (declare-field f "Lorg/armedbear/lisp/LispObject;")
         (emit-invokevirtual +lisp-symbol-class+
                             "getSymbolFunctionOrDie"
@@ -931,10 +1008,10 @@
     (declare-field g "Lorg/armedbear/lisp/Symbol;")
     (emit 'ldc
           (pool-string (symbol-name symbol)))
-    (emit 'invokestatic
-          "org/armedbear/lisp/Keyword"
-          "internKeyword"
-          "(Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;")
+    (emit-invokestatic "org/armedbear/lisp/Keyword"
+                       "internKeyword"
+                       "(Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;"
+                       0)
     (emit 'putstatic
           *this-class*
           g
@@ -949,10 +1026,10 @@
     (declare-field g +lisp-object+)
     (emit 'ldc
           (pool-string s))
-    (emit 'invokestatic
-          "org/armedbear/lisp/Lisp"
-          "readObjectFromString"
-          "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;")
+    (emit-invokestatic +lisp-class+
+                       "readObjectFromString"
+                       "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
+                       0)
     (emit 'putstatic
           *this-class*
           g
@@ -972,18 +1049,18 @@
             g1
             +lisp-string+)
       (emit 'dup)
-      (emit 'invokestatic
-            +lisp-class+
-            "recall"
-            "(Lorg/armedbear/lisp/LispString;)Lorg/armedbear/lisp/LispObject;")
+      (emit-invokestatic +lisp-class+
+                         "recall"
+                         "(Lorg/armedbear/lisp/LispString;)Lorg/armedbear/lisp/LispObject;"
+                         0)
       (emit 'putstatic
             *this-class*
             g2
             +lisp-object+)
-      (emit 'invokestatic
-            +lisp-class+
-            "forget"
-            "(Lorg/armedbear/lisp/LispString;)V")
+      (emit-invokestatic +lisp-class+
+                         "forget"
+                         "(Lorg/armedbear/lisp/LispString;)V"
+                         -1)
       (setq *static-code* *code*)
       g2)))
 
@@ -993,10 +1070,10 @@
     (declare-field g "Lorg/armedbear/lisp/LispString;")
     (emit 'ldc
           (pool-string string))
-    (emit 'invokestatic
-          "org/armedbear/lisp/LispString"
-          "getInstance"
-          "(Ljava/lang/String;)Lorg/armedbear/lisp/LispString;")
+    (emit-invokestatic "org/armedbear/lisp/LispString"
+                       "getInstance"
+                       "(Ljava/lang/String;)Lorg/armedbear/lisp/LispString;"
+                       0)
     (emit 'putstatic
           *this-class*
           g
@@ -1194,10 +1271,10 @@
      (compile-form (second args))
      (unless (remove-store-value)
        (emit-push-value))
-     (emit 'invokestatic
-           +lisp-class+
-           "list2"
-           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;")
+     (emit-invokestatic +lisp-class+
+                        "list2"
+                        "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
+                        -1)
      (emit-store-value)
      t)
     (SYS::SIMPLE-TYPEP
@@ -1217,10 +1294,10 @@
      (compile-form (third args))
      (unless (remove-store-value)
        (emit-push-value))
-     (emit 'invokestatic
-           +lisp-class+
-           "list3"
-           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;")
+     (emit-invokestatic +lisp-class+
+                        "list3"
+                        "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
+                        -2)
      (emit-store-value)
      t)
     (t
@@ -1420,10 +1497,10 @@
   (compile-form (second form))
   (unless (remove-store-value)
     (emit-push-value))
-  (emit 'invokestatic
-        "org/armedbear/lisp/Lisp"
-        "multipleValueList"
-        "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+  (emit-invokestatic +lisp-class+
+                     "multipleValueList"
+                     "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                     0)
   (emit-store-value))
 
 (defun compile-let/let* (form)
@@ -1509,10 +1586,10 @@
                    g
                    "Lorg/armedbear/lisp/Symbol;")
              (emit 'swap)
-             (emit 'invokestatic
-                   "org/armedbear/lisp/Lisp"
-                   "bindSpecialVariable"
-                   "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V")))
+             (emit-invokestatic +lisp-class+
+                                "bindSpecialVariable"
+                                "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                -2)))
           (t
            (emit 'astore i)))))
 
@@ -1539,10 +1616,10 @@
                        g
                        "Lorg/armedbear/lisp/Symbol;")
                  (emit 'swap)
-                 (emit 'invokestatic
-                       "org/armedbear/lisp/Lisp"
-                       "bindSpecialVariable"
-                       "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V")))
+                 (emit-invokestatic +lisp-class+
+                                    "bindSpecialVariable"
+                                    "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                    -2)))
               (t
                (emit 'astore i)
                (vector-push var *locals*)
@@ -1638,10 +1715,10 @@
       (compile-form (cadr rest))
       (unless (remove-store-value)
         (emit-push-value))
-      (emit 'invokestatic
-            +lisp-class+
-            "setSpecialVariable"
-            "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+      (emit-invokestatic +lisp-class+
+                         "setSpecialVariable"
+                         "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                         -1)
       (emit-store-value))))
 
 (defun compile-quote (form)
@@ -1696,10 +1773,10 @@
                     *this-class*
                     g
                     +lisp-object+)
-              (emit 'invokestatic
-                    +lisp-class+
-                    "coerceToFunction"
-                    "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;")
+              (emit-invokestatic +lisp-class+
+                                 "coerceToFunction"
+                                 "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
+                                 0)
               (emit-store-value)))
            (t
             (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
