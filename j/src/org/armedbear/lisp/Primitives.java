@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.222 2003-06-02 01:40:22 piso Exp $
+ * $Id: Primitives.java,v 1.223 2003-06-02 02:30:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1406,6 +1406,28 @@ public final class Primitives extends Module
         }
     };
 
+    // ### macro-function
+    // Need to support optional second argument specifying environment.
+    private static final Primitive MACRO_FUNCTION =
+        new Primitive("macro-function") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 1)
+                throw new WrongNumberOfArgumentsException(this);
+            Symbol symbol = checkSymbol(args[0]);
+            LispObject obj = symbol.getSymbolFunction();
+            if (obj instanceof MacroObject)
+                return ((MacroObject)obj).getExpander();
+            if (obj instanceof SpecialOperator) {
+                LispObject macroObject =
+                    get(symbol, Symbol.MACROEXPAND_MACRO, NIL);
+                if (macroObject instanceof MacroObject)
+                    return ((MacroObject)macroObject).getExpander();
+            }
+            return NIL;
+        }
+    };
+
     // ### defmacro
     private static final SpecialOperator DEFMACRO =
         new SpecialOperator("defmacro") {
@@ -1425,7 +1447,11 @@ public final class Primitives extends Module
                         list(Symbol.CDR, formArg)));
             Closure expansionFunction =
                 new Closure(expander.cadr(), expander.cddr(), env);
-            symbol.setSymbolFunction(new MacroObject(expansionFunction));
+            MacroObject macroObject = new MacroObject(expansionFunction);
+            if (symbol.getSymbolFunction() instanceof SpecialOperator)
+                put(symbol, Symbol.MACROEXPAND_MACRO, macroObject);
+            else
+                symbol.setSymbolFunction(macroObject);
             LispThread.currentThread().clearValues();
             return symbol;
         }
@@ -2312,21 +2338,6 @@ public final class Primitives extends Module
         }
     };
 
-    // ### macro-function
-    // Need to support optional second argument specifying environment.
-    private static final Primitive MACRO_FUNCTION =
-        new Primitive("macro-function") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            if (args.length != 1)
-                throw new WrongNumberOfArgumentsException(this);
-            LispObject obj = args[0].getSymbolFunction();
-            if (obj instanceof MacroObject)
-                return ((MacroObject)obj).getExpander();
-            return NIL;
-        }
-    };
-
     // ### function-lambda-expression
     // function-lambda-expression function => lambda-expression, closure-p, name
     private static final Primitive1 FUNCTION_LAMBDA_EXPRESSION =
@@ -3033,16 +3044,22 @@ public final class Primitives extends Module
                 default:
                     throw new WrongNumberOfArgumentsException(this);
             }
-            LispObject list = checkList(symbol.getPropertyList());
-            while (list != NIL) {
-                LispObject obj = list.car();
-                if (obj.eql(indicator))
-                    return list.cadr();
-                list = list.cdr().cdr();
-            }
-            return defaultValue;
+            return get(symbol, indicator, defaultValue);
         }
     };
+
+    private static final LispObject get(Symbol symbol, LispObject indicator,
+        LispObject defaultValue) throws LispError
+    {
+        LispObject list = checkList(symbol.getPropertyList());
+        while (list != NIL) {
+            LispObject obj = list.car();
+            if (obj.eql(indicator))
+                return list.cadr();
+            list = list.cdr().cdr();
+        }
+        return defaultValue;
+    }
 
     // ### %put
     // %put symbol indicator value
@@ -3053,22 +3070,28 @@ public final class Primitives extends Module
             Symbol symbol = checkSymbol(first);
             LispObject indicator = second;
             LispObject value = third;
-            LispObject list = checkList(symbol.getPropertyList());
-            while (list != NIL) {
-                if (list.car().eql(indicator)) {
-                    // Found it!
-                    LispObject rest = list.cdr();
-                    rest.setCar(value);
-                    return value;
-                }
-                list = list.cdr().cdr();
-            }
-            // Not found.
-            symbol.setPropertyList(new Cons(indicator, new Cons(value,
-                symbol.getPropertyList())));
-            return value;
+            return put(symbol, indicator, value);
         }
     };
+
+    private static final LispObject put(Symbol symbol, LispObject indicator,
+        LispObject value) throws LispError
+    {
+        LispObject list = checkList(symbol.getPropertyList());
+        while (list != NIL) {
+            if (list.car().eql(indicator)) {
+                // Found it!
+                LispObject rest = list.cdr();
+                rest.setCar(value);
+                return value;
+            }
+            list = list.cdr().cdr();
+        }
+        // Not found.
+        symbol.setPropertyList(new Cons(indicator, new Cons(value,
+            symbol.getPropertyList())));
+        return value;
+    }
 
     private static final SpecialOperator LET = new SpecialOperator("let") {
         public LispObject execute(LispObject args, Environment env)
