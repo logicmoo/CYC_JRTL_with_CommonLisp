@@ -1,8 +1,8 @@
 /*
  * StreamError.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: StreamError.java,v 1.10 2003-11-03 16:05:46 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: StreamError.java,v 1.11 2004-03-05 16:02:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,24 +23,42 @@ package org.armedbear.lisp;
 
 public class StreamError extends LispError
 {
-    private Throwable cause;
+    private final LispObject stream;
+    private final Throwable cause;
 
-    public StreamError()
+    public StreamError(Stream stream)
     {
+        this.stream = stream != null ? stream : NIL;
+        cause = null;
     }
 
-    public StreamError(LispObject initArgs)
+    public StreamError(LispObject initArgs) throws ConditionThrowable
     {
+        LispObject stream = NIL;
+        LispObject first, second;
+        while (initArgs != NIL) {
+            first = initArgs.car();
+            initArgs = initArgs.cdr();
+            second = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.STREAM)
+                stream = second;
+        }
+        this.stream = stream;
+        cause = null;
     }
 
-    public StreamError(String message)
+    public StreamError(Stream stream, String message)
     {
         super(message);
+        this.stream = stream != null ? stream : NIL;
+        cause = null;
     }
 
-    public StreamError(Throwable cause)
+    public StreamError(Stream stream, Throwable cause)
     {
         super();
+        this.stream = stream != null ? stream : NIL;
         this.cause = cause;
     }
 
@@ -70,6 +88,21 @@ public class StreamError extends LispError
             if (message != null && message.length() > 0)
                 return message;
         }
-        return "stream error";
+        return "Stream error.";
     }
+
+    // ### stream-error-stream
+    private static final Primitive1 STREAM_ERROR_STREAM =
+        new Primitive1("stream-error-stream", "condition")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((StreamError)arg).stream;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.STREAM_ERROR));
+            }
+        }
+    };
 }
