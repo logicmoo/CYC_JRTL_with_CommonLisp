@@ -9,8 +9,8 @@
 (export '(global-map-key global-unmap-key map-key-for-mode unmap-key-for-mode
           set-global-property
           run-hooks
+          status
           defcommand
-          save-all
           key-pressed-hook))
 
 (defun global-map-key (key command)
@@ -78,8 +78,6 @@
 (defmacro defcommand (name command)
   `(setf (symbol-function ',name)
          (lambda () (execute-command ,command))))
-
-(defcommand save-all "saveAll")
 
 (defvar key-pressed-hook nil)
 
