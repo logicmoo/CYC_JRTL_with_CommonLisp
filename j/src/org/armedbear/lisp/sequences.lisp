@@ -2,7 +2,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(some every notany notevery copy-seq nreverse
+(export '(some every notany notevery copy-seq reverse nreverse
           position position-if position-if-not
           find find-if find-if-not))
 
