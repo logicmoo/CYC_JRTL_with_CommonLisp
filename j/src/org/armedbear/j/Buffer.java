@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.16 2002-12-08 01:26:52 piso Exp $
+ * $Id: Buffer.java,v 1.17 2002-12-08 02:17:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2321,7 +2321,9 @@ public class Buffer extends SystemBuffer
     public String getFileNameForDisplay()
     {
         final File file = getFile();
-        return file != null ? file.netPath() : "";
+        if (file != null)
+            return file.isRemote() ? file.netPath() : file.canonicalPath();
+        return "";
     }
 
     // For the buffer list.
