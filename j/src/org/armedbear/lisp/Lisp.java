@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.60 2003-04-27 17:17:19 piso Exp $
+ * $Id: Lisp.java,v 1.61 2003-04-28 00:28:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -855,5 +855,6 @@ public abstract class Lisp
         loadClass("org.armedbear.lisp.Extensions");
         loadClass("org.armedbear.lisp.Java");
         loadClass("org.armedbear.lisp.CompiledFunction");
+        loadClass("org.armedbear.lisp.TwoWayStream");
     }
 }
