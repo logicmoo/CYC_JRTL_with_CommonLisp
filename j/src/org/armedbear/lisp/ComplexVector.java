@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.11 2004-02-27 14:32:11 piso Exp $
+ * $Id: ComplexVector.java,v 1.12 2004-03-04 01:54:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,29 +143,17 @@ public final class ComplexVector extends AbstractVector
         final int limit = length();
         if (index < 0 || index >= limit)
             badIndex(index, limit);
-        return get(index);
+        return getRowMajor(index);
     }
 
     // Ignores fill pointer.
     // FIXME inline
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
-        return get(Fixnum.getValue(index));
+        return getRowMajor(Fixnum.getValue(index));
     }
 
-    // FIXME inline
     public LispObject getRowMajor(int index) throws ConditionThrowable
-    {
-        return get(index);
-    }
-
-    // FIXME inline
-    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
-    {
-        set(index, newValue);
-    }
-
-    public LispObject get(int index) throws ConditionThrowable
     {
         if (elements != null) {
             try {
@@ -179,7 +167,7 @@ public final class ComplexVector extends AbstractVector
             return array.getRowMajor(index + displacement);
     }
 
-    public void set(int index, LispObject newValue) throws ConditionThrowable
+    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         if (elements != null) {
             try {
@@ -198,7 +186,7 @@ public final class ComplexVector extends AbstractVector
         int i = start, j = 0;
         try {
             while (i < end)
-                v.set(j++, get(i++));
+                v.setRowMajor(j++, getRowMajor(i++));
             return v;
         }
         catch (ArrayIndexOutOfBoundsException e) {
@@ -234,7 +222,7 @@ public final class ComplexVector extends AbstractVector
         SimpleVector result = new SimpleVector(length);
         int i, j;
         for (i = 0, j = length - 1; i < length; i++, j--)
-            result.set(i, get(j));
+            result.setRowMajor(i, getRowMajor(j));
         return result;
     }
 
@@ -261,7 +249,7 @@ public final class ComplexVector extends AbstractVector
             // Need to extend vector.
             ensureCapacity(capacity * 2 + 1);
         }
-        set(fillPointer, element);
+        setRowMajor(fillPointer, element);
         return new Fixnum(fillPointer++);
     }
 
@@ -276,7 +264,7 @@ public final class ComplexVector extends AbstractVector
             ext = Math.max(ext, capacity + 1);
             ensureCapacity(capacity + ext);
         }
-        set(fillPointer, element);
+        setRowMajor(fillPointer, element);
         return new Fixnum(fillPointer++);
     }
 

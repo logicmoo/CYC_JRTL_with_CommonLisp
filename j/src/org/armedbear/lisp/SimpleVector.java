@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.10 2004-02-27 14:31:54 piso Exp $
+ * $Id: SimpleVector.java,v 1.11 2004-03-04 01:56:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,27 +138,6 @@ public final class SimpleVector extends AbstractVector
     }
 
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
-    {
-        try {
-            elements[index] = newValue;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, capacity);
-        }
-    }
-
-    public LispObject get(int index) throws ConditionThrowable
-    {
-        try {
-            return elements[index];
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, capacity);
-            return NIL; // Not reached.
-        }
-    }
-
-    public void set(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
             elements[index] = newValue;

@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.12 2004-02-25 23:11:23 piso Exp $
+ * $Id: ComplexString.java,v 1.13 2004-03-04 01:52:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -230,16 +230,6 @@ public final class ComplexString extends AbstractString
     }
 
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
-    {
-        setChar(index, LispCharacter.getValue(newValue));
-    }
-
-    public LispObject get(int index) throws ConditionThrowable
-    {
-        return LispCharacter.getInstance(getChar(index));
-    }
-
-    public void set(int index, LispObject newValue) throws ConditionThrowable
     {
         setChar(index, LispCharacter.getValue(newValue));
     }

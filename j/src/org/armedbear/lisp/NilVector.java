@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.8 2004-02-25 13:50:54 piso Exp $
+ * $Id: NilVector.java,v 1.9 2004-03-04 01:55:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,16 +133,6 @@ public final class NilVector extends AbstractString
     }
 
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
-    {
-        storeError(newValue);
-    }
-
-    public LispObject get(int index) throws ConditionThrowable
-    {
-        return accessError();
-    }
-
-    public void set(int index, LispObject newValue) throws ConditionThrowable
     {
         storeError(newValue);
     }

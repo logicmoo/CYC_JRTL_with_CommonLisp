@@ -52,7 +52,7 @@ public abstract class AbstractVector extends AbstractArray
                 return false;
             AbstractVector v = (AbstractVector) obj;
             for (int i = length(); i-- > 0;)
-                if (!get(i).equalp(v.get(i)))
+                if (!getRowMajor(i).equalp(v.getRowMajor(i)))
                     return false;
             return true;
         }
@@ -85,10 +85,6 @@ public abstract class AbstractVector extends AbstractArray
     }
 
     public abstract int capacity();
-
-    public abstract LispObject get(int index) throws ConditionThrowable;
-
-    public abstract void set(int index, LispObject newValue) throws ConditionThrowable;
 
     public abstract LispObject subseq(int start, int end) throws ConditionThrowable;
 
@@ -145,9 +141,9 @@ public abstract class AbstractVector extends AbstractArray
         int i = 0;
         int j = length() - 1;
         while (i < j) {
-            LispObject temp = get(i);
-            set(i, get(j));
-            set(j, temp);
+            LispObject temp = getRowMajor(i);
+            setRowMajor(i, getRowMajor(j));
+            setRowMajor(j, temp);
             ++i;
             --j;
         }
@@ -167,7 +163,7 @@ public abstract class AbstractVector extends AbstractArray
             for (int i = 0; i < limit; i++) {
                 if (i > 0)
                     sb.append(' ');
-                sb.append(get(i));
+                sb.append(getRowMajor(i));
             }
             if (limit < length())
                 sb.append(" ...");

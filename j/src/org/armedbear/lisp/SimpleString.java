@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.11 2004-02-25 23:12:04 piso Exp $
+ * $Id: SimpleString.java,v 1.12 2004-03-04 01:56:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -249,27 +249,6 @@ public final class SimpleString extends AbstractString
     }
 
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
-    {
-        try {
-            chars[index] = LispCharacter.getValue(newValue);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, capacity);
-        }
-    }
-
-    public LispObject get(int index) throws ConditionThrowable
-    {
-        try {
-            return LispCharacter.getInstance(chars[index]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, capacity);
-            return NIL; // Not reached.
-        }
-    }
-
-    public void set(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
             chars[index] = LispCharacter.getValue(newValue);
