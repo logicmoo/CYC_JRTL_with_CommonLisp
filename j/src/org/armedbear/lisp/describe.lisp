@@ -1,7 +1,7 @@
 ;;; describe.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: describe.lisp,v 1.1 2005-02-11 22:08:02 piso Exp $
+;;; $Id: describe.lisp,v 1.2 2005-02-12 03:23:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,9 +26,10 @@
       (arglist known-p)
       (arglist object)
     (when known-p
-      (if arglist
-          (format stream "~&The function's arguments are:~%  ~A~%" arglist)
-          (format stream "~&The function takes no arguments.")))))
+      (format stream "~&The function's lambda list is:~%  ~A~%" arglist))))
+
+(defun %describe (object stream)
+  (format stream "~S is an object of type ~S.~%" object (type-of object)))
 
 (defun describe (object &optional stream)
   (let ((stream (out-synonym-of stream))
@@ -60,16 +61,26 @@
          (when function
            (format stream "Its function binding is ~S.~%" function)
            (describe-arglist function stream)))
+       (let ((docstring (get object '%function-documentation)))
+         (when docstring
+           (format stream "Function documentation:~%  ~A~%" docstring)))
        (let ((plist (symbol-plist object)))
          (when plist
-           (format stream "The symbol's property list has these indicator/value pairs:~%")
+           (format stream "The symbol's property list contains these indicator/value pairs:~%")
            (loop
              (when (null plist) (return))
              (format stream "  ~S ~S~%" (car plist) (cadr plist))
              (setf plist (cddr plist))))))
       (FUNCTION
-       (format stream "~S is an object of type ~S.~%" object (type-of object))
+       (%describe object stream)
        (describe-arglist object stream))
+      (INTEGER
+       (%describe object stream)
+       (format stream "~D.~%~
+                       #x~X~%~
+                       #o~O~%~
+                       #b~B~%"
+               object object object object))
       (t
        (%describe object stream))))
   (values))
