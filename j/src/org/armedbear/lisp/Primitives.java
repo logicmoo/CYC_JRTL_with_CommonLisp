@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.604 2004-03-11 11:34:05 piso Exp $
+ * $Id: Primitives.java,v 1.605 2004-03-13 14:48:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4352,16 +4352,20 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            BigInteger value;
-            if (arg instanceof Fixnum)
-                value = BigInteger.valueOf(((Fixnum)arg).getValue());
-            else if (arg instanceof Bignum)
-                value = ((Bignum)arg).getValue();
-            else {
-                signal(new TypeError(arg, "integer"));
-                return NIL;
+            if (arg instanceof Fixnum) {
+                int n = ((Fixnum)arg).value;
+                if (n < 0)
+                    n = ~n;
+                int count = 0;
+                while (n > 0) {
+                    n = n >>> 1;
+                    ++count;
+                }
+                return new Fixnum(count);
             }
-            return new Fixnum(value.bitLength());
+            if (arg instanceof Bignum)
+                return new Fixnum(((Bignum)arg).value.bitLength());
+            return signal(new TypeError(arg, "integer"));
         }
     };
 
