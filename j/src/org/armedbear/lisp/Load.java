@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.1 2003-01-17 19:43:21 piso Exp $
+ * $Id: Load.java,v 1.2 2003-01-25 17:04:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,29 +61,33 @@ public final class Load extends Lisp
     private static final LispObject load(final String filename,
         boolean verbose, boolean print) throws LispException
     {
-        String dir =
-            LispString.getValue(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
-        File file = new File(dir, filename);
-        boolean isFile = file.isFile();
-        if (!isFile) {
-            String extension = getExtension(filename);
-            if (extension == null) {
-                // No extension specified. Try appending ".lisp".
-                file = new File(dir, filename.concat(".lisp"));
+        File file = null;
+        boolean isFile = false;
+        if (Utilities.isFilenameAbsolute(filename)) {
+            file = new File(filename);
+            if (file != null) {
                 isFile = file.isFile();
-            }
-            if (!isFile) {
-                URL url = Lisp.class.getResource(filename);
-                String path = getPath(url);
-                if (path != null) {
-                    file = new File(path);
-                    isFile = file.isFile();
+                if (!isFile) {
+                    String extension = getExtension(filename);
+                    if (extension == null) {
+                        // No extension specified. Try appending ".lisp".
+                        file = new File(filename.concat(".lisp"));
+                        isFile = file.isFile();
+                    }
                 }
-                if (!isFile && extension == null) {
-                    url = Lisp.class.getResource(filename.concat(".lisp"));
-                    path = getPath(url);
-                    if (path != null) {
-                        file = new File(path);
+            }
+        } else {
+            // Filename is not absolute.
+            String dir =
+                LispString.getValue(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
+            file = new File(dir, filename);
+            if (file != null) {
+                isFile = file.isFile();
+                if (!isFile) {
+                    String extension = getExtension(filename);
+                    if (extension == null) {
+                        // No extension specified. Try appending ".lisp".
+                        file = new File(dir, filename.concat(".lisp"));
                         isFile = file.isFile();
                     }
                 }
