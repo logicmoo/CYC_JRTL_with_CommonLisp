@@ -2,7 +2,7 @@
  * StatusBar.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: StatusBar.java,v 1.3 2003-07-24 19:36:43 piso Exp $
+ * $Id: StatusBar.java,v 1.4 2003-07-25 18:47:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,11 +55,11 @@ public final class StatusBar extends JComponent implements PreferencesChangeList
 
     private final Frame frame;
     private final Border border;
-    private int charAscent;
+    private final int charAscent;
     private String messageText;
 
-    public StatusBar(Frame frame) {
-        super();
+    public StatusBar(Frame frame)
+    {
         this.frame = frame;
         Editor.preferences().addPreferencesChangeListener(this);
         preferencesChanged();
