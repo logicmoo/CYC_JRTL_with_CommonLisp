@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.276 2004-08-16 20:36:55 piso Exp $
+;;; $Id: jvm.lisp,v 1.277 2004-08-17 01:08:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -788,20 +788,6 @@
            (eval-when (:load-toplevel :execute)
              (setf (gethash ,opcodes *resolvers*) (symbol-function ',name)))))))
 
-;; PUSH-VALUE
-(define-resolver 203 (instruction)
-  (let ((val *val*))
-    (if (<= 0 val 3)
-        (inst (+ val 42))
-        (inst 25 val))))
-
-;; STORE-VALUE
-(define-resolver 204 (instruction)
-  (let ((val *val*))
-  (if (<= 0 val 3)
-      (inst (+ val 75))
-      (inst 58 val))))
-
 ;; ALOAD
 (define-resolver 25 (instruction)
  (let* ((args (instruction-args instruction))
@@ -1150,36 +1136,9 @@
       (setf *code* (delete nil code))
       t)))
 
-;; Reduce GOTOs.
-(defun optimize-3 ()
-  (validate-labels *code*)
-  (unless (vectorp *code*)
-    (setf *code* (coerce *code* 'vector)))
-  (let ((code *code*)
-        (locally-changed-p nil))
-    (dotimes (i (length code))
-      (let ((instruction (svref code i)))
-        (when (eql (instruction-opcode instruction) 167) ; GOTO
-          (let* ((label (car (instruction-args instruction)))
-                 ;; The actual jump is to the first real instruction after the label.
-                 (target-index (1+ (symbol-value label)))
-                 (instr1 (svref code target-index))
-                 (instr2 (if (eql (instruction-opcode instr1) 203) ; PUSH-VALUE
-                             (svref code (1+ target-index))
-                             nil)))
-            (when (and instr2 (eql (instruction-opcode instr2) 176)) ; ARETURN
-              (let ((previous-instruction (svref code (1- i))))
-                (when (eql (instruction-opcode previous-instruction) 204) ; STORE-VALUE
-                  (setf (instruction-opcode previous-instruction) 176) ; ARETURN
-                  (setf (svref code i) nil)
-                  (setf locally-changed-p t))))))))
-    (when locally-changed-p
-      (setf *code* (delete nil code))
-      t)))
-
 ;; CLEAR-VALUES CLEAR-VALUES => CLEAR-VALUES
 ;; GETSTATIC POP => nothing
-(defun optimize-4 ()
+(defun optimize-3 ()
   (let* ((code (coerce *code* 'list))
          (tail code)
          (changed nil))
@@ -1248,7 +1207,6 @@
         (setf changed-p (or (optimize-1) changed-p))
         (setf changed-p (or (optimize-2) changed-p))
         (setf changed-p (or (optimize-3) changed-p))
-        (setf changed-p (or (optimize-4) changed-p))
         (setf changed-p (or (delete-unreachable-code) changed-p))
         (unless changed-p
           (return))))
@@ -2274,20 +2232,6 @@
            (%format t "line 1876~%")
            (aver nil)))))
 
-(defun compile-test-not/null (form)
-  (let ((arg (second form)))
-    (cond ((and (consp arg)
-                (memq (car arg) '(NOT NULL)))
-           (compile-form (second arg) :target :stack)
-           (maybe-emit-clear-values (second arg))
-           (emit-push-nil)
-           'if_acmpeq)
-          (t
-           (compile-form arg :target :stack)
-           (maybe-emit-clear-values arg)
-           (emit-push-nil)
-           'if_acmpne))))
-
 (defparameter java-predicates (make-hash-table :test 'eq))
 
 (defun define-java-predicate (predicate translation)
@@ -2309,6 +2253,20 @@
 (define-java-predicate 'STRINGP    "stringp")
 (define-java-predicate 'VECTORP    "vectorp")
 (define-java-predicate 'ZEROP      "zerop")
+
+(defun compile-test-not/null (form)
+  (let ((arg (second form)))
+    (cond ((and (consp arg)
+                (memq (car arg) '(NOT NULL)))
+           (compile-form (second arg) :target :stack)
+           (maybe-emit-clear-values (second arg))
+           (emit-push-nil)
+           'if_acmpeq)
+          (t
+           (compile-form arg :target :stack)
+           (maybe-emit-clear-values arg)
+           (emit-push-nil)
+           'if_acmpne))))
 
 (defun compile-test (form)
   ;; Use a Java boolean if possible.
