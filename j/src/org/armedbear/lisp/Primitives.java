@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.220 2003-06-01 20:58:36 piso Exp $
+ * $Id: Primitives.java,v 1.221 2003-06-02 01:20:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -650,6 +650,47 @@ public final class Primitives extends Module
                 default:
                     throw new WrongNumberOfArgumentsException("IF");
             }
+        }
+    };
+
+    // ### when
+    private static final SpecialOperator WHEN = new SpecialOperator("when") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            if (args == NIL)
+                throw new WrongNumberOfArgumentsException(this);
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = NIL;
+            if (eval(args.car(), env, thread) != NIL) {
+                args = args.cdr();
+                while (args != NIL) {
+                    result = eval(args.car(), env, thread);
+                    args = args.cdr();
+                }
+            }
+            return result;
+        }
+    };
+
+    // ### unless
+    private static final SpecialOperator UNLESS =
+        new SpecialOperator("unless") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            if (args == NIL)
+                throw new WrongNumberOfArgumentsException(this);
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = NIL;
+            if (eval(args.car(), env, thread) == NIL) {
+                args = args.cdr();
+                while (args != NIL) {
+                    result = eval(args.car(), env, thread);
+                    args = args.cdr();
+                }
+            }
+            return result;
         }
     };
 
