@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.32 2004-01-04 21:08:40 piso Exp $
+ * $Id: Pathname.java,v 1.33 2004-01-05 02:11:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,6 +181,10 @@ public final class Pathname extends LispObject
     {
         StringBuffer sb = new StringBuffer("#P");
         if (name != NIL) {
+            sb.append('"');
+            sb.append(getNamestring());
+            sb.append('"');
+        } else if (directory != NIL && type == NIL) {
             sb.append('"');
             sb.append(getNamestring());
             sb.append('"');
@@ -601,9 +605,9 @@ public final class Pathname extends LispObject
         }
     };
 
-    private static final LispObject mergePathnames(Pathname pathname,
-                                                   Pathname defaultPathname,
-                                                   LispObject defaultVersion)
+    public static final Pathname mergePathnames(Pathname pathname,
+                                                Pathname defaultPathname,
+                                                LispObject defaultVersion)
         throws ConditionThrowable
     {
         Pathname p = new Pathname();
@@ -636,5 +640,15 @@ public final class Pathname extends LispObject
         else
             p.version = defaultVersion;
         return p;
+    }
+
+    static {
+        try {
+            LispObject obj = _DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue();
+            _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(coerceToPathname(obj));
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
     }
 }
