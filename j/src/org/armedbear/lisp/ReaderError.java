@@ -2,7 +2,7 @@
  * ReaderError.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ReaderError.java,v 1.1 2004-01-18 20:08:35 piso Exp $
+ * $Id: ReaderError.java,v 1.2 2004-09-28 14:05:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class ReaderError extends ParseError
+public class ReaderError extends StreamError
 {
     public ReaderError(String message)
     {
@@ -49,9 +49,9 @@ public class ReaderError extends ParseError
             return T;
         if (type == BuiltInClass.READER_ERROR)
             return T;
-        if (type == Symbol.STREAM_ERROR)
+        if (type == Symbol.PARSE_ERROR)
             return T;
-        if (type == BuiltInClass.STREAM_ERROR)
+        if (type == BuiltInClass.PARSE_ERROR)
             return T;
         return super.typep(type);
     }
