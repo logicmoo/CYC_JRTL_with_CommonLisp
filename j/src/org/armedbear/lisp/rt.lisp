@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.96 2003-08-06 19:38:59 piso Exp $
+;;; $Id: rt.lisp,v 1.97 2003-08-07 13:04:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -391,6 +391,12 @@
 (defun do-all-tests (&optional (compile-tests t))
   (let ((rt::*compile-tests* compile-tests))
     (time (do-tests))))
+
+(when (and (find-package "JVM")
+           (fboundp 'jvm::jvm-compile))
+  (mapcar #'jvm::jvm-compile '(sys::list-remove-duplicates*
+                               sys::vector-remove-duplicates*
+                               remove-duplicates)))
 
 (load (concatenate 'string rt::*prefix* "char-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cl-symbols-aux.lsp"))
