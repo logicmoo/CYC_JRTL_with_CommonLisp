@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.274 2004-08-15 12:41:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.275 2004-08-16 03:29:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -137,7 +137,9 @@
     variable))
 
 (defun find-visible-variable (name)
-  (find name *visible-variables* :key 'variable-name))
+  (dolist (variable *visible-variables*)
+    (when (eq name (variable-name variable))
+      (return variable))))
 
 (defun allocate-register ()
   (prog1
@@ -1074,88 +1076,98 @@
               (instruction-stack instruction)
               (instruction-depth instruction)))))
 
-(defun validate-labels ()
-  (dotimes (i (length *code*))
-    (let* ((instruction (svref *code* i))
-           (opcode (instruction-opcode instruction)))
-      (when (eql opcode 202) ; LABEL
+(defun validate-labels (code)
+  (let ((code (coerce code 'list))
+        (i 0))
+    (dolist (instruction code)
+      (when (eql (instruction-opcode instruction) 202) ; LABEL
         (let ((label (car (instruction-args instruction))))
-          (set label i))))))
+          (set label i)))
+      (incf i))))
 
 ;; Remove unused labels.
 (defun optimize-1 ()
-  (let ((code *code*)
+  (let ((code (coerce *code* 'list))
         (changed nil)
         (marker (gensym)))
     ;; Mark the labels that are actually branched to.
-    (dotimes (i (length code))
-      (let ((instruction (svref code i)))
-        (when (branch-opcode-p (instruction-opcode instruction))
-          (let ((label (car (instruction-args instruction))))
-            (set label marker)))))
+    (dolist (instruction code)
+      (when (branch-opcode-p (instruction-opcode instruction))
+        (let ((label (car (instruction-args instruction))))
+          (set label marker))))
     ;; Add labels used for exception handlers.
     (dolist (handler *handlers*)
       (set (handler-from handler) marker)
       (set (handler-to handler) marker)
       (set (handler-code handler) marker))
     ;; Remove labels that are not used as branch targets.
-    (dotimes (i (length code))
-      (let ((instruction (svref code i)))
-        (when (= (instruction-opcode instruction) 202) ; LABEL
-          (let ((label (car (instruction-args instruction))))
-            (unless (eq (symbol-value label) marker)
-              (setf (svref code i) nil)
-              (setf changed t))))))
+    (let ((tail code))
+      (loop
+        (when (null tail)
+          (return))
+        (let ((instruction (car tail)))
+          (when (= (instruction-opcode instruction) 202) ; LABEL
+            (let ((label (car (instruction-args instruction))))
+              (unless (eq (symbol-value label) marker)
+                (setf (car tail) nil)
+                (setf changed t)))))
+        (setf tail (cdr tail))))
     (when changed
       (setf *code* (delete nil code))
       t)))
 
 (defun optimize-2 ()
-  (let* ((code *code*)
-         (limit (1- (length code)))
+  (let* ((code (coerce *code* 'list))
+         (tail code)
          (changed nil))
-    (dotimes (i limit)
-      (let ((instruction (svref code i))
+    (loop
+      (when (null (cdr tail))
+        (return))
+      (let ((instruction (car tail))
             next-instruction)
         (when (and instruction
                    (= (instruction-opcode instruction) 167) ; GOTO
-                   (setf next-instruction (svref code (1+ i))))
+                   (setf next-instruction (cadr tail)))
           (cond ((and (= (instruction-opcode next-instruction) 202) ; LABEL
                       (eq (car (instruction-args instruction))
                           (car (instruction-args next-instruction))))
                  ;; GOTO next instruction: we don't need this one.
-                 (setf (svref code i) nil)
+                 (setf (car tail) nil)
                  (setf changed t))
                 ((= (instruction-opcode next-instruction) 167) ; GOTO
                  ;; Two GOTOs in a row: the next instruction is unreachable.
-                 (setf (svref code (1+ i)) nil)
-                 (setf changed t))))))
+                 (setf (cadr tail) nil)
+                 (setf changed t)))))
+      (setf tail (cdr tail)))
     (when changed
       (setf *code* (delete nil code))
       t)))
 
 ;; Reduce GOTOs.
 (defun optimize-3 ()
-  (validate-labels)
-  (let ((locally-changed-p nil))
-    (dotimes (i (length *code*))
-      (let ((instruction (svref *code* i)))
+  (validate-labels *code*)
+  (unless (vectorp *code*)
+    (setf *code* (coerce *code* 'vector)))
+  (let ((code *code*)
+        (locally-changed-p nil))
+    (dotimes (i (length code))
+      (let ((instruction (svref code i)))
         (when (eql (instruction-opcode instruction) 167) ; GOTO
           (let* ((label (car (instruction-args instruction)))
                  ;; The actual jump is to the first real instruction after the label.
                  (target-index (1+ (symbol-value label)))
-                 (instr1 (svref *code* target-index))
+                 (instr1 (svref code target-index))
                  (instr2 (if (eql (instruction-opcode instr1) 203) ; PUSH-VALUE
-                             (svref *code* (1+ target-index))
+                             (svref code (1+ target-index))
                              nil)))
             (when (and instr2 (eql (instruction-opcode instr2) 176)) ; ARETURN
-              (let ((previous-instruction (svref *code* (1- i))))
+              (let ((previous-instruction (svref code (1- i))))
                 (when (eql (instruction-opcode previous-instruction) 204) ; STORE-VALUE
                   (setf (instruction-opcode previous-instruction) 176) ; ARETURN
-                  (clear instruction)
+                  (setf (svref code i) nil)
                   (setf locally-changed-p t))))))))
     (when locally-changed-p
-      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      (setf *code* (delete nil code))
       t)))
 
 ;; CLEAR-VALUES CLEAR-VALUES => CLEAR-VALUES
@@ -1182,7 +1194,7 @@
                    changed t)))))
       (setf tail (cdr tail)))
     (when changed
-      (setf *code* (coerce code 'vector))
+      (setf *code* code)
       t)))
 
 (defvar *delete-unreachable-code-flag* t)
@@ -1190,22 +1202,29 @@
 (defun delete-unreachable-code ()
   (when *delete-unreachable-code-flag*
     ;; Look for unreachable code after GOTO.
-    (validate-labels)
-    (let ((locally-changed-p nil)
-          (after-goto nil))
-      (dotimes (i (length *code*))
-        (let ((instruction (svref *code* i)))
+    (unless (listp *code*)
+      (setf *code* (coerce *code* 'list)))
+    (validate-labels *code*)
+    (let* ((code *code*)
+           (tail code)
+           (locally-changed-p nil)
+           (after-goto nil))
+      (loop
+        (when (null tail)
+          (return))
+        (let ((instruction (car tail)))
           (cond (after-goto
                  (if (= (instruction-opcode instruction) 202) ; LABEL
                      (setf after-goto nil)
                      ;; Unreachable.
                      (progn
-                       (clear instruction)
+                       (setf (car tail) nil)
                        (setf locally-changed-p t))))
                 ((= (instruction-opcode instruction) 167) ; GOTO
-                 (setf after-goto t)))))
+                 (setf after-goto t))))
+        (setf tail (cdr tail)))
       (when locally-changed-p
-        (setf *code* (delete 0 *code* :key #'instruction-opcode))
+        (setf *code* (delete nil code))
         t))))
 
 (defvar *enable-optimization* t)
@@ -1226,6 +1245,8 @@
         (setf changed-p (or (delete-unreachable-code) changed-p))
         (unless changed-p
           (return))))
+    (unless (typep *code* 'vector)
+      (setf *code* (coerce *code* 'vector)))
     (when *compiler-debug*
       (%format t "----- after optimization -----~%")
       (print-code))))
