@@ -2,7 +2,7 @@
  * SlimeOutputStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SlimeOutputStream.java,v 1.1 2004-09-26 08:32:51 asimon Exp $
+ * $Id: SlimeOutputStream.java,v 1.2 2004-09-26 09:02:09 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,18 +112,6 @@ public final class SlimeOutputStream extends Stream
         }
         super._finishOutput();
     }
-
-    /*
-    public LispObject getString() throws ConditionThrowable
-    {
-        if (elementType == NIL)
-            return new NilVector(0);
-        StringBuffer sb = stringWriter.getBuffer();
-        SimpleString s = new SimpleString(sb);
-        sb.setLength(0);
-        return s;
-    }
-    */
 
     public String toString()
     {
