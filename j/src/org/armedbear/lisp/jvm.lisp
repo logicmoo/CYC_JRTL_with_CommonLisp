@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.16 2003-11-08 16:09:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.17 2003-11-08 16:16:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -507,10 +507,6 @@
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
   (emit 'aload *thread*)
-;;   (emit 'invokevirtual
-;;         +lisp-thread-class+
-;;         "clearValues"
-;;         "()V"))
   (emit-invokevirtual +lisp-thread-class+ "clearValues" "()V"))
 
 (defun emit-invoke-method (method-name)
