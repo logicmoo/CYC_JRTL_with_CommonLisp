@@ -2,7 +2,7 @@
  * UndefinedFunction.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: UndefinedFunction.java,v 1.11 2004-10-13 00:22:20 piso Exp $
+ * $Id: UndefinedFunction.java,v 1.12 2004-10-18 19:18:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,14 +59,5 @@ public final class UndefinedFunction extends CellError
         catch (Throwable t) {}
         sb.append(" is undefined.");
         return sb.toString();
-    }
-
-    public String writeToString() throws ConditionThrowable
-    {
-        if (_PRINT_ESCAPE_.symbolValue() == NIL)
-            return super.writeToString();
-        StringBuffer sb = new StringBuffer("UNDEFINED-FUNCTION ");
-        sb.append(getCellName().writeToString());
-        return unreadableString(sb.toString());
     }
 }
