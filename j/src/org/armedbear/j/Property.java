@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.4 2002-11-10 00:25:36 piso Exp $
+ * $Id: Property.java,v 1.5 2002-11-11 18:13:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,8 @@ public final class Property implements Comparable, Constants
         createProperty("Log.maxBackupIndex", 0);
     public static final Property LOG_MAX_FILE_SIZE =
         createProperty("Log.maxFileSize", 100000);
+    public static final Property NNTP_READ_TIMEOUT =
+        createProperty("nntpReadTimeout", 0);
     public static final Property PRINTER_FONT_SIZE =
         createProperty("printerFontSize", 10);
     public static final Property REORDER_BUFFERS =
