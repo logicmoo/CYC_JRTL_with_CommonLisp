@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: trace.lisp,v 1.11 2005-02-12 03:30:32 piso Exp $
+;;; $Id: trace.lisp,v 1.12 2005-02-20 14:41:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package #:system)
+
+(require 'format)
 
 (defconstant *untraced-function* (make-symbol "untraced-function"))
 
@@ -51,22 +53,22 @@
   (unless (fboundp name)
     (error "~S is not the name of a function." name))
   (if (member name *traced-functions*)
-      (%format t "~S is already being traced." name)
+      (format t "~S is already being traced." name)
       (let* ((untraced-function (fdefinition name))
              (trace-function
               (lambda (&rest args)
                 (with-standard-io-syntax
-                    (%format *trace-output* (indent "~D: ~S~%") *trace-depth*
-                             (cons name args)))
+                    (format *trace-output* (indent "~D: ~S~%") *trace-depth*
+                            (cons name args)))
                 (when breakp
                   (break))
                 (incf *trace-depth*)
                 (let ((r (multiple-value-list (apply untraced-function args))))
                   (decf *trace-depth*)
                   (with-standard-io-syntax
-                    (%format *trace-output* (indent "~D: ~A returned") *trace-depth* name)
-                      (dolist (val r)
-                        (%format *trace-output* " ~S" val))
+                    (format *trace-output* (indent "~D: ~A returned") *trace-depth* name)
+                    (dolist (val r)
+                      (format *trace-output* " ~S" val))
                     (terpri *trace-output*))
                   (values-list r)))))
         (let ((*warn-on-redefinition* nil))
@@ -100,7 +102,7 @@
   (dolist (arg args)
     (if (member arg *traced-functions*)
         (untrace-1 arg)
-        (%format t "~S is not being traced.~%" arg))))
+        (format t "~S is not being traced.~%" arg))))
 
 (defun untrace-1 (symbol)
   (let ((untraced-function (get symbol *untraced-function*))
