@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.13 2002-12-06 22:02:19 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.14 2002-12-07 12:23:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -415,7 +415,10 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         }
         if (showCompletionList) {
             if (popup == null) {
+                long start = System.currentTimeMillis();
                 completions = getCompletions(prefix);
+                long elapsed = System.currentTimeMillis() - start;
+                Log.debug("getCompletions " + elapsed + " ms");
                 index = 0;
                 if (completions.size() == 1) {
                     String completion = (String) completions.get(0);
@@ -461,26 +464,32 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         ArrayList completions = new ArrayList();
         final String sourcePath = checkSourcePath ? getSourcePath() : null;
         prefix = File.normalize(prefix);
+        long start = System.currentTimeMillis();
         FilenameCompletion completion =
             new FilenameCompletion(dir, prefix, sourcePath,
                 completionsIgnoreCase);
+        long elapsed = System.currentTimeMillis() - start;
+        Log.debug("new FilenameCompletion " + elapsed + " ms");
         final File currentDirectory = getCurrentDirectory();
+        final File currentFile = editor.getBuffer().getFile();
         List files = completion.listFiles();
         if (files != null) {
             final int limit = files.size();
             for (int i = 0; i < limit; i++) {
                 File file = (File) files.get(i);
                 // We don't want the file we're currently looking at.
-                if (file.equals(editor.getBuffer().getFile()))
+                if (file.equals(currentFile))
                     continue;
                 String name;
-                if (currentDirectory.equals(file.getParentFile()))
+                if (currentDirectory != null &&
+                    currentDirectory.equals(file.getParentFile())) {
                     name = file.getName();
-                else
+                } else {
                     name = file.canonicalPath();
+                }
                 if (file.isDirectory()) {
                     addCompletion(completions,
-                        name.concat(LocalFile.getSeparator()));
+                        name.concat(file.getSeparator()));
                     continue;
                 }
                 if (isExcluded(name))
@@ -644,12 +653,12 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         popup = null;
         File file = File.getInstance(editor.getCompletionDirectory(),
             textField.getText());
-        if (file != null && file.isFile()) {
-            editor.repaintNow();
-            enter();
-        } else {
+        if (file == null || file.isDirectory()) {
             textField.requestFocus();
             end();
+        } else {
+            editor.repaintNow();
+            enter();
         }
     }
 
