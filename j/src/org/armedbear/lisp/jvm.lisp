@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.263 2004-08-02 02:07:10 piso Exp $
+;;; $Id: jvm.lisp,v 1.264 2004-08-02 15:13:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -344,7 +344,7 @@
 (install-p1-handler 'load-time-value      'identity)
 (install-p1-handler 'locally              'p1-default)
 (install-p1-handler 'multiple-value-bind  'p1-lambda)
-(install-p1-handler 'multiple-value-call  'identity)
+(install-p1-handler 'multiple-value-call  'p1-default)
 (install-p1-handler 'multiple-value-list  'p1-default)
 (install-p1-handler 'multiple-value-prog1 'p1-default)
 (install-p1-handler 'multiple-value-setq  'p1-lambda)
