@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.20 2003-05-19 02:06:19 piso Exp $
+ * $Id: Jdb.java,v 1.21 2003-05-20 15:59:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -852,6 +852,7 @@ public final class Jdb extends Buffer implements JdbConstants
                 }
             }
         }
+        fireBreakpointChanged();
     }
 
     public void saveSession()
@@ -969,6 +970,12 @@ public final class Jdb extends Buffer implements JdbConstants
                         line.setAnnotation(null);
                 }
             }
+            // Repaint editors with buffers in Java mode.
+            for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+                Editor ed = it.nextEditor();
+                if (ed.getModeId() == JAVA_MODE)
+                    ed.repaint();
+            }
         }
     }
 
@@ -999,7 +1006,9 @@ public final class Jdb extends Buffer implements JdbConstants
     private void restart()
     {
         killVM();
+        saveSession();
         removeAnnotations();
+        session.loadDefaults();
         initializeBreakpoints();
         startProcess();
         fireContextChanged();
