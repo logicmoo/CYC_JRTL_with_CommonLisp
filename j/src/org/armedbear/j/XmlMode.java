@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.9 2003-06-13 00:08:30 piso Exp $
+ * $Id: XmlMode.java,v 1.10 2003-06-17 15:28:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -381,16 +381,20 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                     do {
                         pos.prev();
                     } while (!pos.atStart() && !pos.lookingAt(COMMENT_START));
-                } else if (pos.lookingAt("</")) {
-                    ++count;
-                } else if (pos.lookingAt("<")) {
-                    // getTag() skips past the tag, so use pos.copy() here
-                    // since we're moving backwards not forwards.
-                    String tag = getTag(pos.copy());
-                    if (!tag.endsWith("/>")) {
-                        --count;
-                        if (count == 0)
-                            return tag;
+                } else if (pos.getChar() == '<') {
+                    if (pos.lookingAt("</"))
+                        ++count;
+                    else if (pos.lookingAt("<?"))
+                        ;
+                    else {
+                        // getTag() skips past the tag, so use pos.copy() here
+                        // since we're moving backwards not forwards.
+                        String tag = getTag(pos.copy());
+                        if (!tag.endsWith("/>")) {
+                            --count;
+                            if (count == 0)
+                                return tag;
+                        }
                     }
                 }
             } while (pos.prev());
