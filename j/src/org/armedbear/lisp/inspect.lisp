@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: inspect.lisp,v 1.1 2003-10-30 15:41:54 piso Exp $
+;;; $Id: inspect.lisp,v 1.2 2003-11-27 14:56:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "SYSTEM")
+
+(require 'clos)
 
 (defun inspect (obj)
   (format t "~S~%" (type-of obj))
