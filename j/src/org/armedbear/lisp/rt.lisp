@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.30 2003-03-04 15:34:20 piso Exp $
+;;; $Id: rt.lisp,v 1.31 2003-03-05 19:55:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -459,6 +459,7 @@
                               "simple-bit-vector-p"
                               "simple-vector-p"
                               "some"
+                              "sort"
                               "string"
                               "svref"
                               "t"
