@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.125 2003-09-05 14:29:43 piso Exp $
+ * $Id: Lisp.java,v 1.126 2003-09-11 14:58:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -608,6 +608,25 @@ public abstract class Lisp
         if (n.compareTo(INT_MIN) >= 0 && n.compareTo(INT_MAX) <= 0)
             return new Fixnum(n.intValue());
         return new Bignum(n);
+    }
+
+    public static final LispObject values(LispObject first, LispObject second)
+    {
+        LispObject[] values = new LispObject[2];
+        values[0] = first;
+        values[1] = second;
+        LispThread.currentThread().setValues(values);
+        return first;
+    }
+
+    public static final LispObject values(LispObject[] args)
+    {
+        if (args.length == 1) {
+            LispThread.currentThread().clearValues();
+            return args[0];
+        }
+        LispThread.currentThread().setValues(args);
+        return args.length > 0 ? args[0] : NIL;
     }
 
     public static final LispObject readObjectFromString(String s)
