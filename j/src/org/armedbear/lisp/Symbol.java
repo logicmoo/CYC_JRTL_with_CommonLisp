@@ -1,8 +1,8 @@
 /*
  * Symbol.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.101 2003-12-21 15:56:13 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Symbol.java,v 1.102 2004-01-17 00:38:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,6 +102,7 @@ public class Symbol extends LispObject
     public static final Symbol RESTART                          = PACKAGE_CL.addExternalSymbol("RESTART");
     public static final Symbol SEQUENCE                         = PACKAGE_CL.addExternalSymbol("SEQUENCE");
     public static final Symbol SHORT_FLOAT                      = PACKAGE_CL.addExternalSymbol("SHORT-FLOAT");
+    public static final Symbol SIGNED_BYTE                      = PACKAGE_CL.addExternalSymbol("SIGNED-BYTE");
     public static final Symbol SIMPLE_ARRAY                     = PACKAGE_CL.addExternalSymbol("SIMPLE-ARRAY");
     public static final Symbol SIMPLE_BASE_STRING               = PACKAGE_CL.addExternalSymbol("SIMPLE-BASE-STRING");
     public static final Symbol SIMPLE_BIT_VECTOR                = PACKAGE_CL.addExternalSymbol("SIMPLE-BIT-VECTOR");
