@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.364 2003-09-02 16:33:28 piso Exp $
+ * $Id: Primitives.java,v 1.365 2003-09-02 17:40:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4768,6 +4768,22 @@ public final class Primitives extends Module
             if (arg instanceof Complex)
                 return ((Complex)arg).getImaginaryPart();
             return arg.multiplyBy(Fixnum.ZERO);
+        }
+    };
+
+    // ### integer-length
+    private static final Primitive1 INTEGER_LENGTH =
+        new Primitive1("integer-length") {
+        public LispObject execute(LispObject arg) throws TypeError
+        {
+            BigInteger value;
+            if (arg instanceof Fixnum)
+                value = BigInteger.valueOf(((Fixnum)arg).getValue());
+            else if (arg instanceof Bignum)
+                value = ((Bignum)arg).getValue();
+            else
+                throw new TypeError(arg, "integer");
+            return new Fixnum(value.bitLength());
         }
     };
 
