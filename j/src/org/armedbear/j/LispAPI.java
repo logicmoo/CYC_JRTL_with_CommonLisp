@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.56 2004-11-03 18:10:53 piso Exp $
+ * $Id: LispAPI.java,v 1.57 2004-11-07 15:38:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1161,7 +1161,7 @@ public final class LispAPI extends Lisp
                     public void run()
                     {
                         try {
-                            funcall0(fun, LispThread.currentThread());
+                            LispThread.currentThread().execute(fun);
                         }
                         catch (Throwable t) {
                             Log.error(t);
