@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.7 2003-05-17 19:25:09 piso Exp $
+ * $Id: AbstractMode.java,v 1.8 2003-06-12 14:29:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,7 +197,19 @@ public abstract class AbstractMode implements Constants, Mode
 
     public MenuBar createMenuBar(Frame frame)
     {
-        return MenuBar.createDefaultMenuBar(frame);
+        return createDefaultMenuBar(frame);
+    }
+
+    private static MenuBar createDefaultMenuBar(Frame frame)
+    {
+        MenuBar menuBar = new MenuBar("Default");
+        menuBar.add(new Menu("File", 'F'));
+        menuBar.add(new Menu("Edit", 'E'));
+        menuBar.add(new Menu("View", 'V'));
+        menuBar.add(new Menu("Search", 'S'));
+        menuBar.add(new Menu("Go", 'G'));
+        menuBar.add(new Menu("Help", 'H'));
+        return menuBar;
     }
 
     /**
