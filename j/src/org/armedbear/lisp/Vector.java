@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.13 2003-03-17 18:28:43 piso Exp $
+ * $Id: Vector.java,v 1.14 2003-03-18 03:51:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,12 +71,12 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
         return fillPointer >= 0 ? fillPointer : capacity;
     }
 
-    public LispObject elt(long index) throws LispError
+    public LispObject elt(int index) throws LispError
     {
-        long limit = length();
+        final int limit = length();
         if (index < 0 || index >= limit)
             badIndex(index, limit);
-        return elements[(int)index];
+        return elements[index];
     }
 
     public LispObject remove(LispObject item) throws LispError
@@ -84,14 +84,46 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
         throw new LispError("not implemented");
     }
 
-    public LispObject get(int index)
+    public LispObject getRowMajor(int index) throws LispError
     {
-        return elements[index];
+        try {
+            return elements[index];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, elements.length);
+            return NIL; // Not reached.
+        }
+    }
+
+    public void setRowMajor(int index, LispObject newValue) throws LispError
+    {
+        try {
+            elements[index] = newValue;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, elements.length);
+        }
+    }
+
+    public LispObject get(int index) throws LispError
+    {
+        try {
+            return elements[index];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, elements.length);
+            return NIL; // Not reached.
+        }
     }
 
     public void set(int index, LispObject newValue) throws LispError
     {
-        elements[index] = newValue;
+        try {
+            elements[index] = newValue;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, elements.length);
+        }
     }
 
     public void fill(LispObject obj) throws LispError
