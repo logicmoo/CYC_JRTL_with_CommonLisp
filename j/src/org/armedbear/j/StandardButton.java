@@ -1,7 +1,7 @@
 /*
  * StandardButton.java
  *
- * Copyright (C) 2000-2002 Peter Graves
+ * Copyright (C) 2000-2003 Peter Graves
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import javax.swing.JButton;
 
 public final class StandardButton extends JButton
 {
-    public static final int DEFAULT_WIDTH = 80;
+    public static final int DEFAULT_WIDTH  = 80;
     public static final int DEFAULT_HEIGHT = 24;
 
     public StandardButton(String text)
@@ -37,14 +37,5 @@ public final class StandardButton extends JButton
             setMaximumSize(dim);
             setPreferredSize(dim);
         }
-    }
-
-    public StandardButton(String text, int width, int height)
-    {
-        super(text);
-        Dimension dim = new Dimension(width, height);
-        setMinimumSize(dim);
-        setMaximumSize(dim);
-        setPreferredSize(dim);
     }
 }
