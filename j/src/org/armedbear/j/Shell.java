@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.9 2002-10-14 23:38:32 piso Exp $
+ * $Id: Shell.java,v 1.10 2002-10-15 01:02:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ public class Shell extends Buffer implements Constants
         if (shellCommand.indexOf("tcsh") >= 0)
             promptIsStderr = false;
     }
-    
+
     protected Shell(String shellCommand, Mode mode)
     {
         initializeUndo();
@@ -264,7 +264,7 @@ public class Shell extends Buffer implements Constants
         int offset = 0;
         if (promptRE != null) {
             Line dotLine = editor.getDotLine();
-            if (dotLine.next() == null || dotLine.flags() == ShellFormatter.STATE_INPUT) {
+            if (dotLine.next() == null || dotLine.flags() == STATE_INPUT) {
                 REMatch match = promptRE.getMatch(dotLine.getText());
                 if (match != null)
                     offset = match.getEndIndex();
@@ -434,7 +434,7 @@ public class Shell extends Buffer implements Constants
             dotLine.setText(dotLine.getText() + s);
         }
         if (dotLine.flags() == 0)
-            dotLine.setFlags(ShellFormatter.STATE_INPUT);
+            dotLine.setFlags(STATE_INPUT);
         editor.eol();
         editor.insertLineSeparator();
         if (needsRenumbering)
@@ -582,7 +582,7 @@ public class Shell extends Buffer implements Constants
             final List completions = completion.getCompletions();
             final int size = completions.size();
             if (size > 0) {
-                dotLine.setFlags(ShellFormatter.STATE_INPUT);
+                dotLine.setFlags(STATE_INPUT);
                 editor.insertLineSeparator();
                 for (int i = 0; i < size; i++) {
                     String s = (String) completions.get(i);
@@ -704,7 +704,7 @@ public class Shell extends Buffer implements Constants
     {
         final Editor editor = Editor.currentEditor();
         if (editor.getDotLine().next() == null)
-            editor.getDotLine().setFlags(ShellFormatter.STATE_INPUT);
+            editor.getDotLine().setFlags(STATE_INPUT);
         try {
             stdin.write(c);
             stdin.flush();
@@ -873,7 +873,7 @@ public class Shell extends Buffer implements Constants
         Debug.assertTrue(posEndOfOutput != null);
         final Line last = posEndOfOutput.getLine();
         if (isPasswordPrompt(last)) {
-            last.setFlags(ShellFormatter.STATE_PASSWORD_PROMPT);
+            last.setFlags(STATE_PASSWORD_PROMPT);
             return;
         }
         // Look at the next-to-last line.
@@ -885,7 +885,7 @@ public class Shell extends Buffer implements Constants
             // See if the last line looks like the second line of the prompt.
             REMatch match = promptRE.getMatch(last.getText());
             if (match != null)
-                nextToLast.setFlags(ShellFormatter.STATE_PROMPT);
+                nextToLast.setFlags(STATE_PROMPT);
         }
     }
 
@@ -902,7 +902,9 @@ public class Shell extends Buffer implements Constants
     protected void checkPasswordPrompt()
     {
         if (isPasswordPrompt(posEndOfOutput.getLine())) {
-            String password = PasswordDialog.showPasswordDialog(Editor.currentEditor(), "Password:", "Password");
+            String password =
+                PasswordDialog.showPasswordDialog(Editor.currentEditor(),
+                                                  "Password:", "Password");
             if (password != null) {
                 try {
                     stdin.write(password + "\n");
