@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: GenericFunction.java,v 1.10 2004-06-11 23:36:42 piso Exp $
+ * $Id: GenericFunction.java,v 1.11 2004-10-09 15:37:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.lisp;
 public final class GenericFunction extends StandardObject
 {
     private LispObject discriminatingFunction;
+    private LispObject requiredArgs;
 
     public GenericFunction(LispClass cls, SimpleVector slots)
     {
@@ -38,6 +39,16 @@ public final class GenericFunction extends StandardObject
     public void setDiscriminatingFunction(LispObject function)
     {
         discriminatingFunction = function;
+    }
+
+    public LispObject getRequiredArgs()
+    {
+        return requiredArgs;
+    }
+
+    public void setRequiredArgs(LispObject requiredArgs)
+    {
+        this.requiredArgs = requiredArgs;
     }
 
     public LispObject execute() throws ConditionThrowable
@@ -150,6 +161,36 @@ public final class GenericFunction extends StandardObject
                 return second;
             }
             return signal(new TypeError(first, "generic function"));
+        }
+    };
+
+    private static final Primitive GF_REQUIRED_ARGS =
+        new Primitive("gf-required-args", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((GenericFunction)arg).getRequiredArgs();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.GENERIC_FUNCTION));
+            }
+        }
+    };
+
+    private static final Primitive _SET_GF_REQUIRED_ARGS =
+        new Primitive("%set-gf-required-args", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((GenericFunction)first).setRequiredArgs(second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.GENERIC_FUNCTION));
+            }
         }
     };
 }
