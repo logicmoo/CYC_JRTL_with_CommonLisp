@@ -2,7 +2,7 @@
  * CVS.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CVS.java,v 1.2 2003-04-21 01:37:15 piso Exp $
+ * $Id: CVS.java,v 1.3 2003-06-16 15:31:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,7 +261,6 @@ public final class CVS implements Constants
                     }
                 }
             }
-
             final Buffer finalParentBuffer = parentBuffer;
             Runnable commandRunnable = new Runnable() {
                 public void run()
@@ -557,7 +556,7 @@ public final class CVS implements Constants
         return cvsCommand.getOutput();
     }
 
-    private static class CvsCommand
+    private static final class CvsCommand
     {
         final private String cmd;
         final private File workingDirectory;
@@ -571,20 +570,7 @@ public final class CVS implements Constants
 
         public void run()
         {
-            FastStringBuffer sb = new FastStringBuffer();
-            if (Platform.isPlatformUnix())
-                sb.append('\\');
-            sb.append("cd ");
-            if (Platform.isPlatformWindows())
-                sb.append("/d ");
-            // Enclose directory name in double quotes in case it contains
-            // embedded spaces.
-            sb.append('"');
-            sb.append(workingDirectory.canonicalPath());
-            sb.append('"');
-            sb.append(" && ");
-            sb.append(cmd);
-            shellCommand = new ShellCommand(sb.toString());
+            shellCommand = new ShellCommand(cmd, workingDirectory);
             shellCommand.run();
         }
 
