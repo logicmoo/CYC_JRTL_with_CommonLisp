@@ -1,7 +1,7 @@
 ;;; write-sequence.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: write-sequence.lisp,v 1.2 2004-03-10 01:23:17 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: write-sequence.lisp,v 1.3 2005-03-28 19:20:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun write-sequence (sequence stream &key (start 0) end)
   (unless (and (integerp start) (>= start 0))
@@ -30,12 +30,20 @@
                :datum start
                :expected-type '(integer 0)))
       (setf end (length sequence)))
-  (if (eq (stream-element-type stream) 'character)
-      (if (stringp sequence)
-          (%write-string sequence stream start end)
-          (do ((i start (1+ i)))
-              ((>= i end) sequence)
-            (write-char (elt sequence i) stream)))
-      (do ((i start (1+ i)))
-          ((>= i end) sequence)
-        (write-byte (elt sequence i) stream))))
+  (let ((stream-element-type (stream-element-type stream)))
+    (cond ((eq stream-element-type 'character)
+           (if (stringp sequence)
+               (%write-string sequence stream start end)
+               (do ((i start (1+ i)))
+                   ((>= i end) sequence)
+                 (write-char (elt sequence i) stream))))
+          ((and (equal stream-element-type '(unsigned-byte 8))
+                (vectorp sequence)
+                (equal (array-element-type sequence) '(unsigned-byte 8)))
+           (do ((i start (1+ i)))
+               ((>= i end) sequence)
+             (write-8-bits (elt sequence i) stream)))
+          (t
+           (do ((i start (1+ i)))
+               ((>= i end) sequence)
+             (write-byte (elt sequence i) stream))))))
