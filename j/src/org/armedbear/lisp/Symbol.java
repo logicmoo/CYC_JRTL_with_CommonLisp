@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.158 2004-11-06 20:56:21 piso Exp $
+ * $Id: Symbol.java,v 1.159 2004-11-08 18:21:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,7 @@ public class Symbol extends LispObject
     public static final Symbol FILE_STREAM                      = PACKAGE_CL.addExternalSymbol("FILE-STREAM");
     public static final Symbol FIXNUM                           = PACKAGE_CL.addExternalSymbol("FIXNUM");
     public static final Symbol FLOAT                            = PACKAGE_CL.addExternalSymbol("FLOAT");
+    public static final Symbol FORWARD_REFERENCED_CLASS         = PACKAGE_SYS.addExternalSymbol("FORWARD-REFERENCED-CLASS");
     public static final Symbol FUNCTION                         = PACKAGE_CL.addExternalSymbol("FUNCTION");
     public static final Symbol GENERIC_FUNCTION                 = PACKAGE_CL.addExternalSymbol("GENERIC-FUNCTION");
     public static final Symbol HASH_TABLE                       = PACKAGE_CL.addExternalSymbol("HASH-TABLE");
