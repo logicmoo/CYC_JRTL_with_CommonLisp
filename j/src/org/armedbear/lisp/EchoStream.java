@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.9 2004-03-10 01:55:34 piso Exp $
+ * $Id: EchoStream.java,v 1.10 2004-06-22 23:07:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,14 +89,24 @@ public final class EchoStream extends Stream
         return true;
     }
 
-    public boolean isCharacterStream() throws ConditionThrowable
+    public boolean isCharacterInputStream() throws ConditionThrowable
     {
-        return in.isCharacterStream();
+        return in.isCharacterInputStream();
     }
 
-    public boolean isBinaryStream() throws ConditionThrowable
+    public boolean isBinaryInputStream() throws ConditionThrowable
     {
-        return in.isBinaryStream();
+        return in.isBinaryInputStream();
+    }
+
+    public boolean isCharacterOutputStream() throws ConditionThrowable
+    {
+        return out.isCharacterOutputStream();
+    }
+
+    public boolean isBinaryOutputStream() throws ConditionThrowable
+    {
+        return out.isBinaryOutputStream();
     }
 
     // Returns -1 at end of file.

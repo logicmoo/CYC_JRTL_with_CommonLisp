@@ -2,7 +2,7 @@
  * CaseFrobStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: CaseFrobStream.java,v 1.3 2004-06-17 19:52:12 piso Exp $
+ * $Id: CaseFrobStream.java,v 1.4 2004-06-22 23:07:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,7 @@ public abstract class CaseFrobStream extends Stream
     protected CaseFrobStream(Stream target)
         throws ConditionThrowable
     {
-        Debug.assertTrue(target.isCharacterStream());
-        Debug.assertTrue(target.isOutputStream());
+        Debug.assertTrue(target.isCharacterOutputStream());
         this.target = target;
     }
 
@@ -67,12 +66,22 @@ public abstract class CaseFrobStream extends Stream
         return true;
     }
 
-    public boolean isCharacterStream() throws ConditionThrowable
+    public boolean isCharacterInputStream() throws ConditionThrowable
+    {
+        return false;
+    }
+
+    public boolean isBinaryInputStream() throws ConditionThrowable
+    {
+        return false;
+    }
+
+    public boolean isCharacterOutputStream() throws ConditionThrowable
     {
         return true;
     }
 
-    public boolean isBinaryStream() throws ConditionThrowable
+    public boolean isBinaryOutputStream() throws ConditionThrowable
     {
         return false;
     }

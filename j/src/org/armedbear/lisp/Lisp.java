@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.256 2004-06-15 01:03:07 piso Exp $
+ * $Id: Lisp.java,v 1.257 2004-06-22 23:07:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -914,9 +914,8 @@ public abstract class Lisp
 	    return checkCharacterInputStream(in);
         }
         if (obj instanceof Stream)
-            if (((Stream)obj).isInputStream())
-                if (((Stream)obj).isCharacterStream())
-                    return (Stream) obj;
+            if (((Stream)obj).isCharacterInputStream())
+                return (Stream) obj;
         signal(new TypeError(obj, "character input stream"));
         // Not reached.
         return null;
@@ -932,9 +931,8 @@ public abstract class Lisp
 	    return checkCharacterOutputStream(out);
         }
         if (obj instanceof Stream)
-            if (((Stream)obj).isOutputStream())
-                if (((Stream)obj).isCharacterStream())
-                    return (Stream) obj;
+            if (((Stream)obj).isCharacterOutputStream())
+                return (Stream) obj;
         signal(new TypeError(obj, "character output stream"));
         // Not reached.
         return null;
@@ -950,9 +948,8 @@ public abstract class Lisp
 	    return checkBinaryInputStream(in);
         }
         if (obj instanceof Stream)
-            if (((Stream)obj).isInputStream())
-                if (((Stream)obj).isBinaryStream())
-                    return (Stream) obj;
+            if (((Stream)obj).isBinaryInputStream())
+                return (Stream) obj;
         signal(new TypeError(obj, "binary input stream"));
         // Not reached.
         return null;
@@ -968,9 +965,8 @@ public abstract class Lisp
 	    return checkBinaryOutputStream(out);
         }
         if (obj instanceof Stream)
-            if (((Stream)obj).isOutputStream())
-                if (((Stream)obj).isBinaryStream())
-                    return (Stream) obj;
+            if (((Stream)obj).isBinaryOutputStream())
+                return (Stream) obj;
         signal(new TypeError(obj, "binary output stream"));
         // Not reached.
         return null;
@@ -989,7 +985,7 @@ public abstract class Lisp
                 Stream in = ((TwoWayStream)stream).getInputStream();
 		return inSynonymOf(in);
             }
-            if (stream.isInputStream() && stream.isCharacterStream())
+            if (stream.isCharacterInputStream())
                 return stream;
         }
         signal(new TypeError(obj, "character input stream"));
@@ -1010,7 +1006,7 @@ public abstract class Lisp
                 Stream out = ((TwoWayStream)obj).getOutputStream();
 		return outSynonymOf(out);
             }
-            if (stream.isOutputStream() && stream.isCharacterStream())
+            if (stream.isCharacterOutputStream())
                 return stream;
         }
         signal(new TypeError(obj, "character output stream"));

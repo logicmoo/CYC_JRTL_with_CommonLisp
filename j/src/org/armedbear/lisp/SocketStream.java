@@ -2,7 +2,7 @@
  * SocketStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SocketStream.java,v 1.1 2004-05-25 18:05:01 piso Exp $
+ * $Id: SocketStream.java,v 1.2 2004-06-22 23:07:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,16 +27,10 @@ public final class SocketStream extends TwoWayStream
 {
     private final Socket socket;
 
-    public SocketStream(Socket socket, TwoWayStream stream)
+    public SocketStream(Socket socket, Stream in, Stream out)
     {
-	super(stream, stream);
+	super(in, out);
         this.socket = socket;
-    }
-
-    public SocketStream(Socket socket, TwoWayStream stream, boolean interactive)
-    {
-        this(socket, stream);
-        setInteractive(interactive);
     }
 
     public LispObject typeOf()

@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.76 2004-06-11 17:18:14 piso Exp $
+ * $Id: Stream.java,v 1.77 2004-06-22 23:07:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,14 +121,24 @@ public class Stream extends LispObject
         return isOutputStream;
     }
 
-    public boolean isCharacterStream() throws ConditionThrowable
+    public boolean isCharacterInputStream() throws ConditionThrowable
     {
-        return isCharacterStream;
+        return isCharacterStream && isInputStream;
     }
 
-    public boolean isBinaryStream() throws ConditionThrowable
+    public boolean isBinaryInputStream() throws ConditionThrowable
     {
-        return isBinaryStream;
+        return isBinaryStream && isInputStream;
+    }
+
+    public boolean isCharacterOutputStream() throws ConditionThrowable
+    {
+        return isCharacterStream && isOutputStream;
+    }
+
+    public boolean isBinaryOutputStream() throws ConditionThrowable
+    {
+        return isBinaryStream && isOutputStream;
     }
 
     public boolean isInteractive()

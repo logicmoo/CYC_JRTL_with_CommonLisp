@@ -2,7 +2,7 @@
  * socket_stream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: socket_stream.java,v 1.1 2004-05-25 18:15:59 piso Exp $
+ * $Id: socket_stream.java,v 1.2 2004-06-22 23:07:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@
 
 package org.armedbear.lisp;
 
-import java.net.ServerSocket;
 import java.net.Socket;
 
 // ### %socket-stream
@@ -35,14 +34,14 @@ public final class socket_stream extends Primitive2
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-         Socket socket = (Socket) ((JavaObject) first).getObject();
-	 LispObject elementType = second; // Checked by caller.
-	 try {
-            Stream in =
-                new Stream(socket.getInputStream(), elementType);
-            Stream out =
-                new Stream(socket.getOutputStream(), elementType);
-            return new SocketStream(socket, new TwoWayStream(in, out));
+        Socket socket = (Socket) ((JavaObject)first).getObject();
+        LispObject elementType = second; // Checked by caller.
+        try {
+             Stream in =
+                 new Stream(socket.getInputStream(), elementType);
+             Stream out =
+                 new Stream(socket.getOutputStream(), elementType);
+             return new SocketStream(socket, in, out);
         }
         catch (Exception e) {
             return signal(new LispError(e.getMessage()));

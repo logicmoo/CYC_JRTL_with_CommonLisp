@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.20 2004-05-25 18:37:38 piso Exp $
+ * $Id: TwoWayStream.java,v 1.21 2004-06-22 23:07:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,26 @@ public class TwoWayStream extends Stream
     public Stream getOutputStream()
     {
         return out;
+    }
+
+    public boolean isCharacterInputStream() throws ConditionThrowable
+    {
+        return in.isCharacterInputStream();
+    }
+
+    public boolean isBinaryInputStream() throws ConditionThrowable
+    {
+        return in.isBinaryInputStream();
+    }
+
+    public boolean isCharacterOutputStream() throws ConditionThrowable
+    {
+        return out.isCharacterOutputStream();
+    }
+
+    public boolean isBinaryOutputStream() throws ConditionThrowable
+    {
+        return out.isBinaryOutputStream();
     }
 
     public LispObject typeOf()

@@ -2,7 +2,7 @@
  * ConcatenatedStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ConcatenatedStream.java,v 1.3 2004-03-10 01:54:13 piso Exp $
+ * $Id: ConcatenatedStream.java,v 1.4 2004-06-22 23:07:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,18 +31,28 @@ public final class ConcatenatedStream extends Stream
         isInputStream = true;
     }
 
-    public boolean isCharacterStream() throws ConditionThrowable
+    public boolean isCharacterInputStream() throws ConditionThrowable
     {
         if (streams == NIL)
             return true;
-        return ((Stream)streams.car()).isCharacterStream();
+        return ((Stream)streams.car()).isCharacterInputStream();
     }
 
-    public boolean isBinaryStream() throws ConditionThrowable
+    public boolean isBinaryInputStream() throws ConditionThrowable
     {
         if (streams == NIL)
             return true;
-        return ((Stream)streams.car()).isBinaryStream();
+        return ((Stream)streams.car()).isBinaryInputStream();
+    }
+
+    public boolean isCharacterOutputStream() throws ConditionThrowable
+    {
+        return false;
+    }
+
+    public boolean isBinaryOutputStream() throws ConditionThrowable
+    {
+        return false;
     }
 
     public LispObject typeOf()
