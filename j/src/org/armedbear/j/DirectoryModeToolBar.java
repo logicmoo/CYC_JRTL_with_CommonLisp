@@ -1,8 +1,8 @@
 /*
  * DirectoryModeToolBar.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: DirectoryModeToolBar.java,v 1.1.1.1 2002-09-24 16:08:14 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: DirectoryModeToolBar.java,v 1.2 2004-05-25 00:25:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@ public final class DirectoryModeToolBar extends ToolBar
         super(frame);
         addButton("New", ICON_NEW, "newBuffer");
         addButton("Open", ICON_OPEN, "openFile");
+        addButton("Save", ICON_SAVE, "saveFile", false);
         addButton("Close", ICON_CLOSE, "killBuffer");
         addSeparator();
         addButton("Back", ICON_BACK, "dirBack");
