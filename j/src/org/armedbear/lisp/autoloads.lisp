@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.100 2004-02-01 16:48:44 piso Exp $
+;;; $Id: autoloads.lisp,v 1.101 2004-02-01 20:42:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -207,6 +207,8 @@
 (in-package "EXTENSIONS")
 (export 'simple-search)
 (autoload 'simple-search "search.lisp")
+(export 'run-shell-command)
+(autoload 'run-shell-command)
 
 ;; JVM compiler.
 (in-package "JVM")
