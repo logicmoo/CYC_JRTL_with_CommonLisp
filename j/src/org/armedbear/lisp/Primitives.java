@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.491 2003-11-04 03:12:00 piso Exp $
+ * $Id: Primitives.java,v 1.492 2003-11-06 17:10:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1313,9 +1313,18 @@ public final class Primitives extends Module
                     symbol.setFunctionDocumentation(body.car());
                     body = body.cdr();
                 }
+                LispObject decls = NIL;
+                while (body.car() instanceof Cons && body.car().car() == Symbol.DECLARE) {
+                    decls = new Cons(body.car(), decls);
+                    body = body.cdr();
+                }
                 body = new Cons(symbol, body);
                 body = new Cons(Symbol.BLOCK, body);
                 body = new Cons(body, NIL);
+                while (decls != NIL) {
+                    body = new Cons(decls.car(), body);
+                    decls = decls.cdr();
+                }
                 Closure closure = new Closure(symbol.getName(), arglist, body,
                                               env);
                 closure.setArglist(arglist);
@@ -2085,7 +2094,8 @@ public final class Primitives extends Module
     // ### function-lambda-expression
     // function-lambda-expression function => lambda-expression, closure-p, name
     private static final Primitive1 FUNCTION_LAMBDA_EXPRESSION =
-        new Primitive1("function-lambda-expression") {
+        new Primitive1("function-lambda-expression")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispObject[] values = new LispObject[3];
@@ -4010,8 +4020,10 @@ public final class Primitives extends Module
     };
 
     // ### nreverse
-    public static final Primitive1 NREVERSE = new Primitive1("nreverse") {
-        public LispObject execute (LispObject arg) throws ConditionThrowable {
+    public static final Primitive1 NREVERSE = new Primitive1("nreverse")
+    {
+        public LispObject execute (LispObject arg) throws ConditionThrowable
+        {
             if (arg instanceof AbstractVector) {
                 ((AbstractVector)arg).nreverse();
                 return arg;
