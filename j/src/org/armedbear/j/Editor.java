@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.64 2003-06-13 00:35:56 piso Exp $
+ * $Id: Editor.java,v 1.65 2003-06-13 00:56:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2433,8 +2433,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         return KeyMap.getGlobalKeyMap().lookup(keyChar, keyCode, modifiers);
     }
 
-    public KeyMapping getKeyMapping(String command)
+    // Returns multiple values: mapping, mode.
+    // mode == null means it's a global mapping.
+    public Object[] getKeyMapping(String command)
     {
+        Mode mode = null;
         // Look in buffer-local keymap first.
         KeyMapping mapping = buffer.getKeyMapForMode().getKeyMapping(command);
         // If not found there, try global keymap.
@@ -2449,8 +2452,12 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 if (buffer.getKeyMapForMode().lookup(keyStroke) != null)
                     mapping = null;
             }
-        }
-        return mapping;
+        } else
+            mode = getMode();
+        Object[] values = new Object[2];
+        values[0] = mapping;
+        values[1] = mode;
+        return values;
     }
 
     private Macro macro;
@@ -6226,7 +6233,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                         execute(command, parameters);
                         if (interactive && parameters == null) {
                             // Suggest key binding if one is available.
-                            KeyMapping mapping = getKeyMapping(command);
+                            Object[] values = getKeyMapping(command);
+                            Debug.assertTrue(values != null);
+                            Debug.assertTrue(values.length == 2);
+                            KeyMapping mapping = (KeyMapping) values[0];
+                            Mode mode = (Mode) values[1];
                             if (mapping != null) {
                                 String statusText = statusBar.getText();
                                 boolean append =
@@ -6234,11 +6245,17 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                                 FastStringBuffer sb = new FastStringBuffer();
                                 if (append) {
                                     sb.append(statusText);
-                                    sb.append("      ");
+                                    sb.append("          ");
                                 }
                                 sb.append(command);
                                 sb.append(" is mapped to ");
                                 sb.append(mapping.getKeyText());
+                                if (mode != null) {
+                                    sb.append(" (");
+                                    sb.append(mode);
+                                    sb.append(" mode)");
+                                } else
+                                    sb.append(" (global mapping)");
                                 status(sb.toString());
                             }
                         }
