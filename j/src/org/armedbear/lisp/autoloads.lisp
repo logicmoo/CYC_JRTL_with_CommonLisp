@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.52 2003-10-28 23:26:14 piso Exp $
+;;; $Id: autoloads.lisp,v 1.53 2003-10-28 23:45:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -119,3 +119,5 @@
 (autoload-macro 'do-all-symbols)
 (autoload-macro '(trace untrace) "trace.lisp")
 (autoload-macro 'define-symbol-macro)
+(autoload-macro 'with-slots)
+(autoload-macro 'with-accessors)
