@@ -91,6 +91,7 @@ coerce
 compile
 compile-file
 compile-file-pathname
+compiled-function-p
 compiler-macro-function
 complement
 concatenate
