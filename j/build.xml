@@ -145,6 +145,8 @@
       <include name="gnu/regexp/MessagesBundle.properties"/>
       <include name="org/armedbear/lisp/build"/>
       <include name="org/armedbear/lisp/*.lisp"/>
+      <include name="org/armedbear/lisp/*.abcl"/>
+      <include name="org/armedbear/lisp/*.cls"/>
     </jar>
   </target>
 
