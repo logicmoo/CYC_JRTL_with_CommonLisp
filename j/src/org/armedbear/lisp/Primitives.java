@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.110 2003-03-12 18:38:10 piso Exp $
+ * $Id: Primitives.java,v 1.111 2003-03-12 19:57:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4016,6 +4016,21 @@ public final class Primitives extends Module
                 return second;
             } else
                 throw new TypeError(first, "function");
+        }
+    };
+
+    // Destructively alters the vector, changing its length to NEW-SIZE, which
+    // must be less than or equal to its current length.
+    // shrink-vector vector new-size => vector
+    private static final Primitive2 SHRINK_VECTOR =
+        new Primitive2("shrink-vector") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            AbstractVector v = checkVector(first);
+            int size = (int) Fixnum.getValue(second);
+            v.shrink(size);
+            return v;
         }
     };
 
