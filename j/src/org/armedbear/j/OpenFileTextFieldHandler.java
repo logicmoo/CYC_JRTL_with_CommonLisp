@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.6 2002-12-03 16:07:29 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.7 2002-12-03 16:19:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -438,17 +438,19 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         Buffer buffer = editor.getBuffer();
         if (buffer != null) {
             File file = buffer.getFile();
-            if (file != null && (file.isLocal() || file instanceof SshFile)) {
-                if (file.canonicalPath().equals("/"))
-                    currentDirectory = file;
-                else if (file.isDirectory())
-                    currentDirectory = file;
-                else
-                    currentDirectory = file.getParentFile();
+            if (file != null) {
+                if (file.isLocal() || file instanceof SshFile) {
+                    if (file.canonicalPath().equals("/"))
+                        currentDirectory = file;
+                    else if (file.isDirectory())
+                        currentDirectory = file;
+                    else
+                        currentDirectory = file.getParentFile();
+                }
             }
         }
         if (currentDirectory == null)
-            return null;
+            currentDirectory = Directories.getUserHomeDirectory();
         ArrayList completions = new ArrayList();
         final String sourcePath = checkSourcePath ? getSourcePath() : null;
         prefix = File.normalize(prefix);
