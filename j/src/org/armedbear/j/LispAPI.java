@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.36 2004-08-30 18:05:16 piso Exp $
+ * $Id: LispAPI.java,v 1.37 2004-08-31 18:14:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -378,10 +378,25 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### %set-line-flags
+    private static final Primitive2 _SET_LINE_FLAGS =
+        new Primitive2("%set-line-flags", PACKAGE_J, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Line line = checkLine(first);
+            int flags = Fixnum.getValue(second);
+            line.setFlags(flags);
+            return second;
+        }
+    };
+
     // ### char-after
     // Returns character immediately after marker.
     private static final Primitive1 CHAR_AFTER =
-        new Primitive1("char-after", PACKAGE_J, true) {
+        new Primitive1("char-after", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return LispCharacter.getInstance(checkMarker(arg).getChar());
@@ -391,7 +406,8 @@ public final class LispAPI extends Lisp
     // ### char-before
     // Returns character immediately before marker.
     private static final Primitive1 CHAR_BEFORE =
-        new Primitive1("char-before", PACKAGE_J, true) {
+        new Primitive1("char-before", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Position pos = checkMarker(arg).copy();
@@ -402,7 +418,8 @@ public final class LispAPI extends Lisp
     // ### forward-char
     // Move point right N characters (left if N is negative).
     private static final Primitive FORWARD_CHAR =
-        new Primitive("forward-char", PACKAGE_J, true) {
+        new Primitive("forward-char", PACKAGE_J, true)
+    {
         public LispObject execute() throws ConditionThrowable
         {
             return forwardChar(1);
