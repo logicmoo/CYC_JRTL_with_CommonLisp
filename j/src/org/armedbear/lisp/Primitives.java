@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.5 2003-01-28 17:54:16 piso Exp $
+ * $Id: Primitives.java,v 1.6 2003-01-30 17:43:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1033,7 +1033,7 @@ public final class Primitives extends Module
             body = new Cons(symbol, body);
             body = new Cons(Symbol.BLOCK, body);
             body = new Cons(body, NIL);
-            symbol.setSymbolFunction(new Closure(symbol.getName(),parameters,
+            symbol.setSymbolFunction(new Closure(symbol.getName(), parameters,
                 body, env));
             // INTERN returns multiple values, but DEFUN does not.
             setValues(null);
@@ -2427,6 +2427,40 @@ public final class Primitives extends Module
             result = progn(args.cdr(), env);
         return result;
     }
+
+    // ### flet
+    // e.g. (flet ((double (x) (+ x x))) ... )
+    public static final SpecialOperator FLET = new SpecialOperator("flet") {
+        public LispObject execute(LispObject args, Environment env)
+            throws LispException
+        {
+            // First argument is a list of local function definitions.
+            LispObject defs = checkList(args.car());
+            LispObject result;
+            if (defs != NIL) {
+                Environment oldDynEnv = dynEnv;
+                Environment ext = new Environment(env);
+                while (defs != NIL) {
+                    LispObject def = checkList(defs.car());
+                    Symbol symbol = checkSymbol(def.car());
+                    LispObject rest = def.cdr();
+                    LispObject parameters = rest.car();
+                    LispObject body = rest.cdr();
+                    body = new Cons(symbol, body);
+                    body = new Cons(Symbol.BLOCK, body);
+                    body = new Cons(body, NIL);
+                    Closure closure =
+                        new Closure(symbol.getName(), parameters, body, env);
+                    ext.bindFunctional(symbol, closure);
+                    defs = defs.cdr();
+                }
+                result = progn(args.cdr(), ext);
+                dynEnv = oldDynEnv;
+            } else
+                result = progn(args.cdr(), env);
+            return result;
+        }
+    };
 
     // ### block
     private static final SpecialOperator BLOCK = new SpecialOperator("block") {
