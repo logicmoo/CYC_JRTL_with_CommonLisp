@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandInterpreter.java,v 1.26 2004-09-02 21:25:13 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.27 2004-10-17 13:33:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -407,6 +407,14 @@ public class CommandInterpreter extends Buffer
                 ed.getDisplay().setReframe(-2);
                 ed.setUpdateFlag(REPAINT);
                 ed.updateDisplay();
+            } else {
+                View view = ed.getView(this);
+                if (view != null) {
+                    Position end = getEnd();
+                    view.setDot(end);
+                    view.setCaretCol(getCol(end));
+                    view.setMark(null);
+                }
             }
         }
     }
