@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: signal.lisp,v 1.1 2003-12-14 17:14:41 piso Exp $
+;;; $Id: signal.lisp,v 1.2 2004-03-01 17:25:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,17 +21,22 @@
 
 (in-package "SYSTEM")
 
+(defvar *maximum-error-depth* 10)
+
+(defvar *current-error-depth* 0)
+
 (defvar *handler-clusters* ())
 
 (defvar *break-on-signals* nil)
 
+;; Redefined in clos.lisp.
 (defun coerce-to-condition (datum arguments default-type fun-name)
   (cond ((typep datum 'condition)
 	 (when arguments
            (error 'simple-type-error
                   :datum arguments
                   :expected-type 'null
-                  :format-control "you may not supply additional arguments when giving ~S to ~S"
+                  :format-control "You may not supply additional arguments when giving ~S to ~S."
                   :format-arguments (list datum fun-name)))
 	 datum)
 	((symbolp datum)
@@ -44,7 +49,7 @@
 	 (error 'simple-type-error
 		:datum datum
 		:expected-type '(or symbol string)
-		:format-control "bad argument to ~S: ~S"
+		:format-control "Bad argument to ~S: ~S."
 		:format-arguments (list fun-name datum)))))
 
 (defun signal (datum &rest arguments)
@@ -63,8 +68,14 @@
 	  (when (typep condition (car handler))
 	    (funcall (cdr handler) condition)))))
     (when (typep condition 'error)
-      (setf *saved-backtrace* (backtrace-as-list))
-      (invoke-debugger condition))
+      (let ((*current-error-depth* (1+ *current-error-depth*)))
+        (cond ((> *current-error-depth* *maximum-error-depth*)
+               (%format t "~%Help! Maximum error depth exceeded (~D nested errors).~%"
+                        *current-error-depth*)
+               (debug-loop))
+              (t
+               (setf *saved-backtrace* (backtrace-as-list))
+               (invoke-debugger condition)))))
     nil))
 
 (defmacro handler-bind (bindings &body forms)
