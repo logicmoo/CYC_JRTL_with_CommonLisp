@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.20 2002-12-12 19:44:34 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.21 2002-12-13 14:27:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -669,8 +669,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                      completion.toLowerCase().startsWith(originalText))
                 select = true;
             if (select) {
-                textField.setCaretPosition(completion.length());
-                textField.moveCaretPosition(originalText.length());
+                textField.setCaretPosition(originalText.length());
+                textField.moveCaretPosition(completion.length());
             }
         }
     }
@@ -887,9 +887,11 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             if (originalText != null) {
                 int end = text.length();
                 int begin = end - originalText.length();
-                if (text.substring(begin, end).equalsIgnoreCase(originalText)) {
-                    text = text.substring(0, begin);
-                    text += originalText;
+                if (end > begin) {
+                    if (text.substring(begin, end).equalsIgnoreCase(originalText)) {
+                        text = text.substring(0, begin);
+                        text += originalText;
+                    }
                 }
             }
             // Append typed char.
