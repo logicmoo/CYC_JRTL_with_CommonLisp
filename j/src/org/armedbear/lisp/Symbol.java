@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.113 2004-03-09 11:09:34 piso Exp $
+ * $Id: Symbol.java,v 1.114 2004-03-10 20:07:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -399,22 +399,26 @@ public class Symbol extends LispObject
 
     public String toString()
     {
-        boolean printReadably = (_PRINT_READABLY_.symbolValueNoThrow() != NIL);
-        // "Specifically, if *PRINT-READABLY* is true, printing proceeds as if
-        // *PRINT-ESCAPE*, *PRINT-ARRAY*, and *PRINT-GENSYM* were also true,
-        // and as if *PRINT-LENGTH*, *PRINT-LEVEL*, and *PRINT-LINES* were
-        // false."
-        boolean printEscape =
-            printReadably || (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL);
+        if (_PRINT_READABLY_.symbolValueNoThrow() != NIL) {
+            StringBuffer sb = new StringBuffer();
+            if (pkg == PACKAGE_KEYWORD) {
+                sb.append(':');
+            } else {
+                sb.append(multipleEscape(pkg.getName()));
+                sb.append("::");
+            }
+            sb.append(multipleEscape(name));
+            return sb.toString();
+        }
+        boolean printEscape = (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL);
         LispObject printCase = _PRINT_CASE_.symbolValueNoThrow();
         LispObject readtableCase = getCurrentReadtable().getReadtableCase();
         if (pkg == PACKAGE_KEYWORD) {
             if (printCase == Keyword.DOWNCASE)
                 return ":".concat(name.toLowerCase());
-            else if (printCase == Keyword.CAPITALIZE)
-                return capitalize(name, readtableCase);
-            else
-                return ":".concat(name);
+            if (printCase == Keyword.CAPITALIZE)
+                return ":".concat(capitalize(name, readtableCase));
+            return ":".concat(name);
         }
         if (!printEscape) {
             if (readtableCase == Keyword.UPCASE) {
@@ -456,28 +460,31 @@ public class Symbol extends LispObject
                     escape = true;
                     break;
                 }
-                if (Character.isLowerCase(c)) {
-                    escape = true;
-                    break;
+                if (readtableCase == Keyword.UPCASE) {
+                    if (Character.isLowerCase(c)) {
+                        escape = true;
+                        break;
+                    }
+                } else if (readtableCase == Keyword.DOWNCASE) {
+                    if (Character.isUpperCase(c)) {
+                        escape = true;
+                        break;
+                    }
                 }
             }
         }
-        String s;
-        if (escape) {
-            StringBuffer sb = new StringBuffer("|");
-            for (int i = 0; i < length; i++) {
-                char c = name.charAt(i);
-                if (c == '|' || c == '\\')
-                    sb.append('\\');
-                sb.append(c);
-            }
-            sb.append('|');
-            s = sb.toString();
-        } else
-            s = name;
+        String s = escape ? multipleEscape(name) : name;
         if (!escape) {
-            if (printCase == Keyword.DOWNCASE)
+            if (readtableCase == Keyword.PRESERVE)
+                ;
+            else if (readtableCase == Keyword.INVERT)
+                s = invert(s);
+            else if (printCase == Keyword.DOWNCASE)
                 s = s.toLowerCase();
+            else if (printCase == Keyword.UPCASE)
+                s = s.toUpperCase();
+            else if (printCase == Keyword.CAPITALIZE)
+                s = capitalize(s, readtableCase);
         }
         if (pkg == null || pkg == NIL) {
             if (_PRINT_GENSYM_.symbolValueNoThrow() != NIL)
@@ -503,6 +510,20 @@ public class Symbol extends LispObject
         else
             sb.append("::");
         sb.append(s);
+        return sb.toString();
+    }
+
+    private static final String multipleEscape(String s)
+    {
+        StringBuffer sb = new StringBuffer("|");
+        final int limit = s.length();
+        for (int i = 0; i < limit; i++) {
+            char c = s.charAt(i);
+            if (c == '|' || c == '\\')
+                sb.append('\\');
+            sb.append(c);
+        }
+        sb.append('|');
         return sb.toString();
     }
 
