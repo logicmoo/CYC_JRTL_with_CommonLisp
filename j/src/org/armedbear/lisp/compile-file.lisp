@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.65 2005-03-21 00:34:47 piso Exp $
+;;; $Id: compile-file.lisp,v 1.66 2005-03-22 00:32:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -289,7 +289,8 @@
                                      stream compile-time-too)
               (return-from process-toplevel-form))
             (when compile-time-too
-              (eval form))))))
+              (eval form))
+            (setf form (precompile-form form nil))))))
   (dump-form form stream))
 
 (defun process-toplevel-macrolet (form stream compile-time-too)
