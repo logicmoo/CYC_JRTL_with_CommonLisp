@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.16 2004-09-11 19:18:01 piso Exp $
+;;; $Id: slime.lisp,v 1.17 2004-09-12 17:53:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,7 +36,9 @@
            #:slime-space
            #:edit-definition
            #:eval-region
-           #:eval-last-expression
+           #:slime-eval-last-expression
+           #:slime-eval-defun
+           #:slime-compile-defun
            #:slime-compile-file
            #:slime-compile-and-load-file))
 
@@ -384,11 +386,23 @@
 (defun display-eval-result (value)
   (status value))
 
-(defun eval-last-expression ()
+(defun slime-eval-last-expression ()
   (let* ((string (last-expression))
          (package (find-buffer-package)))
     (slime-eval-async
      `(swank:eval-string-async ,string ,package) 'display-eval-result)))
+
+(defun slime-eval-defun ()
+  (let* ((string (defun-at-point))
+         (package (find-buffer-package)))
+    (slime-eval-async
+     `(swank:eval-string-async ,string ,package) 'display-eval-result)))
+
+(defun slime-compile-defun ()
+  (let* ((string (defun-at-point))
+         (package (find-buffer-package)))
+    (slime-eval-async
+     `(swank:swank-compile-string ,string ,package) 'display-eval-result)))
 
 (defun slime-compile-file ()
   (let ((pathname (buffer-pathname)))
@@ -409,5 +423,7 @@
 (map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp Shell")
 (map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp")
 (map-key-for-mode "Ctrl Alt R" "(slime:eval-region)" "Lisp")
-(map-key-for-mode "Ctrl Alt E" "(slime:eval-last-expression)" "Lisp")
+(map-key-for-mode "Ctrl Alt E" "(slime:slime-eval-last-expression)" "Lisp")
 (map-key-for-mode "Ctrl Alt K" "(slime:slime-compile-and-load-file)" "Lisp")
+(map-key-for-mode "Ctrl Alt X" "(slime:slime-eval-defun)" "Lisp")
+(map-key-for-mode "Ctrl Alt C" "(slime:slime-compile-defun)" "Lisp")
