@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: typep.lisp,v 1.20 2004-02-13 00:29:07 piso Exp $
+;;; $Id: typep.lisp,v 1.21 2004-10-20 00:17:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -136,6 +136,10 @@
        (eql object (car i)))
       (SATISFIES
        (funcall (car i) object))
+      (NIL-VECTOR
+       (and (simple-typep object 'nil-vector)
+            (or (null i)
+                (eql (car i) (length object)))))
       (t
        nil))))
 
