@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispString.java,v 1.80 2004-02-16 00:46:22 piso Exp $
+ * $Id: LispString.java,v 1.81 2004-02-16 01:25:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -311,21 +311,36 @@ public final class LispString extends AbstractVector
         }
     }
 
-    public LispString adjustArray(int size, LispObject initialElement)
+    public LispString adjustArray(int size, LispObject initialElement,
+                                  LispObject initialContents)
         throws ConditionThrowable
     {
         if (chars.length != size) {
             char[] newArray = new char[size];
-            System.arraycopy(chars, 0, newArray, 0,
-                             Math.min(chars.length, size));
-            if (size > chars.length) {
-                final char c;
-                if (initialElement != NIL)
-                    c = LispCharacter.getValue(initialElement);
-                else
-                    c = 0;
-                for (int i = chars.length; i < size; i++)
-                    newArray[i] = c;
+            if (initialContents != NIL) {
+                if (initialContents.listp()) {
+                    LispObject list = initialContents;
+                    for (int i = 0; i < size; i++) {
+                        newArray[i] = LispCharacter.getValue(list.car());
+                        list = list.cdr();
+                    }
+                } else if (initialContents.vectorp()) {
+                    for (int i = 0; i < size; i++)
+                        newArray[i] = LispCharacter.getValue(initialContents.elt(i));
+                } else
+                    signal(new TypeError(initialContents, Symbol.SEQUENCE));
+            } else {
+                System.arraycopy(chars, 0, newArray, 0,
+                                 Math.min(chars.length, size));
+                if (size > chars.length) {
+                    final char c;
+                    if (initialElement != NIL)
+                        c = LispCharacter.getValue(initialElement);
+                    else
+                        c = 0;
+                    for (int i = chars.length; i < size; i++)
+                        newArray[i] = c;
+                }
             }
             chars = newArray;
         }
