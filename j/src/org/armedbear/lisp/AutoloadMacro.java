@@ -2,7 +2,7 @@
  * AutoloadMacro.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AutoloadMacro.java,v 1.12 2004-03-31 03:06:53 piso Exp $
+ * $Id: AutoloadMacro.java,v 1.13 2004-07-09 17:39:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,14 +48,14 @@ public final class AutoloadMacro extends Autoload
         Load.loadSystemFile(getFileName(), true);
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer("AUTOLOAD-MACRO ");
-        sb.append(symbol);
+        StringBuffer sb = new StringBuffer("#<AUTOLOAD-MACRO ");
+        sb.append(getSymbol().writeToString());
         sb.append(" \"");
         sb.append(getFileName());
-        sb.append('"');
-        return unreadableString(sb.toString());
+        sb.append("\">");
+        return sb.toString();
     }
 
     // ### autoload-macro
