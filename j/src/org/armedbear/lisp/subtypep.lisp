@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.32 2003-11-17 18:25:21 piso Exp $
+;;; $Id: subtypep.lisp,v 1.33 2003-12-27 20:50:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -306,6 +306,8 @@
            (return-from subtypep (values t t)))
           ((null (or i1 i2))
            (return-from subtypep (values (simple-subtypep t1 t2) t)))
+          ((eq t2 (find-class t1 nil))
+           (return-from subtypep (values t t)))
           ((eq t2 'sequence)
            (cond ((memq t1 '(null cons list))
                   (values t t))
