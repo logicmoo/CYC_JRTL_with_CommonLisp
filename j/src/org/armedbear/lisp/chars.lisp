@@ -1,7 +1,7 @@
 ;;; chars.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: chars.lisp,v 1.9 2004-02-09 13:07:20 piso Exp $
+;;; $Id: chars.lisp,v 1.10 2004-03-11 09:37:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,12 +35,8 @@
 	  ;; Else, fail.
 	  (t nil))))
 
-
 (defun alphanumericp (char)
-  (declare (character char))
-  (let ((m (char-code char)))
-    (or (< 47 m 58) (< 64 m 91) (< 96 m 123))))
-
+  (or (digit-char-p char) (alpha-char-p char)))
 
 (defun char/= (character &rest more-characters)
   (do* ((head character (car list))
@@ -51,7 +47,6 @@
 	      (if (eql head (car l)) (return nil)))
       (return nil))))
 
-
 (defun char< (character &rest more-characters)
   (do* ((c character (car list))
 	(list more-characters (cdr list)))
@@ -59,7 +54,6 @@
     (unless (< (char-int c)
 	       (char-int (car list)))
       (return nil))))
-
 
 (defun char> (character &rest more-characters)
   (do* ((c character (car list))
@@ -69,7 +63,6 @@
 	       (char-int (car list)))
       (return nil))))
 
-
 (defun char<= (character &rest more-characters)
   (do* ((c character (car list))
 	(list more-characters (cdr list)))
@@ -77,7 +70,6 @@
     (unless (<= (char-int c)
 		(char-int (car list)))
       (return nil))))
-
 
 (defun char>= (character &rest more-characters)
   (do* ((c character (car list))
@@ -87,11 +79,9 @@
 		(char-int (car list)))
       (return nil))))
 
-
 (defmacro equal-char-code (character)
   `(let ((ch (char-code ,character)))
      (if (< 96 ch 123) (- ch 32) ch)))
-
 
 (defun char-not-equal (character &rest more-characters)
   (do* ((head character (car list))
