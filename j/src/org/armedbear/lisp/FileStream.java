@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.16 2004-09-18 20:28:19 piso Exp $
+ * $Id: FileStream.java,v 1.17 2004-10-02 16:54:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,9 @@ import java.io.RandomAccessFile;
 
 public final class FileStream extends Stream
 {
+    private static final boolean isPlatformWindows =
+        Utilities.isPlatformWindows();
+
     private static final int BUFSIZE = 4096;
 
     private final RandomAccessFile raf;
@@ -155,7 +158,20 @@ public final class FileStream extends Stream
     protected int _readChar() throws ConditionThrowable
     {
         try {
-            return raf.read();
+            if (isPlatformWindows) {
+                int c = raf.read();
+                if (c == '\r') {
+                    int c2 = raf.read();
+                    if (c2 == '\n')
+                        return c2;
+                    // '\r' was not followed by '\n'
+                    long pos = raf.getFilePointer();
+                    if (pos > 0)
+                        raf.seek(pos - 1);
+                }
+                return c;
+            } else
+                return raf.read();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -170,6 +186,16 @@ public final class FileStream extends Stream
             long pos = raf.getFilePointer();
             if (pos > 0)
                 raf.seek(pos - 1);
+            if (isPlatformWindows && n == '\n') {
+                // Check for preceding '\r'.
+                pos = raf.getFilePointer();
+                if (pos > 0) {
+                    raf.seek(pos - 1);
+                    n = raf.read();
+                    if (n == '\r')
+                        raf.seek(pos - 1);
+                }
+            }
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
