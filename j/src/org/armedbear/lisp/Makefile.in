@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.171 2004-04-30 01:52:27 piso Exp $
+# $Id: Makefile.in,v 1.172 2004-05-02 01:56:02 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -247,6 +247,8 @@ clean:
 	-rm -rf *.fasl
 	-rm -rf *.cls
 	if [ -e build ]; then rm build; fi
+	if [ -e ControlC.h ]; then rm ControlC.h fi
+	if [ -e libabcl.so ]; then rm libabcl.so fi
 
 Makefile: Makefile.in ../../../../config.status
 	cd ../../../.. && $(SHELL) ./config.status
