@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.395 2005-02-10 01:43:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.396 2005-02-10 12:53:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5730,9 +5730,11 @@
               (sys::%set-lambda-name compiled-definition name)
               (sys:set-call-count compiled-definition (sys:call-count definition))
               (sys::%set-arglist compiled-definition (sys::arglist definition))
-              (if (macro-function name)
-                  (setf (fdefinition name) (sys::make-macro name compiled-definition))
-                  (setf (fdefinition name) compiled-definition)))
+              (let ((*warn-on-redefinition* nil))
+                (setf (fdefinition name)
+                      (if (macro-function name)
+                          (sys::make-macro name compiled-definition)
+                          compiled-definition))))
             (cond ((zerop (+ jvm::*errors* jvm::*warnings* jvm::*style-warnings*))
                    (setf warnings-p nil failure-p nil))
                   ((zerop (+ jvm::*errors* jvm::*warnings*))
