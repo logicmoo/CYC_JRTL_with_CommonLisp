@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.33 2003-10-20 17:36:17 piso Exp $
+;;; $Id: defclass.lisp,v 1.34 2003-10-20 18:06:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1134,7 +1134,25 @@
               (let ((result ()))
                 (dolist (primary primaries)
                   (push (funcall (method-function primary) args nil) result))
-                (reverse result))))
+                (nreverse result))))
+          (APPEND
+           #'(lambda (args)
+              (let ((result ()))
+                (dolist (primary primaries)
+                  (setf result (append result (funcall (method-function primary) args nil))))
+                result)))
+          (NCONC
+           #'(lambda (args)
+              (let ((result ()))
+                (dolist (primary primaries)
+                  (setf result (nconc result (funcall (method-function primary) args nil))))
+                result)))
+          (PROGN
+           #'(lambda (args)
+              (let ((result nil))
+                (dolist (primary primaries)
+                  (setf result (funcall (method-function primary) args nil)))
+                result)))
           (AND
            #'(lambda (args)
               (let ((result t))
