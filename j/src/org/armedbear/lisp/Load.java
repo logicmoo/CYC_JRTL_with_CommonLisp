@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.7 2003-03-04 12:57:38 piso Exp $
+ * $Id: Load.java,v 1.8 2003-03-14 18:49:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,7 +149,7 @@ public final class Load extends Lisp
         Environment oldDynEnv = dynEnv;
         dynEnv = new Environment(dynEnv);
         dynEnv.bind(_PACKAGE_, _PACKAGE_.symbolValue());
-        long loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue());
+        int loadDepth = Fixnum.getInt(_LOAD_DEPTH_.symbolValue());
         dynEnv.bind(_LOAD_DEPTH_, new Fixnum(++loadDepth));
         StringBuffer sb = new StringBuffer();
         for (long i = 0; i < loadDepth; i++)
