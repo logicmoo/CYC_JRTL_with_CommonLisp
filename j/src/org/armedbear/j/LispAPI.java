@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.50 2004-09-07 02:29:04 piso Exp $
+ * $Id: LispAPI.java,v 1.51 2004-09-07 20:22:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -218,6 +218,30 @@ public final class LispAPI extends Lisp
         {
             String name = checkBuffer(arg).getTitle();
             return name != null ? new SimpleString(name) : NIL;
+        }
+    };
+
+    // ### get-buffer
+    private static final Primitive1 GET_BUFFER =
+        new Primitive1("get-buffer", PACKAGE_J, true, "name")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof AbstractString) {
+                String name = arg.getStringValue();
+                BufferIterator iterator = new BufferIterator();
+                while (iterator.hasNext()) {
+                    Buffer buffer = iterator.nextBuffer();
+                    if (buffer.getTitle().equals(name))
+                        return new JavaObject(buffer);
+                }
+                return NIL;
+            }
+            if (arg instanceof JavaObject) {
+                if (((JavaObject)arg).getObject() instanceof Buffer)
+                    return arg;
+            }
+            return NIL;
         }
     };
 
@@ -924,7 +948,8 @@ public final class LispAPI extends Lisp
 
     // ### insert
     private static final Primitive INSERT =
-        new Primitive("insert", PACKAGE_J, true) {
+        new Primitive("insert", PACKAGE_J, true, "&rest args")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0)
@@ -980,12 +1005,26 @@ public final class LispAPI extends Lisp
         }
     };
 
-    private static final Primitive0 UNDO =
-        new Primitive0("undo", PACKAGE_J, true)
+    // ### undo
+    private static final Primitive UNDO =
+        new Primitive("undo", PACKAGE_J, true, "&optional count")
     {
         public LispObject execute() throws ConditionThrowable
         {
             Editor.currentEditor().undo();
+            return NIL;
+        }
+
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Editor editor = Editor.currentEditor();
+            int count;
+            if (arg == NIL)
+                count = 1;
+            else
+                count = Fixnum.getValue(arg);
+            for (int i = 0; i < count; i++)
+                editor.undo();
             return NIL;
         }
     };
@@ -1151,10 +1190,12 @@ public final class LispAPI extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Buffer buffer = checkBuffer(arg);
-            Editor editor = Editor.currentEditor();
-            editor.makeNext(buffer);
-            editor.activateInOtherWindow(buffer);
+            if (arg != NIL) {
+                Buffer buffer = checkBuffer(arg);
+                Editor editor = Editor.currentEditor();
+                editor.makeNext(buffer);
+                editor.activateInOtherWindow(buffer);
+            }
             return arg;
         }
     };
@@ -1303,6 +1344,28 @@ public final class LispAPI extends Lisp
         {
             String s = LispMode.getCurrentDefun(Editor.currentEditor());
             return s != null ? new SimpleString(s) : NIL;
+        }
+    };
+
+    // ### forward-sexp
+    private static final Primitive FORWARD_SEXP =
+        new Primitive("forward-sexp", PACKAGE_J, true, "")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            LispMode.forwardSexp();
+            return NIL;
+        }
+    };
+
+    // ### backward-sexp
+    private static final Primitive BACKWARD_SEXP =
+        new Primitive("backward-sexp", PACKAGE_J, true, "")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            LispMode.backwardSexp();
+            return NIL;
         }
     };
 
