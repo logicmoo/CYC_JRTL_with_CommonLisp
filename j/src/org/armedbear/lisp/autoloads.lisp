@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.64 2003-11-14 17:56:11 piso Exp $
+;;; $Id: autoloads.lisp,v 1.65 2003-11-21 02:56:15 dmcnaught Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -132,6 +132,24 @@
 (in-package "JAVA")
 (export 'jregister-handler "JAVA")
 (autoload 'jregister-handler "java.lisp")
+(export 'jclass-name "JAVA")
+(autoload 'jclass-name "java.lisp")
+(export 'jobject-class "JAVA")
+(autoload 'jobject-class "java.lisp")
+(export 'jclass-constructors "JAVA")
+(autoload 'jclass-constructors "java.lisp")
+(export 'jconstructor-params "JAVA")
+(autoload 'jconstructor-params "java.lisp")
+(export 'jclass-fields "JAVA")
+(autoload 'jclass-fields "java.lisp")
+(export 'jfield-type "JAVA")
+(autoload 'jfield-type "java.lisp")
+(export 'jclass-methods "JAVA")
+(autoload 'jclass-methods "java.lisp")
+(export 'jinstance-of-p "JAVA")
+(autoload 'jinstance-of-p "java.lisp")
+
+
 
 ;; Profiler.
 (in-package "PROFILER")
