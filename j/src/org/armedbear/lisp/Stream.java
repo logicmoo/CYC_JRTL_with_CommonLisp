@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.64 2004-04-24 15:51:19 piso Exp $
+ * $Id: Stream.java,v 1.65 2004-05-01 23:38:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -507,7 +507,8 @@ public class Stream extends LispObject
         LispObject obj = read(true, NIL, true);
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
-        return signal(new LispError("invalid complex number format #C" + obj));
+        return signal(new LispError("Invalid complex number format: #C" +
+                                    obj.writeToString()));
     }
 
     private String readMultipleEscape() throws ConditionThrowable
