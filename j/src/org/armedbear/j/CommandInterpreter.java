@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.13 2003-01-04 15:13:55 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.14 2003-01-15 20:27:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -340,11 +340,16 @@ public class CommandInterpreter extends Buffer
         }
         try {
             Position pos = getEnd();
-            insertString(pos, s);
-            if (needsRenumbering())
-                renumber();
-            enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
-            posEndOfOutput = pos.copy();
+            if (pos != null) {
+                insertString(pos, s);
+                if (needsRenumbering())
+                    renumber();
+                enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
+                posEndOfOutput = pos.copy();
+            } else {
+                setText(s);
+                posEndOfOutput = getEnd().copy();
+            }
         }
         finally {
             unlockWrite();
