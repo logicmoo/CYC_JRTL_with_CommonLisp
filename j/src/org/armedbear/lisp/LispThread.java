@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.2 2003-04-27 17:17:19 piso Exp $
+ * $Id: LispThread.java,v 1.3 2003-04-27 17:56:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -282,6 +282,14 @@ public final class LispThread extends LispObject
           stream.writeString(raw);
           return;
       }
+  }
+
+  public String toString()
+  {
+      StringBuffer sb = new StringBuffer("#<THREAD @ ");
+      sb.append(Integer.toHexString(hashCode()));
+      sb.append(">");
+      return sb.toString();
   }
 
   // ### make-thread
