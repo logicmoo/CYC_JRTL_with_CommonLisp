@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.690 2004-10-10 17:12:58 piso Exp $
+ * $Id: Primitives.java,v 1.691 2004-10-19 23:26:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2045,7 +2045,7 @@ public final class Primitives extends Lisp
 
     // ### simple-typep
     private static final Primitive2 SIMPLE_TYPEP =
-        new Primitive2("simple-typep", PACKAGE_SYS, false)
+        new Primitive2("simple-typep", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
