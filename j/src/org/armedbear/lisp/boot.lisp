@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.14 2003-03-07 02:28:00 piso Exp $
+;;; $Id: boot.lisp,v 1.15 2003-03-07 03:16:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@
 (in-package "COMMON-LISP")
 
 (export '(plusp minusp integerp
+          character
           open
           call-arguments-limit
           lambda-parameters-limit
@@ -56,6 +57,9 @@
 ;; FIXME
 (defun fixnump (n)
   (numberp n))
+
+(defun character (x)
+  (coerce x 'character))
 
 (defun open (filename
 	     &key
