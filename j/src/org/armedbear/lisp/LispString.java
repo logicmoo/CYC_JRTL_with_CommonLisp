@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.48 2003-08-03 01:33:44 piso Exp $
+ * $Id: LispString.java,v 1.49 2003-08-03 01:50:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ public final class LispString extends AbstractVector
 
     public LispObject getElementType()
     {
-        return Symbol.BASE_CHAR;
+        return Symbol.CHARACTER;
     }
 
     public boolean isSimpleVector()
