@@ -2,7 +2,7 @@
  * MailboxEntry.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MailboxEntry.java,v 1.1.1.1 2002-09-24 16:10:05 piso Exp $
+ * $Id: MailboxEntry.java,v 1.2 2003-05-30 15:09:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,7 +166,21 @@ public abstract class MailboxEntry implements Serializable
         }
         while (s.toLowerCase().endsWith("(fwd)"))
             s = s.substring(0, s.length()-5).trim();
-        return s;
+
+        // Some broken mailers (or MTAs) arbitrarily break the subject line
+        // after 74 characters. If this happens to be in the middle of a word,
+        // we'll end up with an extra LWSP char in the subject string when we
+        // unfold the header, meaning we won't get an exact match with the
+        // subject of the message being replied to, which is the whole point
+        // here. So we strip out all LWSP chars before returning the base
+        // subject.
+        FastStringBuffer sb = new FastStringBuffer();
+        for (int i = 0, limit = s.length(); i < limit; i++) {
+            char c = s.charAt(i);
+            if (c != ' ' && c != '\t')
+                sb.append(c);
+        }
+        return sb.toString();
     }
 
     public final boolean subjectIsReply()
