@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.13 2003-02-27 19:11:49 piso Exp $
+ * $Id: Symbol.java,v 1.14 2003-03-01 01:10:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@ public class Symbol extends LispObject
     public static final Symbol NULL               = export("NULL");
     public static final Symbol PACKAGE            = export("PACKAGE");
     public static final Symbol SEQUENCE           = export("SEQUENCE");
+    public static final Symbol SIMPLE_BASE_STRING = export("SIMPLE-BASE-STRING");
     public static final Symbol SIMPLE_BIT_VECTOR  = export("SIMPLE-BIT-VECTOR");
     public static final Symbol SIMPLE_STRING      = export("SIMPLE-STRING");
     public static final Symbol SIMPLE_VECTOR      = export("SIMPLE-VECTOR");
