@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.77 2004-03-09 18:59:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.78 2004-03-10 16:30:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2327,21 +2327,20 @@
 (defun compile-form (form &optional for-effect)
   (cond
    ((consp form)
-    (let ((op (car form))
-          (args (cdr form)))
-      (when (macro-function op)
-        (compile-form (macroexpand form))
-        (return-from compile-form))
+    (let ((op (car form)))
       (when (symbolp op)
         (let ((handler (get op 'jvm-compile-handler)))
           (when handler
             (funcall handler form for-effect)
             (return-from compile-form))))
+      (when (macro-function op)
+        (compile-form (macroexpand form))
+        (return-from compile-form))
       (cond
        ((special-operator-p op)
         (error "COMPILE-FORM unsupported special operator ~S" op))
        (t ; Function call.
-        (compile-function-call op args for-effect)))))
+        (compile-function-call op (cdr form) for-effect)))))
    ((eq form '())
     (unless for-effect
       (emit-push-nil)
