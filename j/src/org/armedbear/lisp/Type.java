@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.17 2003-09-08 17:15:47 piso Exp $
+ * $Id: Type.java,v 1.18 2003-09-08 17:41:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,7 +148,7 @@ public class Type extends Lisp
 
     // Subtypes of SYMBOL
     public static final Type BOOLEAN   = new Type(Symbol.BOOLEAN, SYMBOL);
-    public static final Type KEYWORD   = new Type(Symbol.KEYWORD, SYMBOL);
+    public static final Type KEYWORD   = new Type(Symbol.KEYWORD, SYMBOL, ATOM);
 
     // Subtypes of SEQUENCE
     public static final Type VECTOR    = new Type(Symbol.VECTOR, ARRAY, SEQUENCE);
