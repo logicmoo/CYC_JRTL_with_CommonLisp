@@ -2,7 +2,7 @@
  * ToolBarButton.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ToolBarButton.java,v 1.1.1.1 2002-09-24 16:08:25 piso Exp $
+ * $Id: ToolBarButton.java,v 1.2 2002-10-02 18:22:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,11 +48,15 @@ public final class ToolBarButton extends JButton implements ActionListener,
         setRequestFocusEnabled(false);
     }
 
-    public void setIconFromFile(String iconFile)
+    public void setIconFromFile(String filename)
     {
-        URL url = Editor.class.getResource("images/" + iconFile);
-        if (url != null)
-            setIcon(new ImageIcon(url));
+        if (Utilities.isFilenameAbsolute(filename))
+            setIcon(new ImageIcon(filename));
+        else {
+            URL url = Editor.class.getResource("images/" + filename);
+            if (url != null)
+                setIcon(new ImageIcon(url));
+        }
     }
 
     protected void paintBorder(Graphics g)
