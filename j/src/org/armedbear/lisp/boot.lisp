@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.80 2003-07-31 18:53:03 piso Exp $
+;;; $Id: boot.lisp,v 1.81 2003-08-03 19:06:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -273,4 +273,8 @@
 
 ;; FIXME
 (defmacro check-type (place typespec &optional string)
+  nil)
+
+;; FIXME
+(defun warn (&rest args)
   nil)
