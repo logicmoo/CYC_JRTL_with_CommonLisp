@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.71 2003-09-14 17:36:12 piso Exp $
+ * $Id: Symbol.java,v 1.72 2003-09-15 03:52:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -365,7 +365,16 @@ public class Symbol extends LispObject
 
         boolean escape = false;
         for (int i = name.length(); i-- > 0;) {
-            if (Character.isLowerCase(name.charAt(i))) {
+            char c = name.charAt(i);
+            if (c == '(' || c == ')') {
+                escape = true;
+                break;
+            }
+            if (Character.isWhitespace(c)) {
+                escape = true;
+                break;
+            }
+            if (Character.isLowerCase(c)) {
                 escape = true;
                 break;
             }
