@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fixme.lisp,v 1.3 2003-08-15 15:45:33 piso Exp $
+;;; $Id: fixme.lisp,v 1.4 2003-08-16 13:24:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -56,6 +56,9 @@
 
 (defun compile-file (&rest args)
   (values nil nil nil))
+
+(defun compile-file-pathname (pathname)
+  (concatenate 'string (namestring pathname) ".compiled"))
 
 (defvar *readtable* nil)
 
