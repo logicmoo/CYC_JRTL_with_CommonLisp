@@ -1,0 +1,76 @@
+/*
+ * SocketStream.java
+ *
+ * Copyright (C) 2004 Peter Graves
+ * $Id: SocketStream.java,v 1.1 2004-05-25 18:05:01 piso Exp $
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package org.armedbear.lisp;
+
+import java.net.Socket;
+
+public final class SocketStream extends TwoWayStream
+{
+    private final Socket socket;
+
+    public SocketStream(Socket socket, TwoWayStream stream)
+    {
+	super(stream, stream);
+        this.socket = socket;
+    }
+
+    public SocketStream(Socket socket, TwoWayStream stream, boolean interactive)
+    {
+        this(socket, stream);
+        setInteractive(interactive);
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.SOCKET_STREAM;
+    }
+
+    public LispClass classOf()
+    {
+        return BuiltInClass.SOCKET_STREAM;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.SOCKET_STREAM)
+            return T;
+        if (type == BuiltInClass.SOCKET_STREAM)
+            return T;
+        return super.typep(type);
+    }
+
+    public LispObject close(LispObject abort) throws ConditionThrowable
+    {
+	try {
+	    socket.close();
+	    setOpen(false);
+	    return T;
+	} catch (Exception e) {
+	    return signal(new LispError(e.getMessage()));
+	}
+    }
+
+    public String toString()
+    {
+        return unreadableString("SOCKET-STREAM");
+    }
+}
