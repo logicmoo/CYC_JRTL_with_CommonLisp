@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.117 2003-03-13 18:25:11 piso Exp $
+ * $Id: Primitives.java,v 1.118 2003-03-13 20:35:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4018,10 +4018,8 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
-            AbstractVector v = checkVector(first);
-            int size = (int) Fixnum.getValue(second);
-            v.shrink(size);
-            return v;
+            checkVector(first).shrink(Fixnum.getInt(second));
+            return first;
         }
     };
 
