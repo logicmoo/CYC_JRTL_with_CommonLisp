@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.44 2004-10-13 15:40:52 piso Exp $
+;;; $Id: pprint.lisp,v 1.45 2004-10-13 17:52:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -372,12 +372,20 @@
   (when (member kind '(:fresh :unconditional :mandatory))
     (attempt-to-output xp T nil)))
 
-(defun start-block (xp prefix-string on-each-line? suffix-string)
-  (when prefix-string
-    (write-string++ prefix-string xp 0 (length prefix-string)))
+(defun start-block (xp prefix on-each-line? suffix)
+  (unless (stringp prefix)
+    (error 'type-error
+	   :datum prefix
+	   :expected-type 'string))
+  (unless (stringp suffix)
+    (error 'type-error
+	   :datum suffix
+	   :expected-type 'string))
+  (when prefix
+    (write-string++ prefix xp 0 (length prefix)))
   (push-block-stack xp)
   (enqueue xp :start-block nil
-	   (if on-each-line? (cons suffix-string prefix-string) suffix-string))
+	   (if on-each-line? (cons suffix prefix) suffix))
   (incf (depth-in-blocks xp))	      ;must be after enqueue
   (setf (section-start xp) (TP<-BP xp)))
 
@@ -598,7 +606,7 @@
 	(*current-level* 0)
 	(result nil))
     (catch 'line-limit-abbreviation-exit
-      (start-block xp nil nil nil)
+      (start-block xp "" nil "")
       (setq result (apply fn xp args))
       (end-block xp nil))
     (when (and *locating-circularities*
@@ -812,8 +820,8 @@
 
 (defmacro pprint-logical-block ((stream-symbol object
                                                &key
-                                               (prefix nil prefix-p)
-                                               (per-line-prefix nil per-line-prefix-p)
+                                               (prefix "" prefix-p)
+                                               (per-line-prefix "" per-line-prefix-p)
                                                (suffix ""))
 				&body body)
   (cond ((eq stream-symbol nil)
@@ -829,10 +837,12 @@
   `(maybe-initiate-xp-printing
      #'(lambda (,stream-symbol)
 	 (let ((+l ,object)
-	       (+p ,(or prefix per-line-prefix ""))
+               (+p ,(cond (prefix-p prefix)
+                          (per-line-prefix-p per-line-prefix)
+                          (t "")))
 	       (+s ,suffix))
 	   (pprint-logical-block+
-	     (,stream-symbol +l +p +s ,(not (null per-line-prefix)) t nil)
+	     (,stream-symbol +l +p +s ,per-line-prefix-p t nil)
 	     ,@ body nil)))
      (sys:decode-stream-arg ,stream-symbol)))
 
@@ -954,13 +964,14 @@
 
 (defun pretty-vector (xp v)
   (pprint-logical-block (xp nil :prefix "#(" :suffix ")")
-    (let ((end (length v)) (i 0))
+    (let ((end (length v))
+          (i 0))
       (when (plusp end)
 	(loop
           (pprint-pop)
-;;           (write+ (aref v i) xp)
           (sys:output-object (aref v i) xp)
-          (if (= (incf i) end) (return nil))
+          (when (= (incf i) end)
+            (return nil))
           (write-char++ #\space xp)
           (pprint-newline+ :fill xp))))))
 
@@ -968,27 +979,27 @@
 
 (defun pretty-non-vector (xp array)
   (when (and *print-readably*
-	     (not (array-readably-printable-p array)))
+             (not (array-readably-printable-p array)))
     (error 'print-not-readable :object array))
   (let* ((bottom (1- (array-rank array)))
-	 (indices (make-list (1+ bottom) :initial-element 0))
-	 (dims (array-dimensions array))
-	 (*prefix* (cl:format nil "#~DA(" (1+ bottom))))
+         (indices (make-list (1+ bottom) :initial-element 0))
+         (dims (array-dimensions array))
+         (*prefix* (cl:format nil "#~DA(" (1+ bottom))))
     (labels ((pretty-slice (slice)
-	       (pprint-logical-block (xp nil :prefix *prefix* :suffix ")")
-		 (let ((end (nth slice dims))
-		       (spot (nthcdr slice indices))
-		       (i 0)
-		       (*prefix* "("))
-		   (when (plusp end)
-		     (loop (pprint-pop)
-			   (setf (car spot) i)
-			   (if (= slice bottom)
-			       (sys:output-object (apply #'aref array indices) xp)
-			       (pretty-slice (1+ slice)))
-			   (if (= (incf i) end) (return nil))
-			   (write-char++ #\space xp)
-			   (pprint-newline+ (if (= slice bottom) :fill :linear) xp)))))))
+               (pprint-logical-block (xp nil :prefix *prefix* :suffix ")")
+                 (let ((end (nth slice dims))
+                       (spot (nthcdr slice indices))
+                       (i 0)
+                       (*prefix* "("))
+                   (when (plusp end)
+                     (loop (pprint-pop)
+                           (setf (car spot) i)
+                           (if (= slice bottom)
+                               (sys:output-object (apply #'aref array indices) xp)
+                               (pretty-slice (1+ slice)))
+                           (if (= (incf i) end) (return nil))
+                           (write-char++ #\space xp)
+                           (pprint-newline+ (if (= slice bottom) :fill :linear) xp)))))))
       (pretty-slice 0))))
 
 (defun array-readably-printable-p (array)
@@ -1091,7 +1102,8 @@
 ;cover anything new you define.
 
 (defun let-print (xp obj)
-  (funcall (formatter "~:<~1I~W~^ ~@_~/xp:bind-list/~^~@{ ~_~W~^~}~:>") xp obj))
+  (funcall (formatter "~:<~^~W~^ ~@_~:<~@{~:<~^~W~@{ ~_~W~}~:>~^ ~_~}~:>~1I~:@_~@{~W~^ ~_~}~:>")
+           xp obj))
 
 (defun cond-print (xp obj)
   (funcall (formatter "~:<~W~^ ~:I~@_~@{~:/xp:pprint-linear/~^ ~_~}~:>") xp obj))
