@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.44 2004-02-07 19:52:48 piso Exp $
+;;; $Id: defstruct.lisp,v 1.45 2004-02-18 15:31:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -383,9 +383,7 @@
            (setf *dd-predicate* nil)
            (setf *dd-predicate* (symbol-name (cadr option))))))
     (:type
-     (setf *dd-type* (cadr option)))
-    (t
-     (format t "unrecognized DEFSTRUCT option: ~S~%" (car option)))))
+     (setf *dd-type* (cadr option)))))
 
 (defun parse-name-and-options (name-and-options)
   (setf *dd-name* (car name-and-options))
@@ -402,7 +400,7 @@
                               :conc-name))
              (parse-1-option (list option)))
             (t
-             (error "unrecognized DEFSTRUCT option: ~S" option))))))
+             (error "Unrecognized DEFSTRUCT option: ~S." option))))))
 
 (defmacro defstruct (name-and-options &rest slots)
   (let ((*dd-name* nil)
