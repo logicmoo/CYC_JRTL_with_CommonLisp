@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.29 2003-02-05 15:49:26 piso Exp $
+ * $Id: Buffer.java,v 1.30 2003-02-09 13:05:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,7 +263,17 @@ public class Buffer extends SystemBuffer
 
     protected static Buffer createBuffer(File file, File cache, String listing)
     {
-        int fileType = getFileType(file, cache);
+        int fileType = Utilities.getFileType(cache != null ? cache : file);
+        if (fileType == FILETYPE_GZIP) {
+            // If we're looking at a remote file, gunzip the cached copy
+            // of it; otherwise, gunzip the file itself into the cache.
+            File uncompressed = cacheGZIP(cache != null ? cache : file);
+            if (uncompressed != null) {
+                cache = uncompressed;
+                fileType = Utilities.getFileType(cache);
+            } else
+                fileType = FILETYPE_BINARY; // Something went wrong.
+        }
         if (fileType == FILETYPE_JPEG ||
             Editor.getModeList().modeAccepts(IMAGE_MODE, file.getName())) {
             Buffer buffer =
@@ -306,22 +316,6 @@ public class Buffer extends SystemBuffer
         return new Buffer(file);
     }
 
-    private static final int getFileType(File file, File cache)
-    {
-        int fileType = Utilities.getFileType(cache != null ? cache : file);
-        if (fileType == FILETYPE_GZIP) {
-            // If we're looking at a remote file, gunzip the cached copy
-            // of it; otherwise, gunzip the file itself into the cache.
-            File uncompressed = cacheGZIP(cache != null ? cache : file);
-            if (uncompressed != null) {
-                cache = uncompressed;
-                fileType = Utilities.getFileType(cache);
-            } else
-                fileType = FILETYPE_BINARY; // Something went wrong.
-        }
-        return fileType;
-    }
-
     private boolean initialized;
 
     public synchronized boolean initialized()
@@ -338,8 +332,19 @@ public class Buffer extends SystemBuffer
     {
         Debug.assertTrue(!initialized);
         final File file = getFile();
-        if (fileType == FILETYPE_UNKNOWN)
-            fileType = getFileType(file, cache);
+        if (fileType == FILETYPE_UNKNOWN) {
+            fileType = Utilities.getFileType(cache != null ? cache : file);
+            if (fileType == FILETYPE_GZIP) {
+                // If we're looking at a remote file, gunzip the cached copy
+                // of it; otherwise, gunzip the file itself into the cache.
+                File uncompressed = cacheGZIP(cache != null ? cache : file);
+                if (uncompressed != null) {
+                    cache = uncompressed;
+                    fileType = Utilities.getFileType(cache);
+                } else
+                    fileType = FILETYPE_BINARY; // Something went wrong.
+            }
+        }
         mode = getDefaultMode();
         formatter = mode.getFormatter(this);
         if (fileType == FILETYPE_ZIP) {
