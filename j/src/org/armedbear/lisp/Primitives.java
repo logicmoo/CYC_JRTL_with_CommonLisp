@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.343 2003-08-24 16:23:22 piso Exp $
+ * $Id: Primitives.java,v 1.344 2003-08-24 17:26:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4785,6 +4785,30 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg)
         {
             return arg instanceof Complex ? T : NIL;
+        }
+    };
+
+    // ### realpart
+    private static final Primitive1 REALPART = new Primitive1("realpart")
+    {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof Complex)
+                return ((Complex)arg).getRealPart();
+            if ((arg.getType() & TYPE_NUMBER) != 0)
+                return arg;
+            throw new TypeError(arg, "number");
+        }
+    };
+
+    // ### imagpart
+    private static final Primitive1 IMAGPART = new Primitive1("imagpart")
+    {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof Complex)
+                return ((Complex)arg).getImaginaryPart();
+            return arg.multiplyBy(Fixnum.ZERO);
         }
     };
 }
