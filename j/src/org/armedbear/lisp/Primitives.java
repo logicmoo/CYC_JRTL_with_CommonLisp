@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.478 2003-10-17 19:37:45 piso Exp $
+ * $Id: Primitives.java,v 1.479 2003-10-21 18:41:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3352,21 +3352,6 @@ public final class Primitives extends Module
                 args = args.cdr();
             }
             return result;
-        }
-    };
-
-    // ### assert
-    // Should be a macro.
-    private static final SpecialOperator ASSERT =
-        new SpecialOperator("assert") {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            if (args.length() != 1)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            if (eval(args.car(), env, LispThread.currentThread()) == NIL)
-                throw new ConditionThrowable(new LispError("assertion failed: " + args.car()));
-            return NIL;
         }
     };
 
