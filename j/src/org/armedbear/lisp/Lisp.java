@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.245 2004-05-27 20:43:19 piso Exp $
+ * $Id: Lisp.java,v 1.246 2004-05-29 15:16:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -367,14 +367,23 @@ public abstract class Lisp
         return Symbol.SIGNAL.getSymbolFunction().execute(condition);
     }
 
-    protected static boolean interrupted;
+    private static boolean interrupted;
 
-    public static final void handleInterrupt()
+    public static synchronized final boolean interrupted()
     {
-        try {
-            Symbol.BREAK.getSymbolFunction().execute();
-        }
-        catch (Throwable t) {}
+        return interrupted;
+    }
+
+    public static synchronized final void setInterrupted(boolean b)
+    {
+        interrupted = b;
+    }
+
+    public static final void handleInterrupt() throws ConditionThrowable
+    {
+        setInterrupted(false);
+        Symbol.BREAK.getSymbolFunction().execute();
+        setInterrupted(false);
     }
 
     public static final LispObject eval(final LispObject obj,
@@ -390,10 +399,8 @@ public abstract class Lisp
                 Profiler.sample(thread);
         }
         thread.clearValues();
-        if (interrupted) {
-            interrupted = false;
+        if (interrupted())
             handleInterrupt();
-        }
         if (thread.isDestroyed())
             throw new ThreadDestroyed();
         if (obj instanceof Symbol) {
