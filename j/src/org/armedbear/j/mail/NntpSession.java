@@ -2,7 +2,7 @@
  * NntpSession.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NntpSession.java,v 1.4 2002-11-11 18:17:51 piso Exp $
+ * $Id: NntpSession.java,v 1.5 2002-12-05 16:55:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,7 @@
 
 package org.armedbear.j.mail;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
@@ -42,7 +40,7 @@ public final class NntpSession
     private String host;
     private int port;
     private Socket socket;
-    private BufferedReader reader;
+    private MailReader reader;
     private OutputStreamWriter writer;
     private String groupName;
     private int count;
@@ -170,8 +168,9 @@ public final class NntpSession
         try {
             socket = new Socket(host, port);
             Log.debug("connected!");
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer = new OutputStreamWriter(socket.getOutputStream());
+            reader = new MailReader(socket.getInputStream());
+            writer =
+                new OutputStreamWriter(socket.getOutputStream(), "ISO-8859-1");
             readLine();
             return true;
         }
@@ -220,15 +219,14 @@ public final class NntpSession
         String response = readLine();
         if (response == null)
             return false;
-        if (!response.startsWith("211"))
-            return false;
-        this.groupName = groupName;
         StringTokenizer st = new StringTokenizer(response);
         String token = st.nextToken();
-        Debug.assertTrue(token.equals("211"));
+        if (!token.equals("211"))
+            return false;
         count = Integer.parseInt(st.nextToken());
         first = Integer.parseInt(st.nextToken());
         last = Integer.parseInt(st.nextToken());
+        this.groupName = groupName;
         return true;
     }
 
