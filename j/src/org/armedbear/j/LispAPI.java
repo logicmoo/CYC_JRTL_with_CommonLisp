@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.44 2004-09-05 15:55:19 piso Exp $
+ * $Id: LispAPI.java,v 1.45 2004-09-05 19:10:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.j;
 
+import gnu.regexp.REException;
 import java.util.Iterator;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
@@ -92,7 +93,8 @@ public final class LispAPI extends Lisp
             return (Editor) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            signal(new TypeError("The value " + obj + " is not an editor."));
+            signal(new TypeError("The value " + obj.writeToString() +
+                                 " is not an editor."));
             // Not reached.
             return null;
         }
@@ -109,7 +111,8 @@ public final class LispAPI extends Lisp
             return (Buffer) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            signal(new TypeError("The value " + obj + " is not a buffer."));
+            signal(new TypeError("The value " + obj.writeToString() +
+                                 " is not a buffer."));
             // Not reached.
             return null;
         }
@@ -124,7 +127,8 @@ public final class LispAPI extends Lisp
             return (Position) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            signal(new TypeError("The value " + obj + " is not a mark."));
+            signal(new TypeError("The value " + obj.writeToString() +
+                                 " is not a mark."));
             // Not reached.
             return null;
         }
@@ -139,7 +143,8 @@ public final class LispAPI extends Lisp
             return (Line) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            signal(new TypeError("The value " + obj + " is not a line."));
+            signal(new TypeError("The value " + obj.writeToString() +
+                                 " is not a line."));
             // Not reached.
             return null;
         }
@@ -1138,60 +1143,57 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### search-forward string
-    private static final Primitive SEARCH_FORWARD =
-        new Primitive("%search-forward", PACKAGE_J, false,
-                      "pattern buffer start ignore-case-p whole-words-only-p")
+    // ### %search
+    private static final Primitive _SEARCH =
+        new Primitive("%search", PACKAGE_J, false,
+                      "pattern direction regexp-p buffer start ignore-case-p whole-words-only-p")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
-            if (args.length != 5)
+            if (args.length != 7)
                 return signal(new WrongNumberOfArgumentsException(this));
             final String pattern;
             if (args[0] instanceof AbstractString)
                 pattern = args[0].getStringValue();
             else
                 return signal(new TypeError(args[0], Symbol.STRING));
-            final Buffer buffer = checkBuffer(args[1]);
+            final boolean backward;
+            Symbol direction = checkSymbol(args[1]);
+            if (direction == NIL || direction.getName().equals("BACKWARD"))
+                backward = true;
+            else if (direction.getName().equals("FORWARD"))
+                backward = false;
+            else
+                return signal(new LispError("Invalid direction " + direction.writeToString()));
+            final Buffer buffer = checkBuffer(args[3]);
             final Position start;
-            if (args[2] == NIL)
+            if (args[4] == NIL)
                 start = Editor.currentEditor().getDot();
             else
-                start = checkMark(args[2]);
-            final boolean ignoreCase = (args[3] != NIL);
-            final boolean wholeWordsOnly = (args[4] != NIL);
+                start = checkMark(args[4]);
+            final boolean ignoreCase = (args[5] != NIL);
+            final boolean wholeWordsOnly = (args[6] != NIL);
             Search search =
                 new Search(pattern, ignoreCase, wholeWordsOnly);
-            Position pos = search.findString(buffer, start);
-            return pos != null ? new JavaObject(pos) : NIL;
-        }
-    };
-
-    // ### search-backward string
-    private static final Primitive SEARCH_BACKWARD =
-        new Primitive("%search-backward", PACKAGE_J, false,
-                      "string buffer start ignore-case-p whole-words-only-p")
-    {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            if (args.length != 5)
-                return signal(new WrongNumberOfArgumentsException(this));
-            final String pattern;
-            if (args[0] instanceof AbstractString)
-                pattern = args[0].getStringValue();
-            else
-                return signal(new TypeError(args[0], Symbol.STRING));
-            final Buffer buffer = checkBuffer(args[1]);
-            final Position start;
-            if (args[2] == NIL)
-                start = Editor.currentEditor().getDot();
-            else
-                start = checkMark(args[2]);
-            final boolean ignoreCase = (args[3] != NIL);
-            final boolean wholeWordsOnly = (args[4] != NIL);
-            Search search =
-                new Search(pattern, ignoreCase, wholeWordsOnly);
-            Position pos = search.reverseFindString(buffer, start);
+            final Position pos;
+            if (args[2] != NIL) {
+                try {
+                    search.setREFromPattern();
+                }
+                catch (REException e) {
+                    return signal(new LispError("Invalid regular expression: \"" +
+                                                pattern + '"'));
+                }
+                if (backward)
+                    pos = search.reverseFindRegExp(buffer, start);
+                else
+                    pos = search.findRegExp(buffer, start);
+            } else {
+                if (backward)
+                    pos = search.reverseFindString(buffer, start);
+                else
+                    pos = search.findString(buffer, start);
+            }
             return pos != null ? new JavaObject(pos) : NIL;
         }
     };
