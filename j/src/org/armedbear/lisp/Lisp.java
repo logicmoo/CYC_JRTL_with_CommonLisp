@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.251 2004-06-10 12:26:42 piso Exp $
+ * $Id: Lisp.java,v 1.252 2004-06-12 14:35:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -492,7 +492,8 @@ public abstract class Lisp
                     Closure closure = new Closure(rest.car(), rest.cdr(), env);
                     return closure.execute(evalList(args, env, thread));
                 } else
-                    return signal(new ProgramError("illegal function object: " + first));
+                    return signal(new ProgramError("Illegal function object: " +
+                                                   first.writeToString()));
             }
         } else
             return obj;
