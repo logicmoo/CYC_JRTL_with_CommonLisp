@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.24 2003-09-21 19:32:34 piso Exp $
+ * $Id: LispClass.java,v 1.25 2003-09-21 19:48:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ public class LispClass extends StandardObject
 
     protected final Symbol symbol;
     private LispObject directSuperclasses;
-    private LispObject classPrecendenceList;
+    private LispObject classPrecedenceList = NIL;
 
     protected LispClass(Symbol symbol)
     {
@@ -80,46 +80,46 @@ public class LispClass extends StandardObject
 
     public final LispObject getCPL()
     {
-        return classPrecendenceList;
+        return classPrecedenceList;
     }
 
     public final void setCPL(LispObject obj1)
     {
         Debug.assertTrue(obj1 == this);
-        classPrecendenceList = new Cons(obj1);
+        classPrecedenceList = new Cons(obj1);
     }
 
     public final void setCPL(LispObject obj1, LispObject obj2)
     {
         Debug.assertTrue(obj1 == this);
-        classPrecendenceList = list2(obj1, obj2);
+        classPrecedenceList = list2(obj1, obj2);
     }
 
     public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3)
     {
         Debug.assertTrue(obj1 == this);
-        classPrecendenceList = list3(obj1, obj2, obj3);
+        classPrecedenceList = list3(obj1, obj2, obj3);
     }
 
     public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3,
                              LispObject obj4)
     {
         Debug.assertTrue(obj1 == this);
-        classPrecendenceList = list4(obj1, obj2, obj3, obj4);
+        classPrecedenceList = list4(obj1, obj2, obj3, obj4);
     }
 
     public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3,
                              LispObject obj4, LispObject obj5)
     {
         Debug.assertTrue(obj1 == this);
-        classPrecendenceList = list5(obj1, obj2, obj3, obj4, obj5);
+        classPrecedenceList = list5(obj1, obj2, obj3, obj4, obj5);
     }
 
     public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3,
                              LispObject obj4, LispObject obj5, LispObject obj6)
     {
         Debug.assertTrue(obj1 == this);
-        classPrecendenceList = list6(obj1, obj2, obj3, obj4, obj5, obj6);
+        classPrecedenceList = list6(obj1, obj2, obj3, obj4, obj5, obj6);
     }
 
     public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3,
@@ -127,7 +127,7 @@ public class LispClass extends StandardObject
                              LispObject obj7)
     {
         Debug.assertTrue(obj1 == this);
-        classPrecendenceList = list7(obj1, obj2, obj3, obj4, obj5, obj6, obj7);
+        classPrecedenceList = list7(obj1, obj2, obj3, obj4, obj5, obj6, obj7);
     }
 
     public String getName()
@@ -185,6 +185,17 @@ public class LispClass extends StandardObject
         {
             if (arg instanceof LispClass)
                 return ((LispClass)arg).getDirectSuperclasses();
+            throw new ConditionThrowable(new TypeError(arg, "class"));
+        }
+    };
+
+    private static final Primitive1 CLASS_PRECEDENCE_LIST =
+        new Primitive1("class-precedence-list", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof LispClass)
+                return ((LispClass)arg).getCPL();
             throw new ConditionThrowable(new TypeError(arg, "class"));
         }
     };
