@@ -2,7 +2,7 @@
  * Macro.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Macro.java,v 1.1.1.1 2002-09-24 16:07:43 piso Exp $
+ * $Id: Macro.java,v 1.2 2002-10-10 18:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,21 +44,34 @@ public final class Macro
 
     public synchronized void record(char c)
     {
-        list.add(new Character(c) );
+        list.add(new Character(c));
     }
 
     public synchronized void playback()
     {
-        Editor editor = Editor.currentEditor();
-        CompoundEdit compoundEdit = editor.beginCompoundEdit();
-        final int size = list.size();
-        for (int i = 0; i < size; i++) {
-            Object object = list.get(i);
-            if (object instanceof String)
-                editor.executeCommand((String) object);
-            else if (object instanceof Character)
-                editor.insertNormalChar(((Character) object).charValue());
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        try {
+            buffer.lockWrite();
         }
-        editor.getBuffer().endCompoundEdit(compoundEdit);
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            CompoundEdit compoundEdit = buffer.beginCompoundEdit();
+            final int size = list.size();
+            for (int i = 0; i < size; i++) {
+                Object object = list.get(i);
+                if (object instanceof String)
+                    editor.executeCommand((String)object);
+                else if (object instanceof Character)
+                    editor.insertNormalChar(((Character) object).charValue());
+            }
+            buffer.endCompoundEdit(compoundEdit);
+        }
+        finally {
+            buffer.unlockWrite();
+        }
     }
 }
