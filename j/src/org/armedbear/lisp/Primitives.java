@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.593 2004-03-06 19:53:15 piso Exp $
+ * $Id: Primitives.java,v 1.594 2004-03-06 20:49:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1831,7 +1831,7 @@ public final class Primitives extends Lisp
                     return signal(new TypeError(args[i+i], Symbol.FIXNUM));
                 }
             }
-            return array.getRowMajor(array.getRowMajorIndex(subs));
+            return array.get(subs);
         }
     };
 
@@ -1907,7 +1907,7 @@ public final class Primitives extends Lisp
                 }
             }
             final LispObject newValue = args[args.length - 1];
-            array.setRowMajor(array.getRowMajorIndex(subs), newValue);
+            array.set(subs, newValue);
             return newValue;
         }
     };
