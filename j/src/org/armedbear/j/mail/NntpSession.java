@@ -1,8 +1,8 @@
 /*
  * NntpSession.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: NntpSession.java,v 1.6 2002-12-05 20:32:13 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: NntpSession.java,v 1.7 2003-05-26 15:23:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.StringTokenizer;
+import javax.swing.SwingUtilities;
 import org.armedbear.j.Debug;
 import org.armedbear.j.Editor;
 import org.armedbear.j.FastStringBuffer;
@@ -37,6 +39,7 @@ public final class NntpSession
 {
     private static final int DEFAULT_PORT = 119;
 
+    private String errorText;
     private String host;
     private int port;
     private Socket socket;
@@ -68,6 +71,16 @@ public final class NntpSession
             return null;
 
         return new NntpSession(host, DEFAULT_PORT);
+    }
+
+    public String getErrorText()
+    {
+        return errorText;
+    }
+
+    private void setErrorText(String s)
+    {
+        errorText = s;
     }
 
     public void setEcho(boolean b)
@@ -171,6 +184,10 @@ public final class NntpSession
                 new OutputStreamWriter(socket.getOutputStream(), "ISO-8859-1");
             readLine();
             return true;
+        }
+        catch (UnknownHostException e) {
+            setErrorText("Unknown host " + host);
+            return false;
         }
         catch (IOException e) {
             Log.error(e);
