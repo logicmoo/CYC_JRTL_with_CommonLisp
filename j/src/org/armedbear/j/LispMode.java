@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.12 2002-10-31 16:12:13 piso Exp $
+ * $Id: LispMode.java,v 1.13 2002-11-03 20:30:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,8 +119,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
     }
 
     private final String[] specials = new String[] {
-        "case", "ecase", "do", "do*", "flet", "lambda", "let", "let*", "loop",
-        "progn", "typecase", "unless", "when"
+        "case", "ecase", "do", "do*", "dolist", "dotimes", "flet", "lambda",
+        "let", "let*", "loop", "progn", "typecase", "unless", "when"
     };
     
     private final String[] hemlockSpecials = new String[] {
