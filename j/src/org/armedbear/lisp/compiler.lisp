@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.1 2003-03-05 17:46:13 piso Exp $
+;;; $Id: compiler.lisp,v 1.2 2003-03-05 20:50:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -136,6 +136,8 @@
 
 (defun compile-list (form)
   (let ((first (car form)))
+    (unless (and first (symbolp first) (fboundp first))
+      (return-from compile-list form))
     (cond ((macro-function first)
            (compile-sexp (macroexpand form)))
           ((special-operator-p first)
