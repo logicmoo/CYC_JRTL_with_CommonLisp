@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.586 2004-02-27 14:35:54 piso Exp $
+ * $Id: Primitives.java,v 1.587 2004-03-01 15:07:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -670,7 +670,9 @@ public final class Primitives extends Lisp
 
     // ### princ
     // princ object &optional output-stream => object
-    private static final Primitive PRINC = new Primitive("princ","object &optional output-stream") {
+    private static final Primitive PRINC =
+        new Primitive("princ", "object &optional output-stream")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1 || args.length > 2)
@@ -687,7 +689,8 @@ public final class Primitives extends Lisp
 
     // ### princ-to-string
     private static final Primitive1 PRINC_TO_STRING =
-        new Primitive1("princ-to-string","object") {
+        new Primitive1("princ-to-string", "object")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispThread thread = LispThread.currentThread();
@@ -701,7 +704,9 @@ public final class Primitives extends Lisp
 
     // ### prin1
     // prin1 object &optional output-stream => object
-    private static final Primitive PRIN1 = new Primitive("prin1","object &optional output-stream") {
+    private static final Primitive PRIN1 =
+        new Primitive("prin1", "object &optional output-stream")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Stream out =
