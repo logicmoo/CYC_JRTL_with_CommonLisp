@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.103 2004-06-11 12:19:30 piso Exp $
+;;; $Id: clos.lisp,v 1.104 2004-06-12 14:34:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -953,19 +953,25 @@
   (multiple-value-bind
     (function-name qualifiers lambda-list specializers documentation declarations body)
     (parse-defmethod args)
-    `(progn
-       (unless (find-generic-function ',function-name nil)
-         (ensure-generic-function
-          ',function-name
-          :lambda-list ',lambda-list))
-       (ensure-method (find-generic-function ',function-name)
-                      :lambda-list ',lambda-list
-                      :qualifiers ',qualifiers
-                      :specializers ',specializers
-                      :documentation ,documentation
-                      :declarations ',declarations
-                      :body ',body
-                      ))))
+    (let ((specializers-form ()))
+      (dolist (specializer specializers)
+        (cond ((and (consp specializer) (eq (car specializer) 'eql))
+               (push `(list 'eql ,(cadr specializer)) specializers-form))
+              (t
+               (push `',specializer specializers-form))))
+      (setf specializers-form `(list ,@(nreverse specializers-form)))
+      `(progn
+         (unless (find-generic-function ',function-name nil)
+           (ensure-generic-function
+            ',function-name
+            :lambda-list ',lambda-list))
+         (ensure-method (find-generic-function ',function-name)
+                        :lambda-list ',lambda-list
+                        :qualifiers ',qualifiers
+                        :specializers ,specializers-form
+                        :documentation ,documentation
+                        :declarations ',declarations
+                        :body ',body)))))
 
 (defun canonicalize-specializers (specializers)
   (mapcar #'canonicalize-specializer specializers))
@@ -985,7 +991,7 @@
              (setf object (cadr object)))
            (intern-eql-specializer object)))
         (t
-         (error "Unknown specializer: ~S~%." specializer))))
+         (error "Unknown specializer: ~S" specializer))))
 
 (defun parse-defmethod (args)
   (let ((function-name (car args))
