@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.21 2003-11-08 20:17:34 piso Exp $
+;;; $Id: jvm.lisp,v 1.22 2003-11-11 19:20:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,8 +16,6 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-(require 'transform)
 
 (in-package "JVM")
 
@@ -1349,10 +1347,9 @@
     (t
      nil)))
 
-(defconstant +cl-package+ (find-package "COMMON-LISP"))
-(defconstant +sys-package+ (find-package "SYSTEM"))
-
-(defconstant +known-packages+ (list +cl-package+ +sys-package+))
+(defconstant +known-packages+ (list (find-package "COMMON-LISP")
+                                    (find-package "SYSTEM")
+                                    (find-package "EXTENSIONS")))
 
 (defun compile-function-call (fun args &optional for-effect)
 ;;   (format t "compile-function-call fun = ~S args = ~S~%" fun args)
@@ -1726,12 +1723,11 @@
     (compile-form form)))
 
 (defun compile-setq (form)
+  (unless (= (length form) 3)
+    (error "COMPILE-SETQ too many args for SETQ"))
   (let* ((rest (cdr form))
-         (len (length rest))
          (sym (car rest))
          (index (position sym *locals* :from-end t)))
-    (unless (= len 2)
-      (error "COMPILE-SETQ too many args for SETQ"))
     (when index
       (compile-form (cadr rest))
       (emit-push-value)
@@ -1969,7 +1965,7 @@
 (defun compile-defun (name form)
   (unless (eq (car form) 'LAMBDA)
     (return-from compile-defun nil))
-  (setq form (transform form))
+  (setf form (precompile-form form t))
   (let* ((*defun-name* name)
          (*declared-symbols* (make-hash-table))
          (*declared-functions* (make-hash-table))
@@ -2208,10 +2204,10 @@
         (setf speed (cdr (assoc 'speed decls)))))
     (if (eql speed 3)
         (progn
-          (c::%compile name definition)
+          (precompile name definition)
           (jvm-compile name definition))
         (progn
-          (c::%compile name definition)
+          (precompile name definition)
           ))))
 
 (defmacro defun (name lambda-list &rest body)
