@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.77 2003-07-16 18:14:17 piso Exp $
+;;; $Id: boot.lisp,v 1.78 2003-07-29 01:13:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -236,6 +236,14 @@
        `(block nil (let* ,vl ,@decl (tagbody ,@body))))
       (push (car body) decl)
       (pop body)))
+
+
+(defmacro dolist ((var list &optional result) &rest body)
+  (let ((g (gensym)))
+    `(do ((,g ,list (cdr ,g)))
+         ((atom ,g) (let ((,var nil)) ,result))
+       (let ((,var (car ,g)))
+         ,@body))))
 
 
 ;; FIXME
