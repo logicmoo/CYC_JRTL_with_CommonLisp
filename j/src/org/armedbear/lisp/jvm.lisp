@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.277 2004-08-17 01:08:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.278 2004-08-17 06:14:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2254,19 +2254,77 @@
 (define-java-predicate 'VECTORP    "vectorp")
 (define-java-predicate 'ZEROP      "zerop")
 
-(defun compile-test-not/null (form)
-  (let ((arg (second form)))
-    (cond ((and (consp arg)
-                (memq (car arg) '(NOT NULL)))
-           (compile-form (second arg) :target :stack)
-           (maybe-emit-clear-values (second arg))
-           (emit-push-nil)
-           'if_acmpeq)
-          (t
-           (compile-form arg :target :stack)
-           (maybe-emit-clear-values arg)
-           (emit-push-nil)
-           'if_acmpne))))
+(defun compile-test-not (form)
+  (let* ((form (second form)))
+    (when (consp form)
+      (when (memq (car form) '(NOT NULL))
+        (compile-form (second form) :target :stack)
+        (maybe-emit-clear-values (second form))
+        (emit-push-nil)
+        (return-from compile-test-not 'if_acmpeq))
+      (case (length form)
+        (2
+         (let ((op (car form))
+               (arg (cadr form)))
+           (when (eq op 'SYMBOLP)
+             (compile-form arg :target :stack)
+             (maybe-emit-clear-values arg)
+             (emit 'instanceof +lisp-symbol-class+)
+             (return-from compile-test-not 'ifne))
+           (when (eq op 'CONSP)
+             (compile-form arg :target :stack)
+             (maybe-emit-clear-values arg)
+             (emit 'instanceof +lisp-cons-class+)
+             (return-from compile-test-not 'ifne))
+           (when (eq op 'ATOM)
+             (compile-form arg :target :stack)
+             (maybe-emit-clear-values arg)
+             (emit 'instanceof +lisp-cons-class+)
+             (return-from compile-test-not 'ifeq))
+           (let ((s (gethash op java-predicates)))
+             (when s
+               (compile-form arg :target :stack)
+               (maybe-emit-clear-values arg)
+               (emit-invokevirtual +lisp-object-class+
+                                   s
+                                   "()Z"
+                                   0)
+               (return-from compile-test-not 'ifne)))))
+        (3
+         (let ((op (car form))
+               (arg1 (second form))
+               (arg2 (third form)))
+           (when (eq op 'EQ)
+             (compile-form arg1 :target :stack)
+             (maybe-emit-clear-values arg1)
+             (compile-form arg2 :target :stack)
+             (maybe-emit-clear-values arg2)
+             (return-from compile-test-not 'if_acmpeq))
+           (let ((s (cdr (assq op
+                               '((=      . "isEqualTo")
+                                 (/=     . "isNotEqualTo")
+                                 (<      . "isLessThan")
+                                 (<=     . "isLessThanOrEqualTo")
+                                 (>      . "isGreaterThan")
+                                 (>=     . "isGreaterThanOrEqualTo")
+                                 (EQL    . "eql")
+                                 (EQUAL  . "equal")
+                                 (EQUALP . "equalp"))))))
+             (when s
+               (compile-form arg1 :target :stack)
+               (maybe-emit-clear-values arg1)
+               (compile-form arg2 :target :stack)
+               (maybe-emit-clear-values arg2)
+               (emit-invokevirtual +lisp-object-class+
+                                   s
+                                   "(Lorg/armedbear/lisp/LispObject;)Z"
+                                   -1)
+               (return-from compile-test-not 'ifne)))))))
+    ;; Otherwise...
+    (compile-form form :target :stack)
+    (maybe-emit-clear-values form)
+    (emit-push-nil)
+    'if_acmpne))
 
 (defun compile-test (form)
   ;; Use a Java boolean if possible.
@@ -2280,7 +2338,7 @@
        (let ((op (car form))
              (arg (cadr form)))
          (when (memq op '(NOT NULL))
-           (return-from compile-test (compile-test-not/null form)))
+           (return-from compile-test (compile-test-not form)))
          (when (eq op 'SYMBOLP)
            (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
