@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Extensions.java,v 1.36 2005-03-24 01:09:43 piso Exp $
+ * $Id: Extensions.java,v 1.37 2005-04-04 18:45:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,6 +159,17 @@ public final class Extensions extends Lisp
                     status = ((Fixnum)second).value;
             }
             exit(status);
+            return LispThread.currentThread().nothing();
+        }
+    };
+
+    // ### dump-java-stack
+    private static final Primitive DUMP_JAVA_STACK =
+        new Primitive("dump-java-stack", PACKAGE_EXT, true)
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            Thread.dumpStack();
             return LispThread.currentThread().nothing();
         }
     };
