@@ -1,8 +1,8 @@
 /*
  * OpenFileDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileDialog.java,v 1.1.1.1 2002-09-24 16:08:09 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: OpenFileDialog.java,v 1.2 2003-06-26 00:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,8 +62,7 @@ public class OpenFileDialog extends JDialog implements FocusListener
         panel.add(textField);
         getContentPane().add(panel, BorderLayout.CENTER);
         pack();
-        if (Platform.isJava14())
-            Utilities.setFocusTraversalKeysEnabled(textField, false);
+        textField.setFocusTraversalKeysEnabled(false);
         textField.requestFocus();
         addFocusListener(this);
     }

@@ -2,7 +2,7 @@
  * SidebarList.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: SidebarList.java,v 1.2 2003-06-16 15:25:09 piso Exp $
+ * $Id: SidebarList.java,v 1.3 2003-06-26 00:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,8 +43,7 @@ public abstract class SidebarList extends JList implements NavigationComponent
         int h = Editor.preferences().getIntegerProperty(Property.JLIST_FIXED_CELL_HEIGHT);
         if (h > 0)
             setFixedCellHeight(h);
-        if (Platform.isJava14())
-            Utilities.setFocusTraversalKeysEnabled(this, false);
+        setFocusTraversalKeysEnabled(false);
     }
 
     public void refresh()

@@ -1,8 +1,8 @@
 /*
  * JavaTree.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: JavaTree.java,v 1.2 2002-12-24 17:01:27 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: JavaTree.java,v 1.3 2003-06-26 00:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,8 +101,7 @@ public final class JavaTree extends SidebarTree implements Constants,
         getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         setRootVisible(false);
         setCellRenderer(new TreeCellRenderer());
-        if (Platform.isJava14())
-            Utilities.setFocusTraversalKeysEnabled(this, false);
+        setFocusTraversalKeysEnabled(false);
         addKeyListener(this);
         addMouseListener(this);
         setToolTipText("");

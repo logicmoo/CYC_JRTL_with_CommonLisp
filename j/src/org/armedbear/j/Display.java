@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Display.java,v 1.11 2003-06-13 19:05:57 piso Exp $
+ * $Id: Display.java,v 1.12 2003-06-26 00:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,8 +120,7 @@ public final class Display extends JComponent implements Constants,
         if (plainFont == null)
             initializeStaticValues();
         initialize();
-        if (Platform.isJava14())
-            Utilities.setFocusTraversalKeysEnabled(this, false);
+        setFocusTraversalKeysEnabled(false);
         setToolTipText("");
     }
 

@@ -1,8 +1,8 @@
 /*
  * LocationBar.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: LocationBar.java,v 1.5 2003-02-21 14:51:08 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: LocationBar.java,v 1.6 2003-06-26 00:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,8 +73,7 @@ public final class LocationBar extends JPanel implements Constants,
         label.setHorizontalAlignment(JLabel.RIGHT);
         add(label);
         textField = new HistoryTextField(editor, 20);
-        if (Platform.isJava14())
-            Utilities.setFocusTraversalKeysEnabled(textField, false);
+        textField.setFocusTraversalKeysEnabled(false);
         add(textField);
         addCloseButton();
         textField.addMouseListener(this);

@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.45 2003-06-18 16:12:23 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.46 2003-06-26 00:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -797,8 +797,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             listbox.setFont(textField.getFont());
             if (completions.length < 8)
                 listbox.setVisibleRowCount(completions.length);
-            if (Platform.isJava14())
-                Utilities.setFocusTraversalKeysEnabled(listbox, false);
+            listbox.setFocusTraversalKeysEnabled(false);
             listbox.setSelectedIndex(0);
             listbox.addMouseListener(this);
         }

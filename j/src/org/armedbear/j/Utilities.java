@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.23 2003-06-25 18:10:07 piso Exp $
+ * $Id: Utilities.java,v 1.24 2003-06-26 00:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1628,39 +1628,6 @@ public final class Utilities implements Constants
         Border border = BorderFactory.createEtchedBorder();
         panel.setBorder(BorderFactory.createTitledBorder(border, title));
         return panel;
-    }
-
-    private static Method setFocusTraversalKeysEnabledMethod;
-
-    public static void setFocusTraversalKeysEnabled(Component component, boolean enabled)
-    {
-        if (!Platform.isJava14())
-            return;
-        if (setFocusTraversalKeysEnabledMethod == null) {
-            Class[] parameterTypes = new Class[1];
-            parameterTypes[0] = Boolean.TYPE;
-            try {
-                setFocusTraversalKeysEnabledMethod =
-                    java.awt.Component.class.getMethod("setFocusTraversalKeysEnabled",
-                        parameterTypes);
-            }
-            catch (NoSuchMethodException e) {
-                Log.error(e);
-                return;
-            }
-        }
-        if (setFocusTraversalKeysEnabledMethod != null) {
-            Object[] args = {new Boolean(enabled)};
-            try {
-                setFocusTraversalKeysEnabledMethod.invoke(component, args);
-            }
-            catch (IllegalAccessException e) {
-                Log.error(e);
-            }
-            catch (InvocationTargetException e) {
-                Log.error(e);
-            }
-        }
     }
 
     private static Method setExtendedStateMethod;
