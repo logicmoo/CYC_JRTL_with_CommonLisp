@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.402 2003-09-19 00:05:11 piso Exp $
+ * $Id: Primitives.java,v 1.403 2003-09-19 00:30:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1731,7 +1731,7 @@ public final class Primitives extends Module
                         } else
                             handler = obj;
                         LispObject[] handlerArgs = new LispObject[1];
-                        handlerArgs[0] = new JavaObject(c);
+                        handlerArgs[0] = c.getCondition();
                          // Might not return.
                         funcall(handler, handlerArgs, thread);
                     }
@@ -1768,7 +1768,7 @@ public final class Primitives extends Module
                         int numArgs = parameterList.length();
                         if (numArgs == 1) {
                             LispObject[] handlerArgs = new LispObject[1];
-                            handlerArgs[0] = new JavaObject(c);
+                            handlerArgs[0] = c.getCondition();
                             return funcall(handler, handlerArgs, thread);
                         }
                         if (numArgs == 0) {
