@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: print.lisp,v 1.5 2004-06-11 16:52:33 piso Exp $
+;;; $Id: print.lisp,v 1.6 2004-06-17 11:31:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -227,46 +227,45 @@
 
 ;;;; OUTPUT-OBJECT -- the main entry point
 
-;;; Objects whose print representation identifies them EQLly don't
-;;; need to be checked for circularity.
+;; Objects whose print representation identifies them EQLly don't need to be
+;; checked for circularity.
 (defun uniquely-identified-by-print-p (x)
   (or (numberp x)
       (characterp x)
       (and (symbolp x)
 	   (symbol-package x))))
 
+(defun %print-object (object stream)
+  (if *print-pretty*
+      (output-pretty-object object stream)
+      (output-ugly-object object stream)))
+
+(defun %check-object (object stream)
+  (multiple-value-bind (marker initiate) (check-for-circularity object t)
+    (if (eq initiate :initiate)
+        ;; Initialize circularity detection.
+        (let ((*circularity-hash-table* (make-hash-table :test 'eq)))
+          (%check-object object (make-broadcast-stream))
+          (let ((*circularity-counter* 0))
+            (%check-object object stream)))
+        ;; Otherwise...
+        (if marker
+            (progn
+              (when (handle-circularity marker stream)
+                (%print-object object stream)))
+            (%print-object object stream)))))
+
 ;;; Output OBJECT to STREAM observing all printer control variables.
 (defun output-object (object stream)
-  (labels ((print-it (stream)
-                     (if *print-pretty*
-                         (output-pretty-object object stream)
-                         (output-ugly-object object stream)))
-	   (check-it (stream)
-                     (multiple-value-bind (marker initiate)
-                       (check-for-circularity object t)
-                       ;; initialization of the circulation detect noise ...
-                       (if (eq initiate :initiate)
-                           (let ((*circularity-hash-table*
-                                  (make-hash-table :test 'eq)))
-                             (check-it (make-broadcast-stream))
-                             (let ((*circularity-counter* 0))
-                               (check-it stream)))
-                           ;; otherwise
-                           (if marker
-                               (progn
-                                 (when (handle-circularity marker stream)
-                                   (print-it stream)))
-                               (print-it stream))))))
-          (cond (;; Maybe we don't need to bother with circularity detection.
-	   (or (not *print-circle*)
-	       (uniquely-identified-by-print-p object))
-	   (print-it stream))
-                (;; If we have already started circularity detection, this
-	   ;; object might be a shared reference. If we have not, then
-	   ;; if it is a compound object it might contain a circular
-	   ;; reference to itself or multiple shared references.
-	   (or *circularity-hash-table*
-	       (compound-object-p object))
-	   (check-it stream))
-                (t
-                 (print-it stream)))))
+  (cond ((or (not *print-circle*)
+             (uniquely-identified-by-print-p object))
+         (%print-object object stream))
+        ;; If we have already started circularity detection, this object might
+        ;; be a shared reference. If we have not, then if it is a compound
+        ;; object, it might contain a circular reference to itself or multiple
+        ;; shared references.
+        ((or *circularity-hash-table*
+             (compound-object-p object))
+         (%check-object object stream))
+        (t
+         (%print-object object stream))))
