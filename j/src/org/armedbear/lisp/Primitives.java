@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.44 2003-02-21 15:19:24 piso Exp $
+ * $Id: Primitives.java,v 1.45 2003-02-21 16:11:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -733,39 +733,6 @@ public final class Primitives extends Module
             throw new LispError();
         }
     };
-
-    private static final Primitive3 SUBST = new Primitive3("subst") {
-        public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
-        {
-            return _subst(first, second, third);
-        }
-    };
-
-    private static LispObject _subst(LispObject n, LispObject o, LispObject expr)
-        throws LispError
-    {
-        if (expr == NIL)
-            return NIL;
-        if (expr instanceof Cons) {
-            LispObject[] array = expr.copyToArray();
-            final int length = array.length;
-            for (int i = 0; i < length; i++) {
-                LispObject obj = array[i];
-                if (obj == NIL)
-                    array[i] = NIL;
-                else if (obj instanceof Cons)
-                    array[i] = _subst(n, o, obj);
-                else if (eql(obj, o))
-                    array[i] = n;
-            }
-            LispObject result = (o == NIL) ? n : NIL;
-            for (int i = length; i-- > 0;)
-                result = new Cons(array[i], result);
-            return result;
-        }
-        throw new LispError();
-    }
 
     // Numeric equality.
     private static final Primitive EQUALS = new Primitive("=") {
