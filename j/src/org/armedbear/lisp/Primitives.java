@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.444 2003-09-26 18:38:36 piso Exp $
+ * $Id: Primitives.java,v 1.445 2003-09-27 18:31:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -665,40 +665,24 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            final CharacterOutputStream out;
-            LispObject streamArg = second;
-            if (streamArg == T)
-                streamArg = _TERMINAL_IO_.symbolValue();
-            else if (streamArg == NIL)
-                streamArg = _STANDARD_OUTPUT_.symbolValue();
-            if (streamArg instanceof CharacterOutputStream)
-                out = (CharacterOutputStream) streamArg;
-            else if (streamArg instanceof TwoWayStream)
-                out = ((TwoWayStream)streamArg).getOutputStream();
-            else
-                throw new ConditionThrowable(new TypeError(second, "character output stream"));
-            out.writeString(String.valueOf(first));
+            outSynonymOf(second).writeString(String.valueOf(first));
             return first;
         }
     };
 
     // ### princ
+    // princ object &optional output-stream => object
     private static final Primitive PRINC = new Primitive("princ") {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1 || args.length > 2)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            CharacterOutputStream out = null;
-            if (args.length == 2) {
-                if (args[1] instanceof CharacterOutputStream)
-                    out = (CharacterOutputStream) args[1];
-                else
-                    throw new ConditionThrowable(new TypeError(args[0], "output stream"));
-            }
-            if (out == null)
-                out = getStandardOutput();
-            if (out != null)
-                out.princ(args[0]);
+            final CharacterOutputStream out;
+            if (args.length == 1)
+                out = checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+            else
+                out = outSynonymOf(args[1]);
+            out.princ(args[0]);
             return args[0];
         }
     };
@@ -722,24 +706,15 @@ public final class Primitives extends Module
     private static final Primitive PRIN1 = new Primitive("prin1") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            CharacterOutputStream out = getStandardOutput();
-            if (out != null)
-                out.prin1(arg);
+            CharacterOutputStream out =
+                checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+            out.prin1(arg);
             return arg;
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            CharacterOutputStream out;
-            if (second instanceof CharacterOutputStream)
-                out = (CharacterOutputStream) second;
-            else if (second == T)
-                out = getTerminalIO().getOutputStream();
-            else if (second == NIL)
-                out = getStandardOutput();
-            else
-                throw new ConditionThrowable(new TypeError(second, "output stream"));
-            out.prin1(first);
+            outSynonymOf(second).prin1(first);
             return first;
         }
     };
@@ -754,51 +729,58 @@ public final class Primitives extends Module
     };
 
     // ### print
+    // print object &optional output-stream => object
     // PRINT is just like PRIN1 except that the printed representation of
     // object is preceded by a newline and followed by a space.
     private static final Primitive1 PRINT = new Primitive1("print") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            CharacterOutputStream out = getStandardOutput();
-            if (out != null) {
-                out.terpri();
-                out.prin1(arg);
-                out.writeString(" ");
-            }
+            CharacterOutputStream out =
+                checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+            out.terpri();
+            out.prin1(arg);
+            out.writeString(" ");
             return arg;
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            CharacterOutputStream out = outSynonymOf(second);
+            out.terpri();
+            out.prin1(first);
+            out.writeString(" ");
+            return first;
         }
     };
 
     // ### terpri
+    // terpri &optional output-stream => nil
     private static final Primitive TERPRI = new Primitive("terpri") {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length > 1)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            CharacterOutputStream out = null;
-            if (args.length == 1) {
-                if (args[0] instanceof CharacterOutputStream)
-                    out = (CharacterOutputStream) args[0];
-                else
-                    throw new ConditionThrowable(new TypeError(args[0], "output stream"));
-            }
-            if (out == null)
-                out = getStandardOutput();
+            final CharacterOutputStream out;
+            if (args.length == 0)
+                out = checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+            else
+                out = outSynonymOf(args[0]);
             return out.terpri();
         }
     };
 
     // ### fresh-line
+    // fresh-line &optional output-stream => generalized-boolean
     private static final Primitive FRESH_LINE = new Primitive("fresh-line") {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length > 1)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             CharacterOutputStream out;
-            if (args.length == 1)
-                out = checkOutputStream(args[0]);
+            if (args.length == 0)
+                out = checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
             else
-                out = getStandardOutput();
+                out = outSynonymOf(args[0]);
             return out.freshLine();
         }
     };
@@ -1207,7 +1189,7 @@ public final class Primitives extends Module
                 _args[i] = args[i+1];
             String s = _format(_args);
             if (destination == T) {
-                getStandardOutput().writeString(s);
+                checkOutputStream(_STANDARD_OUTPUT_.symbolValue()).writeString(s);
                 return NIL;
             }
             if (destination == NIL)
@@ -1220,7 +1202,7 @@ public final class Primitives extends Module
                 ((TwoWayStream)destination).getOutputStream().writeString(s);
                 return NIL;
             }
-            // Destination can also be stream or string with fill pointer.
+            // Destination can also be a string with a fill pointer.
 //             throw new ConditionThrowable(new LispError("FORMAT: not implemented"));
             return NIL;
         }
@@ -3468,20 +3450,12 @@ public final class Primitives extends Module
         {
             if (args.length < 1 || args.length > 2)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            char c = LispCharacter.getValue(args[0]);
-            CharacterOutputStream out = null;
+            final char c = LispCharacter.getValue(args[0]);
+            final CharacterOutputStream out;
             if (args.length == 1)
-                out = getStandardOutput();
-            else {
-                LispObject streamArg = args[1];
-                if (streamArg instanceof CharacterOutputStream)
-                    out = (CharacterOutputStream) streamArg;
-                else if (streamArg == T || streamArg == NIL)
-                    out = getStandardOutput();
-                else
-                    throw new ConditionThrowable(new TypeError(args[1],
-                                                               "character output stream"));
-            }
+                out = checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+            else
+                out = outSynonymOf(args[1]);
             out.writeChar(c);
             return args[0];
         }
@@ -3497,22 +3471,7 @@ public final class Primitives extends Module
             if (args.length != 4)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             String s = LispString.getValue(args[0]);
-            CharacterOutputStream out = null;
-            if (args.length == 1)
-                out = getStandardOutput();
-            else {
-                LispObject streamArg = args[1];
-                if (streamArg == T)
-                    streamArg = _TERMINAL_IO_.symbolValue();
-                else if (streamArg == NIL)
-                    streamArg = _STANDARD_OUTPUT_.symbolValue();
-                if (streamArg instanceof CharacterOutputStream)
-                    out = (CharacterOutputStream) streamArg;
-                else if (streamArg instanceof TwoWayStream)
-                    out = ((TwoWayStream)streamArg).getOutputStream();
-                else
-                    throw new ConditionThrowable(new TypeError(args[1], "character output stream"));
-            }
+            CharacterOutputStream out = outSynonymOf(args[1]);
             int start = Fixnum.getValue(args[2]);
             int end = Fixnum.getValue(args[3]);
             out.writeString(s.substring(start, end));
@@ -3521,25 +3480,13 @@ public final class Primitives extends Module
     };
 
     // ### %write-newline
-    // write-string string output-stream start end => string
+    // %write-newline output-stream => nil
     private static final Primitive1 _WRITE_NEWLINE =
         new Primitive1("%write-newline", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            LispObject streamArg = arg;
-            if (streamArg == T)
-                streamArg = _TERMINAL_IO_.symbolValue();
-            else if (streamArg == NIL)
-                streamArg = _STANDARD_OUTPUT_.symbolValue();
-            final CharacterOutputStream out;
-            if (streamArg instanceof CharacterOutputStream)
-                out = (CharacterOutputStream) streamArg;
-            else if (streamArg instanceof TwoWayStream)
-                out = ((TwoWayStream)streamArg).getOutputStream();
-            else
-                throw new ConditionThrowable(new TypeError(streamArg, "character output stream"));
-            out.writeString(System.getProperty("line.separator"));
+            outSynonymOf(arg).writeString(System.getProperty("line.separator"));
             return NIL;
         }
     };
@@ -3569,25 +3516,31 @@ public final class Primitives extends Module
     private static final LispObject flushOutput(LispObject[] args)
         throws ConditionThrowable
     {
-        CharacterOutputStream out = null;
+        final CharacterOutputStream out;
         if (args.length == 0)
-            out = getStandardOutput();
-        else {
-            LispObject streamArg = args[0];
-            if (streamArg == T)
-                streamArg = _TERMINAL_IO_.symbolValue();
-            else if (streamArg == NIL)
-                streamArg = _STANDARD_OUTPUT_.symbolValue();
-            if (streamArg instanceof CharacterOutputStream)
-                out = (CharacterOutputStream) streamArg;
-            else if (streamArg instanceof TwoWayStream)
-                out = ((TwoWayStream)streamArg).getOutputStream();
-            else
-                throw new ConditionThrowable(new TypeError(args[0], "character output stream"));
-        }
+            out = checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+        else
+            out = outSynonymOf(args[0]);
         out.flushOutput();
         return NIL;
     }
+
+    // ### clear-input
+    // clear-input &optional input-stream => nil
+    private static final Primitive CLEAR_INPUT = new Primitive("clear-input") {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length > 1)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            final CharacterInputStream in;
+            if (args.length == 0)
+                in = checkInputStream(_STANDARD_INPUT_.symbolValue());
+            else
+                in = inSynonymOf(args[0]);
+            in.clearInput();
+            return NIL;
+        }
+    };
 
     // ### close
     // close stream &key abort => result
