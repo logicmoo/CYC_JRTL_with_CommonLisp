@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.48 2003-05-30 16:17:42 piso Exp $
+;;; $Id: boot.lisp,v 1.49 2003-05-31 14:05:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -95,22 +95,23 @@
   (%make-hash-table test size rehash-size rehash-threshold))
 
 (dolist (name '("documentation.lisp"
+                "exports.lisp"
                 "early-defuns.lisp"
                 "backquote.lisp"
                 "setf.lisp"
                 "macros.lisp"
                 "destructuring-bind.lisp"
-                "defmacro.lisp"
+;;                 "defmacro.lisp"
+                "arrays.lisp"
+                "compiler.lisp"
                 "list.lisp"
                 "sequences.lisp"
                 "symbol.lisp"
                 "error.lisp"
                 "chars.lisp"
                 "strings.lisp"
-                "sort.lisp"
-                "arrays.lisp"
-                "compiler.lisp"))
-  (cl::%load name))
+                "sort.lisp"))
+  (%load name))
 
 
 ;;; Miscellany.
@@ -164,36 +165,8 @@
   nil)
 
 
-(format t "; Expanding macros ...~%")
-(finish-output)
-(let ((start (get-internal-real-time))
-      elapsed)
-  (c::compile-package :compiler)
-  (c::compile-package :cl)
-  (setq elapsed (- (get-internal-real-time) start))
-  (format t "; Expanded macros (~A seconds)~%"
-          (/ (coerce elapsed 'float) internal-time-units-per-second))
-  (finish-output))
-
-
-;; Redefine DEFUN to compile the definition on the fly.
-(defmacro defun (name lambda-list &rest body)
-  `(prog1
-    (cl::%defun ',name ',lambda-list ',body)
-    (compile ',name)))
-
-;; Redefine DEFMACRO to compile the expansion function on the fly.
-(defmacro defmacro (name lambda-list &rest body)
-  (let* ((form (gensym))
-         (env (gensym))
-         (body (parse-defmacro lambda-list form body name 'defmacro
-                               :environment env))
-         (expander `(lambda (,form ,env) (block ,name ,body))))
-    `(fset ',name (make-macro (compile nil ,expander)))))
-
-;; Load defstruct.lisp and loop.lisp AFTER redefining DEFUN and DEFMACRO...
-(cl::%load "defstruct.lisp")
-(cl::%load "loop.lisp")
+(%load "defstruct.lisp")
+(%load "loop.lisp")
 
 
 (debug)

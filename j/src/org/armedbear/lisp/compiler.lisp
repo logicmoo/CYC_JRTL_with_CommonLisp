@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.14 2003-05-30 19:35:14 piso Exp $
+;;; $Id: compiler.lisp,v 1.15 2003-05-31 14:04:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 (export 'compile)
 
-(in-package "C")
+(in-package "COMPILER")
 
 (defun compile-progn (forms)
   (mapcar #'compile-sexp forms))
@@ -216,3 +216,23 @@
           (setf (fdefinition name) (make-macro result))
           (setf (fdefinition name) result)))
     (values (or name result) nil nil)))
+
+(compile-package :compiler)
+(compile-package :cl)
+
+(in-package :cl)
+
+;; Redefine DEFUN to compile the definition on the fly.
+(defmacro defun (name lambda-list &rest body)
+  `(prog1
+    (cl::%defun ',name ',lambda-list ',body)
+    (compile ',name)))
+
+;; Redefine DEFMACRO to compile the expansion function on the fly.
+(defmacro defmacro (name lambda-list &rest body)
+  (let* ((form (gensym))
+         (env (gensym))
+         (body (parse-defmacro lambda-list form body name 'defmacro
+                               :environment env))
+         (expander `(lambda (,form ,env) (block ,name ,body))))
+    `(fset ',name (make-macro (compile nil ,expander)))))
