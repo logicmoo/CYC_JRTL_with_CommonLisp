@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.2 2002-09-29 17:15:15 piso Exp $
+ * $Id: Editor.java,v 1.3 2002-10-02 16:30:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2242,6 +2242,16 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         setDefaultCursor();
     }
 
+    public boolean execute(String command) throws NoSuchMethodException
+    {
+        String[] array = parseCommand(command);
+        if (array == null)
+            return false;
+        String methodName = array[0];
+        String parameters = array[1];
+        return execute(methodName, parameters);
+    }
+
     public boolean execute(String commandName, String parameters) throws NoSuchMethodException
     {
         if (commandName == null)
@@ -2357,7 +2367,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             insertKeyTextInternal(keyChar, keyCode, modifiers);
             return true;
         }
-
         KeyMapping mapping = getKeyMapping(keyChar, keyCode, modifiers);
         if (mapping != null) {
             String command = mapping.getCommand();
@@ -2378,7 +2387,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 }
             }
         }
-
         return false;
     }
 
@@ -6142,14 +6150,10 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     private static String[] parseCommand(String command)
     {
         command = command.trim();
-
         // Command name is terminated by whitespace or '('.
         char delimiter = '\0';
-
         int index = -1;
-
         int commandLength = command.length();
-
         for (int i = 0; i < commandLength; i++) {
             char c = command.charAt(i);
             if (c == '(' || Character.isWhitespace(c)) {
@@ -6158,9 +6162,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 break;
             }
         }
-
         String methodName, parameters;
-
         if (index < 0) {
             methodName = command;
             parameters = null;
