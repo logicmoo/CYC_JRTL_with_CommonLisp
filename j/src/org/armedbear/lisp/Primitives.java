@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.247 2003-06-20 19:33:31 piso Exp $
+ * $Id: Primitives.java,v 1.248 2003-06-20 19:49:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3316,31 +3316,6 @@ public final class Primitives extends Module
                 default:
                     throw new WrongNumberOfArgumentsException(this);
             }
-        }
-    };
-
-    // ### make-string-output-stream
-    // make-string-output-stream &key element-type => string-stream
-    private static final Primitive MAKE_STRING_OUTPUT_STREAM =
-        new Primitive("make-string-output-stream") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            if (args.length > 1)
-                throw new WrongNumberOfArgumentsException(this);
-            // FIXME Ignore arg for now.
-            return new StringOutputStream();
-        }
-    };
-
-    // ### get-output-stream-string
-    // get-output-stream-string string-output-stream => string
-    private static final Primitive1 GET_OUTPUT_STREAM_STRING =
-        new Primitive1("get-output-stream-string") {
-        public LispObject execute(LispObject arg) throws LispError
-        {
-            if (arg instanceof StringOutputStream)
-                return ((StringOutputStream)arg).getString();
-            throw new TypeError(this, "string output stream");
         }
     };
 
