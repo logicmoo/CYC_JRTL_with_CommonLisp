@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.13 2004-10-12 17:02:16 piso Exp $
+ * $Id: MathFunctions.java,v 1.14 2004-10-12 18:32:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,14 +100,11 @@ public final class MathFunctions extends Lisp
 
     private static LispObject asin(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof Complex) {
-            LispObject im = ((Complex)arg).getImaginaryPart();
-            if (im.zerop())
-                return Complex.getInstance(asin(((Complex)arg).getRealPart()),
-                                           im);
+        if (arg instanceof LispFloat) {
+            double d = ((LispFloat)arg).value;
+            if (Math.abs(d) < 1)
+                return new LispFloat(Math.asin(d));
         }
-        if (arg instanceof LispFloat)
-            return new LispFloat(Math.asin(((LispFloat)arg).value));
         LispObject result = arg.multiplyBy(arg);
         result = Fixnum.ONE.subtract(result);
         result = sqrt(result);
@@ -115,7 +112,8 @@ public final class MathFunctions extends Lisp
         n = n.multiplyBy(arg);
         result = n.add(result);
         result = log(result);
-        result = result.multiplyBy(Complex.getInstance(Fixnum.ZERO, Fixnum.MINUS_ONE));
+        result = result.multiplyBy(Complex.getInstance(Fixnum.ZERO,
+                                                       Fixnum.MINUS_ONE));
         if (result instanceof Complex) {
             if (arg instanceof Complex)
                 return result;
@@ -137,14 +135,11 @@ public final class MathFunctions extends Lisp
 
     private static LispObject acos(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof Complex) {
-            LispObject im = ((Complex)arg).getImaginaryPart();
-            if (im.zerop())
-                return Complex.getInstance(acos(((Complex)arg).getRealPart()),
-                                           im);
+        if (arg instanceof LispFloat) {
+            double d = ((LispFloat)arg).value;
+            if (Math.abs(d) < 1)
+                return new LispFloat(Math.acos(d));
         }
-        if (arg instanceof LispFloat)
-            return new LispFloat(Math.acos(((LispFloat)arg).value));
         LispObject result = LispFloat.PI.divideBy(Fixnum.TWO);
         result = result.subtract(asin(arg));
         if (result instanceof Complex) {
