@@ -1,10 +1,6 @@
 ;;; j.lisp
 
-(unless (find-package "J")
-  (make-package "J"))
-
 (in-package "J")
-(use-package "JAVA")
 
 (export '(global-map-key global-unmap-key map-key-for-mode unmap-key-for-mode
           set-global-property
@@ -12,14 +8,14 @@
           log.debug
           add-hook
           invoke-hook
-          current-editor
           update-display
           update-location-bar
           location-bar-cancel-input
           restore-focus
           status
           defcommand
-          key-pressed-hook))
+          key-pressed-hook
+          variable-value))
 
 (defun global-map-key (key command)
   (jstatic "globalMapKey" "org.armedbear.j.API" key command))
@@ -72,9 +68,9 @@
       (dolist (function hooks)
         (apply function args)))))
 
-(defun current-editor ()
-  (let ((method (jmethod "org.armedbear.j.Editor" "currentEditor")))
-    (jstatic method nil)))
+;; (defun current-editor ()
+;;   (let ((method (jmethod "org.armedbear.j.Editor" "currentEditor")))
+;;     (jstatic method nil)))
 
 (defun update-display (&optional ed)
   (let ((method (jmethod "org.armedbear.j.Editor" "updateDisplay"))
@@ -113,6 +109,22 @@
          (lambda () (execute-command ,command))))
 
 (defvar key-pressed-hook nil)
+
+(defun variable-value (name &optional (kind :current) where)
+  (%variable-value name kind where))
+
+(defun set-variable-value (name kind &rest rest)
+  (let (where new-value)
+    (ecase (length rest)
+      (1
+       (setq where nil
+             new-value (car rest)))
+      (2
+       (setq where (car rest)
+             new-value (cadr rest))))
+    (%set-variable-value name kind where new-value)))
+
+(defsetf variable-value set-variable-value)
 
 (in-package "COMMON-LISP-USER")
 (use-package "J")
