@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.32 2004-09-30 19:12:58 piso Exp $
+ * $Id: AbstractArray.java,v 1.33 2004-10-07 14:57:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,7 +208,10 @@ public abstract class AbstractArray extends LispObject
             appendContents(dimv, 0, sb, thread);
             return sb.toString();
         }
-        sb.append("(SIMPLE-ARRAY T (");
+        sb.append('(');
+        if (this instanceof SimpleArray)
+            sb.append("SIMPLE-");
+        sb.append("ARRAY T (");
         for (int i = 0; i < dimv.length; i++) {
             sb.append(dimv[i]);
             if (i < dimv.length - 1)
