@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.40 2003-06-11 15:09:16 piso Exp $
+ * $Id: Buffer.java,v 1.41 2003-06-18 15:43:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1344,27 +1344,28 @@ public class Buffer extends SystemBuffer
         if (file.equals(Preferences.getPreferencesFile())) {
             // Reload preferences.
             Editor.loadPreferences();
-            // Force mode-specific keymaps to be reloaded.
-            modeList.resetModes();
-            // Force global keymap to be reloaded.
-            KeyMap.resetGlobalKeyMap();
+            if (Editor.preferences().getBooleanProperty(Property.AUTO_RELOAD_KEY_MAPS)) {
+                // Reload keymaps.
+                KeyMap.reloadKeyMaps();
+            }
             repaint = true;
         } else {
-            // Reload mode-specific keymap(s) if modified.
-            synchronized (modeList) {
-                Iterator it = modeList.iterator();
-                while (it.hasNext()) {
-                    ModeListEntry entry = (ModeListEntry) it.next();
-                    Mode mode = entry.getMode(false);
-                    if (mode != null) {
-                        if (file.equals(mode.getKeyMapFile()))
-                            mode.reset();
+            if (Editor.preferences().getBooleanProperty(Property.AUTO_RELOAD_KEY_MAPS)) {
+                // Reload mode-specific keymap(s) if modified.
+                synchronized (modeList) {
+                    for (Iterator it = modeList.iterator(); it.hasNext();) {
+                        ModeListEntry entry = (ModeListEntry) it.next();
+                        Mode mode = entry.getMode(false);
+                        if (mode != null) {
+                            if (file.equals(mode.getKeyMapFile()))
+                                mode.deleteKeyMap();
+                        }
                     }
                 }
+                // Global keymap.
+                if (file.equals(KeyMap.getGlobalKeyMapFile()))
+                    KeyMap.deleteGlobalKeyMap();
             }
-            // Global keymap.
-            if (file.equals(KeyMap.getGlobalKeyMapFile()))
-                KeyMap.resetGlobalKeyMap();
         }
         // Reload theme if modified.
         String theme = Editor.preferences().getStringProperty(Property.THEME);
