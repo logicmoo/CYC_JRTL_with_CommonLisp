@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.24 2004-06-20 14:56:15 piso Exp $
+;;; $Id: pprint.lisp,v 1.25 2004-06-20 16:32:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1104,10 +1104,9 @@
 		    (not (stringp object)) (not (bit-vector-p object))
 		    (not (structure-type-p (type-of object))))
 	       (pretty-array xp object))
-	      (T (let ((stuff
-			 (with-output-to-string (s)
-			   (non-pretty-print object s))))
-		   (write-string+ stuff xp 0 (length stuff)))))))))
+	      (t
+               (let ((stuff (with-output-to-string (s) (non-pretty-print object s))))
+                 (write-string+ stuff xp 0 (length stuff)))))))))
 
 (defun non-pretty-print (object s)
   (write object
