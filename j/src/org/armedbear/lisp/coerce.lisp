@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: coerce.lisp,v 1.1 2004-01-17 13:12:52 piso Exp $
+;;; $Id: coerce.lisp,v 1.2 2004-02-10 16:19:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,8 +40,8 @@
                 (return-from coerce object))))
         ((eq result-type 'function)
          (return-from coerce (coerce-to-function object)))
-        ((and (typep object 'sequence)
-              (subtypep result-type 'sequence))
+        ((and (%typep object 'sequence)
+              (%subtypep result-type 'sequence))
          (return-from coerce (concatenate result-type object)))
         (t
          (error 'simple-type-error
