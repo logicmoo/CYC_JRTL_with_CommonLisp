@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.6 2003-09-14 14:24:51 piso Exp $
+;;; $Id: subtypep.lisp,v 1.7 2003-09-14 16:03:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,6 +155,8 @@
     (return-from sub-interval-p t)))
 
 (defun subtypep (type1 type2)
+  (when (or (null type1) (eq type2 t))
+    (return-from subtypep (values t t)))
   (setq type1 (normalize-type type1)
         type2 (normalize-type type2))
   (when (equal type1 type2)
@@ -164,12 +166,7 @@
         (i1 (cdr type1))
         (i2 (cdr type2)))
     (unless (or i1 i2)
-      (cond ((or (eq t1 nil) (eq t2 t))
-             (return-from subtypep (values t t)))
-            ((eq t2 nil)
-             (return-from subtypep (values nil t)))
-            (t
-             (return-from subtypep (values (simple-subtypep t1 t2) t)))))
+      (return-from subtypep (values (simple-subtypep t1 t2) t)))
     (cond ((eq t2 'atom)
            (cond ((member t1 '(cons list)) (values nil t))
                  ((known-type-p t1) (values t t))
