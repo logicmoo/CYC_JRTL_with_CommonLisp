@@ -1,7 +1,7 @@
 ;;; write-to-string.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: write-to-string.lisp,v 1.2 2004-04-24 12:40:41 piso Exp $
+;;; $Id: write-to-string.lisp,v 1.3 2004-05-10 01:11:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,14 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from SBCL.
-
 (in-package "SYSTEM")
-
-(defun stringify-object (object)
-  (let ((stream (make-string-output-stream)))
-    (output-object object stream)
-    (get-output-stream-string stream)))
 
 (defun write-to-string (object &key
                                ((:escape *print-escape*) *print-escape*)
@@ -38,11 +31,8 @@
                                ((:array *print-array*) *print-array*)
                                ((:gensym *print-gensym*) *print-gensym*)
                                ((:readably *print-readably*) *print-readably*)
-                               ((:right-margin *print-right-margin*)
-                                *print-right-margin*)
-                               ((:miser-width *print-miser-width*)
-                                *print-miser-width*)
+                               ((:right-margin *print-right-margin*) *print-right-margin*)
+                               ((:miser-width *print-miser-width*) *print-miser-width*)
                                ((:lines *print-lines*) *print-lines*)
-                               ((:pprint-dispatch *print-pprint-dispatch*)
-                                *print-pprint-dispatch*))
-  (stringify-object object))
+                               ((:pprint-dispatch *print-pprint-dispatch*) *print-pprint-dispatch*))
+  (%write-to-string object))
