@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.32 2005-01-13 11:54:36 piso Exp $
+ * $Id: LispReader.java,v 1.33 2005-02-06 00:54:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,9 +188,9 @@ public final class LispReader extends Lisp
                 if (c == '0' || c == '1')
                     sb.append(c);
                 else {
-                    int attr = currentReadtable().getAttribute(c);
-                    if (attr == Readtable.ATTR_WHITESPACE ||
-                        attr == Readtable.ATTR_TERMINATING_MACRO) {
+                    int syntaxType = currentReadtable().getSyntaxType(c);
+                    if (syntaxType == Readtable.SYNTAX_TYPE_WHITESPACE ||
+                        syntaxType == Readtable.SYNTAX_TYPE_TERMINATING_MACRO) {
                         stream._unreadChar(c);
                         break;
                     } else if (!suppress) {

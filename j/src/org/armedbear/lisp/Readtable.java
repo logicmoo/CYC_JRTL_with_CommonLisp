@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Readtable.java,v 1.39 2005-02-05 20:48:50 piso Exp $
+ * $Id: Readtable.java,v 1.40 2005-02-06 00:53:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,14 +25,14 @@ import java.util.ArrayList;
 
 public final class Readtable extends LispObject
 {
-    public static final byte ATTR_CONSTITUENT           = 0;
-    public static final byte ATTR_WHITESPACE            = 1;
-    public static final byte ATTR_TERMINATING_MACRO     = 2;
-    public static final byte ATTR_NON_TERMINATING_MACRO = 3;
-    public static final byte ATTR_SINGLE_ESCAPE         = 4;
-    public static final byte ATTR_MULTIPLE_ESCAPE       = 5;
+    public static final byte SYNTAX_TYPE_CONSTITUENT           = 0;
+    public static final byte SYNTAX_TYPE_WHITESPACE            = 1;
+    public static final byte SYNTAX_TYPE_TERMINATING_MACRO     = 2;
+    public static final byte SYNTAX_TYPE_NON_TERMINATING_MACRO = 3;
+    public static final byte SYNTAX_TYPE_SINGLE_ESCAPE         = 4;
+    public static final byte SYNTAX_TYPE_MULTIPLE_ESCAPE       = 5;
 
-    private final byte[]          attributes           = new byte[CHAR_MAX];
+    private final byte[]          syntax               = new byte[CHAR_MAX];
     private final LispObject[]    readerMacroFunctions = new LispObject[CHAR_MAX];
     private final DispatchTable[] dispatchTables       = new DispatchTable[CHAR_MAX];
 
@@ -40,24 +40,24 @@ public final class Readtable extends LispObject
 
     public Readtable()
     {
-        attributes[9]    = ATTR_WHITESPACE; // tab
-        attributes[10]   = ATTR_WHITESPACE; // linefeed
-        attributes[12]   = ATTR_WHITESPACE; // form feed
-        attributes[13]   = ATTR_WHITESPACE; // return
-        attributes[' ']  = ATTR_WHITESPACE;
+        syntax[9]    = SYNTAX_TYPE_WHITESPACE; // tab
+        syntax[10]   = SYNTAX_TYPE_WHITESPACE; // linefeed
+        syntax[12]   = SYNTAX_TYPE_WHITESPACE; // form feed
+        syntax[13]   = SYNTAX_TYPE_WHITESPACE; // return
+        syntax[' ']  = SYNTAX_TYPE_WHITESPACE;
 
-        attributes['"']  = ATTR_TERMINATING_MACRO;
-        attributes['\''] = ATTR_TERMINATING_MACRO;
-        attributes['(']  = ATTR_TERMINATING_MACRO;
-        attributes[')']  = ATTR_TERMINATING_MACRO;
-        attributes[',']  = ATTR_TERMINATING_MACRO;
-        attributes[';']  = ATTR_TERMINATING_MACRO;
-        attributes['`']  = ATTR_TERMINATING_MACRO;
+        syntax['"']  = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax['\''] = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax['(']  = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax[')']  = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax[',']  = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax[';']  = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax['`']  = SYNTAX_TYPE_TERMINATING_MACRO;
 
-        attributes['#']  = ATTR_NON_TERMINATING_MACRO;
+        syntax['#']  = SYNTAX_TYPE_NON_TERMINATING_MACRO;
 
-        attributes['\\'] = ATTR_SINGLE_ESCAPE;
-        attributes['|']  = ATTR_MULTIPLE_ESCAPE;
+        syntax['\\'] = SYNTAX_TYPE_SINGLE_ESCAPE;
+        syntax['|']  = SYNTAX_TYPE_MULTIPLE_ESCAPE;
 
         readerMacroFunctions[';']  = LispReader.READ_COMMENT;
         readerMacroFunctions['"']  = LispReader.READ_STRING;
@@ -107,7 +107,7 @@ public final class Readtable extends LispObject
         else
             rt = checkReadtable(obj);
         synchronized (rt) {
-            System.arraycopy(rt.attributes, 0, attributes, 0,
+            System.arraycopy(rt.syntax, 0, syntax, 0,
                              CHAR_MAX);
             System.arraycopy(rt.readerMacroFunctions, 0, readerMacroFunctions, 0,
                              CHAR_MAX);
@@ -124,7 +124,7 @@ public final class Readtable extends LispObject
     // FIXME synchronization
     private static void copyReadtable(Readtable from, Readtable to)
     {
-        System.arraycopy(from.attributes, 0, to.attributes, 0,
+        System.arraycopy(from.syntax, 0, to.syntax, 0,
                          CHAR_MAX);
         System.arraycopy(from.readerMacroFunctions, 0, to.readerMacroFunctions, 0,
                          CHAR_MAX);
@@ -170,15 +170,15 @@ public final class Readtable extends LispObject
     public boolean isWhitespace(char c)
     {
         if (c < CHAR_MAX)
-            return attributes[c] == ATTR_WHITESPACE;
+            return syntax[c] == SYNTAX_TYPE_WHITESPACE;
         return false;
     }
 
-    public byte getAttribute(char c)
+    public byte getSyntaxType(char c)
     {
         if (c < CHAR_MAX)
-            return attributes[c];
-        return ATTR_CONSTITUENT;
+            return syntax[c];
+        return SYNTAX_TYPE_CONSTITUENT;
     }
 
     public boolean isInvalid(char c)
@@ -225,8 +225,7 @@ public final class Readtable extends LispObject
         LispObject function = getReaderMacroFunction(c);
         LispObject non_terminating_p;
         if (function != null) {
-            byte attribute = attributes[c];
-            if (attribute == ATTR_NON_TERMINATING_MACRO)
+            if (syntax[c] == SYNTAX_TYPE_NON_TERMINATING_MACRO)
                 non_terminating_p = T;
             else
                 non_terminating_p = NIL;
@@ -239,13 +238,13 @@ public final class Readtable extends LispObject
 
     private void makeDispatchMacroCharacter(char dispChar, LispObject non_terminating_p)
     {
-        byte attribute;
+        byte syntaxType;
         if (non_terminating_p != NIL)
-            attribute = ATTR_NON_TERMINATING_MACRO;
+            syntaxType = SYNTAX_TYPE_NON_TERMINATING_MACRO;
         else
-            attribute = ATTR_TERMINATING_MACRO;
+            syntaxType = SYNTAX_TYPE_TERMINATING_MACRO;
         // FIXME synchronization
-        attributes[dispChar] = attribute;
+        syntax[dispChar] = syntaxType;
         readerMacroFunctions[dispChar] = LispReader.READ_DISPATCH_CHAR;
         dispatchTables[dispChar] = new DispatchTable();
     }
@@ -372,7 +371,7 @@ public final class Readtable extends LispObject
             char c = LispCharacter.getValue(first);
             Readtable rt = currentReadtable();
             // FIXME synchronization
-            rt.attributes[c] = ATTR_TERMINATING_MACRO;
+            rt.syntax[c] = SYNTAX_TYPE_TERMINATING_MACRO;
             rt.readerMacroFunctions[c] = coerceToFunction(second);
             return T;
         }
@@ -383,13 +382,13 @@ public final class Readtable extends LispObject
         {
             char c = LispCharacter.getValue(first);
             Readtable rt = currentReadtable();
-            byte attribute;
+            byte syntaxType;
             if (third != NIL)
-                attribute = ATTR_NON_TERMINATING_MACRO;
+                syntaxType = SYNTAX_TYPE_NON_TERMINATING_MACRO;
             else
-                attribute = ATTR_TERMINATING_MACRO;
+                syntaxType = SYNTAX_TYPE_TERMINATING_MACRO;
             // FIXME synchronization
-            rt.attributes[c] = attribute;
+            rt.syntax[c] = syntaxType;
             rt.readerMacroFunctions[c] = coerceToFunction(second);
             return T;
         }
@@ -399,14 +398,14 @@ public final class Readtable extends LispObject
             if (args.length != 4)
                 return signal(new WrongNumberOfArgumentsException(this));
             char c = LispCharacter.getValue(args[0]);
-            byte attribute;
+            byte syntaxType;
             if (args[2] != NIL)
-                attribute = ATTR_NON_TERMINATING_MACRO;
+                syntaxType = SYNTAX_TYPE_NON_TERMINATING_MACRO;
             else
-                attribute = ATTR_TERMINATING_MACRO;
+                syntaxType = SYNTAX_TYPE_TERMINATING_MACRO;
             Readtable rt = checkReadtable(args[3]);
             // FIXME synchronization
-            rt.attributes[c] = attribute;
+            rt.syntax[c] = syntaxType;
             rt.readerMacroFunctions[c] = coerceToFunction(args[1]);
             return T;
         }
@@ -507,7 +506,7 @@ public final class Readtable extends LispObject
             else
                 fromReadtable = new Readtable(NIL);
             // FIXME synchronization
-            toReadtable.attributes[toChar] = fromReadtable.attributes[fromChar];
+            toReadtable.syntax[toChar] = fromReadtable.syntax[fromChar];
             toReadtable.readerMacroFunctions[toChar] =
                 fromReadtable.readerMacroFunctions[fromChar];
             return T;

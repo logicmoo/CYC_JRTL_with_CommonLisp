@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.108 2005-02-06 00:40:22 piso Exp $
+ * $Id: Stream.java,v 1.109 2005-02-06 00:55:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -547,8 +547,8 @@ public class Stream extends LispObject
                 return null;
             }
             char c = (char) n;
-            byte attr = rt.getAttribute(c);
-            if (attr == Readtable.ATTR_SINGLE_ESCAPE) {
+            byte syntaxType = rt.getSyntaxType(c);
+            if (syntaxType == Readtable.SYNTAX_TYPE_SINGLE_ESCAPE) {
                 n = _readChar();
                 if (n < 0) {
                     signal(new EndOfFile(this));
@@ -558,7 +558,7 @@ public class Stream extends LispObject
                 sb.append((char)n);
                 continue;
             }
-            if (attr == Readtable.ATTR_MULTIPLE_ESCAPE)
+            if (syntaxType == Readtable.SYNTAX_TYPE_MULTIPLE_ESCAPE)
                 break;
             sb.append(c);
         }
@@ -693,8 +693,8 @@ public class Stream extends LispObject
         if (sb.length() > 0) {
             Debug.assertTrue(sb.length() == 1);
             char c = sb.charAt(0);
-            byte attr = rt.getAttribute(c);
-            if (attr == Readtable.ATTR_SINGLE_ESCAPE) {
+            byte syntaxType = rt.getSyntaxType(c);
+            if (syntaxType == Readtable.SYNTAX_TYPE_SINGLE_ESCAPE) {
                 int n = _readChar();
                 if (n < 0) {
                     signal(new EndOfFile(this));
@@ -704,7 +704,7 @@ public class Stream extends LispObject
                 sb.setCharAt(0, (char) n);
                 flags = new BitSet(1);
                 flags.set(0);
-            } else if (attr == Readtable.ATTR_MULTIPLE_ESCAPE) {
+            } else if (syntaxType == Readtable.SYNTAX_TYPE_MULTIPLE_ESCAPE) {
                 sb.setLength(0);
                 sb.append(readMultipleEscape(rt));
                 flags = new BitSet(sb.length());
@@ -728,13 +728,13 @@ public class Stream extends LispObject
                 _unreadChar(n);
                 break;
             }
-            byte attribute = rt.getAttribute(c);
-            if (attribute == Readtable.ATTR_TERMINATING_MACRO) {
+            byte syntaxType = rt.getSyntaxType(c);
+            if (syntaxType == Readtable.SYNTAX_TYPE_TERMINATING_MACRO) {
                 _unreadChar(c);
                 break;
             }
             rt.checkInvalid(c);
-            if (attribute == Readtable.ATTR_SINGLE_ESCAPE) {
+            if (syntaxType == Readtable.SYNTAX_TYPE_SINGLE_ESCAPE) {
                 n = _readChar();
                 if (n < 0)
                     break;
@@ -744,7 +744,7 @@ public class Stream extends LispObject
                 flags.set(sb.length() - 1);
                 continue;
             }
-            if (attribute == Readtable.ATTR_MULTIPLE_ESCAPE) {
+            if (syntaxType == Readtable.SYNTAX_TYPE_MULTIPLE_ESCAPE) {
                 int begin = sb.length();
                 sb.append(readMultipleEscape(rt));
                 int end = sb.length();
