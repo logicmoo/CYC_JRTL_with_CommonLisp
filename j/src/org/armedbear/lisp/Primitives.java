@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.69 2003-03-03 03:04:50 piso Exp $
+ * $Id: Primitives.java,v 1.70 2003-03-03 15:05:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -994,6 +994,16 @@ public final class Primitives extends Module
                 throw new SimpleError(((Symbol)datum).getName());
             }
             throw new SimpleError(_format(args));
+        }
+    };
+
+    // ### signal
+    private static final Primitive SIGNAL = new Primitive("signal") {
+        public LispObject execute(LispObject[] args) throws Condition
+        {
+            if (args.length < 1)
+                throw new WrongNumberOfArgumentsException(this);
+            throw new SimpleCondition();
         }
     };
 
