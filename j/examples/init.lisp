@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.20 2004-08-18 18:40:22 piso Exp $
+;;; $Id: init.lisp,v 1.21 2004-09-02 21:33:00 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -116,3 +116,10 @@
 (maybe-load "/home/peter/.j/complete.lisp")
 
 (maybe-load "/home/peter/depot/j/build-abcl.lisp")
+
+(add-hook 'lisp-shell-startup-hook
+          (lambda (buffer command)
+            (when (or (search "org.armedbear.lisp" command)
+                      (search "abcl" command)
+                      (search "sbcl" command))
+              (sys:load-system-file "slime-loader"))))
