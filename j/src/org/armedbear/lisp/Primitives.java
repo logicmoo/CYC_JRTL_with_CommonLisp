@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.652 2004-06-07 02:09:18 piso Exp $
+ * $Id: Primitives.java,v 1.653 2004-06-07 12:41:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3386,10 +3386,14 @@ public final class Primitives extends Lisp
             catch (ClassCastException e) {
                 return signal(new TypeError(first, Symbol.STRING));
             }
+            char[] chars = s.chars();
             Stream out = outSynonymOf(second);
             int start = Fixnum.getValue(third);
-            int end = Fixnum.getValue(fourth);
-            char[] chars = s.chars();
+            int end;
+            if (fourth == NIL)
+                end = chars.length;
+            else
+                end = Fixnum.getValue(fourth);
             checkBounds(start, end, chars.length);
             out._writeChars(chars, start, end);
             return first;
