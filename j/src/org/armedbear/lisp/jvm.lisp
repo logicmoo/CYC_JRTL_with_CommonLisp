@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.34 2003-11-16 01:47:08 piso Exp $
+;;; $Id: jvm.lisp,v 1.35 2003-11-16 03:07:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -791,6 +791,14 @@
               (instr (instruction-opcode instruction))
               (instruction-args instruction)))))
 
+(defun validate-labels ()
+  (dotimes (i (length *code*))
+    (let* ((instruction (svref *code* i))
+           (opcode (instruction-opcode instruction)))
+      (when (eql opcode 202)
+        (let ((label (car (instruction-args instruction))))
+          (set label i))))))
+
 (defun optimize-code ()
   (when *debug*
     (format t "----- before optimization -----~%")
@@ -830,6 +838,37 @@
                               (setf changed-p t))
                               ))))))
       (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      ;; Reduce GOTOs.
+      (validate-labels)
+      (dotimes (i (length *code*))
+        (let ((instruction (svref *code* i)))
+          (when (eql (instruction-opcode instruction) 167) ; GOTO
+            (let* ((label (car (instruction-args instruction)))
+                   (target-index (1+ (symbol-value label)))
+                   (instr1 (svref *code* target-index))
+                   (instr2 (if (eql (instruction-opcode instr1) 203) ; PUSH-VALUE
+                               (svref *code* (1+ target-index))
+                               nil)))
+              (when (and instr2 (eql (instruction-opcode instr2) 176)) ; ARETURN
+                (let ((previous-instruction (svref *code* (1- i))))
+                  (when (eql (instruction-opcode previous-instruction) 204) ; STORE-VALUE
+                    (setf (instruction-opcode previous-instruction) 176) ; ARETURN
+                    (setf (instruction-opcode instruction) 0)
+                    (setf changed-p t))))))))
+      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      ;; Look for sequence STORE-VALUE LOAD-VALUE ARETURN.
+      (dotimes (i (- (length *code*) 2))
+        (let ((instr1 (svref *code* i))
+              (instr2 (svref *code* (+ i 1)))
+              (instr3 (svref *code* (+ i 2))))
+          (when (and (eql (instruction-opcode instr1) 204)
+                     (eql (instruction-opcode instr2) 203)
+                     (eql (instruction-opcode instr3) 176))
+            (setf (instruction-opcode instr1) 176)
+            (setf (instruction-opcode instr2) 0)
+            (setf (instruction-opcode instr3) 0)
+            (setf changed-p t))))
+      (setf *code* (delete 0 *code* :key #'instruction-opcode))
       (unless changed-p
           (return))))
   (when *debug*
@@ -840,52 +879,6 @@
 
 ;; CODE is a list of INSTRUCTIONs.
 (defun code-bytes (code)
-
-;;   (fresh-line)
-;;   (format t "-- begin code --~%")
-;;   (dotimes (i (length code))
-;;     (format t "~S~%" (svref code i)))
-;;   (format t "--- end code ---~%")
-
-;;   ;; Make a list of the labels that are actually branched to.
-;;   (let ((branch-targets ()))
-;;     (dotimes (i (length code))
-;;       (let ((instruction (svref code i)))
-;;         (when (branch-opcode-p (instruction-opcode instruction))
-;;           (push branch-targets (car (instruction-args instruction))))))
-;;     (format t "branch-targets = ~S~%" branch-targets)
-
-;;     ;; Remove labels that are not used as branch targets.
-;;     (dotimes (i (length code))
-;;       (let ((instruction (svref code i)))
-;;         (when (= (instruction-opcode instruction) 202) ; LABEL
-;;           (let ((label (car (instruction-args instruction))))
-;;             (unless (member label branch-targets)
-;;               (setf (instruction-opcode instruction) 0)))))))
-
-;;   (dotimes (i (length code))
-;;     (let ((instruction (svref code i)))
-;;       (when (and (< i (1- (length code)))
-;;                  (= (instruction-opcode instruction) 167) ; GOTO
-;;         (let ((next-instruction (svref code (1+ i))))
-;;           (when (and (= (instruction-opcode next-instruction) 202) ; LABEL
-;;                      (eq (car (instruction-args instruction))
-;;                          (car (instruction-args next-instruction))))
-;;             (setf (instruction-opcode instruction) 0)))))))
-
-;;   (setf code (delete 0 code :key #'instruction-opcode))
-
-;;   (fresh-line)
-;;   (format t "-- begin code --~%")
-;;   (dotimes (i (length code))
-;;     (format t "~S~%" (svref code i)))
-;;   (format t "--- end code ---~%")
-
-;;   (setf code (coerce code 'list))
-
-  ;; FIXME Do stack analysis here!
-;;   (setf *max-stack* (analyze-stack code))
-
   (let ((code (resolve-opcodes code))
         (length 0))
     ;; Pass 1: calculate label offsets and overall length.
@@ -906,7 +899,6 @@
               (setf (instruction-args instruction) (u2 offset))))
           (unless (= (instruction-opcode instruction) 202) ; LABEL
             (incf index (opcode-size (instruction-opcode instruction)))))))
-
     ;; Expand instructions into bytes, skipping LABEL pseudo-instructions.
     (let ((bytes (make-array length))
           (index 0))
