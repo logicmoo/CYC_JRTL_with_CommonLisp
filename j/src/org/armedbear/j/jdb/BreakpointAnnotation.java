@@ -1,8 +1,8 @@
 /*
  * BreakpointAnnotation.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: BreakpointAnnotation.java,v 1.1.1.1 2002-09-24 16:09:39 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: BreakpointAnnotation.java,v 1.2 2003-05-18 01:26:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public final class BreakpointAnnotation extends Annotation
 {
     public BreakpointAnnotation(ResolvableBreakpoint bp)
     {
-        super(bp, (char) 8226);
+        super(bp, bp.isResolved() ? (char) 0x2022 : (char) 0x25e6);
     }
 
     public ResolvableBreakpoint getBreakpoint()
