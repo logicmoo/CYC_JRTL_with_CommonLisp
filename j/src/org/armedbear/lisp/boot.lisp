@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.158 2004-04-01 01:14:50 piso Exp $
+;;; $Id: boot.lisp,v 1.159 2004-04-02 03:21:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,9 +18,9 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (sys::%in-package "COMMON-LISP")
-
-(format t "Low-level initialization completed in ~A seconds.~%"
-        (float (/ (ext:uptime) 1000)))
+(unless (ext:memq :j *features*)
+    (format t "Low-level initialization completed in ~A seconds.~%"
+            (float (/ (ext:uptime) 1000))))
 
 (setq ext:*autoload-verbose* nil)
 (setq *load-verbose* nil)
@@ -77,9 +77,6 @@
      ,@(when docp
          `((sys::%set-documentation ',var 'variable ',doc)))
      ',var))
-
-(defvar *features*
-  '(:armedbear))
 
 (defun make-package (package-name &key nicknames use)
   (sys::%make-package package-name nicknames use))
@@ -199,4 +196,5 @@
 (sys::load-system-file "late-setf")
 (sys::load-system-file "debug")
 
+#-j
 (format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000)))
