@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.38 2003-11-16 21:17:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.39 2003-11-16 21:33:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1990,12 +1990,21 @@
     (cond ((= (length args) 2)
            (ensure-thread-var-initialized)
            (emit 'aload *thread*)
-           (compile-form (car args))
-           (unless (remove-store-value)
-             (emit-push-value))
-           (compile-form (cadr args))
-           (unless (remove-store-value)
-             (emit-push-value))
+           (cond ((and (eq (car args) t)
+                       (eq (cadr args) t))
+                  (emit-push-t)
+                  (emit 'dup))
+                 ((and (eq (car args) nil)
+                       (eq (cadr args) nil))
+                  (emit-push-nil)
+                  (emit 'dup))
+                 (t
+                  (compile-form (car args))
+                  (unless (remove-store-value)
+                    (emit-push-value))
+                  (compile-form (cadr args))
+                  (unless (remove-store-value)
+                    (emit-push-value))))
            (emit-invokevirtual +lisp-thread-class+
                                "setValues"
                                "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
