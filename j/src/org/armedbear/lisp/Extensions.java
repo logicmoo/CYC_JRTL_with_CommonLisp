@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.28 2004-08-19 16:05:37 piso Exp $
+ * $Id: Extensions.java,v 1.29 2004-10-17 12:08:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,10 @@ import java.net.Socket;
 
 public final class Extensions extends Lisp
 {
+    // ### *ed-functions*
+    public static final Symbol _ED_FUNCTIONS_ =
+        exportSpecial("*ED-FUNCTIONS*", PACKAGE_EXT, NIL);
+
     // ### neq
     private static final Primitive2 NEQ =
         new Primitive2("neq", PACKAGE_EXT, true)
