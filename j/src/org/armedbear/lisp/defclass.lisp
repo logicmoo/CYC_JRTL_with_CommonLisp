@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.4 2003-10-10 17:17:24 piso Exp $
+;;; $Id: defclass.lisp,v 1.5 2003-10-10 23:35:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -332,6 +332,91 @@
 
 (defun allocate-slot-storage (size initial-value)
   (make-array size :initial-element initial-value))
+
+;;; Standard instance slot access
+
+;;; N.B. The location of the effective-slots slots in the class metaobject for
+;;; standard-class must be determined without making any further slot
+;;; references.
+
+(defvar the-slots-of-standard-class) ;standard-class's class-slots
+(defvar the-class-standard-class)    ;standard-class's class metaobject
+
+(defun slot-location (class slot-name)
+  (if (and (eq slot-name 'effective-slots)
+           (eq class the-class-standard-class))
+      (position 'effective-slots the-slots-of-standard-class
+                :key #'slot-definition-name)
+      (let ((slot (find slot-name
+                        (class-slots class)
+                        :key #'slot-definition-name)))
+        (if (null slot)
+            (error "The slot ~S is missing from the class ~S."
+                   slot-name class)
+            (let ((pos (position slot
+                                 (remove-if-not #'instance-slot-p
+                                                (class-slots class)))))
+              (if (null pos)
+                  (error "The slot ~S is not an instance~@
+                  slot in the class ~S."
+                         slot-name class)
+                  pos))))))
+
+(defun slot-contents (slots location)
+  (svref slots location))
+
+(defun (setf slot-contents) (new-value slots location)
+  (setf (svref slots location) new-value))
+
+(defun std-slot-value (instance slot-name)
+  (let* ((location (slot-location (class-of instance) slot-name))
+         (slots (std-instance-slots instance))
+         (val (slot-contents slots location)))
+    (if (eq secret-unbound-value val)
+        (error "The slot ~S is unbound in the object ~S."
+               slot-name instance)
+        val)))
+(defun slot-value (object slot-name)
+  (if (eq (class-of (class-of object)) the-class-standard-class)
+      (std-slot-value object slot-name)
+      (slot-value-using-class (class-of object) object slot-name)))
+
+(defun (setf std-slot-value) (new-value instance slot-name)
+  (let ((location (slot-location (class-of instance) slot-name))
+        (slots (std-instance-slots instance)))
+    (setf (slot-contents slots location) new-value)))
+(defun (setf slot-value) (new-value object slot-name)
+  (if (eq (class-of (class-of object)) the-class-standard-class)
+      (setf (std-slot-value object slot-name) new-value)
+      (setf-slot-value-using-class
+       new-value (class-of object) object slot-name)))
+
+(defun std-slot-boundp (instance slot-name)
+  (let ((location (slot-location (class-of instance) slot-name))
+        (slots (std-instance-slots instance)))
+    (not (eq secret-unbound-value (slot-contents slots location)))))
+(defun slot-boundp (object slot-name)
+  (if (eq (class-of (class-of object)) the-class-standard-class)
+      (std-slot-boundp object slot-name)
+      (slot-boundp-using-class (class-of object) object slot-name)))
+
+(defun std-slot-makunbound (instance slot-name)
+  (let ((location (slot-location (class-of instance) slot-name))
+        (slots (std-instance-slots instance)))
+    (setf (slot-contents slots location) secret-unbound-value))
+  instance)
+(defun slot-makunbound (object slot-name)
+  (if (eq (class-of (class-of object)) the-class-standard-class)
+      (std-slot-makunbound object slot-name)
+      (slot-makunbound-using-class (class-of object) object slot-name)))
+
+(defun std-slot-exists-p (instance slot-name)
+  (not (null (find slot-name (class-slots (class-of instance))
+                   :key #'slot-definition-name))))
+(defun slot-exists-p (object slot-name)
+  (if (eq (class-of (class-of object)) the-class-standard-class)
+      (std-slot-exists-p object slot-name)
+      (slot-exists-p-using-class (class-of object) object slot-name)))
 
 ;;; Standard instance allocation
 
