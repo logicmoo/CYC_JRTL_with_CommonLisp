@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.53 2003-11-10 00:13:04 piso Exp $
+;;; $Id: sequences.lisp,v 1.54 2003-12-20 17:02:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,24 +33,3 @@
 
 (defmacro make-sequence-like (sequence length)
   `(make-sequence-of-type (type-of ,sequence) ,length))
-
-
-;;; SUBSEQ (from CMUCL)
-
-(defun list-subseq (sequence start &optional end)
-  (if (and end (>= start end))
-      ()
-      (let* ((groveled (nthcdr start sequence))
-	     (result (list (car groveled))))
-	(if groveled
-	    (do ((list (cdr groveled) (cdr list))
-		 (splice result (cdr (rplacd splice (list (car list)))))
-		 (index (1+ start) (1+ index)))
-              ((or (atom list) (and end (= index end)))
-               result))
-	    ()))))
-
-(defun subseq (sequence start &optional end)
-  (if (listp sequence)
-      (list-subseq sequence start end)
-      (vector-subseq sequence start end)))
