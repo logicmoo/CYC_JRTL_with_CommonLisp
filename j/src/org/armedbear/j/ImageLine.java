@@ -2,7 +2,7 @@
  * ImageLine.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImageLine.java,v 1.1.1.1 2002-09-24 16:08:45 piso Exp $
+ * $Id: ImageLine.java,v 1.2 2002-11-27 23:57:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ import java.awt.Rectangle;
 
 public final class ImageLine extends AbstractLine implements Line
 {
-    private final Image image;
+    private Image image;
     private final int imageHeight;
     private final int imageWidth;
     private final int height;
@@ -123,5 +123,19 @@ public final class ImageLine extends AbstractLine implements Line
     public final boolean isBlank()
     {
         return false;
+    }
+    
+    public final void flushImage()
+    {
+        if (image != null) {
+            image.flush();
+            image = null;
+        }        
+    }
+    
+    protected void finalize() throws Throwable
+    {
+        flushImage();
+        super.finalize();
     }
 }
