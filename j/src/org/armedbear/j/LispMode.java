@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.27 2003-03-05 15:50:12 piso Exp $
+ * $Id: LispMode.java,v 1.28 2003-03-09 22:12:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
     }
 
     private static final String validChars =
-        "!$%&*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{}~";
+        "!$%&*+-./0123456789<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{}~";
 
     public final boolean isIdentifierStart(char c)
     {
