@@ -2,7 +2,7 @@
  * file_write_date.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: file_write_date.java,v 1.1 2004-01-07 18:54:25 piso Exp $
+ * $Id: file_write_date.java,v 1.2 2004-01-07 19:02:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 import java.io.File;
 
-// ### file-error-pathname
+// ### file-write-date
 public final class file_write_date extends Primitive1
 {
     private file_write_date()
