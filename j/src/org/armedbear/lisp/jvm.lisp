@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.85 2004-03-25 18:43:11 piso Exp $
+;;; $Id: jvm.lisp,v 1.86 2004-03-25 23:47:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1493,7 +1493,11 @@
         ((memq (car form) '(1+ 1- + - < > <= >=
                             car cdr cadr caddr
                             eq eql equal equalp
-                            length constantp))
+                            length constantp list
+                            macro-function
+                            compiler-macro-function
+                            get
+                            special-operator-p))
          t)
         (t
          nil)))
@@ -1570,10 +1574,12 @@
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
+       (unless (single-valued-p (first args))
+         (emit-clear-values))
        (compile-form (second args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (every 'single-valued-p args)
+       (unless (single-valued-p (second args))
          (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
@@ -1583,13 +1589,17 @@
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
+       (unless (single-valued-p (first args))
+         (emit-clear-values))
        (compile-form (second args))
        (unless (remove-store-value)
          (emit-push-value))
+       (unless (single-valued-p (second args))
+         (emit-clear-values))
        (compile-form (third args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (every 'single-valued-p args)
+       (unless (single-valued-p (third args))
          (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
@@ -1606,10 +1616,10 @@
            (unless (remove-store-value)
              (emit-push-value)) ; leaves value on stack
            (emit 'aastore) ; store value in array
+           (unless (single-valued-p form)
+             (emit-clear-values))
            (incf i))) ; array left on stack here
        ;; Stack: function array-ref
-       (unless (every 'single-valued-p args)
-         (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1704,7 +1714,7 @@
   (compile-form form)
   (unless (remove-store-value)
     (emit-push-value))
-  (unless (atom form) ; FIXME There are other safe cases too!
+  (unless (single-valued-p form)
     (emit-clear-values))
   (emit-push-nil)
   'if_acmpeq)
@@ -1715,12 +1725,15 @@
          (alternate (fourth form))
          (label1 (gensym))
          (label2 (gensym)))
-    (emit (compile-test test) `,label1)
-    (compile-form consequent for-effect)
-    (emit 'goto `,label2)
-    (emit 'label `,label1)
-    (compile-form alternate for-effect)
-    (emit 'label `,label2)))
+    (cond ((eq test t)
+           (compile-form consequent for-effect))
+          (t
+           (emit (compile-test test) `,label1)
+           (compile-form consequent for-effect)
+           (emit 'goto `,label2)
+           (emit 'label `,label1)
+           (compile-form alternate for-effect)
+           (emit 'label `,label2)))))
 
 (defun compile-multiple-value-list (form for-effect)
   (compile-form (second form))
@@ -1771,7 +1784,6 @@
       (LET*
        (compile-let*-vars varlist specials)))
     ;; Body of LET/LET*.
-    (emit-clear-values)
     (do ((body (cddr form) (cdr body)))
         ((null (cdr body))
          (compile-form (car body) for-effect))
@@ -1804,6 +1816,8 @@
                (compile-form initform)
                (unless (remove-store-value)
                  (emit-push-value))
+               (unless (single-valued-p initform)
+                 (emit-clear-values))
                (setf last-push-was-nil nil))
               (t
                (if last-push-was-nil
@@ -1873,7 +1887,9 @@
         (cond (initform
                (compile-form initform)
                (unless (remove-store-value)
-                 (emit-push-value)))
+                 (emit-push-value))
+               (unless (single-valued-p initform)
+                 (emit-clear-values)))
               (t
                (emit-push-nil)))
         (cond (specialp
