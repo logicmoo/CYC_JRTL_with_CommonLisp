@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.49 2003-09-14 15:33:05 piso Exp $
+ * $Id: LispObject.java,v 1.50 2003-09-14 16:43:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -236,6 +236,16 @@ public class LispObject extends Lisp
     public LispObject SIMPLE_STRING_P()
     {
         return NIL;
+    }
+
+    public LispObject VECTORP()
+    {
+        return vectorp() ? T : NIL;
+    }
+
+    public boolean vectorp()
+    {
+        return false;
     }
 
     public int length() throws LispError
