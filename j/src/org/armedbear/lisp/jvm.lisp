@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.259 2004-08-01 15:10:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.260 2004-08-01 15:16:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2340,10 +2340,11 @@
        (compile-form (second form) :target function-register)
        (compile-form (third form) :target :stack)
        (emit 'aload function-register)
+       (emit-push-current-thread)
        (emit-invokestatic +lisp-class+
                           "multipleValueCall1"
-                          "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                          -1)
+                          "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
+                          -2)
        (emit-move-from-stack target)))
     (t
      (error "COMPILE-MULTIPLE-VALUE-CALL: unsupported case: ~S" form))))
