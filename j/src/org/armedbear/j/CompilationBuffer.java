@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CompilationBuffer.java,v 1.10 2003-01-10 02:01:57 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.11 2003-02-27 12:55:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,7 +181,19 @@ public final class CompilationBuffer extends Buffer implements Runnable
         process = null;
         exitValue = -1;
         try {
-            if (Platform.isPlatformUnix()) {
+            if (Platform.isPlatformWindows()) {
+                String cmd = "cd /d \"" + currentDir.canonicalPath() + "\" && " + expandedCommand;
+                ArrayList list = new ArrayList();
+                list.add("cmd.exe");
+                list.add("/c");
+                list.addAll(Utilities.tokenize(cmd));
+                final int size = list.size();
+                String[] cmdarray = new String[size];
+                for (int i = 0; i < size; i++)
+                    cmdarray[i] = (String) list.get(i);
+                process = Runtime.getRuntime().exec(cmdarray);
+            } else {
+                // Not Windows. Assume Unix.
                 if (Utilities.haveJpty()) {
                     exitValueFile = Utilities.getTempFile();
                     FastStringBuffer sb = new FastStringBuffer();
@@ -200,20 +212,11 @@ public final class CompilationBuffer extends Buffer implements Runnable
                     String[] cmdarray = {"/bin/sh", "-c", cmd};
                     process = Runtime.getRuntime().exec(cmdarray);
                 }
-            } else if (Platform.isPlatformWindows()) {
-                String cmd = "cd /d \"" + currentDir.canonicalPath() + "\" && " + expandedCommand;
-                ArrayList list = new ArrayList();
-                list.add("cmd.exe");
-                list.add("/c");
-                list.addAll(Utilities.tokenize(cmd));
-                final int size = list.size();
-                String[] cmdarray = new String[size];
-                for (int i = 0; i < size; i++)
-                    cmdarray[i] = (String) list.get(i);
-                process = Runtime.getRuntime().exec(cmdarray);
             }
         }
-        catch (IOException e) {}
+        catch (Throwable t) {
+            Log.error(t);
+        }
     }
 
     private String expandCommand(String s)
