@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.121 2004-01-02 01:24:40 piso Exp $
+ * $Id: Autoload.java,v 1.122 2004-01-02 02:23:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -239,6 +239,7 @@ public class Autoload extends Function
         autoload("hash-table-size", "HashTable");
         autoload("hash-table-test", "HashTable");
         autoload("import", "PackageFunctions");
+        autoload("input-stream-p", "input_stream_p");
         autoload("last", "last");
         autoload("lisp-implementation-type", "lisp_implementation_type");
         autoload("lisp-implementation-version", "lisp_implementation_version");
@@ -260,6 +261,7 @@ public class Autoload extends Function
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-string-output-stream", "StringOutputStream");
         autoload("namestring", "Pathname");
+        autoload("output-stream-p", "output_stream_p");
         autoload("package-name", "PackageFunctions");
         autoload("package-nicknames", "PackageFunctions");
         autoload("package-shadowing-symbols", "PackageFunctions");
