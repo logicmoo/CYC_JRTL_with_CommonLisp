@@ -1,8 +1,8 @@
 /*
  * FolderTree.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: FolderTree.java,v 1.1.1.1 2002-09-24 16:09:54 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: FolderTree.java,v 1.2 2003-07-23 15:57:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j.mail;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -34,6 +35,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import org.armedbear.j.Buffer;
+import org.armedbear.j.Display;
 import org.armedbear.j.Editor;
 import org.armedbear.j.Frame;
 import org.armedbear.j.NavigationComponent;
@@ -195,6 +197,12 @@ public final class FolderTree extends JTree implements NavigationComponent,
             else
                 setBackgroundSelectionColor(noFocusSelectionBackground);
             return this;
+        }
+
+        public void paintComponent(Graphics g)
+        {
+            Display.setRenderingHints(g);
+            super.paintComponent(g);
         }
     }
 }
