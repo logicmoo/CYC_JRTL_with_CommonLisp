@@ -2,7 +2,7 @@
  * BeanShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: BeanShell.java,v 1.1.1.1 2002-09-24 16:08:39 piso Exp $
+ * $Id: BeanShell.java,v 1.2 2002-11-19 00:25:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,18 +28,14 @@ import java.io.InputStreamReader;
 
 public final class BeanShell
 {
-    public static void runStartupScript()
+    public static void runStartupScript(File file)
     {
-        File file = Editor.getStartupScript();
-        if (file != null && file.isFile()) {
-            Interpreter interpreter = getInterpreter();
-            try {
-                Log.info("loading ".concat(file.canonicalPath()));
-                interpreter.source(file.canonicalPath());
-            }
-            catch (Throwable t) {
-                Log.error(t);
-            }
+        Interpreter interpreter = getInterpreter();
+        try {
+            interpreter.source(file.canonicalPath());
+        }
+        catch (Throwable t) {
+            Log.error(t);
         }
     }
 
