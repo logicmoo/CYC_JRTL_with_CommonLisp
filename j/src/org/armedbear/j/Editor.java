@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.99 2003-07-20 11:23:44 piso Exp $
+ * $Id: Editor.java,v 1.100 2003-07-24 19:40:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +65,6 @@ import java.util.Properties;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.FocusManager;
@@ -491,8 +490,6 @@ public final class Editor extends JPanel implements Constants,
     {
         // Add this editor to the global editor list.
         editorList.add(this);
-
-        setBorder(BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         setLayout(new BorderLayout());
         display.setDoubleBuffered(true);
