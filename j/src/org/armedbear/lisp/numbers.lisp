@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.32 2004-06-13 18:42:44 piso Exp $
+;;; $Id: numbers.lisp,v 1.33 2004-08-15 11:18:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,20 +28,6 @@
       (if (rationalp number)
 	  (if (plusp number) 1 -1)
 	  (/ number (abs number)))))
-
-;;; If the numbers do not divide exactly and the result of (/ number divisor)
-;;; would be positive then increment the quotient and decrement the remainder by
-;;; the divisor.
-(defun ceiling (number &optional (divisor 1))
-  "Returns the smallest integer not less than number, or number/divisor.
-  The second returned value is the remainder."
-  (multiple-value-bind (tru rem) (truncate number divisor)
-    (if (and (not (zerop rem))
-	     (if (minusp divisor)
-		 (minusp number)
-		 (plusp number)))
-	(values (+ tru 1) (- rem divisor))
-	(values tru rem))))
 
 (defun round (number &optional (divisor 1))
   "Rounds number (or number/divisor) to nearest integer.
