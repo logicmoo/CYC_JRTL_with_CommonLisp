@@ -2,7 +2,7 @@
  * DiffFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DiffFormatter.java,v 1.5 2003-05-10 15:28:48 piso Exp $
+ * $Id: DiffFormatter.java,v 1.6 2003-05-10 15:44:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,17 @@ public final class DiffFormatter extends Formatter
             addSegment(text, DIFF_FORMAT_INSERTED);
             return segmentList;
         }
-        if (c == '-' && !text.startsWith("--- ")) {
+        if (c == '>') {
+            // Inserted line.
+            addSegment(text, DIFF_FORMAT_INSERTED);
+            return segmentList;
+        }
+        if (c == '-' && !text.equals("---") && !text.startsWith("--- ")) {
+            // Deleted line.
+            addSegment(text, DIFF_FORMAT_DELETED);
+            return segmentList;
+        }
+        if (c == '<') {
             // Deleted line.
             addSegment(text, DIFF_FORMAT_DELETED);
             return segmentList;
@@ -149,7 +159,13 @@ public final class DiffFormatter extends Formatter
             return true;
         if (s.equals("***************"))
             return true;
-
+        if (s.equals("---"))
+            return true;
+        if (s.length() > 0) {
+            char c = s.charAt(0);
+            if (c >= '0' && c <= '9')
+                return true;
+        }
         return false;
     }
 
