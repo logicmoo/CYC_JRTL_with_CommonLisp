@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.7 2004-01-27 01:40:19 piso Exp $
+ * $Id: Stream.java,v 1.8 2004-01-27 02:55:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -400,7 +400,7 @@ public class Stream extends LispObject
         }
     }
 
-    private boolean isTokenDelimiter(char c)
+    private static boolean isTokenDelimiter(char c)
     {
         switch (c) {
             case '"':
@@ -418,7 +418,7 @@ public class Stream extends LispObject
 
     private LispObject readRightParen() throws ConditionThrowable
     {
-        return signal(new LispError("unmatched right parenthesis"));
+        return signal(new LispError("Unmatched right parenthesis."));
     }
 
     private LispObject readComment() throws ConditionThrowable
@@ -803,7 +803,7 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject makeObject(String token) throws ConditionThrowable
+    private static LispObject makeObject(String token) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
         if (_READ_SUPPRESS_.symbolValueNoThrow(thread) != NIL)
@@ -827,7 +827,7 @@ public class Stream extends LispObject
             Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
                 return signal(new LispError("package \"" + packageName +
-                                                           "\" not found"));
+                                            "\" not found"));
             return pkg.intern(symbolName);
         }
         index = token.indexOf(':');
@@ -844,18 +844,18 @@ public class Stream extends LispObject
             // Error!
             if (pkg.findInternalSymbol(symbolName) != null)
                 return signal(new LispError("symbol \"" + symbolName +
-                                                           "\" is not external in package " +
-                                                           packageName));
+                                            "\" is not external in package " +
+                                            packageName));
             else
                 return signal(new LispError("symbol \"" + symbolName +
-                                                           "\" not found in package " +
-                                                           packageName));
+                                            "\" not found in package " +
+                                            packageName));
         }
         // Intern token in current package.
         return ((Package)_PACKAGE_.symbolValueNoThrow(thread)).intern(token);
     }
 
-    private LispObject makeNumber(String token) throws ConditionThrowable
+    private static LispObject makeNumber(String token) throws ConditionThrowable
     {
         if (token.indexOf('/') >= 0)
             return makeRatio(token);
@@ -883,7 +883,7 @@ public class Stream extends LispObject
         return null;
     }
 
-    private LispObject makeRatio(String token) throws ConditionThrowable
+    private static LispObject makeRatio(String token) throws ConditionThrowable
     {
         final int index = token.indexOf('/');
         if (index < 0)
@@ -897,7 +897,7 @@ public class Stream extends LispObject
         return null;
     }
 
-    private LispObject makeFloat(String token) throws ConditionThrowable
+    private static LispObject makeFloat(String token) throws ConditionThrowable
     {
         final int length = token.length();
         if (length == 0)
