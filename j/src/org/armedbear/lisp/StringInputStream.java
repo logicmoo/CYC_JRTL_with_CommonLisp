@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java,v 1.14 2004-02-23 00:10:44 piso Exp $
+ * $Id: StringInputStream.java,v 1.15 2004-03-11 11:29:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,19 +117,21 @@ public final class StringInputStream extends Stream
     // ### make-string-input-stream
     // make-string-input-stream string &optional start end => string-stream
     private static final Primitive MAKE_STRING_INPUT_STREAM =
-        new Primitive("make-string-input-stream","string &optional start end")
+        new Primitive("make-string-input-stream", "string &optional start end")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new StringInputStream(arg.getStringValue());
         }
+
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             String s = first.getStringValue();
             int start = Fixnum.getValue(second);
-            return new StringInputStream(s.substring(start));
+            return new StringInputStream(s, start);
         }
+
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -137,12 +139,13 @@ public final class StringInputStream extends Stream
             String s = first.getStringValue();
             int start = Fixnum.getValue(second);
             if (third == NIL)
-                return new StringInputStream(s.substring(start));
+                return new StringInputStream(s, start);
             int end = Fixnum.getValue(third);
-            return new StringInputStream(s.substring(start, end));
+            return new StringInputStream(s, start, end);
         }
     };
 
+    // ### string-input-stream-current
     private static final Primitive1 STRING_INPUT_STREAM_CURRENT =
         new Primitive1("string-input-stream-current", PACKAGE_EXT, true, "stream")
     {
