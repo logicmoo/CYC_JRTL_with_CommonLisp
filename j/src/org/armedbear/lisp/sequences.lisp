@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.55 2004-02-12 01:18:01 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: sequences.lisp,v 1.56 2004-02-12 01:18:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
