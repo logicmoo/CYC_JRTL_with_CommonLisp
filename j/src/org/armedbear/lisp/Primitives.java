@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.303 2003-07-27 19:13:28 piso Exp $
+ * $Id: Primitives.java,v 1.304 2003-07-28 23:43:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1541,7 +1541,8 @@ public final class Primitives extends Module
     };
 
     private static final LispObject _do(LispObject args, Environment env,
-        boolean sequential) throws Condition
+                                        boolean sequential)
+        throws Condition
     {
         // Process variable specifications.
         LispObject first = args.car();
@@ -1561,6 +1562,7 @@ public final class Primitives extends Module
             } else {
                 // Not a cons, must be a symbol.
                 variables[i] = checkSymbol(obj);
+                initials[i] = NIL;
             }
             first = first.cdr();
         }
