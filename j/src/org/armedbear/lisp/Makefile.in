@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.154 2004-02-25 18:34:29 piso Exp $
+# $Id: Makefile.in,v 1.155 2004-02-26 01:36:59 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@ CLASSFILES =	AbstractArray.class \
 		AbstractString.class \
 		AbstractVector.class \
 		ArithmeticError.class \
-		Array.class \
 		Autoload.class \
 		AutoloadMacro.class \
 		Bignum.class \
@@ -39,6 +38,7 @@ CLASSFILES =	AbstractArray.class \
 		Closure.class \
 		CompiledFunction.class \
 		Complex.class \
+		ComplexArray.class \
 		ComplexBitVector.class \
 		ComplexString.class \
 		ComplexVector.class \
@@ -48,7 +48,6 @@ CLASSFILES =	AbstractArray.class \
 		Cons.class \
 		ControlError.class \
 		Debug.class \
-		DisplacedArray.class \
 		DivisionByZero.class \
 		Do.class \
 		EchoStream.class \
@@ -114,6 +113,7 @@ CLASSFILES =	AbstractArray.class \
 		RuntimeClass.class \
 		SeriousCondition.class \
 		ShellCommand.class \
+		SimpleArray.class \
 		SimpleBitVector.class \
 		SimpleCondition.class \
 		SimpleError.class \
