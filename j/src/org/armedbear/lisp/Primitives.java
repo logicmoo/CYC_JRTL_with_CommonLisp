@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.208 2003-05-30 17:49:15 piso Exp $
+ * $Id: Primitives.java,v 1.209 2003-05-30 18:49:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4460,7 +4460,7 @@ public final class Primitives extends Module
     };
 
     // ### make-socket
-    // host port => stream
+    // make-socket host port => stream
     private static final Primitive2 MAKE_SOCKET = new Primitive2("make-socket") {
         public LispObject execute(LispObject first, LispObject second) throws LispError
         {
@@ -4592,6 +4592,36 @@ public final class Primitives extends Module
             if (arg == NIL)
                 return NIL;
             throw new TypeError(arg, "proper sequence");
+        }
+    };
+
+    // ### %setelt
+    // %setelt sequence index newval => newval
+    private static final Primitive3 _SETELT = new Primitive3("%setelt") {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
+        {
+            if (first instanceof Cons) {
+                int index = Fixnum.getValue(second);
+                if (index < 0)
+                    throw new TypeError();
+                LispObject list = first;
+                int i = 0;
+                while (true) {
+                    if (i == index) {
+                        list.setCar(third);
+                        return third;
+                    }
+                    list = list.cdr();
+                    if (list == NIL)
+                        throw new TypeError();
+                    ++i;
+                }
+            } else if (first instanceof AbstractVector) {
+                ((AbstractVector)first).set(Fixnum.getValue(second), third);
+                return third;
+            } else
+                throw new TypeError(first, "sequence");
         }
     };
 }
