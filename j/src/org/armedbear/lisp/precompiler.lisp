@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.41 2004-04-14 14:35:41 piso Exp $
+;;; $Id: precompiler.lisp,v 1.42 2004-04-20 15:18:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -290,13 +290,28 @@
       (setf body (list (append (list 'LET* (cdr auxvars)) body))))
     (let ((specials ()))
       (dolist (var lambda-list)
+        (when (consp var)
+          (if (consp (first var))
+              (setf var (second (first var)))   ;; e.g. "&key ((:x *x*) 42)"
+              (setf var (first var))))          ;; e.g. "&optional (*x* 42)"
         (when (special-variable-p var)
           (push var specials)))
       (when specials
-        (dolist (var specials)
+        (dolist (special specials)
           (let ((sym (gensym)))
-            (setf lambda-list (subst sym var lambda-list))
-            (setf body (list (append (list 'LET* (list (list var sym))) body)))))))
+            (let ((res ()))
+              (dolist (var lambda-list)
+                (cond ((and (consp var) (consp (first var))
+                            (eq special (second (first var))))
+                       (push (list (list (first (first var)) sym) (second var)) res))
+                      ((and (consp var) (eq special (first var)))
+                       (push (cons sym (cdr var)) res))
+                      ((eq var special)
+                       (push sym res))
+                      (t
+                       (push var res))))
+              (setf lambda-list (nreverse res)))
+            (setf body (list (append (list 'LET* (list (list special sym))) body)))))))
     (list* 'LAMBDA lambda-list (mapcar #'precompile1 body))))
 
 (defun define-local-macro (name lambda-list body)
