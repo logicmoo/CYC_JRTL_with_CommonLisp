@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.17 2003-01-02 15:49:24 piso Exp $
+ * $Id: LispFormatter.java,v 1.18 2003-01-05 15:28:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,7 +185,7 @@ public final class LispFormatter extends Formatter
                 continue;
             }
             if (c == '\'') {
-                i = skipQuotedObject(text, ++i);
+                i = skipQuotedObject(text, ++i, state);
                 continue;
             }
             if (c == '`') {
@@ -457,7 +457,7 @@ public final class LispFormatter extends Formatter
         return changed;
     }
 
-    private static int skipQuotedObject(String text, int i)
+    private int skipQuotedObject(String text, int i, int state)
     {
         int count = 0;
         final int limit = text.length();
@@ -468,11 +468,15 @@ public final class LispFormatter extends Formatter
                     ++i;
                     break;
                 case '(':
+                    endToken(text, i, state);
                     ++count;
                     ++i;
+                    endToken(text, i, STATE_OPEN_PAREN);
                     break;
                 case ')':
+                    endToken(text, i, state);
                     ++i;
+                    endToken(text, i, STATE_CLOSE_PAREN);
                     if (count > 0) {
                         --count;
                         if (count == 0)
