@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.11 2003-05-15 01:21:59 piso Exp $
+ * $Id: Jdb.java,v 1.12 2003-05-15 15:38:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,6 +180,11 @@ public final class Jdb extends Buffer
     public String getJavaExecutable()
     {
         return javaExecutable;
+    }
+
+    public String getVMArgs()
+    {
+        return vmArgs;
     }
 
     public boolean getStartSuspended()
