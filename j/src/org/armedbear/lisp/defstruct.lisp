@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.42 2003-11-22 16:32:39 piso Exp $
+;;; $Id: defstruct.lisp,v 1.43 2003-11-22 18:57:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -102,7 +102,7 @@
 (defun define-keyword-constructor (constructor)
   (let* ((constructor-name (intern (car constructor)))
          (keys ())
-         (elements ()))
+         (values ()))
     (dolist (slot *dd-slots*)
       (let ((name (dsd-name slot))
             (initform (dsd-initform slot)))
@@ -113,25 +113,133 @@
       (let ((name (dsd-name dsd))
             (initform (dsd-initform dsd)))
         (if name
-            (push name elements)
-            (push initform elements))))
-    (setf elements (nreverse elements))
+            (push name values)
+            (push initform values))))
+    (setf values (nreverse values))
     (cond ((eq *dd-type* 'list)
            `((defun ,constructor-name ,keys
-               (list ,@elements))))
+               (list ,@values))))
           ((or (eq *dd-type* 'vector)
                (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
            (let ((element-type (if (consp *dd-type*) (cadr *dd-type*) t)))
              `((defun ,constructor-name ,keys
-                 (make-array ,(length elements)
+                 (make-array ,(length values)
                              :element-type ',element-type
-                             :initial-contents (list ,@elements))))))
+                             :initial-contents (list ,@values))))))
           (t
            `((defun ,constructor-name ,keys
-               (%make-structure ',*dd-name* (list ,@elements))))))))
+               (%make-structure ',*dd-name* (list ,@values))))))))
+
+(defun get-slot (name)
+;;   (let ((res (find name (dd-slots defstruct) :test #'string= :key #'dsd-name)))
+  (let ((res nil))
+    (dolist (dsd *dd-slots*)
+      (when (string= name (dsd-name dsd))
+        (setf res dsd)
+        (return)))
+    (if res
+        (values (dsd-type res) (dsd-initform res))
+        (values t nil))))
 
 (defun define-boa-constructor (constructor)
-  )
+  (multiple-value-bind (req opt restp rest keyp keys allowp auxp aux)
+    (parse-lambda-list (cadr constructor))
+    (let ((arglist ())
+          (vars ())
+          (types ())
+          (skipped-vars ()))
+      (dolist (arg req)
+        (push arg arglist)
+        (push arg vars)
+        (push (get-slot arg) types))
+      (when opt
+        (push '&optional arglist)
+        (dolist (arg opt)
+          (cond ((consp arg)
+                 (destructuring-bind
+                  (name
+                   &optional
+                   (def (nth-value 1 (get-slot name)))
+                   (supplied-test nil supplied-test-p))
+                  arg
+                  (push `(,name ,def ,@(if supplied-test-p `(,supplied-test) nil)) arglist)
+                  (push name vars)
+                  (push (get-slot name) types)))
+                (t
+                 (multiple-value-bind (type default) (get-slot arg)
+                   (push `(,arg ,default) arglist)
+                   (push arg vars)
+                   (push type types))))))
+      (when restp
+        (push '&rest arglist)
+        (push rest arglist)
+        (push rest vars)
+        (push 'list types))
+      (when keyp
+        (push '&key arglist)
+        (dolist (key keys)
+          (if (consp key)
+              (destructuring-bind (wot
+                                   &optional
+                                   (def nil def-p)
+                                   (supplied-test nil supplied-test-p))
+                                  key
+                                  (let ((name (if (consp wot)
+                                                  (destructuring-bind (key var) wot
+                                                                      (declare (ignore key))
+                                                                      var)
+                                                  wot)))
+                                    (multiple-value-bind (type slot-def)
+                                      (get-slot name)
+                                      (push `(,wot ,(if def-p def slot-def)
+                                                   ,@(if supplied-test-p `(,supplied-test) nil))
+                                            arglist)
+                                      (push name vars)
+                                      (push type types))))
+              (multiple-value-bind (type default) (get-slot key)
+                (push `(,key ,default) arglist)
+                (push key vars)
+                (push type types)))))
+      (when allowp
+        (push '&allow-other-keys arglist))
+      (when auxp
+        (push '&aux arglist)
+        (dolist (arg aux)
+          (push arg arglist)
+          (if (and (consp arg) (= (length arg) 2))
+              (let ((var (first arg)))
+                (push var vars)
+                (push (get-slot var) types))
+              (push (if (consp arg) (first arg) arg) skipped-vars))))
+      (setf arglist (nreverse arglist)
+            var (nreverse vars)
+            types (nreverse types)
+            skipped-vars (nreverse skipped-vars))
+      (let ((values ()))
+        (dolist (dsd *dd-slots*)
+          (let ((name (dsd-name dsd))
+                var)
+            (cond ((find name skipped-vars :test #'string=)
+                   (push nil values))
+                  ((setf var (find name vars :test #'string=))
+                   (push var values))
+                  (t
+                   (push (dsd-initform dsd) values)))))
+        (setf values (nreverse values))
+        (let* ((constructor-name (intern (car constructor))))
+          (cond ((eq *dd-type* 'list)
+                 `((defun ,constructor-name ,arglist
+                     (list ,@values))))
+                ((or (eq *dd-type* 'vector)
+                     (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
+                 (let ((element-type (if (consp *dd-type*) (cadr *dd-type*) t)))
+                   `((defun ,constructor-name ,arglist
+                       (make-array ,(length values)
+                                   :element-type ',element-type
+                                   :initial-contents (list ,@values))))))
+                (t
+                 `((defun ,constructor-name ,arglist
+                     (%make-structure ',*dd-name* (list ,@values)))))))))))
 
 (defun default-constructor-name ()
   (concatenate 'string "MAKE-" (symbol-name *dd-name*)))
@@ -247,8 +355,8 @@
             name arglist)
        (case numargs
          (0 ; Use default name.
-          (setf name (default-constructor-name))
-          (setf arglist nil)
+          (setf name (default-constructor-name)
+                arglist nil)
           (push (list name arglist) *dd-constructors*))
          (1
           (if (null (car args))
@@ -256,7 +364,10 @@
               (setf name (symbol-name (car args))))
           (setf arglist nil)
           (push (list name arglist) *dd-constructors*))
-         (2))))
+         (2
+          (setf name (symbol-name (car args))
+                arglist (cadr args))
+          (push (list name arglist) *dd-constructors*)))))
     (:copier
      (let* ((args (cdr option))
             (numargs (length args)))
