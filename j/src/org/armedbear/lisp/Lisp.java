@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.130 2003-09-14 17:03:03 piso Exp $
+ * $Id: Lisp.java,v 1.131 2003-09-14 17:45:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,37 +65,6 @@ public abstract class Lisp
 
     // End-of-file marker.
     public static final LispObject EOF = new LispObject();
-
-    // Types.
-    static final int TYPE_SYMBOL            = 0x00000001;
-    static final int TYPE_CONS              = 0x00000002;
-
-    static final int TYPE_FIXNUM            = 0x00000004;
-    static final int TYPE_BIGNUM            = 0x00000008;
-    static final int TYPE_RATIO             = 0x00000010;
-    static final int TYPE_FLOAT             = 0x00000020;
-    static final int TYPE_COMPLEX           = 0x00000040;
-
-    static final int TYPE_NULL              = 0x00000080;
-
-    static final int TYPE_VECTOR            = 0x00000100;
-    static final int TYPE_STRING            = 0x00000200;
-    static final int TYPE_BIT_VECTOR        = 0x00000400;
-
-    // Functions, special operators, macros.
-    static final int TYPE_PRIMITIVE         = 0x00010000;
-    static final int TYPE_PRIMITIVE0        = 0x00020000;
-    static final int TYPE_PRIMITIVE1        = 0x00040000;
-    static final int TYPE_PRIMITIVE2        = 0x00080000;
-    static final int TYPE_PRIMITIVE3        = 0x00100000;
-    static final int TYPE_CLOSURE           = 0x00200000;
-    static final int TYPE_SPECIAL_OPERATOR  = 0x00400000;
-    static final int TYPE_COMPILED_FUNCTION = 0x00800000;
-
-    // Composite types.
-    static final int TYPE_INTEGER  = TYPE_FIXNUM | TYPE_BIGNUM;
-    static final int TYPE_RATIONAL = TYPE_INTEGER | TYPE_RATIO;
-    static final int TYPE_REAL     = TYPE_RATIONAL | TYPE_FLOAT;
 
     // Functional types.
     static final int FTYPE_SPECIAL_OPERATOR = 1;
