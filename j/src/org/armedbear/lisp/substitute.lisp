@@ -1,7 +1,7 @@
 ;;; substitute.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: substitute.lisp,v 1.3 2003-07-02 16:44:29 piso Exp $
+;;; $Id: substitute.lisp,v 1.4 2003-07-02 17:52:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -50,10 +50,10 @@
                               (normal
                                (if test-not
                                    (not
-                                    (funcall test-not old (apply-key key elt)))
-                                   (funcall test old (apply-key key elt))))
-                              (if (funcall test (apply-key key elt)))
-                              (if-not (not (funcall test (apply-key key elt)))))
+                                    (funcall test-not old (sys::apply-key key elt)))
+                                   (funcall test old (sys::apply-key key elt))))
+                              (if (funcall test (sys::apply-key key elt)))
+                              (if-not (not (funcall test (sys::apply-key key elt)))))
 			    (setq count (1- count))
 			    new)
                            (t elt))))))
@@ -69,7 +69,7 @@
 ;;; on each pass through the loop. Called by all three substitute functions.
 (defun vector-substitute* (pred new sequence incrementer left right length
                                 start end count key test test-not old)
-  (let ((result (make-sequence-like sequence length))
+  (let ((result (sys::make-sequence-like sequence length))
 	(index left))
     (do ()
       ((= index start))
@@ -82,10 +82,10 @@
 	    (cond ((case pred
                      (normal
                       (if test-not
-                          (not (funcall test-not old (apply-key key elt)))
-                          (funcall test old (apply-key key elt))))
-                     (if (funcall test (apply-key key elt)))
-                     (if-not (not (funcall test (apply-key key elt)))))
+                          (not (funcall test-not old (sys::apply-key key elt)))
+                          (funcall test old (sys::apply-key key elt))))
+                     (if (funcall test (sys::apply-key key elt)))
+                     (if-not (not (funcall test (sys::apply-key key elt)))))
 		   (setq count (1- count))
 		   new)
 		  (t elt)))
