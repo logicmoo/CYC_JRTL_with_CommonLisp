@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.45 2003-08-12 01:34:11 piso Exp $
+# $Id: Makefile.in,v 1.46 2003-08-14 01:55:42 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ COMPILER_CLASSPATH = @COMPILER_CLASSPATH@
 
 CLASSFILES =	AbstractArray.class \
 		AbstractVector.class \
+		AndTypeSpecifier.class \
 		Array.class \
 		ArrayType.class \
 		ArrayTypeSpecifier.class \
@@ -94,6 +95,7 @@ CLASSFILES =	AbstractArray.class \
 		Return.class \
 		SimpleCondition.class \
 		SimpleError.class \
+		SimpleVectorTypeSpecifier.class \
 		SpecialOperator.class \
 		StreamError.class \
 		StringFunctions.class \
@@ -110,6 +112,7 @@ CLASSFILES =	AbstractArray.class \
 		TwoWayStream.class \
 		UnboundVariableException.class \
 		UndefinedFunctionError.class \
+		UnspecifiedTypeSpecifier.class \
 		Utilities.class \
 		Vector.class \
 		VectorTypeSpecifier.class \
