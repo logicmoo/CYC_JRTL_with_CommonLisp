@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.47 2003-03-08 21:26:03 piso Exp $
+;;; $Id: rt.lisp,v 1.48 2003-03-08 21:36:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -559,6 +559,7 @@
                               "substitute"
                               "substitute-if"
                               "substitute-if-not"
+                              "subtypep"
                               "svref"
                               "t"
                               "tagbody"
