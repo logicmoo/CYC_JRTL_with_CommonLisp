@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.2 2003-03-29 20:04:12 piso Exp $
+;;; $Id: init.lisp,v 1.3 2003-04-01 02:39:47 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -9,9 +9,12 @@
       (error "file not found: ~A" filename))
     (load filename)
     ;; In my world, antialiasing looks good with Kodiak but not with other
-    ;; themes.
-    (set-global-property 'antialias
-                         (if (string= name "Kodiak") "true" "false"))
+    ;; themes, and italics don't look good without antialiasing...
+    (if (string= name "Kodiak")
+        (set-global-property "antialias" "true"
+                             "enableItalics" "true")
+        (set-global-property "antialias" "false"
+                             "enableItalics" "false"))
     (reset-display)
     t))
 
@@ -25,7 +28,6 @@
   (jstatic "getProperty" "java.lang.System" "java.version"))
 
 (when (string= (subseq (java-version) 0 5) "1.4.1")
-  (set-global-property "enableItalics" "true")
   (set-global-property "adjustAscent" "-1")
   (set-global-property "adjustLeading" "-2")
   (reset-display))
