@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.48 2003-03-08 21:36:16 piso Exp $
+;;; $Id: rt.lisp,v 1.49 2003-03-09 03:54:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -453,8 +453,9 @@
                               "call-arguments-limit"
                               "case"
                               "catch"
-                              "character"
                               "char-compare"
+                              "character"
+                              "cl-symbols"
                               "concatenate"
                               "cond"
                               "cons-test-01"
@@ -583,6 +584,7 @@
 
 (load (concatenate 'string rt::*prefix* "char-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cl-symbols-aux.lsp"))
+(load (concatenate 'string rt::*prefix* "cl-symbol-names.lsp"))
 
 #+armedbear (progn
 (c::compile-package :cl-test :verbose t)
