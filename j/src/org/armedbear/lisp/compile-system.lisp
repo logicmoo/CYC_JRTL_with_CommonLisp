@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.24 2004-09-15 18:37:02 piso Exp $
+;;; $Id: compile-system.lisp,v 1.25 2004-09-23 23:47:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,14 +38,23 @@
      (load (compile-file "source-transform.lisp"))
      (load (compile-file "opcodes.lisp"))
      (load (compile-file "jvm.lisp"))
+     (load (compile-file "compile-file.lisp"))
      ;; FIXME We need to load clos.lisp before we can compile clos.lisp.
      (load "clos.lisp")
      ;; Order matters for these files.
      (mapc #'compile-file '("collect.lisp"
                             "macros.lisp"
                             "loop.lisp"))
-     (mapc #'compile-file '("pprint.lisp"
-                            "format.lisp"))
+;;      (mapc #'compile-file '("pprint.lisp"
+;;                             "format.lisp"))
+     (load (compile-file "typep.lisp"))
+     (load (compile-file "print.lisp"))
+     (load (compile-file "pprint.lisp"))
+     (load (compile-file "format.lisp"))
+     (load (compile-file "delete.lisp"))
+     (load (compile-file "coerce.lisp"))
+     (load (compile-file "concatenate.lisp"))
+     (load (compile-file "make-sequence.lisp"))
      ;; But not for these.
      (mapc #'compile-file '("adjoin.lisp"
                             "and.lisp"
@@ -66,11 +75,11 @@
                             "chars.lisp"
                             "check-type.lisp"
                             "clos.lisp"
-                            "coerce.lisp"
-                            "compile-file.lisp"
+;;                             "coerce.lisp"
+;;                             "compile-file.lisp"
                             "compile-file-pathname.lisp"
                             "compiler-macro.lisp"
-                            "concatenate.lisp"
+;;                             "concatenate.lisp"
                             "cond.lisp"
                             "copy-list.lisp"
                             "copy-seq.lisp"
@@ -84,7 +93,7 @@
                             "defstruct.lisp"
                             "deftype.lisp"
                             "delete-duplicates.lisp"
-                            "delete.lisp"
+;;                             "delete.lisp"
                             "deposit-field.lisp"
                             "destructuring-bind.lisp"
                             "directory.lisp"
@@ -119,7 +128,7 @@
                             "load.lisp"
                             "make-hash-table.lisp"
                             "make-load-form-saving-slots.lisp"
-                            "make-sequence.lisp"
+;;                             "make-sequence.lisp"
                             "make-string-output-stream.lisp"
                             "make-string.lisp"
                             "map-into.lisp"
@@ -141,7 +150,7 @@
                             "parse-lambda-list.lisp"
                             "parse-namestring.lisp"
                             "pathnames.lisp"
-                            "print.lisp"
+;;                             "print.lisp"
                             ;;"print-object.lisp"
                             "print-unreadable-object.lisp"
                             "profiler.lisp"
@@ -181,7 +190,7 @@
                             "trace.lisp"
                             "translate-logical-pathname.lisp"
                             "tree-equal.lisp"
-                            "typep.lisp"
+;;                             "typep.lisp"
                             "upgraded-complex-part-type.lisp"
                             "with-accessors.lisp"
                             "with-hash-table-iterator.lisp"
