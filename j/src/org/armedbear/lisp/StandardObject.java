@@ -1,8 +1,8 @@
 /*
  * StandardObject.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.37 2004-11-28 15:43:50 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: StandardObject.java,v 1.38 2005-03-13 03:56:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,9 +72,16 @@ public class StandardObject extends LispObject
         // conditions, type-of returns the proper name of the class returned by
         // class-of if it has a proper name, and otherwise returns the class
         // itself."
-        Symbol symbol = layout.getLispClass().getSymbol();
-        if (symbol != NIL)
-            return symbol;
+        LispClass c1 = layout.getLispClass();
+        // The proper name of a class is "a symbol that names the class whose
+        // name is that symbol".
+        Symbol symbol = c1.getSymbol();
+        if (symbol != NIL) {
+            // TYPE-OF.9
+            LispObject c2 = LispClass.findClass(symbol);
+            if (c2 == c1)
+                return symbol;
+        }
         return layout.getLispClass();
     }
 
@@ -119,8 +126,6 @@ public class StandardObject extends LispObject
         int currentLevel = Fixnum.getValue(currentPrintLevel);
         if (currentLevel >= maxLevel)
             return "#";
-        LispClass cls = layout.getLispClass();
-        return unreadableString(cls != null ? cls.getSymbol().getName() : "STANDARD-OBJECT");
+        return unreadableString(typeOf().writeToString());
     }
-
 }
