@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.16 2004-01-31 20:10:16 piso Exp $
+ * $Id: TwoWayStream.java,v 1.17 2004-02-12 19:52:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class TwoWayStream extends Stream
         setInteractive(interactive);
     }
 
-    public LispObject getElementType()
+    public LispObject getElementType() throws ConditionThrowable
     {
         LispObject itype = in.getElementType();
         LispObject otype = out.getElementType();
