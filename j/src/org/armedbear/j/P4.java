@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: P4.java,v 1.15 2004-08-18 02:19:31 piso Exp $
+ * $Id: P4.java,v 1.16 2004-09-17 18:18:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -340,41 +340,43 @@ public class P4 implements Constants
 
     public static void log(String args)
     {
+        final Editor editor = Editor.currentEditor();
+        final Buffer parentBuffer = editor.getBuffer();
         boolean useCurrentFile = true;
-        if (args == null)
-            args = "-l";
         List list = Utilities.tokenize(args);
         for (int i = 0; i < list.size(); i++) {
             String arg = (String) list.get(i);
             if (arg.charAt(0) != '-') {
-                // Must be a filename.
+                // Must be a filename. Use its canonical path.
+                File file =
+                    File.getInstance(parentBuffer.getCurrentDirectory(), arg);
+                list.set(i, file.canonicalPath());
                 useCurrentFile = false;
-                break;
+            } else if (arg.equals("-l")) {
+                // We use this option by default.
+                list.set(i, "");
             }
         }
-        final Editor editor = Editor.currentEditor();
-        final Buffer parentBuffer = editor.getBuffer();
-        FastStringBuffer sb = new FastStringBuffer("p4 filelog ");
-        sb.append(args);
-        if (useCurrentFile) {
-            if (parentBuffer.getFile() == null)
-                return;
-            final String name = parentBuffer.getFile().getName();
+        final String baseCmd = "p4 filelog -l ";
+        final String title;
+        FastStringBuffer sb = new FastStringBuffer(baseCmd);
+        for (int i = 0; i < list.size(); i++) {
+            sb.append((String)list.get(i));
             sb.append(' ');
-            if (name.indexOf(' ') >= 0) {
-                // Enclose filename in double quotes since it contains an
-                // embedded space.
-                sb.append('"');
-                sb.append(name);
-                sb.append('"');
-            } else
-                sb.append(name);
         }
+        if (useCurrentFile) {
+            File file = parentBuffer.getFile();
+            if (file == null)
+                return;
+            sb.append(maybeQuote(file.canonicalPath()));
+            title = baseCmd + maybeQuote(file.getName());
+        } else
+            title = sb.toString();
         final String cmd = sb.toString();
         editor.setWaitCursor();
-        final String output = command(cmd, parentBuffer.getCurrentDirectory());
+        final String output = command(cmd, null);
         OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
-        buf.setTitle(cmd);
+        buf.setTitle(title);
         editor.makeNext(buf);
         editor.activateInOtherWindow(buf);
         editor.setDefaultCursor();
