@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.12 2004-09-07 15:42:21 piso Exp $
+;;; $Id: format.lisp,v 1.13 2004-09-10 12:49:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 ;;; From primordial-extensions.lisp.
 
@@ -266,7 +266,7 @@
 
 ;;; From early-format.lisp.
 
-(in-package "FORMAT")
+(in-package #:format)
 
 (defparameter *format-whitespace-chars*
   (vector #\space
@@ -312,7 +312,7 @@
 
 ;;; From late-format.lisp.
 
-(in-package "FORMAT")
+(in-package #:format)
 
 (define-condition format-error (error)
   ((complaint :reader format-error-complaint :initarg :complaint)
@@ -1651,7 +1651,7 @@
 
 ;;; From target-format.lisp.
 
-(in-package "FORMAT")
+(in-package #:format)
 
 (defun format (destination control-string &rest format-arguments)
   (etypecase destination
@@ -2122,25 +2122,21 @@
         (decf spaceleft))
       (multiple-value-bind (str len lpoint tpoint)
         (sys::flonum-to-string (abs number) spaceleft d k)
-        ;;         (sys::%format t "spaceleft = ~S~%" spaceleft)
 	;;if caller specifically requested no fraction digits, suppress the
 	;;optional trailing zero
 	(when (and d (zerop d)) (setq tpoint nil))
 	(when w
 	  (decf spaceleft len)
-          ;;           (sys::%format t "spaceleft = ~S~%" spaceleft)
 	  ;;optional leading zero
 	  (when lpoint
 	    (if (or (> spaceleft 0) tpoint) ;force at least one digit
 		(decf spaceleft)
 		(setq lpoint nil)))
-          ;;           (sys::%format t "spaceleft = ~S~%" spaceleft)
 	  ;;optional trailing zero
 	  (when tpoint
 	    (if (> spaceleft 0)
 		(decf spaceleft)
 		(setq tpoint nil))))
-        ;;         (sys::%format t "spaceleft = ~S~%" spaceleft)
 	(cond ((and w (< spaceleft 0) ovf)
 	       ;;field width overflow
 	       (dotimes (i w) (write-char ovf stream))
@@ -2153,11 +2149,12 @@
                       (write-char #\+ stream)))
 	       (when lpoint
                  (write-char #\0 stream)
-                 (decf spaceleft))
+                 (when spaceleft
+                     (decf spaceleft)))
                (when (and w (null d) (< spaceleft 0))
                  ;; "A value is chosen for d in such a way that as many
                  ;; digits as possible may be printed subject to the width
-                 ;; constraint imposed by the parameter w..."
+                 ;; constraint imposed by the parameter w ..."
                  (let ((index (position #\. str)))
                    (when index
                      (setf str (subseq str 0 (1+ index))))))
