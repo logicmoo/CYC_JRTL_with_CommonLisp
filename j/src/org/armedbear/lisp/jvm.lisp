@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.218 2004-07-15 20:03:26 piso Exp $
+;;; $Id: jvm.lisp,v 1.219 2004-07-19 14:27:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 (shadow '(method variable))
 
 (defvar *use-locals-vector* nil)
+(defvar *new-way* t) ;; FIXME Remove this after transition to new way!
 
 ;; FIXME
 ;; This controls compiler debugging output, not debuggability of compiled code!
@@ -63,12 +64,35 @@
 ;; All variables seen so far.
 (defvar *all-variables* ())
 
+(defvar *dump-variables* nil)
+
+(defun dump-1-variable (variable)
+  (%format t "  ~S ~A special-p = ~S register = ~S level = ~S index = ~S arg-index = ~S~%"
+           (variable-name variable)
+           (variable-kind variable)
+           (variable-special-p variable)
+           (variable-register variable)
+           (variable-level variable)
+           (variable-index variable)
+           (variable-arg-index variable)))
+
+(defun dump-variables (list caption)
+  (when *dump-variables*
+    (write-string caption)
+    (if list
+        (dolist (variable list)
+          (dump-1-variable variable))
+        (%format t "  None.~%"))))
+
+(defvar *nesting-level* 0)
+
 (defstruct variable
   name
   (kind 'LOCAL) ; ARG, LOCAL, SPECIAL
   special-p
   register ; register number or NIL
-  context
+;;   context
+  (level *nesting-level*)
   index
   arg-index)
 
@@ -85,7 +109,7 @@
 
 (defun add-variable-to-context (variable)
   (assert (variable-p variable))
-  (setf (variable-context variable) *context*)
+;;   (setf (variable-context variable) *context*)
   (push variable (context-vars *context*)))
 
 
@@ -93,6 +117,7 @@
   (let* ((index (if special-p nil (length (context-vars *context*))))
          (variable (make-variable :name name :special-p special-p :index index)))
     (push variable *variables*)
+    (push variable *all-variables*)
     (unless special-p
       (add-variable-to-context variable))
     variable))
@@ -112,7 +137,9 @@
 (defstruct local-function
   name
   function
-  classfile)
+  classfile
+  variable
+  (nesting-level (1+ *nesting-level*)))
 
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
@@ -684,6 +711,8 @@
          (assert nil))))
 
 (defun resolve-variables ()
+  (dump-variables (reverse *all-variables*)
+                  (%format nil "Variables in ~A:~%" *defun-name*))
   (let ((code (nreverse *code*)))
     (setf *code* nil)
     (dolist (instruction code)
@@ -692,14 +721,42 @@
          (let ((variable (first (instruction-args instruction)))
                (target (second (instruction-args instruction))))
            (assert (variable-p variable))
+;;            (format t "resolving var-ref, *nesting-level* = ~S~%" *nesting-level*)
+;;            (dump-1-variable variable)
            (cond ((variable-register variable)
                   (emit 'aload (variable-register variable))
                   (emit-move-from-stack target))
                  ((variable-special-p variable)
                   (compile-special-reference (variable-name variable) target))
-                 (*child-p*
+                 ((= (variable-level variable) *nesting-level* 0)
+;;                   (format t "level 0 case~%")
+                  (emit 'aload 1)
+                  (emit 'bipush (variable-index variable))
+                  (emit 'aaload)
+                  (emit-move-from-stack target))
+                 ((and (variable-index variable) ; A local at the current nesting level.
+                       (= (variable-level variable) *nesting-level*))
+;;                   (format t "local at current nesting level~%")
+                  (emit 'aload 1)
+                  (emit 'bipush (variable-index variable))
+                  (emit 'aaload)
+                  (emit-move-from-stack target))
+                 (nil ;;*child-p*
                   (emit 'aload *context-register*)
                   (emit 'bipush (variable-index variable))
+                  (emit 'aaload)
+                  (emit-move-from-stack target))
+                 (*child-p*
+                  ;; The general case.
+                  (emit 'aload *context-register*) ; Array of arrays.
+                  (assert (fixnump (variable-level variable)))
+                  (emit 'bipush (variable-level variable))
+                  (emit 'aaload) ; Locals array for level in question.
+                  (let ((index (variable-index variable)))
+                    (unless (fixnump index)
+                      (setf index (variable-arg-index variable)))
+                    (assert (fixnump index))
+                    (emit 'bipush index))
                   (emit 'aaload)
                   (emit-move-from-stack target))
                  (t
@@ -709,15 +766,42 @@
                   (emit-move-from-stack target)))))
         (207 ; VAR-SET
          (let ((variable (car (instruction-args instruction))))
+;;            (format t "resolving var-set...~%")
+;;            (dump-1-variable variable)
            (assert (variable-p variable))
            (assert (not (variable-special-p variable)))
            (cond ((variable-register variable)
                   (emit 'astore (variable-register variable)))
-                 (*child-p*
+                 ((= (variable-level variable) *nesting-level* 0)
+;;                   (format t "level 0 case~%")
+                  (emit 'aload 1) ; Stack: value array
+                  (emit 'swap) ; array value
+                  (emit 'bipush (variable-index variable)) ; array value index
+                  (emit 'swap) ; array index value
+                  (emit 'aastore))
+                 ((and (variable-index variable) ; A local at the current nesting level.
+                       (= (variable-level variable) *nesting-level*))
+;;                   (format t "local at current nesting level~%")
+                  (emit 'aload 1) ; Stack: value array
+                  (emit 'swap) ; array value
+                  (emit 'bipush (variable-index variable)) ; array value index
+                  (emit 'swap) ; array index value
+                  (emit 'aastore)
+                  )
+                 (nil ;;*child-p*
                   (emit 'aload *context-register*) ; Stack: value context
                   (emit 'swap) ; context value
                   (emit 'bipush (variable-index variable)) ; context value index
                   (emit 'swap) ; context index value
+                  (emit 'aastore))
+                 (*child-p*
+                  ;; The general case.
+                  (emit 'aload *context-register*) ; Array of arrays.
+                  (emit 'bipush (variable-level variable))
+                  (emit 'aaload) ; Locals array for level in question.
+                  (emit 'swap) ; array value
+                  (emit 'bipush (variable-index variable)) ; array value index
+                  (emit 'swap) ; array index value
                   (emit 'aastore))
                  (t
                   (emit 'aload 1) ; Stack: value array
@@ -1772,13 +1856,17 @@
          (args (cdr form))
          (local-function (find fun *local-functions* :key #'local-function-name)))
     (assert (not (null local-function)))
-    (let* ((g (if *compile-file-truename*
-                  (declare-local-function local-function)
-                  (declare-object (local-function-function local-function)))))
-      (emit 'getstatic
-            *this-class*
-            g
-            +lisp-object+)) ; Stack: template-function
+    (cond ((local-function-variable local-function)
+           ;; LABELS
+           (emit 'var-ref (local-function-variable local-function) :stack))
+          (t
+           (let* ((g (if *compile-file-truename*
+                         (declare-local-function local-function)
+                         (declare-object (local-function-function local-function)))))
+             (emit 'getstatic
+                   *this-class*
+                   g
+                   +lisp-object+)))) ; Stack: template-function
     (emit 'sipush (length args))
     (emit 'anewarray "org/armedbear/lisp/LispObject")
     (let ((i 0))
@@ -1790,12 +1878,61 @@
         (maybe-emit-clear-values arg)
         (incf i))) ; array left on stack here
     ;; Stack: template-function args
-    (emit 'aload *context-register*)
+    (if *new-way*
+        (progn
+;;           (format t "compile-local-function-call *nesting-level* = ~S local-function-nesting-level = ~S~%"
+;;                   *nesting-level*
+;;                   (local-function-nesting-level local-function))
+          (cond ((zerop *nesting-level*)
+                 ;; Make a vector of size 1.
+                 (emit 'sipush 1)
+                 (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
+                 ;; Store args/locals register in slot 0.
+                 (emit 'dup)
+                 (emit 'sipush 0)
+                 (emit 'aload 1) ;; Args/locals register.
+                 (emit 'aastore))
+;;                 ((eql (local-function-nesting-level local-function) 1)
+;;                  (emit 'sipush 1)
+;;                  (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
+;;                  (emit 'dup)
+;;                  (emit 'sipush 0)
+;;                  (emit 'aload *context-register*)
+;;                  (emit 'aastore)
+;;                  )
+                ((= *nesting-level* (local-function-nesting-level local-function))
+;;                  (format t "same level case~%")
+                 (emit 'aload 2)
+                 )
+                (t
+                 ;; This is the general case.
+;;                  (%format t "line 1887~%")
+;;                  (assert nil)
+                 (emit 'sipush (local-function-nesting-level local-function))
+                 (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
+                 (dotimes (i (1- (local-function-nesting-level local-function)))
+                   (emit 'dup)
+                   (emit 'sipush i)
+                   (emit 'aload 2)
+                   (emit 'sipush i)
+                   (emit 'aaload)
+                   (emit 'aastore))
+                 (emit 'dup)
+                 (emit 'sipush (1- (local-function-nesting-level local-function)))
+                 (emit 'aload 1) ; Args/locals.
+                 (emit 'aastore)
+                 )))
+        (emit 'aload *context-register*))
     ;; Stack: template-function args context
-    (emit-invokevirtual +lisp-object-class+
-                        "execute"
-                        "([Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                        -2)
+    (if *new-way*
+        (emit-invokevirtual +lisp-object-class+
+                            "execute"
+                            "([Lorg/armedbear/lisp/LispObject;[[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                            -2)
+        (emit-invokevirtual +lisp-object-class+
+                            "execute"
+                            "([Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                            -2))
     (cond ((null target)
            (emit 'pop)
            (maybe-emit-clear-values form))
@@ -1803,6 +1940,7 @@
           ((fixnump target)
            (emit 'astore target))
           (t
+           (%format t "line 1876~%")
            (assert nil)))))
 
 (defun compile-test-not/null (form)
@@ -1966,18 +2104,20 @@
                              "bindSpecial"
                              "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
                              -3))
-        (*child-p*
-         (emit 'aload *context-register*) ; Stack: value context
-         (emit 'swap) ; context value
-         (emit 'bipush (variable-index variable)) ; context value index
-         (emit 'swap) ; context index value
-         (emit 'aastore))
+;;         (*child-p*
+;;          (emit 'aload *context-register*) ; Stack: value context
+;;          (emit 'swap) ; context value
+;;          (emit 'bipush (variable-index variable)) ; context value index
+;;          (emit 'swap) ; context index value
+;;          (emit 'aastore))
         (*use-locals-vector*
          (emit 'aload 1) ; Stack: value array
          (emit 'swap) ; array value
          (emit 'bipush (variable-index variable)) ; array value index
          (emit 'swap) ; array index value
-         (emit 'aastore))))
+         (emit 'aastore))
+        (t
+         (assert nil))))
 
 (defun compile-multiple-value-bind (form &key (target *val*))
   (let* ((*register* *register*)
@@ -2131,6 +2271,8 @@
       (setf variable (push-variable var specialp))
       (unless (or specialp *use-locals-vector*)
         (setf (variable-register variable) (allocate-register)))
+;;       (format t "compile-let*-vars variable = ~S~%" (variable-name variable))
+;;       (dump-1-variable variable)
       (compile-binding variable))))
 
 ;; Returns list of declared specials.
@@ -2364,9 +2506,9 @@
   ;; Nothing to do.
   )
 
-(defun compile-local-function (def)
-  (let* ((name (car def))
-         (arglist (cadr def))
+(defun compile-local-function (definition local-function)
+  (let* ((name (car definition))
+         (arglist (cadr definition))
          form
          function
          classfile)
@@ -2380,20 +2522,37 @@
                  (when (and (consp arg)
                             (not (constantp (second arg))))
                    (error "COMPILE-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
-    (multiple-value-bind (body decls) (sys::parse-body (cddr def))
+    (multiple-value-bind (body decls) (sys::parse-body (cddr definition))
       (setf body (list (list* 'BLOCK name body)))
       (dolist (decl decls)
         (push decl body))
       (setf form (list* 'LAMBDA arglist body)))
-    (if *compile-file-truename*
-        (setf classfile (compile-defun name form nil (sys::next-classfile-name)))
-        (setf function
-              (sys::load-compiled-function (compile-defun name form nil
-                                                          (format nil "flet-~D.class" *child-count*)))))
-    (push (make-local-function :name name
-                               :function function
-                               :classfile classfile)
-          *local-functions*)))
+    (let ((*nesting-level* (1+ *nesting-level*)))
+      (if *compile-file-truename*
+          (setf classfile (compile-defun name form nil (sys::next-classfile-name)))
+          (progn
+            (setf function
+                  (sys::load-compiled-function (compile-defun name form nil
+                                                              (format nil "local-~D.class" *child-count*))))
+            (incf *child-count*))))
+    (cond (local-function
+           (setf (local-function-classfile local-function) classfile)
+           (let ((g (if *compile-file-truename*
+                        (declare-local-function local-function)
+                        (declare-object function))))
+             (emit 'getstatic
+                   *this-class*
+                   g
+                   +lisp-object+)
+;;              (format t "*nesting-level* = ~S~%" *nesting-level*)
+;;              (format t "setting LABELS variable...~%")
+;;              (dump-1-variable (local-function-variable local-function))
+             (emit 'var-set (local-function-variable local-function))))
+          (t
+           (push (make-local-function :name name
+                                      :function function
+                                      :classfile classfile)
+                 *local-functions*)))))
 
 (defun compile-flet (form &key (target *val*))
   (if *use-locals-vector*
@@ -2401,33 +2560,52 @@
             (definitions (cadr form))
             (body (cddr form)))
         (dolist (definition definitions)
-          (compile-local-function definition))
+          (compile-local-function definition nil))
         (do ((forms body (cdr forms)))
             ((null forms))
           (compile-form (car forms) :target (if (cdr forms) nil target))))
       (error "COMPILE-FLET: unsupported case.")))
 
 (defun compile-labels (form &key target)
-  (error "COMPILE-LABELS: unsupported case."))
+  (if *use-locals-vector*
+      (let ((*local-functions* *local-functions*)
+            (definitions (cadr form))
+            (body (cddr form)))
+        (dolist (definition definitions)
+          (let* ((name (car definition))
+                 (variable (push-variable (copy-symbol name) nil)))
+            (push (make-local-function :name name :variable variable)
+                  *local-functions*)))
+        (dolist (definition definitions)
+          (let* ((name (car definition))
+                 (local-function (find name *local-functions* :key #'local-function-name)))
+            (compile-local-function definition local-function)))
+        (do ((forms body (cdr forms)))
+            ((null forms))
+          (compile-form (car forms) :target (if (cdr forms) nil target))))
+      (error "COMPILE-LABELS: unsupported case.")))
 
 (defun compile-function (form &key (target *val*))
    (let ((name (second form))
          (local-function))
      (cond ((symbolp name)
             (cond ((setf local-function (find name *local-functions* :key #'local-function-name))
-                   (let ((g (if *compile-file-truename*
-                                (declare-local-function local-function)
-                                (declare-object (local-function-function local-function)))))
-                     (emit 'getstatic
-                           *this-class*
-                           g
-                           +lisp-object+) ; Stack: template-function
-                     (emit 'aload *context-register*) ; Stack: template-function context
-                     (emit-invokestatic +lisp-class+
-                                        "makeCompiledClosure"
-                                        "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                        -1) ; Stack: compiled-closure
-                     (emit-move-from-stack target)))
+                   (error "COMPILE-FUNCTION: local functions are not supported")
+                   (if (local-function-variable local-function)
+                       (emit 'var-ref (local-function-variable local-function) :stack)
+                       (let ((g (if *compile-file-truename*
+                                    (declare-local-function local-function)
+                                    (declare-object (local-function-function local-function)))))
+                         (emit 'getstatic
+                               *this-class*
+                               g
+                               +lisp-object+))) ; Stack: template-function
+                   (emit 'aload *context-register*) ; Stack: template-function context
+                   (emit-invokestatic +lisp-class+
+                                      "makeCompiledClosure"
+                                      "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                                      -1) ; Stack: compiled-closure
+                   (emit-move-from-stack target))
                   ((inline-ok name)
                    (let ((g (declare-function name)))
                      (emit 'getstatic
@@ -2618,6 +2796,7 @@
         ((fixnump target)
          (emit 'astore target))
         (t
+         (%format t "line 2721~%")
          (assert nil))))
 
 (defun compile-variable-reference (name target)
@@ -2827,6 +3006,7 @@
 (defun analyze-args (args)
   (assert (not (memq '&AUX args)))
   (when (or *use-locals-vector*
+            *child-p*
             (memq '&KEY args)
             (memq '&OPTIONAL args)
             (memq '&REST args))
@@ -2834,7 +3014,9 @@
     (setq *hairy-arglist-p* t)
     (return-from analyze-args
                  (if *child-p*
-                     #.(format nil "([~A[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
+                     (if *new-way*
+                         #.(format nil "([~A[[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
+                         #.(format nil "([~A[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+))
                      #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
   (case (length args)
     (0 #.(format nil "()~A" +lisp-object+))
@@ -2854,7 +3036,7 @@
     (let* ((*speed* *speed*)
            (*safety* *safety*)
            (*defun-name* name)
-           (*declared-symbols* (make-hash-table))
+           (*declared-symbols* (make-hash-table :test 'eq))
            (*declared-functions* (make-hash-table :test 'equal))
            (*declared-strings* (make-hash-table :test 'eq))
            (class-name
@@ -2871,11 +3053,14 @@
            (*using-arg-array* nil)
            (*hairy-arglist-p* nil)
 
+;;            (*nesting-level* (if *nesting-level* (1+ *nesting-level*) 0))
+
            (*child-p* (if *context* t nil))
 
-           (*child-count* (if *child-p* (1+ *child-count*) 0))
+;;            (*child-count* (if *child-p* (1+ *child-count*) 0))
 
-           (*use-locals-vector* (or *child-p* obstacles))
+           (*use-locals-vector* (or ;;*child-p*
+                                    obstacles))
 
            (descriptor (analyze-args args))
            (execute-method (make-method :name "execute"
@@ -2889,12 +3074,14 @@
            (*registers-allocated* 0)
            (*handlers* ())
 
-           ;;          (*context* (make-context :parent *context*))
            (*context* (if *context* *context* (make-context)))
+;;            (*context* *context*)
 
            (*context-register* *context-register*)
 
            (*variables* *variables*)
+
+           (*all-variables* *all-variables*)
 
            (parameters ())
 
@@ -2904,6 +3091,12 @@
            (*val* nil)
            (*thread* nil)
            (*initialize-thread-var* nil))
+;;       (format t "~S *nesting-level* = ~S~%" *defun-name* *nesting-level*)
+      (if (zerop *nesting-level*)
+          (setf *child-count* 0))
+;;       (when (> *nesting-level* 1)
+;;         (error "Nesting level > 1, aborting"))
+;;       (setf *context* (make-context))
       (setf (method-name-index execute-method)
             (pool-name (method-name execute-method)))
       (setf (method-descriptor-index execute-method)
@@ -2917,7 +3110,8 @@
                                              :kind 'ARG
                                              :special-p nil ;; FIXME
                                              :register nil
-                                             :index (length (context-vars *context*))
+                                             :index ;;(length (context-vars *context*))
+                                             arg-index
                                              :arg-index arg-index)))
                 (push variable *all-variables*)
                 (push variable *variables*)
@@ -2949,10 +3143,15 @@
                   (t
                    (setf (variable-special-p variable) t))))))
 
+      (dump-variables (reverse parameters)
+                      (format nil "Arguments to ~A:~%" *defun-name*))
+
       (allocate-register) ;; "this" pointer
       (if *using-arg-array*
-          (allocate-register) ;; One slot for arg array.
-          (dolist (arg args) ;; One slot for each argument.
+          ;; One slot for arg array.
+          (allocate-register)
+          ;; Otherwise, one register for each argument.
+          (dolist (arg args)
             (allocate-register)))
       (cond (*child-p*
              (setf *context-register* (allocate-register))
@@ -2960,6 +3159,7 @@
             (*use-locals-vector*
              (assert *using-arg-array*)
              (setf *context-register* 1)))
+;;       (format t "~S *context-register* = ~S~%" *defun-name* *context-register*)
       ;; Reserve the next available slot for the value register.
       (setf *val* (allocate-register))
       ;; Reserve the next available slot for the thread register.
@@ -2996,16 +3196,21 @@
                       (setf (variable-index variable) nil))
                      (t
                       (error "error: need to establish dynamic binding"))))
-              ;; Copy args to context vector.
+;;               ;; Copy args to context vector.
+              ;; Don't copy args to context vector!
               (*child-p*
-               ;; Destination.
-               (emit 'aload *context-register*)
-               (emit 'bipush (variable-index variable))
-               ;; Value.
-               (emit 'aload 1)
-               (emit 'bipush (variable-arg-index variable))
-               (emit 'aaload)
-               (emit 'aastore))))
+;;                ;; Destination.
+;;                (emit 'aload *context-register*)
+;;                (emit 'bipush (variable-index variable))
+;;                ;; Value.
+;;                (emit 'aload 1)
+;;                (emit 'bipush (variable-arg-index variable))
+;;                (emit 'aaload)
+;;                (emit 'aastore)
+;;                (setf (variable-arg-index variable) nil)
+;;                (setf (variable-index variable) nil)
+               )
+              ))
 
       (process-optimization-declarations body)
       (do ((forms body (cdr forms)))
@@ -3026,15 +3231,35 @@
           (emit 'aload_0)
           (emit 'aload_1)
           ; Reserve extra slots for locals if applicable.
-          (if (and *use-locals-vector* (not *child-p*))
+;;           (if (and *use-locals-vector* (not *child-p*))
+          (let ((extra (if *use-locals-vector*
+                           (length (context-vars *context*))
+                           0)))
               ;;             (emit 'sipush (- (length *all-locals*) (length *args*)))
-              (emit 'sipush (length (context-vars *context*))) ;; FIXME subtract length of args
-              (emit 'iconst_0))
+;;               (emit 'sipush (length (context-vars *context*))) ;; FIXME subtract length of args
+;;               (emit 'iconst_0))
+;;             (format t "~S extra = ~S~%" *defun-name* extra)
+            (emit 'sipush extra))
           (emit-invokevirtual *this-class*
                               "processArgs"
                               "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
                               -2)
           (emit 'astore_1))
+
+        #+nil
+        (if *new-way*
+            (case *nesting-level*
+              (0)
+              (1
+;;                (emit 'aload 2) ;; Vector of context vectors.
+;;                (emit 'sipush 0)
+;;                (emit 'aaload) ;; Context vector.
+;;                (emit 'astore 2)
+               )
+              (t
+               (%format t "line 3211~%")
+               (assert nil))))
+
         (initialize-thread-var)
         (setf *code* (append code *code*)))
 
