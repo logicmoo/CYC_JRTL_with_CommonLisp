@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.20 2002-11-19 00:23:53 piso Exp $
+ * $Id: Editor.java,v 1.21 2002-11-22 23:53:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3434,6 +3434,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         endOfBlock();
         nextWord();
         moveCaretToDotCol();
+        updateDotLine();
     }
 
     public void wordLeft()
@@ -3445,6 +3446,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         beginningOfBlock();
         prevWord();
         moveCaretToDotCol();
+        updateDotLine();
     }
 
     public void selectWordRight()
@@ -3457,6 +3459,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         updateDotLine();
         nextWord();
         moveCaretToDotCol();
+        updateDotLine();
     }
 
     public void selectWordLeft()
@@ -3469,6 +3472,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         updateDotLine();
         prevWord();
         moveCaretToDotCol();
+        updateDotLine();
     }
 
     public void selectAll()
