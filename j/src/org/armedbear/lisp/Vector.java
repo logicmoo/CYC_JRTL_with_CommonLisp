@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.26 2003-09-20 17:02:05 piso Exp $
+ * $Id: Vector.java,v 1.27 2003-10-17 19:37:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,6 +79,18 @@ public class Vector extends AbstractVector
             elements = newArray;
             capacity = minCapacity;
         }
+    }
+
+    public Vector adjustArray(int size)
+    {
+        if (elements.length != size) {
+            LispObject[] newArray = new LispObject[size];
+            System.arraycopy(elements, 0, newArray, 0,
+                             Math.min(elements.length, size));
+            elements = newArray;
+            capacity = size;
+        }
+        return this;
     }
 
     public int length()
