@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.41 2004-05-29 19:05:58 piso Exp $
+ * $Id: LispThread.java,v 1.42 2004-06-02 11:42:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -251,26 +251,28 @@ public final class LispThread extends LispObject
         return dynEnv != null ? dynEnv.lookup(symbol) : null;
     }
 
-    private Stack catchTags = new Stack();
+    private LispObject catchTags = NIL;
 
-    public void pushCatchTag(LispObject tag)
+    public void pushCatchTag(LispObject tag) throws ConditionThrowable
     {
-        catchTags.push(tag);
+        catchTags = new Cons(tag, catchTags);
     }
 
-    public LispObject popCatchTag()
+    public void popCatchTag() throws ConditionThrowable
     {
-        if (!catchTags.empty())
-            return (LispObject) catchTags.pop();
-        Debug.assertTrue(false);
-        return null;
+        if (catchTags != NIL)
+            catchTags = catchTags.cdr();
+        else
+            Debug.assertTrue(false);
     }
 
-    public boolean isValidCatchTag(LispObject tag)
+    public boolean isValidCatchTag(LispObject tag) throws ConditionThrowable
     {
-        for (int i = catchTags.size(); i-- > 0;) {
-            if (catchTags.get(i) == tag)
+        LispObject rest = catchTags;
+        while (rest != NIL) {
+            if (rest.car() == tag)
                 return true;
+            rest = rest.cdr();
         }
         return false;
     }
