@@ -1,8 +1,8 @@
 /*
  * Dispatcher.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Dispatcher.java,v 1.4 2002-12-29 16:06:28 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Dispatcher.java,v 1.5 2003-05-13 17:05:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.net.URL;
 import java.util.List;
+import javax.swing.JPopupMenu;
 import javax.swing.ToolTipManager;
 import javax.swing.undo.CompoundEdit;
 
@@ -362,6 +363,10 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
 
     public void mouseClicked(MouseEvent e)
     {
+        // Mask off the bits we don't care about (Java 1.4).
+        int modifiers = e.getModifiers() & 0x1f;
+        if (modifiers != InputEvent.BUTTON1_MASK)
+            return;
         if (editor.getMark() != null && e.getClickCount() == 1) {
             final Buffer buffer = editor.getBuffer();
             if (buffer.getBooleanProperty(Property.ENABLE_DRAG_TEXT)) {
@@ -369,7 +374,6 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
                 Position pos = display.positionFromPoint(e.getPoint());
                 if (pos.isAfter(r.getBegin()) && pos.isBefore(r.getEnd())) {
                     editor.addUndo(SimpleEdit.MOVE);
-                    Log.debug("mouseClicked calling unmark");
                     editor.unmark();
                     display.moveCaretToPoint(e.getPoint());
                     if (buffer.getBooleanProperty(Property.RESTRICT_CARET))
@@ -378,14 +382,6 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
                 }
             }
         }
-    }
-
-    public void mouseEntered(MouseEvent e)
-    {
-    }
-
-    public void mouseExited(MouseEvent e)
-    {
     }
 
     private boolean dragTextStarting;
@@ -407,9 +403,17 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
             if (sidebar != null)
                 sidebar.setUpdateFlag(SIDEBAR_SET_BUFFER);
         }
-        if (editor.getPopup() != null)
-            editor.killPopup();
-        if (editor.getMark() != null) {
+        int modifiers = e.getModifiers() & 0x1f;
+        JPopupMenu popup = editor.getPopup();
+        if (popup != null) {
+            if (popup.isVisible()) {
+                editor.killPopup();
+                if (modifiers != InputEvent.BUTTON1_MASK)
+                    return;
+            }
+            editor.setPopup(null);
+        }
+        if (modifiers == InputEvent.BUTTON1_MASK && editor.getMark() != null) {
             if (editor.getBuffer().getBooleanProperty(Property.ENABLE_DRAG_TEXT)) {
                 Region r = new Region(editor);
                 if (!r.isColumnRegion()) {
@@ -428,6 +432,10 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
     public void mouseReleased(MouseEvent e)
     {
     }
+
+    public void mouseEntered(MouseEvent e) {}
+
+    public void mouseExited(MouseEvent e) {}
 
     private boolean dispatchMousePressed(MouseEvent e)
     {
