@@ -2,7 +2,7 @@
  * BroadcastStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: BroadcastStream.java,v 1.10 2004-11-03 15:38:52 piso Exp $
+ * $Id: BroadcastStream.java,v 1.11 2004-12-07 19:27:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,6 +192,10 @@ public final class BroadcastStream extends Stream
     private static final Primitive MAKE_BROADCAST_STREAM =
         new Primitive("make-broadcast-stream", "&rest streams")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return new BroadcastStream(new Stream[0]);
+        }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             Stream[] streams = new Stream[args.length];
