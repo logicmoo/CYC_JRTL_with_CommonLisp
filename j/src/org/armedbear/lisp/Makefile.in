@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.27 2003-06-20 18:13:08 piso Exp $
+# $Id: Makefile.in,v 1.28 2003-06-20 18:56:33 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -84,6 +84,7 @@ CLASSFILES =	AbstractArray.class \
 		SimpleError.class \
 		SpecialOperator.class \
 		StreamError.class \
+		StringFunctions.class \
 		StringInputStream.class \
 		StringOutputStream.class \
 		Symbol.class \
