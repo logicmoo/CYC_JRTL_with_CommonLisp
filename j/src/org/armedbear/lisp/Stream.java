@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.25 2004-02-24 01:54:40 piso Exp $
+ * $Id: Stream.java,v 1.26 2004-02-24 22:22:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -685,7 +685,7 @@ public class Stream extends LispObject
                 break;
             }
         }
-        return new BitVector(sb.toString());
+        return new SimpleBitVector(sb.toString());
     }
 
     private LispObject readArray(int rank) throws ConditionThrowable
