@@ -1,7 +1,7 @@
 ;;; case.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: case.lisp,v 1.2 2004-04-14 14:33:49 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: case.lisp,v 1.3 2005-01-31 17:22:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,10 +26,6 @@
   (or (zerop n) ; since anything can be considered an improper list of length 0
       (and (consp x)
 	   (list-of-length-at-least-p (cdr x) (1- n)))))
-
-;;; FIXME
-(defun style-warn (&rest args)
-  nil)
 
 (defun case-body-error (name keyform keyform-value expected-type keys)
   (restart-case
