@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.26 2003-02-05 02:45:01 piso Exp $
+ * $Id: Buffer.java,v 1.27 2003-02-05 03:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,10 @@
 package org.armedbear.j;
 
 import java.awt.Cursor;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -401,28 +403,74 @@ public class Buffer extends SystemBuffer
             case FILETYPE_TEXT:
             default: {
                 final File file = getFile();
-                Mode m = null;
-                if (entryName != null)
-                    m = getModeForFileName(entryName);
-                else if (file != null)
-                    m = getModeForFileName(file.getName());
-                if (m != null && m.getId() == IMAGE_MODE) {
-                    if (fileType == FILETYPE_TEXT)
-                        m = modeList.getMode(PLAIN_TEXT_MODE);
-                    else
-                        m = modeList.getMode(BINARY_MODE);
-                } else if (m == null) {
-                    if (file != null) {
-                        if (file.getProtocol() == File.PROTOCOL_HTTP ||
-                            file.getProtocol() == File.PROTOCOL_HTTPS)
-                            m = modeList.getMode(HTML_MODE);
+                Mode m = grovelMode(file);
+                if (m == null) {
+                    if (entryName != null)
+                        m = getModeForFileName(entryName);
+                    else if (file != null)
+                        m = getModeForFileName(file.getName());
+                    if (m != null && m.getId() == IMAGE_MODE) {
+                        if (fileType == FILETYPE_TEXT)
+                            m = modeList.getMode(PLAIN_TEXT_MODE);
+                        else
+                            m = modeList.getMode(BINARY_MODE);
+                    } else if (m == null) {
+                        if (file != null) {
+                            if (file.getProtocol() == File.PROTOCOL_HTTP ||
+                                file.getProtocol() == File.PROTOCOL_HTTPS)
+                                m = modeList.getMode(HTML_MODE);
+                        }
+                        if (m == null)
+                            m = modeList.getMode(PLAIN_TEXT_MODE);
                     }
-                    if (m == null)
-                        m = modeList.getMode(PLAIN_TEXT_MODE);
                 }
                 return m;
             }
         }
+    }
+
+    private static final Mode grovelMode(File file)
+    {
+        if (file == null)
+            return null;
+        if (!file.isLocal())
+            return null;
+        if (!file.isFile())
+            return null;
+        Mode mode = null;
+        try {
+            BufferedReader reader =
+                new BufferedReader(new InputStreamReader(file.getInputStream()));
+            String s = reader.readLine();
+            int begin = s.indexOf("-*-");
+            if (begin >= 0) {
+                s = s.substring(begin + 3);
+                int end = s.indexOf("-*-");
+                if (end >= 0) {
+                    s = s.substring(0, end).trim().toLowerCase();
+                    int index = s.indexOf("mode:");
+                    String modeName;
+                    if (index < 0) {
+                        // "-*- Lisp -*-"
+                        modeName = s;
+                    } else {
+                        // "-*- Mode: LISP; Syntax: ANSI-Common-Lisp; Base: 10 -*-"
+                        s = s.substring(5).trim();
+                        for (end = 0; end < s.length(); end++) {
+                            char c = s.charAt(end);
+                            if (c == ' ' || c == '\t' || c == ';')
+                                break;
+                        }
+                        modeName = s.substring(0, end);
+                    }
+                    mode = Editor.getModeList().getModeFromModeName(modeName);
+                }
+            }
+        }
+        catch (IOException e) {
+            Log.error(e);
+        }
+        return mode;
     }
 
     // Locking.
