@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Environment.java,v 1.7 2003-11-18 14:11:19 piso Exp $
+ * $Id: Environment.java,v 1.8 2003-11-19 02:39:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,21 +111,47 @@ public final class Environment extends LispObject
         return null;
     }
 
+    // Returns body with declarations removed.
+    public LispObject processDeclarations(LispObject body)
+        throws ConditionThrowable
+    {
+        while (body != NIL) {
+            LispObject obj = body.car();
+            if (obj instanceof Cons && obj.car() == Symbol.DECLARE) {
+                LispObject decls = obj.cdr();
+                while (decls != NIL) {
+                    LispObject decl = decls.car();
+                    if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
+                        LispObject vars = decl.cdr();
+                        while (vars != NIL) {
+                            Symbol var = checkSymbol(vars.car());
+                            declareSpecial(var);
+                            vars = vars.cdr();
+                        }
+                    }
+                    decls = decls.cdr();
+                }
+                body = body.cdr();
+            } else
+                break;
+        }
+        return body;
+    }
+
+    public void declareSpecial(Symbol var)
+    {
+            vars = new Binding(var, null, vars);
+            vars.specialp = true;
+    }
+
+    public boolean isDeclaredSpecial(Symbol var)
+    {
+        Binding binding = getBinding(var);
+        return binding != null ? binding.specialp : false;
+    }
+
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
-        sb.append("#<ENVIRONMENT");
-        Binding binding = vars;
-        while (binding != null) {
-            sb.append(' ');
-            sb.append(binding.symbol.getName());
-            sb.append(" = ");
-            sb.append(binding.value);
-            binding = binding.next;
-            if (binding != null)
-                sb.append(",");
-        }
-        sb.append(">");
-        return sb.toString();
+        return unreadableString("ENVIRONMENT");
     }
 }
