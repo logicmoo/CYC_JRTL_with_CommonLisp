@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.24 2003-02-15 17:47:28 piso Exp $
+ * $Id: Primitives.java,v 1.25 2003-02-15 19:44:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1497,9 +1497,17 @@ public final class Primitives extends Module
                         LispObject parameterList = clause.cadr();
                         LispObject body = clause.cdr().cdr();
                         Closure handler = new Closure(parameterList, body, env);
-                        LispObject[] handlerArgs = new LispObject[1];
-                        handlerArgs[0] = new JavaObject(e);
-                        return funcall(handler, handlerArgs);
+                        int numArgs = parameterList.length();
+                        if (numArgs == 1) {
+                            LispObject[] handlerArgs = new LispObject[1];
+                            handlerArgs[0] = new JavaObject(e);
+                            return funcall(handler, handlerArgs);
+                        }
+                        if (numArgs == 0) {
+                            LispObject[] handlerArgs = new LispObject[0];
+                            return funcall(handler, handlerArgs);
+                        }
+                        throw new LispError("HANDLER-CASE: invalid handler clause");
                     }
                     clauses = clauses.cdr();
                 }
@@ -1513,6 +1521,8 @@ public final class Primitives extends Module
     {
         if (type == Symbol.UNDEFINED_FUNCTION)
             return e instanceof UndefinedFunctionError;
+        if (type == Symbol.TYPE_ERROR)
+            return e instanceof TypeError;
         return type == Symbol.ERROR;
     }
 
