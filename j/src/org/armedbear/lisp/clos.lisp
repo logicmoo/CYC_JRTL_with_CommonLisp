@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.1 2003-10-22 17:35:59 piso Exp $
+;;; $Id: clos.lisp,v 1.2 2003-10-29 18:54:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1485,3 +1485,5 @@
 (defgeneric compute-applicable-methods (gf args))
 (defmethod compute-applicable-methods ((gf standard-generic-function) args)
   (compute-applicable-methods-using-classes gf (mapcar #'class-of args)))
+
+(provide 'clos)
