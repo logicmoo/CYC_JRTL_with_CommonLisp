@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.207 2004-07-08 06:07:25 piso Exp $
+;;; $Id: jvm.lisp,v 1.208 2004-07-08 18:01:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -69,8 +69,11 @@
   special-p
   register ; register number or NIL
   context
-  index)
+  index
+  arg-index)
 
+;; True for local functions defined with FLET or LABELS.
+(defvar *child-p* nil)
 
 (defvar *context* nil)
 
@@ -1950,7 +1953,9 @@
 
 ;; Generates code to bind variable to value at top of runtime stack.
 (defun compile-binding (variable)
-  (cond ((variable-special-p variable)
+  (cond ((variable-register variable)
+         (emit 'astore (variable-register variable)))
+        ((variable-special-p variable)
          (ensure-thread-var-initialized)
          (emit 'aload *thread*)
          (emit 'swap)
@@ -1963,6 +1968,16 @@
                              "bindSpecial"
                              "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
                              -2))
+        (*child-p*
+         ;; Compile call to LispThread.setVariableValue().
+         (ensure-thread-var-initialized)
+         (emit 'aload *thread*)
+         (emit 'swap)
+         (emit 'bipush (variable-index variable)) ; Stack: thread value index
+         (emit-invokevirtual +lisp-thread-class+
+                             "setVariableValue"
+                             "(Lorg/armedbear/lisp/LispObject;I)V"
+                             -3))
         (*use-locals-vector*
          (let ((index (variable-index variable)))
            (emit 'aload 1) ; Stack: value array
@@ -1971,6 +1986,7 @@
            (emit 'swap) ; array index value
            (emit 'aastore)))
         (t
+         (assert nil) ; FIXME!
          (emit 'astore (variable-register variable)))))
 
 (defun compile-let-vars (varlist specials)
@@ -2526,8 +2542,11 @@
           (t
             (ecase (variable-kind variable)
               (LOCAL
-               (cond ((and (variable-context variable)
-                           (neq (variable-context variable) *context*))
+               (cond (
+;;                       (and (variable-context variable)
+;;                            (neq (variable-context variable) *context*))
+                      *child-p*
+
                       ;; Compile call to LispThread.getVariableValue().
                       (ensure-thread-var-initialized)
                       (emit 'aload *thread*)
@@ -2541,8 +2560,11 @@
                       (emit 'bipush (variable-index variable))
                       (emit 'aaload))))
               (ARG
-               (cond ((and (variable-context variable)
-                           (neq (variable-context variable) *context*))
+               (cond (
+;;                       (and (variable-context variable)
+;;                            (neq (variable-context variable) *context*))
+                      *child-p*
+
                       ;; Compile call to LispThread.getVariableValue().
                       (ensure-thread-var-initialized)
                       (emit 'aload *thread*)
@@ -2583,13 +2605,16 @@
          (maybe-emit-clear-values (cadr rest))
          (unless for-effect
            (emit 'dup)) ; Stack: value value
-         (cond ((and (variable-context variable)
-                     (neq (variable-context variable) *context*))
+         (cond (
+;;                 (and (variable-context variable)
+;;                      (neq (variable-context variable) *context*))
+                *child-p*
+
                 ;; Compile call to LispThread.setVariableValue().
                 (ensure-thread-var-initialized)
                 (emit 'aload *thread*)
                 (emit 'swap)
-                (emit 'bipush (variable-index variable)) ; Stack: value value depth index
+                (emit 'bipush (variable-index variable)) ; Stack: value thread value index
                 (emit-invokevirtual +lisp-thread-class+
                                     "setVariableValue"
                                     "(Lorg/armedbear/lisp/LispObject;I)V"
@@ -2608,13 +2633,16 @@
            (emit-store-value))
          )
         (ARG
-         (cond ((and (variable-context variable)
-                     (neq (variable-context variable) *context*))
+         (cond (
+;;                 (and (variable-context variable)
+;;                      (neq (variable-context variable) *context*))
+                *child-p*
+
                 ;; Compile call to LispThread.setVariableValue().
                 (ensure-thread-var-initialized)
                 (emit 'aload *thread*)
                 (emit 'swap)
-                (emit 'bipush (variable-index variable)) ; Stack: value value depth index
+                (emit 'bipush (variable-index variable)) ; Stack: value thread value index
                 (emit-invokevirtual +lisp-thread-class+
                                     "setVariableValue"
                                     "(Lorg/armedbear/lisp/LispObject;I)V"
@@ -2885,9 +2913,14 @@
          (*registers-allocated* 0)
          (*handlers* ())
 
-         (*context* (make-context :parent *context*))
+;;          (*context* (make-context :parent *context*))
+         (*child-p* (if *context* t nil))
+         (*context* (if *context* *context* (make-context)))
 
          (*variables* *variables*)
+
+         (parameters ())
+
          (*pool* ())
          (*pool-count* 1)
          (*pool-entries* (make-hash-table :test #'equal))
@@ -2900,16 +2933,20 @@
           (pool-name (method-descriptor execute-method)))
     (if *hairy-arglist-p*
         (let* ((fun (sys::make-compiled-function nil args body))
-               (vars (sys::varlist fun)))
+               (vars (sys::varlist fun))
+               (arg-index 0))
           (dolist (var vars)
             (let ((variable (make-variable :name var
                                            :kind 'ARG
                                            :special-p nil ;; FIXME
                                            :register nil
-                                           :index (length (context-vars *context*)))))
+                                           :index (length (context-vars *context*))
+                                           :arg-index arg-index)))
               (push variable *all-variables*)
               (push variable *variables*)
-              (add-variable-to-context variable))))
+              (push variable parameters)
+              (add-variable-to-context variable)
+              (incf arg-index))))
         (let ((register 1))
           (dolist (arg args)
             (let ((variable (make-variable :name arg
@@ -2919,6 +2956,7 @@
                                            :index (length (context-vars *context*)))))
               (push variable *all-variables*)
               (push variable *variables*)
+              (push variable parameters)
               (add-variable-to-context variable)
               (incf register)))))
 
@@ -2944,45 +2982,57 @@
     ;; Reserve the next available slot for the thread register.
     (setf *thread* (allocate-register))
 
-    ;; Establish dynamic bindings for any variables declared special.
-;;     (dolist (arg args)
-;;       (let ((variable (find-visible-variable arg)))
-;;         (unless variable
-;;           (format t "Can't find variable ~S~%" arg))
-;;         (assert (not (null variable)))
-    (dolist (variable *variables*)
-      (when (eq (variable-context variable) *context*)
-        (when (variable-special-p variable)
-          (cond ((variable-register variable)
-                 (ensure-thread-var-initialized)
-                 (emit 'aload *thread*)
-                 (emit 'getstatic
-                       *this-class*
-                       (declare-symbol (variable-name variable))
-                       +lisp-symbol+)
-                 (emit 'aload (variable-register variable))
-                 (emit-invokevirtual +lisp-thread-class+
-                                     "bindSpecial"
-                                     "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                     -2)
-                 (setf (variable-register variable) nil))
-                ((variable-index variable)
-                 (ensure-thread-var-initialized)
-                 (emit 'aload *thread*)
-                 (emit 'getstatic
-                       *this-class*
-                       (declare-symbol (variable-name variable))
-                       +lisp-symbol+)
-                 (emit 'aload 1)
-                 (emit 'bipush (variable-index variable))
-                 (emit 'aaload)
-                 (emit-invokevirtual +lisp-thread-class+
-                                     "bindSpecial"
-                                     "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                     -2)
-                 (setf (variable-index variable) nil))
-                (t
-                 (error "error: need to establish dynamic binding"))))))
+    (dolist (variable parameters)
+      (cond ((variable-special-p variable)
+             ;; Establish dynamic bindings for any variables declared special.
+             (cond ((variable-register variable)
+                    (ensure-thread-var-initialized)
+                    (emit 'aload *thread*)
+                    (emit 'getstatic
+                          *this-class*
+                          (declare-symbol (variable-name variable))
+                          +lisp-symbol+)
+                    (emit 'aload (variable-register variable))
+                    (emit-invokevirtual +lisp-thread-class+
+                                        "bindSpecial"
+                                        "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                        -2)
+                    (setf (variable-register variable) nil))
+                   ((variable-index variable)
+                    (ensure-thread-var-initialized)
+                    (emit 'aload *thread*)
+                    (emit 'getstatic
+                          *this-class*
+                          (declare-symbol (variable-name variable))
+                          +lisp-symbol+)
+                    (emit 'aload 1)
+                    (emit 'bipush (variable-index variable))
+                    (emit 'aaload)
+                    (emit-invokevirtual +lisp-thread-class+
+                                        "bindSpecial"
+                                        "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                        -2)
+                    (setf (variable-index variable) nil))
+                   (t
+                    (error "error: need to establish dynamic binding"))))
+            ;; Copy args to context vector.
+            (*child-p*
+             (format t "*child-p* case: variable = ~S index = ~S arg-index = ~S~%"
+                     (variable-name variable)
+                     (variable-index variable)
+                     (variable-arg-index variable))
+             (emit 'aload 1)
+             (emit 'bipush (variable-arg-index variable))
+             (emit 'aaload)
+             (ensure-thread-var-initialized)
+             (emit 'aload *thread*)
+             (emit 'swap) ; Stack: thread value
+             (emit 'bipush (variable-index variable)) ; thread value index
+             (emit-invokevirtual +lisp-thread-class+
+                                 "setVariableValue"
+                                 "(Lorg/armedbear/lisp/LispObject;I)V"
+                                 -3))
+            ))
 
     (process-optimization-declarations body)
     (dolist (f body)

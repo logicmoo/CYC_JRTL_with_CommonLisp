@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.47 2004-07-08 06:06:45 piso Exp $
+ * $Id: LispThread.java,v 1.48 2004-07-08 18:01:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -308,13 +308,25 @@ public final class LispThread extends LispObject
             Debug.assertTrue(false);
     }
 
-    public LispObject getVariableValue(int index)
+    // FIXME Only writeToString() throws ConditionThrowable...
+    public LispObject getVariableValue(int index) throws ConditionThrowable
     {
-        return _context.data[index];
+        LispObject value = _context.data[index];
+        if (value == null) {
+            Debug.trace("getVariableValue(): value at index " + index + " is null");
+            for (int i = 0; i < _context.data.length; i++) {
+                LispObject obj = _context.data[i];
+                Debug.trace("data[" + i + "] = " + (obj == null ? "null" : obj.writeToString()));
+            }
+            Debug.assertTrue(false);
+        }
+        return value;
     }
 
     public void setVariableValue(LispObject value, int index)
     {
+        Debug.assertTrue(value != null);
+        Debug.assertTrue(_context != null);
         _context.data[index] = value;
     }
 
@@ -322,6 +334,8 @@ public final class LispThread extends LispObject
         throws ConditionThrowable
     {
         try {
+            Debug.assertTrue(function != null);
+            Debug.assertTrue(args != null);
             return function.execute(args);
         }
         finally {
