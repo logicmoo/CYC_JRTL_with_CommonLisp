@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.29 2003-12-20 09:04:39 asimon Exp $
+ * $Id: Java.java,v 1.30 2003-12-20 22:39:07 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Array;
 
 public final class Java extends Lisp
 {
@@ -77,8 +78,8 @@ public final class Java extends Lisp
      *               derived from the instance.
      */
     private static final Primitive JFIELD = 
-      new Primitive("jfield", PACKAGE_JAVA, true, 
-                    "class-ref-or-field field-or-instance &optional instance value")
+        new Primitive("jfield", PACKAGE_JAVA, true, 
+                      "class-ref-or-field field-or-instance &optional instance value")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -330,6 +331,81 @@ public final class Java extends Lisp
         }
     };
 
+    // ### jnew-array
+    // jnew-array element-type &rest dimensions
+    private static final Primitive JNEW_ARRAY = new Primitive("jnew-array", PACKAGE_JAVA, true, 
+                                                              "element-type &rest dimensions")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 2)
+                signal(new WrongNumberOfArgumentsException(this));
+            try {
+                Class c = forClassRef(args[0]);
+                int[] dimensions = new int[args.length - 1];
+                for (int i = 1; i < args.length; i++)
+                    dimensions[i-1] = ((Integer)args[i].javaInstance()).intValue();
+                return new JavaObject(Array.newInstance(c, dimensions));
+            }
+            catch (ClassNotFoundException e) {
+                signal(new LispError("class not found: " + e.getMessage()));
+            }
+            catch (Throwable t) {
+                signal(new LispError(getMessage(t)));
+            }
+            // Not reached.
+            return NIL;
+        }
+    };
+
+    // ### jarray-ref
+    // jarray-ref java-array &rest indices
+    private static final Primitive JARRAY_REF = new Primitive("jarray-ref", PACKAGE_JAVA, true, 
+                                                              "java-array &rest indices")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 2)
+                signal(new WrongNumberOfArgumentsException(this));
+            try {
+                Object a = args[0].javaInstance();
+                for (int i = 1; i<args.length - 1; i++)
+                    a = Array.get(a, ((Integer)args[i].javaInstance()).intValue());
+                return makeLispObject(Array.get(a, ((Integer)args[args.length - 1].javaInstance()).intValue()));
+            }
+            catch (Throwable t) {
+                signal(new LispError(getMessage(t)));
+            }
+            // Not reached.
+            return NIL;
+        }
+    };
+
+    // ### jarray-set
+    // jarray-set java-array new-value &rest indices
+    private static final Primitive JARRAY_SET = new Primitive("jarray-set", PACKAGE_JAVA, true, 
+                                                              "java-array new-value &rest indices")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 3)
+                signal(new WrongNumberOfArgumentsException(this));
+            try {
+                Object a = args[0].javaInstance();
+                LispObject v = args[1];
+                for (int i = 2; i<args.length - 1; i++)
+                    a = Array.get(a, ((Integer)args[i].javaInstance()).intValue());
+                Array.set(a, ((Integer)args[args.length - 1].javaInstance()).intValue(), v.javaInstance());
+                return v;
+            }
+            catch (Throwable t) {
+                signal(new LispError(getMessage(t)));
+            }
+            // Not reached.
+            return NIL;
+        }
+    };
+
     // ### jcall
     // jcall method instance &rest args
     private static final Primitive JCALL = new Primitive("jcall", PACKAGE_JAVA, true, 
@@ -364,7 +440,7 @@ public final class Java extends Lisp
     // ### make-immediate-object
     // make-immediate-object object &optional type
     private static final Primitive MAKE_IMMEDIATE_OBJECT = 
-      new Primitive("make-immediate-object", PACKAGE_JAVA, true, "object &optional type")
+        new Primitive("make-immediate-object", PACKAGE_JAVA, true, "object &optional type")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
