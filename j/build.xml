@@ -139,7 +139,7 @@
       manifest="manifest"
       basedir="${basedir}"
       excludes="pg.class, SampleExtension.class, org/armedbear/lisp/Tests.class"
-      includes="**/*.class, **/*.keywords, **/*.bsh, **/*.lisp, org/armedbear/j/version, org/armedbear/j/build, org/armedbear/j/snapshot, org/armedbear/j/images/*.gif, org/armedbear/j/images/*.png, gnu/regexp/MessagesBundle.properties"
+      includes="**/*.class, **/*.keywords, **/*.bsh, **/*.lisp, org/armedbear/j/version, org/armedbear/j/build, org/armedbear/j/snapshot, org/armedbear/lisp/build, org/armedbear/j/images/*.gif, org/armedbear/j/images/*.png, gnu/regexp/MessagesBundle.properties"
     />
   </target>
 
