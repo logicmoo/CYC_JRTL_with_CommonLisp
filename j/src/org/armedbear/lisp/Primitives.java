@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.537 2003-12-18 18:03:53 piso Exp $
+ * $Id: Primitives.java,v 1.538 2003-12-20 17:02:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3647,33 +3647,86 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### vector-subseq
-    // vector-subseq vector start &optional end => subsequence
-    private static final Primitive3 VECTOR_SUBSEQ =
-        new Primitive3("vector-subseq", PACKAGE_SYS, false)
+    // ### subseq
+    // subseq sequence start &optional end
+    private static final Primitive SUBSEQ =
+        new Primitive("subseq", "sequence start &optional end")
     {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            final int start = Fixnum.getValue(second);
+            if (start < 0) {
+                StringBuffer sb = new StringBuffer("Bad start index (");
+                sb.append(start);
+                sb.append(") for SUBSEQ.");
+                signal(new TypeError(sb.toString()));
+            }
+            if (first.listp())
+                return list_subseq(first, start, -1);
+            if (first.vectorp()) {
+                AbstractVector v = (AbstractVector) first;
+                return v.subseq(start, v.length());
+            }
+            return signal(new TypeError(first, Symbol.SEQUENCE));
+        }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            AbstractVector v = checkVector(first);
-            int start = Fixnum.getValue(second);
-            int end = third != NIL ? Fixnum.getValue(third) : v.length();
-            if (start > end) {
-                StringBuffer sb = new StringBuffer("start (");
+            final int start = Fixnum.getValue(second);
+            if (start < 0) {
+                StringBuffer sb = new StringBuffer("Bad start index (");
                 sb.append(start);
-                sb.append(") is greater than end (");
-                sb.append(end);
-                sb.append(')');
+                sb.append(").");
                 signal(new TypeError(sb.toString()));
             }
-            return v.subseq(start, end);
+            int end;
+            if (third != NIL) {
+                end = Fixnum.getValue(third);
+                if (start > end) {
+                    StringBuffer sb = new StringBuffer("Start index (");
+                    sb.append(start);
+                    sb.append(") is greater than end index (");
+                    sb.append(end);
+                    sb.append(") for SUBSEQ.");
+                    signal(new TypeError(sb.toString()));
+                }
+            } else
+                end = -1;
+            if (first.listp())
+                return list_subseq(first, start, end);
+            if (first.vectorp()) {
+                AbstractVector v = (AbstractVector) first;
+                if (end < 0)
+                    end = v.length();
+                return v.subseq(start, end);
+            }
+            return signal(new TypeError(first, Symbol.SEQUENCE));
         }
     };
 
+    private static final LispObject list_subseq(LispObject list, int start,
+                                                int end)
+        throws ConditionThrowable
+    {
+        int index = 0;
+        LispObject result = NIL;
+        while (list != NIL) {
+            if (end >= 0 && index == end)
+                return result.nreverse();
+            if (index++ >= start)
+                result = new Cons(list.car(), result);
+            list = list.cdr();
+        }
+        return result.nreverse();
+    }
+
     // ### random
     // random limit &optional random-state => random-number
-    private static final Primitive RANDOM = new Primitive("random","limit &optional random-state") {
+    private static final Primitive RANDOM =
+        new Primitive("random", "limit &optional random-state")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
