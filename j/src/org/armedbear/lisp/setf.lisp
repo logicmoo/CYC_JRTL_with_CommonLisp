@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.29 2003-10-01 14:29:36 piso Exp $
+;;; $Id: setf.lisp,v 1.30 2003-10-01 17:45:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,6 +33,17 @@
 		`(,@inverse ,@vars ,new-var))
 	    `(,(car form) ,@vars))))
 
+;;; If a macro, expand one level and try again.  If not, go for the
+;;; SETF function.
+(defun expand-or-get-setf-inverse (form environment)
+  (multiple-value-bind
+    (expansion expanded)
+    (macroexpand-1 form environment)
+    (if expanded
+	(get-setf-expansion expansion environment)
+	(get-setf-method-inverse form `(funcall #'(setf ,(car form)))
+				 t))))
+
 (defun get-setf-expansion (form &optional environment)
   (let (temp)
     (cond ((symbolp form)
@@ -45,31 +56,6 @@
            (funcall temp form environment))
 	  (t
 	   (expand-or-get-setf-inverse form environment)))))
-
-;;; If a macro, expand one level and try again.  If not, go for the
-;;; SETF function.
-(defun expand-or-get-setf-inverse (form environment)
-  (multiple-value-bind
-    (expansion expanded)
-    (macroexpand-1 form environment)
-    (if expanded
-	(get-setf-expansion expansion environment)
-	(get-setf-method-inverse form `(funcall #'(setf ,(car form)))
-				 t))))
-
-(defun get-setf-method-inverse (form inverse setf-function)
-  (let ((new-var (gensym))
-	(vars nil)
-	(vals nil))
-    (dolist (x (cdr form))
-      (push (gensym) vars)
-      (push x vals))
-    (setq vals (nreverse vals))
-    (values vars vals (list new-var)
-	    (if setf-function
-		`(,@inverse ,new-var ,@vars)
-		`(,@inverse ,@vars ,new-var))
-	    `(,(car form) ,@vars))))
 
 ;;; ROTATEF (from GCL)
 (defmacro rotatef (&rest rest)
