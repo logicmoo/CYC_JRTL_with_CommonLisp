@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.97 2003-12-09 20:26:23 asimon Exp $
+ * $Id: Symbol.java,v 1.98 2003-12-12 19:13:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ public class Symbol extends LispObject
     public static final Symbol OTHERWISE                        = PACKAGE_CL.addExternalSymbol("OTHERWISE");
     public static final Symbol QUOTE                            = PACKAGE_CL.addExternalSymbol("QUOTE");
     public static final Symbol SETF                             = PACKAGE_CL.addExternalSymbol("SETF");
+    public static final Symbol SIGNAL                           = PACKAGE_CL.addExternalSymbol("SIGNAL");
     public static final Symbol SPECIAL                          = PACKAGE_CL.addExternalSymbol("SPECIAL");
 
     // Type specifiers.
