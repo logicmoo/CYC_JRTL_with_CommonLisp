@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.81 2004-04-24 12:23:12 piso Exp $
+ * $Id: LispObject.java,v 1.82 2004-04-27 01:29:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,32 +86,32 @@ public class LispObject extends Lisp
 
     public LispObject car() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "list"));
+        return signal(new TypeError(this, Symbol.LIST));
     }
 
     public void setCar(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, "cons"));
+        signal(new TypeError(this, Symbol.CONS));
     }
 
     public LispObject cdr() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "list"));
+        return signal(new TypeError(this, Symbol.LIST));
     }
 
     public void setCdr(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, "cons"));
+        signal(new TypeError(this, Symbol.CONS));
     }
 
     public LispObject cadr() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "list"));
+        return signal(new TypeError(this, Symbol.LIST));
     }
 
     public LispObject cddr() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "list"));
+        return signal(new TypeError(this, Symbol.LIST));
     }
 
     public LispObject EQ(LispObject obj)
@@ -141,17 +141,17 @@ public class LispObject extends Lisp
 
     public LispObject ABS() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "number"));
+        return signal(new TypeError(this, Symbol.NUMBER));
     }
 
     public LispObject NUMERATOR() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "rational number"));
+        return signal(new TypeError(this, Symbol.RATIONAL));
     }
 
     public LispObject DENOMINATOR() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "rational number"));
+        return signal(new TypeError(this, Symbol.RATIONAL));
     }
 
     public LispObject EVENP() throws ConditionThrowable
@@ -161,7 +161,7 @@ public class LispObject extends Lisp
 
     public boolean evenp() throws ConditionThrowable
     {
-        signal(new TypeError(this, "integer"));
+        signal(new TypeError(this, Symbol.INTEGER));
         // Not reached.
         return false;
     }
@@ -173,7 +173,7 @@ public class LispObject extends Lisp
 
     public boolean oddp() throws ConditionThrowable
     {
-        signal(new TypeError(this, "integer"));
+        signal(new TypeError(this, Symbol.INTEGER));
         // Not reached.
         return false;
     }
@@ -185,7 +185,7 @@ public class LispObject extends Lisp
 
     public boolean plusp() throws ConditionThrowable
     {
-        signal(new TypeError(this, "real number"));
+        signal(new TypeError(this, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -197,7 +197,7 @@ public class LispObject extends Lisp
 
     public boolean minusp() throws ConditionThrowable
     {
-        signal(new TypeError(this, "real number"));
+        signal(new TypeError(this, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -219,7 +219,7 @@ public class LispObject extends Lisp
 
     public boolean zerop() throws ConditionThrowable
     {
-        signal(new TypeError(this, "number"));
+        signal(new TypeError(this, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -311,7 +311,7 @@ public class LispObject extends Lisp
 
     public int length() throws ConditionThrowable
     {
-        signal(new TypeError(this, "sequence"));
+        signal(new TypeError(this, Symbol.SEQUENCE));
         // Not reached.
         return 0;
     }
@@ -323,22 +323,22 @@ public class LispObject extends Lisp
 
     public LispObject elt(int index) throws ConditionThrowable
     {
-        return signal(new TypeError(this, "sequence"));
+        return signal(new TypeError(this, Symbol.SEQUENCE));
     }
 
     public LispObject nreverse() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "sequence"));
+        return signal(new TypeError(this, Symbol.SEQUENCE));
     }
 
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
-        return signal(new TypeError(this, "array"));
+        return signal(new TypeError(this, Symbol.ARRAY));
     }
 
     public LispObject[] copyToArray() throws ConditionThrowable
     {
-        signal(new TypeError(this, "list"));
+        signal(new TypeError(this, Symbol.LIST));
         // Not reached.
         return null;
     }
@@ -360,7 +360,7 @@ public class LispObject extends Lisp
 
     public LispObject ENDP() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "list"));
+        return signal(new TypeError(this, Symbol.LIST));
     }
 
     public LispObject NOT()
