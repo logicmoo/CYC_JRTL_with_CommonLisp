@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.153 2004-05-07 14:07:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.154 2004-05-07 16:55:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -183,6 +183,7 @@
       (setf *code* (cdr *code*))
       t)))
 
+(defconstant +java-string+ "Ljava/lang/String;")
 (defconstant +lisp-class+ "org/armedbear/lisp/Lisp")
 (defconstant +lisp-object-class+ "org/armedbear/lisp/LispObject")
 (defconstant +lisp-object+ "Lorg/armedbear/lisp/LispObject;")
@@ -190,6 +191,7 @@
 (defconstant +lisp-symbol-class+ "org/armedbear/lisp/Symbol")
 (defconstant +lisp-symbol+ "Lorg/armedbear/lisp/Symbol;")
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
+(defconstant +lisp-thread+ "Lorg/armedbear/lisp/LispThread;")
 (defconstant +lisp-cons-class+ "org/armedbear/lisp/Cons")
 (defconstant +lisp-fixnum-class+ "org/armedbear/lisp/Fixnum")
 (defconstant +lisp-fixnum+ "Lorg/armedbear/lisp/Fixnum;")
@@ -204,18 +206,39 @@
 (defun emit-push-t ()
   (emit 'getstatic +lisp-class+ "T" +lisp-symbol+))
 
+(defun make-descriptor (arg-types return-type)
+  (with-output-to-string (s)
+    (princ #\( s)
+    (dolist (type arg-types)
+      (princ type s))
+    (princ #\) s)
+    (princ (if return-type return-type "V") s)))
+
+(defun descriptor (designator)
+  (cond ((stringp designator)
+         designator)
+        ((listp designator)
+         (unless (= (length designator) 2)
+           (error "Bad method type descriptor ~S." designator))
+         (make-descriptor (car designator) (cadr designator)))
+        (t
+         (error "Bad method type descriptor ~S." designator))))
+
 (defun emit-invokestatic (class-name method-name descriptor stack)
   (assert stack)
-  (let ((instruction (emit 'invokestatic class-name method-name descriptor)))
+  (let ((instruction (emit 'invokestatic
+                           class-name method-name (descriptor descriptor))))
     (setf (instruction-stack instruction) stack)
     (assert (eql (instruction-stack instruction) stack))))
 
 (defun emit-invokespecial (class-name method-name descriptor stack)
-  (let ((instruction (emit 'invokespecial class-name method-name descriptor)))
+  (let ((instruction (emit 'invokespecial
+                           class-name method-name (descriptor descriptor))))
     (setf (instruction-stack instruction) stack)))
 
 (defun emit-invokevirtual (class-name method-name descriptor stack)
-  (let ((instruction (emit 'invokevirtual class-name method-name descriptor)))
+  (let ((instruction (emit 'invokevirtual
+                           class-name method-name (descriptor descriptor))))
     (setf (instruction-stack instruction) stack)))
 
 ;; Index of local variable used to hold the current thread.
@@ -232,7 +255,8 @@
       (setf *code* ())
       (emit-invokestatic +lisp-thread-class+
                          "currentThread"
-                         "()Lorg/armedbear/lisp/LispThread;"
+;;                          `(() ,+lisp-thread+)
+                         (make-descriptor () +lisp-thread+)
                          1)
       (emit 'astore *thread*)
       (setf *code* (append code *code*)))
@@ -775,21 +799,24 @@
                   (s (format nil "~S" args)))
              (emit 'ldc
                    (pool-string s))
-             (emit-invokestatic "org/armedbear/lisp/Lisp"
+             (emit-invokestatic +lisp-class+
                                 "readObjectFromString"
-                                "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
+;;                                 "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
+                                `((,+java-string+) ,+lisp-object+)
                                 0))
            (emit-push-nil) ;; body
            (emit 'aconst_null) ;; environment
            (emit-invokespecial super
                                "<init>"
-                               "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/Environment;)V"
+;;                                "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/Environment;)V"
+                               `((,+lisp-symbol+ ,+lisp-object+ ,+lisp-object+ ,+lisp-environment+) nil)
                                -4))
           (t
            (emit 'aload_0)
            (emit-invokespecial super
                                "<init>"
-                               "()V"
+;;                                "()V"
+                               '(nil nil)
                                0)))
     (setf *code* (append *static-code* *code*))
     (emit 'return)
@@ -1783,11 +1810,34 @@
     (emit 'label `,label2)
     (emit-store-value)))
 
+;; (defun compile-block (form for-effect)
+;;   (let* ((rest (cdr form))
+;;          (block-label (car rest))
+;;          (block-exit (gensym))
+;;          (*blocks* (acons block-label block-exit *blocks*)))
+;;     (do ((subforms (cdr rest) (cdr subforms)))
+;;         ((null subforms))
+;;       (let ((subform (car subforms))
+;;             (really-for-effect (or (cdr subforms) for-effect)))
+;;         (compile-form subform really-for-effect)
+;;         (when really-for-effect
+;;           (maybe-emit-clear-values subform))))
+;;     (emit 'label `,block-exit)))
 (defun compile-block (form for-effect)
   (let* ((rest (cdr form))
          (block-label (car rest))
          (block-exit (gensym))
-         (*blocks* (acons block-label block-exit *blocks*)))
+         (*blocks* (acons block-label block-exit *blocks*))
+         (saved-fp (fill-pointer *locals*))
+         env-var)
+    ;; Save current dynamic environment.
+    (setf env-var (vector-push nil *locals*))
+    (setf *max-locals* (max *max-locals* (fill-pointer *locals*)))
+    (ensure-thread-var-initialized)
+    (emit 'aload *thread*)
+    (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+    (emit 'astore env-var)
+
     (do ((subforms (cdr rest) (cdr subforms)))
         ((null subforms))
       (let ((subform (car subforms))
@@ -1795,7 +1845,14 @@
         (compile-form subform really-for-effect)
         (when really-for-effect
           (maybe-emit-clear-values subform))))
-    (emit 'label `,block-exit)))
+    (emit 'label `,block-exit)
+    ;; Restore dynamic environment.
+    (emit 'aload *thread*)
+    (emit 'aload env-var)
+    (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+    ;; Restore fill pointer to its saved value so the slots used by these
+    ;; bindings will again be available.
+    (setf (fill-pointer *locals*) saved-fp)))
 
 (defun compile-return-from (form for-effect)
   (let* ((rest (cdr form))
