@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.7 2004-09-06 01:56:51 piso Exp $
+;;; $Id: swank.lisp,v 1.8 2004-09-07 00:55:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -183,3 +183,31 @@
     (when package
       (let ((symbol (parse-symbol function-name package)))
         (find-definitions symbol)))))
+
+(defun format-values-for-echo-area (values)
+  (let ((*print-readably* nil))
+    (cond (values
+           (with-output-to-string (s)
+             (do* ((values values (cdr values))
+                   (value (car values) (car values)))
+                  ((null values))
+               (prin1 value s)
+               (when (cdr values)
+                 (princ ", " s)))))
+          (t
+           "; No value"))))
+
+(defun eval-region (string)
+  (let (values)
+    (with-input-from-string (stream string)
+      (loop
+        (let ((form (read stream nil stream)))
+          (when (eq form stream)
+            (return values))
+          (setf values (multiple-value-list (eval form))))))))
+
+(defun interactive-eval-region (string package-name)
+  (finish-output)
+  (let ((package (if package-name (find-package package-name) *package*)))
+    (let ((*package* (or package *package*)))
+      (format-values-for-echo-area (eval-region string)))))
