@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.540 2003-12-27 03:08:19 piso Exp $
+ * $Id: Primitives.java,v 1.541 2003-12-27 04:57:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1389,19 +1389,17 @@ public final class Primitives extends Lisp
 
     // ### macro-function
     // Need to support optional second argument specifying environment.
-    private static final Primitive MACRO_FUNCTION = new Primitive("macro-function","symbol &optional environment")
+    private static final Primitive MACRO_FUNCTION =
+        new Primitive("macro-function", "symbol &optional environment")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (args.length != 1)
-                signal(new WrongNumberOfArgumentsException(this));
-            Symbol symbol = checkSymbol(args[0]);
-            LispObject obj = symbol.getSymbolFunction();
+            LispObject obj = arg.getSymbolFunction();
             if (obj instanceof MacroObject)
                 return ((MacroObject)obj).getExpander();
             if (obj instanceof SpecialOperator) {
                 LispObject macroObject =
-                    get(symbol, Symbol.MACROEXPAND_MACRO, NIL);
+                    get((Symbol)arg, Symbol.MACROEXPAND_MACRO, NIL);
                 if (macroObject instanceof MacroObject)
                     return ((MacroObject)macroObject).getExpander();
                 return NIL;
