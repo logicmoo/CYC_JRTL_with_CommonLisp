@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.115 2005-02-28 02:50:04 piso Exp $
+ * $Id: Stream.java,v 1.116 2005-03-07 19:08:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -698,13 +698,13 @@ public class Stream extends LispObject
                     return symbol;
                 // Error!
                 if (pkg.findInternalSymbol(symbolName) != null)
-                    return signal(new LispError("The symbol \"" + symbolName +
-                                                "\" is not external in package " +
-                                                packageName + '.'));
+                    return signal(new ReaderError("The symbol \"" + symbolName +
+                                                  "\" is not external in package " +
+                                                  packageName + '.'));
                 else
-                    return signal(new LispError("The symbol \"" + symbolName +
-                                                "\" was not found in package " +
-                                                packageName + '.'));
+                    return signal(new ReaderError("The symbol \"" + symbolName +
+                                                  "\" was not found in package " +
+                                                  packageName + '.'));
             }
         }
         // Intern token in current package.
