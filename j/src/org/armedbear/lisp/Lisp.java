@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.83 2003-06-10 17:12:16 piso Exp $
+ * $Id: Lisp.java,v 1.84 2003-06-11 02:19:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +26,31 @@ import java.util.Random;
 
 public abstract class Lisp
 {
+    // Packages.
+    public static final Package PACKAGE_CL =
+        Packages.createPackage("COMMON-LISP", 1024);
+    public static final Package PACKAGE_CL_USER =
+        Packages.createPackage("COMMON-LISP-USER", 1024);
+    public static final Package PACKAGE_JAVA =
+        Packages.createPackage("JAVA");
+    static {
+        try {
+            PACKAGE_CL.addNickname("CL");
+            PACKAGE_CL.addNickname("LISP");
+            PACKAGE_CL_USER.addNickname("CL-USER");
+            PACKAGE_CL_USER.addNickname("USER");
+            PACKAGE_CL_USER.usePackage(PACKAGE_CL);
+            PACKAGE_CL_USER.usePackage(PACKAGE_JAVA);
+        }
+        catch (LispError e) {
+            e.printStackTrace();
+        }
+    }
+    public static final Package PACKAGE_KEYWORD =
+        Packages.createPackage("KEYWORD", 1024);
+
     // ### nil
-    public static final LispObject NIL = new Nil();
+    public static final LispObject NIL = new Nil(PACKAGE_CL);
 
     // End-of-file marker.
     /*package*/ static final LispObject EOF = new LispObject();
@@ -359,6 +382,8 @@ public abstract class Lisp
     public static final LispObject checkList(LispObject obj)
         throws LispError
     {
+        if (obj == null)
+            throw new NullPointerException();
         if (obj.listp())
             return obj;
         throw new TypeError(obj, "list");
@@ -617,29 +642,6 @@ public abstract class Lisp
             symbol.getPropertyList())));
         return value;
     }
-
-    // Packages.
-    public static final Package PACKAGE_CL =
-        Packages.createPackage("COMMON-LISP", 1024);
-    public static final Package PACKAGE_CL_USER =
-        Packages.createPackage("COMMON-LISP-USER", 1024);
-    public static final Package PACKAGE_JAVA =
-        Packages.createPackage("JAVA");
-    static {
-        try {
-            PACKAGE_CL.addNickname("CL");
-            PACKAGE_CL.addNickname("LISP");
-            PACKAGE_CL_USER.addNickname("CL-USER");
-            PACKAGE_CL_USER.addNickname("USER");
-            PACKAGE_CL_USER.usePackage(PACKAGE_CL);
-            PACKAGE_CL_USER.usePackage(PACKAGE_JAVA);
-        }
-        catch (LispError e) {
-            e.printStackTrace();
-        }
-    }
-    public static final Package PACKAGE_KEYWORD =
-        Packages.createPackage("KEYWORD", 1024);
 
     public static final Symbol intern(String name, Package pkg)
     {
