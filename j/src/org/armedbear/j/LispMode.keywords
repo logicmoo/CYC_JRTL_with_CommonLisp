@@ -306,6 +306,7 @@ restart-case
 return
 return-from
 reverse
+room
 rotatef
 row-major-aref
 rplaca
@@ -363,6 +364,7 @@ tenth
 terpri
 the
 third
+time
 type-of
 typecase
 typep
