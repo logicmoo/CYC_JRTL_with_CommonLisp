@@ -2,7 +2,7 @@
  * ControlC.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ControlC.java,v 1.2 2004-04-30 12:25:22 piso Exp $
+ * $Id: ControlC.java,v 1.3 2004-05-02 01:46:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,6 @@ package org.armedbear.lisp;
 
 public class ControlC implements Runnable
 {
-    static {
-        System.loadLibrary("abcl");
-    }
-
     public static native void installControlCHandler();
 
     public static void callback()
