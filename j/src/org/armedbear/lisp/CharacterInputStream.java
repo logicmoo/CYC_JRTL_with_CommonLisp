@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.50 2003-09-19 14:44:10 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.51 2003-09-28 14:11:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,20 +32,18 @@ import java.math.BigInteger;
 public class CharacterInputStream extends LispStream
 {
     private final PushbackReader reader;
-    private int offset;
-    private int lineNumber;
+    protected int offset;
+    protected int lineNumber;
+
+    protected CharacterInputStream()
+    {
+        reader = null;
+    }
 
     public CharacterInputStream(InputStream in)
     {
         reader = new PushbackReader(
             new BufferedReader(new InputStreamReader(in)),
-            2);
-    }
-
-    public CharacterInputStream(String s)
-    {
-        reader = new PushbackReader(
-            new BufferedReader(new StringReader(s)),
             2);
     }
 
@@ -60,13 +58,14 @@ public class CharacterInputStream extends LispStream
     }
 
     public LispObject read(boolean eofError, LispObject eofValue,
-        boolean recursive) throws ConditionThrowable
+                           boolean recursive)
+        throws ConditionThrowable
     {
         try {
             LispObject result = readPreservingWhitespace(eofError, eofValue,
-                recursive);
+                                                         recursive);
             if (result != eofValue && !recursive) {
-                if (reader.ready()) {
+                if (ready()) {
                     int n = read();
                     if (n >= 0) {
                         char c = (char) n;
@@ -83,7 +82,9 @@ public class CharacterInputStream extends LispStream
     }
 
     public LispObject readPreservingWhitespace(boolean eofError,
-        LispObject eofValue, boolean recursive) throws ConditionThrowable
+                                               LispObject eofValue,
+                                               boolean recursive)
+        throws ConditionThrowable
     {
         while (true) {
             int n;
@@ -427,27 +428,43 @@ public class CharacterInputStream extends LispStream
                     if (n < 0)
                         throw new ConditionThrowable(new EndOfFileException());
                     c = (char) n;
+                    if (c == '\\') {
+                        // Single escape.
+                        n = read();
+                        if (n < 0)
+                            throw new ConditionThrowable(new EndOfFileException());
+                        sb.append((char)n);
+                        continue;
+                    }
                     if (c == '|')
-                        return new Symbol(sb.toString());
+                        break;
                     sb.append(c);
                 }
             } else {
-                sb.append(c);
+                sb.append(Character.toUpperCase(c));
                 while (true) {
                     n = read();
                     if (n < 0)
                         break;
                     c = (char) n;
+                    if (c == '\\') {
+                        // Single escape.
+                        n = read();
+                        if (n < 0)
+                            throw new ConditionThrowable(new EndOfFileException());
+                        sb.append((char)n);
+                        continue;
+                    }
                     if (Character.isWhitespace(c))
                         break;
                     if (c == '(' || c == ')') {
                         unread(c);
                         break;
                     }
-                    sb.append(c);
+                    sb.append(Character.toUpperCase(c));
                 }
-                return new Symbol(sb.toString().toUpperCase());
             }
+            return new Symbol(sb.toString());
         }
         catch (IOException e) {
             throw new ConditionThrowable(new StreamError(e));
@@ -899,7 +916,7 @@ public class CharacterInputStream extends LispStream
     public LispObject clearInput() throws ConditionThrowable
     {
         try {
-            while (reader.ready())
+            while (ready())
                 read();
         }
         catch (IOException e) {
@@ -921,7 +938,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private int read() throws IOException
+    protected int read() throws IOException
     {
         int n = reader.read();
         ++offset;
@@ -930,11 +947,16 @@ public class CharacterInputStream extends LispStream
         return n;
     }
 
-    private void unread(int n) throws IOException
+    protected void unread(int n) throws IOException
     {
         reader.unread(n);
         --offset;
         if (n == '\n')
             --lineNumber;
+    }
+
+    protected boolean ready() throws IOException
+    {
+        return reader.ready();
     }
 }
