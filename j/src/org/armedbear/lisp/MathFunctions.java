@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.5 2004-02-12 13:18:28 piso Exp $
+ * $Id: MathFunctions.java,v 1.6 2004-06-05 00:48:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,14 +75,11 @@ public final class MathFunctions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return tan(arg);
+            if (arg.realp())
+                return new LispFloat(Math.tan(LispFloat.coerceToFloat(arg).value));
+            return sin(arg).divideBy(cos(arg));
         }
     };
-
-    private static LispObject tan(LispObject arg) throws ConditionThrowable
-    {
-        return sin(arg).divideBy(cos(arg));
-    }
 
     // ### asin
     private static final Primitive1 ASIN = new Primitive1("asin", "number")
