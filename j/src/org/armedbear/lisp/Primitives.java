@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.730 2005-02-06 01:59:48 piso Exp $
+ * $Id: Primitives.java,v 1.731 2005-02-08 16:42:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -345,6 +345,10 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
+            if (arg == NIL)
+                return LispThread.currentThread().setValues(new LispObject[0]);
+            if (arg.cdr() == NIL)
+                return arg.car();
             return LispThread.currentThread().setValues(arg.copyToArray());
         }
     };
@@ -766,7 +770,8 @@ public final class Primitives extends Lisp
                     get(checkSymbol(arg.cadr()), Symbol._SETF_FUNCTION);
                 return f != null ? T : NIL;
             }
-            signal(new TypeError(arg, "valid function name"));
+            signal(new TypeError("The value " + arg.writeToString() +
+                                 " is not a valid function name."));
             return NIL;
         }
     };
