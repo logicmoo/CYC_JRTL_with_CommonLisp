@@ -2,7 +2,7 @@
  * FloatingPointInexact.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FloatingPointInexact.java,v 1.1 2004-02-02 18:38:37 piso Exp $
+ * $Id: FloatingPointInexact.java,v 1.2 2004-02-02 18:41:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class FloatingPointInexact extends LispError
+public class FloatingPointInexact extends ArithmeticError
 {
     public FloatingPointInexact()
     {
