@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.32 2003-03-29 01:17:23 piso Exp $
+ * $Id: LispShell.java,v 1.33 2003-04-03 18:39:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,9 +150,10 @@ public final class LispShell extends Shell
         stripEcho = true;
         if (isComplete) {
             // No containing sexp. Send input to lisp process.
-            Position begin = posEndOfOutput;
+            Position begin = getEndOfOutput();
             end = editor.getDotCopy();
             end.setOffset(end.getLineLength());
+            setEndOfOutput(end);
             String s = new Region(this, begin, end).toString();
             sendInputToLisp(s);
         } else
