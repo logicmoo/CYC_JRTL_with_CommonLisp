@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: KeyMap.java,v 1.25 2005-03-06 16:30:06 piso Exp $
+ * $Id: KeyMap.java,v 1.26 2005-03-06 19:33:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -402,6 +402,35 @@ public final class KeyMap implements Constants
             mapKey(0x2d, CTRL_MASK, "toCenter"); // Ctrl -
             mapKey(0x2d, CTRL_MASK | SHIFT_MASK, "toTop"); // Ctrl Shift -
         }
+    }
+
+    public synchronized final KeyMapping lookupEventSequence(EventSequence es)
+    {
+        KeyMap requestedKeyMap = null;
+        KeyMapping mapping = null;
+        final int limit = es.size();
+        for (int i = 0; i < limit; i++) {
+            final JEvent e = es.getEvent(i);
+            if (requestedKeyMap != null) {
+                mapping = requestedKeyMap.lookup(e.getKeyChar(), e.getKeyCode(),
+                                                 e.getModifiers());
+            } else {
+                mapping = lookup(e.getKeyChar(), e.getKeyCode(),
+                                 e.getModifiers());
+            }
+            if (mapping == null)
+                return null;
+            final Object command = mapping.getCommand();
+            if (command instanceof KeyMap) {
+                requestedKeyMap = (KeyMap) command;
+                continue;
+            }
+            if (i < limit - 1) {
+                // Sequence is too long.
+                return null;
+            }
+        }
+        return mapping;
     }
 
     public synchronized final KeyMapping lookup(char keyChar, int keyCode,
