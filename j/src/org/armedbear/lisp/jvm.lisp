@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.407 2005-03-21 00:33:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.408 2005-03-24 23:56:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4596,11 +4596,7 @@
                   (emit 'iload (variable-register var2))
                   (emit 'isub))
                  (t
-;;                   (emit 'iload (variable-register var1))
-;;                   (emit 'i2l)
                   (emit-push-long var1)
-;;                   (emit 'iload (variable-register var2))
-;;                   (emit 'i2l)
                   (emit-push-long var2)
                   (emit 'lsub)
                   (emit-box-long)))
@@ -4683,17 +4679,29 @@
 
 (defun p2-aref (form &key (target :stack) representation)
   ;; We only optimize the 2-arg case.
-  (unless (= (length form) 3)
-       (return-from p2-aref (compile-function-call form target representation)))
-  (compile-form (second form) :target :stack)
-  (compile-form (third form) :target :stack :representation :unboxed-fixnum)
-  (unless (and (single-valued-p (second form))
-               (single-valued-p (third form)))
-    (emit-clear-values))
-  (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
-  (when (eq representation :unboxed-fixnum)
-    (emit-unbox-fixnum))
-  (emit-move-from-stack target representation))
+  (cond ((= (length form) 3)
+         (let ((array-declared-type t))
+           (when (symbolp (second form))
+             (let ((variable (find-visible-variable (second form))))
+               (when variable
+                 (setf array-declared-type (variable-declared-type variable)))))
+           (compile-form (second form) :target :stack)
+           (compile-form (third form) :target :stack :representation :unboxed-fixnum)
+           (unless (and (single-valued-p (second form))
+                        (single-valued-p (third form)))
+             (emit-clear-values))
+           (cond ((subtypep array-declared-type '(array (unsigned-byte 8)))
+                  (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I")
+                  (unless (eq representation :unboxed-fixnum)
+                    (emit 'i2l)
+                    (emit-box-long)))
+                 (t
+                  (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
+                  (when (eq representation :unboxed-fixnum)
+                    (emit-unbox-fixnum))))
+           (emit-move-from-stack target representation)))
+        (t
+         (compile-function-call form target representation))))
 
 (defun p2-not/null (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
