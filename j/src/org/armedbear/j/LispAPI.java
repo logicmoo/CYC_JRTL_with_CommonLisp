@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.28 2003-10-10 18:55:22 piso Exp $
+ * $Id: LispAPI.java,v 1.29 2003-12-04 16:56:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +22,12 @@
 package org.armedbear.j;
 
 import java.util.Iterator;
+import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.Fixnum;
+import org.armedbear.lisp.Function;
+import org.armedbear.lisp.GenericFunction;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
@@ -32,6 +35,7 @@ import org.armedbear.lisp.LispCharacter;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispString;
+import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Packages;
 import org.armedbear.lisp.Primitive0;
@@ -42,6 +46,7 @@ import org.armedbear.lisp.Primitive;
 import org.armedbear.lisp.Primitives;
 import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.TypeError;
+import org.armedbear.lisp.UndefinedFunction;
 import org.armedbear.lisp.WrongNumberOfArgumentsException;
 
 public final class LispAPI extends Lisp
@@ -821,6 +826,36 @@ public final class LispAPI extends Lisp
             Log.debug(t);
         }
     }
+
+    // ### invoke-later
+    public static final Primitive1 INVOKE_LATER =
+        new Primitive1("INVOKE-LATER", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            final LispObject fun;
+            if (arg instanceof Symbol)
+                fun = arg.getSymbolFunction();
+            else
+                fun = arg;
+            if (fun instanceof Function || fun instanceof GenericFunction) {
+                Runnable r = new Runnable() {
+                    public void run()
+                    {
+                        try {
+                            funcall0(fun, LispThread.currentThread());
+                        }
+                        catch (Throwable t) {
+                            Log.error(t);
+                        }
+                    }
+                };
+                SwingUtilities.invokeLater(r);
+                return NIL;
+            }
+            throw new ConditionThrowable(new UndefinedFunction(arg));
+        }
+    };
 
     static {
         for (Iterator it = Property.iterator(); it.hasNext();)
