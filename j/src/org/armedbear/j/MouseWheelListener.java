@@ -2,7 +2,7 @@
  * MouseWheelListener.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: MouseWheelListener.java,v 1.1.1.1 2002-09-24 16:08:05 piso Exp $
+ * $Id: MouseWheelListener.java,v 1.2 2003-01-06 02:47:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,12 @@ public final class MouseWheelListener implements java.awt.event.MouseWheelListen
 
     public void mouseWheelMoved(MouseWheelEvent e)
     {
+        // Without this, focus ends up in the location bar textfield if you use
+        // the mouse wheel in the edit window after using the openFile
+        // completion list to open a file.
+        // See also Editor.mouseMoveDotToPoint(MouseEvent).
+        Editor.currentEditor().setFocusToDisplay();
+
         if (e.getWheelRotation() < 0)
             editor.getDisplay().windowUp(5);
         else
