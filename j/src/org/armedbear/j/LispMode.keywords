@@ -390,6 +390,7 @@ seventh
 shadow
 shadowing-import
 shiftf
+signal
 simple-bit-vector-p
 simple-string-p
 sixth
