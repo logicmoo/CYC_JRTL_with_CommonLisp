@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.37 2003-06-08 17:12:44 piso Exp $
+ * $Id: Closure.java,v 1.38 2003-06-08 17:23:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ public class Closure extends Function
     private final Parameter[] requiredParameters;
     private final Parameter[] optionalParameters;
     private final Parameter[] keywordParameters;
-    private final Parameter[] auxVarArray;
+    private final Parameter[] auxVars;
     private final LispObject body;
     private final Environment environment;
     private final LispObject function;
@@ -197,17 +197,17 @@ public class Closure extends Function
                 keywordParameters.toArray(this.keywordParameters);
             } else
                 this.keywordParameters = null;
-            if (auxVars != null && auxVars.size() > 0) {
-                auxVarArray = new Parameter[auxVars.size()];
-                auxVars.toArray(auxVarArray);
+            if (auxVars != null) {
+                this.auxVars = new Parameter[auxVars.size()];
+                auxVars.toArray(this.auxVars);
             } else
-                auxVarArray = null;
+                this.auxVars = null;
         } else {
             Debug.assertTrue(lambdaList == NIL);
             requiredParameters = null;
             optionalParameters = null;
             keywordParameters = null;
-            auxVarArray = null;
+            auxVars = null;
             arity = 0;
 
             minArgs = maxArgs = 0;
@@ -286,9 +286,8 @@ public class Closure extends Function
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(environment);
             bind(requiredParameters[0].var, arg, ext);
-            if (auxVarArray != null) {
+            if (auxVars != null)
                 bindAuxVars(ext, thread);
-            }
             LispObject result = NIL;
             LispObject prog = body;
             while (prog != NIL) {
@@ -313,9 +312,8 @@ public class Closure extends Function
             Environment ext = new Environment(environment);
             bind(requiredParameters[0].var, first, ext);
             bind(requiredParameters[1].var, second, ext);
-            if (auxVarArray != null) {
+            if (auxVars != null)
                 bindAuxVars(ext, thread);
-            }
             LispObject result = NIL;
             LispObject prog = body;
             while (prog != NIL) {
@@ -342,9 +340,8 @@ public class Closure extends Function
             bind(requiredParameters[0].var, first, ext);
             bind(requiredParameters[1].var, second, ext);
             bind(requiredParameters[2].var, third, ext);
-            if (auxVarArray != null) {
+            if (auxVars != null)
                 bindAuxVars(ext, thread);
-            }
             LispObject result = NIL;
             LispObject prog = body;
             while (prog != NIL) {
@@ -392,7 +389,7 @@ public class Closure extends Function
                 for (int i = 0; i < arity; i++)
                     bind(requiredParameters[i].var, args[i], ext);
             }
-            if (auxVarArray != null)
+            if (auxVars != null)
                 bindAuxVars(ext, thread);
             LispObject result = NIL;
             LispObject prog = body;
@@ -526,7 +523,7 @@ public class Closure extends Function
                 }
             }
         }
-        if (auxVarArray != null)
+        if (auxVars != null)
             bindAuxVars(ext, thread);
         LispObject result = NIL;
         LispObject prog = body;
@@ -542,8 +539,8 @@ public class Closure extends Function
         throws Condition
     {
         // Aux variable processing is analogous to LET* processing.
-        for (int i = 0; i < auxVarArray.length; i++) {
-            Parameter parameter = auxVarArray[i];
+        for (int i = 0; i < auxVars.length; i++) {
+            Parameter parameter = auxVars[i];
             Symbol symbol = parameter.var;
             LispObject initForm = parameter.initForm;
             LispObject value =
