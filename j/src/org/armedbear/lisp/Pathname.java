@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.45 2004-01-26 14:34:43 piso Exp $
+ * $Id: Pathname.java,v 1.46 2004-02-02 01:05:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,6 +255,7 @@ public final class Pathname extends LispObject
                 if (!version.equalp(p.version))
                     return false;
             } else {
+                // Unix.
                 if (!host.equal(p.host))
                     return false;
                 if (!device.equal(p.device))
@@ -276,6 +277,43 @@ public final class Pathname extends LispObject
     public boolean equalp(LispObject obj) throws ConditionThrowable
     {
         return equal(obj);
+    }
+
+    private boolean matches(Pathname wildcard) throws ConditionThrowable
+    {
+        if (Utilities.isPlatformWindows()) {
+            if (wildcard.device != Keyword.WILD) {
+                if (!device.equalp(wildcard.device))
+                    return false;
+            }
+            if (wildcard.name != Keyword.WILD) {
+                if (!name.equalp(wildcard.name))
+                    return false;
+            }
+            if (wildcard.directory != Keyword.WILD) {
+                if (!directory.equalp(wildcard.directory))
+                    return false;
+            }
+            if (wildcard.type != Keyword.WILD) {
+                if (!type.equalp(wildcard.type))
+                    return false;
+            }
+        } else {
+            // Unix.
+            if (wildcard.name != Keyword.WILD) {
+                if (!name.equal(wildcard.name))
+                    return false;
+            }
+            if (wildcard.directory != Keyword.WILD) {
+                if (!directory.equal(wildcard.directory))
+                    return false;
+            }
+            if (wildcard.type != Keyword.WILD) {
+                if (!type.equal(wildcard.type))
+                    return false;
+            }
+        }
+        return true;
     }
 
     public String toString()
@@ -608,6 +646,19 @@ public final class Pathname extends LispObject
                 default:
                     return signal(new WrongNumberOfArgumentsException(this));
             }
+        }
+    };
+
+    // ### pathname-match-p pathname wildcard => generalized-boolean
+    private static final Primitive2 PATHNAME_MATCH_P =
+        new Primitive2("pathname-match-p", "pathname wildcard")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Pathname pathname = coerceToPathname(first);
+            Pathname wildcard = coerceToPathname(second);
+            return pathname.matches(wildcard) ? T : NIL;
         }
     };
 
