@@ -2,7 +2,7 @@
  * Dispatcher.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Dispatcher.java,v 1.3 2002-10-12 00:06:39 piso Exp $
+ * $Id: Dispatcher.java,v 1.4 2002-12-29 16:06:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -177,9 +177,10 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         // Update all editors displaying buffer.
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
             Editor ed = it.nextEditor();
-            if (ed == editor)
+            if (ed == editor) {
+                ed.getDisplay().setCaretVisible(true);
                 ed.updateDisplay();
-            else if (ed.getBuffer() == buffer) {
+            } else if (ed.getBuffer() == buffer) {
                 if (buffer.getModeId() != IMAGE_MODE) {
                     ed.getDisplay().repaintChangedLines();
                     ed.updateScrollBars();
