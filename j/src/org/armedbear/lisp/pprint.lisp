@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.46 2004-10-13 18:15:14 piso Exp $
+;;; $Id: pprint.lisp,v 1.47 2004-11-21 16:01:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -578,7 +578,7 @@
 		     ((:lines *print-lines*) *print-lines*)
 		     ((:pprint-dispatch *print-pprint-dispatch*)
 		      *print-pprint-dispatch*))
-  (sys:output-object object (sys:decode-stream-arg stream))
+  (sys:output-object object (sys:out-synonym-of stream))
   object)
 
 (defun maybe-initiate-xp-printing (fn stream &rest args)
@@ -590,7 +590,7 @@
                  (make-hash-table :test 'eq)
                  sys::*circularity-hash-table*))
 	    (*result* nil))
-	(xp-print fn (sys:decode-stream-arg stream) args)
+	(xp-print fn (sys:out-synonym-of stream) args)
 	*result*)))
 
 (defun xp-print (fn stream args)
@@ -676,7 +676,7 @@
     (write-string++ s xp 0 (length s))))
 
 (defun print (object &optional (stream *standard-output*))
-  (setf stream (sys:decode-stream-arg stream))
+  (setf stream (sys:out-synonym-of stream))
   (terpri stream)
   (let ((*print-escape* t))
     (sys:output-object object stream))
@@ -685,17 +685,17 @@
 
 (defun prin1 (object &optional (stream *standard-output*))
   (let ((*print-escape* t))
-    (sys:output-object object (sys:decode-stream-arg stream)))
+    (sys:output-object object (sys:out-synonym-of stream)))
   object)
 
 (defun princ (object &optional (stream *standard-output*))
   (let ((*print-escape* nil)
         (*print-readably* nil))
-    (sys:output-object object (sys:decode-stream-arg stream)))
+    (sys:output-object object (sys:out-synonym-of stream)))
   object)
 
 (defun pprint (object &optional (stream *standard-output*))
-  (setq stream (sys:decode-stream-arg stream))
+  (setq stream (sys:out-synonym-of stream))
   (terpri stream)
   (let ((*print-escape* T) (*print-pretty* T))
     (sys:output-object object stream))
@@ -733,7 +733,7 @@
       (sys:output-object object stream))))
 
 (defun write-char (char &optional (stream *standard-output*))
-  (setf stream (sys:decode-stream-arg stream))
+  (setf stream (sys:out-synonym-of stream))
   (if (xp-structure-p stream)
       (write-char+ char stream)
       (sys::%write-char char stream))
@@ -741,7 +741,7 @@
 
 (defun write-string (string &optional (stream *standard-output*)
                             &key (start 0) (end (length string)))
-  (setf stream (sys:decode-stream-arg stream))
+  (setf stream (sys:out-synonym-of stream))
   (if (xp-structure-p stream)
       (write-string+ string stream start end)
       (progn
@@ -755,7 +755,7 @@
 
 (defun write-line (string &optional (stream *standard-output*)
 		   &key (start 0) (end (length string)))
-  (setf stream (sys:decode-stream-arg stream))
+  (setf stream (sys:out-synonym-of stream))
   (cond ((xp-structure-p stream)
          (write-string+ string stream start end)
          (pprint-newline+ :unconditional stream))
@@ -764,7 +764,7 @@
   string)
 
 (defun terpri (&optional (stream *standard-output*))
-  (setf stream (sys:decode-stream-arg stream))
+  (setf stream (sys:out-synonym-of stream))
   (if (xp-structure-p stream)
       (pprint-newline+ :unconditional stream)
       (sys::%terpri stream))
@@ -774,7 +774,7 @@
 ;stuff, in order to find out the right info to return as the result.
 
 (defun fresh-line (&optional (stream *standard-output*))
-  (setf stream (sys:decode-stream-arg stream))
+  (setf stream (sys:out-synonym-of stream))
   (cond ((xp-structure-p stream)
 	 (attempt-to-output stream t t) ;ok because we want newline
 	 (when (not (zerop (LP<-BP stream)))
@@ -789,7 +789,7 @@
 ;output continues to the stream later.
 
 (defun finish-output (&optional (stream *standard-output*))
-  (setf stream (sys:decode-stream-arg stream))
+  (setf stream (sys:out-synonym-of stream))
   (when (xp-structure-p stream)
     (attempt-to-output stream T T)
     (setf stream (base-stream stream)))
@@ -797,7 +797,7 @@
   nil)
 
 (defun force-output (&optional (stream *standard-output*))
-  (setf stream (sys:decode-stream-arg stream))
+  (setf stream (sys:out-synonym-of stream))
   (when (xp-structure-p stream)
     (attempt-to-output stream T T)
     (setf stream (base-stream stream)))
@@ -805,7 +805,7 @@
   nil)
 
 (defun clear-output (&optional (stream *standard-output*))
-  (setf stream (sys:decode-stream-arg stream))
+  (setf stream (sys:out-synonym-of stream))
   (when (xp-structure-p stream)
     (let ((*locating-circularities* 0)) ;hack to prevent visible output
       (attempt-to-output stream T T)
@@ -844,7 +844,7 @@
 	   (pprint-logical-block+
 	     (,stream-symbol +l +p +s ,per-line-prefix-p t nil)
 	     ,@ body nil)))
-     (sys:decode-stream-arg ,stream-symbol)))
+     (sys:out-synonym-of ,stream-symbol)))
 
 ;Assumes var and args must be variables.  Other arguments must be literals or variables.
 
@@ -871,7 +871,7 @@
 ;; true, a line break is inserted in the output when the appropriate condition
 ;; below is satisfied; otherwise, PPRINT-NEWLINE has no effect."
 (defun pprint-newline (kind &optional (stream *standard-output*))
-  (setq stream (sys:decode-stream-arg stream))
+  (setq stream (sys:out-synonym-of stream))
   (when (not (member kind '(:linear :miser :fill :mandatory)))
     (error 'simple-type-error
            :format-control "Invalid KIND argument ~A to PPRINT-NEWLINE."
@@ -884,7 +884,7 @@
 ;; true, PPRINT-INDENT sets the indentation in the innermost dynamically
 ;; enclosing logical block; otherwise, PPRINT-INDENT has no effect."
 (defun pprint-indent (relative-to n &optional (stream *standard-output*))
-  (setq stream (sys:decode-stream-arg stream))
+  (setq stream (sys:out-synonym-of stream))
   (when (not (member relative-to '(:block :current)))
     (error "Invalid KIND argument ~A to PPRINT-INDENT" relative-to))
   (when (and (xp-structure-p stream) *print-pretty*)
@@ -892,7 +892,7 @@
   nil)
 
 (defun pprint-tab (kind colnum colinc &optional (stream *standard-output*))
-  (setq stream (sys:decode-stream-arg stream))
+  (setq stream (sys:out-synonym-of stream))
   (when (not (member kind '(:line :section :line-relative :section-relative)))
     (error "Invalid KIND argument ~A to PPRINT-TAB" kind))
   (when (and (xp-structure-p stream) *print-pretty*)
