@@ -1,7 +1,7 @@
 ;;; bit-array-ops.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: bit-array-ops.lisp,v 1.2 2003-10-09 16:51:08 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: bit-array-ops.lisp,v 1.3 2005-02-12 21:11:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from CMUCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun bit-array-same-dimensions-p (array1 array2)
   (declare (type (array bit) array1 array2))
@@ -30,6 +30,12 @@
 		   (array-dimension array2 index))
 	   (return nil)))))
 
+(defun require-same-dimensions (array1 array2)
+  (unless (bit-array-same-dimensions-p array1 array2)
+    (error 'program-error
+           "~S and ~S do not have the same dimensions."
+           array1 array2)))
+
 (defun pick-result-array (result-bit-array bit-array-1)
   (case result-bit-array
     ((t) bit-array-1)
@@ -37,10 +43,7 @@
 		       :element-type 'bit
 		       :initial-element 0))
     (t
-     (unless (bit-array-same-dimensions-p bit-array-1
-					  result-bit-array)
-       (error 'program-error "~S and ~S do not have the same dimensions"
-              bit-array-1 result-bit-array))
+     (require-same-dimensions bit-array-1 result-bit-array)
      result-bit-array)))
 
 (defmacro def-bit-array-op (name function)
@@ -52,9 +55,7 @@
                RESULT-BIT-ARRAY is NIL or omitted, a new array is~%  created.  ~
                All the arrays must have the same rank and dimensions."
 	      (symbol-name function))
-     (unless (bit-array-same-dimensions-p bit-array-1 bit-array-2)
-       (error 'program-error "~S and ~S do not have the same dimensions"
-              bit-array-1 bit-array-2))
+     (require-same-dimensions bit-array-1 bit-array-2)
      (let ((result-bit-array (pick-result-array result-bit-array bit-array-1)))
        (dotimes (i (array-total-size result-bit-array) result-bit-array)
          (setf (row-major-aref result-bit-array i)
@@ -62,16 +63,65 @@
                                   (row-major-aref bit-array-2 i))
                        1))))))
 
-(def-bit-array-op bit-and   logand)
-(def-bit-array-op bit-ior   logior)
-(def-bit-array-op bit-xor   logxor)
+;; (def-bit-array-op bit-and   logand)
+;; (def-bit-array-op bit-ior   logior)
+;; (def-bit-array-op bit-xor   logxor)
 (def-bit-array-op bit-eqv   logeqv)
-(def-bit-array-op bit-nand  lognand)
+;; (def-bit-array-op bit-nand  lognand)
 (def-bit-array-op bit-nor   lognor)
 (def-bit-array-op bit-andc1 logandc1)
 (def-bit-array-op bit-andc2 logandc2)
 (def-bit-array-op bit-orc1  logorc1)
 (def-bit-array-op bit-orc2  logorc2)
+
+(defun bit-and (bit-array-1 bit-array-2 &optional result-bit-array)
+  (require-same-dimensions bit-array-1 bit-array-2)
+  (let ((result-bit-array (pick-result-array result-bit-array bit-array-1)))
+    (if (and (simple-bit-vector-p bit-array-1)
+             (simple-bit-vector-p bit-array-2)
+             (simple-bit-vector-p result-bit-array))
+        (%simple-bit-vector-bit-and bit-array-1 bit-array-2 result-bit-array)
+        (dotimes (i (array-total-size result-bit-array) result-bit-array)
+          (setf (row-major-aref result-bit-array i)
+                (logand (row-major-aref bit-array-1 i)
+                        (row-major-aref bit-array-2 i)))))))
+
+(defun bit-ior (bit-array-1 bit-array-2 &optional result-bit-array)
+  (require-same-dimensions bit-array-1 bit-array-2)
+  (let ((result-bit-array (pick-result-array result-bit-array bit-array-1)))
+    (if (and (simple-bit-vector-p bit-array-1)
+             (simple-bit-vector-p bit-array-2)
+             (simple-bit-vector-p result-bit-array))
+        (%simple-bit-vector-bit-ior bit-array-1 bit-array-2 result-bit-array)
+        (dotimes (i (array-total-size result-bit-array) result-bit-array)
+          (setf (row-major-aref result-bit-array i)
+                (logior (row-major-aref bit-array-1 i)
+                        (row-major-aref bit-array-2 i)))))))
+
+(defun bit-xor (bit-array-1 bit-array-2 &optional result-bit-array)
+  (require-same-dimensions bit-array-1 bit-array-2)
+  (let ((result-bit-array (pick-result-array result-bit-array bit-array-1)))
+    (if (and (simple-bit-vector-p bit-array-1)
+             (simple-bit-vector-p bit-array-2)
+             (simple-bit-vector-p result-bit-array))
+        (%simple-bit-vector-bit-xor bit-array-1 bit-array-2 result-bit-array)
+        (dotimes (i (array-total-size result-bit-array) result-bit-array)
+          (setf (row-major-aref result-bit-array i)
+                (logxor (row-major-aref bit-array-1 i)
+                        (row-major-aref bit-array-2 i)))))))
+
+(defun bit-nand (bit-array-1 bit-array-2 &optional result-bit-array)
+  (require-same-dimensions bit-array-1 bit-array-2)
+  (let ((result-bit-array (pick-result-array result-bit-array bit-array-1)))
+    (if (and (simple-bit-vector-p bit-array-1)
+             (simple-bit-vector-p bit-array-2)
+             (simple-bit-vector-p result-bit-array))
+        (%simple-bit-vector-bit-nand bit-array-1 bit-array-2 result-bit-array)
+        (dotimes (i (array-total-size result-bit-array) result-bit-array)
+          (setf (row-major-aref result-bit-array i)
+                (logand (lognand (row-major-aref bit-array-1 i)
+                                 (row-major-aref bit-array-2 i))
+                        1))))))
 
 (defun bit-not (bit-array &optional result-bit-array)
   "Performs a bit-wise logical NOT on the elements of BIT-ARRAY,
