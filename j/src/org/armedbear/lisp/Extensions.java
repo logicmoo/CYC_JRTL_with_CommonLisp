@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Extensions.java,v 1.34 2005-02-10 12:55:51 piso Exp $
+ * $Id: Extensions.java,v 1.35 2005-03-19 14:39:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -151,7 +151,18 @@ public final class Extensions extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            exit();
+            exit(0);
+            return LispThread.currentThread().nothing();
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            int status = 0;
+            if (first == Keyword.STATUS) {
+                if (second instanceof Fixnum)
+                    status = ((Fixnum)second).value;
+            }
+            exit(status);
             return LispThread.currentThread().nothing();
         }
     };
@@ -162,7 +173,18 @@ public final class Extensions extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            exit();
+            exit(0);
+            return LispThread.currentThread().nothing();
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            int status = 0;
+            if (first == Keyword.STATUS) {
+                if (second instanceof Fixnum)
+                    status = ((Fixnum)second).value;
+            }
+            exit(status);
             return LispThread.currentThread().nothing();
         }
     };
