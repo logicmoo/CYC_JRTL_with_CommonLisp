@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.89 2004-01-06 15:10:53 asimon Exp $
+;;; $Id: autoloads.lisp,v 1.90 2004-01-07 19:51:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -133,6 +133,7 @@
 (autoload-macro 'assert)
 (autoload 'logical-pathname-translations)
 (autoload-macro 'with-input-from-string)
+(autoload 'ensure-directories-exist)
 
 ;; Java interface.
 (in-package "JAVA")
