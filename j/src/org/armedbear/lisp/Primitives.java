@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.475 2003-10-15 20:40:37 piso Exp $
+ * $Id: Primitives.java,v 1.476 2003-10-16 00:32:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1270,14 +1270,21 @@ public final class Primitives extends Module
     }
 
     // ### %defun
-    // %defun name arglist body => name
-    private static final Primitive3 _DEFUN =
-        new Primitive3("%defun", PACKAGE_SYS, false)
+    // %defun name arglist body environment => name
+    private static final Primitive _DEFUN = new Primitive("%defun", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
+            if (args.length < 3 || args.length > 4)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            LispObject first = args[0];
+            LispObject second = args[1];
+            LispObject third = args[2];
+            Environment env;
+            if (args.length == 4 && args[3] != NIL)
+                env = checkEnvironment(args[3]);
+            else
+                env = new Environment();
             if (first instanceof Symbol) {
                 Symbol symbol = checkSymbol(first);
                 if (symbol.getSymbolFunction() instanceof SpecialOperator) {
@@ -1296,7 +1303,7 @@ public final class Primitives extends Module
                 body = new Cons(Symbol.BLOCK, body);
                 body = new Cons(body, NIL);
                 Closure closure = new Closure(symbol.getName(), arglist, body,
-                                              new Environment());
+                                              env);
                 closure.setArglist(arglist);
                 symbol.setSymbolFunction(closure);
                 return symbol;
@@ -1313,7 +1320,7 @@ public final class Primitives extends Module
                 body = new Cons(symbol, body);
                 body = new Cons(Symbol.BLOCK, body);
                 body = new Cons(body, NIL);
-                Closure closure = new Closure(arglist, body, new Environment());
+                Closure closure = new Closure(arglist, body, env);
                 closure.setArglist(arglist);
                 put(symbol, PACKAGE_SYS.intern("SETF-FUNCTION"), closure);
                 return symbol;
