@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.441 2003-09-26 14:21:22 piso Exp $
+ * $Id: Primitives.java,v 1.442 2003-09-26 16:52:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1310,11 +1310,18 @@ public final class Primitives extends Module
     // ### %defun
     // %defun name arglist body => name
     private static final Primitive3 _DEFUN =
-        new Primitive3("%defun", PACKAGE_SYS, false) {
+        new Primitive3("%defun", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(first);
+            if (symbol.getSymbolFunction() instanceof SpecialOperator) {
+                String message =
+                    symbol.getName() + " is a special operator and may not be redefined";
+                throw new ConditionThrowable(new ProgramError(message));
+            }
             LispObject arglist = checkList(second);
             LispObject body = checkList(third);
             if (body.car() instanceof LispString && body.cdr() != NIL) {
