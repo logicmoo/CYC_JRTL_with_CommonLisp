@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.184 2003-04-28 01:50:07 piso Exp $
+ * $Id: Primitives.java,v 1.185 2003-05-22 00:29:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3432,6 +3432,14 @@ public final class Primitives extends Module
             out.writeString(sb.toString());
             out.finishOutput();
             return result;
+        }
+    };
+
+    private static final Primitive0 GET_INTERNAL_REAL_TIME =
+        new Primitive0("get-internal-real-time") {
+        public LispObject execute() throws Condition
+        {
+            return number(System.currentTimeMillis());
         }
     };
 
