@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.155 2004-05-07 18:14:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.156 2004-05-07 23:15:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -49,6 +49,10 @@
   (let ((index (vector-push symbol *locals*)))
     (setf *max-locals* (max *max-locals* (fill-pointer *locals*)))
     index))
+
+;; Returns index of allocated slot.
+(defun local-index (symbol)
+  (position symbol *locals* :from-end t))
 
 (defvar *variables* ())
 
@@ -1682,7 +1686,7 @@
                                    "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
                                    -2)))
             (t
-             (let ((index (position var *locals* :from-end t)))
+             (let ((index (local-index var)))
                (unless index
                  (error "COMPILE-LET-VARS can't find local variable"))
                (emit 'astore index)))))))
@@ -1887,7 +1891,7 @@
                                             for-effect)))
   (let* ((rest (cdr form))
          (sym (car rest))
-         (index (position sym *locals* :from-end t)))
+         (index (local-index sym)))
     (when index
       (compile-form (cadr rest))
       (unless (remove-store-value)
@@ -2214,7 +2218,7 @@
 (defun compile-variable-ref (var)
   (let ((v (find-variable var)))
     (unless (and v (variable-special-p v))
-      (let ((index (position var *locals* :from-end t)))
+      (let ((index (local-index var)))
         (when index
           (emit 'aload index)
           (emit-store-value)
@@ -2376,13 +2380,11 @@
             (vector-push var *args*)))
         (dolist (arg args)
           (vector-push arg *args*)))
+    (allocate-local nil) ;; "this" pointer
     (if *using-arg-array*
-        ;; Using arg array: slot 0 is "this" pointer, slot 1 is arg array,
-        ;; first available slot is 2.
-        (setf (fill-pointer *locals*) 2)
-        ;; Not using arg array: slot 0 is "this" pointer, next N slots are used
-        ;; for args.
-        (setf (fill-pointer *locals*) (1+ (length args))))
+        (allocate-local nil) ;; One slot for arg array.
+        (dolist (arg args) ;; One slot for each argument.
+          (allocate-local nil)))
     ;; Reserve the next available slot for the value register.
     (setf *val* (allocate-local nil))
     ;; Reserve the next available slot for the thread register.
