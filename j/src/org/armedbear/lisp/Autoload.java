@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.50 2003-09-08 01:37:20 piso Exp $
+ * $Id: Autoload.java,v 1.51 2003-09-08 02:25:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,6 +154,7 @@ public final class Autoload extends Function
 
     static {
         autoload("array-displacement", "DisplacedArray");
+        autoload("atan", "atan");
         autoload("char-equal", "CharacterFunctions");
         autoload("char-greaterp", "CharacterFunctions");
         autoload("char-lessp", "CharacterFunctions");
