@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.71 2004-02-18 14:00:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.72 2004-02-19 15:38:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1309,7 +1309,7 @@
               g
               "Lorg/armedbear/lisp/LispObject;")
         (emit-store-value))))
-   ((classp form)
+   ((or (classp form) (typep form 'generic-function))
     (let ((g (declare-object form)))
       (emit 'getstatic
             *this-class*
@@ -1345,6 +1345,7 @@
 (setf (gethash 'CAR             unary-operators) "car")
 (setf (gethash 'CDDR            unary-operators) "cddr")
 (setf (gethash 'CDR             unary-operators) "cdr")
+(setf (gethash 'CHARACTERP      unary-operators) "CHARACTERP")
 (setf (gethash 'COMPLEXP        unary-operators) "COMPLEXP")
 (setf (gethash 'CONSTANTP       unary-operators) "CONSTANTP")
 (setf (gethash 'DENOMINATOR     unary-operators) "DENOMINATOR")
@@ -1630,19 +1631,20 @@
            (emit 'instanceof +lisp-cons-class+)
            (return-from compile-test 'ifne))
          (let ((s (cdr (assq (car form)
-                             '((EVENP     . "evenp")
-                               (FLOATP    . "floatp")
-                               (INTEGERP  . "integerp")
-                               (MINUSP    . "minusp")
-                               (LISTP     . "listp")
-                               (NUMBERP   . "numberp")
-                               (ODDP      . "oddp")
-                               (PLUSP     . "plusp")
-                               (RATIONALP . "rationalp")
-                               (REALP     . "realp")
-                               (VECTORP   . "vectorp")
-                               (ZEROP     . "zerop")
-                               )))))
+                             '((CHARACTERP . "characterp")
+                               (EVENP      . "evenp")
+                               (FLOATP     . "floatp")
+                               (INTEGERP   . "integerp")
+                               (LISTP      . "listp")
+                               (MINUSP     . "minusp")
+                               (NUMBERP    . "numberp")
+                               (ODDP       . "oddp")
+                               (PLUSP      . "plusp")
+                               (RATIONALP  . "rationalp")
+                               (REALP      . "realp")
+                               (STRINGP    . "stringp")
+                               (VECTORP    . "vectorp")
+                               (ZEROP      . "zerop"))))))
            (when s
              (compile-form (second form))
              (unless (remove-store-value)
@@ -1669,8 +1671,7 @@
                                (>=     . "isGreaterThanOrEqualTo")
                                (EQL    . "eql")
                                (EQUAL  . "equal")
-                               (EQUALP . "equalp")
-                               )))))
+                               (EQUALP . "equalp"))))))
            (when s
              (compile-form (second form))
              (unless (remove-store-value)
