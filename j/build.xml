@@ -243,6 +243,7 @@
     <mkdir dir="${distdir}"/>
     <copy todir="${distdir}">
       <fileset dir="${topdir}">
+        <exclude name="**/*.orig"/>
         <exclude name="**/*.class"/>
         <exclude name="**/*.jar"/>
         <exclude name="**/*.zip"/>
@@ -307,7 +308,8 @@
     <zip
       zipfile="${topdir}/j.zip"
       basedir="${topdir}"
-      excludes="src/TEST-*.txt, **/*.class, **/*.jar, **/*.zip, src/test/**, **/Makefile,
+      excludes="src/TEST-*.txt, **/*.orig, **/*.class, **/*.jar, **/*.zip,
+        src/test/**, **/Makefile,
         config.status, config.cache, config.log, autom4te.cache/**,
         **/classes.stamp, **/build, **/version,
         **/j, **/j.bat, **/jpty, **/ChangeLog, src/org/armedbear/lisp/lisp"
