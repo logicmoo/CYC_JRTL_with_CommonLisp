@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.28 2004-02-21 13:57:44 piso Exp $
+;;; $Id: precompiler.lisp,v 1.29 2004-02-28 15:32:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -102,6 +102,15 @@
                    (list (find-package "CL") (find-package "SYS"))))
         `(,(cadr callee) ,@(cdr args))
         form)))
+
+(define-compiler-macro byte (size position)
+  `(cons ,size ,position))
+
+(define-compiler-macro byte-size (bytespec)
+  `(car ,bytespec))
+
+(define-compiler-macro byte-position (bytespec)
+  `(cdr ,bytespec))
 
 (in-package "EXTENSIONS")
 
@@ -594,5 +603,3 @@
      (%defun ',name ',lambda-list ',body ,env)
      (precompile ',name)
      ',name))
-
-
