@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.168 2003-04-10 01:05:14 piso Exp $
+ * $Id: Primitives.java,v 1.169 2003-04-10 02:42:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3851,9 +3851,7 @@ public final class Primitives extends Module
                 if (second == Symbol.CHARACTER) {
                     if (first.length() == 1)
                         return ((LispString)first).get(0);
-                    throw new TypeError();
                 }
-                // Fall through...
             }
             if (first instanceof AbstractVector) {
                 if (second == Symbol.BIT_VECTOR ||
@@ -3923,9 +3921,7 @@ public final class Primitives extends Module
                     String name = first.getName();
                     if (name.length() == 1)
                         return new LispCharacter(name.charAt(0));
-                    throw new TypeError();
-                }
-                if (second == Symbol.FUNCTION) {
+                } else if (second == Symbol.FUNCTION) {
                     LispObject obj = first.getSymbolFunction();
                     if (obj instanceof Function) {
                         if (obj instanceof SpecialOperator)
@@ -3934,9 +3930,15 @@ public final class Primitives extends Module
                             throw new TypeError();
                         return obj;
                     }
-                    throw new TypeError();
                 }
-            } else if (second == Symbol.FLOAT || second == Symbol.SINGLE_FLOAT) {
+            } else if (first instanceof Fixnum) {
+                if (second == Symbol.CHARACTER || second == Symbol.BASE_CHAR) {
+                    int n = Fixnum.getValue(first);
+                    if (n >= Character.MIN_VALUE && n <= Character.MAX_VALUE)
+                        return new LispCharacter((char)n);
+                }
+            }
+            if (second == Symbol.FLOAT || second == Symbol.SINGLE_FLOAT) {
                 return LispFloat.coerceToFloat(first);
             }
             throw new TypeError();
