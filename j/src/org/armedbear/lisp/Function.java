@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.7 2003-03-05 19:40:08 piso Exp $
+ * $Id: Function.java,v 1.8 2003-03-12 18:37:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,8 @@ public abstract class Function extends LispObject
 
     private long callCount;
 
+    private LispObject lambdaName;
+
     protected Function()
     {
         module = null;
@@ -42,7 +44,7 @@ public abstract class Function extends LispObject
         this.name = name != null ? name.toUpperCase() : null;
         index = 0;
         if (name != null)
-            Symbol.addFunction(this);
+            lambdaName = Symbol.addFunction(this.name, this);
     }
 
     public Function(String name, Package pkg)
@@ -53,6 +55,7 @@ public abstract class Function extends LispObject
         if (name != null) {
             Symbol symbol = pkg.intern(this.name);
             symbol.setSymbolFunction(this);
+            lambdaName = symbol;
         }
     }
 
@@ -61,7 +64,7 @@ public abstract class Function extends LispObject
         this.module = module;
         this.name = name.toUpperCase();
         this.index = index;
-        Symbol.addFunction(this);
+        lambdaName = Symbol.addFunction(this.name, this);
     }
 
     public LispObject typeOf()
@@ -81,6 +84,16 @@ public abstract class Function extends LispObject
     public final String getName()
     {
         return name;
+    }
+
+    public final LispObject getLambdaName()
+    {
+        return lambdaName;
+    }
+
+    public final void setLambdaName(LispObject obj)
+    {
+        lambdaName = obj;
     }
 
     // Primitive
