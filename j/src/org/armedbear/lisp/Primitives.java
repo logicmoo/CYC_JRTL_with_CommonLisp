@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.468 2003-10-10 02:01:24 piso Exp $
+ * $Id: Primitives.java,v 1.469 2003-10-10 02:57:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4211,21 +4211,6 @@ public final class Primitives extends Module
             for (int i = size; i-- > 0;)
                 result = new Cons(second, result);
             return result;
-        }
-    };
-
-    // memq item list &key key test test-not => tail
-    private static final Primitive2 MEMQ = new Primitive2("memq") {
-        public LispObject execute(LispObject item, LispObject list)
-            throws ConditionThrowable
-        {
-            LispObject tail = checkList(list);
-            while (tail != NIL) {
-                if (item == tail.car())
-                    return tail;
-                tail = tail.cdr();
-            }
-            return NIL;
         }
     };
 
