@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.105 2003-08-23 02:11:48 piso Exp $
+;;; $Id: rt.lisp,v 1.106 2003-08-24 17:52:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -201,6 +201,7 @@
                               "equal"
                               "equalp"
                               "error"
+                              "etypecase"
                               "eval"
                               "every"
                               "fboundp"
@@ -309,7 +310,7 @@
                               "nth"
                               "nth-value"
                               "nthcdr"
-;;                               "number-comparison"
+                              "number-comparison"
                               "nunion"
                               "or"
                               "packages"
