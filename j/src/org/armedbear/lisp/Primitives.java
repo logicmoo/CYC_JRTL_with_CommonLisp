@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.314 2003-08-05 01:16:42 piso Exp $
+ * $Id: Primitives.java,v 1.315 2003-08-06 19:14:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3408,6 +3408,23 @@ public final class Primitives extends Module
                     return new Closure(arg.cadr(), arg.cddr(), env);
             }
             throw new UndefinedFunctionError(String.valueOf(arg));
+        }
+    };
+
+    // ### resolve
+    // Force autoload to be resolved.
+    private static final Primitive1 RESOLVE =
+        new Primitive1("resolve", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject arg) throws Condition
+        {
+            Symbol symbol = checkSymbol(arg);
+            LispObject fun = symbol.getSymbolFunction();
+            if (fun instanceof Autoload) {
+                Autoload autoload = (Autoload) fun;
+                autoload.load();
+                return autoload.getSymbol().getSymbolFunction();
+            }
+            return fun;
         }
     };
 
