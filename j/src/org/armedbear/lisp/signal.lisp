@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: signal.lisp,v 1.8 2004-05-14 17:17:58 piso Exp $
+;;; $Id: signal.lisp,v 1.9 2004-05-26 11:41:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,29 +28,6 @@
 (defvar *handler-clusters* ())
 
 (defvar *break-on-signals* nil)
-
-;; Redefined in clos.lisp.
-(defun coerce-to-condition (datum arguments default-type fun-name)
-  (cond ((typep datum 'condition)
-	 (when arguments
-           (error 'simple-type-error
-                  :datum arguments
-                  :expected-type 'null
-                  :format-control "You may not supply additional arguments when giving ~S to ~S."
-                  :format-arguments (list datum fun-name)))
-	 datum)
-	((symbolp datum)
-	 (%make-condition datum arguments))
-	((or (stringp datum) (functionp datum))
-	 (%make-condition default-type
-                          (list :format-control datum
-                                :format-arguments arguments)))
-	(t
-	 (error 'simple-type-error
-		:datum datum
-		:expected-type '(or symbol string)
-		:format-control "Bad argument to ~S: ~S."
-		:format-arguments (list fun-name datum)))))
 
 (defun signal (datum &rest arguments)
   (let ((condition (coerce-to-condition datum arguments 'simple-condition 'signal))
@@ -80,6 +57,32 @@
                (setf *saved-backtrace* (backtrace-as-list))
                (invoke-debugger condition)))))
     nil))
+
+;; COERCE-TO-CONDITION is going to be redefined in clos.lisp, so we define it
+;; in this file after SIGNAL so the call to it in SIGNAL is NOTINLINE. We could
+;; use (DECLAIM (NOTINLINE COERCE-TO-CONDITON)) to achieve the same effect more
+;; reliably if our compiler understood that kind of talk.
+(defun coerce-to-condition (datum arguments default-type fun-name)
+  (cond ((typep datum 'condition)
+	 (when arguments
+           (error 'simple-type-error
+                  :datum arguments
+                  :expected-type 'null
+                  :format-control "You may not supply additional arguments when giving ~S to ~S."
+                  :format-arguments (list datum fun-name)))
+	 datum)
+	((symbolp datum)
+	 (%make-condition datum arguments))
+	((or (stringp datum) (functionp datum))
+	 (%make-condition default-type
+                          (list :format-control datum
+                                :format-arguments arguments)))
+	(t
+	 (error 'simple-type-error
+		:datum datum
+		:expected-type '(or symbol string)
+		:format-control "Bad argument to ~S: ~S."
+		:format-arguments (list fun-name datum)))))
 
 (defmacro handler-bind (bindings &body forms)
   (dolist (binding bindings)
