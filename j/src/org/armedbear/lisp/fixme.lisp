@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: fixme.lisp,v 1.19 2004-03-02 00:04:37 piso Exp $
+;;; $Id: fixme.lisp,v 1.20 2004-03-04 01:18:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,9 +36,6 @@
   (when (eq (car declaration-specifier) 'special)
     (dolist (var (cdr declaration-specifier))
       (%defvar var))))
-
-(defun compile-file-pathname (pathname)
-  (concatenate 'string (namestring pathname) ".compiled"))
 
 (defun disassemble (fn)
   (%format t "; DISASSEMBLE is not implemented."))
