@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.211 2004-03-02 20:33:07 piso Exp $
+ * $Id: Lisp.java,v 1.212 2004-03-03 19:46:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1504,6 +1504,10 @@ public abstract class Lisp
     // ### *read-base*
     public static final Symbol _READ_BASE_ =
         exportSpecial("*READ-BASE*", PACKAGE_CL, new Fixnum(10));
+
+    // ### *read-default-float-format*
+    public static final Symbol _READ_DEFAULT_FLOAT_FORMAT_ =
+        exportSpecial("*READ-DEFAULT-FLOAT-FORMAT*", PACKAGE_CL, Symbol.DOUBLE_FLOAT);
 
     // Printer control variables.
     public static final Symbol _PRINT_ARRAY_ =
