@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispFormatter.java,v 1.31 2003-07-17 00:47:06 piso Exp $
+ * $Id: LispFormatter.java,v 1.32 2003-08-24 18:30:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@ public final class LispFormatter extends Formatter
                     break;
                 case STATE_CAR: {
                     String token = text.substring(tokenBegin, tokenEnd).trim();
-                    if (LispMode.isDefiner(token)) {
+                    if (isDefiner(token)) {
                         if (isPositionFunctional(text, tokenBegin, currentLine))
                             format = LISP_FORMAT_DEFUN;
                         else
@@ -135,6 +135,21 @@ public final class LispFormatter extends Formatter
             addSegment(text, tokenBegin, tokenEnd, format);
             tokenBegin = tokenEnd;
         }
+    }
+
+    // Don't include DEFCONSTANT, DEFPARAMETER or DEFVAR!
+    private static final String[] definers = new String[] {
+        "defclass", "define-condition", "defmacro", "defmethod", "defstruct",
+        "deftype", "defun"
+    };
+
+    private static final boolean isDefiner(String s)
+    {
+        if (s.length() >= 5 && s.startsWith("def"))
+            if (Utilities.isOneOf(s, definers))
+                return true;
+
+        return false;
     }
 
     // Returns true if token at specified offset in detabbed text from line is
