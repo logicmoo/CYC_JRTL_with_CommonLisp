@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.12 2003-05-24 00:37:14 piso Exp $
+ * $Id: Package.java,v 1.13 2003-05-24 00:39:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.lisp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public final class Package extends LispObject
 {
@@ -55,6 +56,11 @@ public final class Package extends LispObject
     public final String getName()
     {
         return name;
+    }
+
+    public final List getNicknames()
+    {
+        return nicknames;
     }
 
     // Returns null if symbol not found in package.
