@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.113 2003-03-12 21:38:19 piso Exp $
+ * $Id: Primitives.java,v 1.114 2003-03-13 03:12:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,8 +128,6 @@ public final class Primitives extends Module
     private static final int RPLACA                     = 9;
     private static final int RPLACD                     = 10;
     private static final int SET                        = 11;
-    private static final int STRING_EQUAL               = 12;
-    private static final int STRING_EQUAL_IGNORE_CASE   = 13;
 
     private Primitives()
     {
@@ -227,8 +225,6 @@ public final class Primitives extends Module
         definePrimitive2("rplaca", RPLACA);
         definePrimitive2("rplacd", RPLACD);
         definePrimitive2("set", SET);
-        definePrimitive2("string-equal", STRING_EQUAL_IGNORE_CASE);
-        definePrimitive2("string=", STRING_EQUAL);
     }
 
     // SpecialOperator
@@ -543,11 +539,6 @@ public final class Primitives extends Module
                 return equal(first, second) ? T : NIL;
             case EQUALP:                        // ### equalp
                 return equalp(first, second) ? T : NIL;
-            case STRING_EQUAL:                  // ### string=
-                // Case sensitive.
-                return LispString.equals(first, second);
-            case STRING_EQUAL_IGNORE_CASE:      // ### string-equal
-                return LispString.equalsIgnoreCase(first, second);
             case CHAR:                          // ### char
                 try {
                     String s = LispString.getValue(first);
