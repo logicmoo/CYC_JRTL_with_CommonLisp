@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.23 2003-10-01 01:27:56 piso Exp $
+;;; $Id: defstruct.lisp,v 1.24 2003-10-01 13:59:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,8 +64,7 @@
   (let ((accessor
          (if *ds-conc-name*
              (intern (concatenate 'string (symbol-name *ds-conc-name*) (symbol-name slot-name)))
-             slot-name))
-        (setf-expander (gensym)))
+             slot-name)))
     `((setf (symbol-function ',accessor) (get-slot-accessor ,index))
       (%put ',accessor 'setf-inverse (get-slot-mutator ,index)))))
 
