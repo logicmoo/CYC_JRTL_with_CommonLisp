@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.189 2003-05-24 17:05:57 piso Exp $
+ * $Id: Primitives.java,v 1.190 2003-05-24 17:39:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2768,21 +2768,10 @@ public final class Primitives extends Module
         {
             if (args.length == 0 || args.length > 2)
                 throw new WrongNumberOfArgumentsException(this);
-            Package pkg = null;
-            if (args.length == 2) {
-                LispObject arg = args[1];
-                if (arg instanceof Package)
-                    pkg = (Package) arg;
-                else if (arg instanceof LispString)
-                    pkg = Packages.findPackage(((LispString)arg).getValue());
-                else if (arg instanceof Symbol)
-                    pkg = Packages.findPackage(arg.getName());
-                else
-                    throw new TypeError(arg, "package");
-                if (pkg == null)
-                    throw new LispError(String.valueOf(arg) +
-                        " is not a package");
-            } else
+            Package pkg;
+            if (args.length == 2)
+                pkg = coerceToPackage(args[1]);
+            else
                 pkg = (Package) _PACKAGE_.symbolValue();
             // args[0] can be a single symbol or a list.
             if (args[0] instanceof Cons) {
