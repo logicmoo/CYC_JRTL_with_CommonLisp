@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.93 2004-08-02 00:35:06 piso Exp $
+ * $Id: Fixnum.java,v 1.94 2004-08-08 18:15:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -557,32 +557,32 @@ public final class Fixnum extends LispObject
         if (obj instanceof Fixnum) {
             if (value == 0)
                 return this;
-            int count = ((Fixnum)obj).value;
-            if (count == 0)
+            int shift = ((Fixnum)obj).value;
+            if (shift == 0)
                 return this;
             long n = value;
-            if (count < -32) {
+            if (shift <= -32) {
                 // Right shift.
                 return n >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
             }
-            if (count < 0)
-                return new Fixnum((int)(n >> -count));
-            if (count <= 32)
-                return number(n << count);
-            // BigInteger.shiftLeft() succumbs to a stack overflow if count
+            if (shift < 0)
+                return new Fixnum((int)(n >> -shift));
+            if (shift <= 32)
+                return number(n << shift);
+            // BigInteger.shiftLeft() succumbs to a stack overflow if shift
             // is Integer.MIN_VALUE, so...
-            if (count == Integer.MIN_VALUE)
+            if (shift == Integer.MIN_VALUE)
                 return n >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
-            return number(BigInteger.valueOf(value).shiftLeft(count));
+            return number(BigInteger.valueOf(value).shiftLeft(shift));
         }
         if (obj instanceof Bignum) {
             if (value == 0)
                 return this;
             BigInteger n = BigInteger.valueOf(value);
-            BigInteger count = ((Bignum)obj).value;
-            if (count.signum() > 0)
+            BigInteger shift = ((Bignum)obj).value;
+            if (shift.signum() > 0)
                 return signal(new LispError("Can't represent result of left shift."));
-            if (count.signum() < 0)
+            if (shift.signum() < 0)
                 return n.signum() >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
             Debug.bug(); // Shouldn't happen.
         }
