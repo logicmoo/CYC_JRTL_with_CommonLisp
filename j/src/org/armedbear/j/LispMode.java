@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.46 2003-07-26 16:22:49 piso Exp $
+ * $Id: LispMode.java,v 1.47 2003-08-02 00:39:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,6 +78,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_U, CTRL_MASK | ALT_MASK, "backwardUpList");
         km.mapKey(KeyEvent.VK_E, CTRL_MASK | ALT_MASK, "evalDefunLisp");
         km.mapKey(KeyEvent.VK_R, CTRL_MASK | ALT_MASK, "evalRegionLisp");
+        km.mapKey(KeyEvent.VK_M, CTRL_MASK, "lispFindMatchingChar");
     }
 
     public boolean isTaggable()
@@ -569,6 +570,39 @@ public class LispMode extends AbstractMode implements Constants, Mode
         Position pos = mode.backwardSexp(editor.getDot());
         if (pos != null)
             editor.moveDotTo(pos);
+    }
+
+    public static void lispFindMatchingChar()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        Position dot = editor.getDotCopy();
+        if (dot == null)
+            return;
+        char origChar = dot.getChar();
+        if (origChar != '(') {
+            // Look at previous char.
+            dot.prev();
+            origChar = dot.getChar();
+            if (origChar != ')')
+                return;
+        }
+        editor.setWaitCursor();
+        Position match = editor.findMatchInternal(dot, 0);
+        editor.setDefaultCursor();
+        if (match != null) {
+            // Move past closing parenthesis.
+            if (match.getChar() == ')')
+                match.next();
+            editor.addUndo(SimpleEdit.MOVE);
+            editor.unmark();
+            editor.updateDotLine();
+            editor.getDot().moveTo(match);
+            editor.updateDotLine();
+            editor.moveCaretToDotCol();
+        } else
+            editor.status("No match");
     }
 
     public static void evalDefunLisp()
