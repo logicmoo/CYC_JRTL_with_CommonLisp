@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.160 2004-05-08 18:31:46 piso Exp $
+;;; $Id: jvm.lisp,v 1.161 2004-05-09 00:06:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2135,8 +2135,11 @@
             (let ((closure-vars (remove-duplicates (union (remove nil (coerce *locals* 'list))
                                                           (remove nil (coerce *args* 'list)))))
                   (lambda-body (cddr obj)))
-              (cond ((and (null closure-vars)
-                          (not (contains-return lambda-body)))
+              (cond (closure-vars
+                     (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))
+                    ((contains-return lambda-body)
+                     (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing RETURN or RETURN-FROM."))
+                    (t
                      (fresh-line)
                      (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
                      (let ((g (if *compile-file-truename*
@@ -2146,9 +2149,7 @@
                              *this-class*
                              g
                              +lisp-object+)
-                       (emit-store-value)))
-                    (t
-                     (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
+                       (emit-store-value))))))
 ;;             ;; FIXME We need to construct a proper lexical environment here
 ;;             ;; and pass it to coerceToFunction().
 ;;             (let ((g (declare-object-as-string obj)))
@@ -2334,18 +2335,22 @@
 
 (defun compile-form (form &optional for-effect)
   (cond ((consp form)
-         (let ((op (car form)))
-           (when (symbolp op)
-             (let ((handler (get op 'jvm-compile-handler)))
-               (when handler
-                 (funcall handler form for-effect)
-                 (return-from compile-form))))
-           (cond ((macro-function op)
-                  (compile-form (macroexpand form)))
-                 ((special-operator-p op)
-                  (error "COMPILE-FORM: unsupported special operator ~S." op))
-                 (t ; Function call.
-                  (compile-function-call form for-effect)))))
+         (let ((op (car form))
+               handler)
+           (cond ((symbolp op)
+                  (cond ((setf handler (get op 'jvm-compile-handler))
+                         (funcall handler form for-effect))
+                        ((macro-function op)
+                         (compile-form (macroexpand form)))
+                        ((special-operator-p op)
+                         (error "COMPILE-FORM: unsupported special operator ~S." op))
+                        (t
+                         (compile-function-call form for-effect))))
+                 ((and (consp op) (eq (car op) 'LAMBDA))
+                  (let ((new-form (list* 'FUNCALL form)))
+                    (compile-form new-form)))
+                 (t
+                  (error "COMPILE-FORM unhandled case ~S" form)))))
         ((null form)
          (unless for-effect
            (emit-push-nil)
