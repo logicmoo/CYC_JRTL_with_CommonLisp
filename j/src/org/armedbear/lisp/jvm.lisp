@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.189 2004-06-25 23:03:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.190 2004-06-28 01:05:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@
 (import 'sys::%format)
 
 (shadow '(method variable))
+
+(defvar *use-locals-vector* nil)
 
 ;; FIXME
 ;; This controls compiler debugging output, not debuggability of compiled code!
@@ -271,24 +273,19 @@
 
 ;; Index of local variable used to hold the current thread.
 (defvar *thread* nil)
-(defvar *thread-var-initialized* nil)
+
+(defvar *initialize-thread-var* nil)
+
+(defun initialize-thread-var ()
+  (when *initialize-thread-var*
+    (emit-invokestatic +lisp-thread-class+
+                       "currentThread"
+                       (make-descriptor () +lisp-thread+)
+                       1)
+    (emit 'astore *thread*)))
 
 (defun ensure-thread-var-initialized ()
-  (unless *thread-var-initialized*
-    ;; Put the code to initialize the local at the very beginning of the
-    ;; function, to guarantee that the local gets initialized even if the code
-    ;; at our current location is never executed, since the local may be
-    ;; referenced elsewhere too.
-    (let ((code *code*))
-      (setf *code* ())
-      (emit-invokestatic +lisp-thread-class+
-                         "currentThread"
-;;                          `(() ,+lisp-thread+)
-                         (make-descriptor () +lisp-thread+)
-                         1)
-      (emit 'astore *thread*)
-      (setf *code* (append code *code*)))
-    (setf *thread-var-initialized* t)))
+  (setf *initialize-thread-var* t))
 
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
@@ -2871,7 +2868,7 @@
          (*pool-entries* (make-hash-table :test #'equal))
          (*val* nil)
          (*thread* nil)
-         (*thread-var-initialized* nil))
+         (*initialize-thread-var* nil))
     (setf (method-name-index execute-method)
           (pool-name (method-name execute-method)))
     (setf (method-descriptor-index execute-method)
@@ -2892,21 +2889,30 @@
     (setf *val* (allocate-local nil))
     ;; Reserve the next available slot for the thread register.
     (setf *thread* (allocate-local nil))
-    (when *hairy-arglist-p*
-      (emit 'aload_0)
-      (emit 'aload_1)
-      (emit-invokevirtual *this-class*
-                          "processArgs"
-                          "([Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;"
-                          -1)
-      (emit 'astore_1))
+
     (process-optimization-declarations body)
-    (generate-interrupt-check)
     (dolist (f body)
       (compile-form f))
     (unless (remove-store-value)
       (emit-push-value)) ; leave result on stack
     (emit 'areturn)
+
+    ;; Go back and fill in prologue.
+    (let ((code *code*))
+      (setf *code* ())
+      (generate-interrupt-check)
+      (when (or *hairy-arglist-p* *use-locals-vector*)
+        (emit 'aload_0)
+        (emit 'aload_1)
+        (emit 'iconst_0) ; Number of slots for locals.
+        (emit-invokevirtual *this-class*
+                            "processArgs"
+                            "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
+                            -1)
+        (emit 'astore_1))
+      (initialize-thread-var)
+      (setf *code* (append code *code*)))
+
     (finalize-code)
     (optimize-code)
     (setf *code* (resolve-opcodes *code*))

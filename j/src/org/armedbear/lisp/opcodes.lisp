@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: opcodes.lisp,v 1.4 2004-06-03 18:50:26 piso Exp $
+;;; $Id: opcodes.lisp,v 1.5 2004-06-28 01:05:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@
 ;; name number size stack-effect (nil if unknown)
 (define-opcode nop 0 1 nil)
 (define-opcode aconst_null 1 1 1)
-(define-opcode iconst_m1 2 1 nil)
+(define-opcode iconst_m1 2 1 1)
 (define-opcode iconst_0 3 1 1)
 (define-opcode iconst_1 4 1 1)
 (define-opcode iconst_2 5 1 1)
