@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.371 2005-01-25 05:37:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.372 2005-01-25 20:15:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -71,12 +71,53 @@
 
 (defvar *compiler-debug* nil)
 
-(defstruct class-file
+(defvar *pool* nil)
+(defvar *pool-count* 1)
+(defvar *pool-entries* nil)
+(defvar *fields* ())
+(defvar *static-code* ())
+
+(defstruct (class-file (:constructor %make-class-file))
   pathname ; pathname of output file
   class
   superclass
   lambda-list ; as advertised
-  methods)
+  pool
+  (pool-count 1)
+  (pool-entries (make-hash-table :test #'equal))
+  fields
+  methods
+  static-code)
+
+(defun class-name-from-filespec (filespec)
+  (let* ((name (pathname-name filespec)))
+    (dotimes (i (length name))
+      (when (eql (char name i) #\-)
+        (setf (char name i) #\_)))
+    (concatenate 'string "org/armedbear/lisp/" name)))
+
+(defun make-class-file (&key pathname lambda-list)
+  (aver (not (null pathname)))
+  (let ((class-file (%make-class-file :pathname pathname
+                                      :lambda-list lambda-list)))
+    (setf (class-file-class class-file) (class-name-from-filespec pathname))
+    class-file))
+
+(defmacro with-class-file (class-file &body body)
+  (let ((var (gensym)))
+    `(let* ((,var ,class-file)
+            (*pool* (class-file-pool ,var))
+            (*pool-count* (class-file-pool-count ,var))
+            (*pool-entries* (class-file-pool-entries ,var))
+            (*fields* (class-file-fields ,var))
+            (*static-code* (class-file-static-code ,var)))
+       (progn ,@body)
+       (setf (class-file-pool ,var) *pool*
+             (class-file-pool-count ,var) *pool-count*
+             (class-file-pool-entries ,var) *pool-entries*
+             (class-file-fields ,var) *fields*
+             (class-file-static-code ,var) *static-code*
+             ))))
 
 (defstruct compiland
   name
@@ -92,15 +133,9 @@
 
 (defvar *current-compiland* nil)
 
-(defvar *pool* nil)
-(defvar *pool-count* 1)
-(defvar *pool-entries* nil)
-
 (defvar *this-class* nil)
 
 (defvar *code* ())
-(defvar *static-code* ())
-(defvar *fields* ())
 
 ;; All tags visible at the current point of compilation, some of which may not
 ;; be in the current compiland.
@@ -1821,6 +1856,7 @@
   handlers)
 
 (defun make-constructor (super args)
+;;   (%format t "make-constructor (length *static-code*) = ~S~%" (length *static-code*))
   (let* ((*compiler-debug* nil) ; We don't normally need to see debugging output for constructors.
          (constructor (make-method :name "<init>"
                                    :descriptor "()V"))
@@ -1830,7 +1866,9 @@
     (setf (method-name-index constructor) (pool-name (method-name constructor)))
     (setf (method-descriptor-index constructor) (pool-name (method-descriptor constructor)))
     (setf (method-max-locals constructor) 1)
-    (cond (*hairy-arglist-p*
+    (cond (;;*hairy-arglist-p*
+           (equal super +lisp-compiled-function-class+)
+
            (emit 'aload_0) ;; this
            (emit 'aconst_null) ;; name
            (let* ((*print-level* nil)
@@ -1844,22 +1882,37 @@
            (emit-invokespecial-init super
                                     (list +lisp-symbol+ +lisp-object+
                                           +lisp-object+ +lisp-environment+)))
-          (*child-p*
-           (cond ((null *closure-variables*)
-                  (emit 'aload_0)
-                  (emit-invokespecial-init super nil))
-                 (t
-                  (emit 'aload_0) ;; this
-                  (let* ((*print-level* nil)
-                         (*print-length* nil)
-                         (s (%format nil "~S" args)))
-                    (emit 'ldc (pool-string s))
-                    (emit-invokestatic +lisp-class+ "readObjectFromString"
-                                       (list +java-string+) +lisp-object+))
-                  (emit-invokespecial-init super (list +lisp-object+)))))
-          (t
+          ((equal super +lisp-primitive-class+)
            (emit 'aload_0)
-           (emit-invokespecial-init super nil)))
+           (emit-invokespecial-init super nil))
+;;           (*child-p*
+;;            (cond ((null *closure-variables*)
+;;                   (emit 'aload_0)
+;;                   (emit-invokespecial-init super nil))
+;;                  (t
+;;                   (emit 'aload_0) ;; this
+;;                   (let* ((*print-level* nil)
+;;                          (*print-length* nil)
+;;                          (s (%format nil "~S" args)))
+;;                     (emit 'ldc (pool-string s))
+;;                     (emit-invokestatic +lisp-class+ "readObjectFromString"
+;;                                        (list +java-string+) +lisp-object+))
+;;                   (emit-invokespecial-init super (list +lisp-object+)))))
+;;           (t
+;;            (emit 'aload_0)
+;;            (emit-invokespecial-init super nil)))
+          ((equal super +lisp-ctf-class+)
+           (emit 'aload_0) ;; this
+           (let* ((*print-level* nil)
+                  (*print-length* nil)
+                  (s (%format nil "~S" args)))
+             (emit 'ldc (pool-string s))
+             (emit-invokestatic +lisp-class+ "readObjectFromString"
+                                (list +java-string+) +lisp-object+))
+           (emit-invokespecial-init super (list +lisp-object+)))
+          (t
+           (aver nil)))
+
     (setf *code* (append *static-code* *code*))
     (emit 'return)
     (finalize-code)
@@ -1956,6 +2009,7 @@
                            (list +java-string+ +java-string+) +lisp-symbol+)
         (emit 'putstatic *this-class* g +lisp-symbol+)
         (setf *static-code* *code*)
+;;         (%format t "declare-symbol (length *static-code* = ~S~%" (length *static-code*))
         (setf (gethash symbol *declared-symbols*) g)))
     g))
 
@@ -3744,13 +3798,17 @@
 
       (setf class-file (make-class-file :pathname pathname
                                         :lambda-list lambda-list))
+
       (setf (compiland-class-file compiland) class-file)
 
-      (let ((*current-compiland* compiland)
-            (*speed* *speed*)
-            (*safety* *safety*)
-            (*debug* *debug*))
-        (p2-compiland compiland))
+      (with-class-file class-file
+        (let ((*current-compiland* compiland)
+              (*speed* *speed*)
+              (*safety* *safety*)
+              (*debug* *debug*))
+          (p2-compiland compiland)
+          (write-class-file (compiland-class-file compiland))
+          ))
       (cond (*compile-file-truename*
              ;; Verify that the class file is loadable.
              (let ((*default-pathname-defaults* pathname))
@@ -3819,11 +3877,14 @@
                                            (%format nil "local-~D.class" *child-count*)
                                            (incf *child-count*)))
                            :lambda-list lambda-list)))
-  (let ((*current-compiland* compiland)
-        (*speed* *speed*)
-        (*safety* *safety*)
-        (*debug* *debug*))
-    (p2-compiland compiland))
+  (with-class-file (compiland-class-file compiland)
+    (let ((*current-compiland* compiland)
+          (*speed* *speed*)
+          (*safety* *safety*)
+          (*debug* *debug*))
+      (p2-compiland compiland)
+      (write-class-file (compiland-class-file compiland))
+      ))
   (let ((class-file (compiland-class-file compiland)))
     (emit 'getstatic *this-class*
           (if *compile-file-truename*
@@ -4750,7 +4811,7 @@
 
 (defun write-class-file (class-file)
   (let* ((super (class-file-superclass class-file))
-         (this-index (pool-class *this-class*))
+         (this-index (pool-class (class-file-class class-file)))
          (super-index (pool-class super))
          (constructor (make-constructor super
                                         (class-file-lambda-list class-file))))
@@ -4841,13 +4902,6 @@
           (setf (compiland-p1-result compiland)
                 (list* 'LAMBDA lambda-list (mapcar #'p1 body))))))))
 
-(defun class-name-from-filespec (filespec)
-  (let* ((name (pathname-name filespec)))
-    (dotimes (i (length name))
-      (when (eql (char name i) #\-)
-        (setf (char name i) #\_)))
-    (concatenate 'string "org/armedbear/lisp/" name)))
-
 (defun p2-compiland (compiland)
   (dformat t "p2-compiland ~S~%" (compiland-name compiland))
   (let* ((p1-result (compiland-p1-result compiland))
@@ -4856,7 +4910,8 @@
          (*declared-strings* (make-hash-table :test 'eq))
          (*declared-fixnums* (make-hash-table :test 'eql))
          (class-file (compiland-class-file compiland))
-         (*this-class* (class-name-from-filespec (class-file-pathname class-file)))
+;;          (*this-class* (class-name-from-filespec (class-file-pathname class-file)))
+         (*this-class* (class-file-class class-file))
          (args (cadr p1-result))
          (body (cddr p1-result))
          (*using-arg-array* nil)
@@ -4869,8 +4924,8 @@
          (execute-method (make-method :name "execute"
                                       :descriptor descriptor))
          (*code* ())
-         (*static-code* ())
-         (*fields* ())
+;;          (*static-code* ())
+;;          (*fields* ())
          (*register* 0)
          (*registers-allocated* 0)
          (*handlers* ())
@@ -4879,9 +4934,9 @@
 
          (parameters ())
 
-         (*pool* ())
-         (*pool-count* 1)
-         (*pool-entries* (make-hash-table :test #'equal))
+;;          (*pool* ())
+;;          (*pool-count* 1)
+;;          (*pool-entries* (make-hash-table :test #'equal))
          (*val* nil)
          (*thread* nil)
          (*initialize-thread-var* nil))
@@ -5133,7 +5188,7 @@
 
     (push execute-method (class-file-methods class-file))
 
-    (write-class-file (compiland-class-file compiland))
+;;     (write-class-file (compiland-class-file compiland))
     (dformat t "leaving p2-compiland ~S~%" (compiland-name compiland))))
 
 (defun compile-1 (compiland)
@@ -5163,7 +5218,13 @@
           (incf i))))
 
     ;; Pass 2.
-    (p2-compiland compiland)
+;;     (%format t "compile-1 (length *fields*) = ~S~%" (length *fields*))
+    (with-class-file (compiland-class-file compiland)
+      (p2-compiland compiland)
+      (write-class-file (compiland-class-file compiland))
+      )
+;;     (%format t "compile-1 (length *fields*) = ~S~%" (length *fields*))
+
     (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
     (class-file-pathname (compiland-class-file compiland))))
 
@@ -5173,11 +5234,11 @@
     (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (aver (null *current-compiland*))
   (handler-bind ((warning #'handle-warning))
-      (compile-1 (make-compiland :name name
-                                 :lambda-expression (precompile-form form t)
-                                 :class-file (make-class-file :pathname filespec
-                                                              :lambda-list (cadr form))
-                                 :parent *current-compiland*))))
+    (compile-1 (make-compiland :name name
+                               :lambda-expression (precompile-form form t)
+                               :class-file (make-class-file :pathname filespec
+                                                            :lambda-list (cadr form))
+                               :parent *current-compiland*))))
 
 (defun handle-warning (condition)
   (fresh-line)
