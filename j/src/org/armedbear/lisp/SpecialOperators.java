@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.23 2004-01-27 18:06:20 piso Exp $
+ * $Id: SpecialOperators.java,v 1.24 2004-03-06 04:08:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -439,6 +439,10 @@ public final class SpecialOperators extends Lisp
             final LispThread thread = LispThread.currentThread();
             while (args != NIL) {
                 Symbol symbol = checkSymbol(args.car());
+                if (symbol.isConstant()) {
+                    return signal(new ProgramError(String.valueOf(symbol) +
+                        " is a constant and thus cannot be set."));
+                }
                 args = args.cdr();
                 Binding binding = null;
                 if (env.isDeclaredSpecial(symbol) || symbol.isSpecialVariable()) {
