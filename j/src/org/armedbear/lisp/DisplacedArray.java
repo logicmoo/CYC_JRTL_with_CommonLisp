@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.2 2003-09-08 17:18:07 piso Exp $
+ * $Id: DisplacedArray.java,v 1.3 2003-09-08 18:28:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,20 @@ public final class DisplacedArray extends AbstractArray
     {
         this.array = array;
         this.offset = offset;
+    }
+
+    public LispObject typep(LispObject typeSpecifier) throws LispError
+    {
+        if (typeSpecifier == Symbol.ARRAY)
+            return T;
+        if (typeSpecifier instanceof LispClass) {
+            final String name = typeSpecifier.getName();
+            if (name.equals("ARRAY"))
+                return T;
+        }
+        if (typeSpecifier instanceof Cons)
+            return CompoundTypeSpecifier.getInstance(typeSpecifier).test(this);
+        return super.typep(typeSpecifier);
     }
 
     public int length() throws LispError
