@@ -1109,6 +1109,21 @@ If this property is not specified, the XML parser provided as part of the Java
 <b>See also:</b> <a href="xmlmode.html">XML Mode</a>
 </dl>
 
+<code><a name="patchMode">patchMode</a></code>
+<dl>
+<dd>
+Suffix to be used for the filename of the first backup of a local file.
+<p>
+For example, if the value of this property is ".orig", the first backup of the
+file foo.bar will be made to the file foo.bar.orig in the same directory.
+<p>
+The <a href="commands.html#diff">diff</a> command, when invoked with no
+arguments, diffs the file associated with the current buffer against its
+patchMode backup file (if it exists).
+<p>
+<b>Default value:</b> None
+</dl>
+
 <code><a name="PHPMode.color.var">PHPMode.color.var</a></code>
 <dl>
 <dd>
