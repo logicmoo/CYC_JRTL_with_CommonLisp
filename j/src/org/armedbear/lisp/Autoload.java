@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.37 2003-08-03 04:39:40 piso Exp $
+ * $Id: Autoload.java,v 1.38 2003-08-05 00:53:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +175,7 @@ public final class Autoload extends Function
         autoload("import", "PackageFunctions");
         autoload("list-all-packages", "PackageFunctions");
         autoload("make-string-output-stream", "StringOutputStream");
-        autoload("make-two-way-stream", "TwoWayStream");
+//         autoload("make-two-way-stream", "TwoWayStream");
         autoload("package-name", "PackageFunctions");
         autoload("package-nicknames", "PackageFunctions");
         autoload("package-shadowing-symbols", "PackageFunctions");
@@ -189,8 +189,8 @@ public final class Autoload extends Function
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
         autoload("sxhash", "HashTable");
-        autoload("two-way-stream-input-stream", "TwoWayStream");
-        autoload("two-way-stream-output-stream", "TwoWayStream");
+//         autoload("two-way-stream-input-stream", "TwoWayStream");
+//         autoload("two-way-stream-output-stream", "TwoWayStream");
         autoload("unexport", "PackageFunctions");
         autoload("unuse-package", "PackageFunctions");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
