@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.25 2004-07-20 15:28:39 piso Exp $
+ * $Id: StringFunctions.java,v 1.26 2004-08-15 11:25:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,18 +26,47 @@ public final class StringFunctions extends Lisp
     // ### %string=
     // Case sensitive.
     private static final Primitive _STRING_EQUAL =
-        new Primitive("%string=", PACKAGE_SYS, true)
+        new Primitive("%string=", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
+            int start1, end1, start2, end2;
+            try {
+                start1 = ((Fixnum)args[2]).value;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(args[2], Symbol.FIXNUM));
+            }
+            if (args[3] == NIL) {
+                end1 = array1.length;
+            } else {
+                try {
+                    end1 = ((Fixnum)args[3]).value;
+                }
+                catch (ClassCastException e) {
+                    return signal(new TypeError(args[3], Symbol.FIXNUM));
+                }
+            }
+            try {
+                start2 = ((Fixnum)args[4]).value;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(args[4], Symbol.FIXNUM));
+            }
+            if (args[5] == NIL) {
+                end2 = array2.length;
+            } else {
+                try {
+                    end2 = ((Fixnum)args[5]).value;
+                }
+                catch (ClassCastException e) {
+                    return signal(new TypeError(args[5], Symbol.FIXNUM));
+                }
+            }
             if ((end1 - start1) != (end2 - start2))
                 return NIL;
             try {
@@ -50,6 +79,26 @@ public final class StringFunctions extends Lisp
                 // Shouldn't happen.
                 Debug.trace(e);
                 return NIL;
+            }
+            return T;
+        }
+    };
+
+    // ### %%string=
+    // Case sensitive.
+    private static final Primitive2 __STRING_EQUAL =
+        new Primitive2("%%string=", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            char[] array1 = first.STRING().chars();
+            char[] array2 = second.STRING().chars();
+            if (array1.length != array2.length)
+                return NIL;
+            for (int i = array1.length; i-- > 0;) {
+                if (array1[i] != array2[i])
+                    return NIL;
             }
             return T;
         }
