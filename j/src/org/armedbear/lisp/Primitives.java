@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.634 2004-04-30 16:48:21 piso Exp $
+ * $Id: Primitives.java,v 1.635 2004-05-03 02:01:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -247,8 +247,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### eval
-    private static final Primitive1 EVAL = new Primitive1("eval", "form")
+    // ### %eval
+    private static final Primitive1 _EVAL =
+        new Primitive1("%eval", PACKAGE_SYS, false, "form")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
