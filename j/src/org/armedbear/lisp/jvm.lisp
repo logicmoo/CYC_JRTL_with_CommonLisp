@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.128 2004-04-26 16:21:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.129 2004-04-26 17:19:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1186,22 +1186,21 @@
     (when (plusp (length output))
       output)))
 
-(defvar *declared-symbols* ())
-(defvar *declared-functions* ())
+(defvar *declared-symbols* nil)
+(defvar *declared-functions* nil)
+(defvar *declared-strings* nil)
 
 (defun declare-symbol (symbol)
   (let ((g (gethash symbol *declared-symbols*)))
     (unless g
       (let ((*code* *static-code*)
             (s (sanitize symbol)))
-        (setq g (symbol-name (gensym)))
+        (setf g (symbol-name (gensym)))
         (when s
-          (setq g (concatenate 'string g "_" s)))
-        (declare-field g "Lorg/armedbear/lisp/Symbol;")
-        (emit 'ldc
-              (pool-string (symbol-name symbol)))
-        (emit 'ldc
-              (pool-string (package-name (symbol-package symbol))))
+          (setf g (concatenate 'string g "_" s)))
+        (declare-field g +lisp-symbol+)
+        (emit 'ldc (pool-string (symbol-name symbol)))
+        (emit 'ldc (pool-string (package-name (symbol-package symbol))))
         (emit-invokestatic +lisp-class+
                            "internInPackage"
                            "(Ljava/lang/String;Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;"
@@ -1209,7 +1208,7 @@
         (emit 'putstatic
               *this-class*
               g
-              "Lorg/armedbear/lisp/Symbol;")
+              +lisp-symbol+)
         (setq *static-code* *code*)
         (setf (gethash symbol *declared-symbols*) g)))
     g))
@@ -1227,17 +1226,15 @@
                (emit 'getstatic
                      *this-class*
                      g
-                     "Lorg/armedbear/lisp/Symbol;"))
+                     +lisp-symbol+))
               (t
-               (emit 'ldc
-                     (pool-string (symbol-name symbol)))
-               (emit 'ldc
-                     (pool-string (package-name (symbol-package symbol))))
+               (emit 'ldc (pool-string (symbol-name symbol)))
+               (emit 'ldc (pool-string (package-name (symbol-package symbol))))
                (emit-invokestatic +lisp-class+
                                   "internInPackage"
                                   "(Ljava/lang/String;Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;"
                                   -1)))
-        (declare-field f "Lorg/armedbear/lisp/LispObject;")
+        (declare-field f +lisp-object+)
         (emit-invokevirtual +lisp-symbol-class+
                             "getSymbolFunctionOrDie"
                             "()Lorg/armedbear/lisp/LispObject;"
@@ -1245,7 +1242,7 @@
         (emit 'putstatic
               *this-class*
               f
-              "Lorg/armedbear/lisp/LispObject;")
+              +lisp-object+)
         (setq *static-code* *code*)
         (setf (gethash symbol *declared-functions*) f)))
     f))
@@ -1253,9 +1250,8 @@
 (defun declare-keyword (symbol)
   (let ((g (symbol-name (gensym)))
         (*code* *static-code*))
-    (declare-field g "Lorg/armedbear/lisp/Symbol;")
-    (emit 'ldc
-          (pool-string (symbol-name symbol)))
+    (declare-field g +lisp-symbol+)
+    (emit 'ldc (pool-string (symbol-name symbol)))
     (emit-invokestatic "org/armedbear/lisp/Keyword"
                        "internKeyword"
                        "(Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;"
@@ -1263,7 +1259,7 @@
     (emit 'putstatic
           *this-class*
           g
-          "Lorg/armedbear/lisp/Symbol;")
+          +lisp-symbol+)
     (setq *static-code* *code*)
     g))
 
@@ -1298,7 +1294,7 @@
           *this-class*
           g
           +lisp-fixnum+)
-    (setq *static-code* *code*)
+    (setf *static-code* *code*)
     g))
 
 (defun declare-object-as-string (obj)
@@ -1316,7 +1312,7 @@
           *this-class*
           g
           +lisp-object+)
-    (setq *static-code* *code*)
+    (setf *static-code* *code*)
     g))
 
 (defun declare-object (obj)
@@ -1347,21 +1343,24 @@
       g2)))
 
 (defun declare-string (string)
-  (let ((g (symbol-name (gensym)))
-        (*code* *static-code*))
-    (declare-field g +lisp-simple-string+)
-    (emit 'new +lisp-simple-string-class+)
-    (emit 'dup)
-    (emit 'ldc (pool-string string))
-    (emit-invokespecial +lisp-simple-string-class+
-                        "<init>"
-                        "(Ljava/lang/String;)V"
-                        -2)
-    (emit 'putstatic
-          *this-class*
-          g
-          +lisp-simple-string+)
-    (setf *static-code* *code*)
+  (let ((g (gethash string *declared-strings*)))
+    (unless g
+      (let ((*code* *static-code*))
+        (setf g (symbol-name (gensym)))
+        (declare-field g +lisp-simple-string+)
+        (emit 'new +lisp-simple-string-class+)
+        (emit 'dup)
+        (emit 'ldc (pool-string string))
+        (emit-invokespecial +lisp-simple-string-class+
+                            "<init>"
+                            "(Ljava/lang/String;)V"
+                            -2)
+        (emit 'putstatic
+              *this-class*
+              g
+              +lisp-simple-string+)
+        (setf *static-code* *code*)
+        (setf (gethash string *declared-strings*) g)))
     g))
 
 (defun compile-constant (form)
@@ -1399,14 +1398,14 @@
       (emit 'getstatic
             *this-class*
             g
-            "Lorg/armedbear/lisp/LispObject;")
+            +lisp-object+)
       (emit-store-value)))
    ((characterp form)
     (let ((g (declare-object-as-string form)))
       (emit 'getstatic
             *this-class*
             g
-            "Lorg/armedbear/lisp/LispObject;")
+            +lisp-object+)
       (emit-store-value)))
    ((symbolp form)
     (when (null (symbol-package form))
@@ -1415,14 +1414,14 @@
         (emit 'getstatic
               *this-class*
               g
-              "Lorg/armedbear/lisp/LispObject;")
+              +lisp-object+)
         (emit-store-value))))
    ((or (classp form) (hash-table-p form) (typep form 'generic-function))
     (let ((g (declare-object form)))
       (emit 'getstatic
             *this-class*
             g
-            "Lorg/armedbear/lisp/LispObject;")
+            +lisp-object+)
       (emit-store-value)))
    (t
     (error "COMPILE-CONSTANT unhandled case ~S" form))))
@@ -2527,6 +2526,7 @@
   (let* ((*defun-name* name)
          (*declared-symbols* (make-hash-table))
          (*declared-functions* (make-hash-table))
+         (*declared-strings* (make-hash-table :test 'eq))
          (class-name
           (let* ((pathname (pathname classfile))
                  (name (pathname-name classfile)))
