@@ -11,6 +11,10 @@
                 "defstruct"))
   (cl::%load (concatenate 'string name ".lisp")))
 
+(in-package "COMMON-LISP")
+
+(export '(open call-arguments-limit))
+
 (defun open (filename
 	     &key
 	     (direction :input)
@@ -21,3 +25,5 @@
   (if (eq direction :output)
       (%open-output-file filename)
       (error "operation not supported")))
+
+(defconstant call-arguments-limit 50)
