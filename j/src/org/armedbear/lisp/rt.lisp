@@ -1,7 +1,8 @@
 ;;; rt.lisp
 
 (unless (find-package :rt)
-  (make-package :rt))
+  (make-package :rt)
+  (use-package "COMMON-LISP" :rt))
 
 (in-package :rt)
 (export '(deftest))
@@ -48,7 +49,8 @@
     (if passed (incf *passed*) (incf *failed*))))
 
 (unless (find-package :cl-test)
-  (make-package :cl-test))
+  (make-package :cl-test)
+  (use-package "COMMON-LISP" :cl-test))
 
 (in-package :cl-test)
 (use-package :rt)
