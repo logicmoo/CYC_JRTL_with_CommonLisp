@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.27 2003-06-08 14:13:31 piso Exp $
+ * $Id: Closure.java,v 1.28 2003-06-08 14:28:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public class Closure extends Function
     private final Environment environment;
     private final LispObject function;
     private final boolean allowOtherKeys;
-    private final boolean haveRest;
+    private final boolean restp;
     private int arity;
     private int required;
     private int keywordParameterCount;
@@ -63,7 +63,7 @@ public class Closure extends Function
         this.parameterList = parameterList;
         Debug.assertTrue(parameterList == NIL || parameterList instanceof Cons);
         boolean allowOtherKeys = false;
-        boolean haveRest = false;
+        boolean restp = false;
         if (parameterList instanceof Cons) {
             final int length = parameterList.length();
             ArrayList arrayList = new ArrayList();
@@ -96,7 +96,7 @@ public class Closure extends Function
                         optional = true;
                         arity = -1;
                     } else if (obj == Symbol.AND_REST || obj == Symbol.AND_BODY) {
-                        haveRest = true;
+                        restp = true;
                         rest = true;
                         optional = false;
                         key = false;
@@ -218,7 +218,7 @@ public class Closure extends Function
         if (arity >= 0)
             Debug.assertTrue(arity == required);
         this.allowOtherKeys = allowOtherKeys;
-        this.haveRest = haveRest;
+        this.restp = restp;
 
         minArgs = required;
     }
@@ -446,15 +446,17 @@ public class Closure extends Function
             ++i;
         }
         // &rest parameter.
-        if (i < parameterArray.length) {
-            Parameter parameter = parameterArray[i];
-            if (parameter.type == REST) {
-                Symbol symbol = parameter.var;
-                LispObject rest = NIL;
-                for (int j = args.length; j-- > i;)
-                    rest = new Cons(args[j], rest);
-                bind(symbol, rest, ext);
-                ++i;
+        if (restp) {
+            if (i < parameterArray.length) {
+                Parameter parameter = parameterArray[i];
+                if (parameter.type == REST) {
+                    Symbol symbol = parameter.var;
+                    LispObject rest = NIL;
+                    for (int j = args.length; j-- > i;)
+                        rest = new Cons(args[j], rest);
+                    bind(symbol, rest, ext);
+                    ++i;
+                }
             }
         }
         // Keyword parameters.
@@ -520,7 +522,7 @@ public class Closure extends Function
         } else {
             // No keyword parameters.
             if (argsUsed < args.length) {
-                if (!haveRest) {
+                if (!restp) {
                     throw new WrongNumberOfArgumentsException(this);
                 }
             }
