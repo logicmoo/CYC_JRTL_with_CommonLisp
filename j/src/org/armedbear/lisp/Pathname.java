@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.14 2003-09-19 14:44:10 piso Exp $
+ * $Id: Pathname.java,v 1.15 2003-09-25 01:07:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,6 +197,35 @@ public final class Pathname extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg instanceof Pathname ? T : NIL;
+        }
+    };
+
+    // ### user-homedir-pathname
+    // user-homedir-pathname &optional host => pathname
+    private static final Primitive USER_HOMEDIR_PATHNAME =
+        new Primitive("user-homedir-pathname")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            switch (args.length) {
+                case 0: {
+                    String s = System.getProperty("user.home");
+                    // For compatibility with SBCL and ACL (and maybe other
+                    // Lisps), we want the namestring of a directory to end
+                    // with a '/' on Unix.
+                    // FIXME Do we need to do something similar on Windows?
+                    if (s.startsWith("/") {
+                        // Unix.
+                        if (!s.endsWith("/"))
+                            s = s.concat("/");
+                    }
+                    return new Pathname(s);
+                }
+                case 1:
+                    return NIL;
+                default:
+                    throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            }
         }
     };
 }
