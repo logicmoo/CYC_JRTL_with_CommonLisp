@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.8 2003-02-15 16:48:16 piso Exp $
+ * $Id: Interpreter.java,v 1.9 2003-02-16 14:34:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,8 +176,12 @@ public final class Interpreter extends Lisp
                     command.equals("cd") ||
                     command.equals("pwd"))
                     return command;
-                if (command.length() >= 2 && "exit".startsWith(command))
-                    return "exit";
+                if (command.length() >= 2) {
+                    if ("package".startsWith(command))
+                        return "package";
+                    if ("exit".startsWith(command))
+                        return "exit";
+                }
             }
         }
         return null;
@@ -236,6 +240,33 @@ public final class Interpreter extends Lisp
             LispString string =
                 checkString(_DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue());
             getStandardOutput().writeLine(string.getValue());
+        } else if (command.equals("package")) {
+            String s = reader.readLine().trim();
+            if (s.length() == 0) {
+                Package pkg = (Package) _PACKAGE_.getSymbolValue();
+                getStandardOutput().writeString("The ");
+                getStandardOutput().writeString(pkg.getName());
+                getStandardOutput().writeLine(" package is current.");
+            } else {
+                if (s.charAt(0) == ':')
+                    s = s.substring(1);
+                s = s.toUpperCase();
+                Package pkg = Packages.findPackage(s);
+                if (pkg != null) {
+                    if (dynEnv != null) {
+                        Binding binding = dynEnv.getBinding(_PACKAGE_);
+                        if (binding != null) {
+                            binding.value = pkg;
+                            return;
+                        }
+                    }
+                    // No dynamic binding.
+                    _PACKAGE_.setSymbolValue(pkg);
+                } else {
+                    getStandardOutput().writeString("Unknown package ");
+                    getStandardOutput().writeLine(s);
+                }
+            }
         }
     }
 
