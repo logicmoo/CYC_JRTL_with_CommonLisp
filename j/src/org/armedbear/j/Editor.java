@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.112 2003-08-09 15:21:15 piso Exp $
+ * $Id: Editor.java,v 1.113 2003-08-13 15:12:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DropTarget;
 import java.awt.event.ComponentEvent;
@@ -5024,26 +5023,13 @@ public final class Editor extends JPanel implements Constants,
             lastSearch.notFound(this);
     }
 
-    public static void copyKillToSystemClipboard()
-    {
-        String kill = killRing.pop();
-        if (kill != null) {
-            // Work around Java bug 4213197.
-            // Make sure the string we put on the system clipboard was not generated
-            // by a substring operation.
-            kill = new String(kill);
-            StringSelection ss = new StringSelection(kill);
-            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, ss);
-        }
-    }
-
     public void copyPath()
     {
         if (buffer instanceof Directory) {
             String path = ((Directory) buffer).getPathAtDot();
             if (path != null) {
                 killRing.appendNew(path);
-                copyKillToSystemClipboard();
+                killRing.copyLastKillToSystemClipboard();
                 status("Path copied to clipboard");
             }
         }
@@ -5072,7 +5058,7 @@ public final class Editor extends JPanel implements Constants,
             return; // Nothing to do.
 
         if (!isColumnSelection())
-            copyKillToSystemClipboard();
+            killRing.copyLastKillToSystemClipboard();
 
         if (message != null)
             status(message);
@@ -5100,7 +5086,7 @@ public final class Editor extends JPanel implements Constants,
         } else
             return; // Nothing to do.
 
-        copyKillToSystemClipboard();
+        killRing.copyLastKillToSystemClipboard();
 
         if (message != null)
             status(message);
@@ -5232,7 +5218,7 @@ public final class Editor extends JPanel implements Constants,
                         killRing.appendToCurrent(kill);
                     else
                         killRing.appendNew(kill);
-                    copyKillToSystemClipboard();
+                    killRing.copyLastKillToSystemClipboard();
 
                     // Save undo information before calling Region.delete so
                     // modified flag will be correct if we revert.
@@ -5280,7 +5266,7 @@ public final class Editor extends JPanel implements Constants,
                 killRing.appendToCurrent(kill);
             else
                 killRing.appendNew(kill);
-            copyKillToSystemClipboard();
+            killRing.copyLastKillToSystemClipboard();
 
             // Save undo information before calling Region.delete so
             // modified flag will be correct if we revert.
@@ -5458,14 +5444,12 @@ public final class Editor extends JPanel implements Constants,
             }
             catch (Exception e) {}
         }
-        if (toBeInserted != null && toBeInserted.length() != 0)
+        if (toBeInserted != null && toBeInserted.length() > 0)
             killRing.appendNew(toBeInserted);
-
         // Even if we already have the text to be inserted, we MUST call
         // killRing.pop() here so that killRing.indexOfNextPop and
         // killRing.lastPaste are set correctly.
         toBeInserted = killRing.pop();
-
         if (toBeInserted != null) {
             paste(toBeInserted);
             setCurrentCommand(COMMAND_PASTE);
@@ -5505,7 +5489,7 @@ public final class Editor extends JPanel implements Constants,
         if (mark != null) {
             Region r = new Region(this);
             killRing.appendNew(r.toString());
-            copyKillToSystemClipboard();
+            killRing.copyLastKillToSystemClipboard();
             addUndo(SimpleEdit.MOVE);
             setMark(null);
         }
