@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.510 2003-12-07 17:03:37 piso Exp $
+ * $Id: Primitives.java,v 1.511 2003-12-07 17:27:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,6 @@ public final class Primitives extends Module
     private static final int COMPILED_FUNCTION_P        = 16;
     private static final int CONSP                      = 17;
     private static final int EVAL                       = 18;
-    private static final int FOURTH                     = 19;
     private static final int IDENTITY                   = 20;
     private static final int KEYWORDP                   = 21;
     private static final int LISTP                      = 22;
@@ -58,7 +57,6 @@ public final class Primitives extends Module
     private static final int MAKE_SYMBOL                = 24;
     private static final int MAKUNBOUND                 = 25;
     private static final int PREDECESSOR                = 26;
-    private static final int SECOND                     = 27;
     private static final int SIMPLE_BIT_VECTOR_P        = 28;
     private static final int SIMPLE_STRING_P            = 29;
     private static final int SIMPLE_VECTOR_P            = 30;
@@ -68,7 +66,6 @@ public final class Primitives extends Module
     private static final int SYMBOL_NAME                = 34;
     private static final int SYMBOL_PACKAGE             = 35;
     private static final int SYMBOL_PLIST               = 36;
-    private static final int THIRD                      = 37;
     private static final int UPPER_CASE_P               = 38;
     private static final int VECTORP                    = 39;
 
@@ -95,14 +92,12 @@ public final class Primitives extends Module
         definePrimitive1("compiled-function-p", COMPILED_FUNCTION_P);
         definePrimitive1("consp", CONSP);
         definePrimitive1("eval", EVAL);
-        definePrimitive1("fourth", FOURTH);
         definePrimitive1("identity", IDENTITY);
         definePrimitive1("keywordp", KEYWORDP);
         definePrimitive1("listp", LISTP);
         definePrimitive1("lower-case-p", LOWER_CASE_P);
         definePrimitive1("make-symbol", MAKE_SYMBOL);
         definePrimitive1("makunbound", MAKUNBOUND);
-        definePrimitive1("second", SECOND);
         definePrimitive1("simple-bit-vector-p", SIMPLE_BIT_VECTOR_P);
         definePrimitive1("simple-string-p", SIMPLE_STRING_P);
         definePrimitive1("simple-vector-p", SIMPLE_VECTOR_P);
@@ -111,7 +106,6 @@ public final class Primitives extends Module
         definePrimitive1("symbol-name", SYMBOL_NAME);
         definePrimitive1("symbol-package", SYMBOL_PACKAGE);
         definePrimitive1("symbol-plist", SYMBOL_PLIST);
-        definePrimitive1("third", THIRD);
         definePrimitive1("upper-case-p", UPPER_CASE_P);
         definePrimitive1("vectorp", VECTORP);
     }
@@ -174,12 +168,6 @@ public final class Primitives extends Module
         switch (index) {
             case IDENTITY:                      // ### identity
                 return arg;
-            case SECOND:                        // ### second
-                return arg.cadr();
-            case THIRD:                         // ### third
-                return arg.cdr().cdr().car();
-            case FOURTH:                        // ### fourth
-                return arg.cdr().cdr().cdr().car();
             case COMPILED_FUNCTION_P:           // ### compiled-function-p
                 return arg.typep(Symbol.COMPILED_FUNCTION);
             case KEYWORDP:                      // ### keywordp
