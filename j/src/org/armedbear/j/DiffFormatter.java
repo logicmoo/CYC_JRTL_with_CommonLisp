@@ -2,7 +2,7 @@
  * DiffFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DiffFormatter.java,v 1.2 2003-04-19 14:24:59 piso Exp $
+ * $Id: DiffFormatter.java,v 1.3 2003-04-23 03:55:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,8 +30,9 @@ public final class DiffFormatter extends Formatter
     private static final int DIFF_FORMAT_CONTEXT  = 3;
     private static final int DIFF_FORMAT_INSERTED = 4;
     private static final int DIFF_FORMAT_DELETED  = 5;
+    private static final int DIFF_FORMAT_CHANGED  = 6;
 
-    public static final int DIFF_FORMAT_LAST = 5;
+    public static final int DIFF_FORMAT_LAST = 6;
 
     public DiffFormatter(Buffer buffer)
     {
@@ -46,22 +47,28 @@ public final class DiffFormatter extends Formatter
             return segmentList;
         }
         final String text = getDetabbedText(line);
-        if (text.charAt(0) == '+' && !text.startsWith("+++")) {
+        final char c = text.charAt(0);
+        if (c == '+' && !text.startsWith("+++ ")) {
             // Inserted line.
             addSegment(text, DIFF_FORMAT_INSERTED);
             return segmentList;
         }
-        if (text.charAt(0) == '-' && !text.startsWith("---")) {
+        if (c == '-' && !text.startsWith("--- ")) {
             // Deleted line.
             addSegment(text, DIFF_FORMAT_DELETED);
             return segmentList;
         }
-        if (text.charAt(0) == ' ') {
+        if (c == '!') {
+            // Changed line (diff -c).
+            addSegment(text, DIFF_FORMAT_CHANGED);
+            return segmentList;
+        }
+        if (c == ' ') {
             // Context line.
             addSegment(text, DIFF_FORMAT_CONTEXT);
             return segmentList;
         }
-        if (text.charAt(0) == '?' || text.startsWith("Index: ")) {
+        if (c == '?' || text.startsWith("Index: ")) {
             // File line.
             addSegment(text, DIFF_FORMAT_FILE);
             return segmentList;
@@ -81,6 +88,7 @@ public final class DiffFormatter extends Formatter
             formatTable.addEntryFromPrefs(DIFF_FORMAT_CONTEXT, "context", "text");
             formatTable.addEntryFromPrefs(DIFF_FORMAT_INSERTED, "inserted", "text");
             formatTable.addEntryFromPrefs(DIFF_FORMAT_DELETED, "deleted", "text");
+            formatTable.addEntryFromPrefs(DIFF_FORMAT_CHANGED, "changed", "text");
         }
         return formatTable;
     }
