@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.21 2003-02-25 16:40:58 piso Exp $
+ * $Id: Lisp.java,v 1.22 2003-02-27 13:44:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,19 +25,6 @@ import java.util.Stack;
 
 public abstract class Lisp
 {
-    // ### t
-    public static final LispObject T = new LispObject() {
-        public LispObject typeOf()
-        {
-            return Symbol.SYMBOL;
-        }
-
-        public String toString()
-        {
-            return "T";
-        }
-    };
-
     // ### nil
     public static final LispObject NIL = new Nil();
 
@@ -737,9 +724,6 @@ public abstract class Lisp
         return (CharacterOutputStream) _TRACE_OUTPUT_.symbolValueNoThrow();
     }
 
-    public static final Symbol _PRINT_ESCAPE_ =
-        exportSpecial("*PRINT-ESCAPE*", PACKAGE_CL, T);
-
     // Adjust by 1 to fool ANSI test suite.
     public static final Symbol MOST_POSITIVE_FIXNUM =
         exportConstant("MOST-POSITIVE-FIXNUM", PACKAGE_CL,
@@ -785,6 +769,16 @@ public abstract class Lisp
             e.printStackTrace();
         }
     }
+
+    // ### t
+    public static final Symbol T = export("T");
+    static {
+        T.setSymbolValue(T);
+        T.setConstant(true);
+    }
+
+    public static final Symbol _PRINT_ESCAPE_ =
+        exportSpecial("*PRINT-ESCAPE*", PACKAGE_CL, T);
 
     static {
         loadClass("org.armedbear.lisp.Primitives");
