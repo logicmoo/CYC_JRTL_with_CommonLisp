@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.23 2003-08-16 17:13:44 piso Exp $
+ * $Id: LispFloat.java,v 1.24 2003-08-16 18:33:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,7 +256,7 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public LispObject truncate(LispObject obj) throws LispError
+    public LispObject truncate(LispObject obj) throws Condition
     {
         final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];
@@ -270,6 +270,33 @@ public final class LispFloat extends LispObject
                 thread.setValues(values);
                 return values[0];
             }
+        }
+        if (obj instanceof LispFloat) {
+            float divisor = ((LispFloat)obj).getValue();
+            float quotient = value / divisor;
+            if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
+                int q = (int) quotient;
+                values[0] = new Fixnum(q);
+                values[1] = new LispFloat(value - q * divisor);
+                thread.setValues(values);
+                return values[0];
+            }
+            // We need to convert the quotient to a bignum.
+            int bits = Float.floatToRawIntBits(quotient);
+            Fixnum significand = new Fixnum((bits & 0x007fffff) | 0x800000);
+            Fixnum exponent = new Fixnum(((bits >> 23) & 0xff) - 150);
+            Fixnum sign = ((bits & 0x80000000) != 0) ? new Fixnum(-1) : Fixnum.ONE;
+            LispObject result = significand;
+            result =
+                result.multiplyBy(Primitives.EXPT.execute(new Fixnum(2), exponent));
+            result = result.multiplyBy(sign);
+            // Calculate remainder.
+            LispObject product = result.multiplyBy(obj);
+            LispObject remainder = subtract(product);
+            values[0] = result;
+            values[1] = remainder;
+            thread.setValues(values);
+            return values[0];
         }
         throw new LispError("LispFloat.truncate(): not implemented: " + obj.typeOf());
     }

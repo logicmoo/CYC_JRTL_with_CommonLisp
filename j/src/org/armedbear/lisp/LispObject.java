@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.33 2003-08-16 16:54:46 piso Exp $
+ * $Id: LispObject.java,v 1.34 2003-08-16 18:33:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -322,7 +322,7 @@ public class LispObject extends Lisp
         return isGreaterThanOrEqualTo(obj) ? T : NIL;
     }
 
-    public LispObject truncate(LispObject obj) throws LispError
+    public LispObject truncate(LispObject obj) throws Condition
     {
         throw new TypeError(this, "real number");
     }
