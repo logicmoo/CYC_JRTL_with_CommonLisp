@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.39 2004-04-01 01:15:56 piso Exp $
+;;; $Id: precompiler.lisp,v 1.40 2004-04-06 02:43:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -133,6 +133,60 @@
 (in-package "PRECOMPILER")
 
 (defvar *in-jvm-compile* nil)
+
+;;; From OpenMCL.
+(defun compiler-macroexpand-1 (form &optional env)
+  (let ((expander nil)
+        (newdef nil))
+    (if (and (consp form)
+             (symbolp (car form))
+             (setq expander (compiler-macro-function (car form) env)))
+        (values (setq newdef (funcall expander form env))
+                (not (eq newdef form)))
+        (values form
+                nil))))
+
+(defun compiler-macroexpand (form &optional env)
+  (let ((expanded-p nil))
+    (loop
+      (multiple-value-bind (expansion exp-p) (compiler-macroexpand-1 form env)
+        (if exp-p
+            (setf form expansion expanded-p t)
+            (return))))
+    (values form expanded-p)))
+
+(defun precompile1 (form)
+  (if (atom form)
+      form
+      (let ((op (car form))
+            handler)
+        (when (symbolp op)
+          (cond ((local-macro-function op)
+                 (let ((result (expand-local-macro form)))
+                   (if (equal result form)
+                       (return-from precompile1 result)
+                       (return-from precompile1 (precompile1 result)))))
+                ((compiler-macro-function op)
+                 (let ((result (compiler-macroexpand form)))
+                   ;; Fall through if no change...
+                   (unless (equal result form)
+                     (return-from precompile1 (precompile1 result)))))
+                ((eq op 'setf)
+                 (let ((place (second form)))
+                   (when (and (consp place)
+                              (local-macro-function (car place)))
+                     (let ((expansion (expand-local-macro place)))
+                       (return-from precompile1
+                                    (precompile1 (list* op expansion
+                                                        (cddr form))))))
+                   (return-from precompile1 (precompile1 (expand-macro form)))))
+                ((setf handler (get op 'precompile-handler))
+                 (return-from precompile1 (funcall handler form)))
+                ((macro-function op)
+                 (return-from precompile1 (precompile1 (expand-macro form))))
+                ((special-operator-p op)
+                 (error "PRECOMPILE1: unsupported special operator ~S." op))))
+        (precompile-cons form))))
 
 (defun precompile-identity (form)
   form)
@@ -422,60 +476,6 @@
       (unless expanded
         (return-from expand-macro result))
       (setf form result))))
-
-;;; From OpenMCL.
-(defun compiler-macroexpand-1 (form &optional env)
-  (let ((expander nil)
-        (newdef nil))
-    (if (and (consp form)
-             (symbolp (car form))
-             (setq expander (compiler-macro-function (car form) env)))
-        (values (setq newdef (funcall expander form env))
-                (not (eq newdef form)))
-        (values form
-                nil))))
-
-(defun compiler-macroexpand (form &optional env)
-  (let ((expanded-p nil))
-    (loop
-      (multiple-value-bind (expansion exp-p) (compiler-macroexpand-1 form env)
-        (if exp-p
-            (setf form expansion expanded-p t)
-            (return))))
-    (values form expanded-p)))
-
-(defun precompile1 (form)
-  (if (atom form)
-      form
-      (let ((op (car form))
-            handler)
-        (when (symbolp op)
-          (cond ((local-macro-function op)
-                 (let ((result (expand-local-macro form)))
-                   (if (equal result form)
-                       (return-from precompile1 result)
-                       (return-from precompile1 (precompile1 result)))))
-                ((compiler-macro-function op)
-                 (let ((result (compiler-macroexpand form)))
-                   ;; Fall through if no change...
-                   (unless (equal result form)
-                     (return-from precompile1 (precompile1 result)))))
-                ((eq op 'setf)
-                 (let ((place (second form)))
-                   (when (and (consp place)
-                              (local-macro-function (car place)))
-                     (let ((expansion (expand-local-macro place)))
-                       (return-from precompile1
-                                    (precompile1 (list* op expansion
-                                                        (cddr form))))))
-                   (return-from precompile1 (precompile1 (expand-macro form)))))
-                ((setf handler (get op 'precompile-handler))
-                 (return-from precompile1 (funcall handler form)))
-                ((macro-function op)
-                 (return-from precompile1 (precompile1 (expand-macro form))))
-                ((special-operator-p op)
-                 (error "PRECOMPILE1: unsupported special operator ~S~%." op))))
-        (precompile-cons form))))
 
 (defun precompile-form (form in-jvm-compile)
   (let ((*in-jvm-compile* in-jvm-compile))
