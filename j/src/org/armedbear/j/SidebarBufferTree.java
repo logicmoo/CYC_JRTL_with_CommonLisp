@@ -2,7 +2,7 @@
  * SidebarBufferTree.java
  *
  * Copyright (C) 2003 Mike Rutter, Peter Graves
- * $Id: SidebarBufferTree.java,v 1.1 2003-08-07 17:32:31 piso Exp $
+ * $Id: SidebarBufferTree.java,v 1.2 2003-08-09 17:47:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,13 +128,6 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
                 node.add(new DefaultMutableTreeNode(buffer));
             }
         }
-    }
-
-    public void paintComponent(Graphics g)
-    {
-        if ((updateFlag & SIDEBAR_MODIFIED_BUFFER_COUNT) != 0)
-            updateLabel();
-        super.paintComponent(g);
     }
 
     public synchronized void setUpdateFlag(int mask)
@@ -264,11 +257,15 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
     public void refresh()
     {
         if (SwingUtilities.isEventDispatchThread()) {
+            if ((updateFlag & SIDEBAR_MODIFIED_BUFFER_COUNT) != 0)
+                updateLabel();
             initializeTreeStructure();
         } else {
             Runnable r = new Runnable() {
                 public void run()
                 {
+                    if ((updateFlag & SIDEBAR_MODIFIED_BUFFER_COUNT) != 0)
+                        updateLabel();
                     initializeTreeStructure();
                 }
             };
