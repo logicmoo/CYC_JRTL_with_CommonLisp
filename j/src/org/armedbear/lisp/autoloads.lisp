@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.162 2004-09-27 13:57:52 piso Exp $
+;;; $Id: autoloads.lisp,v 1.163 2004-09-29 00:48:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -84,8 +84,8 @@
 (autoload '(write-string write-line) "write-string")
 (autoload '(y-or-n-p yes-or-no-p) "query")
 (autoload 'maphash)
-(autoload 'write)
-(autoload 'write-to-string)
+(autoload 'write "pprint")
+(autoload 'write-to-string "pprint")
 (autoload '(decode-universal-time get-decoded-time encode-universal-time)
           "time")
 (autoload 'gentemp)
