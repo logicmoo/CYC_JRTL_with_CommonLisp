@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.11 2002-10-30 20:36:30 piso Exp $
+ * $Id: LispMode.java,v 1.12 2002-10-31 16:12:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@
 package org.armedbear.j;
 
 import java.awt.event.KeyEvent;
-import org.armedbear.lisp.*;
 
 public class LispMode extends AbstractMode implements Constants, Mode
 {
