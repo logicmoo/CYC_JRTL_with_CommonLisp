@@ -1,8 +1,8 @@
 /*
  * DefaultTextFieldHandler.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: DefaultTextFieldHandler.java,v 1.4 2003-07-18 15:23:41 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: DefaultTextFieldHandler.java,v 1.5 2005-03-04 19:15:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,7 +204,9 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
             case KeyEvent.VK_ENTER:
                 resetExpansion();
                 // Make sure user can see what he typed.
-                textField.paintImmediately(0, 0, textField.getWidth(), textField.getHeight());
+                textField.paintImmediately(0, 0,
+                                           textField.getWidth(),
+                                           textField.getHeight());
                 e.consume();
                 handler.enter();
                 return;
@@ -274,6 +276,17 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
             else if (command == "expand") {
                 expand();
                 return; // Don't call resetExpansion()!
+            } else if (command == "escape") {
+                // keyboard-quit
+                if (expansion != null) {
+                    // Cancel expansion.
+                    textField.setText(savedText);
+                    resetExpansion();
+                    // Consume key event so parent will ignore it.
+                    e.consume();
+                } else
+                    handler.escape();
+                return;
             }
         }
         resetExpansion();
