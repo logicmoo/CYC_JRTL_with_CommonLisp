@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SystemBuffer.java,v 1.4 2002-10-05 14:06:33 piso Exp $
+ * $Id: SystemBuffer.java,v 1.5 2002-10-10 16:25:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,7 +78,7 @@ public class SystemBuffer implements Constants
         return firstLine;
     }
 
-    public final synchronized void setFirstLine(Line line)
+    public synchronized void setFirstLine(Line line)
     {
         firstLine = line;
     }
