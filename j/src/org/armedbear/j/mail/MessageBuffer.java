@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.5 2002-10-05 18:06:49 piso Exp $
+ * $Id: MessageBuffer.java,v 1.6 2002-10-10 17:11:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -183,10 +183,22 @@ public class MessageBuffer extends Buffer
 
     protected void reset()
     {
-        empty();
-        message = null;
-        mimeBody = null;
-        selectedPart = null;
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            empty();
+            message = null;
+            mimeBody = null;
+            selectedPart = null;
+        }
+        finally {
+            unlockWrite();
+        }
     }
 
     public int load()
@@ -722,7 +734,6 @@ public class MessageBuffer extends Buffer
         showRawText = !showRawText;
         if (mailbox != null)
             mailbox.showRawText = showRawText;
-        empty();
         setText();
         formatter.parseBuffer();
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -744,7 +755,6 @@ public class MessageBuffer extends Buffer
     {
         if (mailbox != null)
             mailbox.showFullHeaders = showFullHeaders = !showFullHeaders;
-        empty();
         setText();
         formatter.parseBuffer();
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -845,6 +855,24 @@ public class MessageBuffer extends Buffer
 
     protected void setText()
     {
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            _setText();
+        }
+        finally {
+            unlockWrite();
+        }
+    }
+
+    private void _setText()
+    {
+        empty();
         if (showRawText) {
             body = rawBody;
             setText(message.getRawText());
