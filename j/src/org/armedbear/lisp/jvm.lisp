@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.310 2004-12-17 16:08:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.311 2004-12-17 17:16:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -193,6 +193,7 @@
 
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
+(defvar *arity* nil)
 
 (defvar *val* nil) ; index of value register
 
@@ -625,6 +626,22 @@
   (declare (optimize speed))
   (ensure-thread-var-initialized)
   (emit 'aload *thread*))
+
+(defun maybe-generate-arg-count-check ()
+  (when *arity*
+    (let ((label1 (gensym)))
+      (aver (fixnump *arity*))
+      (aver (not (minusp *arity*)))
+      (emit 'aload 1)
+      (emit 'arraylength)
+      (emit 'bipush *arity*)
+      (emit 'if_icmpeq `,label1)
+      (emit 'aload 0) ; this
+      (emit-invokevirtual *this-class*
+                          "argCountError"
+                          "()V"
+                          -1)
+      (emit 'label `,label1))))
 
 (defun maybe-generate-interrupt-check ()
   (unless (> *speed* *safety*)
@@ -4000,7 +4017,8 @@
     (2 #.(%format nil "(~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+))
     (3 #.(%format nil "(~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
     (4 #.(%format nil "(~A~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
-    (t (setq *using-arg-array* t)
+    (t (setf *using-arg-array* t)
+       (setf *arity* (length args))
        #.(%format nil "([~A)~A" +lisp-object+ +lisp-object+))))
 
 (defun write-class-file (args body execute-method classfile)
@@ -4074,6 +4092,7 @@
            (body (cddr precompiled-form))
            (*using-arg-array* nil)
            (*hairy-arglist-p* nil)
+           (*arity* nil)
 
            (*child-p* (if *context* t nil))
 
@@ -4223,22 +4242,23 @@
       ;; Go back and fill in prologue.
       (let ((code *code*))
         (setf *code* ())
+        (maybe-generate-arg-count-check)
         (maybe-generate-interrupt-check)
-        (when (or *hairy-arglist-p* *use-locals-vector*)
-          (emit 'aload_0) ; this
-          (emit 'aload_1) ; arg vector
-          ; Reserve extra slots for locals if applicable.
-          (let ((extra (if *use-locals-vector*
-                           (length (context-vars *context*))
-                           0)))
-            (emit 'sipush extra))
-          (emit-invokevirtual *this-class*
-                              (if (or (memq '&optional args) (memq '&key args))
-                                  "processArgs"
-                                  "fastProcessArgs")
-                              "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
-                              -2)
-          (emit 'astore_1))
+        (cond ((or *hairy-arglist-p* *use-locals-vector*)
+               (emit 'aload_0) ; this
+               (emit 'aload_1) ; arg vector
+               ; Reserve extra slots for locals if applicable.
+               (let ((extra (if *use-locals-vector*
+                                (length (context-vars *context*))
+                                0)))
+                 (emit 'sipush extra))
+               (emit-invokevirtual *this-class*
+                                   (if (or (memq '&optional args) (memq '&key args))
+                                       "processArgs"
+                                       "fastProcessArgs")
+                                   "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
+                                   -2)
+               (emit 'astore_1)))
 
         (maybe-initialize-thread-var)
         (setf *code* (append code *code*)))
