@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.358 2003-08-27 17:28:27 piso Exp $
+ * $Id: Primitives.java,v 1.359 2003-08-28 00:00:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2338,57 +2338,51 @@ public final class Primitives extends Module
 
     // ### funcall
     private static final Primitive FUNCALL = new Primitive("funcall") {
-        public LispObject execute(LispObject first) throws Condition
+        public LispObject execute(LispObject arg) throws Condition
         {
             LispObject fun;
-            if (first instanceof Symbol) {
-                fun = first.getSymbolFunction();
-                if (fun instanceof SpecialOperator)
-                    throw new UndefinedFunctionError(first);
-            } else
-                fun = first;
+            if (arg instanceof Symbol)
+                fun = arg.getSymbolFunction();
+            else
+                fun = arg;
             if (fun instanceof Function)
                 return funcall0(fun, LispThread.currentThread());
-            throw new TypeError(fun, "function");
+            throw new UndefinedFunctionError(arg);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws Condition
         {
             LispObject fun;
-            if (first instanceof Symbol) {
+            if (first instanceof Symbol)
                 fun = first.getSymbolFunction();
-                if (fun instanceof SpecialOperator)
-                    throw new UndefinedFunctionError(first);
-            } else
+            else
                 fun = first;
             if (fun instanceof Function)
                 return funcall1(fun, second, LispThread.currentThread());
-            throw new TypeError(fun, "function");
+            throw new UndefinedFunctionError(first);
         }
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws Condition
+                                  LispObject third)
+            throws Condition
         {
             LispObject fun;
-            if (first instanceof Symbol) {
+            if (first instanceof Symbol)
                 fun = first.getSymbolFunction();
-                if (fun instanceof SpecialOperator)
-                    throw new UndefinedFunctionError(first);
-            } else
+            else
                 fun = first;
             if (fun instanceof Function)
                 return funcall2(fun, second, third, LispThread.currentThread());
-            throw new TypeError(fun, "function");
+            throw new UndefinedFunctionError(first);
         }
         public LispObject execute(LispObject[] args) throws Condition
         {
             if (args.length < 1)
                 throw new WrongNumberOfArgumentsException(this);
-            LispObject fun = args[0];
-            if (fun instanceof Symbol) {
-                fun = fun.getSymbolFunction();
-                if (fun instanceof SpecialOperator)
-                    throw new UndefinedFunctionError(args[0]);
-            }
+            LispObject fun;
+            if (args[0] instanceof Symbol)
+                fun = args[0].getSymbolFunction();
+            else
+                fun = args[0];
             if (fun instanceof Function) {
                 final int length = args.length - 1; // Number of arguments.
                 if (length == 3) {
@@ -2400,7 +2394,7 @@ public final class Primitives extends Module
                     return funcall(fun, funArgs, LispThread.currentThread());
                 }
             }
-            throw new TypeError(fun, "function");
+            throw new UndefinedFunctionError(args[0]);
         }
     };
 
