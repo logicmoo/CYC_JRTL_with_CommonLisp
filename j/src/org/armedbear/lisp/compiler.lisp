@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.38 2003-09-16 16:15:53 piso Exp $
+;;; $Id: compiler.lisp,v 1.39 2003-10-01 01:14:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -246,8 +246,8 @@
 (defmacro defmacro (name lambda-list &rest body)
   (let* ((form (gensym))
          (env (gensym))
-         (body (parse-defmacro lambda-list form body name 'defmacro
-                               :environment env))
+         (body (sys::parse-defmacro lambda-list form body name 'defmacro
+                                    :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body))))
     `(progn
        (if (special-operator-p ',name)
