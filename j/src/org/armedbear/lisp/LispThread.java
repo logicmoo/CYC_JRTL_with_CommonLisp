@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.52 2004-08-16 03:30:23 piso Exp $
+ * $Id: LispThread.java,v 1.53 2004-08-16 20:36:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -379,6 +379,10 @@ public final class LispThread extends LispObject
             return function.execute();
         }
         finally {
+            if (profiling && sampling) {
+                if (sampleNow)
+                    Profiler.sample(this);
+            }
             stack = oldStack;
         }
     }
@@ -394,6 +398,10 @@ public final class LispThread extends LispObject
             return function.execute(arg);
         }
         finally {
+            if (profiling && sampling) {
+                if (sampleNow)
+                    Profiler.sample(this);
+            }
             stack = oldStack;
         }
     }
@@ -411,6 +419,10 @@ public final class LispThread extends LispObject
             return function.execute(first, second);
         }
         finally {
+            if (profiling && sampling) {
+                if (sampleNow)
+                    Profiler.sample(this);
+            }
             stack = oldStack;
         }
     }
@@ -429,6 +441,10 @@ public final class LispThread extends LispObject
             return function.execute(first, second, third);
         }
         finally {
+            if (profiling && sampling) {
+                if (sampleNow)
+                    Profiler.sample(this);
+            }
             stack = oldStack;
         }
     }
@@ -449,6 +465,10 @@ public final class LispThread extends LispObject
             return function.execute(first, second, third, fourth);
         }
         finally {
+            if (profiling && sampling) {
+                if (sampleNow)
+                    Profiler.sample(this);
+            }
             stack = oldStack;
         }
     }
@@ -462,6 +482,10 @@ public final class LispThread extends LispObject
             return function.execute(args);
         }
         finally {
+            if (profiling && sampling) {
+                if (sampleNow)
+                    Profiler.sample(this);
+            }
             stack = oldStack;
         }
     }
