@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.3 2002-10-05 00:32:28 piso Exp $
+ * $Id: MessageBuffer.java,v 1.4 2002-10-05 15:28:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,7 @@ import org.armedbear.j.Sidebar;
 import org.armedbear.j.TextLine;
 import org.armedbear.j.Utilities;
 import org.armedbear.j.WebBuffer;
+import org.armedbear.j.WebFormatter;
 import org.armedbear.j.WebLine;
 import org.armedbear.j.WebLoader;
 
@@ -87,7 +88,7 @@ public class MessageBuffer extends Buffer
         type = TYPE_NORMAL;
         lineSeparator = "\n";
         mode = MessageMode.getMode();
-        setFormatter(mode.getFormatter(this));
+        setFormatter(new MessageFormatter(this));
         readOnly = true;
         message = new Message(rawText);
         parseMessage();
@@ -185,6 +186,7 @@ public class MessageBuffer extends Buffer
         empty();
         message = null;
         mimeBody = null;
+        selectedPart = null;
     }
 
     public int load()
@@ -847,6 +849,8 @@ public class MessageBuffer extends Buffer
             body = rawBody;
             setText(message.getRawText());
             headerLineCount = Utilities.countLines(allHeaders);
+            if (!(formatter instanceof MessageFormatter))
+                setFormatter(new MessageFormatter(this));
             return;
         }
         // Not raw mode.
@@ -880,6 +884,8 @@ public class MessageBuffer extends Buffer
                     renumber();
                 } else
                     setText(headers + "\r\n" + body);
+                if (!(formatter instanceof MessageFormatter))
+                    setFormatter(new MessageFormatter(this));
                 return;
             }
             if (contentType.equals("text/html")) {
@@ -891,6 +897,8 @@ public class MessageBuffer extends Buffer
                 lastLine.setNext(lines.getFirstLine());
                 lines.getFirstLine().setPrevious(lastLine);
                 renumber();
+                if (!(formatter instanceof WebFormatter))
+                    setFormatter(new WebFormatter(this));
                 return;
             }
         }
@@ -921,12 +929,15 @@ public class MessageBuffer extends Buffer
             Line lastLine = getLastLine();
             lastLine.setNext(lines.getFirstLine());
             lines.getFirstLine().setPrevious(lastLine);
-            setFormatter(new org.armedbear.j.WebFormatter(this));
+            if (!(formatter instanceof WebFormatter))
+                setFormatter(new WebFormatter(this));
         } else {
             body = Utilities.wrap(body,
                 Editor.currentEditor().getDisplay().getColumns(), 8);
             appendLine("");
             append(body);
+            if (!(formatter instanceof MessageFormatter))
+                setFormatter(new MessageFormatter(this));
         }
         // Don't try to display images inline if the message is too big.
         if (message.getSize() < 1024 * 1024) {
