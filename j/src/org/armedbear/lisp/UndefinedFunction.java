@@ -2,7 +2,7 @@
  * UndefinedFunction.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UndefinedFunction.java,v 1.6 2003-12-15 17:35:05 piso Exp $
+ * $Id: UndefinedFunction.java,v 1.7 2003-12-21 15:55:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,9 +50,10 @@ public final class UndefinedFunction extends CellError
 
     public String getMessage()
     {
-        StringBuffer sb = new StringBuffer("undefined function");
-        sb.append(' ');
-        sb.append(String.valueOf(getCellName()));
-        return sb.toString();
+        LispObject cellName = getCellName();
+        if (cellName instanceof Symbol)
+            return "The symbol " + cellName.toString() + " does not have a function definition.";
+        else
+            return "Undefined function " + cellName;
     }
 }
