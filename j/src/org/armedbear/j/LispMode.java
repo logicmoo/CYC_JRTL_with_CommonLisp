@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.81 2004-09-13 01:51:00 piso Exp $
+ * $Id: LispMode.java,v 1.82 2004-09-13 13:49:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,12 +93,21 @@ public class LispMode extends AbstractMode implements Constants, Mode
     public void populateModeMenu(Editor editor, Menu menu)
     {
         boolean enabled = LispShell.findLisp(null) != null;
-        menu.add(editor, "Eval Region", 'R', "evalRegionLisp", enabled);
-        menu.add(editor, "Eval Defun", 'D', "evalDefunLisp", enabled);
-        menu.add(editor, "Compile Defun", 'C', "compileDefunLisp", enabled);
-        menu.add(editor, "Load File", 'L', "loadLispFile", enabled);
-        menu.add(editor, "Compile File", 'F', "compileLispFile", enabled);
-        menu.add(editor, "Compile and Load File", 'A', "compileAndLoadLispFile", enabled);
+        if (isSlimeLoaded()) {
+            menu.add(editor, "Eval Region", 'R', "(slime:slime-eval-region)", enabled);
+            menu.add(editor, "Eval Defun", 'D', "(slime:slime-eval-defun)", enabled);
+            menu.add(editor, "Compile Defun", 'C', "(slime:slime-compile-defun)", enabled);
+            menu.add(editor, "Load File", 'L', "(slime:slime-load-file)", enabled);
+            menu.add(editor, "Compile File", 'F', "(slime:slime-compile-file)", enabled);
+            menu.add(editor, "Compile and Load File", 'A', "(slime:slime-compile-and-load-file)", enabled);
+        } else {
+            menu.add(editor, "Eval Region", 'R', "evalRegionLisp", enabled);
+            menu.add(editor, "Eval Defun", 'D', "evalDefunLisp", enabled);
+            menu.add(editor, "Compile Defun", 'C', "compileDefunLisp", enabled);
+            menu.add(editor, "Load File", 'L', "loadLispFile", enabled);
+            menu.add(editor, "Compile File", 'F', "compileLispFile", enabled);
+            menu.add(editor, "Compile and Load File", 'A', "compileAndLoadLispFile", enabled);
+        }
     }
 
     private static final boolean isSlimeLoaded()
