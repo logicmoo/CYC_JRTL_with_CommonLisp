@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.746 2005-03-22 19:59:59 piso Exp $
+ * $Id: Primitives.java,v 1.747 2005-03-23 18:21:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2062,16 +2062,6 @@ public final class Primitives extends Lisp
     private static final Primitive _ASET =
         new Primitive("%aset", PACKAGE_SYS, false, "array subscripts new-element")
     {
-        public LispObject execute() throws ConditionThrowable
-        {
-            return signal(new WrongNumberOfArgumentsException(this));
-        }
-
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            return signal(new WrongNumberOfArgumentsException(this));
-        }
-
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -2088,7 +2078,6 @@ public final class Primitives extends Lisp
             array.setRowMajor(0, second);
             return second;
         }
-
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -2110,7 +2099,6 @@ public final class Primitives extends Lisp
             v.setRowMajor(index, third);
             return third;
         }
-
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final AbstractArray array;
