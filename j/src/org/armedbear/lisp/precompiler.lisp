@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.64 2004-05-19 17:29:18 piso Exp $
+;;; $Id: precompiler.lisp,v 1.65 2004-05-27 00:33:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,6 +155,14 @@
             (return))))
     (values form expanded-p)))
 
+(defun precompile-constant (form)
+  (if *compile-file-truename*
+      (cond ((packagep form)
+             `(find-package ,(package-name form)))
+            (t
+             form))
+      form))
+
 (defvar *local-variables* ())
 
 (defun find-varspec (sym)
@@ -169,7 +177,7 @@
                (third varspec)
                form)))
         ((atom form)
-         form)
+         (precompile-constant form))
         (t
          (let ((op (car form))
                handler)
