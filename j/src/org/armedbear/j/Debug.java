@@ -2,7 +2,7 @@
  * Debug.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Debug.java,v 1.3 2002-12-08 18:35:21 piso Exp $
+ * $Id: Debug.java,v 1.4 2003-01-09 16:15:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,5 +93,49 @@ public final class Debug
                 catch (InterruptedException e) {}
             }
         }
+    }
+
+    public static void listThreads()
+    {
+        int threadCount = Thread.currentThread().activeCount();
+        Thread[] threads = new Thread[threadCount];
+        threadCount = Thread.currentThread().enumerate(threads);
+        FastStringBuffer sb = new FastStringBuffer();
+        Log.debug("----- listThreads -----");
+        for (int i = 0; i < threadCount; i++) {
+            Thread thread = threads[i];
+            sb.setText(thread.getName());
+            while (sb.length() < 24)
+                sb.append(' ');
+            sb.append(thread.getPriority());
+            if (thread.isDaemon())
+                sb.append(" (daemon)");
+            Log.debug(sb.toString());
+        }
+        int processCount = 0;
+        if (Platform.isPlatformLinux()) {
+            String[] cmdarray = {"bash", "-c",
+                "ps -o pid,pri,%cpu,rss,start,time,command"};
+            String output = Utilities.exec(cmdarray);
+            FastStringReader reader = new FastStringReader(output);
+            String s = reader.readLine();
+            if (s != null)
+                Log.debug(s);
+            while ((s = reader.readLine()) != null) {
+                if (s.indexOf("java") >= 0 && s.indexOf("grep") < 0) {
+                    Log.debug(s);
+                    ++processCount;
+                }
+            }
+        }
+        sb.setText("listThreads: ");
+        sb.append(threadCount);
+        sb.append(" Java threads");
+        if (processCount > 0) {
+            sb.append(", ");
+            sb.append(processCount);
+            sb.append(" processes");
+        }
+        Log.debug(sb.toString());
     }
 }
