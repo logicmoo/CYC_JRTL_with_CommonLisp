@@ -1,8 +1,8 @@
 /*
  * LispThread.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.71 2004-12-18 01:21:48 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: LispThread.java,v 1.72 2005-02-01 03:19:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ public final class LispThread extends LispObject
         }
     }
 
-    private static void remove(Thread javaThread)
+    public static void remove(Thread javaThread)
     {
         synchronized (lock) {
             HashMap m = (HashMap) map.clone();
