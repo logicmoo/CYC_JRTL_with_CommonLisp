@@ -414,6 +414,7 @@ signal
 simple-bit-vector-p
 simple-string-p
 sixth
+slot-value
 some
 sort
 special
@@ -494,6 +495,7 @@ with-open-file
 with-open-stream
 with-output-to-string
 with-simple-restart
+with-slots
 with-standard-io-syntax
 write
 write-char
