@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.10 2002-11-22 02:04:45 piso Exp $
+ * $Id: CommandTable.java,v 1.11 2002-11-23 17:33:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -236,6 +236,7 @@ public class CommandTable
             addCommand("dirDoShellCommand", "Directory");
             addCommand("dirForward", "Directory");
             addCommand("dirOpenFile", "Directory");
+            addCommand("downList", "LispMode");
             addCommand("editRegister", "Registers");
             addCommand("entabRegion", "RegionCommands");
             addCommand("expand", "Expansion");
@@ -247,6 +248,7 @@ public class CommandTable
             addCommand("findTagAtDotOtherWindow", "TagCommands");
             addCommand("finish", "CheckinBuffer");
             addCommand("followContext", "FollowContextTask");
+            addCommand("forwardSexp", "LispMode");
             addCommand("google", "WebMode");
             addCommand("gotoFile", "GotoFile");
             addCommand("help", "Help");
@@ -339,6 +341,7 @@ public class CommandTable
             addCommand("telnet", "RemoteShell");
             addCommand("thisError", "CompilationBuffer");
             addCommand("toggleWrap", "WrapText");
+            addCommand("upList", "LispMode");
             addCommand("upperCaseRegion", "RegionCommands");
             addCommand("whereIs", "ExecuteCommandDialog");
             addCommand("wrapComment", "WrapText");
