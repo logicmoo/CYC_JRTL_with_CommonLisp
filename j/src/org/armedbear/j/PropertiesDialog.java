@@ -1,8 +1,8 @@
 /*
  * PropertiesDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: PropertiesDialog.java,v 1.2 2003-06-06 12:33:23 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: PropertiesDialog.java,v 1.3 2003-06-06 12:34:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -470,7 +470,6 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
             case Buffer.TYPE_SHELL:
             case Buffer.TYPE_TELNET:
             case Buffer.TYPE_SSH:
-//             case Buffer.TYPE_COMPILATION:
             case Buffer.TYPE_MAN:
                 return;
             default:
