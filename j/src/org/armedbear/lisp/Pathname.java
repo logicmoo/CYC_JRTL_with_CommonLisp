@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.33 2004-01-05 02:11:00 piso Exp $
+ * $Id: Pathname.java,v 1.34 2004-01-05 15:39:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,12 @@ public final class Pathname extends LispObject
     public Pathname(String s) throws ConditionThrowable
     {
         if (s != null) {
+            if (Utilities.isPlatformUnix()) {
+                if (s.equals("~"))
+                    s = System.getProperty("user.home").concat("/");
+                else if (s.startsWith("~/"))
+                    s = System.getProperty("user.home").concat(s.substring(1));
+            }
             this.namestring = s;
             String d = null;
             // Find last file separator char.
@@ -90,8 +96,17 @@ public final class Pathname extends LispObject
             return list1(Keyword.ABSOLUTE);
         LispObject result = new Cons(Keyword.ABSOLUTE);
         StringTokenizer st = new StringTokenizer(d, "/\\");
-        while (st.hasMoreTokens())
-            result = new Cons(new LispString(st.nextToken()), result);
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken();
+            LispObject obj;
+            if (token.equals("*"))
+                obj = Keyword.WILD;
+            else if (token.equals("**"))
+                obj = Keyword.WILD_INFERIORS;
+            else
+                obj = new LispString(token);
+            result = new Cons(obj, result);
+        }
         return result.nreverse();
     }
 
@@ -114,13 +129,35 @@ public final class Pathname extends LispObject
         return super.typep(type);
     }
 
-    public String getNamestring()
+    public String getNamestring() throws ConditionThrowable
     {
         if (namestring != null)
             return namestring;
         StringBuffer sb = new StringBuffer();
         if (directory instanceof LispString)
-            sb.append(((LispString)directory).getValue());
+            Debug.assertTrue(false);
+        if (directory != NIL) {
+            LispObject temp = directory;
+            LispObject part = temp.car();
+            if (part == Keyword.ABSOLUTE)
+                sb.append(File.separatorChar);
+            else if (part == Keyword.RELATIVE)
+                ;
+            else
+                signal(new LispError("Unsupported directory component " + part + "."));
+            temp = temp.cdr();
+            while (temp != NIL) {
+                part = temp.car();
+                if (part instanceof LispString)
+                    sb.append(((LispString)part).getValue());
+                else if (part == Keyword.WILD)
+                    sb.append("*");
+                else
+                    signal(new LispError("Unsupported directory component " + part + "."));
+                sb.append(File.separatorChar);
+                temp = temp.cdr();
+            }
+        }
         if (sb.length() > 0 && sb.charAt(sb.length() - 1) != File.separatorChar)
             sb.append(File.separatorChar);
         if (name instanceof LispString)
@@ -179,47 +216,52 @@ public final class Pathname extends LispObject
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer("#P");
-        if (name != NIL) {
-            sb.append('"');
-            sb.append(getNamestring());
-            sb.append('"');
-        } else if (directory != NIL && type == NIL) {
-            sb.append('"');
-            sb.append(getNamestring());
-            sb.append('"');
-        } else {
-            sb.append('(');
-            if (host != NIL) {
-                sb.append(":HOST ");
-                sb.append(host);
-                sb.append(' ');
+        try {
+            StringBuffer sb = new StringBuffer("#P");
+            if (name != NIL) {
+                sb.append('"');
+                sb.append(getNamestring());
+                sb.append('"');
+            } else if (directory != NIL && type == NIL) {
+                sb.append('"');
+                sb.append(getNamestring());
+                sb.append('"');
+            } else {
+                sb.append('(');
+                if (host != NIL) {
+                    sb.append(":HOST ");
+                    sb.append(host);
+                    sb.append(' ');
+                }
+                if (device != NIL) {
+                    sb.append(":DEVICE ");
+                    sb.append(device);
+                    sb.append(' ');
+                }
+                if (directory != NIL) {
+                    sb.append(":DIRECTORY ");
+                    sb.append(directory);
+                    sb.append(" ");
+                }
+                if (type != NIL) {
+                    sb.append(":TYPE ");
+                    sb.append(type);
+                    sb.append(' ');
+                }
+                if (version != NIL) {
+                    sb.append(":VERSION ");
+                    sb.append(version);
+                    sb.append(' ');
+                }
+                if (sb.charAt(sb.length() - 1) == ' ')
+                    sb.setLength(sb.length() - 1);
+                sb.append(')');
             }
-            if (device != NIL) {
-                sb.append(":DEVICE ");
-                sb.append(device);
-                sb.append(' ');
-            }
-            if (directory != NIL) {
-                sb.append(":DIRECTORY ");
-                sb.append(directory);
-                sb.append(" ");
-            }
-            if (type != NIL) {
-                sb.append(":TYPE ");
-                sb.append(type);
-                sb.append(' ');
-            }
-            if (version != NIL) {
-                sb.append(":VERSION ");
-                sb.append(version);
-                sb.append(' ');
-            }
-            if (sb.charAt(sb.length() - 1) == ' ')
-                sb.setLength(sb.length() - 1);
-            sb.append(')');
+            return sb.toString();
         }
-        return sb.toString();
+        catch (ConditionThrowable t) {
+            return unreadableString("PATHNAME");
+        }
     }
 
     public static Pathname parseNamestring(String namestring)
