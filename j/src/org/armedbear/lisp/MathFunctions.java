@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.9 2004-09-27 01:33:39 piso Exp $
+ * $Id: MathFunctions.java,v 1.10 2004-09-27 01:37:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -575,7 +575,6 @@ public final class MathFunctions extends Lisp
                 }
                 return result;
             }
-            final double pi = 3.141592653589793;
             final double x; // base
             final double y; // power
             if (base instanceof Fixnum)
@@ -597,8 +596,8 @@ public final class MathFunctions extends Lisp
                 return new LispFloat(r);
             if (x < 0) {
                 r = Math.pow(-x, y);
-                double realPart = r * Math.cos(y * pi);
-                double imagPart = r * Math.sin(y * pi);
+                double realPart = r * Math.cos(y * Math.PI);
+                double imagPart = r * Math.sin(y * Math.PI);
                 return Complex.getInstance(new LispFloat(realPart),
                                            new LispFloat(imagPart));
             }
