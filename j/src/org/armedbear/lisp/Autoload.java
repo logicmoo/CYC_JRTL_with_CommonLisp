@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.86 2003-10-11 00:17:51 piso Exp $
+ * $Id: Autoload.java,v 1.87 2003-10-11 18:49:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,7 +252,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%open-input-file", "open");
         autoload(PACKAGE_SYS, "%open-output-file", "open");
-        autoload(PACKAGE_SYS, "%set-class-direct-methods", "StandardClass");
+        autoload(PACKAGE_SYS, "%set-class-direct-methods", "LispClass");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "StandardClass");
         autoload(PACKAGE_SYS, "%set-class-slots", "StandardClass");
         autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
@@ -280,7 +280,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%structure-set-2", "StructureObject");
         autoload(PACKAGE_SYS, "%time", "Time");
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObject");
-        autoload(PACKAGE_SYS, "class-direct-methods", "StandardClass");
+        autoload(PACKAGE_SYS, "class-direct-methods", "LispClass");
         autoload(PACKAGE_SYS, "class-direct-slots", "StandardClass");
         autoload(PACKAGE_SYS, "class-slots", "StandardClass");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
