@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.24 2004-03-09 11:08:58 piso Exp $
+ * $Id: StringFunctions.java,v 1.25 2004-07-20 15:28:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -794,9 +794,15 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            if (first.stringp())
-                return ((AbstractArray)first).getRowMajor(Fixnum.getInt(second));
-            return signal(new TypeError(first, Symbol.STRING));
+            try {
+                return ((AbstractString)first).getRowMajor(((Fixnum)second).value);
+            }
+            catch (ClassCastException e) {
+                if (first instanceof AbstractString)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.STRING));
+            }
         }
     };
 
@@ -805,14 +811,22 @@ public final class StringFunctions extends Lisp
         new Primitive3("%set-char", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
-            if (first.stringp()) {
-                ((AbstractArray)first).setRowMajor(Fixnum.getInt(second),
-                                                   checkCharacter(third));
+            try {
+                ((AbstractString)first).setRowMajor(((Fixnum)second).value,
+                                                    ((LispCharacter)third));
                 return third;
             }
-            return signal(new TypeError(first, Symbol.STRING));
+            catch (ClassCastException e) {
+                if (!(first instanceof AbstractString))
+                    return signal(new TypeError(first, Symbol.STRING));
+                else if (!(second instanceof Fixnum))
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(third, Symbol.CHARACTER));
+            }
         }
     };
 
