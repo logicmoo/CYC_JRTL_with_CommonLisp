@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.253 2003-06-21 19:55:13 piso Exp $
+ * $Id: Primitives.java,v 1.254 2003-06-22 16:15:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@ import java.math.BigInteger;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 public final class Primitives extends Module
@@ -2298,11 +2299,10 @@ public final class Primitives extends Module
 
     // ### *gensym-counter*
     private static final Symbol _GENSYM_COUNTER_ =
-        PACKAGE_CL.intern("*GENSYM-COUNTER*");
+        PACKAGE_CL.addExternalSymbol("*GENSYM-COUNTER*");
     static {
         _GENSYM_COUNTER_.setSymbolValue(Fixnum.ZERO);
         _GENSYM_COUNTER_.setSpecial(true);
-        _GENSYM_COUNTER_.setExternal(true);
     }
 
     // ### gensym
@@ -2582,10 +2582,9 @@ public final class Primitives extends Module
                     resultForm = args.car();
             }
             Environment oldDynEnv = thread.getDynamicEnvironment();
-            for (Iterator it = pkg.iterator(); it.hasNext();) {
+            List list = pkg.getExternalSymbols();
+            for (Iterator it = list.iterator(); it.hasNext();) {
                 Symbol symbol = (Symbol) it.next();
-                if (!symbol.isExternal())
-                    continue;
                 Environment ext = new Environment(env);
                 bind(var, symbol, ext);
                 LispObject body = bodyForm;

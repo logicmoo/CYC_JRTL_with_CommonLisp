@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.89 2003-06-21 19:44:31 piso Exp $
+ * $Id: Lisp.java,v 1.90 2003-06-22 16:15:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -678,14 +678,13 @@ public abstract class Lisp
     public static final Symbol export(String name, Package pkg)
     {
         Symbol symbol = pkg.intern(name);
-        symbol.setExternal(true);
+        try {
+            pkg.export(symbol); // FIXME Inefficient!
+        }
+        catch (LispError e) {
+            Debug.trace(e);
+        }
         return symbol;
-    }
-
-    // Export symbol from the COMMON-LISP package.
-    public static final Symbol export(String name)
-    {
-        return export(name, PACKAGE_CL);
     }
 
     public static final Symbol internSpecial(String name, Package pkg,
@@ -701,7 +700,12 @@ public abstract class Lisp
         LispObject value)
     {
         Symbol symbol = pkg.intern(name);
-        symbol.setExternal(true);
+        try {
+            pkg.export(symbol); // FIXME Inefficient!
+        }
+        catch (LispError e) {
+            Debug.trace(e);
+        }
         symbol.setSpecial(true);
         symbol.setSymbolValue(value);
         return symbol;
@@ -711,7 +715,12 @@ public abstract class Lisp
         LispObject value)
     {
         Symbol symbol = pkg.intern(name);
-        symbol.setExternal(true);
+        try {
+            pkg.export(symbol); // FIXME Inefficient!
+        }
+        catch (LispError e) {
+            Debug.trace(e);
+        }
         symbol.setConstant(true);
         symbol.setSymbolValue(value);
         return symbol;
@@ -871,7 +880,7 @@ public abstract class Lisp
     }
 
     // ### t
-    public static final Symbol T = export("T");
+    public static final Symbol T = PACKAGE_CL.addExternalSymbol("T");
     static {
         T.setSymbolValue(T);
         T.setConstant(true);

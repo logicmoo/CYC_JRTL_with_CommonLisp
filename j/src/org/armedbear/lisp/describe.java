@@ -2,7 +2,7 @@
  * describe.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: describe.java,v 1.1 2003-06-20 19:32:07 piso Exp $
+ * $Id: describe.java,v 1.2 2003-06-22 16:15:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,10 @@ public final class describe extends Lisp
                 sb.append(" is an ");
                 if (pkg == NIL)
                     sb.append("uninterned");
+                else if (((Package)pkg).findExternalSymbol(symbol.getName()) == symbol)
+                    sb.append("external");
                 else
-                    sb.append(symbol.isExternal() ? "external" : "internal");
+                    sb.append("internal");
                 sb.append(" symbol");
                 if (pkg != NIL) {
                     sb.append(" in the ");

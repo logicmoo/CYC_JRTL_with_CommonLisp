@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.47 2003-06-21 19:43:31 piso Exp $
+ * $Id: Symbol.java,v 1.48 2003-06-22 16:15:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,99 +23,95 @@ package org.armedbear.lisp;
 
 public class Symbol extends LispObject
 {
-    public static final Symbol AND_ALLOW_OTHER_KEYS = export("&ALLOW-OTHER-KEYS");
-    public static final Symbol AND_AUX              = export("&AUX");
-    public static final Symbol AND_BODY             = export("&BODY");
-    public static final Symbol AND_ENVIRONMENT      = export("&ENVIRONMENT");
-    public static final Symbol AND_KEY              = export("&KEY");
-    public static final Symbol AND_OPTIONAL         = export("&OPTIONAL");
-    public static final Symbol AND_REST             = export("&REST");
-    public static final Symbol AND_WHOLE            = export("&WHOLE");
-    public static final Symbol APPLY                = export("APPLY");
-    public static final Symbol BLOCK                = export("BLOCK");
-    public static final Symbol CDR                  = export("CDR");
-    public static final Symbol DOCUMENTATION        = export("DOCUMENTATION");
-    public static final Symbol EQ                   = export("EQ");
-    public static final Symbol EQL                  = export("EQL");
-    public static final Symbol EQUAL                = export("EQUAL");
-    public static final Symbol EQUALP               = export("EQUALP");
-    public static final Symbol FLET                 = export("FLET");
-    public static final Symbol GO                   = export("GO");
-    public static final Symbol LAMBDA               = export("LAMBDA");
-    public static final Symbol LET                  = export("LET");
-    public static final Symbol LOAD                 = export("LOAD");
-    public static final Symbol OTHERWISE            = export("OTHERWISE");
-    public static final Symbol QUOTE                = export("QUOTE");
+    public static final Symbol AND_ALLOW_OTHER_KEYS = PACKAGE_CL.addExternalSymbol("&ALLOW-OTHER-KEYS");
+    public static final Symbol AND_AUX              = PACKAGE_CL.addExternalSymbol("&AUX");
+    public static final Symbol AND_BODY             = PACKAGE_CL.addExternalSymbol("&BODY");
+    public static final Symbol AND_ENVIRONMENT      = PACKAGE_CL.addExternalSymbol("&ENVIRONMENT");
+    public static final Symbol AND_KEY              = PACKAGE_CL.addExternalSymbol("&KEY");
+    public static final Symbol AND_OPTIONAL         = PACKAGE_CL.addExternalSymbol("&OPTIONAL");
+    public static final Symbol AND_REST             = PACKAGE_CL.addExternalSymbol("&REST");
+    public static final Symbol AND_WHOLE            = PACKAGE_CL.addExternalSymbol("&WHOLE");
+    public static final Symbol APPLY                = PACKAGE_CL.addExternalSymbol("APPLY");
+    public static final Symbol BLOCK                = PACKAGE_CL.addExternalSymbol("BLOCK");
+    public static final Symbol CDR                  = PACKAGE_CL.addExternalSymbol("CDR");
+    public static final Symbol DOCUMENTATION        = PACKAGE_CL.addExternalSymbol("DOCUMENTATION");
+    public static final Symbol EQ                   = PACKAGE_CL.addExternalSymbol("EQ");
+    public static final Symbol EQL                  = PACKAGE_CL.addExternalSymbol("EQL");
+    public static final Symbol EQUAL                = PACKAGE_CL.addExternalSymbol("EQUAL");
+    public static final Symbol EQUALP               = PACKAGE_CL.addExternalSymbol("EQUALP");
+    public static final Symbol FLET                 = PACKAGE_CL.addExternalSymbol("FLET");
+    public static final Symbol GO                   = PACKAGE_CL.addExternalSymbol("GO");
+    public static final Symbol LAMBDA               = PACKAGE_CL.addExternalSymbol("LAMBDA");
+    public static final Symbol LET                  = PACKAGE_CL.addExternalSymbol("LET");
+    public static final Symbol LOAD                 = PACKAGE_CL.addExternalSymbol("LOAD");
+    public static final Symbol OTHERWISE            = PACKAGE_CL.addExternalSymbol("OTHERWISE");
+    public static final Symbol QUOTE                = PACKAGE_CL.addExternalSymbol("QUOTE");
 
     // Type specifiers.
-    public static final Symbol ARRAY                = export("ARRAY");
-    public static final Symbol ATOM                 = export("ATOM");
-    public static final Symbol BASE_CHAR            = export("BASE-CHAR");
-    public static final Symbol BASE_STRING          = export("BASE-STRING");
-    public static final Symbol BIGNUM               = export("BIGNUM");
-    public static final Symbol BIT                  = export("BIT");
-    public static final Symbol BIT_VECTOR           = export("BIT-VECTOR");
-    public static final Symbol CHARACTER            = export("CHARACTER");
-    public static final Symbol COMPILED_FUNCTION    = export("COMPILED_FUNCTION");
-    public static final Symbol CONS                 = export("CONS");
-    public static final Symbol DOUBLE_FLOAT         = export("DOUBLE-FLOAT");
-    public static final Symbol EXTENDED_CHAR        = export("EXTENDED-CHAR");
-    public static final Symbol FIXNUM               = export("FIXNUM");
-    public static final Symbol FLOAT                = export("FLOAT");
-    public static final Symbol FUNCTION             = export("FUNCTION");
-    public static final Symbol INTEGER              = export("INTEGER");
-    public static final Symbol KEYWORD              = export("KEYWORD");
-    public static final Symbol LIST                 = export("LIST");
-    public static final Symbol LONG_FLOAT           = export("LONG-FLOAT");
-    public static final Symbol NULL                 = export("NULL");
-    public static final Symbol NUMBER               = export("NUMBER");
-    public static final Symbol PACKAGE              = export("PACKAGE");
-    public static final Symbol RATIO                = export("RATIO");
-    public static final Symbol RATIONAL             = export("RATIONAL");
-    public static final Symbol REAL                 = export("REAL");
-    public static final Symbol SEQUENCE             = export("SEQUENCE");
-    public static final Symbol SHORT_FLOAT          = export("SHORT-FLOAT");
-    public static final Symbol SIMPLE_ARRAY         = export("SIMPLE-ARRAY");
-    public static final Symbol SIMPLE_BASE_STRING   = export("SIMPLE-BASE-STRING");
-    public static final Symbol SIMPLE_BIT_VECTOR    = export("SIMPLE-BIT-VECTOR");
-    public static final Symbol SIMPLE_STRING        = export("SIMPLE-STRING");
-    public static final Symbol SIMPLE_VECTOR        = export("SIMPLE-VECTOR");
-    public static final Symbol SINGLE_FLOAT         = export("SINGLE-FLOAT");
-    public static final Symbol STANDARD_CHAR        = export("STANDARD-CHAR");
-    public static final Symbol STREAM               = export("STREAM");
-    public static final Symbol STRING               = export("STRING");
-    public static final Symbol SYMBOL               = export("SYMBOL");
-    public static final Symbol TWO_WAY_STREAM       = export("TWO-WAY-STREAM");
-    public static final Symbol UNSIGNED_BYTE        = export("UNSIGNED-BYTE");
-    public static final Symbol VECTOR               = export("VECTOR");
+    public static final Symbol ARRAY                = PACKAGE_CL.addExternalSymbol("ARRAY");
+    public static final Symbol ATOM                 = PACKAGE_CL.addExternalSymbol("ATOM");
+    public static final Symbol BASE_CHAR            = PACKAGE_CL.addExternalSymbol("BASE-CHAR");
+    public static final Symbol BASE_STRING          = PACKAGE_CL.addExternalSymbol("BASE-STRING");
+    public static final Symbol BIGNUM               = PACKAGE_CL.addExternalSymbol("BIGNUM");
+    public static final Symbol BIT                  = PACKAGE_CL.addExternalSymbol("BIT");
+    public static final Symbol BIT_VECTOR           = PACKAGE_CL.addExternalSymbol("BIT-VECTOR");
+    public static final Symbol CHARACTER            = PACKAGE_CL.addExternalSymbol("CHARACTER");
+    public static final Symbol COMPILED_FUNCTION    = PACKAGE_CL.addExternalSymbol("COMPILED_FUNCTION");
+    public static final Symbol CONS                 = PACKAGE_CL.addExternalSymbol("CONS");
+    public static final Symbol DOUBLE_FLOAT         = PACKAGE_CL.addExternalSymbol("DOUBLE-FLOAT");
+    public static final Symbol EXTENDED_CHAR        = PACKAGE_CL.addExternalSymbol("EXTENDED-CHAR");
+    public static final Symbol FIXNUM               = PACKAGE_CL.addExternalSymbol("FIXNUM");
+    public static final Symbol FLOAT                = PACKAGE_CL.addExternalSymbol("FLOAT");
+    public static final Symbol FUNCTION             = PACKAGE_CL.addExternalSymbol("FUNCTION");
+    public static final Symbol INTEGER              = PACKAGE_CL.addExternalSymbol("INTEGER");
+    public static final Symbol KEYWORD              = PACKAGE_CL.addExternalSymbol("KEYWORD");
+    public static final Symbol LIST                 = PACKAGE_CL.addExternalSymbol("LIST");
+    public static final Symbol LONG_FLOAT           = PACKAGE_CL.addExternalSymbol("LONG-FLOAT");
+    public static final Symbol NULL                 = PACKAGE_CL.addExternalSymbol("NULL");
+    public static final Symbol NUMBER               = PACKAGE_CL.addExternalSymbol("NUMBER");
+    public static final Symbol PACKAGE              = PACKAGE_CL.addExternalSymbol("PACKAGE");
+    public static final Symbol RATIO                = PACKAGE_CL.addExternalSymbol("RATIO");
+    public static final Symbol RATIONAL             = PACKAGE_CL.addExternalSymbol("RATIONAL");
+    public static final Symbol REAL                 = PACKAGE_CL.addExternalSymbol("REAL");
+    public static final Symbol SEQUENCE             = PACKAGE_CL.addExternalSymbol("SEQUENCE");
+    public static final Symbol SHORT_FLOAT          = PACKAGE_CL.addExternalSymbol("SHORT-FLOAT");
+    public static final Symbol SIMPLE_ARRAY         = PACKAGE_CL.addExternalSymbol("SIMPLE-ARRAY");
+    public static final Symbol SIMPLE_BASE_STRING   = PACKAGE_CL.addExternalSymbol("SIMPLE-BASE-STRING");
+    public static final Symbol SIMPLE_BIT_VECTOR    = PACKAGE_CL.addExternalSymbol("SIMPLE-BIT-VECTOR");
+    public static final Symbol SIMPLE_STRING        = PACKAGE_CL.addExternalSymbol("SIMPLE-STRING");
+    public static final Symbol SIMPLE_VECTOR        = PACKAGE_CL.addExternalSymbol("SIMPLE-VECTOR");
+    public static final Symbol SINGLE_FLOAT         = PACKAGE_CL.addExternalSymbol("SINGLE-FLOAT");
+    public static final Symbol STANDARD_CHAR        = PACKAGE_CL.addExternalSymbol("STANDARD-CHAR");
+    public static final Symbol STREAM               = PACKAGE_CL.addExternalSymbol("STREAM");
+    public static final Symbol STRING               = PACKAGE_CL.addExternalSymbol("STRING");
+    public static final Symbol SYMBOL               = PACKAGE_CL.addExternalSymbol("SYMBOL");
+    public static final Symbol TWO_WAY_STREAM       = PACKAGE_CL.addExternalSymbol("TWO-WAY-STREAM");
+    public static final Symbol UNSIGNED_BYTE        = PACKAGE_CL.addExternalSymbol("UNSIGNED-BYTE");
+    public static final Symbol VECTOR               = PACKAGE_CL.addExternalSymbol("VECTOR");
 
-    public static final Symbol UNSPECIFIED          = export("*");
+    public static final Symbol UNSPECIFIED          = PACKAGE_CL.addExternalSymbol("*");
 
     // Condition types.
-    public static final Symbol SIMPLE_CONDITION     = export("SIMPLE-CONDITION");
+    public static final Symbol SIMPLE_CONDITION     = PACKAGE_CL.addExternalSymbol("SIMPLE-CONDITION");
 
-    public static final Symbol END_OF_FILE          = export("END-OF-FILE");
-    public static final Symbol ERROR                = export("ERROR");
-    public static final Symbol CONTROL_ERROR        = export("CONTROL-ERROR");
-    public static final Symbol PACKAGE_ERROR        = export("PACKAGE-ERROR");
-    public static final Symbol PROGRAM_ERROR        = export("PROGRAM-ERROR");
-    public static final Symbol SIMPLE_ERROR         = export("SIMPLE-ERROR");
-    public static final Symbol STREAM_ERROR         = export("STREAM-ERROR");
-    public static final Symbol TYPE_ERROR           = export("TYPE-ERROR");
-    public static final Symbol UNDEFINED_FUNCTION   = export("UNDEFINED-FUNCTION");
+    public static final Symbol END_OF_FILE          = PACKAGE_CL.addExternalSymbol("END-OF-FILE");
+    public static final Symbol ERROR                = PACKAGE_CL.addExternalSymbol("ERROR");
+    public static final Symbol CONTROL_ERROR        = PACKAGE_CL.addExternalSymbol("CONTROL-ERROR");
+    public static final Symbol PACKAGE_ERROR        = PACKAGE_CL.addExternalSymbol("PACKAGE-ERROR");
+    public static final Symbol PROGRAM_ERROR        = PACKAGE_CL.addExternalSymbol("PROGRAM-ERROR");
+    public static final Symbol SIMPLE_ERROR         = PACKAGE_CL.addExternalSymbol("SIMPLE-ERROR");
+    public static final Symbol STREAM_ERROR         = PACKAGE_CL.addExternalSymbol("STREAM-ERROR");
+    public static final Symbol TYPE_ERROR           = PACKAGE_CL.addExternalSymbol("TYPE-ERROR");
+    public static final Symbol UNDEFINED_FUNCTION   = PACKAGE_CL.addExternalSymbol("UNDEFINED-FUNCTION");
 
     // Internal symbols.
-    public static final Symbol BACKQUOTE = intern("BACKQUOTE", PACKAGE_CL);
-    public static final Symbol COMMA = intern("COMMA", PACKAGE_CL);
-    public static final Symbol COMMA_ATSIGN =
-        intern("COMMA-ATSIGN", PACKAGE_CL);
-    public static final Symbol COMMA_DOT = intern("COMMA-DOT", PACKAGE_CL);
-    public static final Symbol MACROEXPAND_MACRO =
-        intern("MACROEXPAND-MACRO", PACKAGE_CL);
+    public static final Symbol BACKQUOTE            = PACKAGE_CL.addInternalSymbol("BACKQUOTE");
+    public static final Symbol COMMA                = PACKAGE_CL.addInternalSymbol("COMMA");
+    public static final Symbol COMMA_ATSIGN         = PACKAGE_CL.addInternalSymbol("COMMA-ATSIGN");
+    public static final Symbol COMMA_DOT            = PACKAGE_CL.addInternalSymbol("COMMA-DOT");
+    public static final Symbol MACROEXPAND_MACRO    = PACKAGE_CL.addInternalSymbol("MACROEXPAND-MACRO");
 
-    public static final Symbol ARRAY_DIMENSION_LIMIT =
-        export("ARRAY-DIMENSION-LIMIT");
-
+    public static final Symbol ARRAY_DIMENSION_LIMIT = PACKAGE_CL.addExternalSymbol("ARRAY-DIMENSION-LIMIT");
     static {
         ARRAY_DIMENSION_LIMIT.setSymbolValue(new Fixnum(0x1000000));
         ARRAY_DIMENSION_LIMIT.setConstant(true);
@@ -124,12 +120,16 @@ public class Symbol extends LispObject
     // Bit flags.
     private static final int SPECIAL  = 0x0001;
     private static final int CONSTANT = 0x0002;
-    private static final int EXTERNAL = 0x0004;
 
     public static final Symbol addFunction(String name, LispObject obj)
     {
         Symbol symbol = PACKAGE_CL.intern(name);
-        symbol.flags = EXTERNAL;
+        try {
+            PACKAGE_CL.export(symbol); // FIXME Inefficient!
+        }
+        catch (LispError e) {
+            Debug.trace(e);
+        }
         symbol.function = obj;
         return symbol;
     }
@@ -185,24 +185,6 @@ public class Symbol extends LispObject
         return TYPE_SYMBOL;
     }
 
-    public final boolean isInternal()
-    {
-        return (flags & EXTERNAL) == 0;
-    }
-
-    public final boolean isExternal()
-    {
-        return (flags & EXTERNAL) != 0;
-    }
-
-    public final void setExternal(boolean b)
-    {
-        if (b)
-            flags |= EXTERNAL;
-        else
-            flags &= ~EXTERNAL;
-    }
-
     public final boolean isSpecialVariable()
     {
         return (flags & SPECIAL) != 0;
@@ -241,7 +223,7 @@ public class Symbol extends LispObject
         if (pkg == PACKAGE_KEYWORD)
             return ":".concat(name);
         StringBuffer sb = new StringBuffer(pkg.getName());
-        if (isExternal())
+        if (((Package)pkg).findExternalSymbol(name) != null)
             sb.append(':');
         else
             sb.append("::");
@@ -332,10 +314,12 @@ public class Symbol extends LispObject
         final Package currentPackage = (Package) _PACKAGE_.getSymbolValue();
         if (pkg == currentPackage)
             return s;
-        if (currentPackage.uses(pkg) && isExternal())
-            return s;
+        if (currentPackage.uses(pkg)) {
+            if (((Package)pkg).findExternalSymbol(name) != null)
+                return s;
+        }
         StringBuffer sb = new StringBuffer(pkg.getName());
-        if (isExternal())
+        if (((Package)pkg).findExternalSymbol(name) != null)
             sb.append(':');
         else
             sb.append("::");
