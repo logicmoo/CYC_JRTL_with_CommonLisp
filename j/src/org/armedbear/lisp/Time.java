@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Time.java,v 1.22 2004-11-03 15:39:02 piso Exp $
+ * $Id: Time.java,v 1.23 2004-12-12 16:43:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,26 +34,30 @@ public final class Time extends Lisp
         {
             Cons.setCount(0);
             long start = System.currentTimeMillis();
-            LispObject result = arg.execute(new LispObject[0]);
-            long elapsed = System.currentTimeMillis() - start;
-            long count = Cons.getCount();
-            Stream out =
-                checkCharacterOutputStream(_TRACE_OUTPUT_.symbolValue());
-            out.freshLine();
-            StringBuffer sb =
-                new StringBuffer(String.valueOf((float)elapsed/1000));
-            sb.append(" seconds");
-            sb.append(System.getProperty("line.separator"));
-            if (count > 0) {
-                sb.append(count);
-                sb.append(" cons cell");
-                if (count > 1)
-                    sb.append('s');
-                sb.append(System.getProperty("line.separator"));
+            try {
+                LispObject result = arg.execute(new LispObject[0]);
+                return result;
             }
-            out._writeString(sb.toString());
-            out._finishOutput();
-            return result;
+            finally {
+                long elapsed = System.currentTimeMillis() - start;
+                long count = Cons.getCount();
+                Stream out =
+                    checkCharacterOutputStream(_TRACE_OUTPUT_.symbolValue());
+                out.freshLine();
+                StringBuffer sb =
+                    new StringBuffer(String.valueOf((float)elapsed/1000));
+                sb.append(" seconds");
+                sb.append(System.getProperty("line.separator"));
+                if (count > 0) {
+                    sb.append(count);
+                    sb.append(" cons cell");
+                    if (count > 1)
+                        sb.append('s');
+                    sb.append(System.getProperty("line.separator"));
+                }
+                out._writeString(sb.toString());
+                out._finishOutput();
+            }
         }
     };
 
