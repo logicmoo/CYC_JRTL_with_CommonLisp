@@ -2,7 +2,7 @@
  * DirectoryEntry.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: DirectoryEntry.java,v 1.3 2002-12-07 11:21:08 piso Exp $
+ * $Id: DirectoryEntry.java,v 1.4 2002-12-07 12:25:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,21 +106,48 @@ public final class DirectoryEntry
         REMatch match = Directory.getNativeMoveToFilenameRegExp().getMatch(s);
         if (match != null)
             return s.substring(match.getEndIndex());
-        else {
-            Log.error("DirectoryEntry.getName returning null s = |" + s + "|");
-            return null;
-        }
+        Log.error("DirectoryEntry.getName returning null s = |" + s + "|");
+        return null;
+    }
+
+    public static int getNameColumn(String s)
+    {
+        // Strip symbolic link if any.
+        int end = s.indexOf(" -> ");
+        if (end >= 0)
+            s = s.substring(0, end);
+        REMatch match = Directory.getNativeMoveToFilenameRegExp().getMatch(s);
+        if (match != null)
+            return match.getEndIndex();
+        return 0;
     }
 
     public final String extractName()
     {
-        if (name != null) {
-            // Internal format.
-            return name;
-        } else {
-            // Native format.
-            return getName(string);
+        if (name == null && string != null)
+            name = getName(string);
+        return name;
+    }
+
+    // nameColumn must be > 0. It's just a hint.
+    public final String extractName(int nameColumn)
+    {
+        if (name != null)
+            return name; // Cached.
+        if (string == null)
+            return null;
+        if (nameColumn > 0 && nameColumn < string.length()) {
+            String s = string;
+            // Strip symbolic link if any.
+            int end = s.indexOf(" -> ");
+            if (end >= 0)
+                s = s.substring(0, end);
+            if (s.charAt(nameColumn-1) == ' ')
+                if (!Character.isWhitespace(s.charAt(nameColumn)))
+                    return name = s.substring(nameColumn);
         }
+        // Do it the hard way.
+        return getName(string);
     }
 
     public final String getName()
