@@ -1,8 +1,8 @@
 /*
  * Readtable.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.36 2004-11-03 15:39:01 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Readtable.java,v 1.37 2005-01-11 17:45:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,9 @@ public final class Readtable extends LispObject
 
     public Readtable()
     {
+        attributes[8]    = ATTR_INVALID; // backspace
+        attributes[127]  = ATTR_INVALID; // rubout
+
         attributes[9]    = ATTR_WHITESPACE; // tab
         attributes[10]   = ATTR_WHITESPACE; // linefeed
         attributes[12]   = ATTR_WHITESPACE; // form feed
@@ -180,6 +183,12 @@ public final class Readtable extends LispObject
         if (c < CHAR_MAX)
             return attributes[c];
         return ATTR_CONSTITUENT;
+    }
+    
+    public void checkInvalid(char c) throws ConditionThrowable
+    {
+        if (c < CHAR_MAX && attributes[c] == ATTR_INVALID)
+            signal(new ReaderError("Invalid character"));
     }
 
     public LispObject getReaderMacroFunction(char c)
