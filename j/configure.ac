@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2004 Peter Graves
-dnl  $Id: configure.ac,v 1.33 2004-05-02 01:50:02 piso Exp $
+dnl  $Id: configure.ac,v 1.34 2004-05-02 14:56:27 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.33 $)
+AC_REVISION($Revision: 1.34 $)
 
 BOOTFILE=./configure-options
 
@@ -144,11 +144,25 @@ LISP_HOME=$srcdir/src/org/armedbear/lisp
 AC_SUBST(LISP_HOME)
 
 
+dnl  Make prefix explicit.
+test "x$prefix" = xNONE && prefix=/usr/local
+
+dnl  Make prefix explicit.
+test "x$exec_prefix" = xNONE && exec_prefix=/usr/local
+
+dnl  Make datadir and libdir explicit.
+eval "datadir=$datadir"
+eval "libdir=$libdir"
+
+dnl Library path for libabcl.so.
+ABCL_LIBPATH=$LISP_HOME:$libdir/abcl
+AC_SUBST(ABCL_LIBPATH)
+
 dnl  Java runtime classes and options
 if test -f $JDK/jre/lib/rt.jar ; then
     # SUN
     JAVA_RUNTIME=$JDK/jre/lib/rt.jar
-    ABCL_JAVA_OPTIONS="-server -Xmx128M -Xrs -Djava.library.path=$LISP_HOME"
+    ABCL_JAVA_OPTIONS="-server -Xmx128M"
 elif test -f $JDK/jre/lib/core.jar ; then
     # IBM
     JAVA_RUNTIME=""
@@ -167,14 +181,6 @@ if test -f $JDK/lib/tools.jar ; then
 fi
 AC_SUBST(JAVA_RUNTIME)
 AC_SUBST(ABCL_JAVA_OPTIONS)
-
-
-dnl  Make prefix explicit.
-test "x$prefix" = xNONE && prefix=/usr/local
-
-
-dnl  Make datadir explicit.
-eval "datadir=$datadir"
 
 
 dnl  Construct command line for shell script.
