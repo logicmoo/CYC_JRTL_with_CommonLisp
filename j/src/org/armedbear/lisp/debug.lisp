@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.24 2004-05-29 19:06:41 piso Exp $
+;;; $Id: debug.lisp,v 1.25 2004-08-25 17:47:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,8 +54,10 @@
 
 (defun internal-debug ()
   (if (fboundp 'tpl::repl)
-      (loop
-        (tpl::repl))
+      (let ((in (two-way-stream-input-stream *debug-io*))
+            (out (two-way-stream-output-stream *debug-io*)))
+        (loop
+          (tpl::repl in out)))
       (quit)))
 
 (defun debug-loop ()
