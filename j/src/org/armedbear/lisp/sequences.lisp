@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.29 2003-03-25 01:02:31 piso Exp $
+;;; $Id: sequences.lisp,v 1.30 2003-03-30 02:05:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,7 +20,9 @@
 (in-package "COMMON-LISP")
 
 (export '(make-sequence
-          some every notany notevery subseq copy-seq fill reverse nreverse
+          some every notany notevery subseq copy-seq fill
+          replace
+          reverse nreverse
           concatenate
           map map-into
           reduce
@@ -257,6 +259,35 @@
   (seq-dispatch sequence
 		(list-fill* sequence item start end)
 		(vector-fill* sequence item start end)))
+
+
+;;; REPLACE (from ECL)
+
+(defun replace (sequence1 sequence2
+                          &key start1  end1
+                          start2 end2 )
+  (with-start-end start1 end1 sequence1
+    (with-start-end start2 end2 sequence2
+      (if (and (eq sequence1 sequence2)
+               (> start1 start2))
+          (do* ((i 0 (1+ i))
+                (l (if (< (- end1 start1)
+                          (- end2 start2))
+                       (- end1 start1)
+                       (- end2 start2)))
+                (s1 (+ start1 (1- l)) (1- s1))
+                (s2 (+ start2 (1- l)) (1- s2)))
+               ((>= i l) sequence1)
+            (setf (elt sequence1 s1) (elt sequence2 s2)))
+          (do ((i 0 (1+ i))
+               (l (if (< (- end1 start1)
+                         (- end2 start2))
+                      (- end1 start1)
+                      (- end2 start2)))
+               (s1 start1 (1+ s1))
+               (s2 start2 (1+ s2)))
+              ((>= i l) sequence1)
+            (setf (elt sequence1 s1) (elt sequence2 s2)))))))
 
 
 ;;; REVERSE (from CMUCL)

@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.68 2003-03-25 17:46:27 piso Exp $
+;;; $Id: rt.lisp,v 1.69 2003-03-30 02:05:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -730,6 +730,7 @@
                               "reduce"
                               "remove"
                               "remove-duplicates"
+                              "replace"
                               "reverse"
                               "search-bitvector"
                               "search-list"
