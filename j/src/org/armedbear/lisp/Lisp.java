@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.120 2003-08-15 15:17:18 piso Exp $
+ * $Id: Lisp.java,v 1.121 2003-08-16 01:20:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -696,12 +696,23 @@ public abstract class Lisp
     {
         if (obj == null)
             throw new NullPointerException();
-        try {
+        if (obj instanceof CharacterInputStream)
             return (CharacterInputStream) obj;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "input stream");
-        }
+        if (obj instanceof TwoWayStream)
+            return ((TwoWayStream)obj).getInputStream();
+        throw new TypeError(obj, "input stream");
+    }
+
+    public static final CharacterOutputStream checkOutputStream(LispObject obj)
+        throws LispError
+    {
+        if (obj == null)
+            throw new NullPointerException();
+        if (obj instanceof CharacterOutputStream)
+            return (CharacterOutputStream) obj;
+        if (obj instanceof TwoWayStream)
+            return ((TwoWayStream)obj).getOutputStream();
+        throw new TypeError(obj, "output stream");
     }
 
     public static final Readtable checkReadtable(LispObject obj)
@@ -929,9 +940,9 @@ public abstract class Lisp
         return (CharacterInputStream) _STANDARD_INPUT_.symbolValueNoThrow();
     }
 
-    public static final CharacterOutputStream getStandardOutput()
+    public static final CharacterOutputStream getStandardOutput() throws LispError
     {
-        return (CharacterOutputStream) _STANDARD_OUTPUT_.symbolValueNoThrow();
+        return checkOutputStream(_STANDARD_OUTPUT_.symbolValueNoThrow());
     }
 
     public static final CharacterOutputStream getTraceOutput()
