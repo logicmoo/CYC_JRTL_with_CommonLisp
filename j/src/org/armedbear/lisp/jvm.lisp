@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.23 2003-11-11 19:32:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.24 2003-11-11 20:13:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1521,7 +1521,7 @@
   (emit-push-nil)
   'if_acmpeq)
 
-(defun compile-if (form)
+(defun compile-if (form for-effect)
   (let* ((test (second form))
          (consequent (third form))
          (alternate (fourth form))
@@ -1536,7 +1536,7 @@
     (compile-form alternate)
     (emit 'label `,label2)))
 
-(defun compile-multiple-value-list (form)
+(defun compile-multiple-value-list (form for-effect)
   (compile-form (second form))
   (unless (remove-store-value)
     (emit-push-value))
@@ -1546,7 +1546,7 @@
                      0)
   (emit-store-value))
 
-(defun compile-let/let* (form)
+(defun compile-let/let* (form for-effect)
   (let* ((saved-fp (fill-pointer *locals*))
          (varlist (second form))
          (specialp nil)
@@ -1679,7 +1679,7 @@
     (when index
       (tag-label (aref *tags* index)))))
 
-(defun compile-tagbody (form)
+(defun compile-tagbody (form for-effect)
   (let ((saved-fp (fill-pointer *tags*))
         (body (cdr form)))
     ;; Scan for tags.
@@ -1701,14 +1701,14 @@
   (emit-push-nil)
   (emit-store-value))
 
-(defun compile-go (form)
+(defun compile-go (form for-effect)
   (let* ((name (cadr form))
          (label (label-for-tag name)))
     (unless label
       (error "COMPILE-GO: tag not found: ~S" name))
   (emit 'goto label)))
 
-(defun compile-block (form)
+(defun compile-block (form for-effect)
    (let* ((rest (cdr form))
           (block-label (car rest))
           (block-exit (gensym))
@@ -1718,12 +1718,12 @@
        (compile-form (car forms) (cdr forms)))
      (emit 'label `,block-exit)))
 
-(defun compile-progn (form)
+(defun compile-progn (form for-effect)
   (do ((forms (cdr form) (cdr forms)))
       ((null forms))
     (compile-form (car forms) (cdr forms))))
 
-(defun compile-setq (form)
+(defun compile-setq (form for-effect)
   (unless (= (length form) 3)
     (error "COMPILE-SETQ too many args for SETQ"))
   (let* ((rest (cdr form))
@@ -1764,7 +1764,7 @@
                          -1)
       (emit-store-value))))
 
-(defun compile-quote (form)
+(defun compile-quote (form for-effect)
    (let ((obj (second form)))
      (cond ((null obj)
             (emit-push-nil)
@@ -1790,11 +1790,11 @@
            (t
             (error "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
-(defun compile-declare (form)
+(defun compile-declare (form for-effect)
   ;; Nothing to do.
   )
 
-(defun compile-function (form)
+(defun compile-function (form for-effect)
    (let ((obj (second form)))
      (cond ((symbolp obj)
             (let ((g (declare-symbol obj)))
@@ -1824,7 +1824,7 @@
            (t
             (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
-(defun compile-return-from (form)
+(defun compile-return-from (form for-effect)
    (let* ((rest (cdr form))
           (block-label (car rest))
           (block-exit (cdr (assoc block-label *blocks*)))
@@ -1834,7 +1834,7 @@
      (compile-form result-form)
      (emit 'goto `,block-exit)))
 
-(defun compile-plus (form)
+(defun compile-plus (form for-effect)
   (let* ((args (cdr form))
          (len (length args)))
     (case len
@@ -1853,7 +1853,7 @@
       (t
        (compile-function-call '+ args)))))
 
-(defun compile-minus (form)
+(defun compile-minus (form for-effect)
   (let* ((args (cdr form))
          (len (length args)))
     (case len
@@ -1906,21 +1906,21 @@
 (defun compile-form (form &optional for-effect)
   (cond
    ((consp form)
-    (let ((first (first form))
-          (rest (rest form)))
-      (when (macro-function first)
+    (let ((op (car form))
+          (args (cdr form)))
+      (when (macro-function op)
         (compile-form (macroexpand form))
         (return-from compile-form))
-      (when (symbolp first)
-        (let ((handler (get first 'jvm-compile)))
+      (when (symbolp op)
+        (let ((handler (get op 'jvm-compile-handler)))
           (when handler
-            (funcall handler form)
+            (funcall handler form for-effect)
             (return-from compile-form))))
       (cond
-       ((special-operator-p first)
-        (error "COMPILE-FORM unhandled special operator ~S" first))
+       ((special-operator-p op)
+        (error "COMPILE-FORM unhandled special operator ~S" op))
        (t ; Function call.
-        (compile-function-call first rest for-effect)))))
+        (compile-function-call op args for-effect)))))
    ((eq form '())
     (unless for-effect
       (emit-push-nil)
@@ -2155,7 +2155,7 @@
                      (find-symbol (concatenate 'string "COMPILE-" (symbol-name fun)) 'jvm))))
     (unless (and handler (fboundp handler))
       (error "no handler for ~S" fun))
-    (setf (get fun 'jvm-compile) handler)))
+    (setf (get fun 'jvm-compile-handler) handler)))
 
 (mapc #'install-handler '(block
                           declare
