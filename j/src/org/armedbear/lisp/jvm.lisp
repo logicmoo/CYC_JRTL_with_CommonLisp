@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.152 2004-05-06 19:04:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.153 2004-05-07 14:07:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -196,6 +196,7 @@
 (defconstant +lisp-simple-string-class+ "org/armedbear/lisp/SimpleString")
 (defconstant +lisp-simple-string+ "Lorg/armedbear/lisp/SimpleString;")
 (defconstant +lisp-environment-class+ "org/armedbear/lisp/Environment")
+(defconstant +lisp-environment+ "Lorg/armedbear/lisp/Environment;")
 
 (defun emit-push-nil ()
   (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
@@ -1574,7 +1575,7 @@
       (setf *max-locals* (max *max-locals* (fill-pointer *locals*)))
       (ensure-thread-var-initialized)
       (emit 'aload *thread*)
-      (emit 'getfield +lisp-thread-class+ "dynEnv" "Lorg/armedbear/lisp/Environment;")
+      (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
       (emit 'astore env-var))
     (ecase (car form)
       (LET
@@ -1589,9 +1590,10 @@
       (maybe-emit-clear-values (car body)))
     (when specialp
       ;; Restore dynamic environment.
+      ;; FIXME This code also needs to run when we RETURN-FROM an enclosing block!
       (emit 'aload *thread*)
       (emit 'aload env-var)
-      (emit 'putfield +lisp-thread-class+ "dynEnv" "Lorg/armedbear/lisp/Environment;"))
+      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))
     ;; Restore fill pointer to its saved value so the slots used by these
     ;; bindings will again be available.
     (setf (fill-pointer *locals*) saved-fp)))
@@ -1766,7 +1768,7 @@
 
 (defun compile-atom (form for-effect)
   (unless (= (length form) 2)
-    (error "wrong number of arguments for ATOM"))
+    (error "Wrong number of arguments for ATOM."))
   (compile-form (cadr form) nil)
   (unless (remove-store-value)
     (emit-push-value))
@@ -1807,15 +1809,17 @@
 
 (defun compile-cons (form for-effect)
   (unless (= (length form) 3)
-    (error "wrong number of arguments for CONS"))
+    (error "Wrong number of arguments for CONS."))
   (emit 'new +lisp-cons-class+)
   (emit 'dup)
   (compile-form (second form))
   (unless (remove-store-value)
     (emit-push-value))
+  (maybe-emit-clear-values (second form))
   (compile-form (third form))
   (unless (remove-store-value)
     (emit-push-value))
+  (maybe-emit-clear-values (third form))
   (emit-invokespecial "org/armedbear/lisp/Cons"
                       "<init>"
                       "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
