@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.5 2003-07-06 16:20:39 piso Exp $
+ * $Id: PackageFunctions.java,v 1.6 2003-07-06 17:30:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +61,28 @@ public final class PackageFunctions extends Lisp
             return coerceToPackage(arg).getUsedByList();
         }
     };
+
+    // ### import
+    // import symbols &optional package => t
+    private static final Primitive IMPORT = new Primitive("import") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length == 0 || args.length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject symbols = args[0];
+            Package pkg =
+                args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
+            if (symbols.listp()) {
+                while (symbols != NIL) {
+                    pkg.importSymbol(checkSymbol(symbols.car()));
+                    symbols = symbols.cdr();
+                }
+            } else
+                pkg.importSymbol(checkSymbol(symbols));
+            return T;
+        }
+    };
+
 
     // ### shadow
     // shadow symbol-names &optional package => t
@@ -222,14 +244,11 @@ public final class PackageFunctions extends Lisp
                 }
             }
 
-            if (exports != NIL) {
-                LispObject list = checkCons(exports);
-                while (list != NIL) {
-                    LispObject obj = list.car();
-                    String symbolName = LispString.getValue(list.car());
-                    pkg.export(pkg.intern(symbolName));
-                    list = list.cdr();
-                }
+            while (exports != NIL) {
+                LispObject obj = exports.car();
+                String symbolName = LispString.getValue(exports.car());
+                pkg.export(pkg.intern(symbolName));
+                exports = exports.cdr();
             }
 
             return NIL;
