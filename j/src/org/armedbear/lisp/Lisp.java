@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.297 2004-11-06 14:39:04 piso Exp $
+ * $Id: Lisp.java,v 1.298 2004-11-06 18:51:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -602,8 +602,6 @@ public abstract class Lisp
     public static final LispObject checkList(LispObject obj)
         throws ConditionThrowable
     {
-        if (obj == null)
-            throw new NullPointerException();
         if (obj.listp())
             return obj;
         return signal(new TypeError(obj, Symbol.LIST));
