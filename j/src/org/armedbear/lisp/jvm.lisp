@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.397 2005-02-14 04:06:11 piso Exp $
+;;; $Id: jvm.lisp,v 1.398 2005-02-17 18:38:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -490,7 +490,9 @@
              (when protected
                (setf (block-non-local-return-p block) t))))
           (t
-           (setf (block-non-local-return-p block) t))))
+           (setf (block-non-local-return-p block) t)))
+    (when (block-non-local-return-p block)
+      (dformat t "non-local return from block ~S~%" (block-name block))))
   (list* 'RETURN-FROM (cadr form) (mapcar #'p1 (cddr form))))
 
 (defun p1-tagbody (form)
@@ -1523,7 +1525,7 @@
             (when (branch-opcode-p opcode)
               (let ((label (car (instruction-args instruction))))
                 (walk-code code (symbol-value label) depth))))
-        (when (member opcode '(167 169 191)) ; GOTO RET ATHROW
+        (when (member opcode '(167 169 176 191)) ; GOTO RET ATHROW
           ;; Current path ends.
           (return-from walk-code))))))
 
@@ -1770,7 +1772,8 @@
               (176 ; ARETURN
                (setf (instruction-opcode instruction) 176
                      (instruction-args instruction) nil
-                     changed t)))))))
+                     changed t))
+              )))))
     (when changed
       (setf *code* (delete nil code))
       t)))
@@ -2752,10 +2755,12 @@
            (return-from compile-function-call))))
       (unless (> *speed* *debug*)
         (emit-push-current-thread))
-      (cond ((inline-ok op)
-             (if (eq op (compiland-name *current-compiland*)) ; recursive call
-                 (emit 'aload 0) ; this
-                 (emit 'getstatic *this-class* (declare-function op) +lisp-object+)))
+      (cond ((eq op (compiland-name *current-compiland*)) ; recursive call
+             (if (notinline-p op)
+                 (emit 'getstatic *this-class* (declare-symbol op) +lisp-symbol+)
+                 (emit 'aload 0)))
+            ((inline-ok op)
+             (emit 'getstatic *this-class* (declare-function op) +lisp-object+))
             ((null (symbol-package op))
              (let ((g (if *compile-file-truename*
                           (declare-object-as-string op)
@@ -3325,6 +3330,7 @@
                  (setf (variable-register variable) (allocate-register)))))))
     ;; If we're going to bind any special variables...
     (when bind-special-p
+      (dformat t "p2-m-v-b-node lastSpecialBinding~%")
       ;; Save current dynamic environment.
       (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
@@ -3405,6 +3411,7 @@
         (return)))
     ;; If so...
     (when specialp
+      (dformat t "p2-let/let*-node lastSpecialBinding~%")
       ;; Save current dynamic environment.
       (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
@@ -3589,6 +3596,7 @@
           (push tag local-tags)
           (push tag *visible-tags*))))
     (when (block-non-local-go-p block)
+      (dformat t "p2-tagbody-node lastSpecialBinding~%")
       (setf environment-register (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)
@@ -3730,11 +3738,16 @@
          (*register* *register*))
     (setf (block-target block) target)
     (when (block-return-p block)
-      ;; Save current dynamic environment.
-      (setf (block-environment-register block) (allocate-register))
-      (emit-push-current-thread)
-      (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)
-      (emit 'astore (block-environment-register block)))
+      (dformat t "p2-block-node lastSpecialBinding~%")
+      (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
+      (cond ((some #'variable-special-p *all-variables*)
+;;              Save current dynamic environment.
+             (setf (block-environment-register block) (allocate-register))
+             (emit-push-current-thread)
+             (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)
+             (emit 'astore (block-environment-register block)))
+            (t
+             (dformat t "no specials~%"))))
     (setf (block-catch-tag block) (gensym))
     (let* ((*register* *register*)
            (BEGIN-BLOCK (gensym))
