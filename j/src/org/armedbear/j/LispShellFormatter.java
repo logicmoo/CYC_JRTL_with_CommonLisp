@@ -2,7 +2,7 @@
  * LispShellFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispShellFormatter.java,v 1.3 2002-11-24 05:05:30 piso Exp $
+ * $Id: LispShellFormatter.java,v 1.4 2002-12-28 01:27:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,10 @@ import gnu.regexp.UncheckedRE;
 public final class LispShellFormatter extends Formatter
 {
     // Formats.
-    private static final byte FORMAT_TEXT   = 0;
-    private static final byte FORMAT_PROMPT = 1;
-    private static final byte FORMAT_INPUT  = 2;
+    private static final byte FORMAT_TEXT    = 0;
+    private static final byte FORMAT_COMMENT = 1;
+    private static final byte FORMAT_PROMPT  = 2;
+    private static final byte FORMAT_INPUT   = 3;
 
     private final RE defaultPromptRE =
         new UncheckedRE("^[^>\\*\\]]*[>\\*\\]] *");
@@ -48,6 +49,11 @@ public final class LispShellFormatter extends Formatter
             return segmentList;
         }
         final String text = getDetabbedText(line);
+        final String trim = text.trim();
+        if (trim.length() > 0 && trim.charAt(0) == ';') {
+            addSegment(text, FORMAT_COMMENT);
+            return segmentList;
+        }
         switch (line.flags()) {
             case STATE_PROMPT: {
                 addSegment(text, FORMAT_PROMPT);
@@ -110,6 +116,7 @@ public final class LispShellFormatter extends Formatter
         if (formatTable == null) {
             formatTable = new FormatTable("LispShellMode");
             formatTable.addEntryFromPrefs(FORMAT_TEXT, "text");
+            formatTable.addEntryFromPrefs(FORMAT_COMMENT, "comment");
             formatTable.addEntryFromPrefs(FORMAT_PROMPT, "prompt");
             formatTable.addEntryFromPrefs(FORMAT_INPUT, "input" );
         }
