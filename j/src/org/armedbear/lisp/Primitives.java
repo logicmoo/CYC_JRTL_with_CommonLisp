@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.628 2004-04-14 14:32:27 piso Exp $
+ * $Id: Primitives.java,v 1.629 2004-04-16 01:08:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3373,27 +3373,28 @@ public final class Primitives extends Lisp
 
     // ### %write-string
     // write-string string output-stream start end => string
-    private static final Primitive _WRITE_STRING =
-        new Primitive("%write-string", PACKAGE_SYS, false)
+    private static final Primitive4 _WRITE_STRING =
+        new Primitive4("%write-string", PACKAGE_SYS, false,
+                       "string output-stream start end")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
         {
-            if (args.length != 4)
-                signal(new WrongNumberOfArgumentsException(this));
             AbstractString s;
             try {
-                s = (AbstractString) args[0];
+                s = (AbstractString) first;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(args[0], Symbol.STRING));
+                return signal(new TypeError(first, Symbol.STRING));
             }
-            Stream out = outSynonymOf(args[1]);
-            int start = Fixnum.getValue(args[2]);
-            int end = Fixnum.getValue(args[3]);
+            Stream out = outSynonymOf(second);
+            int start = Fixnum.getValue(third);
+            int end = Fixnum.getValue(fourth);
             char[] chars = s.chars();
             checkBounds(start, end, chars.length);
             out._writeChars(chars, start, end);
-            return args[0];
+            return first;
         }
     };
 
