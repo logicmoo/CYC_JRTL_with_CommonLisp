@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.339 2005-01-02 02:30:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.340 2005-01-02 04:11:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3879,44 +3879,33 @@
         (push decl body))
       (setf form (list* 'LAMBDA arglist body)))
     (let ((*nesting-level* (1+ *nesting-level*)))
-      (cond (*compile-file-truename*
-             (setf classfile (sys::next-classfile-name))
-;;              (compile-defun name form nil classfile)
-
-;;              (aver (eq (car form) 'LAMBDA))
-;;              (handler-bind ((warning #'handle-warning))
-;;                (let ((precompiled-form (if *current-compiland*
-;;                                            form
-;;                                            (precompile-form form t))))
-                 (compile-1 (make-compiland :name name
-;;                                             :lambda-expression precompiled-form
-                                            :lambda-expression form
-                                            :classfile classfile
-                                            :parent *current-compiland*))
-;;              )
-;;                )
-
-             )
-            (t
-             (setf classfile (prog1
+      (setf classfile (if *compile-file-truename*
+                          (sys::next-classfile-name)
+                          (prog1
                               (%format nil "local-~D.class" *child-count*)
-                              (incf *child-count*)))
-;;              (compile-defun name form nil classfile)
-
-;;              (aver (eq (car form) 'LAMBDA))
-;;              (handler-bind ((warning #'handle-warning))
-;;                (let ((precompiled-form (if *current-compiland*
-;;                                            form
-;;                                            (precompile-form form t))))
-                 (compile-1 (make-compiland :name name
-;;                                             :lambda-expression precompiled-form
-                                            :lambda-expression form
-                                            :classfile classfile
-                                            :parent *current-compiland*))
-;;                  )
-;;                )
-
-             (setf function (sys:load-compiled-function classfile)))))
+                              (incf *child-count*))))
+      (compile-1 (make-compiland :name name
+                                        :lambda-expression form
+                                        :classfile classfile
+                                        :parent *current-compiland*))
+;;       (cond (*compile-file-truename*
+;; ;;              (setf classfile (sys::next-classfile-name))
+;; ;;              (compile-1 (make-compiland :name name
+;; ;;                                         :lambda-expression form
+;; ;;                                         :classfile classfile
+;; ;;                                         :parent *current-compiland*))
+;;              )
+;;             (t
+;; ;;              (setf classfile (prog1
+;; ;;                               (%format nil "local-~D.class" *child-count*)
+;; ;;                               (incf *child-count*)))
+;; ;;              (compile-1 (make-compiland :name name
+;; ;;                                         :lambda-expression form
+;; ;;                                         :classfile classfile
+;; ;;                                         :parent *current-compiland*))
+;;              (setf function (sys:load-compiled-function classfile)))))
+      (when (null *compile-file-truename*)
+        (setf function (sys:load-compiled-function classfile))))
     (cond (local-function
            (setf (local-function-classfile local-function) classfile)
            (let ((g (if *compile-file-truename*
