@@ -2,7 +2,7 @@
  * CharacterOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: CharacterOutputStream.java,v 1.3 2003-08-11 16:10:56 piso Exp $
+ * $Id: CharacterOutputStream.java,v 1.4 2003-08-16 16:53:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +65,8 @@ public class CharacterOutputStream extends LispStream
     public LispObject terpri() throws StreamError
     {
         try {
-            writer.write(System.getProperty("line.separator"));
+            writer.write(lineSeparator);
+            writer.flush();
             charPos = 0;
         }
         catch (IOException e) {
@@ -79,7 +80,8 @@ public class CharacterOutputStream extends LispStream
         if (charPos == 0)
             return NIL;
         try {
-            writer.write(System.getProperty("line.separator"));
+            writer.write(lineSeparator);
+            writer.flush();
             charPos = 0;
         }
         catch (IOException e) {
@@ -102,14 +104,15 @@ public class CharacterOutputStream extends LispStream
     {
         try {
             writer.write(c);
+            if (c == '\n') {
+                writer.flush();
+                charPos = 0;
+            } else
+                ++charPos;
         }
         catch (IOException e) {
             throw new StreamError(e);
         }
-        if (c == '\n')
-            charPos = 0;
-        else
-            ++charPos;
     }
 
     // PRINC is just like PRIN1 except that the output has no escape
@@ -126,15 +129,15 @@ public class CharacterOutputStream extends LispStream
         thread.setDynamicEnvironment(oldDynEnv);
         try {
             writer.write(s);
+            int index = s.lastIndexOf('\n');
+            if (index < 0)
+                charPos += s.length();
+            else
+                charPos = s.length() - (index + 1);
         }
         catch (IOException e) {
             throw new StreamError(e);
         }
-        int index = s.lastIndexOf('\n');
-        if (index < 0)
-            charPos += s.length();
-        else
-            charPos = s.length() - (index + 1);
     }
 
     // PRIN1 produces output suitable for input to READ.
@@ -144,21 +147,26 @@ public class CharacterOutputStream extends LispStream
         String s = String.valueOf(obj);
         try {
             writer.write(s);
+            int index = s.lastIndexOf('\n');
+            if (index < 0)
+                charPos += s.length();
+            else
+                charPos = s.length() - (index + 1);
         }
         catch (IOException e) {
             throw new StreamError(e);
         }
-        int index = s.lastIndexOf('\n');
-        if (index < 0)
-            charPos += s.length();
-        else
-            charPos = s.length() - (index + 1);
     }
 
     public void writeChar(char c) throws StreamError
     {
         try {
             writer.write(c);
+            if (c == '\n') {
+                writer.flush();
+                charPos = 0;
+            } else
+                ++charPos;
         }
         catch (IOException e) {
             throw new StreamError(e);
@@ -190,6 +198,7 @@ public class CharacterOutputStream extends LispStream
         try {
             writer.write(s);
             writer.write(lineSeparator);
+            writer.flush();
             charPos = 0;
         }
         catch (IOException e) {
@@ -204,7 +213,8 @@ public class CharacterOutputStream extends LispStream
         t.printStackTrace(pw);
         try {
             writer.write(sw.toString());
-            writer.write(System.getProperty("line.separator"));
+            writer.write(lineSeparator);
+            writer.flush();
             charPos = 0;
         }
         catch (IOException e) {
