@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: loop.lisp,v 1.10 2004-02-21 16:00:22 piso Exp $
+;;; $Id: loop.lisp,v 1.11 2004-10-20 04:25:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -85,6 +85,8 @@
 ;;;;      Burlington, Massachusetts  01803
 ;;;;      United States of America
 ;;;;      +1-617-221-1000
+
+(in-package #:system)
 
 (defpackage "LOOP" (:use "COMMON-LISP"))
 
