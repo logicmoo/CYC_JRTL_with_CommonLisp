@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.199 2003-05-27 19:08:55 piso Exp $
+ * $Id: Primitives.java,v 1.200 2003-05-28 00:21:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4469,6 +4469,25 @@ public final class Primitives extends Module
                 return list;
             } else
                 return obj;
+        }
+    };
+
+    private static final Primitive1 REVERSE = new Primitive1("reverse") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof AbstractVector)
+                return ((AbstractVector)arg).reverse();
+            if (arg instanceof Cons) {
+                LispObject result = NIL;
+                while (arg != NIL) {
+                    result = new Cons(arg.car(), result);
+                    arg = arg.cdr();
+                }
+                return result;
+            }
+            if (arg == NIL)
+                return NIL;
+            throw new TypeError(arg, "proper sequence");
         }
     };
 }
