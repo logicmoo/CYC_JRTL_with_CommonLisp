@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.35 2004-04-22 15:15:40 piso Exp $
+ * $Id: LispAPI.java,v 1.36 2004-08-30 18:05:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,9 @@ public final class LispAPI extends Lisp
         PACKAGE_J_INTERNALS.usePackage(PACKAGE_EXT);
         PACKAGE_J_INTERNALS.usePackage(PACKAGE_JAVA);
     }
+
+    public static final Symbol BUFFER_STREAM =
+        LispAPI.PACKAGE_J.addExternalSymbol("BUFFER-STREAM");
 
     public static final Symbol _CURRENT_COMMAND_ =
         exportSpecial("*CURRENT-COMMAND*", PACKAGE_J, NIL);
@@ -183,9 +186,10 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### buffer
+    // ### editor-buffer editor => buffer
     private static final Primitive1 BUFFER =
-        new Primitive1("buffer", PACKAGE_J, true) {
+        new Primitive1("editor-buffer", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new JavaObject(checkEditor(arg).getBuffer());
@@ -935,6 +939,47 @@ public final class LispAPI extends Lisp
                 return NIL;
             }
             return signal(new UndefinedFunction(arg));
+        }
+    };
+
+    // ### make-buffer-stream buffer => stream
+    private static final Primitive MAKE_BUFFER_STREAM =
+        new Primitive("make-buffer-stream", PACKAGE_J, true)
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return new BufferStream(new Buffer(0));
+        }
+
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return new BufferStream(checkBuffer(arg));
+        }
+    };
+
+    // ### buffer-stream-buffer stream => buffer
+    private static final Primitive1 BUFFER_STREAM_BUFFER =
+        new Primitive1("buffer-stream-buffer", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof BufferStream)
+                return new JavaObject(((BufferStream)arg).getBuffer());
+            return signal(new TypeError(arg, "BUFFER-STREAM"));
+        }
+    };
+
+    // ### pop-to-buffer buffer => buffer
+    private static final Primitive POP_TO_BUFFER =
+        new Primitive("pop-to-buffer", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Buffer buffer = checkBuffer(arg);
+            Editor editor = Editor.currentEditor();
+            editor.makeNext(buffer);
+            editor.activateInOtherWindow(buffer);
+            return arg;
         }
     };
 
