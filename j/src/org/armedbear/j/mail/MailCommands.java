@@ -1,8 +1,8 @@
 /*
  * MailCommands.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: MailCommands.java,v 1.3 2003-04-18 16:50:20 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: MailCommands.java,v 1.4 2003-07-04 15:01:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -169,6 +169,11 @@ public final class MailCommands implements Constants
             editor.makeNext(mb);
             editor.switchToBuffer(mb);
         }
+    }
+
+    public static Buffer getMailboxBuffer(Editor editor, MailboxURL url)
+    {
+        return getMailbox(editor, url);
     }
 
     public static Mailbox getMailbox(Editor editor, MailboxURL url)
