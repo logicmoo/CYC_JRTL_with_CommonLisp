@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.32 2004-05-23 02:49:28 piso Exp $
+;;; $Id: top-level.lisp,v 1.33 2004-05-28 10:52:15 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 
 (in-package "TOP-LEVEL")
 
-(import 'sys::%format)
+(import '(sys::%format sys::list-traced-functions sys::trace-1 sys::untrace-1 sys::untrace-all))
 
 (defvar *null-cmd* (gensym))
 
@@ -199,6 +199,19 @@
 (defun pwd-command (ignored)
   (format t "~A~%" (namestring *default-pathname-defaults*)))
 
+
+(defun trace-command (args) 
+  (if (zerop (length args))
+    (format t "~A~%" (list-traced-functions))
+    (dolist (f (tokenize args))
+      (trace-1 (read-from-string f)))))
+
+(defun untrace-command (args) 
+  (if (zerop (length args))
+    (untrace-all)
+    (dolist (f (tokenize args))
+      (untrace-1 (read-from-string f)))))
+
 (defconstant spaces (make-string 32 :initial-element #\space))
 
 (defun pad (string width)
@@ -245,7 +258,9 @@
     ("package" "pa" package-command "change *PACKAGE*")
     ("pwd" "pw" pwd-command "print current directory")
     ("reset" "res" reset-command "return to top level")
-    ("rq" nil rq-command "require a module")))
+    ("rq" nil rq-command "require a module")
+    ("trace" "tr" trace-command "trace function(s)")
+    ("untrace" "untr" untrace-command "untrace function(s)")))
 
 (defun entry-name (entry)
   (first entry))
