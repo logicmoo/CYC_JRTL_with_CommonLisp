@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.42 2004-03-11 19:03:19 piso Exp $
+ * $Id: Stream.java,v 1.43 2004-03-11 19:44:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -251,6 +251,9 @@ public class Stream extends LispObject
 
     private LispObject processChar(char c) throws ConditionThrowable
     {
+        LispObject handler = getCurrentReadtable().getReaderMacroFunction(c);
+        if (handler instanceof ReaderMacroFunction)
+            return ((ReaderMacroFunction)handler).execute(this, c);
         switch (c) {
             case '"':
                 return readString();
