@@ -383,6 +383,7 @@ seventh
 shadow
 shadowing-import
 shiftf
+simple-bit-vector-p
 simple-string-p
 sixth
 some
