@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.20 2003-10-10 17:13:33 piso Exp $
+;;; $Id: subtypep.lisp,v 1.21 2003-10-14 02:31:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -127,14 +127,19 @@
           (return)))
     (case tp
       ((ARRAY SIMPLE-ARRAY)
-       (when (and i (eq (car i) nil))
+       (when (and i (eq (car i) nil)) ; Element type is NIL.
          (if (eq tp 'simple-array)
              (setq tp 'simple-string)
              (setq tp 'string))
-         (when (cadr i)
-           (if (consp (cadr i))
-               (setq i (cadr i))
-               (setq i (list (cadr i)))))))
+         (when (cadr i) ; rank/dimensions
+           (cond ((and (consp (cadr i)) (= (length (cadr i)) 1))
+                  (if (eq (caadr i) '*)
+                      (setq i nil)
+                      (setq i (cadr i))))
+                 ((eql (cadr i) 1)
+                  (setq i nil))
+                 (t
+                  (error "invalid type specifier ~S" type))))))
       ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
        (setq tp 'float)))
     (if i (cons tp i) tp)))
