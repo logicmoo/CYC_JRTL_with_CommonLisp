@@ -307,6 +307,7 @@
         (prefix "/home/peter/gcl/ansi-tests/")
         (suffix ".lsp")
         (tests (or args (list "and"
+                              "aref"
                               "block"
                               "boundp"
                               "call-arguments-limit"
