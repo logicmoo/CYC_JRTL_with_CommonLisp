@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.85 2004-02-14 00:20:26 piso Exp $
+;;; $Id: clos.lisp,v 1.86 2004-02-16 19:14:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -942,20 +942,13 @@
     (finalize-generic-function gf)
     gf))
 
-;;; Run-time environment hacking (Common Lisp ain't got 'em).
-
 (defun top-level-environment ()
-  nil) ; Bogus top level lexical environment
-
-(defvar compile-methods nil)      ; by default, run everything interpreted
+  nil)
 
 (defun compile-in-lexical-environment (env lambda-expr)
-  (declare (ignore env))
-  (if compile-methods
-      (compile nil lambda-expr)
-      (eval `(function ,lambda-expr))))
+  (make-closure lambda-expr env))
 
-(defmacro defmethod (&rest args)
+(defmacro defmethod (&rest args &environment environment)
   (multiple-value-bind
     (function-name qualifiers lambda-list specializers documentation declarations body)
     (parse-defmethod args)
@@ -971,7 +964,7 @@
                       :documentation ,documentation
                       :declarations ',declarations
                       :body ',body
-                      :environment (top-level-environment)))))
+                      :environment ,environment))))
 
 (defun canonicalize-specializers (specializers)
   (mapcar #'canonicalize-specializer specializers))
