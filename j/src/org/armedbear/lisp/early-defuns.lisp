@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.21 2005-03-17 14:59:57 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.22 2005-03-23 18:24:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -101,7 +101,10 @@
       (SIGNED-BYTE
        (if (or (null i) (eq (car i) '*))
            (return-from normalize-type 'integer)
-           (return-from normalize-type (list 'integer (expt -2 (1- (car i))) (1- (expt 2 (1- (car i))))))))
+           (return-from normalize-type
+                        (list 'integer
+                              (- (expt 2 (1- (car i))))
+                              (1- (expt 2 (1- (car i))))))))
       (UNSIGNED-BYTE
        (if (or (null i) (eq (car i) '*))
            (return-from normalize-type '(integer 0 *)))
