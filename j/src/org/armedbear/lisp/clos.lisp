@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.125 2004-11-06 20:58:26 piso Exp $
+;;; $Id: clos.lisp,v 1.126 2004-11-06 21:22:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -429,11 +429,13 @@
 
 (defsetf std-slot-value %set-std-slot-value)
 
-(defun (setf slot-value) (new-value object slot-name)
+(defun %set-slot-value (object slot-name new-value)
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (setf (std-slot-value object slot-name) new-value)
       (setf-slot-value-using-class
        new-value (class-of object) object slot-name)))
+
+(defsetf slot-value %set-slot-value)
 
 (defun slot-boundp (object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
