@@ -2,7 +2,7 @@
  * CustomFocusManager.java
  *
  * Copyright (C) 1999-2002 Peter Graves
- * $Id: CustomFocusManager.java,v 1.2 2003-02-20 19:42:27 piso Exp $
+ * $Id: CustomFocusManager.java,v 1.3 2003-02-23 01:21:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.j;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import javax.swing.DefaultFocusManager;
+import javax.swing.JDialog;
 import javax.swing.JMenu;
 
 public final class CustomFocusManager extends DefaultFocusManager
@@ -48,20 +49,35 @@ public final class CustomFocusManager extends DefaultFocusManager
             }
             return;
         }
-        if (Editor.preferences().getBooleanProperty(Property.ENABLE_KEY_PRESSED_HOOK)) {
-            if (!(focusedComponent instanceof Display)) {
-                if (e.getID() == KeyEvent.KEY_PRESSED) {
-                    KeyMapping km;
-                    int keyCode = e.getKeyCode();
-                    if (keyCode != 0)
-                        km = new KeyMapping(keyCode, e.getModifiers(), null);
-                    else
-                        km = new KeyMapping(e.getKeyChar(), null);
-                    Editor.runHooks("key-pressed-hook",
-                        "\"" + km.toString() + "\"");
-                }
+        if (e.getID() == KeyEvent.KEY_PRESSED) {
+            if (isComponentHookable(focusedComponent)) {
+                KeyMapping km;
+                int keyCode = e.getKeyCode();
+                if (keyCode != 0)
+                    km = new KeyMapping(keyCode, e.getModifiers(), null);
+                else
+                    km = new KeyMapping(e.getKeyChar(), null);
+                Editor.runHooks("key-pressed-hook",
+                    "\"" + km.toString() + "\"");
             }
         }
         super.processKeyEvent(focusedComponent, e);
+    }
+
+    private static final boolean isComponentHookable(Component c)
+    {
+        if (c instanceof Display)
+            return false;
+        if (c == null)
+            return false;
+        if (!Editor.preferences().getBooleanProperty(Property.ENABLE_KEY_PRESSED_HOOK))
+            return false;
+        while (true) {
+            if (c instanceof JDialog)
+                return false;
+            c = c.getParent();
+            if (c == null)
+                return true;
+        }
     }
 }
