@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.263 2003-06-24 01:22:13 piso Exp $
+ * $Id: Primitives.java,v 1.264 2003-06-24 18:20:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4440,6 +4440,39 @@ public final class Primitives extends Module
                 tail = tail.cdr();
             }
             return NIL;
+        }
+    };
+
+    // ### funcall-key
+    // funcall-key function-or-nil element
+    private static final Primitive2 FUNCALL_KEY = new Primitive2("funcall-key") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws Condition
+        {
+            if (first != NIL) {
+                LispObject[] args = new LispObject[1];
+                args[0] = second;
+                return funcall(first, args, LispThread.currentThread());
+            }
+            return second;
+        }
+    };
+
+    // ### coerce-to-function
+    private static final Primitive1 COERCE_TO_FUNCTION =
+        new Primitive1("coerce-to-function") {
+        public LispObject execute(LispObject arg) throws Condition
+        {
+            if (arg instanceof Function)
+                return arg;
+            if (arg instanceof Symbol) {
+                LispObject fun = arg.getSymbolFunction();
+                if (fun instanceof Function)
+                    return fun;
+            }
+            if (arg instanceof Cons && arg.car() == Symbol.LAMBDA)
+                return new Closure(arg.cadr(), arg.cdr().cdr(), new Environment());
+            throw new UndefinedFunctionError(arg);
         }
     };
 }
