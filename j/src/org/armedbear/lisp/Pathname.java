@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.25 2004-01-01 18:55:00 piso Exp $
+ * $Id: Pathname.java,v 1.26 2004-01-01 20:34:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.lisp;
 
 import java.io.File;
+import java.util.StringTokenizer;
 
 public final class Pathname extends LispObject
 {
@@ -33,7 +34,7 @@ public final class Pathname extends LispObject
     // A string, NIL, :wild or :unspecific.
     private LispObject type = NIL;
 
-    // A positive integer, or NIL, :wild, :unspecific, or :newest.
+    // A positive integer, or NIL, :WILD, :UNSPECIFIC, or :NEWEST.
     private LispObject version = NIL;
 
     private String namestring;
@@ -42,40 +43,55 @@ public final class Pathname extends LispObject
     {
     }
 
-    private Pathname(String s)
+    private Pathname(String s) throws ConditionThrowable
     {
         if (s != null) {
             this.namestring = s;
+            String d = null;
             // Find last file separator char.
             for (int i = s.length(); i-- > 0;) {
                 char c = s.charAt(i);
                 if (c == '/' || c == '\\') {
-                    directory = new LispString(s.substring(0, i + 1));
+                    d = s.substring(0, i + 1);
                     s = s.substring(i + 1);
                     break;
                 }
             }
+            if (d != null)
+                directory = parseDirectory(d);
             int index = s.lastIndexOf('.');
+            String n = null;
+            String t = null;
             if (index > 0) {
-                name = new LispString(s.substring(0, index));
-                type = new LispString(s.substring(index + 1));
-            } else
-                name = new LispString(s);
+                n = s.substring(0, index);
+                t = s.substring(index + 1);
+            } else if (s.length() > 0)
+                n = s;
+            if (n != null) {
+                if (n.equals("*"))
+                    name = Keyword.WILD;
+                else
+                    name = new LispString(n);
+            }
+            if (t != null) {
+                if (t.equals("*"))
+                    type = Keyword.WILD;
+                else
+                    type = new LispString(t);
+            }
         }
     }
 
-    private Pathname(String directory, String name)
+    private static final LispObject parseDirectory(String d)
+        throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
-        if (directory != null && directory.length() > 0) {
-            sb.append(directory);
-            if (!directory.endsWith(File.separator))
-                sb.append(File.separator);
-        }
-        if (name != null && name.length() > 0) {
-            sb.append(name);
-        }
-        namestring = sb.toString();
+        if (d.equals("/"))
+            return list1(Keyword.ABSOLUTE);
+        LispObject result = new Cons(Keyword.ABSOLUTE);
+        StringTokenizer st = new StringTokenizer(d, "/\\");
+        while (st.hasMoreTokens())
+            result = new Cons(new LispString(st.nextToken()), result);
+        return result.nreverse();
     }
 
     public LispObject typeOf()
@@ -108,6 +124,8 @@ public final class Pathname extends LispObject
             sb.append(File.separatorChar);
         if (name instanceof LispString)
             sb.append(((LispString)name).getValue());
+        else if (name == Keyword.WILD)
+            sb.append('*');
         if (type instanceof LispString) {
             sb.append('.');
             sb.append(((LispString)type).getValue());
@@ -163,6 +181,7 @@ public final class Pathname extends LispObject
     }
 
     public static Pathname parseNamestring(String namestring)
+        throws ConditionThrowable
     {
         return new Pathname(namestring);
     }
@@ -318,7 +337,12 @@ public final class Pathname extends LispObject
             Pathname p = new Pathname();
             p.host = args[0];
             p.device = args[1];
-            p.directory = args[2];
+            if (args[2] instanceof LispString)
+                p.directory = list2(Keyword.ABSOLUTE, args[2]);
+            else if (args[2] == Keyword.WILD)
+                p.directory = list2(Keyword.ABSOLUTE, Keyword.WILD);
+            else
+                p.directory = args[2];
             p.name = args[3];
             p.type = args[4];
             p.version = args[5]; // Ignored.
