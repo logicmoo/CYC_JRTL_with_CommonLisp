@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.32 2004-10-17 12:10:10 piso Exp $
+;;; $Id: compile-system.lisp,v 1.33 2004-10-17 13:23:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,27 @@
 (require '#:loop)
 (require '#:collect)
 (require '#:jvm)
+
+(defun grovel-java-definitions-in-file (file out)
+  (with-open-file (in file)
+    (let ((line-number 1))
+      (loop
+        (let ((text (read-line in nil in))
+              position)
+          (cond ((eq text in)
+                 (return))
+                ((setf position (search "###" text))
+                 (let ((name (read-from-string (subseq text (+ position 3)))))
+                   (format out "~S ~S ~S~%" name file line-number))))
+          (incf line-number))))))
+
+(defun grovel-java-definitions ()
+  (time
+   (let ((files (directory (merge-pathnames "*.java" *lisp-home*))))
+     (with-open-file (stream (merge-pathnames "tags" *lisp-home*)
+                             :direction :output :if-exists :supersede)
+       (dolist (file files)
+         (grovel-java-definitions-in-file file stream))))))
 
 (defun maybe-compile-file (source-file &key force)
   (if force

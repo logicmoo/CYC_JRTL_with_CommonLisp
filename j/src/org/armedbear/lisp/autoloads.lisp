@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.168 2004-10-17 12:09:40 piso Exp $
+;;; $Id: autoloads.lisp,v 1.169 2004-10-17 13:23:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -255,8 +255,8 @@
 (autoload 'socket-close "socket")
 (export 'get-socket-stream)
 (autoload 'get-socket-stream "socket")
-(export 'compile-system)
-(autoload 'compile-system)
+(export '(grovel-java-definitions compile-system))
+(autoload '(grovel-java-definitions compile-system) "compile-system")
 (export 'with-thread-lock)
 (autoload-macro 'with-thread-lock)
 (export 'aver)
