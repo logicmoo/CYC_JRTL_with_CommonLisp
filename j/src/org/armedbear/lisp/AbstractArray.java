@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.26 2004-05-27 20:44:59 piso Exp $
+ * $Id: AbstractArray.java,v 1.27 2004-09-29 01:17:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,21 +175,50 @@ public abstract class AbstractArray extends LispObject
             if (dimensions.length == 0) {
                 sb.append(getRowMajor(index).writeToString());
             } else {
-                sb.append('(');
-                int[] dims = new int[dimensions.length - 1];
-                for (int i = 1; i < dimensions.length; i++)
-                    dims[i-1] = dimensions[i];
-                int count = 1;
-                for (int i = 0; i < dims.length; i++)
-                    count *= dims[i];
-                int length = dimensions[0];
-                for (int i = 0; i < length; i++) {
-                    if (i != 0)
-                        sb.append(' ');
-                    appendContents(dims, index, sb);
-                    index += count;
-                }
-                sb.append(')');
+                final LispThread thread = LispThread.currentThread();
+                final LispObject printLength = _PRINT_LENGTH_.symbolValue(thread);
+                final int maxLength;
+                if (printLength instanceof Fixnum)
+                    maxLength = ((Fixnum)printLength).value;
+                else
+                    maxLength = Integer.MAX_VALUE;
+                final LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+                final int maxLevel;
+                if (printLevel instanceof Fixnum)
+                    maxLevel = ((Fixnum)printLevel).value;
+                else
+                    maxLevel = Integer.MAX_VALUE;
+                LispObject currentPrintLevel =
+                    _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+                int currentLevel = Fixnum.getValue(currentPrintLevel);
+                if (currentLevel < maxLevel) {
+                    Environment oldDynEnv = thread.getDynamicEnvironment();
+                    thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
+                    try {
+                        sb.append('(');
+                        int[] dims = new int[dimensions.length - 1];
+                        for (int i = 1; i < dimensions.length; i++)
+                            dims[i-1] = dimensions[i];
+                        int count = 1;
+                        for (int i = 0; i < dims.length; i++)
+                            count *= dims[i];
+                        final int length = dimensions[0];
+                        final int limit = Math.min(length, maxLength);
+                        for (int i = 0; i < limit; i++) {
+                            appendContents(dims, index, sb);
+                            if (i < limit - 1)
+                                sb.append(' ');
+                            index += count;
+                        }
+                        if (limit < length)
+                            sb.append(" ...");
+                        sb.append(')');
+                    }
+                    finally {
+                        thread.setDynamicEnvironment(oldDynEnv);
+                    }
+                } else
+                    sb.append('#');
             }
         }
         catch (ConditionThrowable t) {
