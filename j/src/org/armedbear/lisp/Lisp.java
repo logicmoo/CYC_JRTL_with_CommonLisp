@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.26 2003-03-07 03:02:31 piso Exp $
+ * $Id: Lisp.java,v 1.27 2003-03-07 17:59:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -807,6 +807,7 @@ public abstract class Lisp
         public LispObject execute() throws LispError
         {
             CharacterOutputStream out = getStandardOutput();
+            out.freshLine();
             if (!profiling) {
                 Package[] packages = Packages.getAllPackages();
                 for (int i = 0; i < packages.length; i++) {
@@ -836,6 +837,7 @@ public abstract class Lisp
         public LispObject execute() throws LispError
         {
             CharacterOutputStream out = getStandardOutput();
+            out.freshLine();
             if (profiling) {
                 profiling = false;
                 out.writeLine("Profiling stopped.");
