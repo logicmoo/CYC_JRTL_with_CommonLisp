@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.42 2003-03-29 19:46:17 piso Exp $
+ * $Id: Editor.java,v 1.43 2003-03-29 20:01:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1072,7 +1072,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public void dropBookmark()
     {
         AWTEvent e = dispatcher.getLastEvent();
-        if (e.getID() == KeyEvent.KEY_PRESSED) {
+        if (e != null && e.getID() == KeyEvent.KEY_PRESSED) {
             int keyCode = ((KeyEvent)e).getKeyCode();
             int index = keyCode - KeyEvent.VK_0;
             if (index >= 0 && index < bookmarks.length) {
@@ -1088,7 +1088,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public void gotoBookmark()
     {
         AWTEvent e = dispatcher.getLastEvent();
-        if (e.getID() == KeyEvent.KEY_PRESSED) {
+        if (e != null && e.getID() == KeyEvent.KEY_PRESSED) {
             int keyCode = ((KeyEvent)e).getKeyCode();
             int index = keyCode - KeyEvent.VK_0;
             if (index >= 0 && index < bookmarks.length) {
@@ -3211,7 +3211,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         CompoundEdit compoundEdit = null;
         if (e instanceof MouseEvent) {
             compoundEdit = beginCompoundEdit();
-            mouseMoveDotToPoint((MouseEvent) e);
+            mouseMoveDotToPoint((MouseEvent)e);
         }
         if (inWord()) {
             addUndo(SimpleEdit.MOVE);
@@ -4230,7 +4230,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public final void openFile()
     {
-        if (dispatcher.getLastEvent().getSource() instanceof MenuItem) {
+        AWTEvent e = dispatcher.getLastEvent();
+        if (e != null && e.getSource() instanceof MenuItem) {
             Runnable r = new Runnable() {
                 public void run()
                 {
@@ -6171,7 +6172,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         textField.setHistory(new History("executeCommand.input", 30));
         textField.recallLast();
         textField.selectAll();
-        if (dispatcher.getLastEvent().getSource() instanceof MenuItem) {
+        AWTEvent e = dispatcher.getLastEvent();
+        if (e != null && e.getSource() instanceof MenuItem) {
             Runnable r = new Runnable() {
                 public void run()
                 {
