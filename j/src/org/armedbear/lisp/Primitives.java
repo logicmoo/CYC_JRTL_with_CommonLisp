@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.469 2003-10-10 02:57:00 piso Exp $
+ * $Id: Primitives.java,v 1.470 2003-10-12 18:23:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2143,7 +2143,7 @@ public final class Primitives extends Module
             LispObject fun = first;
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
-            if (fun instanceof Function) {
+            if (fun instanceof Function || fun instanceof GenericFunction) {
                 final int numFunArgs = spread.length();
                 final LispThread thread = LispThread.currentThread();
                 switch (numFunArgs) {
@@ -2176,7 +2176,7 @@ public final class Primitives extends Module
             LispObject fun = args[0];
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
-            if (fun instanceof Function) {
+            if (fun instanceof Function || fun instanceof GenericFunction) {
                 final int numFunArgs = numArgs - 2 + spread.length();
                 final LispObject[] funArgs = new LispObject[numFunArgs];
                 int j = 0;
