@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.453 2003-09-29 14:25:40 piso Exp $
+ * $Id: Primitives.java,v 1.454 2003-09-29 16:16:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3615,7 +3615,8 @@ public final class Primitives extends Module
         }
     };
 
-    private static final Primitive1 CHAR_NAME = new Primitive1("char-name") {
+    private static final Primitive1 CHAR_NAME = new Primitive1("char-name")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             char c = LispCharacter.getValue(arg);
@@ -3636,6 +3637,9 @@ public final class Primitives extends Module
                 case '\f':
                     name = "Page";
                     break;
+                case '\b':
+                    name = "Backspace";
+                    break;
                 default:
                     break;
             }
@@ -3643,7 +3647,8 @@ public final class Primitives extends Module
         }
     };
 
-    private static final Primitive DIGIT_CHAR = new Primitive("digit-char") {
+    private static final Primitive DIGIT_CHAR = new Primitive("digit-char")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final long radix;
@@ -3667,7 +3672,8 @@ public final class Primitives extends Module
     };
 
     private static final Primitive1 _CALL_COUNT =
-        new Primitive1("%call-count", PACKAGE_SYS, false) {
+        new Primitive1("%call-count", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new Fixnum(arg.getCallCount());
@@ -3675,7 +3681,8 @@ public final class Primitives extends Module
     };
 
     private static final Primitive2 _SET_CALL_COUNT =
-        new Primitive2("%set-call-count", PACKAGE_SYS, false) {
+        new Primitive2("%set-call-count", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
