@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShellMode.java,v 1.9 2003-03-31 16:41:09 piso Exp $
+ * $Id: LispShellMode.java,v 1.10 2003-07-26 00:31:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,6 +109,8 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         }
         if (buffer instanceof LispShell)
             ((LispShell)buffer).resetLisp();
+        else if (buffer instanceof JLisp)
+            ;
         else
             Debug.bug();
     }
