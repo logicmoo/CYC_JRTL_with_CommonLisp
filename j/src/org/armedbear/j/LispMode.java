@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.84 2005-01-24 14:23:15 piso Exp $
+ * $Id: LispMode.java,v 1.85 2005-02-01 14:22:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -213,10 +213,6 @@ public class LispMode extends AbstractMode implements Constants, Mode
         "while"
     };
 
-    private final String[] hemlockSpecials = new String[] {
-        "frob", "with-mark"
-    };
-
     public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final Line model = findModel(line);
@@ -284,7 +280,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 }
                 return buffer.getCol(pos) + indentSize;
             }
-            if (token.equals("handler-case")) {
+            if (token.equals("handler-case") || token.equals("unwind-protect")) {
                 Position p1 = forwardSexp(posFirst);
                 if (p1 != null) {
                     // Skip whitespace to get to opening '(' of form to be
@@ -301,7 +297,6 @@ public class LispMode extends AbstractMode implements Constants, Mode
             if (token.startsWith("def") ||
                 Utilities.isOneOf(token, specials) ||
                 Utilities.isOneOf(token, elispSpecials) ||
-                Utilities.isOneOf(token, hemlockSpecials) ||
                 token.startsWith("with-"))
                 return buffer.getCol(pos) + indentSize;
             // Not special. Indent under the second element of the containing
