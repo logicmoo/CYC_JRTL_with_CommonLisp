@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.50 2003-08-01 16:21:28 piso Exp $
+ * $Id: Buffer.java,v 1.51 2003-09-15 16:27:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1341,16 +1341,19 @@ public class Buffer extends SystemBuffer
         if (!isModified())
             return true;
         addUndoBoundary();
+        boolean succeeded = false;
         final File file = getFile();
         if (file != null) {
             if (file.isLocal())
-                return saveLocal(file);
+                succeeded = saveLocal(file);
             if (file instanceof FtpFile)
-                return saveFtp();
+                succeeded = saveFtp();
             if (file instanceof SshFile)
-                return saveSsh((SshFile)file);
+                succeeded = saveSsh((SshFile)file);
         }
-        return false;
+        if (succeeded && Editor.isLispInitialized())
+            LispAPI.invokeAfterSaveHook(this);
+        return succeeded;
     }
 
     private boolean saveLocal(final File file)
