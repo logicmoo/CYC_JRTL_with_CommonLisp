@@ -112,10 +112,10 @@
   (apply #'values (mapcar #'notnot (multiple-value-list (equalp x y)))))
 
 (defun make-int-list (n)
-  (let ((result nil))
-    (dotimes (i n)
-      (setf result (cons i result)))
-    (reverse result)))
+  (do ((result nil)
+       (i (1- n) (1- i)))
+    ((< i 0) result)
+    (setq result (cons i result))))
 
 (defun make-int-array (n &optional (fn #'make-array))
   (let ((a (funcall fn n)))
