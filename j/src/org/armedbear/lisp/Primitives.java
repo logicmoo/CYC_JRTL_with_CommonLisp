@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.95 2003-03-07 19:32:19 piso Exp $
+ * $Id: Primitives.java,v 1.96 2003-03-08 03:32:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -639,6 +639,46 @@ public final class Primitives extends Module
                 default:
                     throw new WrongNumberOfArgumentsException("IF");
             }
+        }
+    };
+
+    // ### %%if2
+    private static final SpecialOperator __IF2 = new SpecialOperator("%%if2") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            if (eval(args.car(), env) != NIL)
+                return eval(args.cadr(), env);
+            return NIL;
+        }
+    };
+
+    // ### %%if3
+    private static final SpecialOperator __IF3 = new SpecialOperator("%%if3") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            if (eval(args.car(), env) != NIL)
+                return eval(args.cadr(), env);
+            return eval(args.cdr().cadr(), env);
+        }
+    };
+
+    // ### sum
+    private static final Primitive2 SUM = new Primitive2("sum") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return Fixnum.sum(first, second);
+        }
+    };
+
+    // ### difference
+    private static final Primitive2 DIFFERENCE = new Primitive2("difference") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return Fixnum.difference(first, second);
         }
     };
 
@@ -2899,8 +2939,7 @@ public final class Primitives extends Module
                     try {
                         // Handle GO inline if possible.
                         if (current.car() == Symbol.GO) {
-                            LispObject tag = current.cadr();
-                            LispObject code = tagbody.getCode(tag);
+                            LispObject code = tagbody.getCode(current.cadr());
                             if (code != null) {
                                 remaining = code;
                                 continue;
@@ -2960,6 +2999,32 @@ public final class Primitives extends Module
             }
             catch (Return ret) {
                 if (ret.getName() == name) {
+                    stack.setSize(depth);
+                    return ret.getResult();
+                }
+                throw ret;
+            }
+        }
+    };
+
+    // ### %%block
+    private static final SpecialOperator __BLOCK =
+        new SpecialOperator("%%block") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            LispObject body = args.cdr();
+            LispObject result = NIL;
+            final int depth = stack.size();
+            try {
+                while (body != NIL) {
+                    result = eval(body.car(), env);
+                    body = body.cdr();
+                }
+                return result;
+            }
+            catch (Return ret) {
+                if (ret.getName() == args.car()) {
                     stack.setSize(depth);
                     return ret.getResult();
                 }
@@ -3103,6 +3168,35 @@ public final class Primitives extends Module
                     symbol.setSymbolValue(value);
                 args = args.cdr();
             }
+            return value;
+        }
+    };
+
+    // ### %%setq2
+    private static final SpecialOperator __SETQ2 =
+        new SpecialOperator("%%setq2") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            Symbol symbol = (Symbol) args.car();
+            LispObject value = eval(args.cadr(), env);
+            if (symbol.isSpecialVariable()) {
+                if (dynEnv != null) {
+                    Binding binding = dynEnv.getBinding(symbol);
+                    if (binding != null) {
+                        binding.value = value;
+                        return value;
+                    }
+                }
+                symbol.setSymbolValue(value);
+                return value;
+            }
+            // Not special.
+            Binding binding = env.getBinding(symbol);
+            if (binding != null)
+                binding.value = value;
+            else
+                symbol.setSymbolValue(value);
             return value;
         }
     };
