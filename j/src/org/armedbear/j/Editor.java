@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.28 2003-01-02 19:22:01 piso Exp $
+ * $Id: Editor.java,v 1.29 2003-01-02 19:36:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4274,9 +4274,13 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
         if (file.isRemote())
             return null;
-        if (!confirm("Create file?", file.canonicalPath() + " does not exist.  Create?"))
-            return null;
-        return Buffer.createBuffer(file);
+        // File is local.
+        if (!file.exists()) {
+            if (confirm("Create file?",
+                        file.canonicalPath() + " does not exist.  Create?"))
+                return Buffer.createBuffer(file);
+        }
+        return null;
     }
 
     public Buffer openFiles(List list)
