@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.61 2003-04-28 00:28:55 piso Exp $
+ * $Id: Lisp.java,v 1.62 2003-04-28 00:54:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -313,18 +313,6 @@ public abstract class Lisp
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "symbol");
-        }
-    }
-
-    public static Fixnum checkNumber(LispObject obj) throws LispError
-    {
-        if (obj == null)
-            throw new NullPointerException();
-        try {
-            return (Fixnum) obj;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "number");
         }
     }
 
