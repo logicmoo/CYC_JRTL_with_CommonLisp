@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.56 2003-10-18 23:10:01 piso Exp $
+;;; $Id: compiler.lisp,v 1.57 2003-10-19 01:39:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -208,7 +208,7 @@
       (TAGBODY
        (let ((body (cdr form)))
          (cons 'tagbody (compile-tagbody body))))
-      (LABELS
+      ((LABELS FLET)
 ;;        (format t "LABELS *local-macros* = ~S~%" *local-macros*)
        (let* ((locals (cadr form))
               (body (cddr form))
@@ -216,7 +216,8 @@
               (compiled-body (compile-progn body)))
 ;;          (format t "body          = ~S~%" body)
 ;;          (format t "compiled-body = ~S~%" compiled-body)
-         (append '(labels) (list compiled-locals) compiled-body)))
+;;          (append '(labels) (list compiled-locals) compiled-body)))
+         (list* first compiled-locals compiled-body)))
       (RETURN
        (if (cdr form)
            (cons 'return (list (compile-sexp (cadr form))))
