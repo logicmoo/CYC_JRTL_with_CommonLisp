@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.26 2004-04-25 17:35:44 piso Exp $
+ * $Id: StructureObject.java,v 1.27 2004-05-10 00:18:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,7 +103,7 @@ public final class StructureObject extends LispObject
                 } else
                     sb.append(slotName);
                 sb.append(' ');
-                sb.append(slots[i]);
+                sb.append(slots[i].writeToString());
             }
             if (limit < slots.length)
                 sb.append(" ...");
@@ -127,7 +127,10 @@ public final class StructureObject extends LispObject
                 return ((StructureObject)first).slots[((Fixnum)second).getValue()];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError());
+                if (first instanceof StructureObject)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.STRUCTURE_OBJECT));
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
