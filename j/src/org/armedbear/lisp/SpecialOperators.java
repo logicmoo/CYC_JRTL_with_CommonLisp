@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.7 2003-10-25 21:53:23 piso Exp $
+ * $Id: SpecialOperators.java,v 1.8 2003-10-27 17:57:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -323,7 +323,8 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### setq
-    private static final SpecialOperator SETQ = new SpecialOperator("setq") {
+    private static final SpecialOperator SETQ = new SpecialOperator("setq")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -333,22 +334,15 @@ public final class SpecialOperators extends Lisp
                 Symbol symbol = checkSymbol(args.car());
                 args = args.cdr();
                 value = eval(args.car(), env, thread);
+                Binding binding = null;
                 if (symbol.isSpecialVariable()) {
                     Environment dynEnv = thread.getDynamicEnvironment();
-                    if (dynEnv != null) {
-                        Binding binding = dynEnv.getBinding(symbol);
-                        if (binding != null) {
-                            binding.value = value;
-                            args = args.cdr();
-                            continue;
-                        }
-                    }
-                    symbol.setSymbolValue(value);
-                    args = args.cdr();
-                    continue;
+                    if (dynEnv != null)
+                        binding = dynEnv.getBinding(symbol);
+                } else {
+                    // Not special.
+                    binding = env.getBinding(symbol);
                 }
-                // Not special.
-                Binding binding = env.getBinding(symbol);
                 if (binding != null)
                     binding.value = value;
                 else
