@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: GenericFunction.java,v 1.12 2004-10-10 17:11:48 piso Exp $
+ * $Id: GenericFunction.java,v 1.13 2004-10-11 18:03:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.lisp;
 
 public final class GenericFunction extends StandardObject
 {
+    private LispObject name;
     private LispObject discriminatingFunction;
     private LispObject methods;
     private LispObject requiredArgs;
@@ -41,6 +42,16 @@ public final class GenericFunction extends StandardObject
                 return NIL;
         }
         return super.typep(type);
+    }
+
+    public LispObject getGenericFunctionName()
+    {
+        return name;
+    }
+
+    public void setGenericFunctionName(LispObject name)
+    {
+        this.name = name;
     }
 
     public LispObject getDiscriminatingFunction()
@@ -160,6 +171,36 @@ public final class GenericFunction extends StandardObject
     {
         ++callCount;
     }
+
+    private static final Primitive _GENERIC_FUNCTION_NAME =
+        new Primitive("%generic-function-name", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((GenericFunction)arg).getGenericFunctionName();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.GENERIC_FUNCTION));
+            }
+        }
+    };
+
+    private static final Primitive _SET_GENERIC_FUNCTION_NAME =
+        new Primitive("%set-generic-function-name", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((GenericFunction)first).setGenericFunctionName(second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.GENERIC_FUNCTION));
+            }
+        }
+    };
 
     private static final Primitive GENERIC_FUNCTION_DISCRIMINATING_FUNCTION =
         new Primitive("generic-function-discriminating-function", PACKAGE_SYS, false)
