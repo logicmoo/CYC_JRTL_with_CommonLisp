@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.26 2004-02-18 15:32:38 piso Exp $
+;;; $Id: top-level.lisp,v 1.27 2004-03-02 11:55:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
 
 (defvar *null-cmd* (gensym))
 
-(defparameter *command-char* #\:)
+(defvar *command-char* #\:)
 
 (defvar *cmd-number* 1
   "Number of the next command")
@@ -177,8 +177,8 @@
             (pad (entry-name entry) 12)
             (pad (entry-abbr entry) 5)
             (entry-help entry)))
-  (format t "~%Commands must be prefixed by the command character, which is '~A' by default.~%~%"
-          *command-char*))
+  (format t "~%Commands must be prefixed by the command character, which is '~A'~A.~%~%"
+          *command-char* (if (eql *command-char* #\:) " by default" "")))
 
 (defparameter *command-table*
   '(("apropos" 2 apropos-command "show apropos")
@@ -286,7 +286,7 @@
 
 (defun top-level-loop ()
   (fresh-line)
-  (%format t "Type :HELP for a list of available commands.~%")
+  (%format t "Type ~AHELP for a list of available commands.~%" *command-char*)
   (loop
       (with-simple-restart (top-level
                             "Return to top level.")
