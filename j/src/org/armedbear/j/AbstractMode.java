@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.4 2003-03-31 16:36:23 piso Exp $
+ * $Id: AbstractMode.java,v 1.5 2003-05-13 16:39:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -387,7 +387,29 @@ public abstract class AbstractMode implements Constants, Mode
         final Dispatcher dispatcher = editor.getDispatcher();
         final JPopupMenu popup = new JPopupMenu();
 
-        JMenuItem menuItem = new JMenuItem();
+        JMenuItem menuItem;
+
+        if (buffer.supportsUndo()) {
+            menuItem = new JMenuItem();
+            menuItem.setText("Undo");
+            menuItem.setActionCommand("undo");
+            menuItem.addActionListener(dispatcher);
+            if (!buffer.canUndo())
+                menuItem.setEnabled(false);
+            popup.add(menuItem);
+
+            menuItem = new JMenuItem();
+            menuItem.setText("Redo");
+            menuItem.setActionCommand("redo");
+            menuItem.addActionListener(dispatcher);
+            if (!buffer.canRedo())
+                menuItem.setEnabled(false);
+            popup.add(menuItem);
+
+            popup.addSeparator();
+        }
+
+        menuItem = new JMenuItem();
         menuItem.setText(editor.getMark() == null ? "Cut line" : "Cut");
         menuItem.setActionCommand("killRegion");
         menuItem.addActionListener(dispatcher);
@@ -463,7 +485,7 @@ public abstract class AbstractMode implements Constants, Mode
             return tb;
         return getDefaultToolBar(frame);
     }
-    
+
     protected ToolBar getCustomToolBar(Frame frame)
     {
         String filename =
@@ -478,7 +500,7 @@ public abstract class AbstractMode implements Constants, Mode
         }
         return null;
     }
-    
+
     protected ToolBar getDefaultToolBar(Frame frame)
     {
         return frame.getDefaultToolBar();
@@ -560,7 +582,7 @@ public abstract class AbstractMode implements Constants, Mode
     {
         return canIndent();
     }
-    
+
     public boolean acceptsLinePaste(Editor editor)
     {
         return true;
