@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.5 2003-02-12 02:37:51 piso Exp $
+ * $Id: Tests.java,v 1.6 2003-02-14 19:59:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -351,6 +351,14 @@ public class Tests extends TestCase
         verify("(<= 14 14)", "T");
         verify("(<= 14 15)", "T");
         verify("(<= 15 14)", "NIL");
+
+        // evenp, oddp
+        verify("(evenp 2)", "T");
+        verify("(evenp 3)", "NIL");
+        verify("(oddp 2)", "NIL");
+        verify("(oddp 3)", "T");
+        verify("(evenp 0)", "T");
+        verify("(oddp -1)", "T");
 
         // zerop
         verify("(zerop 0)", "T");
