@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.18 2004-02-11 02:41:35 piso Exp $
+;;; $Id: init.lisp,v 1.19 2004-04-13 15:57:34 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -107,8 +107,10 @@
                                  "move"
                                  "{annie}mail/netcom")))
 
-(when (probe-file "/home/peter/.j/key-pressed.lisp")
-  (load "/home/peter/.j/key-pressed.lisp"))
+(defun maybe-load (pathname)
+  (when (probe-file pathname)
+    (load pathname)))
 
-(when (probe-file "/home/peter/.j/update-check-enabled.lisp")
-  (load "/home/peter/.j/update-check-enabled.lisp"))
+(maybe-load "/home/peter/.j/key-pressed.lisp")
+(maybe-load "/home/peter/.j/update-check-enabled.lisp")
+(maybe-load "/home/peter/.j/complete.lisp")
