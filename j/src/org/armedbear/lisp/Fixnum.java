@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.77 2003-10-30 21:40:10 asimon Exp $
+ * $Id: Fixnum.java,v 1.78 2003-11-16 18:29:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -448,30 +448,30 @@ public final class Fixnum extends LispObject
     public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        LispObject[] values = new LispObject[2];
+        final LispObject value1, value2;
 	try {
 	  if (obj instanceof Fixnum) {
             long divisor = ((Fixnum)obj).value;
             long quotient = value / divisor;
             long remainder = value % divisor;
-            values[0] = number(quotient);
-            values[1] = remainder == 0 ? Fixnum.ZERO : number(remainder);
+            value1 = number(quotient);
+            value2 = remainder == 0 ? Fixnum.ZERO : number(remainder);
 	  } else if (obj instanceof Bignum) {
             BigInteger value = getBigInteger();
             BigInteger divisor = ((Bignum)obj).getValue();
             BigInteger[] results = value.divideAndRemainder(divisor);
             BigInteger quotient = results[0];
             BigInteger remainder = results[1];
-            values[0] = number(quotient);
-            values[1] = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
+            value1 = number(quotient);
+            value2 = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
 	  } else if (obj instanceof Ratio) {
             Ratio divisor = (Ratio) obj;
             LispObject quotient =
 	      multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
             LispObject remainder =
 	      subtract(quotient.multiplyBy(divisor));
-            values[0] = quotient;
-            values[1] = remainder;
+            value1 = quotient;
+            value2 = remainder;
 	  } else
             throw new ConditionThrowable(new LispError("Fixnum.truncate(): not implemented: " + obj.typeOf()));
         }
@@ -480,8 +480,7 @@ public final class Fixnum extends LispObject
                 throw new ConditionThrowable(new DivisionByZero());
             throw new ConditionThrowable(new ArithmeticError(e.getMessage()));
         }
-        thread.setValues(values);
-        return values[0];
+        return thread.setValues(value1, value2);
     }
 
     public int hashCode()

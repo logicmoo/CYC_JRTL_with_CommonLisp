@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.37 2003-10-30 21:40:10 asimon Exp $
+ * $Id: Ratio.java,v 1.38 2003-11-16 18:25:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -403,12 +403,7 @@ public final class Ratio extends LispObject
 	  // Subtract to get remainder.
 	  LispObject remainder = subtract(product);
 
-	  final LispThread thread = LispThread.currentThread();
-	  LispObject[] values = new LispObject[2];
-	  values[0] = number(quotient);
-	  values[1] = remainder;
-	  thread.setValues(values);
-	  return values[0];
+          return LispThread.currentThread().setValues(number(quotient), remainder);
         }
         catch (ArithmeticException e) {
             if (obj.zerop())
