@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.26 2002-12-14 15:48:13 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.27 2002-12-15 15:24:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -663,12 +663,12 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         textField.setText(completion);
         if (Editor.preferences().getBooleanProperty(Property.SELECT_COMPLETION)) {
             if (originalText != null) {
-                boolean select = false;
-                if (completion.startsWith(originalText))
-                    select = true;
-                else if (Utilities.isLowerCase(originalText) &&
-                         completion.toLowerCase().startsWith(originalText))
-                    select = true;
+                boolean ignoreCase =
+                    Editor.preferences().getBooleanProperty(
+                        Property.FILENAME_COMPLETIONS_IGNORE_CASE);
+                boolean select =
+                    completion.regionMatches(ignoreCase, 0, originalText, 0,
+                                             originalText.length());
                 if (select) {
                     textField.setCaretPosition(originalText.length());
                     textField.moveCaretPosition(completion.length());
