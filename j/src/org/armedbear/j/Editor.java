@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.52 2003-05-14 00:10:49 piso Exp $
+ * $Id: Editor.java,v 1.53 2003-05-20 18:13:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7338,6 +7338,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 case C_MODE:
                 case CPP_MODE:
                 case PERL_MODE:
+                case PHP_MODE:
                     if (line.trim().endsWith("{")) {
                         if (!next.isHidden()) {
                             fold(next);
