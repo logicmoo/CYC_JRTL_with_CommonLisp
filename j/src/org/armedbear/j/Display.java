@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Display.java,v 1.7 2003-03-16 19:55:37 piso Exp $
+ * $Id: Display.java,v 1.8 2003-04-03 18:33:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -649,22 +649,22 @@ public final class Display extends JComponent implements Constants,
             }
             final int maxAppend = limit - totalChars;
             if (segmentStart >= begin) {
-                if (segmentLength < maxAppend) {
+                if (segmentLength <= maxAppend) {
                     segment.getChars(0, segmentLength, ta, totalChars);
                     totalChars += segmentLength;
-                } else if (maxAppend > 1) {
-                    segment.getChars(0, maxAppend - 1, ta, totalChars);
-                    totalChars += maxAppend - 1;
+                } else if (maxAppend > 0) {
+                    segment.getChars(0, maxAppend, ta, totalChars);
+                    totalChars += maxAppend;
                 }
             } else {
                 // segmentStart < begin && segmentStart + segmentLength >= begin
                 String text = segment.substring(begin - segmentStart);
-                if (text.length() < maxAppend) {
+                if (text.length() <= maxAppend) {
                     text.getChars(0, text.length(), ta, totalChars);
                     totalChars += text.length();
-                } else if (maxAppend > 1) {
-                    text.getChars(0, maxAppend - 1, ta, totalChars);
-                    totalChars += maxAppend - 1;
+                } else if (maxAppend > 0) {
+                    text.getChars(0, maxAppend, ta, totalChars);
+                    totalChars += maxAppend;
                 }
             }
             final int format = segment.getFormat();
