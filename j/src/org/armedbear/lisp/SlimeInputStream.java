@@ -1,8 +1,8 @@
 /*
- * StringInputStream.java
+ * SlimeInputStream.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: SlimeInputStream.java,v 1.3 2004-11-03 15:27:23 piso Exp $
+ * Copyright (C) 2004 András Simon, Peter Graves
+ * $Id: SlimeInputStream.java,v 1.4 2004-11-04 11:02:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,7 +78,7 @@ public class SlimeInputStream extends Stream
         if (offset >= length) {
             try {
                 ostream.finishOutput();
-                s = funcall0(f, LispThread.currentThread()).getStringValue();
+                s = LispThread.currentThread().execute(f).getStringValue();
             }
             catch (Throwable t) {
                 return -1;
@@ -91,7 +91,7 @@ public class SlimeInputStream extends Stream
         int n = s.charAt(offset);
         ++offset;
         if (n == '\n')
-            ++lineNumber; 
+            ++lineNumber;
         return n;
     }
 
@@ -128,9 +128,11 @@ public class SlimeInputStream extends Stream
     // ### make-slime-input-stream
     // make-slime-input-stream function output-stream => slime-input-stream
     private static final Primitive MAKE_SLIME_INPUT_STREAM =
-        new Primitive("make-slime-input-stream", PACKAGE_EXT, true, "function output-stream")
+        new Primitive("make-slime-input-stream", PACKAGE_EXT, true,
+                      "function output-stream")
     {
-        public LispObject execute(LispObject first, LispObject second) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
             final Function fun;
             final Stream os;
