@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.136 2003-12-13 20:21:16 piso Exp $
+;;; $Id: boot.lisp,v 1.137 2003-12-14 17:15:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -123,6 +123,7 @@
 (sys::precompile-package "SYSTEM")
 (sys::precompile-package "COMMON-LISP")
 
+(sys::%load "signal.lisp")
 (sys::%load "list.lisp")
 (sys::%load "sequences.lisp")
 (sys::%load "error.lisp")
