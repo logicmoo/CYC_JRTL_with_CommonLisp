@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.104 2004-06-12 14:34:13 piso Exp $
+;;; $Id: clos.lisp,v 1.105 2004-06-17 10:53:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -949,7 +949,7 @@
 (defun compile-in-lexical-environment (env lambda-expr)
   (make-closure lambda-expr env))
 
-(defmacro defmethod (&rest args)
+(defmacro defmethod (&rest args &environment env)
   (multiple-value-bind
     (function-name qualifiers lambda-list specializers documentation declarations body)
     (parse-defmethod args)
@@ -971,7 +971,8 @@
                         :specializers ,specializers-form
                         :documentation ,documentation
                         :declarations ',declarations
-                        :body ',body)))))
+                        :body ',body
+                        :environment ,env)))))
 
 (defun canonicalize-specializers (specializers)
   (mapcar #'canonicalize-specializer specializers))
@@ -1050,65 +1051,63 @@
   (let ((plist (analyze-lambda-list specialized-lambda-list)))
     (getf plist ':specializers)))
 
+(defun get-keyword-from-arg (arg)
+  (if (listp arg)
+      (if (listp (car arg))
+          (caar arg)
+          (make-keyword (car arg)))
+      (make-keyword arg)))
+
 (defun analyze-lambda-list (lambda-list)
-  (labels ((make-keyword (symbol)
-                         (intern (symbol-name symbol)
-                                 (find-package 'keyword)))
-           (get-keyword-from-arg (arg)
-                                 (if (listp arg)
-                                     (if (listp (car arg))
-                                         (caar arg)
-                                         (make-keyword (car arg)))
-                                     (make-keyword arg))))
-          (let ((keys ())           ; Just the keywords
-                (key-args ())       ; Keywords argument specs
-                (keysp nil)         ;
-                (required-names ()) ; Just the variable names
-                (required-args ())  ; Variable names & specializers
-                (specializers ())   ; Just the specializers
-                (rest-var nil)
-                (optionals ())
-                (auxs ())
-                (allow-other-keys nil)
-                (state :parsing-required))
-            (dolist (arg lambda-list)
-              (if (member arg lambda-list-keywords)
-                  (ecase arg
-                    (&optional
-                     (setq state :parsing-optional))
-                    (&rest
-                     (setq state :parsing-rest))
-                    (&key
-                     (setq keysp t)
-                     (setq state :parsing-key))
-                    (&allow-other-keys
-                     (setq allow-other-keys 't))
-                    (&aux
-                     (setq state :parsing-aux)))
-                  (case state
-                    (:parsing-required
-                     (push-on-end arg required-args)
-                     (if (listp arg)
-                         (progn (push-on-end (car arg) required-names)
-                           (push-on-end (cadr arg) specializers))
-                         (progn (push-on-end arg required-names)
-                           (push-on-end 't specializers))))
-                    (:parsing-optional (push-on-end arg optionals))
-                    (:parsing-rest (setq rest-var arg))
-                    (:parsing-key
-                     (push-on-end (get-keyword-from-arg arg) keys)
-                     (push-on-end arg key-args))
-                    (:parsing-aux (push-on-end arg auxs)))))
-            (list  :required-names required-names
-                   :required-args required-args
-                   :specializers specializers
-                   :rest-var rest-var
-                   :keywords keys
-                   :key-args key-args
-                   :keysp keysp
-                   :auxiliary-args auxs
-                   :optional-args optionals
-                   :allow-other-keys allow-other-keys))))
+  (let ((keys ())           ; Just the keywords
+        (key-args ())       ; Keywords argument specs
+        (keysp nil)         ;
+        (required-names ()) ; Just the variable names
+        (required-args ())  ; Variable names & specializers
+        (specializers ())   ; Just the specializers
+        (rest-var nil)
+        (optionals ())
+        (auxs ())
+        (allow-other-keys nil)
+        (state :parsing-required))
+    (dolist (arg lambda-list)
+      (if (member arg lambda-list-keywords)
+          (ecase arg
+            (&optional
+             (setq state :parsing-optional))
+            (&rest
+             (setq state :parsing-rest))
+            (&key
+             (setq keysp t)
+             (setq state :parsing-key))
+            (&allow-other-keys
+             (setq allow-other-keys 't))
+            (&aux
+             (setq state :parsing-aux)))
+          (case state
+            (:parsing-required
+             (push-on-end arg required-args)
+             (if (listp arg)
+                 (progn (push-on-end (car arg) required-names)
+                   (push-on-end (cadr arg) specializers))
+                 (progn (push-on-end arg required-names)
+                   (push-on-end 't specializers))))
+            (:parsing-optional (push-on-end arg optionals))
+            (:parsing-rest (setq rest-var arg))
+            (:parsing-key
+             (push-on-end (get-keyword-from-arg arg) keys)
+             (push-on-end arg key-args))
+            (:parsing-aux (push-on-end arg auxs)))))
+    (list  :required-names required-names
+           :required-args required-args
+           :specializers specializers
+           :rest-var rest-var
+           :keywords keys
+           :key-args key-args
+           :keysp keysp
+           :auxiliary-args auxs
+           :optional-args optionals
+           :allow-other-keys allow-other-keys)))
 
 #+nil
 (defun check-method-arg-info (gf arg-info method)
