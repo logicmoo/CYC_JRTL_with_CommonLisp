@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.400 2003-09-16 17:41:15 piso Exp $
+ * $Id: Primitives.java,v 1.401 2003-09-18 15:40:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2990,8 +2990,8 @@ public final class Primitives extends Module
                 varList = varList.cdr();
                 if (obj instanceof Cons) {
                     bind(checkSymbol(obj.car()),
-                        eval(obj.cadr(), evalEnv, thread),
-                        ext);
+                         eval(obj.cadr(), evalEnv, thread),
+                         ext);
                 } else
                     bind(checkSymbol(obj), NIL, ext);
             }
