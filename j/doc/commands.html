@@ -60,6 +60,7 @@
     <li><a href="commands.html#cycleTabWidth">cycleTabWidth</a></li>
     <li><a href="commands.html#decodeRegion">decodeRegion</a></li>
     <li><a href="commands.html#defaultMode">defaultMode</a></li>
+    <li><a href="commands.html#defaultKeyMaps">defaultKeyMaps</a></li>
     <li><a href="commands.html#delete">delete</a></li>
     <li><a href="commands.html#deleteWordLeft">deleteWordLeft</a></li>
     <li><a href="commands.html#deleteWordRight">deleteWordRight</a></li>
@@ -260,6 +261,7 @@
     <li><a href="commands.html#recompile">recompile</a></li>
     <li><a href="commands.html#recordMacro">recordMacro</a></li>
     <li><a href="commands.html#redo">redo</a></li>
+    <li><a href="commands.html#reloadKeyMaps">reloadKeyMaps</a></li>
     <li><a href="commands.html#renumberRegion">renumberRegion</a></li>
     <li><a href="commands.html#replace">replace</a></li>
     <li><a href="commands.html#replaceInFiles">replaceInFiles</a></li>
@@ -845,6 +847,17 @@ Reloads the current buffer in its default mode.
 <b>Default key mapping:</b> Ctrl Alt B in binary mode
 <p>
 <b>See also:</b> <a href="#binaryMode">binaryMode</a>
+<br><br>
+</dl><!--<hr>-->
+
+<a name="defaultKeyMaps">defaultKeyMaps</a><dl><dd>
+<p>
+Discards all custom key mappings and returns to j's internal defaults.
+<p>
+<b>Default key mapping:</b> None
+<p>
+<b>See also:</b> <a href="#reloadKeyMaps">reloadKeyMaps</a>,
+<a href="keys.html">Key Mappings</a>
 <br><br>
 </dl><!--<hr>-->
 
@@ -3492,6 +3505,20 @@ Undoes the last undo.
 <b>Default key mapping:</b> Ctrl Y
 <br><br>
 <b>See also:</b> <a href="#undo">undo</a>
+<br><br>
+</dl><!--<hr>-->
+
+<a name="reloadKeyMaps">reloadKeyMaps</a><dl><dd>
+<p>
+Reloads all configured key maps. If no custom key maps are configured, j's
+internal default key maps will be used. Ad hoc mappings (including mappings
+made in <a href="init.lisp.html">init.lisp</a>) are discarded.
+<br><br>
+<b>Default key mapping:</b> None
+<br><br>
+<b>See also:</b> <a href="#defaultKeyMaps">defaultKeyMaps</a>,
+<a href="preferences.html#autoReloadKeyMaps">autoReloadKeyMaps</a>,
+<a href="keys.html">Key Mappings</a>
 <br><br>
 </dl><!--<hr>-->
 
