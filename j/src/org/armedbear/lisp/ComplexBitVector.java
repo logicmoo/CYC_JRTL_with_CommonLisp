@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.3 2004-02-25 13:50:50 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.4 2004-02-25 16:18:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,41 +178,32 @@ public final class ComplexBitVector extends AbstractBitVector
 
     public void fill(LispObject obj) throws ConditionThrowable
     {
-        if (bits != null) {
-            try {
-                int n = Fixnum.getValue(obj);
-                if (n == 1) {
-                    for (int i = bits.length; i-- > 0;)
-                        bits[i] = -1L;
+        try {
+            switch (((Fixnum)obj).value) {
+                case 0:
+                    if (bits != null) {
+                        for (int i = bits.length; i-- > 0;)
+                            bits[i] = 0;
+                    } else {
+                        for (int i = capacity; i-- > 0;)
+                            clearBit(i);
+                    }
                     return;
-                }
-                if (n == 0) {
-                    for (int i = bits.length; i-- > 0;)
-                        bits[i] = 0;
+                case 1:
+                    if (bits != null) {
+                        for (int i = bits.length; i-- > 0;)
+                            bits[i] = -1L;
+                    } else {
+                        for (int i = capacity; i-- > 0;)
+                            setBit(i);
+                    }
                     return;
-                }
-                // None of the above...
             }
-            catch (ConditionThrowable t) {}
-            signal(new TypeError(obj, Symbol.BIT));
-        } else {
-            try {
-                int n = Fixnum.getValue(obj);
-                if (n == 1) {
-                    for (int i = capacity; i-- > 0;)
-                        setBit(i);
-                    return;
-                }
-                if (n == 0) {
-                    for (int i = capacity; i-- > 0;)
-                        clearBit(i);
-                    return;
-                }
-                // None of the above...
-            }
-            catch (ConditionThrowable t) {}
-            signal(new TypeError(obj, Symbol.BIT));
         }
+        catch (ClassCastException e) {
+            // Fall through...
+        }
+        signal(new TypeError(obj, Symbol.BIT));
     }
 
     public void shrink(int n) throws ConditionThrowable
