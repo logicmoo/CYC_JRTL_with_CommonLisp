@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.47 2004-04-28 17:42:42 piso Exp $
+;;; $Id: precompiler.lisp,v 1.48 2004-04-28 18:51:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -350,7 +350,22 @@
       (list* 'PROGN (mapcar #'precompile1 body)))))
 
 (defun precompile-symbol-macrolet (form)
-  (list* 'SYMBOL-MACROLET (cadr form) (mapcar #'precompile1 (cddr form))))
+  (multiple-value-bind (body decls) (sys::parse-body (cddr form) nil)
+    (when decls
+      (let ((specials ()))
+        (dolist (decl decls)
+          (when (eq (car decl) 'DECLARE)
+            (dolist (declspec (cdr decl))
+              (when (eq (car declspec) 'SPECIAL)
+                (setf specials (append specials (cdr declspec)))))))
+        (when specials
+          (let ((syms (mapcar #'car (cadr form))))
+            (dolist (special specials)
+              (when (memq special syms)
+                (error 'program-error
+                       :format-control "~S is a symbol-macro and may not be declared special."
+                       :format-arguments (list special))))))))
+    (list* 'SYMBOL-MACROLET (cadr form) (mapcar #'precompile1 body))))
 
 (defun precompile-let/let*-vars (vars)
   (let ((result nil))
