@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.43 2004-09-05 00:07:48 piso Exp $
+ * $Id: LispAPI.java,v 1.44 2004-09-05 15:55:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@ import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Packages;
+import org.armedbear.lisp.Pathname;
 import org.armedbear.lisp.Primitive0;
 import org.armedbear.lisp.Primitive1;
 import org.armedbear.lisp.Primitive2;
@@ -237,7 +238,13 @@ public final class LispAPI extends Lisp
         {
             // Move dot to position.
             final Editor editor = Editor.currentEditor();
-            editor.moveDotTo(checkMark(arg));
+            if (arg instanceof Fixnum) {
+                Position pos =
+                    editor.getBuffer().getPosition(((Fixnum)arg).value);
+                if (pos != null)
+                    editor.moveDotTo(pos);
+            } else
+                editor.moveDotTo(checkMark(arg));
             return new JavaObject(editor.getDot());
         }
     };
@@ -1186,6 +1193,24 @@ public final class LispAPI extends Lisp
                 new Search(pattern, ignoreCase, wholeWordsOnly);
             Position pos = search.reverseFindString(buffer, start);
             return pos != null ? new JavaObject(pos) : NIL;
+        }
+    };
+
+    // ### find-file-buffer pathname => buffer
+    private static final Primitive FIND_FILE_BUFFER =
+        new Primitive("find-file-buffer", PACKAGE_J, true, "pathname")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            final Pathname pathname = Pathname.coerceToPathname(arg);
+            final String namestring = pathname.getNamestring();
+            if (namestring != null) {
+                final Editor editor = Editor.currentEditor();
+                final Buffer buffer = editor.getBuffer(File.getInstance(namestring));
+                if (buffer != null)
+                    return new JavaObject(buffer);
+            }
+            return NIL;
         }
     };
 
