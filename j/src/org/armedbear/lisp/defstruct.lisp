@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.35 2003-11-20 18:42:09 piso Exp $
+;;; $Id: defstruct.lisp,v 1.36 2003-11-20 19:04:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,15 +28,19 @@
 (defvar *ds-initial-offset*)
 (defvar *ds-predicate*)
 (defvar *ds-print-function*)
-(defvar *ds-slot-descriptions*)
+(defvar *ds-direct-slots*)
 
-(defun define-constructor (constructor slots)
+(defun define-constructor (constructor)
   (let* ((constructor-name (intern (car constructor)))
-         (slot-names (mapcar #'(lambda (x) (if (atom x) x (car x))) slots))
-         (inits (mapcar #'(lambda (x) (if (atom x) nil (cadr x))) slots))
-         (slot-descriptions (mapcar #'(lambda (x y) (list x y)) slot-names inits))
-         (keys (cons '&key slot-descriptions))
-         (elements slot-names))
+         (keys ())
+         (elements ()))
+    (dolist (slot *ds-direct-slots*)
+      (let ((name (getf slot :name))
+            (initform (getf slot :initform)))
+        (push (list name initform) keys)
+        (push name elements)))
+    (setf keys (cons '&key (nreverse keys)))
+    (setf elements (nreverse elements))
     (when *ds-named*
       (push (list 'quote *ds-name*) elements))
     (when *ds-initial-offset*
@@ -54,19 +58,19 @@
                              :initial-contents (list ,@elements))))))
           (t
            `((defun ,constructor-name ,keys
-               (%make-structure ',*ds-name* (list ,@slot-names))))))))
+               (%make-structure ',*ds-name* (list ,@elements))))))))
 
 (defun default-constructor-name ()
   (concatenate 'string "MAKE-" (symbol-name *ds-name*)))
 
-(defun define-constructors (slots)
+(defun define-constructors ()
   (if *ds-constructors*
       (let ((results ()))
         (dolist (constructor *ds-constructors*)
           (when (car constructor)
-            (setf results (nconc results (define-constructor constructor slots)))))
+            (setf results (nconc results (define-constructor constructor)))))
         results)
-      (define-constructor (cons (default-constructor-name) nil) slots)))
+      (define-constructor (cons (default-constructor-name) nil))))
 
 (defun define-predicate ()
   (when (and *ds-predicate*
@@ -220,7 +224,7 @@
         (*ds-initial-offset* nil)
         (*ds-predicate* nil)
         (*ds-print-function* nil)
-        (*ds-slot-descriptions* ()))
+        (*ds-direct-slots* ()))
     (parse-name-and-options (if (atom name-and-options)
                                 (list name-and-options)
                                 name-and-options))
@@ -230,11 +234,11 @@
       (let ((slot-description (if (atom slot)
                                   (list :name slot :initform nil)
                                   (list :name (car slot) :initform (cadr slot)))))
-        (push slot-description *ds-slot-descriptions*)))
-    (setf *ds-slot-descriptions* (nreverse *ds-slot-descriptions*))
+        (push slot-description *ds-direct-slots*)))
+    (setf *ds-direct-slots* (nreverse *ds-direct-slots*))
     `(progn
-       (make-structure-class ',*ds-name* ',*ds-slot-descriptions*)
-       ,@(define-constructors slots)
+       (make-structure-class ',*ds-name* ',*ds-direct-slots*)
+       ,@(define-constructors)
        ,@(define-predicate)
        ,@(define-access-functions slots)
        ,@(define-copier)
