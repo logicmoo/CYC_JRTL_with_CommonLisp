@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.169 2004-10-17 13:23:31 piso Exp $
+;;; $Id: autoloads.lisp,v 1.170 2004-11-26 15:10:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -104,7 +104,10 @@
 
 (autoload-macro 'defstruct)
 (autoload-macro 'with-hash-table-iterator)
+
+(autoload 'package-iterator-function "with-package-iterator")
 (autoload-macro 'with-package-iterator)
+
 (autoload-macro 'remf)
 (autoload-macro 'check-type)
 (autoload-macro 'deftype)
