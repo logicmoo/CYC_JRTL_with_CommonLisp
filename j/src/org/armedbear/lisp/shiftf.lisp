@@ -1,7 +1,7 @@
 ;;; shiftf.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: shiftf.lisp,v 1.3 2004-04-04 05:13:20 piso Exp $
+;;; $Id: shiftf.lisp,v 1.4 2004-04-04 15:07:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,8 +21,7 @@
 
 (in-package "SYSTEM")
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (require '#:collect))
+(require '#:collect)
 
 (defmacro shiftf (&rest args &environment env)
   "One or more SETF-style place expressions, followed by a single
