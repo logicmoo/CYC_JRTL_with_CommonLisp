@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.20 2003-03-15 03:56:01 piso Exp $
+ * $Id: Fixnum.java,v 1.21 2003-03-15 18:10:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,92 +186,92 @@ public final class Fixnum extends LispObject
         }
     }
 
-    public LispObject isEqualTo(LispObject obj) throws LispError
+    public boolean isEqualTo(LispObject obj) throws LispError
     {
         try {
-            return value == ((Fixnum)obj).value ? T : NIL;
+            return value == ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
             // obj is not a fixnum.
             if (obj instanceof Bignum)
-                return getBigInteger().equals(Bignum.getValue(obj)) ? T : NIL;
+                return getBigInteger().equals(Bignum.getValue(obj));
             if (obj instanceof LispFloat)
-                return (float) value == LispFloat.getValue(obj) ? T : NIL;
+                return (float) value == LispFloat.getValue(obj);
             throw new TypeError(obj, "number");
         }
     }
 
-    public LispObject isNotEqualTo(LispObject obj) throws LispError
+    public boolean isNotEqualTo(LispObject obj) throws LispError
     {
         try {
-            return value != ((Fixnum)obj).value ? T : NIL;
+            return value != ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
             // obj is not a fixnum.
             if (obj instanceof Bignum)
-                return getBigInteger().equals(Bignum.getValue(obj)) ? NIL : T;
+                return !getBigInteger().equals(Bignum.getValue(obj));
             if (obj instanceof LispFloat)
-                return (float) value == LispFloat.getValue(obj) ? NIL : T;
+                return (float) value != LispFloat.getValue(obj);
             throw new TypeError(obj, "number");
         }
     }
 
-    public LispObject isLessThan(LispObject obj) throws LispError
+    public boolean isLessThan(LispObject obj) throws LispError
     {
         try {
-            return value < ((Fixnum)obj).value ? T : NIL;
+            return value < ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
             // obj is not a fixnum.
             if (obj instanceof Bignum)
-                return getBigInteger().compareTo(Bignum.getValue(obj)) < 0 ? T : NIL;
+                return getBigInteger().compareTo(Bignum.getValue(obj)) < 0;
             if (obj instanceof LispFloat)
-                return (float) value < LispFloat.getValue(obj) ? T : NIL;
+                return (float) value < LispFloat.getValue(obj);
             throw new TypeError(obj, "number");
         }
     }
 
-    public LispObject isGreaterThan(LispObject obj) throws LispError
+    public boolean isGreaterThan(LispObject obj) throws LispError
     {
         try {
-            return value > ((Fixnum)obj).value ? T : NIL;
+            return value > ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
             // obj is not a fixnum.
             if (obj instanceof Bignum)
-                return getBigInteger().compareTo(Bignum.getValue(obj)) > 0 ? T : NIL;
+                return getBigInteger().compareTo(Bignum.getValue(obj)) > 0;
             if (obj instanceof LispFloat)
-                return (float) value > LispFloat.getValue(obj) ? T : NIL;
+                return (float) value > LispFloat.getValue(obj);
             throw new TypeError(obj, "number");
         }
     }
 
-    public LispObject isLessThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
     {
         try {
-            return value <= ((Fixnum)obj).value ? T : NIL;
+            return value <= ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
             // obj is not a fixnum.
             if (obj instanceof Bignum)
-                return getBigInteger().compareTo(Bignum.getValue(obj)) <= 0 ? T : NIL;
+                return getBigInteger().compareTo(Bignum.getValue(obj)) <= 0;
             if (obj instanceof LispFloat)
-                return (float) value <= LispFloat.getValue(obj) ? T : NIL;
+                return (float) value <= LispFloat.getValue(obj);
             throw new TypeError(obj, "number");
         }
     }
 
-    public LispObject isGreaterThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
     {
         try {
-            return value >= ((Fixnum)obj).value ? T : NIL;
+            return value >= ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
             // obj is not a fixnum.
             if (obj instanceof Bignum)
-                return getBigInteger().compareTo(Bignum.getValue(obj)) >= 0 ? T : NIL;
+                return getBigInteger().compareTo(Bignum.getValue(obj)) >= 0;
             if (obj instanceof LispFloat)
-                return (float) value >= LispFloat.getValue(obj) ? T : NIL;
+                return (float) value >= LispFloat.getValue(obj);
             throw new TypeError(obj, "number");
         }
     }

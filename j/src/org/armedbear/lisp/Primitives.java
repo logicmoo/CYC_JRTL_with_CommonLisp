@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.128 2003-03-15 17:51:35 piso Exp $
+ * $Id: Primitives.java,v 1.129 2003-03-15 18:11:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -301,7 +301,7 @@ public final class Primitives extends Module
                     throw new WrongNumberOfArgumentsException("MIN");
                 LispObject result = args[0];
                 for (int i = 1; i < args.length; i++) {
-                    if (args[i].isLessThan(result) != NIL)
+                    if (args[i].isLessThan(result))
                         result = args[i];
                 }
                 return result;
@@ -311,7 +311,7 @@ public final class Primitives extends Module
                     throw new WrongNumberOfArgumentsException("MAX");
                 LispObject result = args[0];
                 for (int i = 1; i < args.length; i++) {
-                    if (args[i].isGreaterThan(result) != NIL)
+                    if (args[i].isGreaterThan(result))
                         result = args[i];
                 }
                 return result;
@@ -838,12 +838,12 @@ public final class Primitives extends Module
         {
             final int length = array.length;
             if (length == 2)
-                return array[0].isEqualTo(array[1]);
+                return array[0].isEqualTo(array[1]) ? T : NIL;
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
             final LispObject obj = array[0];
             for (int i = 1; i < length; i++) {
-                if (array[i].isEqualTo(obj) != T)
+                if (array[i].isNotEqualTo(obj))
                     return NIL;
             }
             return T;
@@ -856,13 +856,13 @@ public final class Primitives extends Module
         {
             final int length = array.length;
             if (length == 2)
-                return array[0].isNotEqualTo(array[1]);
+                return array[0].isNotEqualTo(array[1]) ? T : NIL;
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
             for (int i = 0; i < length; i++) {
                 final LispObject obj = array[i];
                 for (int j = i+1; j < length; j++) {
-                    if (array[j].isNotEqualTo(obj) == NIL)
+                    if (array[j].isEqualTo(obj))
                         return NIL;
                 }
             }
@@ -877,11 +877,11 @@ public final class Primitives extends Module
         {
             final int length = array.length;
             if (length == 2)
-                return array[0].isLessThan(array[1]);
+                return array[0].isLessThan(array[1]) ? T : NIL;
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
             for (int i = 1; i < length; i++) {
-                if (array[i].isLessThanOrEqualTo(array[i-1]) != NIL)
+                if (array[i].isLessThanOrEqualTo(array[i-1]))
                     return NIL;
             }
             return T;
@@ -898,11 +898,11 @@ public final class Primitives extends Module
                 case 1:
                     return T;
                 case 2:
-                    return array[0].isLessThanOrEqualTo(array[1]);
+                    return array[0].isLessThanOrEqualTo(array[1]) ? T : NIL;
                 default: {
                     final int length = array.length;
                     for (int i = 1; i < length; i++) {
-                        if (array[i].isLessThan(array[i-1]) != NIL)
+                        if (array[i].isLessThan(array[i-1]))
                             return NIL;
                     }
                     return T;
@@ -917,11 +917,11 @@ public final class Primitives extends Module
         {
             final int length = array.length;
             if (length == 2)
-                return array[0].isGreaterThan(array[1]);
+                return array[0].isGreaterThan(array[1]) ? T : NIL;
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
             for (int i = 1; i < length; i++) {
-                if (array[i].isGreaterThanOrEqualTo(array[i-1]) != NIL)
+                if (array[i].isGreaterThanOrEqualTo(array[i-1]))
                     return NIL;
             }
             return T;
@@ -939,10 +939,10 @@ public final class Primitives extends Module
                 case 1:
                     return T;
                 case 2:
-                    return array[0].isGreaterThanOrEqualTo(array[1]);
+                    return array[0].isGreaterThanOrEqualTo(array[1]) ? T : NIL;
                 default:
                     for (int i = 1; i < length; i++) {
-                        if (array[i].isGreaterThan(array[i-1]) != NIL)
+                        if (array[i].isGreaterThan(array[i-1]))
                             return NIL;
                     }
                     return T;

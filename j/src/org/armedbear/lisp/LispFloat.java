@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.3 2003-03-15 03:56:01 piso Exp $
+ * $Id: LispFloat.java,v 1.4 2003-03-15 18:11:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,60 +129,60 @@ public final class LispFloat extends LispObject
         }
     }
 
-    public LispObject isEqualTo(LispObject obj) throws LispError
+    public boolean isEqualTo(LispObject obj) throws LispError
     {
         try {
-            return value == ((LispFloat)obj).value ? T : NIL;
+            return value == ((LispFloat)obj).value;
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "number");
         }
     }
 
-    public LispObject isNotEqualTo(LispObject obj) throws LispError
+    public boolean isNotEqualTo(LispObject obj) throws LispError
     {
         try {
-            return value != ((LispFloat)obj).value ? T : NIL;
+            return value != ((LispFloat)obj).value;
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "number");
         }
     }
 
-    public LispObject isLessThan(LispObject obj) throws LispError
+    public boolean isLessThan(LispObject obj) throws LispError
     {
         try {
-            return value < ((LispFloat)obj).value ? T : NIL;
+            return value < ((LispFloat)obj).value;
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "number");
         }
     }
 
-    public LispObject isGreaterThan(LispObject obj) throws LispError
+    public boolean isGreaterThan(LispObject obj) throws LispError
     {
         try {
-            return value > ((LispFloat)obj).value ? T : NIL;
+            return value > ((LispFloat)obj).value;
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "number");
         }
     }
 
-    public LispObject isLessThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
     {
         try {
-            return value <= ((LispFloat)obj).value ? T : NIL;
+            return value <= ((LispFloat)obj).value;
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "number");
         }
     }
 
-    public LispObject isGreaterThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
     {
         try {
-            return value >= ((LispFloat)obj).value ? T : NIL;
+            return value >= ((LispFloat)obj).value;
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "number");
