@@ -2,7 +2,7 @@
  * DiffMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DiffMode.java,v 1.7 2003-05-10 15:52:39 piso Exp $
+ * $Id: DiffMode.java,v 1.8 2003-06-14 17:49:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,20 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
 
     public static void diff()
     {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        File file = buffer.getFile();
+        if (file.isLocal() && file.isFile()) {
+            File patchFile = buffer.getPatchFile();
+            if (patchFile != null && patchFile.isFile()) {
+                FastStringBuffer sb = new FastStringBuffer("-ub ");
+                sb.append(patchFile.canonicalPath());
+                sb.append(' ');
+                sb.append(file.canonicalPath());
+                diff(sb.toString());
+                return;
+            }
+        }
         diff("--help");
     }
 
