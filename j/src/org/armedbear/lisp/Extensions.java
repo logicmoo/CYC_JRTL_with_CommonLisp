@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.29 2004-10-17 12:08:27 piso Exp $
+ * $Id: Extensions.java,v 1.30 2004-10-17 13:59:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,8 @@ public final class Extensions extends Lisp
 {
     // ### *ed-functions*
     public static final Symbol _ED_FUNCTIONS_ =
-        exportSpecial("*ED-FUNCTIONS*", PACKAGE_EXT, NIL);
+        exportSpecial("*ED-FUNCTIONS*", PACKAGE_EXT,
+                      list1(intern("DEFAULT-ED-FUNCTION", PACKAGE_SYS)));
 
     // ### neq
     private static final Primitive2 NEQ =
