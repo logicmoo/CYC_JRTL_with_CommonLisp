@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.737 2005-02-21 18:08:55 piso Exp $
+ * $Id: Primitives.java,v 1.738 2005-02-23 14:31:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5222,6 +5222,40 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg)
         {
             return arg instanceof LispClass ? T : NIL;
+        }
+    };
+
+    // ### char-to-utf8 char => octets
+    private static final Primitive CHAR_TO_UTF8 =
+        new Primitive("char-to-utf8", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            final LispCharacter c;
+            try {
+                c = (LispCharacter) arg;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CHARACTER));
+            }
+            char[] chars = new char[1];
+            chars[0] = c.value;
+            String s = new String(chars);
+            final byte[] bytes;
+            try {
+                bytes = s.getBytes("UTF8");
+            }
+            catch (java.io.UnsupportedEncodingException e) {
+                return signal(new LispError("UTF8 is not a supported encoding."));
+            }
+            LispObject[] objects = new LispObject[bytes.length];
+            for (int i = bytes.length; i-- > 0;) {
+                int n = bytes[i];
+                if (n < 0)
+                    n += 256;
+                objects[i] = new Fixnum(n);
+            }
+            return new SimpleVector(objects);
         }
     };
 
