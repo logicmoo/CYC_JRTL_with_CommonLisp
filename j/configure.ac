@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
-dnl  Copyright (C) 1998-2003 Peter Graves
-dnl  $Id: configure.ac,v 1.20 2004-02-10 11:31:42 piso Exp $
+dnl  Copyright (C) 1998-2004 Peter Graves
+dnl  $Id: configure.ac,v 1.21 2004-02-10 11:33:06 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.20 $)
+AC_REVISION($Revision: 1.21 $)
 
 BOOTFILE=./configure-options
 
