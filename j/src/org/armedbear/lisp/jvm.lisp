@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.35 2003-11-16 03:07:21 piso Exp $
+;;; $Id: jvm.lisp,v 1.36 2003-11-16 19:39:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1800,6 +1800,23 @@
       (error "COMPILE-GO: tag not found: ~S" name))
   (emit 'goto label)))
 
+(defun compile-atom (form for-effect)
+  (unless (= (length form) 2)
+    (error "wrong number of arguments for ATOM"))
+  (compile-form (cadr form) nil)
+  (unless (remove-store-value)
+    (emit-push-value))
+  (emit 'instanceof +lisp-cons-class+)
+  (let ((label1 (gensym))
+        (label2 (gensym)))
+    (emit 'ifeq `,label1)
+    (emit-push-nil)
+    (emit 'goto `,label2)
+    (emit 'label `,label1)
+    (emit-push-t)
+    (emit 'label `,label2)
+    (emit-store-value)))
+
 (defun compile-block (form for-effect)
    (let* ((rest (cdr form))
           (block-label (car rest))
@@ -2255,7 +2272,8 @@
       (error "no handler for ~S" fun))
     (setf (get fun 'jvm-compile-handler) handler)))
 
-(mapc #'install-handler '(block
+(mapc #'install-handler '(atom
+                          block
                           declare
                           function
                           go
