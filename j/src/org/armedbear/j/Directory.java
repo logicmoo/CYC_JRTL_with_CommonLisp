@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.12 2003-01-02 18:21:52 piso Exp $
+ * $Id: Directory.java,v 1.13 2003-02-11 17:32:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,6 +62,8 @@ public final class Directory extends Buffer
     private static final RE internalMoveToFilenameRegExp;
 
     private long totalSize;
+
+    private boolean loadError;
 
     static {
         // Letters.
@@ -225,6 +227,8 @@ public final class Directory extends Buffer
         if (file.isRemote())
             DirectoryCache.getDirectoryCache().purge(file.getHostName());
         reload();
+        if (loadError)
+            return;
         boolean rescanned = false;
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
             Editor ed = it.nextEditor();
@@ -575,6 +579,7 @@ public final class Directory extends Buffer
             if (!Utilities.haveLs())
                 useNativeFormat = false;
         }
+        loadError = false;
         totalSize = 0;
         try {
             DirectoryFilenameFilter dff = null;
@@ -602,6 +607,8 @@ public final class Directory extends Buffer
                     setListing(file.getDirectoryListing());
                     if (getListing() != null)
                         reader = new BufferedReader(new StringReader(getListing()));
+                    else
+                        loadError = true;
                     if (limitPattern != null)
                         dff = new DirectoryFilenameFilter(limitPattern);
                 } else {
