@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.594 2004-03-06 20:49:46 piso Exp $
+ * $Id: Primitives.java,v 1.595 2004-03-07 06:22:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1811,6 +1811,33 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             return first.AREF(second);
+        }
+
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            final AbstractArray array;
+            try {
+                array = checkArray(first);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.ARRAY));
+            }
+            final int[] subs = new int[2];
+            try {
+                subs[0] = ((Fixnum)second).value;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(second, Symbol.FIXNUM));
+            }
+            try {
+                subs[1] = ((Fixnum)third).value;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(third, Symbol.FIXNUM));
+            }
+            return array.get(subs);
         }
 
         public LispObject execute(LispObject[] args) throws ConditionThrowable
