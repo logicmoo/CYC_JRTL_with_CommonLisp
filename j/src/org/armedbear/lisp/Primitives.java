@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.282 2003-07-07 01:13:50 piso Exp $
+ * $Id: Primitives.java,v 1.283 2003-07-07 02:22:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -718,6 +718,15 @@ public final class Primitives extends Module
             if (out != null)
                 out.prin1(args[0]);
             return args[0];
+        }
+    };
+
+    // ### prin1-to-string
+    private static final Primitive1 PRIN1_TO_STRING =
+        new Primitive1("prin1-to-string") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return new LispString(String.valueOf(arg));
         }
     };
 
