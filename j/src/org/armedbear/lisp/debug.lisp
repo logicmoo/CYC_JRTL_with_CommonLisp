@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.14 2004-01-27 14:04:10 piso Exp $
+;;; $Id: debug.lisp,v 1.15 2004-03-01 18:01:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,7 +72,14 @@
                (stream-line-number *load-stream*)
                (stream-offset *load-stream*)))
     (%format *debug-io* "Debugger invoked on condition of type ~A:~%" (type-of condition))
-    (%format *debug-io* "  ~A~%" condition))
+    (if (and (fboundp 'print-object)
+             (not (autoloadp 'print-object)))
+        (progn
+          (write-string "  " *debug-io*)
+          (let ((*print-escape* nil))
+            (print-object condition *debug-io*))
+          (terpri *debug-io*))
+        (%format *debug-io* "  ~A~%" condition)))
   (let ((*debug-condition* condition)
         (level *debug-level*))
     (clear-input)
