@@ -1,8 +1,8 @@
 /*
  * NewsGroupMessageBuffer.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupMessageBuffer.java,v 1.10 2003-05-26 17:09:04 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: NewsGroupMessageBuffer.java,v 1.11 2003-05-26 17:09:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ import org.armedbear.j.Utilities;
 public final class NewsGroupMessageBuffer extends MessageBuffer
 {
     private NewsGroupSummary summary;
-    private boolean cancelled = false;
+    private boolean cancelled;
 
     public NewsGroupMessageBuffer(NewsGroupSummary summary,
         NewsGroupSummaryEntry entry)

@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: MessageBuffer.java,v 1.15 2003-04-19 18:31:19 piso Exp $
+ * $Id: MessageBuffer.java,v 1.16 2003-05-26 17:08:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,7 @@ import org.armedbear.j.ProgressNotifier;
 import org.armedbear.j.Property;
 import org.armedbear.j.SaveFileDialog;
 import org.armedbear.j.Sidebar;
+import org.armedbear.j.SystemBuffer;
 import org.armedbear.j.TextLine;
 import org.armedbear.j.Utilities;
 import org.armedbear.j.WebBuffer;
@@ -1030,7 +1031,7 @@ public class MessageBuffer extends Buffer
         final int wrapCol = Editor.currentEditor().getDisplay().getColumns();
         final int tabWidth = 8;
         final int IN_DIFF = 1;
-        org.armedbear.j.SystemBuffer buf = new org.armedbear.j.SystemBuffer();
+        SystemBuffer buf = new SystemBuffer();
         FastStringReader reader = new FastStringReader(body);
         String s;
         while ((s = reader.readLine()) != null)
