@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.60 2003-10-19 18:34:09 piso Exp $
+ * $Id: LispMode.java,v 1.61 2003-10-19 20:33:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -919,7 +919,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 otherEditor.makeNext(buf);
             } else
                 editor.makeNext(buf);
-            editor.activateInOtherWindow(buf);
+            editor.displayInOtherWindow(buf);
         }
     }
 }
