@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: print.lisp,v 1.1 2004-04-24 12:35:44 piso Exp $
+;;; $Id: print.lisp,v 1.2 2004-04-25 18:04:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,6 +65,13 @@
   (if (consp object)
       (output-list object stream)
       (%output-object object stream)))
+
+;; FIXME
+(defun output-pretty-object (object stream)
+  (require 'pprint)
+  (let ((pkg (find-package "XP")))
+    (when pkg
+      (funcall (symbol-function (intern "BASIC-WRITE" pkg)) object stream))))
 
 ;;;; circularity detection stuff
 
@@ -182,8 +189,7 @@
 (defun output-object (object stream)
   (labels ((print-it (stream)
                      (if *print-pretty*
-;;                          (sb!pretty:output-pretty-object object stream)
-                         (pprint object stream)
+                         (output-pretty-object object stream)
                          (output-ugly-object object stream)))
 	   (check-it (stream)
                      (multiple-value-bind (marker initiate)
