@@ -1,6 +1,6 @@
 ;;; -*- Mode: Lisp -*-
 ;;; Anokha Classic
-;;; $Id: AnokhaClassic.lisp,v 1.1 2003-03-29 20:20:18 piso Exp $
+;;; $Id: AnokhaClassic.lisp,v 1.2 2003-04-01 02:19:57 piso Exp $
 
 (use-package "J")
 
@@ -93,7 +93,13 @@
 
  "MakefileMode.color.target"            "255 153   0"
 
+ "PropertiesMode.color.key"             "255 153   0"
+ "PropertiesMode.style.key"             plain
+ "PropertiesMode.color.value"           white
+ "PropertiesMode.style.value"           plain
+ "PropertiesMode.color.delimiter"       "255 255   0"
  "PropertiesMode.color.section"         "255 153   0"
+ "PropertiesMode.style.section"         bold
 
  "DirectoryMode.color.directory"        "255 153   0"
  "DirectoryMode.color.symlink"          "255 204   0"
@@ -101,8 +107,11 @@
 
  "DiffMode.color.file"                  "255 255   0"
  "DiffMode.style.file"                  plain
+ "DiffMode.color.header"                "180 180 128"
+ "DiffMode.style.header"                plain
  "DiffMode.color.deleted"               "180 180 180"
  "DiffMode.color.inserted"              "255 153   0"
+ "DiffMode.color.context"               white
 
  ;; List Registers mode
  "color.registerHeader"                 "255 153   0"

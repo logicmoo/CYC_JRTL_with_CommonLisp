@@ -1,6 +1,6 @@
 ;;; -*- Mode: Lisp -*-
 ;;; Kodiak 4/14/2000-11/1/2000
-;;; $Id: Kodiak.lisp,v 1.1 2003-03-29 20:20:08 piso Exp $
+;;; $Id: Kodiak.lisp,v 1.2 2003-04-01 02:19:20 piso Exp $
 
 (use-package "J")
 
@@ -86,7 +86,7 @@
  "DiffMode.style.file"                  bold
  "DiffMode.color.header"                "  0 102   0"
  "DiffMode.style.header"                italic
- "DiffMode.color.context"               plain
+ "DiffMode.color.context"               black
  "DiffMode.color.inserted"              "153   0   0"
  "DiffMode.style.inserted"              plain
  "DiffMode.color.deleted"               "  0   0 153"
