@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.24 2004-05-27 20:40:38 piso Exp $
+ * $Id: Extensions.java,v 1.25 2004-06-15 02:41:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +72,8 @@ public final class Extensions extends Lisp
 
     // ### special-variable-p
     private static final Primitive1 SPECIAL_VARIABLE_P =
-        new Primitive1("special-variable-p", PACKAGE_EXT, true) {
+        new Primitive1("special-variable-p", PACKAGE_EXT, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.isSpecialVariable() ? T : NIL;
@@ -82,7 +83,8 @@ public final class Extensions extends Lisp
     // ### charpos
     // charpos stream => position
     private static final Primitive1 CHARPOS =
-        new Primitive1("charpos", PACKAGE_EXT, true) {
+        new Primitive1("charpos", PACKAGE_EXT, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Stream stream = checkCharacterOutputStream(arg);
@@ -101,6 +103,16 @@ public final class Extensions extends Lisp
             Stream stream = checkCharacterOutputStream(first);
             stream.setCharPos(Fixnum.getValue(second));
             return second;
+        }
+    };
+
+    private static final Primitive1 SOURCE =
+        new Primitive1("source", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Symbol symbol = checkSymbol(arg);
+            return get(symbol, PACKAGE_SYS.intern("SOURCE"), NIL);
         }
     };
 
