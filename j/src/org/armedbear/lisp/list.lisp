@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.23 2003-03-29 02:56:00 piso Exp $
+;;; $Id: list.lisp,v 1.24 2003-05-27 17:48:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
           fifth sixth seventh eighth ninth tenth
           make-list
           copy-list copy-alist copy-tree
-          revappend nconc nreconc
+          revappend nconc
           butlast nbutlast
           ldiff
           complement constantly
@@ -145,13 +145,6 @@
               list)
             rest-conc))
       list))
-
-(defun nreconc (x y)
-  (do ((1st (cdr x) (if (atom 1st) 1st (cdr 1st)))
-       (2nd x 1st)		;2nd follows first down the list.
-       (3rd y 2nd))		;3rd follows 2nd down the list.
-      ((atom 2nd) 3rd)
-    (rplacd 2nd 3rd)))
 
 (defun require-type (arg type)
   (unless (typep  arg type)
