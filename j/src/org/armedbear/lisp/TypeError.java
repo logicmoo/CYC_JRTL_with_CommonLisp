@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: TypeError.java,v 1.19 2004-04-24 15:16:11 piso Exp $
+ * $Id: TypeError.java,v 1.20 2004-05-27 20:31:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,42 +95,48 @@ public class TypeError extends LispError
 
     public String getMessage()
     {
-        final LispThread thread = LispThread.currentThread();
-        final Environment oldDynEnv = thread.getDynamicEnvironment();
-        thread.bindSpecial(_PRINT_ESCAPE_, T);
+        // FIXME
         try {
-            String s = super.getMessage();
-            if (s != null)
-                return s;
-            StringBuffer sb = new StringBuffer();
-            String name = datum != null ? datum.writeToString() : null;
-            String type = null;
-            if (typeString != null)
-                type = typeString;
-            else if (expectedType != null)
-                type = expectedType.writeToString();
-            if (type != null) {
-                if (name != null) {
-                    sb.append("The value ");
+            final LispThread thread = LispThread.currentThread();
+            final Environment oldDynEnv = thread.getDynamicEnvironment();
+            thread.bindSpecial(_PRINT_ESCAPE_, T);
+            try {
+                String s = super.getMessage();
+                if (s != null)
+                    return s;
+                StringBuffer sb = new StringBuffer();
+                String name = datum != null ? datum.writeToString() : null;
+                String type = null;
+                if (typeString != null)
+                    type = typeString;
+                else if (expectedType != null)
+                    type = expectedType.writeToString();
+                if (type != null) {
+                    if (name != null) {
+                        sb.append("The value ");
+                        sb.append(name);
+                    } else
+                        sb.append("Value");
+                    sb.append(" is not of type ");
+                    sb.append(type);
+                } else if (name != null) {
+                    sb.append("Wrong type: ");
                     sb.append(name);
-                } else
-                    sb.append("Value");
-                sb.append(" is not of type ");
-                sb.append(type);
-            } else if (name != null) {
-                sb.append("Wrong type: ");
-                sb.append(name);
+                }
+                sb.append('.');
+                return sb.toString();
             }
-            sb.append('.');
-            return sb.toString();
+            catch (Throwable t) {
+                // FIXME
+                Debug.trace(t);
+                return toString();
+            }
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
         }
         catch (Throwable t) {
-            // FIXME
-            Debug.trace(t);
             return toString();
-        }
-        finally {
-            thread.setDynamicEnvironment(oldDynEnv);
         }
     }
 

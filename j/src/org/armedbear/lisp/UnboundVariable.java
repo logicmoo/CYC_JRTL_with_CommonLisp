@@ -2,7 +2,7 @@
  * UnboundVariable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: UnboundVariable.java,v 1.7 2004-04-24 14:01:05 piso Exp $
+ * $Id: UnboundVariable.java,v 1.8 2004-05-27 20:31:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,9 +31,17 @@ public final class UnboundVariable extends CellError
 
     public String getMessage()
     {
-        final LispThread thread = LispThread.currentThread();
-        Environment oldDynEnv = thread.getDynamicEnvironment();
-        thread.bindSpecial(_PRINT_ESCAPE_, T);
+        LispThread thread = null;
+        // FIXME
+        try {
+            thread = LispThread.currentThread();
+        }
+        catch (Throwable t) {}
+        Environment oldDynEnv = null;
+        if (thread != null) {
+            oldDynEnv = thread.getDynamicEnvironment();
+            thread.bindSpecial(_PRINT_ESCAPE_, T);
+        }
         StringBuffer sb = new StringBuffer("The variable ");
         // FIXME
         try {
@@ -41,7 +49,8 @@ public final class UnboundVariable extends CellError
         }
         catch (Throwable t) {}
         sb.append(" is unbound.");
-        thread.setDynamicEnvironment(oldDynEnv);
+        if (thread != null)
+            thread.setDynamicEnvironment(oldDynEnv);
         return sb.toString();
     }
 
