@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.20 2003-12-27 00:59:00 piso Exp $
+ * $Id: SpecialOperators.java,v 1.21 2003-12-27 04:30:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,8 +271,20 @@ public final class SpecialOperators extends Lisp
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(env);
             while (defs != NIL) {
-                LispObject def = checkList(defs.car());
-                Symbol symbol = checkSymbol(def.car());
+                final LispObject def = checkList(defs.car());
+                final LispObject name = def.car();
+                final Symbol symbol;
+                if (name instanceof Symbol) {
+                    symbol = checkSymbol(name);
+                    if (symbol.getSymbolFunction() instanceof SpecialOperator) {
+                        String message =
+                            symbol.getName() + " is a special operator and may not be redefined";
+                        return signal(new ProgramError(message));
+                    }
+                } else if (name instanceof Cons && name.car() == Symbol.SETF) {
+                    symbol = checkSymbol(name.cadr());
+                } else
+                    return signal(new TypeError(name, "valid function name"));
                 LispObject rest = def.cdr();
                 LispObject parameters = rest.car();
                 LispObject body = rest.cdr();
@@ -293,8 +305,8 @@ public final class SpecialOperators extends Lisp
                     closure = new Closure(parameters, body, ext);
                 else
                     closure = new Closure(parameters, body, env);
-                closure.setLambdaName(list2(Symbol.FLET, symbol));
-                ext.bindFunctional(symbol, closure);
+                closure.setLambdaName(list2(Symbol.FLET, name));
+                ext.bindFunctional(name, closure);
                 defs = defs.cdr();
             }
             result = progn(args.cdr(), ext, thread);
@@ -401,8 +413,11 @@ public final class SpecialOperators extends Lisp
                 if (arg.car() == Symbol.LAMBDA)
                     return new Closure(arg.cadr(), arg.cddr(), env);
                 if (arg.car() == Symbol.SETF) {
-                    LispObject f = get(checkSymbol(arg.cadr()),
-                                       PACKAGE_SYS.intern("SETF-FUNCTION"));
+                    LispObject f = env.lookupFunctional(arg);
+                    if (f != null)
+                        return f;
+                    f = get(checkSymbol(arg.cadr()),
+                            PACKAGE_SYS.intern("SETF-FUNCTION"));
                     if (f != null)
                         return f;
                 }
