@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.57 2003-09-21 00:06:32 piso Exp $
+ * $Id: Closure.java,v 1.58 2003-09-23 18:17:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -596,6 +596,20 @@ public class Closure extends Function
             }
         } else {
             // No keyword parameters.
+            if (argsUsed + 2 <= args.length) {
+                // Check for :ALLOW-OTHER-KEYS.
+                LispObject allowOtherKeysValue = null;
+                LispObject keyword = args[argsUsed];
+                if (keyword == Keyword.ALLOW_OTHER_KEYS) {
+                    allowOtherKeysValue = args[argsUsed + 1];
+                    argsUsed += 2;
+                }
+                if (allowOtherKeysValue != null && allowOtherKeysValue != NIL) {
+                    // Skip keyword/value pairs.
+                    while (argsUsed + 2 <= args.length)
+                        argsUsed += 2;
+                }
+            }
             if (argsUsed < args.length) {
                 if (restVar == null) {
                     throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
