@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.24 2003-08-02 17:27:44 piso Exp $
+ * $Id: LispObject.java,v 1.25 2003-08-02 19:37:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,6 +111,11 @@ public class LispObject extends Lisp
     public LispObject elt(int index) throws LispError
     {
         throw new TypeError(this, "sequence");
+    }
+
+    public LispObject AREF(LispObject index) throws LispError
+    {
+        throw new TypeError(this, "array");
     }
 
     public LispObject[] copyToArray() throws LispError

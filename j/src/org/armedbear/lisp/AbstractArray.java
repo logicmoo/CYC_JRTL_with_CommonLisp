@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AbstractArray.java,v 1.3 2003-05-25 17:19:17 piso Exp $
+ * $Id: AbstractArray.java,v 1.4 2003-08-02 19:37:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,14 @@ public abstract class AbstractArray extends LispObject
     public final LispObject constantp()
     {
         return T;
+    }
+
+    public LispObject AREF(LispObject index) throws LispError
+    {
+        StringBuffer sb = new StringBuffer("AREF: ");
+        sb.append("wrong number of subscripts (1) for array of rank ");
+        sb.append(getRank());
+        throw new ProgramError(sb.toString());
     }
 
     public abstract int getRank();

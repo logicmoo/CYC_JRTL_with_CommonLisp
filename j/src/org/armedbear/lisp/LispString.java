@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.45 2003-07-20 18:16:08 piso Exp $
+ * $Id: LispString.java,v 1.46 2003-08-02 19:38:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -259,6 +259,18 @@ public final class LispString extends AbstractVector
         if (index < 0 || index >= limit)
             badIndex(index, limit);
         return new LispCharacter(array[index]);
+    }
+
+    // Ignores fill pointer.
+    public LispObject AREF(LispObject index) throws LispError
+    {
+        try {
+            return new LispCharacter(array[Fixnum.getValue(index)]);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(Fixnum.getValue(index), array.length);
+            return NIL; // Not reached.
+        }
     }
 
     public LispObject remove(LispObject item) throws LispError

@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.19 2003-05-31 20:08:37 piso Exp $
+ * $Id: Vector.java,v 1.20 2003-08-02 19:39:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,18 @@ public class Vector extends AbstractVector
         if (index < 0 || index >= limit)
             badIndex(index, limit);
         return elements[index];
+    }
+
+    // Ignores fill pointer.
+    public LispObject AREF(LispObject index) throws LispError
+    {
+        try {
+            return elements[Fixnum.getValue(index)];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(Fixnum.getValue(index), elements.length);
+            return NIL; // Not reached.
+        }
     }
 
     public LispObject getRowMajor(int index) throws LispError
