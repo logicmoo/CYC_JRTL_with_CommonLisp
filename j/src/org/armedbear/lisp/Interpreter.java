@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.16 2003-03-03 15:05:58 piso Exp $
+ * $Id: Interpreter.java,v 1.17 2003-03-09 16:05:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,12 +66,12 @@ public final class Interpreter extends Lisp
         return interpreter = new Interpreter(in, out, initialDirectory);
     }
 
-    private final InputStream inputStream;
     private final Environment environment = new Environment();
 
     private Interpreter()
     {
-        inputStream = System.in;
+        CharacterInputStream in = new CharacterInputStream(System.in);
+        _STANDARD_INPUT_.setSymbolValue(in);
         CharacterOutputStream out = new CharacterOutputStream(System.out);
         _STANDARD_OUTPUT_.setSymbolValue(out);
         _ERROR_OUTPUT_.setSymbolValue(out);
@@ -82,7 +82,8 @@ public final class Interpreter extends Lisp
     private Interpreter(InputStream inputStream, OutputStream outputStream,
         String initialDirectory)
     {
-        this.inputStream = inputStream;
+        CharacterInputStream in = new CharacterInputStream(inputStream);
+        _STANDARD_INPUT_.setSymbolValue(in);
         CharacterOutputStream out = new CharacterOutputStream(outputStream);
         _STANDARD_OUTPUT_.setSymbolValue(out);
         _ERROR_OUTPUT_.setSymbolValue(out);
@@ -117,8 +118,6 @@ public final class Interpreter extends Lisp
 
     public void run()
     {
-        Debug.assertTrue(inputStream != null);
-        CharacterInputStream in = new CharacterInputStream(inputStream);
         history = new ArrayList();
         commandNumber = 0;
         done = false;
@@ -133,16 +132,16 @@ public final class Interpreter extends Lisp
                     ++commandNumber;
                     out.writeString(prompt());
                     out.finishOutput();
-                    char c = peekCharNonWhitespace(in);
+                    char c = peekCharNonWhitespace(getStandardInput());
                     if (c == '\n') {
                         // Blank line.
-                        in.readChar(true, NIL);
+                        getStandardInput().readChar(true, NIL);
                         --commandNumber;
                         continue;
                     }
                     LispObject object = null;
                     if (c == ':') {
-                        LispObject input = in.readLine(false, EOF);
+                        LispObject input = getStandardInput().readLine(false, EOF);
                         if (input == EOF)
                             break;
                         String s = LispString.getValue(input);
@@ -165,7 +164,7 @@ public final class Interpreter extends Lisp
                         }
                     }
                     if (object == null)
-                        object = in.read(false, EOF, false); // Top level read.
+                        object = getStandardInput().read(false, EOF, false); // Top level read.
                     if (object == EOF)
                         break;
                     addHistory(commandNumber, object);
@@ -185,11 +184,11 @@ public final class Interpreter extends Lisp
                     out.finishOutput();
                 }
                 catch (StackOverflowError e) {
-                    in.clearInput();
+                    getStandardInput().clearInput();
                     out.writeLine("Stack overflow");
                 }
                 catch (Condition c) {
-                    in.clearInput();
+                    getStandardInput().clearInput();
                     String message = c.getMessage();
                     if (message != null)
                         out.writeLine("Error: " + c.getMessage() + ".");
@@ -198,7 +197,7 @@ public final class Interpreter extends Lisp
                     backtrace();
                 }
                 catch (Throwable t) {
-                    in.clearInput();
+                    getStandardInput().clearInput();
                     out.printStackTrace(t);
                     backtrace();
                 }
