@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.25 2003-11-02 14:07:30 piso Exp $
+ * $Id: Nil.java,v 1.26 2003-11-14 00:47:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,22 +66,22 @@ public final class Nil extends Symbol
 
     public LispObject car()
     {
-        return NIL;
+        return this;
     }
 
     public LispObject cdr()
     {
-        return NIL;
+        return this;
     }
 
     public final LispObject cadr()
     {
-        return NIL;
+        return this;
     }
 
     public final LispObject cddr()
     {
-        return NIL;
+        return this;
     }
 
     public int length()
@@ -92,6 +92,11 @@ public final class Nil extends Symbol
     public LispObject elt(int index) throws ConditionThrowable
     {
         throw new ConditionThrowable(new TypeError("ELT: invalid index " + index + " for " + this));
+    }
+
+    public LispObject nreverse()
+    {
+        return this;
     }
 
     public LispObject[] copyToArray()
@@ -126,7 +131,7 @@ public final class Nil extends Symbol
 
     public LispObject remove(LispObject item) throws ConditionThrowable
     {
-        return NIL;
+        return this;
     }
 
     public String toString()

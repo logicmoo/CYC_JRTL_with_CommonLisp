@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.63 2003-10-30 08:17:14 asimon Exp $
+ * $Id: LispString.java,v 1.64 2003-11-14 00:53:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ public final class LispString extends AbstractVector
         return result;
     }
 
-    public void nreverse() throws ConditionThrowable
+    public LispObject nreverse() throws ConditionThrowable
     {
         int i = 0;
         int j = length() - 1;
@@ -195,6 +195,7 @@ public final class LispString extends AbstractVector
             ++i;
             --j;
         }
+        return this;
     }
 
     public LispObject getRowMajor(int index) throws ConditionThrowable

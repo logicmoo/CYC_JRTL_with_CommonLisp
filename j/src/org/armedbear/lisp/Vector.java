@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.27 2003-10-17 19:37:13 piso Exp $
+ * $Id: Vector.java,v 1.28 2003-11-14 00:52:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,7 +199,7 @@ public class Vector extends AbstractVector
         return result;
     }
 
-    public void nreverse() throws ConditionThrowable
+    public LispObject nreverse() throws ConditionThrowable
     {
         int i = 0;
         int j = length() - 1;
@@ -210,6 +210,7 @@ public class Vector extends AbstractVector
             ++i;
             --j;
         }
+        return this;
     }
 
     public String toString()

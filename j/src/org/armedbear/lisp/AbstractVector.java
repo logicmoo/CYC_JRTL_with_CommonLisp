@@ -166,7 +166,7 @@ public abstract class AbstractVector extends AbstractArray
 
     public abstract LispObject reverse() throws ConditionThrowable;
 
-    public void nreverse() throws ConditionThrowable
+    public LispObject nreverse() throws ConditionThrowable
     {
         int i = 0;
         int j = length() - 1;
@@ -177,5 +177,6 @@ public abstract class AbstractVector extends AbstractArray
             ++i;
             --j;
         }
+        return this;
     }
 }

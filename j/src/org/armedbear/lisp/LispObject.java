@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.63 2003-11-14 00:22:52 piso Exp $
+ * $Id: LispObject.java,v 1.64 2003-11-14 00:46:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,7 +289,7 @@ public class LispObject extends Lisp
         throw new ConditionThrowable(new TypeError(this, "sequence"));
     }
 
-    public void nreverse() throws ConditionThrowable
+    public LispObject nreverse() throws ConditionThrowable
     {
         throw new ConditionThrowable(new TypeError(this, "sequence"));
     }
