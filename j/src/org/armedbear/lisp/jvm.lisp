@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.223 2004-07-19 20:34:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.224 2004-07-20 14:48:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3021,8 +3021,7 @@
            (*registers-allocated* 0)
            (*handlers* ())
 
-           (*context* (if *context* *context* (make-context)))
-;;            (*context* *context*)
+           (*context* *context*)
 
            (*context-register* *context-register*)
 
@@ -3043,7 +3042,7 @@
           (setf *child-count* 0))
 ;;       (when (> *nesting-level* 1)
 ;;         (error "Nesting level > 1, aborting"))
-;;       (setf *context* (make-context))
+      (setf *context* (make-context))
       (setf (method-name-index execute-method)
             (pool-name (method-name execute-method)))
       (setf (method-descriptor-index execute-method)
@@ -3063,18 +3062,21 @@
                 (push variable parameters)
                 (add-variable-to-context variable)
                 (incf index))))
-          (let ((register 1))
+          (let ((register 1)
+                (index 0))
             (dolist (arg args)
+              (assert (= index (length (context-vars *context*))))
               (let ((variable (make-variable :name arg
                                              :kind 'ARG
                                              :special-p nil ;; FIXME
                                              :register (if *using-arg-array* nil register)
-                                             :index (length (context-vars *context*)))))
+                                             :index index)))
                 (push variable *all-variables*)
                 (push variable *visible-variables*)
                 (push variable parameters)
                 (add-variable-to-context variable)
-                (incf register)))))
+                (incf register)
+                (incf index)))))
 
       (let ((specials (process-special-declarations body)))
         (dolist (name specials)
