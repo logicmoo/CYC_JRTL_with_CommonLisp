@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: P4.java,v 1.9 2003-04-21 01:35:48 piso Exp $
+ * $Id: P4.java,v 1.10 2003-06-16 15:44:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -685,7 +685,7 @@ public class P4 implements Constants
             title = "Output from p4 submit";
         }
         final String input = checkinBuffer.getText();
-        ShellCommand shellCommand = new ShellCommand(cmd, input);
+        ShellCommand shellCommand = new ShellCommand(cmd, null, input);
         shellCommand.run();
         if (shellCommand.exitValue() != 0) {
             // Error.
@@ -789,59 +789,9 @@ public class P4 implements Constants
     // Implementation.
     private static final String command(String cmd, File workingDirectory)
     {
-        if (workingDirectory != null) {
-            P4Command p4Command = new P4Command(cmd, workingDirectory);
-            p4Command.run();
-            return p4Command.getOutput();
-        } else {
-            ShellCommand shellCommand = new ShellCommand(cmd);
-            shellCommand.run();
-            return shellCommand.getOutput();
-        }
-    }
-
-    private static class P4Command
-    {
-        final private String cmd;
-        final private File workingDirectory;
-        private ShellCommand shellCommand;
-
-        public P4Command(String cmd, File workingDirectory)
-        {
-            this.cmd = cmd;
-            this.workingDirectory = workingDirectory;
-            Log.debug("cmd = |" + cmd + "|");
-            Log.debug("workingDirectory = |" + workingDirectory + "|");
-        }
-
-        public void run()
-        {
-            FastStringBuffer sb = new FastStringBuffer();
-            if (workingDirectory != null) {
-                if (Platform.isPlatformUnix())
-                    sb.append('\\');
-                sb.append("cd ");
-                if (Platform.isPlatformWindows())
-                    sb.append("/d ");
-                sb.append(workingDirectory.canonicalPath());
-                sb.append(" && ");
-            }
-            sb.append(cmd);
-            shellCommand = new ShellCommand(sb.toString());
-            shellCommand.run();
-        }
-
-        public final String getOutput()
-        {
-            Debug.assertTrue(shellCommand != null);
-            return shellCommand.getOutput();
-        }
-
-        public final int exitValue()
-        {
-            Debug.assertTrue(shellCommand != null);
-            return shellCommand.exitValue();
-        }
+        ShellCommand shellCommand = new ShellCommand(cmd, workingDirectory);
+        shellCommand.run();
+        return shellCommand.getOutput();
     }
 
     private static boolean checkP4Installed()
