@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.18 2003-04-04 15:07:53 piso Exp $
+ * $Id: CommandTable.java,v 1.19 2003-04-04 16:05:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -234,6 +234,7 @@ public class CommandTable
             addCommand("decodeRegion", "RegionCommands");
             addCommand("describeKey", "DescribeKeyDialog");
             addCommand("detabRegion", "RegionCommands");
+            addCommand("diff", "DiffMode");
             addCommand("diffGotoFile", "DiffMode", "gotoFile");
             addCommand("dirBack", "Directory");
             addCommand("dirCycleSortBy", "Directory");
