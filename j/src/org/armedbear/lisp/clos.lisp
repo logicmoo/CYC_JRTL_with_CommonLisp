@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.44 2003-12-19 18:30:31 piso Exp $
+;;; $Id: clos.lisp,v 1.45 2003-12-19 19:20:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -80,6 +80,7 @@
 (defsetf class-precedence-list %set-class-precedence-list)
 (defsetf std-instance-layout %set-std-instance-layout)
 (defsetf std-instance-slots %set-std-instance-slots)
+(defsetf instance-ref %set-instance-ref)
 
 (defun (setf find-class) (new-value symbol &optional errorp environment)
   (%set-find-class symbol new-value))
@@ -427,13 +428,13 @@
 (defun std-slot-value (instance slot-name)
   (let* ((location (slot-location (class-of instance) slot-name))
          (value (cond ((fixnump location)
-                       (slot-contents (std-instance-slots instance) location))
+                       (instance-ref instance location))
                       ((consp location)
                        (cdr location))
                       (t
                        (slot-missing (class-of instance) instance slot-name 'slot-value)))))
     (if (eq +slot-unbound+ value)
-        (error "the slot ~S is unbound in the object ~S" slot-name instance)
+        (error "The slot ~S is unbound in the object ~S." slot-name instance)
         value)))
 
 (defun slot-value (object slot-name)
@@ -444,7 +445,8 @@
 (defun (setf std-slot-value) (new-value instance slot-name)
   (let ((location (slot-location (class-of instance) slot-name)))
     (cond ((fixnump location)
-           (setf (slot-contents (std-instance-slots instance) location) new-value))
+;;            (setf (slot-contents (std-instance-slots instance) location) new-value))
+           (setf (instance-ref instance location) new-value))
           ((consp location)
            (setf (cdr location) new-value))
           (t
@@ -460,7 +462,8 @@
 (defun std-slot-boundp (instance slot-name)
   (let ((location (slot-location (class-of instance) slot-name)))
     (cond ((fixnump location)
-           (neq +slot-unbound+ (slot-contents (std-instance-slots instance) location)))
+;;            (neq +slot-unbound+ (slot-contents (std-instance-slots instance) location)))
+           (neq +slot-unbound+ (instance-ref instance location)))
           ((consp location)
            (neq +slot-unbound+ (cdr location)))
           (t
