@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.29 2003-06-02 16:32:25 piso Exp $
+;;; $Id: list.lisp,v 1.30 2003-06-02 17:45:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -105,15 +105,6 @@
   (do ((top x (cdr top))
        (result y (cons (car top) result)))
       ((endp top) result)))
-
-(defun nconc (&optional list &rest rest)
-  (if rest
-      (let ((rest-conc (apply #'nconc rest)))
-        (if (consp list)
-            (progn (setf (cdr (last list)) rest-conc)
-              list)
-            rest-conc))
-      list))
 
 (defun require-type (arg type)
   (unless (typep arg type)
