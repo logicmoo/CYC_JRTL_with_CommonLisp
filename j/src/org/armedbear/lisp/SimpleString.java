@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.5 2004-02-24 12:54:25 piso Exp $
+ * $Id: SimpleString.java,v 1.6 2004-02-24 14:03:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -393,4 +393,45 @@ public final class SimpleString extends AbstractString
             hashCode = hashCode * 31 + chars[i];
         return cachedHashCode = hashCode;
     }
+
+    // ### schar
+    private static final Primitive2 SCHAR = new Primitive2("schar", "string index")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                return LispCharacter.getInstance(((SimpleString)first).chars[((Fixnum)second).value]);
+            }
+            catch (ClassCastException e) {
+                if (first instanceof SimpleString)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
+            }
+        }
+    };
+
+    // ### %set-schar
+    private static final Primitive3 _SET_SCHAR =
+        new Primitive3("%set-schar", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            try {
+                ((SimpleString)first).chars[((Fixnum)second).value] =
+                    ((LispCharacter)third).value;
+                return third;
+            }
+            catch (ClassCastException e) {
+                if (!(first instanceof SimpleString))
+                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
+                if (!(second instanceof Fixnum))
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                return signal(new TypeError(third, Symbol.CHARACTER));
+            }
+        }
+    };
 }
