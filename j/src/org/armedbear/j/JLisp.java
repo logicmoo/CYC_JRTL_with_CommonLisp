@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.7 2003-02-20 18:46:08 piso Exp $
+ * $Id: JLisp.java,v 1.8 2003-02-20 19:06:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -209,6 +209,7 @@ public final class JLisp extends CommandInterpreter
 
     public static void runLispCommand(String command) throws LispError
     {
+        Interpreter.initialize(true);
         Interpreter.evaluate(command);
     }
 }
