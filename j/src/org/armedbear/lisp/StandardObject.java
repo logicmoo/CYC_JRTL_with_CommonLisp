@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.6 2003-10-11 20:40:25 piso Exp $
+ * $Id: StandardObject.java,v 1.7 2003-10-12 03:37:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,19 @@ public class StandardObject extends LispObject
             }
         }
         return super.typep(type);
+    }
+
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer("#<");
+        if (cls != null)
+            sb.append(cls.getSymbol().getName());
+        else
+            sb.append("STANDARD-OBJECT");
+        sb.append(" @ #x");
+        sb.append(Integer.toHexString(hashCode()));
+        sb.append(">");
+        return sb.toString();
     }
 
     private static final Primitive1 STD_INSTANCE_SLOTS =
