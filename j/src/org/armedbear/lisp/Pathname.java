@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.56 2004-05-09 14:15:02 piso Exp $
+ * $Id: Pathname.java,v 1.57 2004-05-11 14:31:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -751,7 +751,8 @@ public class Pathname extends LispObject
             else if (second == Keyword.VERSION)
                 value = pathname.version;
             else
-                return signal(new ProgramError("Unrecognized keyword " + second + "."));
+                return signal(new ProgramError("Unrecognized keyword " +
+                                               second.writeToString() + "."));
             if (value == Keyword.WILD || value == Keyword.WILD_INFERIORS)
                 return T;
             else
@@ -760,7 +761,8 @@ public class Pathname extends LispObject
     };
 
     private static final Primitive MERGE_PATHNAMES =
-        new Primitive("merge-pathnames", "pathname &optional default-pathname default-version")
+        new Primitive("merge-pathnames",
+                      "pathname &optional default-pathname default-version")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -891,8 +893,9 @@ public class Pathname extends LispObject
         return NIL;
     }
 
+    // ### rename-file filespec new-name => defaulted-new-name, old-truename, new-truename
     public static final Primitive2 RENAME_FILE =
-        new Primitive2("rename-file", "pathspec new-name")
+        new Primitive2("rename-file", "filespec new-name")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -904,9 +907,15 @@ public class Pathname extends LispObject
             newName = mergePathnames(newName, filespec, NIL);
             File source = new File(filespec.getNamestring());
             File destination = new File(newName.getNamestring());
+            if (Utilities.isPlatformWindows()) {
+                if (destination.isFile())
+                    destination.delete();
+            }
             if (!source.renameTo(destination))
-                return signal(new FileError("Unable to rename " + filespec +
-                                            " to " + newName + "."));
+                return signal(new FileError("Unable to rename " +
+                                            filespec.writeToString() +
+                                            " to " + newName.writeToString() +
+                                            "."));
             LispThread.currentThread().setValues(newName, filespec,
                                                  truename(newName, true));
             return newName;
@@ -926,7 +935,8 @@ public class Pathname extends LispObject
             else if (p.name == Keyword.WILD)
                 sb.append('*');
             else
-                signal(new SimpleError("Pathname has no name component: " + p + "."));
+                signal(new SimpleError("Pathname has no name component: " +
+                                       p.writeToString() + "."));
             if (p.type instanceof AbstractString) {
                 sb.append('.');
                 sb.append(p.type.getStringValue());
