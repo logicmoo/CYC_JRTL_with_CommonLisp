@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.9 2002-12-07 19:25:34 piso Exp $
+ * $Id: File.java,v 1.10 2002-12-08 01:50:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@ public class File implements Comparable
     public static final String PREFIX_HTTPS     = "https://";
     public static final String PREFIX_FTP       = "ftp://";
     public static final String PREFIX_SSH       = "ssh://";
+    public static final String PREFIX_FILE      = "file://";
 
     public static final int TYPE_UNKNOWN        = 0;
     public static final int TYPE_FILE           = 1;
@@ -99,14 +100,16 @@ public class File implements Comparable
     {
         if (name == null)
             return null;
-        final int length = name.length();
+        int length = name.length();
+        if (length >= 2) {
+            // Name may be enclosed in quotes.
+            if (name.charAt(0) == '"' && name.charAt(length-1) == '"') {
+                name = name.substring(1, length-1);
+                length -= 2;
+            }
+        }
         if (length == 0)
             return null;
-        // Name may be enclosed in quotes.
-        if (length >= 2) {
-            if (name.charAt(0) == '"' && name.charAt(length-1) == '"')
-                name = name.substring(1, length-1);
-        }
 
         if (name.startsWith(PREFIX_FTP))
             return FtpFile.getFtpFile(name);
@@ -116,6 +119,11 @@ public class File implements Comparable
             return SshFile.getSshFile(name);
 
         // Local file.
+        if (name.startsWith(PREFIX_FILE)) {
+            name = name.substring(PREFIX_FILE.length());
+            if (name.length() == 0)
+                return null;
+        }
         name = normalize(name);
 
         if (Platform.isPlatformWindows() && name.startsWith("\\")) {
@@ -195,18 +203,24 @@ public class File implements Comparable
     {
         if (name == null)
             return null;
-        final int length = name.length();
+        int length = name.length();
+        if (length >= 2) {
+            // Name may be enclosed in quotes.
+            if (name.charAt(0) == '"' && name.charAt(length-1) == '"') {
+                name = name.substring(1, length-1);
+                length -= 2;
+            }
+        }
         if (length == 0)
             return null;
-        // Name may be enclosed in quotes.
-        if (length >= 2) {
-            if (name.charAt(0) == '"' && name.charAt(length-1) == '"')
-                name = name.substring(1, length-1);
-        }
 
         if (hasRemotePrefix(name)) {
             // Ignore directory.
             return getInstance(canonicalize(name, "/"));
+        }
+        if (hasLocalPrefix(name)) {
+            // Fully qualified name.
+            return getInstance(name);
         }
 
         if (directory == null)
@@ -417,6 +431,13 @@ public class File implements Comparable
         if (name.startsWith(PREFIX_FTP))
             return true;
         if (name.startsWith(PREFIX_SSH))
+            return true;
+        return false;
+    }
+
+    private static boolean hasLocalPrefix(String name)
+    {
+        if (name.startsWith(PREFIX_FILE))
             return true;
         return false;
     }
