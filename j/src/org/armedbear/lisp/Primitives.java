@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.587 2004-03-01 15:07:30 piso Exp $
+ * $Id: Primitives.java,v 1.588 2004-03-03 00:34:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -687,21 +687,6 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### princ-to-string
-    private static final Primitive1 PRINC_TO_STRING =
-        new Primitive1("princ-to-string", "object")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            LispThread thread = LispThread.currentThread();
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-            SimpleString string = new SimpleString(String.valueOf(arg));
-            thread.setDynamicEnvironment(oldDynEnv);
-            return string;
-        }
-    };
-
     // ### prin1
     // prin1 object &optional output-stream => object
     private static final Primitive PRIN1 =
@@ -722,13 +707,33 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### princ-to-string
+    private static final Primitive1 PRINC_TO_STRING =
+        new Primitive1("princ-to-string", "object")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+            SimpleString string = new SimpleString(String.valueOf(arg));
+            thread.setDynamicEnvironment(oldDynEnv);
+            return string;
+        }
+    };
+
     // ### prin1-to-string
     private static final Primitive1 PRIN1_TO_STRING =
         new Primitive1("prin1-to-string", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new SimpleString(String.valueOf(arg));
+            LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            thread.bindSpecial(_PRINT_ESCAPE_, T);
+            SimpleString string = new SimpleString(String.valueOf(arg));
+            thread.setDynamicEnvironment(oldDynEnv);
+            return string;
         }
     };
 
