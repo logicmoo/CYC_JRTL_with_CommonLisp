@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.40 2003-09-14 17:36:11 piso Exp $
+ * $Id: Bignum.java,v 1.41 2003-09-17 19:19:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,21 +42,36 @@ public final class Bignum extends LispObject
         return Symbol.BIGNUM;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispClass classOf()
     {
-        if (typeSpecifier == Symbol.BIGNUM)
+        return LispClass.BIGNUM;
+    }
+
+    public LispObject typep(LispObject type) throws LispError
+    {
+        if (type == Symbol.BIGNUM)
             return T;
-        if (typeSpecifier == Symbol.INTEGER)
+        if (type == LispClass.BIGNUM)
             return T;
-        if (typeSpecifier == Symbol.RATIONAL)
+        if (type == Symbol.INTEGER)
             return T;
-        if (typeSpecifier == Symbol.REAL)
+        if (type == LispClass.INTEGER)
             return T;
-        if (typeSpecifier == Symbol.NUMBER)
+        if (type == Symbol.RATIONAL)
             return T;
-        if (typeSpecifier == Symbol.UNSIGNED_BYTE)
+        if (type == LispClass.RATIONAL)
+            return T;
+        if (type == Symbol.REAL)
+            return T;
+        if (type == LispClass.REAL)
+            return T;
+        if (type == Symbol.NUMBER)
+            return T;
+        if (type == LispClass.NUMBER)
+            return T;
+        if (type == Symbol.UNSIGNED_BYTE)
             return value.signum() >= 0 ? T : NIL;
-        return super.typep(typeSpecifier);
+        return super.typep(type);
     }
 
     public LispObject NUMBERP()

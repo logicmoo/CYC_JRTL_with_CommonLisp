@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.67 2003-09-16 19:01:07 piso Exp $
+ * $Id: Fixnum.java,v 1.68 2003-09-17 19:20:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,23 +46,38 @@ public final class Fixnum extends LispObject
         return Symbol.FIXNUM;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispClass classOf()
     {
-        if (typeSpecifier == Symbol.FIXNUM)
+        return LispClass.FIXNUM;
+    }
+
+    public LispObject typep(LispObject type) throws LispError
+    {
+        if (type == Symbol.FIXNUM)
             return T;
-        if (typeSpecifier == Symbol.INTEGER)
+        if (type == LispClass.FIXNUM)
             return T;
-        if (typeSpecifier == Symbol.RATIONAL)
+        if (type == Symbol.INTEGER)
             return T;
-        if (typeSpecifier == Symbol.REAL)
+        if (type == LispClass.INTEGER)
             return T;
-        if (typeSpecifier == Symbol.NUMBER)
+        if (type == Symbol.RATIONAL)
             return T;
-        if (typeSpecifier == Symbol.UNSIGNED_BYTE)
+        if (type == LispClass.RATIONAL)
+            return T;
+        if (type == Symbol.REAL)
+            return T;
+        if (type == LispClass.REAL)
+            return T;
+        if (type == Symbol.NUMBER)
+            return T;
+        if (type == LispClass.NUMBER)
+            return T;
+        if (type == Symbol.UNSIGNED_BYTE)
             return value >= 0 ? T : NIL;
-        if (typeSpecifier == Symbol.BIT)
+        if (type == Symbol.BIT)
             return (value == 0 || value == 1) ? T : NIL;
-        return super.typep(typeSpecifier);
+        return super.typep(type);
     }
 
     public LispObject NUMBERP()
