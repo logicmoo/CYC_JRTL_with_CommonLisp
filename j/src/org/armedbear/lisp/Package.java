@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.5 2003-03-07 19:02:37 piso Exp $
+ * $Id: Package.java,v 1.6 2003-03-15 13:53:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,7 +110,7 @@ public final class Package extends LispObject
         values[0] = NIL;
         values[1] = NIL;
         setValues(values);
-        return symbol;
+        return NIL;
     }
 
     public synchronized Symbol intern(String name)
