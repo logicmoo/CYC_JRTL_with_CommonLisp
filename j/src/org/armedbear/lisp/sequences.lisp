@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.27 2003-03-15 18:30:24 piso Exp $
+;;; $Id: sequences.lisp,v 1.28 2003-03-15 19:07:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
           position position-if position-if-not
           find find-if find-if-not
           count count-if count-if-not
+          mismatch
           search))
 
 (defun signal-index-too-large-error (sequence index)
@@ -1355,6 +1356,68 @@
 		  (if from-end
 		      (vector-count-if t t test sequence)
 		      (vector-count-if t nil test sequence)))))
+
+
+;;; MISMATCH (from ECL)
+
+(defun call-test (test test-not item keyx)
+  (cond (test (funcall test item keyx))
+        (test-not (not (funcall test-not item keyx)))
+        (t (eql item keyx))))
+
+(defun test-error()
+  (error "both test and test are supplied"))
+
+(defun bad-seq-limit (x &optional y)
+  (error "bad sequence limit ~a" (if y (list x y) x)))
+
+(defmacro with-start-end (start end seq &body body)
+  `(let* ((,start (if ,start (the-start ,start) 0))
+          (,end (the-end ,end ,seq)))
+     (unless (<= ,start ,end) (bad-seq-limit ,start ,end))
+     ,@ body))
+
+(defun the-end (x y)
+  (cond ((fixnump x)
+	 (unless (<= x (length y))
+	   (bad-seq-limit x))
+	 x)
+	((null x)
+	 (length y))
+	(t (bad-seq-limit x))))
+
+(defun the-start (x)
+  (cond ((fixnump x)
+	 (unless (>= x 0)
+           (bad-seq-limit x))
+	 x)
+	((null x) 0)
+	(t (bad-seq-limit x))))
+
+(defun mismatch (sequence1 sequence2 &key from-end test test-not
+                           (key #'identity) start1 start2 end1 end2)
+  (and test test-not (test-error))
+  (with-start-end
+   start1 end1 sequence1
+   (with-start-end
+    start2 end2 sequence2
+    (if (not from-end)
+        (do ((i1 start1 (1+ i1))
+             (i2 start2 (1+ i2)))
+          ((or (>= i1 end1) (>= i2 end2))
+           (if (and (>= i1 end1) (>= i2 end2)) nil i1))
+          (unless (call-test test test-not
+                             (funcall key (elt sequence1 i1))
+                             (funcall key (elt sequence2 i2)))
+            (return i1)))
+        (do ((i1 (1- end1) (1- i1))
+             (i2 (1- end2)  (1- i2)))
+          ((or (< i1 start1) (< i2 start2))
+           (if (and (< i1 start1) (< i2 start2)) nil (1+ i1)))
+          (unless (call-test test test-not
+                             (funcall key (elt sequence1 i1))
+                             (funcall key (elt sequence2 i2)))
+            (return (1+ i1))))))))
 
 
 ;; SEARCH (from CMUCL)
