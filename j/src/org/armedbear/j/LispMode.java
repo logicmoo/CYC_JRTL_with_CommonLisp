@@ -1,8 +1,8 @@
 /*
  * LispMode.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.83 2004-10-12 15:48:57 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: LispMode.java,v 1.84 2005-01-24 14:23:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -206,7 +206,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         "do-symbols", "dolist", "dotimes", "ecase", "etypecase", "eval-when",
         "flet",  "handler-bind", "labels", "lambda", "let", "let*", "locally",
         "loop", "macrolet", "multiple-value-bind", "pprint-logical-block",
-        "progn", "typecase", "unless", "when"
+        "prog1", "prog2", "progn", "typecase", "unless", "when"
     };
 
     private final String[] elispSpecials = new String[] {
