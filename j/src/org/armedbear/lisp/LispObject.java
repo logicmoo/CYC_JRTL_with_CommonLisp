@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.20 2003-07-29 18:03:03 piso Exp $
+ * $Id: LispObject.java,v 1.21 2003-07-29 18:47:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -217,9 +217,19 @@ public class LispObject extends Lisp
         throw new TypeError(this, "number");
     }
 
+    public LispObject IS_E(LispObject obj) throws LispError
+    {
+        return isEqualTo(obj) ? T : NIL;
+    }
+
     public boolean isNotEqualTo(LispObject obj) throws LispError
     {
         throw new TypeError(this, "number");
+    }
+
+    public LispObject IS_NE(LispObject obj) throws LispError
+    {
+        return isNotEqualTo(obj) ? T : NIL;
     }
 
     public boolean isLessThan(LispObject obj) throws LispError
@@ -227,9 +237,19 @@ public class LispObject extends Lisp
         throw new TypeError(this, "number");
     }
 
+    public LispObject IS_LT(LispObject obj) throws LispError
+    {
+        return isLessThan(obj) ? T : NIL;
+    }
+
     public boolean isGreaterThan(LispObject obj) throws LispError
     {
         throw new TypeError(this, "number");
+    }
+
+    public LispObject IS_GT(LispObject obj) throws LispError
+    {
+        return isGreaterThan(obj) ? T : NIL;
     }
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
@@ -237,9 +257,19 @@ public class LispObject extends Lisp
         throw new TypeError(this, "number");
     }
 
+    public LispObject IS_LE(LispObject obj) throws LispError
+    {
+        return isLessThanOrEqualTo(obj) ? T : NIL;
+    }
+
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
     {
         throw new TypeError(this, "number");
+    }
+
+    public LispObject IS_GE(LispObject obj) throws LispError
+    {
+        return isGreaterThanOrEqualTo(obj) ? T : NIL;
     }
 
     // Profiling.
