@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Shell.java,v 1.30 2004-09-13 00:09:36 piso Exp $
+ * $Id: Shell.java,v 1.31 2004-09-13 00:42:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -557,6 +557,8 @@ public class Shell extends CommandInterpreter implements Constants
     {
         Position endOfOutput = getEndOfOutput();
         if (endOfOutput != null && isPasswordPrompt(endOfOutput.getLine())) {
+            if (!Editor.getBufferList().contains(this))
+                return;
             String password =
                 PasswordDialog.showPasswordDialog(Editor.currentEditor(),
                                                   "Password:", "Password");
