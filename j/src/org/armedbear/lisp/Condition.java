@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Condition.java,v 1.21 2004-03-01 23:53:48 piso Exp $
+ * $Id: Condition.java,v 1.22 2004-03-10 02:00:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,6 +129,7 @@ public class Condition extends StandardObject
         return unreadableString(String.valueOf(typeOf()));
     }
 
+    // ### condition-report
     private static final Primitive1 CONDITION_REPORT =
         new Primitive1("condition-report", PACKAGE_SYS, false, "condition")
     {
