@@ -2,7 +2,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(push prog1 pop the declare declaim locally time))
+(export '(push prog1 pop loop the declare declaim locally time))
 
 (defmacro push (x place)
   `(setf ,place (cons ,x ,place)))
@@ -15,6 +15,10 @@
 
 (defmacro pop (place)
   `(prog1 (car ,place) (setf ,place (cdr ,place))))
+
+(defmacro loop (&rest exps)
+  (let ((tag (gensym)))
+    `(block nil (tagbody ,tag ,@exps (go ,tag)))))
 
 (defmacro the (type form) form)
 
