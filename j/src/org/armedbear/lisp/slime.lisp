@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.1 2004-09-01 19:57:25 piso Exp $
+;;; $Id: slime.lisp,v 1.2 2004-09-02 00:47:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@
 (defun complete-symbol ()
   (cond ((eq *last-command* 'complete)
          (unless (> (length *completions*) 1)
-           (return-from complete))
+           (return-from complete-symbol))
          (undo)
          (incf *completion-index*)
          (when (> *completion-index* (1- (length *completions*)))
