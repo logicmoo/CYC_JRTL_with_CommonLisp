@@ -1,8 +1,8 @@
 /*
  * PHPTagger.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: PHPTagger.java,v 1.1.1.1 2002-09-24 16:08:41 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: PHPTagger.java,v 1.2 2003-03-20 17:21:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ public final class PHPTagger extends Tagger
     // We trim before matching, so "function" will appear without any preceding
     // whitespace.
     private static final RE functionRE =
-        new UncheckedRE("^function\\s+([a-zA-Z_\u007f-\u00ff][a-zA-Z0-9_\u007f-\u00ff]*)\\s*\\(");
+        new UncheckedRE("^function\\s+&?([a-zA-Z_\u007f-\u00ff][a-zA-Z0-9_\u007f-\u00ff]*)\\s*\\(");
 
     public PHPTagger(SystemBuffer buffer)
     {
