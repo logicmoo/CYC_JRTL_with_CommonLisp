@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.30 2004-05-25 18:34:19 piso Exp $
+ * $Id: BuiltInClass.java,v 1.31 2004-06-08 10:54:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,6 +74,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass BIT_VECTOR                       = addClass(Symbol.BIT_VECTOR);
     public static final BuiltInClass BROADCAST_STREAM                 = addClass(Symbol.BROADCAST_STREAM);
     public static final BuiltInClass BUILT_IN_CLASS                   = addClass(Symbol.BUILT_IN_CLASS);
+    public static final BuiltInClass CASE_FROB_STREAM                 = addClass(Symbol.CASE_FROB_STREAM);
     public static final BuiltInClass CHARACTER                        = addClass(Symbol.CHARACTER);
     public static final BuiltInClass CLASS                            = addClass(Symbol.CLASS);
     public static final BuiltInClass COMPLEX                          = addClass(Symbol.COMPLEX);
@@ -285,6 +286,8 @@ public class BuiltInClass extends LispClass
         BROADCAST_STREAM.setCPL(BROADCAST_STREAM, STREAM, CLASS_T);
         BUILT_IN_CLASS.setDirectSuperclass(CLASS);
         BUILT_IN_CLASS.setCPL(BUILT_IN_CLASS, CLASS, STANDARD_OBJECT, CLASS_T);
+        CASE_FROB_STREAM.setDirectSuperclass(STREAM);
+        CASE_FROB_STREAM.setCPL(CASE_FROB_STREAM, STREAM, CLASS_T);
         CELL_ERROR.setCPL(CELL_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, CLASS_T);
         CHARACTER.setDirectSuperclass(CLASS_T);
