@@ -2,12 +2,6 @@
 
 (in-package "COMMON-LISP")
 
-(export '(prog1 prog2 push pop psetq loop
-          the declare declaim locally eval-when
-          time
-          with-open-file with-open-stream
-          do do*))
-
 (defmacro prog1 (first-form &rest forms)
   (let ((result (gensym)))
     `(let ((,result ,first-form))
@@ -128,3 +122,9 @@
 
 (defmacro do* (varlist endlist &rest body)
   (do-do-body varlist endlist body 'let* 'setq 'do* nil))
+
+(defmacro loop (&rest exps)
+  (if (and exps (symbolp (car exps)))
+      (error "LOOP keywords are not supported")
+      (let ((tag (gensym)))
+	`(block nil (tagbody ,tag ,@exps (go ,tag))))))
