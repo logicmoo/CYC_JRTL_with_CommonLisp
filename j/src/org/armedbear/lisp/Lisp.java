@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.144 2003-09-21 19:32:05 piso Exp $
+ * $Id: Lisp.java,v 1.145 2003-09-22 12:13:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,7 @@ public abstract class Lisp
             PACKAGE_CL_USER.usePackage(PACKAGE_JAVA);
             PACKAGE_SYS.addNickname("SYS");
             PACKAGE_SYS.usePackage(PACKAGE_CL);
+            PACKAGE_SYS.usePackage(PACKAGE_EXT);
             PACKAGE_EXT.addNickname("EXT");
             PACKAGE_EXT.usePackage(PACKAGE_CL);
         }
