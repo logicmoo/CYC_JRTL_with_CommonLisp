@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.62 2003-09-10 18:45:25 piso Exp $
+ * $Id: Fixnum.java,v 1.63 2003-09-14 15:07:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +72,12 @@ public final class Fixnum extends LispObject
             return (value == 0 || value == 1) ? T : NIL;
         return super.typep(typeSpecifier);
     }
-    
+
+    public LispObject NUMBERP()
+    {
+        return T;
+    }
+
     public boolean integerp()
     {
         return true;

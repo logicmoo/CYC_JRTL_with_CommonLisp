@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.38 2003-09-05 14:30:24 piso Exp $
+ * $Id: LispFloat.java,v 1.39 2003-09-14 15:08:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,11 @@ public final class LispFloat extends LispObject
         if (typeSpecifier == Symbol.NUMBER)
             return T;
         return super.typep(typeSpecifier);
+    }
+
+    public LispObject NUMBERP()
+    {
+        return T;
     }
 
     public boolean eql(LispObject obj)

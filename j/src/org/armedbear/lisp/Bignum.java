@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.36 2003-09-10 18:45:38 piso Exp $
+ * $Id: Bignum.java,v 1.37 2003-09-14 15:08:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,12 @@ public final class Bignum extends LispObject
             return value.signum() >= 0 ? T : NIL;
         return super.typep(typeSpecifier);
     }
-    
+
+    public LispObject NUMBERP()
+    {
+        return T;
+    }
+
     public boolean integerp()
     {
         return true;
