@@ -1,7 +1,7 @@
 ;;; parse-integer.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: parse-integer.lisp,v 1.2 2003-07-05 02:32:16 piso Exp $
+;;; $Id: parse-integer.lisp,v 1.3 2003-09-08 01:15:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -49,9 +49,9 @@
                      found-digit t))
               (junk-allowed (return nil))
               ((whitespacep char)
-               (until (eq (setq index (1+ index)) end)
-                      (unless (whitespacep (char string index))
-                        (error "not an integer string: ~S" string)))
+               (do () ((= (setq index (1+ index)) end))
+                 (unless (whitespacep (char string index))
+                   (error "not an integer string: ~S" string)))
                (return nil))
               (t
                (error "not an integer string: ~S" string))))
