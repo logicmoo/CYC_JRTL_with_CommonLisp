@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.17 2003-03-09 06:33:58 piso Exp $
+;;; $Id: list.lisp,v 1.18 2003-03-13 16:17:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
           copy-list copy-alist copy-tree
           revappend nconc nreconc
           butlast nbutlast
+          ldiff
           complement constantly
           subst subst-if subst-if-not nsubst nsubst-if nsubst-if-not
           sublis nsublis
@@ -189,6 +190,23 @@
           ((= count n)
            (rplacd 2nd ())
            list))))))
+
+
+;;; LDIFF (from SBCL)
+
+(defun ldiff (list object)
+  (require-type list 'list)
+  (do* ((list list (cdr list))
+	(result (list ()))
+	(splice result))
+    ((atom list)
+     (if (eql list object)
+         (cdr result)
+         (progn (rplacd splice list) (cdr result))))
+    (if (eql list object)
+	(return (cdr result))
+	(setq splice (cdr (rplacd splice (list (car list))))))))
+
 
 (defmacro apply-key (key element)
   `(if ,key
