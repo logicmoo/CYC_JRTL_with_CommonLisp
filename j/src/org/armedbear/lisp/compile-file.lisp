@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.44 2004-09-18 19:19:56 piso Exp $
+;;; $Id: compile-file.lisp,v 1.45 2004-10-18 19:13:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -213,7 +213,7 @@
 	  (intersection '(:execute eval) situations)))
 
 (defun compile-file (input-file &key output-file verbose print external-format)
-  (unless (or (probe-file input-file)
+  (unless (or (and (probe-file input-file) (not (file-directory-p input-file)))
               (pathname-type input-file))
     (let ((pathname (merge-pathnames (make-pathname :type "lisp") input-file)))
       (when (probe-file pathname)
