@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.200 2004-11-21 16:03:49 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: boot.lisp,v 1.201 2005-01-31 17:24:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -295,7 +295,7 @@
                (load x)))
             (t
              (let ((*readtable* (copy-readtable nil)))
-               (sys::load-system-file (string-downcase (string module-name))))))
+               (load-system-file (string-downcase (string module-name))))))
       (set-difference *modules* saved-modules))))
 
 (defun read-from-string (string &optional (eof-error-p t) eof-value
@@ -321,5 +321,7 @@
 (load-system-file "pprint")
 
 (unless (sys::featurep :j)
-  (sys::load-system-file "top-level")
-  (sys::%format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000))))
+  (load-system-file "top-level")
+  (setf *warn-on-redefinition* t)
+  (%format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000))))
+
