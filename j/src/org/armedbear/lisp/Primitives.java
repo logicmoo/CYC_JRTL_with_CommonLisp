@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.56 2003-02-28 16:59:21 piso Exp $
+ * $Id: Primitives.java,v 1.57 2003-02-28 19:25:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3271,6 +3271,15 @@ public final class Primitives extends Module
             catch (FileNotFoundException e) {
                 throw new LispError(" file not found: " + pathname);
             }
+        }
+    };
+
+    private static final Primitive FIND_CLASS = new Primitive("find-class") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length < 1)
+                throw new WrongNumberOfArgumentsException(this);
+            return LispClass.findClass(checkSymbol(args[0]));
         }
     };
 
