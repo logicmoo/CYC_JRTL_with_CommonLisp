@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.675 2004-09-07 15:36:37 piso Exp $
+ * $Id: Primitives.java,v 1.676 2004-09-18 17:49:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2730,18 +2730,25 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### fset name function &optional source-position => function
+    // ### fset name function &optional source-position arglist => function
     private static final Primitive FSET =
         new Primitive("fset", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return execute(first, second, NIL);
+            return execute(first, second, NIL, NIL);
         }
 
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
+            throws ConditionThrowable
+        {
+            return execute(first, second, third, NIL);
+        }
+
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
             throws ConditionThrowable
         {
             if (first instanceof Symbol) {
@@ -2761,8 +2768,11 @@ public final class Primitives extends Lisp
             } else
                 return signal(new TypeError(first.writeToString() +
                                             " is not a valid function name."));
-            if (second instanceof Functional)
+            if (second instanceof Functional) {
                 ((Functional)second).setLambdaName(first);
+                if (fourth != NIL)
+                    ((Functional)second).setArglist(fourth);
+            }
             return second;
         }
     };
