@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.3 2003-01-26 18:09:13 piso Exp $
+ * $Id: Interpreter.java,v 1.4 2003-01-28 01:41:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -233,7 +233,7 @@ public final class Interpreter extends Lisp
     {
         final String sep = System.getProperty("line.separator");
         StringBuffer sb = new StringBuffer("Armed Bear Lisp ");
-        sb.append(version());
+        sb.append(Version.getVersion());
         if (build != null) {
             sb.append(" (built ");
             sb.append(build);
