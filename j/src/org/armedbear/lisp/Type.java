@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.19 2003-09-08 18:05:27 piso Exp $
+ * $Id: Type.java,v 1.20 2003-09-11 16:06:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Type extends Lisp
+public class Type extends LispObject
 {
     private static final HashMap map = new HashMap();
 
