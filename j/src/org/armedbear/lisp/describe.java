@@ -2,7 +2,7 @@
  * describe.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: describe.java,v 1.2 2003-06-22 16:15:14 piso Exp $
+ * $Id: describe.java,v 1.3 2003-07-27 18:50:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,12 +64,19 @@ public final class describe extends Lisp
                     sb.append("Its function binding is ");
                     sb.append(function);
                     sb.append(".\n");
+                    if (function instanceof Function) {
+                        LispObject arglist = ((Function)function).getArglist();
+                        if (arglist != null) {
+                            sb.append("Function argument list:\n  ");
+                            if (arglist instanceof LispString)
+                                sb.append(((LispString)arglist).getValue());
+                            else
+                                sb.append(arglist);
+                            sb.append('\n');
+                        }
+                    }
                     LispObject documentation =
-                        eval(list(Symbol.DOCUMENTATION,
-                            list(Symbol.QUOTE, symbol),
-                            list(Symbol.QUOTE, Symbol.FUNCTION)),
-                            new Environment(),
-                            LispThread.currentThread());
+                        symbol.getFunctionDocumentation();
                     if (documentation instanceof LispString) {
                         sb.append("Function documentation:\n  ");
                         sb.append(((LispString)documentation).getValue());
@@ -85,7 +92,7 @@ public final class describe extends Lisp
                         LispObject value = array[i+1];
                         sb.append("  ");
                         sb.append(indicator);
-                        sb.append("\t\t");
+                        sb.append(' ');
                         sb.append(value);
                         sb.append('\n');
                     }
@@ -94,6 +101,7 @@ public final class describe extends Lisp
             CharacterOutputStream out = getStandardOutput();
             out.freshLine();
             out.writeString(sb.toString());
+            out.freshLine();
             return LispThread.currentThread().nothing();
         }
     };
