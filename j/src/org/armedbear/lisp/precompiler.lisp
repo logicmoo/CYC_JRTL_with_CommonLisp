@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.63 2004-05-19 14:56:07 piso Exp $
+;;; $Id: precompiler.lisp,v 1.64 2004-05-19 17:29:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -529,14 +529,16 @@
     (dolist (def defs (nreverse result))
       (push (precompile-local-function-def def) result))))
 
-(defun find-use (symbol expression)
+(defun find-use (name expression)
   (cond ((atom expression)
          nil)
-        ((eq (car expression) symbol)
+        ((eq (car expression) name)
          t)
+        ((consp name)
+         t) ;; FIXME Recognize use of SETF functions!
         (t
-         (or (find-use symbol (car expression))
-             (find-use symbol (cdr expression))))))
+         (or (find-use name (car expression))
+             (find-use name (cdr expression))))))
 
 (defun precompile-flet (form)
   (let ((*local-functions-and-macros* *local-functions-and-macros*)
