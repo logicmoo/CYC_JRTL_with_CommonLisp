@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.273 2004-08-10 03:28:41 piso Exp $
+;;; $Id: jvm.lisp,v 1.274 2004-08-15 12:41:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1866,6 +1866,7 @@
 (define-unary-operator 'REST            "cdr")
 (define-unary-operator 'SECOND          "cadr")
 (define-unary-operator 'SIMPLE-STRING-P "SIMPLE_STRING_P")
+(define-unary-operator 'STRING          "STRING")
 (define-unary-operator 'STRINGP         "STRINGP")
 (define-unary-operator 'SYMBOLP         "SYMBOLP")
 (define-unary-operator 'VECTORP         "VECTORP")
