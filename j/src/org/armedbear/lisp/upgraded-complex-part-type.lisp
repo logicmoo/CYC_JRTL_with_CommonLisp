@@ -1,7 +1,7 @@
 ;;; upgraded-complex-part-type.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: upgraded-complex-part-type.lisp,v 1.1 2004-03-05 19:11:51 piso Exp $
+;;; $Id: upgraded-complex-part-type.lisp,v 1.2 2004-05-03 15:24:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,5 +24,7 @@
 	 'float)
 	((subtypep typespec 'rational)
 	 'rational)
+        ((subtypep typespec 'real)
+         'real)
 	(t
-	 'real)))
+	 t)))
