@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.2 2002-10-05 13:08:28 piso Exp $
+ * $Id: Buffer.java,v 1.3 2002-10-10 16:28:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@ public class Buffer extends SystemBuffer
     private BackgroundProcess backgroundProcess;
 
     private Mutex mutex = new Mutex();
-    private ReadWriteLock rwlock = new ReadWriteLock();
+    private final ReadWriteLock rwlock = new ReadWriteLock();
 
     private boolean isNewFile;
 
@@ -439,27 +439,27 @@ public class Buffer extends SystemBuffer
         release();
     }
 
-    public final void lockRead() throws InterruptedException
+    public final synchronized void lockRead() throws InterruptedException
     {
         rwlock.lockRead();
     }
 
-    public final void unlockRead()
+    public final synchronized void unlockRead()
     {
         rwlock.unlockRead();
     }
 
-    public final void lockWrite() throws InterruptedException
+    public final synchronized void lockWrite() throws InterruptedException
     {
         rwlock.lockWrite();
     }
 
-    public final void unlockWrite()
+    public final synchronized void unlockWrite()
     {
         rwlock.unlockWrite();
     }
 
-    public final boolean isWriteLocked()
+    public final synchronized boolean isWriteLocked()
     {
         return rwlock.isWriteLocked();
     }
@@ -879,41 +879,53 @@ public class Buffer extends SystemBuffer
     public int load()
     {
         if (!isLoaded) {
-            final File file = getFile();
-            final File toBeLoaded = cache != null ? cache : file;
-            if (toBeLoaded.isFile()) {
-                Editor editor = Editor.currentEditor();
-                FastStringBuffer sb = new FastStringBuffer("Loading");
-                if (entryName != null) {
-                    sb.append(' ');
-                    sb.append(entryName);
-                } else if (file != null) {
-                    sb.append(' ');
-                    sb.append(file.getName());
+            try {
+                lockWrite();
+            }
+            catch (InterruptedException e) {
+                Log.error(e);
+                return LOAD_FAILED;
+            }
+            try {
+                final File file = getFile();
+                final File toBeLoaded = cache != null ? cache : file;
+                if (toBeLoaded.isFile()) {
+                    Editor editor = Editor.currentEditor();
+                    FastStringBuffer sb = new FastStringBuffer("Loading");
+                    if (entryName != null) {
+                        sb.append(' ');
+                        sb.append(entryName);
+                    } else if (file != null) {
+                        sb.append(' ');
+                        sb.append(file.getName());
+                    }
+                    sb.append("...");
+                    editor.status(sb.toString());
+                    Debug.assertTrue(mode != null);
+                    Debug.assertTrue(toBeLoaded != null);
+                    loadFile(toBeLoaded);
+                    // At this point, if we loaded from a cache, lastModified will
+                    // be set based on the cache file, which is not what we want
+                    // in the case of a local file.
+                    if (toBeLoaded == cache && file != null && !file.isRemote())
+                        lastModified = file.lastModified();
+                    formatter.parseBuffer();
+                    checkCVS();
+                    sb.append("done");
+                    editor.status(sb.toString());
+                } else {
+                    // File doesn't exist.
+                    if (getFirstLine() == null) {
+                        appendLine("");
+                        lineSeparator = System.getProperty("line.separator");
+                    }
+                    renumberOriginal();
+                    setModeFromFilename(canonicalPath());
+                    isLoaded = true;
                 }
-                sb.append("...");
-                editor.status(sb.toString());
-                Debug.assertTrue(mode != null);
-                Debug.assertTrue(toBeLoaded != null);
-                loadFile(toBeLoaded);
-                // At this point, if we loaded from a cache, lastModified will
-                // be set based on the cache file, which is not what we want
-                // in the case of a local file.
-                if (toBeLoaded == cache && file != null && !file.isRemote())
-                    lastModified = file.lastModified();
-                formatter.parseBuffer();
-                checkCVS();
-                sb.append("done");
-                editor.status(sb.toString());
-            } else {
-                // File doesn't exist.
-                if (getFirstLine() == null) {
-                    appendLine("");
-                    lineSeparator = System.getProperty("line.separator");
-                }
-                renumberOriginal();
-                setModeFromFilename(canonicalPath());
-                isLoaded = true;
+            }
+            finally {
+                unlockWrite();
             }
         }
         return LOAD_COMPLETED;
@@ -1795,6 +1807,15 @@ public class Buffer extends SystemBuffer
             autosaveFile.delete();
     }
 
+    public void setFirstLine(Line line)
+    {
+        if (!rwlock.isWriteLocked()) {
+            Log.error("----- setFirstLine() called without write lock -----");
+            Debug.dumpStack();
+        }
+        super.setFirstLine(line);
+    }
+
     public void modified()
     {
         if (!rwlock.isWriteLocked()) {
@@ -2031,18 +2052,30 @@ public class Buffer extends SystemBuffer
 
     protected void setText(String text)
     {
-        empty();
-        if (text != null) {
-            FastStringReader reader = new FastStringReader(text);
-            String s;
-            while ((s = reader.readLine()) != null)
-                appendLine(s);
+        try {
+            lockWrite();
         }
-        if (getFirstLine() == null)
-            appendLine("");
-        renumber();
-        invalidate();
-        isLoaded = true;
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            empty();
+            if (text != null) {
+                FastStringReader reader = new FastStringReader(text);
+                String s;
+                while ((s = reader.readLine()) != null)
+                    appendLine(s);
+            }
+            if (getFirstLine() == null)
+                appendLine("");
+            renumber();
+            invalidate();
+            isLoaded = true;
+        }
+        finally {
+            unlockWrite();
+        }
     }
 
     // Inserts s at pos, moves pos past s.
@@ -2438,7 +2471,19 @@ public class Buffer extends SystemBuffer
 
     protected void finalize() throws Throwable
     {
-        empty();
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            empty();
+        }
+        finally {
+            unlockWrite();
+        }
         super.finalize();
     }
 
