@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java,v 1.9 2004-01-24 19:46:44 piso Exp $
+ * $Id: StringInputStream.java,v 1.10 2004-01-26 00:35:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,8 @@ public final class StringInputStream extends Stream
         elementType = Symbol.CHARACTER;
         isInputStream = true;
         isOutputStream = false;
+        isCharacterStream = true;
+        isBinaryStream = false;
         this.s = s;
         this.start = start;
         this.end = end;

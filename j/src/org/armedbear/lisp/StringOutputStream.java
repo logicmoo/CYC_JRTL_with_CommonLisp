@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: StringOutputStream.java,v 1.8 2004-01-24 19:46:44 piso Exp $
+ * $Id: StringOutputStream.java,v 1.9 2004-01-26 00:35:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,8 @@ public final class StringOutputStream extends Stream
         elementType = Symbol.CHARACTER;
         isInputStream = false;
         isOutputStream = true;
+        isCharacterStream = true;
+        isBinaryStream = false;
         setWriter(stringWriter = new StringWriter());
     }
 

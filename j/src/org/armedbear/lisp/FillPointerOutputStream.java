@@ -2,7 +2,7 @@
  * FillPointerOutputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: FillPointerOutputStream.java,v 1.5 2004-01-24 19:16:19 piso Exp $
+ * $Id: FillPointerOutputStream.java,v 1.6 2004-01-26 00:36:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,8 @@ public final class FillPointerOutputStream extends Stream
         elementType = Symbol.CHARACTER;
         isOutputStream = true;
         isInputStream = false;
+        isCharacterStream = true;
+        isBinaryStream = false;
         this.string = string;
         setWriter(new Writer());
     }
