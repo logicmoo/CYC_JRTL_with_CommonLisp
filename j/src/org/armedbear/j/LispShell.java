@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.23 2003-01-16 17:05:06 piso Exp $
+ * $Id: LispShell.java,v 1.24 2003-01-16 19:42:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -310,19 +310,19 @@ public final class LispShell extends Shell
                     java = null;
             }
             String classPath = System.getProperty("java.class.path");
-            List paths = Utilities.getDirectoriesInPath(classPath);
-            for (Iterator it = paths.iterator(); it.hasNext();) {
-                String path = (String) it.next();
+            // If j was invoked via "java -jar j.jar", use the canonical path
+            // of j.jar.
+            if (classPath.indexOf(LocalFile.getPathSeparatorChar()) < 0) {
+                // Only one component in classpath.
+                String path = classPath;
                 if (Platform.isPlatformWindows())
                     path = path.toLowerCase();
                 if (path.equals("j.jar") || path.endsWith("/j.jar") ||
                     path.endsWith("\\j.jar")) {
                     File dir = File.getInstance(System.getProperty("user.dir"));
                     File file = File.getInstance(dir, path);
-                    if (file != null && file.isFile()) {
+                    if (file != null && file.isFile())
                         classPath = file.canonicalPath();
-                        break;
-                    }
                 }
             }
             FastStringBuffer sb = new FastStringBuffer();
