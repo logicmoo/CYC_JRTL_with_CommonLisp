@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.34 2003-06-08 16:39:19 piso Exp $
+ * $Id: Closure.java,v 1.35 2003-06-08 16:54:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,6 @@ public class Closure extends Function
     private final Parameter[] requiredParameters;
     private final Parameter[] optionalParameters;
     private final Parameter[] keywordParameters;
-    private final Parameter[] parameterArray;
     private final Parameter[] auxVarArray;
     private final LispObject body;
     private final Environment environment;
@@ -74,7 +73,6 @@ public class Closure extends Function
         boolean restp = false;
         if (lambdaList instanceof Cons) {
             final int length = lambdaList.length();
-            ArrayList arrayList = new ArrayList();
             ArrayList keywordParameters = new ArrayList();
             ArrayList auxVars = null;
             ArrayList requiredParameters = new ArrayList();
@@ -102,7 +100,6 @@ public class Closure extends Function
                                 "&REST/&BODY must be followed by a variable");
                         Debug.assertTrue(restVar == null);
                         restVar = (Symbol) remaining.car();
-                        arrayList.add(new Parameter(restVar, NIL, REST));
                     } else if (obj == Symbol.AND_KEY) {
                         state = STATE_KEYWORD;
                         arity = -1;
@@ -115,21 +112,17 @@ public class Closure extends Function
                         arity = -1; // FIXME
                     } else {
                         if (state == STATE_OPTIONAL) {
-                            arrayList.add(new Parameter((Symbol)obj, NIL,
-                                OPTIONAL));
                             optionalParameters.add(new Parameter((Symbol)obj,
                                 NIL, OPTIONAL));
                             if (maxArgs >= 0)
                                 ++maxArgs;
                         } else if (state == STATE_KEYWORD) {
-                            arrayList.add(new Parameter((Symbol)obj, NIL, KEYWORD));
                             keywordParameters.add(new Parameter((Symbol)obj, NIL, KEYWORD));
                             ++keywordParameterCount;
                             if (maxArgs >= 0)
                                 maxArgs += 2;
                         } else {
                             Debug.assertTrue(state == STATE_REQUIRED);
-                            arrayList.add(new Parameter((Symbol)obj));
                             requiredParameters.add(new Parameter((Symbol)obj));
                             ++required;
                             if (maxArgs >= 0)
@@ -148,7 +141,6 @@ public class Closure extends Function
                         Symbol symbol = checkSymbol(obj.car());
                         LispObject initForm = obj.cadr();
                         LispObject svar = obj.cdr().cdr().car();
-                        arrayList.add(new Parameter(symbol, initForm, svar, OPTIONAL));
                         optionalParameters.add(new Parameter(symbol, initForm, svar, OPTIONAL));
                         if (maxArgs >= 0)
                             ++maxArgs;
@@ -173,8 +165,6 @@ public class Closure extends Function
                             if (obj != NIL)
                                 svar = obj.car();
                         }
-                        arrayList.add(new Parameter(keyword, var, initForm,
-                                                    svar));
                         keywordParameters.add(new Parameter(keyword, var,
                             initForm, svar));
                         ++keywordParameterCount;
@@ -188,8 +178,6 @@ public class Closure extends Function
             }
             if (arity == 0)
                 arity = length;
-            parameterArray = new Parameter[arrayList.size()];
-            arrayList.toArray(parameterArray);
             this.requiredParameters = new Parameter[requiredParameters.size()];
             requiredParameters.toArray(this.requiredParameters);
             this.optionalParameters = new Parameter[optionalParameters.size()];
@@ -204,7 +192,6 @@ public class Closure extends Function
                 auxVarArray = null;
         } else {
             Debug.assertTrue(lambdaList == NIL);
-            parameterArray = new Parameter[0];
             requiredParameters = null;
             optionalParameters = null;
             keywordParameters = null;
@@ -222,13 +209,6 @@ public class Closure extends Function
         this.restp = restp;
 
         minArgs = required;
-
-        if (required > parameterArray.length) {
-            Debug.trace("invocation error in function " + getName());
-            Debug.trace("required = " + required);
-            Debug.trace("parameterArray.length = " + parameterArray.length);
-            Debug.assertTrue(false);
-        }
     }
 
     private static final void invalidParameter(LispObject obj)
@@ -294,7 +274,7 @@ public class Closure extends Function
             final LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(environment);
-            bind(parameterArray[0].var, arg, ext);
+            bind(requiredParameters[0].var, arg, ext);
             if (auxVarArray != null) {
                 bindAuxVars(ext, thread);
             }
@@ -320,8 +300,8 @@ public class Closure extends Function
             final LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(environment);
-            bind(parameterArray[0].var, first, ext);
-            bind(parameterArray[1].var, second, ext);
+            bind(requiredParameters[0].var, first, ext);
+            bind(requiredParameters[1].var, second, ext);
             if (auxVarArray != null) {
                 bindAuxVars(ext, thread);
             }
@@ -348,9 +328,9 @@ public class Closure extends Function
             final LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(environment);
-            bind(parameterArray[0].var, first, ext);
-            bind(parameterArray[1].var, second, ext);
-            bind(parameterArray[2].var, third, ext);
+            bind(requiredParameters[0].var, first, ext);
+            bind(requiredParameters[1].var, second, ext);
+            bind(requiredParameters[2].var, third, ext);
             if (auxVarArray != null) {
                 bindAuxVars(ext, thread);
             }
