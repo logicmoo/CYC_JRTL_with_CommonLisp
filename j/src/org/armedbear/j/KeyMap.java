@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: KeyMap.java,v 1.26 2005-03-06 19:33:22 piso Exp $
+ * $Id: KeyMap.java,v 1.27 2005-03-06 20:47:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,7 +277,6 @@ public final class KeyMap implements Constants
         mapKey(KeyEvent.VK_BACK_SPACE, SHIFT_MASK, "backspace");
         mapKey(KeyEvent.VK_BACK_SPACE, CTRL_MASK, "deleteWordLeft");
         mapKey(KeyEvent.VK_ENTER, 0, "newline");
-        mapKey(KeyEvent.VK_J, CTRL_MASK, "newlineAndIndent");
 
         mapKey(KeyEvent.VK_ESCAPE, 0, "escape");
 
