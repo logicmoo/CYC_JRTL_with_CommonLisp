@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.32 2003-09-26 00:42:43 piso Exp $
+;;; $Id: autoloads.lisp,v 1.33 2003-09-26 01:11:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -84,6 +84,7 @@
 (autoload '(write-string write-line) "write-string.lisp")
 (autoload '(y-or-n-p yes-or-no-p) "query.lisp")
 (autoload 'maphash)
+(autoload 'write)
 
 (autoload-macro 'defstruct)
 (autoload-macro 'with-hash-table-iterator)
