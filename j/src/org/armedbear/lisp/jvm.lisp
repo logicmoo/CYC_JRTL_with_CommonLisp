@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.88 2004-03-26 17:34:41 piso Exp $
+;;; $Id: jvm.lisp,v 1.89 2004-03-27 14:25:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1444,6 +1444,7 @@
     (if s
         (progn
           (compile-form (first args))
+          (maybe-emit-clear-values (first args))
           (emit-invoke-method s)
           t)
         nil)))
@@ -2484,7 +2485,16 @@
   (let* ((*defun-name* name)
          (*declared-symbols* (make-hash-table))
          (*declared-functions* (make-hash-table))
-         (*this-class* "org/armedbear/lisp/out")
+         (class-name
+          (let* ((pathname (pathname classfile))
+                 (name (pathname-name classfile)))
+            (dotimes (i (length name))
+              (when (eql (char name i) #\-)
+                (setf (char name i) #\_)))
+            name))
+;;          (*this-class* "org/armedbear/lisp/out")
+         (*this-class*
+          (concatenate 'string "org/armedbear/lisp/" class-name))
          (args (cadr form))
          (body (cddr form))
          (*using-arg-array* nil)
