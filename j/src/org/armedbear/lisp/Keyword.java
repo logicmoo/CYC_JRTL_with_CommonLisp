@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Keyword.java,v 1.27 2004-02-03 02:28:55 piso Exp $
+ * $Id: Keyword.java,v 1.28 2004-03-05 16:07:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +76,7 @@ public final class Keyword extends Lisp
         REF                 = internKeyword("REF"),
         RELATIVE            = internKeyword("RELATIVE"),
         START               = internKeyword("START"),
+        STREAM              = internKeyword("STREAM"),
         SUPERSEDE           = internKeyword("SUPERSEDE"),
         TIME                = internKeyword("TIME"),
         TYPE                = internKeyword("TYPE"),
