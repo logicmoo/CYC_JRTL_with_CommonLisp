@@ -2,7 +2,7 @@
  * XmlTreeElement.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: XmlTreeElement.java,v 1.1.1.1 2002-09-24 16:08:56 piso Exp $
+ * $Id: XmlTreeElement.java,v 1.2 2003-06-04 00:09:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,22 +21,22 @@
 
 package org.armedbear.j;
 
-import org.xml.sax.AttributeList;
-import org.xml.sax.helpers.AttributeListImpl;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.AttributesImpl;
 
 public final class XmlTreeElement
 {
     private final String name;
-    private final AttributeList attributes;
+    private final Attributes attributes;
     private final int lineNumber;
     private final int columnNumber;
 
-    public XmlTreeElement(String name, AttributeList attributes, int lineNumber,
+    public XmlTreeElement(String name, Attributes attributes, int lineNumber,
         int columnNumber)
     {
         this.name = name;
         // Must copy attributes!
-        this.attributes = new AttributeListImpl(attributes);
+        this.attributes = new AttributesImpl(attributes);
         this.lineNumber = lineNumber;
         this.columnNumber = columnNumber;
     }
@@ -56,7 +56,7 @@ public final class XmlTreeElement
     {
         FastStringBuffer sb = new FastStringBuffer(name);
         for (int i = 0; i < attributes.getLength(); i++)
-            appendNameAndValue(sb, attributes.getName(i), attributes.getValue(i));
+            appendNameAndValue(sb, attributes.getQName(i), attributes.getValue(i));
         return sb.toString();
     }
 

@@ -1,8 +1,8 @@
 /*
  * XmlTree.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: XmlTree.java,v 1.3 2002-10-11 14:07:36 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: XmlTree.java,v 1.4 2003-06-04 00:12:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,11 +178,19 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
                     if (lineNumber == dotLineNumber) {
                         // Tree element column numbers are one-based, so
                         // subtract 1.
-                        final int columnNumber =
-                            treeElement.getColumnNumber() - 1;
-                        Debug.assertTrue(columnNumber >= 0);
+                        int columnNumber = treeElement.getColumnNumber();
+                        if (columnNumber > 0) {
+                            // Tree element column numbers are one-based, so
+                            // subtract 1.
+                            --columnNumber;
+                        }
                         int index;
-                        if (xp) {
+                        if (columnNumber < 0) {
+                            // Crimson always reports -1 ("maintaining column
+                            // numbers hurts performance").
+                            index = findStartTag(treeElement.getName(),
+                                dotLine, 0);
+                        } else if (xp) {
                             // Position reported by XP is '<' of start tag.
                             index = columnNumber;
                         } else {
@@ -381,7 +389,10 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
         Line line = editor.getBuffer().getLine(lineNumber);
         if (line != null) {
             int offset;
-            if (xp) {
+            if (treeElement.getColumnNumber() < 0) {
+                // Crimson always reports -1.
+                offset = findStartTag(name, line, 0);
+            } else if (xp) {
                 // Position reported by XP is '<' of start tag.
                 offset = treeElement.getColumnNumber()-1;
             } else {
