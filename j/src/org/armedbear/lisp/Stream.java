@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.31 2004-03-02 20:32:46 piso Exp $
+ * $Id: Stream.java,v 1.32 2004-03-04 10:48:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -783,32 +783,16 @@ public class Stream extends LispObject
         if (_READ_SUPPRESS_.symbolValueNoThrow(thread) != NIL)
             return NIL;
         final char firstChar = token.charAt(0);
+        if ("-+0123456789".indexOf(firstChar) >= 0) {
+            LispObject number = makeNumber(token, getReadBase());
+            if (number != null)
+                return number;
+        }
         final int radix = getReadBase();
-        if (radix == 10) {
-            if ("-+0123456789".indexOf(firstChar) >= 0) {
-                LispObject number = makeNumber(token, radix);
-                if (number != null)
-                    return number;
-            }
-        } else {
-            boolean numeric = true;
-            for (int i = token.length(); i-- > 0;) {
-                char c = token.charAt(i);
-                if (c == '-')
-                    ;
-                else if (c == '+')
-                    ;
-                else if (c == '/')
-                    ;
-                else if (c == '.')
-                    ;
-                else if (Character.digit(c, radix) < 0) {
-                    numeric = false;
-                    break;
-                }
-            }
-            if (numeric)
-                return makeNumber(token, radix);
+        if (Character.digit(firstChar, radix) >= 0) {
+            LispObject number = makeNumber(token, radix);
+            if (number != null)
+                return number;
         }
         if (token.equals("T"))
             return T;
@@ -881,21 +865,24 @@ public class Stream extends LispObject
             token = token.substring(0, token.length()-1);
         }
         boolean numeric = true;
-        // The first character was checked in makeObject().
         if (radix == 10) {
-            for (int i = token.length(); i-- > 1;) {
+            for (int i = token.length(); i-- > 0;) {
                 char c = token.charAt(i);
                 if (c < '0' || c > '9') {
-                    numeric = false;
-                    break;
+                    if (i > 0 || (c != '-' && c != '+')) {
+                        numeric = false;
+                        break;
+                    }
                 }
             }
         } else {
-            for (int i = token.length(); i-- > 1;) {
+            for (int i = token.length(); i-- > 0;) {
                 char c = token.charAt(i);
                 if (Character.digit(c, radix) < 0) {
-                    numeric = false;
-                    break;
+                    if (i > 0 || (c != '-' && c != '+')) {
+                        numeric = false;
+                        break;
+                    }
                 }
             }
         }
