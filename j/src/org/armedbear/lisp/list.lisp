@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.20 2003-03-13 20:06:23 piso Exp $
+;;; $Id: list.lisp,v 1.21 2003-03-27 17:37:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,7 +37,8 @@
           set-difference nset-difference
           set-exclusive-or nset-exclusive-or subsetp
           acons pairlis
-          assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not))
+          assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not
+          mapc mapcan mapl maplist mapcon))
 
 (defun caadr (list) (car (car (cdr list))))
 (defun caaar (list) (car (car (car list))))
@@ -594,3 +595,43 @@
   (if key
       (assoc-guts (not (funcall predicate (funcall key (cdar alist)))))
       (assoc-guts (not (funcall predicate (cdar alist))))))
+
+
+;;; Mapping functions (from CMUCL)
+
+(defun map1 (function original-arglists accumulate take-car)
+  (let* ((arglists (copy-list original-arglists))
+	 (ret-list (list nil))
+	 (temp ret-list))
+    (do ((res nil)
+	 (args '() '()))
+      ((dolist (x arglists nil) (if (null x) (return t)))
+       (if accumulate
+           (cdr ret-list)
+           (car original-arglists)))
+      (do ((l arglists (cdr l)))
+        ((null l))
+	(push (if take-car (caar l) (car l)) args)
+	(setf (car l) (cdar l)))
+      (setq res (apply function (nreverse args)))
+      (case accumulate
+	(:nconc (setq temp (last (nconc temp res))))
+	(:list (rplacd temp (list res))
+	       (setq temp (cdr temp)))))))
+
+
+(defun mapc (function list &rest more-lists)
+  (map1 function (cons list more-lists) nil t))
+
+(defun mapcan (function list &rest more-lists)
+  (map1 function (cons list more-lists) :nconc t))
+
+(defun mapl (function list &rest more-lists)
+  (map1 function (cons list more-lists) nil nil))
+
+(defun maplist (function list &rest more-lists)
+  (map1 function (cons list more-lists) :list nil))
+
+(defun mapcon (function list &rest more-lists)
+  (map1 function (cons list more-lists) :nconc nil))
+
