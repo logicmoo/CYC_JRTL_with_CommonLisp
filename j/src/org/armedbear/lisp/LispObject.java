@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.6 2003-02-27 15:54:00 piso Exp $
+ * $Id: LispObject.java,v 1.7 2003-02-27 19:05:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public class LispObject extends Lisp
         return T;
     }
 
-    public LispObject typep(LispObject typeSpecifier)
+    public LispObject typep(LispObject typeSpecifier) throws LispError
     {
         return typeSpecifier == T ? T : NIL;
     }
