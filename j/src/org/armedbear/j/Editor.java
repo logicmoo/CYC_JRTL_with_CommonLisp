@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.116 2003-10-06 15:01:16 piso Exp $
+ * $Id: Editor.java,v 1.117 2003-10-13 23:56:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4755,7 +4755,7 @@ public final class Editor extends JPanel implements Constants,
             if (!start.next())
                 return;
             setWaitCursor();
-            Position pos = lastSearch.find(buffer.getMode(), start);
+            Position pos = lastSearch.find(buffer, start);
             setDefaultCursor();
             if (pos != null) {
                 moveDotTo(pos);
