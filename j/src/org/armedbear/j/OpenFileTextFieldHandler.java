@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.41 2003-02-08 14:59:48 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.42 2003-03-03 20:42:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -855,6 +855,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     case KeyEvent.VK_RIGHT:
                     case KeyEvent.VK_KP_RIGHT:
                         reset();
+                        originalText = null;
+                        originalPrefix = null;
                         textField.requestFocus();
                         end();
                         e.consume();
