@@ -2,7 +2,7 @@
  * ImapMailbox.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImapMailbox.java,v 1.2 2002-09-25 13:59:18 piso Exp $
+ * $Id: ImapMailbox.java,v 1.3 2002-10-07 23:49:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1604,6 +1604,8 @@ public final class ImapMailbox extends Mailbox
                 return null;
             }
             String s = session.readLine();
+            if (s == null)
+                return null;
             if (s.startsWith("* ")) {
                 int index = s.indexOf('(');
                 if (index < 0) {
