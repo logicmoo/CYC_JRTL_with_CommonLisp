@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.17 2003-06-02 13:52:51 piso Exp $
+;;; $Id: compiler.lisp,v 1.18 2003-06-02 18:13:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@
 (defun compile-cond-clause (clause)
   (let ((test (car clause))
         (forms (cdr clause)))
-    (append (list (compile-sexp test)) (compile-progn forms))))
+    (nconc (list (compile-sexp test)) (compile-progn forms))))
 
 (defun compile-case (keyform clauses)
   (let ((result (list (compile-sexp keyform))))
@@ -59,7 +59,7 @@
 (defun compile-case-clause (clause)
   (let ((keys (car clause))
         (forms (cdr clause)))
-    (append (list keys) (compile-progn forms))))
+    (nconc (list keys) (compile-progn forms))))
 
 (defun compile-tagbody (body)
   (let ((rest body)
