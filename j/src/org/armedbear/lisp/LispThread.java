@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.33 2004-04-30 17:27:11 piso Exp $
+ * $Id: LispThread.java,v 1.34 2004-05-09 02:36:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,6 +109,27 @@ public final class LispThread extends LispObject
     public final LispObject[] getValues()
     {
         return _values;
+    }
+
+    public final LispObject[] getValues(int count)
+    {
+        if (_values == null) {
+            LispObject[] values = new LispObject[count];
+            for (int i = count; i-- > 0;)
+                values[i] = NIL;
+            return values;
+        }
+        // If the caller doesn't want any extra values, just return the ones
+        // we've got.
+        if (count <= _values.length)
+            return _values;
+        // The caller wants more values than we have. Pad with NILs.
+        LispObject[] values = new LispObject[count];
+        for (int i = _values.length; i-- > 0;)
+            values[i] = _values[i];
+        for (int i = _values.length; i < count; i++)
+            values[i] = NIL;
+        return values;
     }
 
     public final LispObject setValues()
