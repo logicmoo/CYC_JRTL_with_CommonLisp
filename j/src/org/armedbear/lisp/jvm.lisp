@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.358 2005-01-19 15:59:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.359 2005-01-20 17:09:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -855,6 +855,7 @@
 (defconstant +lisp-class+ "org/armedbear/lisp/Lisp")
 (defconstant +lisp-object-class+ "org/armedbear/lisp/LispObject")
 (defconstant +lisp-object+ "Lorg/armedbear/lisp/LispObject;")
+(defconstant +lisp-object-array+ "[Lorg/armedbear/lisp/LispObject;")
 (defconstant +lisp-string+ "Lorg/armedbear/lisp/SimpleString;")
 (defconstant +lisp-symbol-class+ "org/armedbear/lisp/Symbol")
 (defconstant +lisp-symbol+ "Lorg/armedbear/lisp/Symbol;")
@@ -889,7 +890,7 @@
     (dolist (type arg-types)
       (princ type s))
     (princ #\) s)
-    (princ (if return-type return-type "V") s)))
+    (princ (or return-type "V") s)))
 
 (defun descriptor (designator)
   (cond ((stringp designator)
@@ -944,7 +945,9 @@
     (let ((label1 (gensym)))
       (aver (fixnump *arity*))
       (aver (not (minusp *arity*)))
-      (emit 'aload 1)
+;;       (emit 'aload 1)
+      (aver (not (null (compiland-argument-register *current-compiland*))))
+      (emit 'aload (compiland-argument-register *current-compiland*))
       (emit 'arraylength)
       (emit 'bipush *arity*)
       (emit 'if_icmpeq `,label1)
@@ -1811,7 +1814,7 @@
   name-index
   descriptor-index)
 
-(defstruct method
+(defstruct (java-method (:conc-name method-) (:constructor make-method))
   access-flags
   name
   descriptor
@@ -4023,14 +4026,14 @@
 
 (defun p2-local-function (compiland local-function)
   (let* ((name (compiland-name compiland))
-         (arglist (cadr (compiland-lambda-expression compiland)))
+         (lambda-list (cadr (compiland-lambda-expression compiland)))
          form
          function
          classfile)
-    (when (or (memq '&optional arglist)
-              (memq '&key arglist))
+    (when (or (memq '&optional lambda-list)
+              (memq '&key lambda-list))
       (let ((state nil))
-        (dolist (arg arglist)
+        (dolist (arg lambda-list)
           (cond ((memq arg lambda-list-keywords)
                  (setf state arg))
                 ((memq state '(&optional &key))
@@ -4154,8 +4157,6 @@
                    *this-class*
                    g
                    +lisp-object+))
-
-;;              )
            )
           (t
            (setf (compiland-classfile compiland)
@@ -5150,59 +5151,61 @@
 ;; Returns descriptor.
 (defun analyze-args (args)
   (aver (not (memq '&AUX args)))
+  (let ((arg-count (length args)))
 
-  (when *child-p*
+    (when *child-p*
+      (when (or (memq '&KEY args)
+                (memq '&OPTIONAL args)
+                (memq '&REST args))
+        (setf *using-arg-array* t)
+        (setf *hairy-arglist-p* t)
+        (return-from analyze-args
+                     (if *closure-variables*
+                         #.(%format nil "([~A[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
+                         #.(%format nil "([~A)~A" +lisp-object+ +lisp-object+))))
+      (cond
+       (*closure-variables*
+        (return-from analyze-args
+                     (cond ((<= arg-count 4)
+                            (make-descriptor (list* +lisp-object-array+
+                                                    (make-list arg-count :initial-element +lisp-object+))
+                                             +lisp-object+))
+                           (t
+;;                             (error "analyze-args unsupported case")
+                            (setf *using-arg-array* t)
+                            (setf *arity* arg-count)
+                            (make-descriptor (list +lisp-object-array+ +lisp-object-array+)
+                                             +lisp-object+)
+                            ))))
+       (t
+        (return-from analyze-args
+                     (cond ((<= arg-count 4)
+                            (make-descriptor (make-list arg-count :initial-element +lisp-object+)
+                                             +lisp-object+))
+                           (t
+                            (setf *using-arg-array* t)
+                            (setf *arity* arg-count)
+                            (make-descriptor (list +lisp-object-array+) +lisp-object+)))
+                     ))))
+
+
     (when (or (memq '&KEY args)
               (memq '&OPTIONAL args)
               (memq '&REST args))
       (setf *using-arg-array* t)
       (setf *hairy-arglist-p* t)
       (return-from analyze-args
-                   (if *closure-variables*
-                       #.(%format nil "([~A[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
-                       #.(%format nil "([~A)~A" +lisp-object+ +lisp-object+))))
-    (cond
-     (*closure-variables*
-      (return-from analyze-args
-                   (case (length args)
-                     (0 #.(%format nil "([~A)~A" +lisp-object+ +lisp-object+))
-                     (1 #.(%format nil "([~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+))
-                     (2 #.(%format nil "([~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
-                     (3 #.(%format nil "([~A~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
-                     (4 #.(%format nil "([~A~A~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
-                     (t
-                      (error "analyze-args unsupported case")))))
-     (t
-      (return-from analyze-args
-                   (case (length args)
-                     (0 #.(%format nil "()~A" +lisp-object+))
-                     (1 #.(%format nil "(~A)~A" +lisp-object+ +lisp-object+))
-                     (2 #.(%format nil "(~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+))
-                     (3 #.(%format nil "(~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
-                     (4 #.(%format nil "(~A~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
-                     (t (setf *using-arg-array* t)
-                        (setf *arity* (length args))
-                        #.(%format nil "([~A)~A" +lisp-object+ +lisp-object+)))))))
+                   (make-descriptor (list +lisp-object-array+) +lisp-object+)))
 
+    (cond ((<= arg-count 4)
+           (make-descriptor (make-list (length args) :initial-element +lisp-object+)
+                            +lisp-object+))
+          (t
+           (setf *using-arg-array* t)
+           (setf *arity* arg-count)
+           (make-descriptor (list +lisp-object-array+) +lisp-object+)))
 
-  (when (or (memq '&KEY args)
-            (memq '&OPTIONAL args)
-            (memq '&REST args))
-    (setf *using-arg-array* t)
-    (setf *hairy-arglist-p* t)
-    (return-from analyze-args
-                 (if *child-p*
-                     #.(%format nil "([~A[[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
-                     #.(%format nil "([~A)~A" +lisp-object+ +lisp-object+))))
-  (case (length args)
-    (0 #.(%format nil "()~A" +lisp-object+))
-    (1 #.(%format nil "(~A)~A" +lisp-object+ +lisp-object+))
-    (2 #.(%format nil "(~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+))
-    (3 #.(%format nil "(~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
-    (4 #.(%format nil "(~A~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
-    (t (setf *using-arg-array* t)
-       (setf *arity* (length args))
-       #.(%format nil "([~A)~A" +lisp-object+ +lisp-object+))))
+    ))
 
 (defun write-class-file (args body execute-method classfile)
   (dformat t "write-class-file ~S~%" classfile)
@@ -5640,8 +5643,6 @@
     ))
 
 (defun compile-defun (name form environment &optional (classfile "out.class"))
-  ;;   (dformat t "COMPILE-DEFUN ~S ~S~%" name classfile)
-  ;;   (dformat t "compile-defun form = ~S~%" form)
   (aver (eq (car form) 'LAMBDA))
   (unless (or (null environment) (sys::empty-environment-p environment))
     (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
@@ -5653,8 +5654,7 @@
       (compile-1 (make-compiland :name name
                                  :lambda-expression precompiled-form
                                  :classfile classfile
-                                 :parent *current-compiland*))))
-        )
+                                 :parent *current-compiland*)))))
 
 (defun handle-warning (condition)
   (fresh-line)
