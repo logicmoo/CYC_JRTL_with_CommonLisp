@@ -1,7 +1,7 @@
 ;;; swank-abcl.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-abcl.lisp,v 1.3 2004-09-05 19:51:21 piso Exp $
+;;; $Id: swank-abcl.lisp,v 1.4 2004-09-06 01:31:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,4 +53,5 @@
     `(((,name)
        (:location
         (:file ,(namestring (ext:source-pathname name)))
-        (:position ,(or (ext:source-file-position name) 0) t))))))
+        (:position ,(or (ext:source-file-position name) 0) t)
+        (:function-name ,(symbol-name name)))))))
