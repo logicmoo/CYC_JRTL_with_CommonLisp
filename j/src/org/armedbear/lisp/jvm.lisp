@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.43 2003-11-17 02:27:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.44 2003-11-23 17:59:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -635,8 +635,9 @@
 ;;          (inst opcode (u2 index))))
          (setf (instruction-args instruction) (u2 index))
          instruction))
-      ((189 ; ANEWARRAY class-name
-        193 ; INSTANCEOF
+      ((187 ; NEW class-name
+        189 ; ANEWARRAY class-name
+        193 ; INSTANCEOF class-name
         )
        (let ((index (pool-class (first args))))
          (inst opcode (u2 index))))
@@ -718,6 +719,8 @@
      1)
     (179 ; PUTSTATIC
      -1)
+    (187 ; NEW
+     1)
     (189 ; ANEWARRAY
      0)
     (193 ; INSTANCEOF
@@ -1832,6 +1835,23 @@
       (compile-form (car forms) (or (cdr forms) for-effect)))
     (emit 'label `,block-exit)))
 
+(defun compile-cons (form for-effect)
+  (unless (= (length form) 3)
+    (error "wrong number of arguments for CONS"))
+  (emit 'new +lisp-cons-class+)
+  (emit 'dup)
+  (compile-form (second form))
+  (unless (remove-store-value)
+    (emit-push-value))
+  (compile-form (third form))
+  (unless (remove-store-value)
+    (emit-push-value))
+  (emit-invokespecial "org/armedbear/lisp/Cons"
+                      "<init>"
+                      "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
+                      -3)
+  (emit-store-value))
+
 (defun compile-progn (form for-effect)
   (do ((forms (cdr form) (cdr forms)))
       ((null forms))
@@ -2326,6 +2346,7 @@
 
 (mapc #'install-handler '(atom
                           block
+                          cons
                           declare
                           function
                           go
