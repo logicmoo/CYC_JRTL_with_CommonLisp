@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Complex.java,v 1.1 2003-08-12 01:33:31 piso Exp $
+ * $Id: Complex.java,v 1.2 2003-08-12 02:06:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,13 @@ public final class Complex extends LispObject
     public int getType()
     {
         return TYPE_COMPLEX;
+    }
+
+    public LispObject ZEROP() throws TypeError
+    {
+        if (realpart.ZEROP() != NIL && imagpart.ZEROP() != NIL)
+            return T;
+        return NIL;
     }
 
     public String toString()
