@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.182 2004-04-05 01:07:36 piso Exp $
+ * $Id: Autoload.java,v 1.183 2004-04-15 15:49:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -323,6 +323,8 @@ public class Autoload extends Function
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
         autoload("short-site-name", "SiteName");
+        autoload("simple-condition-format-arguments", "SimpleCondition");
+        autoload("simple-condition-format-control", "SimpleCondition");
         autoload("simple-string-p", "StringFunctions");
         autoload("sin", "MathFunctions");
         autoload("sinh", "MathFunctions");
