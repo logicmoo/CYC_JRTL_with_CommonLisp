@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.188 2004-09-28 01:40:53 piso Exp $
+;;; $Id: boot.lisp,v 1.189 2004-09-28 14:07:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -118,8 +118,8 @@
   `(progn
      (sys::%defvar ',var)
      ,@(when valp
-	 `((unless (boundp ',var)
-	     (setq ,var ,val))))
+         `((unless (boundp ',var)
+             (setq ,var ,val))))
      ,@(when docp
          `((sys::%set-documentation ',var 'variable ',doc)))
      ',var))
@@ -165,6 +165,119 @@
 
 (set-dispatch-macro-character #\# #\+ #'read-conditional *standard-readtable*)
 (set-dispatch-macro-character #\# #\- #'read-conditional *standard-readtable*)
+
+
+
+;;; Reading circular data: the #= and ## reader macros (from SBCL)
+
+;;; Objects already seen by CIRCLE-SUBST.
+(defvar *sharp-equal-circle-table*)
+
+;; This function is kind of like NSUBLIS, but checks for circularities and
+;; substitutes in arrays and structures as well as lists. The first arg is an
+;; alist of the things to be replaced assoc'd with the things to replace them.
+(defun circle-subst (old-new-alist tree)
+  (cond ((not (typep tree
+                     '(or cons (array t) structure-object standard-object)))
+         (let ((entry (find tree old-new-alist :key #'second)))
+           (if entry (third entry) tree)))
+        ((null (gethash tree *sharp-equal-circle-table*))
+         (setf (gethash tree *sharp-equal-circle-table*) t)
+         (cond
+          ;;                ((typep tree '(or structure-object standard-object))
+          ;;                 (do ((i 1 (1+ i))
+          ;;                      (end (%instance-length tree)))
+          ;;                     ((= i end))
+          ;;                   (let* ((old (%instance-ref tree i))
+          ;;                          (new (circle-subst old-new-alist old)))
+          ;;                     (unless (eq old new)
+          ;;                       (setf (%instance-ref tree i) new)))))
+          ((arrayp tree)
+           ;;                 (with-array-data ((data tree) (start) (end))
+           ;;                   (declare (fixnum start end))
+           ;;                   (do ((i start (1+ i)))
+           ;;                       ((>= i end))
+           ;;                     (let* ((old (aref data i))
+           ;;                            (new (circle-subst old-new-alist old)))
+           ;;                       (unless (eq old new)
+           ;;                         (setf (aref data i) new))))))
+           (do ((i 0 (1+ i))
+                (end (array-total-size tree)))
+               ((>= i end))
+             (let* ((old (row-major-aref tree i))
+                    (new (circle-subst old-new-alist old)))
+               (unless (eq old new)
+                 (setf (row-major-aref tree i) new)))))
+         (t
+          (let ((a (circle-subst old-new-alist (car tree)))
+                (d (circle-subst old-new-alist (cdr tree))))
+            (unless (eq a (car tree))
+              (rplaca tree a))
+            (unless (eq d (cdr tree))
+              (rplacd tree d)))))
+        tree)
+  (t tree)))
+
+;;; Sharp-equal works as follows. When a label is assigned (i.e. when
+;;; #= is called) we GENSYM a symbol is which is used as an
+;;; unforgeable tag. *SHARP-SHARP-ALIST* maps the integer tag to this
+;;; gensym.
+;;;
+;;; When SHARP-SHARP encounters a reference to a label, it returns the
+;;; symbol assoc'd with the label. Resolution of the reference is
+;;; deferred until the read done by #= finishes. Any already resolved
+;;; tags (in *SHARP-EQUAL-ALIST*) are simply returned.
+;;;
+;;; After reading of the #= form is completed, we add an entry to
+;;; *SHARP-EQUAL-ALIST* that maps the gensym tag to the resolved
+;;; object. Then for each entry in the *SHARP-SHARP-ALIST, the current
+;;; object is searched and any uses of the gensysm token are replaced
+;;; with the actual value.
+
+(defvar *sharp-sharp-alist* ())
+
+(defun sharp-equal (stream ignore label)
+  (declare (ignore ignore))
+  (when *read-suppress* (return-from sharp-equal (values)))
+  (unless label
+    (error 'reader-error
+           :stream stream
+           :format-control "Missing label for #="))
+  (when (or (assoc label *sharp-sharp-alist*)
+            (assoc label *sharp-equal-alist*))
+    (error 'reader-error
+           :stream stream
+           :format-control "Multiply defined label: #~D="
+           :format-arguments (list label)))
+  (let* ((tag (gensym))
+         (*sharp-sharp-alist* (acons label tag *sharp-sharp-alist*))
+         (obj (read stream t nil t)))
+    (when (eq obj tag)
+      (error 'reader-error
+             :stream stream
+             :format-control "Must tag something more than just #~D#"
+             :format-arguments (list label)))
+    (push (list label tag obj) *sharp-equal-alist*)
+    (let ((*sharp-equal-circle-table* (make-hash-table :test 'eq :size 20)))
+      (circle-subst *sharp-equal-alist* obj))))
+
+(defun sharp-sharp (stream ignore label)
+  (declare (ignore ignore))
+  (when *read-suppress* (return-from sharp-sharp nil))
+  (unless label
+    (%reader-error stream "missing label for ##" label))
+
+  (let ((entry (assoc label *sharp-equal-alist*)))
+    (if entry
+        (third entry)
+        (let ((pair (assoc label *sharp-sharp-alist*)))
+          (unless pair
+            (%reader-error stream "object is not labelled #~S#" label))
+          (cdr pair)))))
+
+(set-dispatch-macro-character #\# #\= #'sharp-equal *standard-readtable*)
+(set-dispatch-macro-character #\# #\# #'sharp-sharp *standard-readtable*)
+
 
 (copy-readtable *standard-readtable* *readtable*)
 
@@ -215,7 +328,7 @@
       (set-difference *modules* saved-modules))))
 
 (defun read-from-string (string &optional (eof-error-p t) eof-value
-				&key (start 0) end preserve-whitespace)
+                                &key (start 0) end preserve-whitespace)
   (sys::%read-from-string string eof-error-p eof-value start end preserve-whitespace))
 
 (defconstant lambda-list-keywords
