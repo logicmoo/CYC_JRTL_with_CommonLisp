@@ -1,7 +1,7 @@
 ;;; dotimes.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: dotimes.lisp,v 1.1 2004-03-31 02:44:06 piso Exp $
+;;; $Id: dotimes.lisp,v 1.2 2004-07-07 15:17:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,27 +19,30 @@
 
 (in-package "SYSTEM")
 
-(defmacro dotimes ((var count &optional (result nil)) &body body)
-  (if (numberp count)
-      (let ((tag (gensym)))
-        `(block nil
-           (let ((,var 0))
-             (tagbody
-              ,tag
-              (if (>= ,var ,count)
-                  (return-from nil (progn ,result)))
-              ,@body
-              (setq ,var (1+ ,var))
-              (go ,tag)))))
-      (let ((limit (gensym))
-            (tag (gensym)))
-        `(block nil
-           (let ((,limit ,count)
-                 (,var 0))
-             (tagbody
-              ,tag
-              (if (>= ,var ,limit)
-                  (return-from nil (progn ,result)))
-              ,@body
-              (setq ,var (1+ ,var))
-              (go ,tag)))))))
+(defmacro dotimes ((var count &optional (result nil)) &body decls-and-code)
+  (multiple-value-bind (code decls) (parse-body decls-and-code nil)
+    (if (numberp count)
+        (let ((tag (gensym)))
+          `(block nil
+             (let ((,var 0))
+               ,@decls
+               (tagbody
+                ,tag
+                (if (>= ,var ,count)
+                    (return-from nil (progn ,result)))
+                ,@code
+                (setq ,var (1+ ,var))
+                (go ,tag)))))
+        (let ((limit (gensym))
+              (tag (gensym)))
+          `(block nil
+             (let ((,limit ,count)
+                   (,var 0))
+               ,@decls
+               (tagbody
+                ,tag
+                (if (>= ,var ,limit)
+                    (return-from nil (progn ,result)))
+                ,@code
+                (setq ,var (1+ ,var))
+                (go ,tag))))))))

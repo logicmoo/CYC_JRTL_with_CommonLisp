@@ -1,7 +1,7 @@
 ;;; do.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: do.lisp,v 1.1 2004-04-04 00:50:58 piso Exp $
+;;; $Id: do.lisp,v 1.2 2004-07-07 15:16:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 (in-package "SYSTEM")
 
-(defun do-do-body (varlist endlist code bind step name block)
+(defun do-do-body (varlist endlist decls-and-code bind step name block)
   (let* ((inits ())
 	 (steps ())
 	 (L1 (gensym))
@@ -42,17 +42,19 @@
 		  (setq steps (list* (third v) (first v) steps)))
 	       (t (error "~S is an illegal form for a ~S varlist." v name))))
 	    (t (error "~S is an illegal form for a ~S varlist." v name))))
-    ;; And finally construct the new form.
-    `(block ,block
-       (,bind ,(nreverse inits)
-              (tagbody
-               (go ,L2)
-               ,L1
-               ,@code
-               (,step ,@(nreverse steps))
-               ,L2
-               (unless ,(car endlist) (go ,L1))
-               (return-from ,block (progn ,@(cdr endlist))))))))
+    ;; Construct the new form.
+    (multiple-value-bind (code decls) (parse-body decls-and-code nil)
+      `(block ,block
+         (,bind ,(nreverse inits)
+          ,@decls
+          (tagbody
+           (go ,L2)
+           ,L1
+           ,@code
+           (,step ,@(nreverse steps))
+           ,L2
+           (unless ,(car endlist) (go ,L1))
+           (return-from ,block (progn ,@(cdr endlist)))))))))
 
 (defmacro do (varlist endlist &rest body)
   (do-do-body varlist endlist body 'let 'psetq 'do nil))
