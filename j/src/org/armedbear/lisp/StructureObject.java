@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.7 2003-09-07 16:41:53 piso Exp $
+ * $Id: StructureObject.java,v 1.8 2003-09-08 01:35:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,28 +54,6 @@ public final class StructureObject extends LispObject
         return super.typep(typeSpecifier);
     }
 
-    public LispObject get(int index) throws LispError
-    {
-        try {
-            return slots[index];
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            getStandardOutput().printStackTrace(e);
-            throw new LispError("internal error");
-        }
-    }
-
-    public void set(int index, LispObject newValue) throws LispError
-    {
-        try {
-            slots[index] = newValue;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            getStandardOutput().printStackTrace(e);
-            throw new LispError("internal error");
-        }
-    }
-
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#S(");
@@ -100,10 +78,14 @@ public final class StructureObject extends LispObject
             throws LispError
         {
             try {
-                return ((StructureObject)first).get(((Fixnum)second).getValue());
+                return ((StructureObject)first).slots[((Fixnum)second).getValue()];
             }
             catch (ClassCastException e) {
                 throw new TypeError();
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                getStandardOutput().printStackTrace(e);
+                throw new LispError("internal error");
             }
         }
     };
@@ -113,10 +95,14 @@ public final class StructureObject extends LispObject
         public LispObject execute(LispObject arg) throws LispError
         {
             try {
-                return ((StructureObject)arg).get(0);
+                return ((StructureObject)arg).slots[0];
             }
             catch (ClassCastException e) {
                 throw new TypeError();
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                getStandardOutput().printStackTrace(e);
+                throw new LispError("internal error");
             }
         }
     };
@@ -126,10 +112,14 @@ public final class StructureObject extends LispObject
         public LispObject execute(LispObject arg) throws LispError
         {
             try {
-                return ((StructureObject)arg).get(1);
+                return ((StructureObject)arg).slots[1];
             }
             catch (ClassCastException e) {
                 throw new TypeError();
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                getStandardOutput().printStackTrace(e);
+                throw new LispError("internal error");
             }
         }
     };
@@ -139,10 +129,14 @@ public final class StructureObject extends LispObject
         public LispObject execute(LispObject arg) throws LispError
         {
             try {
-                return ((StructureObject)arg).get(2);
+                return ((StructureObject)arg).slots[2];
             }
             catch (ClassCastException e) {
                 throw new TypeError();
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                getStandardOutput().printStackTrace(e);
+                throw new LispError("internal error");
             }
         }
     };
@@ -156,11 +150,72 @@ public final class StructureObject extends LispObject
             throws LispError
         {
             try {
-                ((StructureObject)first).set(((Fixnum)second).getValue(), third);
+                ((StructureObject)first).slots[((Fixnum)second).getValue()] = third;
                 return third;
             }
             catch (ClassCastException e) {
                 throw new TypeError();
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                getStandardOutput().printStackTrace(e);
+                throw new LispError("internal error");
+            }
+        }
+    };
+
+    private static final Primitive1 _STRUCTURE_SET_0 =
+        new Primitive1("%structure-set-0", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            try {
+                ((StructureObject)first).slots[0] = second;
+                return second;
+            }
+            catch (ClassCastException e) {
+                throw new TypeError();
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                getStandardOutput().printStackTrace(e);
+                throw new LispError("internal error");
+            }
+        }
+    };
+
+    private static final Primitive1 _STRUCTURE_SET_1 =
+        new Primitive1("%structure-set-1", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            try {
+                ((StructureObject)first).slots[1] = second;
+                return second;
+            }
+            catch (ClassCastException e) {
+                throw new TypeError();
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                getStandardOutput().printStackTrace(e);
+                throw new LispError("internal error");
+            }
+        }
+    };
+
+    private static final Primitive1 _STRUCTURE_SET_2 =
+        new Primitive1("%structure-set-2", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            try {
+                ((StructureObject)first).slots[2] = second;
+                return second;
+            }
+            catch (ClassCastException e) {
+                throw new TypeError();
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                getStandardOutput().printStackTrace(e);
+                throw new LispError("internal error");
             }
         }
     };
