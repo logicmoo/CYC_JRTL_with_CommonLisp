@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: inspect.lisp,v 1.9 2004-11-13 00:33:40 piso Exp $
+;;; $Id: inspect.lisp,v 1.10 2004-11-18 15:47:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -107,13 +107,13 @@
              (dolist (part parts)
                (let ((name (string (car part)))
                      (value (cdr part)))
-                 (format t "~4D ~A ~A ~A~%" i
+                 (format t "~4D ~A ~A ~S~%" i
                          name
                          (leader name)
                          value)
                  (incf i)
                  (when (> i limit)
-                   return)))))))
+                   (return))))))))
   (values))
 
 (defun display-current ()
