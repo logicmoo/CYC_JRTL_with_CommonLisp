@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.527 2003-12-12 19:13:35 piso Exp $
+ * $Id: Primitives.java,v 1.528 2003-12-13 15:21:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1685,7 +1685,7 @@ public final class Primitives extends Lisp
                             handler = obj;
                         LispObject[] handlerArgs = new LispObject[1];
                         handlerArgs[0] = condition;
-                         // Might not return.
+                        // Might not return.
                         funcall(handler, handlerArgs, thread);
                     }
                     bindings = bindings.cdr();
@@ -3063,7 +3063,8 @@ public final class Primitives extends Lisp
     };
 
     // ### go
-    private static final SpecialOperator GO = new SpecialOperator("go") {
+    private static final SpecialOperator GO = new SpecialOperator("go")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3212,7 +3213,10 @@ public final class Primitives extends Lisp
             final LispThread thread = LispThread.currentThread();
             LispObject tag = eval(args.car(), env, thread);
             LispObject result = eval(args.cadr(), env, thread);
-            throw new Throw(tag, result);
+            if (thread.isValidCatchTag(tag))
+                throw new Throw(tag, result);
+            else
+                return signal(new ControlError("attempt to throw to the non-existent tag " + tag));
         }
     };
 
