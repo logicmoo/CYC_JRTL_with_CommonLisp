@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.237 2004-05-11 15:13:14 piso Exp $
+ * $Id: Lisp.java,v 1.238 2004-05-12 17:17:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1262,7 +1262,7 @@ public abstract class Lisp
                             thread.setDynamicEnvironment(oldDynEnv);
                         }
                     } else if (c == '%') {
-                        sb.append(System.getProperty("line.separator"));
+                        sb.append('\n');
                     }
                     state = NEUTRAL;
                 } else {
