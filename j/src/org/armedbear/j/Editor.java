@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.81 2003-06-29 00:34:05 piso Exp $
+ * $Id: Editor.java,v 1.82 2003-06-30 00:07:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 import org.armedbear.j.mail.MailCommands;
 import org.armedbear.j.mail.MailboxURL;
-import org.xml.sax.SAXParseException;
+import org.armedbear.lisp.Interpreter;
 
 public final class Editor extends JPanel implements Constants,
     ComponentListener, MouseWheelListener
@@ -6032,8 +6032,6 @@ public final class Editor extends JPanel implements Constants,
             setFocusToTextField();
     }
 
-    private static Method evaluateMethod;
-
     public void executeCommand(String input)
     {
         executeCommand(input, false);
@@ -6047,17 +6045,7 @@ public final class Editor extends JPanel implements Constants,
         if (input.charAt(0) == '(') {
             // Lisp form.
             try {
-                if (evaluateMethod == null) {
-                    Class c = Class.forName("org.armedbear.lisp.Interpreter");
-                    if (c != null) {
-                        Class[] parameterTypes = new Class[] {
-                            Class.forName("java.lang.String")
-                        };
-                        evaluateMethod = c.getMethod("evaluate", parameterTypes);
-                    }
-                }
-                if (evaluateMethod != null)
-                    invoke(evaluateMethod, input);
+                Interpreter.evaluate(input);
             }
             catch (Throwable t) {
                 Log.debug(t);
