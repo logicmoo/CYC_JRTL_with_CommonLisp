@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.11 2003-09-06 14:08:25 piso Exp $
+;;; $Id: numbers.lisp,v 1.12 2003-09-08 02:24:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -210,3 +210,25 @@
 	    (unless (< iterated-value init-value)
 	      (return init-value))
 	    (setq init-value iterated-value))))))
+
+
+(defun phase (number)
+  "Returns the angle part of the polar representation of a complex number.
+   For complex numbers, this is (atan (imagpart number) (realpart number)).
+   For non-complex positive numbers, this is 0.  For non-complex negative
+   numbers this is PI."
+  (etypecase number
+             (rational
+              (if (minusp number)
+                  (coerce pi 'single-float)
+                  0.0f0))
+             (single-float
+              (if (minusp (float-sign number))
+                  (coerce pi 'single-float)
+                  0.0f0))
+             (double-float
+              (if (minusp (float-sign number))
+                  (coerce pi 'double-float)
+                  0.0d0))
+             (complex
+              (atan (imagpart number) (realpart number)))))
