@@ -1,7 +1,7 @@
 ;;; fill.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fill.lisp,v 1.1 2003-06-10 16:05:43 piso Exp $
+;;; $Id: fill.lisp,v 1.2 2003-12-07 16:50:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,33 +17,30 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
+(in-package "SYSTEM")
 
-(export 'fill)
+;;; Adapted from CMUCL.
 
-;;; From CMUCL.
+(defun list-fill (sequence item start end)
+  (do ((current (nthcdr start sequence) (cdr current))
+       (index start (1+ index)))
+      ((or (atom current) (and end (= index end)))
+       sequence)
+    (rplaca current item)))
 
-(defmacro vector-fill (sequence item start end)
-  `(do ((index ,start (1+ index)))
-       ((= index ,end) ,sequence)
-     (setf (aref ,sequence index) ,item)))
-
-(defmacro list-fill (sequence item start end)
-  `(do ((current (nthcdr ,start ,sequence) (cdr current))
-        (index ,start (1+ index)))
-       ((or (atom current) (and end (= index ,end)))
-        sequence)
-     (rplaca current ,item)))
-
-(defun list-fill* (sequence item start end)
-  (list-fill sequence item start end))
-
-(defun vector-fill* (sequence item start end)
-  (when (null end) (setq end (length sequence)))
-  (vector-fill sequence item start end))
+(defun vector-fill (sequence item start end)
+  (unless end
+    (setf end (length sequence)))
+  (do ((index start (1+ index)))
+      ((= index end) sequence)
+    (setf (aref sequence index) item)))
 
 (defun fill (sequence item &key (start 0) end)
-  (if (listp sequence)
-      (list-fill* sequence item start end)
-      (vector-fill* sequence item start end)))
-
+  (cond ((listp sequence)
+         (list-fill sequence item start end))
+        ((and (stringp sequence)
+              (zerop start)
+              (null end))
+         (simple-string-fill sequence item))
+        (t
+         (vector-fill sequence item start end))))
