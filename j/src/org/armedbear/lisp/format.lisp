@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.13 2004-09-10 12:49:48 piso Exp $
+;;; $Id: format.lisp,v 1.14 2004-10-05 02:56:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from SBCL.
+;;; Adapted from SBCL and CMUCL.
 
 (in-package #:system)
 
@@ -357,16 +357,56 @@
   (declare (simple-string string))
   (let ((index 0)
 	(end (length string))
-	(result nil))
+	(result nil)
+	(in-block nil)
+	(pprint nil)
+	(semi nil)
+	(justification-semi 0))
     (loop
       (let ((next-directive (or (position #\~ string :start index) end)))
 	(when (> next-directive index)
 	  (push (subseq string index next-directive) result))
 	(when (= next-directive end)
 	  (return))
-	(let ((directive (parse-directive string next-directive)))
+	(let* ((directive (parse-directive string next-directive))
+	       (directive-char (format-directive-character directive)))
+	  ;; We are looking for illegal combinations of format
+	  ;; directives in the control string.  See the last paragraph
+	  ;; of CLHS 22.3.5.2: "an error is also signaled if the
+	  ;; ~<...~:;...~> form of ~<...~> is used in the same format
+	  ;; string with ~W, ~_, ~<...~:>, ~I, or ~:T."
+	  (cond ((char= #\< directive-char)
+		 ;; Found a justification or logical block
+		 (setf in-block t))
+		((and in-block (char= #\; directive-char))
+		 ;; Found a semi colon in a justification or logical block
+		 (setf semi t))
+		((char= #\> directive-char)
+		 ;; End of justification or logical block.  Figure out which.
+		 (setf in-block nil)
+		 (cond ((format-directive-colonp directive)
+			;; A logical-block directive.  Note that fact, and also
+			;; note that we don't care if we found any ~;
+			;; directives in the block.
+			(setf pprint t)
+			(setf semi nil))
+		       (semi
+			;; A justification block with a ~; directive in it.
+			(incf justification-semi))))
+		((and (not in-block)
+		      (or (and (char= #\T directive-char) (format-directive-colonp directive))
+			  (char= #\W directive-char)
+			  (char= #\_ directive-char)
+			  (char= #\I directive-char)))
+		 (setf pprint t)))
 	  (push directive result)
 	  (setf index (format-directive-end directive)))))
+    (when (and pprint (plusp justification-semi))
+      (error 'format-error
+	     :complaint "A justification directive cannot be in the same format string~%~
+             as ~~W, ~~I, ~~:T, or a logical-block directive."
+	     :control-string string
+	     :offset 0))
     (nreverse result)))
 
 (defun parse-directive (string start)
@@ -2743,8 +2783,6 @@
 (defun format-justification (stream newline-prefix extra-space line-len strings
                                     pad-left pad-right mincol colinc minpad padchar)
   (setf strings (reverse strings))
-  (when (and (not pad-left) (not pad-right) (null (cdr strings)))
-    (setf pad-left t))
   (let* ((num-gaps (+ (1- (length strings))
 		      (if pad-left 1 0)
 		      (if pad-right 1 0)))
@@ -2755,18 +2793,21 @@
 	 (length (if (> chars mincol)
 		     (+ mincol (* (ceiling (- chars mincol) colinc) colinc))
 		     mincol))
-	 (padding (- length chars)))
+	 (padding (+ (- length chars) (* num-gaps minpad))))
     (when (and newline-prefix
 	       (> (+ (or (charpos stream) 0)
 		     length extra-space)
 		  line-len))
       (write-string newline-prefix stream))
     (flet ((do-padding ()
-                       (let ((pad-len (truncate padding num-gaps)))
+                       (let ((pad-len (if (zerop num-gaps)
+                                          padding
+                                          (truncate padding num-gaps))))
                          (decf padding pad-len)
                          (decf num-gaps)
                          (dotimes (i pad-len) (write-char padchar stream)))))
-      (when pad-left
+      (when (or pad-left
+		(and (not pad-right) (null (cdr strings))))
 	(do-padding))
       (when strings
 	(write-string (car strings) stream)
