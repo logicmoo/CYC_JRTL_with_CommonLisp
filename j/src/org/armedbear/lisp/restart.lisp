@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: restart.lisp,v 1.15 2004-03-03 01:48:06 piso Exp $
+;;; $Id: restart.lisp,v 1.16 2004-05-04 17:33:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from GCL.
-
 (in-package "SYSTEM")
+
+;;; Adapted from GCL.
 
 (defun read-evaluated-form ()
   (fresh-line *query-io*)
@@ -49,19 +49,14 @@
                 *restart-clusters*)))
      ,@forms))
 
+;;; Adapted from SBCL.
 (defun compute-restarts (&optional condition)
-;;   (let ((res ()))
-;;     (dolist (restart-cluster *restart-clusters*)
-;;       (dolist (restart restart-cluster)
-;;         (push restart res)))
-;;     (nreverse res)))
   (let ((associated ())
 	(other ()))
     (dolist (alist *condition-restarts*)
       (if (eq (car alist) condition)
 	  (setq associated (cdr alist))
 	  (setq other (append (cdr alist) other))))
-;;     (collect ((res))
     (let ((res ()))
       (dolist (restart-cluster *restart-clusters*)
         (dolist (restart restart-cluster)
@@ -69,9 +64,7 @@
                          (member restart associated)
                          (not (member restart other)))
                      (funcall (restart-test-function restart) condition))
-;;             (res restart))))
             (push restart res))))
-;;              (res))))
       (nreverse res))))
 
 (defun restart-report (restart stream)
@@ -116,7 +109,7 @@
                                  :format-arguments (list restart)))))
     (%invoke-restart-interactively real-restart)))
 
-
+;;; RESTART-CASE (adapted from SBCL)
 (defun parse-keyword-pairs (list keys)
   (do ((l list (cddr l))
        (k '() (list* (cadr l) (car l) k)))
@@ -155,6 +148,34 @@
       (setf result (list* `#',test :test-function result)))
     (nreverse result)))
 
+
+;; "If the restartable-form is a list whose car is any of the symbols SIGNAL,
+;; ERROR, CERROR, or WARN (or is a macro form which macroexpands into such a
+;; list), then WITH-CONDITION-RESTARTS is used implicitly to associate the
+;; indicated restarts with the condition to be signaled."
+(defun munge-restart-case-expression (expression)
+  (let ((exp (macroexpand expression)))
+    (if (consp exp)
+	(let* ((name (car exp))
+	       (args (if (eq name 'cerror) (cddr exp) (cdr exp))))
+	  (if (member name '(SIGNAL ERROR CERROR WARN))
+              (let ((n-cond (gensym)))
+                `(let ((,n-cond (coerce-to-condition ,(first args)
+                                                     (list ,@(rest args))
+                                                     ',(case name
+                                                         (WARN 'simple-warning)
+                                                         (SIGNAL 'simple-condition)
+                                                         (t 'simple-error))
+                                                     ',name)))
+                   (with-condition-restarts
+                     ,n-cond
+                     (car *restart-clusters*)
+                     ,(if (eq name 'cerror)
+                          `(cerror ,(second exp) ,n-cond)
+                          `(,name ,n-cond)))))
+              expression))
+        expression)))
+
 (defmacro restart-case (expression &body clauses)
   (let ((block-tag (gensym))
         (temp-var (gensym))
@@ -184,7 +205,7 @@
                                          (go ,tag))
                                       ,@keys)))
                          data)
-                (return-from ,block-tag ,expression))
+                (return-from ,block-tag ,(munge-restart-case-expression expression)))
                ,@(mapcan #'(lambda (datum)
                             (let ((tag  (nth 1 datum))
                                   (bvl  (nth 3 datum))
