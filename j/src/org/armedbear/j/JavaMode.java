@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaMode.java,v 1.5 2002-12-08 03:46:35 piso Exp $
+ * $Id: JavaMode.java,v 1.6 2003-04-27 16:00:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,8 +219,10 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         final int indentSize = buffer.getIndentSize();
 
         final String firstIdentifier = getFirstIdentifier(text);
-        if (firstIdentifier.equals("throws"))
-            return buffer.getIndentation(model) + indentSize;
+        if (firstIdentifier.equals("throws")) {
+            Position pos = findBeginningOfStatement(new Position(model, 0));
+            return buffer.getIndentation(pos.getLine()) + indentSize;
+        }
 
         final String modelText = trimSyntacticWhitespace(model.getText());
 
@@ -380,10 +382,9 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         } while (c != SyntaxIterator.DONE && c != ')');
         Position pos = it.getPosition();
         pos = matchClosingParen(pos);
-        int modelIndent = buffer.getIndentation(pos.getLine());
         boolean indent = false;
         final String s = getIdentifierBefore(pos);
-        final String[] indentAfter = {"if", "while", "for", "switch"};
+        final String[] indentAfter = {"if", "while", "for", "switch", "catch"};
         if (Utilities.isOneOf(s, indentAfter)) {
             indent = true;
         } else if (buffer.getModeId() == JAVA_MODE) {
@@ -393,11 +394,14 @@ public class JavaMode extends AbstractMode implements Constants, Mode
             if (s.equals("elseif") || s.equals("foreach"))
                 indent = true;
         }
+        int modelIndent;
         if (indent) {
+            modelIndent = buffer.getIndentation(pos.getLine());
             if (textFirstChar != '{' ||
                 buffer.getBooleanProperty(Property.INDENT_BEFORE_BRACE))
                 return modelIndent + buffer.getIndentSize();
-        }
+        } else
+            modelIndent = buffer.getIndentation(findBeginningOfStatement(pos).getLine());
         return modelIndent;
     }
 
@@ -407,23 +411,29 @@ public class JavaMode extends AbstractMode implements Constants, Mode
       loop:
         while (true) {
             switch (it.prevChar()) {
-                case ')':
+                case ')': {
                     Position pos = matchClosingParen(it.getPosition());
                     it = getSyntaxIterator(pos);
                     break;
-                case '}':
-                    return buffer.getIndentation(it.getLine());
-                case '{':
+                }
+                case '}': {
+                    Position pos = matchClosingBrace(it.getPosition());
+                    pos = findBeginningOfStatement(pos);
+                    return buffer.getIndentation(pos.getLine());
+                }
+                case '{': {
                     Line model = it.getLine();
                     String modelText = trimSyntacticWhitespace(model.getText());
                     if (modelText.equals("{"))
                         return buffer.getIndentation(model) + buffer.getIndentSize();
                     return indentAfterOpeningBrace(model, modelText, buffer);
-                case ':':
+                }
+                case ':': {
                     String firstIdentifier = getFirstIdentifier(it.getLine());
                     if (firstIdentifier.equals("case") || firstIdentifier.equals("default"))
                         return buffer.getIndentation(it.getLine()) + buffer.getIndentSize();
                     break;
+                }
                 case SyntaxIterator.DONE:
                     return 0;
             }
