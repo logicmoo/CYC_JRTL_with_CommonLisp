@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.33 2004-01-02 19:16:44 piso Exp $
+ * $Id: Java.java,v 1.34 2004-01-04 20:06:57 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -293,7 +293,11 @@ public final class Java extends Lisp
                     signal(new TypeError("wrong type: " + methodRef));
                 Object[] methodArgs = new Object[args.length-2];
                 for (int i = 2; i < args.length; i++) {
-                    methodArgs[i-2] = args[i].javaInstance();
+                    LispObject arg = args[i];
+		    if (arg == NIL)
+                        methodArgs[i-2] = null;
+		    else 
+                        methodArgs[i-2] = arg.javaInstance();
                 }
                 Object result = m.invoke(null, methodArgs);
                 return makeLispObject(result);
@@ -320,7 +324,11 @@ public final class Java extends Lisp
                 Constructor constructor = (Constructor) JavaObject.getObject(classRef);
                 Object[] initargs = new Object[args.length-1];
                 for (int i = 1; i < args.length; i++) {
-                    initargs[i-1] = args[i].javaInstance();
+                    LispObject arg = args[i];
+		    if (arg == NIL)
+                        initargs[i-1] = null;
+		    else 
+                        initargs[i-1] = arg.javaInstance();
                 }
                 return new JavaObject(constructor.newInstance(initargs));
             }
@@ -425,7 +433,11 @@ public final class Java extends Lisp
                     instance = JavaObject.getObject(args[1]);
                 Object[] methodArgs = new Object[args.length-2];
                 for (int i = 2; i < args.length; i++) {
-                    methodArgs[i-2] = args[i].javaInstance();
+                    LispObject arg = args[i];
+		    if (arg == NIL)
+                        methodArgs[i-2] = null;
+		    else 
+                        methodArgs[i-2] = arg.javaInstance();
                 }
                 Object result = method.invoke(instance, methodArgs);
                 return makeLispObject(result);
