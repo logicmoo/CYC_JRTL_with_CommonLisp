@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.12 2003-09-15 19:05:17 piso Exp $
+;;; $Id: init.lisp,v 1.13 2003-10-07 02:08:35 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -68,6 +68,27 @@
                                  "~C linux-kernel"
                                  "move"
                                  "{annie}mail/linux-kernel")))
+
+;; In minutes.
+(defparameter check-enabled-timeout 5)
+
+;; Don't resolve autoloads in the background thread!
+(sys::resolve 'get-internal-real-time)
+
+(defun update-check-enabled ()
+  (loop
+    (sleep 60) ; 1 minute
+    (let* ((last-event-time (get-last-event-internal-time))
+           (current-time (get-internal-real-time))
+           (timeout (* check-enabled-timeout 60 internal-time-units-per-second))
+           (enable (if (> current-time (+ last-event-time timeout)) nil t)))
+      (unless (eql (variable-value 'check-enabled :global) enable)
+        (setf (variable-value 'check-enabled :global) enable)
+        (log-debug "check-enabled => ~A"
+                   (variable-value 'check-enabled :global))))))
+
+(defun start-update-check-enabled-thread ()
+  (make-thread #'update-check-enabled))
 
 (when (probe-file "/home/peter/.j/key-pressed.lisp")
   (load "/home/peter/.j/key-pressed.lisp"))
