@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.49 2004-07-11 14:14:18 piso Exp $
+ * $Id: LispThread.java,v 1.50 2004-08-01 19:12:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,6 +170,40 @@ public final class LispThread extends LispObject
             values[i] = _values[i];
         for (int i = _values.length; i < count; i++)
             values[i] = NIL;
+        return values;
+    }
+
+    // Used by the JVM compiler for MULTIPLE-VALUE-CALL.
+    public final LispObject[] accumulateValues(LispObject result,
+                                               LispObject[] oldValues)
+    {
+        if (oldValues == null) {
+            if (_values != null)
+                return _values;
+            LispObject[] values = new LispObject[1];
+            values[0] = result;
+            return values;
+        }
+        if (_values != null) {
+            if (_values.length == 0)
+                return oldValues;
+            final int totalLength = oldValues.length + _values.length;
+            LispObject[] values = new LispObject[totalLength];
+            System.arraycopy(oldValues, 0,
+                             values, 0,
+                             oldValues.length);
+            System.arraycopy(_values, 0,
+                             values, oldValues.length,
+                             _values.length);
+            return values;
+        }
+        // _values is null.
+        final int totalLength = oldValues.length + 1;
+        LispObject[] values = new LispObject[totalLength];
+        System.arraycopy(oldValues, 0,
+                         values, 0,
+                         oldValues.length);
+        values[totalLength - 1] = result;
         return values;
     }
 
