@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.17 2003-09-04 14:59:53 piso Exp $
+ * $Id: AbstractMode.java,v 1.18 2003-09-04 15:03:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -320,7 +320,6 @@ public abstract class AbstractMode implements Constants, Mode
             menu.add(editor, "Replace in Files...", 'E', "replaceInFiles");
         menu.addSeparator();
         menu.add(editor, "Find Tag...", 'A', "findTag");
-        menu.add(editor, "List Tags in Current Buffer", 'C', "listTags");
     }
 
     private static void populateGoMenu(Editor editor, Menu menu)
