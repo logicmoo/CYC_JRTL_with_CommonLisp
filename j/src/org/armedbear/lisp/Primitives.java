@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.466 2003-10-08 18:09:29 piso Exp $
+ * $Id: Primitives.java,v 1.467 2003-10-10 01:53:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4142,7 +4142,8 @@ public final class Primitives extends Module
 
     // ### %set-elt
     // %setelt sequence index newval => newval
-    private static final Primitive3 _SET_ELT = new Primitive3("%set-elt")
+    private static final Primitive3 _SET_ELT =
+        new Primitive3("%set-elt", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
@@ -4182,7 +4183,9 @@ public final class Primitives extends Module
 //                 (cons a d)))))
 
     // ### maptree
-    private static final Primitive2 MAPTREE = new Primitive2("maptree") {
+    private static final Primitive2 MAPTREE =
+        new Primitive2("maptree", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject fun, LispObject x)
             throws ConditionThrowable
         {
