@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.51 2003-07-30 18:51:44 piso Exp $
+ * $Id: Closure.java,v 1.52 2003-07-31 16:54:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -282,6 +282,16 @@ public class Closure extends Function
         return lambdaList;
     }
 
+    public final LispObject getVariableList()
+    {
+        LispObject result = NIL;
+        if (variables != null) {
+            for (int i = variables.length; i-- > 0;)
+                result = new Cons(variables[i], result);
+        }
+        return result;
+    }
+
     // Returns body as a list.
     public final LispObject getBody()
     {
@@ -443,7 +453,7 @@ public class Closure extends Function
         return result;
     }
 
-    public LispObject[] processArgs(LispObject[] args) throws Condition
+    protected LispObject[] processArgs(LispObject[] args) throws Condition
     {
         final LispThread thread = LispThread.currentThread();
         if (arity >= 0) {
