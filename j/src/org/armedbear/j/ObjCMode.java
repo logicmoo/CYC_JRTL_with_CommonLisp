@@ -2,7 +2,7 @@
  * ObjCMode.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ObjCMode.java,v 1.2 2003-12-30 06:38:04 piso Exp $
+ * $Id: ObjCMode.java,v 1.3 2003-12-30 17:34:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,6 +59,11 @@ public final class ObjCMode extends CMode implements Constants, Mode
     public Formatter getFormatter(Buffer buffer)
     {
         return new CFormatter(buffer, LANGUAGE_OBJC);
+    }
+
+    public Tagger getTagger(SystemBuffer buffer)
+    {
+        return new ObjCTagger(buffer);
     }
 
     public boolean isIdentifierStart(char c)
