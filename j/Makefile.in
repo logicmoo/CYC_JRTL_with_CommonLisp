@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2000 Peter Graves
-# $Id: Makefile.in,v 1.6 2003-06-04 01:10:42 piso Exp $
+# $Id: Makefile.in,v 1.7 2003-07-01 13:14:20 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ config.status: configure
 
 classes:
 	set -e; \
-	for i in src/bsh src/bsh/classpath src/bsh/commands src/bsh/reflect src/gnu/regexp \
+	for i in src/gnu/regexp \
 	  src/org/armedbear/j/mail \
 	  src/org/armedbear/j/jdb \
 	  src/org/armedbear/j \
@@ -63,10 +63,8 @@ jpty.exe:
 
 j.jar: classes.stamp
 	cd src && $(JAR) cmf manifest ../j.jar Main.class org/armedbear/j/*.class \
-	  org/armedbear/j/*.bsh \
 	  org/armedbear/j/version org/armedbear/j/build \
 	  org/armedbear/j/images/*.png \
-	  bsh/*.class bsh/classpath/*.class bsh/commands/*.class bsh/commands/*.bsh bsh/reflect/*.class \
 	  gnu/regexp/*.class gnu/regexp/MessagesBundle.properties \
 	  org/armedbear/j/mail/*.class \
 	  org/armedbear/j/jdb/*.class \
@@ -97,7 +95,6 @@ distdir:
 	-cp -p  src/org/armedbear/j/version.in  $(distdir)/src/org/armedbear/j
 	-cp -p  src/org/armedbear/j/*.java      $(distdir)/src/org/armedbear/j
 	-cp -p  src/org/armedbear/j/*.keywords  $(distdir)/src/org/armedbear/j
-	-cp -p  src/org/armedbear/j/*.bsh       $(distdir)/src/org/armedbear/j
 	mkdir $(distdir)/src/org/armedbear/j/mail
 	-cp -p  src/org/armedbear/j/mail/Makefile.in src/org/armedbear/j/mail/*.java src/org/armedbear/j/mail/*.keywords $(distdir)/src/org/armedbear/j/mail
 	mkdir $(distdir)/src/org/armedbear/j/jdb
@@ -106,14 +103,6 @@ distdir:
 	-cp -p  src/org/armedbear/j/images/*.png $(distdir)/src/org/armedbear/j/images
 	mkdir $(distdir)/src/org/armedbear/lisp
 	-cp -p  src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml src/org/armedbear/lisp/*.java src/org/armedbear/lisp/*.lisp $(distdir)/src/org/armedbear/lisp
-	mkdir $(distdir)/src/bsh
-	-cp -p  src/bsh/Makefile.in src/bsh/*.java  src/bsh/bsh.jj src/bsh/bsh.jjt $(distdir)/src/bsh
-	mkdir $(distdir)/src/bsh/classpath
-	-cp -p  src/bsh/classpath/Makefile.in src/bsh/classpath/*.java  $(distdir)/src/bsh/classpath
-	mkdir $(distdir)/src/bsh/commands
-	-cp -p  src/bsh/commands/Makefile.in src/bsh/commands/*.java src/bsh/commands/*.bsh $(distdir)/src/bsh/commands
-	mkdir $(distdir)/src/bsh/reflect
-	-cp -p  src/bsh/reflect/Makefile.in src/bsh/reflect/*.java  $(distdir)/src/bsh/reflect
 	mkdir $(distdir)/src/gnu
 	mkdir $(distdir)/src/gnu/regexp
 	-cp -p  src/gnu/regexp/Makefile.in src/gnu/regexp/*.java  src/gnu/regexp/MessagesBundle.properties $(distdir)/src/gnu/regexp
@@ -205,10 +194,6 @@ clean:
 	-rm -f src/org/armedbear/j/jdb/*.class
 	-rm -f src/org/armedbear/lisp/*.class
 	-rm -f src/org/armedbear/lisp/build
-	-rm -f src/bsh/*.class
-	-rm -f src/bsh/classpath/*.class
-	-rm -f src/bsh/commands/*.class
-	-rm -f src/bsh/reflect/*.class
 	-rm -f src/gnu/regexp/*.class
 	-rm -rf $(distdir)
 	-rm -f classes.stamp
@@ -217,10 +202,6 @@ distclean: clean
 	-rm -f config.status config.log config.cache Makefile j j.bat
 	-rm -f src/Makefile
 	-rm -f src/jpty/Makefile
-	-rm -f src/bsh/Makefile
-	-rm -f src/bsh/classpath/Makefile
-	-rm -f src/bsh/commands/Makefile
-	-rm -f src/bsh/reflect/Makefile
 	-rm -f src/gnu/regexp/Makefile
 	-rm -f src/org/armedbear/j/Makefile
 	-rm -f src/org/armedbear/j/version
@@ -245,13 +226,9 @@ j.zip:
 		src/org/armedbear/j/mail/Makefile.in src/org/armedbear/j/mail/*.java \
 		src/org/armedbear/j/mail/*.keywords \
 		src/org/armedbear/j/jdb/Makefile.in src/org/armedbear/j/jdb/*.java \
-		src/org/armedbear/j/*.bsh \
 		src/org/armedbear/j/images/*.png \
 		src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml \
 		src/org/armedbear/lisp/*.java src/org/armedbear/lisp/*.lisp \
-		src/bsh/Makefile.in src/bsh/*.j* \
-		src/bsh/classpath/Makefile.in src/bsh/classpath/*.java \
-		src/bsh/commands/Makefile.in src/bsh/commands/*.java src/bsh/commands/*.bsh \
 		src/bsh/reflect/Makefile.in src/bsh/reflect/*.java \
 		src/gnu/regexp/Makefile.in src/gnu/regexp/*.java src/gnu/regexp/MessagesBundle.properties \
 		doc/*.html doc/*.css \
