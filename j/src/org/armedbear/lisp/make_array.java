@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.16 2004-02-24 21:00:29 piso Exp $
+ * $Id: make_array.java,v 1.17 2004-02-24 22:24:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,9 +112,12 @@ public final class make_array extends Primitive
                     v = new ComplexString(size);
                 else
                     v = new SimpleString(size);
-            } else if (upgradedType == Symbol.BIT)
-                v = new BitVector(size);
-            else if (upgradedType == NIL)
+            } else if (upgradedType == Symbol.BIT) {
+                if (fillPointer != NIL || adjustable != NIL)
+                    v = new BitVector(size);
+                else
+                    v = new SimpleBitVector(size);
+            } else if (upgradedType == NIL)
                 v = new NilVector(size);
             else {
                 if (fillPointer != NIL || adjustable != NIL)
