@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: AbstractMode.java,v 1.21 2005-02-16 21:39:20 piso Exp $
+ * $Id: AbstractMode.java,v 1.22 2005-03-03 14:04:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,9 @@ import java.util.List;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.JavaObject;
+import org.armedbear.lisp.LispObject;
 
 /**
  * <p>
@@ -42,8 +45,6 @@ import javax.swing.JPopupMenu;
  * Any class extending AbstractMode must add its id and displayName to the
  * <code>Constants</code> class.
  * </p>
- *
- * ***More on overriding AbstractMode goes here***
  *
  * @future #createBuffer(File)
  *
@@ -127,11 +128,6 @@ public abstract class AbstractMode implements Constants, Mode
         return new PlainTextFormatter(buffer);
     }
 
-    /**
-     * Returns the display name for this mode.
-     *
-     * @return The display name for this mode.
-     */
     public final String toString()
     {
         return displayName;
@@ -141,6 +137,28 @@ public abstract class AbstractMode implements Constants, Mode
     public synchronized final KeyMap getKeyMap()
     {
         if (keyMap == null) {
+            if (Editor.isLispInitialized()) {
+                String functionName =
+                    displayName.toLowerCase().replace(' ', '-').concat("-mode-map");
+                FastStringBuffer sb = new FastStringBuffer("(ignore-errors (");
+                sb.append("j::");
+                sb.append(functionName);
+                sb.append("))");
+                try {
+                    LispObject result =
+                        Interpreter.evaluate(sb.toString());
+                    if (result instanceof JavaObject) {
+                        Object obj = ((JavaObject)result).getObject();
+                        if (obj instanceof KeyMap) {
+                            keyMap = (KeyMap) obj;
+                            return keyMap;
+                        }
+                    }
+                }
+                catch (Throwable t) {
+                    Log.debug(t);
+                }
+            }
             if (!loadKeyMapForMode()) {
                 keyMap = new KeyMap();
                 setKeyMapDefaults(keyMap);
