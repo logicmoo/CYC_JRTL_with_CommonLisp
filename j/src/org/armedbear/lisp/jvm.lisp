@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.286 2004-08-21 20:42:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.287 2004-08-25 23:12:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -264,7 +264,6 @@
   (list* 'RETURN-FROM (cadr form) (mapcar #'p1 (cddr form))))
 
 (defun p1-tagbody (form)
-;;   (format t "P1-TAGBODY form = ~S~%" form)
   (let* ((block (make-block-node :name '(TAGBODY)))
          (*blocks* (cons block *blocks*))
          (*visible-tags* *visible-tags*)
@@ -277,19 +276,15 @@
     block))
 
 (defun p1-go (form)
-;;   (format t "P1-GO form = ~S~%" form)
-;;   (format t "*current-compiland* = ~S~%" *current-compiland*)
   (let* ((name (cadr form))
          (tag (find-tag name)))
     (unless tag
       (error "COMPILE-GO: tag not found: ~S" name))
-;;     (format t "tag-compiland = ~S~%" (tag-compiland tag))
     (unless (eq (tag-compiland tag) *current-compiland*)
       (setf (block-non-local-go-p (tag-block tag)) t)))
   form)
 
 (defun p1-flet/labels (form)
-;;   (format t "P1-FLET/LABELS form = ~S~%" form)
   (when *current-compiland*
     (incf (compiland-children *current-compiland*) (length (cadr form))))
   ;; Do pass 1 on the local definitions, discarding the result (we're just
@@ -297,7 +292,6 @@
   (let ((*current-compiland* nil))
     (dolist (definition (cadr form))
       (setf definition (list* 'BLOCK (car definition) (cadr definition) (cddr definition)))
-;;       (format t "definition = ~S~%" definition)
       (p1 definition)))
   (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
 
@@ -331,21 +325,16 @@
   (list* 'THROW (mapcar #'p1 (cdr form))))
 
 (defun expand-inline (form expansion)
-;;   (format t "expand-inline form = ~S~%" form)
   (let ((args (cdr form))
         (vars (cadr expansion))
         (varlist ())
         new-form)
-;;     (format t "var = ~S~%" vars)
-;;     (format t "args = ~S~%" args)
     (do ((vars vars (cdr vars))
          (args args (cdr args)))
         ((null vars))
       (push (list (car vars) (car args)) varlist))
     (setf varlist (nreverse varlist))
-;;     (format t "varlist = ~S~%" varlist)
     (setf new-form (list* 'LET varlist (cddr expansion)))
-;;     (format t "new-form = ~S~%" new-form)
     new-form))
 
 (defun p1 (form)
@@ -373,7 +362,6 @@
                             (when (neq new-form form)
                               (return-from p1 (p1 new-form))))))
                       (let ((expansion (inline-expansion op)))
-;;                         (format t "expansion = ~S~%" expansion)
                         (when expansion
                           (return-from p1 (expand-inline form expansion))))
                       (p1-default form))))
@@ -437,7 +425,7 @@
                    (6 'double)
                    (12 'name-and-type)
                    (1 'utf8)))
-      (format t "~D: ~A ~S~%" (1+ index) type entry)
+      (%format t "~D: ~A ~S~%" (1+ index) type entry)
       (setq pool (cdr pool))))
   t)
 
@@ -502,7 +490,7 @@
     depth))
 
 (defun print-instruction (instruction)
-  (format nil "~A ~A stack = ~S depth = ~S"
+  (%format nil "~A ~A stack = ~S depth = ~S"
           (opcode-name (instruction-opcode instruction))
           (instruction-args instruction)
           (instruction-stack instruction)
@@ -954,10 +942,10 @@
       (when (instruction-depth instruction)
         (unless (eql (instruction-depth instruction) (+ depth (instruction-stack instruction)))
           (fresh-line)
-          (format t "Stack inconsistency at index ~D: found ~S, expected ~S.~%"
-                  i
-                  (instruction-depth instruction)
-                  (+ depth (instruction-stack instruction))))
+          (%format t "Stack inconsistency at index ~D: found ~S, expected ~S.~%"
+                   i
+                   (instruction-depth instruction)
+                   (+ depth (instruction-stack instruction))))
         (return-from walk-code))
       (let ((opcode (instruction-opcode instruction)))
         (unless (eql opcode 168) ; JSR
@@ -986,10 +974,10 @@
         (if (instruction-stack instruction)
             (when (opcode-stack-effect opcode)
               (unless (eql (instruction-stack instruction) (opcode-stack-effect opcode))
-                (format t "instruction-stack = ~S opcode-stack-effect = ~S~%"
-                        (instruction-stack instruction)
-                        (opcode-stack-effect opcode))
-                (format t "index = ~D instruction = ~A~%" i (print-instruction instruction))))
+                (%format t "instruction-stack = ~S opcode-stack-effect = ~S~%"
+                         (instruction-stack instruction)
+                         (opcode-stack-effect opcode))
+                (%format t "index = ~D instruction = ~A~%" i (print-instruction instruction))))
             (setf (instruction-stack instruction) (opcode-stack-effect opcode)))
         (aver (not (null (instruction-stack instruction))))))
     (walk-code code 0 0)
@@ -1003,9 +991,9 @@
           (when depth
             (setf max-stack (max max-stack depth)))))
       (when *compiler-debug*
-        (format t "compiland name = ~S~%" (compiland-name *current-compiland*))
-        (format t "max-stack = ~D~%" max-stack)
-        (format t "----- after stack analysis -----~%")
+        (%format t "compiland name = ~S~%" (compiland-name *current-compiland*))
+        (%format t "max-stack = ~D~%" max-stack)
+        (%format t "----- after stack analysis -----~%")
         (print-code))
       max-stack)))
 
@@ -1030,22 +1018,18 @@
          (let ((variable (first (instruction-args instruction)))
                (target (second (instruction-args instruction))))
            (aver (variable-p variable))
-;;            (format t "resolving var-ref, *nesting-level* = ~S~%" *nesting-level*)
-;;            (dump-1-variable variable)
            (cond ((variable-register variable)
                   (emit 'aload (variable-register variable))
                   (emit-move-from-stack target))
                  ((variable-special-p variable)
                   (compile-special-reference (variable-name variable) target))
                  ((= (variable-level variable) *nesting-level* 0)
-;;                   (format t "level 0 case~%")
                   (emit 'aload 1)
                   (emit 'bipush (variable-index variable))
                   (emit 'aaload)
                   (emit-move-from-stack target))
                  ((and (variable-index variable) ; A local at the current nesting level.
                        (= (variable-level variable) *nesting-level*))
-;;                   (format t "local at current nesting level~%")
                   (emit 'aload 1)
                   (emit 'bipush (variable-index variable))
                   (emit 'aaload)
@@ -1066,14 +1050,11 @@
                   (emit-move-from-stack target)))))
         (207 ; VAR-SET
          (let ((variable (car (instruction-args instruction))))
-;;            (format t "resolving var-set...~%")
-;;            (dump-1-variable variable)
            (aver (variable-p variable))
            (aver (not (variable-special-p variable)))
            (cond ((variable-register variable)
                   (emit 'astore (variable-register variable)))
                  ((= (variable-level variable) *nesting-level* 0)
-;;                   (format t "level 0 case~%")
                   (emit 'aload 1) ; Stack: value array
                   (emit 'swap) ; array value
                   (emit 'bipush (variable-index variable)) ; array value index
@@ -1081,7 +1062,6 @@
                   (emit 'aastore))
                  ((and (variable-index variable) ; A local at the current nesting level.
                        (= (variable-level variable) *nesting-level*))
-;;                   (format t "local at current nesting level~%")
                   (emit 'aload 1) ; Stack: value array
                   (emit 'swap) ; array value
                   (emit 'bipush (variable-index variable)) ; array value index
@@ -1112,12 +1092,12 @@
 (defun print-code()
   (dotimes (i (length *code*))
     (let ((instruction (aref *code* i)))
-      (format t "~D ~A ~S ~S ~S~%"
-              i
-              (opcode-name (instruction-opcode instruction))
-              (instruction-args instruction)
-              (instruction-stack instruction)
-              (instruction-depth instruction)))))
+      (%format t "~D ~A ~S ~S ~S~%"
+               i
+               (opcode-name (instruction-opcode instruction))
+               (instruction-args instruction)
+               (instruction-stack instruction)
+               (instruction-depth instruction)))))
 
 (defun validate-labels (code)
   (let ((code (coerce code 'list))
@@ -1247,7 +1227,7 @@
 
 (defun optimize-code ()
   (unless *enable-optimization*
-    (format t "optimizations are disabled~%"))
+    (%format t "optimizations are disabled~%"))
   (when *enable-optimization*
     (when *compiler-debug*
       (%format t "----- before optimization -----~%")
@@ -1395,7 +1375,7 @@
            (emit 'aload_0) ;; this
            (let* ((*print-level* nil)
                   (*print-length* nil)
-                  (s (format nil "~S" args)))
+                  (s (%format nil "~S" args)))
              (emit 'ldc
                    (pool-string s))
              (emit-invokestatic +lisp-class+
@@ -1411,7 +1391,7 @@
            (emit 'aconst_null) ;; name
            (let* ((*print-level* nil)
                   (*print-length* nil)
-                  (s (format nil "~S" args)))
+                  (s (%format nil "~S" args)))
              (emit 'ldc
                    (pool-string s))
              (emit-invokestatic +lisp-class+
@@ -1652,7 +1632,7 @@
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
          (*print-length* nil)
-         (s (format nil "~S" obj))
+         (s (%format nil "~S" obj))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc
@@ -1672,7 +1652,7 @@
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
          (*print-length* nil)
-         (s (format nil "#.(FIND-PACKAGE ~S)" (package-name obj)))
+         (s (%format nil "#.(FIND-PACKAGE ~S)" (package-name obj)))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc
@@ -1719,7 +1699,7 @@
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
          (*print-length* nil)
-         (s (format nil "~S" obj))
+         (s (%format nil "~S" obj))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc
@@ -2492,7 +2472,6 @@
   'if_acmpeq)
 
 (defun compile-if (form &key (target *val*))
-;;   (format t "compile-if target = ~S~%" target)
   (let* ((test (second form))
          (consequent (third form))
          (alternate (fourth form))
@@ -2502,20 +2481,12 @@
            (compile-form consequent :target target))
           (t
            (emit (compile-test test) LABEL1)
-;;            (format t "consequent = ~S~%" consequent)
-
            (compile-form consequent :target :stack)
            (emit-move-from-stack target)
-;;            (compile-form consequent :target target)
-
            (emit 'goto LABEL2)
            (label LABEL1)
-;;            (format t "alternate = ~S~%" alternate)
-
            (compile-form alternate :target :stack)
            (emit-move-from-stack target)
-;;            (compile-form consequent :target target)
-
            (label LABEL2)))))
 
 (defun compile-multiple-value-list (form &key (target *val*))
@@ -3054,7 +3025,7 @@
 ;;   (%format t "COMPILE-BLOCK-NODE ~S block-return-p = ~S~%"
 ;;            (block-name block) (block-return-p block))
   (unless (block-node-p block)
-    (format t "type-of block = ~S~%" (type-of block))
+    (%format t "type-of block = ~S~%" (type-of block))
     (aver (block-node-p block)))
   (let* ((*blocks* (cons block *blocks*))
          (*register* *register*))
@@ -3262,7 +3233,7 @@
              (compile-defun name form nil classfile))
             (t
              (setf classfile (prog1
-                              (format nil "local-~D.class" *child-count*)
+                              (%format nil "local-~D.class" *child-count*)
                               (incf *child-count*)))
              (compile-defun name form nil classfile)
              (setf function (sys::load-compiled-function classfile)))))
@@ -3275,9 +3246,6 @@
                    *this-class*
                    g
                    +lisp-object+)
-             ;;              (format t "*nesting-level* = ~S~%" *nesting-level*)
-             ;;              (format t "setting LABELS variable...~%")
-             ;;              (dump-1-variable (local-function-variable local-function))
              (emit 'var-set (local-function-variable local-function))))
           (t
            (push (make-local-function :name name
@@ -3369,7 +3337,9 @@
                      +lisp-object+))))
           (t
            (let* ((classfile
-                   (prog1 (format nil "local-~D.class" *child-count*) (incf *child-count*)))
+                   (prog1
+                    (%format nil "local-~D.class" *child-count*)
+                    (incf *child-count*)))
                   (compiled-function (sys::load-compiled-function
                                       (let ((*nesting-level* (1+ *nesting-level*)))
                                         (compile-defun nil form nil classfile)))))
@@ -3413,7 +3383,6 @@
                               +lisp-object+))) ; Stack: template-function
 ;;                   (emit 'aload *context-register*) ; Stack: template-function context
                   (cond ((zerop *nesting-level*)
-;;                          (format t "*nesting-level* is zero~%")
                          ;; Make a vector of size 1.
                          (emit 'sipush 1)
                          (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
@@ -3872,7 +3841,6 @@
                         (t
                          (compile-function-call form :target target))))
                  ((and (consp op) (eq (car op) 'LAMBDA))
-;;                   (format t "compile-form lambda case~%")
                   (let ((new-form (list* 'FUNCALL form)))
                     (compile-form new-form :target target)))
                  (t
@@ -3918,16 +3886,16 @@
     (setq *hairy-arglist-p* t)
     (return-from analyze-args
                  (if *child-p*
-                     #.(format nil "([~A[[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
-                     #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
+                     #.(%format nil "([~A[[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
+                     #.(%format nil "([~A)~A" +lisp-object+ +lisp-object+))))
   (case (length args)
-    (0 #.(format nil "()~A" +lisp-object+))
-    (1 #.(format nil "(~A)~A" +lisp-object+ +lisp-object+))
-    (2 #.(format nil "(~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+))
-    (3 #.(format nil "(~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
-    (4 #.(format nil "(~A~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
+    (0 #.(%format nil "()~A" +lisp-object+))
+    (1 #.(%format nil "(~A)~A" +lisp-object+ +lisp-object+))
+    (2 #.(%format nil "(~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+))
+    (3 #.(%format nil "(~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
+    (4 #.(%format nil "(~A~A~A~A)~A" +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+))
     (t (setq *using-arg-array* t)
-       #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
+       #.(%format nil "([~A)~A" +lisp-object+ +lisp-object+))))
 
 (defun write-class-file (args body execute-method classfile)
   (let* ((super
@@ -4087,7 +4055,7 @@
                    (setf (variable-special-p variable) t))))))
 
       (dump-variables (reverse parameters)
-                      (format nil "Arguments to ~A:~%" (compiland-name *current-compiland*)))
+                      (%format nil "Arguments to ~A:~%" (compiland-name *current-compiland*)))
 
       (allocate-register) ;; "this" pointer
       (if *using-arg-array*
