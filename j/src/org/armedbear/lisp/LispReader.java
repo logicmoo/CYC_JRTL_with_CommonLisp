@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.31 2005-01-13 11:29:16 piso Exp $
+ * $Id: LispReader.java,v 1.32 2005-01-13 11:54:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,6 +178,7 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char ignored, int n)
             throws ConditionThrowable
         {
+            final boolean suppress = _READ_SUPPRESS_.symbolValue() != NIL;
             StringBuffer sb = new StringBuffer();
             while (true) {
                 int ch = stream._readChar();
@@ -187,11 +188,20 @@ public final class LispReader extends Lisp
                 if (c == '0' || c == '1')
                     sb.append(c);
                 else {
-                    stream._unreadChar(c);
-                    break;
+                    int attr = currentReadtable().getAttribute(c);
+                    if (attr == Readtable.ATTR_WHITESPACE ||
+                        attr == Readtable.ATTR_TERMINATING_MACRO) {
+                        stream._unreadChar(c);
+                        break;
+                    } else if (!suppress) {
+                        String name = LispCharacter.charToName(c);
+                        if (name == null)
+                            name = "#\\" + c;
+                        signal(new ReaderError("Illegal element for bit-vector: " + name));
+                    }
                 }
             }
-            if (_READ_SUPPRESS_.symbolValue() != NIL)
+            if (suppress)
                 return NIL;
             if (n >= 0) {
                 // n was supplied.
