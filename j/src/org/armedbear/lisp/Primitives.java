@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.344 2003-08-24 17:26:24 piso Exp $
+ * $Id: Primitives.java,v 1.345 2003-08-24 18:27:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1455,20 +1455,21 @@ public final class Primitives extends Module
         }
     };
 
-    // ### defconstant
-    // defconstant name initial-value [documentation] => name
-    private static final SpecialOperator DEFCONSTANT =
-        new SpecialOperator("defconstant") {
-        public LispObject execute(LispObject args, Environment env)
-            throws Condition
+    // ### %defconstant
+    private static final Primitive3 _DEFCONSTANT =
+        new Primitive3("%defconstant", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws LispError
         {
-            if (args.length() > 3)
-                throw new WrongNumberOfArgumentsException(this);
-            Symbol symbol = checkSymbol(args.car());
-            final LispThread thread = LispThread.currentThread();
-            symbol.setSymbolValue(eval(args.cadr(), env, thread));
+            Symbol symbol = checkSymbol(first);
+            if (third instanceof LispString) {
+                // Documentation.
+                symbol.setVariableDocumentation(third);
+            } else if (third != NIL)
+                throw new TypeError(third, "string");
+            symbol.setSymbolValue(second);
             symbol.setConstant(true);
-            thread.clearValues();
             return symbol;
         }
     };
