@@ -1,8 +1,8 @@
 /*
  * PasswordDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: PasswordDialog.java,v 1.1.1.1 2002-09-24 16:07:57 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: PasswordDialog.java,v 1.2 2003-07-04 12:45:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +89,7 @@ public final class PasswordDialog extends JDialog implements FocusListener,
         super.dispose();
         editor.restoreFocus();
     }
+
     public void focusGained(FocusEvent e)
     {
         textField.requestFocus();
