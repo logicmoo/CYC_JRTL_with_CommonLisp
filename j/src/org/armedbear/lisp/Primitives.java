@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.570 2004-02-16 01:12:12 piso Exp $
+ * $Id: Primitives.java,v 1.571 2004-02-16 15:31:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1340,7 +1340,7 @@ public final class Primitives extends Lisp
     }
 
     // ### %defun
-    // %defun name arglist body environment => name
+    // %defun name arglist body &optional environment => name
     private static final Primitive _DEFUN = new Primitive("%defun", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -1362,7 +1362,7 @@ public final class Primitives extends Lisp
                 symbol = checkSymbol(first);
                 if (symbol.getSymbolFunction() instanceof SpecialOperator) {
                     String message =
-                        symbol.getName() + " is a special operator and may not be redefined";
+                        symbol.getName() + " is a special operator and may not be redefined.";
                     return signal(new ProgramError(message));
                 }
             } else if (first instanceof Cons && first.car() == Symbol.SETF) {
@@ -4213,6 +4213,25 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### make-closure lambda-form environment => closure
+    private static final Primitive2 MAKE_CLOSURE =
+        new Primitive2("make-closure", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof Cons && first.car() == Symbol.LAMBDA) {
+                final Environment env;
+                if (second == NIL)
+                    env = new Environment();
+                else
+                    env = checkEnvironment(second);
+                return new Closure(first.cadr(), first.cddr(), env);
+            }
+            return signal(new TypeError("Argument to MAKE-CLOSURE is not a lambda form."));
+        }
+    };
+
     // ### streamp
     private static final Primitive1 STREAMP = new Primitive1("streamp", "object")
     {
@@ -4232,7 +4251,7 @@ public final class Primitives extends Lisp
     };
 
     // ### evenp
-    private static final Primitive1 EVENP = new Primitive1("evenp","integer")
+    private static final Primitive1 EVENP = new Primitive1("evenp", "integer")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4241,7 +4260,7 @@ public final class Primitives extends Lisp
     };
 
     // ### oddp
-    private static final Primitive1 ODDP = new Primitive1("oddp","integer")
+    private static final Primitive1 ODDP = new Primitive1("oddp", "integer")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4250,7 +4269,7 @@ public final class Primitives extends Lisp
     };
 
     // ### numberp
-    private static final Primitive1 NUMBERP = new Primitive1("numberp","object")
+    private static final Primitive1 NUMBERP = new Primitive1("numberp", "object")
     {
         public LispObject execute(LispObject arg)
         {
@@ -4259,7 +4278,8 @@ public final class Primitives extends Lisp
     };
 
     // ### realp
-    private static final Primitive1 REALP = new Primitive1("realp","object") {
+    private static final Primitive1 REALP = new Primitive1("realp", "object")
+    {
         public LispObject execute(LispObject arg)
         {
             return arg.REALP();
