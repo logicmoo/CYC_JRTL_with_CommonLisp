@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.42 2004-04-20 15:18:33 piso Exp $
+;;; $Id: precompiler.lisp,v 1.43 2004-04-20 18:33:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -363,8 +363,24 @@
           (push var result)))
     (nreverse result)))
 
-(defun precompile-let/let* (form)
-  (list* (car form)
+(defun precompile-let (form)
+  (list* 'LET
+         (precompile-let/let*-vars (cadr form))
+         (mapcar #'precompile1 (cddr form))))
+
+;; (LET* ((X 1)) (LET* ((Y 2)) (LET* ((Z 3)) (+ X Y Z)))) =>
+;; (LET* ((X 1) (Y 2) (Z 3)) (+ X Y Z))
+(defun maybe-fold-let* (form)
+  (if (and (= (length form) 3)
+           (consp (third form))
+           (eq (car (third form)) 'let*))
+      (let ((third (maybe-fold-let* (third form))))
+        (list* 'LET* (append (second form) (second third)) (cddr third)))
+      form))
+
+(defun precompile-let* (form)
+  (setf form (maybe-fold-let* form))
+  (list* 'LET*
          (precompile-let/let*-vars (cadr form))
          (mapcar #'precompile1 (cddr form))))
 
@@ -550,8 +566,8 @@
 (install-handler 'do-symbols           'precompile-do-symbols)
 (install-handler 'do-external-symbols  'precompile-do-symbols)
 
-(install-handler 'let                  'precompile-let/let*)
-(install-handler 'let*                 'precompile-let/let*)
+(install-handler 'let                  'precompile-let)
+(install-handler 'let*                 'precompile-let*)
 
 (install-handler 'load-time-value      'precompile-load-time-value)
 
