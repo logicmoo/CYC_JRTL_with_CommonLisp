@@ -2,7 +2,7 @@
  * XmlParserImpl.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: XmlParserImpl.java,v 1.6 2003-06-06 15:48:25 piso Exp $
+ * $Id: XmlParserImpl.java,v 1.7 2003-06-25 18:30:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,9 +46,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public final class XmlParserImpl extends DefaultHandler implements Runnable,
     ContentHandler, EntityResolver
 {
-    private static final String DEFAULT_XML_READER =
-        "org.apache.crimson.parser.XMLReaderImpl";
-
     private static final String VALIDATION =
         "http://xml.org/sax/features/validation";
 
@@ -74,28 +71,18 @@ public final class XmlParserImpl extends DefaultHandler implements Runnable,
     {
         String className =
             Editor.preferences().getStringProperty("org.xml.sax.driver");
-        if (className == null) {
+        if (className == null)
             className = System.getProperty("org.xml.sax.driver");
-            if (className == null)
-                className = DEFAULT_XML_READER;
-        }
-        try {
-            xmlReader = XMLReaderFactory.createXMLReader(className);
-        }
-        catch (Exception e) {
-            Log.debug(e);
-        }
-        if (xmlReader == null) {
-            if (className != null && !className.equals(DEFAULT_XML_READER)) {
-                try {
-                    xmlReader =
-                        XMLReaderFactory.createXMLReader(DEFAULT_XML_READER);
-                }
-                catch (Exception e) {
-                    Log.debug(e);
-                }
+        if (className != null) {
+            try {
+                xmlReader = XMLReaderFactory.createXMLReader(className);
+            }
+            catch (Exception e) {
+                Log.debug(e);
             }
         }
+        if (xmlReader == null)
+            xmlReader = Utilities.getDefaultXMLReader();
         if (xmlReader == null) {
             parserClassName = null;
             aelfred = false;
@@ -126,9 +113,8 @@ public final class XmlParserImpl extends DefaultHandler implements Runnable,
             Debug.bug();
             return false;
         }
-        String id = "http://xml.org/sax/features/validation";
         try {
-            xmlReader.setFeature(id, enable);
+            xmlReader.setFeature(VALIDATION, enable);
         }
         catch (SAXNotRecognizedException e) {
             Log.error(e);

@@ -2,7 +2,7 @@
  * JdbSession.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: JdbSession.java,v 1.3 2003-06-03 16:51:45 piso Exp $
+ * $Id: JdbSession.java,v 1.4 2003-06-25 18:32:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 public final class JdbSession extends Properties
 {
@@ -240,17 +239,17 @@ public final class JdbSession extends Properties
 
     private void load(File file)
     {
-        try {
-            String defaultReader = "org.apache.crimson.parser.XMLReaderImpl";
-            XMLReader xmlReader =
-                XMLReaderFactory.createXMLReader(defaultReader);
+        XMLReader xmlReader = Utilities.getDefaultXMLReader();
+        if (xmlReader != null) {
             xmlReader.setContentHandler(new Handler());
-            InputSource inputSource = new InputSource(file.getInputStream());
-            xmlReader.parse(inputSource);
-        }
-        catch (EOFException ignored) {}
-        catch (Exception e) {
-            Log.error(e);
+            try {
+                InputSource inputSource = new InputSource(file.getInputStream());
+                xmlReader.parse(inputSource);
+            }
+            catch (EOFException ignored) {}
+            catch (Exception e) {
+                Log.error(e);
+            }
         }
     }
 
@@ -274,18 +273,18 @@ public final class JdbSession extends Properties
         public void startElement(String uri, String localName, String qName,
             Attributes attributes) throws SAXException
         {
-            if (localName.equals("session")) {
+            if (localName.equals("session") || qName.equals("session")) {
                 String version = attributes.getValue("version");
                 if (!version.equals(getVersion()))
                     throw new SAXException("Unknown session format");
-            } else if (localName.equals("property")) {
+            } else if (localName.equals("property") || qName.equals("property")) {
                 // Session property.
                 String propertyName = attributes.getValue("name");
                 String value = attributes.getValue("value");
                 setProperty(propertyName, value);
-            } else if (localName.equals("breakpoints")) {
+            } else if (localName.equals("breakpoints") || qName.equals("breakpoints")) {
                 breakpointSpecifications = new ArrayList();
-            } else if (localName.equals("breakpoint")) {
+            } else if (localName.equals("breakpoint") || qName.equals("breakpoint")) {
                 BreakpointSpecification spec =
                     new BreakpointSpecification(attributes);
                 breakpointSpecifications.add(spec);

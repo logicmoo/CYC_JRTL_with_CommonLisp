@@ -2,7 +2,7 @@
  * MailboxProperties.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: MailboxProperties.java,v 1.3 2003-06-03 17:05:20 piso Exp $
+ * $Id: MailboxProperties.java,v 1.4 2003-06-25 18:36:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,13 +34,13 @@ import org.armedbear.j.File;
 import org.armedbear.j.Log;
 import org.armedbear.j.Property;
 import org.armedbear.j.PropertyList;
+import org.armedbear.j.Utilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 public final class MailboxProperties
 {
@@ -117,20 +117,17 @@ public final class MailboxProperties
             list = new ArrayList();
             File file = getFile();
             if (file.isFile()) {
-                try {
-                    String defaultReader =
-                        "org.apache.crimson.parser.XMLReaderImpl";
-                    XMLReader xmlReader =
-                        XMLReaderFactory.createXMLReader(defaultReader);
-                    Log.debug("MailboxProperties.initialize xmlReader = " +
-                        xmlReader);
-                    xmlReader.setContentHandler(new Handler());
-                    InputSource inputSource =
-                        new InputSource(file.getInputStream());
-                    xmlReader.parse(inputSource);
-                }
-                catch (Exception e) {
-                    Log.error(e);
+                XMLReader xmlReader = Utilities.getDefaultXMLReader();
+                if (xmlReader != null) {
+                    try {
+                        xmlReader.setContentHandler(new Handler());
+                        InputSource inputSource =
+                            new InputSource(file.getInputStream());
+                        xmlReader.parse(inputSource);
+                    }
+                    catch (Exception e) {
+                        Log.error(e);
+                    }
                 }
             }
             // Delete old mailboxes.xml in ~/.j (if any).
@@ -245,14 +242,14 @@ public final class MailboxProperties
     {
         private Entry currentEntry = null;
 
-        public void startElement(String uri, String localName, String qname,
+        public void startElement(String uri, String localName, String qName,
             Attributes attributes) throws SAXException
         {
-            if (localName.equals("mailboxes")) {
+            if (localName.equals("mailboxes") || qName.equals("mailboxes")) {
                 String version = attributes.getValue("version");
                 if (!version.equals(MailboxProperties.getVersion()))
                     throw new SAXException("Unknown mailbox history format");
-            } else if (localName.equals("mailbox")) {
+            } else if (localName.equals("mailbox") || qName.equals("mailbox")) {
                 // Start a new entry.
                 String mailboxName = attributes.getValue("name");
                 currentEntry = new Entry(mailboxName);
@@ -263,7 +260,7 @@ public final class MailboxProperties
                 catch (NumberFormatException e) {
                     Log.error(e);
                 }
-            } else if (localName.equals("property")) {
+            } else if (localName.equals("property") || qName.equals("property")) {
                 Debug.assertTrue(currentEntry != null);
                 String key = attributes.getValue("name");
                 if (key != null) {
@@ -280,7 +277,7 @@ public final class MailboxProperties
 
         public void endElement(String uri, String localName, String qName)
         {
-            if (localName.equals("mailbox")) {
+            if (localName.equals("mailbox") || qName.equals("mailbox")) {
                 MailboxProperties.add(currentEntry);
                 currentEntry = null;
             }
