@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Frame.java,v 1.7 2002-11-15 15:22:54 piso Exp $
+ * $Id: Frame.java,v 1.8 2002-12-28 01:29:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -611,10 +611,10 @@ public final class Frame extends JFrame implements Constants, WindowListener,
     private Editor openInOtherWindow(Editor editor, Buffer buffer, float split,
         boolean switchWindows)
     {
+        editor.saveView();
         Editor otherEditor = null;
         if (editors[1] == null) {
             Debug.assertTrue(editor == editors[0]);
-            editor.saveView();
             editors[1] = new Editor(this);
             editors[1].activate(buffer);
             editors[1].updateLocation();
