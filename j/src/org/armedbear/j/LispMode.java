@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.88 2005-02-16 21:40:16 piso Exp $
+ * $Id: LispMode.java,v 1.89 2005-02-17 15:47:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,6 +288,37 @@ public class LispMode extends AbstractMode implements Constants, Mode
             }
         }
         return inQuote;
+    }
+
+    public boolean isInComment(Buffer buffer, Position pos)
+    {
+        if (buffer.needsParsing())
+            buffer.getFormatter().parseBuffer();
+        final Line line = pos.getLine();
+        final int offset = pos.getOffset();
+        int state = line.flags();
+        for (int i = 0; i < offset; i++) {
+            char c = line.charAt(i);
+            if (c == '\\') {
+                // Escape.
+                ++i;
+            } else if (state == STATE_COMMENT) {
+                if (c == '|' && i < offset && line.charAt(i + 1) == '#') {
+                    state = STATE_NEUTRAL; // FIXME nested #| |# comments
+                    ++i; // skip '#'
+                }
+            } else if (state == STATE_QUOTE) {
+                if (c == '"')
+                    state = STATE_NEUTRAL;
+            } else if (c == '"') {
+                state = STATE_QUOTE;
+            } else if (c == '#' && i < offset && line.charAt(i + 1) == '|') {
+                state = STATE_COMMENT;
+                ++i; // skip '|'
+            } else if (c == ';')
+                return true;
+        }
+        return state == STATE_COMMENT;
     }
 
     public boolean canIndent()
