@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.21 2003-03-01 16:01:44 piso Exp $
+ * $Id: LispFormatter.java,v 1.22 2003-03-06 20:51:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -161,9 +161,9 @@ public final class LispFormatter extends Formatter
                 return;
             }
             if (c == '#' && i < limit-1) {
+                endToken(text, i, state);
                 c = text.charAt(i+1);
                 if (c == '|') {
-                    endToken(text, i, state);
                     state = STATE_COMMENT;
                     i += 2;
                     continue;
@@ -172,6 +172,7 @@ public final class LispFormatter extends Formatter
                     i += 2;
                     continue;
                 }
+                state = STATE_NEUTRAL;
                 ++i;
                 continue;
             }
@@ -239,6 +240,8 @@ public final class LispFormatter extends Formatter
                     endToken(text, i, state);
                     state = STATE_NEUTRAL;
                 }
+                ++i;
+                continue;
             }
             if (state == STATE_CAR) {
                 if (Character.isWhitespace(c)) {
