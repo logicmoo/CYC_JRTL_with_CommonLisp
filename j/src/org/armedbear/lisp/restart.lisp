@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.8 2003-12-17 17:53:36 piso Exp $
+;;; $Id: restart.lisp,v 1.9 2003-12-17 18:38:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,6 +74,14 @@
 ;;              (res))))
       (nreverse res))))
 
+(defun restart-report (restart stream)
+  (funcall (or (restart-report-function restart)
+	       (let ((name (restart-name restart)))
+		 (lambda (stream)
+		   (if name (format stream "~S" name)
+		       (format stream "~S" restart)))))
+	   stream))
+
 (defun find-restart (name &optional condition)
   (let ((restarts (compute-restarts condition)))
     (dolist (restart restarts)
@@ -106,19 +114,21 @@
                          key-vars keywords)
              ,@forms))))))
 
-(defun transform-keywords (&key report interactive)
+(defun transform-keywords (&key report interactive test)
   (let ((result ()))
     (when report
-      (setq result (list* (if (stringp report)
+      (setf result (list* (if (stringp report)
                               `#'(lambda (stream)
                                   (write-string ,report stream))
                               `#',report)
                           :report-function
                           result)))
     (when interactive
-      (setq result (list* `#',interactive
+      (setf result (list* `#',interactive
                           :interactive-function
                           result)))
+    (when test
+      (setf result (list* `#',test :test-function result)))
     (nreverse result)))
 
 (defmacro restart-case (expression &body clauses)
@@ -126,12 +136,14 @@
         (temp-var (gensym))
         (data
          (mapcar #'(lambda (clause)
-                    (with-keyword-pairs ((report interactive &rest forms)
+                    (with-keyword-pairs ((report interactive test
+                                                 &rest forms)
                                          (cddr clause))
                       (list (car clause)
                             (gensym)
-                            (transform-keywords :report report ;keywords=2
-                                                :interactive interactive)
+                            (transform-keywords :report report
+                                                :interactive interactive
+                                                :test test)
                             (cadr clause)
                             forms)))
                  clauses)))
