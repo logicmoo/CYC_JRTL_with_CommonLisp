@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.43 2003-12-19 18:18:19 piso Exp $
+;;; $Id: clos.lisp,v 1.44 2003-12-19 18:30:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -497,13 +497,6 @@
 
 (defun instance-slot-p (slot)
   (eq (slot-definition-allocation slot) :instance))
-
-;;; Simple vectors are used for slot storage.
-
-(defun allocate-slot-storage (size initial-value)
-  (make-array size :initial-element initial-value))
-
-;;; Standard instance allocation
 
 (defun std-allocate-instance (class)
   (let* ((layout (class-layout class))
