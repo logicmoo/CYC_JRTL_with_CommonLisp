@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.142 2004-01-09 16:46:33 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: boot.lisp,v 1.143 2004-01-09 16:46:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
