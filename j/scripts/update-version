@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: update-version,v 1.1 2003-05-24 17:00:18 piso Exp $
+# $Id: update-version,v 1.2 2003-10-23 01:00:43 piso Exp $
 
 # Usage: update-version old-version new-version
 
@@ -24,8 +24,8 @@ fi
 
 grep $1 build.xml > /dev/null ||
     { echo "Error: current version of build.xml is not $1"; exit 1; }
-grep $1 configure.in > /dev/null ||
-    { echo "Error: current version of configure.in is not $1"; exit 1; }
+grep $1 configure.ac > /dev/null ||
+    { echo "Error: current version of configure.ac is not $1"; exit 1; }
 grep $1 configure > /dev/null ||
     { echo "Error: current version of configure is not $1"; exit 1; }
 
@@ -36,13 +36,13 @@ mv build.xml.new build.xml
 cvs commit -m "$2" build.xml ||
 { echo "Error: unable to commit build.xml"; exit 1; }
 
-p4 edit configure.in
+p4 edit configure.ac
 p4 edit configure
-sed -e "s/$1/$2/g" configure.in > configure.in.new
-mv configure.in configure.in~
-mv configure.in.new configure.in
-cvs commit -m "$2" configure.in ||
-{ echo "Error: unable to commit configure.in"; exit 1; }
+sed -e "s/$1/$2/g" configure.ac > configure.ac.new
+mv configure.ac configure.ac~
+mv configure.ac.new configure.ac
+cvs commit -m "$2" configure.ac ||
+{ echo "Error: unable to commit configure.ac"; exit 1; }
 mv configure configure~
 autoconf
 cvs commit -m "$2" configure ||
