@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.233 2003-06-11 01:01:29 piso Exp $
+ * $Id: Primitives.java,v 1.234 2003-06-11 02:05:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -402,7 +402,12 @@ public final class Primitives extends Module
                 throw new UndefinedFunctionError(arg);
             }
             case SYMBOL_PLIST:                  // ### symbol-plist
-                return Symbol.getPropertyList(arg);
+                try {
+                    return ((Symbol)arg).getPropertyList();
+                }
+                catch (ClassCastException e) {
+                    throw new TypeError(arg, "symbol");
+                }
             case ABS:                           // ### abs
                 return new Fixnum(Math.abs(Fixnum.getValue(arg)));
             case ARRAYP:                        // ### arrayp
