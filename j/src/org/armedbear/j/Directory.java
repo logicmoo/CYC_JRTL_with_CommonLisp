@@ -1,8 +1,8 @@
 /*
  * Directory.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.15 2003-03-20 00:26:22 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Directory.java,v 1.16 2003-05-11 14:35:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -813,6 +813,16 @@ public final class Directory extends Buffer
 
     public static void dirOpenFile()
     {
+        _dirOpenFile(false);
+    }
+
+    public static void dirOpenFileAndKillDirectory()
+    {
+        _dirOpenFile(true);
+    }
+
+    private static void _dirOpenFile(boolean killDirectory)
+    {
         final Editor editor = Editor.currentEditor();
         final Buffer buffer = editor.getBuffer();
         if (buffer instanceof Directory) {
@@ -821,11 +831,11 @@ public final class Directory extends Buffer
             AWTEvent e = editor.getDispatcher().getLastEvent();
             if (e instanceof MouseEvent)
                 editor.mouseMoveDotToPoint((MouseEvent) e);
-            ((Directory)buffer).openFileAtDot();
+            ((Directory)buffer).openFileAtDot(killDirectory);
         }
     }
 
-    private synchronized void openFileAtDot()
+    private synchronized void openFileAtDot(boolean killDirectory)
     {
         final Editor editor = Editor.currentEditor();
         editor.setWaitCursor();
@@ -936,6 +946,8 @@ public final class Directory extends Buffer
             editor.makeNext(buf);
             editor.activate(buf);
         }
+        if (killDirectory)
+            kill();
     }
 
     public synchronized void changeDirectory(File f)
