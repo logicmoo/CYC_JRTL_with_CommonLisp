@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.296 2004-10-22 23:38:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.297 2004-10-23 15:01:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2332,6 +2332,11 @@
              (maybe-emit-clear-values arg)
              (emit 'instanceof +lisp-symbol-class+)
              (return-from compile-test-not 'ifne))
+           (when (eq op 'FIXNUMP)
+             (compile-form arg :target :stack)
+             (maybe-emit-clear-values arg)
+             (emit 'instanceof +lisp-fixnum-class+)
+             (return-from compile-test-not 'ifne))
            (when (eq op 'CONSP)
              (compile-form arg :target :stack)
              (maybe-emit-clear-values arg)
@@ -2404,6 +2409,11 @@
            (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
            (emit 'instanceof +lisp-symbol-class+)
+           (return-from compile-test 'ifeq))
+         (when (eq op 'FIXNUMP)
+           (compile-form arg :target :stack)
+           (maybe-emit-clear-values arg)
+           (emit 'instanceof +lisp-fixnum-class+)
            (return-from compile-test 'ifeq))
          (when (eq op 'CONSP)
            (compile-form arg :target :stack)
