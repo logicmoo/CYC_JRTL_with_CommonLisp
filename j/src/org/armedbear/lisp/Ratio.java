@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Ratio.java,v 1.49 2005-03-12 17:06:56 piso Exp $
+ * $Id: Ratio.java,v 1.50 2005-03-17 14:56:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,8 +121,11 @@ public final class Ratio extends LispObject
             return numerator.equals(((Ratio)obj).numerator) &&
                 denominator.equals(((Ratio)obj).denominator);
         }
-        if (obj instanceof LispFloat) {
-            return floatValue() == ((LispFloat)obj).getValue();
+        if (obj instanceof SingleFloat) {
+            return floatValue() == ((SingleFloat)obj).value;
+        }
+        if (obj instanceof DoubleFloat) {
+            return doubleValue() == ((DoubleFloat)obj).value;
         }
         return false;
     }
@@ -151,7 +154,12 @@ public final class Ratio extends LispObject
         return false;
     }
 
-    public double floatValue()
+    public float floatValue()
+    {
+        return (float) doubleValue();
+    }
+
+    public double doubleValue()
     {
         double result = numerator.doubleValue() / denominator.doubleValue();
         if (result != 0 && !Double.isNaN(result) && !Double.isInfinite(result))
@@ -217,8 +225,11 @@ public final class Ratio extends LispObject
             return number(numerator.multiply(d).add(n.multiply(denominator)),
                 common);
         }
-        if (obj instanceof LispFloat) {
-            return new LispFloat(floatValue() + ((LispFloat)obj).getValue());
+        if (obj instanceof SingleFloat) {
+            return new SingleFloat(floatValue() + ((SingleFloat)obj).value);
+        }
+        if (obj instanceof DoubleFloat) {
+            return new DoubleFloat(doubleValue() + ((DoubleFloat)obj).value);
         }
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
@@ -248,8 +259,11 @@ public final class Ratio extends LispObject
             return number(numerator.multiply(d).subtract(n.multiply(denominator)),
                 common);
         }
-        if (obj instanceof LispFloat) {
-            return new LispFloat(floatValue() - ((LispFloat)obj).getValue());
+        if (obj instanceof SingleFloat) {
+            return new SingleFloat(floatValue() - ((SingleFloat)obj).value);
+        }
+        if (obj instanceof DoubleFloat) {
+            return new DoubleFloat(doubleValue() - ((DoubleFloat)obj).value);
         }
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
@@ -274,8 +288,11 @@ public final class Ratio extends LispObject
             BigInteger d = ((Ratio)obj).denominator;
             return number(numerator.multiply(n), denominator.multiply(d));
         }
-        if (obj instanceof LispFloat) {
-            return new LispFloat(floatValue() * ((LispFloat)obj).getValue());
+        if (obj instanceof SingleFloat) {
+            return new SingleFloat(floatValue() * ((SingleFloat)obj).value);
+        }
+        if (obj instanceof DoubleFloat) {
+            return new DoubleFloat(doubleValue() * ((DoubleFloat)obj).value);
         }
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
@@ -300,10 +317,15 @@ public final class Ratio extends LispObject
             BigInteger d = ((Ratio)obj).denominator;
             return number(numerator.multiply(d), denominator.multiply(n));
         }
-        if (obj instanceof LispFloat) {
+        if (obj instanceof SingleFloat) {
             if (obj.zerop())
                 return signal(new DivisionByZero());
-            return new LispFloat(floatValue() / ((LispFloat)obj).getValue());
+            return new SingleFloat(floatValue() / ((SingleFloat)obj).value);
+        }
+        if (obj instanceof DoubleFloat) {
+            if (obj.zerop())
+                return signal(new DivisionByZero());
+            return new DoubleFloat(doubleValue() / ((DoubleFloat)obj).value);
         }
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
@@ -326,8 +348,10 @@ public final class Ratio extends LispObject
         if (obj instanceof Ratio)
             return (numerator.equals(((Ratio)obj).numerator) &&
                     denominator.equals(((Ratio)obj).denominator));
-        if (obj instanceof LispFloat)
-            return isEqualTo(((LispFloat)obj).rational());
+        if (obj instanceof SingleFloat)
+            return isEqualTo(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return isEqualTo(((DoubleFloat)obj).rational());
         if (obj.numberp())
             return false;
         signal(new TypeError(obj, Symbol.NUMBER));
@@ -355,8 +379,10 @@ public final class Ratio extends LispObject
             BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
             return n1.compareTo(n2) < 0;
         }
-        if (obj instanceof LispFloat)
-            return isLessThan(((LispFloat)obj).rational());
+        if (obj instanceof SingleFloat)
+            return isLessThan(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return isLessThan(((DoubleFloat)obj).rational());
         signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
@@ -377,8 +403,10 @@ public final class Ratio extends LispObject
             BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
             return n1.compareTo(n2) > 0;
         }
-        if (obj instanceof LispFloat)
-            return isGreaterThan(((LispFloat)obj).rational());
+        if (obj instanceof SingleFloat)
+            return isGreaterThan(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return isGreaterThan(((DoubleFloat)obj).rational());
         signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
@@ -399,8 +427,10 @@ public final class Ratio extends LispObject
             BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
             return n1.compareTo(n2) <= 0;
         }
-        if (obj instanceof LispFloat)
-            return isLessThanOrEqualTo(((LispFloat)obj).rational());
+        if (obj instanceof SingleFloat)
+            return isLessThanOrEqualTo(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return isLessThanOrEqualTo(((DoubleFloat)obj).rational());
         signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
@@ -421,8 +451,10 @@ public final class Ratio extends LispObject
             BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
             return n1.compareTo(n2) >= 0;
         }
-        if (obj instanceof LispFloat)
-            return isGreaterThanOrEqualTo(((LispFloat)obj).rational());
+        if (obj instanceof SingleFloat)
+            return isGreaterThanOrEqualTo(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return isGreaterThanOrEqualTo(((DoubleFloat)obj).rational());
         signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
@@ -430,12 +462,13 @@ public final class Ratio extends LispObject
 
     public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
-        if (obj instanceof LispFloat) {
-            // "When rationals and floats are combined by a numerical function,
-            // the rational is first converted to a float of the same format."
-            // 12.1.4.1
-            return new LispFloat(floatValue()).truncate(obj);
-        }
+        // "When rationals and floats are combined by a numerical function,
+        // the rational is first converted to a float of the same format."
+        // 12.1.4.1
+        if (obj instanceof SingleFloat)
+            return new SingleFloat(floatValue()).truncate(obj);
+        if (obj instanceof DoubleFloat)
+            return new DoubleFloat(doubleValue()).truncate(obj);
         BigInteger n, d;
 	try {
 	  if (obj instanceof Fixnum) {

@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.24 2004-12-06 17:48:28 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: format.lisp,v 1.25 2005-03-17 15:03:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -194,7 +194,7 @@
 	(t
          (when scale
            (setf x (* x (expt 10 scale))))
-         (let* ((s (sys::%write-to-string x))
+         (let* ((s (sys:float-string x))
                 (length (length s))
                 (index (position #\. s)))
            (when fdigits

@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.60 2005-03-13 01:50:18 piso Exp $
+;;; $Id: subtypep.lisp,v 1.61 2005-03-17 15:04:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 (in-package #:system)
 
-(defparameter *known-types* (make-hash-table))
+(defparameter *known-types* (make-hash-table :test 'eq))
 
 (dolist (i '((ARITHMETIC-ERROR ERROR)
              (ARRAY)
@@ -40,6 +40,7 @@
              (CONS LIST)
              (CONTROL-ERROR ERROR)
              (DIVISION-BY-ZERO ARITHMETIC-ERROR)
+             (DOUBLE-FLOAT FLOAT)
              (END-OF-FILE STREAM-ERROR)
              (ERROR SERIOUS-CONDITION)
              (EXTENDED-CHAR CHARACTER NIL)
@@ -56,6 +57,7 @@
              (INTEGER RATIONAL)
              (KEYWORD SYMBOL)
              (LIST SEQUENCE)
+             (LONG-FLOAT FLOAT)
              (NIL-VECTOR SIMPLE-STRING)
              (NULL BOOLEAN LIST)
              (NUMBER)
@@ -73,6 +75,7 @@
              (REAL NUMBER)
              (RESTART)
              (SERIOUS-CONDITION CONDITION)
+             (SHORT-FLOAT FLOAT)
              (SIMPLE-ARRAY ARRAY)
              (SIMPLE-BASE-STRING SIMPLE-STRING BASE-STRING)
              (SIMPLE-BIT-VECTOR BIT-VECTOR SIMPLE-ARRAY)
@@ -82,6 +85,7 @@
              (SIMPLE-TYPE-ERROR SIMPLE-CONDITION TYPE-ERROR)
              (SIMPLE-VECTOR VECTOR SIMPLE-ARRAY)
              (SIMPLE-WARNING SIMPLE-CONDITION WARNING)
+             (SINGLE-FLOAT FLOAT)
              (STANDARD-CHAR CHARACTER)
              (STANDARD-CLASS CLASS)
              (STANDARD-GENERIC-FUNCTION GENERIC-FUNCTION)
@@ -567,6 +571,14 @@
                  (t (values nil (known-type-p t1)))))
           ((eq t1 'float)
            (if (memq t2 '(float real number))
+               (values (sub-interval-p i1 i2) t)
+               (values nil (known-type-p t2))))
+          ((memq t1 '(single-float short-float))
+           (if (memq t2 '(single-float short-float float real number))
+               (values (sub-interval-p i1 i2) t)
+               (values nil (known-type-p t2))))
+          ((memq t1 '(double-float long-float))
+           (if (memq t2 '(double-float long-float float real number))
                (values (sub-interval-p i1 i2) t)
                (values nil (known-type-p t2))))
           ((eq t1 'integer)

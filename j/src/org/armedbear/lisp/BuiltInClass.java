@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.36 2005-02-28 00:56:26 piso Exp $
+ * $Id: BuiltInClass.java,v 1.37 2005-03-17 14:48:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,6 +82,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass CONCATENATED_STREAM              = addClass(Symbol.CONCATENATED_STREAM);
     public static final BuiltInClass CONS                             = addClass(Symbol.CONS);
     public static final BuiltInClass DIVISION_BY_ZERO                 = addClass(Symbol.DIVISION_BY_ZERO);
+    public static final BuiltInClass DOUBLE_FLOAT                     = addClass(Symbol.DOUBLE_FLOAT);
     public static final BuiltInClass ECHO_STREAM                      = addClass(Symbol.ECHO_STREAM);
     public static final BuiltInClass END_OF_FILE                      = addClass(Symbol.END_OF_FILE);
     public static final BuiltInClass ENVIRONMENT                      = addClass(Symbol.ENVIRONMENT);
@@ -117,8 +118,9 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass SIMPLE_BIT_VECTOR                = addClass(Symbol.SIMPLE_BIT_VECTOR);
     public static final BuiltInClass SIMPLE_ERROR                     = addClass(Symbol.SIMPLE_ERROR);
     public static final BuiltInClass SIMPLE_STRING                    = addClass(Symbol.SIMPLE_STRING);
-    public static final BuiltInClass SIMPLE_VECTOR                    = addClass(Symbol.SIMPLE_VECTOR);
     public static final BuiltInClass SIMPLE_TYPE_ERROR                = addClass(Symbol.SIMPLE_TYPE_ERROR);
+    public static final BuiltInClass SIMPLE_VECTOR                    = addClass(Symbol.SIMPLE_VECTOR);
+    public static final BuiltInClass SINGLE_FLOAT                     = addClass(Symbol.SINGLE_FLOAT);
     public static final BuiltInClass SLIME_INPUT_STREAM               = addClass(Symbol.SLIME_INPUT_STREAM);
     public static final BuiltInClass SLIME_OUTPUT_STREAM              = addClass(Symbol.SLIME_OUTPUT_STREAM);
     public static final BuiltInClass SOCKET_STREAM                    = addClass(Symbol.SOCKET_STREAM);
@@ -316,6 +318,8 @@ public class BuiltInClass extends LispClass
         DIVISION_BY_ZERO.setCPL(DIVISION_BY_ZERO, ARITHMETIC_ERROR, ERROR,
                                 SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                                 CLASS_T);
+        DOUBLE_FLOAT.setDirectSuperclass(FLOAT);
+        DOUBLE_FLOAT.setCPL(DOUBLE_FLOAT, FLOAT, REAL, NUMBER, CLASS_T);
         ECHO_STREAM.setDirectSuperclass(STREAM);
         ECHO_STREAM.setCPL(ECHO_STREAM, STREAM, CLASS_T);
         END_OF_FILE.setDirectSuperclass(STREAM_ERROR);
@@ -434,6 +438,8 @@ public class BuiltInClass extends LispClass
                              CLASS_T);
         SIMPLE_WARNING.setCPL(SIMPLE_WARNING, SIMPLE_CONDITION, WARNING,
                               CONDITION, STANDARD_OBJECT, CLASS_T);
+        SINGLE_FLOAT.setDirectSuperclass(FLOAT);
+        SINGLE_FLOAT.setCPL(SINGLE_FLOAT, FLOAT, REAL, NUMBER, CLASS_T);
         SLIME_INPUT_STREAM.setDirectSuperclass(STRING_STREAM);
         SLIME_INPUT_STREAM.setCPL(SLIME_INPUT_STREAM, STRING_STREAM, STREAM,
                                    CLASS_T);

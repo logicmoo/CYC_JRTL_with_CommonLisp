@@ -2,7 +2,7 @@
  * RuntimeClass.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: RuntimeClass.java,v 1.9 2004-11-03 15:27:23 piso Exp $
+ * $Id: RuntimeClass.java,v 1.10 2005-03-17 14:57:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,14 +150,14 @@ public class RuntimeClass extends Lisp
         return new Bignum(i);
     }
 
-    public static final LispFloat makeLispObject(float i) throws ConditionThrowable
+    public static final DoubleFloat makeLispObject(float i) throws ConditionThrowable
     {
-        return new LispFloat(i);
+        return new DoubleFloat(i);
     }
 
-    public static final LispFloat makeLispObject(double i) throws ConditionThrowable
+    public static final DoubleFloat makeLispObject(double i) throws ConditionThrowable
     {
-        return new LispFloat(i);
+        return new DoubleFloat(i);
     }
 
     public static final LispCharacter makeLispObject(char i) throws ConditionThrowable

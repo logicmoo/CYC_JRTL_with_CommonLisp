@@ -1,8 +1,8 @@
 /*
  * RandomState.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: RandomState.java,v 1.4 2004-11-03 15:39:01 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: RandomState.java,v 1.5 2005-03-17 14:55:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,11 +97,17 @@ public final class RandomState extends LispObject
                 BigInteger remainder = rand.remainder(limit);
                 return number(remainder);
             }
-        } else if (arg instanceof LispFloat) {
-            double limit = ((LispFloat)arg).getValue();
+        } else if (arg instanceof SingleFloat) {
+            float limit = ((SingleFloat)arg).value;
+            if (limit > 0) {
+                float rand = random.nextFloat();
+                return new SingleFloat(rand * limit);
+            }
+        } else if (arg instanceof DoubleFloat) {
+            double limit = ((DoubleFloat)arg).value;
             if (limit > 0) {
                 double rand = random.nextDouble();
-                return new LispFloat(rand * limit);
+                return new DoubleFloat(rand * limit);
             }
         }
         return signal(new TypeError(arg, "positive integer or positive float"));

@@ -1,8 +1,8 @@
 /*
  * float_sign.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: float_sign.java,v 1.1 2004-06-06 19:31:53 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: float_sign.java,v 1.2 2005-03-17 15:01:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.lisp;
 
+// ### float-sign
 public final class float_sign extends Primitive
 {
     private float_sign()
@@ -30,34 +31,33 @@ public final class float_sign extends Primitive
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        try {
-            double d = ((LispFloat)arg).value;
+        if (arg instanceof SingleFloat) {
+            float f = ((SingleFloat)arg).value;
+            int bits = Float.floatToRawIntBits(f);
+            return bits < 0 ? SingleFloat.MINUS_ONE : SingleFloat.ONE;
+        }
+        if (arg instanceof DoubleFloat) {
+            double d = ((DoubleFloat)arg).value;
             long bits = Double.doubleToRawLongBits(d);
-            return bits < 0 ? LispFloat.MINUS_ONE : LispFloat.ONE;
+            return bits < 0 ? DoubleFloat.MINUS_ONE : DoubleFloat.ONE;
         }
-        catch (ClassCastException e) {
-            return signal(new TypeError(arg, Symbol.FLOAT));
-        }
+        return signal(new TypeError(arg, Symbol.FLOAT));
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        double d1, d2;
-        try {
-            d1 = ((LispFloat)first).value;
-        }
-        catch (ClassCastException e) {
+        if (!first.floatp())
             return signal(new TypeError(first, Symbol.FLOAT));
-        }
-        try {
-            d2 = Math.abs(((LispFloat)second).value);
-        }
-        catch (ClassCastException e) {
+        if (!second.floatp())
             return signal(new TypeError(second, Symbol.FLOAT));
-        }
-        long bits = Double.doubleToRawLongBits(d1);
-        return bits < 0 ? new LispFloat(-d2) : new LispFloat(d2);
+        if (first.minusp()) {
+            if (second.minusp())
+                return second;
+            else
+                return Fixnum.ZERO.subtract(second);
+        } else
+            return second.ABS();
     }
 
     private static final Primitive FLOAT_SIGN = new float_sign();

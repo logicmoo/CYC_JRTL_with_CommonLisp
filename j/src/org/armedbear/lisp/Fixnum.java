@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.111 2005-03-12 17:54:30 piso Exp $
+ * $Id: Fixnum.java,v 1.112 2005-03-17 14:50:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,8 +178,10 @@ public final class Fixnum extends LispObject
     {
         if (obj instanceof Fixnum)
             return value == ((Fixnum)obj).value;
-        if (obj instanceof LispFloat)
-            return (float) value == ((LispFloat)obj).getValue();
+        if (obj instanceof SingleFloat)
+            return value == ((SingleFloat)obj).value;
+        if (obj instanceof DoubleFloat)
+            return value == ((DoubleFloat)obj).value;
         return false;
     }
 
@@ -261,17 +263,6 @@ public final class Fixnum extends LispObject
         }
     }
 
-    public static float getFloat(LispObject obj) throws ConditionThrowable
-    {
-        try {
-            return (float) ((Fixnum)obj).value;
-        }
-        catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.FIXNUM));
-            return 0;
-        }
-    }
-
     public final int getValue()
     {
         return value;
@@ -322,8 +313,10 @@ public final class Fixnum extends LispObject
             return number(getBigInteger().multiply(denominator).add(numerator),
                           denominator);
         }
-        if (obj instanceof LispFloat)
-            return new LispFloat(value + LispFloat.getValue(obj));
+        if (obj instanceof SingleFloat)
+            return new SingleFloat(value + ((SingleFloat)obj).value);
+        if (obj instanceof DoubleFloat)
+            return new DoubleFloat(value + ((DoubleFloat)obj).value);
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
@@ -353,8 +346,10 @@ public final class Fixnum extends LispObject
                 getBigInteger().multiply(denominator).subtract(numerator),
                 denominator);
         }
-        if (obj instanceof LispFloat)
-            return new LispFloat(value - LispFloat.getValue(obj));
+        if (obj instanceof SingleFloat)
+            return new SingleFloat(value - ((SingleFloat)obj).value);
+        if (obj instanceof DoubleFloat)
+            return new DoubleFloat(value - ((DoubleFloat)obj).value);
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
             return Complex.getInstance(subtract(c.getRealPart()),
@@ -390,8 +385,10 @@ public final class Fixnum extends LispObject
                 getBigInteger().multiply(numerator),
                 denominator);
         }
-        if (obj instanceof LispFloat)
-            return new LispFloat(value * LispFloat.getValue(obj));
+        if (obj instanceof SingleFloat)
+            return new SingleFloat(value * ((SingleFloat)obj).value);
+        if (obj instanceof DoubleFloat)
+            return new DoubleFloat(value * ((DoubleFloat)obj).value);
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
             return Complex.getInstance(multiplyBy(c.getRealPart()),
@@ -418,8 +415,10 @@ public final class Fixnum extends LispObject
                 return number(getBigInteger().multiply(denominator),
                               numerator);
             }
-            if (obj instanceof LispFloat)
-                return new LispFloat(value / LispFloat.getValue(obj));
+            if (obj instanceof SingleFloat)
+                return new SingleFloat(value / ((SingleFloat)obj).value);
+            if (obj instanceof DoubleFloat)
+                return new DoubleFloat(value / ((DoubleFloat)obj).value);
             if (obj instanceof Complex) {
                 Complex c = (Complex) obj;
                 LispObject realPart = c.getRealPart();
@@ -447,8 +446,10 @@ public final class Fixnum extends LispObject
     {
         if (obj instanceof Fixnum)
             return value == ((Fixnum)obj).value;
-        if (obj instanceof LispFloat)
-            return (float) value == LispFloat.getValue(obj);
+        if (obj instanceof SingleFloat)
+            return isEqualTo(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return value == ((DoubleFloat)obj).value;
         if (obj instanceof Complex)
             return obj.isEqualTo(this);
         if (obj.numberp())
@@ -468,8 +469,10 @@ public final class Fixnum extends LispObject
         if (obj instanceof Fixnum)
             return value != ((Fixnum)obj).value;
             // obj is not a fixnum.
-        if (obj instanceof LispFloat)
-            return (float) value != LispFloat.getValue(obj);
+        if (obj instanceof SingleFloat)
+            return isNotEqualTo(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return value != ((DoubleFloat)obj).value;
         if (obj instanceof Complex)
             return obj.isNotEqualTo(this);
         if (obj.numberp())
@@ -495,8 +498,10 @@ public final class Fixnum extends LispObject
                 getBigInteger().multiply(((Ratio)obj).denominator());
             return n.compareTo(((Ratio)obj).numerator()) < 0;
         }
-        if (obj instanceof LispFloat)
-            return isLessThan(((LispFloat)obj).rational());
+        if (obj instanceof SingleFloat)
+            return isLessThan(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return isLessThan(((DoubleFloat)obj).rational());
         signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
@@ -518,8 +523,10 @@ public final class Fixnum extends LispObject
                 getBigInteger().multiply(((Ratio)obj).denominator());
             return n.compareTo(((Ratio)obj).numerator()) > 0;
         }
-        if (obj instanceof LispFloat)
-            return isGreaterThan(((LispFloat)obj).rational());
+        if (obj instanceof SingleFloat)
+            return isGreaterThan(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return isGreaterThan(((DoubleFloat)obj).rational());
         signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
@@ -541,8 +548,10 @@ public final class Fixnum extends LispObject
                 getBigInteger().multiply(((Ratio)obj).denominator());
             return n.compareTo(((Ratio)obj).numerator()) <= 0;
         }
-        if (obj instanceof LispFloat)
-            return isLessThanOrEqualTo(((LispFloat)obj).rational());
+        if (obj instanceof SingleFloat)
+            return isLessThanOrEqualTo(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return isLessThanOrEqualTo(((DoubleFloat)obj).rational());
         signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
@@ -564,8 +573,10 @@ public final class Fixnum extends LispObject
                 getBigInteger().multiply(((Ratio)obj).denominator());
             return n.compareTo(((Ratio)obj).numerator()) >= 0;
         }
-        if (obj instanceof LispFloat)
-            return isGreaterThanOrEqualTo(((LispFloat)obj).rational());
+        if (obj instanceof SingleFloat)
+            return isGreaterThanOrEqualTo(((SingleFloat)obj).rational());
+        if (obj instanceof DoubleFloat)
+            return isGreaterThanOrEqualTo(((DoubleFloat)obj).rational());
         signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
@@ -598,11 +609,16 @@ public final class Fixnum extends LispObject
                     subtract(quotient.multiplyBy(divisor));
                 value1 = quotient;
                 value2 = remainder;
-            } else if (obj instanceof LispFloat) {
+            } else if (obj instanceof SingleFloat) {
                 // "When rationals and floats are combined by a numerical
                 // function, the rational is first converted to a float of the
                 // same format." 12.1.4.1
-                return new LispFloat(value).truncate(obj);
+                return new SingleFloat(value).truncate(obj);
+            } else if (obj instanceof DoubleFloat) {
+                // "When rationals and floats are combined by a numerical
+                // function, the rational is first converted to a float of the
+                // same format." 12.1.4.1
+                return new DoubleFloat(value).truncate(obj);
             } else
                 return signal(new TypeError(obj, Symbol.REAL));
         }

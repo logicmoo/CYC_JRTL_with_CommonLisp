@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.20 2005-02-26 17:41:38 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.21 2005-03-17 14:59:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -41,8 +41,10 @@
             (return-from normalize-type '(integer 0 *)))
            (BASE-CHAR
             (return-from normalize-type 'character))
-           ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
-            (return-from normalize-type 'float))
+           (SHORT-FLOAT
+            (return-from normalize-type 'single-float))
+           (LONG-FLOAT
+            (return-from normalize-type 'double-float))
            (COMPLEX
             (return-from normalize-type '(complex *)))
            (ARRAY
@@ -153,13 +155,17 @@
        (if i
            (return-from normalize-type (list 'simple-array 'base-char (list (car i))))
            (return-from normalize-type '(simple-array base-char (*)))))
-      ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
-       (setf tp 'float))
+      (SHORT-FLOAT
+       (setf tp 'single-float))
+      (LONG-FLOAT
+       (setf tp 'double-float))
       (COMPLEX
         (cond ((null i)
                (setf i '(*)))
-              ((memq i '(short-float single-float double-float long-float))
-               (setf i 'float)))))
+              ((eq i 'short-float)
+               (setf i 'single-float))
+              ((eq i 'long-float)
+               (setf i 'double-float)))))
     (if i (cons tp i) tp)))
 
 (defun caaaar (list) (car (car (car (car list)))))

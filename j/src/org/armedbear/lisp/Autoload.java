@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.219 2005-03-15 17:34:30 piso Exp $
+ * $Id: Autoload.java,v 1.220 2005-03-17 14:44:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -497,7 +497,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
         autoload(PACKAGE_SYS, "class-slots", "SlotClass");
-        autoload(PACKAGE_SYS, "coerce-to-float", "FloatFunctions");
+        autoload(PACKAGE_SYS, "coerce-to-double-float", "FloatFunctions");
+        autoload(PACKAGE_SYS, "coerce-to-single-float", "FloatFunctions");
         autoload(PACKAGE_SYS, "condition-report", "Condition");
         autoload(PACKAGE_SYS, "create-new-file", "create_new_file");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
@@ -505,6 +506,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "double-float-low-bits", "FloatFunctions");
         autoload(PACKAGE_SYS, "float-infinity-p", "FloatFunctions");
         autoload(PACKAGE_SYS, "float-nan-p", "FloatFunctions");
+        autoload(PACKAGE_SYS, "float-string", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "function-info", "function_info");
         autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "get-function-info-value", "function_info");

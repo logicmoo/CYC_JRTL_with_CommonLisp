@@ -2,7 +2,7 @@
  * ftruncate.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ftruncate.java,v 1.4 2005-03-12 15:57:48 piso Exp $
+ * $Id: ftruncate.java,v 1.5 2005-03-17 15:03:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,11 @@ package org.armedbear.lisp;
 // (defun ftruncate (number &optional (divisor 1))
 //  (multiple-value-bind (tru rem) (truncate number divisor)
 //   (values (float tru) rem)))
+
+// "FFLOOR, FCEILING, FTRUNCATE, and FROUND handle arguments of different types
+// in the following way: If number is a float, and divisor is not a float of
+// longer format, then the first result is a float of the same type as number.
+// Otherwise, the first result is of the type determined by contagion rules."
 public final class ftruncate extends Primitive
 {
     private ftruncate()
@@ -35,10 +40,17 @@ public final class ftruncate extends Primitive
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         LispObject q = arg.truncate(Fixnum.ONE); // an integer
-        if (q instanceof Fixnum)
-            q = new LispFloat(((Fixnum)q).value);
-        else
-            q = new LispFloat(((Bignum)q).floatValue());
+        if (arg instanceof DoubleFloat) {
+            if (q instanceof Fixnum)
+                q = new DoubleFloat(((Fixnum)q).value);
+            else
+                q = new DoubleFloat(((Bignum)q).doubleValue());
+        } else {
+            if (q instanceof Fixnum)
+                q = new SingleFloat(((Fixnum)q).value);
+            else
+                q = new SingleFloat(((Bignum)q).floatValue());
+        }
         LispThread.currentThread()._values[0] = q;
         return q;
     }
@@ -47,10 +59,17 @@ public final class ftruncate extends Primitive
         throws ConditionThrowable
     {
         LispObject q = first.truncate(second); // an integer
-        if (q instanceof Fixnum)
-            q = new LispFloat(((Fixnum)q).value);
-        else
-            q = new LispFloat(((Bignum)q).floatValue());
+        if (first instanceof DoubleFloat || second instanceof DoubleFloat) {
+            if (q instanceof Fixnum)
+                q = new DoubleFloat(((Fixnum)q).value);
+            else
+                q = new DoubleFloat(((Bignum)q).doubleValue());
+        } else {
+            if (q instanceof Fixnum)
+                q = new SingleFloat(((Fixnum)q).value);
+            else
+                q = new SingleFloat(((Bignum)q).floatValue());
+        }
         LispThread.currentThread()._values[0] = q;
         return q;
     }

@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Java.java,v 1.49 2005-03-01 13:09:18 asimon Exp $
+ * $Id: Java.java,v 1.50 2005-03-17 14:50:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -663,7 +663,7 @@ public final class Java extends Lisp
         if (obj instanceof Long)
             return new Bignum(((Long)obj).longValue());
         if (obj instanceof Double || obj instanceof Float)
-            return new LispFloat(((Number)obj).doubleValue());
+            return new DoubleFloat(((Number)obj).doubleValue());
         if (obj instanceof String)
             return new SimpleString((String)obj);
         if (obj instanceof Character)

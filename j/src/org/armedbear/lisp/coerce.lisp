@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: coerce.lisp,v 1.6 2005-02-26 17:38:11 piso Exp $
+;;; $Id: coerce.lisp,v 1.7 2005-03-17 14:59:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,8 +46,10 @@
                 (char (symbol-name object) 0))
                (t
                 (coerce-error object result-type))))
-        ((memq result-type '(float single-float double-float short-float long-float))
-         (coerce-to-float object))
+        ((memq result-type '(float single-float short-float))
+         (coerce-to-single-float object))
+        ((memq result-type '(double-float long-float))
+         (coerce-to-double-float object))
         ((eq result-type 'complex)
          (cond ((floatp object)
                 (complex object 0.0))

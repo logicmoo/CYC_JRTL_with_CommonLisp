@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.175 2005-02-28 17:18:02 piso Exp $
+ * $Id: Symbol.java,v 1.176 2005-03-17 14:58:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,6 +186,8 @@ public class Symbol extends LispObject
     public static final Symbol _SETF_FUNCTION                     = PACKAGE_SYS.addInternalSymbol("%SETF-FUNCTION");
     public static final Symbol _SOURCE                            = PACKAGE_SYS.addInternalSymbol("%SOURCE");
 
+    public static final Symbol SINGLE_FLOAT_POSITIVE_INFINITY     = PACKAGE_EXT.addExternalSymbol("SINGLE-FLOAT-POSITIVE-INFINITY");
+    public static final Symbol SINGLE_FLOAT_NEGATIVE_INFINITY     = PACKAGE_EXT.addExternalSymbol("SINGLE-FLOAT-NEGATIVE-INFINITY");
     public static final Symbol DOUBLE_FLOAT_POSITIVE_INFINITY     = PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-POSITIVE-INFINITY");
     public static final Symbol DOUBLE_FLOAT_NEGATIVE_INFINITY     = PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-NEGATIVE-INFINITY");
 

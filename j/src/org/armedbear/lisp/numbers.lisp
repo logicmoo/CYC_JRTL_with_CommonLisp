@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.34 2004-10-12 17:03:00 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: numbers.lisp,v 1.35 2005-03-17 15:04:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -157,5 +157,7 @@
                   0.0d0))
              (complex
               (if (zerop (realpart number))
-                  (* (/ pi 2) (signum (imagpart number)))
+                  (coerce (* (/ pi 2) (signum (imagpart number)))
+                          (if (typep (imagpart number) 'double-float)
+                              'double-float 'single-float))
                   (atan (imagpart number) (realpart number))))))

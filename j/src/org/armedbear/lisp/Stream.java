@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.116 2005-03-07 19:08:01 piso Exp $
+ * $Id: Stream.java,v 1.117 2005-03-17 14:57:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -934,6 +934,7 @@ public class Stream extends LispObject
         StringBuffer sb = new StringBuffer();
         int i = 0;
         boolean maybe = false;
+        char marker = 0;
         char c = token.charAt(i);
         if (c == '-' || c == '+') {
             sb.append(c);
@@ -950,9 +951,22 @@ public class Stream extends LispObject
                 break;
         }
         if (i < length) {
-            if ("esfdlESFDL".indexOf(token.charAt(i)) >= 0) {
+            c = token.charAt(i);
+            if ("esfdlESFDL".indexOf(c) >= 0) {
                 // Exponent marker.
                 maybe = true;
+                marker = Utilities.toUpperCase(c);
+                if (marker == 'S')
+                    marker = 'F';
+                else if (marker == 'L')
+                    marker = 'D';
+                else if (marker == 'E') {
+                    LispObject format = _READ_DEFAULT_FLOAT_FORMAT_.symbolValue();
+                    if (format == Symbol.SINGLE_FLOAT || format == Symbol.SHORT_FLOAT)
+                        marker = 'F';
+                    else
+                        marker = 'D';
+                }
                 sb.append('E');
                 ++i;
             }
@@ -962,7 +976,17 @@ public class Stream extends LispObject
         // Append rest of token.
         sb.append(token.substring(i));
         try {
-            return new LispFloat(Double.parseDouble(sb.toString()));
+            if (marker == 0) {
+                LispObject format = _READ_DEFAULT_FLOAT_FORMAT_.symbolValue();
+                if (format == Symbol.SINGLE_FLOAT || format == Symbol.SHORT_FLOAT)
+                    marker = 'F';
+                else
+                    marker = 'D';
+            }
+            if (marker == 'D')
+                return new DoubleFloat(Double.parseDouble(sb.toString()));
+            else
+                return new SingleFloat(Float.parseFloat(sb.toString()));
         }
         catch (NumberFormatException e) {
             return null;
