@@ -2,7 +2,7 @@
  * SessionBufferEntry.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SessionBufferEntry.java,v 1.1.1.1 2002-09-24 16:08:48 piso Exp $
+ * $Id: SessionBufferEntry.java,v 1.2 2003-03-20 15:21:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,9 @@ import java.util.Iterator;
 
 public final class SessionBufferEntry
 {
+    private static final String lineSeparator =
+        System.getProperty("line.separator");
+
     private Buffer buffer;
     private String path;
     private String modeName;
@@ -130,7 +133,8 @@ public final class SessionBufferEntry
         sb.append('"');
         PropertyList properties = buffer.getProperties();
         if (properties.size() > 0) {
-            sb.append(">" + System.getProperty("line.separator"));
+            sb.append(">");
+            sb.append(lineSeparator);
             Iterator it = properties.keyIterator();
             if (it != null) {
                 while (it.hasNext()) {
@@ -148,6 +152,12 @@ public final class SessionBufferEntry
 
     private static String propertyToXml(String name, String value)
     {
-        return new String("      <property name=\"" + name + "\" value=\"" + value + "\"/>" + System.getProperty("line.separator"));
+        FastStringBuffer sb = new FastStringBuffer("      <property name=\"");
+        sb.append(name);
+        sb.append("\" value=\"");
+        sb.append(value);
+        sb.append("\"/>");
+        sb.append(lineSeparator);
+        return sb.toString();
     }
 }
