@@ -2,7 +2,7 @@
  * UndefinedFunction.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UndefinedFunction.java,v 1.2 2003-09-20 17:02:05 piso Exp $
+ * $Id: UndefinedFunction.java,v 1.3 2003-09-21 01:41:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,22 +26,10 @@ public final class UndefinedFunction extends LispError
     private final LispObject object;
     private final String name;
 
-    public UndefinedFunction()
-    {
-        object = null;
-        name = null;
-    }
-
     public UndefinedFunction(LispObject object)
     {
         this.object = object;
         this.name = null;
-    }
-
-    public UndefinedFunction(String name)
-    {
-        this.object = null;
-        this.name = name;
     }
 
     public LispObject typeOf()
