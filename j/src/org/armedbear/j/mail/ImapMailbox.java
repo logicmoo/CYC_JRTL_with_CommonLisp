@@ -1,8 +1,8 @@
 /*
  * ImapMailbox.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImapMailbox.java,v 1.4 2002-10-11 01:42:37 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: ImapMailbox.java,v 1.5 2003-08-09 17:41:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -324,8 +324,7 @@ public final class ImapMailbox extends Mailbox
     {
         private final boolean interactive;
 
-        // If this constructor is private, we run into jikes 1.15 bug #2256.
-        /*private*/ GetNewMessagesProcess(boolean interactive)
+        public GetNewMessagesProcess(boolean interactive)
         {
             this.interactive = interactive;
         }
