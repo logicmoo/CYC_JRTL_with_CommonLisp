@@ -1,8 +1,8 @@
 /*
  * AdjustPlacementRunnable.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: AdjustPlacementRunnable.java,v 1.1.1.1 2002-09-24 16:07:58 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: AdjustPlacementRunnable.java,v 1.2 2003-06-28 19:14:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,35 +21,40 @@
 
 package org.armedbear.j;
 
-import java.awt.Rectangle;
+import javax.swing.SwingUtilities;
 
 public final class AdjustPlacementRunnable implements Runnable
 {
     private final Frame frame;
-    private final Rectangle desired;
     private final int extendedState;
 
-    public AdjustPlacementRunnable(Frame frame, Rectangle desired,
-        int extendedState)
+    public AdjustPlacementRunnable(Frame frame, int extendedState)
     {
         this.frame = frame;
-        this.desired = desired;
         this.extendedState = extendedState;
     }
 
     public void run()
     {
-        Rectangle actual = frame.getBounds();
-        final boolean adjust = !actual.equals(desired);
-        if (adjust) {
-            frame.setBounds(desired);
-            frame.validate();
-        }
         if (extendedState != 0) {
             frame.storeExtendedState(extendedState);
-            Utilities.setExtendedState(frame, extendedState);
+            frame.setExtendedState(extendedState);
         }
-        Editor.setDisplayReady(true);
-        frame.getCurrentEditor().updateDisplay();
+        final Editor editor = frame.getCurrentEditor();
+        editor.setFocusToDisplay();
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                // Must call setDisplayReady(true) before calling reframe().
+                Editor.setDisplayReady(true);
+                editor.reframe();
+                if (editor.getBuffer().isBusy())
+                    editor.setWaitCursor();
+                else
+                    editor.setDefaultCursor();
+            }
+        };
+        SwingUtilities.invokeLater(r);
+        IdleThread.startIdleThread();
     }
 }
