@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.6 2003-07-06 17:30:10 piso Exp $
+ * $Id: PackageFunctions.java,v 1.7 2003-07-06 17:37:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,6 +146,32 @@ public final class PackageFunctions extends Lisp
         }
     };
 
+    // ### unuse-package
+    // unuse-package packages-to-unuse &optional package => t
+    private static final Primitive USE_PACKAGE =
+        new Primitive("unuse-package") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length < 1 || args.length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            Package pkg;
+            if (args.length == 2)
+                pkg = coerceToPackage(args[1]);
+            else
+                pkg = getCurrentPackage();
+            if (args[0] instanceof Cons) {
+                LispObject list = args[0];
+                while (list != NIL) {
+                    pkg.unusePackage(coerceToPackage(list.car()));
+                    list = list.cdr();
+                }
+            } else
+                pkg.unusePackage(coerceToPackage(args[0]));
+            return T;
+        }
+    };
+
+    // ### %defpackage
     // %defpackage name nicknames size shadows shadowing-imports use imports
     // interns exports doc-string => package
     private static final Primitive _DEFPACKAGE =
