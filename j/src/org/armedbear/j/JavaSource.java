@@ -2,7 +2,7 @@
  * JavaSource.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaSource.java,v 1.1.1.1 2002-09-24 16:08:08 piso Exp $
+ * $Id: JavaSource.java,v 1.2 2002-12-21 03:27:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,23 @@ public final class JavaSource implements Constants
                     File file = File.getInstance(dir, fileName);
                     if (file != null && file.isFile())
                         return file;
+                }
+            }
+            // Not found. Try looking for short name of file.
+            int index = fileName.lastIndexOf(SEPARATOR_CHAR);
+            if (index >= 0) {
+                String shortName = fileName.substring(index+1);
+                Log.debug("shortName = |" + shortName + "|");
+                iter = dirNames.iterator();
+                while (iter.hasNext()) {
+                    File dir = File.getInstance((String)iter.next());
+                    if (dir != null) {
+                        File file = File.getInstance(dir, shortName);
+                        if (file != null && file.isFile()) {
+                            Log.debug("file = " + file.canonicalPath());
+                            return file;
+                        }
+                    }
                 }
             }
         }
