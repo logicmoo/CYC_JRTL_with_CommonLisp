@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.13 2003-03-13 03:09:33 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.14 2003-03-13 20:35:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -334,12 +334,17 @@ public class CharacterInputStream extends LispStream
     private LispObject readCharacterLiteral() throws Condition
     {
         try {
+            int n = read();
+            if (n < 0)
+                throw new EndOfFileException();
+            char c = (char) n;
             StringBuffer sb = new StringBuffer();
+            sb.append(c);
             while (true) {
-                int n = read();
+                n = read();
                 if (n < 0)
                     break;
-                char c = (char) n;
+                c = (char) n;
                 if (Character.isWhitespace(c))
                     break;
                 if (c == '(' || c == ')') {
@@ -351,7 +356,7 @@ public class CharacterInputStream extends LispStream
             String token = sb.toString();
             if (token.length() == 1)
                 return new LispCharacter(token.charAt(0));
-            int n = nameToChar(token);
+            n = nameToChar(token);
             if (n >= 0)
                 return new LispCharacter((char)n);
             throw new LispError("unrecognized character name: " + token);
