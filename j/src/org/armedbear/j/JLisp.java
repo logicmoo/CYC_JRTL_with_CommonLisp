@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.6 2003-02-16 16:52:39 piso Exp $
+ * $Id: JLisp.java,v 1.7 2003-02-20 18:46:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,17 +30,16 @@ import org.armedbear.lisp.LispError;
 
 public final class JLisp extends CommandInterpreter
 {
-    private final Thread thread;
+    private Thread thread;
     private final File initialDir;
 
     private int port;
     private Socket socket;
     private Interpreter interpreter;
 
-    private JLisp(Thread thread, File initialDir)
+    private JLisp(File initialDir)
     {
         super();
-        this.thread = thread;
         this.initialDir = initialDir;
         mode = LispShellMode.getMode();
         formatter = mode.getFormatter(this);
@@ -65,18 +64,18 @@ public final class JLisp extends CommandInterpreter
 
     protected void startProcess()
     {
-        Thread thread = new Thread("JLisp interpreter") {
+        thread = new Thread("JLisp interpreter") {
             public void run()
             {
                 try {
                     startServer();
                     if (interpreter != null)
                         interpreter.run();
-                    Log.debug("interpreter thread exiting");
                 }
                 catch (Exception e) {
                     Log.error(e);
                 }
+                Log.debug("interpreter thread exiting");
             }
         };
         thread.setDaemon(true);
@@ -132,7 +131,7 @@ public final class JLisp extends CommandInterpreter
 
     public synchronized void dispose()
     {
-        Thread thread = new Thread("JLisp dispose") {
+        Thread disposeThread = new Thread("JLisp dispose") {
             public void run()
             {
                 Log.debug("JLisp.dispose");
@@ -153,8 +152,8 @@ public final class JLisp extends CommandInterpreter
                 }
             }
         };
-        thread.setDaemon(true);
-        thread.start();
+        disposeThread.setDaemon(true);
+        disposeThread.start();
     }
 
     public static void jlisp()
@@ -174,7 +173,7 @@ public final class JLisp extends CommandInterpreter
         File initialDir = editor.getCurrentDirectory();
         if (initialDir == null || initialDir.isRemote())
             initialDir = Directories.getUserHomeDirectory();
-        JLisp jlisp = new JLisp(Thread.currentThread(), initialDir);
+        JLisp jlisp = new JLisp(initialDir);
         jlisp.startProcess();
         editor.makeNext(jlisp);
         Editor ed;
@@ -193,7 +192,17 @@ public final class JLisp extends CommandInterpreter
     {
         Interpreter.initialize(true);
         FastStringBuffer sb = new FastStringBuffer("(load \"");
-        sb.append(file.canonicalPath());
+        if (Platform.isPlatformWindows()) {
+            String cp = file.canonicalPath();
+            final int limit = cp.length();
+            for (int i = 0; i < limit; i++) {
+                char c = cp.charAt(i);
+                if (c == '\\')
+                    sb.append('\\'); // Double backslash.
+                sb.append(c);
+            }
+        } else
+            sb.append(file.canonicalPath());
         sb.append("\")");
         Interpreter.evaluate(sb.toString());
     }
