@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.160 2003-04-06 19:57:08 piso Exp $
+ * $Id: Primitives.java,v 1.161 2003-04-08 14:16:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2556,6 +2556,27 @@ public final class Primitives extends Module
         }
         throw new LispError(obj + " is not the name of a package");
     }
+
+    // ### shadow
+    // shadow symbol-names &optional package => t
+    private static final Primitive SHADOW = new Primitive("shadow") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length == 0 || args.length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject symbols = args[0];
+            Package pkg =
+                args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
+            if (symbols.listp()) {
+                while (symbols != NIL) {
+                    pkg.shadow(javaString(symbols.car()));
+                    symbols = symbols.cdr();
+                }
+            } else
+                pkg.shadow(javaString(symbols));
+            return T;
+        }
+    };
 
     // ### find-package
     private static final Primitive1 FIND_PACKAGE =
