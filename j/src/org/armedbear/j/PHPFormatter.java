@@ -1,8 +1,8 @@
 /*
  * PHPFormatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: PHPFormatter.java,v 1.1.1.1 2002-09-24 16:07:54 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: PHPFormatter.java,v 1.2 2003-05-15 15:34:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,7 +187,7 @@ public final class PHPFormatter extends Formatter implements Constants
         while (!pos.atEnd()) {
             char c = pos.getChar();
             if (c == '\\') {
-                // Escape char.
+                // Escape.
                 pos.skip(1);
                 pos.next();
                 continue;
@@ -580,7 +580,8 @@ public final class PHPFormatter extends Formatter implements Constants
             }
             if (c == '\\') {
                 // Escape.
-                pos.skip(2);
+                pos.skip(1);
+                pos.next();
                 continue;
             }
             if (state == STATE_COMMENT) {
@@ -660,7 +661,8 @@ public final class PHPFormatter extends Formatter implements Constants
             }
             if (c == '\\') {
                 // Escape.
-                pos.skip(2);
+                pos.skip(1);
+                pos.next();
                 continue;
             }
             switch (state) {
