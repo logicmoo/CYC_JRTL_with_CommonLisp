@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.105 2004-01-31 18:26:49 piso Exp $
+ * $Id: Symbol.java,v 1.106 2004-02-11 19:51:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,8 +125,9 @@ public class Symbol extends LispObject
     public static final Symbol UNSIGNED_BYTE                    = PACKAGE_CL.addExternalSymbol("UNSIGNED-BYTE");
     public static final Symbol VECTOR                           = PACKAGE_CL.addExternalSymbol("VECTOR");
 
+    public static final Symbol NIL_VECTOR                       = PACKAGE_SYS.addInternalSymbol("NIL-VECTOR");
     public static final Symbol STRING_INPUT_STREAM              = PACKAGE_SYS.addInternalSymbol("STRING-INPUT-STREAM");
-    public static final Symbol STRING_OUTPUT_STREAM              = PACKAGE_SYS.addInternalSymbol("STRING-OUTPUT-STREAM");
+    public static final Symbol STRING_OUTPUT_STREAM             = PACKAGE_SYS.addInternalSymbol("STRING-OUTPUT-STREAM");
 
     public static final Symbol UNSPECIFIED                      = PACKAGE_CL.addExternalSymbol("*");
 
@@ -418,19 +419,24 @@ public class Symbol extends LispObject
                 return name;
         }
         boolean escape = false;
-        for (int i = name.length(); i-- > 0;) {
-            char c = name.charAt(i);
-            if (c == '(' || c == ')' || c == ',') {
-                escape = true;
-                break;
-            }
-            if (Character.isWhitespace(c)) {
-                escape = true;
-                break;
-            }
-            if (Character.isLowerCase(c)) {
-                escape = true;
-                break;
+        final int length = name.length();
+        if (length == 0)
+            escape = true;
+        else {
+            for (int i = length; i-- > 0;) {
+                char c = name.charAt(i);
+                if (c == '(' || c == ')' || c == ',') {
+                    escape = true;
+                    break;
+                }
+                if (Character.isWhitespace(c)) {
+                    escape = true;
+                    break;
+                }
+                if (Character.isLowerCase(c)) {
+                    escape = true;
+                    break;
+                }
             }
         }
         String s = escape ? ("|" + name + "|") : name;
@@ -555,7 +561,20 @@ public class Symbol extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new Symbol(LispString.getValue(arg));
+            String s;
+            try {
+                s = ((LispString)arg).getValue();
+            }
+            catch (ClassCastException e) {
+                if (arg instanceof NilVector) {
+                    if (arg.length() == 0)
+                        s = "";
+                    else
+                        return ((NilVector)arg).accessError();
+                } else
+                    return signal(new TypeError(arg, Symbol.STRING));
+            }
+            return new Symbol(s);
         }
     };
 

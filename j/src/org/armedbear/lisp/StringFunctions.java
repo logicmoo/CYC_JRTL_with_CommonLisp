@@ -1,8 +1,8 @@
 /*
  * StringFunctions.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: StringFunctions.java,v 1.12 2003-12-13 00:02:47 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: StringFunctions.java,v 1.13 2004-02-11 19:53:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -622,7 +622,18 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispString s = checkString(first);
+            LispString s;
+            try {
+                s = (LispString) first;
+            }
+            catch (ClassCastException e) {
+                if (first instanceof NilVector) {
+                    if (first.length() == 0)
+                        return first;
+                    return ((NilVector)first).accessError();
+                }
+                return signal(new TypeError(first, Symbol.STRING));
+            }
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
@@ -650,7 +661,18 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispString s = checkString(first);
+            LispString s;
+            try {
+                s = (LispString) first;
+            }
+            catch (ClassCastException e) {
+                if (first instanceof NilVector) {
+                    if (first.length() == 0)
+                        return first;
+                    return ((NilVector)first).accessError();
+                }
+                return signal(new TypeError(first, Symbol.STRING));
+            }
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
@@ -678,7 +700,18 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispString s = checkString(first);
+            LispString s;
+            try {
+                s = (LispString) first;
+            }
+            catch (ClassCastException e) {
+                if (first instanceof NilVector) {
+                    if (first.length() == 0)
+                        return first;
+                    return ((NilVector)first).accessError();
+                }
+                return signal(new TypeError(first, Symbol.STRING));
+            }
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
