@@ -2,7 +2,7 @@
  * ClosureTemplateFunction.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ClosureTemplateFunction.java,v 1.3 2004-07-21 18:09:40 piso Exp $
+ * $Id: ClosureTemplateFunction.java,v 1.4 2004-11-07 18:06:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,14 +46,14 @@ public abstract class ClosureTemplateFunction extends Closure
     }
 
     public final LispObject execute(LispObject first, LispObject second,
-                              LispObject third)
+                                    LispObject third)
         throws ConditionThrowable
     {
         return notImplemented();
     }
 
     public final LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth)
+                                    LispObject third, LispObject fourth)
         throws ConditionThrowable
     {
         return notImplemented();
