@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.701 2004-11-03 15:39:01 piso Exp $
+ * $Id: Primitives.java,v 1.702 2004-11-04 01:55:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2108,38 +2108,38 @@ public final class Primitives extends Lisp
     public static final Primitive FUNCALL =
         new Primitive("funcall", "function &rest args")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return funcall0(arg, LispThread.currentThread());
+            return LispThread.currentThread().execute(arg);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return funcall1(first, second, LispThread.currentThread());
+            return LispThread.currentThread().execute(first, second);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            return funcall2(first, second, third, LispThread.currentThread());
+            return LispThread.currentThread().execute(first, second, third);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
             throws ConditionThrowable
         {
-            return funcall3(first, second, third, fourth,
-                            LispThread.currentThread());
+            return LispThread.currentThread().execute(first, second, third,
+                                                      fourth);
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
-            if (args.length < 1) {
-                signal(new WrongNumberOfArgumentsException(this));
-                return NIL;
-            }
             final int length = args.length - 1; // Number of arguments.
             LispObject[] newArgs = new LispObject[length];
             System.arraycopy(args, 1, newArgs, 0, length);
-            return funcall(args[0], newArgs, LispThread.currentThread());
+            return LispThread.currentThread().execute(args[0], newArgs);
         }
     };
 
@@ -2154,12 +2154,12 @@ public final class Primitives extends Lisp
             final LispThread thread = LispThread.currentThread();
             switch (length) {
                 case 1:
-                    return funcall1(fun, args.car(), thread);
+                    return thread.execute(fun, args.car());
                 case 2:
-                    return funcall2(fun, args.car(), args.cadr(), thread);
+                    return thread.execute(fun, args.car(), args.cadr());
                 case 3:
-                    return funcall3(fun, args.car(), args.cadr(),
-                                    args.cdr().cdr().car(), thread);
+                    return thread.execute(fun, args.car(), args.cadr(),
+                                          args.cdr().cdr().car());
                 default: {
                     final LispObject[] funArgs = new LispObject[length];
                     int j = 0;
@@ -2201,7 +2201,7 @@ public final class Primitives extends Lisp
             LispObject result = NIL;
             LispObject splice = null;
             while (list != NIL) {
-                LispObject obj = funcall1(fun, list.car(), thread);
+                LispObject obj = thread.execute(fun, list.car());
                 if (splice == null) {
                     result = new Cons(obj, result);
                     splice = result;
@@ -2224,7 +2224,7 @@ public final class Primitives extends Lisp
             LispObject splice = null;
             while (list1 != NIL && list2 != NIL) {
                 LispObject obj =
-                    funcall2(fun, list1.car(), list2.car(), thread);
+                    thread.execute(fun, list1.car(), list2.car());
                 if (splice == null) {
                     result = new Cons(obj, result);
                     splice = result;
@@ -4055,12 +4055,13 @@ public final class Primitives extends Lisp
     // ### funcall-key
     // funcall-key function-or-nil element
     private static final Primitive FUNCALL_KEY =
-        new Primitive("funcall-key", PACKAGE_SYS, false) {
+        new Primitive("funcall-key", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             if (first != NIL)
-                return funcall1(first, second, LispThread.currentThread());
+                return LispThread.currentThread().execute(first, second);
             return second;
         }
     };
