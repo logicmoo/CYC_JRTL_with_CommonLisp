@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.54 2003-02-27 23:29:07 piso Exp $
+ * $Id: Primitives.java,v 1.55 2003-02-28 15:54:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -719,26 +719,14 @@ public final class Primitives extends Module
         }
     };
 
-//     private static final Primitive1 REVERSE = new Primitive1("reverse") {
-//         public LispObject execute(LispObject obj) throws LispError
-//         {
-//             if (obj == NIL)
-//                 return NIL;
-//             if (obj instanceof Cons) {
-//                 final int length = obj.length();
-//                 LispObject[] array = new LispObject[length];
-//                 for (int i = 0; i < length; i++) {
-//                     array[i] = obj.car();
-//                     obj = obj.cdr();
-//                 }
-//                 LispObject result = NIL;
-//                 for (int i = 0; i < length; i++)
-//                     result = new Cons(array[i], result);
-//                 return result;
-//             }
-//             throw new LispError();
-//         }
-//     };
+    private static final Primitive1 VECTOR_NREVERSE_ =
+        new Primitive1("vector-nreverse*") {
+        public LispObject execute (LispObject arg) throws LispError {
+            AbstractVector v = checkVector(arg);
+            v.nreverse();
+            return v;
+        }
+    };
 
     // Numeric equality.
     private static final Primitive EQUALS = new Primitive("=") {
