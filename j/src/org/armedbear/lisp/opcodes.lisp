@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: opcodes.lisp,v 1.9 2004-08-02 00:33:59 piso Exp $
+;;; $Id: opcodes.lisp,v 1.10 2004-08-16 16:51:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,6 +19,8 @@
 
 (in-package "JVM")
 
+(defparameter *opcode-table* (make-array 256))
+
 (defparameter *opcodes* (make-hash-table :test 'equalp))
 
 (defstruct jvm-opcode name number size stack-effect)
@@ -29,6 +31,7 @@
                                    :number ,number
                                    :size ,size
                                    :stack-effect ,stack-effect)))
+     (setf (svref *opcode-table* ,number) opcode)
      (setf (gethash name *opcodes*) opcode)
      (setf (gethash ,number *opcodes*) opcode)))
 
@@ -242,26 +245,23 @@
 (define-opcode var-ref 206 nil nil)
 (define-opcode var-set 207 nil nil)
 
-(defparameter *last-opcode* 205)
+(defparameter *last-opcode* 207)
 
 (defun opcode-name (opcode-number)
   (let ((opcode (gethash opcode-number *opcodes*)))
     (and opcode (jvm-opcode-name opcode))))
 
 (defun opcode-number (opcode-name)
+  (declare (optimize (speed 3) (safety 0)))
   (let ((opcode (gethash (string opcode-name) *opcodes*)))
     (and opcode (jvm-opcode-number opcode))))
 
-(defun opcode-size (opcode-name-or-number)
-  (unless (numberp opcode-name-or-number)
-    (setf opcode-name-or-number (string opcode-name-or-number)))
-  (let ((opcode (gethash opcode-name-or-number *opcodes*)))
-    (and opcode (jvm-opcode-size opcode))))
+(defun opcode-size (opcode-number)
+  (declare (optimize speed (safety 0)))
+  (jvm-opcode-size (svref *opcode-table* opcode-number)))
 
-(defun opcode-stack-effect (opcode-name-or-number)
-  (unless (numberp opcode-name-or-number)
-    (setf opcode-name-or-number (string opcode-name-or-number)))
-  (let ((opcode (gethash opcode-name-or-number *opcodes*)))
-    (and opcode (jvm-opcode-stack-effect opcode))))
+(defun opcode-stack-effect (opcode-number)
+  (declare (optimize speed (safety 0)))
+  (jvm-opcode-stack-effect (svref *opcode-table* opcode-number)))
 
 (provide '#:opcodes)
