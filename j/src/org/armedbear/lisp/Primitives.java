@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.722 2004-12-07 20:41:36 piso Exp $
+ * $Id: Primitives.java,v 1.723 2004-12-16 15:07:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4648,7 +4648,7 @@ public final class Primitives extends Lisp
 
     // ### built-in-function-p
     private static final Primitive BUILT_IN_FUNCTION_P =
-        new Primitive("built-in-function-p", PACKAGE_SYS, false)
+        new Primitive("built-in-function-p", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4657,6 +4657,38 @@ public final class Primitives extends Lisp
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.SYMBOL));
+            }
+        }
+    };
+
+    // ### single-valued-p
+    private static final Primitive SINGLE_VALUED_P =
+        new Primitive("single-valued-p", PACKAGE_SYS, true, "symbol")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((Symbol)arg).SINGLE_VALUED_P();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.SYMBOL));
+            }
+        }
+    };
+
+    // ### %set-single-valued-p
+    private static final Primitive _SET_SINGLE_VALUED_P =
+        new Primitive("%set-single-valued-p", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((Symbol)first).setSingleValued(second != NIL);
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.SYMBOL));
             }
         }
     };
