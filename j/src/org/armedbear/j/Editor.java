@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.53 2003-05-20 18:13:27 piso Exp $
+ * $Id: Editor.java,v 1.54 2003-05-20 18:46:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7292,7 +7292,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         if (dot == null)
             return;
-        if (!foldRegionInternal())
+        if (!foldRegionInternal() && !foldExplicit())
             foldNearLine(getDotLine());
     }
 
@@ -7318,6 +7318,36 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         Line end = r.getEnd().getLine();
         addUndo(SimpleEdit.FOLD);
         setMark(null);
+        for (Line line = begin; line != end; line = line.next())
+            line.hide();
+        buffer.renumber();
+        unhideDotInAllFrames(buffer);
+        return true;
+    }
+
+    private boolean foldExplicit()
+    {
+        if (getDotLine().getText().indexOf("{{{") < 0)
+            return false;
+        int count = 1;
+        Line begin = getDotLine().next();
+        if (begin == null)
+            return false;
+        Line end = begin.next();
+        while (end != null) {
+            String text = end.getText();
+            if (text.indexOf("{{{") >= 0) {
+                ++count;
+            } else if (text.indexOf("}}}") >= 0) {
+                --count;
+                if (count == 0) {
+                    end = end.next();
+                    break;
+                }
+            }
+            end = end.next();
+        }
+        addUndo(SimpleEdit.FOLD);
         for (Line line = begin; line != end; line = line.next())
             line.hide();
         buffer.renumber();
