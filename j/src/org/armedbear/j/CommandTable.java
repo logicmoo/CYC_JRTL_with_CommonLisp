@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.41 2003-08-04 15:47:08 piso Exp $
+ * $Id: CommandTable.java,v 1.42 2003-08-07 17:59:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,7 @@ public class CommandTable
             addCommand("doShellCommandOnRegion");
             addCommand("down");
             addCommand("dropBookmark");
+            addCommand("dropTemporaryMarker");
             addCommand("electricCloseAngleBracket");
             addCommand("electricCloseBrace");
             addCommand("electricColon");
@@ -105,6 +106,7 @@ public class CommandTable
             addCommand("foldMethods");
             addCommand("foldRegion");
             addCommand("gotoBookmark");
+            addCommand("gotoTemporaryMarker");
             addCommand("help");
             addCommand("home");
             addCommand("httpDeleteCookies");
@@ -339,6 +341,7 @@ public class CommandTable
             addCommand("saveSession", "Session");
             addCommand("saveToRegister", "Registers");
             addCommand("selectToMarker", "Marker");
+            addCommand("selectToTemporaryMarker", "Marker");
             addCommand("shellCommand", "ShellCommand");
             addCommand("shell", "Shell");
             addCommand("shellBackspace", "CommandInterpreter");

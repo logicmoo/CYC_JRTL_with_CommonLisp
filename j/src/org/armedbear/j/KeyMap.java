@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.14 2003-08-04 12:58:44 piso Exp $
+ * $Id: KeyMap.java,v 1.15 2003-08-07 17:59:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,6 +288,11 @@ public final class KeyMap implements Constants
         mapKey(KeyEvent.VK_7, CTRL_MASK, "gotoBookmark");
         mapKey(KeyEvent.VK_8, CTRL_MASK, "gotoBookmark");
         mapKey(KeyEvent.VK_9, CTRL_MASK, "gotoBookmark");
+
+        // Temporary marker commands.
+        mapKey(KeyEvent.VK_BACK_SLASH, ALT_MASK, "dropTemporaryMarker");
+        mapKey(KeyEvent.VK_BACK_SLASH, CTRL_MASK, "gotoTemporaryMarker");
+        mapKey(KeyEvent.VK_BACK_SLASH, CTRL_MASK | SHIFT_MASK, "selectToTemporaryMarker");
 
         mapKey(KeyEvent.VK_F11, 0, "commentRegion");
         mapKey(KeyEvent.VK_F11, SHIFT_MASK, "uncommentRegion");
