@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.280 2003-07-06 17:59:06 piso Exp $
+ * $Id: Primitives.java,v 1.281 2003-07-06 18:08:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,71 +46,70 @@ public final class Primitives extends Module
     private static final int DIVIDE                     = 6;
     private static final int EXIT                       = 7;
     private static final int LAST                       = 8;
-    private static final int LIST_ALL_PACKAGES          = 9;
-    private static final int MAX                        = 10;
-    private static final int MIN                        = 11;
-    private static final int MULTIPLY                   = 12;
-    private static final int VALUES                     = 13;
+    private static final int MAX                        = 9;
+    private static final int MIN                        = 10;
+    private static final int MULTIPLY                   = 11;
+    private static final int VALUES                     = 12;
 
     // Primitive1
-    private static final int ABS                        = 14;
-    private static final int ARRAYP                     = 15;
-    private static final int ARRAY_HAS_FILL_POINTER_P   = 16;
-    private static final int BIT_VECTOR_P               = 17;
-    private static final int BOTH_CASE_P                = 18;
-    private static final int CHARACTERP                 = 19;
-    private static final int CHAR_CODE                  = 20;
-    private static final int CHAR_DOWNCASE              = 21;
-    private static final int CHAR_INT                   = 22;
-    private static final int CHAR_UPCASE                = 23;
-    private static final int CODE_CHAR                  = 24;
-    private static final int COMPILED_FUNCTION_P        = 25;
-    private static final int CONSP                      = 26;
-    private static final int CONSTANTP                  = 27;
-    private static final int ENDP                       = 28;
-    private static final int EVAL                       = 29;
-    private static final int EVENP                      = 30;
-    private static final int FBOUNDP                    = 31;
-    private static final int FMAKUNBOUND                = 32;
-    private static final int FOURTH                     = 33;
-    private static final int FUNCTIONP                  = 34;
-    private static final int IDENTITY                   = 35;
-    private static final int KEYWORDP                   = 36;
-    private static final int LENGTH                     = 37;
-    private static final int LISTP                      = 38;
-    private static final int LOWER_CASE_P               = 39;
-    private static final int MAKE_SYMBOL                = 40;
-    private static final int MAKUNBOUND                 = 41;
-    private static final int NUMBERP                    = 42;
-    private static final int ODDP                       = 43;
-    private static final int PREDECESSOR                = 44;
-    private static final int SECOND                     = 45;
-    private static final int SIMPLE_BIT_VECTOR_P        = 46;
-    private static final int SIMPLE_STRING_P            = 47;
-    private static final int SIMPLE_VECTOR_P            = 48;
-    private static final int SPECIAL_OPERATOR_P         = 49;
-    private static final int STRINGP                    = 50;
-    private static final int SUCCESSOR                  = 51;
-    private static final int SYMBOLP                    = 52;
-    private static final int SYMBOL_FUNCTION            = 53;
-    private static final int SYMBOL_NAME                = 54;
-    private static final int SYMBOL_PACKAGE             = 55;
-    private static final int SYMBOL_PLIST               = 56;
-    private static final int SYMBOL_VALUE               = 57;
-    private static final int THIRD                      = 58;
-    private static final int UPPER_CASE_P               = 59;
-    private static final int VALUES_LIST                = 60;
-    private static final int VECTORP                    = 61;
-    private static final int ZEROP                      = 62;
+    private static final int ABS                        = 13;
+    private static final int ARRAYP                     = 14;
+    private static final int ARRAY_HAS_FILL_POINTER_P   = 15;
+    private static final int BIT_VECTOR_P               = 16;
+    private static final int BOTH_CASE_P                = 17;
+    private static final int CHARACTERP                 = 18;
+    private static final int CHAR_CODE                  = 19;
+    private static final int CHAR_DOWNCASE              = 20;
+    private static final int CHAR_INT                   = 21;
+    private static final int CHAR_UPCASE                = 22;
+    private static final int CODE_CHAR                  = 23;
+    private static final int COMPILED_FUNCTION_P        = 24;
+    private static final int CONSP                      = 25;
+    private static final int CONSTANTP                  = 26;
+    private static final int ENDP                       = 27;
+    private static final int EVAL                       = 28;
+    private static final int EVENP                      = 29;
+    private static final int FBOUNDP                    = 30;
+    private static final int FMAKUNBOUND                = 31;
+    private static final int FOURTH                     = 32;
+    private static final int FUNCTIONP                  = 33;
+    private static final int IDENTITY                   = 34;
+    private static final int KEYWORDP                   = 35;
+    private static final int LENGTH                     = 36;
+    private static final int LISTP                      = 37;
+    private static final int LOWER_CASE_P               = 38;
+    private static final int MAKE_SYMBOL                = 39;
+    private static final int MAKUNBOUND                 = 40;
+    private static final int NUMBERP                    = 41;
+    private static final int ODDP                       = 42;
+    private static final int PREDECESSOR                = 43;
+    private static final int SECOND                     = 44;
+    private static final int SIMPLE_BIT_VECTOR_P        = 45;
+    private static final int SIMPLE_STRING_P            = 46;
+    private static final int SIMPLE_VECTOR_P            = 47;
+    private static final int SPECIAL_OPERATOR_P         = 48;
+    private static final int STRINGP                    = 49;
+    private static final int SUCCESSOR                  = 50;
+    private static final int SYMBOLP                    = 51;
+    private static final int SYMBOL_FUNCTION            = 52;
+    private static final int SYMBOL_NAME                = 53;
+    private static final int SYMBOL_PACKAGE             = 54;
+    private static final int SYMBOL_PLIST               = 55;
+    private static final int SYMBOL_VALUE               = 56;
+    private static final int THIRD                      = 57;
+    private static final int UPPER_CASE_P               = 58;
+    private static final int VALUES_LIST                = 59;
+    private static final int VECTORP                    = 60;
+    private static final int ZEROP                      = 61;
 
     // Primitive2
-    private static final int MEMBER                     = 63;
-    private static final int MOD                        = 64;
-    private static final int RPLACA                     = 65;
-    private static final int RPLACD                     = 66;
-    private static final int SET                        = 67;
-    private static final int _RPLACA                    = 68;
-    private static final int _RPLACD                    = 69;
+    private static final int MEMBER                     = 62;
+    private static final int MOD                        = 63;
+    private static final int RPLACA                     = 64;
+    private static final int RPLACD                     = 65;
+    private static final int SET                        = 66;
+    private static final int _RPLACA                    = 67;
+    private static final int _RPLACD                    = 68;
 
     private Primitives()
     {
@@ -124,7 +123,6 @@ public final class Primitives extends Module
         definePrimitive("/", DIVIDE);
         definePrimitive("exit", EXIT);
         definePrimitive("last", LAST);
-        definePrimitive("list-all-packages", LIST_ALL_PACKAGES); // FIXME Primitive0
         definePrimitive("max", MAX);
         definePrimitive("min", MIN);
         definePrimitive("values", VALUES);
@@ -279,8 +277,6 @@ public final class Primitives extends Module
             case EXIT:                          // ### exit
                 exit();
                 return T;
-            case LIST_ALL_PACKAGES:
-                return Packages.listAllPackages();
             default:
                 Debug.trace("bad index " + index);
                 throw new WrongNumberOfArgumentsException((String)null);

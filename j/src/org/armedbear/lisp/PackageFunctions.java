@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.7 2003-07-06 17:37:56 piso Exp $
+ * $Id: PackageFunctions.java,v 1.8 2003-07-06 18:08:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,6 +168,14 @@ public final class PackageFunctions extends Lisp
             } else
                 pkg.unusePackage(coerceToPackage(args[0]));
             return T;
+        }
+    };
+
+    private static final Primitive0 LIST_ALL_PACKAGES =
+        new Primitive0("list-all-packages") {
+        public LispObject execute()
+        {
+            return Packages.listAllPackages();
         }
     };
 
