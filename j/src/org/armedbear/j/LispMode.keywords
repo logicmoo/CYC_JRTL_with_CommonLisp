@@ -238,6 +238,7 @@ make-synonym-stream
 make-two-way-stream
 makunbound
 map
+map-into
 mapc
 mapcan
 mapcar
