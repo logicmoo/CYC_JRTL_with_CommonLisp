@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.57 2003-10-19 01:39:19 piso Exp $
+;;; $Id: compiler.lisp,v 1.58 2003-11-05 19:34:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -140,12 +140,7 @@
         (push (define-local-macro name lambda-list forms) *local-macros*)
         (push name *local-macros*)
         (push (list* name lambda-list (compile-progn forms)) res)))
-;;     (format t "*local-macros* = ~S~%" *local-macros*)
-;;     (format t "body          = ~S~%" body)
     (setf compiled-body (compile-progn body))
-;;     (format t "compiled-body = ~S~%" compiled-body)
-;;     (setf res (list* 'macrolet (reverse res) compiled-body))
-;;     res))
     (setf res (list* 'progn compiled-body))
     res))
 
