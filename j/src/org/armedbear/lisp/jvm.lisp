@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.212 2004-07-11 16:55:27 piso Exp $
+;;; $Id: jvm.lisp,v 1.213 2004-07-11 18:48:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2294,13 +2294,6 @@
            (when (cdr forms)
              (maybe-emit-clear-values (car forms)))))))
 
-(defun rewrite-setq (form)
-  (let ((expr (third form)))
-    (if (unsafe-p expr)
-        (let ((sym (gensym)))
-          (list 'LET (list (list sym expr)) (list 'SETQ (second form) sym)))
-        form)))
-
 (defun compile-quote (form for-effect)
    (let ((obj (second form)))
      (cond ((null obj)
@@ -2621,76 +2614,49 @@
           (t
            (emit 'var-ref variable)))))
 
+(defun rewrite-setq (form)
+  (let ((expr (third form)))
+    (if (unsafe-p expr)
+        (let ((sym (gensym)))
+          (list 'LET (list (list sym expr)) (list 'SETQ (second form) sym)))
+        form)))
+
 (defun compile-setq (form for-effect)
-;;   (format t "compile-setq form = ~S~%" form)
   (unless (= (length form) 3)
     (return-from compile-setq (compile-form (precompiler::precompile-setq form)
                                             for-effect)))
-  (let* ((rest (cdr form))
-         (name (car rest))
+  (let* ((name (second form))
+         (value-form (third form))
          (variable (find-visible-variable name)))
-    (when (and variable (not (variable-special-p variable)))
-      (when (variable-register variable)
-        (compile-form (cadr rest))
-        (unless (remove-store-value)
-          (emit-push-value))
-        (maybe-emit-clear-values (cadr rest))
-        (unless for-effect
-          (emit 'dup)
-          (emit-store-value))
-        (emit 'var-set variable)
-        (return-from compile-setq))
-      (ecase (variable-kind variable)
-        (LOCAL
-         (compile-form (cadr rest))
-         (unless (remove-store-value)
-           (emit-push-value))
-         (maybe-emit-clear-values (cadr rest))
-         (unless for-effect
-           (emit 'dup)) ; Stack: value value
-         (emit 'var-set variable)
-         (unless for-effect
+    (cond ((or (null variable)
+               (variable-special-p variable))
+           (let ((new-form (rewrite-setq form)))
+             (when (neq new-form form)
+               (return-from compile-setq (compile-form new-form))))
+           (emit 'getstatic
+                 *this-class*
+                 (declare-symbol name)
+                 +lisp-symbol+)
+           (compile-form value-form)
+           (unless (remove-store-value)
+             (emit-push-value))
+           (maybe-emit-clear-values value-form)
+           (emit-push-current-thread)
+           (emit-invokestatic +lisp-class+
+                              "setSpecialVariable"
+                              "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
+                              -1)
            (emit-store-value))
-         )
-        (ARG
-         (compile-form (cadr rest))
-         (unless (remove-store-value)
-           (emit-push-value))
-         (maybe-emit-clear-values (cadr rest))
-         (unless for-effect
-           (emit 'dup)) ; Stack: value value
-         (cond (*child-p*
-                (emit 'var-set variable)
-                (unless for-effect
-                  (emit-store-value)))
-               (*using-arg-array*
-                (emit 'var-set variable)
-                (unless for-effect
-                  (emit-store-value))))))
-      (return-from compile-setq))
-
-    ;; still not found
-    ;; must be a global variable
-    ;; Why do we call REWRITE-SETQ in this case only?
-    (let ((new-form (rewrite-setq form)))
-      (when (neq new-form form)
-        (return-from compile-setq (compile-form new-form))))
-
-    (emit 'getstatic
-          *this-class*
-          (declare-symbol name)
-          +lisp-symbol+)
-    (compile-form (cadr rest))
-    (unless (remove-store-value)
-      (emit-push-value))
-    (maybe-emit-clear-values (cadr rest))
-
-    (emit-push-current-thread)
-    (emit-invokestatic +lisp-class+
-                       "setSpecialVariable"
-                       "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
-                       -1)
-    (emit-store-value)))
+          (t
+           (compile-form value-form)
+           (unless (remove-store-value)
+             (emit-push-value))
+           (maybe-emit-clear-values value-form)
+           (unless for-effect
+             (emit 'dup))
+           (emit 'var-set variable)
+           (unless for-effect
+             (emit-store-value))))))
 
 (defun compile-catch (form &optional for-effect)
   (when (= (length form) 2) ; (catch 'foo)
