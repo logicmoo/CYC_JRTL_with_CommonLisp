@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.104 2004-02-03 02:14:42 piso Exp $
+;;; $Id: autoloads.lisp,v 1.105 2004-02-03 02:49:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -143,6 +143,7 @@
 (autoload '(pprint pprint-logical-block) "pprint.lisp")
 (autoload '(write-byte read-byte) "byte-io.lisp")
 (autoload-macro 'with-open-file)
+(autoload 'translate-logical-pathname)
 
 ;; Java interface.
 (in-package "JAVA")
