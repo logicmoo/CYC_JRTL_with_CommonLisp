@@ -1,7 +1,7 @@
 ;;; chars.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: chars.lisp,v 1.12 2004-03-17 18:20:32 piso Exp $
+;;; $Id: chars.lisp,v 1.13 2004-04-23 00:51:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,20 +20,6 @@
 (in-package "SYSTEM")
 
 ;;; From CMUCL.
-
-(defun digit-char-p (char &optional (radix 10))
-  (let ((m (- (char-code char) 48)))
-    (cond ((<= radix 10)
-	   ;; Special-case decimal and smaller radices.
-	   (if (and (>= m 0) (< m radix))  m  nil))
-	  ;; Digits 0 - 9 are used as is, since radix is larger.
-	  ((and (>= m 0) (< m 10)) m)
-	  ;; Check for upper case A - Z.
-	  ((and (>= (setq m (- m 7)) 10) (< m radix)) m)
-	  ;; Also check lower case a - z.
-	  ((and (>= (setq m (- m 32)) 10) (< m radix)) m)
-	  ;; Else, fail.
-	  (t nil))))
 
 (defun alphanumericp (char)
   (or (digit-char-p char) (alpha-char-p char)))
@@ -86,11 +72,11 @@
 		  (return nil)))
       (return nil))))
 
-(when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
-  (mapcar #'jvm::jvm-compile '(digit-char-p
-                               alphanumericp
-                               char/=
-                               char<
-                               char>
-                               char>=
-                               char-not-equal)))
+(eval-when (:execute)
+  (when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
+    (mapcar #'jvm::jvm-compile '(alphanumericp
+                                 char/=
+                                 char<
+                                 char>
+                                 char>=
+                                 char-not-equal))))
