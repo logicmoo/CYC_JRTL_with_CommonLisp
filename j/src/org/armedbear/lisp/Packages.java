@@ -2,7 +2,7 @@
  * Packages.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Packages.java,v 1.6 2003-05-24 17:04:50 piso Exp $
+ * $Id: Packages.java,v 1.7 2003-07-06 19:04:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,24 @@ public final class Packages extends Lisp
         return pkg;
     }
 
+    public static final synchronized void addPackage(Package pkg)
+        throws LispError
+    {
+        final String name = pkg.getName();
+        if (map.get(name) != null)
+            throw new LispError("a package named " + name +
+                                " already exists");
+        packages.add(pkg);
+        map.put(name, pkg);
+        List nicknames = pkg.getNicknames();
+        if (nicknames != null) {
+            for (Iterator it = nicknames.iterator(); it.hasNext();) {
+                String nickname = (String) it.next();
+                addNickname(pkg, nickname);
+            }
+        }
+    }
+
     // Returns null if package doesn't exist.
     public static final synchronized Package findPackage(String name)
     {
@@ -59,7 +77,7 @@ public final class Packages extends Lisp
     {
         if (map.get(name) != null)
             throw new LispError("a package named " + name +
-                " already exists");
+                                " already exists");
         Package pkg = new Package(name);
         packages.add(pkg);
         map.put(name, pkg);
@@ -71,7 +89,7 @@ public final class Packages extends Lisp
     {
         if (map.get(nickname) != null)
             throw new LispError("a package named " + nickname +
-                " already exists");
+                                " already exists");
         map.put(nickname, pkg);
     }
 
@@ -82,9 +100,11 @@ public final class Packages extends Lisp
         if (name != null) {
             map.remove(name);
             List nicknames = pkg.getNicknames();
-            for (Iterator it = nicknames.iterator(); it.hasNext();) {
-                String nickname = (String) it.next();
-                map.remove(nickname);
+            if (nicknames != null) {
+                for (Iterator it = nicknames.iterator(); it.hasNext();) {
+                    String nickname = (String) it.next();
+                    map.remove(nickname);
+                }
             }
             packages.remove(pkg);
             return true;
