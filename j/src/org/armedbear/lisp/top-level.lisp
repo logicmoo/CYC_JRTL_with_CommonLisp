@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.36 2004-08-18 13:53:32 piso Exp $
+;;; $Id: top-level.lisp,v 1.37 2004-08-24 14:17:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@
         (setf (schar s 0) (char-upcase (schar s 0)))
         (unless (eql (schar s (1- len)) #\.)
           (setf s (concatenate 'string s "."))))
-      (format *debug-io* "~A~%" s))
+      (%format *debug-io* "~A~%" s))
     (show-restarts (compute-restarts) *debug-io*)))
 
 (defun inspect-command (args)
@@ -115,8 +115,8 @@
 
 (defun package-command (args)
   (cond ((null args)
-         (format *standard-output* "The ~A package is current.~%"
-                 (package-name *package*)))
+         (%format *standard-output* "The ~A package is current.~%"
+                  (package-name *package*)))
         ((and *old-package* (string= args "-") (null (find-package "-")))
          (rotatef *old-package* *package*))
         (t
@@ -127,7 +127,7 @@
            (if pkg
                (setf *old-package* *package*
                      *package* pkg)
-               (format *standard-output* "Unknown package ~A.~%" args))))))
+               (%format *standard-output* "Unknown package ~A.~%" args))))))
 
 (defun reset-command (ignored)
   (invoke-restart 'top-level))
@@ -146,7 +146,7 @@
          (if *old-pwd*
              (setf args (namestring *old-pwd*))
              (progn
-               (format t "No previous directory.")
+               (%format t "No previous directory.")
                (return-from cd-command))))
         ((and (> (length args) 1) (string= (subseq args 0 2) "~/")
               (setf args (concatenate 'string
@@ -158,8 +158,8 @@
           (unless (equal dir *default-pathname-defaults*)
             (setf *old-pwd* *default-pathname-defaults*
                   *default-pathname-defaults* dir))
-          (format t "~A" (namestring *default-pathname-defaults*)))
-        (format t "Error: no such directory (~S).~%" args))))
+          (%format t "~A" (namestring *default-pathname-defaults*)))
+        (%format t "Error: no such directory (~S).~%" args))))
 
 (defun ls-command (args)
   (let ((args (if (stringp args) args ""))
@@ -205,11 +205,11 @@
       (require module))))
 
 (defun pwd-command (ignored)
-  (format t "~A~%" (namestring *default-pathname-defaults*)))
+  (%format t "~A~%" (namestring *default-pathname-defaults*)))
 
 (defun trace-command (args)
   (if (null args)
-    (format t "~A~%" (list-traced-functions))
+    (%format t "~A~%" (list-traced-functions))
     (dolist (f (tokenize args))
       (trace-1 (read-from-string f)))))
 
@@ -232,17 +232,17 @@
                (eql (schar prefix 0) *command-char*))
       (setf prefix (subseq prefix 1))
       (decf prefix-len))
-    (format t "~%  COMMAND     ABBR DESCRIPTION~%")
+    (%format t "~%  COMMAND     ABBR DESCRIPTION~%")
     (dolist (entry *command-table*)
       (when (or (null prefix)
                 (and (<= prefix-len (length (entry-name entry)))
                      (string-equal prefix (subseq (entry-name entry) 0 prefix-len))))
-        (format t "  ~A~A~A~%"
-                (pad (entry-name entry) 12)
-                (pad (entry-abbreviation entry) 5)
-                (entry-help entry))))
-    (format t "~%Commands must be prefixed by the command character, which is '~A'~A.~%~%"
-            *command-char* (if (eql *command-char* #\:) " by default" ""))))
+        (%format t "  ~A~A~A~%"
+                 (pad (entry-name entry) 12)
+                 (pad (entry-abbreviation entry) 5)
+                 (entry-help entry))))
+    (%format t "~%Commands must be prefixed by the command character, which is '~A'~A.~%~%"
+             *command-char* (if (eql *command-char* #\:) " by default" ""))))
 
 (defun help-command (&optional ignored)
   (%help-command nil))
