@@ -2,7 +2,7 @@
  * logand.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: logand.java,v 1.9 2004-02-28 14:45:36 piso Exp $
+ * $Id: logand.java,v 1.10 2004-03-04 01:26:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,13 +48,13 @@ public final class logand extends Primitive
             if (first instanceof Fixnum)
                 n1 = ((Fixnum)first).getBigInteger();
             else if (first instanceof Bignum)
-                n1 = ((Bignum)first).getValue();
+                n1 = ((Bignum)first).value;
             else
                 return signal(new TypeError(first, Symbol.INTEGER));
             if (second instanceof Fixnum)
                 n2 = ((Fixnum)second).getBigInteger();
             else if (second instanceof Bignum)
-                n2 = ((Bignum)second).getValue();
+                n2 = ((Bignum)second).value;
             else
                 return signal(new TypeError(second, Symbol.INTEGER));
             return number(n1.and(n2));
@@ -69,7 +69,7 @@ public final class logand extends Primitive
             if (args[i] instanceof Fixnum)
                 n = ((Fixnum)args[i]).getBigInteger();
             else if (args[i] instanceof Bignum)
-                n = ((Bignum)args[i]).getValue();
+                n = ((Bignum)args[i]).value;
             else
                 return signal(new TypeError(args[i], Symbol.INTEGER));
             result = result.and(n);
