@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: profiler.lisp,v 1.5 2003-06-02 14:45:37 piso Exp $
+;;; $Id: profiler.lisp,v 1.6 2003-07-17 17:20:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,25 +20,25 @@
 (defun show-call-counts ()
   (let ((syms (list-calls)))
     (setf syms (sort syms #'<
-                     :key #'(lambda (x) (%call-count (fdefinition x)))))
+                     :key #'(lambda (x) (sys::%call-count (fdefinition x)))))
     (dolist (sym syms)
       (show-call-count-for-symbol sym)))
   (values))
 
-;; Returns list of al symbols with non-zero call counts.
+;; Returns list of all symbols with non-zero call counts.
 (defun list-calls ()
   (let ((result nil))
     (dolist (pkg (list-all-packages))
-      (dolist (sym (package-symbols pkg))
+      (dolist (sym (sys::package-symbols pkg))
         (when (fboundp sym)
           (let* ((f (fdefinition sym))
-                 (n (%call-count f)))
+                 (n (sys::%call-count f)))
             (unless (zerop n)
               (setq result (cons sym result)))))))
     result))
 
 (defun show-call-count-for-symbol (sym)
-  (format t "~A ~A~%" sym (%call-count (fdefinition sym))))
+  (format t "~A ~A~%" sym (sys::%call-count (fdefinition sym))))
 
 (defmacro profile (&rest forms)
   `(progn (start-profiler) ,@forms (stop-profiler)))

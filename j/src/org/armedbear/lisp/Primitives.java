@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.298 2003-07-16 17:19:14 piso Exp $
+ * $Id: Primitives.java,v 1.299 2003-07-17 17:17:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2851,8 +2851,7 @@ public final class Primitives extends Module
         new Primitive1("package-symbols", PACKAGE_SYS, false) {
         public LispObject execute(LispObject arg) throws Condition
         {
-            Package pkg = coerceToPackage(arg);
-            return pkg.getSymbols();
+            return coerceToPackage(arg).getSymbols();
         }
     };
 
@@ -4026,7 +4025,7 @@ public final class Primitives extends Module
     };
 
     private static final Primitive1 _CALL_COUNT =
-        new Primitive1("%call-count") {
+        new Primitive1("%call-count", PACKAGE_SYS, false) {
         public LispObject execute(LispObject arg) throws LispError
         {
             return new Fixnum(arg.getCallCount());
@@ -4034,7 +4033,7 @@ public final class Primitives extends Module
     };
 
     private static final Primitive2 _SET_CALL_COUNT =
-        new Primitive2("%set-call-count") {
+        new Primitive2("%set-call-count", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
@@ -4101,7 +4100,7 @@ public final class Primitives extends Module
     };
 
     private static final Primitive2 _SET_LAMBDA_NAME =
-        new Primitive2("%set-lambda-name") {
+        new Primitive2("%set-lambda-name", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {

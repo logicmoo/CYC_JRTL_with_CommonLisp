@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.30 2003-07-07 01:14:40 piso Exp $
+;;; $Id: compiler.lisp,v 1.31 2003-07-17 17:19:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -219,8 +219,8 @@
            (error 'type-error)))
     (setq result (coerce-to-function (compile-sexp expr)))
     (when (and name (functionp result))
-      (%set-lambda-name result name)
-      (%set-call-count result (%call-count definition))
+      (sys::%set-lambda-name result name)
+      (sys::%set-call-count result (sys::%call-count definition))
 ;;       (setf (fdefinition name) result))
       (if (macro-function name)
           (setf (fdefinition name) (make-macro result))
