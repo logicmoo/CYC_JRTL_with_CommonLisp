@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.54 2003-08-26 14:38:16 piso Exp $
+ * $Id: Fixnum.java,v 1.55 2003-08-27 16:15:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -376,10 +376,7 @@ public final class Fixnum extends LispObject
             long remainder = value % divisor;
             values[0] = number(quotient);
             values[1] = remainder == 0 ? Fixnum.ZERO : number(remainder);
-            thread.setValues(values);
-            return values[0];
-        }
-        if (obj instanceof Bignum) {
+        } else if (obj instanceof Bignum) {
             BigInteger value = getBigInteger();
             BigInteger divisor = ((Bignum)obj).getValue();
             BigInteger[] results = value.divideAndRemainder(divisor);
@@ -387,10 +384,7 @@ public final class Fixnum extends LispObject
             BigInteger remainder = results[1];
             values[0] = number(quotient);
             values[1] = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
-            thread.setValues(values);
-            return values[0];
-        }
-        if (obj instanceof Ratio) {
+        } else if (obj instanceof Ratio) {
             Ratio divisor = (Ratio) obj;
             LispObject quotient =
                 multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
@@ -398,10 +392,10 @@ public final class Fixnum extends LispObject
                 subtract(quotient.multiplyBy(divisor));
             values[0] = quotient;
             values[1] = remainder;
-            thread.setValues(values);
-            return values[0];
-        }
-        throw new LispError("Fixnum.truncate(): not implemented: " + obj.typeOf());
+        } else
+            throw new LispError("Fixnum.truncate(): not implemented: " + obj.typeOf());
+        thread.setValues(values);
+        return values[0];
     }
 
     public int hashCode()
