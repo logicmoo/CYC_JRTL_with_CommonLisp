@@ -67,6 +67,7 @@ cddddr
 cdddr
 cddr
 cdr
+ceiling
 cerror
 char
 char-code
@@ -170,7 +171,9 @@ evenp
 every
 export
 fboundp
+fceiling
 fdefinition
+ffloor
 fifth
 file-namestring
 fill
@@ -185,11 +188,14 @@ find-symbol
 finish-output
 first
 flet
+floor
 fmakunbound
 force-output
 format
 fourth
 fresh-line
+fround
+ftruncate
 funcall
 function
 function-lambda-expression
@@ -386,6 +392,7 @@ return-from
 reverse
 room
 rotatef
+round
 row-major-aref
 rplaca
 rplacd
@@ -459,6 +466,7 @@ throw
 time
 translate-logical-pathname
 truename
+truncate
 type-of
 typecase
 typep
