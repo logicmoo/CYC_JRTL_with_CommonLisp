@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.4 2002-10-11 16:11:11 piso Exp $
+ * $Id: Directory.java,v 1.5 2002-10-17 14:12:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,7 +187,7 @@ public final class Directory extends Buffer
         boolean reload = false;
         if (pattern == null && limitPattern != null)
             reload = true;
-        else if (!pattern.equals(limitPattern))
+        else if (pattern != null && !pattern.equals(limitPattern))
             reload = true;
         if (reload) {
             Editor editor = Editor.currentEditor();
