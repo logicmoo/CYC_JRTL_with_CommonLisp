@@ -2,7 +2,7 @@
  * LispTagger.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispTagger.java,v 1.10 2003-05-07 15:55:47 piso Exp $
+ * $Id: LispTagger.java,v 1.11 2003-09-17 00:03:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,8 +81,15 @@ public final class LispTagger extends Tagger
                 continue;
             }
             if (c == '(') {
-                if (state != DEFINITION)
-                    state = OPEN_PAREN;
+                if (state == DEFINITION) {
+                    Position tokenStart = pos.copy();
+                    String name = gatherList(pos);
+                    addTag(name, tokenStart, definer);
+                    state = NEUTRAL;
+                    definer = null;
+                    continue;
+                }
+                state = OPEN_PAREN;
                 pos.next();
                 continue;
             }
@@ -145,6 +152,22 @@ public final class LispTagger extends Tagger
         else
             Debug.bug();
         tags.add(new LispTag(name, pos, type));
+    }
+
+    // Advances pos past list.
+    private String gatherList(Position pos)
+    {
+        FastStringBuffer sb = new FastStringBuffer();
+        char c = pos.getChar();
+        Debug.bugIf(c != '(');
+        if (pos.next()) {
+            while ((c = pos.getChar()) != ')') {
+                sb.append(c);
+                if (!pos.next())
+                    break;
+            }
+        }
+        return sb.toString();
     }
 
     // Advances pos past token.
