@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.36 2003-09-20 17:02:04 piso Exp $
+ * $Id: Interpreter.java,v 1.37 2003-09-25 14:33:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,26 +70,14 @@ public final class Interpreter extends Lisp
 
     private Interpreter()
     {
-        CharacterInputStream in = new CharacterInputStream(System.in);
-        _STANDARD_INPUT_.setSymbolValue(in);
-        CharacterOutputStream out = new CharacterOutputStream(System.out);
-        _STANDARD_OUTPUT_.setSymbolValue(out);
-        _ERROR_OUTPUT_.setSymbolValue(out);
-        _TRACE_OUTPUT_.setSymbolValue(out);
         jlisp = false;
     }
 
     private Interpreter(InputStream inputStream, OutputStream outputStream,
-        String initialDirectory)
+                        String initialDirectory)
     {
-        CharacterInputStream in = new CharacterInputStream(inputStream);
-        _STANDARD_INPUT_.setSymbolValue(in);
-        CharacterOutputStream out = new CharacterOutputStream(outputStream);
-        _STANDARD_OUTPUT_.setSymbolValue(out);
-        _ERROR_OUTPUT_.setSymbolValue(out);
-        _TRACE_OUTPUT_.setSymbolValue(out);
-        _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(
-            new LispString(initialDirectory));
+        resetIO(new CharacterInputStream(inputStream),
+                new CharacterOutputStream(outputStream));
         jlisp = true;
     }
 

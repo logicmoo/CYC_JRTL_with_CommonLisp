@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.148 2003-09-23 15:44:03 piso Exp $
+ * $Id: Lisp.java,v 1.149 2003-09-25 14:33:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -947,36 +947,48 @@ public abstract class Lisp
         return (Package) _PACKAGE_.symbolValueNoThrow();
     }
 
+    private static CharacterInputStream stdin =
+        new CharacterInputStream(System.in);
+
+    private static CharacterOutputStream stdout =
+        new CharacterOutputStream(System.out);
+
+    public static final Symbol _STANDARD_INPUT_ =
+        exportSpecial("*STANDARD-INPUT*", PACKAGE_CL, stdin);
+
+    public static final Symbol _STANDARD_OUTPUT_ =
+        exportSpecial("*STANDARD-OUTPUT*", PACKAGE_CL, stdout);
+
+    public static final Symbol _ERROR_OUTPUT_ =
+        exportSpecial("*ERROR-OUTPUT*", PACKAGE_CL, stdout);
+
+    public static final Symbol _TRACE_OUTPUT_ =
+        exportSpecial("*TRACE-OUTPUT*", PACKAGE_CL, stdout);
+
     public static final Symbol _TERMINAL_IO_ =
         exportSpecial("*TERMINAL-IO*", PACKAGE_CL,
-                      new TwoWayStream(new CharacterInputStream(System.in),
-                                       new CharacterOutputStream(System.out)));
+                      new TwoWayStream(stdin, stdout));
 
     public static final Symbol _QUERY_IO_ =
         exportSpecial("*QUERY-IO*", PACKAGE_CL,
-                      new TwoWayStream(new CharacterInputStream(System.in),
-                                       new CharacterOutputStream(System.out)));
+                      new TwoWayStream(stdin, stdout));
 
     public static final Symbol _DEBUG_IO_ =
         exportSpecial("*DEBUG-IO*", PACKAGE_CL,
-                      new TwoWayStream(new CharacterInputStream(System.in),
-                                       new CharacterOutputStream(System.out)));
+                      new TwoWayStream(stdin, stdout));
 
-    public static final Symbol _STANDARD_INPUT_ =
-        exportSpecial("*STANDARD-INPUT*", PACKAGE_CL,
-                      new CharacterInputStream(System.in));
-
-    public static final Symbol _STANDARD_OUTPUT_ =
-        exportSpecial("*STANDARD-OUTPUT*", PACKAGE_CL,
-                      new CharacterOutputStream(System.out));
-
-    public static final Symbol _ERROR_OUTPUT_ =
-        exportSpecial("*ERROR-OUTPUT*", PACKAGE_CL,
-                      new CharacterOutputStream(System.out));
-
-    public static final Symbol _TRACE_OUTPUT_ =
-        exportSpecial("*TRACE-OUTPUT*", PACKAGE_CL,
-                      new CharacterOutputStream(System.out));
+    public void resetIO(CharacterInputStream in, CharacterOutputStream out)
+    {
+        stdin = in;
+        stdout = out;
+        _STANDARD_INPUT_.setSymbolValue(stdin);
+        _STANDARD_OUTPUT_.setSymbolValue(stdout);
+        _ERROR_OUTPUT_.setSymbolValue(stdout);
+        _TRACE_OUTPUT_.setSymbolValue(stdout);
+        _TERMINAL_IO_.setSymbolValue(new TwoWayStream(stdin, stdout));
+        _QUERY_IO_.setSymbolValue(new TwoWayStream(stdin, stdout));
+        _DEBUG_IO_.setSymbolValue(new TwoWayStream(stdin, stdout));
+    }
 
     public static final TwoWayStream getTerminalIO()
     {
