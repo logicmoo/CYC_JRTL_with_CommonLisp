@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.136 2003-03-16 23:08:31 piso Exp $
+ * $Id: Primitives.java,v 1.137 2003-03-17 14:41:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1898,34 +1898,129 @@ public final class Primitives extends Module
         return false;
     }
 
-    // ### make-array
-    // We only support one-dimensional arrays for now.
-    // make-array size &key element-type initial-element fill-pointer
-    private static final Primitive MAKE_ARRAY = new Primitive("make-array") {
+//     // ### make-array
+//     // We only support one-dimensional arrays for now.
+//     // make-array size &key element-type initial-element fill-pointer
+//     private static final Primitive MAKE_ARRAY = new Primitive("make-array") {
+//         public LispObject execute(LispObject[] args) throws LispError
+//         {
+//             if (args.length == 0)
+//                 throw new WrongNumberOfArgumentsException(this);
+//             if (args.length > 1)
+//                 if ((args.length - 1) % 2 != 0)
+//                     throw new ProgramError("odd number of keyword arguments");
+//             long lsize;
+//             LispObject sizeArg = args[0];
+//             if (sizeArg instanceof Cons) {
+//                 if (sizeArg.length() > 1)
+//                     throw new LispError(
+//                         "only one-dimensional arrays are supported");
+//                 lsize = Fixnum.getValue(sizeArg.car());
+//             } else
+//                 lsize = Fixnum.getValue(args[0]);
+//             long limit =
+//                 Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
+//             if (lsize < 0 && lsize >= limit) {
+//                 StringBuffer sb = new StringBuffer();
+//                 sb.append("the size specified for this array (");
+//                 sb.append(lsize);
+//                 sb.append(')');
+//                 if (lsize >= limit) {
+//                     sb.append(" is >= ARRAY-DIMENSION-LIMIT (");
+//                     sb.append(limit);
+//                     sb.append(')');
+//                 } else
+//                     sb.append(" is negative");
+//                 throw new LispError(sb.toString());
+//             }
+//             final int size = (int) lsize;
+//             LispObject elementType = null;
+//             LispObject initialElement = null;
+//             LispObject initialContents = null;
+//             LispObject fillPointer = NIL;
+//             // Process keyword arguments (if any).
+//             for (int i = 1; i < args.length; i += 2) {
+//                 LispObject keyword = checkSymbol(args[i]);
+//                 LispObject value = args[i+1];
+//                 if (keyword == Keyword.ELEMENT_TYPE)
+//                     elementType = value;
+//                 else if (keyword == Keyword.INITIAL_ELEMENT)
+//                     initialElement = value;
+//                 else if (keyword == Keyword.INITIAL_CONTENTS)
+//                     initialContents = value;
+//                 else if (keyword == Keyword.FILL_POINTER)
+//                     fillPointer = value;
+//                 else {
+//                     String s = "MAKE-ARRAY: unsupported keyword " + keyword;
+//                     throw new LispError(s);
+//                 }
+//             }
+//             if (initialElement != null && initialContents != null) {
+//                 throw new LispError("MAKE-ARRAY: cannot specify both " +
+//                     ":initial-element and :initial-contents");
+//             }
+//             AbstractVector v;
+//             if (elementType == Symbol.CHARACTER ||
+//                 elementType == Symbol.BASE_CHAR ||
+//                 elementType == Symbol.STANDARD_CHAR) {
+//                 v = new LispString(size);
+//             } else if (elementType == Symbol.BIT) {
+//                 v = new BitVector(size);
+//             } else {
+//                 // FIXME If elementType != null it should be a known type.
+//                 v = new Vector(size);
+//             }
+//             if (initialElement != null) {
+//                 // Initial element was specified.
+//                 v.fill(initialElement);
+//             } else if (initialContents != null) {
+//                 // Since we only support one-dimensional arrays, this
+//                 // must be a sequence (and not a nested structure of
+//                 // sequences).
+//                 checkSequence(initialContents);
+//                 // FIXME Don't use ELT for lists!
+//                 for (int i = 0; i < size; i++)
+//                     v.set(i, initialContents.elt(i));
+//             }
+//             if (fillPointer != NIL)
+//                 v.setFillPointer(fillPointer);
+//             return v;
+//         }
+//     };
+
+    // ### %make-array dimensions element-type initial-element initial-contents
+    // adjustable fill-pointer displaced-to displaced-index-offset
+    private static final Primitive _MAKE_ARRAY = new Primitive("%make-array") {
         public LispObject execute(LispObject[] args) throws LispError
         {
-            if (args.length == 0)
+            if (args.length != 9)
                 throw new WrongNumberOfArgumentsException(this);
-            if (args.length > 1)
-                if ((args.length - 1) % 2 != 0)
-                    throw new ProgramError("odd number of keyword arguments");
-            long lsize;
-            LispObject sizeArg = args[0];
-            if (sizeArg instanceof Cons) {
-                if (sizeArg.length() > 1)
+            LispObject dimensions = args[0];
+            LispObject elementType = args[1];
+            LispObject initialElement = args[2];
+            LispObject initialElementProvided = args[3];
+            LispObject initialContents = args[4];
+            LispObject adjustable = args[5];
+            LispObject fillPointer = args[6];
+            LispObject displacedTo = args[7];
+            LispObject displacedIndexOffset = args[8];
+
+            final int size;
+            if (dimensions instanceof Cons) {
+                if (dimensions.length() > 1)
                     throw new LispError(
                         "only one-dimensional arrays are supported");
-                lsize = Fixnum.getValue(sizeArg.car());
+                size = Fixnum.getValue(dimensions.car());
             } else
-                lsize = Fixnum.getValue(args[0]);
-            long limit =
+                size = Fixnum.getValue(dimensions);
+            int limit =
                 Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
-            if (lsize < 0 && lsize >= limit) {
+            if (size < 0 || size >= limit) {
                 StringBuffer sb = new StringBuffer();
                 sb.append("the size specified for this array (");
-                sb.append(lsize);
+                sb.append(size);
                 sb.append(')');
-                if (lsize >= limit) {
+                if (size >= limit) {
                     sb.append(" is >= ARRAY-DIMENSION-LIMIT (");
                     sb.append(limit);
                     sb.append(')');
@@ -1933,29 +2028,28 @@ public final class Primitives extends Module
                     sb.append(" is negative");
                 throw new LispError(sb.toString());
             }
-            final int size = (int) lsize;
-            LispObject elementType = null;
-            LispObject initialElement = null;
-            LispObject initialContents = null;
-            LispObject fillPointer = NIL;
-            // Process keyword arguments (if any).
-            for (int i = 1; i < args.length; i += 2) {
-                LispObject keyword = checkSymbol(args[i]);
-                LispObject value = args[i+1];
-                if (keyword == Keyword.ELEMENT_TYPE)
-                    elementType = value;
-                else if (keyword == Keyword.INITIAL_ELEMENT)
-                    initialElement = value;
-                else if (keyword == Keyword.INITIAL_CONTENTS)
-                    initialContents = value;
-                else if (keyword == Keyword.FILL_POINTER)
-                    fillPointer = value;
-                else {
-                    String s = "MAKE-ARRAY: unsupported keyword " + keyword;
-                    throw new LispError(s);
-                }
-            }
-            if (initialElement != null && initialContents != null) {
+            //             LispObject elementType = null;
+            //             LispObject initialElement = null;
+            //             LispObject initialContents = null;
+            //             LispObject fillPointer = NIL;
+            //             // Process keyword arguments (if any).
+            //             for (int i = 1; i < args.length; i += 2) {
+            //                 LispObject keyword = checkSymbol(args[i]);
+            //                 LispObject value = args[i+1];
+            //                 if (keyword == Keyword.ELEMENT_TYPE)
+            //                     elementType = value;
+            //                 else if (keyword == Keyword.INITIAL_ELEMENT)
+            //                     initialElement = value;
+            //                 else if (keyword == Keyword.INITIAL_CONTENTS)
+            //                     initialContents = value;
+            //                 else if (keyword == Keyword.FILL_POINTER)
+            //                     fillPointer = value;
+            //                 else {
+            //                     String s = "MAKE-ARRAY: unsupported keyword " + keyword;
+            //                     throw new LispError(s);
+            //                 }
+            //             }
+            if (initialElementProvided != NIL && initialContents != NIL) {
                 throw new LispError("MAKE-ARRAY: cannot specify both " +
                     ":initial-element and :initial-contents");
             }
@@ -1970,10 +2064,10 @@ public final class Primitives extends Module
                 // FIXME If elementType != null it should be a known type.
                 v = new Vector(size);
             }
-            if (initialElement != null) {
+            if (initialElementProvided != NIL) {
                 // Initial element was specified.
                 v.fill(initialElement);
-            } else if (initialContents != null) {
+            } else if (initialContents != NIL) {
                 // Since we only support one-dimensional arrays, this
                 // must be a sequence (and not a nested structure of
                 // sequences).
