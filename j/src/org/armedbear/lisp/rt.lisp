@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.149 2004-01-31 19:14:39 piso Exp $
+;;; $Id: rt.lisp,v 1.150 2004-02-02 13:45:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -522,6 +522,7 @@
 (load (concatenate 'string regression-test::*prefix* "string-aux.lsp"))
 (load (concatenate 'string regression-test::*prefix* "random-aux.lsp"))
 (load (concatenate 'string regression-test::*prefix* "remove-aux.lsp"))
+(load (concatenate 'string regression-test::*prefix* "remove-duplicates-aux.lsp"))
 
 #+armedbear
 (when (and (fboundp 'jvm::jvmcompile) (not (autoloadp 'jvm::jvm-compile)))
