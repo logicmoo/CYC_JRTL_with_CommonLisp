@@ -2,7 +2,7 @@
  * ObjCMode.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ObjCMode.java,v 1.1 2003-12-29 19:20:35 piso Exp $
+ * $Id: ObjCMode.java,v 1.2 2003-12-30 06:38:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,16 @@ public final class ObjCMode extends CMode implements Constants, Mode
     public static Mode getMode()
     {
         return mode;
+    }
+
+    public final String getCommentStart()
+    {
+        return "// ";
+    }
+
+    public final String getCommentEnd()
+    {
+        return null;
     }
 
     public Formatter getFormatter(Buffer buffer)
