@@ -12,6 +12,7 @@
           current-editor
           update-display
           update-location-bar
+          restore-focus
           status
           execute-command
           defcommand
@@ -51,40 +52,34 @@
         ((functionp hook)
          (apply hook args)))))
 
-(defconstant current-editor-method
-  (jmethod "org.armedbear.j.Editor" "currentEditor"))
+(let ((method (jmethod "org.armedbear.j.Editor" "currentEditor")))
+  (defun current-editor ()
+    (jstatic method nil)))
 
-(defun current-editor ()
-  (jstatic current-editor-method nil))
+(let ((method (jmethod "org.armedbear.j.Editor" "updateDisplay")))
+  (defun update-display (&optional ed)
+    (let ((ed (or ed (current-editor))))
+      (jcall method ed))))
 
-(defconstant update-display-method
-  (jmethod "org.armedbear.j.Editor" "updateDisplay"))
+(let ((method (jmethod "org.armedbear.j.Editor" "updateLocation")))
+  (defun update-location-bar (&optional ed)
+    (let ((ed (or ed (current-editor))))
+      (jcall method ed))))
 
-(defun update-display (&optional ed)
-  (let ((ed (or ed (current-editor))))
-    (jcall update-display-method ed)))
+(let ((method (jmethod "org.armedbear.j.Editor" "restoreFocus")))
+  (defun restore-focus () (jstatic method nil)))
 
-(defconstant update-location-bar-method
-  (jmethod "org.armedbear.j.Editor" "updateLocation"))
+(let ((method (jmethod "org.armedbear.j.Editor" "status" "java.lang.String")))
+  (defun status (string &optional ed)
+    (let ((ed (or ed (current-editor))))
+      (jcall method ed string))))
 
-(defun update-location-bar (&optional ed)
-  (let ((ed (or ed (current-editor))))
-    (jcall update-location-bar-method ed)))
-
-(defun status (string &optional ed)
-  (let ((ed (or ed (current-editor)))
-        (method (jmethod "org.armedbear.j.Editor" "status"
-                         "java.lang.String")))
-    (jcall method ed string)))
-
-(defconstant execute-command-method
-  (jmethod "org.armedbear.j.Editor" "executeCommand"
-           "java.lang.String"))
-
-(defun execute-command (command &optional ed)
-  (let ((ed (or ed (current-editor))))
-    (jcall execute-command-method ed command)
-    (update-display ed)))
+(let ((method (jmethod "org.armedbear.j.Editor"
+                       "executeCommand" "java.lang.String")))
+  (defun execute-command (command &optional ed)
+    (let ((ed (or ed (current-editor))))
+      (jcall method ed command)
+      (update-display ed))))
 
 (defmacro defcommand (name command)
   `(setf (symbol-function ',name)
