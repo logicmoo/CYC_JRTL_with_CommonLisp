@@ -2,7 +2,7 @@
  * UnboundSlot.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: UnboundSlot.java,v 1.2 2004-01-02 01:18:34 piso Exp $
+ * $Id: UnboundSlot.java,v 1.3 2004-05-25 15:53:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,9 +49,9 @@ public final class UnboundSlot extends CellError
     public String getMessage()
     {
         StringBuffer sb = new StringBuffer("The slot ");
-        sb.append(getCellName());
+        sb.append(safeWriteToString(getCellName()));
         sb.append(" is unbound in the object ");
-        sb.append(instance);
+        sb.append(safeWriteToString(instance));
         sb.append('.');
         return sb.toString();
     }
