@@ -2,7 +2,7 @@
  * Menu.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Menu.java,v 1.4 2003-06-12 18:43:26 piso Exp $
+ * $Id: Menu.java,v 1.5 2003-06-12 23:45:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,22 +53,7 @@ public final class Menu extends JMenu implements Constants
     public MenuItem add(Editor editor, String label, char mnemonic,
         String command, boolean enabled)
     {
-        // Look in buffer-local keymap first.
-        KeyMapping mapping =
-            editor.getBuffer().getKeyMapForMode().getKeyMapping(command);
-        // If not found there, try global keymap.
-        if (mapping == null) {
-            mapping = KeyMap.getGlobalKeyMap().getKeyMapping(command);
-            // Don't let a global mapping hide a different mapping of the same
-            // keystroke in the buffer-local keymap!
-            if (mapping != null) {
-                KeyStroke keyStroke =
-                    KeyStroke.getKeyStroke(mapping.getKeyCode(),
-                        mapping.getModifiers());
-                if (editor.getBuffer().getKeyMapForMode().lookup(keyStroke) != null)
-                    keyStroke = null;
-            }
-        }
+        KeyMapping mapping = editor.getKeyMapping(command);
         String keyText = mapping != null ? mapping.getKeyText() : "";
         if (keyText.length() == 3) {
             if (keyText.charAt(0) == '\'' && keyText.charAt(2) == '\'')
