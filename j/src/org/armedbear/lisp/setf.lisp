@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.32 2003-10-01 21:46:59 piso Exp $
+;;; $Id: setf.lisp,v 1.33 2003-10-06 00:20:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -106,9 +106,11 @@
           ((null a) `(progn ,@(nreverse l)))
 	(setq l (cons (list 'setf (car a) (cadr a)) l)))))))
 
+;;; Redefined in define-modify-macro.lisp.
 (defmacro incf (place &optional (delta 1))
   `(setf ,place (+ ,place ,delta)))
 
+;;; Redefined in define-modify-macro.lisp.
 (defmacro decf (place &optional (delta 1))
   `(setf ,place (- ,place ,delta)))
 
