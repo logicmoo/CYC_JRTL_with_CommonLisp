@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.105 2003-11-16 14:58:17 piso Exp $
+ * $Id: Autoload.java,v 1.106 2003-11-20 18:01:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,8 +64,9 @@ public class Autoload extends Function
                 Debug.assertTrue(false);
             }
         }
-        symbol.setSymbolFunction(new Autoload(symbol, null,
-                                              "org.armedbear.lisp.".concat(className)));
+        if (symbol.getSymbolFunction() == null)
+            symbol.setSymbolFunction(new Autoload(symbol, null,
+                                                  "org.armedbear.lisp.".concat(className)));
     }
 
     public void load() throws ConditionThrowable
@@ -293,8 +294,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%open-input-file", "open");
         autoload(PACKAGE_SYS, "%open-output-file", "open");
         autoload(PACKAGE_SYS, "%set-class-direct-methods", "LispClass");
-        autoload(PACKAGE_SYS, "%set-class-direct-slots", "StandardClass");
-        autoload(PACKAGE_SYS, "%set-class-slots", "StandardClass");
+        autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass");
+        autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
@@ -322,8 +323,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%time", "Time");
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObject");
         autoload(PACKAGE_SYS, "class-direct-methods", "LispClass");
-        autoload(PACKAGE_SYS, "class-direct-slots", "StandardClass");
-        autoload(PACKAGE_SYS, "class-slots", "StandardClass");
+        autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
+        autoload(PACKAGE_SYS, "class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
         autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTable");
