@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.38 2004-08-24 17:41:14 piso Exp $
+;;; $Id: top-level.lisp,v 1.39 2004-10-12 13:58:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -69,11 +69,20 @@
   (let ((count (or (and args (ignore-errors (parse-integer args)))
                    most-positive-fixnum))
         (n 0))
-    (dolist (frame *saved-backtrace*)
-      (%format *debug-io* "  ~D: ~S~%" n frame)
-      (incf n)
-      (when (>= n count)
-        (return))))
+    (with-standard-io-syntax
+      (let ((*print-pretty* t))
+        (dolist (frame *saved-backtrace*)
+          (fresh-line *debug-io*)
+          (let ((prefix (format nil "~3D: (" n)))
+            (pprint-logical-block (*debug-io* nil :prefix prefix :suffix ")")
+              (prin1 (car frame) *debug-io*)
+              (let ((args (cdr frame)))
+                (if (listp args)
+                    (format *debug-io* "~{ ~_~S~}" args)
+                    (format *debug-io* " ~S" args)))))
+          (incf n)
+          (when (>= n count)
+            (return))))))
   (values))
 
 (defun continue-command (args)
