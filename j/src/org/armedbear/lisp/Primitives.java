@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.115 2003-03-13 14:52:06 piso Exp $
+ * $Id: Primitives.java,v 1.116 2003-03-13 15:31:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,17 +117,16 @@ public final class Primitives extends Module
     private static final int ZEROP                      = 59;
 
     // Primitive2
-    private static final int CHAR                       = 1;
-    private static final int CONS                       = 2;
-    private static final int ELT                        = 3;
-    private static final int EQL                        = 4;
-    private static final int EQUAL                      = 5;
-    private static final int EQUALP                     = 6;
-    private static final int MEMBER                     = 7;
-    private static final int MOD                        = 8;
-    private static final int RPLACA                     = 9;
-    private static final int RPLACD                     = 10;
-    private static final int SET                        = 11;
+    private static final int CONS                       = 1;
+    private static final int ELT                        = 2;
+    private static final int EQL                        = 3;
+    private static final int EQUAL                      = 4;
+    private static final int EQUALP                     = 5;
+    private static final int MEMBER                     = 6;
+    private static final int MOD                        = 7;
+    private static final int RPLACA                     = 8;
+    private static final int RPLACD                     = 9;
+    private static final int SET                        = 10;
 
     private Primitives()
     {
@@ -214,7 +213,6 @@ public final class Primitives extends Module
         definePrimitive1("vectorp", VECTORP);
         definePrimitive1("zerop", ZEROP);
 
-        definePrimitive2("char", CHAR);
         definePrimitive2("cons", CONS);
         definePrimitive2("elt", ELT);
         definePrimitive2("eql", EQL);
@@ -539,8 +537,6 @@ public final class Primitives extends Module
                 return equal(first, second) ? T : NIL;
             case EQUALP:                        // ### equalp
                 return equalp(first, second) ? T : NIL;
-            case CHAR:                          // ### char
-                return checkString(first).get(Fixnum.getInt(second));
             case MEMBER: {                      // ### member
                 // member item list &key key test test-not => tail
                 // FIXME Support keyword arguments!
