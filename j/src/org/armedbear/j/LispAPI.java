@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.52 2004-09-11 12:07:13 piso Exp $
+ * $Id: LispAPI.java,v 1.53 2004-09-12 15:01:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1340,9 +1340,9 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### current-defun => string
+    // ### defun-at-point => string
     private static final Primitive CURRENT_DEFUN =
-        new Primitive("current-defun", PACKAGE_J, true, "pathname")
+        new Primitive("defun-at-point", PACKAGE_J, true, "")
     {
         public LispObject execute() throws ConditionThrowable
         {
