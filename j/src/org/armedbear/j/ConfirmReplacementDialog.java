@@ -2,7 +2,7 @@
  * ConfirmReplacementDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: ConfirmReplacementDialog.java,v 1.2 2003-07-23 16:16:15 piso Exp $
+ * $Id: ConfirmReplacementDialog.java,v 1.3 2003-07-26 17:50:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ public final class ConfirmReplacementDialog extends AbstractDialog
     {
         replacement.replaceOccurrence();
         replacement.getEditor().updateDisplay();
-        Position pos = replacement.find(editor.getBuffer(), editor.getDot());
+        Position pos = replacement.find(editor.getMode(), editor.getDot());
         if (pos == null) {
             dispose();
             return;
@@ -115,7 +115,7 @@ public final class ConfirmReplacementDialog extends AbstractDialog
             dispose();
             return;
         }
-        Position pos = replacement.find(editor.getBuffer(), start);
+        Position pos = replacement.find(editor.getMode(), start);
         if (pos == null) {
             dispose();
             return;
@@ -148,7 +148,7 @@ public final class ConfirmReplacementDialog extends AbstractDialog
         replacement.replaceOccurrence();
         // Replace all the rest.
         Position pos;
-        while ((pos = replacement.find(editor.getBuffer(), editor.getDot())) != null) {
+        while ((pos = replacement.find(editor.getMode(), editor.getDot())) != null) {
             editor.addUndo(SimpleEdit.MOVE);
             editor.getDot().moveTo(pos);
             if (replacement.restrictToSelection()) {

@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.102 2003-07-26 00:38:24 piso Exp $
+ * $Id: Editor.java,v 1.103 2003-07-26 17:49:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4636,7 +4636,7 @@ public final class Editor extends JPanel implements Constants,
             if (!start.next())
                 return;
             setWaitCursor();
-            Position pos = lastSearch.find(buffer, start);
+            Position pos = lastSearch.find(buffer.getMode(), start);
             setDefaultCursor();
             if (pos != null) {
                 moveDotTo(pos);
@@ -4841,10 +4841,10 @@ public final class Editor extends JPanel implements Constants,
             start = new Position(mark);
         else
             start = new Position(dot);
-        Position pos = lastSearch.find(buffer, start);
+        Position pos = lastSearch.find(buffer.getMode(), start);
         if (pos != null && pos.equals(start)) {
             if (pos.next())
-                pos = lastSearch.find(buffer, pos);
+                pos = lastSearch.find(buffer.getMode(), pos);
         }
         if (pos != null && !pos.equals(start)) {
             moveDotTo(pos);
@@ -4897,7 +4897,8 @@ public final class Editor extends JPanel implements Constants,
         if (pattern == null || pattern.length() == 0)
             return;
         lastSearch = new Search(pattern, false, true);
-        Position pos = lastSearch.find(buffer, new Position(buffer.getFirstLine(), 0));
+        Position pos = lastSearch.find(buffer.getMode(),
+                                       new Position(buffer.getFirstLine(), 0));
         if (pos != null) {
             moveDotTo(pos);
             markFoundPattern(lastSearch);

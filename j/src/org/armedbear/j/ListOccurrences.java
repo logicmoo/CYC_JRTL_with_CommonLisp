@@ -2,7 +2,7 @@
  * ListOccurrences.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: ListOccurrences.java,v 1.5 2003-07-26 16:19:14 piso Exp $
+ * $Id: ListOccurrences.java,v 1.6 2003-07-26 17:52:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,7 @@ public class ListOccurrences extends Buffer
     {
         ListOccurrences listOccurrences = null;
         Position pos = new Position(sourceBuffer.getFirstLine(), 0);
-        while ((pos = search.find(sourceBuffer, pos)) != null) {
+        while ((pos = search.find(sourceBuffer.getMode(), pos)) != null) {
             if (listOccurrences == null)
                 listOccurrences = new ListOccurrences(search, sourceBuffer);
             listOccurrences.appendOccurrenceLine(pos.getLine());
@@ -206,7 +206,7 @@ public class ListOccurrences extends Buffer
             ed.unmark();
             ed.update(ed.getDotLine());
             ed.setDot(target, 0);
-            Position found = search.find(buf, ed.getDot());
+            Position found = search.find(buf.getMode(), ed.getDot());
             if (found != null) {
                 ed.setDot(found);
                 ed.markFoundPattern(search);

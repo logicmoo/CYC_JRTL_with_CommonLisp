@@ -2,7 +2,7 @@
  * ReplaceDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: ReplaceDialog.java,v 1.2 2003-07-24 16:52:14 piso Exp $
+ * $Id: ReplaceDialog.java,v 1.3 2003-07-26 17:50:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -296,7 +296,7 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
         }
         final Buffer buffer = editor.getBuffer();
         if (replacement.confirmChanges()) {
-            Position pos = replacement.find(buffer, editor.getDot());
+            Position pos = replacement.find(buffer.getMode(), editor.getDot());
             if (pos == null) {
                 editor.endCompoundEdit(compoundEdit);
                 editor.undo();
@@ -331,7 +331,7 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
             // Not confirming changes.
             Position saved = new Position(editor.getDot());
             Position pos;
-            while ((pos = replacement.find(buffer, editor.getDot())) != null) {
+            while ((pos = replacement.find(buffer.getMode(), editor.getDot())) != null) {
                 editor.addUndo(SimpleEdit.MOVE);
                 editor.getDot().moveTo(pos);
                 if (replacement.isMultilinePattern())
