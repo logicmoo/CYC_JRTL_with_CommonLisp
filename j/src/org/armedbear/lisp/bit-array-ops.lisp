@@ -1,7 +1,7 @@
 ;;; bit-array-ops.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: bit-array-ops.lisp,v 1.1 2003-10-09 16:41:53 piso Exp $
+;;; $Id: bit-array-ops.lisp,v 1.2 2003-10-09 16:51:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -55,37 +55,30 @@
      (unless (bit-array-same-dimensions-p bit-array-1 bit-array-2)
        (error 'program-error "~S and ~S do not have the same dimensions"
               bit-array-1 bit-array-2))
-     (let* ((result-bit-array (pick-result-array result-bit-array bit-array-1))
-            (end3 (array-total-size result-bit-array)))
-       (do ((index-1 0 (1+ index-1))
-            (index-2 0 (1+ index-2))
-            (index-3 0 (1+ index-3)))
-           ((>= index-3 end3) result-bit-array)
-         (setf (row-major-aref result-bit-array index-3)
-               (logand (,function (row-major-aref bit-array-1 index-1)
-                                  (row-major-aref bit-array-2 index-2))
+     (let ((result-bit-array (pick-result-array result-bit-array bit-array-1)))
+       (dotimes (i (array-total-size result-bit-array) result-bit-array)
+         (setf (row-major-aref result-bit-array i)
+               (logand (,function (row-major-aref bit-array-1 i)
+                                  (row-major-aref bit-array-2 i))
                        1))))))
 
-(def-bit-array-op bit-and logand)
-(def-bit-array-op bit-ior logior)
-(def-bit-array-op bit-xor logxor)
-(def-bit-array-op bit-eqv logeqv)
-(def-bit-array-op bit-nand lognand)
-(def-bit-array-op bit-nor lognor)
+(def-bit-array-op bit-and   logand)
+(def-bit-array-op bit-ior   logior)
+(def-bit-array-op bit-xor   logxor)
+(def-bit-array-op bit-eqv   logeqv)
+(def-bit-array-op bit-nand  lognand)
+(def-bit-array-op bit-nor   lognor)
 (def-bit-array-op bit-andc1 logandc1)
 (def-bit-array-op bit-andc2 logandc2)
-(def-bit-array-op bit-orc1 logorc1)
-(def-bit-array-op bit-orc2 logorc2)
+(def-bit-array-op bit-orc1  logorc1)
+(def-bit-array-op bit-orc2  logorc2)
 
 (defun bit-not (bit-array &optional result-bit-array)
   "Performs a bit-wise logical NOT on the elements of BIT-ARRAY,
    putting the results in RESULT-BIT-ARRAY.  If RESULT-BIT-ARRAY is T,
    BIT-ARRAY is used.  If RESULT-BIT-ARRAY is NIL or omitted, a new array is
    created.  Both arrays must have the same rank and dimensions."
-  (let* ((result-bit-array (pick-result-array result-bit-array bit-array))
-         (dst-end (array-total-size result-bit-array)))
-    (do ((src-index 0 (1+ src-index))
-         (dst-index 0 (1+ dst-index)))
-        ((>= dst-index dst-end) result-bit-array)
-      (setf (row-major-aref result-bit-array dst-index)
-            (logxor (row-major-aref bit-array src-index) 1)))))
+  (let ((result-bit-array (pick-result-array result-bit-array bit-array)))
+    (dotimes (i (array-total-size result-bit-array) result-bit-array)
+      (setf (row-major-aref result-bit-array i)
+            (logxor (row-major-aref bit-array i) 1)))))
