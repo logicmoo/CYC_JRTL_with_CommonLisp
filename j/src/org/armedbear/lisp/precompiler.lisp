@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.55 2004-05-03 18:39:46 piso Exp $
+;;; $Id: precompiler.lisp,v 1.56 2004-05-03 19:28:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -158,7 +158,9 @@
 (defvar *local-variables* ())
 
 (defun find-varspec (sym)
-  (find sym *local-variables* :key #'car))
+  (dolist (varspec *local-variables*)
+    (when (eq sym (car varspec))
+      (return varspec))))
 
 (defun precompile1 (form)
   (cond ((symbolp form)
