@@ -1,8 +1,8 @@
 /*
  * LineSegment.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: LineSegment.java,v 1.1.1.1 2002-09-24 16:08:41 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: LineSegment.java,v 1.2 2004-04-01 18:39:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,6 @@ package org.armedbear.j;
 
 public class LineSegment
 {
-    // The line segment pool.
-    private static final int MAX_POOL_INDEX = 99;
-    private static LineSegment[] pool = new LineSegment[MAX_POOL_INDEX+1];
-    private static int poolIndex;
-
     private String text;
     private int begin;
     private int end;
@@ -35,31 +30,11 @@ public class LineSegment
 
     public static final LineSegment getLineSegment(String text, int format)
     {
-        synchronized(pool) {
-            if (poolIndex > 0) {
-                LineSegment segment = pool[--poolIndex];
-                segment.text = text;
-                segment.begin = 0;
-                segment.end = text.length();
-                segment.format = format;
-                return segment;
-            }
-        }
         return new LineSegment(text, format);
     }
 
     public static final LineSegment getLineSegment(String text, int begin, int end, int format)
     {
-        synchronized(pool) {
-            if (poolIndex > 0) {
-                LineSegment segment = pool[--poolIndex];
-                segment.text = text;
-                segment.begin = begin;
-                segment.end = end;
-                segment.format = format;
-                return segment;
-            }
-        }
         return new LineSegment(text, begin, end, format);
     }
 
@@ -112,9 +87,5 @@ public class LineSegment
 
     public void recycle()
     {
-        synchronized(pool) {
-            if (poolIndex < MAX_POOL_INDEX)
-                pool[poolIndex++] = this;
-        }
     }
 }
