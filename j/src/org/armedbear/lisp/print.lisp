@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: print.lisp,v 1.9 2004-10-05 13:19:32 piso Exp $
+;;; $Id: print.lisp,v 1.10 2004-10-08 14:21:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,7 +39,11 @@
      (return)))
 
 (defun output-integer (integer stream)
-  (%output-object integer stream))
+;;   (%output-object integer stream))
+  (if (xp::xp-structure-p stream)
+      (let ((s (sys::%write-to-string integer)))
+        (xp::write-string++ s stream 0 (length s)))
+      (%output-object integer stream)))
 
 (defun output-list (list stream)
   (cond ((and (null *print-readably*)
@@ -49,10 +53,10 @@
         (t
          (let ((*current-print-level* (1+ *current-print-level*)))
                 (write-char #\( stream)
-                (let ((length 0)
+                (let ((*current-print-length* 0)
                       (list list))
                   (loop
-                    (punt-print-if-too-long length stream)
+                    (punt-print-if-too-long *current-print-length* stream)
                     (output-object (pop list) stream)
                     (unless list
                       (return))
@@ -62,7 +66,7 @@
                       (output-object list stream)
                       (return))
                     (write-char #\space stream)
-                    (incf length)))
+                    (incf *current-print-length*)))
                 (write-char #\) stream))))
   list)
 
@@ -83,10 +87,12 @@
 (defun output-vector (vector stream)
   (declare (vector vector))
   (cond ((stringp vector)
+         (assert nil)
          (sys::%output-object vector stream))
 	((not (or *print-array* *print-readably*))
 	 (output-terse-array vector stream))
 	((bit-vector-p vector)
+         (assert nil)
          (sys::%output-object vector stream))
 	(t
 	 (when (and *print-readably*
@@ -110,8 +116,13 @@
 (defun output-ugly-object (object stream)
   (cond ((consp object)
          (output-list object stream))
-        ((vectorp object)
+        ((and (vectorp object)
+              (not (stringp object))
+              (not (bit-vector-p object)))
          (output-vector object stream))
+        ((xp::xp-structure-p stream)
+         (let ((s (sys::%write-to-string object)))
+           (xp::write-string++ s stream 0 (length s))))
         (t
          (%output-object object stream))))
 
@@ -206,17 +217,34 @@
      ;; just looking. So don't bother groveling it again.
      nil)
     (t
-     (write-char #\# stream)
-     (let ((*print-base* 10) (*print-radix* nil))
+;;      (write-char #\# stream)
+;;      (let ((*print-base* 10)
+;;            (*print-radix* nil))
        (cond ((minusp marker)
-	      (output-integer (- marker) stream)
-	      (write-char #\# stream)
+;; 	      (output-integer (- marker) stream)
+;; 	      (write-char #\# stream)
+              (print-reference marker stream)
 	      nil)
 	     (t
-	      (output-integer marker stream)
-	      (write-char #\= stream)
-	      t))))))
-
+;; 	      (output-integer marker stream)
+;; 	      (write-char #\= stream)
+              (print-label marker stream)
+	      t)))))
+
+(defun print-label (marker stream)
+  (write-char #\# stream)
+  (let ((*print-base* 10)
+        (*print-radix* nil))
+    (output-integer marker stream))
+  (write-char #\= stream))
+
+(defun print-reference (marker stream)
+  (write-char #\# stream)
+  (let ((*print-base* 10)
+        (*print-radix* nil))
+    (output-integer (- marker) stream))
+  (write-char #\# stream))
+
 ;;;; OUTPUT-OBJECT -- the main entry point
 
 ;; Objects whose print representation identifies them EQLly don't need to be
@@ -233,7 +261,8 @@
       (output-ugly-object object stream)))
 
 (defun %check-object (object stream)
-  (multiple-value-bind (marker initiate) (check-for-circularity object t)
+  (multiple-value-bind (marker initiate)
+      (check-for-circularity object t)
     (if (eq initiate :initiate)
         ;; Initialize circularity detection.
         (let ((*circularity-hash-table* (make-hash-table :test 'eq)))
@@ -242,9 +271,8 @@
             (%check-object object stream)))
         ;; Otherwise...
         (if marker
-            (progn
-              (when (handle-circularity marker stream)
-                (%print-object object stream)))
+            (when (handle-circularity marker stream)
+              (%print-object object stream))
             (%print-object object stream)))))
 
 ;;; Output OBJECT to STREAM observing all printer control variables.

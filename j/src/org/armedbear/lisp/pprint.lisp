@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.41 2004-10-05 13:20:12 piso Exp $
+;;; $Id: pprint.lisp,v 1.42 2004-10-08 14:21:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,7 +43,6 @@
 
 ;------------------------------------------------------------------------
 
-#+armedbear
 (in-package "XP")
 
 ;must do the following in common lisps not supporting *print-shared*
@@ -53,14 +52,9 @@
 
 (defvar *default-right-margin* 70.
   "controls default line length; must be a non-negative integer")
-(defvar *last-abbreviated-printing*
-	#'(lambda (&optional stream) (declare (ignore stream)) nil)
-  "funcalling this redoes the last xp printing that was abbreviated.")
 
 (defvar *current-level* 0
   "current depth in logical blocks.")
-(defvar *current-length* 0
-  "current position in logical block.")
 (defvar *abbreviation-happened* nil
   "t if current thing being printed has been abbreviated.")
 (defvar *result* nil "used to pass back a value")
@@ -75,13 +69,6 @@
 (defvar *locating-circularities* nil
   "Integer if making a first pass over things to identify circularities.
    Integer used as counter for #n= syntax.")
-(defvar *parents* nil "used when *print-shared* is nil")
-
-(defvar *circularity-hash-table* nil
-  "Contains hash table used for locating circularities, or a stack.")
-;When an entry is first made it is zero.
-;If a duplicate is found, a positive integer tag is assigned.
-;After the first time the object is printed out, the tag is negated.
 
 ;               ---- XP STRUCTURES, AND THE INTERNAL ALGORITHM ----
 
@@ -387,7 +374,8 @@
     (attempt-to-output xp T nil)))
 
 (defun start-block (xp prefix-string on-each-line? suffix-string)
-  (when prefix-string (write-string++ prefix-string xp 0 (length prefix-string)))
+  (when prefix-string
+    (write-string++ prefix-string xp 0 (length prefix-string)))
   (push-block-stack xp)
   (enqueue xp :start-block nil
 	   (if on-each-line? (cons suffix-string prefix-string) suffix-string))
@@ -396,7 +384,8 @@
 
 (defun end-block (xp suffix)
   (unless (eq *abbreviation-happened* '*print-lines*)
-    (when suffix (write-string+ suffix xp 0 (length suffix)))
+    (when suffix
+      (write-string+ suffix xp 0 (length suffix)))
     (decf (depth-in-blocks xp))
     (enqueue xp :end-block nil suffix)
     (do ((ptr (Qleft xp) (Qnext ptr))) ;looking for start of block we are ending
@@ -479,8 +468,7 @@
 
 (defun flush (xp)
   (unless *locating-circularities*
-    (cl:write-string
-       (buffer xp) (base-stream xp) :end (buffer-ptr xp)))
+    (write-string (buffer xp) (base-stream xp) :end (buffer-ptr xp)))
   (incf (buffer-offset xp) (buffer-ptr xp))
   (incf (charpos xp) (buffer-ptr xp))
   (setf (buffer-ptr xp) 0))
@@ -503,7 +491,7 @@
       (reverse-string-in-place (suffix xp) 0 (suffix-ptr xp))
       (write-string+++ (suffix xp) xp 0 (suffix-ptr xp))
       (setf (Qleft xp) (Qnext (Qright xp)))
-      (setq *abbreviation-happened* '*print-lines*)
+      (setf *abbreviation-happened* '*print-lines*)
       (throw 'line-limit-abbreviation-exit T))
     (incf (line-no xp))
     (unless *locating-circularities*
@@ -563,15 +551,6 @@
 ;they do not need error checking of fancy stream coercion.  The '++' forms
 ;additionally assume the thing being output does not contain a newline.
 
-(defun basic-write (object stream)
-  (cond ((xp-structure-p stream)
-         (write+ object stream))
-	(*print-pretty*
-         (maybe-initiate-xp-printing #'(lambda (s o) (write+ o s))
-                                     stream object))
-	(t
-         (sys:output-object object stream))))
-
 (defun write (object &key
 		     ((:stream stream) *standard-output*)
 		     ((:escape *print-escape*) *print-escape*)
@@ -592,27 +571,19 @@
 		     ((:lines *print-lines*) *print-lines*)
 		     ((:pprint-dispatch *print-pprint-dispatch*)
 		      *print-pprint-dispatch*))
-  (basic-write object stream)
+  (sys:output-object object (sys:decode-stream-arg stream))
   object)
 
 (defun maybe-initiate-xp-printing (fn stream &rest args)
-  (if (xp-structure-p stream) (apply fn stream args)
+  (if (xp-structure-p stream)
+      (apply fn stream args)
       (let ((*abbreviation-happened* nil)
-	    (*locating-circularities* (if *print-circle* 0 nil))
-	    (*circularity-hash-table*
-	      (if *print-circle* (make-hash-table :test 'eq) nil))
-	    (*parents* (when (not *print-shared*) (list nil)))
+	    (sys::*circularity-hash-table*
+             (if (and *print-circle* (null sys::*circularity-hash-table*))
+                 (make-hash-table :test 'eq)
+                 sys::*circularity-hash-table*))
 	    (*result* nil))
 	(xp-print fn (sys:decode-stream-arg stream) args)
-	(when *abbreviation-happened*
-	  (setq *last-abbreviated-printing*
-		(eval
-		  `(function
-		     (lambda (&optional (stream ',stream))
-		       (let ((*package* ',*package*))
-			 (apply #'maybe-initiate-xp-printing
-				',fn stream
-				',(copy-list args))))))))
 	*result*)))
 
 (defun xp-print (fn stream args)
@@ -620,7 +591,7 @@
   (when *locating-circularities*
     (setq *locating-circularities* nil)
     (setq *abbreviation-happened* nil)
-    (setq *parents* nil)
+;;     (setq *parents* nil)
     (setq *result* (do-xp-printing fn stream args))))
 
 (defun do-xp-printing (fn stream args)
@@ -637,108 +608,47 @@
 	       (zerop (buffer-offset xp)))	;Didn't suppress partial line.
       (setq *locating-circularities* nil))	;print what you have got.
     (when (catch 'line-limit-abbreviation-exit
-	    (attempt-to-output xp nil T) nil)
-      (attempt-to-output xp T T))
+	    (attempt-to-output xp nil t) nil)
+      (attempt-to-output xp t t))
     result))
 
 (defun write+ (object xp)
-  (let ((*parents* *parents*))
-    (unless (and *circularity-hash-table*
-                 (eq (circularity-process xp object nil) :subsequent))
-      (when (and *circularity-hash-table* (consp object))
-	;;avoid possible double check in handle-logical-block.
-	(setq object (cons (car object) (cdr object))))
-      (let ((printer (if *print-pretty* (get-printer object *print-pprint-dispatch*) nil))
-	    type)
-	(cond (printer (funcall printer xp object))
-	      ((maybe-print-fast xp object))
-	      ((and *print-pretty*
-		    (symbolp (setq type (type-of object)))
-		    (setq printer (get type 'structure-printer))
-		    (not (eq printer :none)))
-	       (funcall printer xp object))
-	      ((and *print-pretty* *print-array* (arrayp object)
-		    (not (stringp object)) (not (bit-vector-p object))
-		    (not (structure-type-p (type-of object))))
-	       (pretty-array xp object))
-	      (t
-               (let ((stuff (with-output-to-string (s) (non-pretty-print object s))))
-                 (write-string+ stuff xp 0 (length stuff)))))))))
+;;   (let ((*parents* *parents*))
+;;     (unless (and *circularity-hash-table*
+;;                  (eq (circularity-process xp object nil) :subsequent))
+;;       (when (and *circularity-hash-table* (consp object))
+;; 	;;avoid possible double check in handle-logical-block.
+;; 	(setq object (cons (car object) (cdr object))))
+  (let ((printer (if *print-pretty* (get-printer object *print-pprint-dispatch*) nil))
+        type)
+    (cond (printer (funcall printer xp object))
+          ((maybe-print-fast object xp))
+          ((and *print-pretty*
+                (symbolp (setq type (type-of object)))
+                (setq printer (get type 'structure-printer))
+                (not (eq printer :none)))
+           (funcall printer xp object))
+          ((and *print-pretty* *print-array* (arrayp object)
+                (not (stringp object)) (not (bit-vector-p object))
+                (not (structure-type-p (type-of object))))
+           (pretty-array xp object))
+          (t
+           (let ((stuff (with-output-to-string (s) (non-pretty-print object s))))
+             (write-string+ stuff xp 0 (length stuff)))))))
 
 (defun non-pretty-print (object s)
-  (write object
-         :level (if *print-level*
-                    (- *print-level* *current-level*))
-         :pretty nil
-         :stream s))
-
-;It is vital that this function be called EXACTLY once for each occurrence of
-;  each thing in something being printed.
-;Returns nil if printing should just continue on.
-;  Either it is not a duplicate, or we are in the first pass and do not know.
-;returns :FIRST if object is first occurrence of a DUPLICATE.
-;  (This can only be returned on a second pass.)
-;  After an initial code (printed by this routine on the second pass)
-;  printing should continue on for the object.
-;returns :SUBSEQUENT if second or later occurrence.
-;  Printing is all taken care of by this routine.
-
-;Note many (maybe most) lisp implementations have characters and small numbers
-;represented in a single word so that the are always eq when they are equal and the
-;reader takes care of properly sharing them (just as it does with symbols).
-;Therefore, we do not want circularity processing applied to them.  However,
-;some kinds of numbers (e.g., bignums) undoubtedly are complex structures that
-;the reader does not share.  However, they cannot have circular pointers in them
-;and it is therefore probably a waste to do circularity checking on them.  In
-;any case, it is not clear that it easy to tell exactly what kinds of numbers a
-;given implementation of CL is going to have the reader automatically share.
-
-(defun circularity-process (xp object interior-cdr?)
-  (unless (or (numberp object)
-	      (characterp object)
-	      (and (symbolp object)	;Reader takes care of sharing.
-		   (or (null *print-gensym*) (symbol-package object))))
-    (let ((id (gethash object *circularity-hash-table*)))
-      (if *locating-circularities*
-	  (cond ((null id)	;never seen before
-		 (when *parents* (push object *parents*))
-		 (setf (gethash object *circularity-hash-table*) 0)
-		 nil)
-		((zerop id) ;possible second occurrence
-		 (cond ((or (null *parents*) (member object *parents*))
-			(setf (gethash object *circularity-hash-table*)
-			      (incf *locating-circularities*))
-			:subsequent)
-		       (t
-                        nil)))
-		(t
-                 :subsequent));third or later occurrence
-	  (cond ((or (null id)	;never seen before (note ~@* etc. conses)
-		     (zerop id));no duplicates
-		 nil)
-		((plusp id)
-		 (cond (interior-cdr?
-			(decf *current-level*)
-			(write-string++ ". #" xp 0 3))
-		       (t
-                        (write-char++ #\# xp)))
-		 (print-fixnum xp id)
-		 (write-char++ #\= xp)
-		 (setf (gethash object *circularity-hash-table*) (- id))
-		 :first)
-		(t
-                 (if interior-cdr? (write-string++ ". #" xp 0 3)
-                     (write-char++ #\# xp))
-                 (print-fixnum xp (- id))
-                 (write-char++ #\# xp)
-                 :subsequent))))))
+;;   (write object
+;;          :level (if *print-level*
+;;                     (- *print-level* *current-level*))
+;;          :pretty nil
+;;          :stream s))
+  (sys::output-ugly-object object s))
 
 ;This prints a few very common, simple atoms very fast.
 ;Pragmatically, this turns out to be an enormous savings over going to the
 ;standard printer all the time.  There would be diminishing returns from making
 ;this work with more things, but might be worth it.
-
-(defun maybe-print-fast (xp object)
+(defun maybe-print-fast (object xp)
   (cond ((stringp object)
          (let ((s (sys::%write-to-string object)))
            (write-string++ s xp 0 (length s))
@@ -746,7 +656,9 @@
 	((ext:fixnump object)
          (print-fixnum xp object)
          t)
-	((symbolp object)
+	((and (symbolp object)
+              (or (symbol-package object)
+                  (null *print-circle*)))
          (let ((s (sys::%write-to-string object)))
            (write-string++ s xp 0 (length s))
            t)
@@ -760,28 +672,26 @@
   (setf stream (sys:decode-stream-arg stream))
   (terpri stream)
   (let ((*print-escape* t))
-    (basic-write object stream))
+    (sys:output-object object stream))
   (write-char #\space stream)
   object)
 
 (defun prin1 (object &optional (stream *standard-output*))
-  (setf stream (sys:decode-stream-arg stream))
   (let ((*print-escape* t))
-    (basic-write object stream))
+    (sys:output-object object (sys:decode-stream-arg stream)))
   object)
 
 (defun princ (object &optional (stream *standard-output*))
-  (setf stream (sys:decode-stream-arg stream))
   (let ((*print-escape* nil)
         (*print-readably* nil))
-    (basic-write object stream))
+    (sys:output-object object (sys:decode-stream-arg stream)))
   object)
 
 (defun pprint (object &optional (stream *standard-output*))
   (setq stream (sys:decode-stream-arg stream))
   (terpri stream)
   (let ((*print-escape* T) (*print-pretty* T))
-    (basic-write object stream))
+    (sys:output-object object stream))
   (values))
 
 (defun write-to-string (object &key
@@ -806,14 +716,14 @@
 
 (defun prin1-to-string (object)
   (with-output-to-string (stream)
-    (let ((*print-escape* T))
-      (basic-write object stream))))
+    (let ((*print-escape* t))
+      (sys:output-object object stream))))
 
 (defun princ-to-string (object)
   (with-output-to-string (stream)
     (let ((*print-escape* nil)
           (*print-readably* nil))
-      (basic-write object stream))))
+      (sys:output-object object stream))))
 
 (defun write-char (char &optional (stream *standard-output*))
   (setf stream (sys:decode-stream-arg stream))
@@ -901,7 +811,7 @@
 ;they do not need error checking or fancy stream coercion.  The '++' forms
 ;additionally assume the thing being output does not contain a newline.
 
-(defmacro pprint-logical-block ((stream-symbol list
+(defmacro pprint-logical-block ((stream-symbol object
                                                &key
                                                (prefix nil prefix-p)
                                                (per-line-prefix nil per-line-prefix-p)
@@ -919,7 +829,7 @@
     (error "Cannot specify values for both PREFIX and PER-LINE-PREFIX."))
   `(maybe-initiate-xp-printing
      #'(lambda (,stream-symbol)
-	 (let ((+l ,list)
+	 (let ((+l ,object)
 	       (+p ,(or prefix per-line-prefix ""))
 	       (+s ,suffix))
 	   (pprint-logical-block+
@@ -931,12 +841,13 @@
 
 (defmacro pprint-logical-block+ ((var args prefix suffix per-line? circle-check? atsign?)
 				 &body body)
-   (when (and circle-check? atsign?)
-     (setf circle-check? 'not-first-p))
+;;    (when (and circle-check? atsign?)
+;;      (setf circle-check? 'not-first-p))
   `(let ((*current-level* (1+ *current-level*))
-	 (*current-length* -1)
-	 (*parents* *parents*)
-	 ,@(if (and circle-check? atsign?) `((not-first-p (plusp *current-length*)))))
+	 (sys:*current-print-length* -1)
+;; 	 ,@(if (and circle-check? atsign?)
+;;                `((not-first-p (plusp sys:*current-print-length*))))
+         )
      (unless (check-block-abbreviation ,var ,args ,circle-check?)
        (block logical-block
 	 (start-block ,var ,prefix ,per-line? ,suffix)
@@ -981,34 +892,49 @@
          (pop ,args)))
 
   (defun pprint-pop-check+ (args xp)
-    (incf *current-length*)
+    (incf sys:*current-print-length*)
     (cond ((not (listp args))  ;must be first so supersedes length abbrev
            (write-string++ ". " xp 0 2)
-           (write+ args xp)
-           T)
+           (sys:output-object args xp)
+           t)
           ((and *print-length* ;must supersede circle check
                 (not *print-readably*)
-                (not (< *current-length* *print-length*)))
+                (not (< sys:*current-print-length* *print-length*)))
            (write-string++ "..." xp 0 3)
-           (setq *abbreviation-happened* T)
-           T)
-          ((and *circularity-hash-table* (not (zerop *current-length*)))
-           (case (circularity-process xp args T)
-             (:first ;; note must inhibit rechecking of circularity for args.
-              (write+ (cons (car args) (cdr args)) xp) T)
-             (:subsequent t)
-             (t nil)))))
+;;            (setq *abbreviation-happened* T)
+           t)
+;;           ((and *circularity-hash-table* (not (zerop sys:*current-print-length*)))
+;;            (case (circularity-process xp args T)
+;;              (:first ;; note must inhibit rechecking of circularity for args.
+;;               (write+ (cons (car args) (cdr args)) xp) T)
+;;              (:subsequent t)
+;;              (t nil)))
+
+          ((or (not *print-circle*)
+               (sys::uniquely-identified-by-print-p args))
+           nil)
+
+          ((and (plusp sys:*current-print-length*)
+                (sys::check-for-circularity args))
+           (write-string++ ". " xp 0 2)
+           (sys:output-object args xp)
+           t)
+
+          ))
 
   (defun check-block-abbreviation (xp args circle-check?)
     (cond ((not (listp args))
-           (write+ args xp) T)
+           (sys:output-object args xp) T)
           ((and *print-level*
                 (not *print-readably*)
                 (> *current-level* *print-level*))
-           (write-char++ #\# XP) (setq *abbreviation-happened* T) T)
-          ((and *circularity-hash-table*
-                circle-check?
-                (eq (circularity-process xp args nil) :subsequent)) T)
+           (write-char++ #\# xp)
+           (setf *abbreviation-happened* t)
+           t)
+;;           ((and *circularity-hash-table*
+;;                 circle-check?
+;;                 (eq (circularity-process xp args nil) :subsequent)) T)
+
           (t
            nil)))
 ) ;; EVAL-WHEN
@@ -1020,7 +946,7 @@
          (pretty-vector xp array))
 	((zerop (array-rank array))
 	 (write-string++ "#0A" xp 0 3)
-	 (write+ (aref array) xp))
+	 (sys:output-object (aref array) xp))
 	(t
          (pretty-non-vector xp array))))
 
@@ -1028,11 +954,13 @@
   (pprint-logical-block (xp nil :prefix "#(" :suffix ")")
     (let ((end (length v)) (i 0))
       (when (plusp end)
-	(loop (pprint-pop)
-	      (write+ (aref v i) xp)
-	      (if (= (incf i) end) (return nil))
-	      (write-char++ #\space xp)
-	      (pprint-newline+ :fill xp))))))
+	(loop
+          (pprint-pop)
+;;           (write+ (aref v i) xp)
+          (sys:output-object (aref v i) xp)
+          (if (= (incf i) end) (return nil))
+          (write-char++ #\space xp)
+          (pprint-newline+ :fill xp))))))
 
 (declaim (special *prefix*))
 
@@ -1054,7 +982,7 @@
 		     (loop (pprint-pop)
 			   (setf (car spot) i)
 			   (if (= slice bottom)
-			       (write+ (apply #'aref array indices) xp)
+			       (sys:output-object (apply #'aref array indices) xp)
 			       (pretty-slice (1+ slice)))
 			   (if (= (incf i) end) (return nil))
 			   (write-char++ #\space xp)
@@ -1077,20 +1005,22 @@
   (pprint-logical-block (s list :prefix (if colon? "(" "")
 			        :suffix (if colon? ")" ""))
     (pprint-exit-if-list-exhausted)
-    (loop (write+ (pprint-pop) s)
-	  (pprint-exit-if-list-exhausted)
-	  (write-char++ #\space s)
-	  (pprint-newline+ :linear s))))
+    (loop
+      (sys:output-object (pprint-pop) s)
+      (pprint-exit-if-list-exhausted)
+      (write-char++ #\space s)
+      (pprint-newline+ :linear s))))
 
-(defun pprint-fill (s list &optional (colon? T) atsign?)
-  (declare (ignore atsign?))
-  (pprint-logical-block (s list :prefix (if colon? "(" "")
-			        :suffix (if colon? ")" ""))
+(defun pprint-fill (stream object &optional (colon-p t) at-sign-p)
+  (declare (ignore at-sign-p))
+  (pprint-logical-block (stream object :prefix (if colon-p "(" "")
+                                       :suffix (if colon-p ")" ""))
     (pprint-exit-if-list-exhausted)
-    (loop (write+ (pprint-pop) s)
-	  (pprint-exit-if-list-exhausted)
-	  (write-char++ #\space s)
-	  (pprint-newline+ :fill s))))
+    (loop
+      (sys:output-object (pprint-pop) stream)
+      (pprint-exit-if-list-exhausted)
+      (write-char++ #\space stream)
+      (pprint-newline+ :fill stream))))
 
 (defun pprint-tabular (s list &optional (colon? T) atsign? (tabsize nil))
   (declare (ignore atsign?))
@@ -1098,11 +1028,12 @@
   (pprint-logical-block (s list :prefix (if colon? "(" "")
 			        :suffix (if colon? ")" ""))
     (pprint-exit-if-list-exhausted)
-    (loop (write+ (pprint-pop) s)
-	  (pprint-exit-if-list-exhausted)
-	  (write-char++ #\space s)
-	  (pprint-tab+ :section-relative 0 tabsize s)
-	  (pprint-newline+ :fill s))))
+    (loop
+      (sys:output-object (pprint-pop) s)
+      (pprint-exit-if-list-exhausted)
+      (write-char++ #\space s)
+      (pprint-tab+ :section-relative 0 tabsize s)
+      (pprint-newline+ :fill s))))
 
 (defun fn-call (xp list)
   (funcall (formatter "~:<~W~^ ~:I~@_~@{~W~^ ~_~}~:>") xp list))
@@ -1134,9 +1065,9 @@
 	   xp list))
 
 (defun print-fancy-fn-call (xp list template)
-  (let ((i 0) (in-first-section T))
-    (pprint-logical-block+ (xp list "(" ")" nil T nil)
-      (write+ (pprint-pop) xp)
+  (let ((i 0) (in-first-section t))
+    (pprint-logical-block+ (xp list "(" ")" nil t nil)
+      (sys:output-object (pprint-pop) xp)
       (pprint-indent+ :current 1 xp)
       (loop
 	(pprint-exit-if-list-exhausted)
@@ -1149,18 +1080,8 @@
 			      (in-first-section :fill)
 			      (T :linear))
 			xp)
-	(write+ (pprint-pop) xp)
+	(sys:output-object (pprint-pop) xp)
 	(incf i)))))
-
-(defun maybelab (xp item &rest args)
-    (declare (ignore args) (special need-newline indentation))
-  (when need-newline (pprint-newline+ :mandatory xp))
-  (cond ((and item (symbolp item))
-	 (write+ item xp)
-	 (setq need-newline nil))
-	(T (pprint-tab+ :section indentation 0 xp)
-	   (write+ item xp)
-	   (setq need-newline T))))
 
 ;This is an attempt to specify a correct format for every form in the CL book
 ;that does not just get printed out like an ordinary function call
@@ -1196,11 +1117,29 @@
 (defun mvb-print (xp list)
   (print-fancy-fn-call xp list '(1 3 2 1)))
 
+;; Used by PROG-PRINT and TAGBODY-PRINT.
+(defun maybelab (xp item &rest args)
+  (declare (ignore args) (special need-newline indentation))
+  (when need-newline (pprint-newline+ :mandatory xp))
+  (cond ((and item (symbolp item))
+	 (write+ item xp)
+	 (setq need-newline nil))
+	(t (pprint-tab+ :section indentation 0 xp)
+	   (write+ item xp)
+	   (setq need-newline T))))
+
 (defun prog-print (xp list)
   (let ((need-newline T) (indentation (1+ (length (symbol-name (car list))))))
     (declare (special need-newline indentation))
     (funcall (formatter "~:<~W~^ ~:/xp:pprint-fill/~^ ~@{~/xp:maybelab/~^ ~}~:>")
 	     xp list)))
+
+(defun tagbody-print (xp list)
+  (let ((need-newline (and (consp (cdr list))
+			   (symbolp (cadr list)) (cadr list)))
+	(indentation (1+ (length (symbol-name (car list))))))
+    (declare (special need-newline indentation))
+    (funcall (formatter "~:<~W~^ ~@{~/xp:maybelab/~^ ~}~:>") xp list)))
 
 (defun setq-print (xp obj)
   (funcall (formatter "~:<~W~^ ~:I~@_~@{~W~^ ~:_~W~^ ~_~}~:>") xp obj))
@@ -1209,13 +1148,6 @@
   (if (and (consp (cdr list)) (null (cddr list)))
       (funcall (formatter "'~W") xp (cadr list))
       (pprint-fill xp list)))
-
-(defun tagbody-print (xp list)
-  (let ((need-newline (and (consp (cdr list))
-			   (symbolp (cadr list)) (cadr list)))
-	(indentation (1+ (length (symbol-name (car list))))))
-    (declare (special need-newline indentation))
-    (funcall (formatter "~:<~W~^ ~@{~/xp:maybelab/~^ ~}~:>") xp list)))
 
 (defun up-print (xp list)
   (print-fancy-fn-call xp list '(0 3 1 1)))
@@ -1355,8 +1287,26 @@
 		  (write-char #\space xp)
 		  (pprint-newline :linear xp)))))))
 
+;; (defun basic-write (object stream)
+;;   (cond ((xp-structure-p stream)
+;;          (write+ object stream))
+;; 	(*print-pretty*
+;;          (maybe-initiate-xp-printing #'(lambda (s o) (write+ o s))
+;;                                      stream object))
+;; 	(t
+;;          (assert nil)
+;;          (sys:output-object object stream))))
+
 (defun output-pretty-object (object stream)
-  (basic-write object stream))
+;;   (basic-write object stream))
+  (cond ((xp-structure-p stream)
+         (write+ object stream))
+	(*print-pretty*
+         (maybe-initiate-xp-printing #'(lambda (s o) (write+ o s))
+                                     stream object))
+	(t
+         (assert nil)
+         (sys:output-object object stream))))
 
 (provide 'pprint)
 
