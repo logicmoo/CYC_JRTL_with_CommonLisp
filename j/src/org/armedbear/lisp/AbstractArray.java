@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.22 2004-03-06 04:06:01 piso Exp $
+ * $Id: AbstractArray.java,v 1.23 2004-03-06 18:35:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,8 +137,6 @@ public abstract class AbstractArray extends LispObject
             sb.append('.');
             signal(new ProgramError(sb.toString()));
         }
-        if (rank == 0)
-            return 0;
         int sum = 0;
         int size = 1;
         for (int i = rank; i-- > 0;) {
