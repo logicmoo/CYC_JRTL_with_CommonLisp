@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.61 2003-09-11 01:08:46 piso Exp $
+# $Id: Makefile.in,v 1.62 2003-09-11 16:07:48 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -60,6 +60,7 @@ CLASSFILES =	AbstractArray.class \
 		Functional.class \
 		Go.class \
 		HashTable.class \
+		IntegerTypeSpecifier.class \
 		Interpreter.class \
 		Java.class \
 		JavaClassLoader.class \
@@ -77,6 +78,7 @@ CLASSFILES =	AbstractArray.class \
 		Load.class \
 		MacroObject.class \
 		Main.class \
+		MemberTypeSpecifier.class \
 		Module.class \
 		Nil.class \
 		NotTypeSpecifier.class \
