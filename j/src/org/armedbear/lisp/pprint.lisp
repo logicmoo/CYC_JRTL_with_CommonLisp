@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.1 2004-01-27 16:25:19 piso Exp $
+;;; $Id: pprint.lisp,v 1.2 2004-03-02 00:08:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -84,8 +84,8 @@
 #-armedbear
 (provide "XP")
 
-(shadow '(write print prin1 princ #-armedbear pprint format write-to-string princ-to-string
-	  prin1-to-string write-line write-string write-char terpri fresh-line
+(shadow '(write print #-armedbear prin1 #-armedbear princ #-armedbear pprint format write-to-string princ-to-string
+	  prin1-to-string write-line #-armedbear write-string write-char terpri fresh-line
 	  defstruct finish-output force-output clear-output))
 
 (export '(formatter copy-pprint-dispatch pprint-dispatch
@@ -1055,11 +1055,18 @@
 	     (apply #'cl:write object pairs))))
   object)
 
+#-armedbear
 (defun basic-write (object stream)
   (cond ((xp-structure-p stream) (write+ object stream))
 	(*print-pretty* (maybe-initiate-xp-printing
 			  #'(lambda (s o) (write+ o s)) stream object))
 	(T (cl:write object :stream stream))))
+#+armedbear
+(defun basic-write (object stream)
+  (cond ((xp-structure-p stream) (write+ object stream))
+	(*print-pretty* (maybe-initiate-xp-printing
+                         #'(lambda (s o) (write+ o s)) stream object))
+	(t (sys::%write object stream))))
 
 (defun maybe-initiate-xp-printing (fn stream &rest args)
   (if (xp-structure-p stream) (apply fn stream args)
@@ -1349,6 +1356,7 @@
       (cl:write-char char stream))
   char)
 
+#-armedbear
 (defun write-string (string &optional (stream *standard-output*)
 		     &key (start 0) (end (length string)))
   (setq stream (decode-stream-arg stream))
@@ -1357,6 +1365,23 @@
       (cl:write-string string stream :start start :end end))
   string)
 
+#+armedbear
+(defun write-string (string &optional (stream *standard-output*)
+                            &key (start 0) (end (length string)))
+  (setq stream (decode-stream-arg stream))
+  (if (xp-structure-p stream)
+      (write-string+ string stream start end)
+;;       (cl:write-string string stream :start start :end end))
+      (progn
+        (unless start
+          (setf start 0))
+        (if end
+            (setf end (min end (length string)))
+            (setf end (length string)))
+        (sys::%write-string string stream start end)))
+  string)
+
+#-armedbear
 (defun write-line (string &optional (stream *standard-output*)
 		   &key (start 0) (end (length string)))
   (setq stream (decode-stream-arg stream))

@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.1 2004-01-24 20:09:03 piso Exp $
+;;; $Id: compile-file.lisp,v 1.2 2004-03-02 00:04:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,10 +19,6 @@
 
 (in-package "SYSTEM")
 
-(defun compile-file (&rest args)
-  (values nil nil nil))
-
-#+nil
 (defun compile-file (input-file &key output-file verbose print external-format)
   (unless output-file
     (setf output-file (compile-file-pathname input-file)))
