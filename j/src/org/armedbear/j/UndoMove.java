@@ -1,8 +1,8 @@
 /*
  * UndoMove.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: UndoMove.java,v 1.1.1.1 2002-09-24 16:08:27 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: UndoMove.java,v 1.2 2003-08-01 17:23:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,8 @@
 package org.armedbear.j;
 
 import javax.swing.undo.AbstractUndoableEdit;
-import javax.swing.undo.UndoableEdit;
 
-public final class UndoMove extends AbstractUndoableEdit implements Constants,
-    UndoableEdit
+public class UndoMove extends AbstractUndoableEdit implements Constants
 {
     private final State preState;
     private State postState;
