@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.311 2003-08-03 00:11:23 piso Exp $
+ * $Id: Primitives.java,v 1.312 2003-08-03 19:41:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1217,7 +1217,8 @@ public final class Primitives extends Module
                 return NIL;
             }
             // Destination can also be stream or string with fill pointer.
-            throw new LispError("FORMAT: not implemented");
+//             throw new LispError("FORMAT: not implemented");
+            return NIL;
         }
     };
 
@@ -1290,8 +1291,9 @@ public final class Primitives extends Module
                     }
                 } else if (c == '%') {
                     sb.append(System.getProperty("line.separator"));
-                } else
-                    throw new LispError("FORMAT: not implemented");
+                }
+//                 else
+//                     throw new LispError("FORMAT: not implemented");
                 state = NEUTRAL;
             } else {
                 // There are no other valid states.
@@ -3786,6 +3788,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### probe-file
     private static final Primitive1 PROBE_FILE = new Primitive1("probe-file") {
         public LispObject execute(LispObject arg) throws LispError
         {
@@ -4719,6 +4722,14 @@ public final class Primitives extends Module
         {
             coerceToFunction(first).setArglist(second);
             return second;
+        }
+    };
+
+    private static final Primitive1 STREAMP = new Primitive1("STREAMP")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return arg instanceof LispStream ? T : NIL;
         }
     };
 }
