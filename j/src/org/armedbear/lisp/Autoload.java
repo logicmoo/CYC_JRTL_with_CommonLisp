@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.188 2004-06-08 11:27:14 piso Exp $
+ * $Id: Autoload.java,v 1.189 2004-06-26 14:58:27 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -350,6 +350,11 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "assql", "assql", true);
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file", true);
         autoload(PACKAGE_EXT, "gc", "gc", true);
+        autoload(PACKAGE_EXT, "mailbox-empty-p", "Mailbox", true);
+        autoload(PACKAGE_EXT, "mailbox-peek", "Mailbox", true);
+        autoload(PACKAGE_EXT, "mailbox-read", "Mailbox", true);
+        autoload(PACKAGE_EXT, "mailbox-send", "Mailbox", true);
+        autoload(PACKAGE_EXT, "make-mailbox", "Mailbox", true);
         autoload(PACKAGE_EXT, "make-thread-lock", "ThreadLock", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
         autoload(PACKAGE_EXT, "simple-string-fill", "StringFunctions");
