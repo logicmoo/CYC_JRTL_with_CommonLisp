@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.640 2004-05-12 19:07:55 piso Exp $
+ * $Id: Primitives.java,v 1.641 2004-05-15 17:57:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4451,19 +4451,6 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new SimpleString(Integer.toHexString(System.identityHashCode(arg)));
-        }
-    };
-
-    // ### mkdir
-    private static final Primitive1 MKDIR =
-        new Primitive1("mkdir", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            if (arg instanceof AbstractString)
-                return new File(arg.getStringValue()).mkdir() ? T : NIL;
-            else
-                return signal(new TypeError(arg, Symbol.STRING));
         }
     };
 
