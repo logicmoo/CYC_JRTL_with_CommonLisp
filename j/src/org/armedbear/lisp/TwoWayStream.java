@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.10 2004-01-16 16:32:36 piso Exp $
+ * $Id: TwoWayStream.java,v 1.11 2004-01-16 16:54:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,14 @@ public final class TwoWayStream extends LispStream
     {
         this.in = in;
         this.out = out;
+    }
+
+    public TwoWayStream(LispInputStream in, LispOutputStream out,
+                        boolean interactive)
+    {
+        this.in = in;
+        this.out = out;
+        setInteractive(interactive);
     }
 
     public LispInputStream getInputStream()
