@@ -3355,12 +3355,17 @@ there) is inserted at the current location of the caret.
 <p>
 If a block is marked, the inserted text replaces the marked block.
 <p>
-If the text to be inserted ends with a line separator, it is inserted above
-the line containing the caret, as if the caret were in the first column of the
-line, even if that is not the case. The intention behind this is to make it
-easy to cut and paste whole lines of text (or blocks of lines), without having
-to move the caret to the beginning of the line. If possible, the indentation
-of the inserted lines is corrected to match their new context.
+By default, if the text to be inserted ends with a line separator, it is
+inserted above the line containing the caret, as if the caret were in the first
+column of the line, even if that is not the case. The intention behind this is
+to make it easy to cut and paste whole lines of text (or blocks of lines),
+without having to move the caret to the beginning of the line. If possible, the
+indentation of the inserted lines is corrected to match their new context.
+<p>
+You can disable this behavior by setting the property
+<a href="preferences.html#autoPasteLines">autoPasteLines</a> to false. If
+<a href="preferences.html#autoPasteLines">autoPasteLines</a> is false, the
+inserted text is always placed at the exact location of the caret.
 <p>
 <b>Default key mapping:</b> Ctrl V
 <p>

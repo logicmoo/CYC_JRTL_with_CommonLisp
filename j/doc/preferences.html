@@ -196,10 +196,14 @@ A couple of substitutions are supported:
 <code><a name="autoIndent">autoIndent</a></code>
 <dl>
 <dd>
-If true, the functions <code>electricCloseAngleBracket</code>,
-<code>htmlEndTag</code>, <code>htmlInsertTag</code>, <code>htmlBold</code> and
-<code>xmlElectricSlash</code> automatically re-indent the current line
-according to context. This property only applies to HTML and XML modes.
+If true, the functions
+<a href="commands.html#electricCloseAngleBracket">electricCloseAngleBracket</a>,
+<a href="commands.html#htmlEndTag">htmlEndTag</a>,
+<a href="commands.html#htmlInsertTag">htmlInsertTag</a>,
+<a href="commands.html#htmlBold">htmlBold</a> and
+<a href="commands.html#xmlElectricSlash">xmlElectricSlash</a> automatically
+re-indent the current line according to context. This property only applies to
+HTML and XML modes.
 <p>
 <b>Default value:</b> true
 </dl>
@@ -207,11 +211,30 @@ according to context. This property only applies to HTML and XML modes.
 <code><a name="autoNewline">autoNewline</a></code>
 <dl>
 <dd>
-If true, the functions <code>electricOpenBrace</code>,
-<code>electricCloseBrace</code>, <code>electricColon</code> and
-<code>electricSemi</code> automatically insert a line separator.
+If true, the functions
+<a href="commands.html#electricOpenBrace">electricOpenBrace</a>,
+<a href="commands.html#electricCloseBrace">electricCloseBrace</a>,
+<a href="commands.html#electricColon">electricColon</a> and
+<a href="commands.html#electricSemi">electricSemi</a>
+automatically insert a line separator.
 <p>
 <b>Default value:</b> false
+</dl>
+
+<code><a name="autoPasteLines">autoPasteLines</a></code>
+<dl>
+<dd>
+If true, <a href="commands.html#paste">paste</a> inserts text that ends with a
+line separator above the line containing the caret, as if the caret were in the
+first column of the line, even if that is not the case. The intention behind
+this is to make it easy to cut and paste whole lines of text (or blocks of
+lines), without having to move the caret to the beginning of the line. If
+possible, the indentation of the inserted lines is corrected to match their new
+context.
+<p>
+If false, the inserted text is always placed at the exact location of the caret.
+<p>
+<b>Default value:</b> true
 </dl>
 
 <code><a name="autoReloadKeyMaps">autoReloadKeyMaps</a></code>
