@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.96 2003-11-03 16:06:18 piso Exp $
+# $Id: Makefile.in,v 1.97 2003-11-04 00:37:34 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -130,7 +130,6 @@ CLASSFILES =	AbstractArray.class \
 		cell_error_name.class \
 		coerce.class \
 		cxr.class \
-		define_condition.class \
 		delete_file.class \
 		describe.class \
 		dolist.class \
