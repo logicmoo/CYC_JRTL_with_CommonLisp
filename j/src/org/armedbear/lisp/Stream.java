@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.28 2004-02-25 01:28:34 piso Exp $
+ * $Id: Stream.java,v 1.29 2004-02-26 01:44:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -686,9 +686,14 @@ public class Stream extends LispObject
     private LispObject readArray(int rank) throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, true);
-        if (rank == 1)
-            return new SimpleVector(obj);
-        return new Array(rank, obj);
+        switch (rank) {
+            case 0:
+                return new ZeroRankArray(T, obj, false);
+            case 1:
+                return new SimpleVector(obj);
+            default:
+                return new SimpleArray(rank, obj);
+        }
     }
 
     private LispObject readComplex() throws ConditionThrowable
