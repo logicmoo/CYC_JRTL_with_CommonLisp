@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.8 2004-01-26 15:27:25 piso Exp $
+;;; $Id: open.lisp,v 1.9 2004-01-26 20:34:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@
             (error 'file-error
                    :format-control "The file ~S already exists."
                    :format-arguments (list (namestring pathname)))))
-         (nil
+         ((nil)
           (when (probe-file pathname)
             (return-from open nil)))
          (:supersede) ; OK to proceed.
