@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.751 2005-03-29 13:51:55 piso Exp $
+ * $Id: Primitives.java,v 1.752 2005-03-29 19:24:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3824,6 +3824,13 @@ public final class Primitives extends Lisp
         new Primitive("read-8-bits", PACKAGE_SYS, true,
                       "stream &optional eof-error-p eof-value")
     {
+        public LispObject execute (LispObject first, LispObject second,
+                                   LispObject third)
+            throws ConditionThrowable
+        {
+            return checkBinaryInputStream(first).readByte((second != NIL),
+                                                          third);
+        }
         public LispObject execute (LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
