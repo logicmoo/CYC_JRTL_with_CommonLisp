@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.128 2004-05-10 13:13:44 piso Exp $
+ * $Id: Symbol.java,v 1.129 2004-05-22 17:27:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -633,6 +633,21 @@ public class Symbol extends LispObject
             }
         }
         return sb.toString();
+    }
+
+    private static final LispObject UNBOUND = new SimpleString("..unbound..");
+
+    public LispObject getParts() throws ConditionThrowable
+    {
+        LispObject result = NIL;
+        result = result.push(new Cons(new SimpleString("name"), new SimpleString(name)));
+        result = result.push(new Cons(new SimpleString("package"), pkg));
+        result = result.push(new Cons(new SimpleString("value"),
+                                      value != null ? value : UNBOUND));
+        result = result.push(new Cons(new SimpleString("function"),
+                                      function != null ? function : UNBOUND));
+        result = result.push(new Cons(new SimpleString("plist"), getPropertyList()));
+        return result.nreverse();
     }
 
     public final int hashCode()
