@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShell.java,v 1.38 2003-06-26 02:39:27 piso Exp $
+ * $Id: LispShell.java,v 1.39 2003-07-06 01:27:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -361,7 +361,6 @@ public final class LispShell extends Shell
             sb.append(classPath);
             sb.append(" org.armedbear.lisp.Main");
             shellCommand = sb.toString();
-            Log.debug(shellCommand);
         }
         lisp(shellCommand, "lisp", false);
     }
