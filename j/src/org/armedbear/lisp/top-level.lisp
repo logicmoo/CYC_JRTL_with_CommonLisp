@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.43 2005-03-07 18:59:29 piso Exp $
+;;; $Id: top-level.lisp,v 1.44 2005-03-15 16:07:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -99,11 +99,12 @@
           (fresh-line *debug-io*)
           (let ((prefix (format nil "~3D: (" n)))
             (pprint-logical-block (*debug-io* nil :prefix prefix :suffix ")")
-              (prin1 (car frame) *debug-io*)
-              (let ((args (cdr frame)))
-                (if (listp args)
-                    (format *debug-io* "~{ ~_~S~}" args)
-                    (format *debug-io* " ~S" args)))))
+              (ignore-errors
+               (prin1 (car frame) *debug-io*)
+               (let ((args (cdr frame)))
+                 (if (listp args)
+                     (format *debug-io* "~{ ~_~S~}" args)
+                     (format *debug-io* " ~S" args))))))
           (incf n)
           (when (>= n count)
             (return))))))
