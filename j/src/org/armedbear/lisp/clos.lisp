@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.107 2004-06-24 12:17:57 piso Exp $
+;;; $Id: clos.lisp,v 1.108 2004-08-25 16:43:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -847,17 +847,16 @@
                             :format-arguments (list apo)))
                  (push index res)))))))
 
-(defparameter generic-function-table (make-hash-table :test #'equal))
+(defvar generic-function-table (make-hash-table :test #'equal))
 
-;; FIXME Do we still need this?
-(defun find-generic-function (symbol &optional (errorp t))
-  (let ((gf (gethash symbol generic-function-table nil)))
+(defun find-generic-function (name &optional (errorp t))
+  (let ((gf (gethash name generic-function-table nil)))
     (if (and (null gf) errorp)
-        (error "no generic function named ~S" symbol)
+        (error "There is no generic function named ~S." name)
         gf)))
 
-(defun (setf find-generic-function) (new-value symbol)
-  (setf (gethash symbol generic-function-table) new-value))
+(defun (setf find-generic-function) (new-value name)
+  (setf (gethash name generic-function-table) new-value))
 
 (defun lambda-lists-congruent-p (lambda-list1 lambda-list2)
   (let* ((plist1 (analyze-lambda-list lambda-list1))
