@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.103 2003-03-09 17:36:31 piso Exp $
+ * $Id: Primitives.java,v 1.104 2003-03-10 01:43:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1324,26 +1324,34 @@ public final class Primitives extends Module
         return sb.toString();
     }
 
-    // ### defun
-    // Should be a macro.
-    private static final SpecialOperator DEFUN = new SpecialOperator("defun") {
-        public LispObject execute(LispObject args, Environment env)
-            throws LispError
+    // %defun name parameters body => name
+    private static final Primitive _DEFUN = new Primitive("%defun") {
+        public LispObject execute(LispObject[] args) throws LispError
         {
-            Symbol symbol = checkSymbol(args.car());
-            LispObject rest = args.cdr();
-            LispObject parameters = rest.car();
-            LispObject body = rest.cdr();
-            body = new Cons(symbol, body);
-            body = new Cons(Symbol.BLOCK, body);
-            body = new Cons(body, NIL);
-            symbol.setSymbolFunction(new Closure(symbol.getName(), parameters,
-                body, env));
-            // INTERN returns multiple values, but DEFUN does not.
-            setValues(null);
-            return symbol;
+            Symbol symbol = checkSymbol(args[0]);
+            LispObject parameters = checkList(args[1]);
+            LispObject body = checkList(args[2]);
+            Environment env;
+            if (args.length == 4)
+                env = (Environment) args[3];
+            else
+                env = new Environment();
+            return __defun(symbol, parameters, body, env);
         }
     };
+
+    private static final Symbol __defun(Symbol symbol, LispObject parameters,
+        LispObject body, Environment env) throws LispError
+    {
+        body = new Cons(symbol, body);
+        body = new Cons(Symbol.BLOCK, body);
+        body = new Cons(body, NIL);
+        symbol.setSymbolFunction(new Closure(symbol.getName(), parameters,
+            body, env));
+        // INTERN returns multiple values, but DEFUN does not.
+        setValues(null);
+        return symbol;
+    }
 
     // ### defmacro
     private static final SpecialOperator DEFMACRO =

@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.21 2003-03-09 17:37:35 piso Exp $
+;;; $Id: boot.lisp,v 1.22 2003-03-10 01:44:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 (in-package "COMMON-LISP")
 
 (export '(lambda
+          defun
           *features*
           plusp minusp integerp
           character
@@ -34,6 +35,12 @@
 (defmacro lambda (lambda-list &rest body)
   (list 'FUNCTION (append (list 'LAMBDA lambda-list) body)))
 
+(defmacro defun (&rest args)
+  (let ((name (car args))
+        (parameters (cadr args))
+        (body (cddr args)))
+    (list 'cl::%defun
+          (list 'QUOTE name) (list 'QUOTE parameters) (list 'QUOTE body))))
 
 (defvar *features*
   '(:armedbear))
@@ -136,3 +143,12 @@
 (c::compile-package :cl)
 (format t "done~%")
 (finish-output)
+
+;;; Redefine DEFUN to compile the definition on the fly.
+(defmacro defun (&rest args)
+  (let ((name (car args))
+        (parameters (cadr args))
+        (body (cddr args)))
+    `(prog1
+      (cl::%defun ',name ',parameters ',body)
+      (compile ',name))))
