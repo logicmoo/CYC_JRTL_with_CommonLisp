@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.2 2004-03-02 00:04:11 piso Exp $
+;;; $Id: compile-file.lisp,v 1.3 2004-03-04 01:17:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,3 +30,16 @@
             (return))
           (write-line line out)))))
   (values (truename output-file) nil nil))
+
+;; Adapted from SBCL.
+(defun cfp-output-file-default (input-file)
+  (let* ((defaults (merge-pathnames input-file *default-pathname-defaults*))
+	 (retyped (make-pathname :type "compiled" :defaults defaults)))
+    retyped))
+
+(defun compile-file-pathname (input-file
+                              &key
+                              (output-file (cfp-output-file-default
+                                            input-file))
+                              &allow-other-keys)
+  (merge-pathnames output-file (merge-pathnames input-file)))

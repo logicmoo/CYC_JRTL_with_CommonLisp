@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.114 2004-03-03 00:34:57 piso Exp $
+;;; $Id: autoloads.lisp,v 1.115 2004-03-04 01:18:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -140,7 +140,7 @@
 (autoload 'read-sequence)
 (autoload 'write-sequence)
 (autoload 'make-load-form-saving-slots)
-(autoload 'compile-file)
+(autoload '(compile-file compile-file-pathname) "compile-file.lisp")
 (autoload '(pprint pprint-logical-block copy-pprint-dispatch) "pprint.lisp")
 (autoload '(write-byte read-byte) "byte-io.lisp")
 (autoload-macro 'with-open-file)
