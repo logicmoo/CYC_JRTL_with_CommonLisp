@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.130 2004-01-06 15:08:39 asimon Exp $
+ * $Id: Autoload.java,v 1.131 2004-01-07 18:55:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,7 +224,7 @@ public class Autoload extends Function
         autoload("delete-package", "PackageFunctions");
         autoload("describe", "describe");
         autoload("file-error-pathname", "file_error_pathname");
-        autoload("file-write-date", "Time");
+        autoload("file-write-date", "file_write_date");
         autoload("find-class", "LispClass");
         autoload("get-internal-real-time", "Time");
         autoload("get-internal-run-time", "Time");
