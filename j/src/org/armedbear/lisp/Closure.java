@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.49 2003-07-29 23:57:28 piso Exp $
+ * $Id: Closure.java,v 1.50 2003-07-30 15:53:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -209,19 +209,18 @@ public class Closure extends Function
             } else
                 auxVars = null;
         } else {
+            // Lambda list is empty.
             Debug.assertTrue(lambdaList == NIL);
             requiredParameters = null;
             optionalParameters = null;
             keywordParameters = null;
             auxVars = null;
             arity = 0;
-
             minArgs = maxArgs = 0;
         }
         this.body = body;
         this.environment = env;
         this.allowOtherKeys = allowOtherKeys;
-
         minArgs = requiredParameters != null ? requiredParameters.length : 0;
         if (arity >= 0)
             Debug.assertTrue(arity == minArgs);
@@ -599,49 +598,52 @@ public class Closure extends Function
 
     private static class Parameter
     {
-        Symbol keyword;
-        Symbol var;
-        LispObject initForm;
-        LispObject svar = NIL;
-        int type;
+        private final Symbol var;
+        private final LispObject initForm;
+        private final LispObject svar;
+        private final int type;
+        private final Symbol keyword;
 
-        Parameter(Symbol var)
+        public Parameter(Symbol var)
         {
             this.var = var;
+            this.initForm = null;
+            this.svar = NIL;
+            this.type = REQUIRED;
+            this.keyword = null;
         }
 
-        Parameter(Symbol var, LispObject initForm, int type)
+        public Parameter(Symbol var, LispObject initForm, int type)
         {
             this.var = var;
             this.initForm = initForm;
+            this.svar = NIL;
             this.type = type;
-            if (type == KEYWORD)
-                keyword = PACKAGE_KEYWORD.intern(var.getName());
+            keyword =
+                type == KEYWORD ? PACKAGE_KEYWORD.intern(var.getName()) : null;
         }
 
-        Parameter(Symbol var, LispObject initForm, LispObject svar, int type)
+        public Parameter(Symbol var, LispObject initForm, LispObject svar,
+                         int type)
             throws LispError
         {
-            if (svar != NIL)
-                checkSymbol(svar);
             this.var = var;
             this.initForm = initForm;
-            this.svar = svar;
+            this.svar = (svar != NIL) ? checkSymbol(svar) : NIL;
             this.type = type;
-            if (type == KEYWORD)
-                keyword = PACKAGE_KEYWORD.intern(var.getName());
+            keyword =
+                type == KEYWORD ? PACKAGE_KEYWORD.intern(var.getName()) : null;
         }
 
-        Parameter(Symbol keyword, Symbol var, LispObject initForm, LispObject svar)
+        public Parameter(Symbol keyword, Symbol var, LispObject initForm,
+                         LispObject svar)
             throws LispError
         {
-            if (svar != NIL)
-                checkSymbol(svar);
-            this.keyword = keyword;
             this.var = var;
             this.initForm = initForm;
-            this.svar = svar;
+            this.svar = (svar != NIL) ? checkSymbol(svar) : NIL;
             type = KEYWORD;
+            this.keyword = keyword;
         }
 
         public String toString()
