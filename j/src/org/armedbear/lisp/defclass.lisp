@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.30 2003-10-20 15:03:31 piso Exp $
+;;; $Id: defclass.lisp,v 1.31 2003-10-20 15:33:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -530,7 +530,7 @@
    (method-class              ; :accessor generic-function-method-class
     :initarg :method-class)
 ;;    (discriminating-function)  ; :accessor generic-function-discriminating-function
-   (method-combination
+   (method-combination-type
     :initarg :method-combination)
    (classes-to-emf-table      ; :accessor classes-to-emf-table
     :initform (make-hash-table :test #'equal))))
@@ -564,10 +564,10 @@
 (defun (setf generic-function-method-class) (new-value gf)
   (setf (slot-value gf 'method-class) new-value))
 
-(defun generic-function-method-combination (gf)
-  (slot-value gf 'method-combination))
-(defun (setf generic-function-method-combination) (new-value gf)
-  (setf (slot-value gf 'method-combination) new-value))
+(defun generic-function-method-combination-type (gf)
+  (slot-value gf 'method-combination-type))
+(defun (setf generic-function-method-combination-type) (new-value gf)
+  (setf (slot-value gf 'method-combination-type) new-value))
 
 ;;; Internal accessor for effective method function table
 
@@ -731,7 +731,7 @@
     (setf (generic-function-lambda-list gf) lambda-list)
     (setf (generic-function-methods gf) ())
     (setf (generic-function-method-class gf) method-class)
-    (setf (generic-function-method-combination gf) method-combination)
+    (setf (generic-function-method-combination-type gf) method-combination)
     (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
     (finalize-generic-function gf)
     gf))
@@ -1090,14 +1090,29 @@
 (defun std-compute-effective-method-function (gf methods)
 ;;   (let ((primaries (remove-if-not #'primary-method-p methods))
 ;;         (around (find-if #'around-method-p methods)))
-  (let ((primaries ())
+  (let ((type (generic-function-method-combination-type gf))
+        (primaries ())
         (arounds ())
         around)
     (dolist (m methods)
-      (cond ((around-method-p m)
-             (push m arounds))
-            ((primary-method-p m)
-             (push m primaries))))
+;;       (cond ((around-method-p m)
+;;              (push m arounds))
+;;             ((primary-method-p m)
+;;              (push m primaries))))
+      (let ((qualifiers (method-qualifiers m)))
+        (cond ((null qualifiers)
+               (if (eq type 'standard)
+                   (push m primaries)
+                   (error "method combination type mismatch")))
+              ((cdr qualifiers)
+               (error "invalid method qualifiers"))
+              ((eq (car qualifiers) :around)
+               (push m arounds))
+              ((eq (car qualifiers) type)
+               (push m primaries))
+              ((memq (car qualifiers) '(:before :after)))
+              (t
+               (invalid generic-function combin m)))))
     (setq primaries (nreverse primaries))
     (setq arounds (nreverse arounds))
     (setq around (car arounds))
@@ -1112,7 +1127,7 @@
                 gf (remove around methods))))
           #'(lambda (args)
              (funcall (method-function around) args next-emfun)))
-        (case (generic-function-method-combination gf)
+        (case (generic-function-method-combination-type gf)
           (STANDARD
            (let ((next-emfun (compute-primary-emfun (cdr primaries)))
                  (befores (remove-if-not #'before-method-p methods))
@@ -1142,7 +1157,7 @@
                 result)))
           (t
            (error "unsupported method combination type ~S~"
-                  (generic-function-method-combination gf)))))))
+                  (generic-function-method-combination-type gf)))))))
 
 ;;; compute an effective method function from a list of primary methods:
 
