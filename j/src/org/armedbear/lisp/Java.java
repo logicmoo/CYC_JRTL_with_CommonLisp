@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.24 2003-11-17 20:43:58 asimon Exp $
+ * $Id: Java.java,v 1.25 2003-11-19 23:04:52 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,8 +111,8 @@ public final class Java extends Module
                                 break;
                             } else {
                                 // Case 3.
-                              f.set(null,args[2].javaInstance());
-                              return args[2];
+                                f.set(null,args[2].javaInstance());
+                                return args[2];
                             }
                         } else {
                             // Case 7.
@@ -183,13 +183,13 @@ public final class Java extends Module
                 throw new NoSuchMethodException();
             }
             catch (ClassNotFoundException e) {
-              throw new ConditionThrowable(new LispError("class not found: " + e.getMessage()));
+                throw new ConditionThrowable(new LispError("class not found: " + e.getMessage()));
             }
             catch (NoSuchMethodException e) {
                 throw new ConditionThrowable(new LispError("no such constructor"));
             }
             catch (ConditionThrowable e) {
-              throw e;
+                throw e;
             }
             catch (Throwable t) {
                 throw new ConditionThrowable(new LispError(getMessage(t)));
@@ -217,7 +217,7 @@ public final class Java extends Module
                         parameterTypes[i-2] = forClassRef(args[i]);
                     }
                     return new JavaObject(c.getMethod(methodName,
-                        parameterTypes));
+                                                      parameterTypes));
                 }
                 // Parameter types not explicitly specified.
                 Method[] methods = c.getMethods();
@@ -230,13 +230,13 @@ public final class Java extends Module
                 throw new NoSuchMethodException();
             }
             catch (ClassNotFoundException e) {
-              throw new ConditionThrowable(new LispError("class not found: " + e.getMessage()));
+                throw new ConditionThrowable(new LispError("class not found: " + e.getMessage()));
             }
             catch (NoSuchMethodException e) {
                 throw new ConditionThrowable(new LispError("no such method: " + methodName));
             }
             catch (ConditionThrowable e) {
-              throw e;
+                throw e;
             }
             catch (Throwable t) {
                 throw new ConditionThrowable(new LispError(getMessage(t)));
@@ -280,7 +280,7 @@ public final class Java extends Module
                     throw new ConditionThrowable(new TypeError("wrong type: " + methodRef));
                 Object[] methodArgs = new Object[args.length-2];
                 for (int i = 2; i < args.length; i++) {
-                  methodArgs[i-2] = args[i].javaInstance();
+                    methodArgs[i-2] = args[i].javaInstance();
                 }
                 Object result = m.invoke(null, methodArgs);
                 return makeLispObject(result);
@@ -338,6 +338,34 @@ public final class Java extends Module
             }
             catch (Throwable t) {
                 throw new ConditionThrowable(new LispError(getMessage(t)));
+            }
+        }
+    };
+
+    // ### make-immediate-object
+    // make-immediate-object object &optional type
+    private static final Primitive MAKE_IMMEDIATE_OBJECT = new Primitive("make-immediate-object", PACKAGE_JAVA, true)
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 1)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            LispObject object = args[0];
+            try {
+                if (args.length > 1) {
+                    LispObject type = args[1];
+                    if (type == Keyword.BOOLEAN) {
+                        if (object == NIL)
+                            return new JavaObject(Boolean.FALSE);
+                        else
+                            return new JavaObject(Boolean.TRUE);
+                    }
+                    // other special cases come here
+                }
+                return new JavaObject(object.javaInstance());
+            }
+            catch (Throwable t) {
+                throw new ConditionThrowable(new LispError("MAKE-IMMEDIATE-OBJECT: not implemented"));
             }
         }
     };
@@ -411,7 +439,7 @@ public final class Java extends Module
                     Throwable.class.getMethod("getCause", new Class[0]);
                 if (method != null) {
                     Throwable cause = (Throwable) method.invoke(t,
-                        new Object[0]);
+                                                                new Object[0]);
                     if (cause != null)
                         t = cause;
                 }
