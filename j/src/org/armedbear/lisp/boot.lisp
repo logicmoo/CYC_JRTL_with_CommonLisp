@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.202 2005-02-01 15:21:36 piso Exp $
+;;; $Id: boot.lisp,v 1.203 2005-02-05 17:49:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -319,6 +319,7 @@
 (load-system-file "print")
 (load-system-file "pprint-dispatch")
 (load-system-file "pprint")
+(load-system-file "defsetf")
 
 (unless (sys::featurep :j)
   (load-system-file "top-level")
