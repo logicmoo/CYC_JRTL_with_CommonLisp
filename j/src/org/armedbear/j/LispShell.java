@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.55 2004-04-13 15:13:36 piso Exp $
+ * $Id: LispShell.java,v 1.56 2004-04-22 00:47:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -397,7 +397,7 @@ public class LispShell extends Shell
     }
 
     private static void lisp(String shellCommand, String title,
-        boolean requireJpty)
+                             boolean requireJpty)
     {
         if (requireJpty && !Utilities.haveJpty()) {
             MessageDialog.showMessageDialog(JPTY_NOT_FOUND, "Error");
