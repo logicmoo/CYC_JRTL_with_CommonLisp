@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Environment.java,v 1.6 2003-09-19 01:46:40 piso Exp $
+ * $Id: Environment.java,v 1.7 2003-11-18 14:11:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,8 @@ package org.armedbear.lisp;
 
 public final class Environment extends LispObject
 {
-    private Binding lastBinding;
-    private Binding lastFunctionalBinding;
-
+    private Binding vars;
+    private Binding functions;
     private Binding blocks;
 
     public Environment() {}
@@ -33,20 +32,20 @@ public final class Environment extends LispObject
     public Environment(Environment parent)
     {
         if (parent != null) {
-            this.lastBinding = parent.lastBinding;
-            this.lastFunctionalBinding = parent.lastFunctionalBinding;
+            this.vars = parent.vars;
+            this.functions = parent.functions;
             this.blocks = parent.blocks;
         }
     }
 
     public boolean isEmpty()
     {
-        return (lastBinding == null && lastFunctionalBinding == null);
+        return (vars == null && functions == null);
     }
 
     public void bind(Symbol symbol, LispObject value)
     {
-        lastBinding = new Binding(symbol, value, lastBinding);
+        vars = new Binding(symbol, value, vars);
     }
 
     public void rebind(Symbol symbol, LispObject value)
@@ -57,7 +56,7 @@ public final class Environment extends LispObject
 
     public LispObject lookup(LispObject symbol)
     {
-        Binding binding = lastBinding;
+        Binding binding = vars;
         while (binding != null) {
             if (binding.symbol == symbol)
                 return binding.value;
@@ -68,7 +67,7 @@ public final class Environment extends LispObject
 
     public Binding getBinding(LispObject symbol)
     {
-        Binding binding = lastBinding;
+        Binding binding = vars;
         while (binding != null) {
             if (binding.symbol == symbol)
                 return binding;
@@ -80,13 +79,13 @@ public final class Environment extends LispObject
     // Functional bindings.
     public void bindFunctional(Symbol symbol, LispObject value)
     {
-        lastFunctionalBinding =
-            new Binding(symbol, value, lastFunctionalBinding);
+        functions = new Binding(symbol, value, functions);
     }
 
-    public LispObject lookupFunctional(LispObject symbol) throws ConditionThrowable
+    public LispObject lookupFunctional(LispObject symbol)
+        throws ConditionThrowable
     {
-        Binding binding = lastFunctionalBinding;
+        Binding binding = functions;
         while (binding != null) {
             if (binding.symbol == symbol)
                 return binding.value;
@@ -116,7 +115,7 @@ public final class Environment extends LispObject
     {
         StringBuffer sb = new StringBuffer();
         sb.append("#<ENVIRONMENT");
-        Binding binding = lastBinding;
+        Binding binding = vars;
         while (binding != null) {
             sb.append(' ');
             sb.append(binding.symbol.getName());
