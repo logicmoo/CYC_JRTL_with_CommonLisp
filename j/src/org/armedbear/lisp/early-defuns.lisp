@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.1 2003-05-30 16:14:35 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.2 2003-06-23 02:18:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,18 +19,6 @@
 
 (in-package "COMMON-LISP")
 
-(export '(caadr caaar cdaar cddar cdddr cadar cdadr
-          caaaar caaadr caaddr cadddr cddddr cdaaar cddaar cdddar
-          caadar cadaar cadadr caddar cdaadr cdadar cdaddr cddadr
-          some every notany notevery))
-
-(defun caadr (list) (car (car (cdr list))))
-(defun caaar (list) (car (car (car list))))
-(defun cdaar (list) (cdr (car (car list))))
-(defun cddar (list) (cdr (cdr (car list))))
-(defun cdddr (list) (cdr (cdr (cdr list))))
-(defun cadar (list) (car (cdr (car list))))
-(defun cdadr (list) (cdr (car (cdr list))))
 (defun caaaar (list) (car (car (car (car list)))))
 (defun caaadr (list) (car (car (car (cdr list)))))
 (defun caaddr (list) (car (car (cdr (cdr list)))))
