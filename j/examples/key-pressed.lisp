@@ -1,7 +1,7 @@
 ;;; key-pressed.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: key-pressed.lisp,v 1.2 2003-05-17 15:31:31 piso Exp $
+;;; $Id: key-pressed.lisp,v 1.3 2003-06-13 16:23:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -81,10 +81,6 @@
           ((functionp value)
            (funcall value)))))
 
-;;; Enable the hook.
-(setq key-pressed-hook #'key-pressed)
-(set-global-property "enableKeyPressedHook" "true")
-
 ;;; Key assignments.
 (assign-key "Ctrl O"
             #'(lambda ()
@@ -152,3 +148,7 @@
 (assign-key "Alt O" 'other-window)
 (assign-key "Alt F9"
             #'(lambda () (shell) (restore-focus)))
+
+;;; Enable the hook.
+(add-hook 'key-pressed-hook 'key-pressed)
+(set-global-property "enableKeyPressedHook" "true")
