@@ -2,7 +2,7 @@
  * SendMail.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SendMail.java,v 1.1.1.1 2002-09-24 16:09:58 piso Exp $
+ * $Id: SendMail.java,v 1.2 2002-10-10 17:42:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,16 +81,28 @@ public final class SendMail extends Buffer
     {
         super();
         init();
-        appendFrom();
-        appendLine("To: ");
-        appendLine("Subject: ");
-        appendDefaultHeaders();
-        appendLine(HEADER_SEPARATOR);
-        appendLine("");
-        appendSignature();
-        renumber();
-        formatter.parseBuffer();
-        isLoaded = true;
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            appendFrom();
+            appendLine("To: ");
+            appendLine("Subject: ");
+            appendDefaultHeaders();
+            appendLine(HEADER_SEPARATOR);
+            appendLine("");
+            appendSignature();
+            renumber();
+            formatter.parseBuffer();
+            isLoaded = true;
+        }
+        finally {
+            unlockWrite();
+        }
     }
 
     // Re-opening an unsent message.
@@ -108,20 +120,32 @@ public final class SendMail extends Buffer
         init();
         mailbox = messageBuffer.getMailbox();
         entryRepliedTo = messageBuffer.getMailboxEntry();
-        appendFrom();
-        appendLine("To: ");
-        appendLine("Subject: [Fwd: " + entryRepliedTo.getSubject() + "]");
-        appendDefaultHeaders();
-        appendLine(HEADER_SEPARATOR);
-        appendLine("");
-        Position pos = new Position(getLastLine(), 0);
-        insertString(pos, "----- Forwarded message -----\n\n");
-        insertString(pos, messageBuffer.getText());
-        insertString(pos, "\n\n----- End of forwarded message -----");
-        unmodified();
-        renumber();
-        formatter.parseBuffer();
-        isLoaded = true;
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            appendFrom();
+            appendLine("To: ");
+            appendLine("Subject: [Fwd: " + entryRepliedTo.getSubject() + "]");
+            appendDefaultHeaders();
+            appendLine(HEADER_SEPARATOR);
+            appendLine("");
+            Position pos = new Position(getLastLine(), 0);
+            insertString(pos, "----- Forwarded message -----\n\n");
+            insertString(pos, messageBuffer.getText());
+            insertString(pos, "\n\n----- End of forwarded message -----");
+            unmodified();
+            renumber();
+            formatter.parseBuffer();
+            isLoaded = true;
+        }
+        finally {
+            unlockWrite();
+        }
     }
 
     // Reply.
@@ -137,75 +161,87 @@ public final class SendMail extends Buffer
         MailAddress[] to = entryRepliedTo.getTo();
         MailAddress[] cc = entryRepliedTo.getCc();
         boolean skipTo = false;
-        appendFrom();
-        // Get senders.
-        List senders = null;
-        if (replyTo != null && replyTo.length > 0) {
-            senders = new ArrayList();
-            for (int i = 0; i < replyTo.length; i++)
-                senders.add(replyTo[i]);
-        } else if (from != null && from.length > 0) {
-            senders = new ArrayList();
-            for (int i = 0; i < from.length; i++)
-                senders.add(from[i]);
+        try {
+            lockWrite();
         }
-        if (senders != null) {
-            Debug.assertTrue(senders.size() > 0);
-            // Remove user's address from list of senders.
-            for (int i = senders.size()-1; i >= 0; i--) {
-                MailAddress a = (MailAddress) senders.get(i);
-                if (a.addressMatches(Mail.getUserMailAddress()))
-                    senders.remove(i);
-            }
-            if (senders.size() == 0) {
-                // User was the only sender of the original message.
-                // Use "To" addresses instead.
-                for (int i = 0; i < to.length; i++)
-                    senders.add(to[i]);
-                // Don't add "To" addresses to group.
-                skipTo = true;
-            }
-            removeDuplicateAddresses(senders);
-            appendAddressHeader("To: ", senders);
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
         }
-        // Gather addresses for reply to group.
-        group = new ArrayList();
-        if (!skipTo && to != null) {
-            for (int i = 0;  i < to.length; i++) {
-                MailAddress a = to[i];
-                if (!a.addressMatches(Mail.getUserMailAddress()))
-                    group.add(a);
+        try {
+            appendFrom();
+            // Get senders.
+            List senders = null;
+            if (replyTo != null && replyTo.length > 0) {
+                senders = new ArrayList();
+                for (int i = 0; i < replyTo.length; i++)
+                    senders.add(replyTo[i]);
+            } else if (from != null && from.length > 0) {
+                senders = new ArrayList();
+                for (int i = 0; i < from.length; i++)
+                    senders.add(from[i]);
             }
-        }
-        if (cc != null) {
-            for (int i = 0;  i < cc.length; i++) {
-                MailAddress a = cc[i];
-                if (!a.addressMatches(Mail.getUserMailAddress()))
-                    group.add(a);
+            if (senders != null) {
+                Debug.assertTrue(senders.size() > 0);
+                // Remove user's address from list of senders.
+                for (int i = senders.size()-1; i >= 0; i--) {
+                    MailAddress a = (MailAddress) senders.get(i);
+                    if (a.addressMatches(Mail.getUserMailAddress()))
+                        senders.remove(i);
+                }
+                if (senders.size() == 0) {
+                    // User was the only sender of the original message.
+                    // Use "To" addresses instead.
+                    for (int i = 0; i < to.length; i++)
+                        senders.add(to[i]);
+                    // Don't add "To" addresses to group.
+                    skipTo = true;
+                }
+                removeDuplicateAddresses(senders);
+                appendAddressHeader("To: ", senders);
             }
+            // Gather addresses for reply to group.
+            group = new ArrayList();
+            if (!skipTo && to != null) {
+                for (int i = 0;  i < to.length; i++) {
+                    MailAddress a = to[i];
+                    if (!a.addressMatches(Mail.getUserMailAddress()))
+                        group.add(a);
+                }
+            }
+            if (cc != null) {
+                for (int i = 0;  i < cc.length; i++) {
+                    MailAddress a = cc[i];
+                    if (!a.addressMatches(Mail.getUserMailAddress()))
+                        group.add(a);
+                }
+            }
+            removeDuplicateAddresses(group);
+            // Add group to recipients if applicable.
+            if (replyToGroup && group.size() > 0)
+                appendAddressHeader("Cc: ", group);
+            String subject = entryRepliedTo.getSubject();
+            if (!subject.toLowerCase().startsWith("re:"))
+                subject = "Re: ".concat(subject);
+            appendLine("Subject: ".concat(subject));
+            appendLine("In-Reply-To: " + entryRepliedTo.getMessageId());
+            appendReferences();
+            appendDefaultHeaders();
+            appendLine(HEADER_SEPARATOR);
+            String s =
+                messageBuffer.quoteBody(getIntegerProperty(Property.WRAP_COL));
+            if (s != null)
+                append(s);
+            appendLine("");
+            appendSignature();
+            unmodified();
+            renumber();
+            formatter.parseBuffer();
+            isLoaded = true;
         }
-        removeDuplicateAddresses(group);
-        // Add group to recipients if applicable.
-        if (replyToGroup && group.size() > 0)
-            appendAddressHeader("Cc: ", group);
-        String subject = entryRepliedTo.getSubject();
-        if (!subject.toLowerCase().startsWith("re:"))
-            subject = "Re: ".concat(subject);
-        appendLine("Subject: ".concat(subject));
-        appendLine("In-Reply-To: " + entryRepliedTo.getMessageId());
-        appendReferences();
-        appendDefaultHeaders();
-        appendLine(HEADER_SEPARATOR);
-        String s =
-            messageBuffer.quoteBody(getIntegerProperty(Property.WRAP_COL));
-        if (s != null)
-            append(s);
-        appendLine("");
-        appendSignature();
-        unmodified();
-        renumber();
-        formatter.parseBuffer();
-        isLoaded = true;
+        finally {
+            unlockWrite();
+        }
     }
 
     private void init()
@@ -265,7 +301,7 @@ public final class SendMail extends Buffer
     private static void removeDuplicateAddresses(List list)
     {
         // Remove duplicate entries from list.
-        for (int i = list.size()-1; i >= 0; i--) {
+        for (int i = list.size(); i-- > 0;) {
             MailAddress ma = (MailAddress) list.get(i);
             String addr = ma.getAddress();
             for (int j = i-1; j >= 0; j--) {
