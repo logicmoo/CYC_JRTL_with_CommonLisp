@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.233 2004-07-22 17:25:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.234 2004-07-23 00:37:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,6 +28,9 @@
 (shadow '(method variable))
 
 (defvar *use-locals-vector* nil)
+
+;; FIXME Get rid of this!
+(defvar *support-non-local-returns* nil)
 
 ;; FIXME
 ;; This controls compiler debugging output, not debuggability of compiled code!
@@ -1718,6 +1721,12 @@
          nil)
         ((RETURN-FROM GO CATCH THROW UNWIND-PROTECT)
          t)
+        (BLOCK
+         (if *support-non-local-returns*
+             t
+             (dolist (arg (cdr args))
+               (when (unsafe-p arg)
+                 (return t)))))
         (t
          (dolist (arg args)
            (when (unsafe-p arg)
@@ -2298,10 +2307,10 @@
     (when (eql name (tag-name tag))
       (return tag))))
 
-(defun label-for-tag (name)
-  (dolist (tag *local-tags*)
-    (when (eql name (tag-name tag))
-      (return (tag-label tag)))))
+;; (defun label-for-tag (name)
+;;   (dolist (tag *local-tags*)
+;;     (when (eql name (tag-name tag))
+;;       (return (tag-label tag)))))
 
 (defun compile-tagbody (form &key (target *val*))
   (let ((*local-tags* *local-tags*)
@@ -2371,37 +2380,45 @@
            (when (contains-return subform)
              (return t)))))))
 
-(defstruct cblock
-  label
+(defstruct (block-descriptor (:conc-name block-))
+  name
+  (compiland *current-compiland*)
   exit
-  target)
+  target
+  catch-tag)
 
 (defun compile-block (form &key (target *val*))
-  (let* ((block-label (cadr form))
+  (let* ((name (cadr form))
          (body (cddr form))
          (block-exit (gensym))
-         (cblock (make-cblock :label block-label
-                              :exit block-exit
-                              :target target))
+         (block (make-block-descriptor :name name
+                                       :exit block-exit
+                                       :target target))
          (*blocks* *blocks*)
          (*register* *register*)
          env-register)
-    (push cblock *blocks*)
+    (push block *blocks*)
     (when (contains-return body)
       ;; Save current dynamic environment.
       (setf env-register (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
       (emit 'astore env-register))
-    ;; Compile subforms.
-    (do ((subforms body (cdr subforms)))
-        ((null subforms))
-      (let* ((subform (car subforms))
-             (last-subform-p (null (cdr subforms)))
-             (real-target (if last-subform-p target nil)))
-        (compile-form subform :target real-target)
-        (unless last-subform-p
-          (maybe-emit-clear-values subform))))
+
+    (cond (*support-non-local-returns*
+           (setf (block-catch-tag block) (gensym))
+           (compile-form (list* 'CATCH `',(block-catch-tag block) body) :target target))
+          (t
+           ;; Compile subforms.
+           (do ((subforms body (cdr subforms)))
+               ((null subforms))
+             (let* ((subform (car subforms))
+                    (last-subform-p (null (cdr subforms)))
+                    (real-target (if last-subform-p target nil)))
+               (compile-form subform :target real-target)
+               (unless last-subform-p
+                 (maybe-emit-clear-values subform))))))
+
     (emit 'label `,block-exit)
     (when env-register
       ;; Restore dynamic environment.
@@ -2410,15 +2427,20 @@
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-return-from (form &key (target *val*))
-  (let* ((rest (cdr form))
-         (block-label (car rest))
-         (cblock (find block-label *blocks* :key #'cblock-label))
-         (block-exit (and cblock (cblock-exit cblock)))
-         (result-form (cadr rest)))
-    (unless block-exit
-      (error "No block named ~S is currently visible." block-label))
-    (compile-form result-form :target (cblock-target cblock))
-    (emit 'goto `,block-exit)))
+  (let* ((name (second form))
+         (result-form (third form))
+         (block (find name *blocks* :key #'block-name)))
+    (unless block
+      (error "No block named ~S is currently visible." name))
+    (cond
+     ((eq (block-compiland block) *current-compiland*)
+      (compile-form result-form :target (block-target block))
+      (emit 'goto (block-exit block)))
+     (*support-non-local-returns*
+      (%format t "COMPILE-RETURN-FROM: block not local: ~S~%" name)
+      (compile-form (list 'THROW `',(block-catch-tag block) result-form) :target target))
+     (t
+      (error "COMPILE-RETURN-FROM: block not local: ~S" name)))))
 
 (defun compile-cons (form &key (target *val*))
   (unless (= (length form) 3)
@@ -3371,7 +3393,8 @@
            (*code* ())
            (*static-code* ())
            (*fields* ())
-           (*blocks* ())
+;;            (*blocks* ())
+;;            (*blocks* *blocks*)
 
            (*local-tags* nil)
 
