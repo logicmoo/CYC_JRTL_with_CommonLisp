@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.41 2004-01-18 03:17:34 piso Exp $
+;;; $Id: subtypep.lisp,v 1.42 2004-01-18 20:22:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -349,20 +349,6 @@
                     (values (dimension-subtypep d1 d2) t))
                    (t
                     (values nil t)))))
-          ((and (eq t1 'simple-array) (eq t2 'simple-array))
-           (let ((e1 (car i1))
-                 (e2 (car i2))
-                 (d1 (cadr i1))
-                 (d2 (cadr i2)))
-             (cond ((and (eq e2 '*) (eq d2 '*))
-                    (values t t))
-                   ((or (eq e2 '*)
-                        (equal e1 e2)
-                        (equal (upgraded-array-element-type e1)
-                               (upgraded-array-element-type e2)))
-                    (values (dimension-subtypep d1 d2) t))
-                   (t
-                    (values nil t)))))
           ((and (memq t1 '(array simple-array)) (eq t2 'string))
            (let ((element-type (car i1))
                  (dim (cadr i1))
@@ -410,6 +396,20 @@
                        (and (consp dim) (= (length dim) 1)))
                    (return-from subtypep (values t t))
                    (return-from subtypep (values nil t))))))
+          ((and (eq t1 'simple-array) (eq t2 'simple-array))
+           (let ((e1 (car i1))
+                 (e2 (car i2))
+                 (d1 (cadr i1))
+                 (d2 (cadr i2)))
+             (cond ((and (eq e2 '*) (eq d2 '*))
+                    (values t t))
+                   ((or (eq e2 '*)
+                        (equal e1 e2)
+                        (equal (upgraded-array-element-type e1)
+                               (upgraded-array-element-type e2)))
+                    (values (dimension-subtypep d1 d2) t))
+                   (t
+                    (values nil t)))))
           ((and (eq t1 'simple-string) (eq t2 'simple-array))
            (let ((element-type (car i2))
                  (dim (cadr i2))
@@ -427,6 +427,8 @@
                        (and (consp dim) (= (length dim) 1)))
                    (return-from subtypep (values t t))
                    (return-from subtypep (values nil t))))))
+          ((eq t2 'simple-array)
+           (values nil t))
           (t
            (values nil nil)))))
 
