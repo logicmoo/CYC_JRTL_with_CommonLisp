@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.170 2004-05-29 18:11:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.171 2004-05-29 20:51:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1928,15 +1928,21 @@
         (let ((name f)
               (label (gensym)))
           (vector-push (make-tag :name name :label label) *tags*))))
-    (dolist (f body)
-      (cond ((atom f)
-             (let ((label (label-for-tag f)))
+    (do* ((rest body (cdr rest))
+          (subform (car rest) (car rest)))
+         ((null rest))
+      (cond ((atom subform)
+             (let ((label (label-for-tag subform)))
                (unless label
-                 (error "COMPILE-TAGBODY: tag not found: ~S" f))
+                 (error "COMPILE-TAGBODY: tag not found: ~S" subform))
                (emit 'label label)))
             (t
-             (compile-form f t)
-             (maybe-emit-clear-values f))))
+             (when (and (null (cdr rest)) ;; Last subform.
+                        (consp subform)
+                        (eq (car subform) 'GO))
+               (generate-interrupt-check))
+             (compile-form subform t)
+             (maybe-emit-clear-values subform))))
     (setf (fill-pointer *tags*) saved-fp))
   ;; TAGBODY returns NIL.
   (emit-clear-values)
@@ -2044,8 +2050,9 @@
 
 (defun compile-progn (form for-effect)
   (cond ((null (cdr form))
-         (emit-push-nil)
-         (emit-store-value))
+         (unless for-effect
+           (emit-push-nil)
+           (emit-store-value)))
         (t
          (do ((forms (cdr form) (cdr forms)))
              ((null forms))
