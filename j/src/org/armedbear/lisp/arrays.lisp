@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: arrays.lisp,v 1.11 2003-06-23 19:08:20 piso Exp $
+;;; $Id: arrays.lisp,v 1.12 2003-06-23 19:41:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,14 +33,6 @@
 
 (defun array-row-major-index (array &rest subscripts)
   (%array-row-major-index array subscripts))
-
-(defun aref (array &rest subscripts)
-  (cond ((null subscripts)
-         (row-major-aref array 0))
-        ((null (cdr subscripts))
-         (row-major-aref array (car subscripts)))
-        (t
-         (row-major-aref array (%array-row-major-index array subscripts)))))
 
 (defun %aset (array &rest stuff)
   (if (= (length stuff) 2)
