@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.46 2004-02-18 17:30:08 piso Exp $
+;;; $Id: defstruct.lisp,v 1.47 2004-04-16 13:28:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -493,7 +493,9 @@
                                          :print-function ,*dd-print-function*
                                          :direct-slots ',*dd-direct-slots*
                                          :slots ',*dd-slots*))
-       (make-structure-class ',*dd-name* ',*dd-direct-slots* ',*dd-slots*)
+       (when (or ',*dd-named* (null ',*dd-type*))
+         (make-structure-class ',*dd-name* ',*dd-direct-slots* ',*dd-slots*
+                               ',(car *dd-include*)))
        ,@(define-constructors)
        ,@(define-predicate)
        ,@(define-access-functions)
