@@ -2,7 +2,7 @@
  * Session.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Session.java,v 1.4 2003-02-02 02:34:04 piso Exp $
+ * $Id: Session.java,v 1.5 2003-02-03 01:24:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,28 +219,26 @@ public final class Session extends HandlerBase implements Constants
             SessionBufferEntry entry = (SessionBufferEntry) iter.next();
             if (entry != null) {
                 File file = File.getInstance(entry.getPath());
-                Debug.assertTrue(file.isLocal());
-                if (!file.exists())
-                    continue;
-                int modeId = entry.getModeId(); // Returns -1 if mode not found.
-                Buffer buf = null;
-                if (modeId == WEB_MODE) {
-                    buf = WebBuffer.createWebBuffer(file, null, null);
-                } else {
-                    // Not web mode.
+                if (file.isLocal()) {
+                    Buffer buf = null;
                     if (file.isDirectory())
                         buf = new Directory(file);
-                    else if (file.isFile() && file.canRead())
-                        buf = Buffer.createBuffer(file);
-                }
-                if (buf != null) {
-                    buf.setLastView(new View(entry));
-                    if (toBeActivated == null ||
-                        entry.getLastActivated() > lastActivated) {
-                        toBeActivated = buf;
-                        lastActivated = entry.getLastActivated();
+                    else if (file.isFile() && file.canRead()) {
+                        if (entry.getModeId() == WEB_MODE)
+                            buf = WebBuffer.createWebBuffer(file, null, null);
+                        else
+                            buf = Buffer.createBuffer(file);
                     }
-                }
+                    if (buf != null) {
+                        buf.setLastView(new View(entry));
+                        if (toBeActivated == null ||
+                            entry.getLastActivated() > lastActivated) {
+                            toBeActivated = buf;
+                            lastActivated = entry.getLastActivated();
+                        }
+                    }
+                } else
+                    Debug.bug();
             }
         }
         if (toBeActivated == null)
