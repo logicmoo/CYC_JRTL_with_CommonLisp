@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.7 2003-02-21 01:22:07 piso Exp $
+ * $Id: Symbol.java,v 1.8 2003-02-25 16:44:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,32 +23,34 @@ package org.armedbear.lisp;
 
 public final class Symbol extends LispObject
 {
-    public static final Symbol AND_KEY       = export("&KEY");
-    public static final Symbol AND_OPTIONAL  = export("&OPTIONAL");
-    public static final Symbol AND_REST      = export("&REST");
-    public static final Symbol BLOCK         = export("BLOCK");
-    public static final Symbol LAMBDA        = export("LAMBDA");
-    public static final Symbol LET           = export("LET");
-    public static final Symbol OTHERWISE     = export("OTHERWISE");
-    public static final Symbol QUOTE         = export("QUOTE");
+    public static final Symbol AND_KEY            = export("&KEY");
+    public static final Symbol AND_OPTIONAL       = export("&OPTIONAL");
+    public static final Symbol AND_REST           = export("&REST");
+    public static final Symbol BLOCK              = export("BLOCK");
+    public static final Symbol LAMBDA             = export("LAMBDA");
+    public static final Symbol LET                = export("LET");
+    public static final Symbol OTHERWISE          = export("OTHERWISE");
+    public static final Symbol QUOTE              = export("QUOTE");
 
     // Type specifiers.
-    public static final Symbol CONS          = export("CONS");
-    public static final Symbol CHARACTER     = export("CHARACTER");
-    public static final Symbol FIXNUM        = export("FIXNUM");
-    public static final Symbol FUNCTION      = export("FUNCTION");
-    public static final Symbol NULL          = export("NULL");
-    public static final Symbol PACKAGE       = export("PACKAGE");
-    public static final Symbol STRING        = export("STRING");
-    public static final Symbol SYMBOL        = export("SYMBOL");
-    public static final Symbol VECTOR        = export("VECTOR");
+    public static final Symbol BIT_VECTOR         = export("BIT-VECTOR");
+    public static final Symbol CONS               = export("CONS");
+    public static final Symbol CHARACTER          = export("CHARACTER");
+    public static final Symbol FIXNUM             = export("FIXNUM");
+    public static final Symbol FUNCTION           = export("FUNCTION");
+    public static final Symbol NULL               = export("NULL");
+    public static final Symbol PACKAGE            = export("PACKAGE");
+    public static final Symbol SIMPLE_BIT_VECTOR  = export("SIMPLE-BIT-VECTOR");
+    public static final Symbol STRING             = export("STRING");
+    public static final Symbol SYMBOL             = export("SYMBOL");
+    public static final Symbol VECTOR             = export("VECTOR");
 
     // Condition types.
-    public static final Symbol ERROR         = export("ERROR");
-    public static final Symbol CONTROL_ERROR = export("CONTROL-ERROR");
-    public static final Symbol PACKAGE_ERROR = export("PACKAGE-ERROR");
-    public static final Symbol PROGRAM_ERROR = export("PROGRAM-ERROR");
-    public static final Symbol TYPE_ERROR    = export("TYPE-ERROR");
+    public static final Symbol ERROR              = export("ERROR");
+    public static final Symbol CONTROL_ERROR      = export("CONTROL-ERROR");
+    public static final Symbol PACKAGE_ERROR      = export("PACKAGE-ERROR");
+    public static final Symbol PROGRAM_ERROR      = export("PROGRAM-ERROR");
+    public static final Symbol TYPE_ERROR         = export("TYPE-ERROR");
     public static final Symbol UNDEFINED_FUNCTION =
         export("UNDEFINED-FUNCTION");
 
