@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.49 2004-02-10 23:42:34 piso Exp $
+ * $Id: Pathname.java,v 1.50 2004-02-14 00:21:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -551,6 +551,8 @@ public class Pathname extends LispObject
             signal(new ProgramError("Odd number of keyword arguments."));
         Pathname p = new Pathname();
         Pathname defaults = null;
+        boolean nameSupplied = false;
+        boolean typeSupplied = false;
         for (int i = 0; i < args.length; i += 2) {
             LispObject key = args[i];
             LispObject value = args[i+1];
@@ -567,8 +569,10 @@ public class Pathname extends LispObject
                     p.directory = validateDirectory(value);
             } else if (key == Keyword.NAME) {
                 p.name = value;
+                nameSupplied = true;
             } else if (key == Keyword.TYPE) {
                 p.type = value;
+                typeSupplied = true;
             } else if (key == Keyword.VERSION) {
                 p.version = value;
             } else if (key == Keyword.DEFAULTS) {
@@ -580,9 +584,9 @@ public class Pathname extends LispObject
         if (defaults != null) {
             // Ignore host and device. FIXME Windows!
             p.directory = mergeDirectories(p.directory, defaults.directory);
-            if (p.name == NIL)
+            if (!nameSupplied)
                 p.name = defaults.name;
-            if (p.type == NIL)
+            if (!typeSupplied)
                 p.type = defaults.type;
         }
         return p;
