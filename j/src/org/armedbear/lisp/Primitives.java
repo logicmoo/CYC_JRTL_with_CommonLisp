@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.2 2003-01-25 18:08:50 piso Exp $
+ * $Id: Primitives.java,v 1.3 2003-01-26 02:08:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2203,21 +2203,12 @@ public final class Primitives extends Module
     };
 
     // ### package-nicknames
+    // package-nicknames package => nicknames
     private static final Primitive1 PACKAGE_NICKNAMES =
         new Primitive1("package-nicknames") {
         public LispObject execute(LispObject arg) throws LispException
         {
-            Package pkg = null;
-            if (arg instanceof Package)
-                pkg = (Package) arg;
-            else if (arg instanceof LispString)
-                pkg = Packages.findPackage(((LispString)arg).getValue());
-            else if (arg instanceof Symbol)
-                pkg = Packages.findPackage(arg.getName());
-            if (pkg == null)
-                throw new LispException(String.valueOf(arg) +
-                    "is not a package");
-            return pkg.getNicknames();
+            return coerceToPackage(arg).getNicknames();
         }
     };
 
@@ -2227,35 +2218,17 @@ public final class Primitives extends Module
         new Primitive1("package-use-list") {
         public LispObject execute(LispObject arg) throws LispException
         {
-            Package pkg = null;
-            if (arg instanceof Package)
-                pkg = (Package) arg;
-            else if (arg instanceof LispString)
-                pkg = Packages.findPackage(((LispString)arg).getValue());
-            else if (arg instanceof Symbol)
-                pkg = Packages.findPackage(arg.getName());
-            if (pkg == null)
-                throw new LispException(String.valueOf(arg) +
-                    "is not a package");
-            return pkg.getUseList();
+            return coerceToPackage(arg).getUseList();
         }
     };
 
+    // ### package-used-by-list
+    // package-used-by-list package => used-by-list
     private static final Primitive1 PACKAGE_USED_BY_LIST =
         new Primitive1("package-used-by-list") {
         public LispObject execute(LispObject arg) throws LispException
         {
-            Package pkg = null;
-            if (arg instanceof Package)
-                pkg = (Package) arg;
-            else if (arg instanceof LispString)
-                pkg = Packages.findPackage(((LispString)arg).getValue());
-            else if (arg instanceof Symbol)
-                pkg = Packages.findPackage(arg.getName());
-            if (pkg == null)
-                throw new LispException(String.valueOf(arg) +
-                    "is not a package");
-            return pkg.getUsedByList();
+            return coerceToPackage(arg).getUsedByList();
         }
     };
 
