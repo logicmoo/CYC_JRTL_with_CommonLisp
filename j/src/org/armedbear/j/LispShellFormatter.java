@@ -2,7 +2,7 @@
  * LispShellFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispShellFormatter.java,v 1.8 2003-04-03 19:05:28 piso Exp $
+ * $Id: LispShellFormatter.java,v 1.9 2003-12-04 14:56:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,13 @@ public final class LispShellFormatter extends Formatter
         }
         switch (line.flags()) {
             case STATE_PROMPT: {
-                addSegment(text, FORMAT_PROMPT);
+                int end = getPromptEndIndex(text);
+                if (end > 0) {
+                    line.setFlags(STATE_PROMPT);
+                    addSegment(text, 0, end, FORMAT_PROMPT);
+                    addSegment(text, end, FORMAT_INPUT);
+                } else
+                    addSegment(text, FORMAT_PROMPT);
                 return segmentList;
             }
             case STATE_INPUT: {
@@ -87,6 +93,7 @@ public final class LispShellFormatter extends Formatter
             // Last line of buffer. Check for prompt.
             int end = getPromptEndIndex(text);
             if (end > 0) {
+                line.setFlags(STATE_PROMPT);
                 addSegment(text, 0, end, FORMAT_PROMPT);
                 addSegment(text, end, FORMAT_INPUT);
                 return segmentList;
