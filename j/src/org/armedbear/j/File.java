@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.7 2002-12-07 12:26:28 piso Exp $
+ * $Id: File.java,v 1.8 2002-12-07 19:17:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -460,25 +460,23 @@ public class File implements Comparable
         return canonicalPath;
     }
 
-    // Like getCanonicalPath, but doesn't throw an exception.
-    public String canonicalPath()
+    // Like getCanonicalPath(), but doesn't throw an exception.
+    public final synchronized String canonicalPath()
     {
         if (canonicalPath == null) {
-            if (!isRemote) {
-                if (file != null) {
-                    try {
-                        canonicalPath = file.getCanonicalPath();
-                    }
-                    catch (IOException e) {
-                        Log.error(e);
-                    }
+            if (file != null) {
+                try {
+                    canonicalPath = file.getCanonicalPath();
+                }
+                catch (IOException e) {
+                    Log.error(e);
                 }
             }
         }
         return canonicalPath;
     }
 
-    public void setCanonicalPath(String s)
+    public synchronized void setCanonicalPath(String s)
     {
         if (canonicalPath == null || canonicalPath.equals(""))
             canonicalPath = s;
