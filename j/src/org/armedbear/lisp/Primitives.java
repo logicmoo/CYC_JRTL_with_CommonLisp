@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.503 2003-11-19 13:43:42 piso Exp $
+ * $Id: Primitives.java,v 1.504 2003-11-19 14:45:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -782,14 +782,16 @@ public final class Primitives extends Module
         public LispObject execute(LispObject obj) throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(obj);
-            Environment dynEnv =
-                LispThread.currentThread().getDynamicEnvironment();
             // PROGV: "If too few values are supplied, the remaining symbols
             // are bound and then made to have no value." So BOUNDP must
             // explicitly check for a binding with no value.
-            Binding binding = dynEnv.getBinding(symbol);
-            if (binding != null)
-                return binding.value != null ? T : NIL;
+            Environment dynEnv =
+                LispThread.currentThread().getDynamicEnvironment();
+            if (dynEnv != null) {
+                Binding binding = dynEnv.getBinding(symbol);
+                if (binding != null)
+                    return binding.value != null ? T : NIL;
+            }
             // No binding.
             return symbol.getSymbolValue() != null ? T : NIL;
         }
