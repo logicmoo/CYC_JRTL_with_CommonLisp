@@ -2,7 +2,7 @@
  * DescribeKeyDialog.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: DescribeKeyDialog.java,v 1.1.1.1 2002-09-24 16:09:26 piso Exp $
+ * $Id: DescribeKeyDialog.java,v 1.2 2002-11-10 00:49:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,11 +85,12 @@ public final class DescribeKeyDialog extends AbstractDialog
     {
         if (seenKeyPressed && !disposed) {
             dispose();
-            MessageDialog.showMessageDialog(editor, keyStrokeText + " is not mapped", title);
+            MessageDialog.showMessageDialog(editor,
+                keyStrokeText + " is not mapped", title);
         }
     }
 
-    public void describeKey(char keyChar, int keyCode, int modifiers)
+    private void describeKey(char keyChar, int keyCode, int modifiers)
     {
         if (disposed)
             return;
@@ -97,13 +98,26 @@ public final class DescribeKeyDialog extends AbstractDialog
         modifiers &= 0x0f;
         if (keyCode == 0 && modifiers == InputEvent.SHIFT_MASK) // Shift only.
             modifiers = 0; // Ignore modifier.
+        KeyMapping mapping = null;
         boolean local = false;
-        KeyMapping mapping = buffer.getKeyMapForMode().lookup(keyChar, keyCode, modifiers);
+        final Mode mode = buffer.getMode();
+        // Look in user's mode-specific overrides (if any).
+        KeyMap km = mode.getOverrides();
+        if (km != null)
+            mapping = km.lookup(keyChar, keyCode, modifiers);
+        if (mapping == null)
+            mapping = mode.getKeyMap().lookup(keyChar, keyCode, modifiers);
         if (mapping != null)
             local = true;
-        else
-            mapping = KeyMap.getGlobalKeyMap().lookup(keyChar, keyCode, modifiers);
-        FastStringBuffer sb = new FastStringBuffer(128);
+        else {
+            // Look in user's global overrides (if any).
+            km = KeyMap.getGlobalOverrides();
+            if (km != null)
+                mapping = km.lookup(keyChar, keyCode, modifiers);
+            if (mapping == null)
+                mapping = KeyMap.getGlobalKeyMap().lookup(keyChar, keyCode, modifiers);
+        }
+        FastStringBuffer sb = new FastStringBuffer();
         if (mapping != null) {
             sb.append(mapping.getKeyText());
             sb.append(" is mapped to ");
