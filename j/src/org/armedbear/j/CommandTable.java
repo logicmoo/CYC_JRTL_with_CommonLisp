@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandTable.java,v 1.49 2004-09-03 19:30:33 piso Exp $
+ * $Id: CommandTable.java,v 1.50 2004-09-13 02:02:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,7 +143,9 @@ public class CommandTable
             addCommand("openFileInOtherWindow");
             addCommand("otherWindow");
             addCommand("pageDown");
+            addCommand("pageDownOtherWindow");
             addCommand("pageUp");
+            addCommand("pageUpOtherWindow");
             addCommand("paste");
             addCommand("pasteColumn");
             addCommand("popPosition");

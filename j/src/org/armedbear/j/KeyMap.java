@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.19 2003-12-05 03:22:49 piso Exp $
+ * $Id: KeyMap.java,v 1.20 2004-09-13 02:03:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -232,8 +232,10 @@ public final class KeyMap implements Constants
         mapKey(KeyEvent.VK_DOWN, CTRL_MASK, "windowDown");
         mapKey(KeyEvent.VK_KP_DOWN, CTRL_MASK, "windowDown");
         mapKey(KeyEvent.VK_PAGE_UP, 0, "pageUp");
+        mapKey(KeyEvent.VK_PAGE_UP, ALT_MASK, "pageUpOtherWindow");
         mapKey(KeyEvent.VK_PAGE_UP, SHIFT_MASK, "selectPageUp");
         mapKey(KeyEvent.VK_PAGE_DOWN, 0, "pageDown");
+        mapKey(KeyEvent.VK_PAGE_DOWN, ALT_MASK, "pageDownOtherWindow");
         mapKey(KeyEvent.VK_PAGE_DOWN, SHIFT_MASK, "selectPageDown");
         mapKey(KeyEvent.VK_PAGE_UP, CTRL_MASK, "top");
         mapKey(KeyEvent.VK_PAGE_DOWN, CTRL_MASK, "bottom");
