@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.445 2003-09-27 18:31:20 piso Exp $
+ * $Id: Primitives.java,v 1.446 2003-09-28 00:47:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -455,15 +455,6 @@ public final class Primitives extends Module
         }
     };
 
-    // ### quote
-    private static final SpecialOperator QUOTE = new SpecialOperator("quote") {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            return args.car();
-        }
-    };
-
     // ### atom
     private static final Primitive1 ATOM = new Primitive1("atom") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -589,29 +580,6 @@ public final class Primitives extends Module
                         result = result.subtract(args[i]);
                     return result;
                 }
-            }
-        }
-    };
-
-    // ### if
-    private static final SpecialOperator IF = new SpecialOperator("if") {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            final LispThread thread = LispThread.currentThread();
-            switch (args.length()) {
-                case 2: {
-                    if (eval(args.car(), env, thread) != NIL)
-                        return eval(args.cadr(), env, thread);
-                    return NIL;
-                }
-                case 3: {
-                    if (eval(args.car(), env, thread) != NIL)
-                        return eval(args.cadr(), env, thread);
-                    return eval(args.cdr().cadr(), env, thread);
-                }
-                default:
-                    throw new ConditionThrowable(new WrongNumberOfArgumentsException("IF"));
             }
         }
     };
@@ -2784,63 +2752,6 @@ public final class Primitives extends Module
             return put(symbol, indicator, value);
         }
     };
-
-    private static final SpecialOperator LET = new SpecialOperator("let") {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            return _let(args, env, false);
-        }
-    };
-
-    private static final SpecialOperator LETX = new SpecialOperator("let*") {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            return _let(args, env, true);
-        }
-    };
-
-    private static final LispObject _let(LispObject args, Environment env,
-                                         boolean sequential)
-        throws ConditionThrowable
-    {
-        LispObject varList = checkList(args.car());
-        final LispThread thread = LispThread.currentThread();
-        LispObject result = NIL;
-        if (varList != NIL) {
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            try {
-                Environment ext = new Environment(env);
-                Environment evalEnv = sequential ? ext : env;
-                for (int i = varList.length(); i-- > 0;) {
-                    LispObject obj = varList.car();
-                    varList = varList.cdr();
-                    if (obj instanceof Cons) {
-                        bind(checkSymbol(obj.car()),
-                             eval(obj.cadr(), evalEnv, thread),
-                             ext);
-                    } else
-                        bind(checkSymbol(obj), NIL, ext);
-                }
-                LispObject body = args.cdr();
-                while (body != NIL) {
-                    result = eval(body.car(), ext, thread);
-                    body = body.cdr();
-                }
-            }
-            finally {
-                thread.setDynamicEnvironment(oldDynEnv);
-            }
-        } else {
-            LispObject body = args.cdr();
-            while (body != NIL) {
-                result = eval(body.car(), env, thread);
-                body = body.cdr();
-            }
-        }
-        return result;
-    }
 
     private static final LispObject _flet(LispObject args, Environment env,
         boolean recursive) throws ConditionThrowable
