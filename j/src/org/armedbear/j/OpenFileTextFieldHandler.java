@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.21 2002-12-13 14:27:27 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.22 2002-12-13 15:49:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
 
     private JPopupMenu popup;
     private JList listbox;
+
+    private String originalText;
 
     public OpenFileTextFieldHandler(Editor editor, HistoryTextField textField)
     {
@@ -374,8 +376,6 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     {
         return true;
     }
-
-    private String originalText;
 
     public void tab()
     {
@@ -872,8 +872,10 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     public void keyTyped(KeyEvent e)
     {
         char c = e.getKeyChar();
-        if (c == 8) // backspace
+        if (c == 8) {
+            // backspace
             return;
+        }
         if (c >= ' ') {
             if (popup != null) {
                 popup.setVisible(false);
@@ -887,7 +889,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             if (originalText != null) {
                 int end = text.length();
                 int begin = end - originalText.length();
-                if (end > begin) {
+                if (begin >= 0 && end > begin) {
                     if (text.substring(begin, end).equalsIgnoreCase(originalText)) {
                         text = text.substring(0, begin);
                         text += originalText;
