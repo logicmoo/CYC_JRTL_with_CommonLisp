@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.22 2003-05-29 14:45:34 piso Exp $
+ * $Id: Closure.java,v 1.23 2003-05-29 14:55:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -266,7 +266,7 @@ public class Closure extends Function
     public LispObject execute() throws Condition
     {
         LispObject[] args = new LispObject[0];
-        return execute(args);
+        return execute(args, environment);
     }
 
     public LispObject execute(LispObject arg) throws Condition
@@ -282,7 +282,7 @@ public class Closure extends Function
         LispObject[] args = new LispObject[2];
         args[0] = first;
         args[1] = second;
-        return execute(args);
+        return execute(args, environment);
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -292,7 +292,7 @@ public class Closure extends Function
         args[0] = first;
         args[1] = second;
         args[2] = third;
-        return execute(args);
+        return execute(args, environment);
     }
 
     public final LispObject execute(LispObject[] args) throws Condition
@@ -306,7 +306,7 @@ public class Closure extends Function
         LispObject array[] = new LispObject[2];
         array[0] = args;
         array[1] = env;
-        return execute(array);
+        return execute(array, environment);
     }
 
     protected LispObject execute(LispObject[] args, Environment env)
