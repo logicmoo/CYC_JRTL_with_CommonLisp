@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.113 2004-01-02 01:21:40 piso Exp $
+# $Id: Makefile.in,v 1.114 2004-01-02 02:13:54 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -146,6 +146,7 @@ CLASSFILES =	AbstractArray.class \
 		dotimes.class \
 		gc.class \
 		get_properties.class \
+		input_stream_p.class \
 		last.class \
 		lisp_implementation_type.class \
 		lisp_implementation_version.class \
@@ -166,6 +167,7 @@ CLASSFILES =	AbstractArray.class \
 		make_array.class \
 		make_condition.class \
 		open.class \
+		output_stream_p.class \
 		probe_file.class \
 		room.class \
 		unbound_slot_instance.class \
