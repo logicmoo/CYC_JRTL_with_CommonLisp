@@ -2,7 +2,7 @@
  * CheckinBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CheckinBuffer.java,v 1.3 2002-10-11 01:42:36 piso Exp $
+ * $Id: CheckinBuffer.java,v 1.4 2002-10-14 16:32:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,13 +24,21 @@ package org.armedbear.j;
 public final class CheckinBuffer extends Buffer implements Constants
 {
     private final int vcType;
+    private final boolean editOnly;
+
     private int commentIndex = -1;
 
     public CheckinBuffer(Buffer parentBuffer, int vcType)
     {
+        this(parentBuffer, vcType, false);
+    }
+
+    public CheckinBuffer(Buffer parentBuffer, int vcType, boolean editOnly)
+    {
         super();
         this.parentBuffer = parentBuffer;
         this.vcType = vcType;
+        this.editOnly = editOnly;
         initializeUndo();
         type = TYPE_NORMAL;
         isUntitled = true;
@@ -61,6 +69,11 @@ public final class CheckinBuffer extends Buffer implements Constants
     public final int getVCType()
     {
         return vcType;
+    }
+
+    public final boolean isEditOnly()
+    {
+        return editOnly;
     }
 
     public String getFileNameForDisplay()
@@ -141,7 +154,7 @@ public final class CheckinBuffer extends Buffer implements Constants
     {
         Expansion e =
             new Expansion(dot, Editor.getModeList().getMode(PLAIN_TEXT_MODE));
-        if (e.getPrefix() != null) {
+        if (parentBuffer != null && e.getPrefix() != null) {
             // Look for diff output buffer for same parent buffer.
             for (BufferIterator it = new BufferIterator(); it.hasNext();) {
                 Buffer b = it.nextBuffer();
