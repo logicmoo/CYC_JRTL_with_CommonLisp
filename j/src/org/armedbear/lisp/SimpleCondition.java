@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleCondition.java,v 1.6 2003-09-21 23:04:58 piso Exp $
+ * $Id: SimpleCondition.java,v 1.7 2003-12-12 16:15:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,11 +25,19 @@ public class SimpleCondition extends Condition
 {
     public SimpleCondition()
     {
+        setFormatControl(NIL);
+        setFormatArguments(NIL);
     }
 
-    public SimpleCondition(LispObject initArgs)
+    public SimpleCondition(LispObject formatControl, LispObject formatArguments)
     {
-        this(); // FIXME
+        setFormatControl(formatControl);
+        setFormatArguments(formatArguments);
+    }
+
+    public SimpleCondition(LispObject initArgs) throws ConditionThrowable
+    {
+        super(initArgs);
     }
 
     public SimpleCondition(String message)
@@ -55,4 +63,28 @@ public class SimpleCondition extends Condition
             return T;
         return super.typep(type);
     }
+
+    // ### simple-condition-format-control
+    private static final Primitive1 SIMPLE_CONDITION_FORMAT_CONTROL =
+        new Primitive1("simple-condition-format-control", "condition")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof Condition)
+                return ((Condition)arg).getFormatControl();
+            throw new ConditionThrowable(new TypeError(arg, Symbol.CONDITION));
+        }
+    };
+
+    // ### simple-condition-format-arguments
+    private static final Primitive1 SIMPLE_CONDITION_FORMAT_ARGUMENTS =
+        new Primitive1("simple-condition-format-arguments", "condition")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof Condition)
+                return ((Condition)arg).getFormatArguments();
+            throw new ConditionThrowable(new TypeError(arg, Symbol.CONDITION));
+        }
+    };
 }
