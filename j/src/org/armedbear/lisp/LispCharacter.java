@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.38 2004-02-23 14:24:47 piso Exp $
+ * $Id: LispCharacter.java,v 1.39 2004-02-24 14:02:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class LispCharacter extends LispObject
             characters[i] = new LispCharacter((char)i);
     }
 
-    private final char c;
+    public final char value;
 
     public static LispCharacter getInstance(char c)
     {
@@ -44,7 +44,7 @@ public final class LispCharacter extends LispObject
 
     private LispCharacter(char c)
     {
-        this.c = c;
+        this.value = c;
     }
 
     public LispObject typeOf()
@@ -82,9 +82,9 @@ public final class LispCharacter extends LispObject
 
     public LispObject isStandardChar()
     {
-        if (c >= ' ' && c < 127)
+        if (value >= ' ' && value < 127)
             return T;
-        if (c == '\n')
+        if (value == '\n')
             return T;
         return NIL;
     }
@@ -94,7 +94,7 @@ public final class LispCharacter extends LispObject
         if (this == obj)
             return true;
         if (obj instanceof LispCharacter) {
-            if (c == ((LispCharacter)obj).c)
+            if (value == ((LispCharacter)obj).value)
                 return true;
         }
         return false;
@@ -105,7 +105,7 @@ public final class LispCharacter extends LispObject
         if (this == obj)
             return true;
         if (obj instanceof LispCharacter) {
-            if (c == ((LispCharacter)obj).c)
+            if (value == ((LispCharacter)obj).value)
                 return true;
         }
         return false;
@@ -116,9 +116,9 @@ public final class LispCharacter extends LispObject
         if (this == obj)
             return true;
         if (obj instanceof LispCharacter) {
-            if (c == ((LispCharacter)obj).c)
+            if (value == ((LispCharacter)obj).value)
                 return true;
-            return Utilities.toLowerCase(c) == Utilities.toLowerCase(((LispCharacter)obj).c);
+            return Utilities.toLowerCase(value) == Utilities.toLowerCase(((LispCharacter)obj).value);
         }
         return false;
     }
@@ -137,12 +137,12 @@ public final class LispCharacter extends LispObject
 
     public final char getValue()
     {
-        return c;
+        return value;
     }
 
     public Object javaInstance()
     {
-        return new Character(c);
+        return new Character(value);
     }
 
     public Object javaInstance(Class c)
@@ -152,7 +152,7 @@ public final class LispCharacter extends LispObject
 
     public int hashCode()
     {
-        return c;
+        return value;
     }
 
     public final String toString()
@@ -160,7 +160,7 @@ public final class LispCharacter extends LispObject
         StringBuffer sb = new StringBuffer();
         if (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL) {
             sb.append("#\\");
-            switch (c) {
+            switch (value) {
                 case 0:
                     sb.append("Null");
                     break;
@@ -183,11 +183,11 @@ public final class LispCharacter extends LispObject
                     sb.append("Backspace");
                     break;
                 default:
-                    sb.append(c);
+                    sb.append(value);
                     break;
             }
         } else {
-            sb.append(c);
+            sb.append(value);
         }
         return sb.toString();
     }
@@ -216,7 +216,7 @@ public final class LispCharacter extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispCharacter character = checkCharacter(arg);
-            return Character.isWhitespace(character.c) ? T : NIL;
+            return Character.isWhitespace(character.value) ? T : NIL;
         }
     };
 
