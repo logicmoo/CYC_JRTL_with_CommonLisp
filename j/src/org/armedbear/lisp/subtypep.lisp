@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.23 2003-11-11 17:37:18 piso Exp $
+;;; $Id: subtypep.lisp,v 1.24 2003-11-11 18:05:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -218,19 +218,22 @@
             (null type1)
             (eq type2 t))
     (return-from subtypep (values t t)))
-  (let* ((c1 (classp type1)) (c2 (classp type2))
-         (t1 (if c1
-                 type1
-                 (and (symbolp type1) (find-class type1 nil))))
-         (t2 (if c2
-                 type2
-                 (and (symbolp type2) (find-class type2 nil)))))
-    (when (and t1 t2)
-      (return-from subtypep
-		   (if (member t2 (class-precedence-list t1))
-		       (values t t) (values nil t))))
-    (when (or c1 c2)
-      (return-from subtypep (values nil t))))
+  (when (and (atom type1) (atom type2))
+    (let* ((classp-1 (classp type1))
+           (classp-2 (classp type2))
+           class1 class2)
+      (when (and (setf class1 (if classp-1
+                                  type1
+                                  (and (symbolp type1) (find-class type1 nil))))
+                 (setf class2 (if classp-2
+                                  type2
+                                  (and (symbolp type2) (find-class type2 nil)))))
+        (return-from subtypep
+                     (if (member class2 (class-precedence-list class1))
+                         (values t t)
+                         (values nil t))))
+      (when (or classp-1 classp-2)
+        (return-from subtypep (values nil t)))))
   (setq type1 (subtypep-normalize-type type1)
         type2 (subtypep-normalize-type type2))
   (when (equal type1 type2)
