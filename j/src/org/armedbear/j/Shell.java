@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.4 2002-10-11 01:42:37 piso Exp $
+ * $Id: Shell.java,v 1.5 2002-10-11 13:54:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ import gnu.regexp.REException;
 import gnu.regexp.REMatch;
 import gnu.regexp.UncheckedRE;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -41,7 +42,7 @@ public class Shell extends Buffer implements Constants
 
     protected OutputStreamWriter stdin;
 
-    protected Process process;
+    private Process process;
 
     protected ReaderThread stdoutThread;
     protected ReaderThread stderrThread;
@@ -81,6 +82,16 @@ public class Shell extends Buffer implements Constants
             promptIsStderr = false;
     }
 
+    protected synchronized Process getProcess()
+    {
+        return process;
+    }
+
+    protected synchronized void setProcess(Process p)
+    {
+        process = p;
+    }
+
     private static final String getDefaultShellCommand()
     {
         String s =
@@ -117,7 +128,7 @@ public class Shell extends Buffer implements Constants
     {
         Shell shell = new Shell(shellCommand);
         shell.startProcess();
-        if (shell.process == null) {
+        if (shell.getProcess() == null) {
             Editor.getBufferList().remove(shell);
             String message;
             if (Utilities.haveJpty())
@@ -151,34 +162,39 @@ public class Shell extends Buffer implements Constants
         while (st.hasMoreTokens())
             cmdArray[i++] = st.nextToken();
 
+        Process p = null;
         try {
-            process = Runtime.getRuntime().exec(cmdArray);
+            p = Runtime.getRuntime().exec(cmdArray);
+            setProcess(p);
         }
         catch (Throwable t) {
+            setProcess(null);
             return;
         }
 
         currentDir = initialDir;
         startWatcherThread();
 
-        // See if the process exits right away, meaning jpty couldn't launch
-        // the user's shell.
+        // See if the process exits right away (meaning jpty couldn't launch
+        // the shell command).
         try {
             Thread.sleep(100);
         }
         catch (InterruptedException e) {
             Log.error(e);
         }
-        if (process == null)
-            return;
+        // When the process exits, the watcher thread calls setProcess(null),
+        // so check the value of getProcess() here.
+        if (getProcess() == null)
+            return; // Process exited.
 
         setPromptRE(Editor.preferences().getStringProperty(
             Property.SHELL_PROMPT_PATTERN));
 
         try {
-            stdin  = new OutputStreamWriter(process.getOutputStream());
-            stdoutThread = new StdoutThread();
-            stderrThread = new StderrThread();
+            stdin  = new OutputStreamWriter(p.getOutputStream());
+            stdoutThread = new StdoutThread(p.getInputStream());
+            stderrThread = new StderrThread(p.getErrorStream());
             stdoutThread.start();
             stderrThread.start();
             readOnly = false;
@@ -206,8 +222,11 @@ public class Shell extends Buffer implements Constants
                     stdin.write("exit\n");
                     stdin.flush();
                     stdin.close();
-                    process.destroy();
-                    process.waitFor();
+                    final Process p = getProcess();
+                    if (p != null) {
+                        p.destroy();
+                        p.waitFor();
+                    }
                 }
                 catch (IOException e) {
                     Log.error(e);
@@ -448,11 +467,13 @@ public class Shell extends Buffer implements Constants
 
     private boolean checkProcess()
     {
-        if (process == null)
+        Process p = getProcess();
+        if (p == null)
             return false;
-        if (Utilities.isProcessAlive(process))
+        if (Utilities.isProcessAlive(p))
             return true;
-        process = null;
+        // Not alive.
+        setProcess(null);
         readOnly = true;
         resetUndo();
         return false;
@@ -464,9 +485,11 @@ public class Shell extends Buffer implements Constants
             public void run()
             {
                 try {
-                    process.waitFor();
-                    Log.debug("watcher thread process.waitFor() returned");
-                    process = null;
+                    Process p = getProcess();
+                    if (p != null)
+                        p.waitFor();
+                    Log.debug("watcher thread waitFor() returned");
+                    setProcess(null);
                     if (stdoutThread != null)
                         stdoutThread.join();
                     if (stderrThread != null)
@@ -901,7 +924,7 @@ public class Shell extends Buffer implements Constants
         }
         if (buf != null) {
             Shell shell = (Shell) buf;
-            if (shell.process == null)
+            if (shell.getProcess() == null)
                 shell.startProcess();
         } else
             buf = createShell(shellCommand);
@@ -971,9 +994,9 @@ public class Shell extends Buffer implements Constants
     protected class StdoutThread extends ReaderThread
     {
         // If this constructor is private, we run into jikes 1.15 bug #2256.
-        StdoutThread()
+        StdoutThread(InputStream stdout)
         {
-            super(process.getInputStream());
+            super(stdout);
         }
 
         public String filter(String s)
@@ -990,9 +1013,9 @@ public class Shell extends Buffer implements Constants
     protected class StderrThread extends ReaderThread
     {
         // If this constructor is private, we run into jikes 1.15 bug #2256.
-        StderrThread()
+        StderrThread(InputStream stderr)
         {
-            super(process.getErrorStream());
+            super(stderr);
         }
 
         public String filter(String s)
