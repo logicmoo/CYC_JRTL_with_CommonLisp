@@ -480,6 +480,8 @@ time
 translate-logical-pathname
 truename
 truncate
+two-way-stream-input-stream
+two-way-stream-output-stream
 type-of
 typecase
 typep
