@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.79 2003-06-02 13:16:46 piso Exp $
+ * $Id: Lisp.java,v 1.80 2003-06-03 01:56:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -633,11 +633,6 @@ public abstract class Lisp
     public static final Symbol intern(String name, Package pkg)
     {
         return pkg.intern(name);
-    }
-
-    public static final Symbol internInCurrentPackage(String name)
-    {
-        return getCurrentPackage().intern(name);
     }
 
     public static final Symbol export(String name, Package pkg)
