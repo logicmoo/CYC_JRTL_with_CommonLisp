@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.307 2004-12-12 15:47:49 piso Exp $
+;;; $Id: jvm.lisp,v 1.308 2004-12-16 15:09:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,6 +58,9 @@
      (setf (inline-expansion ',name)
            (precompile-form (list* 'LAMBDA ',lambda-list ',body) t))
      ',name))
+#+nil
+(defmacro defsubst (&rest args)
+  `(defun ,@args))
 
 (defvar *use-locals-vector* nil)
 
@@ -213,6 +216,8 @@
   non-local-go-p
   ;; If non-nil, register containing saved dynamic environment for this block.
   environment-register
+  ;; Only used in LET/LET* nodes.
+  vars
   )
 
 (defvar *blocks* ())
@@ -230,19 +235,42 @@
 
 ;;; Pass 1.
 
-(defun p1-let/let*-vars (varlist)
-  (let ((result nil))
+(defun p1-let/let*-vars (varlist block)
+  (let ((vars nil))
     (dolist (varspec varlist)
       (cond ((consp varspec)
-             (let ((var (car varspec))
-                   (initform (cadr varspec)))
-               (push (list var (p1 initform)) result)))
+             (let ((name (car varspec))
+                   (initform (p1 (cadr varspec))))
+               (push (make-variable :name name :initform initform) vars)))
             (t
-             (push varspec result))))
-    (nreverse result)))
+             (push (make-variable :name varspec) vars))))
+    (setf (block-vars block) (nreverse vars))))
 
 (defun p1-let/let* (form)
-  (list* (car form) (p1-let/let*-vars (cadr form)) (mapcar #'p1 (cddr form))))
+  (let* ((block (make-block-node :name '(LET)))
+         (*blocks* (cons block *blocks*))
+         (body (cddr form)))
+    (p1-let/let*-vars (cadr form) block)
+    (setf body (mapcar #'p1 body))
+    (setf (block-form block) (list* (car form)
+                                    (cadr form)
+                                    body))
+    ;; Check for globally declared specials.
+    (dolist (variable (block-vars block))
+      (when (special-variable-p (variable-name variable))
+        (setf (variable-special-p variable) t)))
+    ;; Process declarations.
+    (dolist (subform body)
+      (unless (and (consp subform) (eq (car subform) 'DECLARE))
+        (return))
+      (let ((decls (cdr subform)))
+        (dolist (decl decls)
+          (when (eq (car decl) 'SPECIAL)
+            (dolist (variable (block-vars block))
+              (unless (variable-special-p variable)
+                (when (memq (variable-name variable) (cdr decl))
+                  (setf (variable-special-p variable) t))))))))
+    block))
 
 (defun p1-block (form)
   (let* ((block (make-block-node :name (cadr form)))
@@ -363,7 +391,7 @@
                               (return-from p1 (p1 new-form))))))
                       (let ((expansion (inline-expansion op)))
                         (when expansion
-                          (return-from p1 (expand-inline form expansion))))
+                          (return-from p1 (p1 (expand-inline form expansion)))))
                       (p1-default form))))
               ((and (consp op) (eq (car op) 'LAMBDA))
                (unless (and *current-compiland*
@@ -609,8 +637,6 @@
                          0)
       (emit 'label `,label1))))
 
-(defparameter single-valued-operators (make-hash-table :test 'eq))
-
 (defun single-valued-p-init ()
   (dolist (op '(+ - * /
                 1+ 1- + - < > <= >= = /=
@@ -714,8 +740,10 @@
                 emit
                 label
                 maybe-emit-clear-values
+                single-valued-p
+                sys:single-valued-p
                 ))
-    (setf (gethash op single-valued-operators) t)))
+    (setf (sys:single-valued-p op) t)))
 
 (eval-when (:load-toplevel :execute)
   (single-valued-p-init))
@@ -740,13 +768,14 @@
         ((eq (first form) 'RETURN-FROM)
          (single-valued-p (third form)))
         (t
-         (values (gethash (car form) single-valued-operators)))))
+         (sys:single-valued-p (car form)))))
 
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
   (emit 'clear-values))
 
 (defun maybe-emit-clear-values (form)
+  (declare (optimize speed))
   (unless (single-valued-p form)
 ;;     (format t "Not single-valued: ~S~%" form)
     (ensure-thread-var-initialized)
@@ -2032,7 +2061,7 @@
   (declare (optimize speed))
   (cond ((notinline-p name)
          nil)
-        ((sys::built-in-function-p name)
+        ((sys:built-in-function-p name)
          t)
         ((memq name *toplevel-defuns*)
          t)
@@ -2191,8 +2220,10 @@
                                   -2)))))))
 
 (defun compile-function-call (form &key (target *val*))
+;;   (%format t "compile-function-call form = ~S~%" form)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
+;;       (%format t "new-form = ~S~%" new-form)
       (return-from compile-function-call (compile-form new-form :target target))))
   (let ((fun (car form))
         (args (cdr form)))
@@ -2201,7 +2232,7 @@
     (when (find-local-function fun)
       (return-from compile-function-call (compile-local-function-call form target)))
     (let ((numargs (length args)))
-      (when (sys::built-in-function-p fun)
+      (when (sys:built-in-function-p fun)
         (case numargs
           (1
            (when (compile-function-call-1 fun args :target target)
@@ -2414,6 +2445,20 @@
                                -1)
            (return-from compile-test (if negatep 'ifne 'ifeq)))
 
+         (when (and (eq op '<=)
+                    (fixnump (second args)))
+           (compile-form (car args) :target :stack)
+           (unless (single-valued-p (car args))
+             (emit-clear-values))
+           (if (<= -32768 (second args) 32767)
+               (emit 'sipush (second args))
+               (emit 'ldc (pool-int (second args))))
+           (emit-invokevirtual +lisp-object-class+
+                               "isLessThanOrEqualTo"
+                               "(I)Z"
+                               -1)
+           (return-from compile-test (if negatep 'ifne 'ifeq)))
+
          (let ((s (cdr (assq op
                              '((=      . "isEqualTo")
                                (/=     . "isNotEqualTo")
@@ -2443,6 +2488,7 @@
          (alternate (fourth form))
          (LABEL1 (gensym))
          (LABEL2 (gensym)))
+;;     (%format t "test = ~S~%" test)
     (cond ((eq test t)
            (compile-form consequent :target target))
           (t
@@ -2680,28 +2726,19 @@
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))))
 
-(defun compile-let/let* (form &key (target *val*))
-  (let* ((block (make-block-node :name '(LET)))
-         (*blocks* (cons block *blocks*))
+(defun compile-let/let*-node (block target)
+  (let* ((*blocks* (cons block *blocks*))
          (*register* *register*)
+         (form (block-form block))
          (*visible-variables* *visible-variables*)
          (specials ())
          (varlist (cadr form))
          (specialp nil))
-    ;; Process declarations.
-    (dolist (f (cddr form))
-      (unless (and (consp f) (eq (car f) 'declare))
-        (return))
-      (let ((decls (cdr f)))
-        (dolist (decl decls)
-          (when (eq (car decl) 'special)
-            (setf specials (append (cdr decl) specials))))))
     ;; Are we going to bind any special variables?
-    (dolist (varspec varlist)
-      (let ((var (if (consp varspec) (car varspec) varspec)))
-        (when (or (memq var specials) (special-variable-p var))
-          (setf specialp t)
-          (return))))
+    (dolist (variable (block-vars block))
+      (when (variable-special-p variable)
+        (setf specialp t)
+        (return)))
     ;; If so...
     (when specialp
       ;; Save current dynamic environment.
@@ -2711,9 +2748,9 @@
       (emit 'astore (block-environment-register block)))
     (ecase (car form)
       (LET
-       (compile-let-bindings varlist specials))
+       (compile-let-bindings block specials))
       (LET*
-       (compile-let*-bindings varlist specials)))
+       (compile-let*-bindings block specials)))
     ;; Body of LET/LET*.
     (compile-progn-body (cddr form) target)
     (when specialp
@@ -2722,63 +2759,23 @@
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))))
 
-(defun compile-let-bindings (varlist specials)
-  (let ((variables ()))
-    (dolist (varspec varlist)
-      (let* ((name (if (consp varspec) (car varspec) varspec))
-             (initform (if (consp varspec) (cadr varspec) nil))
-             (special-p (if (or (memq name specials) (special-variable-p name)) t nil))
-             (variable
-              (make-variable :name name
-                             :initform initform
-                             :special-p special-p
-                             :index (if special-p nil (length (context-vars *context*)))
-                             :register (if (or special-p *use-locals-vector*) nil (allocate-register)))))
-        (unless special-p
-          (add-variable-to-context variable))
-        (push variable variables)))
-    (let ((*register* *register*)
-          (must-clear-values nil))
-      ;; Evaluate each initform. If the variable being bound is special,
-      ;; allocate a temporary register for the result; LET bindings must be
-      ;; done in parallel, so we don't want to modify any specials until all
-      ;; the initforms have been evaluated. Note that we can't just leave the
-      ;; values on the stack because we'll lose JVM stack consistency if there
-      ;; is a non-local GO or RETURN from one of the initforms.
-      (dolist (variable (reverse variables))
-        (let ((initform (variable-initform variable)))
-          (cond (initform
-                 (compile-form initform :target :stack)
-                 (unless must-clear-values
-                   (unless (single-valued-p initform)
-                     (setf must-clear-values t))))
-                (t
-                 (emit-push-nil)))
-          (if (variable-special-p variable)
-              (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register)))
-              (compile-binding variable))))
-      (when must-clear-values
-        (emit-clear-values))
-      ;; Now that all the initforms have been evaluated, move the results from
-      ;; the temporary registers (if any) to their proper destinations.
-      (dolist (variable variables)
-        (when (variable-temp-register variable)
-          (aver (variable-special-p variable))
-          (emit 'aload (variable-temp-register variable))
-          (compile-binding variable))))
-    ;; Now make the variables visible.
-    (dolist (variable (reverse variables))
-      (push variable *visible-variables*)
-      (push variable *all-variables*))))
-
-(defun compile-let*-bindings (varlist specials)
-  (let ((must-clear-values nil))
-    ;; Generate code to evaluate initforms and bind variables.
-    (dolist (varspec varlist)
-      (let* ((var (if (consp varspec) (car varspec) varspec))
-             (initform (if (consp varspec) (cadr varspec) nil))
-             (special-p (if (or (memq var specials) (special-variable-p var)) t nil))
-             variable)
+(defun compile-let-bindings (block specials)
+  (dolist (variable (block-vars block))
+    (unless (variable-special-p variable)
+      (setf (variable-index variable) (length (context-vars *context*)))
+      (unless *use-locals-vector*
+        (setf (variable-register variable) (allocate-register)))
+      (add-variable-to-context variable)))
+  (let ((*register* *register*)
+        (must-clear-values nil))
+    ;; Evaluate each initform. If the variable being bound is special,
+    ;; allocate a temporary register for the result; LET bindings must be
+    ;; done in parallel, so we don't want to modify any specials until all
+    ;; the initforms have been evaluated. Note that we can't just leave the
+    ;; values on the stack because we'll lose JVM stack consistency if there
+    ;; is a non-local GO or RETURN from one of the initforms.
+    (dolist (variable (block-vars block))
+      (let ((initform (variable-initform variable)))
         (cond (initform
                (compile-form initform :target :stack)
                (unless must-clear-values
@@ -2786,9 +2783,42 @@
                    (setf must-clear-values t))))
               (t
                (emit-push-nil)))
-        (setf variable (push-variable var special-p))
-        (unless (or special-p *use-locals-vector*)
-          (setf (variable-register variable) (allocate-register)))
+        (if (variable-special-p variable)
+            (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register)))
+            (compile-binding variable))))
+    (when must-clear-values
+      (emit-clear-values))
+    ;; Now that all the initforms have been evaluated, move the results from
+    ;; the temporary registers (if any) to their proper destinations.
+    (dolist (variable (block-vars block))
+      (when (variable-temp-register variable)
+        (aver (variable-special-p variable))
+        (emit 'aload (variable-temp-register variable))
+        (compile-binding variable))))
+  ;; Now make the variables visible.
+  (dolist (variable (block-vars block))
+    (push variable *visible-variables*)
+    (push variable *all-variables*)))
+
+(defun compile-let*-bindings (block specials)
+  (let ((must-clear-values nil))
+    ;; Generate code to evaluate initforms and bind variables.
+    (dolist (variable (block-vars block))
+      (let* ((initform (variable-initform variable)))
+        (cond (initform
+               (compile-form initform :target :stack)
+               (unless must-clear-values
+                 (unless (single-valued-p initform)
+                   (setf must-clear-values t))))
+              (t
+               (emit-push-nil)))
+        (unless (variable-special-p variable)
+          (setf (variable-index variable) (length (context-vars *context*)))
+          (unless *use-locals-vector*
+            (setf (variable-register variable) (allocate-register)))
+          (add-variable-to-context variable))
+        (push variable *visible-variables*)
+        (push variable *all-variables*)
         (compile-binding variable)))
     (when must-clear-values
       (emit-clear-values))))
@@ -3495,6 +3525,17 @@
           ((eql second 1)
            (compile-form first :target :stack)
            (emit-invoke-method "decr" :target target))
+          ((fixnump (second args))
+           (compile-form (car args) :target :stack)
+           (maybe-emit-clear-values (car args))
+           (if (<= -32768 (second args) 32767)
+               (emit 'sipush (second args))
+               (emit 'ldc (pool-int (second args))))
+           (emit-invokevirtual +lisp-object-class+
+                               "subtract"
+                               "(I)Lorg/armedbear/lisp/LispObject;"
+                               -1)
+           (emit-move-from-stack target))
           (t
            (compile-binary-operation "subtract" args :target target)))))
       (t
@@ -3506,9 +3547,11 @@
            :format-control "Wrong number of arguments for ~S."
            :format-arguments (list (car form))))
   (let ((arg (second form)))
+;;     (%format t "arg = ~S~%" arg)
     (cond ((null arg)
            (emit-push-t))
-          ((constantp arg)
+          ((and (constantp arg) (not (block-node-p arg)))
+;;            (%format t "compile-not/null constantp case~%")
            (emit-push-nil))
           ((and (consp arg)
                 (memq (car arg) '(NOT NULL)))
@@ -3639,7 +3682,7 @@
                (variable-special-p variable))
            (let ((new-form (rewrite-setq form)))
              (when (neq new-form form)
-               (return-from compile-setq (compile-form new-form :target target))))
+               (return-from compile-setq (compile-form (p1 new-form) :target target))))
            (emit-push-current-thread)
            (emit 'getstatic
                  *this-class*
@@ -3872,9 +3915,12 @@
                  (compile-variable-reference form target)
                  (compile-form expansion :target target))))))
         ((block-node-p form)
-         (if (equal (block-name form) '(TAGBODY))
-             (compile-tagbody-node form target)
-             (compile-block-node form target)))
+         (cond ((equal (block-name form) '(TAGBODY))
+                (compile-tagbody-node form target))
+               ((equal (block-name form) '(LET))
+                (compile-let/let*-node form target))
+               (t
+                (compile-block-node form target))))
         ((constantp form)
          (compile-constant form :target target))
         (t
@@ -3910,18 +3956,13 @@
                 (*hairy-arglist-p*
                  "org/armedbear/lisp/CompiledFunction")
                 (t
-;;                  (case (length args)
-;;                    (0 "org/armedbear/lisp/Primitive0")
-;;                    (1 "org/armedbear/lisp/Primitive1")
-;;                    (2 "org/armedbear/lisp/Primitive2")
-;;                    (3 "org/armedbear/lisp/Primitive")
-;;                    (4 "org/armedbear/lisp/Primitive")
-;;                    (t "org/armedbear/lisp/Primitive"))
-                 "org/armedbear/lisp/Primitive"
-                 )))
+                 "org/armedbear/lisp/Primitive")))
          (this-index (pool-class *this-class*))
          (super-index (pool-class super))
-         (constructor (make-constructor super (compiland-name *current-compiland*) args body)))
+         (constructor (make-constructor super
+                                        (compiland-name *current-compiland*)
+                                        args
+                                        body)))
     (pool-name "Code") ; Must be in pool!
 
     ;; Write out the class file.
@@ -4296,8 +4337,8 @@
                              unwind-protect
                              values))
 
-(install-p2-handler 'let  'compile-let/let*)
-(install-p2-handler 'let* 'compile-let/let*)
+;; (install-p2-handler 'let  'compile-let/let*)
+;; (install-p2-handler 'let* 'compile-let/let*)
 (install-p2-handler '+    'compile-plus)
 (install-p2-handler '-    'compile-minus)
 (install-p2-handler 'not  'compile-not/null)
