@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.13 2003-09-19 17:42:09 piso Exp $
+ * $Id: JLisp.java,v 1.14 2003-10-03 16:49:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,7 +139,6 @@ public final class JLisp extends LispShell
                 Log.debug("JLisp.dispose");
                 if (interpreter != null)
                     interpreter.kill();
-                send("(exit)");
                 if (socket != null) {
                     try {
                         Log.debug("closing socket");
