@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.664 2004-07-12 16:15:10 piso Exp $
+ * $Id: Primitives.java,v 1.665 2004-07-23 15:27:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2952,7 +2952,7 @@ public final class Primitives extends Lisp
             }
             LispObject body = args.cdr();
             Environment ext = new Environment(env);
-            final Block block = new Block();
+            final LispObject block = new LispObject();
             ext.addBlock(tag, block);
             LispObject result = NIL;
             final LispThread thread = LispThread.currentThread();
@@ -2991,7 +2991,7 @@ public final class Primitives extends Lisp
             catch (ClassCastException e) {
                 return signal(new TypeError(args.car(), Symbol.SYMBOL));
             }
-            Block block = env.lookupBlock(symbol);
+            LispObject block = env.lookupBlock(symbol);
             if (block == null) {
                 StringBuffer sb = new StringBuffer("No block named ");
                 sb.append(symbol.getName());

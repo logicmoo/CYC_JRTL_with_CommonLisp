@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: dolist.java,v 1.7 2004-05-29 18:40:56 piso Exp $
+ * $Id: dolist.java,v 1.8 2004-07-23 15:30:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ public final class dolist extends SpecialOperator
                 ext.addTagBinding(current, remaining);
             }
             // Implicit block.
-            ext.addBlock(NIL, new Block());
+            ext.addBlock(NIL, new LispObject());
             // Establish a reusable binding.
             final Binding binding;
             if (var.isSpecialVariable() || (specials != NIL && memq(var, specials))) {

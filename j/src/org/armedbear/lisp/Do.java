@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Do.java,v 1.7 2004-05-29 18:43:05 piso Exp $
+ * $Id: Do.java,v 1.8 2004-07-23 15:29:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ public final class Do extends Lisp
         }
         try {
             // Implicit block.
-            ext.addBlock(NIL, new Block());
+            ext.addBlock(NIL, new LispObject());
             while (true) {
                 // Execute body.
                 // Test for termination.
