@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.43 2004-04-20 18:33:54 piso Exp $
+;;; $Id: precompiler.lisp,v 1.44 2004-04-26 02:01:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -654,7 +654,7 @@
   (fset 'defmacro (get 'defmacro 'macroexpand-macro))
   (remprop 'defmacro 'macroexpand-macro))
 
-;; Redefine DEFUN to compile the definition on the fly.
+;; Redefine DEFUN to precompile the definition on the fly.
 (defmacro defun (name lambda-list &rest body &environment env)
   `(progn
      (%defun ',name ',lambda-list ',body ,env)
