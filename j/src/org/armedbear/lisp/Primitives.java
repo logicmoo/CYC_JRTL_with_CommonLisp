@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.323 2003-08-12 02:08:20 piso Exp $
+ * $Id: Primitives.java,v 1.324 2003-08-12 17:35:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,7 +295,6 @@ public final class Primitives extends Module
             case FOURTH:                        // ### fourth
                 return arg.cdr().cdr().cdr().car();
             case FUNCTIONP:                     // ### functionp
-                // Argument must be a function.
                 return arg instanceof Function ? T : NIL;
             case COMPILED_FUNCTION_P:           // ### compiled-function-p
                 return arg.typep(Symbol.COMPILED_FUNCTION);
