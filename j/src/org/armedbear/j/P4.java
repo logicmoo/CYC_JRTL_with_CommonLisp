@@ -1,8 +1,8 @@
 /*
  * P4.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: P4.java,v 1.12 2004-04-26 19:48:48 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: P4.java,v 1.13 2004-05-12 18:01:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,9 +36,8 @@ public class P4 implements Constants
     {
         if (!checkP4Installed())
             return;
-        MessageDialog.showMessageDialog(
-            "The command \"p4\" requires an argument.",
-            "Error");
+        MessageDialog.showMessageDialog("The command \"p4\" requires an argument.",
+                                        "Error");
     }
 
     public static void p4(String s)
@@ -50,13 +49,11 @@ public class P4 implements Constants
             return;
         String command = (String) args.get(0);
         if (command.equals("submit")) {
-            MessageDialog.showMessageDialog("Use \"p4Submit\".",
-                "Error");
+            MessageDialog.showMessageDialog("Use \"p4Submit\".", "Error");
             return;
         }
         if (command.equals("change")) {
-            MessageDialog.showMessageDialog("Use \"p4Change\".",
-                "Error");
+            MessageDialog.showMessageDialog("Use \"p4Change\".", "Error");
             return;
         }
         final Editor editor = Editor.currentEditor();
@@ -333,6 +330,53 @@ public class P4 implements Constants
             editor.makeNext(buf);
             editor.activateInOtherWindow(buf);
         }
+        editor.setDefaultCursor();
+    }
+
+    public static void log()
+    {
+        log(null);
+    }
+
+    public static void log(String args)
+    {
+        boolean useCurrentFile = true;
+        if (args == null)
+            args = "-l";
+        List list = Utilities.tokenize(args);
+        for (int i = 0; i < list.size(); i++) {
+            String arg = (String) list.get(i);
+            if (arg.charAt(0) != '-') {
+                // Must be a filename.
+                useCurrentFile = false;
+                break;
+            }
+        }
+        final Editor editor = Editor.currentEditor();
+        final Buffer parentBuffer = editor.getBuffer();
+        FastStringBuffer sb = new FastStringBuffer("p4 filelog ");
+        sb.append(args);
+        if (useCurrentFile) {
+            if (parentBuffer.getFile() == null)
+                return;
+            final String name = parentBuffer.getFile().getName();
+            sb.append(' ');
+            if (name.indexOf(' ') >= 0) {
+                // Enclose filename in double quotes since it contains an
+                // embedded space.
+                sb.append('"');
+                sb.append(name);
+                sb.append('"');
+            } else
+                sb.append(name);
+        }
+        final String cmd = sb.toString();
+        editor.setWaitCursor();
+        final String output = command(cmd, parentBuffer.getCurrentDirectory());
+        OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
+        buf.setTitle(cmd);
+        editor.makeNext(buf);
+        editor.activateInOtherWindow(buf);
         editor.setDefaultCursor();
     }
 
