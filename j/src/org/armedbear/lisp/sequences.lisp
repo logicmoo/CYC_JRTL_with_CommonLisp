@@ -3,7 +3,8 @@
 (in-package "COMMON-LISP")
 
 (export '(some every notany notevery nreverse
-          position position-if position-if-not))
+          position position-if position-if-not
+          find find-if find-if-not))
 
 (defun signal-index-too-large-error (sequence index)
   (error 'type-error))
@@ -127,14 +128,12 @@
 
 (defmacro list-locater-macro (sequence body-form return-type)
   `(if from-end
-       (do ((sequence (nthcdr (- (the fixnum (length sequence))
-				 (the fixnum end))
-			      (reverse (the list ,sequence))))
-	    (index (1- (the fixnum end)) (1- index))
-	    (terminus (1- (the fixnum start)))
+       (do ((sequence (nthcdr (- (length sequence) end)
+			      (reverse ,sequence)))
+	    (index (1- end) (1- index))
+	    (terminus (1- start))
 	    ,@(case return-type (:position nil) (:element '(current))))
          ((or (= index terminus) (null sequence)) ())
-	 (declare (fixnum index terminus))
 	 ,@(case return-type
 	     (:position nil)
 	     (:element `((setf current (pop ,sequence)))))
@@ -143,7 +142,6 @@
 	    (index start (1+ index))
 	    ,@(case return-type (:position nil) (:element '(current))))
          ((or (= index (the fixnum end)) (null sequence)) ())
-	 (declare (fixnum index))
 	 ,@(case return-type
 	     (:position nil)
 	     (:element `((setf current (pop ,sequence)))))
@@ -210,9 +208,51 @@
   `(list-locater-if-not ,test ,sequence :position))
 
 (defun position-if-not (test sequence &key from-end (start 0) key end)
-  (declare (fixnum start))
   (let ((end (or end (length sequence))))
-    (declare (type index end))
     (seq-dispatch sequence
 		  (list-position-if-not test sequence)
 		  (vector-position-if-not test sequence))))
+
+(defmacro vector-find (item sequence)
+  `(vector-locater ,item ,sequence :element))
+
+(defmacro list-find (item sequence)
+  `(list-locater ,item ,sequence :element))
+
+(defun find (item sequence &key from-end (test #'eql) test-not (start 0)
+                  end key)
+  (seq-dispatch sequence
+                (list-find* item sequence from-end test test-not start end key)
+                (vector-find* item sequence from-end test test-not start end key)))
+
+(defun list-find* (item sequence from-end test test-not start end key)
+  (when (null end) (setf end (length sequence)))
+  (list-find item sequence))
+
+(defun vector-find* (item sequence from-end test test-not start end key)
+  (when (null end) (setf end (length sequence)))
+  (vector-find item sequence))
+
+(defmacro vector-find-if (test sequence)
+  `(vector-locater-if ,test ,sequence :element))
+
+(defmacro list-find-if (test sequence)
+  `(list-locater-if ,test ,sequence :element))
+
+(defun find-if (test sequence &key from-end (start 0) end key)
+  (let ((end (or end (length sequence))))
+    (seq-dispatch sequence
+		  (list-find-if test sequence)
+		  (vector-find-if test sequence))))
+
+(defmacro vector-find-if-not (test sequence)
+  `(vector-locater-if-not ,test ,sequence :element))
+
+(defmacro list-find-if-not (test sequence)
+  `(list-locater-if-not ,test ,sequence :element))
+
+(defun find-if-not (test sequence &key from-end (start 0) end key)
+  (let ((end (or end (length sequence))))
+    (seq-dispatch sequence
+		  (list-find-if-not test sequence)
+		  (vector-find-if-not test sequence))))
