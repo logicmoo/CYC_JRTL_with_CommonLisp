@@ -46,6 +46,8 @@ super
 @implementation
 @protocol
 @end
+@private
+@protected
 @public
 @class
 @selector
