@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.69 2004-06-23 23:59:35 piso Exp $
+;;; $Id: precompiler.lisp,v 1.70 2004-06-24 14:53:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -200,6 +200,7 @@
            (precompile-cons form)))))
 
 (defun precompile-identity (form)
+  (declare (optimize speed (safety 0)))
   form)
 
 (defun precompile-cons (form)

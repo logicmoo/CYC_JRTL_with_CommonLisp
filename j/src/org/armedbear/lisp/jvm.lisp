@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.185 2004-06-19 14:32:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.186 2004-06-24 14:50:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@
 
 (shadow '(method variable))
 
+;; FIXME
+;; This controls compiler debugging output, not debuggability of compiled code!
 (defvar *debug* nil)
 
 (defvar *pool* nil)
@@ -119,6 +121,7 @@
 
 ;; Returns index of entry (1-based).
 (defun pool-add (entry)
+  (declare (optimize speed (safety 0)))
   (let ((index *pool-count*))
     (push entry *pool*)
     (setf (gethash entry *pool-entries*) *pool-count*)
@@ -127,26 +130,31 @@
 
 ;; Returns index of entry (1-based).
 (defun pool-find-entry (entry)
+  (declare (optimize speed (safety 0)))
   (values (gethash entry *pool-entries*)))
 
 ;; Adds entry if not already in pool. Returns index of entry (1-based).
 (defun pool-get (entry)
+  (declare (optimize speed (safety 0)))
   (or (pool-find-entry entry) (pool-add entry)))
 
 (defun pool-name (name)
+  (declare (optimize speed (safety 0)))
   (pool-get (list 1 (length name) name)))
 
 (defun pool-name-and-type (name type)
+  (declare (optimize speed (safety 0)))
   (let* ((name-index (pool-name name))
          (type-index (pool-name type)))
     (pool-get (list 12 name-index type-index))))
 
 (defun pool-class (class-name)
-  (let ((class-name class-name))
+;;   (let ((class-name class-name))
     (dotimes (i (length class-name))
       (when (eql (char class-name i) #\.)
         (setf (char class-name i) #\/)))
-    (pool-get (list 7 (pool-name class-name)))))
+    (pool-get (list 7 (pool-name class-name))))
+;; )
 
 ;; (tag class-index name-and-type-index)
 (defun pool-field (class-name field-name type-name)
@@ -161,12 +169,15 @@
     (pool-get (list 10 class-index name-and-type-index))))
 
 (defun pool-string (string)
+  (declare (optimize speed (safety 0)))
   (pool-get (list 8 (pool-name string))))
 
 (defun pool-int (n)
+  (declare (optimize speed (safety 0)))
   (pool-get (list 3 n)))
 
 (defun u2 (n)
+  (declare (optimize speed (safety 0)))
   (list (ash n -8) (logand n #xff)))
 
 (defstruct instruction opcode args stack depth)
@@ -180,6 +191,7 @@
     (make-instruction :opcode opcode :args args :stack nil :depth nil)))
 
 (defun emit (instr &rest args)
+  (declare (optimize speed (safety 0)))
   (let ((instruction (inst instr args)))
     (push instruction *code*)
     instruction))
@@ -281,17 +293,17 @@
   (ensure-thread-var-initialized)
   (emit 'clear-values))
 
-(defvar *generate-interrupt-checks* t)
-
 (defun generate-interrupt-check ()
-  (let ((label1 (gensym)))
-    (emit 'getstatic +lisp-class+ "interrupted" "Z")
-    (emit 'ifeq `,label1)
-    (emit-invokestatic +lisp-class+
-                       "handleInterrupt"
-                       "()V"
-                       0)
-    (emit 'label `,label1)))
+  (unless (and (eql *speed* 3)
+               (eql *safety* 0))
+    (let ((label1 (gensym)))
+      (emit 'getstatic +lisp-class+ "interrupted" "Z")
+      (emit 'ifeq `,label1)
+      (emit-invokestatic +lisp-class+
+                         "handleInterrupt"
+                         "()V"
+                         0)
+      (emit 'label `,label1))))
 
 (defparameter single-valued-operators (make-hash-table :test 'eq))
 
@@ -578,6 +590,7 @@
            (vector-push-extend (resolve-args instruction) vector)))))))
 
 (defun branch-opcode-p (opcode)
+  (declare (optimize speed (safety 0)))
   (member opcode
     '(153 ; IFEQ
       154 ; IFNE
@@ -776,23 +789,28 @@
       bytes)))
 
 (defun write-u1 (n)
+  (declare (optimize speed (safety 0)))
   (sys::write-8-bits (logand n #xFF) *stream*))
 
 (defun write-u2 (n)
+  (declare (optimize speed (safety 0)))
   (sys::write-8-bits (ash n -8) *stream*)
   (sys::write-8-bits (logand n #xFF) *stream*))
 
 (defun write-u4 (n)
+  (declare (optimize speed (safety 0)))
   (write-u2 (ash n -16))
   (write-u2 (logand n #xFFFF)))
 
 (defun write-s4 (n)
+  (declare (optimize speed (safety 0)))
   (cond ((minusp n)
          (write-u4 (1+ (logxor (- n) #xFFFFFFFF))))
         (t
          (write-u4 n))))
 
 (defun write-utf8 (string)
+  (declare (optimize speed (safety 0)))
   (dotimes (i (length string))
     (let ((c (char string i)))
       (if (eql c #\null)
@@ -802,6 +820,7 @@
           (write-u1 (char-int c))))))
 
 (defun utf8-length (string)
+  (declare (optimize speed (safety 0)))
   (let ((len 0))
     (dotimes (i (length string))
       (incf len (if (eql (char string i) #\null) 2 1)))
@@ -2028,8 +2047,7 @@
                  (error "COMPILE-TAGBODY: tag not found: ~S" subform))
                (emit 'label label)))
             (t
-             (when (and *generate-interrupt-checks*
-                        (null (cdr rest)) ;; Last subform.
+             (when (and (null (cdr rest)) ;; Last subform.
                         (consp subform)
                         (eq (car subform) 'GO))
                (generate-interrupt-check))
@@ -2772,7 +2790,9 @@
   (unless (eq (car form) 'LAMBDA)
     (return-from compile-defun nil))
   (setf form (precompile-form form t))
-  (let* ((*defun-name* name)
+  (let* ((*speed* *speed*)
+         (*safety* *safety*)
+         (*defun-name* name)
          (*declared-symbols* (make-hash-table))
          (*declared-functions* (make-hash-table :test 'equal))
          (*declared-strings* (make-hash-table :test 'eq))
@@ -2838,8 +2858,8 @@
                           "([Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;"
                           -1)
       (emit 'astore_1))
-    (when *generate-interrupt-checks*
-      (generate-interrupt-check))
+    (process-optimization-declarations body)
+    (generate-interrupt-check)
     (dolist (f body)
       (compile-form f))
     (unless (remove-store-value)
@@ -3037,10 +3057,23 @@
           (dolist (spec (cdr decl))
             (let ((val 3)
                   (quantity spec))
-              (if (consp spec)
-                  (setq quantity (car spec) val (cadr spec)))
-              (if (and (fixnump val) (<= 0 val 3) (memq quantity '(debug speed space safety compilation-speed)))
-                  (push (cons quantity val) alist)))))))
+              (when (consp spec)
+                (setf quantity (car spec) val (cadr spec)))
+              (when (and (fixnump val)
+                         (<= 0 val 3)
+                         (memq quantity '(debug speed space safety compilation-speed)))
+                (push (cons quantity val) alist)))))))
+    (when alist
+      (%format t "declarations = ~S~%" alist)
+      (dolist (cons alist)
+        (let ((symbol (car cons))
+              (value (cdr cons)))
+          (case symbol
+            ('speed
+             (setf *speed* value))
+            ('safety
+             (setf *safety* value)))))
+      (%format t "*speed* = ~S *safety* = ~S~%" *speed* *safety*))
     alist))
 
 (defun compile (name &optional definition)
