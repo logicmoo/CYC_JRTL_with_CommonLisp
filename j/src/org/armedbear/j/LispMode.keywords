@@ -264,6 +264,7 @@ make-broadcast-stream
 make-condition
 make-dispatch-macro-character
 make-hash-table
+make-instance
 make-list
 make-package
 make-pathname
