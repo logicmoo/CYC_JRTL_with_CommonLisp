@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.51 2004-01-07 19:55:11 piso Exp $
+ * $Id: LispShell.java,v 1.52 2004-01-09 18:03:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -368,8 +368,10 @@ public class LispShell extends Shell
                     if (vendor.indexOf("Sun") >= 0 ||
                         vendor.indexOf("Blackdown") >= 0) {
                         sb.append(" -server");
+                        sb.append(" -Xmx128M");
                     } else if (vendor.indexOf("IBM") >= 0) {
                         sb.append(" -Xss512K");
+                        sb.append(" -Xmx128M");
                     }
                 }
             } else
