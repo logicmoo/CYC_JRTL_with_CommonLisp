@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.8 2003-11-29 04:21:33 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.9 2003-12-13 21:25:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -209,10 +209,8 @@
 		  (incf maximum))
 		 (:optionals
 		  (when (> (length var) 3)
-		    (cerror "Ignore extra noise."
-			    "More than variable, initform, and suppliedp ~
-			    in &optional binding - ~S"
-			    var))
+		    (error "more than variable, initform, and suppliedp in &optional binding ~S"
+                           var))
 		  (push-optional-binding (car var) (cadr var) (caddr var)
 					 `(not (null ,path)) `(car ,path)
 					 name error-kind error-fun)
