@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.7 2003-08-26 02:28:22 piso Exp $
+;;; $Id: numbers.lisp,v 1.8 2003-09-02 16:15:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,6 +79,17 @@
   (multiple-value-bind (tru rem) (truncate number divisor)
     (declare (ignore tru))
     rem))
+
+
+(defun mod (number divisor)
+  "Returns second result of FLOOR."
+  (let ((rem (rem number divisor)))
+    (if (and (not (zerop rem))
+	     (if (minusp divisor)
+		 (plusp number)
+		 (minusp number)))
+	(+ rem divisor)
+	rem)))
 
 
 (defun ftruncate (number &optional (divisor 1))
