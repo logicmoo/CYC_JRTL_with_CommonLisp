@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.29 2003-06-08 15:08:37 piso Exp $
+ * $Id: Closure.java,v 1.30 2003-06-08 15:32:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +32,15 @@ public class Closure extends Function
     private static final int REST     = 3;
     private static final int AUX      = 4;
 
-    protected LispObject envVar = NIL;
+    // States.
+    private static final int STATE_REQUIRED = 0;
+    private static final int STATE_OPTIONAL = 1;
+    private static final int STATE_KEYWORD  = 2;
+    private static final int STATE_REST     = 3;
+    private static final int STATE_AUX      = 4;
 
-    private final LispObject parameterList;
+    private final LispObject lambdaList;
+    private final Parameter[] requiredParameters;
     private final Parameter[] parameterArray;
     private final Parameter[] keywordParameterArray;
     private final Parameter[] auxVarArray;
@@ -51,29 +57,34 @@ public class Closure extends Function
     private int minArgs;
     private int maxArgs;
 
-    public Closure(LispObject parameterList, LispObject body, Environment env)
+    public Closure(LispObject lambdaList, LispObject body, Environment env)
         throws LispError
     {
-        this(null, parameterList, body, env);
+        this(null, lambdaList, body, env);
     }
 
-    public Closure(String name, LispObject parameterList, LispObject body,
+    public Closure(String name, LispObject lambdaList, LispObject body,
         Environment env) throws LispError
     {
         super(name, getCurrentPackage());
-        this.parameterList = parameterList;
-        Debug.assertTrue(parameterList == NIL || parameterList instanceof Cons);
+        this.lambdaList = lambdaList;
+        Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
+
         boolean allowOtherKeys = false;
         boolean restp = false;
-        if (parameterList instanceof Cons) {
-            final int length = parameterList.length();
+        if (lambdaList instanceof Cons) {
+            final int length = lambdaList.length();
             ArrayList arrayList = new ArrayList();
             ArrayList keywordParameters = new ArrayList();
             ArrayList auxVars = null;
+
+            ArrayList requiredParameters = new ArrayList();
+
             boolean optional = false;
             boolean key = false;
             boolean aux = false;
-            LispObject remaining = parameterList;
+            int state = STATE_REQUIRED;
+            LispObject remaining = lambdaList;
             while (remaining != NIL) {
                 LispObject obj = remaining.car();
                 if (obj instanceof Symbol) {
@@ -81,18 +92,12 @@ public class Closure extends Function
                         if (auxVars == null)
                             auxVars = new ArrayList();
                         auxVars.add(new Parameter((Symbol)obj, NIL, AUX));
-                    } else if (obj == Symbol.AND_ENVIRONMENT) {
-                        remaining = remaining.cdr();
-                        if (remaining == NIL)
-                            throw new LispError(
-                                "&ENVIRONMENT must be followed by a variable");
-                        envVar = checkSymbol(remaining.car());
-                        arity = -1;
-                        // FIXME maxArgs?
                     } else if (obj == Symbol.AND_OPTIONAL) {
+                        state = STATE_OPTIONAL;
                         optional = true;
                         arity = -1;
                     } else if (obj == Symbol.AND_REST || obj == Symbol.AND_BODY) {
+                        state = STATE_REST;
                         restp = true;
                         optional = false;
                         key = false;
@@ -106,6 +111,7 @@ public class Closure extends Function
                         restVar = (Symbol) remaining.car();
                         arrayList.add(new Parameter(restVar, NIL, REST));
                     } else if (obj == Symbol.AND_KEY) {
+                        state = STATE_KEYWORD;
                         key = true;
                         optional = false;
                         arity = -1;
@@ -114,6 +120,7 @@ public class Closure extends Function
                         maxArgs = -1;
                     } else if (obj == Symbol.AND_AUX) {
                         // All remaining specifiers are aux variable specifiers.
+                        state = STATE_AUX;
                         arity = -1; // FIXME
                         aux = true;
                     } else {
@@ -129,7 +136,9 @@ public class Closure extends Function
                             if (maxArgs >= 0)
                                 maxArgs += 2;
                         } else {
+                            Debug.assertTrue(state == STATE_REQUIRED);
                             arrayList.add(new Parameter((Symbol)obj));
+                            requiredParameters.add(new Parameter((Symbol)obj));
                             ++required;
                             if (maxArgs >= 0)
                                 ++maxArgs;
@@ -188,6 +197,8 @@ public class Closure extends Function
                 arity = length;
             parameterArray = new Parameter[arrayList.size()];
             arrayList.toArray(parameterArray);
+            this.requiredParameters = new Parameter[requiredParameters.size()];
+            requiredParameters.toArray(this.requiredParameters);
             Debug.assertTrue(keywordParameterCount == keywordParameters.size());
             if (keywordParameterCount > 0) {
                 keywordParameterArray = new Parameter[keywordParameterCount];
@@ -200,8 +211,9 @@ public class Closure extends Function
             } else
                 auxVarArray = null;
         } else {
-            Debug.assertTrue(parameterList == NIL);
+            Debug.assertTrue(lambdaList == NIL);
             parameterArray = new Parameter[0];
+            requiredParameters = null;
             keywordParameterArray = null;
             auxVarArray = null;
             arity = 0;
@@ -210,7 +222,7 @@ public class Closure extends Function
         }
         this.body = body;
         this.environment = env;
-        this.function = new Cons(Symbol.LAMBDA, new Cons(parameterList, body));
+        this.function = new Cons(Symbol.LAMBDA, new Cons(lambdaList, body));
         if (arity >= 0)
             Debug.assertTrue(arity == required);
         this.allowOtherKeys = allowOtherKeys;
@@ -240,7 +252,7 @@ public class Closure extends Function
 
     public final LispObject getParameterList()
     {
-        return parameterList;
+        return lambdaList;
     }
 
     public final LispObject getFunction()
@@ -383,8 +395,12 @@ public class Closure extends Function
                 throw new WrongNumberOfArgumentsException(this);
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(env);
-            for (int i = 0; i < arity; i++)
-                bind(parameterArray[i].var, args[i], ext);
+
+            if (requiredParameters != null) {
+                Debug.assertTrue(arity == requiredParameters.length);
+                for (int i = 0; i < arity; i++)
+                    bind(requiredParameters[i].var, args[i], ext);
+            }
             if (auxVarArray != null)
                 bindAuxVars(ext, thread);
             LispObject result = NIL;
@@ -553,7 +569,7 @@ public class Closure extends Function
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#<CLOSURE LAMBDA ");
-        sb.append(parameterList != NIL ? String.valueOf(parameterList) : "()");
+        sb.append(lambdaList != NIL ? String.valueOf(lambdaList) : "()");
         try {
             LispObject code = body;
             while (code != NIL) {
