@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: GenericFunction.java,v 1.14 2004-10-23 19:31:54 piso Exp $
+ * $Id: GenericFunction.java,v 1.15 2004-10-24 00:21:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,20 +128,14 @@ public final class GenericFunction extends StandardObject
 
     public String writeToString() throws ConditionThrowable
     {
-        LispObject slots = getSlots();
-        if (slots instanceof AbstractVector) {
-            AbstractVector v = (AbstractVector) slots;
-            if (v.length() > 0) {
-                LispObject name = v.getRowMajor(0);
-                if (name != null) {
-                    StringBuffer sb = new StringBuffer("#<");
-                    sb.append(getLispClass().getSymbol().writeToString());
-                    sb.append(' ');
-                    sb.append(name.writeToString());
-                    sb.append('>');
-                    return sb.toString();
-                }
-            }
+        LispObject name = getGenericFunctionName();
+        if (name != null) {
+            StringBuffer sb = new StringBuffer("#<");
+            sb.append(getLispClass().getSymbol().writeToString());
+            sb.append(' ');
+            sb.append(name.writeToString());
+            sb.append('>');
+            return sb.toString();
         }
         return super.writeToString();
     }
