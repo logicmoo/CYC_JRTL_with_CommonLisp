@@ -2,7 +2,7 @@
  * MessageFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: MessageFormatter.java,v 1.5 2003-04-20 16:07:46 piso Exp $
+ * $Id: MessageFormatter.java,v 1.6 2003-04-21 02:40:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,10 +107,6 @@ public final class MessageFormatter extends Formatter
             } else {
                 addSegment(text, MESSAGE_FORMAT_QUOTE);
             }
-            return segmentList;
-        }
-        if (c == ':' || c == '|') {
-            addSegment(text, MESSAGE_FORMAT_QUOTE);
             return segmentList;
         }
         if (quoteRE.getMatch(text) != null) {
