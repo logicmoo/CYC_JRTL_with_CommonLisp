@@ -2,7 +2,7 @@
  * ImapMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImapMessageBuffer.java,v 1.3 2002-10-11 01:42:37 piso Exp $
+ * $Id: ImapMessageBuffer.java,v 1.4 2002-10-11 18:28:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,9 +83,9 @@ public final class ImapMessageBuffer extends MessageBuffer
     {
         if (isLoaded())
             return LOAD_COMPLETED;
-        setLoaded(true);
         if (!mailbox.isLocked()) {
             Debug.bug();
+            setText("");
             return LOAD_FAILED;
         }
         setBusy(true);
