@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.738 2005-02-23 14:31:54 piso Exp $
+ * $Id: Primitives.java,v 1.739 2005-02-27 20:02:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3094,7 +3094,7 @@ public final class Primitives extends Lisp
                         new Closure(expander.cadr(), expander.cddr(), env);
                     MacroObject macroObject =
                         new MacroObject(symbol, expansionFunction);
-                    ext.bindFunctional(symbol, macroObject);
+                    ext.addFunctionBinding(symbol, macroObject);
                     defs = defs.cdr();
                 }
                 result = progn(args.cdr(), ext, thread);
