@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.47 2004-04-16 13:28:13 piso Exp $
+;;; $Id: defstruct.lisp,v 1.48 2004-04-16 14:26:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -129,6 +129,11 @@
           (t
            `((defun ,constructor-name ,keys
                (%make-structure ',*dd-name* (list ,@values))))))))
+
+(defun find-dsd (name)
+  (dolist (dsd *dd-slots*)
+    (when (string= name (dsd-name dsd))
+      (return dsd))))
 
 (defun get-slot (name)
 ;;   (let ((res (find name (dd-slots defstruct) :test #'string= :key #'dsd-name)))
@@ -454,7 +459,14 @@
           (dolist (dsd included-slots)
             (setf (dsd-index dsd) index)
             (push dsd *dd-slots*)
-            (incf index))))
+            (incf index)))
+        (when (cdr *dd-include*)
+          (dolist (slot (cdr *dd-include*))
+            (let* ((name (if (atom slot) slot (car slot)))
+                   (initform (if (atom slot) nil (cadr slot)))
+                   (dsd (find-dsd name)))
+              (when dsd
+                (setf (dsd-initform dsd) initform))))))
       (when *dd-initial-offset*
         (dotimes (i *dd-initial-offset*)
           (push (make-defstruct-slot-description :name nil
