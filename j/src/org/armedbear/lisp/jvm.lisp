@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.279 2004-08-17 12:14:49 piso Exp $
+;;; $Id: jvm.lisp,v 1.280 2004-08-17 20:16:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -384,24 +384,15 @@
       (setq pool (cdr pool))))
   t)
 
-;; Returns index of entry (1-based).
-(defun pool-add (entry)
-  (declare (optimize speed (safety 0)))
-  (let ((index *pool-count*))
-    (push entry *pool*)
-    (setf (gethash entry *pool-entries*) index)
-    (setf *pool-count* (1+ index))
-    index))
-
-;; Returns index of entry (1-based).
-(defun pool-find-entry (entry)
-  (declare (optimize speed (safety 0)))
-  (values (gethash entry *pool-entries*)))
-
-;; Adds entry if not already in pool. Returns index of entry (1-based).
 (defun pool-get (entry)
   (declare (optimize speed (safety 0)))
-  (or (pool-find-entry entry) (pool-add entry)))
+  (let ((index (gethash entry *pool-entries*)))
+    (unless index
+      (setf index *pool-count*)
+      (push entry *pool*)
+      (setf (gethash entry *pool-entries*) index)
+      (setf *pool-count* (1+ index)))
+    index))
 
 (defun pool-name (name)
   (declare (optimize speed (safety 0)))
@@ -409,27 +400,29 @@
 
 (defun pool-name-and-type (name type)
   (declare (optimize speed (safety 0)))
-  (let* ((name-index (pool-name name))
-         (type-index (pool-name type)))
-    (pool-get (list 12 name-index type-index))))
+  (pool-get (list 12
+                  (pool-name name)
+                  (pool-name type))))
 
+;; Assumes CLASS-NAME is already in the correct form ("org/armedbear/lisp/Lisp"
+;; as opposed to "org.armedbear.lisp.Lisp").
 (defun pool-class (class-name)
-  (dotimes (i (length class-name))
-    (when (eql (char class-name i) #\.)
-      (setf (char class-name i) #\/)))
+  (declare (optimize speed (safety 0)))
   (pool-get (list 7 (pool-name class-name))))
 
 ;; (tag class-index name-and-type-index)
 (defun pool-field (class-name field-name type-name)
-  (let* ((class-index (pool-class class-name))
-         (name-and-type-index (pool-name-and-type field-name type-name)))
-    (pool-get (list 9 class-index name-and-type-index))))
+  (declare (optimize speed (safety 0)))
+  (pool-get (list 9
+                  (pool-class class-name)
+                  (pool-name-and-type field-name type-name))))
 
 ;; (tag class-index name-and-type-index)
 (defun pool-method (class-name method-name type-name)
-  (let* ((class-index (pool-class class-name))
-         (name-and-type-index (pool-name-and-type method-name type-name)))
-    (pool-get (list 10 class-index name-and-type-index))))
+  (declare (optimize speed (safety 0)))
+  (pool-get (list 10
+                  (pool-class class-name)
+                  (pool-name-and-type method-name type-name))))
 
 (defun pool-string (string)
   (declare (optimize speed (safety 0)))
@@ -444,18 +437,12 @@
   (list (logand (ash n -8) #xff)
         (logand n #xff)))
 
-(defstruct instruction
-  opcode
-  args
-  stack
-  depth)
-
-(defun clear (instruction)
-  (declare (optimize speed (safety 0)))
-  (setf (instruction-opcode instruction) 0
-        (instruction-args instruction) nil
-        (instruction-stack instruction) nil
-        (instruction-depth instruction) nil))
+(locally (declare (optimize speed (safety 0)))
+  (defstruct instruction
+    opcode
+    args
+    stack
+    depth))
 
 (defun print-instruction (instruction)
   (format nil "~A ~A stack = ~S depth = ~S"
@@ -677,6 +664,7 @@
                 ext:fixnump
                 ext:memql
                 sys::generic-function-name
+                sys::puthash
                 precompiler::precompile1
                 declare
                 go
@@ -899,6 +887,7 @@
       )))
 
 (defun walk-code (code start-index depth)
+  (declare (optimize speed))
   (do* ((i start-index (1+ i))
         (limit (length code)))
        ((>= i limit))
@@ -1949,11 +1938,11 @@
 (defvar *toplevel-defuns* nil)
 
 (defun notinline-p (name)
-  (declare (optimize (speed 3) (safety 0)))
+  (declare (optimize speed (safety 0)))
   (eq (get name '%inline) 'NOTINLINE))
 
 (defun inline-ok (name)
-  (declare (optimize (speed 3) (safety 0)))
+  (declare (optimize speed (safety 0)))
   (cond ((notinline-p name)
          nil)
         ((sys::built-in-function-p name)
@@ -3836,17 +3825,17 @@
 (defun write-class-file (args body execute-method classfile)
   (let* ((super
           (cond (*child-p*
-                 "org.armedbear.lisp.ClosureTemplateFunction")
+                 "org/armedbear/lisp/ClosureTemplateFunction")
                 (*hairy-arglist-p*
-                 "org.armedbear.lisp.CompiledFunction")
+                 "org/armedbear/lisp/CompiledFunction")
                 (t
                  (case (length args)
-                   (0 "org.armedbear.lisp.Primitive0")
-                   (1 "org.armedbear.lisp.Primitive1")
-                   (2 "org.armedbear.lisp.Primitive2")
-                   (3 "org.armedbear.lisp.Primitive3")
-                   (4 "org.armedbear.lisp.Primitive4")
-                   (t "org.armedbear.lisp.Primitive")))))
+                   (0 "org/armedbear/lisp/Primitive0")
+                   (1 "org/armedbear/lisp/Primitive1")
+                   (2 "org/armedbear/lisp/Primitive2")
+                   (3 "org/armedbear/lisp/Primitive3")
+                   (4 "org/armedbear/lisp/Primitive4")
+                   (t "org/armedbear/lisp/Primitive")))))
          (this-index (pool-class *this-class*))
          (super-index (pool-class super))
          (constructor (make-constructor super (compiland-name *current-compiland*) args body)))
@@ -4271,20 +4260,5 @@
 
 (defun compile (name &optional definition)
   (jvm-compile name definition))
-
-;; (eval-when (:execute)
-;;   (mapc #'jvm-compile '(pool-add
-;;                         pool-find-entry
-;;                         pool-name
-;;                         pool-get
-;;                         compile-form)))
-
-;; (eval-when (:load-toplevel :execute)
-;;   (dotimes (n (1+ *last-opcode*))
-;;     (let ((resolver (gethash n *resolvers*)))
-;;       (when (and resolver
-;;                  (neq resolver #'unsupported-opcode)
-;;                  (not (compiled-function-p resolver)))
-;;         (setf (gethash n *resolvers*) (compile nil resolver))))))
 
 (provide 'jvm)
