@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.646 2004-06-02 10:29:12 piso Exp $
+ * $Id: Primitives.java,v 1.647 2004-06-02 21:21:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3909,7 +3909,8 @@ public final class Primitives extends Lisp
 
     // ### expt
     // expt base-number power-number => result
-    public static final Primitive2 EXPT = new Primitive2("expt", "base-number power-number")
+    public static final Primitive2 EXPT =
+        new Primitive2("expt", "base-number power-number")
     {
         public LispObject execute(LispObject n, LispObject power)
             throws ConditionThrowable
@@ -3952,8 +3953,13 @@ public final class Primitives extends Lisp
             }
             if (power instanceof LispFloat) {
                 if (n instanceof Fixnum) {
-                    double d = Math.pow(((Fixnum)n).getValue(),
-                                        ((LispFloat)power).getValue());
+                    double d = Math.pow(((Fixnum)n).value,
+                                        ((LispFloat)power).value);
+                    return new LispFloat(d);
+                }
+                if (n instanceof LispFloat) {
+                    double d = Math.pow(((LispFloat)n).value,
+                                        ((LispFloat)power).value);
                     return new LispFloat(d);
                 }
             }
