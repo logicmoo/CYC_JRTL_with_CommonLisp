@@ -2,7 +2,7 @@
  * coerce.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: coerce.java,v 1.4 2003-08-12 16:32:14 piso Exp $
+ * $Id: coerce.java,v 1.5 2003-08-23 01:35:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,9 @@ public final class coerce extends Lisp
                 }
                 throw new TypeError();
             }
-            if (second == Symbol.FLOAT || second == Symbol.SINGLE_FLOAT) {
+            if (second == Symbol.FLOAT || second == Symbol.SINGLE_FLOAT ||
+                second == Symbol.DOUBLE_FLOAT || second == Symbol.SHORT_FLOAT ||
+                second == Symbol.LONG_FLOAT) {
                 return LispFloat.coerceToFloat(first);
             }
             if (second == Symbol.COMPLEX) {
