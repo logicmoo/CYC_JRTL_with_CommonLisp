@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Nil.java,v 1.31 2004-02-23 14:52:15 piso Exp $
+ * $Id: Nil.java,v 1.32 2004-03-06 04:07:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,8 @@ public final class Nil extends Symbol
         super("NIL", pkg);
         pkg.addSymbol(this);
         setSymbolValue(this);
+        setSpecial(true);
+        setConstant(true);
     }
 
     public LispObject typeOf()
