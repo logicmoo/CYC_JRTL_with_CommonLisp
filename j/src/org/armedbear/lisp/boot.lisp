@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.198 2004-10-10 17:17:06 piso Exp $
+;;; $Id: boot.lisp,v 1.199 2004-11-21 04:36:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,10 +74,6 @@
 (defun invoke-debugger (condition)
   (sys::%format t "~A~%" condition)
   (ext:quit))
-
-;; CLASS-NAME is redefined as a generic function when CLOS is loaded.
-(defun class-name (class)
-  (sys::%class-name class))
 
 (sys:load-system-file "autoloads")
 (sys:load-system-file "early-defuns")
