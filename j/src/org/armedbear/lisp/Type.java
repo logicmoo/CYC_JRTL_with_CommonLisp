@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.18 2003-09-08 17:41:49 piso Exp $
+ * $Id: Type.java,v 1.19 2003-09-08 18:05:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,7 +109,7 @@ public class Type extends Lisp
         return subtypep;
     }
 
-    public final boolean _isSubtypeOf(Type otherType)
+    public boolean _isSubtypeOf(Type otherType)
     {
         if (otherType == this)
             return true;
@@ -137,18 +137,28 @@ public class Type extends Lisp
 
     public static final Type TYPE_T    = new Type(Symbol.T);
 
+    public static final Type TYPE_NIL  = new Type((Symbol)NIL) {
+        public boolean _isSubtypeOf(Type otherType)
+        {
+            return true;
+        }
+    };
+
     public static final Type ATOM      = new Type(Symbol.ATOM, TYPE_T);
-    public static final Type SYMBOL    = new Type(Symbol.SYMBOL, TYPE_T);
+    public static final Type SYMBOL    = new Type(Symbol.SYMBOL, TYPE_T, ATOM);
     public static final Type SEQUENCE  = new Type(Symbol.SEQUENCE, TYPE_T);
     public static final Type ARRAY     = new Type(Symbol.ARRAY, TYPE_T);
-    public static final Type CHARACTER = new Type(Symbol.CHARACTER, TYPE_T);
-    public static final Type NUMBER    = new Type(Symbol.NUMBER, TYPE_T);
+    public static final Type CHARACTER = new Type(Symbol.CHARACTER, TYPE_T, ATOM);
+    public static final Type NUMBER    = new Type(Symbol.NUMBER, TYPE_T, ATOM);
     public static final Type STREAM    = new Type(Symbol.STREAM, TYPE_T);
     public static final Type CONDITION = new Type(Symbol.CONDITION, TYPE_T);
+    public static final Type FUNCTION  = new Type(Symbol.FUNCTION, TYPE_T);
+    public static final Type STANDARD_OBJECT =
+        new Type(Symbol.STANDARD_OBJECT, TYPE_T);
 
     // Subtypes of SYMBOL
     public static final Type BOOLEAN   = new Type(Symbol.BOOLEAN, SYMBOL);
-    public static final Type KEYWORD   = new Type(Symbol.KEYWORD, SYMBOL, ATOM);
+    public static final Type KEYWORD   = new Type(Symbol.KEYWORD, SYMBOL);
 
     // Subtypes of SEQUENCE
     public static final Type VECTOR    = new Type(Symbol.VECTOR, ARRAY, SEQUENCE);
@@ -179,7 +189,7 @@ public class Type extends Lisp
     // Subtypes of CHARACTER
     public static final Type BASE_CHAR = new Type(Symbol.BASE_CHAR, CHARACTER);
     public static final Type EXTENDED_CHAR =
-        new Type(Symbol.EXTENDED_CHAR, CHARACTER);
+        new Type(Symbol.EXTENDED_CHAR, CHARACTER, TYPE_NIL);
     public static final Type STANDARD_CHAR =
         new Type(Symbol.STANDARD_CHAR, BASE_CHAR);
 
