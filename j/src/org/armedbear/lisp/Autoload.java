@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.26 2003-07-06 14:09:47 piso Exp $
+ * $Id: Autoload.java,v 1.27 2003-07-06 16:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,26 +153,6 @@ public final class Autoload extends Function
     };
 
     static {
-        autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
-        autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
-        autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
-        autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string-equal", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string-greaterp", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string-lessp", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string-not-equal", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string-not-greaterp", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string-not-lessp", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string-upcase", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string/=", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string<", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string<=", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string=", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string>", "StringFunctions");
-        autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
-        autoload(PACKAGE_SYS, "%time", "Time");
         autoload("char-equal", "CharacterFunctions");
         autoload("char-greaterp", "CharacterFunctions");
         autoload("char-lessp", "CharacterFunctions");
@@ -204,5 +184,26 @@ public final class Autoload extends Function
         autoload("sxhash", "HashTable");
         autoload("two-way-stream-input-stream", "TwoWayStream");
         autoload("two-way-stream-output-stream", "TwoWayStream");
+        autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
+        autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
+        autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
+        autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
+        autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-equal", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-greaterp", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-lessp", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-not-equal", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-not-greaterp", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-not-lessp", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-upcase", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string/=", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string<", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string<=", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string=", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string>", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
+        autoload(PACKAGE_SYS, "%time", "Time");
     }
 }
