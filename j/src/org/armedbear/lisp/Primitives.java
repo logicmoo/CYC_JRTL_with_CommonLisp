@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.120 2003-03-14 02:58:42 piso Exp $
+ * $Id: Primitives.java,v 1.121 2003-03-14 18:53:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -269,52 +269,52 @@ public final class Primitives extends Module
                 switch (args.length) {
                     case 0:
                         throw new WrongNumberOfArgumentsException("-");
-                    case 1:
-                        return new Fixnum(-Fixnum.getValue(args[0]));
+                    case 1: {
+                        LispObject result = new Fixnum(0);
+                        return result.subtract(args[0]);
+                    }
                     case 2:
-                        return new Fixnum(Fixnum.getValue(args[0]) -
-                            Fixnum.getValue(args[1]));
-                    default:
-                        long result = Fixnum.getValue(args[0]);
+                        return args[0].subtract(args[1]);
+                    default: {
+                        LispObject result = args[0];
                         for (int i = 1; i < args.length; i++)
-                            result -= Fixnum.getValue(args[i]);
-                        return new Fixnum(result);
+                            result = result.subtract(args[i]);
+                        return result;
+                    }
                 }
             case MULTIPLY: {                    // ### *
-                long result = 1;
+                LispObject result = new Fixnum(1);
                 for (int i = 0; i < args.length; i++)
-                    result *= Fixnum.getValue(args[i]);
-                return new Fixnum(result);
+                    result = result.multiplyBy(args[i]);
+                return result;
             }
             case DIVIDE: {                      // ### /
                 if (args.length < 2)
                     throw new WrongNumberOfArgumentsException("/");
-                long result = Fixnum.getValue(args[0]);
+                LispObject result = args[0];
                 for (int i = 1; i < args.length; i++)
-                    result /= Fixnum.getValue(args[i]);
-                return new Fixnum(result);
+                    result = result.divideBy(args[i]);
+                return result;
             }
             case MIN: {                         // ### min
                 if (args.length < 1)
                     throw new WrongNumberOfArgumentsException("MIN");
-                long result = Fixnum.getValue(args[0]);
+                LispObject result = args[0];
                 for (int i = 1; i < args.length; i++) {
-                    long n = Fixnum.getValue(args[i]);
-                    if (n < result)
-                        result = n;
+                    if (args[i].isLessThan(result) != NIL)
+                        result = args[i];
                 }
-                return new Fixnum(result);
+                return result;
             }
             case MAX: {                         // ### max
                 if (args.length < 1)
                     throw new WrongNumberOfArgumentsException("MAX");
-                long result = Fixnum.getValue(args[0]);
+                LispObject result = args[0];
                 for (int i = 1; i < args.length; i++) {
-                    long n = Fixnum.getValue(args[i]);
-                    if (n > result)
-                        result = n;
+                    if (args[i].isGreaterThan(result) != NIL)
+                        result = args[i];
                 }
-                return new Fixnum(result);
+                return result;
             }
             case LIST: {                        // ### list
                 LispObject result = NIL;
@@ -331,7 +331,7 @@ public final class Primitives extends Module
                 return result;
             }
             case LAST: {                        // ### last
-                long n;
+                int n;
                 switch (args.length) {
                     case 1:
                         n = 1;
@@ -1681,10 +1681,10 @@ public final class Primitives extends Module
             args = args.car();
             Symbol var = checkSymbol(args.car());
             LispObject countForm = args.cadr();
-            long count = Fixnum.getValue(eval(countForm, env));
+            int count = Fixnum.getInt(eval(countForm, env));
             LispObject resultForm = args.cdr().cdr().car();
             Environment oldDynEnv = dynEnv;
-            long i;
+            int i;
             for (i = 0; i < count; i++) {
                 Environment ext = new Environment(env);
                 bind(var, new Fixnum(i), ext);
@@ -2282,7 +2282,7 @@ public final class Primitives extends Module
         sb.append(System.getProperty("line.separator"));
         out.writeString(sb.toString());
         out.finishOutput();
-        return new Fixnum(used);
+        return number(used);
     }
 
     // ### funcall
@@ -2426,9 +2426,9 @@ public final class Primitives extends Module
         {
             if (args.length > 1)
                 throw new WrongNumberOfArgumentsException(this);
-            long old = Fixnum.getValue(_GENSYM_COUNTER_.getSymbolValue());
+            int old = Fixnum.getInt(_GENSYM_COUNTER_.getSymbolValue());
             String prefix ="G";
-            long n = -1;
+            int n = -1;
             if (args.length == 1) {
                 LispObject arg = args[0];
                 if (arg instanceof Fixnum) {
@@ -4027,7 +4027,7 @@ public final class Primitives extends Module
             int length = args.length;
             if (length < 1 || length > 2)
                 throw new WrongNumberOfArgumentsException(this);
-            long limit = Fixnum.getValue(args[0]);
+            int limit = Fixnum.getValue(args[0]);
             Random random;
             if (length == 2)
                 random = (Random) JavaObject.getObject(args[1]);
@@ -4039,7 +4039,7 @@ public final class Primitives extends Module
                 return new Fixnum(n);
             }
             double d = random.nextDouble();
-            long n = (long) (d * limit);
+            int n = (int) (d * limit);
             Debug.assertTrue(n < limit);
             return new Fixnum(n);
         }

@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.15 2003-03-14 02:56:21 piso Exp $
+ * $Id: Fixnum.java,v 1.16 2003-03-14 18:53:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,13 @@
 
 package org.armedbear.lisp;
 
+import java.math.BigInteger;
+
 public final class Fixnum extends LispObject
 {
-    private final long value;
+    private final int value;
 
-    public Fixnum(long value)
+    public Fixnum(int value)
     {
         this.value = value;
     }
@@ -51,7 +53,7 @@ public final class Fixnum extends LispObject
         return T;
     }
 
-    public static long getValue(LispObject obj) throws LispError
+    public static int getValue(LispObject obj) throws LispError
     {
         try {
             return ((Fixnum)obj).value;
@@ -71,6 +73,16 @@ public final class Fixnum extends LispObject
         }
     }
 
+    public static BigInteger getBigInteger(LispObject obj) throws LispError
+    {
+        try {
+            return BigInteger.valueOf(((Fixnum)obj).value);
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
     public static float getFloat(LispObject obj) throws LispError
     {
         try {
@@ -81,7 +93,7 @@ public final class Fixnum extends LispObject
         }
     }
 
-    public final long getValue()
+    public final int getValue()
     {
         return value;
     }
@@ -89,12 +101,15 @@ public final class Fixnum extends LispObject
     public LispObject add(LispObject obj) throws LispError
     {
         try {
-            return new Fixnum(value + ((Fixnum)obj).value);
+            long result = (long) value + ((Fixnum)obj).value;
+            return number(result);
         }
         catch (ClassCastException e) {
             // obj is not a Fixnum.
+            if (obj instanceof Bignum)
+                return obj.add(this);
             if (obj instanceof LispFloat)
-                return new LispFloat(((float)value) + LispFloat.getValue(obj));
+                return new LispFloat(value + LispFloat.getValue(obj));
             throw new TypeError(obj, "number");
         }
     }
@@ -102,7 +117,7 @@ public final class Fixnum extends LispObject
     public LispObject subtract(LispObject obj) throws LispError
     {
         try {
-            return new Fixnum(value - ((Fixnum)obj).value);
+            return number((long) value - ((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "fixnum");
@@ -112,7 +127,7 @@ public final class Fixnum extends LispObject
     public LispObject multiplyBy(LispObject obj) throws LispError
     {
         try {
-            return new Fixnum(value * ((Fixnum)obj).value);
+            return number((long) value * ((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "fixnum");
@@ -122,9 +137,14 @@ public final class Fixnum extends LispObject
     public LispObject divideBy(LispObject obj) throws LispError
     {
         try {
-            return new Fixnum(value / ((Fixnum)obj).value);
+            return number((long) value / ((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
+            if (obj instanceof Bignum) {
+                return new Bignum(value).divideBy(obj);
+            }
+            if (obj instanceof LispFloat)
+                return new LispFloat(value / LispFloat.getValue(obj));
             throw new TypeError(obj, "fixnum");
         }
     }
@@ -205,33 +225,44 @@ public final class Fixnum extends LispObject
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
-            long n = Fixnum.getValue(first);
-            long count = Fixnum.getValue(second);
-            if (count > 0) {
-                // Shift left.
-                return new Fixnum(n << count);
+            if (second instanceof Fixnum) {
+                int count = Fixnum.getInt(second);
+                BigInteger n;
+                if (first instanceof Fixnum)
+                    n = BigInteger.valueOf(((Fixnum)first).getValue());
+                else if (first instanceof Bignum)
+                    n = ((Bignum)first).getValue();
+                else
+                    throw new TypeError(first, "integer");
+                if (count == 0)
+                    return first; // No change.
+                n = n.shiftLeft(count);
+                if (n.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0 &&
+                    n.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0)
+                    return new Fixnum(n.intValue());
+                return new Bignum(n);
             }
-            if (count < 0) {
-                // Shift right.
-                return new Fixnum(n >> -count);
-            }
-            // No change.
-            return first;
+            throw new LispError("ASH: unsupported case");
         }
     };
 
     // ### expt
     // expt base-number power-number => result
     private static final Primitive2 EXPT = new Primitive2("expt") {
-        public LispObject execute(LispObject first, LispObject second)
+        public LispObject execute(LispObject n, LispObject power)
             throws LispError
         {
-            long n = Fixnum.getValue(first);
-            long power = Fixnum.getValue(second);
-            long result = 1;
-            for (long i = power; i-- > 0;)
-                result = result * n;
-            return new Fixnum(result);
+            if (power instanceof Fixnum) {
+                LispObject result = null;
+                if (n instanceof Fixnum || n instanceof Bignum)
+                    result = new Fixnum(1);
+                else
+                    result = new LispFloat((float)1);
+                for (int i = Fixnum.getInt(power); i-- > 0;)
+                    result = result.multiplyBy(n);
+                return result;
+            }
+            throw new LispError("EXPT: unsupported case");
         }
     };
 }
