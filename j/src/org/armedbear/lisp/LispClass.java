@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.43 2004-04-16 13:26:37 piso Exp $
+ * $Id: LispClass.java,v 1.44 2004-04-30 16:14:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public class LispClass extends StandardObject
     protected Symbol symbol;
     private Layout layout;
     private LispObject directSuperclasses;
-    private LispObject directSubclasses;
+    private LispObject directSubclasses = NIL;
     private LispObject classPrecedenceList = NIL;
     private LispObject directMethods = NIL;
     private LispObject documentation = NIL;
