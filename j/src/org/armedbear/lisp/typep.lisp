@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: typep.lisp,v 1.8 2003-11-13 04:37:59 piso Exp $
+;;; $Id: typep.lisp,v 1.9 2003-11-17 15:19:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -111,5 +111,7 @@
                 (if (listp (cadr i))
                     (match-dimensions (array-dimensions object) (cadr i))
                     (eql (array-rank object) (cadr i))))))
+      (EQL
+       (eql object (car i)))
       (t
        nil))))
