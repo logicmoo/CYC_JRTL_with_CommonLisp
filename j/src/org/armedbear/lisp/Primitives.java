@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.533 2003-12-15 01:55:03 piso Exp $
+ * $Id: Primitives.java,v 1.534 2003-12-15 14:09:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1227,54 +1227,6 @@ public final class Primitives extends Lisp
                 formatArguments = new Cons(args[i], formatArguments);
             formatArguments = formatArguments.nreverse();
             signal(new SimpleError(formatControl, formatArguments));
-            return NIL;
-        }
-    };
-
-    // ### warn
-    private static final Primitive WARN = new Primitive("warn", "datum &rest arguments")
-    {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            if (args.length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
-            final CharacterOutputStream out =
-                checkCharacterOutputStream(_ERROR_OUTPUT_.symbolValue());
-            LispObject datum = args[0];
-            Condition condition;
-            if (datum instanceof Condition) {
-                condition = (Condition) datum;
-            } else if (datum instanceof Symbol) {
-                LispObject initArgs = NIL;
-                for (int i = 1; i < args.length; i++)
-                    initArgs = new Cons(args[i], initArgs);
-                initArgs = initArgs.nreverse();
-                if (datum == Symbol.WARNING)
-                    condition = new Warning(initArgs);
-                else if (datum == Symbol.SIMPLE_WARNING)
-                    condition = new SimpleWarning(initArgs);
-                else {
-                    signal(new TypeError(datum, Symbol.WARNING));
-                    return NIL;
-                }
-            } else {
-                // Default is SIMPLE-WARNING.
-                LispObject formatControl = args[0];
-                LispObject formatArguments = NIL;
-                for (int i = 1; i < args.length; i++)
-                    formatArguments = new Cons(formatArguments, new Cons(args[i]));
-                condition = new SimpleWarning(formatControl, formatArguments);
-            }
-            final LispThread thread = LispThread.currentThread();
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-            try {
-                out.freshLine();
-                out.princ(condition);
-            }
-            finally {
-                thread.setDynamicEnvironment(oldDynEnv);
-            }
             return NIL;
         }
     };
