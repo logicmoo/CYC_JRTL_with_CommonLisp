@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.28 2003-03-03 20:25:42 piso Exp $
+ * $Id: LispShell.java,v 1.29 2003-03-03 20:27:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public final class LispShell extends Shell
             shell.setExitCommand("(quit)");
         } else if (shellCommand.equals("sbcl") || shellCommand.equals("/usr/bin/sbcl")) {
             shell.setPromptRE(CMUCL_PROMPT_PATTERN);
-            shell.setResetCommand(":r toplevel");
+            shell.setResetCommand(":abort");
         } else if (shellCommand.indexOf("org.armedbear.lisp") >= 0) {
             shell.setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
         } else {
