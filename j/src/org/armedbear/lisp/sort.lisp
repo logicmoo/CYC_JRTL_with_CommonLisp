@@ -1,7 +1,7 @@
 ;;; sort.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sort.lisp,v 1.5 2003-10-29 13:45:26 piso Exp $
+;;; $Id: sort.lisp,v 1.6 2003-10-29 14:16:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,11 @@
 (export '(sort merge))
 
 (defun sort (sequence predicate &key key)
+  (if (listp sequence)
+      (sort-list sequence predicate key)
+      (quick-sort sequence 0 (length sequence) predicate key)))
+
+(defun stable-sort (sequence predicate &key key)
   (if (listp sequence)
       (sort-list sequence predicate key)
       (quick-sort sequence 0 (length sequence) predicate key)))
