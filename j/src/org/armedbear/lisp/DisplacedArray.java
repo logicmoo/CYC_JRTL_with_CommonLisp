@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.18 2003-12-13 00:58:51 piso Exp $
+ * $Id: DisplacedArray.java,v 1.19 2003-12-27 17:02:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@ public final class DisplacedArray extends AbstractArray
     private final int size;
     private final AbstractArray array;
     private final int offset;
+
+    private int fillPointer = -1; // -1 indicates no fill pointer.
 
     public DisplacedArray(int[] dimv, AbstractArray array, int offset)
     {
@@ -89,7 +91,7 @@ public final class DisplacedArray extends AbstractArray
     public int length() throws ConditionThrowable
     {
         if (dimv.length == 1)
-            return size;
+            return fillPointer >= 0 ? fillPointer : size;
         signal(new TypeError(this, "sequence"));
         // Not reached.
         return 0;
@@ -160,6 +162,39 @@ public final class DisplacedArray extends AbstractArray
             array.setRowMajor(index + offset, newValue);
         else
             signal(new TypeError("bad row major index " + index));
+    }
+
+    public int getFillPointer()
+    {
+        return fillPointer;
+    }
+
+    public void setFillPointer(int n)
+    {
+        fillPointer = n;
+    }
+
+    public void setFillPointer(LispObject obj) throws ConditionThrowable
+    {
+        if (obj == T)
+            fillPointer = size;
+        else {
+            int n = Fixnum.getValue(obj);
+            if (n > size) {
+                StringBuffer sb = new StringBuffer("The new fill pointer (");
+                sb.append(n);
+                sb.append(") exceeds the capacity of the vector (");
+                sb.append(size);
+                sb.append(").");
+                signal(new LispError(sb.toString()));
+            } else if (n < 0) {
+                StringBuffer sb = new StringBuffer("The new fill pointer (");
+                sb.append(n);
+                sb.append(") is negative.");
+                signal(new LispError(sb.toString()));
+            } else
+                fillPointer = n;
+        }
     }
 
     public String toString()
