@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.95 2003-12-07 18:39:57 piso Exp $
+ * $Id: Symbol.java,v 1.96 2003-12-07 18:42:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -451,6 +451,7 @@ public class Symbol extends LispObject
         return this == obj;
     }
 
+    // ### symbol-name
     public static final Primitive1 SYMBOL_NAME = new Primitive1("symbol-name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -464,6 +465,7 @@ public class Symbol extends LispObject
         }
     };
 
+    // ### symbol-package
     public static final Primitive1 SYMBOL_PACKAGE = new Primitive1("symbol-package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -478,6 +480,7 @@ public class Symbol extends LispObject
         }
     };
 
+    // ### symbol-function
     public static final Primitive1 SYMBOL_FUNCTION = new Primitive1("symbol-function")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -495,6 +498,7 @@ public class Symbol extends LispObject
         }
     };
 
+    // ### symbol-plist
     public static final Primitive1 SYMBOL_PLIST = new Primitive1("symbol-plist")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -509,6 +513,7 @@ public class Symbol extends LispObject
         }
     };
 
+    // ### keywordp
     public static final Primitive1 KEYWORDP = new Primitive1("keywordp")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -521,6 +526,7 @@ public class Symbol extends LispObject
         }
     };
 
+    // ### make-symbol
     public static final Primitive1 MAKE_SYMBOL = new Primitive1("make-symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -529,6 +535,7 @@ public class Symbol extends LispObject
         }
     };
 
+    // makunbound
     public static final Primitive1 MAKUNBOUND = new Primitive1("makunbound")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
