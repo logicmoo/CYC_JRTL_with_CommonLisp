@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.365 2003-09-02 17:40:29 piso Exp $
+ * $Id: Primitives.java,v 1.366 2003-09-02 18:29:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4786,6 +4786,33 @@ public final class Primitives extends Module
             return new Fixnum(value.bitLength());
         }
     };
+
+    // ### sqrt
+    private static final Primitive1 SQRT =
+        new Primitive1("sqrt") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof Complex)
+                throw new LispError("SQRT not implemented for complex numbers");
+            if (arg.minusp())
+                return Complex.getInstance(new LispFloat(0),
+                                           sqrt(Fixnum.ZERO.subtract(arg)));
+            return sqrt(arg);
+        }
+    };
+
+    private static final LispFloat sqrt(LispObject obj) throws TypeError
+    {
+        if (obj instanceof Fixnum)
+            return new LispFloat((float)Math.sqrt(((Fixnum)obj).getValue()));
+        if (obj instanceof Bignum)
+            return new LispFloat((float)Math.sqrt(((Bignum)obj).floatValue()));
+        if (obj instanceof Ratio)
+            return new LispFloat((float)Math.sqrt(((Ratio)obj).floatValue()));
+        if (obj instanceof LispFloat)
+            return new LispFloat((float)Math.sqrt(((LispFloat)obj).getValue()));
+        throw new TypeError(obj, "number");
+    }
 
     // ### hashcode-to-string
     private static final Primitive1 HASHCODE_TO_STRING =
