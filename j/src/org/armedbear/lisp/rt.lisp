@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.116 2003-09-08 02:21:49 piso Exp $
+;;; $Id: rt.lisp,v 1.117 2003-09-08 02:36:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -175,6 +175,8 @@
                               "cl-symbols"
                               "coerce"
                               "complement"
+                              "complex"
+                              "complexp"
                               "concatenate"
                               "cond"
                               "cons"
