@@ -2,7 +2,7 @@
  * adjust_array.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.1 2004-02-04 15:12:40 piso Exp $
+ * $Id: adjust_array.java,v 1.2 2004-02-16 00:47:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,8 +45,7 @@ public final class adjust_array extends Primitive
         LispObject displacedTo = args[7];
         LispObject displacedIndexOffset = args[8];
         if (initialElementProvided != NIL && initialContents != NIL) {
-            return signal(new LispError("ADJUST-ARRAY: cannot specify both " +
-                                        "initial element and initial contents."));
+            return signal(new LispError("ADJUST-ARRAY: cannot specify both initial element and initial contents."));
         }
         if (elementType != array.getElementType() &&
             getUpgradedArrayElementType(elementType) != array.getElementType())
@@ -62,7 +61,7 @@ public final class adjust_array extends Primitive
             } else
                 newSize = dimensions;
             if (newSize != null)
-                return v.adjustArray(Fixnum.getValue(newSize));
+                return v.adjustArray(Fixnum.getValue(newSize), initialElement);
         }
         if (array instanceof LispString) {
             LispString s = (LispString) array;
@@ -73,7 +72,7 @@ public final class adjust_array extends Primitive
             } else
                 newSize = dimensions;
             if (newSize != null)
-                return s.adjustArray(Fixnum.getValue(newSize));
+                return s.adjustArray(Fixnum.getValue(newSize), initialElement);
         }
         return signal(new LispError("ADJUST-ARRAY: unsupported case."));
     }
