@@ -1,7 +1,7 @@
 ;;; chars.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: chars.lisp,v 1.3 2003-03-17 14:50:12 piso Exp $
+;;; $Id: chars.lisp,v 1.4 2003-06-26 01:27:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,21 +19,10 @@
 
 (in-package "COMMON-LISP")
 
-(export '(digit-char-p alphanumericp
-          char/= char< char> char<= char>=
-          char-not-equal
-          char-lessp char-greaterp))
-
-
 ;;; From CMUCL.
 
 (defun digit-char-p (char &optional (radix 10))
-  "If char is a digit in the specified radix, returns the fixnum for
-  which that digit stands, else returns NIL.  Radix defaults to 10
-  (decimal)."
-  (declare (character char) (type (integer 2 36) radix))
   (let ((m (- (char-code char) 48)))
-    (declare (fixnum m))
     (cond ((<= radix 10)
 	   ;; Special-case decimal and smaller radices.
 	   (if (and (>= m 0) (< m radix))  m  nil))
@@ -48,15 +37,12 @@
 
 
 (defun alphanumericp (char)
-  "Given a character-object argument, alphanumericp returns T if the
-   argument is either numeric or alphabetic."
   (declare (character char))
   (let ((m (char-code char)))
     (or (< 47 m 58) (< 64 m 91) (< 96 m 123))))
 
 
 (defun char/= (character &rest more-characters)
-  "Returns T if no two of its arguments are the same character."
   (do* ((head character (car list))
 	(list more-characters (cdr list)))
        ((atom list) T)
@@ -67,7 +53,6 @@
 
 
 (defun char< (character &rest more-characters)
-  "Returns T if its arguments are in strictly increasing alphabetic order."
   (do* ((c character (car list))
 	(list more-characters (cdr list)))
        ((atom list) T)
@@ -77,7 +62,6 @@
 
 
 (defun char> (character &rest more-characters)
-  "Returns T if its arguments are in strictly decreasing alphabetic order."
   (do* ((c character (car list))
 	(list more-characters (cdr list)))
        ((atom list) T)
@@ -87,7 +71,6 @@
 
 
 (defun char<= (character &rest more-characters)
-  "Returns T if its arguments are in strictly non-decreasing alphabetic order."
   (do* ((c character (car list))
 	(list more-characters (cdr list)))
        ((atom list) T)
@@ -97,7 +80,6 @@
 
 
 (defun char>= (character &rest more-characters)
-  "Returns T if its arguments are in strictly non-increasing alphabetic order."
   (do* ((c character (car list))
 	(list more-characters (cdr list)))
        ((atom list) T)
@@ -112,8 +94,6 @@
 
 
 (defun char-not-equal (character &rest more-characters)
-  "Returns T if no two of its arguments are the same character.
-   Font, bits, and case are ignored."
   (do* ((head character (car list))
 	(list more-characters (cdr list)))
        ((atom list) T)
@@ -126,8 +106,6 @@
 
 
 (defun char-lessp (character &rest more-characters)
-  "Returns T if its arguments are in strictly increasing alphabetic order.
-   Font, bits, and case are ignored."
   (do* ((c character (car list))
 	(list more-characters (cdr list)))
        ((atom list) T)
@@ -137,8 +115,6 @@
 
 
 (defun char-greaterp (character &rest more-characters)
-  "Returns T if its arguments are in strictly decreasing alphabetic order.
-   Font, bits, and case are ignored."
   (do* ((c character (car list))
 	(list more-characters (cdr list)))
        ((atom list) T)

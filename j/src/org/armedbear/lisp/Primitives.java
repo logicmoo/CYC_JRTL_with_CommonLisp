@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.270 2003-06-25 00:43:24 piso Exp $
+ * $Id: Primitives.java,v 1.271 2003-06-26 01:27:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -387,7 +387,7 @@ public final class Primitives extends Module
                 return new Fixnum(LispCharacter.getValue(arg));
             case CODE_CHAR:                     // ### code-char
                 if (arg instanceof Fixnum) {
-                    long n = Fixnum.getValue(arg);
+                    int n = Fixnum.getValue(arg);
                     if (n < 128)
                         return new LispCharacter((char)n);
                 }
