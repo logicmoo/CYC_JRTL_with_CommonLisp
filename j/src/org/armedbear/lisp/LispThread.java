@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.38 2004-05-27 20:27:49 piso Exp $
+ * $Id: LispThread.java,v 1.39 2004-05-28 01:09:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,11 @@ public final class LispThread extends LispObject
     }
 
     private final Thread javaThread;
+    private boolean destroyed;
+    public Environment dynEnv;
+    public LispObject[] _values;
+    private boolean interrupted;
+    private LispObject pending = NIL;
 
     private LispThread(Thread javaThread)
     {
@@ -83,7 +88,14 @@ public final class LispThread extends LispObject
                     ; // Might happen.
                 }
                 catch (Throwable t) {
-                    t.printStackTrace();
+                    if (isInterrupted()) {
+                        try {
+                            processInterrupts();
+                        }
+                        catch (ConditionThrowable c) {
+                            Debug.trace(c);
+                        }
+                    }
                 }
                 finally {
                     remove(javaThread);
@@ -95,18 +107,38 @@ public final class LispThread extends LispObject
         javaThread.start();
     }
 
-    private boolean destroyed;
-    public Environment dynEnv;
-    public LispObject[] _values;
-
     public final synchronized boolean isDestroyed()
     {
         return destroyed;
     }
 
+    private final synchronized boolean isInterrupted()
+    {
+        return interrupted;
+    }
+
     private final synchronized void setDestroyed(boolean b)
     {
         destroyed = b;
+    }
+
+    private final synchronized void interrupt(LispObject function, LispObject args)
+    {
+        pending = new Cons(args, pending);
+        pending = new Cons(function, pending);
+        interrupted = true;
+        javaThread.interrupt();
+    }
+
+    private final synchronized void processInterrupts() throws ConditionThrowable
+    {
+        while (pending != NIL) {
+            LispObject function = pending.car();
+            LispObject args = pending.cadr();
+            pending = pending.cddr();
+            Primitives.APPLY.execute(function, args);
+        }
+        interrupted = false;
     }
 
     public final LispObject[] getValues()
@@ -504,7 +536,7 @@ public final class LispThread extends LispObject
                 Thread.currentThread().sleep(millis);
             }
             catch (InterruptedException e) {
-                Debug.trace(e);
+                currentThread().processInterrupts();
             }
             return NIL;
         }
@@ -541,6 +573,31 @@ public final class LispThread extends LispObject
                 return T;
             } else
                 return signal(new TypeError(arg, "Lisp thread"));
+        }
+    };
+
+    // ### interrupt-thread thread function &rest args => T
+    // Interrupts thread and forces it to apply function to args. When the
+    // function returns, the thread's original computation continues. If
+    // multiple interrupts are queued for a thread, they are all run, but the
+    // order is not guaranteed.
+    private static final Primitive INTERRUPT_THREAD =
+        new Primitive("interrupt-thread", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 2)
+                return signal(new WrongNumberOfArgumentsException(this));
+            if (args[0] instanceof LispThread) {
+                LispThread thread = (LispThread) args[0];
+                LispObject fun = args[1];
+                LispObject funArgs = NIL;
+                for (int i = args.length; i-- > 2;)
+                    funArgs = new Cons(args[i], funArgs);
+                thread.interrupt(fun, funArgs);
+                return T;
+            } else
+                return signal(new TypeError(args[0], "Lisp thread"));
         }
     };
 
