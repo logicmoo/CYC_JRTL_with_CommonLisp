@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.550 2004-01-07 19:52:58 piso Exp $
+ * $Id: Primitives.java,v 1.551 2004-01-20 14:19:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3639,15 +3639,18 @@ public final class Primitives extends Lisp
 
     // ### unread-char
     // unread-char character &optional input-stream => nil
-    private static final Primitive UNREAD_CHAR = new Primitive("unread-char","character &optional input-stream") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+    private static final Primitive UNREAD_CHAR =
+        new Primitive("unread-char", "character &optional input-stream")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            int length = args.length;
-            if (length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
-            CharacterInputStream stream =
-                length > 1 ? checkCharacterInputStream(args[1]) : getStandardInput();
-            return stream.unreadChar(checkCharacter(args[0]));
+            return getStandardInput().unreadChar(checkCharacter(arg));
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            CharacterInputStream stream = checkCharacterInputStream(second);
+            return stream.unreadChar(checkCharacter(first));
         }
     };
 
