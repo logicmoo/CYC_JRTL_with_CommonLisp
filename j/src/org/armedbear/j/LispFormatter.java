@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.24 2003-03-09 22:16:12 piso Exp $
+ * $Id: LispFormatter.java,v 1.25 2003-03-12 20:04:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,15 +256,22 @@ public final class LispFormatter extends Formatter
                 continue;
             }
             if (state == STATE_NAME) {
-                if (!mode.isIdentifierPart(c)) {
+                if (!mode.isIdentifierPart(c) && c != ':') {
                     endToken(text, i, state);
                     state = STATE_ARGLIST;
                 }
                 ++i;
                 continue;
             }
-            if (state == STATE_IDENTIFIER ||
-                state == STATE_SECONDARY_KEYWORD ||
+            if (state == STATE_IDENTIFIER) {
+                if (!mode.isIdentifierPart(c) && c != ':') {
+                    endToken(text, i, state);
+                    state = STATE_NEUTRAL;
+                }
+                ++i;
+                continue;
+            }
+            if (state == STATE_SECONDARY_KEYWORD ||
                 state == STATE_SUBSTITUTION) {
                 if (!mode.isIdentifierPart(c)) {
                     endToken(text, i, state);
@@ -279,7 +286,8 @@ public final class LispFormatter extends Formatter
                 ++i;
                 continue;
             }
-            if (state == STATE_NEUTRAL || state == STATE_ARGLIST) {
+            if (state == STATE_NEUTRAL || state == STATE_ARGLIST ||
+                state == STATE_QUOTED_LIST) {
                 if (c == ':' || c == '&') {
                     endToken(text, i, state);
                     state = STATE_SECONDARY_KEYWORD;
