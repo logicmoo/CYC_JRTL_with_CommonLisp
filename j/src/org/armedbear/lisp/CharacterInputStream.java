@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.41 2003-07-17 00:10:57 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.42 2003-08-02 20:32:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,7 +304,7 @@ public class CharacterInputStream extends LispStream
                 final LispThread thread = LispThread.currentThread();
                 LispObject result = funcall3(fun,
                                              this,
-                                             new LispCharacter(c),
+                                             LispCharacter.getInstance(c),
                                              new Fixnum(numArg),
                                              thread);
                 LispObject[] values = thread.getValues();
@@ -375,10 +375,10 @@ public class CharacterInputStream extends LispStream
             }
             String token = sb.toString();
             if (token.length() == 1)
-                return new LispCharacter(token.charAt(0));
+                return LispCharacter.getInstance(token.charAt(0));
             n = nameToChar(token);
             if (n >= 0)
-                return new LispCharacter((char)n);
+                return LispCharacter.getInstance((char)n);
             throw new LispError("unrecognized character name: " + token);
         }
         catch (IOException e) {
@@ -830,7 +830,7 @@ public class CharacterInputStream extends LispStream
             else
                 return eofValue;
         }
-        return new LispCharacter((char)n);
+        return LispCharacter.getInstance((char)n);
     }
 
     // unread-char character &optional input-stream => nil

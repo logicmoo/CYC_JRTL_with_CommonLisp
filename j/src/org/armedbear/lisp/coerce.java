@@ -2,7 +2,7 @@
  * coerce.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: coerce.java,v 1.2 2003-06-20 17:54:48 piso Exp $
+ * $Id: coerce.java,v 1.3 2003-08-02 20:32:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class coerce extends Lisp
                 } else if (first instanceof Symbol) {
                     String name = first.getName();
                     if (name.length() == 1)
-                        return new LispCharacter(name.charAt(0));
+                        return LispCharacter.getInstance(name.charAt(0));
                 }
                 throw new TypeError();
             }

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.309 2003-08-02 19:39:47 piso Exp $
+ * $Id: Primitives.java,v 1.310 2003-08-02 20:32:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -385,7 +385,7 @@ public final class Primitives extends Module
                 if (arg instanceof Fixnum) {
                     int n = Fixnum.getValue(arg);
                     if (n < 128)
-                        return new LispCharacter((char)n);
+                        return LispCharacter.getInstance((char)n);
                 }
                 return NIL;
             case CHARACTERP:                    // ### characterp
@@ -401,10 +401,10 @@ public final class Primitives extends Module
             case UPPER_CASE_P:                  // ### upper-case-p
                 return Character.isUpperCase(LispCharacter.getValue(arg)) ? T : NIL;
             case CHAR_DOWNCASE:                 // ### char-downcase
-                return new LispCharacter(Character.toLowerCase(
+                return LispCharacter.getInstance(Character.toLowerCase(
                     LispCharacter.getValue(arg)));
             case CHAR_UPCASE:                   // ### char-upcase
-                return new LispCharacter(Character.toUpperCase(
+                return LispCharacter.getInstance(Character.toUpperCase(
                     LispCharacter.getValue(arg)));
             case STRINGP:                       // ### stringp
                 return (arg.getType() & TYPE_STRING) != 0 ? T : NIL;
@@ -3998,7 +3998,7 @@ public final class Primitives extends Module
         {
             String s = LispString.getValue(string(arg));
             int n = nameToChar(s);
-            return n >= 0 ? new LispCharacter((char)n) : NIL;
+            return n >= 0 ? LispCharacter.getInstance((char)n) : NIL;
         }
     };
 
@@ -4048,8 +4048,8 @@ public final class Primitives extends Module
             if (weight >= radix || weight >= 36)
                 return NIL;
             if (weight < 10)
-                return new LispCharacter((char)('0' + weight));
-            return new LispCharacter((char)('A' + weight - 10));
+                return LispCharacter.getInstance((char)('0' + weight));
+            return LispCharacter.getInstance((char)('A' + weight - 10));
         }
     };
 
