@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Layout.java,v 1.4 2003-12-20 03:05:51 piso Exp $
+ * $Id: Layout.java,v 1.5 2004-10-21 18:18:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,10 +87,10 @@ public final class Layout extends LispObject
         }
     };
 
-    // ### instance-slot-index
-    // instance-slot-index layout slot-name => index
-    private static final Primitive2 INSTANCE_SLOT_INDEX =
-        new Primitive2("instance-slot-index", PACKAGE_SYS, false)
+    // ### layout-slot-index
+    // layout-slot-index layout slot-name => index
+    private static final Primitive INSTANCE_SLOT_INDEX =
+        new Primitive("layout-slot-index", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
