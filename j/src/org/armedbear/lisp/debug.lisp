@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.2 2003-09-21 00:53:10 piso Exp $
+;;; $Id: debug.lisp,v 1.3 2003-09-30 11:00:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,6 +31,8 @@
     (debugger-loop)))
 
 (defun debugger-loop ()
+  (fresh-line *debug-io*)
+  (format *debug-io* "Type :continue to continue...")
   (loop
     (catch 'debug-loop-catcher
       (handler-bind ((error (lambda (condition)
