@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.315 2004-12-26 14:54:07 piso Exp $
+;;; $Id: jvm.lisp,v 1.316 2004-12-26 18:45:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -404,6 +404,14 @@
     (error "Too many arguments for SETQ."))
   (list 'SETQ (second form) (p1 (third form))))
 
+(defun p1-the (form)
+;;   (dformat t "p1-the form = ~S~%" form)
+;;   (if (= *safety* 3)
+      (list 'THE (second form) (p1 (third form)))
+;;       (p1 (third form))
+;;       )
+)
+
 (defun p1-default (form)
   (list* (car form) (mapcar #'p1 (cdr form))))
 
@@ -507,7 +515,7 @@
 (install-p1-handler 'setq                 'p1-setq)
 (install-p1-handler 'symbol-macrolet      'identity)
 (install-p1-handler 'tagbody              'p1-tagbody)
-(install-p1-handler 'the                  'p1-lambda)
+(install-p1-handler 'the                  'p1-the)
 (install-p1-handler 'throw                'p1-throw)
 (install-p1-handler 'unwind-protect       'p1-default)
 
@@ -4409,6 +4417,25 @@
                (emit-unbox-fixnum))
              (emit-move-from-stack target))))))
 
+(defun p2-the (form &key (target *val*) representation)
+;;   (dformat t "p2-the form = ~S~%" form)
+  (let ((type (second form))
+        (expr (third form)))
+  (cond
+   ((and (listp type) (eq (car type) 'VALUES))
+    ;; FIXME
+    (compile-form expr :target target :representation representation))
+   ((= *safety* 3)
+    (let* ((sym (gensym))
+           (new-expr
+            `(let ((,sym ,expr))
+               (sys::require-type ,sym ',type)
+               ,sym)))
+;;       (dformat t "new-expr = ~S~%" new-expr)
+      (compile-form (p1 new-expr) :target target :representation representation)))
+   (t
+    (compile-form expr :target target :representation representation)))))
+
 (defun compile-catch (form &key (target *val*) representation)
   (when (= (length form) 2) ; (catch 'foo)
     (when target
@@ -4939,9 +4966,10 @@
       (setf (method-code execute-method) (code-bytes *code*))
 
       ;; Remove handler if its protected range is empty.
-      (delete-if (lambda (handler) (eql (symbol-value (handler-from handler))
-                                        (symbol-value (handler-to handler))))
-                 *handlers*)
+      (setf *handlers*
+            (delete-if (lambda (handler) (eql (symbol-value (handler-from handler))
+                                              (symbol-value (handler-to handler))))
+                       *handlers*))
 
       (setf (method-max-locals execute-method) *registers-allocated*)
       (setf (method-handlers execute-method) (nreverse *handlers*))
@@ -5098,6 +5126,7 @@
 (install-p2-handler 'eql    'p2-eql)
 (install-p2-handler 'not    'compile-not/null)
 (install-p2-handler 'null   'compile-not/null)
+(install-p2-handler 'the    'p2-the)
 
 (defun process-optimization-declarations (forms)
   (let (alist ())
