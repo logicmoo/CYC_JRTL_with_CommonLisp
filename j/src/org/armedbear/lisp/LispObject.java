@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.95 2004-08-15 10:56:59 piso Exp $
+ * $Id: LispObject.java,v 1.96 2004-08-18 02:17:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -659,6 +659,17 @@ public class LispObject extends Lisp
         signal(new TypeError(this, Symbol.STRING));
         // Not reached.
         return null;
+    }
+
+    public LispObject getSlotValue(int index) throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.STRUCTURE_OBJECT));
+    }
+
+    public LispObject setSlotValue(int index, LispObject value)
+        throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.STRUCTURE_OBJECT));
     }
 
     // Profiling.
