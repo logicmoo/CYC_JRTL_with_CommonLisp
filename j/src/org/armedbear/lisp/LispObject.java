@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.105 2004-12-16 06:34:02 piso Exp $
+ * $Id: LispObject.java,v 1.106 2004-12-16 16:32:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -653,6 +653,11 @@ public class LispObject extends Lisp
             }
         }
         return remainder;
+    }
+
+    public LispObject ash(int shift) throws ConditionThrowable
+    {
+        return ash(new Fixnum(shift));
     }
 
     public LispObject ash(LispObject obj) throws ConditionThrowable

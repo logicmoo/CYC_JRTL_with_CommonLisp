@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.101 2004-12-16 06:34:50 piso Exp $
+ * $Id: Fixnum.java,v 1.102 2004-12-16 16:31:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -573,29 +573,32 @@ public final class Fixnum extends LispObject
         return super.MOD(divisor);
     }
 
+    public LispObject ash(int shift)
+    {
+        if (value == 0)
+            return this;
+        if (shift == 0)
+            return this;
+        long n = value;
+        if (shift <= -32) {
+            // Right shift.
+            return n >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
+        }
+        if (shift < 0)
+            return new Fixnum((int)(n >> -shift));
+        if (shift <= 32)
+            return number(n << shift);
+        // BigInteger.shiftLeft() succumbs to a stack overflow if shift
+        // is Integer.MIN_VALUE, so...
+        if (shift == Integer.MIN_VALUE)
+            return n >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
+        return number(BigInteger.valueOf(value).shiftLeft(shift));
+    }
+
     public LispObject ash(LispObject obj) throws ConditionThrowable
     {
-        if (obj instanceof Fixnum) {
-            if (value == 0)
-                return this;
-            int shift = ((Fixnum)obj).value;
-            if (shift == 0)
-                return this;
-            long n = value;
-            if (shift <= -32) {
-                // Right shift.
-                return n >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
-            }
-            if (shift < 0)
-                return new Fixnum((int)(n >> -shift));
-            if (shift <= 32)
-                return number(n << shift);
-            // BigInteger.shiftLeft() succumbs to a stack overflow if shift
-            // is Integer.MIN_VALUE, so...
-            if (shift == Integer.MIN_VALUE)
-                return n >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
-            return number(BigInteger.valueOf(value).shiftLeft(shift));
-        }
+        if (obj instanceof Fixnum)
+            return ash(((Fixnum)obj).value);
         if (obj instanceof Bignum) {
             if (value == 0)
                 return this;
