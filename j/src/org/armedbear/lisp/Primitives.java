@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.715 2004-12-07 02:07:20 piso Exp $
+ * $Id: Primitives.java,v 1.716 2004-12-07 04:16:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -569,6 +569,12 @@ public final class Primitives extends Lisp
         {
             return first.add(second);
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return first.add(second).add(third);
+        }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             LispObject result = Fixnum.ZERO;
@@ -998,6 +1004,16 @@ public final class Primitives extends Lisp
         {
             return first.isLessThanOrEqualTo(second) ? T : NIL;
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            if (second.isLessThan(first))
+                return NIL;
+            if (third.isLessThan(second))
+                return NIL;
+            return T;
+        }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             switch (array.length) {
@@ -1247,16 +1263,57 @@ public final class Primitives extends Lisp
         new Primitive("%format", PACKAGE_SYS, false,
                       "destination control-string &rest args")
     {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            LispObject destination = first;
+            // Copy remaining arguments.
+            LispObject[] _args = new LispObject[2];
+            _args[0] = second;
+            _args[1] = third;
+            String s = _format(_args);
+            return outputFormattedString(s, destination);
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
+        {
+            LispObject destination = first;
+            // Copy remaining arguments.
+            LispObject[] _args = new LispObject[3];
+            _args[0] = second;
+            _args[1] = third;
+            _args[2] = fourth;
+            String s = _format(_args);
+            return outputFormattedString(s, destination);
+        }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
                 signal(new WrongNumberOfArgumentsException(this));
             LispObject destination = args[0];
             // Copy remaining arguments.
-            LispObject[] _args = new LispObject[args.length-1];
+            LispObject[] _args = new LispObject[args.length - 1];
             for (int i = 0; i < _args.length; i++)
                 _args[i] = args[i+1];
             String s = _format(_args);
+            return outputFormattedString(s, destination);
+        }
+        private final String _format(LispObject[] args)
+            throws ConditionThrowable
+        {
+            LispObject formatControl = args[0];
+            LispObject formatArguments = NIL;
+            for (int i = 1; i < args.length; i++)
+                formatArguments = new Cons(args[i], formatArguments);
+            formatArguments = formatArguments.nreverse();
+            return format(formatControl, formatArguments);
+        }
+        private final LispObject outputFormattedString(String s,
+                                                       LispObject destination)
+            throws ConditionThrowable
+        {
             if (destination == T) {
                 checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue())._writeString(s);
                 return NIL;
@@ -1278,16 +1335,6 @@ public final class Primitives extends Lisp
             return NIL;
         }
     };
-
-    private static final String _format(LispObject[] args) throws ConditionThrowable
-    {
-        LispObject formatControl = args[0];
-        LispObject formatArguments = NIL;
-        for (int i = 1; i < args.length; i++)
-            formatArguments = new Cons(args[i], formatArguments);
-        formatArguments = formatArguments.nreverse();
-        return format(formatControl, formatArguments);
-    }
 
     private static final Symbol _SIMPLE_FORMAT_FUNCTION_ =
         internSpecial("*SIMPLE-FORMAT-FUNCTION*", PACKAGE_SYS, _FORMAT);
@@ -2306,17 +2353,17 @@ public final class Primitives extends Lisp
     private static final Primitive MACROEXPAND =
         new Primitive("macroexpand", "form &optional env")
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
+        public LispObject execute(LispObject form) throws ConditionThrowable
         {
-            return macroexpand(arg,
+            return macroexpand(form,
                                new Environment(),
                                LispThread.currentThread());
         }
-        public LispObject execute(LispObject first, LispObject second)
+        public LispObject execute(LispObject form, LispObject env)
             throws ConditionThrowable
         {
-            return macroexpand(first,
-                               checkEnvironment(second),
+            return macroexpand(form,
+                               env != NIL ? checkEnvironment(env) : new Environment(),
                                LispThread.currentThread());
         }
     };
@@ -3735,6 +3782,12 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             return inSynonymOf(first).readChar(second != NIL, NIL);
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return inSynonymOf(first).readChar(second != NIL, third);
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
