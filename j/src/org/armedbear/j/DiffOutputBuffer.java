@@ -1,8 +1,8 @@
 /*
  * DiffOutputBuffer.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: DiffOutputBuffer.java,v 1.2 2003-04-04 14:06:47 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: DiffOutputBuffer.java,v 1.3 2003-04-04 16:02:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,8 @@ public final class DiffOutputBuffer extends Buffer
     {
         super();
         this.parentBuffer = parentBuffer;
-        directory = parentBuffer.getCurrentDirectory();
+        directory =
+            (parentBuffer == null) ? null : parentBuffer.getCurrentDirectory();
         this.vcType = vcType;
         init();
         setText(output);
