@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.30 2003-12-10 17:31:01 piso Exp $
+;;; $Id: clos.lisp,v 1.31 2003-12-10 17:55:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1416,6 +1416,11 @@
 
 (defmethod allocate-instance ((class standard-class) &rest initargs)
   (std-allocate-instance class))
+
+(defmethod allocate-instance ((class structure-class) &rest initargs)
+  (%make-structure (class-name class)
+                   (make-list (length (class-slots class))
+                              :initial-element +slot-unbound+)))
 
 (defgeneric make-instance (class &key))
 
