@@ -2,7 +2,7 @@
  * CaseFrobStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: CaseFrobStream.java,v 1.2 2004-06-08 23:05:03 piso Exp $
+ * $Id: CaseFrobStream.java,v 1.3 2004-06-17 19:52:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,6 +75,16 @@ public abstract class CaseFrobStream extends Stream
     public boolean isBinaryStream() throws ConditionThrowable
     {
         return false;
+    }
+
+    public int getCharPos()
+    {
+        return target.getCharPos();
+    }
+
+    public void setCharPos(int n)
+    {
+        target.setCharPos(n);
     }
 
     // Returns -1 at end of file.
