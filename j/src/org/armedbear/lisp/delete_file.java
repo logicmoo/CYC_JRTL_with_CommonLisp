@@ -2,7 +2,7 @@
  * delete_file.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: delete_file.java,v 1.3 2004-01-05 16:32:32 piso Exp $
+ * $Id: delete_file.java,v 1.4 2004-05-13 01:51:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,21 +21,38 @@
 
 package org.armedbear.lisp;
 
+import java.io.File;
+
 public final class delete_file extends Primitive1
 {
     private delete_file()
     {
-        super("delete-file","filespec");
+        super("delete-file", "filespec");
     }
 
-    // ### delete-file
-    // delete-file filespec => t
+    // ### delete-file filespec => t
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        Pathname pathname = Pathname.coerceToPathname(arg);
-        Utilities.getFile(pathname).delete();
-        return T;
+        LispObject truename = Pathname.truename(arg, false);
+        if (arg instanceof Stream)
+            ((Stream)arg)._close();
+        if (truename instanceof Pathname) {
+            // File exists.
+            File file = Utilities.getFile((Pathname)truename);
+            if (file.delete()) {
+                return T;
+            } else {
+                StringBuffer sb = new StringBuffer("Unable to delete ");
+                sb.append(file.isDirectory() ? "directory " : "file ");
+                sb.append(truename.writeToString());
+                sb.append('.');
+                return signal(new FileError(sb.toString()));
+            }
+        } else {
+            // File does not exist.
+            return T;
+        }
     }
 
-    private static final delete_file DELETE_FILE = new delete_file();
+    private static final Primitive1 DELETE_FILE = new delete_file();
 }
