@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.126 2004-11-06 21:22:11 piso Exp $
+;;; $Id: clos.lisp,v 1.127 2004-11-07 15:09:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1406,6 +1406,7 @@
                             (dolist (after ',reverse-afters)
                               (funcall (method-function after) args nil)))))
                     nil)))
+             (setf code (compile nil code))
              code))
           (t
            (let ((mc-obj (get mc-name 'method-combination-object)))
