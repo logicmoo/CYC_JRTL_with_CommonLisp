@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.26 2004-06-15 11:26:13 piso Exp $
+ * $Id: Extensions.java,v 1.27 2004-06-15 18:50:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,33 @@ public final class Extensions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return get(checkSymbol(arg), Symbol.SOURCE, NIL);
+            return get(checkSymbol(arg), Symbol._SOURCE, NIL);
+        }
+    };
+
+    private static final Primitive1 SOURCE_FILE_POSITION =
+        new Primitive1("source-file-position", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            LispObject obj = get(checkSymbol(arg), Symbol._SOURCE, NIL);
+            if (obj instanceof Cons)
+                return obj.cdr();
+            return NIL;
+        }
+    };
+
+    private static final Primitive1 SOURCE_PATHNAME =
+        new Primitive1("source-pathname", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            LispObject obj = get(checkSymbol(arg), Symbol._SOURCE, NIL);
+            if (obj instanceof Cons)
+                return obj.car();
+            if (obj instanceof Pathname)
+                return obj;
+            return NIL;
         }
     };
 
