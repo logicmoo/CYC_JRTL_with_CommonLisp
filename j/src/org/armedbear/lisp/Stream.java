@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.38 2004-03-10 01:52:08 piso Exp $
+ * $Id: Stream.java,v 1.39 2004-03-10 20:13:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -269,9 +269,10 @@ public class Stream extends LispObject
             case '#':
                 return readSharp();
             case '|':
-                return getCurrentPackage().intern(readMultipleEscape());
+                _unreadChar(c);
+                return makeObject(readToken());
             case ':':
-                return readKeyword();
+                return PACKAGE_KEYWORD.intern(readToken());
             default:
                 return makeObject(readToken(c));
         }
@@ -732,29 +733,6 @@ public class Stream extends LispObject
         return sb.toString();
     }
 
-    private LispObject readKeyword() throws ConditionThrowable
-    {
-        StringBuffer sb = new StringBuffer();
-        while (true) {
-            int n = _readChar();
-            if (n < 0)
-                break;
-            char c = (char) n;
-            if (Character.isWhitespace(c))
-                break;
-            if (c == '(' || c == ')') {
-                _unreadChar(c);
-                break;
-            }
-            if (c == '|') {
-                sb.append(readMultipleEscape());
-                continue;
-            }
-            sb.append(Utilities.toUpperCase(c));
-        }
-        return PACKAGE_KEYWORD.intern(sb.toString());
-    }
-
     private final String readToken() throws ConditionThrowable
     {
         return readToken(new StringBuffer());
@@ -819,7 +797,6 @@ public class Stream extends LispObject
         }
         if (readtableCase == Keyword.INVERT)
             return invert(sb.toString());
-        // :PRESERVE
         return sb.toString();
     }
 
