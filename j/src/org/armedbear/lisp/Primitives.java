@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.212 2003-05-31 20:36:31 piso Exp $
+ * $Id: Primitives.java,v 1.213 2003-06-01 01:09:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3270,12 +3270,9 @@ public final class Primitives extends Module
         {
             LispObject arg = args.car();
             if (arg instanceof Symbol) {
-                LispObject f = env.lookupFunctional(arg);
-                if (f != null)
-                    return f;
-                f = arg.getSymbolFunction();
-                if (f instanceof Function)
-                    return f;
+                LispObject functional = env.lookupFunctional(arg);
+                if (functional instanceof Function)
+                    return functional;
                 throw new UndefinedFunctionError(arg);
             }
             if (arg instanceof Cons) {
