@@ -2,7 +2,7 @@
  * Region.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Region.java,v 1.1.1.1 2002-09-24 16:08:35 piso Exp $
+ * $Id: Region.java,v 1.2 2003-03-20 15:23:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
  */
 
 package org.armedbear.j;
+
+import java.util.List;
 
 public final class Region implements Constants
 {
@@ -258,8 +260,9 @@ public final class Region implements Constants
                 }
             }
         }
-        for (int i = 0; i < Editor.bookmarks.length; i++) {
-            Marker m = Editor.bookmarks[i];
+        List markers = Marker.getAllMarkers();
+        for (int i = markers.size(); i-- > 0;) {
+            Marker m = (Marker) markers.get(i);
             if (m != null && m.getBuffer() == buffer)
                 adjustMarker(m.getPosition());
         }
