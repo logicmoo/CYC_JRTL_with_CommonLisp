@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.30 2003-10-30 08:17:14 asimon Exp $
+ * $Id: LispCharacter.java,v 1.31 2003-12-07 19:13:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,6 +199,95 @@ public final class LispCharacter extends LispObject
         {
             LispCharacter character = checkCharacter(arg);
             return Character.isWhitespace(character.c) ? T : NIL;
+        }
+    };
+
+    // ### char-code
+    private static final Primitive1 CHAR_CODE = new Primitive1("char-code")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return new Fixnum(getValue(arg));
+        }
+    };
+
+    // ### char-int
+    private static final Primitive1 CHAR_INT = new Primitive1("char-int")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return new Fixnum(getValue(arg));
+        }
+    };
+
+    // ### code-char
+    private static final Primitive1 CODE_CHAR = new Primitive1("code-char")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof Fixnum) {
+                int n = Fixnum.getValue(arg);
+                if (n < 128)
+                    return characters[n];
+            }
+            return NIL;
+        }
+    };
+
+    // ### characterp
+    private static final Primitive1 CHARACTERP = new Primitive1("characterp")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg instanceof LispCharacter ? T : NIL;
+        }
+    };
+
+    // ### both-case-p
+    private static final Primitive1 BOTH_CASE_P = new Primitive1("both-case-p")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            char c = getValue(arg);
+            if (Character.isLowerCase(c) || Character.isUpperCase(c))
+                return T;
+            return NIL;
+        }
+    };
+
+    // ### lower-case-p
+    private static final Primitive1 LOWER_CASE_P = new Primitive1("lower-case-p")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return Character.isLowerCase(getValue(arg)) ? T : NIL;
+        }
+    };
+
+    // ### upper-case-p
+    private static final Primitive1 UPPER_CASE_P = new Primitive1("upper-case-p")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return Character.isUpperCase(getValue(arg)) ? T : NIL;
+        }
+    };
+
+    // ### char-downcase
+    private static final Primitive1 CHAR_DOWNCASE = new Primitive1("char-downcase")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return getInstance(Utilities.toLowerCase(getValue(arg)));
+        }
+    };
+
+    // ### char-upcase
+    private static final Primitive1 CHAR_UPCASE = new Primitive1("char-upcase")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return getInstance(Utilities.toUpperCase(getValue(arg)));
         }
     };
 }

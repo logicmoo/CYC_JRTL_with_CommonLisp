@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.515 2003-12-07 18:40:22 piso Exp $
+ * $Id: Primitives.java,v 1.516 2003-12-07 19:13:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,23 +40,14 @@ public final class Primitives extends Module
     private static final int ARRAYP                     = 6;
     private static final int ARRAY_HAS_FILL_POINTER_P   = 7;
     private static final int BIT_VECTOR_P               = 8;
-    private static final int BOTH_CASE_P                = 9;
-    private static final int CHARACTERP                 = 10;
-    private static final int CHAR_CODE                  = 11;
-    private static final int CHAR_DOWNCASE              = 12;
-    private static final int CHAR_INT                   = 13;
-    private static final int CHAR_UPCASE                = 14;
-    private static final int CODE_CHAR                  = 15;
-    private static final int COMPILED_FUNCTION_P        = 16;
-    private static final int CONSP                      = 17;
-    private static final int EVAL                       = 18;
-    private static final int IDENTITY                   = 19;
-    private static final int LISTP                      = 20;
-    private static final int LOWER_CASE_P               = 21;
-    private static final int SIMPLE_BIT_VECTOR_P        = 22;
-    private static final int SIMPLE_VECTOR_P            = 23;
-    private static final int UPPER_CASE_P               = 24;
-    private static final int VECTORP                    = 25;
+    private static final int COMPILED_FUNCTION_P        = 9;
+    private static final int CONSP                      = 10;
+    private static final int EVAL                       = 11;
+    private static final int IDENTITY                   = 12;
+    private static final int LISTP                      = 13;
+    private static final int SIMPLE_BIT_VECTOR_P        = 14;
+    private static final int SIMPLE_VECTOR_P            = 15;
+    private static final int VECTORP                    = 16;
 
     private Primitives()
     {
@@ -69,22 +60,13 @@ public final class Primitives extends Module
         definePrimitive1("array-has-fill-pointer-p", ARRAY_HAS_FILL_POINTER_P);
         definePrimitive1("arrayp", ARRAYP);
         definePrimitive1("bit-vector-p", BIT_VECTOR_P);
-        definePrimitive1("both-case-p", BOTH_CASE_P);
-        definePrimitive1("char-code", CHAR_CODE);
-        definePrimitive1("char-downcase", CHAR_DOWNCASE);
-        definePrimitive1("char-int", CHAR_INT);
-        definePrimitive1("char-upcase", CHAR_UPCASE);
-        definePrimitive1("characterp", CHARACTERP);
-        definePrimitive1("code-char", CODE_CHAR);
         definePrimitive1("compiled-function-p", COMPILED_FUNCTION_P);
         definePrimitive1("consp", CONSP);
         definePrimitive1("eval", EVAL);
         definePrimitive1("identity", IDENTITY);
         definePrimitive1("listp", LISTP);
-        definePrimitive1("lower-case-p", LOWER_CASE_P);
         definePrimitive1("simple-bit-vector-p", SIMPLE_BIT_VECTOR_P);
         definePrimitive1("simple-vector-p", SIMPLE_VECTOR_P);
-        definePrimitive1("upper-case-p", UPPER_CASE_P);
         definePrimitive1("vectorp", VECTORP);
     }
 
@@ -170,32 +152,6 @@ public final class Primitives extends Module
                 return arg.BIT_VECTOR_P();
             case SIMPLE_BIT_VECTOR_P:           // ### simple-bit-vector-p
                 return arg.typep(Symbol.SIMPLE_BIT_VECTOR);
-            case CHAR_CODE:                     // ### char-code
-            case CHAR_INT:                      // ### char-int
-                return new Fixnum(LispCharacter.getValue(arg));
-            case CODE_CHAR:                     // ### code-char
-                if (arg instanceof Fixnum) {
-                    int n = Fixnum.getValue(arg);
-                    if (n < 128)
-                        return LispCharacter.getInstance((char)n);
-                }
-                return NIL;
-            case CHARACTERP:                    // ### characterp
-                return arg instanceof LispCharacter ? T : NIL;
-            case BOTH_CASE_P: {                 // ### both-case-p
-                char c = LispCharacter.getValue(arg);
-                if (Character.isLowerCase(c) || Character.isUpperCase(c))
-                    return T;
-                return NIL;
-            }
-            case LOWER_CASE_P:                  // ### lower-case-p
-                return Character.isLowerCase(LispCharacter.getValue(arg)) ? T : NIL;
-            case UPPER_CASE_P:                  // ### upper-case-p
-                return Character.isUpperCase(LispCharacter.getValue(arg)) ? T : NIL;
-            case CHAR_DOWNCASE:                 // ### char-downcase
-                return LispCharacter.getInstance(Utilities.toLowerCase(LispCharacter.getValue(arg)));
-            case CHAR_UPCASE:                   // ### char-upcase
-                return LispCharacter.getInstance(Utilities.toUpperCase(LispCharacter.getValue(arg)));
             case EVAL:                          // ### eval
                 return eval(arg, new Environment(), LispThread.currentThread());
             default:
@@ -205,7 +161,8 @@ public final class Primitives extends Module
     }
 
     // ### eq
-    private static final Primitive2 EQ = new Primitive2("eq") {
+    private static final Primitive2 EQ = new Primitive2("eq")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -214,7 +171,8 @@ public final class Primitives extends Module
     };
 
     // ### eql
-    private static final Primitive2 EQL = new Primitive2("eql") {
+    private static final Primitive2 EQL = new Primitive2("eql")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -223,7 +181,8 @@ public final class Primitives extends Module
     };
 
     // ### equal
-    private static final Primitive2 EQUAL = new Primitive2("equal") {
+    private static final Primitive2 EQUAL = new Primitive2("equal")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -232,7 +191,8 @@ public final class Primitives extends Module
     };
 
     // ### equalp
-    private static final Primitive2 EQUALP = new Primitive2("equalp") {
+    private static final Primitive2 EQUALP = new Primitive2("equalp")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
