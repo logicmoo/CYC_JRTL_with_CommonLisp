@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.8 2004-05-06 19:04:24 piso Exp $
+;;; $Id: compile-system.lisp,v 1.9 2004-05-25 18:43:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -113,7 +113,6 @@
                             "make-hash-table.lisp"
                             "make-load-form-saving-slots.lisp"
                             "make-sequence.lisp"
-                            "make-socket.lisp"
                             "make-string-output-stream.lisp"
                             "make-string.lisp"
                             "map-into.lisp"
@@ -163,6 +162,7 @@
                             "sets.lisp"
                             "shiftf.lisp"
                             "signal.lisp"
+                            "socket.lisp"
                             "sort.lisp"
                             "step.lisp"
                             "strings.lisp"
