@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte8.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: BasicVector_UnsignedByte8.java,v 1.2 2005-03-23 18:30:37 piso Exp $
+ * $Id: BasicVector_UnsignedByte8.java,v 1.3 2005-03-24 23:55:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,6 +117,19 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
             return NIL; // Not reached.
+        }
+    }
+
+    // Ignores fill pointer.
+    public int aref(int index) throws ConditionThrowable
+    {
+        try {
+            return (((int)elements[index]) & 0xff);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, elements.length);
+            // Not reached.
+            return 0;
         }
     }
 
