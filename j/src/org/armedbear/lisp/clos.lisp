@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.116 2004-10-21 18:19:52 piso Exp $
+;;; $Id: clos.lisp,v 1.117 2004-10-22 15:55:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -506,8 +506,9 @@
   (let* ((layout (class-layout class))
          (length (and layout (layout-length layout))))
     (unless layout
-      (format t "No layout for class ~S.~%" class)
-      (backtrace))
+      (error 'simple-error
+             :format-control "No layout for class ~S."
+             :format-arguments (list class)))
     (unless length
       (format t "No layout length for class ~S~%." class)
       (setf length (count-if #'instance-slot-p (class-slots class))))

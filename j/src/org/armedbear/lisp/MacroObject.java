@@ -2,7 +2,7 @@
  * MacroObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: MacroObject.java,v 1.6 2004-06-30 17:19:11 piso Exp $
+ * $Id: MacroObject.java,v 1.7 2004-10-22 15:51:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,12 @@ package org.armedbear.lisp;
 
 public final class MacroObject extends Functional
 {
-    private LispObject expander;
+    private final LispObject name;
+    private final LispObject expander;
 
-    public MacroObject(LispObject expander)
+    public MacroObject(LispObject name, LispObject expander)
     {
+        this.name = name;
         this.expander = expander;
     }
 
@@ -38,6 +40,41 @@ public final class MacroObject extends Functional
     public LispObject getExpander()
     {
         return expander;
+    }
+
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(name));
+    }
+
+    public LispObject execute() throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(name));
+    }
+
+    public LispObject execute(LispObject arg) throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(name));
+    }
+
+    public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(name));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third)
+        throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(name));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth)
+        throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(name));
     }
 
     public String writeToString()
