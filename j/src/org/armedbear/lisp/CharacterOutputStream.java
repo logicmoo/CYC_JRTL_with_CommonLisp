@@ -2,7 +2,7 @@
  * CharacterOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: CharacterOutputStream.java,v 1.2 2003-04-27 16:08:03 piso Exp $
+ * $Id: CharacterOutputStream.java,v 1.3 2003-08-11 16:10:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,6 +153,16 @@ public class CharacterOutputStream extends LispStream
             charPos += s.length();
         else
             charPos = s.length() - (index + 1);
+    }
+
+    public void writeChar(char c) throws StreamError
+    {
+        try {
+            writer.write(c);
+        }
+        catch (IOException e) {
+            throw new StreamError(e);
+        }
     }
 
     public void writeString(LispString string) throws StreamError
