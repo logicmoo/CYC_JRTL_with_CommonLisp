@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.5 2003-02-28 19:25:19 piso Exp $
+ * $Id: BitVector.java,v 1.6 2003-03-01 02:54:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,8 @@ public final class BitVector extends Vector
             return T;
         if (typeSpecifier == Symbol.SIMPLE_BIT_VECTOR)
             return isSimpleVector() ? T : NIL;
+        if (typeSpecifier == Symbol.SIMPLE_VECTOR)
+            return NIL; // Can't hold elements of any type, only bits.
         if (typeSpecifier instanceof LispClass) {
             LispClass c = (LispClass) typeSpecifier;
             return c.getName().equals("BIT-VECTOR") ? T : NIL;
