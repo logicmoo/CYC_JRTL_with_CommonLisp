@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.55 2003-12-06 16:36:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.56 2003-12-08 03:02:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 (in-package "JVM")
 
 (export '(jvm-compile jvm-compile-package))
+
+(import 'sys::%format)
 
 (shadow 'method)
 
@@ -2394,20 +2396,20 @@
     (when *compile-print*
       (if name
           (progn
-            (format t "~A Compiling ~S ...~%" prefix name)
+            (%format t "~A Compiling ~S ...~%" prefix name)
             (when (and (fboundp name) (typep (fdefinition name) 'generic-function))
-              (format t "~A Unable to compile generic function ~S~%" prefix name)
+              (%format t "~A Unable to compile generic function ~S~%" prefix name)
               (return-from jvm-compile (values name nil t)))
             (unless (symbolp name)
-              (format t "~A Unable to compile ~S~%" prefix name)
+              (%format t "~A Unable to compile ~S~%" prefix name)
               (return-from jvm-compile (values name nil t))))
-          (format t "~A Compiling top-level form ...~%" prefix)))
+          (%format t "~A Compiling top-level form ...~%" prefix)))
     (unless definition
       (resolve name)
       (setf definition (fdefinition name))
       (when (compiled-function-p definition)
         (when (and *compile-print* name)
-          (format t "~A Already compiled ~S~%" prefix name))
+          (%format t "~A Already compiled ~S~%" prefix name))
         (return-from jvm-compile (values name nil nil))))
     (handler-case
         (let* ((*package* (if (and name (symbol-package name))
@@ -2424,13 +2426,13 @@
                 (setf (fdefinition name) compiled-definition)))
           (when *compile-print*
             (if name
-                (format t "~A Compiled ~S~%" prefix name)
-                (format t "~A Compiled top-level form~%" prefix)))
+                (%format t "~A Compiled ~S~%" prefix name)
+                (%format t "~A Compiled top-level form~%" prefix)))
           (values (or name compiled-definition) nil nil))
       (error (c)
-             (format t "Error: ~S~%" c)
+             (%format t "Error: ~S~%" c)
              (when name
-               (format t "~A Unable to compile ~S~%" prefix name))
+               (%format t "~A Unable to compile ~S~%" prefix name))
              (values (or name (sys::coerce-to-function definition)) nil t)))))
 
 (defun jvm-compile-package (package-designator)
@@ -2493,13 +2495,15 @@
     alist))
 
 (defun compile (name &optional definition)
-  (if (consp name)
-      (return-from compile (values name nil nil)))
-  (if (and name (fboundp name) (typep (symbol-function name) 'generic-function))
-      (return-from compile (values name nil nil)))
+  (when (consp name)
+    (return-from compile (values name nil nil)))
+  (when (and name (fboundp name) (typep (symbol-function name) 'generic-function))
+    (return-from compile (values name nil nil)))
   (unless definition
     (setq definition (or (and (symbolp name) (macro-function name))
                          (fdefinition name))))
+  (when (compiled-function-p definition)
+    (return-from compile (values name nil nil)))
   (let ((expr (get-lambda-to-compile definition))
         (speed nil))
     (when (eq (car expr) 'lambda)
