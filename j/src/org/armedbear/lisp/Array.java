@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.2 2003-03-19 01:45:20 piso Exp $
+ * $Id: Array.java,v 1.3 2003-03-19 02:57:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,7 +145,32 @@ public final class Array extends AbstractArray
                     return NIL;
                 if (length == 2)
                     return T;
-                // FIXME Dimensions.
+                Debug.assertTrue(length == 3);
+                LispObject dimensions = typeSpecifier.cddr().car();
+                int rank = dimv.length;
+                if (dimensions == Symbol.UNSPECIFIED)
+                    return T;
+                if (dimensions == NIL)
+                    return rank == 0 ? T : NIL;
+                if (dimensions instanceof Fixnum)
+                    return ((Fixnum)dimensions).getValue() == rank ? T : NIL;
+                if (dimensions instanceof Cons) {
+                    if (dimensions.length() != rank)
+                        return NIL;
+                    for (int i = 0; i < rank; i++) {
+                        LispObject dim = dimensions.car();
+                        if (dim == Symbol.UNSPECIFIED)
+                            ;
+                        else if (dim instanceof Fixnum) {
+                            if (((Fixnum)dim).getValue() != dimv[i])
+                                return NIL;
+                        } else
+                            return NIL;
+                        dimensions = dimensions.cdr();
+                    }
+                    // No problem found.
+                    return T;
+                }
             }
             return NIL;
         }
