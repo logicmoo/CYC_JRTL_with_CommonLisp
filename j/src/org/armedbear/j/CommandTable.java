@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.28 2003-06-09 17:11:41 piso Exp $
+ * $Id: CommandTable.java,v 1.29 2003-06-18 15:42:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,6 +231,7 @@ public class CommandTable
             addCommand("cvsDiffDir", "CVS", "diffDir");
             addCommand("cvsLog", "CVS", "log");
             addCommand("decodeRegion", "RegionCommands");
+            addCommand("defaultKeyMaps", "KeyMap");
             addCommand("describeKey", "DescribeKeyDialog");
             addCommand("detabRegion", "RegionCommands");
             addCommand("diff", "DiffMode");
@@ -327,6 +328,7 @@ public class CommandTable
             addCommand("properties", "PropertiesDialog");
             addCommand("recentFiles", "RecentFilesDialog");
             addCommand("recompile", "CompilationCommands");
+            addCommand("reloadKeyMaps", "KeyMap");
             addCommand("renumberRegion", "RegionCommands");
             addCommand("replace", "ReplaceDialog");
             addCommand("replaceInFiles", "FindInFiles");
