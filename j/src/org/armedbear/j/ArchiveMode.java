@@ -2,7 +2,7 @@
  * ArchiveMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: ArchiveMode.java,v 1.1.1.1 2002-09-24 16:09:15 piso Exp $
+ * $Id: ArchiveMode.java,v 1.2 2002-10-01 18:42:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,7 +118,7 @@ public final class ArchiveMode extends AbstractMode implements Constants, Mode
                             buf.title = title;
                         } else {
                             buf = new Buffer();
-                            buf.type = AbstractBuffer.TYPE_NORMAL; // Default (may be changed later).
+                            buf.type = Buffer.TYPE_NORMAL; // Default (may be changed later).
                             buf.initializeUndo();
                             buf.setCache(cache);
                             buf.entryName = name;
