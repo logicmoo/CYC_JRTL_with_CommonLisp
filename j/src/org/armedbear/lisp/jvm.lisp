@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.25 2003-11-11 20:29:41 piso Exp $
+;;; $Id: jvm.lisp,v 1.26 2003-11-12 00:54:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1594,19 +1594,23 @@
 (defun compile-let-vars (varlist)
   ;; Generate code to evaluate the initforms and leave the resulting values
   ;; on the stack.
-  (dolist (varspec varlist)
-    (let (var initform)
-      (cond ((consp varspec)
-             (setq var (car varspec)
-                   initform (cadr varspec)))
-            (t
-             (setq var varspec
-                   initform nil)))
-      (cond (initform
-             (compile-form initform)
-             (emit-push-value))
-            (t
-             (emit-push-nil)))))
+  (let ((last-push-was-nil nil))
+    (dolist (varspec varlist)
+      (let (var initform)
+        (if (consp varspec)
+            (setq var (car varspec)
+                  initform (cadr varspec))
+            (setq var varspec
+                  initform nil))
+        (cond (initform
+               (compile-form initform)
+               (emit-push-value)
+               (setf last-push-was-nil nil))
+              (t
+               (if last-push-was-nil
+                   (emit 'dup)
+                   (emit-push-nil))
+               (setf last-push-was-nil t))))))
   ;; Add local variables to local variables vector.
   (dolist (varspec varlist)
     (let ((var (if (consp varspec) (car varspec) varspec)))
@@ -1641,12 +1645,11 @@
   (let ((i (fill-pointer *locals*)))
     (dolist (varspec varlist)
       (let (var initform)
-        (cond ((consp varspec)
-               (setq var (car varspec)
-                     initform (cadr varspec)))
-              (t
-               (setq var varspec
-                     initform nil)))
+        (if (consp varspec)
+            (setq var (car varspec)
+                  initform (cadr varspec))
+            (setq var varspec
+                  initform nil))
         (cond (initform
                (compile-form initform)
                (emit-push-value))
@@ -1731,11 +1734,14 @@
          (index (position sym *locals* :from-end t)))
     (when index
       (compile-form (cadr rest))
-      (if for-effect
-          (unless (remove-store-value)
-            (emit-push-value))
-          (emit-push-value))
-      (emit 'astore index)
+      (unless (remove-store-value)
+        (emit-push-value))
+      (cond (for-effect
+             (emit 'astore index))
+            (t
+             (emit 'dup)
+             (emit 'astore index)
+             (emit-store-value)))
       (return-from compile-setq))
     ;; index is NIL, look in *args* ...
     (setq index (position sym *args*))
