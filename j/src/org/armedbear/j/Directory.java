@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.24 2003-07-04 02:10:06 piso Exp $
+ * $Id: Directory.java,v 1.25 2003-07-04 17:28:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,7 +176,7 @@ public final class Directory extends Buffer
             return new Position(line, getNameOffset(line));
     }
 
-    public void setLimitPattern(String s)
+    private void setLimitPattern(String s)
     {
         if (s == null || s.length() == 0)
             limitPattern = null;
@@ -189,7 +189,33 @@ public final class Directory extends Buffer
         return limitPattern;
     }
 
-    public void limit(String pattern)
+    public static void dirLimit()
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        if (buffer instanceof Directory) {
+            Directory directory = (Directory) buffer;
+            InputDialog dialog = new InputDialog(editor, "Pattern:", "Limit",
+                                                 directory.getLimitPattern());
+            dialog.setHistory(new History("dirLimit"));
+            editor.centerDialog(dialog);
+            dialog.show();
+            String pattern = dialog.getInput();
+            // A null pattern means the user cancelled the input dialog.
+            if (pattern != null)
+                directory.limit(pattern);
+        }
+    }
+
+    public static void dirUnlimit()
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        if (buffer instanceof Directory)
+            ((Directory)buffer).limit(null);
+    }
+
+    private void limit(String pattern)
     {
         if (pattern != null) {
             pattern = pattern.trim();
@@ -661,14 +687,14 @@ public final class Directory extends Buffer
                     }
                 } else {
                     if (!dirIsRoot) {
-                        if (dff.accept("."))
+                        if (dff.accepts("."))
                             addEntry(".");
-                        if (dff.accept(".."))
+                        if (dff.accepts(".."))
                             addEntry("..");
                     }
                     if (files != null) {
                         for (int i = 0; i < files.length; i++) {
-                            if (dff.accept(files[i]))
+                            if (dff.accepts(files[i]))
                                 addEntry(files[i]);
                         }
                     }
