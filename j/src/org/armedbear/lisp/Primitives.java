@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.747 2005-03-23 18:21:12 piso Exp $
+ * $Id: Primitives.java,v 1.748 2005-03-24 23:56:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            signal(new WrongNumberOfArgumentsException("min"));
+            signal(new WrongNumberOfArgumentsException(this));
             return NIL;
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -119,7 +119,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            signal(new WrongNumberOfArgumentsException("max"));
+            signal(new WrongNumberOfArgumentsException(this));
             return NIL;
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -624,7 +624,7 @@ public final class Primitives extends Lisp
         {
             switch (args.length) {
                 case 0:
-                    signal(new WrongNumberOfArgumentsException("-"));
+                    signal(new WrongNumberOfArgumentsException(this));
                 case 1:
                     Debug.assertTrue(false);
                     return Fixnum.ZERO.subtract(args[0]);
