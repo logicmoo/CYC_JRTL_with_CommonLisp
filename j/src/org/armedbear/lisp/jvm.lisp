@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.140 2004-04-29 23:06:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.141 2004-04-30 12:09:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1593,7 +1593,7 @@
              (return t)))))))
 
 (defun rewrite-function-call (form)
-  (let* ((args (cdr form)))
+  (let ((args (cdr form)))
     (if (unsafe-p args)
         (let ((syms ())
               (lets ()))
@@ -2142,6 +2142,13 @@
              ((null forms))
            (compile-form (car forms) (cdr forms))))))
 
+(defun rewrite-setq (form)
+  (let ((expr (third form)))
+    (if (unsafe-p expr)
+        (let ((sym (gensym)))
+          (list 'LET (list (list sym expr)) (list 'SETQ (second form) sym)))
+        form)))
+
 (defun compile-setq (form for-effect)
   (unless (= (length form) 3)
     (return-from compile-setq (compile-form (precompiler::precompile-setq form)
@@ -2216,6 +2223,9 @@
       (return-from compile-setq))
     ;; still not found
     ;; must be a global variable
+    (let ((new-form (rewrite-setq form)))
+      (when (neq new-form form)
+        (return-from compile-setq (compile-form new-form))))
     (let ((g (declare-symbol sym)))
       (emit 'getstatic
             *this-class*
