@@ -1,7 +1,7 @@
 ;;; make-sequence.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: make-sequence.lisp,v 1.5 2004-01-15 02:14:42 piso Exp $
+;;; $Id: make-sequence.lisp,v 1.6 2004-01-17 14:15:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,29 +21,19 @@
 
 ;;; Adapted from ECL.
 
-;;; Returns two values:
-;;;  VALUE-1 = normalized type name or object
-;;;  VALUE-2 = normalized type arguments or nil
-(defun make-sequence-normalize-type (type)
-  (let (tp i fd)
-    (cond ((symbolp type)
-           (values type nil))
-          ((consp type)
-           (setq tp (car type) i (cdr type))
-           (if (and (eq tp 'INTEGER) (consp (cadr i)))
-               (values tp (list (car i) (1- (caadr i))))
-               (values tp i)))
-          (t
-           (error "MAKE-SEQUENCE-NORMALIZE-TYPE: bogus type specifier ~A" type)))))
+(defun size-mismatch-error (type size)
+  (error 'simple-type-error
+         :format-control "The requested length (~D) does not match the specified type ~A."
+         :format-arguments (list size type)))
 
 (defun make-sequence (type size	&key (initial-element nil iesp))
   (let (element-type sequence)
+    (setf type (normalize-type type))
     (if (atom type)
         (cond ((memq type '(LIST CONS))
                (when (zerop size)
                  (if (eq type 'CONS)
-                     (error 'type-error
-                            "the requested length (0) does not match the specified type CONS")
+                     (size-mismatch-error type size)
                      (return-from make-sequence nil)))
                (return-from make-sequence
                             (if iesp
@@ -57,9 +47,7 @@
               ((eq type 'NULL)
                (if (zerop size)
                    (return-from make-sequence nil)
-                   (error 'type-error
-                          "the requested length (~A) does not match the specified type NULL"
-                          size)))
+                   (size-mismatch-error type size)))
               (t
                (when (classp type)
                  (setf type (class-name type)))
@@ -70,8 +58,16 @@
                             (error 'simple-type-error
                                    :format-control "~S is not a sequence type."
                                    :format-arguments (list type)))))))
-        (multiple-value-bind (name args) (make-sequence-normalize-type type)
-          (when (memq name '(LIST CONS))
+        (let ((name (car type))
+              (args (cdr type)))
+          (when (eq name 'LIST)
+            (return-from make-sequence
+                         (if iesp
+                             (make-list size :initial-element initial-element)
+                             (make-list size))))
+          (when (eq name 'CONS)
+            (unless (plusp size)
+              (size-mismatch-error name size))
             (return-from make-sequence
                          (if iesp
                              (make-list size :initial-element initial-element)
@@ -91,9 +87,7 @@
                          len (cadr args))))
             (unless (or (null len) (eq len '*))
               (when (/= size len)
-                (error 'type-error
-                       "the requested length (~A) does not match the specified type ~A"
-                       size type))))))
+                (size-mismatch-error type size))))))
     (setq sequence
           (if iesp
               (make-array size :element-type element-type :initial-element initial-element)
