@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.301 2003-07-18 15:47:19 piso Exp $
+ * $Id: Primitives.java,v 1.302 2003-07-27 18:52:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4664,6 +4664,36 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws Condition
         {
             return coerceToFunction(arg);
+        }
+    };
+
+    // ### arglist
+    private static final Primitive1 ARGLIST =
+        new Primitive1("arglist", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject arg) throws Condition
+        {
+            Function function = coerceToFunction(arg);
+            LispObject arglist = function.getArglist();
+            LispObject[] values = new LispObject[2];
+            if (arglist != null) {
+                values[0] = arglist;
+                values[1] = T;
+            } else {
+                values[0] = NIL;
+                values[1] = NIL;
+            }
+            LispThread.currentThread().setValues(values);
+            return values[0];
+        }
+    };
+
+    private static final Primitive2 _SET_ARGLIST =
+        new Primitive2("%set-arglist", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject first, LispObject second)
+            throws Condition
+        {
+            coerceToFunction(first).setArglist(second);
+            return second;
         }
     };
 }
