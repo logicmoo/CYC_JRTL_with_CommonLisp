@@ -1,8 +1,8 @@
 /*
  * LispFloat.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.53 2003-12-13 00:02:47 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: LispFloat.java,v 1.54 2004-01-14 02:03:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -440,10 +440,20 @@ public final class LispFloat extends LispObject
             return new LispFloat(((Bignum)obj).floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(((Ratio)obj).floatValue());
-        signal(new TypeError(obj, "real number"));
+        signal(new TypeError(String.valueOf(obj) +
+                             " cannot be converted to type FLOAT."));
         // Not reached.
         return LispFloat.ZERO;
     }
+
+    // ### coerce-to-float
+    private static final Primitive1 COERCE_TO_FLOAT =
+        new Primitive1("coerce-to-float", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return coerceToFloat(arg);
+        }
+    };
 
     // ### float
     // float number &optional prototype => float
