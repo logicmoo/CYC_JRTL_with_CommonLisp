@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.3 2002-11-29 16:41:32 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.4 2002-11-30 16:00:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,8 +82,9 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
 
     public void enter()
     {
+        final Buffer buffer = editor.getBuffer();
         String entry = textField.getText();
-        if (!entry.equals(editor.getBuffer().getFileNameForDisplay()))
+        if (!entry.equals(buffer.getFileNameForDisplay()))
             saveHistory();
         entry = preprocess(entry);
         if (encoding != null && !Utilities.isSupportedEncoding(encoding)) {
@@ -94,7 +95,12 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
             error(sb.toString());
             return;
         }
-        File currentDir = editor.getCurrentDirectory();
+        File currentDir = null;
+        File file = buffer.getFile();
+        if (file != null)
+            currentDir = file.getParentFile();
+        if (currentDir == null)
+            currentDir = Directories.getUserHomeDirectory();
         Debug.assertTrue(currentDir != null);
         if (entry.length() == 0) {
             returned = currentDir;
@@ -153,13 +159,11 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
             return;
         }
         // Not absolute.  Look in current directory.
-        if (!currentDir.isRemote()) {
-            candidate = File.getInstance(currentDir, entry);
-            if (candidate != null && candidate.exists()) {
-                returned = candidate;
-                done();
-                return;
-            }
+        candidate = File.getInstance(currentDir, entry);
+        if (candidate != null && candidate.exists()) {
+            returned = candidate;
+            done();
+            return;
         }
         // Not in current directory. Look for a match in one of the current
         // buffers.
@@ -368,6 +372,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
 
     public void tab()
     {
+        editor.setWaitCursor();
         String entry = textField.getText();
         if (entry.startsWith("http:") || entry.startsWith("https:") ||
             entry.startsWith("ftp:"))
@@ -387,13 +392,20 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
             textField.setText(completion);
             textField.setCaretPosition(completion.length());
         }
+        editor.setDefaultCursor();
     }
 
     public List getCompletions(String prefix)
     {
         ArrayList completions = new ArrayList();
-        final File currentDirectory = editor.getCurrentDirectory();
-        if (currentDirectory.isLocal()) {
+        File currentDirectory = null;
+        Buffer buffer = editor.getBuffer();
+        if (buffer != null) {
+            File file = buffer.getFile();
+            if (file != null && (file.isLocal() || file instanceof SshFile))
+                currentDirectory = file.getParentFile();
+        }
+        if (currentDirectory != null) {
             final String sourcePath = checkSourcePath ? getSourcePath() : null;
             prefix = File.normalize(prefix);
             FilenameCompletion completion =
