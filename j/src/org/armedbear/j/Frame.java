@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Frame.java,v 1.10 2003-06-28 19:13:09 piso Exp $
+ * $Id: Frame.java,v 1.11 2003-06-29 00:50:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.lang.reflect.Method;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -40,8 +41,8 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
-public final class Frame extends JFrame implements Constants, WindowListener,
-    ComponentListener, FocusListener
+public final class Frame extends JFrame implements Constants, ComponentListener,
+    FocusListener, WindowListener, WindowStateListener
 {
     private Editor[] editors = new Editor[2];
     private Editor currentEditor;
@@ -57,21 +58,7 @@ public final class Frame extends JFrame implements Constants, WindowListener,
         addComponentListener(this);
         addWindowListener(this);
         addFocusListener(this);
-        if (Platform.isJava14()) {
-            try {
-                Class c = Class.forName("org.armedbear.j.WindowStateListener");
-                Class[] parameterTypes = new Class[1];
-                parameterTypes[0] = Frame.class;
-                Method method = c.getMethod("addListener", parameterTypes);
-                Object[] parameters = new Object[1];
-                parameters[0] = this;
-                method.invoke(null, parameters);
-            }
-            catch (ClassNotFoundException e) {}
-            catch (Exception e) {
-                Log.error(e);
-            }
-        }
+        addWindowStateListener(this);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         statusBar = new StatusBar(this);
         getContentPane().add(statusBar, "South");
@@ -827,6 +814,11 @@ public final class Frame extends JFrame implements Constants, WindowListener,
 
     public void windowDeiconified(WindowEvent e)
     {
+    }
+
+    public void windowStateChanged(WindowEvent e)
+    {
+        storeExtendedState(e.getNewState());
     }
 
     private JComponent focusedComponent;
