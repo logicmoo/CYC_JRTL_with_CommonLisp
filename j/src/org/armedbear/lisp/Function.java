@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.17 2003-07-27 18:53:37 piso Exp $
+ * $Id: Function.java,v 1.18 2003-08-05 01:10:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,7 +135,7 @@ public abstract class Function extends Functional
     {
         if (module != null)
             return module.dispatch(args, index);
-        throw new LispError(name + ": internal error");
+        throw new WrongNumberOfArgumentsException(name);
     }
 
     // Primitive1
