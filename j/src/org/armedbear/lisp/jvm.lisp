@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.120 2004-04-24 15:47:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.121 2004-04-24 18:54:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2316,7 +2316,7 @@
           (block-exit (cdr (assoc block-label *blocks*)))
           (result-form (cadr rest)))
      (unless block-exit
-       (error "no block named ~S is currently visible" block-label))
+       (error "No block named ~S is currently visible." block-label))
      (compile-form result-form)
      (emit 'goto `,block-exit)))
 
