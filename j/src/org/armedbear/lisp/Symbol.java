@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.68 2003-09-08 18:04:28 piso Exp $
+ * $Id: Symbol.java,v 1.69 2003-09-11 16:06:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,7 @@ public class Symbol extends LispObject
     public static final Symbol KEYWORD              = PACKAGE_CL.addExternalSymbol("KEYWORD");
     public static final Symbol LIST                 = PACKAGE_CL.addExternalSymbol("LIST");
     public static final Symbol LONG_FLOAT           = PACKAGE_CL.addExternalSymbol("LONG-FLOAT");
+    public static final Symbol MEMBER               = PACKAGE_CL.addExternalSymbol("MEMBER");
     public static final Symbol NOT                  = PACKAGE_CL.addExternalSymbol("NOT");
     public static final Symbol NULL                 = PACKAGE_CL.addExternalSymbol("NULL");
     public static final Symbol NUMBER               = PACKAGE_CL.addExternalSymbol("NUMBER");
