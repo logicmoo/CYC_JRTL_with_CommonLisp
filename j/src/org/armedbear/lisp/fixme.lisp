@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fixme.lisp,v 1.10 2003-10-19 18:58:56 piso Exp $
+;;; $Id: fixme.lisp,v 1.11 2003-11-06 17:13:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,10 +22,6 @@
 ;; Should be a special operator.
 (defmacro the (type form)
   form)
-
-;; Should be a special operator.
-(defmacro declare (&rest ignored)
-  nil)
 
 (defmacro declaim (&rest decls)
   (let ((res ()))
