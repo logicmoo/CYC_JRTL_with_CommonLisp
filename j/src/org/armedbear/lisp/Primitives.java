@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.645 2004-05-29 18:10:25 piso Exp $
+ * $Id: Primitives.java,v 1.646 2004-06-02 10:29:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -502,7 +502,8 @@ public final class Primitives extends Lisp
             if (value == null) {
                 value = symbol.symbolValue();
                 if (value instanceof SymbolMacro)
-                    signal(new LispError(arg + " has no dynamic value"));
+                    signal(new LispError(arg.writeToString() +
+                                         " has no dynamic value"));
             }
             return value;
         }
@@ -3131,7 +3132,7 @@ public final class Primitives extends Lisp
             } else {
                 return signal(
                     new ControlError(
-                        "Attempt to throw to the non-existent tag " +
+                        "Attempt to throw to the nonexistent tag " +
                         tag.writeToString() + "."));
             }
         }
