@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.639 2004-05-10 13:20:54 piso Exp $
+ * $Id: Primitives.java,v 1.640 2004-05-12 19:07:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3405,20 +3405,18 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %write-newline
-    // %write-newline output-stream => nil
+    // ### %write-newline output-stream => nil
     private static final Primitive1 _WRITE_NEWLINE =
         new Primitive1("%write-newline", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            outSynonymOf(arg)._writeString(System.getProperty("line.separator"));
+            outSynonymOf(arg)._writeChar('\n');
             return NIL;
         }
     };
 
-    // ### finish-output
-    // finish-output &optional output-stream => nil
+    // ### finish-output &optional output-stream => nil
     private static final Primitive FINISH_OUTPUT =
         new Primitive("finish-output", "&optional output-stream")
     {
@@ -3430,8 +3428,7 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### force-output
-    // force-output &optional output-stream => nil
+    // ### force-output &optional output-stream => nil
     private static final Primitive FORCE_OUTPUT =
         new Primitive("force-output", "&optional output-stream")
     {
