@@ -2,7 +2,7 @@
  * NntpSession.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NntpSession.java,v 1.2 2002-10-02 17:50:35 piso Exp $
+ * $Id: NntpSession.java,v 1.3 2002-10-02 18:00:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,6 +187,8 @@ public final class NntpSession
     {
         writeLine("GROUP " + groupName);
         String response = readLine();
+        if (response == null)
+            return false;
         if (!response.startsWith("211"))
             return false;
         this.groupName = groupName;
