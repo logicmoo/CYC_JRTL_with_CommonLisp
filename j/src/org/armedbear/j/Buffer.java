@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.25 2003-02-04 16:48:49 piso Exp $
+ * $Id: Buffer.java,v 1.26 2003-02-05 02:45:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -669,7 +669,7 @@ public class Buffer extends SystemBuffer
         return fileType;
     }
 
-    public final void setFileType(int fileType)
+    private final void setFileType(int fileType)
     {
         this.fileType = fileType;
     }
