@@ -2,7 +2,7 @@
  * Ssh.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Ssh.java,v 1.3 2003-04-10 18:54:59 piso Exp $
+ * $Id: Ssh.java,v 1.4 2003-04-10 23:25:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public final class Ssh
             sb.append(source.getHostName());
             sb.append(':');
         }
-        sb.append(Utilities.escapeSpacesAndParens(source.canonicalPath()));
+        sb.append(escape(source.canonicalPath()));
         list.add(sb.toString());
         sb.setLength(0);
         if (destination instanceof SshFile) {
@@ -85,12 +85,29 @@ public final class Ssh
             sb.append(destination.getHostName());
             sb.append(':');
         }
-        sb.append(Utilities.escapeSpacesAndParens(destination.canonicalPath()));
+        sb.append(escape(destination.canonicalPath()));
         list.add(sb.toString());
         String[] array = new String[list.size()];
         cmdarray = (String[]) list.toArray(array);
         run();
         return succeeded;
+    }
+
+    private static final String safeChars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-./\\";
+
+    // Escapes unsafe characters.
+    private static final String escape(String s)
+    {
+        final int length = s.length();
+        FastStringBuffer sb = new FastStringBuffer(length * 2);
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (safeChars.indexOf(c) < 0)
+                sb.append('\\');
+            sb.append(c);
+        }
+        return sb.toString();
     }
 
     public void run()
