@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.49 2003-03-30 19:16:33 piso Exp $
+ * $Id: Lisp.java,v 1.50 2003-04-01 19:26:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,6 +86,7 @@ public abstract class Lisp
         if (debug) {
             stack.push(new StackFrame((Function)fun, argv));
         }
+        _values = null;
         LispObject result;
         switch (fun.getType()) {
             case TYPE_PRIMITIVE0: {
