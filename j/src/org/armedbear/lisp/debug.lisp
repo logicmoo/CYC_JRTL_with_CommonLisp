@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.19 2004-04-15 12:37:23 piso Exp $
+;;; $Id: debug.lisp,v 1.20 2004-04-22 14:49:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -96,9 +96,10 @@
             (debug-loop))))))
 
 (defun break (&optional (format-control "BREAK called") &rest format-arguments)
-  (with-simple-restart (continue "Return from BREAK.")
-    (invoke-debugger
-     (make-condition 'simple-condition
-                     :format-control format-control
-                     :format-arguments format-arguments)))
-  nil)
+  (let ((*debugger-hook* nil)) ; Specifically required by ANSI.
+    (with-simple-restart (continue "Return from BREAK.")
+      (invoke-debugger
+       (make-condition 'simple-condition
+                       :format-control format-control
+                       :format-arguments format-arguments)))
+    nil))
