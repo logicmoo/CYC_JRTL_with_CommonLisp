@@ -2,7 +2,7 @@
  * CharacterFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CharacterFunctions.java,v 1.10 2004-10-20 17:19:24 piso Exp $
+ * $Id: CharacterFunctions.java,v 1.11 2004-12-07 04:16:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,6 +231,28 @@ public final class CharacterFunctions extends Lisp
                 return signal(new TypeError(datum, Symbol.CHARACTER));
             }
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            try {
+                if (((LispCharacter)first).value > ((LispCharacter)second).value)
+                    return NIL;
+                if (((LispCharacter)second).value > ((LispCharacter)third).value)
+                    return NIL;
+                return T;
+            }
+            catch (ClassCastException e) {
+                LispObject datum;
+                if (!(first instanceof LispCharacter))
+                    datum = first;
+                else if (!(second instanceof LispCharacter))
+                    datum = second;
+                else
+                    datum = third;
+                return signal(new TypeError(datum, Symbol.CHARACTER));
+            }
+        }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
@@ -253,7 +275,8 @@ public final class CharacterFunctions extends Lisp
 
     // ### char-lessp
     private static final Primitive CHAR_LESSP =
-        new Primitive("char-lessp","&rest characters") {
+        new Primitive("char-lessp", "&rest characters")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -281,7 +304,8 @@ public final class CharacterFunctions extends Lisp
 
     // ### char-not-lessp
     private static final Primitive CHAR_NOT_LESSP =
-        new Primitive("char-not-lessp","&rest characters") {
+        new Primitive("char-not-lessp", "&rest characters")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
