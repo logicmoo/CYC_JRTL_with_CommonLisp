@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.65 2004-06-05 02:18:55 piso Exp $
+ * $Id: LispFloat.java,v 1.66 2004-06-05 19:17:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,19 @@ public final class LispFloat extends LispObject
     public static final LispFloat ZERO = new LispFloat(0);
     public static final LispFloat ONE  = new LispFloat(1);
     public static final LispFloat PI   = new LispFloat((double)3.141592653589793);
+
+    public static final LispFloat DOUBLE_FLOAT_POSITIVE_INFINITY =
+        new LispFloat(Double.POSITIVE_INFINITY);
+
+    public static final LispFloat DOUBLE_FLOAT_NEGATIVE_INFINITY =
+        new LispFloat(Double.NEGATIVE_INFINITY);
+
+    static {
+        Symbol.DOUBLE_FLOAT_POSITIVE_INFINITY.setSymbolValue(DOUBLE_FLOAT_POSITIVE_INFINITY);
+        Symbol.DOUBLE_FLOAT_POSITIVE_INFINITY.setConstant(true);
+        Symbol.DOUBLE_FLOAT_NEGATIVE_INFINITY.setSymbolValue(DOUBLE_FLOAT_NEGATIVE_INFINITY);
+        Symbol.DOUBLE_FLOAT_NEGATIVE_INFINITY.setConstant(true);
+    }
 
     public final double value;
 
@@ -242,8 +255,6 @@ public final class LispFloat extends LispObject
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
     {
-        if (obj.zerop())
-            return signal(new DivisionByZero());
         if (obj instanceof LispFloat)
             return new LispFloat(value / ((LispFloat)obj).value);
         if (obj instanceof Fixnum)
@@ -393,26 +404,34 @@ public final class LispFloat extends LispObject
     public LispObject ftruncate(LispObject obj) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
+        double divisor, quotient, remainder;
         if (obj instanceof Fixnum) {
-            long divisor = ((Fixnum)obj).value;
-            double quotient = value / divisor;
-            double remainder = value % divisor;
-            if (quotient == 0)
-                return thread.setValues(new LispFloat(quotient),
-                                        new LispFloat(remainder));
-            else
-                return thread.setValues(new LispFloat(quotient - remainder),
-                                        new LispFloat(remainder));
+            divisor = ((Fixnum)obj).value;
+        } else if (obj instanceof LispFloat) {
+            divisor = ((LispFloat)obj).value;
+        } else {
+            return signal(new LispError("LispFloat.ftruncate(): not implemented: " +
+                                        obj.typeOf().writeToString()));
         }
-        if (obj instanceof LispFloat) {
-            double divisor = ((LispFloat)obj).value;
-            double quotient = value / divisor;
-            double remainder = value % divisor;
-            return thread.setValues(new LispFloat(quotient - remainder),
+        quotient = value / divisor;
+        remainder = value % divisor;
+        if (quotient == 0 ||
+            quotient == Double.POSITIVE_INFINITY ||
+            quotient == Double.NEGATIVE_INFINITY)
+        {
+            return thread.setValues(new LispFloat(quotient),
                                     new LispFloat(remainder));
         }
-        return signal(new LispError("LispFloat.ftruncate(): not implemented: " +
-                                    obj.typeOf().writeToString()));
+        if (quotient == remainder) {
+            // "The quotient represents the mathematical integer of the
+            // same sign as the mathematical quotient, and that has the
+            // greatest integral magnitude not greater than that of the
+            // mathematical quotient."
+            return thread.setValues(new LispFloat(quotient < 0 ? -0.0 : 0.0),
+                                    new LispFloat(remainder));
+        }
+        return thread.setValues(new LispFloat(quotient - remainder),
+                                new LispFloat(remainder));
     }
 
     public int hashCode()
@@ -429,26 +448,20 @@ public final class LispFloat extends LispObject
             return (hashCode() & 0x7fffffff);
     }
 
-    public static final Symbol DOUBLE_FLOAT_POSITIVE_INFINITY =
-        exportConstant("DOUBLE-FLOAT-POSITIVE-INFINITY", PACKAGE_EXT,
-                       new LispFloat(Double.POSITIVE_INFINITY));
-
-    public static final Symbol DOUBLE_FLOAT_NEGATIVE_INFINITY =
-        exportConstant("DOUBLE-FLOAT-NEGATIVE-INFINITY", PACKAGE_EXT,
-                       new LispFloat(Double.NEGATIVE_INFINITY));
-
     public String writeToString() throws ConditionThrowable
     {
         if (value == Double.POSITIVE_INFINITY) {
             StringBuffer sb = new StringBuffer("#.");
-            sb.append(DOUBLE_FLOAT_POSITIVE_INFINITY.writeToString());
+            sb.append(Symbol.DOUBLE_FLOAT_POSITIVE_INFINITY.writeToString());
             return sb.toString();
         }
         if (value == Double.NEGATIVE_INFINITY) {
             StringBuffer sb = new StringBuffer("#.");
-            sb.append(DOUBLE_FLOAT_NEGATIVE_INFINITY.writeToString());
+            sb.append(Symbol.DOUBLE_FLOAT_NEGATIVE_INFINITY.writeToString());
             return sb.toString();
         }
+        if (value != value)
+            return "#<DOUBLE-FLOAT NaN>";
         return String.valueOf(value);
     }
 
