@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.29 2003-03-25 19:26:27 piso Exp $
+ * $Id: LispMode.java,v 1.30 2003-03-28 18:07:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,7 +190,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
             if (token.startsWith("def") ||
                 Utilities.isOneOf(token, specials) ||
                 Utilities.isOneOf(token, elispSpecials) ||
-                Utilities.isOneOf(token, hemlockSpecials))
+                Utilities.isOneOf(token, hemlockSpecials) ||
+                token.startsWith("with-"))
                 return buffer.getCol(pos) + indentSize;
             // Not special. Indent under the second element of the containing
             // list, if the second element is on the same line as the first.
