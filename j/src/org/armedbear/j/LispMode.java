@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.7 2002-10-15 01:32:11 piso Exp $
+ * $Id: LispMode.java,v 1.8 2002-10-18 21:44:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,9 +120,20 @@ public class LispMode extends AbstractMode implements Constants, Mode
 
     public int getCorrectIndentation(Line line, Buffer buffer)
     {
-        Position here = new Position(line, 0);
-        Position pos = findContainingSexp(here);
-        if (pos != null && pos.getOffset() > 0) {
+        if (line.flags() == STATE_QUOTE)
+            return 0;
+        Line model = findModel(line);
+        if (model == null)
+            return 0;
+        final String modelTrim = model.trim();
+        if (modelTrim.length() == 0)
+            return 0;
+        if (modelTrim.charAt(0) == ';')
+            return buffer.getIndentation(model);
+        
+        final int indentSize = buffer.getIndentSize();
+        Position pos = findContainingSexp(new Position(line, 0));
+        if (pos != null) {
             SyntaxIterator it = getSyntaxIterator(pos);
             while (true) {
                 char c = it.nextChar();
@@ -134,19 +145,73 @@ public class LispMode extends AbstractMode implements Constants, Mode
                     return buffer.getCol(it.getPosition());
                 }
                 // Otherwise...
-                if (pos.lineNumber() == here.lineNumber() - 1) {
-                    pos = forwardSexp(pos);
-                    if (pos != null)
-                        return buffer.getCol(pos);
-                }
+                String token = gatherToken(it.getPosition());
+                if (token.equals("if")) {
+                    if (pos.getLine() == model)
+                        return buffer.getCol(pos) + indentSize * 2;
+                    else
+                        return buffer.getCol(pos) + indentSize;
+                } 
+                if (token.equals("let"))
+                    return buffer.getCol(pos) + indentSize;
+                if (token.equals("while"))
+                    return buffer.getCol(pos) + indentSize;
+                if (token.startsWith("def"))
+                    return buffer.getCol(pos) + indentSize;
+                pos = forwardSexp(pos);
+                if (pos != null)
+                    return buffer.getCol(pos);
+                
                 break; // Fall through.
             }
         }
 
         int depth = depth(new Position(line, 0), buffer);
         if (depth > 0)
-            return buffer.getIndentSize() * depth;
+            return indentSize * depth;
         return 0;
+    }
+
+    private static Line findModel(Line line)
+    {
+        Line model = line.previous();
+        if (line.flags() == STATE_COMMENT) {
+            // Any non-blank line is an acceptable model.
+            while (model != null && model.isBlank())
+                model = model.previous();
+        } else {
+            while (model != null) {
+                if (isAcceptableModel(model))
+                    break; // Found an acceptable model.
+                else
+                    model = model.previous();
+            }
+        }
+        return model;
+    }
+
+    private static boolean isAcceptableModel(Line model)
+    {
+        String trim = model.trim();
+        if (trim.length() == 0)
+            return false;
+        if (trim.charAt(0) == ';')
+            return false;
+        return true;
+    }
+
+    private String gatherToken(Position pos)
+    {
+        FastStringBuffer sb = new FastStringBuffer();
+        while (true) {
+            char c = pos.getChar();
+            if (Character.isWhitespace(c))
+                break;
+            sb.append(c);
+            if (!pos.next())
+                break;
+        }
+        return sb.toString();
     }
 
     private int depth(Position pos, Buffer buffer)
