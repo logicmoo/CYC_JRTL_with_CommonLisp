@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.42 2003-11-17 01:56:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.43 2003-11-17 02:27:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1665,10 +1665,10 @@
        (compile-let-vars varlist))
       (LET*
        (compile-let*-vars varlist)))
-    ;; Body of LET.
+    ;; Body of LET/LET*.
     (do ((body (cddr form) (cdr body)))
         ((null (cdr body))
-         (compile-form (car body) nil))
+         (compile-form (car body) for-effect))
       (compile-form (car body) t))
     (when specialp
       ;; Restore dynamic environment.
@@ -1793,9 +1793,10 @@
             (t
              (compile-form f t))))
     (setf (fill-pointer *tags*) saved-fp))
-  ;; TAGBODY returns NIL.
-  (emit-push-nil)
-  (emit-store-value))
+  (unless for-effect
+    ;; TAGBODY returns NIL.
+    (emit-push-nil)
+    (emit-store-value)))
 
 (defun compile-go (form for-effect)
   (let* ((name (cadr form))
@@ -1822,14 +1823,14 @@
     (emit-store-value)))
 
 (defun compile-block (form for-effect)
-   (let* ((rest (cdr form))
-          (block-label (car rest))
-          (block-exit (gensym))
-          (*blocks* (acons block-label block-exit *blocks*)))
-     (do ((forms (cdr rest) (cdr forms)))
-         ((null forms))
-       (compile-form (car forms) (cdr forms)))
-     (emit 'label `,block-exit)))
+  (let* ((rest (cdr form))
+         (block-label (car rest))
+         (block-exit (gensym))
+         (*blocks* (acons block-label block-exit *blocks*)))
+    (do ((forms (cdr rest) (cdr forms)))
+        ((null forms))
+      (compile-form (car forms) (or (cdr forms) for-effect)))
+    (emit 'label `,block-exit)))
 
 (defun compile-progn (form for-effect)
   (do ((forms (cdr form) (cdr forms)))
