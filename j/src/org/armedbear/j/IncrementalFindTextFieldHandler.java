@@ -1,8 +1,8 @@
 /*
  * IncrementalFindTextFieldHandler.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: IncrementalFindTextFieldHandler.java,v 1.4 2003-07-18 15:26:43 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: IncrementalFindTextFieldHandler.java,v 1.5 2004-07-15 19:20:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +89,8 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         editor.setDot(initialDot);
         editor.updateDotLine();
         editor.setMark(initialMark);
+        if (initialMark != null && initialMark.getLine() != initialDot.getLine())
+            editor.setUpdateFlag(REPAINT);
         display.setCaretCol(initialDotCol - display.getShift());
         editor.setUpdateFlag(REFRAME);
         editor.updateDisplay();
@@ -363,6 +365,9 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
 
     private void found(Position pos)
     {
+        if (editor.getMark() != null)
+            if (editor.getMarkLine() != editor.getDotLine())
+                editor.setUpdateFlag(REPAINT);
         editor.updateDotLine();
         editor.getDot().moveTo(pos);
         editor.updateDotLine();
