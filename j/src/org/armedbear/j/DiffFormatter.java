@@ -2,7 +2,7 @@
  * DiffFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DiffFormatter.java,v 1.4 2003-04-23 15:12:25 piso Exp $
+ * $Id: DiffFormatter.java,v 1.5 2003-05-10 15:28:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -136,15 +136,21 @@ public final class DiffFormatter extends Formatter
 
     private static boolean isDiffHeader(String s)
     {
-        return (s.startsWith("cvs server: ") ||
+        if ((s.startsWith("cvs server: ") ||
             s.startsWith("========") ||
             s.startsWith("RCS file: ") ||
             s.startsWith("retrieving revision ") ||
             s.startsWith("diff ") ||
+            s.startsWith("*** ") ||
             s.startsWith("--- ") ||
             s.startsWith("+++ ") ||
             (s.startsWith("@@ ") || s.endsWith(" @@")) ||
-            (s.startsWith("@ ") && s.endsWith(" @")));
+            (s.startsWith("@ ") && s.endsWith(" @"))))
+            return true;
+        if (s.equals("***************"))
+            return true;
+
+        return false;
     }
 
     public FormatTable getFormatTable()
