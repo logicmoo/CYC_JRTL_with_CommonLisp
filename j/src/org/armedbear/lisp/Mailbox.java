@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: Mailbox.java,v 1.1 2004-06-26 14:55:33 asimon Exp $
+ * $Id: Mailbox.java,v 1.2 2004-06-26 21:22:37 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.lisp;
 import java.util.Stack;
+import java.util.EmptyStackException;
 
 public final class Mailbox extends LispObject
 {
@@ -50,7 +51,13 @@ public final class Mailbox extends LispObject
 
     private LispObject peek ()
     {
-        return (LispObject) box.peek();
+        synchronized(this) {
+            try {
+                return (LispObject) box.peek();
+            } catch(EmptyStackException e) {
+                return NIL;
+            }
+        }
     }
 
     private LispObject empty ()
