@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.3 2004-02-24 12:13:02 piso Exp $
+ * $Id: SimpleVector.java,v 1.4 2004-02-24 15:04:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,4 +276,46 @@ public final class SimpleVector extends AbstractVector
         sb.append(')');
         return sb.toString();
     }
+
+    // ### svref
+    // svref simple-vector index => element
+    private static final Primitive2 SVREF =
+        new Primitive2("svref", "simple-vector index")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                return ((SimpleVector)first).elements[((Fixnum)second).value];
+            }
+            catch (ClassCastException e) {
+                if (first instanceof SimpleVector)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.SIMPLE_VECTOR));
+            }
+        }
+    };
+
+    // ### %svset
+    // %svset simple-vector index new-value => new-value
+    private static final Primitive3 _SVSET =
+        new Primitive3("%svset", PACKAGE_SYS, false, "simple-vector index new-value")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            try {
+                ((SimpleVector)first).elements[((Fixnum)second).value] = third;
+                return third;
+            }
+            catch (ClassCastException e) {
+                if (first instanceof SimpleVector)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.SIMPLE_VECTOR));
+            }
+        }
+    };
 }
