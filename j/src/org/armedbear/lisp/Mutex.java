@@ -2,7 +2,7 @@
  * Mutex.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: Mutex.java,v 1.1 2004-09-09 12:41:29 piso Exp $
+ * $Id: Mutex.java,v 1.2 2004-09-09 14:59:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,45 +19,47 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+/*
+  File: Mutex.java
+
+  Originally written by Doug Lea and released into the public domain.
+  This may be used for any purposes whatsoever without acknowledgment.
+  Thanks for the assistance and support of Sun Microsystems Labs,
+  and everyone contributing, testing, and using this code.
+
+  History:
+  Date       Who                What
+  11Jun1998  dl               Create public version
+*/
+
 package org.armedbear.lisp;
 
 public final class Mutex extends LispObject
 {
-    private Thread owner;
-    private int count;
+    private boolean inUse;
 
-    private void acquire() throws ConditionThrowable, InterruptedException
+    public void acquire() throws InterruptedException
     {
-        Thread currentThread = Thread.currentThread();
-        if (currentThread == owner) {
-            ++count;
-        } else {
-            synchronized (this) {
-                try {
-                    while (owner != null)
-                        wait();
-                    owner = currentThread;
-                    count = 1;
-                }
-                catch (InterruptedException e) {
-                    notify();
-                    throw e;
-                }
-            }
-        }
-    }
-
-    private void release() throws ConditionThrowable
-    {
-        if (Thread.currentThread() != owner)
-            signal(new LispError("Attempt to release mutex by a thread other than its current owner."));
+        if (Thread.interrupted())
+            throw new InterruptedException();
         synchronized (this) {
-            if (--count == 0) {
-                owner = null;
+            try {
+                while (inUse)
+                    wait();
+                inUse = true;
+            }
+            catch (InterruptedException e) {
                 notify();
+                throw e;
             }
         }
     }
+
+    public synchronized void release()  {
+        inUse = false;
+        notify();
+    }
+
 
     public String writeToString()
     {
@@ -107,7 +109,8 @@ public final class Mutex extends LispObject
                 return T;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg.writeToString() + " is not a mutex."));
+                return signal(new TypeError("The value " + arg.writeToString() +
+                                            " is not a mutex."));
             }
         }
     };
