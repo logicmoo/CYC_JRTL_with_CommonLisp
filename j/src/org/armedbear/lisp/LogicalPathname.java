@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LogicalPathname.java,v 1.1 2004-02-03 02:01:22 piso Exp $
+ * $Id: LogicalPathname.java,v 1.2 2004-02-03 02:46:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,32 @@ import java.util.HashMap;
 public final class LogicalPathname extends Pathname
 {
     private static final HashMap map = new HashMap();
+
+    private LogicalPathname()
+    {
+        // "The device component of a logical pathname is always :unspecific;
+        // no other component of a logical pathname can be :unspecific."
+        device = Keyword.UNSPECIFIC;
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.LOGICAL_PATHNAME;
+    }
+
+    public LispClass classOf()
+    {
+        return BuiltInClass.LOGICAL_PATHNAME;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.LOGICAL_PATHNAME)
+            return T;
+        if (type == BuiltInClass.LOGICAL_PATHNAME)
+            return T;
+        return super.typep(type);
+    }
 
     // ### %set-logical-pathname-translations
     // %set-logical-pathname-translations host new-translations => newval
@@ -71,7 +97,23 @@ public final class LogicalPathname extends Pathname
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return NIL;
+            if (arg instanceof LogicalPathname)
+                return arg;
+            if (arg instanceof LispString) {
+                String s = ((LispString)arg).getValue();
+                int index = s.indexOf(':');
+                if (index >= 0) {
+                    String host = s.substring(0, index).toUpperCase();
+                    LogicalPathname p = new LogicalPathname();
+                    p.host = new LispString(host);
+                    return p;
+                }
+                return NIL;
+            }
+            if (arg instanceof Stream)
+                return NIL;
+            return signal(new TypeError(String.valueOf(arg) +
+                                        " is not a string, stream, or logical pathname."));
         }
     };
 }
