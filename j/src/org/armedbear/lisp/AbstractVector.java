@@ -20,7 +20,7 @@
 
 package org.armedbear.lisp;
 
-public abstract class AbstractVector extends LispObject
+public abstract class AbstractVector extends AbstractArray
 {
     protected int fillPointer = -1; // -1 indicates no fill pointer.
 
@@ -34,6 +34,8 @@ public abstract class AbstractVector extends LispObject
             return T;
         if (typeSpecifier == Symbol.SIMPLE_VECTOR)
             return isSimpleVector() ? T : NIL;
+        if (typeSpecifier == Symbol.SIMPLE_ARRAY)
+            return isSimpleVector() ? T : NIL;
         if (typeSpecifier instanceof LispClass) {
             final String name = typeSpecifier.getName();
             if (name.equals("VECTOR"))
@@ -41,7 +43,48 @@ public abstract class AbstractVector extends LispObject
             if (name.equals("ARRAY"))
                 return T;
         }
+        if (typeSpecifier instanceof Cons) {
+            final int length = typeSpecifier.length();
+            if (length > 3)
+                throw new WrongNumberOfArgumentsException((LispObject)null);
+            LispObject type = checkSymbol(typeSpecifier.car());
+            if (type == Symbol.ARRAY ||
+                (type == Symbol.SIMPLE_ARRAY && isSimpleVector())) {
+                if (length == 1)
+                    return T;
+                LispObject elementType = typeSpecifier.cadr();
+                if (elementType == Symbol.UNSPECIFIED || elementType == T)
+                    ;
+                else
+                    return NIL;
+                if (length == 2)
+                    return T;
+                LispObject dimensions = typeSpecifier.cddr().car();
+                if (dimensions == Symbol.UNSPECIFIED)
+                    return T;
+                if (dimensions instanceof Fixnum) {
+                    // Rank.
+                    return (((Fixnum)dimensions).getValue() == 1) ? T : NIL;
+                }
+                if (dimensions instanceof Cons) {
+                    if (dimensions.length() != 1)
+                        return NIL;
+                    LispObject dim = dimensions.car();
+                    if (dim == Symbol.UNSPECIFIED)
+                        return T;
+                    if (dim instanceof Fixnum) {
+                        return (((Fixnum)dim).getValue() == capacity()) ? T : NIL;
+                    }
+                }
+            }
+            return NIL;
+        }
         return super.typep(typeSpecifier);
+    }
+
+    public int getRank()
+    {
+        return 1;
     }
 
     public abstract int capacity();
@@ -63,10 +106,10 @@ public abstract class AbstractVector extends LispObject
 
     public int checkIndex(LispObject index) throws LispError
     {
-        long i = Fixnum.getValue(index);
+        int i = Fixnum.getValue(index);
         if (i < 0 || i >= capacity())
             badIndex(i, capacity());
-        return (int) i;
+        return i;
     }
 
     protected void badIndex(long index, long limit) throws LispError
@@ -98,7 +141,7 @@ public abstract class AbstractVector extends LispObject
         if (obj == T)
             fillPointer = capacity();
         else {
-            long n = Fixnum.getValue(obj);
+            int n = Fixnum.getValue(obj);
             if (n > capacity()) {
                 StringBuffer sb = new StringBuffer("the new fill pointer (");
                 sb.append(n);
@@ -113,7 +156,7 @@ public abstract class AbstractVector extends LispObject
                 sb.append(") is negative");
                 throw new LispError(sb.toString());
             }
-            fillPointer = (int) n;
+            fillPointer = n;
         }
     }
 
