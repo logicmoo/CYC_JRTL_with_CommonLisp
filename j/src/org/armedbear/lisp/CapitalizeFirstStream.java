@@ -2,7 +2,7 @@
  * CapitalizeFirstStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: CapitalizeFirstStream.java,v 1.1 2004-06-08 22:52:10 piso Exp $
+ * $Id: CapitalizeFirstStream.java,v 1.2 2004-10-19 02:03:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,10 @@ public final class CapitalizeFirstStream extends CaseFrobStream
     public void _writeChar(char c) throws ConditionThrowable
     {
         if (virgin) {
-            c = Utilities.toUpperCase(c);
-            virgin = false;
+            if (Character.isLetterOrDigit(c)) {
+                c = Utilities.toUpperCase(c);
+                virgin = false;
+            }
         } else
             c = Utilities.toLowerCase(c);
         target._writeChar(c);
@@ -42,14 +44,9 @@ public final class CapitalizeFirstStream extends CaseFrobStream
 
     public void _writeString(String s) throws ConditionThrowable
     {
-        if (s.length() > 0) {
-            if (virgin) {
-                target._writeChar(Utilities.toUpperCase(s.charAt(0)));
-                virgin = false;
-                target._writeString(s.substring(1).toLowerCase());
-            } else
-                target._writeString(s.toLowerCase());
-        }
+        final int length = s.length();
+        for (int i = 0; i < length; i++)
+            _writeChar(s.charAt(i));
     }
 
     public void _writeLine(String s) throws ConditionThrowable
