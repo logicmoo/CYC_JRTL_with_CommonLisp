@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.89 2004-03-27 14:25:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.90 2004-03-27 16:20:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1698,31 +1698,38 @@
   ;; Use a Java boolean if possible.
   (when (consp form)
     (case (length form)
-      (2 (when (memq (car form) '(NOT NULL))
-           (compile-form (second form))
+      (2
+       (let ((op (car form))
+             (arg (cadr form)))
+         (when (memq op '(NOT NULL))
+           (compile-form arg)
            (unless (remove-store-value)
              (emit-push-value))
+           (maybe-emit-clear-values arg)
            (emit-push-nil)
            (return-from compile-test 'if_acmpne))
-         (when (eq (car form) 'SYMBOLP)
-           (compile-form (second form))
+         (when (eq op 'SYMBOLP)
+           (compile-form arg)
            (unless (remove-store-value)
              (emit-push-value))
+           (maybe-emit-clear-values arg)
            (emit 'instanceof +lisp-symbol-class+)
            (return-from compile-test 'ifeq))
-         (when (eq (car form) 'CONSP)
-           (compile-form (second form))
+         (when (eq op 'CONSP)
+           (compile-form arg)
            (unless (remove-store-value)
              (emit-push-value))
+           (maybe-emit-clear-values arg)
            (emit 'instanceof +lisp-cons-class+)
            (return-from compile-test 'ifeq))
-         (when (eq (car form) 'ATOM)
-           (compile-form (second form))
+         (when (eq op 'ATOM)
+           (compile-form arg)
            (unless (remove-store-value)
              (emit-push-value))
+           (maybe-emit-clear-values arg)
            (emit 'instanceof +lisp-cons-class+)
            (return-from compile-test 'ifne))
-         (let ((s (cdr (assq (car form)
+         (let ((s (cdr (assq op
                              '((CHARACTERP . "characterp")
                                (EVENP      . "evenp")
                                (FLOATP     . "floatp")
@@ -1738,23 +1745,30 @@
                                (VECTORP    . "vectorp")
                                (ZEROP      . "zerop"))))))
            (when s
-             (compile-form (second form))
+             (compile-form arg)
              (unless (remove-store-value)
                (emit-push-value))
+             (maybe-emit-clear-values arg)
              (emit-invokevirtual +lisp-object-class+
                                  s
                                  "()Z"
                                  0)
-             (return-from compile-test 'ifeq))))
-      (3 (when (eq (car form) 'EQ)
-           (compile-form (second form))
+             (return-from compile-test 'ifeq)))))
+      (3
+       (let ((op (car form))
+             (arg1 (second form))
+             (arg2 (third form)))
+         (when (eq op 'EQ)
+           (compile-form arg1)
            (unless (remove-store-value)
              (emit-push-value))
-           (compile-form (third form))
+           (maybe-emit-clear-values arg1)
+           (compile-form arg2)
            (unless (remove-store-value)
              (emit-push-value))
+           (maybe-emit-clear-values arg2)
            (return-from compile-test 'if_acmpne))
-         (let ((s (cdr (assq (car form)
+         (let ((s (cdr (assq op
                              '((=      . "isEqualTo")
                                (/=     . "isNotEqualTo")
                                (<      . "isLessThan")
@@ -1765,23 +1779,23 @@
                                (EQUAL  . "equal")
                                (EQUALP . "equalp"))))))
            (when s
-             (compile-form (second form))
+             (compile-form arg1)
              (unless (remove-store-value)
                (emit-push-value))
-             (compile-form (third form))
+             (maybe-emit-clear-values arg1)
+             (compile-form arg2)
              (unless (remove-store-value)
                (emit-push-value))
+             (maybe-emit-clear-values arg2)
              (emit-invokevirtual +lisp-object-class+
                                  s
                                  "(Lorg/armedbear/lisp/LispObject;)Z"
                                  -1)
-             (return-from compile-test 'ifeq))))))
+             (return-from compile-test 'ifeq)))))))
   ;; Otherwise...
   (compile-form form)
   (unless (remove-store-value)
     (emit-push-value))
-;;   (unless (single-valued-p form)
-;;     (emit-clear-values))
   (maybe-emit-clear-values form)
   (emit-push-nil)
   'if_acmpeq)
