@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.13 2003-06-18 15:30:06 piso Exp $
+ * $Id: AbstractMode.java,v 1.14 2003-06-18 15:41:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1097,12 +1097,5 @@ public abstract class AbstractMode implements Constants, Mode
             start = offset;
         }
         return new Position(line, start);
-    }
-
-    public final void reset()
-    {
-        keyMap = null;
-        if (keywords != null)
-            keywords.reload();
     }
 }

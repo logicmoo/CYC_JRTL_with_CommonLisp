@@ -2,7 +2,7 @@
  * Mode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Mode.java,v 1.7 2003-06-18 15:29:07 piso Exp $
+ * $Id: Mode.java,v 1.8 2003-06-18 15:40:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,7 +92,7 @@ public interface Mode
     public File getKeyMapFile();
 
     public void useDefaultKeyMap();
-    
+
     public void deleteKeyMap();
 
     /**
@@ -543,11 +543,4 @@ public interface Mode
      * @since           0.16.1
      */
     public Position findIdentifierStart(Line line, int offset);
-    
-    /**
-     * Performs all actions necessary to return this mode to its default state.
-     * This may include, but is not limited to, resetting the key map and
-     * keywords.
-     */
-    public void reset();
 }
