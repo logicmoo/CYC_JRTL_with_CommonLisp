@@ -375,6 +375,17 @@
 (defun size (type)
   (if (or (string= type "long") (string= type "double")) 2 1))
 
+(defun field-modifier (m)
+  (cond ((string= "public" m) constants.acc-public)
+    ((string= "protected" m) constants.acc-protected)
+    ((string= "private" m) constants.acc-private)
+    ((string= "static" m) constants.acc-static)
+    ((string= "final" m) constants.acc-final)
+    ((string= "transient" m) constants.acc-transient)
+    ((string= "volatile" m) constants.acc-volatile)
+    (t (error "Invalid field modifier ~s." m))))
+
+
 (defun write-method (class-writer class-name method-name unique-method-name result-type arg-types)
 
   (let* ((arg-count (length arg-types))
@@ -478,14 +489,20 @@
   
 
 
-(defun jnew-runtime-class (class-name super-name methods &optional filename)
+(defun jnew-runtime-class (class-name super-name methods &optional fields filename)
   "Creates and loads a Java class with methods calling Lisp closures as given in METHODS.
-   CLASS-NAME and SUPER-NAME are strings, METHODS is a list of method definitions.
+   CLASS-NAME and SUPER-NAME are strings, METHODS is a list of method definitions, and FIELDS
+   is a list of field definitions.
+
    Method definitions are lists of the form 
    (method-name return-type argument-types function)
    where method-name and return-type are strings, argument-types is a list of strings and function
    is a lisp function of (1+ (length argument-types)) arguments; the instance (`this') is
    passed in as the last argument.
+
+   Field definitions are lists of the form
+   (field-name type modifier*)
+   
    If FILE-NAME is given, a .class file will be written; this is useful for debugging only.
    Example:
 
@@ -523,6 +540,13 @@
     (visit-field-3 cw (+ constants.acc-private constants.acc-static)
                    "rc" "Lorg/armedbear/lisp/RuntimeClass;")
 
+    (dolist (field-def fields)
+      (visit-field-3 cw
+	(reduce #'+ (cddr field-def) :key #'field-modifier)
+	(car field-def)
+	(decorated-type-name (cadr field-def))))
+	  
+	
     (let ((cv (visit-method-3 cw constants.acc-public "<init>" "()V")))
       (visit-var-insn-2 cv constants.aload 0)
       (visit-method-insn-4 cv constants.invokespecial super-type-name "<init>" "()V")
