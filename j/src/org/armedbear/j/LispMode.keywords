@@ -348,6 +348,7 @@ rplaca
 rplacd
 sbit
 schar
+search
 second
 set
 set-difference
