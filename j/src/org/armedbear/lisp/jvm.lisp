@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.181 2004-06-04 00:37:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.182 2004-06-14 14:30:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2491,6 +2491,9 @@
   (emit-store-value))
 
 (defun compile-values (form for-effect)
+  (let ((new-form (rewrite-function-call form)))
+    (when (neq new-form form)
+      (return-from compile-values (compile-form new-form))))
   (let ((args (cdr form)))
     (case (length args)
       (1
@@ -2605,7 +2608,7 @@
     (emit-invokevirtual +lisp-thread-class+
                         "pushCatchTag"
                         "(Lorg/armedbear/lisp/LispObject;)V"
-                        -2)
+                        -2) ; Stack depth is 0.
     (emit 'label `,label1) ; Start of protected range.
     ;; Implicit PROGN.
     (do ((forms (cddr form) (cdr forms)))
@@ -2618,8 +2621,7 @@
     (emit 'label `,label3) ; Start of handler for THROW.
     ;; The Throw object is on the runtime stack. Stack depth is 1.
     (emit 'dup) ; Stack depth is 2.
-    (emit 'getfield +lisp-throw-class+ "tag"
-          "Lorg/armedbear/lisp/LispObject;") ; Still 2.
+    (emit 'getfield +lisp-throw-class+ "tag" +lisp-object+) ; Still 2.
     (emit 'aload tag-var) ; Stack depth is 3.
     (emit 'if_acmpne `,label4) ; Stack depth is 1.
     (emit 'aload *thread*)
@@ -2627,7 +2629,7 @@
                         "getResult"
                         "(Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
                         -1)
-    (emit-store-value)
+    (emit-store-value) ; Stack depth is 0.
     (emit 'goto `,label5)
     (emit 'label `,label4) ; Start of handler for all other Throwables.
     ;; A Throwable object is on the runtime stack here. Stack depth is 1.
