@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.15 2002-11-03 20:30:02 piso Exp $
+ * $Id: Editor.java,v 1.16 2002-11-05 15:35:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3929,7 +3929,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public boolean reactivate(Buffer buf)
     {
         if (buf instanceof ImageBuffer)
-            return ((ImageBuffer) buf).reactivate();
+            return ((ImageBuffer)buf).reactivate();
 
         if (buf.getType() != Buffer.TYPE_NORMAL)
             return false;
@@ -3952,6 +3952,12 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             // Read-only status has changed.
             buf.readOnly = !buf.readOnly;
             changed = true;
+            // Let the user know if the file associated with a modified buffer 
+            // is no longer writable.
+            if (buf.readOnly && buf.isLoaded() && buf.isModified())
+                MessageDialog.showMessageDialog(
+                    file.canonicalPath().concat(" is no longer writable"),
+                    "Warning");
         }
 
         if (buf.isLoaded()) {
