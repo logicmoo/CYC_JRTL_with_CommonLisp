@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.42 2004-09-15 18:36:23 piso Exp $
+;;; $Id: compile-file.lisp,v 1.43 2004-09-18 17:50:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -98,23 +98,26 @@
                        (classfile (report-error
                                    (jvm:compile-defun name expr nil classfile-name)))
                        (compiled-function (verify-load classfile)))
-                  (if compiled-function
-                      (progn
-                        (%format t ";  ~A => ~A.cls~%" name
-                                 (pathname-name (pathname classfile-name)))
-                        (setf form
-                              `(fset ',name
-                                     (load-compiled-function ,(file-namestring classfile))
-                                     ,*source-position*))
-                        (when compile-time-too
-                          (fset name compiled-function)))
-                      (progn
-                        (%format t ";  Unable to compile function ~A~%" name)
-                        (let ((precompiled-function (precompile-form expr nil)))
-                          (setf form
-                                `(fset ',name ,precompiled-function ,*source-position*)))
-                        (when compile-time-too
-                          (eval form))))
+                  (cond (compiled-function
+                         (%format t ";  ~A => ~A.cls~%" name
+                                  (pathname-name (pathname classfile-name)))
+                         (setf form
+                               `(fset ',name
+                                      (load-compiled-function ,(file-namestring classfile))
+                                      ,*source-position*
+                                      ',lambda-list))
+                         (when compile-time-too
+                           (fset name compiled-function)))
+                        (t
+                         (%format t ";  Unable to compile function ~A~%" name)
+                         (let ((precompiled-function (precompile-form expr nil)))
+                           (setf form
+                                 `(fset ',name
+                                        ,precompiled-function
+                                        ,*source-position*
+                                        ',lambda-list)))
+                         (when compile-time-too
+                           (eval form))))
                   (push name jvm::*toplevel-defuns*)
                   ;; If NAME is not fbound, provide a dummy definition so that
                   ;; getSymbolFunctionOrDie() will succeed when we try to verify that
@@ -143,7 +146,8 @@
                                 `(fset ',name
                                        (make-macro (load-compiled-function
                                                     ,(file-namestring classfile)))
-                                       ,*source-position*))))
+                                       ,*source-position*
+                                       ',(third form)))))
                     (%format t ";  Unable to compile macro ~A~%" name)))))
            (DEFTYPE
             (eval form))
