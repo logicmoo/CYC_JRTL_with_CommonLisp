@@ -2,7 +2,7 @@
  * JdbSession.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: JdbSession.java,v 1.4 2003-06-25 18:32:44 piso Exp $
+ * $Id: JdbSession.java,v 1.5 2003-06-29 17:50:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import org.armedbear.j.Directories;
 import org.armedbear.j.Editor;
 import org.armedbear.j.File;
 import org.armedbear.j.Log;
@@ -61,7 +62,7 @@ public final class JdbSession extends Properties
     private static File getSettingsDirectory()
     {
         if (jdbDir == null) {
-            jdbDir = File.getInstance(Editor.getEditorDirectory(), "jdb");
+            jdbDir = File.getInstance(Directories.getEditorDirectory(), "jdb");
             if (!jdbDir.isDirectory())
                 jdbDir.mkdirs();
         }
