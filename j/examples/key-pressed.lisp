@@ -1,7 +1,7 @@
 ;;; key-pressed.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: key-pressed.lisp,v 1.4 2003-07-05 02:03:36 piso Exp $
+;;; $Id: key-pressed.lisp,v 1.5 2003-12-04 17:22:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 (defcommand open-file)
 (defcommand open-file-in-other-window)
 (defcommand open-file-in-other-frame)
-(defcommand new-buffer)
+;; (defcommand new-buffer)
 (defcommand recent-files)
 (defcommand save)
 (defcommand save-as)
@@ -38,8 +38,8 @@
 (defcommand next-buffer)
 (defcommand prev-buffer)
 (defcommand new-frame)
-(defcommand my-execute-command "executeCommand")
-(defcommand j-print "print")
+(defcommand execute-command "executeCommand")
+;; (defcommand j-print "print")
 (defcommand save-all-exit)
 (defcommand quit)
 (defcommand jump-to-line)
@@ -66,6 +66,12 @@
 (defcommand other-window)
 (defcommand shell)
 
+;;; Incremental find needs special handling.
+(defun invoke-incremental-find ()
+  (location-bar-cancel-input)
+  (restore-focus)
+  (invoke-later 'incremental-find))
+
 (defvar *table* (make-hash-table :test #'equalp))
 
 ;;; Object can be a symbol or a function.
@@ -76,10 +82,10 @@
 (defun key-pressed (&rest args)
   (let* ((key (car args))
          (value (gethash key *table*)))
-    (cond ((and value (symbolp value))
-           (funcall (symbol-function value)))
-          ((functionp value)
-           (funcall value)))))
+    (when (and value
+               (or (functionp value)
+                   (and (symbolp value) (fboundp value))))
+      (funcall value))))
 
 ;;; Key assignments.
 (assign-key "Ctrl O"
@@ -109,15 +115,16 @@
 (assign-key "Alt Left"
             #'(lambda () (restore-focus) (prev-buffer)))
 (assign-key "Ctrl Shift N" 'new-frame)
-(assign-key "Alt X" 'my-execute-command)
+(assign-key "Alt X" 'execute-command)
 ;; Ctrl P is used for history in textfields.
 ;; (assign-key "Ctrl P" 'j-print)
 (assign-key "Ctrl Shift Q" 'save-all-exit)
 (assign-key "Ctrl Q" 'quit)
 (assign-key "Ctrl J" 'jump-to-line)
 (assign-key "Ctrl Shift J" 'jump-to-column)
-(assign-key "Alt F3" 'j-find)
-(assign-key "Ctrl F" 'incremental-find)
+(assign-key "Alt F3"
+            #'(lambda () (location-bar-cancel-input) (restore-focus) (j-find)))
+(assign-key "Ctrl F" 'invoke-incremental-find)
 (assign-key "Alt L" 'list-occurrences)
 (assign-key "F6" 'find-in-files)
 (assign-key "Ctrl Shift F" 'find-in-files)
