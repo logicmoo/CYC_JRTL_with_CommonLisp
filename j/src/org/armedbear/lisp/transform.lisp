@@ -1,7 +1,7 @@
 ;;; transform.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: transform.lisp,v 1.6 2003-11-09 14:28:31 piso Exp $
+;;; $Id: transform.lisp,v 1.7 2003-11-09 14:50:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,11 +53,11 @@
          (auxvars (memq '&AUX lambda-list))
          (body (cdr args)))
     (if auxvars
-        (append (list 'LAMBDA (subseq lambda-list 0 (position '&AUX lambda-list))
-                      (append (list 'LET*
-                                    (cdr auxvars))
-                              (mapcar #'transform1 body))))
-        (append (list 'LAMBDA lambda-list) (mapcar #'transform1 body)))))
+        (list* 'LAMBDA (subseq lambda-list 0 (position '&AUX lambda-list))
+               (list* 'LET*
+                      (cdr auxvars))
+               (mapcar #'transform1 body))
+        (list* 'LAMBDA lambda-list (mapcar #'transform1 body)))))
 
 (defun transform1 (form)
   (when (atom form)
@@ -74,9 +74,9 @@
       (setq form (macroexpand form))
       (return-from transform1 (transform1 form)))
     (cond ((eq op 'TAGBODY)
-           (append (list 'TAGBODY) (mapcar #'transform1 args)))
+           (list* 'TAGBODY (mapcar #'transform1 args)))
           ((eq op 'PROGN)
-           (append (list 'PROGN) (mapcar #'transform1 args)))
+           (list* 'PROGN (mapcar #'transform1 args)))
           ((eq op 'RETURN-FROM)
            (append (list 'RETURN-FROM) (list (car args))
                    (list (transform1 (cadr args)))))
@@ -93,9 +93,9 @@
                  (t
                   (error "wrong number of arguments for IF"))))
           ((eq op 'LET)
-           (append (list 'LET (car args)) (mapcar #'transform1 (cdr args))))
+           (list* 'LET (car args) (mapcar #'transform1 (cdr args))))
           ((eq op 'LET*)
-           (append (list 'LET* (car args)) (mapcar #'transform1 (cdr args))))
+           (list* 'LET* (car args) (mapcar #'transform1 (cdr args))))
           ((eq op 'LAMBDA)
            (transform-lambda args))
           ((eq op 'BLOCK)
