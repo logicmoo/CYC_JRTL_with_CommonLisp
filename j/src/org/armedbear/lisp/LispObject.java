@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.44 2003-09-04 04:28:01 piso Exp $
+ * $Id: LispObject.java,v 1.45 2003-09-10 18:45:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,7 +182,7 @@ public class LispObject extends Lisp
     {
         return zerop() ? T : NIL;
     }
-    
+
     public boolean zerop() throws TypeError
     {
         throw new TypeError(this, "number");
@@ -199,6 +199,16 @@ public class LispObject extends Lisp
     }
 
     public boolean floatp()
+    {
+        return false;
+    }
+
+    public LispObject INTEGERP()
+    {
+        return integerp() ? T : NIL;
+    }
+
+    public boolean integerp()
     {
         return false;
     }
