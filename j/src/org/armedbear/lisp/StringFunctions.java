@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.21 2004-02-24 14:05:00 piso Exp $
+ * $Id: StringFunctions.java,v 1.22 2004-02-25 01:26:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -531,7 +531,7 @@ public final class StringFunctions extends Lisp
                 sb.append(Utilities.toUpperCase(array[i]));
             for (i = end; i < length; i++)
                 sb.append(array[i]);
-            return new SimpleString(sb.toString());
+            return new SimpleString(sb);
         }
     };
 
@@ -565,7 +565,7 @@ public final class StringFunctions extends Lisp
                 sb.append(Utilities.toLowerCase(array[i]));
             for (i = end; i < length; i++)
                 sb.append(array[i]);
-            return new SimpleString(sb.toString());
+            return new SimpleString(sb);
         }
     };
 
@@ -611,7 +611,7 @@ public final class StringFunctions extends Lisp
             }
             for (i = end; i < length; i++)
                 sb.append(array[i]);
-            return new SimpleString(sb.toString());
+            return new SimpleString(sb);
         }
     };
 
