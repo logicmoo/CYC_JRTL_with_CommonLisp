@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.273 2004-08-21 01:20:43 piso Exp $
+ * $Id: Lisp.java,v 1.274 2004-08-21 16:21:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1926,6 +1926,9 @@ public abstract class Lisp
             return new SimpleString("..unbound..");
         }
     };
+
+    // Initialized in function_info.java.
+    public static EqualHashTable FUNCTION_TABLE;
 
     private static final void loadClass(String className)
     {
