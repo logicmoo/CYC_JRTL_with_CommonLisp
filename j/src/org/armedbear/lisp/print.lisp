@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: print.lisp,v 1.3 2004-05-16 13:04:08 piso Exp $
+;;; $Id: print.lisp,v 1.4 2004-05-16 14:08:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -67,10 +67,53 @@
                     (incf length)))
                 (write-char #\) stream)))))
 
+;;; Output the abbreviated #< form of an array.
+(defun output-terse-array (array stream)
+  (let ((*print-level* nil)
+	(*print-length* nil))
+    (print-unreadable-object (array stream :type t :identity t))))
+
+(defun array-readably-printable-p (array)
+  (and (eq (array-element-type array) t)
+       (let ((zero (position 0 (array-dimensions array)))
+	     (number (position 0 (array-dimensions array)
+			       :test (complement #'eql)
+			       :from-end t)))
+	 (or (null zero) (null number) (> zero number)))))
+
+(defun output-vector (vector stream)
+  (declare (vector vector))
+  (cond ((stringp vector)
+         (sys::%output-object vector stream))
+	((not (or *print-array* *print-readably*))
+	 (output-terse-array vector stream))
+	((bit-vector-p vector)
+         (sys::%output-object vector stream))
+	(t
+	 (when (and *print-readably*
+		    (not (array-readably-printable-p vector)))
+	   (error 'print-not-readable :object vector))
+         (cond ((and (null *print-readably*)
+                     *print-level*
+                     (>= *current-level-in-print* *print-level*))
+                (write-char #\# stream))
+               (t
+                (let ((*current-level-in-print* (1+ *current-level-in-print*)))
+                  (write-string "#(" stream)
+                  (dotimes (i (length vector))
+                    (unless (zerop i)
+                      (write-char #\space stream))
+                    (punt-print-if-too-long i stream)
+                    (output-object (aref vector i) stream))
+                  (write-string ")" stream)))))))
+
 (defun output-ugly-object (object stream)
-  (if (consp object)
-      (output-list object stream)
-      (%output-object object stream)))
+  (cond ((consp object)
+         (output-list object stream))
+        ((vectorp object)
+         (output-vector object stream))
+        (t
+         (%output-object object stream))))
 
 ;; FIXME
 (defun output-pretty-object (object stream)
