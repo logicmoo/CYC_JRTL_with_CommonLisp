@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.28 2004-05-23 15:26:19 piso Exp $
+ * $Id: StructureObject.java,v 1.29 2004-08-18 14:08:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,30 @@ public final class StructureObject extends LispObject
         return super.typep(type);
     }
 
+    public LispObject getSlotValue(int index) throws ConditionThrowable
+    {
+        try {
+            return slots[index];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            return signal(new LispError("Invalid slot index " + index +
+                                        "  for " + writeToString()));
+        }
+    }
+
+    public LispObject setSlotValue(int index, LispObject value)
+        throws ConditionThrowable
+    {
+        try {
+            slots[index] = value;
+            return value;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            return signal(new LispError("Invalid slot index " + index +
+                                        "  for " + writeToString()));
+        }
+    }
+
     public String writeToString() throws ConditionThrowable
     {
         // FIXME
@@ -148,61 +172,7 @@ public final class StructureObject extends LispObject
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
-                return signal(new LispError("internal error"));
-            }
-        }
-    };
-
-    private static final Primitive1 _STRUCTURE_REF_0 =
-        new Primitive1("%structure-ref-0", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return ((StructureObject)arg).slots[0];
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STRUCTURE_OBJECT));
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                // Shouldn't happen.
-                return signal(new LispError("internal error"));
-            }
-        }
-    };
-
-    private static final Primitive1 _STRUCTURE_REF_1 =
-        new Primitive1("%structure-ref-1", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return ((StructureObject)arg).slots[1];
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STRUCTURE_OBJECT));
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                // Shouldn't happen.
-                return signal(new LispError("internal error"));
-            }
-        }
-    };
-
-    private static final Primitive1 _STRUCTURE_REF_2 =
-        new Primitive1("%structure-ref-2", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return ((StructureObject)arg).slots[2];
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STRUCTURE_OBJECT));
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                // Shouldn't happen.
-                return signal(new LispError("internal error"));
+                return signal(new LispError("Internal error."));
             }
         }
     };
@@ -225,67 +195,7 @@ public final class StructureObject extends LispObject
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
-                return signal(new LispError("internal error"));
-            }
-        }
-    };
-
-    private static final Primitive1 _STRUCTURE_SET_0 =
-        new Primitive1("%structure-set-0", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            try {
-                ((StructureObject)first).slots[0] = second;
-                return second;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STRUCTURE_OBJECT));
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                // Shouldn't happen.
-                return signal(new LispError("internal error"));
-            }
-        }
-    };
-
-    private static final Primitive1 _STRUCTURE_SET_1 =
-        new Primitive1("%structure-set-1", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            try {
-                ((StructureObject)first).slots[1] = second;
-                return second;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STRUCTURE_OBJECT));
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                // Shouldn't happen.
-                return signal(new LispError("internal error"));
-            }
-        }
-    };
-
-    private static final Primitive1 _STRUCTURE_SET_2 =
-        new Primitive1("%structure-set-2", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            try {
-                ((StructureObject)first).slots[2] = second;
-                return second;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STRUCTURE_OBJECT));
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                // Shouldn't happen.
-                return signal(new LispError("internal error"));
+                return signal(new LispError("Internal error."));
             }
         }
     };
