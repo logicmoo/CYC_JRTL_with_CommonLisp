@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.735 2005-02-12 02:15:49 piso Exp $
+ * $Id: Primitives.java,v 1.736 2005-02-12 20:59:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1794,10 +1794,16 @@ public final class Primitives extends Lisp
     // ### array-rank
     // array-rank array => rank
     private static final Primitive ARRAY_RANK =
-        new Primitive("array-rank", "array") {
+        new Primitive("array-rank", "array")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new Fixnum(checkArray(arg).getRank());
+            try {
+                return new Fixnum(((AbstractArray)arg).getRank());
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.ARRAY));
+            }
         }
     };
 
@@ -1805,21 +1811,42 @@ public final class Primitives extends Lisp
     // array-dimensions array => dimensions
     // Returns a list of integers. Fill pointer (if any) is ignored.
     private static final Primitive ARRAY_DIMENSIONS =
-        new Primitive("array-dimensions", "array") {
+        new Primitive("array-dimensions", "array")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return checkArray(arg).getDimensions();
+            try {
+                return ((AbstractArray)arg).getDimensions();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.ARRAY));
+            }
         }
     };
 
     // ### array-dimension
     // array-dimension array axis-number => dimension
     private static final Primitive ARRAY_DIMENSION =
-        new Primitive("array-dimension", "array axis-number") {
+        new Primitive("array-dimension", "array axis-number")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return new Fixnum(checkArray(first).getDimension(Fixnum.getValue(second)));
+            final AbstractArray array;
+            try {
+                array = (AbstractArray) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.ARRAY));
+            }
+            final int n;
+            try {
+                n = ((Fixnum)second).value;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(second, Symbol.FIXNUM));
+            }
+            return new Fixnum(array.getDimension(n));
         }
     };
 
