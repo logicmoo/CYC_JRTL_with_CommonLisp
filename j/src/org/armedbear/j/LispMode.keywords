@@ -200,6 +200,7 @@ gethash
 go
 handler-bind
 handler-case
+hash-table-p
 host-namestring
 identity
 if
