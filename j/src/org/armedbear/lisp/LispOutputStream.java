@@ -2,7 +2,7 @@
  * LispOutputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispOutputStream.java,v 1.1 2003-09-28 19:51:01 piso Exp $
+ * $Id: LispOutputStream.java,v 1.2 2003-09-29 12:58:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,4 +23,5 @@ package org.armedbear.lisp;
 
 public abstract class LispOutputStream extends LispStream
 {
+    public abstract void flushOutput() throws ConditionThrowable;
 }
