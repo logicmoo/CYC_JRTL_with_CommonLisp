@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.253 2004-07-30 16:03:18 piso Exp $
+;;; $Id: jvm.lisp,v 1.254 2004-07-30 16:52:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1454,6 +1454,7 @@
 (defvar *declared-symbols* nil)
 (defvar *declared-functions* nil)
 (defvar *declared-strings* nil)
+(defvar *declared-fixnums* nil)
 
 (defun declare-symbol (symbol)
   (let ((g (gethash symbol *declared-symbols*)))
@@ -1564,37 +1565,34 @@
     g))
 
 (defun declare-fixnum (n)
-  (let ((g (symbol-name (gensym)))
-        (*code* *static-code*))
-    (declare-field g +lisp-fixnum+)
-    (emit 'new +lisp-fixnum-class+)
-    (emit 'dup)
-    (case n
-      (-1
-       (emit 'iconst_m1))
-      (0
-       (emit 'iconst_0))
-      (1
-       (emit 'iconst_1))
-      (2
-       (emit 'iconst_2))
-      (3
-       (emit 'iconst_3))
-      (4
-       (emit 'iconst_4))
-      (5
-       (emit 'iconst_5))
-      (t
-       (emit 'ldc (pool-int n))))
-    (emit-invokespecial +lisp-fixnum-class+
-                        "<init>"
-                        "(I)V"
-                        -2)
-    (emit 'putstatic
-          *this-class*
-          g
-          +lisp-fixnum+)
-    (setf *static-code* *code*)
+  (let ((g (gethash n *declared-fixnums*)))
+    (unless g
+      (let ((*code* *static-code*))
+        (setf g (symbol-name (gensym)))
+        (declare-field g +lisp-fixnum+)
+        (emit 'new +lisp-fixnum-class+)
+        (emit 'dup)
+        (case n
+          (-1
+           (emit 'iconst_m1))
+          (0
+           (emit 'iconst_0))
+          (1
+           (emit 'iconst_1))
+          (2
+           (emit 'iconst_2))
+          (3
+           (emit 'iconst_3))
+          (4
+           (emit 'iconst_4))
+          (5
+           (emit 'iconst_5))
+          (t
+           (emit 'ldc (pool-int n))))
+        (emit-invokespecial +lisp-fixnum-class+ "<init>" "(I)V" -2)
+        (emit 'putstatic *this-class* g +lisp-fixnum+)
+        (setf *static-code* *code*)
+        (setf (gethash n *declared-fixnums*) g)))
     g))
 
 (defun declare-object-as-string (obj)
@@ -3764,6 +3762,7 @@
              (*declared-symbols* (make-hash-table :test 'eq))
              (*declared-functions* (make-hash-table :test 'equal))
              (*declared-strings* (make-hash-table :test 'eq))
+             (*declared-fixnums* (make-hash-table :test 'eql))
              (class-name
               (let* ((pathname (pathname classfile))
                      (name (pathname-name classfile)))
