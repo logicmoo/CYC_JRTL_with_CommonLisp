@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.15 2002-12-15 02:24:00 piso Exp $
+ * $Id: LispShell.java,v 1.16 2002-12-15 02:55:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,11 +140,6 @@ public final class LispShell extends Shell
             sendInputToLisp(s);
         } else
             indentLineAtDot(editor);
-    }
-
-    public void eval(String input)
-    {
-        send(input);
     }
 
     protected void stdOutUpdate(final String s)
