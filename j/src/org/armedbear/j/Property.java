@@ -1,8 +1,8 @@
 /*
  * Property.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.17 2003-05-15 12:47:05 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: Property.java,v 1.18 2003-05-21 14:08:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -240,6 +240,8 @@ public final class Property implements Comparable, Constants
         createProperty("textFieldFontName", "Monospaced");
 
     // String properties with no default values.
+    public static final Property ATTRIBUTION =
+        createProperty("attribution");
     public static final Property BACKUP_DIRECTORY =
         createProperty("backupDirectory");
     public static final Property BROWSER =
