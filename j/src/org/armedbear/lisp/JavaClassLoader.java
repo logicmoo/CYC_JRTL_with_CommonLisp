@@ -2,7 +2,7 @@
  * JavaClassLoader.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: JavaClassLoader.java,v 1.8 2004-08-11 11:04:08 asimon Exp $
+ * $Id: JavaClassLoader.java,v 1.9 2004-08-24 18:22:35 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,10 @@ package org.armedbear.lisp;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
+
 
 public class JavaClassLoader extends ClassLoader
 {
@@ -39,14 +43,29 @@ public class JavaClassLoader extends ClassLoader
 
     private static JavaClassLoader persistentInstance;
 
+    private static Set packages = Collections.synchronizedSet(new HashSet());
+
     public static JavaClassLoader getPersistentInstance()
     {
-        if (persistentInstance == null) {
+        return getPersistentInstance(null);
+    }
+
+    public static JavaClassLoader getPersistentInstance(String packageName)
+    {
+        if (persistentInstance == null)
             persistentInstance = new JavaClassLoader();
-	    persistentInstance.definePackage("lisp","","1.0","","","1.0","",null);
-        }
+	definePackage(packageName);
         return persistentInstance;
     }
+
+    private static void definePackage(String packageName)
+    {
+        if (packageName != null && !packages.contains(packageName)) {
+            persistentInstance.definePackage(packageName,"","1.0","","","1.0","",null);
+            packages.add(packageName);
+        }
+    }
+    
 
     protected Class loadClassFromFile(File file)
     {

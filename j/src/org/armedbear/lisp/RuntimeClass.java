@@ -2,7 +2,7 @@
  * RuntimeClass.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: RuntimeClass.java,v 1.6 2004-02-23 00:09:13 piso Exp $
+ * $Id: RuntimeClass.java,v 1.7 2004-08-24 18:22:36 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,9 +85,10 @@ public class RuntimeClass extends Lisp
         public LispObject execute(LispObject className, LispObject classBytes) throws ConditionThrowable
         {
             String cn = className.getStringValue();
+	    String pn = cn.substring(0,cn.lastIndexOf('.'));
 	    byte[] cb = (byte[]) classBytes.javaInstance();
             try {
-                JavaClassLoader loader = JavaClassLoader.getPersistentInstance();
+                JavaClassLoader loader = JavaClassLoader.getPersistentInstance(pn);
                 Class c = loader.loadClassFromByteArray(cn, cb);
                 if (c != null) {
                     return T;
@@ -123,7 +124,7 @@ public class RuntimeClass extends Lisp
 
     public static final LispObject makeLispObject(Object obj) throws ConditionThrowable
     {
-         return new JavaObject(obj);
+        return new JavaObject(obj);
     }
 
     public static final Fixnum makeLispObject(byte i) throws ConditionThrowable
