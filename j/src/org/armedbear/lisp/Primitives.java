@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.457 2003-10-01 22:56:43 piso Exp $
+ * $Id: Primitives.java,v 1.458 2003-10-01 23:04:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,42 +53,41 @@ public final class Primitives extends Module
     private static final int CONSP                      = 19;
     private static final int EVAL                       = 20;
     private static final int EVENP                      = 21;
-    private static final int FBOUNDP                    = 22;
-    private static final int FMAKUNBOUND                = 23;
-    private static final int FOURTH                     = 24;
-    private static final int FUNCTIONP                  = 25;
-    private static final int IDENTITY                   = 26;
-    private static final int KEYWORDP                   = 27;
-    private static final int LENGTH                     = 28;
-    private static final int LISTP                      = 29;
-    private static final int LOWER_CASE_P               = 30;
-    private static final int MAKE_SYMBOL                = 31;
-    private static final int MAKUNBOUND                 = 32;
-    private static final int NUMBERP                    = 33;
-    private static final int ODDP                       = 34;
-    private static final int PREDECESSOR                = 35;
-    private static final int SECOND                     = 36;
-    private static final int SIMPLE_BIT_VECTOR_P        = 37;
-    private static final int SIMPLE_STRING_P            = 38;
-    private static final int SIMPLE_VECTOR_P            = 39;
-    private static final int SPECIAL_OPERATOR_P         = 40;
-    private static final int STRINGP                    = 41;
-    private static final int SUCCESSOR                  = 42;
-    private static final int SYMBOL_FUNCTION            = 43;
-    private static final int SYMBOL_NAME                = 44;
-    private static final int SYMBOL_PACKAGE             = 45;
-    private static final int SYMBOL_PLIST               = 46;
-    private static final int SYMBOL_VALUE               = 47;
-    private static final int THIRD                      = 48;
-    private static final int UPPER_CASE_P               = 49;
-    private static final int VALUES_LIST                = 50;
-    private static final int VECTORP                    = 51;
+    private static final int FMAKUNBOUND                = 22;
+    private static final int FOURTH                     = 23;
+    private static final int FUNCTIONP                  = 24;
+    private static final int IDENTITY                   = 25;
+    private static final int KEYWORDP                   = 26;
+    private static final int LENGTH                     = 27;
+    private static final int LISTP                      = 28;
+    private static final int LOWER_CASE_P               = 29;
+    private static final int MAKE_SYMBOL                = 30;
+    private static final int MAKUNBOUND                 = 31;
+    private static final int NUMBERP                    = 32;
+    private static final int ODDP                       = 33;
+    private static final int PREDECESSOR                = 34;
+    private static final int SECOND                     = 35;
+    private static final int SIMPLE_BIT_VECTOR_P        = 36;
+    private static final int SIMPLE_STRING_P            = 37;
+    private static final int SIMPLE_VECTOR_P            = 38;
+    private static final int SPECIAL_OPERATOR_P         = 39;
+    private static final int STRINGP                    = 40;
+    private static final int SUCCESSOR                  = 41;
+    private static final int SYMBOL_FUNCTION            = 42;
+    private static final int SYMBOL_NAME                = 43;
+    private static final int SYMBOL_PACKAGE             = 44;
+    private static final int SYMBOL_PLIST               = 45;
+    private static final int SYMBOL_VALUE               = 46;
+    private static final int THIRD                      = 47;
+    private static final int UPPER_CASE_P               = 48;
+    private static final int VALUES_LIST                = 49;
+    private static final int VECTORP                    = 50;
 
     // Primitive2
-    private static final int MEMBER                     = 52;
-    private static final int RPLACA                     = 53;
-    private static final int RPLACD                     = 54;
-    private static final int SET                        = 55;
+    private static final int MEMBER                     = 51;
+    private static final int RPLACA                     = 52;
+    private static final int RPLACD                     = 53;
+    private static final int SET                        = 54;
 
     private Primitives()
     {
@@ -116,7 +115,6 @@ public final class Primitives extends Module
         definePrimitive1("consp", CONSP);
         definePrimitive1("eval", EVAL);
         definePrimitive1("evenp", EVENP);
-        definePrimitive1("fboundp", FBOUNDP);
         definePrimitive1("fmakunbound", FMAKUNBOUND);
         definePrimitive1("fourth", FOURTH);
         definePrimitive1("functionp", FUNCTIONP);
@@ -246,8 +244,6 @@ public final class Primitives extends Module
                 return arg.LISTP();
             case MAKE_SYMBOL:                   // ### make-symbol
                 return new Symbol(LispString.getValue(arg));
-            case FBOUNDP:                       // ### fboundp
-                return arg.getSymbolFunction() != null ? T : NIL;
             case MAKUNBOUND:                    // ### makunbound
                 checkSymbol(arg).setSymbolValue(null);
                 return arg;
@@ -734,6 +730,22 @@ public final class Primitives extends Module
             if (LispThread.currentThread().lookupSpecial(symbol) != null)
                 return T;
             return symbol.getSymbolValue() != null ? T : NIL;
+        }
+    };
+
+    // ### fboundp
+    private static final Primitive1 FBOUNDP = new Primitive1("fboundp")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof Symbol)
+                return arg.getSymbolFunction() != null ? T : NIL;
+            if (arg instanceof Cons && arg.car() == Symbol.SETF) {
+                LispObject f = get(checkSymbol(arg.cadr()),
+                                   PACKAGE_SYS.intern("SETF-FUNCTION"));
+                return f != null ? T : NIL;
+            }
+            throw new ConditionThrowable(new TypeError(arg, "valid function name"));
         }
     };
 
