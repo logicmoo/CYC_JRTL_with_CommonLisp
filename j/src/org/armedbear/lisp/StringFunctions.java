@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.22 2004-02-25 01:26:38 piso Exp $
+ * $Id: StringFunctions.java,v 1.23 2004-02-25 01:41:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,12 +41,14 @@ public final class StringFunctions extends Lisp
             if ((end1 - start1) != (end2 - start2))
                 return NIL;
             try {
-                for (int i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                for (int i = start1, j = start2; i < end1; i++, j++) {
                     if (array1[i] != array2[j])
                         return NIL;
                 }
             }
             catch (ArrayIndexOutOfBoundsException e) {
+                // Shouldn't happen.
+                Debug.trace(e);
                 return NIL;
             }
             return T;
@@ -107,7 +109,7 @@ public final class StringFunctions extends Lisp
             if ((end1 - start1) != (end2 - start2))
                 return NIL;
             int i, j;
-            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+            for (i = start1, j = start2; i < end1; i++, j++) {
                 char c1 = array1[i];
                 char c2 = array2[j];
                 if (c1 == c2)
