@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.7 2003-11-15 15:26:12 piso Exp $
+;;; $Id: precompiler.lisp,v 1.8 2003-11-17 01:44:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -237,14 +237,26 @@
   (let ((args (cdr form)))
     (case (length args)
       (2
-       (list 'IF
-             (precompile1 (car args))
-             (precompile1 (cadr args))))
+       (let ((test (precompile1 (car args))))
+         (cond ((null test)
+                nil)
+               ((constantp test)
+                (precompile1 (cadr args)))
+               (t
+                (list 'IF
+                      test
+                      (precompile1 (cadr args)))))))
       (3
-       (list 'IF
-             (precompile1 (car args))
-             (precompile1 (cadr args))
-             (precompile1 (caddr args))))
+       (let ((test (precompile1 (car args))))
+         (cond ((null test)
+                (precompile1 (caddr args)))
+               ((constantp test)
+                (precompile1 (cadr args)))
+               (t
+                (list 'IF
+                      test
+                      (precompile1 (cadr args))
+                      (precompile1 (caddr args)))))))
       (t
        (error "wrong number of arguments for IF")))))
 
