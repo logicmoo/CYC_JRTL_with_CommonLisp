@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.11 2003-07-19 00:14:44 piso Exp $
+ * $Id: LispAPI.java,v 1.12 2003-07-19 01:12:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,9 +197,9 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### current-point
-    private static final Primitive0 CURRENT_POINT =
-        new Primitive0("current-point", PACKAGE_J, true) {
+    // ### point
+    private static final Primitive0 POINT =
+        new Primitive0("point", PACKAGE_J, true) {
         public LispObject execute()
         {
             Editor editor = Editor.currentEditor();
@@ -225,10 +225,31 @@ public final class LispAPI extends Lisp
 
     // ### line-flags
     private static final Primitive1 LINE_FLAGS =
-        new Primitive1("LINE-FLAGS", PACKAGE_J, true) {
+        new Primitive1("line-flags", PACKAGE_J, true) {
         public LispObject execute(LispObject arg) throws LispError
         {
             return number(checkLine(arg).flags());
+        }
+    };
+
+    // ### char-after
+    // Returns character immediately after marker.
+    private static final Primitive1 CHAR_AFTER =
+        new Primitive1("char-after", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return new LispCharacter(checkMarker(arg).getChar());
+        }
+    };
+
+    // ### char-before
+    // Returns character immediately before marker.
+    private static final Primitive1 CHAR_BEFORE =
+        new Primitive1("char-before", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            Position pos = checkMarker(arg).copy();
+            return pos.prev() ? new LispCharacter(pos.getChar()) : NIL;
         }
     };
 
