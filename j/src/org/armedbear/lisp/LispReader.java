@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.15 2004-03-12 01:57:49 piso Exp $
+ * $Id: LispReader.java,v 1.16 2004-03-12 16:45:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public final class LispReader extends Lisp
         new ReaderMacroFunction("read-string", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char ignored)
+        public LispObject execute(Stream stream, char terminator)
             throws ConditionThrowable
         {
             StringBuffer sb = new StringBuffer();
@@ -67,7 +67,7 @@ public final class LispReader extends Lisp
                     sb.append((char)n);
                     continue;
                 }
-                if (c == '"')
+                if (c == terminator)
                     break;
                 // Default.
                 sb.append(c);
