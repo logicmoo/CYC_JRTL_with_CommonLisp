@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.87 2004-02-17 16:53:15 piso Exp $
+;;; $Id: clos.lisp,v 1.88 2004-02-19 15:38:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1281,16 +1281,23 @@
       (return t))))
 
 (defun std-compute-discriminating-function (gf)
-  (if (methods-contain-eql-specializer-p (generic-function-methods gf))
-      #'(lambda (&rest args)
-         (slow-method-lookup gf args nil))
-      #'(lambda (&rest args)
-         (let* ((classes (mapcar #'class-of
-                                 (required-portion gf args)))
-                (emfun (gethash classes (classes-to-emf-table gf) nil)))
-           (if emfun
-               (funcall emfun args)
-               (slow-method-lookup gf args classes))))))
+  (let ((code
+         (if (methods-contain-eql-specializer-p (generic-function-methods gf))
+             (make-closure `(lambda (&rest args)
+                              (slow-method-lookup ,gf args nil))
+                           nil)
+             (make-closure
+              `(lambda (&rest args)
+                 (let* ((classes (mapcar #'class-of (required-portion ,gf args)))
+                        (emfun (gethash classes (classes-to-emf-table ,gf) nil)))
+                   (if emfun
+                       (funcall emfun args)
+                       (slow-method-lookup ,gf args classes))))
+              nil))))
+    (when (and (fboundp 'jvm:jvm-compile)
+               (not (autoloadp 'jvm:jvm-compile)))
+      (setf code (jvm:jvm-compile nil code)))
+    code))
 
 (defun method-applicable-p (method args)
   (do* ((specializers (method-specializers method) (cdr specializers))
