@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.95 2005-02-10 12:56:42 piso Exp $
+ * $Id: Load.java,v 1.96 2005-02-28 02:50:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,7 +133,7 @@ public final class Load extends Lisp
     {
         LispThread thread = LispThread.currentThread();
         if (auto) {
-            Binding lastSpecialBinding = thread.lastSpecialBinding;
+            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             thread.bindSpecial(_READTABLE_,
                                Readtable._STANDARD_READTABLE_.symbolValue(thread));
             thread.bindSpecial(_PACKAGE_, PACKAGE_CL_USER);
@@ -208,7 +208,7 @@ public final class Load extends Lisp
             }
             if (in != null) {
                 final LispThread thread = LispThread.currentThread();
-                final Binding lastSpecialBinding = thread.lastSpecialBinding;
+                final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                 thread.bindSpecial(_WARN_ON_REDEFINITION_, NIL);
                 try {
                     return loadFileFromStream(pathname, truename, in, verbose, print, auto);
@@ -283,7 +283,7 @@ public final class Load extends Lisp
     {
         long start = System.currentTimeMillis();
         LispThread thread = LispThread.currentThread();
-        Binding lastSpecialBinding = thread.lastSpecialBinding;
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_PACKAGE_, _PACKAGE_.symbolValue(thread));
         int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue(thread));
         thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
@@ -358,7 +358,7 @@ public final class Load extends Lisp
     {
         Stream in = new Stream(inputStream, Symbol.CHARACTER);
         final LispThread thread = LispThread.currentThread();
-        Binding lastSpecialBinding = thread.lastSpecialBinding;
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_LOAD_STREAM_, in);
         try {
             final Environment env = new Environment();

@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: TypeError.java,v 1.24 2004-11-13 15:02:01 piso Exp $
+ * $Id: TypeError.java,v 1.25 2005-02-28 02:50:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,7 +98,7 @@ public class TypeError extends LispError
         // FIXME
         try {
             final LispThread thread = LispThread.currentThread();
-            final Binding lastSpecialBinding = thread.lastSpecialBinding;
+            final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             thread.bindSpecial(_PRINT_ESCAPE_, T);
             try {
                 String s = super.getMessage();

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.739 2005-02-27 20:02:40 piso Exp $
+ * $Id: Primitives.java,v 1.740 2005-02-28 02:50:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -749,7 +749,7 @@ public final class Primitives extends Lisp
             // PROGV: "If too few values are supplied, the remaining symbols
             // are bound and then made to have no value." So BOUNDP must
             // explicitly check for a binding with no value.
-            Binding binding =
+            SpecialBinding binding =
                 LispThread.currentThread().getSpecialBinding(symbol);
             if (binding != null)
                 return binding.value != null ? T : NIL;
@@ -1466,7 +1466,7 @@ public final class Primitives extends Lisp
                                                   arg);
 
                     } else {
-                        Binding lastSpecialBinding = thread.lastSpecialBinding;
+                        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                         thread.bindSpecial(_PACKAGE_, PACKAGE_CL);
                         try {
                             Symbol.STYLE_WARN.execute(new SimpleString("redefining ~S in ~S"),
@@ -2621,7 +2621,7 @@ public final class Primitives extends Lisp
     private static final Symbol gensym(String prefix) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer(prefix);
-        Binding binding =
+        SpecialBinding binding =
             LispThread.currentThread().getSpecialBinding(_GENSYM_COUNTER_);
         final LispObject oldValue;
         if (binding != null)
@@ -2811,7 +2811,7 @@ public final class Primitives extends Lisp
                 signal(new PackageError("The name " + packageName +
                                         " does not designate any package."));
             LispThread thread = LispThread.currentThread();
-            Binding binding = thread.getSpecialBinding(_PACKAGE_);
+            SpecialBinding binding = thread.getSpecialBinding(_PACKAGE_);
             if (binding != null) {
                 binding.value = pkg;
                 return pkg;
@@ -3184,7 +3184,8 @@ public final class Primitives extends Lisp
     };
 
     // ### block
-    private static final SpecialOperator BLOCK = new SpecialOperator("block", "name &rest forms")
+    private static final SpecialOperator BLOCK =
+        new SpecialOperator("block", "name &rest forms")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3398,7 +3399,7 @@ public final class Primitives extends Lisp
                 } else
                     break;
             }
-            final Binding lastSpecialBinding = thread.lastSpecialBinding;
+            final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             final Environment ext = new Environment(env);
             int i = 0;
             LispObject var = vars.car();

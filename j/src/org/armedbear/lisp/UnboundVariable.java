@@ -2,7 +2,7 @@
  * UnboundVariable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: UnboundVariable.java,v 1.11 2004-11-13 15:02:01 piso Exp $
+ * $Id: UnboundVariable.java,v 1.12 2005-02-28 02:50:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ public final class UnboundVariable extends CellError
     public String getMessage()
     {
         LispThread thread = LispThread.currentThread();
-        Binding lastSpecialBinding = thread.lastSpecialBinding;
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_PRINT_ESCAPE_, T);
         StringBuffer sb = new StringBuffer("The variable ");
         // FIXME

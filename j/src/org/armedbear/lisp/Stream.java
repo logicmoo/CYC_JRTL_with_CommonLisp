@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.114 2005-02-24 00:36:12 piso Exp $
+ * $Id: Stream.java,v 1.115 2005-02-28 02:50:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1170,7 +1170,7 @@ public class Stream extends LispObject
     public void prin1(LispObject obj) throws ConditionThrowable
     {
         LispThread thread = LispThread.currentThread();
-        Binding lastSpecialBinding = thread.lastSpecialBinding;
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_PRINT_ESCAPE_, T);
         String s = obj.writeToString();
         thread.lastSpecialBinding = lastSpecialBinding;

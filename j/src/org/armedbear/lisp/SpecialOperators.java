@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SpecialOperators.java,v 1.33 2005-02-27 20:03:42 piso Exp $
+ * $Id: SpecialOperators.java,v 1.34 2005-02-28 02:50:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,7 +83,7 @@ public final class SpecialOperators extends Lisp
     {
         LispObject result = NIL;
         final LispThread thread = LispThread.currentThread();
-        final Binding lastSpecialBinding = thread.lastSpecialBinding;
+        final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         try {
             LispObject varList = checkList(args.car());
             LispObject body = args.cdr();
@@ -187,7 +187,7 @@ public final class SpecialOperators extends Lisp
             final LispThread thread = LispThread.currentThread();
             LispObject result = NIL;
             if (varList != NIL) {
-                Binding lastSpecialBinding = thread.lastSpecialBinding;
+                SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                 try {
                     Environment ext = new Environment(env);
                     Environment evalEnv = sequential ? ext : env;
@@ -309,7 +309,7 @@ public final class SpecialOperators extends Lisp
         final LispThread thread = LispThread.currentThread();
         LispObject result;
         if (defs != NIL) {
-            Binding lastSpecialBinding = thread.lastSpecialBinding;
+            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             Environment ext = new Environment(env);
             while (defs != NIL) {
                 final LispObject def = checkList(defs.car());
@@ -384,7 +384,7 @@ public final class SpecialOperators extends Lisp
             final LispThread thread = LispThread.currentThread();
             final LispObject symbols = checkList(eval(args.car(), env, thread));
             LispObject values = checkList(eval(args.cadr(), env, thread));
-            Binding lastSpecialBinding = thread.lastSpecialBinding;
+            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             try {
                 // Set up the new bindings.
                 for (LispObject list = symbols; list != NIL; list = list.cdr()) {
@@ -491,34 +491,77 @@ public final class SpecialOperators extends Lisp
                         " is a constant and thus cannot be set."));
                 }
                 args = args.cdr();
-                Binding binding = null;
+//                 Binding binding = null;
                 if (symbol.isSpecialVariable() || env.isDeclaredSpecial(symbol)) {
-                    binding = thread.getSpecialBinding(symbol);
+//                     binding = thread.getSpecialBinding(symbol);
+                    SpecialBinding binding = thread.getSpecialBinding(symbol);
+                    if (binding != null) {
+                        if (binding.value instanceof SymbolMacro) {
+                            LispObject expansion =
+                                ((SymbolMacro)binding.value).getExpansion();
+                            LispObject form = list3(Symbol.SETF, expansion, args.car());
+                            value = eval(form, env, thread);
+                        } else {
+                            value = eval(args.car(), env, thread);
+                            binding.value = value;
+                        }
+                    } else {
+                        if (symbol.getSymbolValue() instanceof SymbolMacro) {
+                            LispObject expansion =
+                                ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
+                            LispObject form = list3(Symbol.SETF, expansion, args.car());
+                            value = eval(form, env, thread);
+                        } else {
+                            value = eval(args.car(), env, thread);
+                            symbol.setSymbolValue(value);
+                        }
+                    }
                 } else {
                     // Not special.
-                    binding = env.getBinding(symbol);
-                }
-                if (binding != null) {
-                    if (binding.value instanceof SymbolMacro) {
-                        LispObject expansion =
-                            ((SymbolMacro)binding.value).getExpansion();
-                        LispObject form = list3(Symbol.SETF, expansion, args.car());
-                        value = eval(form, env, thread);
+                    Binding binding = env.getBinding(symbol);
+                    if (binding != null) {
+                        if (binding.value instanceof SymbolMacro) {
+                            LispObject expansion =
+                                ((SymbolMacro)binding.value).getExpansion();
+                            LispObject form = list3(Symbol.SETF, expansion, args.car());
+                            value = eval(form, env, thread);
+                        } else {
+                            value = eval(args.car(), env, thread);
+                            binding.value = value;
+                        }
                     } else {
-                        value = eval(args.car(), env, thread);
-                        binding.value = value;
-                    }
-                } else {
-                    if (symbol.getSymbolValue() instanceof SymbolMacro) {
-                        LispObject expansion =
-                            ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
-                        LispObject form = list3(Symbol.SETF, expansion, args.car());
-                        value = eval(form, env, thread);
-                    } else {
-                        value = eval(args.car(), env, thread);
-                        symbol.setSymbolValue(value);
+                        if (symbol.getSymbolValue() instanceof SymbolMacro) {
+                            LispObject expansion =
+                                ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
+                            LispObject form = list3(Symbol.SETF, expansion, args.car());
+                            value = eval(form, env, thread);
+                        } else {
+                            value = eval(args.car(), env, thread);
+                            symbol.setSymbolValue(value);
+                        }
                     }
                 }
+//                 if (binding != null) {
+//                     if (binding.value instanceof SymbolMacro) {
+//                         LispObject expansion =
+//                             ((SymbolMacro)binding.value).getExpansion();
+//                         LispObject form = list3(Symbol.SETF, expansion, args.car());
+//                         value = eval(form, env, thread);
+//                     } else {
+//                         value = eval(args.car(), env, thread);
+//                         binding.value = value;
+//                     }
+//                 } else {
+//                     if (symbol.getSymbolValue() instanceof SymbolMacro) {
+//                         LispObject expansion =
+//                             ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
+//                         LispObject form = list3(Symbol.SETF, expansion, args.car());
+//                         value = eval(form, env, thread);
+//                     } else {
+//                         value = eval(args.car(), env, thread);
+//                         symbol.setSymbolValue(value);
+//                     }
+//                 }
                 args = args.cdr();
             }
             // Return primary value only!

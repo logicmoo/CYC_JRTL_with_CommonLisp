@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Do.java,v 1.11 2004-11-13 15:01:57 piso Exp $
+ * $Id: Do.java,v 1.12 2005-02-28 02:50:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ public final class Do extends Lisp
             varList = varList.cdr();
         }
         final LispThread thread = LispThread.currentThread();
-        Binding lastSpecialBinding = thread.lastSpecialBinding;
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         // Process declarations.
         LispObject specials = NIL;
         while (body != NIL) {

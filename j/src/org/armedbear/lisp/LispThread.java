@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispThread.java,v 1.75 2005-02-26 17:28:15 piso Exp $
+ * $Id: LispThread.java,v 1.76 2005-02-28 02:50:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public final class LispThread extends LispObject
     private final Thread javaThread;
     private boolean destroyed;
     private final LispObject name;
-    public Binding lastSpecialBinding;
+    public SpecialBinding lastSpecialBinding;
     public LispObject[] _values;
     private boolean threadInterrupted;
     private LispObject pending = NIL;
@@ -290,79 +290,79 @@ public final class LispThread extends LispObject
         return obj;
     }
 
-    public final void bindSpecial(Symbol symbol, LispObject value)
+    public final void bindSpecial(Symbol name, LispObject value)
     {
-        lastSpecialBinding = new Binding(symbol, value, lastSpecialBinding);
+        lastSpecialBinding = new SpecialBinding(name, value, lastSpecialBinding);
     }
 
-    public final void bindSpecialToCurrentValue(Symbol symbol)
+    public final void bindSpecialToCurrentValue(Symbol name)
     {
-        Binding binding = lastSpecialBinding;
+        SpecialBinding binding = lastSpecialBinding;
         while (binding != null) {
-            if (binding.symbol == symbol) {
+            if (binding.name == name) {
                 lastSpecialBinding =
-                    new Binding(symbol, binding.value, lastSpecialBinding);
+                    new SpecialBinding(name, binding.value, lastSpecialBinding);
                 return;
             }
             binding = binding.next;
         }
         // Not found.
         lastSpecialBinding =
-            new Binding(symbol, symbol.getSymbolValue(), lastSpecialBinding);
+            new SpecialBinding(name, name.getSymbolValue(), lastSpecialBinding);
     }
 
-    public final LispObject lookupSpecial(LispObject symbol)
+    public final LispObject lookupSpecial(LispObject name)
     {
-        Binding binding = lastSpecialBinding;
+        SpecialBinding binding = lastSpecialBinding;
         while (binding != null) {
-            if (binding.symbol == symbol)
+            if (binding.name == name)
                 return binding.value;
             binding = binding.next;
         }
         return null;
     }
 
-    public final Binding getSpecialBinding(LispObject symbol)
+    public final SpecialBinding getSpecialBinding(LispObject name)
     {
-        Binding binding = lastSpecialBinding;
+        SpecialBinding binding = lastSpecialBinding;
         while (binding != null) {
-            if (binding.symbol == symbol)
+            if (binding.name == name)
                 return binding;
             binding = binding.next;
         }
         return null;
     }
 
-    public final LispObject setSpecialVariable(Symbol symbol, LispObject value)
+    public final LispObject setSpecialVariable(Symbol name, LispObject value)
     {
-        Binding binding = lastSpecialBinding;
+        SpecialBinding binding = lastSpecialBinding;
         while (binding != null) {
-            if (binding.symbol == symbol) {
+            if (binding.name == name) {
                 binding.value = value;
                 return value;
             }
             binding = binding.next;
         }
-        symbol.setSymbolValue(value);
+        name.setSymbolValue(value);
         return value;
     }
 
     // Returns symbol value or NIL if unbound.
-    public final LispObject safeSymbolValue(Symbol symbol)
+    public final LispObject safeSymbolValue(Symbol name)
     {
-        Binding binding = lastSpecialBinding;
+        SpecialBinding binding = lastSpecialBinding;
         while (binding != null) {
-            if (binding.symbol == symbol)
+            if (binding.name == name)
                 return binding.value;
             binding = binding.next;
         }
-        LispObject value = symbol.getSymbolValue();
+        LispObject value = name.getSymbolValue();
         return value != null ? value : NIL;
     }
 
-    public final void rebindSpecial(Symbol symbol, LispObject value)
+    public final void rebindSpecial(Symbol name, LispObject value)
     {
-        Binding binding = getSpecialBinding(symbol);
+        SpecialBinding binding = getSpecialBinding(name);
         binding.value = value;
     }
 

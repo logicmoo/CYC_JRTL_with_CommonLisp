@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.324 2005-02-27 20:10:54 piso Exp $
+ * $Id: Lisp.java,v 1.325 2005-02-28 02:50:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1240,7 +1240,7 @@ public abstract class Lisp
                     if (c == 'A' || c == 'a') {
                         if (j < args.length) {
                             LispObject obj = args[j++];
-                            Binding lastSpecialBinding = thread.lastSpecialBinding;
+                            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
                             thread.bindSpecial(_PRINT_READABLY_, NIL);
                             sb.append(obj.writeToString());
@@ -1249,7 +1249,7 @@ public abstract class Lisp
                     } else if (c == 'S' || c == 's') {
                         if (j < args.length) {
                             LispObject obj = args[j++];
-                            Binding lastSpecialBinding = thread.lastSpecialBinding;
+                            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(_PRINT_ESCAPE_, T);
                             sb.append(obj.writeToString());
                             thread.lastSpecialBinding = lastSpecialBinding;
@@ -1257,7 +1257,7 @@ public abstract class Lisp
                     } else if (c == 'D' || c == 'd') {
                         if (j < args.length) {
                             LispObject obj = args[j++];
-                            Binding lastSpecialBinding = thread.lastSpecialBinding;
+                            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
                             thread.bindSpecial(_PRINT_RADIX_, NIL);
                             thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
@@ -1267,7 +1267,7 @@ public abstract class Lisp
                     } else if (c == 'X' || c == 'x') {
                         if (j < args.length) {
                             LispObject obj = args[j++];
-                            Binding lastSpecialBinding = thread.lastSpecialBinding;
+                            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
                             thread.bindSpecial(_PRINT_RADIX_, NIL);
                             thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));

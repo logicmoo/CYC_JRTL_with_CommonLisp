@@ -2,7 +2,7 @@
  * dotimes.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: dotimes.java,v 1.13 2004-11-13 15:02:01 piso Exp $
+ * $Id: dotimes.java,v 1.14 2005-02-28 02:50:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public final class dotimes extends SpecialOperator
         LispObject countForm = args.cadr();
         final LispThread thread = LispThread.currentThread();
         LispObject resultForm = args.cdr().cdr().car();
-        Binding lastSpecialBinding = thread.lastSpecialBinding;
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         final LispObject stack = thread.getStack();
         // Process declarations.
         LispObject specials = NIL;
@@ -79,7 +79,7 @@ public final class dotimes extends SpecialOperator
             ext.addBlock(NIL, new LispObject());
             LispObject result;
             // Establish a reusable binding.
-            final Binding binding;
+            final Object binding;
             if (specials != NIL && memq(var, specials)) {
                 thread.bindSpecial(var, null);
                 binding = thread.getSpecialBinding(var);
@@ -95,7 +95,10 @@ public final class dotimes extends SpecialOperator
                 int count = ((Fixnum)limit).value;
                 int i;
                 for (i = 0; i < count; i++) {
-                    binding.value = new Fixnum(i);
+                    if (binding instanceof SpecialBinding)
+                        ((SpecialBinding)binding).value = new Fixnum(i);
+                    else
+                        ((Binding)binding).value = new Fixnum(i);
                     LispObject body = bodyForm;
                     while (body != NIL) {
                         LispObject current = body.car();
@@ -133,12 +136,18 @@ public final class dotimes extends SpecialOperator
                     if (interrupted)
                         handleInterrupt();
                 }
-                binding.value = new Fixnum(i);
+                if (binding instanceof SpecialBinding)
+                    ((SpecialBinding)binding).value = new Fixnum(i);
+                else
+                    ((Binding)binding).value = new Fixnum(i);
                 result = eval(resultForm, ext, thread);
             } else if (limit instanceof Bignum) {
                 LispObject i = Fixnum.ZERO;
                 while (i.isLessThan(limit)) {
-                    binding.value = i;
+                    if (binding instanceof SpecialBinding)
+                        ((SpecialBinding)binding).value = i;
+                    else
+                        ((Binding)binding).value = i;
                     LispObject body = bodyForm;
                     while (body != NIL) {
                         LispObject current = body.car();
@@ -178,7 +187,10 @@ public final class dotimes extends SpecialOperator
                     if (interrupted)
                         handleInterrupt();
                 }
-                binding.value = i;
+                if (binding instanceof SpecialBinding)
+                    ((SpecialBinding)binding).value = i;
+                else
+                    ((Binding)binding).value = i;
                 result = eval(resultForm, ext, thread);
             } else
                 return signal(new TypeError(limit, Symbol.INTEGER));

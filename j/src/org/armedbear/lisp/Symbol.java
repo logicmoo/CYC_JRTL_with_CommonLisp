@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.173 2005-02-28 00:55:56 piso Exp $
+ * $Id: Symbol.java,v 1.174 2005-02-28 02:50:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -267,7 +267,7 @@ public class Symbol extends LispObject
     public LispObject getDescription() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        Binding lastSpecialBinding = thread.lastSpecialBinding;
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_PRINT_ESCAPE_, NIL);
         try {
             StringBuffer sb = new StringBuffer("The symbol ");

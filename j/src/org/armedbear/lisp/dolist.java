@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: dolist.java,v 1.10 2004-11-13 15:02:01 piso Exp $
+ * $Id: dolist.java,v 1.11 2005-02-28 02:50:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public final class dolist extends SpecialOperator
         LispObject listForm = args.cadr();
         final LispThread thread = LispThread.currentThread();
         LispObject resultForm = args.cdr().cdr().car();
-        Binding lastSpecialBinding = thread.lastSpecialBinding;
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         final LispObject stack = thread.getStack();
         // Process declarations.
         LispObject specials = NIL;
@@ -77,7 +77,7 @@ public final class dolist extends SpecialOperator
             // Implicit block.
             ext.addBlock(NIL, new LispObject());
             // Establish a reusable binding.
-            final Binding binding;
+            final Object binding;
             if (specials != NIL && memq(var, specials)) {
                 thread.bindSpecial(var, null);
                 binding = thread.getSpecialBinding(var);
@@ -90,7 +90,10 @@ public final class dolist extends SpecialOperator
                 binding = ext.getBinding(var);
             }
             while (list != NIL) {
-                binding.value = list.car();
+                if (binding instanceof SpecialBinding)
+                    ((SpecialBinding)binding).value = list.car();
+                else
+                    ((Binding)binding).value = list.car();
                 LispObject body = bodyForm;
                 while (body != NIL) {
                     LispObject current = body.car();
@@ -125,7 +128,10 @@ public final class dolist extends SpecialOperator
                 if (interrupted)
                     handleInterrupt();
             }
-            binding.value = NIL;
+            if (binding instanceof SpecialBinding)
+                ((SpecialBinding)binding).value = NIL;
+            else
+                ((Binding)binding).value = NIL;
             LispObject result = eval(resultForm, ext, thread);
             return result;
         }

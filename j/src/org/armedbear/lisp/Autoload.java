@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.217 2005-02-27 20:09:49 piso Exp $
+ * $Id: Autoload.java,v 1.218 2005-02-28 02:50:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public class Autoload extends Function
     {
         if (className != null) {
             final LispThread thread = LispThread.currentThread();
-            final Binding lastSpecialBinding = thread.lastSpecialBinding;
+            final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             int loadDepth = Fixnum.getInt(_LOAD_DEPTH_.symbolValue());
             thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
             try {

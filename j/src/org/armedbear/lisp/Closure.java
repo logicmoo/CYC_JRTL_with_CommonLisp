@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.91 2005-02-28 01:11:57 piso Exp $
+ * $Id: Closure.java,v 1.92 2005-02-28 02:50:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -367,7 +367,7 @@ public class Closure extends Function
     {
         if (minArgs == 1) {
             final LispThread thread = LispThread.currentThread();
-            Binding lastSpecialBinding = thread.lastSpecialBinding;
+            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             Environment ext = new Environment(environment);
             if (specials != null) {
                 for (int i = 0; i < specials.length; i++)
@@ -408,7 +408,7 @@ public class Closure extends Function
     {
         if (minArgs == 2) {
             final LispThread thread = LispThread.currentThread();
-            Binding lastSpecialBinding = thread.lastSpecialBinding;
+            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             Environment ext = new Environment(environment);
             if (specials != null) {
                 for (int i = 0; i < specials.length; i++)
@@ -452,7 +452,7 @@ public class Closure extends Function
     {
         if (minArgs == 3) {
             final LispThread thread = LispThread.currentThread();
-            Binding lastSpecialBinding = thread.lastSpecialBinding;
+            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             Environment ext = new Environment(environment);
             if (specials != null) {
                 for (int i = 0; i < specials.length; i++)
@@ -498,7 +498,7 @@ public class Closure extends Function
     {
         if (minArgs == 4) {
             final LispThread thread = LispThread.currentThread();
-            Binding lastSpecialBinding = thread.lastSpecialBinding;
+            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             Environment ext = new Environment(environment);
             if (specials != null) {
                 for (int i = 0; i < specials.length; i++)
@@ -543,7 +543,7 @@ public class Closure extends Function
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        Binding lastSpecialBinding = thread.lastSpecialBinding;
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         if (specials != null) {
             for (int i = 0; i < specials.length; i++)
@@ -617,7 +617,7 @@ public class Closure extends Function
         // The bindings established here (if any) are lost when this function
         // returns. They are used only in the evaluation of initforms for
         // optional and keyword arguments.
-        Binding lastSpecialBinding = thread.lastSpecialBinding;
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         // Section 3.4.4: "...the &environment parameter is bound along with
         // &whole before any other variables in the lambda list..."

@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.53 2004-12-21 18:04:13 piso Exp $
+ * $Id: Cons.java,v 1.54 2005-02-28 02:50:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -473,7 +473,7 @@ public final class Cons extends LispObject
             _CURRENT_PRINT_LEVEL_.symbolValue(thread);
         int currentLevel = Fixnum.getValue(currentPrintLevel);
         if (currentLevel < maxLevel) {
-            Binding lastSpecialBinding = thread.lastSpecialBinding;
+            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
             try {
                 int count = 0;
