@@ -1,8 +1,8 @@
 /*
  * ModeList.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: ModeList.java,v 1.19 2004-06-08 19:20:03 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: ModeList.java,v 1.20 2005-02-17 01:26:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public final class ModeList implements Constants
         addEntry(PROPERTIES_MODE, PROPERTIES_MODE_NAME, "PropertiesMode", true, "(.+\\.config)|(.+\\.co?nf)|(.+\\.cfg)|(.+\\.ini)|(.+\\.properties)|prefs");
         addEntry(PYTHON_MODE, PYTHON_MODE_NAME, "PythonMode", true, ".+\\.py");
         addEntry(RUBY_MODE, RUBY_MODE_NAME, "RubyMode", true, ".+\\.rb");
-        addEntry(SCHEME_MODE, SCHEME_MODE_NAME, "SchemeMode", true, ".+\\.sc[ehm]|.+\\.ss");
+        addEntry(SCHEME_MODE, SCHEME_MODE_NAME, "SchemeMode", true, ".+\\.sc[ehm]?|.+\\.ss");
         addEntry(SEND_MAIL_MODE, SEND_MAIL_MODE_NAME, "mail.SendMailMode", false, null);
         addEntry(SHELL_MODE, SHELL_MODE_NAME, "ShellMode", false, null);
         addEntry(SHELL_SCRIPT_MODE, SHELL_SCRIPT_MODE_NAME, "ShellScriptMode", true, ".+\\.[ck]?sh|\\.bashrc|\\.bash_profile");
