@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.18 2004-02-24 01:54:40 piso Exp $
+ * $Id: StandardObject.java,v 1.19 2004-03-04 02:01:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -206,8 +206,8 @@ public class StandardObject extends LispObject
             throws ConditionThrowable
         {
             try {
-                ((StandardObject)first).slots.set(Fixnum.getValue(second),
-                                                  third);
+                ((StandardObject)first).slots.setRowMajor(Fixnum.getValue(second),
+                                                          third);
                 return third;
             }
             catch (ClassCastException e) {

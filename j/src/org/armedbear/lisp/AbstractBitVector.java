@@ -2,7 +2,7 @@
  * AbstractBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractBitVector.java,v 1.3 2004-02-25 16:58:19 piso Exp $
+ * $Id: AbstractBitVector.java,v 1.4 2004-03-04 02:01:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,7 +180,7 @@ public abstract class AbstractBitVector extends AbstractVector
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         try {
-            return get(((Fixnum)index).value);
+            return getRowMajor(((Fixnum)index).value);
         }
         catch (ClassCastException e) {
             return signal(new TypeError(index, Symbol.FIXNUM));
@@ -199,16 +199,6 @@ public abstract class AbstractBitVector extends AbstractVector
                 result.clearBit(i);
         }
         return result;
-    }
-
-    public LispObject getRowMajor(int index) throws ConditionThrowable
-    {
-        return get(index);
-    }
-
-    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
-    {
-        set(index, newValue);
     }
 
     protected abstract int getBit(int index) throws ConditionThrowable;

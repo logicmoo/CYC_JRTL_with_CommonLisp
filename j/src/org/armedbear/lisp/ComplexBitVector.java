@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.6 2004-02-25 17:29:17 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.7 2004-03-04 02:01:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,10 +113,10 @@ public final class ComplexBitVector extends AbstractBitVector
         // The index < 0 case is checked in get().
         if (index >= length())
             badIndex(index, length());
-        return get(index);
+        return getRowMajor(index);
     }
 
-    public LispObject get(int index) throws ConditionThrowable
+    public LispObject getRowMajor(int index) throws ConditionThrowable
     {
         if (bits != null) {
             if (index < 0 || index >= capacity)
@@ -136,7 +136,7 @@ public final class ComplexBitVector extends AbstractBitVector
             return Fixnum.getValue(array.getRowMajor(index + displacement));
     }
 
-    public void set(int index, LispObject newValue) throws ConditionThrowable
+    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         if (index < 0 || index >= capacity)
             badIndex(index, capacity);
@@ -219,7 +219,7 @@ public final class ComplexBitVector extends AbstractBitVector
             // Need to extend vector.
             ensureCapacity(capacity() * 2 + 1);
         }
-        set(fp, element);
+        setRowMajor(fp, element);
         setFillPointer(fp + 1);
         return new Fixnum(fp);
     }
@@ -237,7 +237,7 @@ public final class ComplexBitVector extends AbstractBitVector
             ext = Math.max(ext, capacity() + 1);
             ensureCapacity(capacity() + ext);
         }
-        set(fp, element);
+        setRowMajor(fp, element);
         setFillPointer(fp + 1);
         return new Fixnum(fp);
     }
@@ -308,12 +308,12 @@ public final class ComplexBitVector extends AbstractBitVector
                 if (initialContents.listp()) {
                     LispObject list = initialContents;
                     for (int i = 0; i < newCapacity; i++) {
-                        set(i, list.car());
+                        setRowMajor(i, list.car());
                         list = list.cdr();
                     }
                 } else if (initialContents.vectorp()) {
                     for (int i = 0; i < newCapacity; i++)
-                        set(i, initialContents.elt(i));
+                        setRowMajor(i, initialContents.elt(i));
                 } else
                     signal(new TypeError(initialContents, Symbol.SEQUENCE));
             } else {

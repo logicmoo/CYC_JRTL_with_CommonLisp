@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.39 2004-02-24 14:02:50 piso Exp $
+ * $Id: LispCharacter.java,v 1.40 2004-03-04 02:01:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,7 +192,8 @@ public final class LispCharacter extends LispObject
         return sb.toString();
     }
 
-    private static final Primitive1 CHARACTER = new Primitive1("character", "character")
+    private static final Primitive1 CHARACTER =
+        new Primitive1("character", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -200,7 +201,7 @@ public final class LispCharacter extends LispObject
                 return arg;
             if (arg instanceof AbstractString) {
                 if (arg.length() == 1)
-                    return ((AbstractString)arg).get(0);
+                    return ((AbstractString)arg).getRowMajor(0);
             } else if (arg instanceof Symbol) {
                 String name = arg.getName();
                 if (name.length() == 1)

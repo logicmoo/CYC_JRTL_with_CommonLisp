@@ -2,7 +2,7 @@
  * SimpleBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleBitVector.java,v 1.7 2004-02-25 17:29:17 piso Exp $
+ * $Id: SimpleBitVector.java,v 1.8 2004-03-04 02:01:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ public final class SimpleBitVector extends AbstractBitVector
         return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
     }
 
-    public LispObject get(int index) throws ConditionThrowable
+    public LispObject getRowMajor(int index) throws ConditionThrowable
     {
         if (index < 0 || index >= capacity)
             badIndex(index, capacity);
@@ -99,7 +99,7 @@ public final class SimpleBitVector extends AbstractBitVector
         return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
     }
 
-    public void set(int index, LispObject newValue) throws ConditionThrowable
+    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         if (index < 0 || index >= capacity)
             badIndex(index, capacity);
@@ -167,12 +167,12 @@ public final class SimpleBitVector extends AbstractBitVector
             if (initialContents.listp()) {
                 LispObject list = initialContents;
                 for (int i = 0; i < newCapacity; i++) {
-                    v.set(i, list.car());
+                    v.setRowMajor(i, list.car());
                     list = list.cdr();
                 }
             } else if (initialContents.vectorp()) {
                 for (int i = 0; i < newCapacity; i++)
-                    v.set(i, initialContents.elt(i));
+                    v.setRowMajor(i, initialContents.elt(i));
             } else
                 signal(new TypeError(initialContents, Symbol.SEQUENCE));
             return v;

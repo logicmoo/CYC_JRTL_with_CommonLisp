@@ -2,7 +2,7 @@
  * ComplexArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexArray.java,v 1.3 2004-02-26 02:12:55 piso Exp $
+ * $Id: ComplexArray.java,v 1.4 2004-03-04 02:01:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@ public final class ComplexArray extends AbstractArray
                 AbstractVector v = checkVector(contents);
                 final int length = v.length();
                 for (int i = 0; i < length; i++) {
-                    LispObject content = v.get(i);
+                    LispObject content = v.getRowMajor(i);
                     index =
                         setInitialContents(axis + 1, newDims, content, index);
                 }

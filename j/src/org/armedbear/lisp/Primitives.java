@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.588 2004-03-03 00:34:01 piso Exp $
+ * $Id: Primitives.java,v 1.589 2004-03-04 02:01:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1880,7 +1880,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             try {
-                ((AbstractVector)first).set(((Fixnum)second).value, third);
+                ((AbstractVector)first).setRowMajor(((Fixnum)second).value, third);
                 return third;
             }
             catch (ClassCastException e) {
@@ -1942,7 +1942,7 @@ public final class Primitives extends Lisp
                 v.noFillPointer();
             if (fillPointer >= v.capacity())
                 return NIL;
-            v.set(fillPointer, first);
+            v.setRowMajor(fillPointer, first);
             v.setFillPointer(fillPointer + 1);
             return new Fixnum(fillPointer);
         }
@@ -1990,7 +1990,7 @@ public final class Primitives extends Lisp
             if (fillPointer == 0)
                 signal(new LispError("nothing left to pop"));
             int newFillPointer = v.checkIndex(fillPointer - 1);
-            LispObject element = v.get(newFillPointer);
+            LispObject element = v.getRowMajor(newFillPointer);
             v.setFillPointer(newFillPointer);
             return element;
         }
@@ -3994,10 +3994,11 @@ public final class Primitives extends Lisp
         new Primitive3("%set-elt", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             if (first instanceof AbstractVector) {
-                ((AbstractVector)first).set(Fixnum.getValue(second), third);
+                ((AbstractVector)first).setRowMajor(Fixnum.getValue(second), third);
                 return third;
             }
             if (first instanceof Cons) {

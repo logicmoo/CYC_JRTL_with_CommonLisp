@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: GenericFunction.java,v 1.7 2004-02-24 01:54:40 piso Exp $
+ * $Id: GenericFunction.java,v 1.8 2004-03-04 02:01:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ public final class GenericFunction extends StandardObject
             AbstractVector v = (AbstractVector) slots;
             try {
                 if (v.length() > 0) {
-                    LispObject name = v.get(0);
+                    LispObject name = v.getRowMajor(0);
                     if (name != null) {
                         StringBuffer sb = new StringBuffer("#<");
                         sb.append(String.valueOf(getLispClass().getSymbol()));
