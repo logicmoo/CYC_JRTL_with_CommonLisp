@@ -1,7 +1,7 @@
 ;;; remove.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: remove.lisp,v 1.3 2003-07-02 17:53:40 piso Exp $
+;;; $Id: remove.lisp,v 1.4 2003-07-02 18:24:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,13 +17,13 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
+(in-package "SYSTEM")
 
 ;;; From CMUCL.
 
 (defmacro real-count (count)
   `(cond ((null ,count) most-positive-fixnum)
-         ((sys:fixnump ,count) (if (minusp ,count) 0 ,count))
+         ((fixnump ,count) (if (minusp ,count) 0 ,count))
          ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
          (t ,count)))
 
@@ -31,7 +31,7 @@
   `(do ((index ,begin (,bump index))
         (result
          (do ((index ,left (,bump index))
-              (result (sys::make-sequence-like sequence length)))
+              (result (make-sequence-like sequence length)))
            ((= index ,begin) result)
            (setf (aref result index) (aref sequence index))))
         (new-index ,begin)
@@ -57,27 +57,27 @@
 (defmacro normal-mumble-remove ()
   `(mumble-remove
     (if test-not
-        (not (funcall test-not item (sys::apply-key key this-element)))
-        (funcall test item (sys::apply-key key this-element)))))
+        (not (funcall test-not item (apply-key key this-element)))
+        (funcall test item (apply-key key this-element)))))
 
 (defmacro normal-mumble-remove-from-end ()
   `(mumble-remove-from-end
     (if test-not
-        (not (funcall test-not item (sys::apply-key key this-element)))
-        (funcall test item (sys::apply-key key this-element)))))
+        (not (funcall test-not item (apply-key key this-element)))
+        (funcall test item (apply-key key this-element)))))
 
 (defmacro if-mumble-remove ()
-  `(mumble-remove (funcall predicate (sys::apply-key key this-element))))
+  `(mumble-remove (funcall predicate (apply-key key this-element))))
 
 (defmacro if-mumble-remove-from-end ()
-  `(mumble-remove-from-end (funcall predicate (sys::apply-key key this-element))))
+  `(mumble-remove-from-end (funcall predicate (apply-key key this-element))))
 
 (defmacro if-not-mumble-remove ()
-  `(mumble-remove (not (funcall predicate (sys::apply-key key this-element)))))
+  `(mumble-remove (not (funcall predicate (apply-key key this-element)))))
 
 (defmacro if-not-mumble-remove-from-end ()
   `(mumble-remove-from-end
-    (not (funcall predicate (sys::apply-key key this-element)))))
+    (not (funcall predicate (apply-key key this-element)))))
 
 (defmacro list-remove-macro (pred reverse-p)
   `(let* ((sequence ,(if reverse-p
@@ -116,30 +116,30 @@
 (defmacro normal-list-remove ()
   `(list-remove
     (if test-not
-        (not (funcall test-not item (sys::apply-key key this-element)))
-        (funcall test item (sys::apply-key key this-element)))))
+        (not (funcall test-not item (apply-key key this-element)))
+        (funcall test item (apply-key key this-element)))))
 
 (defmacro normal-list-remove-from-end ()
   `(list-remove-from-end
     (if test-not
-        (not (funcall test-not item (sys::apply-key key this-element)))
-        (funcall test item (sys::apply-key key this-element)))))
+        (not (funcall test-not item (apply-key key this-element)))
+        (funcall test item (apply-key key this-element)))))
 
 (defmacro if-list-remove ()
   `(list-remove
-    (funcall predicate (sys::apply-key key this-element))))
+    (funcall predicate (apply-key key this-element))))
 
 (defmacro if-list-remove-from-end ()
   `(list-remove-from-end
-    (funcall predicate (sys::apply-key key this-element))))
+    (funcall predicate (apply-key key this-element))))
 
 (defmacro if-not-list-remove ()
   `(list-remove
-    (not (funcall predicate (sys::apply-key key this-element)))))
+    (not (funcall predicate (apply-key key this-element)))))
 
 (defmacro if-not-list-remove-from-end ()
   `(list-remove-from-end
-    (not (funcall predicate (sys::apply-key key this-element)))))
+    (not (funcall predicate (apply-key key this-element)))))
 
 (defun remove (item sequence &key from-end (test #'eql) test-not (start 0)
                     end count key)
