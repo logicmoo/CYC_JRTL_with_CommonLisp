@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.58 2004-02-12 12:10:19 piso Exp $
+ * $Id: LispFloat.java,v 1.59 2004-02-12 12:44:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ public final class LispFloat extends LispObject
 {
     public static final LispFloat ZERO = new LispFloat(0);
     public static final LispFloat ONE  = new LispFloat(1);
+    public static final LispFloat PI   = new LispFloat((double)3.141592653589793);
 
     private final double value;
 
