@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.60 2003-03-13 15:40:06 piso Exp $
+;;; $Id: rt.lisp,v 1.61 2003-03-13 21:00:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -701,6 +701,10 @@
                               "remove"
                               "remove-duplicates"
                               "reverse"
+                              "search-bitvector"
+                              "search-list"
+                              "search-string"
+                              "search-vector"
                               "simple-bit-vector"
                               "simple-bit-vector-p"
                               "simple-vector-p"
@@ -745,4 +749,6 @@
 (load (concatenate 'string rt::*prefix* "char-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cl-symbols-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cl-symbol-names.lsp"))
+(load (concatenate 'string rt::*prefix* "ansi-aux.lsp"))
+(load (concatenate 'string rt::*prefix* "search-aux.lsp"))
 (debug)
