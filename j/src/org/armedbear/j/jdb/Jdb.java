@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.16 2003-05-18 01:34:54 piso Exp $
+ * $Id: Jdb.java,v 1.17 2003-05-18 17:05:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,12 +134,6 @@ public final class Jdb extends Buffer implements JdbConstants
             }
         }
         editor.getFrame().setDefaultCursor();
-    }
-
-    // To support e.g. Alt X "jdb next".
-    public static void jdb(String s)
-    {
-        JdbCommands.command(s);
     }
 
     private Jdb(JdbSession session)
