@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.37 2003-07-01 18:40:58 piso Exp $
+ * $Id: CommandTable.java,v 1.38 2003-07-04 17:27:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,11 +76,9 @@ public class CommandTable
             addCommand("dirGetFile");
             addCommand("dirHome");
             addCommand("dirHomeDir");
-            addCommand("dirLimit");
             addCommand("dirMoveFile");
             addCommand("dirRescan");
             addCommand("dirTagFile");
-            addCommand("dirUnlimit");
             addCommand("dirUpDir");
             addCommand("doShellCommandOnRegion");
             addCommand("down");
@@ -236,8 +234,10 @@ public class CommandTable
             addCommand("dirCycleSortBy", "Directory");
             addCommand("dirDoShellCommand", "Directory");
             addCommand("dirForward", "Directory");
+            addCommand("dirLimit", "Directory");
             addCommand("dirOpenFile", "Directory");
             addCommand("dirOpenFileAndKillDirectory", "Directory");
+            addCommand("dirUnlimit", "Directory");
             addCommand("doShellCommandOnRegion", "RegionCommands");
             addCommand("downList", "LispMode");
             addCommand("editRegister", "Registers");
