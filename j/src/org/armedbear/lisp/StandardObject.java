@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.15 2003-12-19 19:19:52 piso Exp $
+ * $Id: StandardObject.java,v 1.16 2003-12-20 03:06:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ public class StandardObject extends LispObject
 
     protected StandardObject()
     {
-        layout = new Layout(BuiltInClass.STANDARD_OBJECT, Fixnum.ZERO);
+        layout = new Layout(BuiltInClass.STANDARD_OBJECT, Fixnum.ZERO, NIL);
     }
 
     protected StandardObject(LispClass cls, Vector slots)
