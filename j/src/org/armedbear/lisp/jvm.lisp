@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.36 2003-11-16 19:39:25 piso Exp $
+;;; $Id: jvm.lisp,v 1.37 2003-11-16 21:00:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1984,6 +1984,25 @@
       (t
        (compile-function-call '- args)))))
 
+(defun compile-values (form for-effect)
+  (let ((args (cdr form)))
+    (cond ((= (length args) 2)
+           (ensure-thread-var-initialized)
+           (emit 'aload *thread*)
+           (compile-form (car args))
+           (unless (remove-store-value)
+             (emit-push-value))
+           (compile-form (cadr args))
+           (unless (remove-store-value)
+             (emit-push-value))
+           (emit-invokevirtual +lisp-thread-class+
+                               "setValues"
+                               "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                               -2)
+           (emit-store-value))
+          (t
+           (compile-function-call (car form) (cdr form))))))
+
 (defun compile-variable-ref (form)
   (let ((index (position form *locals* :from-end t)))
     (when index
@@ -2283,7 +2302,8 @@
                           quote
                           return-from
                           setq
-                          tagbody))
+                          tagbody
+                          values))
 
 (install-handler 'let  'compile-let/let*)
 (install-handler 'let* 'compile-let/let*)
