@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.319 2003-08-11 01:45:16 piso Exp $
+ * $Id: Primitives.java,v 1.320 2003-08-11 16:11:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3677,6 +3677,33 @@ public final class Primitives extends Module
             if (eval(args.car(), env, LispThread.currentThread()) == NIL)
                 throw new LispError("assertion failed: " + args.car());
             return NIL;
+        }
+    };
+
+    // ### write-char
+    // write-char character &optional output-stream => character
+    private static final Primitive WRITE_CHAR =
+        new Primitive("write-char") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length < 1 || args.length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            char c = LispCharacter.getValue(args[0]);
+            CharacterOutputStream out = null;
+            if (args.length == 1)
+                out = getStandardOutput();
+            else {
+                LispObject streamArg = args[1];
+                if (streamArg instanceof CharacterOutputStream)
+                    out = (CharacterOutputStream) streamArg;
+                else if (streamArg == T || streamArg == NIL)
+                    out = getStandardOutput();
+                else
+                    throw new TypeError(args[1],
+                                        "character output stream");
+            }
+            out.writeChar(c);
+            return args[0];
         }
     };
 
