@@ -1,8 +1,8 @@
 /*
  * MailboxProperties.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: MailboxProperties.java,v 1.2 2003-02-25 16:52:21 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: MailboxProperties.java,v 1.3 2003-06-03 17:05:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,17 +29,18 @@ import java.util.Iterator;
 import org.armedbear.j.Debug;
 import org.armedbear.j.Directories;
 import org.armedbear.j.Editor;
-import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.File;
 import org.armedbear.j.Log;
 import org.armedbear.j.Property;
 import org.armedbear.j.PropertyList;
-import org.xml.sax.AttributeList;
-import org.xml.sax.DocumentHandler;
-import org.xml.sax.HandlerBase;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
-import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 public final class MailboxProperties
 {
@@ -116,14 +117,17 @@ public final class MailboxProperties
             list = new ArrayList();
             File file = getFile();
             if (file.isFile()) {
-                Parser parser = null;
                 try {
-                    parser = (Parser) Class.forName(
-                        "org.armedbear.j.aelfred.SAXDriver").newInstance();
-                    parser.setDocumentHandler(new Handler());
+                    String defaultReader =
+                        "org.apache.crimson.parser.XMLReaderImpl";
+                    XMLReader xmlReader =
+                        XMLReaderFactory.createXMLReader(defaultReader);
+                    Log.debug("MailboxProperties.initialize xmlReader = " +
+                        xmlReader);
+                    xmlReader.setContentHandler(new Handler());
                     InputSource inputSource =
                         new InputSource(file.getInputStream());
-                    parser.parse(inputSource);
+                    xmlReader.parse(inputSource);
                 }
                 catch (Exception e) {
                     Log.error(e);
@@ -237,18 +241,18 @@ public final class MailboxProperties
         }
     }
 
-    private static class Handler extends HandlerBase implements DocumentHandler
+    private static class Handler extends DefaultHandler implements ContentHandler
     {
         private Entry currentEntry = null;
 
-        public void startElement(String name, AttributeList attributes)
-            throws SAXException
+        public void startElement(String uri, String localName, String qname,
+            Attributes attributes) throws SAXException
         {
-            if (name.equals("mailboxes")) {
+            if (localName.equals("mailboxes")) {
                 String version = attributes.getValue("version");
                 if (!version.equals(MailboxProperties.getVersion()))
                     throw new SAXException("Unknown mailbox history format");
-            } else if (name.equals("mailbox")) {
+            } else if (localName.equals("mailbox")) {
                 // Start a new entry.
                 String mailboxName = attributes.getValue("name");
                 currentEntry = new Entry(mailboxName);
@@ -259,7 +263,7 @@ public final class MailboxProperties
                 catch (NumberFormatException e) {
                     Log.error(e);
                 }
-            } else if (name.equals("property")) {
+            } else if (localName.equals("property")) {
                 Debug.assertTrue(currentEntry != null);
                 String key = attributes.getValue("name");
                 if (key != null) {
@@ -274,9 +278,9 @@ public final class MailboxProperties
             }
         }
 
-        public void endElement(String name)
+        public void endElement(String uri, String localName, String qName)
         {
-            if (name.equals("mailbox")) {
+            if (localName.equals("mailbox")) {
                 MailboxProperties.add(currentEntry);
                 currentEntry = null;
             }
