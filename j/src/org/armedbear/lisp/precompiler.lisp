@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.9 2003-11-17 19:12:24 piso Exp $
+;;; $Id: precompiler.lisp,v 1.10 2003-11-23 18:59:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@
               (or (equal (fourth args) '(quote eq))
                   (equal (fourth args) '(function eq))))
          `(assq ,(first args) ,(second args)))
+        ((= (length args) 2)
+         `(assql ,(first args) ,(second args)))
         (t form)))
 
 (define-compiler-macro member (&whole form &rest args)
@@ -177,6 +179,9 @@
     (setf compiled-body (mapcar #'precompile1 body))
     (setf res (list* 'PROGN compiled-body))
     res))
+
+(defun precompile-symbol-macrolet (form)
+  (list* 'SYMBOL-MACROLET (cadr form) (mapcar #'precompile1 (cddr form))))
 
 (defun precompile-let/let*-vars (vars)
   (let ((result nil))
@@ -398,6 +403,7 @@
                             return
                             return-from
                             setq
+                            symbol-macrolet
                             tagbody
                             the
                             unwind-protect))
