@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.283 2004-09-29 18:55:45 piso Exp $
+ * $Id: Lisp.java,v 1.284 2004-10-05 00:05:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -811,6 +811,26 @@ public abstract class Lisp
                             entryName = s.substring(index + 1);
                             if (entryName.startsWith("/"))
                                 entryName = entryName.substring(1);
+                            if (Utilities.isPlatformWindows) {
+                                // "/C:/Documents%20and%20Settings/peter/Desktop/j.jar"
+                                if (zipFileName.length() > 0 && zipFileName.charAt(0) == '/')
+                                    zipFileName = zipFileName.substring(1);
+                                // "C:/Documents%20and%20Settings/peter/Desktop/j.jar"
+                                int i = zipFileName.indexOf("%20");
+                                if (i >= 0) {
+                                    int begin = 0;
+                                    StringBuffer sb = new StringBuffer();
+                                    while (i >= 0) {
+                                        sb.append(zipFileName.substring(begin, i));
+                                        sb.append(' ');
+                                        begin = i + 3;
+                                        i = zipFileName.indexOf("%20", begin);
+                                    }
+                                    sb.append(zipFileName.substring(begin));
+                                    zipFileName = sb.toString();
+                                    // "C:/Documents and Settings/peter/Desktop/j.jar"
+                                }
+                            }
                             ZipFile zipFile = new ZipFile(zipFileName);
                             ZipEntry entry = zipFile.getEntry(entryName);
                             if (entry != null) {
