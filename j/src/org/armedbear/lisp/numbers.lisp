@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.12 2003-09-08 02:24:05 piso Exp $
+;;; $Id: numbers.lisp,v 1.13 2003-09-10 01:22:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,23 +155,10 @@
         (t
          (error 'type-error "wrong type: ~S is not a real number" x))))
 
+
 ;;; FIXME
 (defun rationalize (x)
   (rational x))
-
-(when (and (find-package "JVM")
-           (fboundp 'jvm::jvm-compile))
-  (mapcar #'jvm::jvm-compile '(floor
-                               ceiling
-                               round
-                               rem
-                               ftruncate
-                               ffloor
-                               fceiling
-                               fround
-                               rational
-                               rationalize)))
-
 
 
 (defun gcd (&rest numbers)
@@ -212,6 +199,16 @@
 	    (setq init-value iterated-value))))))
 
 
+(defun float-sign (float1 &optional (float2 (float 1 float1)))
+  "Returns a floating-point number that has the same sign as
+   float1 and, if float2 is given, has the same absolute value
+   as float2."
+  (* (if (minusp float1)
+	 (float -1 float1)
+	 (float 1 float1))
+     (abs float2)))
+
+
 (defun phase (number)
   "Returns the angle part of the polar representation of a complex number.
    For complex numbers, this is (atan (imagpart number) (realpart number)).
@@ -232,3 +229,17 @@
                   0.0d0))
              (complex
               (atan (imagpart number) (realpart number)))))
+
+
+(when (and (find-package "JVM")
+           (fboundp 'jvm::jvm-compile))
+  (mapcar #'jvm::jvm-compile '(floor
+                               ceiling
+                               round
+                               rem
+                               ftruncate
+                               ffloor
+                               fceiling
+                               fround
+                               rational
+                               rationalize)))
