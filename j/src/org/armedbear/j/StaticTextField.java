@@ -1,8 +1,8 @@
 /*
  * StaticTextField.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: StaticTextField.java,v 1.1.1.1 2002-09-24 16:09:19 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: StaticTextField.java,v 1.2 2003-07-24 15:17:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.j;
 
+import java.awt.Graphics;
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -62,5 +63,11 @@ public final class StaticTextField extends JTextField
     public boolean isFocusTraversable()
     {
         return false;
+    }
+
+    public void paintComponent(Graphics g)
+    {
+        Display.setRenderingHints(g);
+        super.paintComponent(g);
     }
 }
