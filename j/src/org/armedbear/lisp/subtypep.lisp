@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.40 2004-01-18 02:03:00 piso Exp $
+;;; $Id: subtypep.lisp,v 1.41 2004-01-18 03:17:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -160,18 +160,26 @@
     (return-from sub-interval-p t)))
 
 (defun dimension-subtypep (dim1 dim2)
-  (cond ((or (eq dim1 '*) (eq dim2 '*))
+  (cond ((eq dim2 '*)
          t)
         ((equal dim1 dim2)
          t)
         ((integerp dim2)
          (and (consp dim1) (= (length dim1) dim2)))
-        ((zerop dim1)
+        ((eql dim1 0)
          (null dim2))
         ((integerp dim1)
          (and (consp dim2)
               (= (length dim2) dim1)
               (equal dim2 (make-list dim1 :initial-element '*))))
+        ((and (consp dim1) (consp dim2) (= (length dim1) (length dim2)))
+         (do* ((list1 dim1 (cdr list1))
+               (list2 dim2 (cdr list2))
+               (e1 (car list1) (car list1))
+               (e2 (car list2) (car list2)))
+              ((null list1) t)
+           (unless (or (eq e2 '*) (eql e1 e2))
+              (return nil))))
         (t
          nil)))
 
@@ -276,9 +284,22 @@
                                   simple-string simple-base-string bit-vector
                                   simple-bit-vector)))
                   (values t t))
+                 ((eq t2 #.(find-class 'vector))
+                  (cond ((memq t1 '(string simple-string))
+                         (values t t))
+                        ((eq t1 'array)
+                         (let ((dim (cadr i1)))
+                           (if (or (eql dim 1)
+                                   (and (consp dim) (= (length dim) 1)))
+                               (values t t)
+                               (values nil t))))
+                        (t
+                         (values nil t))))
                  ((and (eq t2 #.(find-class 'bit-vector))
                        (eq t1 'simple-bit-vector))
-                  (values t t))))
+                  (values t t))
+                 (t
+                  (values nil nil))))
           ((eq t2 'sequence)
            (cond ((memq t1 '(null cons list))
                   (values t t))
