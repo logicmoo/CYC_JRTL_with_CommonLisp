@@ -2,7 +2,7 @@
  * SimpleBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleBitVector.java,v 1.5 2004-02-25 16:12:14 piso Exp $
+ * $Id: SimpleBitVector.java,v 1.6 2004-02-25 16:58:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,6 @@ package org.armedbear.lisp;
 // BIT-VECTOR."
 public final class SimpleBitVector extends AbstractBitVector
 {
-    private int capacity;
-    private long[] bits;
-
     public SimpleBitVector(int capacity) // throws ConditionThrowable
     {
         this.capacity = capacity;
@@ -81,11 +78,6 @@ public final class SimpleBitVector extends AbstractBitVector
         return true;
     }
 
-    public int capacity()
-    {
-        return capacity;
-    }
-
     public int length()
     {
         return capacity;
@@ -101,7 +93,7 @@ public final class SimpleBitVector extends AbstractBitVector
 
     public LispObject get(int index) throws ConditionThrowable
     {
-        if (index >= capacity)
+        if (index < 0 || index >= capacity)
             badIndex(index, capacity);
         int offset = index >> 6;
         return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
@@ -144,26 +136,6 @@ public final class SimpleBitVector extends AbstractBitVector
     {
         int offset = index >> 6;
         bits[offset] &= ~(1L << index);
-    }
-
-    public void fill(LispObject obj) throws ConditionThrowable
-    {
-        try {
-            switch (((Fixnum)obj).value) {
-                case 0:
-                    for (int i = bits.length; i-- > 0;)
-                        bits[i] = 0;
-                    return;
-                case 1:
-                    for (int i = bits.length; i-- > 0;)
-                        bits[i] = -1L;
-                    return;
-            }
-        }
-        catch (ClassCastException e) {
-            // Fall through...
-        }
-        signal(new TypeError(obj, Symbol.BIT));
     }
 
     public void shrink(int n) throws ConditionThrowable

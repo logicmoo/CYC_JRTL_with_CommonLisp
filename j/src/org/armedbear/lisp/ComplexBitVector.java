@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.4 2004-02-25 16:18:30 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.5 2004-02-25 16:58:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,8 @@ package org.armedbear.lisp;
 
 public final class ComplexBitVector extends AbstractBitVector
 {
-    private int capacity;
     private int fillPointer = -1; // -1 indicates no fill pointer.
     private boolean isDisplaced;
-
-    // For non-displaced bit-vectors.
-    private long[] bits;
 
     // For displaced bit-vectors.
     private AbstractArray array;
@@ -101,11 +97,6 @@ public final class ComplexBitVector extends AbstractBitVector
         return super.arrayDisplacement();
     }
 
-    public int capacity()
-    {
-        return capacity;
-    }
-
     public int length()
     {
         return fillPointer >= 0 ? fillPointer : capacity;
@@ -121,7 +112,7 @@ public final class ComplexBitVector extends AbstractBitVector
     public LispObject get(int index) throws ConditionThrowable
     {
         if (bits != null) {
-            if (index >= capacity)
+            if (index < 0 || index >= capacity)
                 badIndex(index, capacity);
             int offset = index >> 6;
             return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
@@ -174,36 +165,6 @@ public final class ComplexBitVector extends AbstractBitVector
             bits[offset] &= ~(1L << index);
         } else
             array.setRowMajor(index + displacement, Fixnum.ZERO);
-    }
-
-    public void fill(LispObject obj) throws ConditionThrowable
-    {
-        try {
-            switch (((Fixnum)obj).value) {
-                case 0:
-                    if (bits != null) {
-                        for (int i = bits.length; i-- > 0;)
-                            bits[i] = 0;
-                    } else {
-                        for (int i = capacity; i-- > 0;)
-                            clearBit(i);
-                    }
-                    return;
-                case 1:
-                    if (bits != null) {
-                        for (int i = bits.length; i-- > 0;)
-                            bits[i] = -1L;
-                    } else {
-                        for (int i = capacity; i-- > 0;)
-                            setBit(i);
-                    }
-                    return;
-            }
-        }
-        catch (ClassCastException e) {
-            // Fall through...
-        }
-        signal(new TypeError(obj, Symbol.BIT));
     }
 
     public void shrink(int n) throws ConditionThrowable

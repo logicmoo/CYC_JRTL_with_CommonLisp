@@ -2,7 +2,7 @@
  * AbstractBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractBitVector.java,v 1.2 2004-02-25 03:06:10 piso Exp $
+ * $Id: AbstractBitVector.java,v 1.3 2004-02-25 16:58:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,11 @@ public abstract class AbstractBitVector extends AbstractVector
 {
     protected static final int LONG_MASK = 0x3f;
 
+    protected int capacity;
+
+    // For non-displaced bit-vectors.
+    protected long[] bits;
+
     public final LispClass classOf()
     {
         return BuiltInClass.BIT_VECTOR;
@@ -42,6 +47,11 @@ public abstract class AbstractBitVector extends AbstractVector
     public final LispObject BIT_VECTOR_P()
     {
         return T;
+    }
+
+    public final int capacity()
+    {
+        return capacity;
     }
 
     public final LispObject getElementType()
@@ -83,6 +93,36 @@ public abstract class AbstractBitVector extends AbstractVector
         if (obj instanceof AbstractVector)
             return ((AbstractVector)obj).equalp(this);
         return false;
+    }
+
+    public void fill(LispObject obj) throws ConditionThrowable
+    {
+        try {
+            switch (((Fixnum)obj).value) {
+                case 0:
+                    if (bits != null) {
+                        for (int i = bits.length; i-- > 0;)
+                            bits[i] = 0;
+                    } else {
+                        for (int i = capacity; i-- > 0;)
+                            clearBit(i);
+                    }
+                    return;
+                case 1:
+                    if (bits != null) {
+                        for (int i = bits.length; i-- > 0;)
+                            bits[i] = -1L;
+                    } else {
+                        for (int i = capacity; i-- > 0;)
+                            setBit(i);
+                    }
+                    return;
+            }
+        }
+        catch (ClassCastException e) {
+            // Fall through...
+        }
+        signal(new TypeError(obj, Symbol.BIT));
     }
 
     public LispObject subseq(int start, int end) throws ConditionThrowable
@@ -139,7 +179,12 @@ public abstract class AbstractBitVector extends AbstractVector
     // Ignores fill pointer.
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
-        return get(Fixnum.getValue(index));
+        try {
+            return get(((Fixnum)index).value);
+        }
+        catch (ClassCastException e) {
+            return signal(new TypeError(index, Symbol.FIXNUM));
+        }
     }
 
     public LispObject reverse() throws ConditionThrowable
