@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.148 2004-02-07 19:53:21 piso Exp $
+;;; $Id: boot.lisp,v 1.149 2004-02-10 15:52:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -119,6 +119,8 @@
 (sys::%load "destructuring-bind.lisp")
 (sys::%load "arrays.lisp")
 (sys::%load "compiler-macro.lisp")
+(sys::%load "subtypep.lisp")
+(sys::%load "typep.lisp")
 (sys::%load "precompiler.lisp")
 
 (sys::precompile-package "PRECOMPILER")
