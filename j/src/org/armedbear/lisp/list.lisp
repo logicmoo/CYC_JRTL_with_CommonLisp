@@ -5,6 +5,7 @@
 (export '(cdddr list-length make-list
           copy-list copy-alist copy-tree
           revappend nconc nreconc
+          butlast nbutlast
           complement constantly
           subst subst-if subst-if-not nsubst nsubst-if nsubst-if-not
           sublis nsublis
@@ -87,6 +88,39 @@
        (3rd y 2nd))		;3rd follows 2nd down the list.
     ((atom 2nd) 3rd)
     (rplacd 2nd 3rd)))
+
+(defun require-type (arg type)
+  (if (typep  arg type)
+      arg
+      (error 'type-error)))
+
+(defun butlast (list &optional (n 1))
+  (setq list (require-type list 'list))
+  (unless (null list)
+    (let ((length (do ((list list (cdr list))
+		       (i 0 (1+ i)))
+                    ((atom list) (1- i)))))
+      (unless (< length n)
+	(do* ((top (cdr list) (cdr top))
+	      (result (list (car list)))
+	      (splice result)
+	      (count length (1- count)))
+          ((= count n) result)
+	  (setq splice (cdr (rplacd splice (list (car top))))))))))
+
+(defun nbutlast (list &optional (n 1))
+  (setq list (require-type list 'list))
+  (unless (null list)
+    (let ((length (do ((list list (cdr list))
+		       (i 0 (1+ i)))
+                    ((atom list) (1- i)))))
+      (unless (< length n)
+	(do ((1st (cdr list) (cdr 1st))
+	     (2nd list 1st)
+	     (count length (1- count)))
+          ((= count n)
+           (rplacd 2nd ())
+           list))))))
 
 (defmacro apply-key (key element)
   `(if ,key
