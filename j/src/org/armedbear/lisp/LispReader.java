@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.19 2004-03-16 16:21:51 piso Exp $
+ * $Id: LispReader.java,v 1.20 2004-03-16 17:13:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,6 +152,42 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### sharp-star
+    public static final DispatchMacroFunction SHARP_STAR =
+        new DispatchMacroFunction("sharp-star", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return stream.readBitVector();
+        }
+    };
+
+    // ### sharp-star
+    public static final DispatchMacroFunction SHARP_COLON =
+        new DispatchMacroFunction("sharp-colon", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return new Symbol(stream.readToken());
+        }
+    };
+
+    // ### sharp-b
+    public static final DispatchMacroFunction SHARP_A =
+        new DispatchMacroFunction("sharp-a", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return stream.readArray(n);
+        }
+    };
+
     // ### sharp-b
     public static final DispatchMacroFunction SHARP_B =
         new DispatchMacroFunction("sharp-b", PACKAGE_SYS, false,
@@ -197,6 +233,18 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             return stream.readRadix(16);
+        }
+    };
+
+    // ### sharp-x
+    public static final DispatchMacroFunction SHARP_BACKSLASH =
+        new DispatchMacroFunction("sharp-backslash", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return stream.readCharacterLiteral();
         }
     };
 }

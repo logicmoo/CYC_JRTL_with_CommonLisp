@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.54 2004-03-16 16:22:27 piso Exp $
+ * $Id: Stream.java,v 1.55 2004-03-16 17:14:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -425,22 +425,12 @@ public class Stream extends LispObject
                                 new Cons(read(true, NIL, true)));
             case '(':
                 return new SimpleVector(readList());
-            case '\\':
-                return readCharacterLiteral();
-            case ':':
-                // An uninterned symbol.
-                return new Symbol(readToken());
             case '|':
                 skipBalancedComment();
                 return null;
             case '.':
                 return eval(read(true, NIL, true), new Environment(),
                             LispThread.currentThread());
-            case '*':
-                return readBitVector();
-            case 'a':
-            case 'A':
-                return readArray(numArg);
             case 'c':
             case 'C':
                 return readComplex();
@@ -458,7 +448,7 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject readCharacterLiteral() throws ConditionThrowable
+    public LispObject readCharacterLiteral() throws ConditionThrowable
     {
         int n = _readChar();
         if (n < 0)
@@ -513,7 +503,7 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject readBitVector() throws ConditionThrowable
+    public LispObject readBitVector() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
         while (true) {
@@ -531,10 +521,12 @@ public class Stream extends LispObject
         return new SimpleBitVector(sb.toString());
     }
 
-    private LispObject readArray(int rank) throws ConditionThrowable
+    public LispObject readArray(int rank) throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, true);
         switch (rank) {
+            case -1:
+                return signal(new ReaderError("No dimensions argument to #A."));
             case 0:
                 return new ZeroRankArray(T, obj, false);
             case 1:
@@ -577,7 +569,7 @@ public class Stream extends LispObject
         return sb.toString();
     }
 
-    private final String readToken() throws ConditionThrowable
+    public final String readToken() throws ConditionThrowable
     {
         return readToken(new StringBuffer());
     }
