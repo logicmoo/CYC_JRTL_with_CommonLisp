@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.15 2004-03-24 01:11:59 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.16 2004-09-27 18:53:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun require-type (arg type)
   (unless (typep arg type)
@@ -186,7 +186,7 @@
   (setq more-sequences (cons sequence more-sequences))
   (do ((i 0 (1+ i))
        (l (apply #'min (mapcar #'length more-sequences))))
-    ((>= i l) t)
+      ((>= i l) t)
     (unless (apply predicate (mapcar #'(lambda (z) (elt z i)) more-sequences))
       (return nil))))
 
@@ -195,4 +195,3 @@
 
 (defun notevery (predicate sequence &rest more-sequences)
   (not (apply #'every predicate sequence more-sequences)))
-
