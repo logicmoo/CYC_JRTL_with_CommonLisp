@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.138 2004-04-18 05:27:33 piso Exp $
+;;; $Id: autoloads.lisp,v 1.139 2004-05-25 18:40:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -227,7 +227,17 @@
 (export 'run-shell-command)
 (autoload 'run-shell-command)
 (export 'make-socket)
-(autoload 'make-socket)
+(autoload 'make-socket "socket")
+(export 'make-server-socket)
+(autoload 'make-server-socket "socket")
+(export 'server-socket-close)
+(autoload 'server-socket-close "socket")
+(export 'socket-accept)
+(autoload 'socket-accept "socket")
+(export 'socket-close)
+(autoload 'socket-close "socket")
+(export 'get-socket-stream)
+(autoload 'get-socket-stream "socket")
 (export 'compile-system)
 (autoload 'compile-system)
 

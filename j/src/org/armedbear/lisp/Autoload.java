@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.184 2004-05-14 00:48:35 piso Exp $
+ * $Id: Autoload.java,v 1.185 2004-05-25 18:38:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -366,6 +366,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%make-array", "make_array");
         autoload(PACKAGE_SYS, "%make-condition", "make_condition");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
+        autoload(PACKAGE_SYS, "%make-server-socket", "make_server_socket");
         autoload(PACKAGE_SYS, "%make-socket", "make_socket");
         autoload(PACKAGE_SYS, "%make-string", "StringFunctions");
         autoload(PACKAGE_SYS, "%make-string-output-stream", "StringOutputStream");
@@ -374,6 +375,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%run-shell-command", "ShellCommand");
+        autoload(PACKAGE_SYS, "%server-socket-close", "server_socket_close");
         autoload(PACKAGE_SYS, "%set-arglist", "arglist");
         autoload(PACKAGE_SYS, "%set-char", "StringFunctions");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass");
@@ -381,6 +383,9 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObject");
         autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
+        autoload(PACKAGE_SYS, "%socket-accept", "socket_accept");
+        autoload(PACKAGE_SYS, "%socket-close", "socket_close");
+        autoload(PACKAGE_SYS, "%socket-stream", "socket_stream");
         autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-equal", "StringFunctions");

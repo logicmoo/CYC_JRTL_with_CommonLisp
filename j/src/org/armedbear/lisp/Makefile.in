@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.174 2004-05-02 16:03:36 piso Exp $
+# $Id: Makefile.in,v 1.175 2004-05-25 18:41:57 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -132,6 +132,7 @@ CLASSFILES =	AbstractArray.class \
 		Site.class \
 		SiteName.class \
 		SlotClass.class \
+		SocketStream.class \
 		SpecialOperator.class \
 		SpecialOperators.class \
 		StandardClass.class \
@@ -206,6 +207,7 @@ CLASSFILES =	AbstractArray.class \
 		machine_version.class \
 		make_array.class \
 		make_condition.class \
+		make_server_socket.class \
 		make_socket.class \
 		mod.class \
 		open_stream_p.class \
@@ -216,7 +218,11 @@ CLASSFILES =	AbstractArray.class \
 		read_delimited_list.class \
 		rem.class \
 		room.class \
+		server_socket_close.class \
 		simple_list_remove_duplicates.class \
+		socket_accept.class \
+		socket_close.class \
+		socket_stream.class \
 		software_type.class \
 		software_version.class \
 		stream_element_type.class \
