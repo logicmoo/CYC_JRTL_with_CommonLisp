@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.30 2003-12-20 22:39:07 asimon Exp $
+ * $Id: Java.java,v 1.31 2003-12-24 15:00:59 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -479,6 +479,20 @@ public final class Java extends Lisp
                 return NIL;
         }
     };
+
+    // ### jobject-lisp-value
+    // jobject-lisp-value java-object
+    private static final Primitive JOBJECT_LISP_VALUE = 
+        new Primitive("jobject-lisp-value", PACKAGE_JAVA, true, "java-object")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+	    if (args.length != 1)
+                signal(new WrongNumberOfArgumentsException(this));
+	    return makeLispObject(args[0].javaInstance());
+        }
+    };
+
 
     // Supports Java primitive types too.
     private static Class forClassRef(LispObject classRef) throws ClassNotFoundException, ConditionThrowable
