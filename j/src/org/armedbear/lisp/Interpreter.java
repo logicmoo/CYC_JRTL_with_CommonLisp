@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.17 2003-03-09 16:05:47 piso Exp $
+ * $Id: Interpreter.java,v 1.18 2003-03-27 02:14:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -169,18 +169,34 @@ public final class Interpreter extends Lisp
                         break;
                     addHistory(commandNumber, object);
                     out.setCharPos(0);
+                    Symbol.MINUS.setSymbolValue(object);
                     LispObject result = eval(object, environment);
+                    Debug.assertTrue(result != null);
+                    Symbol.STAR_STAR_STAR.setSymbolValue(Symbol.STAR_STAR.getSymbolValue());
+                    Symbol.STAR_STAR.setSymbolValue(Symbol.STAR.getSymbolValue());
+                    Symbol.STAR.setSymbolValue(result);
+                    Symbol.PLUS_PLUS_PLUS.setSymbolValue(Symbol.PLUS_PLUS.getSymbolValue());
+                    Symbol.PLUS_PLUS.setSymbolValue(Symbol.PLUS.getSymbolValue());
+                    Symbol.PLUS.setSymbolValue(Symbol.MINUS.getSymbolValue());
                     if (done)
                         return;
                     out = getStandardOutput();
                     out.freshLine();
                     checkStack();
                     LispObject[] values = getValues();
+                    Symbol.SLASH_SLASH_SLASH.setSymbolValue(Symbol.SLASH_SLASH.getSymbolValue());
+                    Symbol.SLASH_SLASH.setSymbolValue(Symbol.SLASH.getSymbolValue());
                     if (values != null) {
+                        LispObject slash = NIL;
+                        for (int i = values.length; i-- > 0;)
+                            slash = new Cons(values[i], slash);
+                        Symbol.SLASH.setSymbolValue(slash);
                         for (int i = 0; i < values.length; i++)
                             out.writeLine(String.valueOf(values[i]));
-                    } else
+                    } else {
+                        Symbol.SLASH.setSymbolValue(new Cons(result));
                         out.writeLine(String.valueOf(result));
+                    }
                     out.finishOutput();
                 }
                 catch (StackOverflowError e) {

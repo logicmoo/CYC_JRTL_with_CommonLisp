@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.47 2003-03-26 21:48:35 piso Exp $
+ * $Id: Lisp.java,v 1.48 2003-03-27 02:14:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1034,6 +1034,26 @@ public abstract class Lisp
     public static final Symbol _RANDOM_STATE_ =
         exportSpecial("*RANDOM-STATE*", PACKAGE_CL,
             new JavaObject(new Random()));
+
+    public static final Symbol STAR = exportSpecial("*", PACKAGE_CL, NIL);
+    public static final Symbol STAR_STAR =
+        exportSpecial("**", PACKAGE_CL, NIL);
+    public static final Symbol STAR_STAR_STAR =
+        exportSpecial("***", PACKAGE_CL, NIL);
+
+    public static final Symbol MINUS = exportSpecial("-", PACKAGE_CL, NIL);
+
+    public static final Symbol PLUS = exportSpecial("+", PACKAGE_CL, NIL);
+    public static final Symbol PLUS_PLUS
+    = exportSpecial("++", PACKAGE_CL, NIL);
+    public static final Symbol PLUS_PLUS_PLUS =
+        exportSpecial("+++", PACKAGE_CL, NIL);
+
+    public static final Symbol SLASH = exportSpecial("/", PACKAGE_CL, NIL);
+    public static final Symbol SLASH_SLASH
+    = exportSpecial("//", PACKAGE_CL, NIL);
+    public static final Symbol SLASH_SLASH_SLASH =
+        exportSpecial("///", PACKAGE_CL, NIL);
 
     static {
         loadClass("org.armedbear.lisp.Primitives");
