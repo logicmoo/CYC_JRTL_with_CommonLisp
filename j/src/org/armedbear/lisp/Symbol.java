@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.44 2003-06-18 16:44:10 piso Exp $
+ * $Id: Symbol.java,v 1.45 2003-06-18 16:49:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ public class Symbol extends LispObject
     public static final Symbol APPLY                = export("APPLY");
     public static final Symbol BLOCK                = export("BLOCK");
     public static final Symbol CDR                  = export("CDR");
+    public static final Symbol DOCUMENTATION        = export("DOCUMENTATION");
     public static final Symbol EQ                   = export("EQ");
     public static final Symbol EQL                  = export("EQL");
     public static final Symbol EQUAL                = export("EQUAL");
