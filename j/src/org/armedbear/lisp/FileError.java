@@ -2,7 +2,7 @@
  * FileError.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileError.java,v 1.2 2004-01-16 11:47:26 piso Exp $
+ * $Id: FileError.java,v 1.3 2004-01-16 15:16:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,12 @@ public final class FileError extends LispError
     public FileError(String message)
     {
         super(message);
+    }
+
+    public FileError(String message, LispObject pathname)
+    {
+        super(message);
+        this.pathname = pathname;
     }
 
     public LispObject getPathname()
