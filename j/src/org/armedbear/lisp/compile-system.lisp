@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.22 2004-08-26 14:54:44 piso Exp $
+;;; $Id: compile-system.lisp,v 1.23 2004-09-01 18:03:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (require '#:loop)
 (require '#:collect)
@@ -68,6 +68,7 @@
                             "clos.lisp"
                             "coerce.lisp"
                             "compile-file.lisp"
+                            "compile-file-pathname.lisp"
                             "compiler-macro.lisp"
                             "concatenate.lisp"
                             "cond.lisp"
@@ -104,7 +105,6 @@
                             "find-all-symbols.lisp"
                             "find.lisp"
                             "fixme.lisp"
-;;                             "format.lisp"
                             "gentemp.lisp"
                             "gray-streams.lisp"
                             "inspect.lisp"
