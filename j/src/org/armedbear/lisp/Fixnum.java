@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.57 2003-09-02 16:26:47 piso Exp $
+ * $Id: Fixnum.java,v 1.58 2003-09-02 18:26:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,14 +131,14 @@ public final class Fixnum extends LispObject
         return (value & 0x01) != 0;
     }
 
-    public LispObject PLUSP() throws TypeError
+    public boolean plusp()
     {
-        return value > 0 ? T : NIL;
+        return value > 0;
     }
 
-    public LispObject MINUSP() throws TypeError
+    public boolean minusp()
     {
-        return value < 0 ? T : NIL;
+        return value < 0;
     }
 
     public LispObject ZEROP()

@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.33 2003-08-30 15:06:47 piso Exp $
+ * $Id: LispFloat.java,v 1.34 2003-09-02 18:28:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,14 +108,14 @@ public final class LispFloat extends LispObject
         return new LispFloat(- value);
     }
 
-    public LispObject PLUSP() throws TypeError
+    public boolean plusp()
     {
-        return value > 0 ? T : NIL;
+        return value > 0;
     }
 
-    public LispObject MINUSP() throws TypeError
+    public boolean minusp()
     {
-        return value < 0 ? T : NIL;
+        return value < 0;
     }
 
     public LispObject ZEROP()

@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.31 2003-09-02 16:27:01 piso Exp $
+ * $Id: Bignum.java,v 1.32 2003-09-02 18:27:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,14 +122,14 @@ public final class Bignum extends LispObject
         return value.testBit(0);
     }
 
-    public LispObject PLUSP() throws TypeError
+    public boolean plusp()
     {
-        return value.signum() > 0 ? T : NIL;
+        return value.signum() > 0;
     }
 
-    public LispObject MINUSP() throws TypeError
+    public boolean minusp()
     {
-        return value.signum() < 0 ? T : NIL;
+        return value.signum() < 0;
     }
 
     public LispObject ZEROP()

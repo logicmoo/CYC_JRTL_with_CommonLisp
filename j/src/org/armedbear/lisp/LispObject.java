@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.42 2003-09-02 16:25:45 piso Exp $
+ * $Id: LispObject.java,v 1.43 2003-09-02 18:25:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -160,10 +160,20 @@ public class LispObject extends Lisp
 
     public LispObject PLUSP() throws TypeError
     {
+        return plusp() ? T : NIL;
+    }
+
+    public boolean plusp() throws TypeError
+    {
         throw new TypeError(this, "real number");
     }
 
     public LispObject MINUSP() throws TypeError
+    {
+        return minusp() ? T : NIL;
+    }
+
+    public boolean minusp() throws TypeError
     {
         throw new TypeError(this, "real number");
     }
