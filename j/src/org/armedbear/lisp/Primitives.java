@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.657 2004-06-11 18:15:02 piso Exp $
+ * $Id: Primitives.java,v 1.658 2004-06-12 16:06:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3324,52 +3324,43 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### finish-output &optional output-stream => nil
-    private static final Primitive FINISH_OUTPUT =
-        new Primitive("finish-output", "&optional output-stream")
+    // ### %finish-output output-stream => nil
+    private static final Primitive1 _FINISH_OUTPUT =
+        new Primitive1("%finish-output", PACKAGE_SYS, false, "output-stream")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (args.length > 1)
-                signal(new WrongNumberOfArgumentsException(this));
-            return finishOutput(args);
+            return finishOutput(arg);
         }
     };
 
-    // ### force-output &optional output-stream => nil
-    private static final Primitive FORCE_OUTPUT =
-        new Primitive("force-output", "&optional output-stream")
+    // ### %force-output output-stream => nil
+    private static final Primitive1 _FORCE_OUTPUT =
+        new Primitive1("%force-output", PACKAGE_SYS, false, "output-stream")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (args.length > 1)
-                signal(new WrongNumberOfArgumentsException(this));
-            return finishOutput(args);
+            return finishOutput(arg);
         }
     };
 
-    private static final LispObject finishOutput(LispObject[] args)
+    private static final LispObject finishOutput(LispObject arg)
         throws ConditionThrowable
     {
         Stream out = null;
-        if (args.length == 0)
+        if (arg == T)
+            out = checkCharacterOutputStream(_TERMINAL_IO_.symbolValue());
+        else if (arg == NIL)
             out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
-        else {
-            LispObject arg = args[0];
-            if (arg == T)
-                out = checkCharacterOutputStream(_TERMINAL_IO_.symbolValue());
-            else if (arg == NIL)
-                out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
-            else if (arg instanceof Stream) {
-                Stream stream = (Stream) arg;
-                if (stream instanceof TwoWayStream)
-                    out = ((TwoWayStream)arg).getOutputStream();
-                else if (stream.isOutputStream())
-                    out = stream;
-            }
-            if (out == null)
-                signal(new TypeError(arg, "output stream"));
+        else if (arg instanceof Stream) {
+            Stream stream = (Stream) arg;
+            if (stream instanceof TwoWayStream)
+                out = ((TwoWayStream)arg).getOutputStream();
+            else if (stream.isOutputStream())
+                out = stream;
         }
+        if (out == null)
+            signal(new TypeError(arg, "output stream"));
         return out.finishOutput();
     }
 
@@ -3392,18 +3383,12 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### clear-output
-    // clear-output &optional output-stream => nil
+    // ### %clear-output output-stream => nil
     // "If any of these operations does not make sense for output-stream, then
     // it does nothing."
-    private static final Primitive CLEAR_OUTPUT =
-        new Primitive("clear-output", "&optional output-stream")
+    private static final Primitive1 _CLEAR_OUTPUT =
+        new Primitive1("%clear-output", PACKAGE_SYS, false, "output-stream")
     {
-        public LispObject execute() throws ConditionThrowable
-        {
-            // Default is standard output.
-            return NIL;
-        }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg == T)
