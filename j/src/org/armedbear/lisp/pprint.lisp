@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.5 2004-03-08 02:52:37 piso Exp $
+;;; $Id: pprint.lisp,v 1.6 2004-04-24 12:41:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1071,7 +1071,7 @@
   (cond ((xp-structure-p stream) (write+ object stream))
 	(*print-pretty* (maybe-initiate-xp-printing
                          #'(lambda (s o) (write+ o s)) stream object))
-	(t (sys::%write object stream))))
+	(t (sys::output-object object stream))))
 
 (defun maybe-initiate-xp-printing (fn stream &rest args)
   (if (xp-structure-p stream) (apply fn stream args)

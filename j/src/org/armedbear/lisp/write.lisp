@@ -1,7 +1,7 @@
 ;;; write.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: write.lisp,v 1.1 2003-09-26 01:10:32 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: write.lisp,v 1.2 2004-04-24 12:42:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,4 +39,4 @@
 		     ((:lines *print-lines*) *print-lines*)
 		     ((:pprint-dispatch *print-pprint-dispatch*)
 		      *print-pprint-dispatch*))
-  (%write object stream))
+  (output-object object stream))
