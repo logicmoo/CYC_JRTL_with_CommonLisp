@@ -2,7 +2,7 @@
  * DefaultTheme.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: DefaultTheme.java,v 1.2 2002-10-05 00:04:58 piso Exp $
+ * $Id: DefaultTheme.java,v 1.3 2002-12-29 16:53:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,6 +127,15 @@ public final class DefaultTheme
             } else if (mode == "WebMode") {
                 if (thing == "headerValue")
                     return new Color(51, 102, 102);
+            } else if (mode == "LispMode") {
+                if (thing == "substitution")
+                    return new Color(153, 0, 153);
+                if (thing == "punctuation")
+                    return new Color(102, 102, 102);
+                if (thing == "parenthesis")
+                    return new Color(102, 102, 102);
+                if (thing == "secondaryKeyword")
+                    return new Color(0, 102, 153);
             } else if (mode == "PerlMode") {
                 if (thing == "scalar")
                     return new Color(51, 51, 0);
