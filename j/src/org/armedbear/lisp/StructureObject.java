@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.33 2004-10-01 15:17:30 piso Exp $
+ * $Id: StructureObject.java,v 1.34 2004-10-12 16:23:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,15 +128,17 @@ public final class StructureObject extends LispObject
     public String writeToString() throws ConditionThrowable
     {
         try {
+            final LispThread thread = LispThread.currentThread();
             // FIXME
             if (typep(Symbol.RESTART) != NIL) {
                 Symbol PRINT_RESTART = PACKAGE_SYS.intern("PRINT-RESTART");
                 LispObject fun = PRINT_RESTART.getSymbolFunction();
                 StringOutputStream stream = new StringOutputStream();
-                funcall2(fun, this, stream, LispThread.currentThread());
+                funcall2(fun, this, stream, thread);
                 return stream.getString().getStringValue();
             }
-            final LispThread thread = LispThread.currentThread();
+            if (_PRINT_STRUCTURE_.symbolValue(thread) == NIL)
+                return unreadableString(structureClass.getSymbol().writeToString());
             int maxLevel = Integer.MAX_VALUE;
             LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
             if (printLevel instanceof Fixnum)
@@ -152,7 +154,7 @@ public final class StructureObject extends LispObject
                 LispObject effectiveSlots = structureClass.getEffectiveSlots();
                 LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
                 Debug.assertTrue(effectiveSlotsArray.length == slots.length);
-                final LispObject printLength = _PRINT_LENGTH_.symbolValue();
+                final LispObject printLength = _PRINT_LENGTH_.symbolValue(thread);
                 final int limit;
                 if (printLength instanceof Fixnum)
                     limit = Math.min(slots.length,
