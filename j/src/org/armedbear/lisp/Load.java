@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.30 2004-01-24 19:29:58 piso Exp $
+ * $Id: Load.java,v 1.31 2004-01-27 14:02:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,6 +224,8 @@ public final class Load extends Lisp
     {
         Stream in = new Stream(inputStream, Symbol.CHARACTER);
         final LispThread thread = LispThread.currentThread();
+        Environment oldDynEnv = thread.getDynamicEnvironment();
+        thread.bindSpecial(_LOAD_STREAM_, in);
         try {
             final Environment env = new Environment();
             while (true) {
@@ -239,26 +241,8 @@ public final class Load extends Lisp
             }
             return T;
         }
-        catch (ConditionThrowable t) {
-            if (debug)
-                thread.saveBacktrace();
-            Stream out = getStandardOutput();
-            String truename = null;
-            LispObject obj = _LOAD_TRUENAME_.symbolValueNoThrow();
-            if (obj instanceof LispString)
-                truename = ((LispString)obj).getValue();
-            StringBuffer sb = new StringBuffer("Error");
-            if (truename != null) {
-                sb.append(" in ");
-                sb.append(truename);
-            }
-            sb.append(" at line ");
-            sb.append(in.getLineNumber() + 1);
-            sb.append(" (offset ");
-            sb.append(in.getOffset());
-            sb.append(')');
-            out.writeLine(sb.toString());
-            throw t;
+        finally {
+            thread.setDynamicEnvironment(oldDynEnv);
         }
     }
 
