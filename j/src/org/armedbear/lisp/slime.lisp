@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.13 2004-09-10 19:30:07 piso Exp $
+;;; $Id: slime.lisp,v 1.14 2004-09-11 02:08:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -122,7 +122,9 @@
     (if (slime-local-p)
         nil ;; FIXME
         (handler-case
-            (swank-protocol:encode-message `(:eval-async ,form ,id) *stream*)
+            (progn
+              (swank-protocol:encode-message `(:eval-async ,form ,id) *stream*)
+              (make-thread #'(lambda () (dispatch-loop))))
           (stream-error () (disconnect))))))
 
 (defun read-port-and-connect (retries)
@@ -157,11 +159,11 @@
   (let* ((string (line-chars (current-line)))
          (end (mark-charpos (current-point))))
     (do ((start (1- end) (1- start)))
-        ((< start 0) (subseq string 0 end))
+        ((< start 0) (when (> end 0) (subseq string 0 end)))
       (let ((c (schar string start)))
         (when (delimiter-p c)
           (incf start)
-          (return-from completion-prefix (subseq string start end)))))))
+          (return (when (> end start) (subseq string start end))))))))
 
 (defun complete-symbol ()
   (when (slime-busy-p)
@@ -357,8 +359,8 @@
     (when mark
       (let* ((string (buffer-substring (current-point) mark))
              (package (find-buffer-package)))
-        (slime-eval-async `(swank:eval-region ,string ,package) 'display-eval-result))
-      (make-thread #'(lambda () (dispatch-loop))))))
+        (slime-eval-async
+         `(swank:eval-region ,string ,package) 'display-eval-result)))))
 
 (defun last-expression ()
   (let (start end)
@@ -375,8 +377,7 @@
   (let* ((string (last-expression))
          (package (find-buffer-package)))
     (slime-eval-async
-     `(swank:eval-string-async ,string ,package) 'display-eval-result))
-  (make-thread #'(lambda () (dispatch-loop))))
+     `(swank:eval-string-async ,string ,package) 'display-eval-result)))
 
 (map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
 (map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")
