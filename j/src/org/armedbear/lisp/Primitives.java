@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.223 2003-06-02 02:30:35 piso Exp $
+ * $Id: Primitives.java,v 1.224 2003-06-02 13:02:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3048,19 +3048,6 @@ public final class Primitives extends Module
         }
     };
 
-    private static final LispObject get(Symbol symbol, LispObject indicator,
-        LispObject defaultValue) throws LispError
-    {
-        LispObject list = checkList(symbol.getPropertyList());
-        while (list != NIL) {
-            LispObject obj = list.car();
-            if (obj.eql(indicator))
-                return list.cadr();
-            list = list.cdr().cdr();
-        }
-        return defaultValue;
-    }
-
     // ### %put
     // %put symbol indicator value
     private static final Primitive3 _PUT = new Primitive3("%put") {
@@ -3073,25 +3060,6 @@ public final class Primitives extends Module
             return put(symbol, indicator, value);
         }
     };
-
-    private static final LispObject put(Symbol symbol, LispObject indicator,
-        LispObject value) throws LispError
-    {
-        LispObject list = checkList(symbol.getPropertyList());
-        while (list != NIL) {
-            if (list.car().eql(indicator)) {
-                // Found it!
-                LispObject rest = list.cdr();
-                rest.setCar(value);
-                return value;
-            }
-            list = list.cdr().cdr();
-        }
-        // Not found.
-        symbol.setPropertyList(new Cons(indicator, new Cons(value,
-            symbol.getPropertyList())));
-        return value;
-    }
 
     private static final SpecialOperator LET = new SpecialOperator("let") {
         public LispObject execute(LispObject args, Environment env)

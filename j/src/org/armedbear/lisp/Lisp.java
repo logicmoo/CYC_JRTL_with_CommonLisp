@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.77 2003-06-01 15:10:21 piso Exp $
+ * $Id: Lisp.java,v 1.78 2003-06-02 13:02:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -569,6 +569,39 @@ public abstract class Lisp
         catch (ClassCastException e) {
             throw new TypeError(obj, "environment");
         }
+    }
+
+    // Property lists.
+    public static final LispObject get(Symbol symbol, LispObject indicator,
+        LispObject defaultValue) throws LispError
+    {
+        LispObject list = checkList(symbol.getPropertyList());
+        while (list != NIL) {
+            LispObject obj = list.car();
+            if (obj.eql(indicator))
+                return list.cadr();
+            list = list.cdr().cdr();
+        }
+        return defaultValue;
+    }
+
+    public static final LispObject put(Symbol symbol, LispObject indicator,
+        LispObject value) throws LispError
+    {
+        LispObject list = checkList(symbol.getPropertyList());
+        while (list != NIL) {
+            if (list.car().eql(indicator)) {
+                // Found it!
+                LispObject rest = list.cdr();
+                rest.setCar(value);
+                return value;
+            }
+            list = list.cdr().cdr();
+        }
+        // Not found.
+        symbol.setPropertyList(new Cons(indicator, new Cons(value,
+            symbol.getPropertyList())));
+        return value;
     }
 
     // Packages.
