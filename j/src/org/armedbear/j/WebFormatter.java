@@ -2,7 +2,7 @@
  * WebFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WebFormatter.java,v 1.1.1.1 2002-09-24 16:08:45 piso Exp $
+ * $Id: WebFormatter.java,v 1.2 2002-10-04 23:52:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,16 @@
 
 package org.armedbear.j;
 
+import gnu.regexp.RE;
+import gnu.regexp.UncheckedRE;
 import java.awt.Color;
 import java.awt.Font;
 
 public final class WebFormatter extends Formatter implements WebConstants
 {
+    // Includes '/' for "Parts/Attachments".
+    private static final RE headerRE = new UncheckedRE("^ *[a-zA-Z\\-/]+:");
+
     public WebFormatter(Buffer buffer)
     {
         this.buffer = buffer;
@@ -33,13 +38,30 @@ public final class WebFormatter extends Formatter implements WebConstants
 
     public final LineSegmentList formatLine(Line line)
     {
-        LineSegmentList list =
-            line instanceof WebLine ? ((WebLine)line).getSegmentList() : null;
-        if (list == null) {
-            list = new LineSegmentList();
-            list.addSegment(new HtmlLineSegment("", 0));
+        if (line instanceof WebLine) {
+            LineSegmentList list = ((WebLine)line).getSegmentList();
+            if (list == null) {
+                list = new LineSegmentList();
+                list.addSegment(new HtmlLineSegment("", 0));
+            }
+            return list;
         }
-        return list;
+        clearSegmentList();
+        final String text = getDetabbedText(line);
+        if (line instanceof MessageHeaderLine) {
+            if (text.length() > 0) {
+                int i = text.indexOf(':');
+                if (i >= 0 && headerRE.getMatch(text) != null) {
+                    addSegment(text, 0, i+1, FORMAT_HEADER_NAME);
+                    addSegment(text, i+1, FORMAT_HEADER_VALUE);
+                    return segmentList;
+                }
+            }
+            // Continuation line.
+            addSegment(text, FORMAT_HEADER_VALUE);
+        } else
+            addSegment(text, FORMAT_TEXT);
+        return segmentList;
     }
 
     public final Color getColor(int format)
@@ -80,6 +102,8 @@ public final class WebFormatter extends Formatter implements WebConstants
             formatTable.addEntryFromPrefs(FORMAT_LINK, "link", "keyword");
             formatTable.addEntryFromPrefs(FORMAT_WHITESPACE, "text");
             formatTable.addEntryFromPrefs(FORMAT_DISABLED, "disabled");
+            formatTable.addEntryFromPrefs(FORMAT_HEADER_NAME, "headerName", "keyword");
+            formatTable.addEntryFromPrefs(FORMAT_HEADER_VALUE, "headerValue", "operator");
         }
         return formatTable;
     }
