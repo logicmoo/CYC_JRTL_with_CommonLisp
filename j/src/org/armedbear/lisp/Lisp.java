@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.167 2003-10-17 14:08:35 piso Exp $
+ * $Id: Lisp.java,v 1.168 2003-10-25 16:35:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.lisp;
 
 import java.math.BigInteger;
+import java.util.Hashtable;
 import java.util.Random;
 
 public abstract class Lisp
@@ -1036,9 +1037,34 @@ public abstract class Lisp
     {
         Package pkg = Packages.findPackage(packageName);
         if (pkg == null)
-            throw new ConditionThrowable(new LispError(packageName + " is not the name of a package"));
+            throw new ConditionThrowable(new LispError(packageName +
+                                                       " is not the name of a package"));
         return pkg.intern(name);
     }
+
+    // The jvm compiler's object table.
+    private static final Hashtable objectTable = new Hashtable();
+
+    public static final LispObject recall(LispString key)
+    {
+        return (LispObject) objectTable.get(((LispString)key).getValue());
+    }
+
+    public static final void forget(LispString key)
+    {
+        objectTable.remove(((LispString)key).getValue());
+    }
+
+    public static final Primitive2 REMEMBER =
+        new Primitive2("remember", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            objectTable.put(LispString.getValue(first), second);
+            return NIL;
+        }
+    };
 
     public static final Symbol export(String name, Package pkg)
     {
@@ -1221,7 +1247,8 @@ public abstract class Lisp
 
     // ### start-profiler
     public static final Primitive0 START_PROFILER =
-        new Primitive0("start-profiler", PACKAGE_EXT, true) {
+        new Primitive0("start-profiler", PACKAGE_EXT, true)
+    {
         public LispObject execute() throws ConditionThrowable
         {
             CharacterOutputStream out = getStandardOutput();
@@ -1251,7 +1278,8 @@ public abstract class Lisp
 
     // ### stop-profiler
     public static final Primitive0 STOP_PROFILER =
-        new Primitive0("stop-profiler", PACKAGE_EXT, true) {
+        new Primitive0("stop-profiler", PACKAGE_EXT, true)
+    {
         public LispObject execute() throws ConditionThrowable
         {
             CharacterOutputStream out = getStandardOutput();
