@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.10 2004-09-27 01:37:34 piso Exp $
+ * $Id: MathFunctions.java,v 1.11 2004-09-27 02:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -536,12 +536,6 @@ public final class MathFunctions extends Lisp
         public LispObject execute(LispObject base, LispObject power)
             throws ConditionThrowable
         {
-            if (base instanceof Complex || power instanceof Complex) {
-                if (base.zerop() && ((Complex)power).getRealPart().plusp()) {
-                    return base.multiplyBy(power);
-                }
-                return exp(power.multiplyBy(log(base)));
-            }
             if (power.zerop()) {
                 if (power instanceof Fixnum) {
                     if (base instanceof LispFloat)
@@ -574,6 +568,12 @@ public final class MathFunctions extends Lisp
                         result = result.divideBy(base);
                 }
                 return result;
+            }
+            if (base instanceof Complex || power instanceof Complex) {
+                if (base.zerop() && ((Complex)power).getRealPart().plusp()) {
+                    return base.multiplyBy(power);
+                }
+                return exp(power.multiplyBy(log(base)));
             }
             final double x; // base
             final double y; // power
