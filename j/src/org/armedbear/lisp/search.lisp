@@ -1,7 +1,7 @@
 ;;; search.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: search.lisp,v 1.1 2003-06-10 15:49:13 piso Exp $
+;;; $Id: search.lisp,v 1.2 2003-06-20 02:32:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,14 +39,14 @@
         (sub (nthcdr start1 ,sub) (cdr sub)))
      ((or (null main) (null sub) (= end1 jndex))
       t)
-     (compare-elements (car main) (car sub))))
+     (compare-elements (car sub) (car main))))
 
 
 (defmacro search-compare-list-vector (main sub)
   `(do ((main ,main (cdr main))
         (index start1 (1+ index)))
      ((or (null main) (= index end1)) t)
-     (compare-elements (car main) (aref ,sub index))))
+     (compare-elements (aref ,sub index) (car main))))
 
 
 (defmacro search-compare-vector-list (main sub index)
@@ -54,14 +54,14 @@
         (jndex start1 (1+ jndex))
         (index ,index (1+ index)))
      ((or (= end1 jndex) (null sub)) t)
-     (compare-elements (aref ,main index) (car sub))))
+     (compare-elements (car sub) (aref ,main index))))
 
 
 (defmacro search-compare-vector-vector (main sub index)
   `(do ((index ,index (1+ index))
         (sub-index start1 (1+ sub-index)))
      ((= sub-index end1) t)
-     (compare-elements (aref ,main index) (aref ,sub sub-index))))
+     (compare-elements (aref ,sub sub-index) (aref ,main index))))
 
 
 (defmacro search-compare (main-type main sub index)
