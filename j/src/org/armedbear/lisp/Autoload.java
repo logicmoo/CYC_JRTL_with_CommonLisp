@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.120 2004-01-01 18:51:27 piso Exp $
+ * $Id: Autoload.java,v 1.121 2004-01-02 01:24:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,6 +276,7 @@ public class Autoload extends Function
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
         autoload("sxhash", "HashTable");
+        autoload("unbound-slot-instance", "unbound_slot_instance");
         autoload("unexport", "PackageFunctions");
         autoload("unuse-package", "PackageFunctions");
         autoload("user-homedir-pathname", "Pathname");
