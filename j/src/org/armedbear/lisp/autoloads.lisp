@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.33 2003-09-26 01:11:06 piso Exp $
+;;; $Id: autoloads.lisp,v 1.34 2003-09-27 17:31:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -92,3 +92,4 @@
 (autoload-macro 'remf)
 (autoload-macro 'define-condition)
 (autoload-macro 'check-type)
+(autoload-macro 'deftype)
