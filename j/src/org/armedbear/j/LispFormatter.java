@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.13 2002-12-30 16:06:28 piso Exp $
+ * $Id: LispFormatter.java,v 1.14 2002-12-31 17:21:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -487,6 +487,7 @@ public final class LispFormatter extends Formatter
                     break;
                 case ';':
                 case ':':
+                case ',':
                     return i;
                 default:
                     while (++i < limit) {
