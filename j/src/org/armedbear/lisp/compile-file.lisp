@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.28 2004-06-15 11:59:35 piso Exp $
+;;; $Id: compile-file.lisp,v 1.29 2004-06-19 02:54:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@
                      (expr (list 'lambda lambda-list (list* 'block name body)) nil)
                      (classfile-name (next-classfile-name))
                      (classfile (report-error
-                                 (jvm:compile-defun nil expr nil classfile-name)))
+                                 (jvm:compile-defun name expr nil classfile-name)))
                      (compiled-function (and classfile
                                              (report-error
                                               (load-compiled-function classfile)))))
