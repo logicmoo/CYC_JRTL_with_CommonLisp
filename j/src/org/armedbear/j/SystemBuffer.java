@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: SystemBuffer.java,v 1.14 2003-06-06 12:35:22 piso Exp $
+ * $Id: SystemBuffer.java,v 1.15 2003-06-14 17:49:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -411,10 +411,12 @@ public class SystemBuffer implements Constants
         if (Platform.isPlatformWindows()) {
             // writeTemporaryFile() throws a SaveException if an error occurs.
             File tempFile = writeTemporaryFile();
-            if (!Utilities.makeBackup(file, false)) {
-                Log.error("backup failed");
-                throw new SaveException(file,
-                    "Unable to write backup file for " + file.canonicalPath());
+            if (!makePatchFile()) {
+                if (!Utilities.makeBackup(file, false)) {
+                    Log.error("backup failed");
+                    throw new SaveException(file,
+                        "Unable to write backup file for " + file.canonicalPath());
+                }
             }
             if (!Utilities.deleteRename(tempFile, file)) {
                 Log.error("unable to rename " + tempFile.canonicalPath() +
@@ -425,11 +427,13 @@ public class SystemBuffer implements Constants
         } else {
             // Save in place on Unix to preserve permissions and ownership of
             // file. Keep original (instead of renaming it) when making backup.
-            if (!Utilities.makeBackup(file, true)) {
-                Log.error("backup failed");
-                throw new SaveException(file,
-                    "Unable to write backup file for ".concat(
-                        file.canonicalPath()));
+            if (!makePatchFile()) {
+                if (!Utilities.makeBackup(file, true)) {
+                    Log.error("backup failed");
+                    throw new SaveException(file,
+                        "Unable to write backup file for ".concat(
+                            file.canonicalPath()));
+                }
             }
             // Write directly to original file.
             if (!writeFile(file)) {
@@ -438,6 +442,43 @@ public class SystemBuffer implements Constants
                     "Unable to write ".concat(file.canonicalPath()));
             }
         }
+    }
+
+    // Returns true if patch file was created successfully.
+    private final boolean makePatchFile()
+    {
+        if (file.isFile()) {
+            File patchFile = getPatchFile();
+            if (patchFile != null) {
+                if (!patchFile.isFile())
+                    return Utilities.copyFile(file, patchFile);
+            }
+        }
+        return false;
+    }
+
+    // Returns null if "patchmode" preference is not set.
+    // Public for DiffMode.diff().
+    public final File getPatchFile()
+    {
+        String suffix;
+        if (this instanceof Buffer)
+            suffix = ((Buffer)this).getStringProperty(Property.PATCH_MODE);
+        else if (mode != null)
+            suffix = mode.getStringProperty(Property.PATCH_MODE);
+        else {
+            suffix =
+                Editor.preferences().getStringProperty(Property.PATCH_MODE);
+        }
+        if (suffix != null) {
+            suffix = suffix.trim();
+            if (suffix.length() > 0) {
+                if (suffix.charAt(0) != '.')
+                    suffix = ".".concat(suffix);
+                return File.getInstance(file.canonicalPath().concat(suffix));
+            }
+        }
+        return null;
     }
 
     public boolean writeFile(File outputFile)
