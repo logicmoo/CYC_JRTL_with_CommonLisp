@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.35 2003-06-02 22:45:51 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.36 2003-06-03 01:55:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -548,9 +548,9 @@ public class CharacterInputStream extends LispStream
 
     private LispObject makeObject(String token) throws LispError
     {
-        if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
+        final LispThread thread = LispThread.currentThread();
+        if (_READ_SUPPRESS_.symbolValueNoThrow(thread) != NIL)
             return NIL;
-
         char c = token.charAt(0);
         if ("-+0123456789".indexOf(c) >= 0) {
             LispObject number = makeNumber(token);
@@ -591,7 +591,8 @@ public class CharacterInputStream extends LispStream
                     "\" is not external in package " + packageName);
             return symbol;
         }
-        return internInCurrentPackage(token);
+        // Intern token in current package.
+        return ((Package)_PACKAGE_.symbolValueNoThrow(thread)).intern(token);
     }
 
     private LispObject makeNumber(String token) throws LispError
