@@ -1,7 +1,7 @@
 ;;; symbol.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: symbol.lisp,v 1.4 2003-07-15 18:28:58 piso Exp $
+;;; $Id: symbol.lisp,v 1.5 2003-08-15 14:31:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,7 +62,8 @@
 (defun copy-symbol (symbol &optional (copy-props nil) &aux new-symbol)
   (setq new-symbol (make-symbol (symbol-name symbol)))
   (when copy-props
-    (set new-symbol (symbol-value symbol))
+    (when (boundp symbol)
+      (set new-symbol (symbol-value symbol)))
     (setf (symbol-plist new-symbol) (copy-list (symbol-plist symbol)))
     (when (fboundp symbol)
       (setf (symbol-function new-symbol) (symbol-function symbol))))
