@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.20 2004-02-09 13:07:21 piso Exp $
+;;; $Id: numbers.lisp,v 1.21 2004-02-27 13:05:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -198,6 +198,12 @@
 	      (return init-value))
 	    (setq init-value iterated-value))))))
 
+(defun float-precision (float)
+  (if (floatp float)
+      (if (zerop float) 0 53)
+      (error 'simple-type-error
+             :format-control "~S is not of type FLOAT."
+             :format-arguments (list float))))
 
 (defun float-sign (float1 &optional (float2 (float 1 float1)))
   "Returns a floating-point number that has the same sign as
