@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.73 2004-06-10 12:16:32 piso Exp $
+ * $Id: Stream.java,v 1.74 2004-06-10 12:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -272,7 +272,7 @@ public class Stream extends LispObject
     public LispObject readSymbol() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
-        _readToken(sb);
+        _readToken(sb, LispThread.currentThread());
         return new Symbol(sb.toString());
     }
 
@@ -342,7 +342,8 @@ public class Stream extends LispObject
         }
     }
 
-    private static boolean isTokenDelimiter(char c)
+    private static final boolean isTokenDelimiter(char c)
+        throws ConditionThrowable
     {
         switch (c) {
             case '"':
@@ -558,8 +559,8 @@ public class Stream extends LispObject
     {
         StringBuffer sb = new StringBuffer();
         sb.append(c);
-        boolean escaped = _readToken(sb);
         final LispThread thread = LispThread.currentThread();
+        boolean escaped = _readToken(sb, thread);
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         final String token = sb.toString();
@@ -639,11 +640,11 @@ public class Stream extends LispObject
         return ((Package)_PACKAGE_.symbolValue(thread)).intern(token);
     }
 
-    private final boolean _readToken(StringBuffer sb)
+    private final boolean _readToken(StringBuffer sb, LispThread thread)
         throws ConditionThrowable
     {
         boolean escaped = false;
-        final Readtable rt = currentReadtable();
+        final Readtable rt = currentReadtable(thread);
         final LispObject readtableCase = rt.getReadtableCase();
         if (sb.length() > 0) {
             Debug.assertTrue(sb.length() == 1);
@@ -843,7 +844,7 @@ public class Stream extends LispObject
     public LispObject readRadix(int radix) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
-        boolean escaped = _readToken(sb);
+        boolean escaped = _readToken(sb, LispThread.currentThread());
         if (escaped)
             return signal(new ReaderError("Illegal syntax for number."));
         String s = sb.toString();
