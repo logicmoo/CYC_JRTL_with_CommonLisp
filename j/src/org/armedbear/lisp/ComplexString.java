@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.5 2004-02-24 15:37:48 piso Exp $
+ * $Id: ComplexString.java,v 1.6 2004-02-24 16:35:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,30 +288,6 @@ public final class ComplexString extends AbstractString
         return capacity;
     }
 
-    public final void ensureCapacity(int minCapacity) throws ConditionThrowable
-    {
-        if (chars != null) {
-            if (capacity < minCapacity) {
-                char[] newArray = new char[minCapacity];
-                System.arraycopy(chars, 0, newArray, 0, capacity);
-                chars = newArray;
-                capacity = minCapacity;
-            }
-        } else {
-            Debug.assertTrue(array != null);
-            if (array.length() - displacement < minCapacity) {
-                // Copy array.
-                char[] chars = new char[minCapacity];
-                System.arraycopy(array.chars(), displacement, chars, 0,
-                                 array.length() - displacement);
-                capacity = minCapacity;
-                array = null;
-                displacement = 0;
-                isDisplaced = false;
-            }
-        }
-    }
-
     public AbstractArray adjustArray(int size, LispObject initialElement,
                                      LispObject initialContents)
         throws ConditionThrowable
@@ -414,6 +390,41 @@ public final class ComplexString extends AbstractString
         }
         chars[fillPointer] = LispCharacter.getValue(element);
         return new Fixnum(fillPointer++);
+    }
+
+    public final void ensureCapacity(int minCapacity) throws ConditionThrowable
+    {
+        if (chars != null) {
+            if (capacity < minCapacity) {
+                char[] newArray = new char[minCapacity];
+                System.arraycopy(chars, 0, newArray, 0, capacity);
+                chars = newArray;
+                capacity = minCapacity;
+            }
+        } else {
+            Debug.assertTrue(array != null);
+            if (array.getTotalSize() - displacement < minCapacity) {
+                // Copy array.
+                chars = new char[minCapacity];
+                final int limit = array.getTotalSize() - displacement;
+                if (array instanceof AbstractString) {
+                    AbstractString string = (AbstractString) array;
+                    for (int i = 0; i < limit; i++) {
+                        chars[i] = string.getChar(displacement + i);
+                    }
+                } else {
+                    for (int i = 0; i < limit; i++) {
+                        LispCharacter character =
+                            (LispCharacter) array.getRowMajor(displacement + i);
+                        chars[i] = character.value;
+                    }
+                }
+                capacity = minCapacity;
+                array = null;
+                displacement = 0;
+                isDisplaced = false;
+            }
+        }
     }
 
     private int cachedHashCode;

@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BitVector.java,v 1.31 2004-02-24 12:56:09 piso Exp $
+ * $Id: BitVector.java,v 1.32 2004-02-24 16:33:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,19 +130,6 @@ public final class BitVector extends AbstractVector
     public int capacity()
     {
         return capacity;
-    }
-
-    public final void ensureCapacity(int minCapacity)
-    {
-        if (capacity < minCapacity) {
-            int size = minCapacity >>> 6;
-            if ((minCapacity & LONG_MASK) != 0)
-                ++size;
-            long[] newBits = new long[size];
-            System.arraycopy(bits, 0, newBits, 0, bits.length);
-            bits = newBits;
-            capacity = minCapacity;
-        }
     }
 
     public int length()
@@ -374,6 +361,19 @@ public final class BitVector extends AbstractVector
         set(fp, element);
         setFillPointer(fp + 1);
         return new Fixnum(fp);
+    }
+
+    private final void ensureCapacity(int minCapacity)
+    {
+        if (capacity < minCapacity) {
+            int size = minCapacity >>> 6;
+            if ((minCapacity & LONG_MASK) != 0)
+                ++size;
+            long[] newBits = new long[size];
+            System.arraycopy(bits, 0, newBits, 0, bits.length);
+            bits = newBits;
+            capacity = minCapacity;
+        }
     }
 
     public String toString()

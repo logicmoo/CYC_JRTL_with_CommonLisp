@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.2 2004-02-24 12:29:08 piso Exp $
+ * $Id: ComplexVector.java,v 1.3 2004-02-24 16:35:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 // A vector that is displaced to another array, has a fill pointer, and/or is
 // expressly adjustable. It can hold elements of any type.
-public class ComplexVector extends AbstractVector
+public final class ComplexVector extends AbstractVector
 {
     private int capacity;
     private int fillPointer = -1; // -1 indicates no fill pointer.
@@ -122,16 +122,6 @@ public class ComplexVector extends AbstractVector
     public int capacity()
     {
         return capacity;
-    }
-
-    public final void ensureCapacity(int minCapacity)
-    {
-        if (elements.length < minCapacity) {
-            LispObject[] newArray = new LispObject[minCapacity];
-            System.arraycopy(elements, 0, newArray, 0, elements.length);
-            elements = newArray;
-            capacity = minCapacity;
-        }
     }
 
     public AbstractArray adjustArray(int size, LispObject initialElement,
@@ -317,6 +307,31 @@ public class ComplexVector extends AbstractVector
         }
         set(fillPointer, element);
         return new Fixnum(fillPointer++);
+    }
+
+    private final void ensureCapacity(int minCapacity) throws ConditionThrowable
+    {
+        if (elements != null) {
+            if (capacity < minCapacity) {
+                LispObject[] newArray = new LispObject[minCapacity];
+                System.arraycopy(elements, 0, newArray, 0, capacity);
+                elements = newArray;
+                capacity = minCapacity;
+            }
+        } else {
+            Debug.assertTrue(array != null);
+            if (array.getTotalSize() - displacement < minCapacity) {
+                // Copy array.
+                elements = new LispObject[minCapacity];
+                final int limit = array.getTotalSize() - displacement;
+                for (int i = 0; i < limit; i++)
+                    elements[i] = array.getRowMajor(displacement + i);
+                capacity = minCapacity;
+                array = null;
+                displacement = 0;
+                isDisplaced = false;
+            }
+        }
     }
 
     public String toString()
