@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.6 2003-01-27 18:04:30 piso Exp $
+ * $Id: Lisp.java,v 1.7 2003-01-28 01:41:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,11 +25,6 @@ import java.util.Stack;
 
 public abstract class Lisp
 {
-    public static final String version()
-    {
-        return "0.0.0.3";
-    }
-
     // ### t
     public static final LispObject T = new LispObject() {
         public String toString()
