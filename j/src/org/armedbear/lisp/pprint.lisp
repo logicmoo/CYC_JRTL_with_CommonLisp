@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.3 2004-03-03 00:36:21 piso Exp $
+;;; $Id: pprint.lisp,v 1.4 2004-03-04 01:20:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3031,6 +3031,8 @@ dw::
 ;so only happens first time is loaded.
 (when (eq *print-pprint-dispatch* T)
   (setq *print-pprint-dispatch* (copy-pprint-dispatch nil)))
+
+(provide 'pprint)
 
 ;changes since last documentation.
 ;~/fn/ only refers to global function values, not lexical.
