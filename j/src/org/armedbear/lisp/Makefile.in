@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.175 2004-05-25 18:41:57 piso Exp $
+# $Id: Makefile.in,v 1.176 2004-06-06 08:41:15 asimon Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -150,6 +150,7 @@ CLASSFILES =	AbstractArray.class \
 		SymbolMacro.class \
 		SynonymStream.class \
 		ThreadDestroyed.class \
+		ThreadLock.class \
 		Throw.class \
 		Time.class \
 		TypeError.class \
