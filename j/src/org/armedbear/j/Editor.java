@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.83 2003-07-01 12:18:22 piso Exp $
+ * $Id: Editor.java,v 1.84 2003-07-01 13:29:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6903,34 +6903,10 @@ public final class Editor extends JPanel implements Constants,
         }
     }
 
-    private static Method runLispCommandMethod;
-
     public static void runLispCommand(String command)
     {
         try {
-            if (runLispCommandMethod == null) {
-                Class c = Class.forName("org.armedbear.j.JLisp");
-                if (c != null) {
-                    Class[] parameterTypes = new Class[1];
-                    parameterTypes[0] = String.class;
-                    runLispCommandMethod =
-                        c.getMethod("runLispCommand", parameterTypes);
-                }
-            }
-            if (runLispCommandMethod != null) {
-                Object[] args = new Object[1];
-                args[0] = command;
-                runLispCommandMethod.invoke(null, args);
-            }
-        }
-        catch (ClassNotFoundException e) {
-            // Not an error.
-        }
-        catch (NoSuchMethodException e) {
-            Log.error(e);
-        }
-        catch (IllegalAccessException e) {
-            Log.error(e);
+            JLisp.runLispCommand(command);
         }
         catch (Throwable t) {
             Log.error(t);
