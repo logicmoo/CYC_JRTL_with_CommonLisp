@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.15 2004-01-29 14:37:12 piso Exp $
+;;; $Id: open.lisp,v 1.16 2004-01-30 20:16:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,6 +21,67 @@
 
 (in-package "SYSTEM")
 
+(defun upgraded-element-type-bits (bits)
+  (if (zerop (mod bits 8))
+      bits
+      (+ bits (- 8 (mod bits 8)))))
+
+(defun upgraded-element-type (element-type)
+  (let ((ok nil))
+    (if (atom element-type)
+        (case element-type
+          ((character base-char)
+           (setf ok t))
+          ((unsigned-byte signed-byte)
+           (setf element-type (list element-type 8)
+                 ok t))
+          (bit
+           (setf element-type (list 'unsigned-byte (upgraded-element-type-bits 1))
+                 ok t))
+          (integer
+           (setf element-type '(signed-byte 8))))
+        (cond ((eq (car element-type) 'or)
+               (let ((types (mapcar #'upgraded-element-type (cdr element-type)))
+                     (result '(unsigned-byte 8)))
+                 (dolist (type types)
+                   (when (eq (car type) 'signed-byte)
+                     (setf (car result) 'signed-byte))
+                   (setf (cadr result) (max (cadr result) (cadr type))))
+                 (setf element-type result
+                       ok t)))
+              ((and (= (length element-type) 2)
+                    (memq (car element-type) '(unsigned-byte signed-byte)))
+               (let ((type (car element-type))
+                     (width (cadr element-type)))
+                 (setf element-type (list (car element-type)
+                                          (upgraded-element-type-bits width))
+                       ok t)))
+              ((eq (car element-type) 'integer)
+               (case (length element-type)
+                 (2
+                  (setf element-type '(signed-byte 8)
+                        ok t))
+                 (3
+                  (let ((low (cadr element-type))
+                        (high (caddr element-type)))
+                    (when (consp low)
+                      (setf low (1+ (car low))))
+                    (when (consp high)
+                      (setf high (1- (car high))))
+                    (setf element-type
+                          (if (minusp low)
+                              (list 'signed-byte
+                                    (upgraded-element-type-bits (max (1+ (integer-length low))
+                                                                     (integer-length high))))
+                              (list 'unsigned-byte
+                                    (upgraded-element-type-bits (integer-length high))))
+                          ok t)))))))
+    (if ok
+        element-type
+        (error 'file-error
+               :format-control "Unsupported element type ~S."
+               :format-arguments (list element-type)))))
+
 (defun open (filename
 	     &key
 	     (direction :input)
@@ -28,6 +89,7 @@
 	     (if-exists nil if-exists-given)
 	     (if-does-not-exist nil if-does-not-exist-given)
 	     (external-format :default))
+  (setf element-type (upgraded-element-type element-type))
   (let ((pathname (merge-pathnames filename)))
     (when (memq direction '(:output :io))
       (unless if-exists-given
