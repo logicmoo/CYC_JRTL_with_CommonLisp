@@ -1,8 +1,8 @@
 /*
  * Sidebar.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: Sidebar.java,v 1.1.1.1 2002-09-24 16:08:26 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: Sidebar.java,v 1.2 2003-07-24 19:31:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,10 +49,11 @@ public final class Sidebar extends JComponent implements Constants
         JScrollPane bufferListScrollPane = new JScrollPane(bufferList);
         bufferListScrollPane.setAlignmentX(LEFT_ALIGNMENT);
         bufferListScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        bufferListScrollPane.setBorder(BorderFactory.createEmptyBorder());
         topPanel.addScrollPane(bufferListScrollPane);
         bottomPanel = new SidebarPanel(this);
         splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topPanel, bottomPanel);
-        splitPane.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.gray));
+        splitPane.setBorder(BorderFactory.createEmptyBorder());
         splitPane.setDividerLocation(Editor.getSessionProperties().getSidebarDividerLocation(frame));
         add(splitPane);
     }
@@ -181,10 +182,11 @@ public final class Sidebar extends JComponent implements Constants
         final Editor editor = getEditor();
         bottomComponent = editor.getMode().getSidebarComponent(editor);
         if (bottomComponent != null) {
-            JScrollPane scrollPane = new JScrollPane((JComponent) bottomComponent);
+            JScrollPane scrollPane = new JScrollPane((JComponent)bottomComponent);
             if (bottomComponent instanceof SidebarList)
                 scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollPane.setAlignmentX(LEFT_ALIGNMENT);
+            scrollPane.setBorder(BorderFactory.createEmptyBorder());
             bottomPanel.addScrollPane(scrollPane);
             bottomPanel.validate();
         } else
