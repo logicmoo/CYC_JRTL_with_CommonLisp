@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.37 2004-02-27 14:32:59 piso Exp $
+ * $Id: Cons.java,v 1.38 2004-04-24 12:32:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,7 +121,23 @@ public final class Cons extends LispObject
 
     public final int hashCode()
     {
-        return car.hashCode() ^ cdr.hashCode();
+        return computeHashCode(this, 4);
+    }
+
+    private static final int computeHashCode(LispObject obj, int depth)
+    {
+        if (obj instanceof Cons) {
+            if (depth > 0) {
+                int n1 = computeHashCode(((Cons)obj).car(), depth - 1);
+                int n2 = computeHashCode(((Cons)obj).cdr(), depth - 1);
+                return n1 ^ n2;
+            } else {
+                // This number comes from SBCL, but since we're not really
+                // using SBCL's SXHASH algorithm, it's probably not optimal.
+                return 261835505;
+            }
+        } else
+            return obj.hashCode();
     }
 
     public final boolean equal(LispObject obj) throws ConditionThrowable
@@ -240,68 +256,62 @@ public final class Cons extends LispObject
         return array;
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
-        try {
-            final LispObject printLength = _PRINT_LENGTH_.symbolValue();
-            final int limit;
-            if (printLength instanceof Fixnum)
-                limit = ((Fixnum)printLength).value;
-            else
-                limit = Integer.MAX_VALUE;
-            StringBuffer sb = new StringBuffer();
-            if (car == Symbol.QUOTE) {
-                if (cdr instanceof Cons) {
-                    // Not a dotted list.
-                    if (cdr.cdr() == NIL) {
-                        sb.append('\'');
-                        sb.append(cdr.car());
-                        return sb.toString();
-                    }
+        final LispObject printLength = _PRINT_LENGTH_.symbolValue();
+        final int limit;
+        if (printLength instanceof Fixnum)
+            limit = ((Fixnum)printLength).value;
+        else
+            limit = Integer.MAX_VALUE;
+        StringBuffer sb = new StringBuffer();
+        if (car == Symbol.QUOTE) {
+            if (cdr instanceof Cons) {
+                // Not a dotted list.
+                if (cdr.cdr() == NIL) {
+                    sb.append('\'');
+                    sb.append(cdr.car().writeToString());
+                    return sb.toString();
                 }
             }
-            if (car == Symbol.FUNCTION) {
-                if (cdr instanceof Cons) {
-                    // Not a dotted list.
-                    if (cdr.cdr() == NIL) {
-                        sb.append("#'");
-                        sb.append(cdr.car());
-                        return sb.toString();
-                    }
+        }
+        if (car == Symbol.FUNCTION) {
+            if (cdr instanceof Cons) {
+                // Not a dotted list.
+                if (cdr.cdr() == NIL) {
+                    sb.append("#'");
+                    sb.append(cdr.car().writeToString());
+                    return sb.toString();
                 }
             }
-            int count = 0;
-            boolean truncated = false;
-            sb.append('(');
-            if (count < limit) {
-                LispObject p = this;
-                sb.append(p.car());
-                ++count;
-                while ((p = p.cdr()) instanceof Cons) {
-                    if (count < limit) {
-                        sb.append(' ');
-                        sb.append(p.car());
-                        ++count;
-                    } else {
-                        truncated = true;
-                        break;
-                    }
-                }
-                if (!truncated && p != NIL) {
-                    sb.append(" . ");
-                    sb.append(p);
-                }
-            } else
-                truncated = true;
-            if (truncated)
-                sb.append(" ...");
-            sb.append(')');
-            return sb.toString();
         }
-        catch (Throwable t) {
-            Debug.trace(t);
-            return "";
-        }
+        int count = 0;
+        boolean truncated = false;
+        sb.append('(');
+        if (count < limit) {
+            LispObject p = this;
+            sb.append(p.car().writeToString());
+            ++count;
+            while ((p = p.cdr()) instanceof Cons) {
+                if (count < limit) {
+                    sb.append(' ');
+                    sb.append(p.car().writeToString());
+                    ++count;
+                } else {
+                    truncated = true;
+                    break;
+                }
+            }
+            if (!truncated && p != NIL) {
+                sb.append(" . ");
+                sb.append(p.writeToString());
+            }
+        } else
+            truncated = true;
+        if (truncated)
+            sb.append(" ...");
+        sb.append(')');
+        return sb.toString();
     }
 
     // Statistics for TIME.
