@@ -1,0 +1,84 @@
+;;; define-modify-macro.lisp
+;;;
+;;; Copyright (C) 2003 Peter Graves
+;;; $Id: define-modify-macro.lisp,v 1.1 2003-10-06 00:16:18 piso Exp $
+;;;
+;;; This program is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU General Public License
+;;; as published by the Free Software Foundation; either version 2
+;;; of the License, or (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+;;; Adapted from CMUCL.
+
+(in-package "SYSTEM")
+
+(defmacro define-modify-macro (name lambda-list function &optional doc-string)
+  "Creates a new read-modify-write macro like PUSH or INCF."
+  (let ((other-args nil)
+	(rest-arg nil)
+	(env (gensym))
+	(reference (gensym)))
+    ;; Parse out the variable names and rest arg from the lambda list.
+    (do ((ll lambda-list (cdr ll))
+	 (arg nil))
+	((null ll))
+      (setq arg (car ll))
+      (cond ((eq arg '&optional))
+	    ((eq arg '&rest)
+	     (if (symbolp (cadr ll))
+		 (setq rest-arg (cadr ll))
+		 (error "non-symbol &REST arg in definition of ~S" name))
+	     (if (null (cddr ll))
+		 (return nil)
+		 (error "illegal stuff after &rest arg in DEFINE-MODIFY-MACRO")))
+	    ((memq arg '(&key &allow-other-keys &aux))
+	     (error "~S not allowed in DEFINE-MODIFY-MACRO lambda list" arg))
+	    ((symbolp arg)
+	     (push arg other-args))
+	    ((and (listp arg) (symbolp (car arg)))
+	     (push (car arg) other-args))
+	    (t (error "illegal stuff in lambda list of DEFINE-MODIFY-MACRO"))))
+    (setq other-args (nreverse other-args))
+    `(defmacro ,name (,reference ,@lambda-list &environment ,env)
+       ,doc-string
+       (multiple-value-bind (dummies vals newval setter getter)
+	 (get-setf-expansion ,reference ,env)
+	 (do ((d dummies (cdr d))
+	      (v vals (cdr v))
+	      (let-list nil (cons (list (car d) (car v)) let-list)))
+	     ((null d)
+	      (push
+	       (list (car newval)
+		     ,(if rest-arg
+			  `(list* ',function getter ,@other-args ,rest-arg)
+			  `(list ',function getter ,@other-args)))
+	       let-list)
+	      `(let* ,(nreverse let-list)
+		 ,setter)))))))
+
+(define-modify-macro incf-complex (&optional (delta 1)) +
+  "The first argument is some location holding a number.  This number is
+   incremented by the second argument, DELTA, which defaults to 1.")
+
+(define-modify-macro decf-complex (&optional (delta 1)) -
+  "The first argument is some location holding a number.  This number is
+   decremented by the second argument, DELTA, which defaults to 1.")
+
+(defmacro incf (place &optional (delta 1))
+  (if (symbolp place)
+      `(setq ,place (+ ,place ,delta))
+      `(incf-complex ,place ,delta)))
+
+(defmacro decf (place &optional (delta 1))
+  (if (symbolp place)
+      `(setq ,place (- ,place ,delta))
+      `(decf-complex ,place ,delta)))
