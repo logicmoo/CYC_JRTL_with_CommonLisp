@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.9 2003-08-15 17:29:40 piso Exp $
+ * $Id: Pathname.java,v 1.10 2003-09-15 15:48:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,6 +96,32 @@ public final class Pathname extends LispObject
             if (arg instanceof Pathname)
                 return new LispString(((Pathname)arg).getNamestring());
             throw new TypeError(arg, "pathname designator");
+        }
+    };
+
+    // ### directory-namestring
+    // directory-namestring pathname => namestring
+    // FIXME arg can be a stream, too...
+    private static final Primitive1 DIRECTORY_NAMESTRING =
+        new Primitive1("directory-namestring")
+    {
+        public LispObject execute(LispObject arg) throws Condition
+        {
+            String namestring;
+            if (arg instanceof LispString)
+                namestring = ((LispString)arg).getValue();
+            else if (arg instanceof Pathname)
+                namestring = ((Pathname)arg).getNamestring();
+            else
+                throw new TypeError(arg, "pathname designator");
+            if (namestring != null) {
+                for (int i = namestring.length(); i-- > 0;) {
+                    char c = namestring.charAt(i);
+                    if (c == '/' || c == '\\')
+                        return new LispString(namestring.substring(0, i + 1));
+                }
+            }
+            return NIL;
         }
     };
 

@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.62 2003-09-14 11:37:40 piso Exp $
+ * $Id: Autoload.java,v 1.63 2003-09-15 15:48:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,6 +165,7 @@ public final class Autoload extends Function
         autoload("coerce", "coerce");
         autoload("copy-structure", "StructureObject");
         autoload("delete-package", "PackageFunctions");
+        autoload("directory-namestring", "Pathname");
         autoload("describe", "describe");
         autoload("file-write-date", "Time");
         autoload("find-class", "LispClass");
