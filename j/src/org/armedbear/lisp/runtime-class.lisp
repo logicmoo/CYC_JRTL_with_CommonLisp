@@ -1,7 +1,7 @@
 ;;; runtime-class.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: runtime-class.lisp,v 1.12 2004-08-11 17:15:05 asimon Exp $
+;;; $Id: runtime-class.lisp,v 1.13 2004-08-27 20:34:35 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -563,7 +563,7 @@
           for unique-method-name = (apply #'concatenate 'string "<init>|" arg-types)
           then (apply #'concatenate 'string "<init>|" arg-types)
           collect unique-method-name into args
-          collect constr-def into args
+          collect  (coerce constr-def 'function) into args
           do
           (write-method cw class-name class-type-name "<init>" unique-method-name '("public") "void" arg-types
                         (cons super-type-name super-invocation-args))
@@ -579,7 +579,7 @@
       for unique-method-name = (apply #'concatenate 'string method-name "|" arg-types)
       then (apply #'concatenate 'string method-name "|" arg-types)
       collect unique-method-name into args
-      collect method-def into args
+      collect (coerce method-def 'function) into args
       do
       (write-method cw class-name class-type-name method-name unique-method-name modifiers ret-type arg-types)
       finally
@@ -603,7 +603,7 @@
           "Can't redefine methods of undefined runtime class ~a" class-name)
   (let ((unique-method-name 
 	 (apply #'concatenate 'string (if method-name method-name "<init>") "|" arg-types)))
-    (java::%jredefine-method class-name unique-method-name method-def)))
+    (java::%jredefine-method class-name unique-method-name  (compile nil method-def))))
 
 (defun jruntime-class-exists-p (class-name)
   "Returns true if a class named CLASS-NAME has been created and loaded by JNEW-RUNTIME-CLASS.
