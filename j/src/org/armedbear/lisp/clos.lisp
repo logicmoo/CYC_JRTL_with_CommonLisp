@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.121 2004-11-06 14:39:42 piso Exp $
+;;; $Id: clos.lisp,v 1.122 2004-11-06 18:53:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -251,7 +251,8 @@
                      #'compute-slots)
                  class))
   (let ((length 0)
-        (instance-slots ()))
+        (instance-slots '())
+        (class-slots '()))
     (dolist (slot (class-slots class))
       (case (slot-definition-allocation slot)
         (:instance
@@ -262,13 +263,13 @@
          (unless (slot-definition-location slot)
            (let ((allocation-class (slot-definition-allocation-class slot)))
              (setf (slot-definition-location slot)
-                   (if (eq class allocation-class)
+                   (if (eq allocation-class class)
                        (cons (slot-definition-name slot) +slot-unbound+)
-                       (slot-location allocation-class (slot-definition-name slot)))))))))
+                       (slot-location allocation-class (slot-definition-name slot))))))
+         (push (slot-definition-location slot) class-slots))))
     (setf (class-layout class)
-          (make-layout class length (nreverse instance-slots))))
-  (setf (class-default-initargs class)
-        (compute-class-default-initargs class)))
+          (make-layout class (nreverse instance-slots) (nreverse class-slots))))
+  (setf (class-default-initargs class) (compute-class-default-initargs class)))
 
 (defun compute-class-default-initargs (class)
   (mapappend #'class-direct-default-initargs
@@ -418,11 +419,8 @@
         nil)))
 
 (defun instance-slot-location (instance slot-name)
-  (let* ((layout (std-instance-layout instance))
-         (location (and layout (layout-slot-index layout slot-name))))
-    (if location
-        location
-        (slot-location (class-of instance) slot-name))))
+  (let ((layout (std-instance-layout instance)))
+    (and layout (layout-slot-location layout slot-name))))
 
 (defun std-slot-value (instance slot-name)
   (let* ((location (instance-slot-location instance slot-name))
