@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.130 2003-09-13 18:48:02 piso Exp $
+;;; $Id: rt.lisp,v 1.131 2003-09-18 19:06:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@
 
 (defvar *prefix* "/home/peter/gcl/ansi-tests/")
 
-(defvar *compile-tests* nil)
+(defvar *compile-tests* t)
 
 (defvar *passed* 0)
 (defvar *failed* 0)
@@ -92,9 +92,10 @@
 	 (values p))
     (let* ((aborted nil)
            (r (handler-case (multiple-value-list
-                             (if *compile-tests*
-                                 (funcall (compile nil `(lambda () ,form)))
-                                 (eval `,form)))
+                             (cond (*compile-tests*
+                                    (funcall (compile nil `(lambda () ,form))))
+                                   (t
+                                    (eval `,form))))
                             (error (c) (setf aborted t) (list c))))
            (passed (and (not aborted) (equalp-with-case r `,values))))
       (unless passed
@@ -480,8 +481,7 @@
     (time (do-tests))))
 
 #+armedbear
-(when (and (find-package "JVM")
-           (fboundp 'jvm::jvm-compile))
+(when (fboundp 'jvm::jvm-compile)
   (mapcar #'jvm::jvm-compile '(sys::list-remove-duplicates*
                                sys::vector-remove-duplicates*
                                remove-duplicates
