@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.141 2003-12-17 03:42:17 piso Exp $
+;;; $Id: boot.lisp,v 1.142 2004-01-09 16:46:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -108,7 +108,6 @@
 (set-dispatch-macro-character #\# #\+ #'read-conditional)
 (set-dispatch-macro-character #\# #\- #'read-conditional)
 
-(make-package "JVM" :use '("COMMON-LISP" "EXTENSIONS"))
 (defvar jvm::*auto-compile* nil)
 (export 'jvm::*auto-compile* "JVM")
 
