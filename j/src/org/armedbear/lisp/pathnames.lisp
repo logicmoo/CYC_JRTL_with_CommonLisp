@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: pathnames.lisp,v 1.3 2004-01-03 17:46:25 piso Exp $
+;;; $Id: pathnames.lisp,v 1.4 2004-01-04 16:00:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,16 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "SYSTEM")
-
-(defun make-pathname (&key host
-			   device
-			   directory
-			   name
-			   type
-			   version
-			   defaults
-			   (case :local))
-  (%make-pathname host device directory name type version defaults case))
 
 (defun pathname-host (pathname &key (case :local))
   (%pathname-host pathname case))
