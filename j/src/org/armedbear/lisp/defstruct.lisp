@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.48 2004-04-16 14:26:50 piso Exp $
+;;; $Id: defstruct.lisp,v 1.49 2004-04-18 13:33:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -300,18 +300,12 @@
          `(lambda (instance) (aref instance ,index)))
         (t
          (case index
-           (0 #'%structure-ref-0)
-           (1 #'%structure-ref-1)
-           (2 #'%structure-ref-2)
+           (0 '(function %structure-ref-0))
+           (1 '(function %structure-ref-1))
+           (2 '(function %structure-ref-2))
            (t
-            (let ((code (make-closure
-                         `(lambda (instance)
-                            (%structure-ref instance ,index))
-                         nil)))
-              (if (and (fboundp 'jvm:jvm-compile)
-                       (not (autoloadp 'jvm:jvm-compile)))
-                  (jvm:jvm-compile nil code)
-                  code)))))))
+            `(lambda (instance)
+               (%structure-ref instance ,index)))))))
 
 (defun slot-writer (index)
   (cond ((eq *dd-type* 'list)
@@ -321,18 +315,12 @@
          `(lambda (instance value) (%aset instance ,index value)))
         (t
          (case index
-           (0 #'%structure-set-0)
-           (1 #'%structure-set-1)
-           (2 #'%structure-set-2)
+           (0 '(function %structure-set-0))
+           (1 '(function %structure-set-1))
+           (2 '(function %structure-set-2))
            (t
-            (let ((code (make-closure
-                         `(lambda (instance value)
-                            (%structure-set instance ,index value))
-                         nil)))
-              (if (and (fboundp 'jvm:jvm-compile)
-                       (not (autoloadp 'jvm:jvm-compile)))
-                  (jvm:jvm-compile nil code)
-                  code)))))))
+            `(lambda (instance value)
+               (%structure-set instance ,index value)))))))
 
 (defun define-access-function (slot-name index)
   (let ((accessor
@@ -454,9 +442,12 @@
     (setf *dd-direct-slots* (nreverse *dd-direct-slots*))
     (let ((index 0))
       (when *dd-include*
-        (let* ((dd (get (car *dd-include*) 'structure-definition))
-               (included-slots (dd-slots dd)))
-          (dolist (dsd included-slots)
+        (let ((dd (get (car *dd-include*) 'structure-definition)))
+          (unless dd
+            (error 'simple-error
+                   :format-control "Class ~S is undefined."
+                   :format-arguments (list (car *dd-include*))))
+          (dolist (dsd (dd-slots dd))
             (setf (dsd-index dsd) index)
             (push dsd *dd-slots*)
             (incf index)))
