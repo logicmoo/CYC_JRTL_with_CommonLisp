@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.55 2003-05-21 17:19:11 piso Exp $
+ * $Id: Editor.java,v 1.56 2003-05-21 17:23:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7535,7 +7535,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
     }
 
-    public void show(Line target)
+    private void show(Line target)
     {
         if (target == null)
             return;
