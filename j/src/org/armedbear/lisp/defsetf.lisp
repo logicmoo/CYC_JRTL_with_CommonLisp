@@ -1,7 +1,7 @@
 ;;; defsetf.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defsetf.lisp,v 1.1 2003-10-23 13:16:36 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: defsetf.lisp,v 1.2 2005-02-05 17:47:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,31 +17,13 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; CURRENTLY THIS FILE IS NOT USED! Oct 23 2003 6:16 AM
+;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
-(require :collect)
-
-;; (defmacro defsetf (access-function update-function)
-;;   `(%put ',access-function 'setf-inverse ',update-function))
+(require '#:collect)
 
 (defun %define-setf-macro (name expander inverse doc)
-;;   (cond ((not (fboundp `(setf ,name))))
-;; 	((info function accessor-for name)
-;; 	 (warn "Defining setf macro for destruct slot accessor; redefining as ~
-;;          a normal function:~%  ~S"
-;; 	       name)
-;; 	 (c::define-function-name name))
-;; 	((not (eq (symbol-package name) (symbol-package 'aref)))
-;; 	 (warn "Defining setf macro for ~S, but ~S is fbound."
-;; 	       name `(setf ,name))))
-;;   (when (or inverse (info setf inverse name))
-;;     (setf (info setf inverse name) inverse))
-;;   (when (or expander (info setf expander name))
-;;     (setf (info setf expander name) expander))
-;;   (when doc
-;;     (setf (documentation name 'setf) doc))
   (when inverse
     (setf (get name 'setf-inverse) inverse))
   (when expander
@@ -67,7 +49,7 @@
 
 (defmacro defsetf (access-fn &rest rest)
   (cond ((not (listp (car rest)))
-	 `(eval-when (load compile eval)
+	 `(eval-when (:load-toplevel :compile-toplevel :execute)
 	    (%define-setf-macro ',access-fn nil ',(car rest)
 				,(when (and (car rest) (stringp (cadr rest)))
 				   `',(cadr rest)))))
@@ -83,7 +65,7 @@
               (parse-defmacro `(,lambda-list ,@store-variables)
                               arglist-var body access-fn 'defsetf
                               :anonymousp t)
-              `(eval-when (load compile eval)
+              `(eval-when (:load-toplevel :compile-toplevel :execute)
                  (%define-setf-macro
                   ',access-fn
                   #'(lambda (,access-form-var ,env-var)
@@ -95,4 +77,4 @@
                   nil
                   ',doc))))))
 	(t
-	 (error "ill-formed DEFSETF for ~S" access-fn))))
+	 (error "Ill-formed DEFSETF for ~S" access-fn))))
