@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.17 2002-11-25 20:08:45 piso Exp $
+ * $Id: LispMode.java,v 1.18 2002-12-12 14:19:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -464,7 +464,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         if (ed == null)
             ed = editor.displayInOtherWindow(lisp);
         Position begin = findStartOfDefun(editor.getDot());
-        if (begin != null && begin.lookingAt("(defun")) {
+        if (begin != null && begin.lookingAt("(def")) {
             Position end = mode.forwardSexp(begin);
             if (end != null) {
                 Region r = new Region(editor.getBuffer(), begin, end);
