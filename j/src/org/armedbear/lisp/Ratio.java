@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.3 2003-03-27 03:55:00 piso Exp $
+ * $Id: Ratio.java,v 1.4 2003-03-27 13:57:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,10 @@ public final class Ratio extends LispObject
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
         if (typeSpecifier == Symbol.RATIO)
+            return T;
+        if (typeSpecifier == Symbol.RATIONAL)
+            return T;
+        if (typeSpecifier == Symbol.REAL)
             return T;
         if (typeSpecifier == Symbol.NUMBER)
             return T;
