@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.151 2004-02-24 11:21:44 piso Exp $
+# $Id: Makefile.in,v 1.152 2004-02-24 22:21:30 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@ JAVACFLAGS = @JAVACFLAGS@
 COMPILER_CLASSPATH = @COMPILER_CLASSPATH@
 
 CLASSFILES =	AbstractArray.class \
+		AbstractBitVector.class \
 		AbstractString.class \
 		AbstractVector.class \
 		ArithmeticError.class \
@@ -113,6 +114,7 @@ CLASSFILES =	AbstractArray.class \
 		RuntimeClass.class \
 		SeriousCondition.class \
 		ShellCommand.class \
+		SimpleBitVector.class \
 		SimpleCondition.class \
 		SimpleError.class \
 		SimpleString.class \
