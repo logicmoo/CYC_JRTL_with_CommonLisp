@@ -2,7 +2,7 @@
  * PackageError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageError.java,v 1.7 2003-09-22 11:08:46 piso Exp $
+ * $Id: PackageError.java,v 1.8 2003-12-12 13:04:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,32 @@ package org.armedbear.lisp;
 
 public class PackageError extends LispError
 {
+    final LispObject pkg;
+
     public PackageError()
     {
+        pkg = NIL;
     }
 
-    public PackageError(LispObject initArgs)
+    public PackageError(LispObject initArgs) throws ConditionThrowable
     {
-        this(); // FIXME
+        LispObject pkg = NIL;
+        LispObject first, second;
+        while (initArgs != NIL) {
+            first = initArgs.car();
+            initArgs = initArgs.cdr();
+            second = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.PACKAGE)
+                pkg = second;
+        }
+        this.pkg = pkg;
     }
 
     public PackageError(String message)
     {
         super(message);
+        pkg = NIL;
     }
 
     public LispObject typeOf()
@@ -55,4 +69,15 @@ public class PackageError extends LispError
             return T;
         return super.typep(type);
     }
+
+    private static final Primitive1 PACKAGE_ERROR_PACKAGE =
+        new Primitive1("package-error-package", "condition")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof PackageError)
+                return ((PackageError)arg).pkg;
+            throw new ConditionThrowable(new TypeError(arg, Symbol.CONDITION));
+        }
+    };
 }
