@@ -214,6 +214,7 @@ macroexpand-1
 macrolet
 make-array
 make-condition
+make-hash-table
 make-package
 make-sequence
 make-string
@@ -228,6 +229,7 @@ mapc
 mapcan
 mapcar
 mapcon
+maphash
 mapl
 maplist
 mask-field
@@ -306,6 +308,7 @@ read-sequence
 readtable-case
 readtablep
 remf
+remhash
 remove
 remove-if
 remove-if-not
@@ -397,6 +400,7 @@ vector-push-extend
 vectorp
 warn
 when
+with-hash-table-iterator
 with-input-from-string
 with-open-file
 with-open-stream
