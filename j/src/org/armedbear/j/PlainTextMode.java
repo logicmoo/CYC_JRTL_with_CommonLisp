@@ -1,8 +1,8 @@
 /*
  * PlainTextMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: PlainTextMode.java,v 1.1.1.1 2002-09-24 16:09:26 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: PlainTextMode.java,v 1.2 2004-09-19 19:00:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,8 @@
 
 package org.armedbear.j;
 
+import java.awt.event.KeyEvent;
+
 public final class PlainTextMode extends AbstractMode implements Constants, Mode
 {
     private static final PlainTextMode mode = new PlainTextMode();
@@ -35,5 +37,10 @@ public final class PlainTextMode extends AbstractMode implements Constants, Mode
     public static final PlainTextMode getMode()
     {
         return mode;
+    }
+
+    protected void setKeyMapDefaults(KeyMap km)
+    {
+        km.mapKey(KeyEvent.VK_F12, ALT_MASK, "wrapParagraphsInRegion");
     }
 }
