@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.10 2004-03-15 19:28:17 piso Exp $
+ * $Id: NilVector.java,v 1.11 2004-06-04 16:14:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,13 +190,11 @@ public final class NilVector extends AbstractString
         return unreadableString("NIL-VECTOR");
     }
 
-    public Fixnum sxhash() throws ConditionThrowable
+    public int sxhash() throws ConditionThrowable
     {
-        if (capacity == 0)
-            return Fixnum.ZERO;
-        accessError();
-        // Not reached.
-        return null;
+        if (capacity != 0)
+            accessError();
+        return 0;
     }
 
     public AbstractVector adjustVector(int newCapacity,
