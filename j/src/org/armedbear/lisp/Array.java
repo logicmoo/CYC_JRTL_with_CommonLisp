@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.15 2003-09-20 17:02:00 piso Exp $
+ * $Id: Array.java,v 1.16 2003-10-09 15:21:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -202,28 +202,5 @@ public final class Array extends AbstractArray
         sb.append('A');
         appendContents(dimv, 0, sb);
         return sb.toString();
-    }
-
-    private void appendContents(int[] dimensions, int index, StringBuffer sb)
-    {
-        if (dimensions.length == 0) {
-            sb.append(data[index]);
-        } else {
-            sb.append('(');
-            int[] dims = new int[dimensions.length - 1];
-            for (int i = 1; i < dimensions.length; i++)
-                dims[i-1] = dimensions[i];
-            int count = 1;
-            for (int i = 0; i < dims.length; i++)
-                count *= dims[i];
-            int length = dimensions[0];
-            for (int i = 0; i < length; i++) {
-                if (i != 0)
-                    sb.append(' ');
-                appendContents(dims, index, sb);
-                index += count;
-            }
-            sb.append(')');
-        }
     }
 }
