@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.52 2003-10-18 16:59:09 piso Exp $
+;;; $Id: compiler.lisp,v 1.53 2003-10-18 17:28:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -196,7 +196,7 @@
        (let ((args (cadr form))
              (body (cddr form)))
          (cons first (cons args (compile-progn body)))))
-      ((DO DO* MULTIPLE-VALUE-BIND)
+      ((DO DO*)
        (let ((second (second form))
              (third (third form))
              (body (cdddr form)))
@@ -228,6 +228,12 @@
       (GO form)
       (MACROLET
        (compile-macrolet form))
+      (MULTIPLE-VALUE-BIND
+       (let ((vars (second form))
+             (values-form (third form))
+             (body (cdddr form)))
+         (list* 'multiple-value-bind vars (compile-sexp values-form)
+                (mapcar #'compile-sexp body))))
       (MULTIPLE-VALUE-SETQ
        (list 'multiple-value-setq (second form) (compile-sexp (third form))))
       (t
