@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.18 2003-11-07 09:18:38 asimon Exp $
+ * $Id: Java.java,v 1.19 2003-11-07 19:02:11 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -337,13 +337,7 @@ public final class Java extends Module
                     instance = JavaObject.getObject(args[1]);
                 Object[] methodArgs = new Object[args.length-2];
                 for (int i = 2; i < args.length; i++) {
-                    LispObject arg = args[i];
-                    if (arg instanceof LispString)
-                        methodArgs[i-2] = ((LispString)arg).getValue();
-                    else if (arg instanceof JavaObject)
-                        methodArgs[i-2] = ((JavaObject)arg).getObject();
-                    else if (arg instanceof LispCharacter)
-                        methodArgs[i-2] = new Character(((LispCharacter)arg).getValue());
+                    methodArgs[i-2] = args[i].javaInstance();
                 }
                 Object result = method.invoke(instance, methodArgs);
                 return makeLispObject(result);
