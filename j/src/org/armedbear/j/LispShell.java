@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.17 2002-12-17 17:18:29 piso Exp $
+ * $Id: LispShell.java,v 1.18 2002-12-24 16:31:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -240,7 +240,7 @@ public final class LispShell extends Shell
             Log.debug("checkProcess returned false");
             return;
         }
-        Thread t = new Thread() {
+        Thread t = new Thread("LispShell dispose") {
             public void run()
             {
                 try {
