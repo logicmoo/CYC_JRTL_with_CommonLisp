@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.8 2002-12-01 16:48:04 piso Exp $
+ * $Id: Property.java,v 1.9 2002-12-06 17:33:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,7 +173,7 @@ public final class Property implements Comparable, Constants
     public static final Property SHOW_CHANGE_MARKS =
         createProperty("showChangeMarks", true);
     public static final Property SHOW_COMPLETION_LIST =
-        createProperty("showCompletionList", false);
+        createProperty("showCompletionList", true);
     public static final Property SHOW_LINE_NUMBERS =
         createProperty("showLineNumbers", false);
     public static final Property SHOW_MESSAGE_NUMBERS =
