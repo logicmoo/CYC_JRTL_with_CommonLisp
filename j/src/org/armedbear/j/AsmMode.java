@@ -2,7 +2,7 @@
  * AsmMode.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AsmMode.java,v 1.1 2003-12-29 19:21:33 piso Exp $
+ * $Id: AsmMode.java,v 1.2 2003-12-31 19:40:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,8 @@ public final class AsmMode extends AbstractMode implements Constants, Mode
     protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
+        km.mapKey(KeyEvent.VK_F9, 0, "compile");
+        km.mapKey(KeyEvent.VK_F9, CTRL_MASK, "recompile");
     }
 
     public boolean canIndent()
