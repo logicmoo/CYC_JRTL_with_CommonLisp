@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.115 2003-08-11 14:34:05 piso Exp $
+ * $Id: Lisp.java,v 1.116 2003-08-11 15:33:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1101,7 +1101,72 @@ public abstract class Lisp
         exportSpecial("///", PACKAGE_CL, NIL);
 
     public static final Symbol PI =
-        exportConstant("PI", PACKAGE_CL, new LispFloat((float)3.141592653589793));
+        exportConstant("PI", PACKAGE_CL,
+                       new LispFloat((float)3.141592653589793));
+
+    public static final Symbol SHORT_FLOAT_EPSILON =
+        exportConstant("SHORT-FLOAT-EPSILON", PACKAGE_CL,
+                       new LispFloat((float)5.960465E-8));
+
+    public static final Symbol SINGLE_FLOAT_EPSILON =
+        exportConstant("SINGLE-FLOAT-EPSILON", PACKAGE_CL,
+                       new LispFloat((float)5.960465E-8));
+
+    public static final Symbol DOUBLE_FLOAT_EPSILON =
+        exportConstant("DOUBLE-FLOAT-EPSILON", PACKAGE_CL,
+                       new LispFloat((float)5.960465E-8));
+
+    public static final Symbol LONG_FLOAT_EPSILON =
+        exportConstant("LONG-FLOAT-EPSILON", PACKAGE_CL,
+                       new LispFloat((float)5.960465E-8));
+
+    public static final Symbol SHORT_FLOAT_NEGATIVE_EPSILON =
+        exportConstant("SHORT-FLOAT-NEGATIVE_EPSILON", PACKAGE_CL,
+                       new LispFloat((float)2.9802325E-8));
+
+    public static final Symbol SINGLE_FLOAT_NEGATIVE_EPSILON =
+        exportConstant("SINGLE-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
+                       new LispFloat((float)2.9802325E-8));
+
+    public static final Symbol DOUBLE_FLOAT_NEGATIVE_EPSILON =
+        exportConstant("DOUBLE-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
+                       new LispFloat((float)2.9802325E-8));
+
+    public static final Symbol LONG_FLOAT_NEGATIVE_EPSILON =
+        exportConstant("LONG-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
+                       new LispFloat((float)2.9802325E-8));
+
+    public static final Symbol MOST_POSITIVE_SHORT_FLOAT =
+        exportConstant("MOST-POSITIVE-SHORT-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MAX_VALUE));
+
+    public static final Symbol MOST_POSITIVE_SINGLE_FLOAT =
+        exportConstant("MOST-POSITIVE-SINGLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MAX_VALUE));
+
+    public static final Symbol MOST_POSITIVE_DOUBLE_FLOAT =
+        exportConstant("MOST-POSITIVE-DOUBLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MAX_VALUE));
+
+    public static final Symbol MOST_POSITIVE_LONG_FLOAT =
+        exportConstant("MOST-POSITIVE-LONG-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MAX_VALUE));
+
+    public static final Symbol MOST_NEGATIVE_SHORT_FLOAT =
+        exportConstant("MOST-NEGATIVE-SHORT-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MAX_VALUE));
+
+    public static final Symbol MOST_NEGATIVE_SINGLE_FLOAT =
+        exportConstant("MOST-NEGATIVE-SINGLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MAX_VALUE));
+
+    public static final Symbol MOST_NEGATIVE_DOUBLE_FLOAT =
+        exportConstant("MOST-NEGATIVE-DOUBLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MAX_VALUE));
+
+    public static final Symbol MOST_NEGATIVE_LONG_FLOAT =
+        exportConstant("MOST-NEGATIVE-LONG-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MAX_VALUE));
 
     static {
         loadClass("org.armedbear.lisp.Primitives");
