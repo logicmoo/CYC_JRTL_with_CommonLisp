@@ -1,7 +1,7 @@
 ;;; late-setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: late-setf.lisp,v 1.2 2003-12-20 14:13:04 piso Exp $
+;;; $Id: late-setf.lisp,v 1.3 2004-03-18 19:06:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -51,6 +51,11 @@
     (values all-dummies all-vals newvals
             `(values ,@(reverse setters)) `(values ,@(reverse getters)))))
 
+(defun make-gensym-list (n)
+  (let ((list ()))
+    (dotimes (i n list)
+      (push (gensym) list))))
+
 (defun %putf (place property new-value)
   (do ((plist place (cddr plist)))
       ((endp plist) (list* property new-value place))
@@ -71,3 +76,16 @@
                  ,set
                  ,newval)
               `(getf ,get ,ptemp ,@(if default `(,def-temp)))))))
+
+(define-setf-expander apply (functionoid &rest args)
+  (unless (and (listp functionoid)
+               (= (length functionoid) 2)
+               (eq (first functionoid) 'function)
+               (symbolp (second functionoid)))
+    (error "SETF of APPLY is only defined for function arguments (e.g. #'AREF)."))
+  (let ((function (second functionoid))
+        (new-var (gensym))
+        (vars (make-gensym-list (length args))))
+    (values vars args (list new-var)
+            `(apply #'(setf ,function) ,new-var ,@vars)
+            `(apply #',function ,@vars))))
