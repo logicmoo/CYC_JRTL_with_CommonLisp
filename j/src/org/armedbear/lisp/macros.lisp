@@ -4,7 +4,7 @@
 
 (export '(prog1 prog2 push pop psetq loop
           the declare declaim locally eval-when
-          time))
+          time with-open-file))
 
 (defmacro prog1 (first-form &rest forms)
   (let ((result (gensym)))
@@ -56,3 +56,17 @@
 
 (defmacro time (form)
   `(%time #'(lambda () ,form)))
+
+(defmacro with-open-file (&rest args)
+  (let ((var (caar args))
+        (open-args (cdar args))
+        (forms (cdr args))
+        (abortp (gensym)))
+    `(let ((,var (open ,@open-args))
+	   (,abortp t))
+       (unwind-protect
+        (multiple-value-prog1
+          (progn ,@forms)
+          (setq ,abortp nil))
+        (when ,var
+          (close ,var :abort ,abortp))))))
