@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.126 2004-04-24 15:50:33 piso Exp $
+ * $Id: Symbol.java,v 1.127 2004-04-30 01:52:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@ public class Symbol extends LispObject
     public static final Symbol AND_WHOLE                        = PACKAGE_CL.addExternalSymbol("&WHOLE");
     public static final Symbol APPLY                            = PACKAGE_CL.addExternalSymbol("APPLY");
     public static final Symbol BLOCK                            = PACKAGE_CL.addExternalSymbol("BLOCK");
+    public static final Symbol BREAK                            = PACKAGE_CL.addExternalSymbol("BREAK");
     public static final Symbol CDR                              = PACKAGE_CL.addExternalSymbol("CDR");
     public static final Symbol DECLARE                          = PACKAGE_CL.addExternalSymbol("DECLARE");
     public static final Symbol DOCUMENTATION                    = PACKAGE_CL.addExternalSymbol("DOCUMENTATION");
