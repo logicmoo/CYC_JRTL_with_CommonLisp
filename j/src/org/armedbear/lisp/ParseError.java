@@ -1,8 +1,8 @@
 /*
  * ParseError.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: ParseError.java,v 1.9 2003-12-12 15:54:22 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: ParseError.java,v 1.10 2004-01-18 20:09:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@ public class ParseError extends LispError
         super(message);
     }
 
-    public ParseError(LispObject initArgs)
+    public ParseError(LispObject initArgs) throws ConditionThrowable
     {
-        // FIXME
+        super(initArgs);
     }
 
     public LispObject typeOf()
