@@ -402,6 +402,7 @@
                               "lambda-parameters-limit"
                               "length"
                               "let"
+                              "loop"
                               "make-string"
                               "multiple-value-bind"
                               "multiple-value-call"
