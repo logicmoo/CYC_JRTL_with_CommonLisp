@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.48 2003-05-11 15:52:50 piso Exp $
+ * $Id: Editor.java,v 1.49 2003-05-11 17:30:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5855,7 +5855,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
         setUpdateFlag(REFRAME);
         reframe();
-        display.setUpdateFlag(REPAINT);
+        setUpdateFlag(REPAINT);
 
         RecentFiles.getInstance().bufferActivated(buffer);
 
@@ -6406,24 +6406,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
         finally {
             buffer.unlockWrite();
-        }
-    }
-
-    public void dir()
-    {
-        if (buffer instanceof Directory)
-            return;
-        File directory = getCurrentDirectory();
-        if (directory == null)
-            return;
-        if (directory.getProtocol() == File.PROTOCOL_HTTP)
-            return;
-
-        // FTP, SSH or local.
-        Buffer buf = getBuffer(directory);
-        if (buf != null) {
-            makeNext(buf);
-            activate(buf);
         }
     }
 
