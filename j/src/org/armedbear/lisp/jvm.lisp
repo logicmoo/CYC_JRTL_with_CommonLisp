@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.285 2004-08-21 18:10:39 piso Exp $
+;;; $Id: jvm.lisp,v 1.286 2004-08-21 20:42:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2223,7 +2223,8 @@
 
 (define-source-transform funcall (&whole form fun &rest args)
   (cond ((and (consp fun)
-              (eq (car fun) 'FUNCTION))
+              (eq (car fun) 'FUNCTION)
+              (symbolp (cadr fun)))
          `(,(cadr fun) ,@args))
         ((and (consp fun)
               (eq (car fun) 'QUOTE))
@@ -3446,23 +3447,21 @@
                                      -1) ; Stack: compiled-closure
                   (emit-move-from-stack target))
                  ((inline-ok name)
-                  (let ((g (declare-function name)))
-                    (emit 'getstatic
-                          *this-class*
-                          g
-                          +lisp-object+)
-                    (emit-move-from-stack target)))
+                  (emit 'getstatic
+                        *this-class*
+                        (declare-function name)
+                        +lisp-object+)
+                  (emit-move-from-stack target))
                  (t
-                  (let ((g (declare-symbol name)))
-                    (emit 'getstatic
-                          *this-class*
-                          g
-                          +lisp-symbol+)
-                    (emit-invokevirtual +lisp-object-class+
-                                        "getSymbolFunctionOrDie"
-                                        "()Lorg/armedbear/lisp/LispObject;"
-                                        0)
-                    (emit-move-from-stack target)))))
+                  (emit 'getstatic
+                        *this-class*
+                        (declare-symbol name)
+                        +lisp-symbol+)
+                  (emit-invokevirtual +lisp-object-class+
+                                      "getSymbolFunctionOrDie"
+                                      "()Lorg/armedbear/lisp/LispObject;"
+                                      0)
+                  (emit-move-from-stack target))))
           ((and (consp name) (eq (car name) 'SETF))
            ; FIXME Need to check for NOTINLINE declaration!
            (cond ((member name *toplevel-defuns* :test #'equal)
@@ -3479,7 +3478,15 @@
                         +lisp-object+)
                   (emit-move-from-stack target))
                  (t
-                  (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
+                  (emit 'getstatic
+                        *this-class*
+                        (declare-symbol (cadr name))
+                        +lisp-symbol+)
+                  (emit-invokevirtual +lisp-symbol-class+
+                                      "getSymbolSetfFunctionOrDie"
+                                      "()Lorg/armedbear/lisp/LispObject;"
+                                      0)
+                  (emit-move-from-stack target))))
           ((and (consp name) (eq (car name) 'LAMBDA))
            (compile-lambda name target))
           (t
