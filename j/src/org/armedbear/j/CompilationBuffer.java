@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CompilationBuffer.java,v 1.9 2003-01-08 13:10:47 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.10 2003-01-10 02:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -609,7 +609,8 @@ public final class CompilationBuffer extends Buffer implements Runnable
             if (otherEditor != null) {
                 cb.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
                 otherEditor.makeNext(cb);
-            }
+            } else
+                cb.setUnsplitOnClose(true);
             editor.displayInOtherWindow(cb);
         }
     }
