@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.2 2003-02-15 16:48:17 piso Exp $
+ * $Id: Package.java,v 1.3 2003-03-05 15:51:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -212,6 +212,18 @@ public final class Package extends LispObject
         for (Iterator it = usedByList.iterator(); it.hasNext();) {
             Package pkg = (Package) it.next();
             list = new Cons(pkg, list);
+        }
+        return list;
+    }
+
+    public LispObject getSymbols()
+    {
+        LispObject list = NIL;
+        synchronized (map) {
+            for (Iterator it = iterator(); it.hasNext();) {
+                Symbol symbol = (Symbol) it.next();
+                list = new Cons(symbol, list);
+            }
         }
         return list;
     }
