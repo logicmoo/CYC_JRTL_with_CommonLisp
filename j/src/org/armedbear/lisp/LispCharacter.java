@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.41 2004-03-08 02:51:59 piso Exp $
+ * $Id: LispCharacter.java,v 1.42 2004-03-11 10:28:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -217,7 +217,8 @@ public final class LispCharacter extends LispObject
 
     // ### whitespacep
     private static final Primitive1 WHITESPACEP =
-        new Primitive1("whitespacep", PACKAGE_SYS, false) {
+        new Primitive1("whitespacep", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispCharacter character = checkCharacter(arg);
@@ -230,7 +231,12 @@ public final class LispCharacter extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new Fixnum(getValue(arg));
+            try {
+                return new Fixnum(((LispCharacter)arg).value);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CHARACTER));
+            }
         }
     };
 
@@ -320,6 +326,57 @@ public final class LispCharacter extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return getInstance(Utilities.toUpperCase(getValue(arg)));
+        }
+    };
+
+    // ### digit-char
+    private static final Primitive DIGIT_CHAR =
+        new Primitive("digit-char", "weight &optional radix")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            int weight;
+            try {
+                weight = ((Fixnum)arg).value;
+            }
+            catch (ClassCastException e) {
+                if (arg instanceof Bignum)
+                    return NIL;
+                return signal(new TypeError(arg, Symbol.INTEGER));
+            }
+            if (weight < 10)
+                return characters['0' + weight];
+            return NIL;
+        }
+
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            int radix;
+            try {
+                radix = ((Fixnum)second).value;
+            }
+            catch (ClassCastException e) {
+                radix = -1;
+            }
+            if (radix < 2 || radix > 36)
+                return signal(new TypeError(second,
+                                            list3(Symbol.INTEGER, Fixnum.TWO,
+                                                  new Fixnum(36))));
+            int weight;
+            try {
+                weight = ((Fixnum)first).value;
+            }
+            catch (ClassCastException e) {
+                if (first instanceof Bignum)
+                    return NIL;
+                return signal(new TypeError(first, Symbol.INTEGER));
+            }
+            if (weight >= radix)
+                return NIL;
+            if (weight < 10)
+                return characters['0' + weight];
+            return characters['A' + weight - 10];
         }
     };
 }
