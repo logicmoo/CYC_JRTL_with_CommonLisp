@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.7 2003-02-27 18:01:24 piso Exp $
+ * $Id: Vector.java,v 1.8 2003-02-27 18:32:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
         elements[index] = newValue;
     }
 
-    public void fill(LispObject obj)
+    public void fill(LispObject obj) throws LispError
     {
         for (int i = length; i-- > 0;)
             elements[i] = obj;
