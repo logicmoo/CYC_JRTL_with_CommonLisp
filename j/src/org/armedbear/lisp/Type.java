@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.5 2003-04-27 16:08:05 piso Exp $
+ * $Id: Type.java,v 1.6 2003-04-28 00:28:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,6 +119,7 @@ public class Type extends Lisp
     public static final Type ARRAY     = new Type(Symbol.ARRAY, TYPE_T);
     public static final Type CHARACTER = new Type(Symbol.CHARACTER, TYPE_T);
     public static final Type NUMBER    = new Type(Symbol.NUMBER, TYPE_T);
+    public static final Type STREAM    = new Type(Symbol.STREAM, TYPE_T);
 
     // Subtype of SYMBOL
     public static final Type KEYWORD   = new Type(Symbol.KEYWORD, SYMBOL);
@@ -157,11 +158,14 @@ public class Type extends Lisp
         new Type(Symbol.STANDARD_CHAR, BASE_CHAR);
 
     // Subtypes of NUMBER
-    public static final Type REAL      = new Type(Symbol.REAL, NUMBER);
-    public static final Type RATIONAL  = new Type(Symbol.RATIONAL, REAL);
-    public static final Type FLOAT     = new Type(Symbol.FLOAT, REAL);
-    public static final Type INTEGER   = new Type(Symbol.INTEGER, RATIONAL);
-    public static final Type RATIO     = new Type(Symbol.RATIO, RATIONAL);
-    public static final Type BIT       = new Type(Symbol.BIT, INTEGER);
-    public static final Type FIXNUM    = new Type(Symbol.FIXNUM, INTEGER);
+    public static final Type REAL     = new Type(Symbol.REAL, NUMBER);
+    public static final Type RATIONAL = new Type(Symbol.RATIONAL, REAL);
+    public static final Type FLOAT    = new Type(Symbol.FLOAT, REAL);
+    public static final Type INTEGER  = new Type(Symbol.INTEGER, RATIONAL);
+    public static final Type RATIO    = new Type(Symbol.RATIO, RATIONAL);
+    public static final Type BIT      = new Type(Symbol.BIT, INTEGER);
+    public static final Type FIXNUM   = new Type(Symbol.FIXNUM, INTEGER);
+
+    // Subtypes of STREAM
+    public static final Type TWO_WAY_STREAM = new Type(Symbol.TWO_WAY_STREAM);
 }
