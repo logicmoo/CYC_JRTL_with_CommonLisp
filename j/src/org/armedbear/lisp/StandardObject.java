@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.33 2004-11-06 20:55:39 piso Exp $
+ * $Id: StandardObject.java,v 1.34 2004-11-08 18:17:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -228,6 +228,7 @@ public class StandardObject extends LispObject
         }
     };
 
+    // ### std-slot-boundp
     private static final Primitive STD_SLOT_BOUNDP =
         new Primitive("std-slot-boundp", PACKAGE_SYS, false,
                       "instance slot-name")
@@ -255,14 +256,18 @@ public class StandardObject extends LispObject
                 LispObject value = location.cdr();
                 return value != UNBOUND_SLOT_VALUE ? T : NIL;
             }
+            final LispThread thread = LispThread.currentThread();
             LispObject value =
-                Symbol.SLOT_MISSING.execute(instance.getLispClass(),
-                                            instance, second,
-                                            Symbol.SLOT_BOUNDP);
+                thread.execute(Symbol.SLOT_MISSING, instance.getLispClass(),
+                               instance, second, Symbol.SLOT_BOUNDP);
+            // "If slot-missing is invoked and returns a value, a boolean
+            // equivalent to its primary value is returned by slot-boundp."
+            thread._values = null;
             return value != NIL ? T : NIL;
         }
     };
 
+    // ### std-slot-value
     private static final Primitive STD_SLOT_VALUE =
         new Primitive("std-slot-value", PACKAGE_SYS, false,
                       "instance slot-name")
@@ -299,6 +304,7 @@ public class StandardObject extends LispObject
         }
     };
 
+    // ### %set-std-slot-value
     private static final Primitive _SET_STD_SLOT_VALUE =
         new Primitive("%set-std-slot-value", PACKAGE_SYS, false,
                       "instance slot-name new-value")
