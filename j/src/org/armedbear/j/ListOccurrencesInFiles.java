@@ -1,8 +1,8 @@
 /*
  * ListOccurrencesInFiles.java
  *
- * Copyright (C) 2000-2003 Peter Graves
- * $Id: ListOccurrencesInFiles.java,v 1.6 2003-07-26 17:45:52 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: ListOccurrencesInFiles.java,v 1.7 2004-04-02 03:29:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public final class ListOccurrencesInFiles extends ListOccurrences
         return Directories.getUserHomeDirectory();
     }
 
-    public void findOccurrenceAtDot(Editor editor)
+    public void findOccurrenceAtDot(Editor editor, boolean killList)
     {
         Position pos = editor.getDotCopy();
         if (pos == null)
@@ -109,7 +109,7 @@ public final class ListOccurrencesInFiles extends ListOccurrences
                     target = buf.getLine(sourceLine.lineNumber());
             } else
                 target = buf.getLine(sourceLineNumber);
-            gotoSource(editor, buf, target);
+            gotoSource(editor, buf, target, killList);
         }
     }
 
@@ -146,7 +146,7 @@ public final class ListOccurrencesInFiles extends ListOccurrences
                     ed.updateDisplay();
                 }
             }
-            findOccurrenceAtDot(editor);
+            findOccurrenceAtDot(editor, false);
         }
     }
 
