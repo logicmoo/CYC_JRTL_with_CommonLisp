@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: fixme.lisp,v 1.20 2004-03-04 01:18:23 piso Exp $
+;;; $Id: fixme.lisp,v 1.21 2004-03-17 23:39:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,7 +38,11 @@
       (%defvar var))))
 
 (defun disassemble (fn)
-  (%format t "; DISASSEMBLE is not implemented."))
+  (%format t "; DISASSEMBLE is not implemented.")
+  (values))
 
 (defmacro with-compilation-unit (options &body body)
   `(progn ,@body))
+
+(defun translate-pathname (&rest args)
+  (error "TRANSLATE-PATHNAME is not implemented."))
