@@ -2,7 +2,7 @@
  * LocalTag.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LocalTag.java,v 1.1.1.1 2002-09-24 16:09:11 piso Exp $
+ * $Id: LocalTag.java,v 1.2 2002-11-10 00:29:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,14 +37,14 @@ public class LocalTag extends Tag implements Constants
     {
         super(name, line.getText());
         pos = new Position(line, 0);
-        this.type = TAG_METHOD;
+        type = TAG_METHOD;
     }
 
     protected LocalTag(String name, Position pos)
     {
         super(name, pos.getLine().getText());
         this.pos = new Position(pos);
-        this.type = TAG_METHOD;
+        type = TAG_METHOD;
     }
 
     protected LocalTag(String name, Position pos, int type, int flags)
@@ -125,7 +125,6 @@ public class LocalTag extends Tag implements Constants
     {
         ImageIcon base = null;
         ImageIcon overlay = null;
-
         switch (type) {
             case TAG_INTERFACE:
             case TAG_IMPLEMENTS:
@@ -140,6 +139,7 @@ public class LocalTag extends Tag implements Constants
                 base = classIcon;
                 break;
             case TAG_METHOD:
+            default:
                 if (methodIcon == null)
                     methodIcon = Utilities.getIconFromFile("method.png");
                 base = methodIcon;
@@ -149,10 +149,7 @@ public class LocalTag extends Tag implements Constants
                     fieldIcon = Utilities.getIconFromFile("field.png");
                 base = fieldIcon;
                 break;
-            default:
-                break;
         }
-
         if (isPublic()) {
             if (publicIcon == null)
                 publicIcon = Utilities.getIconFromFile("public.png");
@@ -166,7 +163,6 @@ public class LocalTag extends Tag implements Constants
                 privateIcon = Utilities.getIconFromFile("private.png");
             overlay = privateIcon;
         }
-
         return new OverlayIcon(base, overlay);
     }
 
