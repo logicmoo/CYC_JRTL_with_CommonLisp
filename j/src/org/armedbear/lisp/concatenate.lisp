@@ -1,7 +1,7 @@
 ;;; concatenate.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: concatenate.lisp,v 1.4 2004-03-13 19:44:48 piso Exp $
+;;; $Id: concatenate.lisp,v 1.5 2004-03-13 19:45:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
           (dotimes (j (length seq))
             (push (elt seq j) result))))
       (do ((result (make-sequence result-type
-                             (apply #'+ (mapcar #'length sequences))))
+                                  (apply #'+ (mapcar #'length sequences))))
            (s sequences (cdr s))
            (i 0))
           ((null s) result)
