@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.31 2004-02-11 02:32:53 piso Exp $
+ * $Id: LispAPI.java,v 1.32 2004-02-26 20:39:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.j;
 import java.util.Iterator;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
+import org.armedbear.lisp.AbstractString;
 import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.Function;
@@ -34,7 +35,6 @@ import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispCharacter;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.LispObject;
-import org.armedbear.lisp.LispString;
 import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Packages;
@@ -44,6 +44,7 @@ import org.armedbear.lisp.Primitive2;
 import org.armedbear.lisp.Primitive3;
 import org.armedbear.lisp.Primitive;
 import org.armedbear.lisp.Primitives;
+import org.armedbear.lisp.SimpleString;
 import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.TypeError;
 import org.armedbear.lisp.UndefinedFunction;
@@ -179,8 +180,8 @@ public final class LispAPI extends Lisp
             File file = checkBuffer(arg).getFile();
             if (file != null) {
                 if (file.isRemote())
-                    return new LispString(file.netPath());
-                return new LispString(file.canonicalPath());
+                    return new SimpleString(file.netPath());
+                return new SimpleString(file.canonicalPath());
             }
             return NIL;
         }
@@ -191,11 +192,11 @@ public final class LispAPI extends Lisp
         new Primitive("buffer-string", PACKAGE_J, true) {
         public LispObject execute() throws ConditionThrowable
         {
-            return new LispString(Editor.currentBuffer().getText());
+            return new SimpleString(Editor.currentBuffer().getText());
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new LispString(checkBuffer(arg).getText());
+            return new SimpleString(checkBuffer(arg).getText());
         }
     };
 
@@ -340,7 +341,7 @@ public final class LispAPI extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String s = checkLine(arg).getText();
-            return s != null ? new LispString(s) : NIL;
+            return s != null ? new SimpleString(s) : NIL;
         }
     };
 
@@ -516,7 +517,7 @@ public final class LispAPI extends Lisp
                 if (property.isIntegerProperty())
                     return number(buffer.getIntegerProperty(property));
                 String value = buffer.getStringProperty(property);
-                return value != null ? new LispString(value) : NIL;
+                return value != null ? new SimpleString(value) : NIL;
             }
             if (kind == KEYWORD_GLOBAL) {
                 if (property.isBooleanProperty())
@@ -524,14 +525,14 @@ public final class LispAPI extends Lisp
                 if (property.isIntegerProperty())
                     return number(preferences.getIntegerProperty(property));
                 String value = preferences.getStringProperty(property);
-                return value != null ? new LispString(value) : NIL;
+                return value != null ? new SimpleString(value) : NIL;
             }
             if (kind == KEYWORD_MODE) {
                 final Mode mode;
                 if (where == NIL)
                     mode = editor.getMode();
                 else {
-                    mode = Editor.getModeList().getModeFromModeName(LispString.getValue(where));
+                    mode = Editor.getModeList().getModeFromModeName(where.getStringValue());
                     if (mode == null)
                         return signal(new LispError("Unknown mode: " + where + "."));
                 }
@@ -540,7 +541,7 @@ public final class LispAPI extends Lisp
                 if (property.isIntegerProperty())
                     return number(mode.getIntegerProperty(property));
                 String value = mode.getStringProperty(property);
-                return value != null ? new LispString(value) : NIL;
+                return value != null ? new SimpleString(value) : NIL;
             }
             if (kind == KEYWORD_BUFFER) {
                 final Buffer buffer;
@@ -553,7 +554,7 @@ public final class LispAPI extends Lisp
                 if (property.isIntegerProperty())
                     return number(buffer.getIntegerProperty(property));
                 String value = buffer.getStringProperty(property);
-                return value != null ? new LispString(value) : NIL;
+                return value != null ? new SimpleString(value) : NIL;
             }
             return signal(new LispError("Invalid parameter: " + kind + "."));
         }
@@ -583,7 +584,7 @@ public final class LispAPI extends Lisp
                         return T;
                     }
                 } else {
-                    preferences.setProperty(property, LispString.getValue(newValue));
+                    preferences.setProperty(property, newValue.getStringValue());
                     return newValue;
                 }
             }
@@ -593,7 +594,7 @@ public final class LispAPI extends Lisp
                 if (where == NIL)
                     mode = editor.getMode();
                 else
-                    mode = Editor.getModeList().getModeFromModeName(LispString.getValue(where));
+                    mode = Editor.getModeList().getModeFromModeName(where.getStringValue());
                 if (property.isBooleanProperty()) {
                     if (newValue == NIL) {
                         mode.setProperty(property, false);
@@ -603,7 +604,7 @@ public final class LispAPI extends Lisp
                         return T;
                     }
                 } else {
-                    mode.setProperty(property, LispString.getValue(newValue));
+                    mode.setProperty(property, newValue.getStringValue());
                     return newValue;
                 }
             }
@@ -621,7 +622,7 @@ public final class LispAPI extends Lisp
                     buffer.setProperty(property, Fixnum.getValue(newValue));
                     return newValue;
                 }
-                buffer.setProperty(property, LispString.getValue(newValue));
+                buffer.setProperty(property, newValue.getStringValue());
                 return newValue;
             }
             return signal(new LispError("Invalid parameter: " + kind));
@@ -654,10 +655,10 @@ public final class LispAPI extends Lisp
         public LispObject execute(LispObject first, LispObject second)
 	    throws ConditionThrowable
         {
-            String keyText = LispString.getValue(first);
+            String keyText = first.getStringValue();
             Object command;
-            if (second instanceof LispString) {
-                command = ((LispString)second).getValue();
+            if (second instanceof AbstractString) {
+                command = second.getStringValue();
             } else {
                 // Verify that the command can be coerced to a function.
                 coerceToFunction(second);
@@ -673,7 +674,7 @@ public final class LispAPI extends Lisp
         public LispObject execute(LispObject arg)
 	    throws ConditionThrowable
         {
-            String keyText = LispString.getValue(arg);
+            String keyText = arg.getStringValue();
             return KeyMap.getGlobalKeyMap().unmapKey(keyText) ? T : NIL;
         }
     };
@@ -685,16 +686,16 @@ public final class LispAPI extends Lisp
                                   LispObject third)
 	    throws ConditionThrowable
         {
-            String keyText = LispString.getValue(first);
+            String keyText = first.getStringValue();
             Object command;
-            if (second instanceof LispString) {
-                command = ((LispString)second).getValue();
+            if (second instanceof AbstractString) {
+                command = second.getStringValue();
             } else {
                 // Verify that the command can be coerced to a function.
                 coerceToFunction(second);
                 command = second;
             }
-            String modeName = LispString.getValue(third);
+            String modeName = third.getStringValue();
             Mode mode = Editor.getModeList().getModeFromModeName(modeName);
             if (mode == null)
                 throw new ConditionThrowable(new LispError("unknown mode \"".concat(modeName).concat("\"")));
@@ -708,8 +709,8 @@ public final class LispAPI extends Lisp
         public LispObject execute(LispObject first, LispObject second)
 	    throws ConditionThrowable
         {
-            String keyText = LispString.getValue(first);
-            String modeName = LispString.getValue(second);
+            String keyText = first.getStringValue();
+            String modeName = second.getStringValue();
             Mode mode = Editor.getModeList().getModeFromModeName(modeName);
             if (mode == null)
                 throw new ConditionThrowable(new LispError("unknown mode \"".concat(modeName).concat("\"")));
@@ -723,12 +724,12 @@ public final class LispAPI extends Lisp
         public LispObject execute(LispObject first, LispObject second)
 	    throws ConditionThrowable
         {
-            String key = LispString.getValue(first);
+            String key = first.getStringValue();
             final String value;
             if (second instanceof Fixnum)
                 value = String.valueOf(Fixnum.getValue(second));
             else
-                value = LispString.getValue(second);
+                value = second.getStringValue();
             Editor.setGlobalProperty(key, value);
             return second;
         }
@@ -750,8 +751,8 @@ public final class LispAPI extends Lisp
                     LispObject obj = args[i];
                     if (obj instanceof LispCharacter) {
                         editor.insertChar(((LispCharacter)obj).getValue());
-                    } else if (obj instanceof LispString) {
-                        editor.insertString(((LispString)obj).getValue());
+                    } else if (obj instanceof AbstractString) {
+                        editor.insertString(obj.getStringValue());
                     } else
                         throw new ConditionThrowable(new TypeError(obj, "character or string"));
                 }
@@ -795,7 +796,7 @@ public final class LispAPI extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Log.debug(LispString.getValue(arg));
+            Log.debug(arg.getStringValue());
             return arg;
         }
     };
