@@ -2,7 +2,7 @@
  * ManMode.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ManMode.java,v 1.1.1.1 2002-09-24 16:07:44 piso Exp $
+ * $Id: ManMode.java,v 1.2 2002-10-01 17:31:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,11 +168,10 @@ public final class ManMode extends AbstractMode implements Constants, Mode
                 if (!Editor.getTempDirectory().mkdirs())
                     return;
             File tempFile = Utilities.getTempFile();
-            Process process = null;
             String cmd = "man " + topic + " > " + tempFile.canonicalPath();
             String[] cmdarray = {"/bin/sh", "-c", cmd};
             try {
-                process = Runtime.getRuntime().exec(cmdarray);
+                Process process = Runtime.getRuntime().exec(cmdarray);
                 process.waitFor();
             }
             catch (Exception e) {
@@ -184,7 +183,6 @@ public final class ManMode extends AbstractMode implements Constants, Mode
                 tempFile.delete();
                 editor.makeNext(man);
                 editor.switchToBuffer(man);
-                man.repaint();
             } else
                 editor.status("No entry");
         }
