@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.135 2003-09-20 18:22:30 piso Exp $
+;;; $Id: rt.lisp,v 1.136 2003-09-21 00:54:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -263,6 +263,7 @@
                               "integer-length"
                               "integerp"
                               "intersection"
+                              "invoke-debugger"
                               "isqrt"
                               "iteration"
                               "keywordp"
