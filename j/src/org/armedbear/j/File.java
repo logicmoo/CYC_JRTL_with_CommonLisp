@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.4 2002-12-07 01:42:42 piso Exp $
+ * $Id: File.java,v 1.5 2002-12-07 10:53:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
-import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -751,23 +750,21 @@ public class File implements Comparable
             String listing = getDirectoryListing();
             if (listing == null)
                 return null;
-            BufferedReader reader = new BufferedReader(new StringReader(listing));
+            long start = System.currentTimeMillis();
+            FastStringReader reader = new FastStringReader(listing);
             ArrayList list = new ArrayList();
             String s;
-            try {
-                while ((s = reader.readLine()) != null) {
-                    DirectoryEntry entry = DirectoryEntry.getDirectoryEntry(s, null);
-                    if (entry != null) {
-                        String name = entry.extractName();
-                        if (name == null || name.equals(".") || name.equals(".."))
-                            continue;
-                        list.add(entry);
-                    }
+            while ((s = reader.readLine()) != null) {
+                DirectoryEntry entry = DirectoryEntry.getDirectoryEntry(s, null);
+                if (entry != null) {
+                    String name = entry.extractName();
+                    if (name == null || name.equals(".") || name.equals(".."))
+                        continue;
+                    list.add(entry);
                 }
             }
-            catch (IOException e) {
-                Log.error(e);
-            }
+            long elapsed = System.currentTimeMillis() - start;
+            Log.debug("listFiles entry list " + elapsed + " ms");
             if (list.size() == 0)
                 return null;
             File[] files = new File[list.size()];
@@ -789,6 +786,8 @@ public class File implements Comparable
                     file.type = TYPE_FILE;
                 files[i] = file;
             }
+            elapsed = System.currentTimeMillis() - start;
+            Log.debug("listFiles total " + elapsed + " ms " + this);
             return files;
         }
         if (isRemote)
