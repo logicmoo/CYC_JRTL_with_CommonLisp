@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.7 2004-06-06 19:31:26 piso Exp $
+ * $Id: MathFunctions.java,v 1.8 2004-06-10 23:21:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -275,7 +275,7 @@ public final class MathFunctions extends Lisp
                     parameterTypes[0] = Double.TYPE;
                     coshMethod = c.getMethod("cosh", parameterTypes);
                 }
-                if (tanhMethod != null) {
+                if (coshMethod != null) {
                     Object[] args;
                     args = new Object[1];
                     args[0] = new Double(((LispFloat)arg).value);
