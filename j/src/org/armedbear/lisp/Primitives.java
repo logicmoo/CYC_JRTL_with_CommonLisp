@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.150 2003-03-27 03:54:33 piso Exp $
+ * $Id: Primitives.java,v 1.151 2003-03-27 13:54:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3704,12 +3704,8 @@ public final class Primitives extends Module
                     }
                     throw new TypeError();
                 }
-            } else if (first instanceof Fixnum) {
-                if (second == Symbol.FLOAT || second == Symbol.SINGLE_FLOAT)
-                    return new LispFloat(((Fixnum)first).getValue());
-            } else if (first instanceof Ratio) {
-                if (second == Symbol.FLOAT || second == Symbol.SINGLE_FLOAT)
-                    return new LispFloat(((Ratio)first).floatValue());
+            } else if (second == Symbol.FLOAT || second == Symbol.SINGLE_FLOAT) {
+                return LispFloat.coerceToFloat(first);
             }
             throw new TypeError();
         }
