@@ -2,7 +2,7 @@
  * Ssh.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: Ssh.java,v 1.1.1.1 2002-09-24 16:08:07 piso Exp $
+ * $Id: Ssh.java,v 1.2 2002-11-28 15:42:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -136,15 +136,17 @@ public final class Ssh
 
     private void sendPassword()
     {
-        Debug.assertTrue(password != null);
-        try {
-            writer.write(password);
-            writer.write("\n");
-            writer.flush();
-        }
-        catch (IOException e) {
-            Log.error(e);
-        }
+        if (password != null) {
+            try {
+                writer.write(password);
+                writer.write("\n");
+                writer.flush();
+            }
+            catch (IOException e) {
+                Log.error(e);
+            }
+        } else
+            Debug.bug();
     }
 
     private class SshReaderThread extends Thread
@@ -167,7 +169,7 @@ public final class Ssh
         {
             FastStringBuffer sb = new FastStringBuffer();
             while (true) {
-                String s = read();
+                final String s = read();
                 if (s == null) {
                     response = sb.toString();
                     return;
@@ -178,7 +180,7 @@ public final class Ssh
                     response = sb.toString();
                     return;
                 }
-                if (s.trim().endsWith("password:")) {
+                if (isPasswordPrompt(s)) {
                     sendPassword();
                     sb.setLength(0);
                 } else
@@ -206,5 +208,15 @@ public final class Ssh
             }
             return sb.toString();
         }
+    }
+        
+    private boolean isPasswordPrompt(String s)
+    {
+        String trim = s.trim().toLowerCase();
+        if (trim.endsWith("password:"))
+            return true;
+        if (trim.startsWith("enter passphrase ") && trim.endsWith(":"))
+            return true;
+        return false;
     }
 }
