@@ -1,8 +1,8 @@
 /*
  * Symbol.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.166 2004-12-16 15:06:23 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: Symbol.java,v 1.167 2005-01-13 19:44:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,6 +256,81 @@ public class Symbol extends LispObject
     public LispObject classOf()
     {
         return BuiltInClass.SYMBOL;
+    }
+
+    public String describe() throws ConditionThrowable
+    {
+        StringBuffer sb = new StringBuffer(writeToString());
+        sb.append(" is an ");
+        if (pkg == NIL)
+            sb.append("uninterned");
+        else if (((Package)pkg).findExternalSymbol(getName()) == this)
+            sb.append("external");
+        else
+            sb.append("internal");
+        sb.append(" symbol");
+        if (pkg != NIL) {
+            sb.append(" in the ");
+            sb.append(pkg.getName());
+            sb.append(" package");
+        }
+        sb.append(".\n");
+        LispObject value = getSymbolValue();
+        if (isSpecialVariable()) {
+            sb.append("It is a ");
+            sb.append(isConstant() ? "constant" : "special variable");
+            sb.append("; ");
+            if (value != null) {
+                sb.append("its value is ");
+                sb.append(value.writeToString());
+            } else
+                sb.append("it is unbound");
+            sb.append(".\n");
+        } else if (value != null) {
+            sb.append("It is an undefined variable; its value is ");
+            sb.append(value.writeToString());
+            sb.append(".\n");
+        }
+        LispObject function = getSymbolFunction();
+        if (function != null) {
+            sb.append("Its function binding is ");
+            sb.append(function.writeToString());
+            sb.append(".\n");
+            if (function instanceof Function) {
+                LispObject arglist = ((Function)function).getArglist();
+                if (arglist != null) {
+                    LispThread thread = LispThread.currentThread();
+                    Binding lastSpecialBinding = thread.lastSpecialBinding;
+                    thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                    sb.append("Function argument list:\n  ");
+                    if (arglist instanceof AbstractString)
+                        sb.append(arglist.getStringValue());
+                    else
+                        sb.append(arglist.writeToString());
+                    sb.append('\n');
+                    thread.lastSpecialBinding = lastSpecialBinding;
+                }
+            }
+            LispObject documentation = getFunctionDocumentation();
+            if (documentation instanceof AbstractString) {
+                sb.append("Function documentation:\n  ");
+                sb.append(documentation.getStringValue());
+                sb.append('\n');
+            }
+        }
+        LispObject plist = getPropertyList();
+        if (plist != NIL) {
+            sb.append("Its property list has these indicator/value pairs:\n");
+            LispObject[] array = plist.copyToArray();
+            for (int i = 0; i < array.length; i += 2) {
+                sb.append("  ");
+                sb.append(array[i].writeToString());
+                sb.append(' ');
+                sb.append(array[i+1].writeToString());
+                sb.append('\n');
+            }
+        }
+        return sb.toString();
     }
 
     public LispObject getDescription() throws ConditionThrowable

@@ -1,8 +1,8 @@
 /*
  * LispObject.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.114 2004-12-23 12:28:51 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: LispObject.java,v 1.115 2005-01-13 19:44:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,15 @@ public class LispObject extends Lisp
     public LispObject classOf()
     {
         return BuiltInClass.CLASS_T;
+    }
+
+    public String describe() throws ConditionThrowable
+    {
+        StringBuffer sb = new StringBuffer(writeToString());
+        sb.append(" is an object of type ");
+        sb.append(typeOf().writeToString());
+        sb.append('.');
+        return sb.toString();
     }
 
     public LispObject getDescription() throws ConditionThrowable
