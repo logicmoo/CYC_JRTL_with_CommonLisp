@@ -2,7 +2,7 @@
  * SimpleTypeError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SimpleTypeError.java,v 1.1 2003-09-22 17:16:48 piso Exp $
+ * $Id: SimpleTypeError.java,v 1.2 2003-12-12 16:13:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,27 +23,9 @@ package org.armedbear.lisp;
 
 public final class SimpleTypeError extends TypeError
 {
-    private LispObject formatControl;
-    private LispObject formatArguments;
-
     public SimpleTypeError(LispObject initArgs) throws ConditionThrowable
     {
         super(initArgs);
-        LispObject datum = NIL;
-        LispObject expectedType = NIL;
-        LispObject first, second;
-        while (initArgs != NIL) {
-            first = initArgs.car();
-            initArgs = initArgs.cdr();
-            second = initArgs.car();
-            initArgs = initArgs.cdr();
-            if (first == Keyword.FORMAT_CONTROL)
-                formatControl = second;
-            else if (first == Keyword.FORMAT_ARGUMENTS)
-                formatArguments = second;
-        }
-        this.formatControl = formatControl;
-        this.formatArguments = formatArguments;
     }
 
     public LispObject typeOf()
@@ -75,8 +57,8 @@ public final class SimpleTypeError extends TypeError
             // (apply 'format (append '(nil format-control) format-arguments))
             LispObject result =
                 Primitives.APPLY.execute(Symbol.FORMAT,
-                                         Primitives.APPEND.execute(list2(NIL, formatControl),
-                                                                   formatArguments));
+                                         Primitives.APPEND.execute(list2(NIL, getFormatControl()),
+                                                                   getFormatArguments()));
             return ((LispString)result).getValue();
         }
         catch (Throwable t) {

@@ -2,7 +2,7 @@
  * SimpleError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleError.java,v 1.6 2003-09-21 02:02:21 piso Exp $
+ * $Id: SimpleError.java,v 1.7 2003-12-12 16:13:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,13 +23,15 @@ package org.armedbear.lisp;
 
 public class SimpleError extends LispError
 {
-    public SimpleError()
+    public SimpleError(LispObject formatControl, LispObject formatArguments)
     {
+        setFormatControl(formatControl);
+        setFormatArguments(formatArguments);
     }
 
-    public SimpleError(LispObject initArgs)
+    public SimpleError(LispObject initArgs) throws ConditionThrowable
     {
-        this(); // FIXME
+        super(initArgs);
     }
 
     public SimpleError(String message)
@@ -52,6 +54,10 @@ public class SimpleError extends LispError
         if (type == Symbol.SIMPLE_ERROR)
             return T;
         if (type == BuiltInClass.SIMPLE_ERROR)
+            return T;
+        if (type == Symbol.SIMPLE_CONDITION)
+            return T;
+        if (type == BuiltInClass.SIMPLE_CONDITION)
             return T;
         return super.typep(type);
     }
