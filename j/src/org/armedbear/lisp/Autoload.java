@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.218 2005-02-28 02:50:02 piso Exp $
+ * $Id: Autoload.java,v 1.219 2005-03-15 17:34:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -294,7 +294,11 @@ public class Autoload extends Function
         autoload("file-length", "file_length");
         autoload("file-string-length", "file_string_length");
         autoload("file-write-date", "file_write_date");
+        autoload("float", "FloatFunctions");
+        autoload("float-digits", "FloatFunctions");
+        autoload("float-radix", "FloatFunctions");
         autoload("float-sign", "float_sign");
+        autoload("floatp", "FloatFunctions");
         autoload("floor", "floor");
         autoload("ftruncate", "ftruncate");
         autoload("get-internal-real-time", "Time");
@@ -318,6 +322,7 @@ public class Autoload extends Function
         autoload("hash-table-test", "HashTableFunctions");
         autoload("import", "PackageFunctions");
         autoload("input-stream-p", "input_stream_p");
+        autoload("integer-decode-float", "FloatFunctions");
         autoload("interactive-stream-p", "interactive_stream_p");
         autoload("last", "last");
         autoload("lisp-implementation-type", "lisp_implementation_type");
@@ -365,6 +370,7 @@ public class Autoload extends Function
         autoload("peek-char", "peek_char");
         autoload("print-not-readable-object", "PrintNotReadable");
         autoload("probe-file", "probe_file");
+        autoload("rational", "FloatFunctions");
         autoload("read-char-no-hang", "read_char_no_hang");
         autoload("read-delimited-list", "read_delimited_list");
         autoload("rem", "rem");
@@ -372,6 +378,7 @@ public class Autoload extends Function
         autoload("remhash", "HashTableFunctions");
         autoload("rename-package", "PackageFunctions");
         autoload("room", "room");
+        autoload("scale-float", "FloatFunctions");
         autoload("schar", "StringFunctions");
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
@@ -490,9 +497,14 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
         autoload(PACKAGE_SYS, "class-slots", "SlotClass");
+        autoload(PACKAGE_SYS, "coerce-to-float", "FloatFunctions");
         autoload(PACKAGE_SYS, "condition-report", "Condition");
         autoload(PACKAGE_SYS, "create-new-file", "create_new_file");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
+        autoload(PACKAGE_SYS, "double-float-high-bits", "FloatFunctions");
+        autoload(PACKAGE_SYS, "double-float-low-bits", "FloatFunctions");
+        autoload(PACKAGE_SYS, "float-infinity-p", "FloatFunctions");
+        autoload(PACKAGE_SYS, "float-nan-p", "FloatFunctions");
         autoload(PACKAGE_SYS, "function-info", "function_info");
         autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "get-function-info-value", "function_info");
@@ -504,6 +516,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "layout-slot-index", "Layout");
         autoload(PACKAGE_SYS, "layout-slot-location", "Layout");
         autoload(PACKAGE_SYS, "make-case-frob-stream", "CaseFrobStream");
+        autoload(PACKAGE_SYS, "make-double-float", "FloatFunctions");
         autoload(PACKAGE_SYS, "make-file-stream", "FileStream");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
         autoload(PACKAGE_SYS, "make-forward-referenced-class", "ForwardReferencedClass");
@@ -515,8 +528,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "psxhash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
-        autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
         autoload(PACKAGE_SYS, "set-function-info-value", "function_info");
+        autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
         autoload(PACKAGE_SYS, "standard-instance-access", "StandardObjectFunctions", true);
         autoload(PACKAGE_SYS, "std-instance-slots", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "std-slot-boundp", "StandardObjectFunctions");
