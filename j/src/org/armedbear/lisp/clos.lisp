@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.128 2004-11-08 18:27:26 piso Exp $
+;;; $Id: clos.lisp,v 1.129 2004-11-08 19:24:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1201,6 +1201,14 @@
   gf)
 
 (defun find-method (gf qualifiers specializers &optional (errorp t))
+  ;; "If the specializers argument does not correspond in length to the number
+  ;; of required arguments of the generic-function, an an error of type ERROR
+  ;; is signaled."
+  (unless (= (length specializers) (length (gf-required-args gf)))
+    (error "FIND-METHOD: the specializers argument has length ~S, but ~S has ~S required parameters."
+           (length specializers)
+           gf
+           (length (gf-required-args gf))))
   (let* ((canonical-specializers (canonicalize-specializers specializers))
          (method
           (find-if #'(lambda (method)
