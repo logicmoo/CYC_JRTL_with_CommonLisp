@@ -1,7 +1,7 @@
 ;;; late-setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: late-setf.lisp,v 1.6 2004-10-14 16:51:25 piso Exp $
+;;; $Id: late-setf.lisp,v 1.7 2004-12-26 23:49:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -83,3 +83,12 @@
     (values vars args (list new-var)
             `(apply #'(setf ,function) ,new-var ,@vars)
             `(apply #',function ,@vars))))
+
+(define-setf-expander the (type place &environment env)
+  (multiple-value-bind (temps subforms store-vars setter getter)
+    (get-setf-expansion place env)
+    (values temps subforms store-vars
+            `(multiple-value-bind ,store-vars
+               (the ,type (values ,@store-vars))
+               ,setter)
+            `(the ,type ,getter))))
