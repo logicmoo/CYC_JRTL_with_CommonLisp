@@ -1,7 +1,7 @@
 ;;; documentation.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: documentation.lisp,v 1.2 2003-06-20 16:40:34 piso Exp $
+;;; $Id: documentation.lisp,v 1.3 2003-07-27 18:55:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,22 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
-
-(export '(documentation))
-
-(defvar *documentation* (make-hash-table))
+(in-package "SYSTEM")
 
 (defun documentation (symbol type)
-  (cdr (assoc type (gethash symbol *documentation*))))
-
-(defun %set-documentation (symbol type string)
-  (let* ((alist (gethash symbol *documentation*))
-	 (pair (assoc type alist)))
-    (if pair
-        (setf (cdr pair) string)
-        (progn
-          (puthash symbol *documentation* (cons (cons type string) alist))
-          string))))
-
-(defsetf documentation %set-documentation)
+  (if (eq type 'function)
+      (get symbol '%function-documentation)))
