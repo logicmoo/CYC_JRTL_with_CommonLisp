@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.231 2004-07-22 14:21:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.232 2004-07-22 14:42:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2258,19 +2258,19 @@
 (defstruct tag name label)
 
 (defun label-for-tag (name)
-  (let ((index (position name *tags* :from-end t :key #'tag-name)))
-    (when index
-      (tag-label (aref *tags* index)))))
+  (dolist (tag *tags*)
+    (when (eql name (tag-name tag))
+      (return (tag-label tag)))))
 
 (defun compile-tagbody (form &key (target *val*))
-  (let ((saved-fp (fill-pointer *tags*))
+  (let ((*tags* *tags*)
         (body (cdr form)))
     ;; Scan for tags.
     (dolist (f body)
       (when (atom f)
         (let ((name f)
               (label (gensym)))
-          (vector-push (make-tag :name name :label label) *tags*))))
+          (push (make-tag :name name :label label) *tags*))))
     (do* ((rest body (cdr rest))
           (subform (car rest) (car rest)))
          ((null rest))
@@ -2285,8 +2285,7 @@
                         (eq (car subform) 'GO))
                (generate-interrupt-check))
              (compile-form subform :target nil)
-             (maybe-emit-clear-values subform))))
-    (setf (fill-pointer *tags*) saved-fp))
+             (maybe-emit-clear-values subform)))))
   ;; TAGBODY returns NIL.
   (emit-clear-values)
   (when target
@@ -3328,7 +3327,9 @@
            (*static-code* ())
            (*fields* ())
            (*blocks* ())
-           (*tags* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
+
+           (*tags* nil)
+
            (*register* 0)
            (*registers-allocated* 0)
            (*handlers* ())
@@ -3349,8 +3350,6 @@
            (*val* nil)
            (*thread* nil)
            (*initialize-thread-var* nil))
-;;       (format t "compile-defun ~S: contains-lambda returned ~S~%"
-;;               *defun-name* (contains-lambda body))
       (if (zerop *nesting-level*)
           (setf *child-count* 0))
       (setf *context* (make-context))
