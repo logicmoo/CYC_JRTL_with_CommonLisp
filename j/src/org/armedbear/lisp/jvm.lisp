@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.318 2004-12-27 02:30:18 piso Exp $
+;;; $Id: jvm.lisp,v 1.319 2004-12-27 14:20:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4036,9 +4036,9 @@
     (emit-move-from-stack target representation)))
 
 (defun compile-plus (form &key (target *val*) representation)
-  (let ((new-form (rewrite-function-call form)))
-    (when (neq new-form form)
-      (return-from compile-plus (compile-form new-form :target target))))
+;;   (let ((new-form (rewrite-function-call form)))
+;;     (when (neq new-form form)
+;;       (return-from compile-plus (compile-form new-form :target target))))
   (case (length form)
     (3
      (let* ((args (cdr form))
@@ -4048,19 +4048,26 @@
             (var2 (unboxed-fixnum-variable arg2)))
        (cond
         ((and (numberp arg1) (numberp arg2))
-         (compile-constant (+ arg1 arg2) :target target))
+         (compile-constant (+ arg1 arg2)
+                           :target target
+                           :representation representation))
         ((and var1 var2)
          (dformat t "compile-plus case 1~%")
          (aver (variable-register var1))
-         (emit 'iload (variable-register var1))
-         (emit 'i2l)
          (aver (variable-register var2))
-         (emit 'iload (variable-register var2))
-         (emit 'i2l)
-         (emit 'ladd)
-         (when (null representation)
+         (cond
+          ((eq representation :unboxed-fixnum)
+           (emit-push-int var1)
+           (emit-push-int arg2)
+           (emit 'iadd))
+          (t
+           (emit 'iload (variable-register var1))
+           (emit 'i2l)
+           (emit 'iload (variable-register var2))
+           (emit 'i2l)
+           (emit 'ladd)
            (emit-box-long))
-         (emit-move-from-stack target representation))
+          (emit-move-from-stack target representation)))
         ((and var1 (fixnump arg2))
          (dformat t "compile-plus case 2~%")
          (aver (variable-register var1))
@@ -4101,7 +4108,7 @@
         ((eql arg2 1)
          (dformat t "compile-plus case 5~%")
          (compile-form arg1 :target :stack)
-         (maybe-emit-clear-values arg2)
+         (maybe-emit-clear-values arg1)
          (emit-invoke-method "incr" target representation))
         ((arg-is-fixnum-p arg1)
          (dformat t "compile-plus case 6~%")
@@ -4136,60 +4143,93 @@
      (compile-function-call form target representation))))
 
 (defun compile-minus (form &key (target *val*) representation)
-  (let ((new-form (rewrite-function-call form)))
-    (when (neq new-form form)
-      (return-from compile-minus (compile-form new-form :target target))))
-  (let* ((args (cdr form))
-         (len (length args)))
-    (case len
-      (2
-       (let ((first (first args))
-             (second (second args)))
+;;   (let ((new-form (rewrite-function-call form)))
+;;     (when (neq new-form form)
+;;       (return-from compile-minus (compile-form new-form :target target))))
+  (case (length form)
+    (3
+     (let* ((args (cdr form))
+            (arg1 (first args))
+            (arg2 (second args))
+            (var1 (unboxed-fixnum-variable arg1))
+            (var2 (unboxed-fixnum-variable arg2)))
+       (cond
+        ((and (numberp arg1) (numberp arg2))
+         (compile-constant (- arg1 arg2)
+                           :target target
+                           :representation representation))
+        ((and var1 var2)
+         (dformat t "compile-minus case 1~%")
+         (aver (variable-register var1))
+         (aver (variable-register var2))
          (cond
-          ((and (numberp first) (numberp second))
-           (compile-constant (- first second) :target target))
-          ((eql second 1)
-           (cond
-            ((unboxed-fixnum-variable-p first)
-             (aver (variable-register (find-visible-variable first)))
-             (emit 'iload (variable-register (find-visible-variable first)))
-             (emit 'i2l)
-             (emit 'iconst_1)
-             (emit 'i2l)
-             (emit 'lsub)
-             (emit-box-long)
-             (emit-move-from-stack target))
-            (t
-             (compile-form first :target :stack)
-             (emit-invoke-method "decr" target representation))))
-          ((fixnump second)
-           (dformat t "compile-minus fixnump second case~%")
-           (cond
-            ((unboxed-fixnum-variable-p first)
-             (dformat t "unboxed-fixnum-variable-p first case~%")
-             (aver (variable-register (find-visible-variable first)))
-             (emit 'iload (variable-register (find-visible-variable first)))
-             (emit 'i2l)
-             (emit-push-constant-int second)
-             (emit 'i2l)
-             (emit 'lsub)
-             (emit-box-long)
-             (emit-move-from-stack target))
-            (t
-             (compile-form first :target :stack)
-             (maybe-emit-clear-values first)
-             (emit-push-constant-int second)
-             (emit-invokevirtual +lisp-object-class+
-                                 "subtract"
-                                 "(I)Lorg/armedbear/lisp/LispObject;"
-                                 -1)
-             (when (eq representation :unboxed-fixnum)
-               (emit-unbox-fixnum))
-             (emit-move-from-stack target representation))))
+          ((eq representation :unboxed-fixnum)
+           (emit 'iload (variable-register var1))
+           (emit 'iload (variable-register var2))
+           (emit 'isub))
           (t
-           (compile-binary-operation "subtract" args target representation)))))
-      (t
-       (compile-function-call form target representation)))))
+           (emit 'iload (variable-register var1))
+           (emit 'i2l)
+           (emit 'iload (variable-register var2))
+           (emit 'i2l)
+           (emit 'lsub)
+           (emit-box-long)))
+         (emit-move-from-stack target representation))
+        ((and var1 (fixnump arg2))
+         (dformat t "compile-minus case 2~%")
+         (aver (variable-register var1))
+         (cond
+          ((eq representation :unboxed-fixnum)
+           (emit-push-int var1)
+           (emit-push-int arg2)
+           (emit 'isub))
+          (t
+           (emit-push-int var1)
+           (emit 'i2l)
+           (emit-push-int arg2)
+           (emit 'i2l)
+           (emit 'lsub)
+           (emit-box-long)))
+         (emit-move-from-stack target representation))
+        ((and (fixnump arg1) var2)
+         (dformat t "compile-minus case 3~%")
+         (aver (variable-register var2))
+         (cond
+          ((eq representation :unboxed-fixnum)
+           (emit-push-int arg1)
+           (emit-push-int var2)
+           (emit 'isub))
+          (t
+           (emit-push-int arg1)
+           (emit 'i2l)
+           (emit-push-int var2)
+           (emit 'i2l)
+           (emit 'lsub)
+           (emit-box-long)))
+         (emit-move-from-stack target representation))
+        ((eql arg2 1)
+         (dformat t "compile-minus case 5~%")
+         (compile-form arg1 :target :stack)
+         (maybe-emit-clear-values arg2)
+         (emit-invoke-method "decr" target representation))
+        ((arg-is-fixnum-p arg2)
+         (dformat t "compile-minus case 7~%")
+         (compile-form arg1 :target :stack)
+         (maybe-emit-clear-values arg1)
+         (emit-push-int arg2)
+         (emit-invokevirtual +lisp-object-class+
+                             "subtract"
+                             "(I)Lorg/armedbear/lisp/LispObject;"
+                             -1)
+         (when (eq representation :unboxed-fixnum)
+           (emit-unbox-fixnum))
+         (emit-move-from-stack target representation))
+        (t
+         (dformat t "compile-minus case 8~%")
+         (compile-binary-operation "subtract" args target representation)))))
+    (t
+     (dformat t "compile-minus case 9~%")
+     (compile-function-call form target representation))))
 
 (defun compile-schar (form &key (target *val*) representation)
   (unless (= (length form) 3)
