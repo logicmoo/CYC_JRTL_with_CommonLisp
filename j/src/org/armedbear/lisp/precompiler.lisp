@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.33 2004-03-16 20:15:32 piso Exp $
+;;; $Id: precompiler.lisp,v 1.34 2004-03-29 04:42:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -469,9 +469,9 @@
                      (return-from precompile1 (precompile1 result))))))
           (let ((handler (get op 'precompile-handler)))
             (when handler
-              (return-from precompile1 (funcall handler form)))))
-        (when (and (symbolp op) (special-operator-p op))
-          (format t "PRECOMPILE1: unsupported special operator ~S~%" op))
+              (return-from precompile1 (funcall handler form))))
+          (when (special-operator-p op)
+            (format t "PRECOMPILE1: unsupported special operator ~S~%" op)))
         (precompile-cons form))))
 
 (defun precompile-form (form in-jvm-compile)
