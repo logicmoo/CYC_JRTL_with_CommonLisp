@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.22 2004-03-07 01:09:00 piso Exp $
+;;; $Id: numbers.lisp,v 1.23 2004-03-09 11:53:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,22 +28,6 @@
       (if (rationalp number)
 	  (if (plusp number) 1 -1)
 	  (/ number (abs number)))))
-
-
-;;; If the numbers do not divide exactly and the result of (/ number divisor)
-;;; would be negative then decrement the quotient and augment the remainder by
-;;; the divisor.
-;;;
-(defun floor (number &optional (divisor 1))
-  "Returns the greatest integer not greater than number, or number/divisor.
-  The second returned value is (mod number divisor)."
-  (multiple-value-bind (tru rem) (truncate number divisor)
-    (if (and (not (zerop rem))
-	     (if (minusp divisor)
-		 (plusp number)
-		 (minusp number)))
-	(values (1- tru) (+ rem divisor))
-	(values tru rem))))
 
 
 ;;; If the numbers do not divide exactly and the result of (/ number divisor)
@@ -252,8 +236,7 @@
       (complex (cos theta) (sin theta))))
 
 (when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
-  (mapcar #'jvm::jvm-compile '(floor
-                               ceiling
+  (mapcar #'jvm::jvm-compile '(ceiling
                                round
                                rem
                                ftruncate
