@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.135 2005-02-17 15:47:46 piso Exp $
+ * $Id: Editor.java,v 1.136 2005-03-01 20:27:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2430,6 +2430,10 @@ public final class Editor extends JPanel implements Constants,
         }
     }
 
+    private KeyMap requestedKeyMap;
+
+    private String prefixKeyStatusText;
+
     public boolean handleKeyEvent(char keyChar, int keyCode, int modifiers)
     {
         if (insertingKeyText) {
@@ -2459,6 +2463,17 @@ public final class Editor extends JPanel implements Constants,
                     }
                     catch (NoSuchMethodException e) {}
                 }
+            } else if (command instanceof KeyMap) {
+                //Log.debug("setting requestedKeyMap to " + command);
+                requestedKeyMap = (KeyMap) command;
+                if (prefixKeyStatusText == null) {
+                    prefixKeyStatusText = mapping.getKeyText() + "-";
+                } else {
+                    prefixKeyStatusText =
+                        prefixKeyStatusText + mapping.getKeyText();
+                }
+                status(prefixKeyStatusText);
+                return true;
             } else if (command instanceof LispObject) {
                 try {
                     LispThread.currentThread().execute(Lisp.coerceToFunction((LispObject)command));
@@ -2474,6 +2489,20 @@ public final class Editor extends JPanel implements Constants,
 
     public KeyMapping getKeyMapping(char keyChar, int keyCode, int modifiers)
     {
+        if (requestedKeyMap != null) {
+            KeyMapping mapping =
+                requestedKeyMap.lookup(keyChar, keyCode, modifiers);
+            if (mapping != null) {
+                requestedKeyMap = null;
+                prefixKeyStatusText = null;
+            } else if (keyChar == 7 && keyCode == 0x47 && modifiers == 2) {
+                // Control G
+                requestedKeyMap = null;
+                prefixKeyStatusText = null;
+                status("");
+            }
+            return mapping;
+        }
         // Look in mode-specific key map.
         KeyMapping mapping =
             buffer.getMode().getKeyMap().lookup(keyChar, keyCode, modifiers);
