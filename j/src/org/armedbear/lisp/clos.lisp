@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.90 2004-02-19 18:29:42 piso Exp $
+;;; $Id: clos.lisp,v 1.91 2004-02-19 19:12:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1426,17 +1426,24 @@
              #'(lambda (args)
                 (funcall (method-function around) args next-emfun))))
           ((eq mc-name 'standard)
-           (let ((next-emfun (compute-primary-emfun (cdr primaries)))
-                 (befores (remove-if-not #'before-method-p methods))
-                 (reverse-afters
-                  (reverse (remove-if-not #'after-method-p methods))))
-             #'(lambda (args)
-                (dolist (before befores)
-                  (funcall (method-function before) args nil))
-                (multiple-value-prog1
-                 (funcall (method-function (car primaries)) args next-emfun)
-                 (dolist (after reverse-afters)
-                   (funcall (method-function after) args nil))))))
+           (let* ((next-emfun (compute-primary-emfun (cdr primaries)))
+                  (befores (remove-if-not #'before-method-p methods))
+                  (reverse-afters
+                   (reverse (remove-if-not #'after-method-p methods)))
+                  (code
+                   (make-closure
+                    (if (and (null befores) (null reverse-afters))
+                        `(lambda (args)
+                           (funcall (method-function ,(car primaries)) args ,next-emfun))
+                        `(lambda (args)
+                           (dolist (before ',befores)
+                             (funcall (method-function before) args nil))
+                           (multiple-value-prog1
+                            (funcall (method-function ,(car primaries)) args ,next-emfun)
+                            (dolist (after ',reverse-afters)
+                              (funcall (method-function after) args nil)))))
+                    nil)))
+             code))
           (t
            (let ((mc-obj (get mc-name 'method-combination-object)))
              (unless mc-obj
