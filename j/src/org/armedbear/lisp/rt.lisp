@@ -419,6 +419,8 @@
                               "unwind-protect"
                               "values"
                               "vector"
+                              "vector-pop"
+                              "vector-push"
                               "vectorp"
                               "when"))))
     (dolist (test tests)
