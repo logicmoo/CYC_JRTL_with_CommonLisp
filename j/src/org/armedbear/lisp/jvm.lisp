@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.199 2004-07-03 23:34:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.200 2004-07-04 02:31:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -67,18 +67,18 @@
 
 (defstruct context vars parent)
 
-(defun add-variable-to-context (var)
-  (assert (variable-p var))
-  (setf (variable-context var) *context*)
-  (push var (context-vars *context*)))
+(defun add-variable-to-context (variable)
+  (assert (variable-p variable))
+  (setf (variable-context variable) *context*)
+  (push variable (context-vars *context*)))
 
 
-(defun push-variable (var special-p)
+(defun push-variable (name special-p)
   (let* ((index (if special-p nil (length (context-vars *context*))))
-         (variable (make-variable :name var :special-p special-p :index index)))
+         (variable (make-variable :name name :special-p special-p :index index)))
     (push variable *variables*)
     (unless special-p
-      (push var *all-locals*)
+      (push name *all-locals*)
       (add-variable-to-context variable)
       )))
 
@@ -1884,7 +1884,7 @@
                         "getValues"
                         "(Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
                         0)
-    ;; Values array is now on the stack (at runtime).
+    ;; Values array is now on the stack at runtime.
     (let ((index 0))
       (dolist (var vars)
         (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
@@ -2979,8 +2979,6 @@
     (unless (remove-store-value)
       (emit-push-value)) ; leave result on stack
     (emit 'areturn)
-
-;;     (%format t "*all-locals* = ~S~%" *all-locals*)
 
     ;; Go back and fill in prologue.
     (let ((code *code*))
