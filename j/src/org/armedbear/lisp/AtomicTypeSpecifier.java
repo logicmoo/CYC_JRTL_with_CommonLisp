@@ -2,7 +2,7 @@
  * AtomicTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AtomicTypeSpecifier.java,v 1.5 2003-09-11 16:42:20 piso Exp $
+ * $Id: AtomicTypeSpecifier.java,v 1.6 2003-09-12 00:55:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public class AtomicTypeSpecifier extends TypeSpecifier
     public LispObject isSubtypeOf(TypeSpecifier ts) throws LispError
     {
         if (ts instanceof UnspecifiedTypeSpecifier)
-            return values(NIL, NIL);
+            return values(NIL, T);
         if (ts instanceof AtomicTypeSpecifier) {
             AtomicTypeSpecifier ats = (AtomicTypeSpecifier) ts;
             return type.isSubtypeOf(ats.type);
@@ -55,6 +55,6 @@ public class AtomicTypeSpecifier extends TypeSpecifier
             if (otherType != null)
                 return type.isSubtypeOf(otherType);
         }
-        return values(NIL, NIL);
+        return values(NIL, T);
     }
 }
