@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.6 2004-02-23 19:56:55 piso Exp $
+ * $Id: NilVector.java,v 1.7 2004-02-24 16:33:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,10 +120,6 @@ public final class NilVector extends AbstractString
     public int capacity()
     {
         return capacity;
-    }
-
-    public void ensureCapacity(int minCapacity)
-    {
     }
 
     public LispObject getElementType()
