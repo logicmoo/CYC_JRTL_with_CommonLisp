@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.27 2003-11-12 21:32:23 piso Exp $
+;;; $Id: subtypep.lisp,v 1.28 2003-11-13 19:21:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -211,13 +211,8 @@
                                          t
                                          (dolist (supertype type1-supertypes)
                                            (when (simple-subtypep supertype type2)
-                                             (return (values t)))))))))
-  (let (c1 c2)
-    (if (and (setf c1 (if (classp type1) type1 (find-class type1 nil)))
-             (setf c2 (if (classp type2) type2 (find-class type2 nil)))
-             (memq c2 (class-precedence-list c1)))
-        t
-        nil)))
+                                             (return t))))))))
+  nil)
 
 (defun subtypep (type1 type2)
   (when (or (equal type1 type2)
