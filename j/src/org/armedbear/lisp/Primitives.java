@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.369 2003-09-04 03:52:38 piso Exp $
+ * $Id: Primitives.java,v 1.370 2003-09-04 04:44:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4280,6 +4280,21 @@ public final class Primitives extends Module
         public LispObject execute(LispObject n, LispObject power)
             throws LispError
         {
+            if (power.zerop()) {
+                if (power instanceof Fixnum) {
+                    if (n instanceof LispFloat)
+                        return LispFloat.ONE;
+                    if (n instanceof Complex) {
+                        if (((Complex)n).getRealPart() instanceof LispFloat)
+                            return Complex.getInstance(LispFloat.ONE,
+                                                       LispFloat.ZERO);
+                    }
+                    return Fixnum.ONE;
+                }
+                if (power instanceof LispFloat) {
+                    return LispFloat.ONE;
+                }
+            }
             if (power instanceof Fixnum) {
                 LispObject result = null;
                 if (n instanceof Fixnum || n instanceof Bignum)
