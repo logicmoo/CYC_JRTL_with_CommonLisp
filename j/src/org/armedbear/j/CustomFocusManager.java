@@ -2,7 +2,7 @@
  * CustomFocusManager.java
  *
  * Copyright (C) 1999-2002 Peter Graves
- * $Id: CustomFocusManager.java,v 1.1.1.1 2002-09-24 16:08:28 piso Exp $
+ * $Id: CustomFocusManager.java,v 1.2 2003-02-20 19:42:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class CustomFocusManager extends DefaultFocusManager
 {
     public void processKeyEvent(Component focusedComponent, KeyEvent e)
     {
-        if (e.getKeyCode() == KeyEvent.VK_TAB) {
+        if (!Platform.isJava14() && e.getKeyCode() == KeyEvent.VK_TAB) {
             if (focusedComponent instanceof JMenu ||
                 focusedComponent instanceof Display) {
                 switch (e.getID()) {
@@ -47,6 +47,20 @@ public final class CustomFocusManager extends DefaultFocusManager
                 }
             }
             return;
+        }
+        if (Editor.preferences().getBooleanProperty(Property.ENABLE_KEY_PRESSED_HOOK)) {
+            if (!(focusedComponent instanceof Display)) {
+                if (e.getID() == KeyEvent.KEY_PRESSED) {
+                    KeyMapping km;
+                    int keyCode = e.getKeyCode();
+                    if (keyCode != 0)
+                        km = new KeyMapping(keyCode, e.getModifiers(), null);
+                    else
+                        km = new KeyMapping(e.getKeyChar(), null);
+                    Editor.runHooks("key-pressed-hook",
+                        "\"" + km.toString() + "\"");
+                }
+            }
         }
         super.processKeyEvent(focusedComponent, e);
     }
