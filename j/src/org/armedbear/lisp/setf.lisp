@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: setf.lisp,v 1.44 2004-08-02 19:22:38 piso Exp $
+;;; $Id: setf.lisp,v 1.45 2004-08-21 03:18:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -229,3 +229,12 @@
 (defsetf charpos %set-charpos)
 (defsetf logical-pathname-translations %set-logical-pathname-translations)
 (defsetf readtable-case %set-readtable-case)
+
+(defun %putf (place property new-value)
+  (do ((plist place (cddr plist)))
+      ((endp plist) (list* property new-value place))
+    (when (eq (car plist) property)
+      (setf (cadr plist) new-value)
+      (return place))))
+
+(defsetf function-info %set-function-info)
