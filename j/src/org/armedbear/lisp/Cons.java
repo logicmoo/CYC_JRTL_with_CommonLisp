@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.42 2004-05-23 02:50:17 piso Exp $
+ * $Id: Cons.java,v 1.43 2004-05-23 15:19:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,13 @@ public final class Cons extends LispObject
     {
         this.car = car;
         this.cdr = NIL;
+        ++count;
+    }
+
+    public Cons(String name, LispObject value)
+    {
+        this.car = new SimpleString(name);
+        this.cdr = value != null ? value : UNBOUND;
         ++count;
     }
 
