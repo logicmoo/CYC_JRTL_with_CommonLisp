@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.68 2003-09-17 18:26:06 piso Exp $
+# $Id: Makefile.in,v 1.69 2003-09-17 18:38:59 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@ CLASSFILES =	AbstractArray.class \
 		ArithmeticError.class \
 		Array.class \
 		ArrayType.class \
-		AtomicTypeSpecifier.class \
 		Autoload.class \
 		AutoloadMacro.class \
 		Bignum.class \
@@ -106,7 +105,6 @@ CLASSFILES =	AbstractArray.class \
 		Time.class \
 		Type.class \
 		TypeError.class \
-		TypeSpecifier.class \
 		TwoWayStream.class \
 		UnboundVariableException.class \
 		UndefinedFunctionError.class \
