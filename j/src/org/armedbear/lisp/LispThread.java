@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.42 2004-06-02 11:42:42 piso Exp $
+ * $Id: LispThread.java,v 1.43 2004-06-04 00:34:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -266,15 +266,17 @@ public final class LispThread extends LispObject
             Debug.assertTrue(false);
     }
 
-    public boolean isValidCatchTag(LispObject tag) throws ConditionThrowable
+    public void throwToTag(LispObject tag, LispObject result)
+        throws ConditionThrowable
     {
         LispObject rest = catchTags;
         while (rest != NIL) {
             if (rest.car() == tag)
-                return true;
+                throw new Throw(tag, result, this);
             rest = rest.cdr();
         }
-        return false;
+        signal(new ControlError("Attempt to throw to the nonexistent tag " +
+                                tag.writeToString() + "."));
     }
 
     private static class StackFrame
