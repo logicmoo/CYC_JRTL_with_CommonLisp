@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Keyword.java,v 1.18 2004-01-02 19:09:27 piso Exp $
+ * $Id: Keyword.java,v 1.19 2004-01-03 17:45:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,8 @@ public final class Keyword extends Lisp
         COUNT_ONLY          = internKeyword("COUNT-ONLY"),
         DATUM               = internKeyword("DATUM"),
         DECLARED            = internKeyword("DECLARED"),
+        DEVICE              = internKeyword("DEVICE"),
+        DIRECTORY           = internKeyword("DIRECTORY"),
         DIRECT_SUPERCLASSES = internKeyword("DIRECT-SUPERCLASSES"),
         DOWNCASE            = internKeyword("DOWNCASE"),
         ELEMENT_TYPE        = internKeyword("ELEMENT-TYPE"),
@@ -47,6 +49,7 @@ public final class Keyword extends Lisp
         FILL_POINTER        = internKeyword("FILL-POINTER"),
         FORMAT_ARGUMENTS    = internKeyword("FORMAT-ARGUMENTS"),
         FORMAT_CONTROL      = internKeyword("FORMAT-CONTROL"),
+        HOST                = internKeyword("HOST"),
         INHERITED           = internKeyword("INHERITED"),
         INITIAL_CONTENTS    = internKeyword("INITIAL-CONTENTS"),
         INITIAL_ELEMENT     = internKeyword("INITIAL-ELEMENT"),
@@ -61,7 +64,10 @@ public final class Keyword extends Lisp
         PUBLIC              = internKeyword("PUBLIC"),
         SUPERSEDE           = internKeyword("SUPERSEDE"),
         TIME                = internKeyword("TIME"),
+        TYPE                = internKeyword("TYPE"),
         UPCASE              = internKeyword("UPCASE"),
         USE                 = internKeyword("USE"),
-        WILD                = internKeyword("WILD");
+        VERSION             = internKeyword("VERSION"),
+        WILD                = internKeyword("WILD"),
+        WILD_INFERIORS      = internKeyword("WILD-INFERIORS");
 }
