@@ -1,7 +1,7 @@
 ;;; transform.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: transform.lisp,v 1.5 2003-11-07 18:12:01 piso Exp $
+;;; $Id: transform.lisp,v 1.6 2003-11-09 14:28:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -99,7 +99,9 @@
           ((eq op 'LAMBDA)
            (transform-lambda args))
           ((eq op 'BLOCK)
-           (append (list 'BLOCK (car args)) (mapcar #'transform1 (cdr args))))
+           (if (null (cdr args))
+               nil
+               (list* 'BLOCK (car args) (mapcar #'transform1 (cdr args)))))
           ((eq op 'SETQ)
            (when (= 2 (length args))
                (return-from transform1 (list 'SETQ (first args) (transform1 (second args)))))
