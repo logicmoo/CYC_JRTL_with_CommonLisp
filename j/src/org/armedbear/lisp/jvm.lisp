@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.229 2004-07-21 18:14:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.230 2004-07-22 13:48:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -507,6 +507,8 @@
              166 ; IF_ACMPNE
              165 ; IF_ACMPEQ
              167 ; GOTO
+             168 ; JSR
+             169 ; RET
              176 ; ARETURN
              177 ; RETURN
              191 ; ATHROW
@@ -639,6 +641,7 @@
       165 ; IF_ACMPEQ
       166 ; IF_ACMPNE
       167 ; GOTO
+      168 ; JSR
       )))
 
 (defun walk-code (code start-index depth)
@@ -648,18 +651,23 @@
     (let ((instruction (aref code i)))
       (when (instruction-depth instruction)
         (unless (eql (instruction-depth instruction) (+ depth (instruction-stack instruction)))
+          (fresh-line)
           (format t "Stack inconsistency at index ~D: found ~S, expected ~S.~%"
                   i
                   (instruction-depth instruction)
                   (+ depth (instruction-stack instruction))))
         (return-from walk-code))
-      (setf depth (+ depth (instruction-stack instruction)))
-      (setf (instruction-depth instruction) depth)
       (let ((opcode (instruction-opcode instruction)))
-        (when (branch-opcode-p opcode)
-          (let ((label (car (instruction-args instruction))))
-            (walk-code code (symbol-value label) depth)))
-        (when (member opcode '(167 191)) ; GOTO ATHROW
+        (unless (eql opcode 168) ; JSR)
+          (setf depth (+ depth (instruction-stack instruction))))
+        (setf (instruction-depth instruction) depth)
+        (if (eql opcode 168) ; JSR
+            (let ((label (car (instruction-args instruction))))
+              (walk-code code (symbol-value label) (1+ depth)))
+            (when (branch-opcode-p opcode)
+              (let ((label (car (instruction-args instruction))))
+                (walk-code code (symbol-value label) depth))))
+        (when (member opcode '(167 169 191)) ; GOTO RET ATHROW
           ;; Current path ends.
           (return-from walk-code))))))
 
@@ -691,6 +699,7 @@
         (when depth
           (setf max-stack (max max-stack depth)))))
     (when *debug*
+      (format t "*defun-name* = ~S~%" *defun-name*)
       (format t "max-stack = ~D~%" max-stack)
       (format t "----- after stack analysis -----~%")
       (print-code))
@@ -810,7 +819,7 @@
   (dotimes (i (length *code*))
     (let* ((instruction (svref *code* i))
            (opcode (instruction-opcode instruction)))
-      (when (eql opcode 202)
+      (when (eql opcode 202) ; LABEL
         (let ((label (car (instruction-args instruction))))
           (set label i))))))
 
@@ -944,24 +953,27 @@
         (setf *code* (delete 0 *code* :key #'instruction-opcode))
         t))))
 
+(defvar *enable-optimization* t)
+
 (defun optimize-code ()
-  (when *debug*
-    (sys::%format t "----- before optimization -----~%")
-    (print-code))
-  (loop
-    (let ((changed-p nil))
-      (setf changed-p (or (optimize-1) changed-p))
-      (setf changed-p (or (optimize-2) changed-p))
-      (setf changed-p (or (optimize-3) changed-p))
-      (setf changed-p (or (optimize-4) changed-p))
-      (setf changed-p (or (optimize-5) changed-p))
-      (setf changed-p (or (delete-unreachable-code) changed-p))
-      (unless changed-p
-        (return))))
-;;   (delete-unreachable-code)
-  (when *debug*
-    (format t "----- after optimization -----~%")
-    (print-code)))
+  (when *enable-optimization*
+    (when *debug*
+      (sys::%format t "----- before optimization -----~%")
+      (print-code))
+    (loop
+      (let ((changed-p nil))
+        (setf changed-p (or (optimize-1) changed-p))
+        (setf changed-p (or (optimize-2) changed-p))
+        (setf changed-p (or (optimize-3) changed-p))
+        (setf changed-p (or (optimize-4) changed-p))
+        (setf changed-p (or (optimize-5) changed-p))
+        ;;       (setf changed-p (or (delete-unreachable-code) changed-p))
+        (unless changed-p
+          (return))))
+    (delete-unreachable-code)
+    (when *debug*
+      (format t "----- after optimization -----~%")
+      (print-code))))
 
 (defun code-bytes (code)
   (let ((length 0))
@@ -1700,7 +1712,7 @@
       (case (car args)
         (QUOTE
          nil)
-        ((RETURN-FROM GO CATCH THROW)
+        ((RETURN-FROM GO CATCH THROW UNWIND-PROTECT)
          t)
         (t
          (dolist (arg args)
@@ -3150,6 +3162,62 @@
     (emit-push-nil)
     (emit-move-from-stack target)))
 
+(defun compile-unwind-protect (form &key (target *val*))
+  (when (= (length form) 2) ; (unwind-protect 42)
+    (compile-form (second form) :target target)
+    (return-from compile-unwind-protect))
+  (let* ((protected-form (cadr form))
+         (cleanup-forms (cddr form))
+         (*register* *register*)
+         (exception-register (allocate-register))
+         (result-register (allocate-register))
+         (values-register (allocate-register))
+         (return-address-register (allocate-register))
+         (label1 (gensym))
+         (label2 (gensym))
+         (label3 (gensym))
+         (label4 (gensym))
+         (label5 (gensym))
+         (cleanup (gensym)))
+    (when (contains-return protected-form)
+      (error "COMPILE-UNWIND-PROTECT: unhandled case (RETURN)"))
+    (when (contains-go protected-form)
+      (error "COMPILE-UNWIND-PROTECT: unhandled case (GO)"))
+    (emit 'label `,label1) ; Start of protected range.
+    (compile-form protected-form :target result-register)
+    (emit-push-current-thread)
+    (emit 'getfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
+    (emit 'astore values-register)
+    (emit 'label `,label2) ; End of protected range.
+    (emit 'jsr `,cleanup)
+    (emit 'goto `,label5) ; Jump over handler.
+    (emit 'label `,label3) ; Start of exception handler.
+    ;; The Throw object is on the runtime stack. Stack depth is 1.
+    (emit 'astore exception-register)
+    (emit 'jsr `,cleanup) ; Call cleanup forms.
+    (emit 'aload exception-register)
+    (emit 'athrow) ; Re-throw exception.
+    (emit 'label `,cleanup) ; Cleanup forms.
+    ;; Return address is on stack here.
+    (emit 'astore return-address-register)
+    (dolist (subform cleanup-forms)
+      (compile-form subform :target nil)
+      (maybe-emit-clear-values subform))
+    (emit 'ret return-address-register)
+    (emit 'label `,label5)
+    ;; Restore multiple values returned by protected form.
+    (emit-push-current-thread)
+    (emit 'aload values-register)
+    (emit 'putfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
+    ;; Result.
+    (emit 'aload result-register)
+    (emit-move-from-stack target)
+    (let ((handler (make-handler :from `,label1
+                                 :to `,label2
+                                 :code `,label3
+                                 :catch-type 0)))
+      (push handler *handlers*))))
+
 (defun compile-form (form &key (target *val*))
   (cond ((consp form)
          (let ((op (car form))
@@ -3601,6 +3669,7 @@
                           setq
                           tagbody
                           throw
+                          unwind-protect
                           values))
 
 (install-handler 'let  'compile-let/let*)
