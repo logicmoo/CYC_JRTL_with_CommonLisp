@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.3 2003-10-04 10:53:26 piso Exp $
+;;; $Id: top-level.lisp,v 1.4 2003-10-05 01:22:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,9 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; Adapted from SB-ACLREPL (originally written by Kevin Rosenberg).
+
+;;; A few things we're gonna be needing...
+(mapc #'sys::resolve '(sort position break write))
 
 (in-package "EXTENSIONS")
 
@@ -44,14 +47,9 @@
   (fresh-line stream)
   (when (> *break-level* 0)
     (format stream "[~D] " *break-level*))
-  (write-string (prompt-package-name) stream)
-  (write-string "(" stream)
-  (princ *cmd-number* stream)
-  (write-string "): " stream))
+  (format stream "~A(~D): " (prompt-package-name) *cmd-number*))
 
 (defparameter *repl-prompt-fun* #'repl-prompt-fun)
-
-(defvar *last-files-loaded* nil)
 
 (defun peek-char-non-whitespace (stream)
   (loop
@@ -66,6 +64,63 @@
         (read-line stream)
         (read stream nil))))
 
+(defun apropos-command (args)
+  (when args (apropos args)))
+
+(defun backtrace-command (args)
+  (let ((count (or (and args (ignore-errors (parse-integer args)))
+                   most-positive-fixnum))
+        (n 0))
+    (dolist (frame *saved-backtrace*)
+      (format t "  ~D: ~A~%" n frame)
+      (incf n)
+      (when (>= n count)
+        (return))))
+  (values))
+
+(defun continue-command (ignored)
+  (if (> *break-level* 0)
+      (throw 'continue-catcher nil)))
+
+(defun describe-command (args)
+  (let ((obj (eval (read-from-string args))))
+    (describe obj)))
+
+(defun package-command (args)
+  (cond ((null args)
+         (format *standard-output* "The ~A package is current.~%"
+                 (package-name *package*)))
+        (t
+         (when (and (plusp (length args)) (eql (char args 0) #\:))
+           (setf args (subseq args 1)))
+         (setf args (nstring-upcase args))
+         (let ((pkg (find-package args)))
+           (if pkg
+               (setf *package* pkg)
+               (format *standard-output* "Unknown package ~A.~%" args))))))
+
+(defun reset-command (ignored)
+  (throw 'top-level-catcher nil))
+
+(defun exit-command (ignored)
+  (exit))
+
+(defun cd-command (args)
+  (cond ((or (null args) (string= args "~"))
+         (setf args (namestring (user-homedir-pathname))))
+        ((and (> (length args) 1) (string= (subseq args 0 2) "~/")
+              (setf args (concatenate 'string
+                                      (namestring (user-homedir-pathname))
+                                      (subseq args 2))))))
+  (let ((dir (probe-directory args)))
+    (if dir
+        (progn
+          (setf *default-pathname-defaults* dir)
+          (format t "~A" (namestring *default-pathname-defaults*)))
+        (format t "Error: no such directory (~S).~%" args))))
+
+(defvar *last-files-loaded* nil)
+
 (defun tokenize (string)
   (do* ((res nil)
         (string (string-left-trim " " string)
@@ -76,22 +131,69 @@
       (setf end (length string)))
     (push (subseq string 0 end) res)))
 
-(defun backtrace-command (&optional count)
-  (let ((count (if (fixnump count) count 7))
-        (n 0))
-    (dolist (frame *saved-backtrace*)
-      (format t "  ~D: ~A~%" n frame)
-      (incf n)
-      (when (>= n count)
-        (return))))
-  (values))
+(defun ld-command (args)
+  (let ((files (if args (tokenize args) *last-files-loaded*)))
+    (setf *last-files-loaded* files)
+    (dolist (file files)
+      (load file))))
 
-(defun continue-command ()
-  (if (> *break-level* 0)
-      (throw 'continue-catcher nil)))
+(defun pwd-command (ignored)
+  (format t "~A~%" *default-pathname-defaults*))
 
-(defun reset-command ()
-  (throw 'top-level-catcher nil))
+(defconstant spaces (make-string 32 :initial-element #\space))
+
+(defun pad (string width)
+  (if (< (length string) width)
+      (concatenate 'string string (subseq spaces 0 (- width (length string))))
+      string))
+
+(defun help-command (ignored)
+  (format t "COMMAND     ABBR DESCRIPTION~%")
+  (dolist (entry *command-table*)
+    (format t "~A~A~A~%"
+            (pad (entry-name entry) 12)
+            (pad (entry-abbr entry) 5)
+            (entry-help entry)
+            )))
+
+(defparameter *command-table*
+  '(("apropos" 2 apropos-command "show apropos")
+    ("bt" 2 backtrace-command "backtrace n stack frames (default all)")
+    ("cd" 2 cd-command "change default directory")
+    ("continue" 4 continue-command "return from break")
+    ("describe" 2 describe-command "describe an object")
+    ("exit" 2 exit-command "exit lisp")
+    ("help" 2 help-command "print this help")
+    ("ld" 2 ld-command "load a file")
+    ("package" 2 package-command "change current package")
+    ("pwd" 3 pwd-command "print current directory")
+    ("reset" 3 reset-command "return to top level")
+    ))
+
+(defun entry-name (entry)
+  (first entry))
+
+(defun entry-min-len (entry)
+  (second entry))
+
+(defun entry-abbr (entry)
+  (if (< (entry-min-len entry) (length (entry-name entry)))
+      (subseq (entry-name entry) 0 (entry-min-len entry))
+      ""))
+
+(defun entry-command (entry)
+  (third entry))
+
+(defun entry-help (entry)
+  (fourth entry))
+
+(defun find-command (string)
+  (let ((len (length string)))
+    (dolist (entry *command-table*)
+      (let ((min-len (entry-min-len entry)))
+        (when (and (>= len min-len)
+                   (string-equal (entry-name entry) string :end1 len))
+          (return (entry-command entry)))))))
 
 (defun process-cmd (form)
   (when (and (stringp form) (> (length form) 1) (eql (char form 0) *command-char*))
@@ -102,58 +204,11 @@
         (setf args (string-trim " " args))
         (when (zerop (length args))
           (setf args nil)))
-      (cond ((string-equal cmd "ld")
-             (let ((files (if args (tokenize args) *last-files-loaded*)))
-               (setf *last-files-loaded* files)
-               (dolist (file files)
-                 (load file)))
-             )
-            ((string-equal cmd "de")
-             (let ((obj (eval (read-from-string args))))
-               (describe obj)))
-            ((string-equal cmd "ap")
-             (apropos args))
-            ((string-equal cmd "pwd")
-             (format t "~A~%" *default-pathname-defaults*))
-            ((string-equal cmd "cd")
-             (cond ((or (null args) (string= args "~"))
-                    (setf args (namestring (user-homedir-pathname))))
-                   ((and (> (length args) 1) (string= (subseq args 0 2) "~/")
-                    (setf args (concatenate 'string
-                                            (namestring (user-homedir-pathname))
-                                            (subseq args 2))))))
-             (let ((dir (probe-directory args)))
-               (if dir
-                   (progn
-                     (setf *default-pathname-defaults* dir)
-                     (format *standard-output* "~A" (namestring *default-pathname-defaults*)))
-                   (format *standard-output* "Error: no such directory (~S).~%" args))))
-            ((string-equal cmd "bt")
-             (let ((count (or (and args (ignore-errors (parse-integer args))) most-positive-fixnum)))
-               (backtrace-command count)))
-            ((string-equal cmd "pa")
-             (cond ((null args)
-                    (format *standard-output* "The ~A package is current.~%"
-                            (package-name *package*)))
-                   (t
-                    (when (and (plusp (length args)) (eql (char args 0) #\:))
-                      (setf args (subseq args 1)))
-                    (setf args (nstring-upcase args))
-                    (let ((pkg (find-package args)))
-                      (if pkg
-                          (setf *package* pkg)
-                          (format *standard-output* "Unknown package ~A.~%" args))))))
-            ((or (string-equal cmd "cont") (string-equal cmd "continue"))
-             (continue-command))
-            ((or (string-equal cmd "res") (string-equal cmd "reset"))
-             (reset-command))
-            ((string-equal cmd "ex")
-             (format t "Bye!~%")
-             (exit))
-            (t
-             (format *standard-output* "Unknown top-level command ~S.~%" cmd)
-             )))
-    (return-from process-cmd t))
+      (let ((fun (find-command cmd)))
+        (if fun
+            (funcall fun args)
+            (format t "Unknown top-level command ~S.~%" cmd)))
+      (return-from process-cmd t)))
   nil)
 
 (defun repl-read-form-fun (in out)
@@ -196,6 +251,8 @@
         (prin1 result)))))
 
 (defun top-level-loop ()
+  (fresh-line)
+  (format t "Type :HELP for a list of top-level commands.~%")
   (loop
     (catch 'top-level-catcher
       (handler-case
