@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.39 2003-07-17 13:45:59 piso Exp $
+ * $Id: CommandTable.java,v 1.40 2003-08-02 00:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -284,6 +284,7 @@ public class CommandTable
             addCommand("lisp", "LispShell");
             addCommand("listBindings", "Help");
             addCommand("listFiles", "FindInFiles");
+            addCommand("lispFindMatchingChar", "LispMode");
             addCommand("listIncludes", "CheckPath");
             addCommand("listMatchingTags", "TagCommands");
             addCommand("listMatchingTagsAtDot", "TagCommands");
