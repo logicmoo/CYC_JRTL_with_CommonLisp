@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.231 2003-06-06 18:19:09 piso Exp $
+ * $Id: Primitives.java,v 1.232 2003-06-10 01:12:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1412,22 +1412,14 @@ public final class Primitives extends Module
             Symbol symbol = checkSymbol(first);
             LispObject parameters = checkList(second);
             LispObject body = checkList(third);
-            return __defun(symbol, parameters, body, new Environment());
+            body = new Cons(symbol, body);
+            body = new Cons(Symbol.BLOCK, body);
+            body = new Cons(body, NIL);
+            symbol.setSymbolFunction(new Closure(symbol.getName(), parameters,
+                body, new Environment()));
+            return symbol;
         }
     };
-
-    private static final Symbol __defun(Symbol symbol, LispObject parameters,
-        LispObject body, Environment env) throws LispError
-    {
-        body = new Cons(symbol, body);
-        body = new Cons(Symbol.BLOCK, body);
-        body = new Cons(body, NIL);
-        symbol.setSymbolFunction(new Closure(symbol.getName(), parameters,
-            body, env));
-        // INTERN returns multiple values, but DEFUN does not.
-        LispThread.currentThread().clearValues();
-        return symbol;
-    }
 
     // ### lambda
     private static final SpecialOperator LAMBDA =
