@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.28 2003-11-13 19:21:46 piso Exp $
+;;; $Id: subtypep.lisp,v 1.29 2003-11-13 19:54:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -203,16 +203,14 @@
     (return-from sub-interval-p t)))
 
 (defun simple-subtypep (type1 type2)
-  (when (and (symbolp type1) (symbolp type2))
-    (multiple-value-bind (type1-supertypes type1-known-p)
-        (gethash type1 *known-types*)
-      (when type1-known-p
-        (return-from simple-subtypep (if (memq type2 type1-supertypes)
-                                         t
-                                         (dolist (supertype type1-supertypes)
-                                           (when (simple-subtypep supertype type2)
-                                             (return t))))))))
-  nil)
+  (multiple-value-bind (type1-supertypes type1-known-p) (gethash type1 *known-types*)
+    (if type1-known-p
+        (if (memq type2 type1-supertypes)
+            t
+            (dolist (supertype type1-supertypes)
+              (when (simple-subtypep supertype type2)
+                (return t))))
+        nil)))
 
 (defun subtypep (type1 type2)
   (when (or (equal type1 type2)
