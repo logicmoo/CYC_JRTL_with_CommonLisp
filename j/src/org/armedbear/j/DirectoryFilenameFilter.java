@@ -1,8 +1,8 @@
 /*
  * DirectoryFilenameFilter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: DirectoryFilenameFilter.java,v 1.2 2003-03-20 15:07:23 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: DirectoryFilenameFilter.java,v 1.3 2003-07-04 17:26:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,72 +21,54 @@
 
 package org.armedbear.j;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 public final class DirectoryFilenameFilter
 {
-    private String prefix;
-    private String suffix;
-    private String substring;
-    private boolean ignoreCaseOfFiles;
+    private Pattern pattern;
+    private boolean ignoreCase;
 
-    public DirectoryFilenameFilter(String filter)
+    public DirectoryFilenameFilter(String s) throws PatternSyntaxException
     {
-        // BUG! Error handling!
-        processFilter(filter);
-        if (Platform.isPlatformWindows()) {
-            ignoreCaseOfFiles = true;
-            if (prefix != null)
-                prefix = prefix.toLowerCase();
-            if (suffix != null)
-                suffix = suffix.toLowerCase();
-            if (substring != null)
-                substring = substring.toLowerCase();
-        }
-    }
-
-    private boolean processFilter(String filter)
-    {
-        if (filter.indexOf("*") < 0)
-            return false;
-
-        if (filter.startsWith("*")){
-            suffix = filter.substring(1);
-            if (suffix.endsWith("*")) {
-                substring = suffix.substring(0, suffix.length()-1);
-                suffix = null;
-                if (substring.indexOf("*") >= 0)
-                    return false;
+        ignoreCase = Platform.isPlatformWindows();
+        if (ignoreCase)
+            s = s.toLowerCase();
+        FastStringBuffer sb = new FastStringBuffer();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '.':
+                    sb.append("\\.");
+                    break;
+                case '*':
+                    sb.append(".*");
+                    break;
+                case '?':
+                    sb.append(".?");
+                    break;
+                default:
+                    sb.append(c);
+                    break;
             }
-            return true;
         }
-        if (filter.endsWith("*")) {
-            prefix = filter.substring(0, filter.length()-1);
-            if (prefix.indexOf("*") >= 0)
-                return false;
+        try {
+            pattern = Pattern.compile(sb.toString());
         }
-        int index = filter.indexOf("*");
-        prefix = filter.substring(0, index);
-        suffix = filter.substring(index+1, filter.length());
-        if (suffix.indexOf("*") >= 0)
-            return false;
-        return true;
+        catch (PatternSyntaxException e) {
+            Log.debug(e);
+            pattern = null;
+        }
     }
 
-    // Returns true if name meets filter criteria (dir is ignored).
-    public boolean accept(String name)
+    public boolean accepts(String name)
     {
-        if (name == null)
+        if (pattern == null)
             return false;
-        if (ignoreCaseOfFiles)
+        if (ignoreCase)
             name = name.toLowerCase();
-        if (prefix != null)
-            if (!name.startsWith(prefix))
-                return false;
-        if (suffix != null)
-            if (!name.endsWith(suffix))
-                return false;
-        if (substring != null)
-            if (name.indexOf(substring) < 0)
-                return false;
-        return true;
+        Matcher matcher = pattern.matcher(name);
+        return matcher.matches();
     }
 }
