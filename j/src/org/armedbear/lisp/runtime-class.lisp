@@ -377,16 +377,17 @@
 
 (defun field-modifier (m)
   (cond ((string= "public" m) constants.acc-public)
-    ((string= "protected" m) constants.acc-protected)
-    ((string= "private" m) constants.acc-private)
-    ((string= "static" m) constants.acc-static)
-    ((string= "final" m) constants.acc-final)
-    ((string= "transient" m) constants.acc-transient)
-    ((string= "volatile" m) constants.acc-volatile)
-    (t (error "Invalid field modifier ~s." m))))
+        ((string= "protected" m) constants.acc-protected)
+        ((string= "private" m) constants.acc-private)
+        ((string= "static" m) constants.acc-static)
+        ((string= "final" m) constants.acc-final)
+        ((string= "transient" m) constants.acc-transient)
+        ((string= "volatile" m) constants.acc-volatile)
+        (t (error "Invalid field modifier ~s." m))))
 
 
-(defun write-method (class-writer class-name method-name unique-method-name result-type arg-types)
+(defun write-method
+  (class-writer class-name method-name unique-method-name result-type arg-types &optional super-invocation)
 
   (let* ((arg-count (length arg-types))
          (args-size (reduce #'+ arg-types :key #'size))
@@ -397,6 +398,21 @@
               method-name
               (format nil "(~{~a~})~a"
                       (mapcar #'decorated-type-name arg-types) (decorated-type-name result-type)))))
+
+    (when super-invocation
+      (visit-var-insn-2 cv constants.aload 0)
+      (loop for arg-number in (cdr super-invocation)
+	with super-arg-types = (make-string-output-stream)
+	do
+	(visit-var-insn-2 cv
+                          (load-instruction (nth (1- arg-number) arg-types))
+                          (reduce #'+ arg-types :end (1- arg-number) :key #'size :initial-value 1))
+	(write-string (arg-type-for-make-lisp-object (nth (1- arg-number) arg-types)) super-arg-types)
+	finally
+	(visit-method-insn-4 cv constants.invokespecial
+                             (type-name (car super-invocation)) "<init>"
+                             (format nil "(~a)~a"
+                                     (get-output-stream-string super-arg-types) "V"))))
     (visit-ldc-insn-1 cv (make-java-string class-name))
     (visit-method-insn-4 cv constants.invokestatic
                          "org/armedbear/lisp/RuntimeClass"
@@ -489,10 +505,22 @@
   
 
 
-(defun jnew-runtime-class (class-name super-name methods &optional fields filename)
+(defun jnew-runtime-class (class-name super-name constructors methods fields &optional filename)
   "Creates and loads a Java class with methods calling Lisp closures as given in METHODS.
-   CLASS-NAME and SUPER-NAME are strings, METHODS is a list of method definitions, and FIELDS
-   is a list of field definitions.
+   CLASS-NAME and SUPER-NAME are strings, CONSTRUCTORS,  METHODS and FIELDS are lists of
+   constructor, method and field definitions. 
+
+   Constructor definitions are lists of the form 
+   (argument-types function &optional super-invocation-arguments)
+   where argument-types is a list of strings and function is a lisp function of
+   (1+ (length argument-types)) arguments; the instance (`this') is passed in as
+   the last argument. The optional super-invocation-arguments is a list of numbers
+   between 1 and (length argument-types), where the number k stands for the kth argument
+   to the just defined constructor. If present, the constructor of the superclass
+   will be called with the appropriate arguments. E.g., if the constructor definition is
+   ((\"java.lang.String\" \"int\") #'(lambda (string i this) ...) (2 1))
+   then the constructor of the superclass with argument types (int, java.lang.String) will
+   be called with the second and first arguments.
 
    Method definitions are lists of the form 
    (method-name return-type argument-types function)
@@ -503,38 +531,12 @@
    Field definitions are lists of the form
    (field-name type modifier*)
    
-   If FILE-NAME is given, a .class file will be written; this is useful for debugging only.
-   Example:
-
-   (java:jnew-runtime-class \"Test\" \"javax.swing.table.AbstractTableModel\" 
-   `((\"getColumnCount\" \"int\" nil ,#'(lambda (this) (format t \"getColumnCount~%\") 42))
-   (\"getRowCount\" \"int\" nil ,#'(lambda (this)  (format t \"getRowCount~%\") 13))
-   (\"getColumnName\" \"java.lang.String\" (\"int\") ,#'(lambda (i this) (format nil \"getColumnName: ~d\" i)))
-   (\"getValueAt\" \"java.lang.Object\" (\"int\" \"int\") ,#'(lambda (i j this) (format nil \"getColumnCount: ~d, ~d\" i j)))
-     
-   (\"doStringString\" \"java.lang.String\" (\"java.lang.String\") ,#'(lambda (s this) (format nil \"getColumnCount: ~s\" s)))
-   (\"doArray\" \"java.lang.String[]\" (\"int[]\" \"long[]\" \"java.lang.String[]\") ,#'(lambda (a b c this) (format t \"doArray: ~s\" (jarray-ref c 1)) (setf (jarray-ref c 1) \"changed\") c))
-   (\"dobb\" \"boolean\" (\"boolean\") ,#'(lambda (b this) (format t \"dobb: ~s~%\" b) (not b)))
-   (\"dob_\" \"void\" (\"boolean\") ,#'(lambda (b this) (format t \"dob_: ~s~%\" b) ))
-   (\"do_b\" \"boolean\" () ,#'(lambda (this) (format t \"do_b:~%\")(make-immediate-object t :boolean))))
-   \"/tmp/Test.class\")
-
-   Classes created this way can be used like any other Java class:
-
-   (jcall (jmethod \"Test\" \"doArray\" \"[I\" \"[J\" \"[Ljava.lang.String;\")
-   (jnew (jconstructor \"Test\"))
-   (jnew-array-from-array \"int\" #(0 1 2))
-   (jnew-array-from-array \"long\" #(0 1 2))
-   (jnew-array-from-array \"java.lang.String\" #(\"a\" \"b\" \"c\")))
-
-
-   (jcall (jmethod \"Test\" \"dobb\" \"boolean\")
-   (jnew (jconstructor \"Test\")) (make-immediate-object t :boolean))
-   "
+   If FILE-NAME is given, a .class file will be written; this is useful for debugging only."
 
   (let ((cw (make-class-writer-1 (make-instance 'jboolean :java-instance t)))
         (class-type-name (type-name class-name))
-        (super-type-name (type-name super-name)))
+        (super-type-name (type-name super-name))
+	(args-for-%jnew))
     (visit-3 cw (+ constants.acc-public constants.acc-super)
              class-type-name super-type-name)
     (visit-field-3 cw (+ constants.acc-private constants.acc-static)
@@ -542,16 +544,27 @@
 
     (dolist (field-def fields)
       (visit-field-3 cw
-	(reduce #'+ (cddr field-def) :key #'field-modifier)
-	(car field-def)
-	(decorated-type-name (cadr field-def))))
+                     (reduce #'+ (cddr field-def) :key #'field-modifier)
+                     (car field-def)
+                     (decorated-type-name (cadr field-def))))
 	  
 	
-    (let ((cv (visit-method-3 cw constants.acc-public "<init>" "()V")))
-      (visit-var-insn-2 cv constants.aload 0)
-      (visit-method-insn-4 cv constants.invokespecial super-type-name "<init>" "()V")
-      (visit-insn-1 cv constants.return)
-      (visit-maxs-2 cv 1 1))
+    (if constructors
+        (loop for (arg-types constr-def super-invocation-args) in constructors
+          for unique-method-name = (apply #'concatenate 'string "<init>|" arg-types)
+          then (apply #'concatenate 'string "<init>|" arg-types)
+          collect unique-method-name into args
+          collect constr-def into args
+          do
+          (write-method cw class-type-name "<init>" unique-method-name "void" arg-types
+                        (cons super-type-name super-invocation-args))
+          finally
+          (setf args-for-%jnew (append args-for-%jnew args)))
+        (let ((cv (visit-method-3 cw constants.acc-public "<init>" "()V")))
+          (visit-var-insn-2 cv constants.aload 0)
+          (visit-method-insn-4 cv constants.invokespecial super-type-name "<init>" "()V")
+          (visit-insn-1 cv constants.return)
+          (visit-maxs-2 cv 1 1)))
 
     (loop for (method-name ret-type arg-types method-def) in methods
       for unique-method-name = (apply #'concatenate 'string method-name "|" arg-types)
@@ -561,7 +574,7 @@
       do
       (write-method cw class-type-name method-name unique-method-name ret-type arg-types)
       finally
-      (apply #'java::%jnew-runtime-class class-name args))
+      (apply #'java::%jnew-runtime-class class-name (append args-for-%jnew args)))
   
     (visit-end-0 cw)
 
