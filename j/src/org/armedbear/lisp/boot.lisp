@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.46 2003-05-27 23:39:12 piso Exp $
+;;; $Id: boot.lisp,v 1.47 2003-05-29 19:27:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,9 +43,6 @@
 
 (defmacro unless (pred &rest body)
   (list 'if (list 'not pred) (append '(progn) body)))
-
-(defmacro lambda (lambda-list &rest body)
-  (list 'FUNCTION (append (list 'LAMBDA lambda-list) body)))
 
 (defmacro defun (name lambda-list &rest body)
   (list 'cl::%defun (list 'QUOTE name) (list 'QUOTE lambda-list) (list 'QUOTE body)))
