@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Package.java,v 1.56 2004-05-27 16:41:54 piso Exp $
+ * $Id: Package.java,v 1.57 2004-05-27 20:29:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -169,6 +169,7 @@ public final class Package extends LispObject
     }
 
     public synchronized LispObject findSymbol(String name)
+        throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
         // Look in external and internal symbols of this package.
