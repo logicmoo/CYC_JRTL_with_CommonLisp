@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.6 2002-10-12 00:06:39 piso Exp $
+ * $Id: Shell.java,v 1.7 2002-10-13 14:02:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -375,7 +375,30 @@ public class Shell extends Buffer implements Constants
         endCompoundEdit(compoundEdit);
     }
 
-    protected void enter(final String s)
+    private void enter()
+    {
+        if (!checkProcess())
+            return;
+        final Editor editor = Editor.currentEditor();
+        final Line dotLine = editor.getDotLine();
+        if (posEndOfOutput == null) {
+            // Ignore input before first prompt is displayed.
+            dotLine.setText("");
+            return;
+        }
+        if (posEndOfOutput.getLine() == dotLine) {
+            if (posEndOfOutput.getOffset() < dotLine.length())
+                input = dotLine.getText().substring(posEndOfOutput.getOffset());
+            else
+                input = "";
+        } else {
+            // We're not at the end of the buffer.
+            input = stripPrompt(dotLine.getText());
+        }
+        enter(input);
+    }
+
+    private void enter(final String s)
     {
         if (s.length() != 0) {
             history.append(s);
@@ -440,29 +463,6 @@ public class Shell extends Buffer implements Constants
         catch (IOException e) {
             Log.error(e);
         }
-    }
-
-    private void enter()
-    {
-        if (!checkProcess())
-            return;
-        final Editor editor = Editor.currentEditor();
-        final Line dotLine = editor.getDotLine();
-        if (posEndOfOutput == null) {
-            // Ignore input before first prompt is displayed.
-            dotLine.setText("");
-            return;
-        }
-        if (posEndOfOutput.getLine() == dotLine) {
-            if (posEndOfOutput.getOffset() < dotLine.length())
-                input = dotLine.getText().substring(posEndOfOutput.getOffset());
-            else
-                input = "";
-        } else {
-            // We're not at the end of the buffer.
-            input = stripPrompt(dotLine.getText());
-        }
-        enter(input);
     }
 
     private boolean checkProcess()
