@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.21 2003-09-25 15:37:08 piso Exp $
+ * $Id: Load.java,v 1.22 2003-10-16 14:33:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,28 +30,7 @@ import java.net.URL;
 
 public final class Load extends Lisp
 {
-    // ### *modules*
-    private static final Symbol _MODULES_ =
-        exportSpecial("*MODULES*", PACKAGE_CL, NIL);
-
-    // ### *load-verbose*
-    private static final Symbol _LOAD_VERBOSE_ =
-        exportSpecial("*LOAD-VERBOSE*", PACKAGE_CL, T);
-
-    // ### *load-print*
-    private static final Symbol _LOAD_PRINT_ =
-        exportSpecial("*LOAD-PRINT*", PACKAGE_CL, NIL);
-
-    // ### *load-truename*
-    private static final Symbol _LOAD_TRUENAME_ =
-        exportSpecial("*LOAD-TRUENAME*", PACKAGE_CL, NIL);
-
-    // ### *load-depth*
-    // internal symbol
-    private static final Symbol _LOAD_DEPTH_ =
-        internSpecial("*LOAD-DEPTH*", PACKAGE_SYS, new Fixnum(0));
-
-    /*package*/ static final LispObject load(String filename)
+    public static final LispObject load(String filename)
         throws ConditionThrowable
     {
         return load(filename,
@@ -59,7 +38,7 @@ public final class Load extends Lisp
                     _LOAD_PRINT_.symbolValueNoThrow() != NIL);
     }
 
-    private static final LispObject load(final String filename,
+    public static final LispObject load(final String filename,
                                          boolean verbose, boolean print)
         throws ConditionThrowable
     {
@@ -109,7 +88,8 @@ public final class Load extends Lisp
         catch (IOException e) {
             throw new ConditionThrowable(new LispError(e.getMessage()));
         }
-        LispObject result = loadFileFromStream(truename, in, verbose, print);
+        LispObject result =
+            loadFileFromStream(truename, in, verbose, print, false);
         try {
             in.close();
         }
@@ -119,8 +99,32 @@ public final class Load extends Lisp
         return result;
     }
 
-    /*package*/ static final LispObject _load(final String filename,
-                                              boolean verbose, boolean print)
+    public static final LispObject _load(String filename)
+        throws ConditionThrowable
+    {
+        return _load(filename,
+                     _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
+                     _LOAD_PRINT_.symbolValueNoThrow() != NIL,
+                     false);
+    }
+
+    public static final LispObject _load(String filename, boolean auto)
+        throws ConditionThrowable
+    {
+        boolean verbose;
+        if (auto)
+            verbose = _AUTOLOAD_VERBOSE_.symbolValueNoThrow() != NIL;
+        else
+            verbose = _LOAD_VERBOSE_.symbolValueNoThrow() != NIL;
+        return _load(filename,
+                     verbose,
+                     _LOAD_PRINT_.symbolValueNoThrow() != NIL,
+                     auto);
+    }
+
+    public static final LispObject _load(final String filename,
+                                         boolean verbose, boolean print,
+                                         boolean auto)
         throws ConditionThrowable
     {
         InputStream in = null;
@@ -149,7 +153,7 @@ public final class Load extends Lisp
         }
         if (in != null) {
             LispObject result =
-                loadFileFromStream(truename, in, verbose, print);
+                loadFileFromStream(truename, in, verbose, print, auto);
             try {
                 in.close();
             }
@@ -164,7 +168,8 @@ public final class Load extends Lisp
     private static final LispObject loadFileFromStream(String truename,
                                                        InputStream in,
                                                        boolean verbose,
-                                                       boolean print)
+                                                       boolean print,
+                                                       boolean auto)
         throws ConditionThrowable
     {
         long start = System.currentTimeMillis();
@@ -173,37 +178,42 @@ public final class Load extends Lisp
         thread.bindSpecial(_PACKAGE_, _PACKAGE_.symbolValue());
         int loadDepth = Fixnum.getInt(_LOAD_DEPTH_.symbolValue());
         thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
-        StringBuffer sb = new StringBuffer();
-        for (long i = 0; i < loadDepth; i++)
-            sb.append(';');
-        String semicolons = sb.toString();
+        final String prefix = getLoadVerbosePrefix(loadDepth);
         try {
             thread.bindSpecial(_LOAD_TRUENAME_, new LispString(truename));
             if (verbose) {
                 CharacterOutputStream out = getStandardOutput();
                 out.freshLine();
-                out.writeString(semicolons);
-                out.writeLine(" Loading " + truename + " ...");
+                out.writeString(prefix);
+                out.writeString(auto ? " Autoloading " : " Loading ");
+                out.writeString(truename);
+                out.writeLine(" ...");
                 out.flushOutput();
-            }
-            LispObject result = loadStream(in, print);
-            if (verbose) {
+                LispObject result = loadStream(in, print);
                 long elapsed = System.currentTimeMillis() - start;
-                CharacterOutputStream out = getStandardOutput();
                 out.freshLine();
-                out.writeString(semicolons);
-                out.writeString(" Loaded ");
+                out.writeString(prefix);
+                out.writeString(auto ? " Autoloaded " : " Loaded ");
                 out.writeString(truename);
                 out.writeString(" (");
                 out.writeString(String.valueOf(((float)elapsed)/1000));
                 out.writeLine(" seconds)");
                 out.flushOutput();
-            }
-            return result;
+                return result;
+            } else
+                return loadStream(in, print);
         }
         finally {
             thread.setDynamicEnvironment(oldDynEnv);
         }
+    }
+
+    public static String getLoadVerbosePrefix(int loadDepth)
+    {
+        StringBuffer sb = new StringBuffer(";");
+        for (int i = loadDepth - 1; i-- > 0;)
+            sb.append(' ');
+        return sb.toString();
     }
 
     private static final LispObject loadStream(InputStream inputStream,
@@ -294,14 +304,15 @@ public final class Load extends Lisp
     };
 
     // ### %load
-    // FIXME This function should not be exported from COMMON-LISP!
     public static final Primitive1 _LOAD =
-        new Primitive1("%load", PACKAGE_SYS, false) {
+        new Primitive1("%load", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return _load(LispString.getValue(arg),
                          _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
-                         _LOAD_PRINT_.symbolValueNoThrow() != NIL);
+                         _LOAD_PRINT_.symbolValueNoThrow() != NIL,
+                         false);
         }
     };
 }
