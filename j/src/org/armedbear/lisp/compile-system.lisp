@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.19 2004-08-02 19:21:05 piso Exp $
+;;; $Id: compile-system.lisp,v 1.20 2004-08-18 18:39:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@
                             "backquote.lisp"
                             "bit-array-ops.lisp"
                             "boole.lisp"
-                            "boot.lisp"
+                            ;;"boot.lisp"
                             "butlast.lisp"
                             "byte-io.lisp"
                             "case.lisp"
