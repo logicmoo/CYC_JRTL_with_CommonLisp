@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.20 2003-02-21 01:20:28 piso Exp $
+ * $Id: Lisp.java,v 1.21 2003-02-25 16:40:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -470,6 +470,11 @@ public abstract class Lisp
             return true;
         }
         return false;
+    }
+
+    public static final Cons list(LispObject first, LispObject second)
+    {
+        return new Cons(first, new Cons(second));
     }
 
     public static final Cons list(LispObject first, LispObject second,
