@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.29 2003-10-10 14:16:19 piso Exp $
+ * $Id: LispClass.java,v 1.30 2003-10-10 14:46:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ public class LispClass extends StandardObject
         return directSuperclasses;
     }
 
-    public final void setDirectSuperclasses(Cons directSuperclasses)
+    public final void setDirectSuperclasses(LispObject directSuperclasses)
     {
         this.directSuperclasses = directSuperclasses;
     }
@@ -249,6 +249,21 @@ public class LispClass extends StandardObject
             if (arg instanceof LispClass)
                 return ((LispClass)arg).getDirectSuperclasses();
             throw new ConditionThrowable(new TypeError(arg, "class"));
+        }
+    };
+
+    // ### %set-class-direct-superclasses
+    private static final Primitive2 _SET_CLASS_DIRECT_SUPERCLASSES =
+        new Primitive2("%set-class-direct-superclasses", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispClass) {
+                ((LispClass)first).setDirectSuperclasses(second);
+                return second;
+            }
+            throw new ConditionThrowable(new TypeError(first, "class"));
         }
     };
 
