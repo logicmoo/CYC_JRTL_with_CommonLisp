@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.348 2005-01-13 11:19:37 piso Exp $
+;;; $Id: jvm.lisp,v 1.349 2005-01-14 03:25:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -184,14 +184,6 @@
 (defvar *child-p* nil)
 
 (defvar *child-count* 0)
-
-;; (defvar *context* nil)
-
-;; (defstruct context vars)
-
-;; (defun add-variable-to-context (variable)
-;;   (aver (variable-p variable))
-;;   (push variable (context-vars *context*)))
 
 (defun find-visible-variable (name)
   (dolist (variable *visible-variables*)
@@ -641,15 +633,16 @@
                     (let ((expansion (inline-expansion op)))
                       (when expansion
                         (return-from p1 (p1 (expand-inline form expansion)))))
-;;                     (p1-default form)
                     (let ((local-function (find-local-function op)))
                       (when local-function
                         (dformat t "p1 local function ~S~%" op)
-                        (let ((variable (local-function-variable local-function)))
-                          (when variable
-                            (unless (eq (variable-compiland variable) *current-compiland*)
-                              (dformat t "p1 ~S used non-locally~%" (variable-name variable))
-                              (setf (variable-used-non-locally-p variable) t))))))
+                        (unless (eq (local-function-compiland local-function)
+                                    *current-compiland*)
+                          (let ((variable (local-function-variable local-function)))
+                            (when variable
+                              (unless (eq (variable-compiland variable) *current-compiland*)
+                                (dformat t "p1 ~S used non-locally~%" (variable-name variable))
+                                (setf (variable-used-non-locally-p variable) t)))))))
                     (list* op (mapcar #'p1 (cdr form)))
                     )))
             ((and (consp op) (eq (car op) 'LAMBDA))
@@ -2752,6 +2745,8 @@
          (args (cdr form))
          (local-function (find-local-function op)))
     (cond
+     ((eq (local-function-compiland local-function) *current-compiland*)
+      (emit 'aload_0))
      ((local-function-variable local-function)
       ;; LABELS
       (dformat t "compile-local-function-call LABELS case~%")
@@ -2768,38 +2763,36 @@
     (when *closure-variables*
       (emit 'checkcast +lisp-ctf-class+))
 
-      (when *closure-variables*
-        ;; First arg is closure variable array.
-        (aver (not (null (compiland-closure-register *current-compiland*))))
-        (emit 'aload (compiland-closure-register *current-compiland*)))
-      (cond
-       ((> (length args) 4)
-        (emit-push-constant-int (length args))
-        (emit 'anewarray "org/armedbear/lisp/LispObject")
-        (let ((i 0)
-              (must-clear-values nil))
-          (dolist (arg args)
-            (emit 'dup)
-            (emit 'sipush i)
-            (compile-form arg :target :stack)
-            (emit 'aastore) ; store value in array
-            (unless must-clear-values
-              (unless (single-valued-p arg)
-                (setf must-clear-values t)))
-            (incf i))
-          (when must-clear-values
-            (emit-clear-values))) ; array left on stack here
-        )
-       (t
-        (let ((must-clear-values nil))
-          (dolist (arg args)
-            (compile-form arg :target :stack)
-            (unless must-clear-values
-              (unless (single-valued-p arg)
-                (setf must-clear-values t))))
-          (when must-clear-values
-            (emit-clear-values))) ; args left on stack here
-        ))
+    (when *closure-variables*
+      ;; First arg is closure variable array.
+      (aver (not (null (compiland-closure-register *current-compiland*))))
+      (emit 'aload (compiland-closure-register *current-compiland*)))
+    (cond
+     ((> (length args) 4)
+      (emit-push-constant-int (length args))
+      (emit 'anewarray "org/armedbear/lisp/LispObject")
+      (let ((i 0)
+            (must-clear-values nil))
+        (dolist (arg args)
+          (emit 'dup)
+          (emit 'sipush i)
+          (compile-form arg :target :stack)
+          (emit 'aastore) ; store value in array
+          (unless must-clear-values
+            (unless (single-valued-p arg)
+              (setf must-clear-values t)))
+          (incf i))
+        (when must-clear-values
+          (emit-clear-values)))) ; array left on stack here
+     (t
+      (let ((must-clear-values nil))
+        (dolist (arg args)
+          (compile-form arg :target :stack)
+          (unless must-clear-values
+            (unless (single-valued-p arg)
+              (setf must-clear-values t))))
+        (when must-clear-values
+          (emit-clear-values))))) ; args left on stack here
 
     (if *closure-variables*
           (case (length args)
