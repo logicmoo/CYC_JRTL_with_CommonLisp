@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.302 2003-07-27 18:52:48 piso Exp $
+ * $Id: Primitives.java,v 1.303 2003-07-27 19:13:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1289,20 +1289,27 @@ public final class Primitives extends Module
     }
 
     // ### %defun
-    // %defun name parameters body => name
+    // %defun name arglist body => name
     private static final Primitive3 _DEFUN =
         new Primitive3("%defun", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
             Symbol symbol = checkSymbol(first);
-            LispObject parameters = checkList(second);
+            LispObject arglist = checkList(second);
             LispObject body = checkList(third);
+            if (body.car() instanceof LispString) {
+                // Documentation.
+                symbol.setFunctionDocumentation(body.car());
+                body = body.cdr();
+            }
             body = new Cons(symbol, body);
             body = new Cons(Symbol.BLOCK, body);
             body = new Cons(body, NIL);
-            symbol.setSymbolFunction(new Closure(symbol.getName(), parameters,
-                body, new Environment()));
+            Closure closure = new Closure(symbol.getName(), arglist, body,
+                                          new Environment());
+            closure.setArglist(arglist);
+            symbol.setSymbolFunction(closure);
             return symbol;
         }
     };
