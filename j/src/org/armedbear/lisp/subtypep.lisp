@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.10 2003-09-20 01:26:41 piso Exp $
+;;; $Id: subtypep.lisp,v 1.11 2003-09-20 16:16:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
              (BIT INTEGER)
              (BIT-VECTOR VECTOR)
              (BOOLEAN SYMBOL)
-             (BUILT-IN-CLASS STANDARD-CLASS)
+             (BUILT-IN-CLASS CLASS)
              (CELL-ERROR ERROR)
              (CHARACTER)
              (CLASS STANDARD-OBJECT)
