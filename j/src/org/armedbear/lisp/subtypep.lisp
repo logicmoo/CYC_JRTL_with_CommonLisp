@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.4 2003-09-13 18:43:24 piso Exp $
+;;; $Id: subtypep.lisp,v 1.5 2003-09-14 01:38:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,6 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+;;; Adapted from GCL.
+
 (in-package "SYSTEM")
 
 (defparameter *known-types* (make-hash-table))
@@ -26,7 +28,9 @@
              (BIT INTEGER)
              (BIT-VECTOR VECTOR)
              (BOOLEAN SYMBOL)
+             (BUILT-IN-CLASS STANDARD-CLASS)
              (CHARACTER ATOM)
+             (CLASS STANDARD-OBJECT)
              (COMPLEX NUMBER)
              (CONS LIST)
              (EXTENDED-CHAR CHARACTER NIL)
@@ -49,6 +53,8 @@
              (SIMPLE-STRING STRING SIMPLE-ARRAY)
              (SIMPLE-VECTOR VECTOR SIMPLE-ARRAY)
              (STANDARD-CHAR CHARACTER)
+             (STANDARD-CLASS CLASS)
+             (STANDARD-OBJECT ATOM)
              (STRING VECTOR)
              (SYMBOL ATOM)
              (TWO-WAY-STREAM STREAM)
