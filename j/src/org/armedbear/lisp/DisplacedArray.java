@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.5 2003-09-14 12:28:06 piso Exp $
+ * $Id: DisplacedArray.java,v 1.6 2003-09-14 13:07:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +76,13 @@ public final class DisplacedArray extends AbstractArray
     {
         if (getRank() == 1)
             return array.BIT_VECTOR_P();
+        return NIL;
+    }
+
+    public LispObject STRINGP()
+    {
+        if (getRank() == 1)
+            return array.STRINGP();
         return NIL;
     }
 
