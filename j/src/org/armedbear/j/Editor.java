@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.57 2003-05-21 17:44:38 piso Exp $
+ * $Id: Editor.java,v 1.58 2003-05-21 18:23:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7399,6 +7399,17 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                             return;
                         }
                     }
+                    if (line.trim().startsWith("}")) {
+                        // We're at the end of a code block. Find the start of
+                        // the block and fold from there.
+                        Position end =
+                            new Position(line, line.getText().indexOf('}'));
+                        Position start = findMatchInternal(end, 0);
+                        if (start != null) {
+                            foldNearLine(start.getLine());
+                            return;
+                        }
+                    }
                     if (next.trim().endsWith("{")) {
                         Line nextNext = next.next();
                         if (nextNext != null && !nextNext.isHidden()) {
@@ -7432,6 +7443,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 continue;
             }
             if (buffer.getCol(prev, prev.getIndentation()) < indent)
+                break;
+            if (prev.getText().endsWith("{"))
                 break;
             begin = prev;
         }
