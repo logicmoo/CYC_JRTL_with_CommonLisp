@@ -1,8 +1,8 @@
 /*
  * arglist.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: arglist.java,v 1.7 2003-12-15 14:22:53 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: arglist.java,v 1.8 2004-02-16 13:13:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@ package org.armedbear.lisp;
 
 public final class arglist extends Lisp
 {
-
     private static final Functional getFunctional(LispObject obj)
         throws ConditionThrowable
     {
