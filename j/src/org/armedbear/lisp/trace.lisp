@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: trace.lisp,v 1.12 2005-02-20 14:41:05 piso Exp $
+;;; $Id: trace.lisp,v 1.13 2005-02-26 17:46:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,18 +58,22 @@
              (trace-function
               (lambda (&rest args)
                 (with-standard-io-syntax
+                  (let ((*print-readably* nil)
+                        (*print-structure* nil))
                     (format *trace-output* (indent "~D: ~S~%") *trace-depth*
-                            (cons name args)))
+                            (cons name args))))
                 (when breakp
                   (break))
                 (incf *trace-depth*)
                 (let ((r (multiple-value-list (apply untraced-function args))))
                   (decf *trace-depth*)
                   (with-standard-io-syntax
-                    (format *trace-output* (indent "~D: ~A returned") *trace-depth* name)
-                    (dolist (val r)
-                      (format *trace-output* " ~S" val))
-                    (terpri *trace-output*))
+                    (let ((*print-readably* nil)
+                          (*print-structure* nil))
+                      (format *trace-output* (indent "~D: ~A returned") *trace-depth* name)
+                      (dolist (val r)
+                        (format *trace-output* " ~S" val))
+                      (terpri *trace-output*)))
                   (values-list r)))))
         (let ((*warn-on-redefinition* nil))
           (setf (symbol-function name) trace-function))

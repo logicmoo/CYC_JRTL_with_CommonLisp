@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: inspect.lisp,v 1.10 2004-11-18 15:47:58 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: inspect.lisp,v 1.11 2005-02-26 17:45:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -125,11 +125,17 @@
   (when *inspected-object*
     (push *inspected-object* *inspected-object-stack*))
   (setf *inspected-object* obj)
-  (let ((*inspect-break* t)
-        (*debug-level* (1+ *debug-level*)))
+  (let* ((*inspect-break* t)
+         (*debug-level* (1+ *debug-level*)))
+    (setf *** **
+          ** *
+          * obj)
     (display-current)
     (catch 'inspect-exit
       (tpl::repl)))
+  (setf *** **
+        ** *
+        * obj)
   (values))
 
 (defun istep (args)
@@ -142,6 +148,9 @@
                (if *inspected-object-stack*
                    (progn
                      (setf *inspected-object* (pop *inspected-object-stack*))
+                     (setf *** **
+                           ** *
+                           * *inspected-object*)
                      (display-current))
                    (format t "Object has no parent.")))
               ((string= option-string "q")
@@ -161,6 +170,7 @@
                                   (push *inspected-object* *inspected-object-stack*)
                                   (setf *inspected-object*
                                         (elt *inspected-object* index))
+                                  (setf * *inspected-object*)
                                   (display-current)))
                             (format t "Object has no selectable components.")))
                        ((or (minusp index)
@@ -169,4 +179,5 @@
                        (t
                         (push *inspected-object* *inspected-object-stack*)
                         (setf *inspected-object* (cdr (elt parts index)))
+                        (setf * *inspected-object*)
                         (display-current)))))))))

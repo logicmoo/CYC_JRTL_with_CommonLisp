@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.58 2005-02-06 18:30:57 piso Exp $
+;;; $Id: subtypep.lisp,v 1.59 2005-02-26 17:44:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -225,7 +225,9 @@
                FLOAT SINGLE-FLOAT DOUBLE-FLOAT SHORT-FLOAT LONG-FLOAT)
               (make-ctype 'REAL type))
              (COMPLEX
-              (make-ctype 'COMPLEX type)))))))
+              (make-ctype 'COMPLEX type))
+             (FUNCTION
+              (make-ctype 'FUNCTION type)))))))
 
 (defun csubtypep-array (ct1 ct2)
   (let ((type1 (normalize-type (ctype-type ct1)))
@@ -317,7 +319,8 @@
            (let ((element-type (car i2))
                  (dim (cadr i2))
                  (size (car i1)))
-             (unless (memq element-type '(bit *))
+             (unless (or (memq element-type '(bit *))
+                         (equal element-type '(integer 0 1)))
                (return-from csubtypep-array (values nil t)))
              (when (integerp size)
                (if (or (eq dim '*)
@@ -424,6 +427,14 @@
           (t
            (values nil nil))))))
 
+(defun csubtypep-function (ct1 ct2)
+  (let ((type1 (ctype-type ct1))
+        (type2 (ctype-type ct2)))
+    (cond ((and (listp type1) (atom type2))
+           (values t t))
+          (t
+           (values nil nil)))))
+
 (defun csubtypep (ctype1 ctype2)
   (cond ((null (and ctype1 ctype2))
          (values nil nil))
@@ -431,6 +442,8 @@
          (values nil t))
         ((eq (ctype-super ctype1) 'array)
          (csubtypep-array ctype1 ctype2))
+        ((eq (ctype-super ctype1) 'function)
+         (csubtypep-function ctype1 ctype2))
         (t
          (values nil nil))))
 
@@ -524,7 +537,7 @@
            (return-from %subtypep (values t t)))
           ((null (or i1 i2))
            (return-from %subtypep (values (simple-subtypep t1 t2) t)))
-          ((eq t2 'sequence)
+          ((eq t2 'SEQUENCE)
            (cond ((memq t1 '(null cons list))
                   (values t t))
                  ((memq t1 '(simple-base-string base-string simple-string string nil-vector))
@@ -532,9 +545,12 @@
                  ((memq t1 '(bit-vector simple-bit-vector))
                   (values t t))
                  ((memq t1 '(array simple-array))
-                  (if (and (cdr i1) (consp (cadr i1)) (null (cdadr i1)))
-                      (values t t)
-                      (values nil t)))
+                  (cond ((and (cdr i1) (consp (cadr i1)) (null (cdadr i1)))
+                         (values t t))
+                        ((and (cdr i1) (eql (cadr i1) 1))
+                         (values t t))
+                        (t
+                         (values nil t))))
                  (t (values nil (known-type-p t1)))))
           ((eq t1 'float)
            (if (memq t2 '(float real number))
