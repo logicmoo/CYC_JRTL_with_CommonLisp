@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshSession.java,v 1.2 2002-10-10 17:58:09 piso Exp $
+ * $Id: SshSession.java,v 1.3 2002-11-28 15:17:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,9 @@ public final class SshSession implements Constants
     private String cd = "\\cd";
 
     private Buffer outputBuffer;
+    
+    private String passwordTitle;
+    private String passwordPrompt;
 
     private SshSession(SshFile file, boolean locked)
     {
@@ -517,7 +520,7 @@ public final class SshSession implements Constants
 
     private int checkInitialResponse()
     {
-        String s = output.toString().trim().toLowerCase();
+        String s = output.toString().trim();
         String check;
         int index = s.lastIndexOf("\r\n");
         if (index >= 0) {
@@ -530,10 +533,21 @@ public final class SshSession implements Constants
                 check = s;
         }
         Log.debug("check = |" + check + "|");
-        if (check.endsWith("password:"))
+        String lower = check.toLowerCase();
+        if (lower.endsWith("password:")) {
+            passwordTitle = "Password";
+            passwordPrompt = check;
             return PASSWORD;
+        }
+        if (lower.startsWith("enter passphrase ") && lower.endsWith(":")) {
+            // We don't want to use the password from .netrc in this situation.
+            password = null;
+            passwordTitle = "Passphrase";
+            passwordPrompt = check;
+            return PASSWORD;
+        }
         RE promptRE = getPromptRE();
-        if (promptRE.getMatch(check) != null)
+        if (promptRE.getMatch(lower) != null)
             return AUTHENTICATED;
         return TRY_AGAIN;
     }
@@ -602,14 +616,13 @@ public final class SshSession implements Constants
         return _promptRE;
     }
 
-    private Runnable getPasswordRunnable = new Runnable()
-    {
+    private Runnable getPasswordRunnable = new Runnable() {
         public void run()
         {
             final Editor editor = Editor.currentEditor();
             editor.setDefaultCursor();
-            String prompt = "Password for " + userName + " on " + hostName + ":";
-            password = PasswordDialog.showPasswordDialog(editor, prompt, "Password");
+            password = PasswordDialog.showPasswordDialog(editor, passwordPrompt,
+                passwordTitle);
             editor.setWaitCursor();
         }
     };
