@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.40 2004-03-04 02:01:45 piso Exp $
+ * $Id: LispCharacter.java,v 1.41 2004-03-08 02:51:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,8 +157,15 @@ public final class LispCharacter extends LispObject
 
     public final String toString()
     {
+        boolean printReadably = (_PRINT_READABLY_.symbolValueNoThrow() != NIL);
+        // "Specifically, if *PRINT-READABLY* is true, printing proceeds as if
+        // *PRINT-ESCAPE*, *PRINT-ARRAY*, and *PRINT-GENSYM* were also true,
+        // and as if *PRINT-LENGTH*, *PRINT-LEVEL*, and *PRINT-LINES* were
+        // false."
+        boolean printEscape =
+            printReadably || (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL);
         StringBuffer sb = new StringBuffer();
-        if (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL) {
+        if (printEscape) {
             sb.append("#\\");
             switch (value) {
                 case 0:
@@ -175,9 +182,6 @@ public final class LispCharacter extends LispObject
                     break;
                 case '\r':
                     sb.append("Return");
-                    break;
-                case ' ':
-                    sb.append("Space");
                     break;
                 case '\b':
                     sb.append("Backspace");
