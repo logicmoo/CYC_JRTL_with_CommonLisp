@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.15 2003-02-16 20:06:45 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.16 2003-03-31 16:39:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,11 @@ public class CommandInterpreter extends Buffer
         catch (REException e) {
             Log.error(e);
         }
+    }
+
+    public final synchronized Position getEndOfOutput()
+    {
+        return posEndOfOutput;
     }
 
     public Icon getIcon()
