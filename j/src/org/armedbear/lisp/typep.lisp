@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: typep.lisp,v 1.4 2003-09-14 17:57:45 piso Exp $
+;;; $Id: typep.lisp,v 1.5 2003-09-16 17:59:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,6 +29,23 @@
        (multiple-value-bind (displaced-to offset) (array-displacement object)
          (and (null displaced-to) (zerop offset)))))
 
+(defun in-interval-p (x interval)
+  (let (low high)
+    (if (endp interval)
+        (setq low '* high '*)
+        (if (endp (cdr interval))
+            (setq low (car interval) high '*)
+            (setq low (car interval) high (cadr interval))))
+    (cond ((eq low '*))
+          ((consp low)
+           (when (<= x (car low)) (return-from in-interval-p nil)))
+          ((when (< x low) (return-from in-interval-p nil))))
+    (cond ((eq high '*))
+          ((consp high)
+           (when (>= x (car high)) (return-from in-interval-p nil)))
+          ((when (> x high) (return-from in-interval-p nil))))
+    (return-from in-interval-p t)))
+
 (defun match-dimensions (dim pat)
   (if (null dim)
       (null pat)
@@ -52,6 +69,8 @@
          (when (typep object type)
            (return-from typep t)))
        nil)
+      (INTEGER
+       (and (integerp object) (in-interval-p object i)))
       (SIMPLE-BIT-VECTOR
        (and (simple-bit-vector-p object)
             (or (endp i) (match-dimensions (array-dimensions object) i))))
