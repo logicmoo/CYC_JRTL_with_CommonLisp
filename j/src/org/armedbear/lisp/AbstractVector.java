@@ -66,8 +66,8 @@ public abstract class AbstractVector extends AbstractArray
                 throw new LispError("bad dimension in array type");
             }
             if (type == Symbol.ARRAY || type == Symbol.VECTOR)
-                ;
-            else if (type == Symbol.SIMPLE_ARRAY) {
+                return CompoundTypeSpecifier.getInstance(typeSpecifier).test(this);
+            if (type == Symbol.SIMPLE_ARRAY) {
                 if (fillPointer >= 0)
                     return NIL;
             } else
@@ -84,12 +84,6 @@ public abstract class AbstractVector extends AbstractArray
             LispObject dimensions = typeSpecifier.cddr().car();
             if (dimensions == Symbol.UNSPECIFIED)
                 return T;
-            if (type == Symbol.VECTOR) {
-                if (dimensions instanceof Fixnum) {
-                    return ((Fixnum)dimensions).getValue() == capacity() ? T : NIL;
-                }
-                throw new LispError("bad dimension in array type");
-            }
             if (type == Symbol.ARRAY || type == Symbol.SIMPLE_ARRAY) {
                 if (dimensions instanceof Fixnum) {
                     // Rank.
