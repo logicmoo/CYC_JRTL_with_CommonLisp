@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.13 2004-06-06 21:52:47 asimon Exp $
+;;; $Id: compile-system.lisp,v 1.14 2004-06-08 00:56:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -98,7 +98,7 @@
                             "find-all-symbols.lisp"
                             "find.lisp"
                             "fixme.lisp"
-                            ;;"format.lisp"
+                            "format.lisp"
                             "gentemp.lisp"
                             "gray-streams.lisp"
                             "inspect.lisp"
@@ -135,7 +135,7 @@
                             "parse-lambda-list.lisp"
                             "parse-namestring.lisp"
                             "pathnames.lisp"
-                            ;;"pprint.lisp"
+                            "pprint.lisp"
                             "print.lisp"
                             ;;"print-object.lisp"
                             "print-unreadable-object.lisp"
