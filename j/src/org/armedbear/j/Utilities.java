@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.30 2003-07-23 04:50:37 piso Exp $
+ * $Id: Utilities.java,v 1.31 2003-07-24 16:45:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ import gnu.regexp.REMatch;
 import gnu.regexp.UncheckedRE;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -51,6 +52,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -1640,8 +1642,16 @@ public final class Utilities implements Constants
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        Border border = BorderFactory.createEtchedBorder();
-        panel.setBorder(BorderFactory.createTitledBorder(border, title));
+        Border border =
+            new TitledBorder(BorderFactory.createEtchedBorder(), title) {
+            public void paintBorder(Component c, Graphics g, int x, int y,
+                                    int width, int height)
+            {
+                Display.setRenderingHints(g);
+                super.paintBorder(c, g, x, y, width, height);
+            }
+        };
+        panel.setBorder(border);
         return panel;
     }
 
