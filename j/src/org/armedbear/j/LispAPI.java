@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.26 2003-09-19 17:42:09 piso Exp $
+ * $Id: LispAPI.java,v 1.27 2003-10-07 00:36:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -750,7 +750,8 @@ public final class LispAPI extends Lisp
     };
 
     private static final Primitive0 BEGIN_COMPOUND_EDIT =
-        new Primitive0("begin-compound-edit", PACKAGE_J, false) {
+        new Primitive0("begin-compound-edit", PACKAGE_J, false)
+    {
         public LispObject execute()
         {
             return new JavaObject(Editor.currentEditor().beginCompoundEdit());
@@ -758,7 +759,8 @@ public final class LispAPI extends Lisp
     };
 
     private static final Primitive1 END_COMPOUND_EDIT =
-        new Primitive1("end-compound-edit", PACKAGE_J, false) {
+        new Primitive1("end-compound-edit", PACKAGE_J, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
@@ -770,6 +772,27 @@ public final class LispAPI extends Lisp
             catch (ClassCastException e) {
                 throw new ConditionThrowable(new TypeError(arg, "compound edit"));
             }
+        }
+    };
+
+    // ### %log-debug
+    private static final Primitive1 _LOG_DEBUG =
+        new Primitive1("%log-debug", PACKAGE_J, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Log.debug(LispString.getValue(arg));
+            return arg;
+        }
+    };
+
+    // ### get-last-event-time
+    private static final Primitive0 GET_LAST_EVENT_INTERNAL_TIME =
+        new Primitive0("get-last-event-internal-time", PACKAGE_J, true)
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return number(Dispatcher.getLastEventMillis());
         }
     };
 
