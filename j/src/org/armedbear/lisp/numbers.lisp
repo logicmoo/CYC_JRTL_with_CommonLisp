@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.28 2004-04-08 11:19:37 piso Exp $
+;;; $Id: numbers.lisp,v 1.29 2004-04-08 12:29:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -209,12 +209,13 @@
       (error "argument to CIS is complex: ~S" radians)
       (complex (cos radians) (sin radians))))
 
-(when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
-  (mapcar #'jvm::jvm-compile '(ceiling
-                               round
-                               ftruncate
-                               ffloor
-                               fceiling
-                               fround
-                               rational
-                               rationalize)))
+(eval-when (:execute)
+  (when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
+    (mapcar #'jvm::jvm-compile '(ceiling
+                                 round
+                                 ftruncate
+                                 ffloor
+                                 fceiling
+                                 fround
+                                 rational
+                                 rationalize))))
