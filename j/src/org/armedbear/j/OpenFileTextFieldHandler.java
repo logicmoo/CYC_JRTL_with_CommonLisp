@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.53 2004-09-08 00:47:11 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.54 2004-09-20 00:44:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -560,12 +560,26 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
 
     private boolean isExcluded(String pathname)
     {
-        if (pathname.endsWith(".class") ||
-            pathname.endsWith(".exe") ||
-            pathname.endsWith(".obj") ||
-            pathname.endsWith(".gz") ||
-            pathname.endsWith("~")) {
+        final int length = pathname.length();
+        if (length > 0) {
+            if (pathname.charAt(length - 1) == '~')
+                return true;
+        }
+        String extension = Utilities.getExtension(pathname);
+        if (Platform.isPlatformWindows())
+            extension = extension.toLowerCase();
+        if (extension.equals(".class") ||
+            extension.equals(".cls") ||
+            extension.equals(".abcl"))
+        {
             return true;
+        }
+        if (Platform.isPlatformWindows()) {
+            if (extension.equals(".obj") ||
+                extension.equals(".exe"))
+            {
+                return true;
+            }
         }
         return false;
     }
