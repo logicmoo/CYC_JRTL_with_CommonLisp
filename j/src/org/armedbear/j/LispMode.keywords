@@ -361,6 +361,7 @@ pathname-host
 pathname-name
 pathname-type
 pathname-version
+pathnamep
 peek-char
 plusp
 pop
