@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.69 2004-06-07 15:52:39 piso Exp $
+ * $Id: Stream.java,v 1.70 2004-06-10 11:08:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -554,12 +554,13 @@ public class Stream extends LispObject
         return sb.toString();
     }
 
-    private LispObject readToken(char c) throws ConditionThrowable
+    private final LispObject readToken(char c) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
         sb.append(c);
         boolean escaped = _readToken(sb);
-        if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
+        final LispThread thread = LispThread.currentThread();
+        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         String token = sb.toString();
         if (!escaped) {
@@ -589,11 +590,11 @@ public class Stream extends LispObject
                     }
                 }
                 if ("-+0123456789".indexOf(firstChar) >= 0) {
-                    LispObject number = makeNumber(token, getReadBase());
+                    LispObject number = makeNumber(token, getReadBase(thread));
                     if (number != null)
                         return number;
                 }
-                final int radix = getReadBase();
+                final int radix = getReadBase(thread);
                 if (Character.digit(firstChar, radix) >= 0) {
                     LispObject number = makeNumber(token, radix);
                     if (number != null)
@@ -601,10 +602,47 @@ public class Stream extends LispObject
                 }
             }
         }
-        return makeSymbol(token);
+        if (token.length() > 0) {
+            if (token.charAt(0) == ':')
+                return PACKAGE_KEYWORD.intern(token.substring(1));
+            int index = token.indexOf("::");
+            if (index > 0) {
+                String packageName = token.substring(0, index);
+                String symbolName = token.substring(index + 2);
+                Package pkg = Packages.findPackage(packageName);
+                if (pkg == null)
+                    return signal(new LispError("Package \"" + packageName +
+                                                "\" not found."));
+                return pkg.intern(symbolName);
+            }
+            index = token.indexOf(':');
+            if (index > 0) {
+                String packageName = token.substring(0, index);
+                String symbolName = token.substring(index + 1);
+                Package pkg = Packages.findPackage(packageName);
+                if (pkg == null)
+                    return signal(new PackageError("Package \"" + packageName +
+                                                   "\" not found."));
+                Symbol symbol = pkg.findExternalSymbol(symbolName);
+                if (symbol != null)
+                    return symbol;
+                // Error!
+                if (pkg.findInternalSymbol(symbolName) != null)
+                    return signal(new LispError("The symbol \"" + symbolName +
+                                                "\" is not external in package " +
+                                                packageName + '.'));
+                else
+                    return signal(new LispError("The symbol \"" + symbolName +
+                                                "\" was not found in package " +
+                                                packageName + '.'));
+            }
+        }
+        // Intern token in current package.
+        return ((Package)_PACKAGE_.symbolValue(thread)).intern(token);
     }
 
-    private final boolean _readToken(StringBuffer sb) throws ConditionThrowable
+    private final boolean _readToken(StringBuffer sb)
+        throws ConditionThrowable
     {
         boolean escaped = false;
         final Readtable rt = currentReadtable();
@@ -672,53 +710,12 @@ public class Stream extends LispObject
         return escaped;
     }
 
-    private static LispObject makeSymbol(String token) throws ConditionThrowable
-    {
-        if (token.length() > 0) {
-            if (token.charAt(0) == ':')
-                return PACKAGE_KEYWORD.intern(token.substring(1));
-            int index = token.indexOf("::");
-            if (index > 0) {
-                String packageName = token.substring(0, index);
-                String symbolName = token.substring(index + 2);
-                Package pkg = Packages.findPackage(packageName);
-                if (pkg == null)
-                    return signal(new LispError("Package \"" + packageName +
-                                                "\" not found."));
-                return pkg.intern(symbolName);
-            }
-            index = token.indexOf(':');
-            if (index > 0) {
-                String packageName = token.substring(0, index);
-                String symbolName = token.substring(index + 1);
-                Package pkg = Packages.findPackage(packageName);
-                if (pkg == null)
-                    return signal(new PackageError("Package \"" + packageName +
-                                                   "\" not found."));
-                Symbol symbol = pkg.findExternalSymbol(symbolName);
-                if (symbol != null)
-                    return symbol;
-                // Error!
-                if (pkg.findInternalSymbol(symbolName) != null)
-                    return signal(new LispError("The symbol \"" + symbolName +
-                                                "\" is not external in package " +
-                                                packageName + '.'));
-                else
-                    return signal(new LispError("The symbol \"" + symbolName +
-                                                "\" was not found in package " +
-                                                packageName + '.'));
-            }
-        }
-        // Intern token in current package.
-        final LispThread thread = LispThread.currentThread();
-        return ((Package)_PACKAGE_.symbolValueNoThrow(thread)).intern(token);
-    }
-
-    private static final int getReadBase() throws ConditionThrowable
+    private static final int getReadBase(LispThread thread)
+        throws ConditionThrowable
     {
         final int readBase;
         try {
-            readBase = ((Fixnum)_READ_BASE_.symbolValue()).value;
+            readBase = ((Fixnum)_READ_BASE_.symbolValue(thread)).value;
         }
         catch (ClassCastException e) {
             // The value of *READ-BASE* is not a Fixnum.
