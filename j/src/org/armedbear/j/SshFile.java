@@ -2,7 +2,7 @@
  * SshFile.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshFile.java,v 1.7 2002-12-07 11:16:22 piso Exp $
+ * $Id: SshFile.java,v 1.8 2002-12-07 19:27:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,9 +36,11 @@ public final class SshFile extends File
         port = DEFAULT_PORT;
     }
 
-    public SshFile(String hostName, String path, String userName, String password, int port)
+    public SshFile(String hostName, String path, String userName,
+        String password, int port)
     {
-        this();
+        isRemote = true;
+        protocol = PROTOCOL_SSH;
         this.hostName = hostName;
         this.canonicalPath = path;
         this.userName = userName;
@@ -110,7 +112,8 @@ public final class SshFile extends File
             return null; // No parent.
         if (index == 0) // "/usr"
             return new SshFile(hostName, "/", userName, password, port);
-        return new SshFile(hostName, canonicalPath.substring(0, index), userName, password, port);
+        return new SshFile(hostName, canonicalPath.substring(0, index),
+            userName, password, port);
     }
 
     public boolean isDirectory()
