@@ -2,7 +2,7 @@
  * NewsGroupSummary.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummary.java,v 1.8 2002-12-05 20:30:49 piso Exp $
+ * $Id: NewsGroupSummary.java,v 1.9 2003-02-04 21:12:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,7 @@ public final class NewsGroupSummary extends Mailbox
         readOnly = true;
         title = groupName;
         progressNotifier = new StatusBarProgressNotifier(this);
+        setInitialized(true);
     }
 
     public final NntpSession getSession()
