@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.114 2003-03-13 03:12:43 piso Exp $
+ * $Id: Primitives.java,v 1.115 2003-03-13 14:52:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -540,14 +540,7 @@ public final class Primitives extends Module
             case EQUALP:                        // ### equalp
                 return equalp(first, second) ? T : NIL;
             case CHAR:                          // ### char
-                try {
-                    String s = LispString.getValue(first);
-                    char c = s.charAt((int)Fixnum.getValue(second));
-                    return new LispCharacter(c);
-                }
-                catch (StringIndexOutOfBoundsException e) {
-                    throw new LispError("string index out of bounds");
-                }
+                return checkString(first).get(Fixnum.getInt(second));
             case MEMBER: {                      // ### member
                 // member item list &key key test test-not => tail
                 // FIXME Support keyword arguments!
