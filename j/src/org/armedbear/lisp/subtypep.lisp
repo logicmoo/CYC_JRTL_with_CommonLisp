@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.14 2003-09-22 12:06:46 piso Exp $
+;;; $Id: subtypep.lisp,v 1.15 2003-09-27 17:31:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -111,9 +111,13 @@
 
 (defun normalize-type (type)
   (let (tp i)
-    (if (consp type)
-        (setq tp (car type) i (cdr type))
-        (setq tp type i nil))
+    (loop
+      (if (consp type)
+          (setq tp (car type) i (cdr type))
+          (setq tp type i nil))
+      (if (and (symbolp tp) (get tp 'deftype-definition))
+          (setq type (apply (get tp 'deftype-definition) i))
+          (return)))
     (case tp
       ((ARRAY SIMPLE-ARRAY)
        (when (and i (eq (car i) nil))
