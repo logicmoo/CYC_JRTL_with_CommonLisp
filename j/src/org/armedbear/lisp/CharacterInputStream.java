@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.10 2003-03-09 17:34:44 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.11 2003-03-09 18:08:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,7 +290,11 @@ public class CharacterInputStream extends LispStream
                 args[0] = this;
                 args[1] = new LispCharacter(c);
                 args[2] = new Fixnum(numArg);
-                return funcall(fun, args);
+                LispObject result = funcall(fun, args);
+                LispObject[] values = getValues();
+                if (values != null && values.length == 0)
+                    return null; // Function returned no values.
+                return result;
             }
             switch (c) {
                 case '\'':
