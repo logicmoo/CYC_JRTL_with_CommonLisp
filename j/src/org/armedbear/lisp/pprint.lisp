@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.4 2004-03-04 01:20:06 piso Exp $
+;;; $Id: pprint.lisp,v 1.5 2004-03-08 02:52:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1293,7 +1293,8 @@
 
 (defun princ (object &optional (stream *standard-output*))
   (setq stream (decode-stream-arg stream))
-  (let ((*print-escape* nil))
+  (let ((*print-escape* nil)
+        (*print-readably* nil))
     (basic-write object stream))
   object)
 
