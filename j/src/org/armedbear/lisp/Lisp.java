@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.179 2003-11-15 00:14:40 piso Exp $
+ * $Id: Lisp.java,v 1.180 2003-11-16 15:33:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,7 +256,6 @@ public abstract class Lisp
                                                  final LispThread thread)
         throws ConditionThrowable
     {
-        LispObject[] results = new LispObject[2];
         if (form instanceof Cons) {
             LispObject car = form.car();
             if (car instanceof Symbol) {
@@ -273,10 +272,7 @@ public abstract class Lisp
                     if (profiling)
                         if (!sampling)
                             expander.incrementCallCount();
-                    results[0] = expander.execute(form, env);
-                    results[1] = T;
-                    thread.setValues(results);
-                    return results[0];
+                    return thread.setValues(expander.execute(form, env), T);
                 }
             }
         } else if (form instanceof Symbol) {
@@ -288,18 +284,11 @@ public abstract class Lisp
                 obj = env.lookup(symbol);
             if (obj == null)
                 obj = symbol.getSymbolValue();
-            if (obj instanceof SymbolMacro) {
-                results[0] = ((SymbolMacro)obj).getExpansion();
-                results[1] = T;
-                thread.setValues(results);
-                return results[0];
-            }
+            if (obj instanceof SymbolMacro)
+                return thread.setValues(((SymbolMacro)obj).getExpansion(), T);
         }
         // Not a macro.
-        results[0] = form;
-        results[1] = NIL;
-        thread.setValues(results);
-        return results[0];
+        return thread.setValues(form, NIL);
     }
 
     private static final Primitive1 INTERACTIVE_EVAL =
@@ -734,25 +723,6 @@ public abstract class Lisp
         if (n.compareTo(INT_MIN) >= 0 && n.compareTo(INT_MAX) <= 0)
             return new Fixnum(n.intValue());
         return new Bignum(n);
-    }
-
-    public static final LispObject values(LispObject first, LispObject second)
-    {
-        LispObject[] values = new LispObject[2];
-        values[0] = first;
-        values[1] = second;
-        LispThread.currentThread().setValues(values);
-        return first;
-    }
-
-    public static final LispObject values(LispObject[] args)
-    {
-        if (args.length == 1) {
-            LispThread.currentThread().clearValues();
-            return args[0];
-        }
-        LispThread.currentThread().setValues(args);
-        return args.length > 0 ? args[0] : NIL;
     }
 
     public static final LispObject readObjectFromString(String s)
