@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.140 2003-12-17 01:48:53 piso Exp $
+;;; $Id: boot.lisp,v 1.141 2003-12-17 03:42:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@
         ((eql subchar (read-feature stream))
          (read stream t nil t))
         (t
-         (let* ((*read-suppress* t))
+         (let ((*read-suppress* t))
            (read stream t nil t)
            (values)))))
 
