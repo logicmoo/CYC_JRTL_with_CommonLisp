@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.7 2003-09-14 16:46:20 piso Exp $
+ * $Id: DisplacedArray.java,v 1.8 2003-09-14 18:23:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,8 @@ public final class DisplacedArray extends AbstractArray
             return VECTORP();
         if (typeSpecifier == Symbol.BIT_VECTOR)
             return BIT_VECTOR_P();
+        if (typeSpecifier == Symbol.SEQUENCE)
+            return VECTORP();
         if (typeSpecifier instanceof LispClass) {
             final String name = typeSpecifier.getName();
             if (name.equals("ARRAY"))
@@ -95,14 +97,21 @@ public final class DisplacedArray extends AbstractArray
 
     public int length() throws LispError
     {
-        if (getRank() == 1)
+        if (dimv.length == 1)
             return size;
+        throw new TypeError(this, "sequence");
+    }
+
+    public LispObject elt(int index) throws LispError
+    {
+        if (dimv.length == 1)
+            return getRowMajor(index);
         throw new TypeError(this, "sequence");
     }
 
     public LispObject AREF(LispObject index) throws LispError
     {
-        if (getRank() == 1)
+        if (dimv.length == 1)
             return getRowMajor(Fixnum.getValue(index));
         StringBuffer sb = new StringBuffer("AREF: ");
         sb.append("wrong number of subscripts (1) for array of rank ");
