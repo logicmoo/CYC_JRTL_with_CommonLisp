@@ -22,7 +22,7 @@
   (jstatic "mapKeyForMode" "org.armedbear.j.API" key mode))
 
 (defun set-global-property (key value)
-  (jstatic "set-global-property" key value))
+  (jstatic "setGlobalProperty" "org.armedbear.j.API" key value))
 
 (in-package "COMMON-LISP-USER")
 (use-package "J")
