@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.77 2004-05-10 15:44:07 piso Exp $
+ * $Id: Closure.java,v 1.78 2004-06-17 10:49:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -868,6 +868,22 @@ public class Closure extends Function
         sb.append('>');
         return sb.toString();
     }
+
+    // ### closure-environment closure => environment
+    private static final Primitive1 CLOSURE_ENVIRONMENT =
+        new Primitive1("closure-environment", PACKAGE_SYS, false, "closure")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof Closure) {
+                Closure closure = (Closure) arg;
+                if (closure.environment != null)
+                    return closure.environment;
+                return NIL;
+            }
+            return signal(new TypeError(arg, "closure"));
+        }
+    };
 
     private static class Parameter
     {
