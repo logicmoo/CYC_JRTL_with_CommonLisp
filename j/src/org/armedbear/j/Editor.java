@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.100 2003-07-24 19:40:09 piso Exp $
+ * $Id: Editor.java,v 1.101 2003-07-25 15:57:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -722,7 +722,8 @@ public final class Editor extends JPanel implements Constants,
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
             panel.add(horizontalScrollBar);
-            panel.add(Box.createRigidArea(new Dimension(16, 16)));
+            final int height = horizontalScrollBar.getPreferredSize().height;
+            panel.add(Box.createRigidArea(new Dimension(height, height)));
             add(panel, BorderLayout.SOUTH);
             horizontalScrollBarListener = new HorizontalScrollBarListener(this);
             horizontalScrollBar.addAdjustmentListener(horizontalScrollBarListener);
