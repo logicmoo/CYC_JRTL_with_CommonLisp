@@ -1,8 +1,8 @@
 /*
  * PythonIndenter.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: PythonIndenter.java,v 1.1.1.1 2002-09-24 16:09:19 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: PythonIndenter.java,v 1.2 2003-05-07 16:31:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,8 +78,8 @@ public final class PythonIndenter
         final String[] unindentAfter = {"break", "continue", "return"};
         if (Utilities.isOneOf(modelFirst, unindentAfter))
             return Math.max(0, modelIndent - indentSize);
-        // Unindent if the current line starts with "else" or "elif".
-        final String[] unindent = {"else", "elif"};
+        // Unindent if the current line starts with "else", "elif" or "except".
+        final String[] unindent = {"else", "elif", "except"};
         if (Utilities.isOneOf(lineFirst, unindent))
             return Math.max(0, modelIndent - indentSize);
         return modelIndent;
