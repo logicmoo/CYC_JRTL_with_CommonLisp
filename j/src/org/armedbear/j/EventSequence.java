@@ -2,7 +2,7 @@
  * EventSequence.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: EventSequence.java,v 1.1 2005-03-04 18:57:23 piso Exp $
+ * $Id: EventSequence.java,v 1.2 2005-03-06 19:32:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,19 @@ public final class EventSequence
     public EventSequence()
     {
         events = new ArrayList();
+    }
+
+    public int size()
+    {
+        return events.size();
+    }
+
+    public EventSequence copy()
+    {
+        EventSequence copy = new EventSequence();
+        for (int i = 0; i < events.size(); i++)
+            copy.events.add(events.get(i));
+        return copy;
     }
 
     public void addEvent(JEvent event)
