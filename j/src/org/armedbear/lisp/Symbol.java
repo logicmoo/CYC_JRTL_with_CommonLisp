@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.153 2004-10-22 00:38:41 piso Exp $
+ * $Id: Symbol.java,v 1.154 2004-10-23 19:25:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -697,66 +697,87 @@ public class Symbol extends LispObject
         return this == obj;
     }
 
-    // Special operator
-    public LispObject execute(LispObject args, Environment env)
-        throws ConditionThrowable
-    {
-        if (function != null)
-            return function.execute(args, env);
-        return signal(new UndefinedFunction(this));
-    }
-
-    // Primitive
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        if (function != null)
+        try {
             return function.execute(args);
-        return signal(new UndefinedFunction(this));
+        }
+        catch (NullPointerException e) {
+            if (function == null)
+                return signal(new UndefinedFunction(this));
+            Debug.trace(e);
+            return signal(new LispError("Null pointer exception"));
+        }
     }
 
-    // Primitive0
     public LispObject execute() throws ConditionThrowable
     {
-        if (function != null)
+        try {
             return function.execute();
-        return signal(new UndefinedFunction(this));
+        }
+        catch (NullPointerException e) {
+            if (function == null)
+                return signal(new UndefinedFunction(this));
+            Debug.trace(e);
+            return signal(new LispError("Null pointer exception"));
+        }
     }
 
-    // Primitive1
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        if (function != null)
+        try {
             return function.execute(arg);
-        return signal(new UndefinedFunction(this));
+        }
+        catch (NullPointerException e) {
+            if (function == null)
+                return signal(new UndefinedFunction(this));
+            Debug.trace(e);
+            return signal(new LispError("Null pointer exception"));
+        }
     }
 
-    // Primitive2
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        if (function != null)
+        try {
             return function.execute(first, second);
-        return signal(new UndefinedFunction(this));
+        }
+        catch (NullPointerException e) {
+            if (function == null)
+                return signal(new UndefinedFunction(this));
+            Debug.trace(e);
+            return signal(new LispError("Null pointer exception"));
+        }
     }
 
-    // Primitive3
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
         throws ConditionThrowable
     {
-        if (function != null)
+        try {
             return function.execute(first, second, third);
-        return signal(new UndefinedFunction(this));
+        }
+        catch (NullPointerException e) {
+            if (function == null)
+                return signal(new UndefinedFunction(this));
+            Debug.trace(e);
+            return signal(new LispError("Null pointer exception"));
+        }
     }
 
-    // Primitive4
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
         throws ConditionThrowable
     {
-        if (function != null)
+        try {
             return function.execute(first, second, third, fourth);
-        return signal(new UndefinedFunction(this));
+        }
+        catch (NullPointerException e) {
+            if (function == null)
+                return signal(new UndefinedFunction(this));
+            Debug.trace(e);
+            return signal(new LispError("Null pointer exception"));
+        }
     }
 
     // ### symbol-name
