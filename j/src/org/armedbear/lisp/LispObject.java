@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.83 2004-05-06 11:16:17 piso Exp $
+ * $Id: LispObject.java,v 1.84 2004-05-10 13:14:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,9 +54,14 @@ public class LispObject extends Lisp
         return NIL;
     }
 
+    public boolean constantp()
+    {
+        return true;
+    }
+
     public LispObject CONSTANTP()
     {
-        return T;
+        return constantp() ? T : NIL;
     }
 
     public LispObject ATOM()
