@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.320 2004-12-27 15:23:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.321 2004-12-27 15:38:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4602,6 +4602,7 @@
 ;;       (return-from compile-throw (compile-form new-form :target target))))
   (emit-push-current-thread)
   (compile-form (second form) :target :stack) ; Tag.
+  (emit-clear-values) ; Do this unconditionally! (MISC.503)
   (compile-form (third form) :target :stack) ; Result.
   (emit-invokevirtual +lisp-thread-class+
                       "throwToTag"
