@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.65 2003-06-26 02:37:48 piso Exp $
+;;; $Id: boot.lisp,v 1.66 2003-07-02 16:43:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -128,9 +128,6 @@
 
 (defun integerp (n)
   (typep n 'integer))
-
-(defun fixnump (n)
-  (typep n 'fixnum))
 
 (defun read-from-string (string &optional eof-error-p eof-value
 				&key (start 0) end preserve-whitespace)
