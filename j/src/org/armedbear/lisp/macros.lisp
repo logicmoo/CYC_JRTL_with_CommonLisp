@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: macros.lisp,v 1.21 2003-08-28 00:23:05 piso Exp $
+;;; $Id: macros.lisp,v 1.22 2003-09-24 14:22:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -86,8 +86,8 @@
 (defun do-do-body (varlist endlist code bind step name block)
   (let* ((inits ())
 	 (steps ())
-	 (l1 (gensym))
-	 (l2 (gensym)))
+	 (L1 (gensym))
+	 (L2 (gensym)))
     ;; Check for illegal old-style do.
     (when (or (not (listp varlist)) (atom endlist))
       (error "Ill-formed ~S -- possibly illegal old style DO?" name))
@@ -105,7 +105,7 @@
 	       (t (error "~S is an illegal form for a ~S varlist." v name))))
 	    (t (error "~S is an illegal form for a ~S varlist." v name))))
     ;; And finally construct the new form.
-    `(block ,BLOCK
+    `(block ,block
             (,bind ,(nreverse inits)
                    (tagbody
                     (go ,L2)
@@ -114,7 +114,7 @@
                     (,step ,@(nreverse steps))
                     ,L2
                     (unless ,(car endlist) (go ,L1))
-                    (return-from ,BLOCK (progn ,@(cdr endlist))))))))
+                    (return-from ,block (progn ,@(cdr endlist))))))))
 
 
 (defmacro do (varlist endlist &rest body)
@@ -124,8 +124,14 @@
 (defmacro do* (varlist endlist &rest body)
   (do-do-body varlist endlist body 'let* 'setq 'do* nil))
 
+(defun ansi-loop (exps)
+  (require 'loop)
+  (fmakunbound 'ansi-loop)
+  `(loop ,@exps))
+
 (defmacro loop (&rest exps)
-  (if (and exps (symbolp (car exps)))
-      (error "LOOP keywords are not supported")
-      (let ((tag (gensym)))
-	`(block nil (tagbody ,tag ,@exps (go ,tag))))))
+  (dolist (exp exps)
+    (when (atom exp)
+      (return-from loop (ansi-loop exps))))
+  (let ((tag (gensym)))
+    `(block nil (tagbody ,tag ,@exps (go ,tag)))))
