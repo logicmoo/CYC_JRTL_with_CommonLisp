@@ -1,8 +1,8 @@
 /*
  * RegionCommands.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: RegionCommands.java,v 1.3 2003-06-28 16:11:54 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: RegionCommands.java,v 1.4 2004-11-02 14:31:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -442,7 +442,7 @@ public final class RegionCommands
         return true;
     }
 
-    public void doShellCommandOnRegion()
+    public static void doShellCommandOnRegion()
     {
         if (!Editor.checkExperimental())
             return;
