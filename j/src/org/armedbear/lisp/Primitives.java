@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.293 2003-07-10 13:42:47 piso Exp $
+ * $Id: Primitives.java,v 1.294 2003-07-12 14:39:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2122,40 +2122,6 @@ public final class Primitives extends Module
             int i = v.checkIndex(second);
             v.set(i, third);
             return third;
-        }
-    };
-
-    // ### %instance-ref
-    // %instance-ref instance index => value
-    private static final Primitive2 _INSTANCE_REF =
-        new Primitive2("%instance-ref", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject first, LispObject second)
-            throws LispError
-        {
-            try {
-                return ((Vector)first).get(((Fixnum)second).getValue());
-            }
-            catch (ClassCastException e) {
-                throw new TypeError();
-            }
-        }
-    };
-
-    // ### %instance-set
-    // %instance-set instance index new-value => new-value
-    private static final Primitive3 _INSTANCE_SET =
-        new Primitive3("%instance-set", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws LispError
-        {
-            try {
-                ((Vector)first).set(((Fixnum)second).getValue(), third);
-                return third;
-            }
-            catch (ClassCastException e) {
-                throw new TypeError();
-            }
         }
     };
 
