@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: TypeError.java,v 1.1 2003-02-15 17:39:11 piso Exp $
+ * $Id: TypeError.java,v 1.2 2003-02-15 19:44:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,13 @@ public final class TypeError extends LispError
         this(null, null);
     }
 
+    public TypeError(String message)
+    {
+        super(message);
+        this.object = null;
+        this.expectedType = null;
+    }
+
     public TypeError(LispObject object)
     {
         this(object, null);
@@ -44,6 +51,10 @@ public final class TypeError extends LispError
 
     public String getMessage()
     {
+        String s = super.getMessage();
+        if (s != null)
+            return s;
+
         StringBuffer sb = new StringBuffer("wrong type");
         String name = object != null ? String.valueOf(object) : null;
         if (expectedType != null) {
