@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.35 2003-12-15 16:22:39 piso Exp $
+;;; $Id: clos.lisp,v 1.36 2003-12-15 16:25:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -177,7 +177,7 @@
                  #'(lambda (key value)
                     `(',key ,(make-initfunction value)))
                  (cdr option))))))
-    (:documentation
+    ((:documentation :report)
      (list (car option) `',(cadr option)))
     (t
      (error 'program-error
