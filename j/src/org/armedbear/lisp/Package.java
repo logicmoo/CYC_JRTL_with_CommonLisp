@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.29 2003-07-07 00:41:53 piso Exp $
+ * $Id: Package.java,v 1.30 2003-07-07 02:13:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -429,8 +429,12 @@ public final class Package extends LispObject
 
     public void unusePackage(Package pkg)
     {
-        if (!(useList.contains(pkg)))
+        if (useList.contains(pkg)) {
             useList.remove(pkg);
+            Debug.assertTrue(pkg.usedByList != null);
+            Debug.assertTrue(pkg.usedByList.contains(this));
+            pkg.usedByList.remove(this);
+        }
     }
 
     public final void addNickname(String s) throws LispError
