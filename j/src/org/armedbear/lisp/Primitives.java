@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.671 2004-08-16 17:53:24 piso Exp $
+ * $Id: Primitives.java,v 1.672 2004-08-19 16:21:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2716,20 +2716,23 @@ public final class Primitives extends Lisp
     private static final Primitive FSET =
         new Primitive("fset", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject[] args)
+        public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            if (args.length < 2 || args.length > 3)
-                return signal(new WrongNumberOfArgumentsException(this));
-            LispObject first = args[0];
-            LispObject second = args[1];
+            return execute(first, second, NIL);
+        }
+
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
             if (first instanceof Symbol) {
                 Symbol symbol = (Symbol) first;
                 symbol.setSymbolFunction(second);
                 LispObject source = Load._FASL_SOURCE_.symbolValue();
                 if (source != NIL) {
-                    if (args.length == 3 && args[2] != NIL)
-                        put(symbol, Symbol._SOURCE, new Cons(source, args[2]));
+                    if (third != NIL)
+                        put(symbol, Symbol._SOURCE, new Cons(source, third));
                     else
                         put(symbol, Symbol._SOURCE, source);
                 }
@@ -2738,7 +2741,8 @@ public final class Primitives extends Lisp
                 Symbol symbol = checkSymbol(first.cadr());
                 put(symbol, Symbol._SETF_FUNCTION, second);
             } else
-                return signal(new TypeError(first, "valid function name"));
+                return signal(new TypeError(first.writeToString() +
+                                            " is not a valid function name."));
             if (second instanceof Functional)
                 ((Functional)second).setLambdaName(first);
             return second;
