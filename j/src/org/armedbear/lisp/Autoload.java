@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.24 2003-07-02 17:10:01 piso Exp $
+ * $Id: Autoload.java,v 1.25 2003-07-06 14:05:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,6 +199,7 @@ public final class Autoload extends Function
         autoload("remhash", "HashTable");
         autoload("room", "room");
         autoload("shadow", "PackageFunctions");
+        autoload("shadowing-import", "PackageFunctions");
         autoload("sxhash", "HashTable");
         autoload("two-way-stream-input-stream", "TwoWayStream");
         autoload("two-way-stream-output-stream", "TwoWayStream");
