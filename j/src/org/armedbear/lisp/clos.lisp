@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.64 2004-02-06 00:32:05 piso Exp $
+;;; $Id: clos.lisp,v 1.65 2004-02-06 13:00:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1278,16 +1278,21 @@
                  (dolist (after reverse-afters)
                    (funcall (method-function after) args nil))))))
           (t
-           (let ((method-combination-object (get mc-name 'method-combination-object)))
-             (unless method-combination-object
+           (let ((mc-obj (get mc-name 'method-combination-object)))
+             (unless mc-obj
                (error "Unsupported method combination type ~A." mc-name))
-             (let* ((operator (method-combination-operator method-combination-object))
+             (let* ((operator (method-combination-operator mc-obj))
+                    (ioa (method-combination-identity-with-one-argument mc-obj))
                     (form
-                     `(lambda (args)
-                        (,operator ,@(mapcar
-                                      (lambda (primary)
-                                        `(funcall ,(method-function primary) args nil))
-                                      primaries)))))
+                     (if (and (null (cdr primaries))
+                              (not (null ioa)))
+                         `(lambda (args)
+                            (funcall ,(method-function (car primaries)) args nil))
+                         `(lambda (args)
+                            (,operator ,@(mapcar
+                                          (lambda (primary)
+                                            `(funcall ,(method-function primary) args nil))
+                                          primaries))))))
                (coerce-to-function form)))))))
 
 ;;; compute an effective method function from a list of primary methods:
