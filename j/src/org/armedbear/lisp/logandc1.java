@@ -2,7 +2,7 @@
  * logandc1.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logandc1.java,v 1.3 2003-09-19 11:50:19 piso Exp $
+ * $Id: logandc1.java,v 1.4 2003-12-10 08:55:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,9 +25,9 @@ import java.math.BigInteger;
 
 public final class logandc1 extends Primitive2
 {
-    private logandc1(String name)
+    private logandc1(String name, String arglist)
     {
-        super(name);
+        super(name,arglist);
     }
 
     public LispObject execute(LispObject first, LispObject second)
@@ -59,5 +59,5 @@ public final class logandc1 extends Primitive2
         throw new ConditionThrowable(new TypeError(first, "integer"));
     }
 
-    private static final logandc1 LOGANDC1 = new logandc1("logandc1");
+    private static final logandc1 LOGANDC1 = new logandc1("logandc1","integer-1 integer-2");
 }

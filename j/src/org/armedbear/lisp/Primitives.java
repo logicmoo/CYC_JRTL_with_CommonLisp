@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.520 2003-12-09 20:26:22 asimon Exp $
+ * $Id: Primitives.java,v 1.521 2003-12-10 08:55:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -981,7 +981,7 @@ public final class Primitives extends Lisp
 
     // ### <
     // Numeric comparison.
-    private static final Primitive LESS_THAN = new Primitive("<") {
+    private static final Primitive LESS_THAN = new Primitive("<","&rest numbers") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -1030,7 +1030,7 @@ public final class Primitives extends Lisp
     };
 
     // ### >
-    private static final Primitive GREATER_THAN = new Primitive(">") {
+    private static final Primitive GREATER_THAN = new Primitive(">","&rest numbers") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {

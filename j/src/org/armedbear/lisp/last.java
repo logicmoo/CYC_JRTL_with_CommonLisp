@@ -2,7 +2,7 @@
  * last.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: last.java,v 1.3 2003-09-19 11:50:19 piso Exp $
+ * $Id: last.java,v 1.4 2003-12-10 08:55:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,9 +24,9 @@ package org.armedbear.lisp;
 // ### last
 // last list &optional n => tail
 public final class last extends Primitive {
-    public last(String name)
+    public last(String name, String arglist)
     {
-        super(name);
+        super(name,arglist);
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -77,5 +77,5 @@ public final class last extends Primitive {
         throw new ConditionThrowable(new TypeError(second, "non-negative integer"));
     }
 
-    private static final last LAST = new last("last");
+    private static final last LAST = new last("last","list &optional n");
 }

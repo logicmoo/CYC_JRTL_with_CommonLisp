@@ -2,7 +2,7 @@
  * logxor.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logxor.java,v 1.2 2003-09-19 11:50:19 piso Exp $
+ * $Id: logxor.java,v 1.3 2003-12-10 08:55:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@ import java.math.BigInteger;
 // exclusive or
 public final class logxor extends Primitive
 {
-    private logxor(String name)
+    private logxor(String name, String arglist)
     {
-        super(name);
+        super(name,arglist);
     }
 
     public LispObject execute()
@@ -67,5 +67,5 @@ public final class logxor extends Primitive
         return number(result);
     }
 
-    private static final logxor LOGXOR = new logxor("logxor");
+    private static final logxor LOGXOR = new logxor("logxor","&rest integers");
 }

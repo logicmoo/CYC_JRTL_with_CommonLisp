@@ -2,7 +2,7 @@
  * logorc1.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logorc1.java,v 1.3 2003-09-19 11:50:19 piso Exp $
+ * $Id: logorc1.java,v 1.4 2003-12-10 08:55:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@ import java.math.BigInteger;
 // or complement of integer-1 with integer-2
 public final class logorc1 extends Primitive2
 {
-    private logorc1(String name)
+    private logorc1(String name, String arglist)
     {
-        super(name);
+        super(name,arglist);
     }
 
     public LispObject execute(LispObject first, LispObject second)
@@ -62,5 +62,5 @@ public final class logorc1 extends Primitive2
         throw new ConditionThrowable(new TypeError(first, "integer"));
     }
 
-    private static final logorc1 LOGORC1 = new logorc1("logorc1");
+    private static final logorc1 LOGORC1 = new logorc1("logorc1","integer-1 integer-2");
 }

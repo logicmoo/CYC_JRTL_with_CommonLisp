@@ -2,7 +2,7 @@
  * logior.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logior.java,v 1.3 2003-09-19 11:50:19 piso Exp $
+ * $Id: logior.java,v 1.4 2003-12-10 08:55:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,9 +27,9 @@ import java.math.BigInteger;
 // logior &rest integers => result-integer
 public final class logior extends Primitive
 {
-    private logior(String name)
+    private logior(String name, String arglist)
     {
-        super(name);
+        super(name,arglist);
     }
 
     public LispObject execute()
@@ -76,5 +76,5 @@ public final class logior extends Primitive
         return number(result);
     }
 
-    private static final logior LOGIOR = new logior("logior");
+    private static final logior LOGIOR = new logior("logior","&rest integers");
 }

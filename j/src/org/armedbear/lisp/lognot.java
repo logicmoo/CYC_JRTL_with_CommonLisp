@@ -2,7 +2,7 @@
  * lognot.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: lognot.java,v 1.3 2003-09-19 11:50:19 piso Exp $
+ * $Id: lognot.java,v 1.4 2003-12-10 08:55:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,9 @@ import java.math.BigInteger;
 // ### lognot
 public final class lognot extends Primitive
 {
-    private lognot(String name)
+    private lognot(String name, String arglist)
     {
-        super(name);
+        super(name,arglist);
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -40,5 +40,5 @@ public final class lognot extends Primitive
         throw new ConditionThrowable(new TypeError(arg, "integer"));
     }
 
-    private static final lognot LOGNOT = new lognot("lognot");
+    private static final lognot LOGNOT = new lognot("lognot","integer");
 }

@@ -2,7 +2,7 @@
  * logandc2.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logandc2.java,v 1.4 2003-09-19 11:50:19 piso Exp $
+ * $Id: logandc2.java,v 1.5 2003-12-10 08:55:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@ import java.math.BigInteger;
 // and integer-1 with complement of integer-2
 public final class logandc2 extends Primitive2
 {
-    private logandc2(String name)
+    private logandc2(String name, String arglist)
     {
-        super(name);
+        super(name,arglist);
     }
 
     public LispObject execute(LispObject first, LispObject second)
@@ -62,5 +62,5 @@ public final class logandc2 extends Primitive2
         throw new ConditionThrowable(new TypeError(first, "integer"));
     }
 
-    private static final logandc2 LOGANDC2 = new logandc2("logandc2");
+    private static final logandc2 LOGANDC2 = new logandc2("logandc2","integer-1 integer-2");
 }
