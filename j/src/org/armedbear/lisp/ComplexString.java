@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.4 2004-02-24 12:55:06 piso Exp $
+ * $Id: ComplexString.java,v 1.5 2004-02-24 15:37:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,14 +180,17 @@ public final class ComplexString extends AbstractString
 
     public void shrink(int n) throws ConditionThrowable
     {
-        if (n < chars.length) {
-            char[] newArray = new char[n];
-            System.arraycopy(chars, 0, newArray, 0, n);
-            chars = newArray;
-            return;
+        if (chars != null) {
+            if (n < capacity) {
+                char[] newArray = new char[n];
+                System.arraycopy(chars, 0, newArray, 0, n);
+                chars = newArray;
+                capacity = n;
+                return;
+            }
+            if (n == capacity)
+                return;
         }
-        if (n == chars.length)
-            return;
         signal(new LispError());
     }
 
@@ -242,7 +245,7 @@ public final class ComplexString extends AbstractString
                 return chars[index];
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                badIndex(index, chars.length);
+                badIndex(index, capacity);
                 return 0; // Not reached.
             }
         } else
@@ -256,7 +259,7 @@ public final class ComplexString extends AbstractString
                 chars[index] = c;
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                badIndex(index, chars.length);
+                badIndex(index, capacity);
             }
         } else
             array.setRowMajor(index + displacement, LispCharacter.getInstance(c));
@@ -288,9 +291,9 @@ public final class ComplexString extends AbstractString
     public final void ensureCapacity(int minCapacity) throws ConditionThrowable
     {
         if (chars != null) {
-            if (chars.length < minCapacity) {
+            if (capacity < minCapacity) {
                 char[] newArray = new char[minCapacity];
-                System.arraycopy(chars, 0, newArray, 0, chars.length);
+                System.arraycopy(chars, 0, newArray, 0, capacity);
                 chars = newArray;
                 capacity = minCapacity;
             }
@@ -321,7 +324,7 @@ public final class ComplexString extends AbstractString
             displacement = 0;
             isDisplaced = false;
         }
-        if (chars.length != size) {
+        if (capacity != size) {
             char[] newArray = new char[size];
             if (initialContents != NIL) {
                 if (initialContents.listp()) {
@@ -337,14 +340,14 @@ public final class ComplexString extends AbstractString
                     signal(new TypeError(initialContents, Symbol.SEQUENCE));
             } else {
                 System.arraycopy(chars, 0, newArray, 0,
-                                 Math.min(chars.length, size));
-                if (size > chars.length) {
+                                 Math.min(capacity, size));
+                if (size > capacity) {
                     final char c;
                     if (initialElement != NIL)
                         c = LispCharacter.getValue(initialElement);
                     else
                         c = 0;
-                    for (int i = chars.length; i < size; i++)
+                    for (int i = capacity; i < size; i++)
                         newArray[i] = c;
                 }
             }
@@ -390,9 +393,9 @@ public final class ComplexString extends AbstractString
     {
         if (fillPointer < 0)
             noFillPointer();
-        if (fillPointer >= chars.length) {
+        if (fillPointer >= capacity) {
             // Need to extend vector.
-            ensureCapacity(chars.length * 2 + 1);
+            ensureCapacity(capacity * 2 + 1);
         }
         chars[fillPointer] = LispCharacter.getValue(element);
         return new Fixnum(fillPointer++);
@@ -404,10 +407,10 @@ public final class ComplexString extends AbstractString
         int ext = Fixnum.getValue(extension);
         if (fillPointer < 0)
             noFillPointer();
-        if (fillPointer >= chars.length) {
+        if (fillPointer >= capacity) {
             // Need to extend vector.
-            ext = Math.max(ext, chars.length + 1);
-            ensureCapacity(chars.length + ext);
+            ext = Math.max(ext, capacity + 1);
+            ensureCapacity(capacity + ext);
         }
         chars[fillPointer] = LispCharacter.getValue(element);
         return new Fixnum(fillPointer++);
