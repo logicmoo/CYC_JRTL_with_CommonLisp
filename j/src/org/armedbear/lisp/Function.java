@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.13 2003-04-16 17:22:28 piso Exp $
+ * $Id: Function.java,v 1.14 2003-04-18 00:03:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,7 +120,7 @@ public abstract class Function extends Functional
         if (name != null)
             sb.append(name);
         else {
-            sb.append(" @ ");
+            sb.append("@ ");
             sb.append(Integer.toHexString(hashCode()));
         }
         sb.append(">");
