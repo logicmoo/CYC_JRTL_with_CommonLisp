@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.19 2004-03-12 19:34:01 piso Exp $
+ * $Id: Readtable.java,v 1.20 2004-03-15 11:07:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,10 +33,10 @@ public final class Readtable extends LispObject
     private static final byte ATTR_MULTIPLE_ESCAPE       = 5;
     private static final byte ATTR_INVALID               = 6;
 
-    private final byte[] attributes = new byte[CHAR_MAX];
-    private final Function[] readerMacroFunctions = new Function[CHAR_MAX];
+    private final byte[]          attributes           = new byte[CHAR_MAX];
+    private final Function[]      readerMacroFunctions = new Function[CHAR_MAX];
+    private final DispatchTable[] dispatchTables       = new DispatchTable[CHAR_MAX];
 
-    private ArrayList table;
     private LispObject readtableCase;
 
     public Readtable()
@@ -69,7 +69,8 @@ public final class Readtable extends LispObject
         readerMacroFunctions['`']  = LispReader.BACKQUOTE_MACRO;
         readerMacroFunctions[',']  = LispReader.COMMA_MACRO;
 
-        table = new ArrayList();
+        dispatchTables['#'] = new DispatchTable();
+
         readtableCase = Keyword.UPCASE;
     }
 
@@ -80,7 +81,12 @@ public final class Readtable extends LispObject
                              CHAR_MAX);
             System.arraycopy(rt.readerMacroFunctions, 0, readerMacroFunctions, 0,
                              CHAR_MAX);
-            table = new ArrayList(rt.table);
+            // Deep copy.
+            for (int i = dispatchTables.length; i-- > 0;) {
+                DispatchTable dt = rt.dispatchTables[i];
+                if (dt != null)
+                    dispatchTables[i] = new DispatchTable(dt);
+            }
             readtableCase = rt.readtableCase;
         }
     }
@@ -88,9 +94,17 @@ public final class Readtable extends LispObject
     // FIXME synchronization
     private static void copyReadtable(Readtable from, Readtable to)
     {
+        System.arraycopy(from.attributes, 0, to.attributes, 0,
+                         CHAR_MAX);
         System.arraycopy(from.readerMacroFunctions, 0, to.readerMacroFunctions, 0,
                          CHAR_MAX);
-        to.table = new ArrayList(from.table);
+        for (int i = from.dispatchTables.length; i-- > 0;) {
+            DispatchTable dt = from.dispatchTables[i];
+            if (dt != null)
+                to.dispatchTables[i] = new DispatchTable(dt);
+            else
+                to.dispatchTables[i] = null;
+        }
         to.readtableCase = from.readtableCase;
     }
 
@@ -140,62 +154,71 @@ public final class Readtable extends LispObject
 
     private LispObject getMacroCharacter(char c)
     {
-        LispObject[] values = new LispObject[2];
-        values[0] = getReaderMacroFunction(c);
-        if (values[0] != null) {
+        LispObject function = getReaderMacroFunction(c);
+        LispObject non_terminating_p;
+        if (function != null) {
             byte attribute = attributes[c];
             if (attribute == ATTR_NON_TERMINATING_MACRO)
-                values[1] = T;
+                non_terminating_p = T;
             else
-                values[1] = NIL;
+                non_terminating_p = NIL;
         } else {
-            values[0] = NIL;
-            values[1] = NIL;
+            function = NIL;
+            non_terminating_p = NIL;
         }
-        LispThread.currentThread().setValues(values);
-        return values[0];
+        return LispThread.currentThread().setValues(function, non_terminating_p);
+    }
+
+    private void makeDispatchMacroCharacter(char dispChar, LispObject non_terminating_p)
+    {
+        byte attribute;
+        if (non_terminating_p != NIL)
+            attribute = ATTR_NON_TERMINATING_MACRO;
+        else
+            attribute = ATTR_TERMINATING_MACRO;
+        // FIXME synchronization
+        attributes[dispChar] = attribute;
+        readerMacroFunctions[dispChar] = LispReader.READ_DISPATCH_CHAR;
+        dispatchTables[dispChar] = new DispatchTable();
     }
 
     public LispObject getDispatchMacroCharacter(char dispChar, char subChar)
+        throws ConditionThrowable
     {
-        synchronized (table) {
-            for (int i = 0; i < table.size(); i++) {
-                Entry e = (Entry) table.get(i);
-                if (e.dispChar == dispChar && e.subChar == subChar)
-                    return e.function;
-            }
+        DispatchTable dispatchTable = dispatchTables[dispChar];
+        if (dispatchTable == null) {
+            LispCharacter c = LispCharacter.getInstance(dispChar);
+            return signal(new LispError(String.valueOf(c) + " is not a dispatch character."));
         }
-        return NIL;
+        LispObject function =
+            dispatchTable.functions[Utilities.toUpperCase(subChar)];
+        return (function != null) ? function : NIL;
     }
 
-    public LispObject setDispatchMacroCharacter(char dispChar, char subChar,
-                                                LispObject function)
+    public void setDispatchMacroCharacter(char dispChar, char subChar,
+                                          LispObject function)
+        throws ConditionThrowable
     {
-        synchronized (table) {
-            for (int i = 0; i < table.size(); i++) {
-                Entry e = (Entry) table.get(i);
-                if (e.dispChar == dispChar && e.subChar == subChar) {
-                    e.function = function;
-                    return T;
-                }
-            }
-            // Not found.
-            table.add(new Entry(dispChar, subChar, function));
-            return T;
+        DispatchTable dispatchTable = dispatchTables[dispChar];
+        if (dispatchTable == null) {
+            LispCharacter c = LispCharacter.getInstance(dispChar);
+            signal(new LispError(String.valueOf(c) + " is not a dispatch character."));
         }
+        dispatchTable.functions[Utilities.toUpperCase(subChar)] = function;
     }
 
-    private static class Entry
+    private static class DispatchTable
     {
-        char dispChar;
-        char subChar;
-        LispObject function;
+        public LispObject[] functions = new LispObject[CHAR_MAX];
 
-        Entry(char dispChar, char subChar, LispObject function)
+        public DispatchTable()
         {
-            this.dispChar = dispChar;
-            this.subChar = subChar;
-            this.function = function;
+        }
+
+        public DispatchTable(DispatchTable dt)
+        {
+            for (int i = 0; i < functions.length; i++)
+                functions[i] = dt.functions[i];
         }
     }
 
@@ -311,6 +334,32 @@ public final class Readtable extends LispObject
         }
     };
 
+    // ### make-dispatch-macro-character char &optional non-terminating-p readtable
+    // => t
+    private static final Primitive MAKE_DISPATCH_MACRO_CHARACTER =
+        new Primitive("make-dispatch-macro-character",
+                      "char &optional non-terminating-p readtable")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 1 || args.length > 3)
+                return signal(new WrongNumberOfArgumentsException(this));
+            char dispChar = LispCharacter.getValue(args[0]);
+            LispObject non_terminating_p;
+            if (args.length > 1)
+                non_terminating_p = args[1];
+            else
+                non_terminating_p = NIL;
+            Readtable readtable;
+            if (args.length > 2)
+                readtable = checkReadtable(args[2]);
+            else
+                readtable = currentReadtable();
+            readtable.makeDispatchMacroCharacter(dispChar, non_terminating_p);
+            return T;
+        }
+    };
+
     // ### get-dispatch-macro-character
     // get-dispatch-macro-character disp-char sub-char &optional readtable
     // => function
@@ -352,7 +401,8 @@ public final class Readtable extends LispObject
                 readtable = checkReadtable(args[3]);
             else
                 readtable = currentReadtable();
-            return readtable.setDispatchMacroCharacter(dispChar, subChar, function);
+            readtable.setDispatchMacroCharacter(dispChar, subChar, function);
+            return T;
         }
     };
 
