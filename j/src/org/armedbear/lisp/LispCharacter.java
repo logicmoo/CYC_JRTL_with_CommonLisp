@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.46 2004-03-17 17:57:09 piso Exp $
+ * $Id: LispCharacter.java,v 1.47 2004-04-17 10:52:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -432,6 +432,29 @@ public final class LispCharacter extends LispObject
         }
     };
 
+    public static final int nameToChar(String s)
+    {
+        String lower = s.toLowerCase();
+        if (lower.equals("space"))
+            return ' ';
+        if (lower.equals("tab"))
+            return '\t';
+        if (lower.equals("newline"))
+            return '\n';
+        if (lower.equals("linefeed"))
+            return '\n';
+        if (lower.equals("return"))
+            return '\r';
+        if (lower.equals("page"))
+            return '\f';
+        if (lower.equals("null"))
+            return 0;
+        if (lower.equals("backspace"))
+            return '\b';
+        // Unknown.
+        return -1;
+    }
+
     // ### name-char
     private static final Primitive1 NAME_CHAR =
         new Primitive1("name-char", "name")
@@ -444,36 +467,32 @@ public final class LispCharacter extends LispObject
         }
     };
 
+    public static final String charToName(char c)
+    {
+        switch (c) {
+            case ' ':
+                return "Space";
+            case '\n':
+                return "Newline";
+            case '\t':
+                return "Tab";
+            case '\r':
+                return "Return";
+            case '\f':
+                return "Page";
+            case '\b':
+                return "Backspace";
+        }
+        return null;
+    }
+
     // ### char-name
     private static final Primitive1 CHAR_NAME =
         new Primitive1("char-name", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            char c = LispCharacter.getValue(arg);
-            String name = null;
-            switch (c) {
-                case ' ':
-                    name = "Space";
-                    break;
-                case '\n':
-                    name = "Newline";
-                    break;
-                case '\t':
-                    name = "Tab";
-                    break;
-                case '\r':
-                    name = "Return";
-                    break;
-                case '\f':
-                    name = "Page";
-                    break;
-                case '\b':
-                    name = "Backspace";
-                    break;
-                default:
-                    break;
-            }
+            String name = charToName(LispCharacter.getValue(arg));
             return name != null ? new SimpleString(name) : NIL;
         }
     };
