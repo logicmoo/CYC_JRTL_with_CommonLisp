@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.362 2005-01-22 12:26:21 piso Exp $
+;;; $Id: jvm.lisp,v 1.363 2005-01-22 19:00:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5464,6 +5464,7 @@
   (let ((*all-variables* ())
         (*closure-variables* ())
         (*current-compiland* compiland)
+        (*child-count* 0)
         (*speed* *speed*)
         (*safety* *safety*)
         (*debug* *debug*))
@@ -5494,15 +5495,17 @@
   (aver (eq (car form) 'LAMBDA))
   (unless (or (null environment) (sys::empty-environment-p environment))
     (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
-  (setf *child-count* 0)
+;;   (setf *child-count* 0)
+  (aver (null *current-compiland*))
   (handler-bind ((warning #'handle-warning))
-    (let ((precompiled-form (if *current-compiland*
-                               form
-                               (precompile-form form t))))
+;;     (let ((precompiled-form (if *current-compiland*
+;;                                form
+;;                                (precompile-form form t))))
       (compile-1 (make-compiland :name name
-                                 :lambda-expression precompiled-form
+;;                                  :lambda-expression precompiled-form
+                                 :lambda-expression (precompile-form form t)
                                  :classfile classfile
-                                 :parent *current-compiland*)))))
+                                 :parent *current-compiland*))))
 
 (defun handle-warning (condition)
   (fresh-line)
