@@ -2,7 +2,7 @@
  * JavaClassLoader.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: JavaClassLoader.java,v 1.3 2004-01-02 11:33:58 asimon Exp $
+ * $Id: JavaClassLoader.java,v 1.4 2004-01-02 14:24:36 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public class JavaClassLoader extends ClassLoader
     }
 
 
-    public Class loadClassFromByteArray(String className, byte[] classbytes)
+    public Class loadClassFromByteArray(String className, byte[] classbytes) throws LinkageError
     {
         try {
             long length = classbytes.length;
@@ -72,6 +72,9 @@ public class JavaClassLoader extends ClassLoader
                 }
             }
         }
+	catch (LinkageError e) {
+            throw e;
+	}
         catch (Throwable t) {
             Debug.trace(t);
         }
