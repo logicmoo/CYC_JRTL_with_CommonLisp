@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.329 2004-12-30 18:29:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.330 2004-12-30 21:54:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1205,8 +1205,10 @@
 (defun analyze-stack ()
   (let* ((code *code*)
          (code-length (length code)))
+    (declare (type fixnum code-length))
     (aver (vectorp code))
     (dotimes (i code-length)
+      (declare (type fixnum i))
       (let* ((instruction (aref code i))
              (opcode (instruction-opcode instruction)))
         (when (eql opcode 202) ; LABEL
@@ -1223,14 +1225,14 @@
 ;;         (aver (not (null (instruction-stack instruction))))
         (unless (instruction-stack instruction)
           (%format t "no stack information for instruction ~D~%" (instruction-opcode instruction))
-          (aver nil))
-        ))
+          (aver nil))))
     (walk-code code 0 0)
     (dolist (handler *handlers*)
       ;; Stack depth is always 1 when handler is called.
       (walk-code code (symbol-value (handler-code handler)) 1))
     (let ((max-stack 0))
       (dotimes (i code-length)
+        (declare (type fixnum i))
         (let* ((instruction (aref code i))
                (depth (instruction-depth instruction)))
           (when depth
@@ -2591,9 +2593,6 @@
     (compile-function-call form target representation))
   (when (> *debug* *speed*)
     (return-from compile-funcall (compile-function-call form target representation)))
-;;   (let ((new-form (rewrite-function-call form)))
-;;     (when (neq new-form form)
-;;       (return-from compile-funcall (compile-form new-form :target target))))
   (compile-form (cadr form) :target :stack)
   (maybe-emit-clear-values (cadr form))
   (compile-call (cddr form))
@@ -2820,60 +2819,59 @@
     (when (eq op 'EQ)
       (process-args args)
       (return-from compile-test-3 (if negatep 'if_acmpeq 'if_acmpne)))
-    (let ((first (first args))
-          (second (second args)))
-      (when (and (memq op '(< <= > >= = /=)) (fixnump second))
-        (let ((variable (unboxed-fixnum-variable first)))
-          (when variable
-            (dformat t "compile-test-3 unboxed fixnum constant comparison case~%")
-            (aver (variable-register variable))
-            (emit 'iload (variable-register variable))
-            (emit-push-constant-int second)
-            (case op
-              (<
-               (return-from compile-test-3 (if negatep 'if_icmplt 'if_icmpge)))
-              (<=
-               (return-from compile-test-3 (if negatep 'if_icmple 'if_icmpgt)))
-              (>
-               (return-from compile-test-3 (if negatep 'if_icmpgt 'if_icmple)))
-              (>=
-               (return-from compile-test-3 (if negatep 'if_icmpge 'if_icmplt)))
-              (=
-               (return-from compile-test-3 (if negatep 'if_icmpeq 'if_icmpne)))
-              (/=
-               (return-from compile-test-3 (if negatep 'if_icmpne 'if_icmpeq)))
-              )))
+    (let* ((arg1 (first args))
+           (arg2 (second args))
+           (var1 (unboxed-fixnum-variable arg1))
+           (var2 (unboxed-fixnum-variable arg2)))
+      (when (memq op '(< <= > >= = /=))
+        (when (and (arg-is-fixnum-p arg1)
+                   (arg-is-fixnum-p arg2))
+          (emit-push-int arg1)
+          (emit-push-int arg2)
+          (case op
+            (<
+             (return-from compile-test-3 (if negatep 'if_icmplt 'if_icmpge)))
+            (<=
+             (return-from compile-test-3 (if negatep 'if_icmple 'if_icmpgt)))
+            (>
+             (return-from compile-test-3 (if negatep 'if_icmpgt 'if_icmple)))
+            (>=
+             (return-from compile-test-3 (if negatep 'if_icmpge 'if_icmplt)))
+            (=
+             (return-from compile-test-3 (if negatep 'if_icmpeq 'if_icmpne)))
+            (/=
+             (return-from compile-test-3 (if negatep 'if_icmpne 'if_icmpeq)))
+            ))
 
         ;; Otherwise...
-;;         (dformat t "compile-test-3 constant comparison case~%")
-        (compile-form first :target :stack)
-        (maybe-emit-clear-values first)
-        (emit-push-constant-int second)
-        (emit-invokevirtual +lisp-object-class+
-                            (case op
-                              (<  "isLessThan")
-                              (<= "isLessThanOrEqualTo")
-                              (>  "isGreaterThan")
-                              (>= "isGreaterThanOrEqualTo")
-                              (=  "isEqualTo")
-                              (/= "isNotEqualTo"))
-                            "(I)Z"
-                            -1)
-        (return-from compile-test-3 (if negatep 'ifne 'ifeq)))
+        (when (arg-is-fixnum-p arg2)
+          (compile-form arg1 :target :stack)
+          (maybe-emit-clear-values arg1)
+          (emit-push-int arg2)
+          (emit-invokevirtual +lisp-object-class+
+                              (case op
+                                (<  "isLessThan")
+                                (<= "isLessThanOrEqualTo")
+                                (>  "isGreaterThan")
+                                (>= "isGreaterThanOrEqualTo")
+                                (=  "isEqualTo")
+                                (/= "isNotEqualTo"))
+                              "(I)Z"
+                              -1)
+          (return-from compile-test-3 (if negatep 'ifne 'ifeq))))
 
       (when (eq op '<)
-        (let ((variable (unboxed-fixnum-variable first)))
-          (when variable
-            (dformat t "compile-test-3 unboxed fixnum variable comparison case~%")
-            (aver (variable-register variable))
-            (emit 'iload (variable-register variable))
-            (compile-form second :target :stack)
+          (when var1
+            (dformat t "compile-test-3 unboxed fixnum var1 comparison case~%")
+            (aver (variable-register var1))
+            (emit 'iload (variable-register var1))
+            (compile-form arg2 :target :stack)
             (emit 'swap)
             (emit-invokevirtual +lisp-object-class+
                                 "isGreaterThan"
                                 "(I)Z"
                                 -1)
-            (return-from compile-test-3 (if negatep 'ifne 'ifeq))))))
+            (return-from compile-test-3 (if negatep 'ifne 'ifeq)))))
 
     (let ((s (cdr (assq op
                         '((=      . "isEqualTo")
@@ -2919,9 +2917,6 @@
   ;; Use a Java boolean if possible.
   (when (and (consp form)
              (not (special-operator-p (car form))))
-;;     (let ((new-form (rewrite-function-call form)))
-;;       (when (neq new-form form)
-;;         (return-from compile-test (compile-test new-form negatep))))
     (case (length form)
       (2
        (return-from compile-test (compile-test-2 form negatep)))
@@ -3708,9 +3703,6 @@
             (error "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
 (defun compile-rplacd (form &key (target *val*) representation)
-;;   (let ((new-form (rewrite-function-call form)))
-;;     (when (neq new-form form)
-;;       (return-from compile-rplacd (compile-form new-form :target target))))
   (let ((args (cdr form)))
     (unless (= (length args) 2)
       (error "wrong number of arguments for RPLACD"))
