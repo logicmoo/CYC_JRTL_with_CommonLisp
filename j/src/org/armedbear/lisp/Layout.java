@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Layout.java,v 1.8 2004-11-06 13:45:33 piso Exp $
+ * $Id: Layout.java,v 1.9 2004-11-06 18:50:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,16 +24,22 @@ package org.armedbear.lisp;
 public final class Layout extends LispObject
 {
     private final LispClass cls;
-    private final LispObject length;
     private final LispObject[] slotNames;
+    private final LispObject classSlots;
 
-    public Layout(LispClass cls, LispObject length, LispObject instanceSlots)
+    public Layout(LispClass cls, LispObject instanceSlots, LispObject classSlots)
     {
         this.cls = cls;
-        this.length = length;
-        Debug.assertTrue(length instanceof Fixnum);
         Debug.assertTrue(instanceSlots.listp());
-        slotNames = new LispObject[((Fixnum)length).value];
+        int length = 0;
+        try {
+            length = instanceSlots.length();
+        }
+        catch (Throwable t) {
+            // Shouldn't happen.
+            Debug.trace(t);
+        }
+        slotNames = new LispObject[length];
         int i = 0;
         try {
             while (instanceSlots != NIL) {
@@ -42,9 +48,11 @@ public final class Layout extends LispObject
             }
         }
         catch (Throwable t) {
+            // Shouldn't happen.
             Debug.trace(t);
         }
-        Debug.assertTrue(i == slotNames.length);
+        Debug.assertTrue(i == length);
+        this.classSlots = classSlots;
     }
 
     public LispClass getLispClass()
@@ -54,14 +62,16 @@ public final class Layout extends LispObject
 
     // ### make-layout
     private static final Primitive MAKE_LAYOUT =
-        new Primitive("make-layout", PACKAGE_SYS, false)
+        new Primitive("make-layout", PACKAGE_SYS, false,
+                      "class instance-slots class-slots")
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
             try {
-                return new Layout((LispClass)first, second, third);
+                return new Layout((LispClass)first, checkList(second),
+                                  checkList(third));
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(first, Symbol.CLASS));
@@ -92,7 +102,7 @@ public final class Layout extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return ((Layout)arg).length;
+                return new Fixnum(((Layout)arg).slotNames.length);
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, "layout"));
@@ -102,7 +112,7 @@ public final class Layout extends LispObject
 
     // ### layout-slot-index
     // layout-slot-index layout slot-name => index
-    private static final Primitive INSTANCE_SLOT_INDEX =
+    private static final Primitive LAYOUT_SLOT_INDEX =
         new Primitive("layout-slot-index", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
@@ -114,6 +124,37 @@ public final class Layout extends LispObject
                 for (int i = 0; i < limit; i++) {
                     if (slotNames[i] == second)
                         return new Fixnum(i);
+                }
+                return NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, "layout"));
+            }
+        }
+    };
+
+    // ### layout-slot-location
+    // layout-slot-location layout slot-name => location
+    private static final Primitive LAYOUT_SLOT_LOCATION =
+        new Primitive("layout-slot-location", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                final LispObject slotNames[] = ((Layout)first).slotNames;
+                final int limit = slotNames.length;
+                for (int i = 0; i < limit; i++) {
+                    if (slotNames[i] == second)
+                        return new Fixnum(i);
+                }
+                // Reaching here, it's not an instance slot.
+                LispObject rest = ((Layout)first).classSlots;
+                while (rest != NIL) {
+                    LispObject location = rest.car();
+                    if (location.car() == second)
+                        return location;
+                    rest = rest.cdr();
                 }
                 return NIL;
             }
