@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.484 2003-10-25 21:56:29 piso Exp $
+ * $Id: Primitives.java,v 1.485 2003-10-26 00:37:26 dmcnaught Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4468,6 +4468,94 @@ public final class Primitives extends Module
         }
     };
 
+    private static final Primitive1 COS = 
+        new Primitive1("cos") {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return cos(arg);
+        }
+    };
+    
+    private static LispObject cos(LispObject arg) throws ConditionThrowable
+    {
+        if (arg.realp()) {
+            LispFloat argf = LispFloat.coerceToFloat(arg);
+            return new LispFloat(Math.cos(argf.getValue()));
+        } else if (arg instanceof Complex) {
+            Complex argc = (Complex)arg;
+            Complex iargc = (Complex)argc.multiplyBy(Complex.getInstance(new Fixnum(0), new Fixnum(1)));
+            Complex c = (Complex)exp(iargc);
+            c = (Complex)c.add(exp(iargc.multiplyBy(new Fixnum(-1))));
+            c = (Complex)c.divideBy(new Fixnum(2));
+            return c;
+        }
+        
+        throw new ConditionThrowable(new TypeError(arg, "number"));
+    }
+    
+    private static final Primitive1 SIN =
+        new Primitive1("sin") {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return sin(arg);
+        }
+    };
+    
+    private static LispObject sin(LispObject arg) throws ConditionThrowable
+    {
+        if (arg.realp()) {  // return real
+            LispFloat argf = LispFloat.coerceToFloat(arg);
+            return new LispFloat(Math.sin(argf.getValue()));
+        } else if (arg instanceof Complex) {
+            Complex argc = (Complex)arg;
+            Complex iargc = (Complex)argc.multiplyBy(Complex.getInstance(new Fixnum(0), new Fixnum(1)));
+            Complex c = (Complex)exp(iargc);
+            c = (Complex)c.subtract(exp(iargc.multiplyBy(new Fixnum(-1))));
+            c = (Complex)c.divideBy((new Fixnum(2)).multiplyBy(Complex.getInstance(new Fixnum(0), new Fixnum(1))));
+            return c;
+        }
+
+        throw new ConditionThrowable(new TypeError(arg, "number"));
+    }
+    
+    private static final Primitive1 TAN =
+        new Primitive1("tan") {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return tan(arg);
+        }
+    };
+    
+    private static LispObject tan(LispObject arg) throws ConditionThrowable
+    {
+        return sin(arg).divideBy(cos(arg));
+    }
+    
+    private static final Primitive1 EXP =
+        new Primitive1("exp") {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return exp(arg);
+        }
+    };
+    
+    private static LispObject exp(LispObject arg) throws ConditionThrowable
+    {
+        if (arg.realp()) {  // return real
+            LispFloat argf = LispFloat.coerceToFloat(arg);
+            return new LispFloat(Math.exp(argf.getValue()));
+        } else if (arg instanceof Complex) {
+            Complex argc = (Complex)arg;
+            double re = LispFloat.coerceToFloat(argc.getRealPart()).getValue();
+            double im = LispFloat.coerceToFloat(argc.getImaginaryPart()).getValue();
+            LispFloat resX = new LispFloat(Math.exp(re) * Math.cos(im));
+            LispFloat resY = new LispFloat(Math.exp(re) * Math.sin(im));
+            return Complex.getInstance(resX, resY);
+        }
+        
+        throw new ConditionThrowable(new TypeError(arg, "number"));
+    }
+    
     // ### sqrt
     private static final Primitive1 SQRT =
         new Primitive1("sqrt") {
@@ -4484,14 +4572,19 @@ public final class Primitives extends Module
 
     private static final LispFloat sqrt(LispObject obj) throws ConditionThrowable
     {
-        if (obj instanceof Fixnum)
-            return new LispFloat(Math.sqrt(((Fixnum)obj).getValue()));
-        if (obj instanceof Bignum)
-            return new LispFloat(Math.sqrt(((Bignum)obj).floatValue()));
-        if (obj instanceof Ratio)
-            return new LispFloat(Math.sqrt(((Ratio)obj).floatValue()));
-        if (obj instanceof LispFloat)
-            return new LispFloat(Math.sqrt(((LispFloat)obj).getValue()));
+        if (obj.realp() && !obj.minusp()) {  // returning real           
+            if (obj instanceof Fixnum)
+                return new LispFloat(Math.sqrt(((Fixnum)obj).getValue()));
+            if (obj instanceof Bignum)
+                return new LispFloat(Math.sqrt(((Bignum)obj).floatValue()));
+            if (obj instanceof Ratio)
+                return new LispFloat(Math.sqrt(((Ratio)obj).floatValue()));
+            if (obj instanceof LispFloat)
+                return new LispFloat(Math.sqrt(((LispFloat)obj).getValue()));
+        }// else {  // returning Complex
+          //  if (obj.realp()) {
+                
+            
         throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
