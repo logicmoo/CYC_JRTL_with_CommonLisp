@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.62 2004-02-05 00:58:38 piso Exp $
+;;; $Id: clos.lisp,v 1.63 2004-02-05 01:14:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -589,28 +589,13 @@
 
 (defmacro defclass (&whole form name direct-superclasses direct-slots &rest options)
   (unless (>= (length form) 3)
-    (error 'program-error "wrong number of arguments for DEFCLASS"))
+    (error 'program-error "Wrong number of arguments for DEFCLASS."))
   `(ensure-class ',name
                  :direct-superclasses
                  ,(canonicalize-direct-superclasses direct-superclasses)
                  :direct-slots
                  ,(canonicalize-direct-slots direct-slots)
                  ,@(canonicalize-defclass-options options)))
-
-;; The method-combination slot of a standard generic function contains either
-;; the name of the method combination type or a list whose car is the name of
-;; the method combination type and whose cdr is a list of options (for example
-;; :MOST-SPECIFIC-FIRST or :MOST-SPECIFIC-LAST).
-
-(defun method-combination-name (method-combination)
-  (if (atom method-combination)
-      method-combination
-      (car method-combination)))
-
-(defun method-combination-options (method-combination)
-  (if (atom method-combination)
-      nil
-      (cdr method-combination)))
 
 (defclass standard-generic-function (generic-function)
   ((name :initarg :name)      ; :accessor generic-function-name
@@ -619,6 +604,9 @@
    (methods :initform ())     ; :accessor generic-function-methods
    (method-class              ; :accessor generic-function-method-class
     :initarg :method-class)
+   ;; The method-combination slot contains either the name of the method
+   ;; combination type or a list whose car is the name of the method
+   ;; combination type and whose cdr is a list of options.
    (method-combination
     :initarg :method-combination)
    (classes-to-emf-table      ; :accessor classes-to-emf-table
@@ -1199,8 +1187,8 @@
 
 (defun std-compute-effective-method-function (gf methods)
   (let* ((mc (generic-function-method-combination gf))
-         (mc-name (method-combination-name mc))
-         (options (method-combination-options mc))
+         (mc-name (if (atom mc) mc (car mc)))
+         (options (if (atom mc) () (cdr mc)))
          (order (car options))
          (primaries ())
          (arounds ())
