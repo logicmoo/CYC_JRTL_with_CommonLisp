@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: profiler.lisp,v 1.10 2004-08-22 01:11:52 piso Exp $
+;;; $Id: profiler.lisp,v 1.11 2004-10-10 17:18:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,50 +17,91 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "PROFILER")
+(in-package #:profiler)
 
-(defparameter *type* nil)
+(export '(*hidden-functions*))
 
-(defparameter *granularity* 1 "Sampling interval (in milliseconds).")
+(require '#:clos)
+(require '#:format)
+
+(defvar *type* nil)
+
+(defvar *granularity* 1 "Sampling interval (in milliseconds).")
+
+(defvar *hidden-functions*
+  '(funcall apply eval
+    sys::%eval sys::interactive-eval
+    tpl::repl tpl::top-level-loop))
+
+(defstruct (profile-info
+            (:constructor make-profile-info (object count)))
+  object
+  count)
 
 ;; Returns list of all symbols with non-zero call counts.
-(defun list-calls ()
-  (let ((result nil))
+(defun list-called-objects ()
+  (let ((result '()))
     (dolist (pkg (list-all-packages))
-      (dolist (sym (sys::package-symbols pkg))
-        (when (fboundp sym)
-          (let* ((f (fdefinition sym))
-                 (n (sys::%call-count f)))
-            (unless (zerop n)
-              (setq result (cons sym result)))))))
-    result))
+      (dolist (sym (sys:package-symbols pkg))
+        (unless (memq sym *hidden-functions*)
+          (when (fboundp sym)
+            (let* ((definition (fdefinition sym))
+                   (count (sys:call-count definition)))
+              (unless (zerop count)
+                (cond ((typep definition 'generic-function)
+                       (push (make-profile-info definition count) result)
+                       (dolist (method (sys::generic-function-methods definition))
+                         (setf count (sys:call-count (sys::method-function method)))
+                         (unless (zerop count)
+                           (push (make-profile-info method count) result))))
+                      (t
+                       (push (make-profile-info sym count) result)))))))))
+    (remove-duplicates result :key 'profile-info-object :test 'eq)))
 
-(defun show-call-count-for-symbol (sym max-count)
-  (let ((count (sys::%call-count (fdefinition sym))))
+(defun object-name (object)
+  (cond ((symbolp object)
+         (symbol-name object))
+        ((typep object 'generic-function)
+         (sys::generic-function-name object))
+        ((typep object 'method)
+         (format nil "~A ~A"
+                 (sys::generic-function-name (sys::method-generic-function object))
+                 (mapcar #'class-name (sys::method-specializers object))))))
+
+(defun show-call-count (info max-count)
+  (let* ((object (profile-info-object info))
+         (count (profile-info-count info))
+         (function (if (symbolp object) (fdefinition object) object)))
     (if max-count
-        (format t "~A ~A ~A (~A%)~%"
-                sym
-                (if (compiled-function-p (fdefinition sym))
-                    ""
-                    "[interpreted function]")
+        (format t "~5,1F ~8D ~A~A~%"
+                (/ (* count 100.0) max-count)
                 count
-                (/ (round (/ (* count 10000.0) max-count)) 100.0))
-        (format t "~A ~A~%" sym count))))
+                (object-name object)
+                (if (or (compiled-function-p function)
+                        (and (symbolp object) (special-operator-p object)))
+                    ""
+                    " [interpreted function]"))
+        (format t "~8D ~A~A~%"
+                count
+                (object-name object)
+                (if (or (compiled-function-p function)
+                        (and (symbolp object) (special-operator-p object)))
+                    ""
+                    " [interpreted function]")))))
 
 (defun show-call-counts ()
-  (let ((syms (list-calls)))
-    (setf syms (sort syms #'<
-                     :key #'(lambda (x) (sys::%call-count (fdefinition x)))))
+  (let ((list (list-called-objects)))
+    (setf list (sort list #'< :key 'profile-info-count))
     (let ((max-count nil))
       (when (eq *type* :time)
-        (let* ((last-sym (car (last syms))))
-          (setf max-count (if last-sym
-                              (sys::%call-count (fdefinition last-sym))
+        (let ((last-info (car (last list))))
+          (setf max-count (if last-info
+                              (profile-info-count last-info)
                               nil))
           (when (eql max-count 0)
             (setf max-count nil))))
-      (dolist (sym syms)
-        (show-call-count-for-symbol sym max-count))))
+      (dolist (info list)
+        (show-call-count info max-count))))
   (values))
 
 (defun start-profiler (&key type)

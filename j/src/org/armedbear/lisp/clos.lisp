@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.110 2004-10-09 16:12:04 piso Exp $
+;;; $Id: clos.lisp,v 1.111 2004-10-10 17:17:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
 ;;; protocol as described in "The Art of The Metaobject Protocol",
 ;;; MIT Press, 1991.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defmacro push-on-end (value location)
   `(setf ,location (nconc ,location (list ,value))))
@@ -691,10 +691,11 @@
 (defun (setf generic-function-documentation) (new-value gf)
   (setf (slot-value gf 'documentation) new-value))
 
-(defun generic-function-methods (gf)
-  (slot-value gf 'methods))
-(defun (setf generic-function-methods) (new-value gf)
-  (setf (slot-value gf 'methods) new-value))
+;; (defun generic-function-methods (gf)
+;;   (slot-value gf 'methods))
+;; (defun (setf generic-function-methods) (new-value gf)
+;;   (setf (slot-value gf 'methods) new-value))
+(defsetf generic-function-methods %set-generic-function-methods)
 
 (defsetf generic-function-discriminating-function
   %set-generic-function-discriminating-function)
@@ -732,13 +733,13 @@
    (body :initarg :body)                   ; :accessor method-body
    (environment :initarg :environment)     ; :accessor method-environment
    (generic-function :initform nil)        ; :accessor method-generic-function
-   (function)                              ; :accessor method-function
+;;    (function)                              ; :accessor method-function
    (documentation)))                       ; :accessor method-documentation
 
 (defvar the-class-standard-method (find-class 'standard-method))
 
-(defvar *sm-function-index*
-  (slot-location the-class-standard-method 'function))
+;; (defvar *sm-function-index*
+;;   (slot-location the-class-standard-method 'function))
 
 (defun method-lambda-list (method) (slot-value method 'lambda-list))
 (defun (setf method-lambda-list) (new-value method)
@@ -769,11 +770,12 @@
 (defun (setf method-generic-function) (new-value method)
   (setf (slot-value method 'generic-function) new-value))
 
-(defun method-function (method)
-  (instance-ref method *sm-function-index*))
+;; (defun method-function (method)
+;;   (instance-ref method *sm-function-index*))
 
-(defun (setf method-function) (new-value method)
-  (setf (slot-value method 'function) new-value))
+;; (defun (setf method-function) (new-value method)
+;;   (setf (slot-value method 'function) new-value))
+(defsetf method-function %set-method-function)
 
 (defun method-documentation (method)
   (slot-value method 'documentation))
@@ -1292,8 +1294,20 @@
                      (error 'program-error
                             :format-control "Not enough arguments for generic function ~S."
                             :format-arguments (list (generic-function-name ,gf))))
-                   (let* ((classes (mapcar #'class-of (subseq args 0 ,number-required)))
-                          (emfun (gethash classes ,emf-table)))
+;;                    (let* ((classes (mapcar #'class-of (subseq args 0 ,number-required)))
+;;                           (emfun (gethash classes ,emf-table)))
+;;                      (if emfun
+;;                          (funcall emfun args)
+;;                          (slow-method-lookup ,gf args classes))))
+                   (let ((classes ())
+                         (i 0)
+                         emfun)
+                     (dolist (arg args)
+                       (push (class-of arg) classes)
+                       (when (= (incf i) ,number-required)
+                         (return)))
+                     (setf classes (nreverse classes))
+                     (setf emfun (gethash classes ,emf-table))
                      (if emfun
                          (funcall emfun args)
                          (slow-method-lookup ,gf args classes))))
@@ -1301,6 +1315,11 @@
 ;;     (when (and (fboundp 'jvm:jvm-compile)
 ;;                (not (autoloadp 'jvm:jvm-compile)))
 ;;       (setf code (jvm:jvm-compile nil code)))
+
+    (when (and (fboundp 'compile)
+               (not (autoloadp 'compile)))
+      (setf code (or (compile nil code) code)))
+
     code))
 
 (defun method-applicable-p (method args)
@@ -1387,10 +1406,10 @@
 (defun std-compute-effective-method-function (gf methods)
   (let* ((mc (generic-function-method-combination gf))
          (mc-name (if (atom mc) mc (car mc)))
-         (options (if (atom mc) () (cdr mc)))
+         (options (if (atom mc) '() (cdr mc)))
          (order (car options))
-         (primaries ())
-         (arounds ())
+         (primaries '())
+         (arounds '())
          around)
     (dolist (m methods)
       (let ((qualifiers (method-qualifiers m)))
