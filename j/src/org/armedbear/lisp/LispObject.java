@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.70 2004-02-04 15:18:11 piso Exp $
+ * $Id: LispObject.java,v 1.71 2004-02-12 01:46:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -539,7 +539,7 @@ public class LispObject extends Lisp
         return signal(new TypeError(this, "real number"));
     }
 
-    public Fixnum sxhash()
+    public Fixnum sxhash() throws ConditionThrowable
     {
         return new Fixnum(hashCode() & 0x7ffffff);
     }
