@@ -1,8 +1,8 @@
 /*
  * Mode.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Mode.java,v 1.9 2003-06-30 17:00:41 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Mode.java,v 1.10 2005-02-16 21:38:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -385,6 +385,8 @@ public interface Mode
      *                  legal identifier parts for this mode.
      */
     public boolean isIdentifierPart(char c);
+
+    public boolean isDelimited(Position pos, int length);
 
     /**
      * Returns <code>true</code> if the specified position is inside a quoted

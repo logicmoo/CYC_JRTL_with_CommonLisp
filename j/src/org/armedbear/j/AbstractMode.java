@@ -1,8 +1,8 @@
 /*
  * AbstractMode.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.20 2003-10-15 14:52:25 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: AbstractMode.java,v 1.21 2005-02-16 21:39:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -860,6 +860,20 @@ public abstract class AbstractMode implements Constants, Mode
         return Character.isJavaIdentifierPart(c);
     }
 
+    public boolean isDelimited(Position pos, int length)
+    {
+        final Line line = pos.getLine();
+        final int offset = pos.getOffset();
+        if (offset > 0) {
+            if (isIdentifierPart(line.charAt(offset - 1)))
+                return false;
+        }
+        final int after = offset + length;
+        if (after < pos.getLineLength() && isIdentifierPart(line.charAt(after)))
+            return false;
+        return true;
+    }
+
     /**
      * {@inheritDoc}
      * The default implementation considers both single and double quotes
@@ -1067,9 +1081,9 @@ public abstract class AbstractMode implements Constants, Mode
         return getIdentifier(pos.getLine(), pos.getOffset());
     }
 
-    public final String getIdentifier(Line line, int offset)
+    public String getIdentifier(Line line, int offset)
     {
-        int limit = line.length();
+        final int limit = line.length();
         if (offset < limit) {
             char c = line.charAt(offset);
             if (isIdentifierPart(c)) {
