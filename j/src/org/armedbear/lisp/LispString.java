@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.54 2003-08-25 17:57:51 piso Exp $
+ * $Id: LispString.java,v 1.55 2003-09-14 13:05:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,16 @@ public final class LispString extends AbstractVector
                 return fillPointer < 0 ? T : NIL;
         }
         return super.typep(typeSpecifier);
+    }
+
+    public LispObject STRINGP()
+    {
+        return T;
+    }
+
+    public LispObject SIMPLE_STRING_P()
+    {
+        return fillPointer < 0 ? T : NIL;
     }
 
     public LispObject getElementType()
