@@ -88,6 +88,7 @@ cadddr
 caddr
 cadr
 call-method
+call-next-method
 car
 case
 catch
