@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.156 2004-08-15 11:41:32 piso Exp $
+;;; $Id: rt.lisp,v 1.157 2004-08-24 20:14:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 (export '(deftest my-aref))
 
 (defvar *prefix*
-  #+linux "/home/peter/gcl/ansi-tests/"
+  #-(or windows mswindows) "/home/peter/gcl/ansi-tests/"
   #+(or windows mswindows) "C:\\ansi-tests\\")
 
 (defvar *compile-tests* t)
@@ -73,6 +73,7 @@
    (t (eql x y))))
 
 (defmacro deftest (name &rest body)
+  (fresh-line)
   (format t "Test ~S~%" `,name)
   (finish-output)
   (let* ((p body)
@@ -136,8 +137,6 @@
   (:shadow #:handler-case #:handler-bind)
   (:import-from "COMMON-LISP-USER" #:compile-and-load "==>")
   (:export #:random-from-seq #:random-case #:coin #:random-permute))
-
-(load (concatenate 'string regression-test::*prefix* "ansi-aux-macros.lsp"))
 
 (defun do-tests (&rest args)
   (let ((regression-test::*passed* 0)
@@ -503,8 +502,11 @@
   (let ((regression-test::*compile-tests* compile-tests))
     (time (do-tests))))
 
+(compile-and-load "ansi-aux-macros.lsp")
 (load (concatenate 'string regression-test::*prefix* "universe.lsp"))
-(load (concatenate 'string regression-test::*prefix* "ansi-aux.lsp"))
+(compile-and-load "random-aux.lsp")
+(compile-and-load "ansi-aux.lsp")
+
 (load (concatenate 'string regression-test::*prefix* "char-aux.lsp"))
 (load (concatenate 'string regression-test::*prefix* "cl-symbols-aux.lsp"))
 (load (concatenate 'string regression-test::*prefix* "cl-symbol-names.lsp"))
@@ -513,7 +515,6 @@
 (load (concatenate 'string regression-test::*prefix* "cons-aux.lsp"))
 (load (concatenate 'string regression-test::*prefix* "numbers-aux.lsp"))
 (load (concatenate 'string regression-test::*prefix* "string-aux.lsp"))
-(load (concatenate 'string regression-test::*prefix* "random-aux.lsp"))
 (load (concatenate 'string regression-test::*prefix* "remove-aux.lsp"))
 (load (concatenate 'string regression-test::*prefix* "remove-duplicates-aux.lsp"))
 
