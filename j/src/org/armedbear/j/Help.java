@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.9 2003-06-19 15:04:15 piso Exp $
+ * $Id: Help.java,v 1.10 2003-06-19 15:51:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 
 public final class Help
@@ -294,6 +296,7 @@ public final class Help
             if (helpFile != null && !helpFile.isFile())
                 helpFile = null;
             List commands = CommandTable.apropos(arg);
+            sort(commands);
             addAproposEntries(commands, helpFile, writer);
             writer.write("<br>");
             writer.write("<b>");
@@ -303,6 +306,7 @@ public final class Help
             if (helpFile != null && !helpFile.isFile())
                 helpFile = null;
             List properties = Property.apropos(arg);
+            sort(properties);
             addAproposEntries(properties, helpFile, writer);
             writer.write("</body>\n</html>\n");
             writer.flush();
@@ -357,6 +361,21 @@ public final class Help
         finally {
             frame.setDefaultCursor();
         }
+    }
+
+    private static Comparator comparator;
+
+    private static void sort(List list)
+    {
+        if (comparator == null) {
+            comparator = new Comparator() {
+                public int compare(Object o1, Object o2)
+                {
+                    return o1.toString().compareToIgnoreCase(o2.toString());
+                }
+            };
+        }
+        Collections.sort(list, comparator);
     }
 
     private static void addAproposEntries(List list, File helpFile,
