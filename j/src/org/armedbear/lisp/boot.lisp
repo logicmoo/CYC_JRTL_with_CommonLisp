@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.164 2004-04-26 16:17:19 piso Exp $
+;;; $Id: boot.lisp,v 1.165 2004-05-03 02:01:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -52,6 +52,10 @@
 
 (defmacro defparameter (name initial-value &optional docstring)
   (list 'sys::%defparameter (list 'QUOTE name) initial-value docstring))
+
+;; EVAL is redefined in precompiler.lisp.
+(defun eval (form)
+  (sys::%eval form))
 
 ;; SYS::OUTPUT-OBJECT is redefined in print.lisp.
 (defun sys::output-object (object stream)
