@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.81 2003-06-07 00:56:32 piso Exp $
+ * $Id: Lisp.java,v 1.82 2003-06-10 00:41:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,7 @@ public abstract class Lisp
     // Functional types.
     static final int FTYPE_SPECIAL_OPERATOR = 1;
     static final int FTYPE_MACRO            = 2;
+    static final int FTYPE_AUTOLOAD         = 3;
 
     // argv must not be null!
     public static final LispObject funcall(LispObject fun, LispObject[] argv,
@@ -182,6 +183,11 @@ public abstract class Lisp
                     }
                     case FTYPE_MACRO:
                         return eval(macroexpand(obj, env, thread), env, thread);
+                    case FTYPE_AUTOLOAD: {
+                        Autoload autoload = (Autoload) fun;
+                        Load._load(autoload.getFileName(), true, false);
+                        return eval(obj, env, thread);
+                    }
                     default: {
                         if (debug)
                             return funcall(fun,
@@ -882,5 +888,6 @@ public abstract class Lisp
         loadClass("org.armedbear.lisp.Java");
         loadClass("org.armedbear.lisp.CompiledFunction");
         loadClass("org.armedbear.lisp.TwoWayStream");
+        loadClass("org.armedbear.lisp.Autoload");
     }
 }

@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.51 2003-06-06 17:06:05 piso Exp $
+;;; $Id: boot.lisp,v 1.52 2003-06-10 00:42:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -113,9 +113,7 @@
                 "symbol.lisp"
                 "error.lisp"
                 "chars.lisp"
-                "strings.lisp"
-                "sort.lisp"
-                "parse-integer.lisp"))
+                "strings.lisp"))
   (%load name))
 
 
@@ -170,8 +168,11 @@
   nil)
 
 
-(%load "defstruct.lisp")
-(%load "loop.lisp")
+(autoload 'sort "sort.lisp")
+(autoload 'merge "merge.lisp")
+(autoload 'parse-integer "parse-integer.lisp")
+(autoload 'defstruct "defstruct.lisp")
+(autoload 'loop "loop.lisp")
 
 
 (debug)
