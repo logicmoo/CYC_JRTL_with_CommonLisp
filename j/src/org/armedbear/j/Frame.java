@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Frame.java,v 1.9 2003-06-27 17:41:13 piso Exp $
+ * $Id: Frame.java,v 1.10 2003-06-28 19:13:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -410,7 +410,7 @@ public final class Frame extends JFrame implements Constants, WindowListener,
             }
             int extendedState = sessionProperties.getExtendedState(0);
             adjustPlacementRunnable =
-                new AdjustPlacementRunnable(this, desired, extendedState);
+                new AdjustPlacementRunnable(this, extendedState);
             setBounds(desired);
         } else {
             // BUG! Should not be hardcoded to 1!
@@ -427,7 +427,7 @@ public final class Frame extends JFrame implements Constants, WindowListener,
             setBounds(desired);
             int extendedState = sessionProperties.getExtendedState(1);
             if (extendedState != 0)
-                Utilities.setExtendedState(this, extendedState);
+                setExtendedState(extendedState);
         }
     }
 
