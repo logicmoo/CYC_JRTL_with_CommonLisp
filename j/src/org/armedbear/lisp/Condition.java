@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Condition.java,v 1.25 2004-08-18 17:14:38 piso Exp $
+ * $Id: Condition.java,v 1.26 2004-09-30 11:10:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,7 +137,7 @@ public class Condition extends StandardObject
             if (formatControl != NIL)
                 return format(formatControl, formatArguments);
         }
-        return unreadableString(typeOf().writeToString());
+        return super.writeToString();
     }
 
     // ### condition-report
