@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.186 2004-06-03 21:37:32 asimon Exp $
+ * $Id: Autoload.java,v 1.187 2004-06-06 19:33:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,6 +252,7 @@ public class Autoload extends Function
         autoload("file-length", "file_length");
         autoload("file-string-length", "file_string_length");
         autoload("file-write-date", "file_write_date");
+        autoload("float-sign", "float_sign");
         autoload("floor", "floor");
         autoload("ftruncate", "ftruncate");
         autoload("get-internal-real-time", "Time");
