@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.268 2003-06-24 20:31:56 piso Exp $
+ * $Id: Primitives.java,v 1.269 2003-06-24 21:47:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2266,18 +2266,22 @@ public final class Primitives extends Module
         {
             if (args.length < 1)
                 throw new WrongNumberOfArgumentsException(this);
-            LispObject fun;
-            if (args[0] instanceof Symbol) {
-                fun = args[0].getSymbolFunction();
+            LispObject fun = args[0];
+            if (fun instanceof Symbol) {
+                fun = fun.getSymbolFunction();
                 if (fun instanceof SpecialOperator)
                     throw new UndefinedFunctionError(args[0]);
-            } else
-                fun = args[0];
+            }
             if (fun instanceof Function) {
                 final int length = args.length - 1; // Number of arguments.
-                LispObject[] funArgs = new LispObject[length];
-                System.arraycopy(args, 1, funArgs, 0, length);
-                return funcall(fun, funArgs, LispThread.currentThread());
+                if (length == 3) {
+                    return funcall3(fun, args[1], args[2], args[3],
+                                    LispThread.currentThread());
+                } else {
+                    LispObject[] funArgs = new LispObject[length];
+                    System.arraycopy(args, 1, funArgs, 0, length);
+                    return funcall(fun, funArgs, LispThread.currentThread());
+                }
             }
             throw new TypeError(fun, "function");
         }
