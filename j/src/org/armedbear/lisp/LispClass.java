@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.53 2004-11-06 20:06:11 piso Exp $
+ * $Id: LispClass.java,v 1.54 2004-11-08 18:18:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@ public class LispClass extends StandardObject
     private LispObject classPrecedenceList = NIL;
     private LispObject directMethods = NIL;
     private LispObject documentation = NIL;
+    private LispObject finalized = NIL;
 
     protected LispClass()
     {
@@ -106,6 +107,16 @@ public class LispClass extends StandardObject
     public final void setDirectSuperclasses(LispObject directSuperclasses)
     {
         this.directSuperclasses = directSuperclasses;
+    }
+
+    public final LispObject getFinalized()
+    {
+        return finalized;
+    }
+
+    public final void setFinalized(LispObject finalized)
+    {
+        this.finalized = finalized;
     }
 
     // When there's only one direct superclass...
@@ -269,16 +280,21 @@ public class LispClass extends StandardObject
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            Symbol symbol = checkSymbol(first);
-            if (second instanceof LispClass) {
-                addClass(symbol, (LispClass) second);
-                return second;
+            try {
+                Symbol symbol = (Symbol) first;
+                if (second instanceof LispClass) {
+                    addClass(symbol, (LispClass) second);
+                    return second;
+                }
+                if (second == NIL) {
+                    map.remove(symbol);
+                    return second;
+                }
+                return signal(new TypeError(second, Symbol.CLASS));
             }
-            if (second == NIL) {
-                map.remove(symbol);
-                return second;
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.SYMBOL));
             }
-            return signal(new TypeError(second, Symbol.CLASS));
         }
     };
 
@@ -486,6 +502,38 @@ public class LispClass extends StandardObject
                 return second;
             }
             return signal(new TypeError(first, Symbol.CLASS));
+        }
+    };
+
+    // ### class-finalized-p
+    private static final Primitive CLASS_FINALIZED_P =
+        new Primitive("class-finalized-p", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((LispClass)arg).getFinalized();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CLASS));
+            }
+        }
+    };
+
+    // ### %set-class-finalized-p
+    private static final Primitive _SET_CLASS_FINALIZED_P =
+        new Primitive("%set-class-finalized-p", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((LispClass)first).setFinalized(second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.CLASS));
+            }
         }
     };
 
