@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.15 2003-11-29 00:51:03 piso Exp $
+;;; $Id: precompiler.lisp,v 1.16 2003-11-29 03:41:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,16 +65,20 @@
         `(eq ,(car args) ,(cadr args))
         form)))
 
-(define-compiler-macro not (&whole form &rest args)
-  (if (and (= (length args) 1) (consp (car args)))
-      (let ((op (caar args)))
-        (cond ((eq op '>=)
-               (cons '< (cdr (car args))))
-              ((eq op '<)
-               (cons '>= (cdr (car args))))
-              (t
-               form)))
-      form))
+(define-compiler-macro not (&whole form arg)
+  (if (atom arg)
+      form
+      (let ((op (case (car arg)
+                  (>= '<)
+                  (<  '>=)
+                  (<= '>)
+                  (>  '<=)
+                  (t  nil))))
+        (if (and op
+                 ;; (< x) => t for real x
+                 (> (length arg) 2))
+            (cons op (cdr arg))
+            form))))
 
 (in-package "EXTENSIONS")
 
