@@ -2,7 +2,7 @@
  * NewsGroupSummary.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummary.java,v 1.4 2002-11-11 18:18:51 piso Exp $
+ * $Id: NewsGroupSummary.java,v 1.5 2002-11-15 20:26:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -161,15 +161,14 @@ public final class NewsGroupSummary extends Mailbox
         }
     };
 
-    public void readArticle(Editor editor, Line line)
+    public void readArticle(Editor editor, Line line, boolean useOtherWindow)
     {
         if (line instanceof MailboxLine) {
             editor.setMark(null);
             NewsGroupSummaryEntry entry =
                 (NewsGroupSummaryEntry) ((MailboxLine)line).getMailboxEntry();
             NewsGroupMessageBuffer mb = new NewsGroupMessageBuffer(this, entry);
-            editor.makeNext(mb);
-            editor.activate(mb);
+            activateMessageBuffer(editor, mb, useOtherWindow);
         }
     }
 
