@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.164 2004-11-30 05:27:47 piso Exp $
+ * $Id: Symbol.java,v 1.165 2004-12-06 19:38:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ public class Symbol extends LispObject
 
     public static final Symbol DOUBLE_FLOAT_POSITIVE_INFINITY   = PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-POSITIVE-INFINITY");
     public static final Symbol DOUBLE_FLOAT_NEGATIVE_INFINITY   = PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-NEGATIVE-INFINITY");
-    
+
     // Bit flags.
     private static final int FLAG_SPECIAL           = 0x0001;
     private static final int FLAG_CONSTANT          = 0x0002;
@@ -217,7 +217,7 @@ public class Symbol extends LispObject
         name = new SimpleString(s);
         pkg = NIL;
     }
-    
+
     public Symbol(AbstractString string)
     {
         name = string;
@@ -229,7 +229,7 @@ public class Symbol extends LispObject
         name = new SimpleString(s);
         this.pkg = pkg;
     }
-    
+
     public Symbol(AbstractString string, Package pkg)
     {
         name = string;
@@ -512,7 +512,7 @@ public class Symbol extends LispObject
 
     public String writeToString() throws ConditionThrowable
     {
-        String n = name.getStringValue();
+        final String n = name.getStringValue();
         final LispThread thread = LispThread.currentThread();
         boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
         LispObject printCase = _PRINT_CASE_.symbolValue(thread);
@@ -568,56 +568,70 @@ public class Symbol extends LispObject
                 return invert(n);
         }
         // Printer escaping is enabled.
-        final boolean escape = needsEscape(n, readtableCase, thread);
-        String s = escape ? multipleEscape(n) : n;
-        if (!escape) {
+        final boolean escapeSymbolName = needsEscape(n, readtableCase, thread);
+        String symbolName = escapeSymbolName ? multipleEscape(n) : n;
+        if (!escapeSymbolName) {
             if (readtableCase == Keyword.PRESERVE)
                 ;
             else if (readtableCase == Keyword.INVERT)
-                s = invert(s);
+                symbolName = invert(symbolName);
             else if (printCase == Keyword.DOWNCASE)
-                s = s.toLowerCase();
+                symbolName = symbolName.toLowerCase();
             else if (printCase == Keyword.UPCASE)
-                s = s.toUpperCase();
+                symbolName = symbolName.toUpperCase();
             else if (printCase == Keyword.CAPITALIZE)
-                s = capitalize(s, readtableCase);
+                symbolName = capitalize(symbolName, readtableCase);
         }
         if (pkg == NIL) {
             if (printReadably || _PRINT_GENSYM_.symbolValue(thread) != NIL)
-                return "#:".concat(s);
+                return "#:".concat(symbolName);
             else
-                return s;
+                return symbolName;
         }
         if (pkg == PACKAGE_KEYWORD)
-            return ":".concat(s);
+            return ":".concat(symbolName);
         // "Package prefixes are printed if necessary." (22.1.3.3.1)
         final Package currentPackage = (Package) _PACKAGE_.symbolValue(thread);
         if (pkg == currentPackage)
-            return s;
+            return symbolName;
         if (currentPackage != null && currentPackage.uses(pkg)) {
             // Check for name conflict in current package.
             if (currentPackage.findExternalSymbol(name) == null)
                 if (currentPackage.findInternalSymbol(name) == null)
                     if (((Package)pkg).findExternalSymbol(name) != null)
-                        return s;
+                        return symbolName;
         }
         // Has this symbol been imported into the current package?
         if (currentPackage.findExternalSymbol(name) == this)
-            return s;
+            return symbolName;
         if (currentPackage.findInternalSymbol(name) == this)
-            return s;
+            return symbolName;
         // Package prefix is necessary.
         String packageName = pkg.getName();
-        if (needsEscape(packageName, readtableCase, thread))
+        final boolean escapePackageName = needsEscape(packageName, readtableCase, thread);
+        if (escapePackageName) {
             packageName = multipleEscape(packageName);
-        else if (printCase == Keyword.DOWNCASE)
-            packageName = packageName.toLowerCase();
+        } else {
+            if (readtableCase == Keyword.UPCASE) {
+                if (printCase == Keyword.DOWNCASE)
+                    packageName = packageName.toLowerCase();
+                else if (printCase == Keyword.CAPITALIZE)
+                    packageName = capitalize(packageName, readtableCase);
+            } else if (readtableCase == Keyword.DOWNCASE) {
+                if (printCase == Keyword.UPCASE)
+                    packageName = packageName.toUpperCase();
+                else if (printCase == Keyword.CAPITALIZE)
+                    packageName = capitalize(packageName, readtableCase);
+            } else if (readtableCase == Keyword.INVERT) {
+                packageName = invert(packageName);
+            }
+        }
         StringBuffer sb = new StringBuffer(packageName);
         if (((Package)pkg).findExternalSymbol(n) != null)
             sb.append(':');
         else
             sb.append("::");
-        sb.append(s);
+        sb.append(symbolName);
         return sb.toString();
     }
 
@@ -701,7 +715,7 @@ public class Symbol extends LispObject
             }
         }
         if (!seenNonDigit)
-                return true;
+            return true;
         if (s.length() > 0 && s.charAt(0) == '.') {
             boolean allDots = true;
             for (int i = s.length(); i-- > 1;) {
