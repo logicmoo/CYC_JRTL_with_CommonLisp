@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.18 2003-03-15 17:38:42 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.19 2003-03-16 14:19:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -590,6 +590,12 @@ public class CharacterInputStream extends LispStream
         LispObject number = makeFloat(token);
         if (number != null)
             return number;
+        // The first character was checked in makeObject().
+        for (int i = token.length(); i-- > 1;) {
+            char c = token.charAt(i);
+            if (c < '0' || c > '9')
+                return null;
+        }
         try {
             return new Fixnum(Integer.parseInt(token));
         }
