@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.137 2004-01-31 02:51:16 piso Exp $
+# $Id: Makefile.in,v 1.138 2004-01-31 13:44:45 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -157,6 +157,7 @@ CLASSFILES =	AbstractArray.class \
 		last.class \
 		lisp_implementation_type.class \
 		lisp_implementation_version.class \
+		listen.class \
 		logand.class \
 		logandc1.class \
 		logandc2.class \
