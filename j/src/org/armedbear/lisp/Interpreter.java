@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.82 2005-03-07 19:06:26 piso Exp $
+ * $Id: Interpreter.java,v 1.83 2005-03-19 14:38:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,6 +182,10 @@ public final class Interpreter extends Lisp
                 String arg = args[i];
                 if (arg.equals("--noinit")) {
                     noinit = true;
+                } else if (arg.equals("--batch")) {
+                    _BATCH_MODE_.setSymbolValue(T);
+                } else if (arg.equals("--preload")) {
+                    _PRELOAD_.setSymbolValue(T);
                 } else if (arg.equals("--eval")) {
                     if (i + 1 < args.length) {
                         ++i;
@@ -257,13 +261,7 @@ public final class Interpreter extends Lisp
 
     public void run(String[] args)
     {
-        LispThread thread = null;
-        try {
-            thread = LispThread.currentThread();
-        }
-        catch (Throwable t) {
-            return;
-        }
+        final LispThread thread = LispThread.currentThread();
         commandNumber = 0;
         try {
             Stream out = getStandardOutput();
@@ -292,6 +290,14 @@ public final class Interpreter extends Lisp
             } else {
                 if (args != null)
                     preprocessCommandLineArguments(args);
+                if (_PRELOAD_.getSymbolValue() != NIL) {
+                    thread.execute(PACKAGE_SYS.intern("PRELOAD-PACKAGE"),
+                                   PACKAGE_CL);
+                    thread.execute(PACKAGE_CL.intern("REQUIRE"),
+                                   new SimpleString("LOOP"));
+                    thread.execute(PACKAGE_SYS.intern("PRELOAD-PACKAGE"),
+                                   PACKAGE_SYS);
+                }
                 if (!noinit)
                     processInitializationFile();
                 if (args != null)
@@ -379,6 +385,11 @@ public final class Interpreter extends Lisp
     }
 
     public void kill()
+    {
+        kill(0);
+    }
+
+    public void kill(int status)
     {
         if (jlisp) {
             try {
