@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.15 2003-10-12 13:46:39 piso Exp $
+;;; $Id: defclass.lisp,v 1.16 2003-10-12 16:15:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -508,7 +508,7 @@
    (methods :initform ())     ; :accessor generic-function-methods
    (method-class              ; :accessor generic-function-method-class
     :initarg :method-class)
-   (discriminating-function)  ; :accessor generic-function-discriminating-function
+;;    (discriminating-function)  ; :accessor generic-function-discriminating-function
    (classes-to-emf-table      ; :accessor classes-to-emf-table
     :initform (make-hash-table :test #'equal))))
 
@@ -529,10 +529,12 @@
 (defun (setf generic-function-methods) (new-value gf)
   (setf (slot-value gf 'methods) new-value))
 
-(defun generic-function-discriminating-function (gf)
-  (slot-value gf 'discriminating-function))
-(defun (setf generic-function-discriminating-function) (new-value gf)
-  (setf (slot-value gf 'discriminating-function) new-value))
+;; (defun generic-function-discriminating-function (gf)
+;;   (slot-value gf 'discriminating-function))
+;; (defun (setf generic-function-discriminating-function) (new-value gf)
+;;   (setf (slot-value gf 'discriminating-function) new-value))
+(defsetf generic-function-discriminating-function
+  %set-generic-function-discriminating-function)
 
 (defun generic-function-method-class (gf)
   (slot-value gf 'method-class))
