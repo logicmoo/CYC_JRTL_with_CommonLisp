@@ -80,6 +80,7 @@
     <li><a href="commands.html#dirLimit">dirLimit</a></li>
     <li><a href="commands.html#dirMoveFile">dirMoveFile</a></li>
     <li><a href="commands.html#dirOpenFile">dirOpenFile</a></li>
+    <li><a href="commands.html#dirOpenFileAndKillDirectory">dirOpenFileAndKillDirectory</a></li>
     <li><a href="commands.html#dirRescan">dirRescan</a></li>
     <li><a href="commands.html#dirTagFile">dirTagFile</a></li>
     <li><a href="commands.html#dirUnlimit">dirUnlimit</a></li>
@@ -1079,11 +1080,25 @@ You can specify either a filename or a directory as the destination.
 
 <a name="dirOpenFile">dirOpenFile</a><dl><dd>
 <p>
-Opens the file or directory at the location of the caret or mouse click.
+Opens the file or directory at the location of the caret or mouse click in a
+directory buffer.
 <p>
 <b>Default key mapping:</b> Enter, Ctrl Shift G, Double Mouse-1, or Mouse-2 in directory buffers
 <p>
-<b>See also:</b> <a href="directories.html">Directory Buffers</a>.
+<b>See also:</b> <a href="#dirOpenFileAndKillDirectory">dirOpenFileAndKillDirectory</a>,
+<a href="directories.html">Directory Buffers</a>.
+<br><br>
+</dl><!--<hr>-->
+
+<a name="dirOpenFileAndKillDirectory">dirOpenFileAndKillDirectory</a><dl><dd>
+<p>
+Opens the file or directory at the location of the caret or mouse click in a
+directory buffer and then closes the directory buffer.
+<p>
+<b>Default key mapping:</b> Ctrl Enter in directory buffers
+<p>
+<b>See also:</b> <a href="#dirOpenFile">dirOpenFile</a>,
+<a href="directories.html">Directory Buffers</a>.
 <br><br>
 </dl><!--<hr>-->
 
