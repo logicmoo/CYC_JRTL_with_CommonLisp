@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.462 2003-10-06 00:25:45 piso Exp $
+ * $Id: Primitives.java,v 1.463 2003-10-06 17:15:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1431,7 +1431,8 @@ public final class Primitives extends Module
 
     // ### %defconstant
     private static final Primitive3 _DEFCONSTANT =
-        new Primitive3("%defconstant", PACKAGE_SYS, false) {
+        new Primitive3("%defconstant", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -1442,6 +1443,7 @@ public final class Primitives extends Module
             else if (third != NIL)
                 throw new ConditionThrowable(new TypeError(third, "string"));
             symbol.setSymbolValue(second);
+            symbol.setSpecial(true);
             symbol.setConstant(true);
             return symbol;
         }
