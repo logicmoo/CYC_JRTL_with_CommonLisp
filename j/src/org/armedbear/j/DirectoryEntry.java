@@ -1,8 +1,8 @@
 /*
  * DirectoryEntry.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: DirectoryEntry.java,v 1.6 2003-07-04 18:04:47 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: DirectoryEntry.java,v 1.7 2004-05-21 16:42:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,8 +65,7 @@ public final class DirectoryEntry
     }
 
     // Constructor for internal format.
-    public DirectoryEntry(String name, long date, long size,
-        boolean isDirectory)
+    public DirectoryEntry(String name, long date, long size, boolean isDirectory)
     {
         this.name = name;
         this.date = date;
@@ -79,7 +78,7 @@ public final class DirectoryEntry
     // Ignore strings that aren't really directory entries.
     // Apply filter (if any).
     public static DirectoryEntry getDirectoryEntry(String s,
-        DirectoryFilenameFilter filter)
+                                                   DirectoryFilenameFilter filter)
     {
         if (s.length() == 0)
             return null;
@@ -90,9 +89,10 @@ public final class DirectoryEntry
             return null;
         if (c == 'l' && s.startsWith("ls "))
             return null;
-        if (filter != null)
-            if (!filter.accepts(getName(s)))
+        if (filter != null) {
+            if (c != 'd' && !filter.accepts(getName(s)))
                 return null;
+        }
         return new DirectoryEntry(s, c);
     }
 
