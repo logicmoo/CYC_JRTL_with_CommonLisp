@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.48 2003-06-22 16:15:14 piso Exp $
+ * $Id: Symbol.java,v 1.49 2003-07-08 15:38:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,7 +92,9 @@ public class Symbol extends LispObject
     public static final Symbol UNSPECIFIED          = PACKAGE_CL.addExternalSymbol("*");
 
     // Condition types.
+    public static final Symbol CONDITION            = PACKAGE_CL.addExternalSymbol("CONDITION");
     public static final Symbol SIMPLE_CONDITION     = PACKAGE_CL.addExternalSymbol("SIMPLE-CONDITION");
+    public static final Symbol SERIOUS_CONDITION    = PACKAGE_CL.addExternalSymbol("SERIOUS-CONDITION");
 
     public static final Symbol END_OF_FILE          = PACKAGE_CL.addExternalSymbol("END-OF-FILE");
     public static final Symbol ERROR                = PACKAGE_CL.addExternalSymbol("ERROR");
