@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.3 2002-10-11 01:42:37 piso Exp $
+ * $Id: Directory.java,v 1.4 2002-10-11 16:11:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -266,19 +266,7 @@ public final class Directory extends Buffer
             topLineNumbers.add(new Integer(topLineNumber));
         }
 
-        try {
-            lockWrite();
-        }
-        catch (InterruptedException e) {
-            Log.error(e);
-            return; // Shouldn't happen.
-        }
-        try {
-            empty();
-        }
-        finally {
-            unlockWrite();
-        }
+        empty();
         entries.clear();
         numMarked = 0;
         setListing(null);
@@ -949,19 +937,7 @@ public final class Directory extends Buffer
             history.truncate();
             history.append(getFile(), name, offset);
             history.reset();
-            try {
-                lockWrite();
-            }
-            catch (InterruptedException e) {
-                Log.error(e);
-                return; // Shouldn't happen.
-            }
-            try {
-                empty();
-            }
-            finally {
-                unlockWrite();
-            }
+            empty();
             entries.clear();
             numMarked = 0;
             setListing(null);
