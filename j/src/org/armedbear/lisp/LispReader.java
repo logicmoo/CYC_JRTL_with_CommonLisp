@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.13 2004-03-12 01:11:09 piso Exp $
+ * $Id: LispReader.java,v 1.14 2004-03-12 01:36:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,6 +107,29 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             return stream.readSharp();
+        }
+    };
+
+    public static final ReaderMacroFunction BACKQUOTE_MACRO =
+        new ReaderMacroFunction("backquote-macro", PACKAGE_SYS, false,
+                                "stream character")
+    {
+        public LispObject execute(Stream stream, char ignored)
+            throws ConditionThrowable
+        {
+            return new Cons(Symbol.BACKQUOTE,
+                            new Cons(stream.read(true, NIL, true)));
+        }
+    };
+
+    public static final ReaderMacroFunction COMMA_MACRO =
+        new ReaderMacroFunction("comma-macro", PACKAGE_SYS, false,
+                                "stream character")
+    {
+        public LispObject execute(Stream stream, char ignored)
+            throws ConditionThrowable
+        {
+            return stream.readComma();
         }
     };
 }
