@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.18 2003-05-18 19:24:18 piso Exp $
+ * $Id: Jdb.java,v 1.19 2003-05-19 00:45:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -934,7 +934,7 @@ public final class Jdb extends Buffer implements JdbConstants
 
     public void dispose()
     {
-        stop();
+        killVM();
         if (controlDialog != null) {
             controlDialog.dispose();
             controlDialog = null;
@@ -965,7 +965,7 @@ public final class Jdb extends Buffer implements JdbConstants
 
     private void quit()
     {
-        stop();
+        killVM();
         removeAnnotations();
         // Copy editor list since unsplitWindow() may close an editor.
         ArrayList editors = new ArrayList();
@@ -989,14 +989,14 @@ public final class Jdb extends Buffer implements JdbConstants
 
     private void restart()
     {
-        stop();
+        killVM();
         removeAnnotations();
         initializeBreakpoints();
         startProcess();
         fireContextChanged();
     }
 
-    private void stop()
+    private synchronized void killVM()
     {
         if (vm != null) {
             try {
