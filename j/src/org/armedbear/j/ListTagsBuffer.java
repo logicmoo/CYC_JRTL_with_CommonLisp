@@ -2,7 +2,7 @@
  * ListTagsBuffer.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: ListTagsBuffer.java,v 1.1.1.1 2002-09-24 16:07:45 piso Exp $
+ * $Id: ListTagsBuffer.java,v 1.2 2002-10-10 17:51:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,15 +64,27 @@ public final class ListTagsBuffer extends Buffer
 
     private void load(List tags)
     {
-        lastFileName = lastClassName = null;
-        appendLine("Tag: \"" + name + '"');
-        Iterator iter = tags.iterator();
-        while (iter.hasNext()) {
-            Tag tag = (Tag) iter.next();
-            appendTag(tag);
+        try {
+            lockWrite();
         }
-        renumber();
-        setLoaded(true);
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            lastFileName = lastClassName = null;
+            appendLine("Tag: \"" + name + '"');
+            Iterator iter = tags.iterator();
+            while (iter.hasNext()) {
+                Tag tag = (Tag) iter.next();
+                appendTag(tag);
+            }
+            renumber();
+            setLoaded(true);
+        }
+        finally {
+            unlockWrite();
+        }
     }
 
     private void appendTag(Tag tag)
