@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.56 2004-08-19 18:15:17 piso Exp $
+ * $Id: LispThread.java,v 1.57 2004-09-01 14:12:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ public final class LispThread extends LispObject
 
     private final Thread javaThread;
     private boolean destroyed;
-    private String name = "Anonymous thread" ;
+    private final LispObject name;
     public Environment dynEnv;
     public LispObject[] _values;
     private boolean threadInterrupted;
@@ -76,9 +76,10 @@ public final class LispThread extends LispObject
     private LispThread(Thread javaThread)
     {
         this.javaThread = javaThread;
+        name = new SimpleString(javaThread.getName());
     }
 
-    private LispThread(final Function fun, String name)
+    private LispThread(final Function fun, LispObject name)
     {
         Runnable r = new Runnable() {
             public void run()
@@ -634,9 +635,15 @@ public final class LispThread extends LispObject
         }
     }
 
-    public String writeToString()
+    public String writeToString() throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer("#<THREAD @ #x");
+        StringBuffer sb = new StringBuffer("#<THREAD ");
+        if (name != NIL) {
+            sb.append('"');
+            sb.append(name.getStringValue());
+            sb.append("\" ");
+        }
+        sb.append("@ #x");
         sb.append(Integer.toHexString(hashCode()));
         sb.append(">");
         return sb.toString();
@@ -651,14 +658,14 @@ public final class LispThread extends LispObject
             final int length = args.length;
             if (length == 0)
                 signal(new WrongNumberOfArgumentsException(this));
-            String name = "Anonymous thread"; // Default.
+            LispObject name = NIL;
             if (length > 1) {
                 if ((length - 1) % 2 != 0)
                     signal(new ProgramError("Odd number of keyword arguments."));
                 if (length > 3)
                     signal(new WrongNumberOfArgumentsException(this));
                 if (args[1] == Keyword.NAME)
-                    name = args[2].getStringValue();
+                    name = args[2].STRING();
                 else
                     signal(new ProgramError("Unrecognized keyword argument " +
                                             args[1].writeToString() + "."));
@@ -689,7 +696,7 @@ public final class LispThread extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return new SimpleString (((LispThread)arg).name);
+                return ((LispThread)arg).name;
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, "Lisp thread"));
