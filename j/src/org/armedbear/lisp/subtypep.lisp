@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.33 2003-12-27 20:50:29 piso Exp $
+;;; $Id: subtypep.lisp,v 1.34 2003-12-27 21:29:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -228,7 +228,8 @@
 (defun subtypep (type1 type2)
   (when (or (eq type1 type2)
             (null type1)
-            (eq type2 t))
+            (eq type2 t)
+            (eq type2 #.(find-class t)))
     (return-from subtypep (values t t)))
   (when (and (atom type1) (atom type2))
     (let* ((classp-1 (classp type1))
@@ -306,8 +307,17 @@
            (return-from subtypep (values t t)))
           ((null (or i1 i2))
            (return-from subtypep (values (simple-subtypep t1 t2) t)))
-          ((eq t2 (find-class t1 nil))
-           (return-from subtypep (values t t)))
+          ((classp t2)
+           (cond ((eq t2 (find-class t1 nil))
+                  (values t t))
+                 ((and (eq t2 #.(find-class 'array))
+                       (memq t1 '(array simple-array vector simple-vector string
+                                  simple-string simple-base-string bit-vector
+                                  simple-bit-vector)))
+                  (values t t))
+                 ((and (eq t2 #.(find-class 'bit-vector))
+                       (eq t1 'simple-bit-vector))
+                  (values t t))))
           ((eq t2 'sequence)
            (cond ((memq t1 '(null cons list))
                   (values t t))
