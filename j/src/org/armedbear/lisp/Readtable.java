@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.14 2004-03-12 01:38:13 piso Exp $
+ * $Id: Readtable.java,v 1.15 2004-03-12 01:58:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ public final class Readtable extends LispObject
     {
         readerMacroFunctions[';'] = LispReader.READ_COMMENT;
         readerMacroFunctions['"'] = LispReader.READ_STRING;
+        readerMacroFunctions['('] = LispReader.READ_LIST;
         readerMacroFunctions[')'] = LispReader.READ_RIGHT_PAREN;
         readerMacroFunctions['\''] = LispReader.READ_QUOTE;
         readerMacroFunctions['#'] = LispReader.READ_DISPATCH_CHAR;
