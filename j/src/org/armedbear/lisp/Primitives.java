@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.121 2003-03-14 18:53:28 piso Exp $
+ * $Id: Primitives.java,v 1.122 2003-03-14 20:09:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -885,15 +885,11 @@ public final class Primitives extends Module
         {
             final int length = array.length;
             if (length == 2)
-                return Fixnum.getValue(array[0]) < Fixnum.getValue(array[1]) ? T : NIL;
+                return array[0].isLessThan(array[1]);
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
-            long[] values = new long[length];
-            // Make sure the arguments are all numbers.
-            for (int i = 0; i < length; i++)
-                values[i] = Fixnum.getValue(array[i]);
             for (int i = 1; i < length; i++) {
-                if (values[i] <= values[i-1])
+                if (array[i].isLessThanOrEqualTo(array[i-1]) != NIL)
                     return NIL;
             }
             return T;
@@ -929,15 +925,11 @@ public final class Primitives extends Module
         {
             final int length = array.length;
             if (length == 2)
-                return Fixnum.getValue(array[0]) > Fixnum.getValue(array[1]) ? T : NIL;
+                return array[0].isGreaterThan(array[1]);
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
-            long[] values = new long[length];
-            // Make sure all of the arguments are numbers.
-            for (int i = 0; i < length; i++)
-                values[i] = Fixnum.getValue(array[i]);
             for (int i = 1; i < length; i++) {
-                if (values[i] >= values[i-1])
+                if (array[i].isGreaterThanOrEqualTo(array[i-1]) != NIL)
                     return NIL;
             }
             return T;
