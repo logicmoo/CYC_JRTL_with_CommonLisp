@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.15 2004-03-01 18:01:30 piso Exp $
+;;; $Id: debug.lisp,v 1.16 2004-03-03 01:46:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 (defun show-restarts (restarts stream)
   (when restarts
     (fresh-line stream)
-    (format stream "Restarts:~%")
+    (%format stream "Restarts:~%")
     (let ((max-name-len 0))
       (dolist (restart restarts)
         (let ((name (restart-name restart)))
@@ -52,11 +52,14 @@
             (terpri stream))
           (incf count))))))
 
+(defun internal-debug ()
+  (loop
+    (tpl::repl)))
+
 (defun debug-loop ()
   (let ((*debug-level* (1+ *debug-level*)))
     (show-restarts (compute-restarts) *debug-io*)
-    (loop
-      (tpl::repl))))
+    (internal-debug)))
 
 (defun invoke-debugger (condition)
   (when *debugger-hook*

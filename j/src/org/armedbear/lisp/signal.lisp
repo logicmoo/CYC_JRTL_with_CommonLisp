@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: signal.lisp,v 1.3 2004-03-01 17:26:39 piso Exp $
+;;; $Id: signal.lisp,v 1.4 2004-03-03 01:47:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -70,9 +70,9 @@
     (when (typep condition 'error)
       (let ((*current-error-depth* (1+ *current-error-depth*)))
         (cond ((> *current-error-depth* *maximum-error-depth*)
-               (%format t "~%Help! Maximum error depth exceeded (~D nested errors).~%"
+               (%format t "~%Maximum error depth exceeded (~D nested errors).~%"
                         *current-error-depth*)
-               (debug-loop))
+               (internal-debug))
               (t
                (setf *saved-backtrace* (backtrace-as-list))
                (invoke-debugger condition)))))
