@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.287 2003-07-07 16:12:34 piso Exp $
+ * $Id: Primitives.java,v 1.288 2003-07-07 16:21:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2634,39 +2634,21 @@ public final class Primitives extends Module
         }
     };
 
-    // ### make-package
-    // make-package package-name &key nicknames use => package
-    private static final Primitive MAKE_PACKAGE =
-        new Primitive("make-package") {
-        public LispObject execute(LispObject[] args) throws LispError
+    // ### %make-package
+    // %make-package package-name nicknames use => package
+    private static final Primitive3 _MAKE_PACKAGE =
+        new Primitive3("%make-package", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws LispError
         {
-            if (args.length == 0)
-                throw new WrongNumberOfArgumentsException(this);
-            if (args.length > 1)
-                if ((args.length - 1) % 2 != 0)
-                    throw new ProgramError("odd number of keyword arguments");
-            LispObject arg = args[0];
-            String packageName = javaString(arg);
+            String packageName = javaString(first);
             Package pkg =
                 Packages.findPackage(packageName);
             if (pkg != null)
                 throw new LispError("package " + packageName +
                     " already exists");
-            // Defaults.
-            LispObject nicknames = NIL;
-            LispObject use = NIL;
-            // Process keyword arguments (if any).
-            for (int i = 1; i < args.length; i += 2) {
-                LispObject keyword = checkSymbol(args[i]);
-                LispObject value = args[i+1];
-                if (keyword == Keyword.NICKNAMES)
-                    nicknames = value;
-                else if (keyword == Keyword.USE)
-                    use = value;
-                else
-                    throw new ProgramError("unrecognized keyword argument " +
-                                           keyword);
-            }
+            LispObject nicknames = checkList(second);
             if (nicknames != NIL) {
                 LispObject list = checkList(nicknames);
                 while (list != NIL) {
@@ -2678,6 +2660,7 @@ public final class Primitives extends Module
                     list = list.cdr();
                 }
             }
+            LispObject use = checkList(third);
             if (use != NIL) {
                 LispObject list = checkList(use);
                 while (list != NIL) {
