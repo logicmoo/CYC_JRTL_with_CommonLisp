@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.99 2004-12-10 15:37:04 piso Exp $
+ * $Id: Fixnum.java,v 1.100 2004-12-11 17:40:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -416,6 +416,11 @@ public final class Fixnum extends LispObject
         signal(new TypeError(obj, "number"));
         // Not reached.
         return false;
+    }
+
+    public boolean isLessThan(int n)
+    {
+        return value < n;
     }
 
     public boolean isLessThan(LispObject obj) throws ConditionThrowable
