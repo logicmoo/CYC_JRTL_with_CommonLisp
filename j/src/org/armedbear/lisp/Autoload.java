@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.14 2003-06-20 18:56:09 piso Exp $
+ * $Id: Autoload.java,v 1.15 2003-06-20 19:15:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,14 +164,19 @@ public final class Autoload extends Function
         autoload("char-not-lessp", "CharacterFunctions");
         autoload("char=", "CharacterFunctions");
         autoload("coerce", "coerce");
+        autoload("delete-package", "PackageFunctions");
         autoload("file-write-date", "Time");
         autoload("get-internal-real-time", "Time");
         autoload("get-universal-time", "Time");
         autoload("gethash", "HashTable");
         autoload("make-two-way-stream", "TwoWayStream");
+        autoload("package-nicknames", "PackageFunctions");
+        autoload("package-use-list", "PackageFunctions");
+        autoload("package-used-by-list", "PackageFunctions");
         autoload("puthash", "HashTable");
         autoload("remhash", "HashTable");
         autoload("room", "room");
+        autoload("shadow", "PackageFunctions");
         autoload("sxhash", "HashTable");
         autoload("two-way-stream-input-stream", "TwoWayStream");
         autoload("two-way-stream-output-stream", "TwoWayStream");
