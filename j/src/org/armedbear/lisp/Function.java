@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.36 2004-05-05 18:09:08 piso Exp $
+ * $Id: Function.java,v 1.37 2004-05-05 18:32:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,24 +23,24 @@ package org.armedbear.lisp;
 
 public abstract class Function extends Functional
 {
-    private final String name;
+    private final Symbol symbol;
 
     private int callCount;
 
     protected Function()
     {
-        name = null;
+        symbol = null;
     }
 
     public Function(String name)
     {
-        this.name = name != null ? name.toUpperCase() : null;
         if (name != null) {
-            Symbol symbol = Symbol.addFunction(this.name, this);
+            symbol = Symbol.addFunction(name.toUpperCase(), this);
             if (cold)
                 symbol.setBuiltInFunction(true);
             setLambdaName(symbol);
-        }
+        } else
+            symbol = null;
     }
 
     public Function(String name, String arglist)
@@ -68,11 +68,10 @@ public abstract class Function extends Functional
     public Function(String name, Package pkg, boolean exported,
                     String arglist, String docstring)
     {
-        this.name = name != null ? name.toUpperCase() : null;
         if (arglist instanceof String)
             setArglist(new SimpleString(arglist));
         if (name != null) {
-            Symbol symbol = pkg.intern(this.name);
+            symbol = pkg.intern(name.toUpperCase());
             symbol.setSymbolFunction(this);
             if (cold)
                 symbol.setBuiltInFunction(true);
@@ -93,7 +92,13 @@ public abstract class Function extends Functional
                     Debug.assertTrue(false);
                 }
             }
-        }
+        } else
+            symbol = null;
+    }
+
+    public Function(Symbol symbol)
+    {
+        this.symbol = symbol;
     }
 
     public LispObject typeOf()
@@ -119,7 +124,7 @@ public abstract class Function extends Functional
 
     public final String getName()
     {
-        return name;
+        return symbol != null ? symbol.getName() : null;
     }
 
     // Primitive0
@@ -163,12 +168,12 @@ public abstract class Function extends Functional
         return signal(new WrongNumberOfArgumentsException(this));
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
-        if (name != null) {
+        if (symbol != null) {
             StringBuffer sb = new StringBuffer("#<FUNCTION");
             sb.append(' ');
-            sb.append(name);
+            sb.append(symbol.writeToString());
             sb.append('>');
             return sb.toString();
         }
