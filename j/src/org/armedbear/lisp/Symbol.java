@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.46 2003-06-20 03:01:00 piso Exp $
+ * $Id: Symbol.java,v 1.47 2003-06-21 19:43:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,8 +128,9 @@ public class Symbol extends LispObject
 
     public static final Symbol addFunction(String name, LispObject obj)
     {
-        Symbol symbol = export(name, PACKAGE_CL);
-        symbol.setSymbolFunction(obj);
+        Symbol symbol = PACKAGE_CL.intern(name);
+        symbol.flags = EXTERNAL;
+        symbol.function = obj;
         return symbol;
     }
 
