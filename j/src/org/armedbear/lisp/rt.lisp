@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.70 2003-03-30 19:37:53 piso Exp $
+;;; $Id: rt.lisp,v 1.71 2003-04-01 19:39:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -711,6 +711,7 @@
                               "multiple-value-bind"
                               "multiple-value-call"
                               "multiple-value-list"
+                              "multiple-value-prog1"
                               "nil"
                               "not-and-null"
                               "notany"
