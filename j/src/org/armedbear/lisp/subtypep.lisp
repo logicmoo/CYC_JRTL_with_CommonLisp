@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.46 2004-02-13 00:29:40 piso Exp $
+;;; $Id: subtypep.lisp,v 1.47 2004-02-13 01:05:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -166,7 +166,7 @@
         ((equal dim1 dim2)
          t)
         ((integerp dim2)
-         (and (consp dim1) (= (length dim1) dim2)))
+         (and (listp dim1) (= (length dim1) dim2)))
         ((eql dim1 0)
          (null dim2))
         ((integerp dim1)
