@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.70 2004-02-08 02:40:11 piso Exp $
+;;; $Id: clos.lisp,v 1.71 2004-02-08 16:12:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1312,6 +1312,7 @@
 (defun sub-specializer-p (c1 c2 c-arg)
   (find c2 (cdr (memq c1 (class-precedence-list c-arg)))))
 
+#+nil
 (defun std-method-more-specific-p (method1 method2 required-classes)
   (mapc #'(lambda (spec1 spec2 arg-class)
            (unless (eq spec1 spec2)
@@ -1326,6 +1327,21 @@
         (method-specializers method2)
         required-classes)
   nil)
+
+(defun std-method-more-specific-p (method1 method2 required-classes)
+  (do ((specializers-1 (method-specializers method1) (cdr specializers-1))
+       (specializers-2 (method-specializers method2) (cdr specializers-2))
+       (classes required-classes (cdr classes)))
+      ((null specializers-1) nil)
+    (let ((spec1 (car specializers-1))
+          (spec2 (car specializers-2)))
+      (unless (eq spec1 spec2)
+        (cond ((eql-specializer-p spec1)
+               (return t))
+              ((eql-specializer-p spec2)
+               (return nil))
+              (t
+               (return (sub-specializer-p spec1 spec2 (car classes)))))))))
 
 (defun primary-method-p (method)
   (null (intersection '(:before :after :around) (method-qualifiers method))))
