@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.35 2004-08-04 02:01:23 piso Exp $
+;;; $Id: top-level.lisp,v 1.36 2004-08-18 13:53:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -168,8 +168,6 @@
                        :directory *default-pathname-defaults*))
   (values))
 
-(defvar *last-files-loaded* nil)
-
 (defun tokenize (string)
   (do* ((res nil)
         (string (string-left-trim " " string)
@@ -179,6 +177,8 @@
     (unless end
       (setf end (length string)))
     (push (subseq string 0 end) res)))
+
+(defvar *last-files-loaded* nil)
 
 (defun ld-command (args)
   (let ((files (if args (tokenize args) *last-files-loaded*)))
@@ -190,6 +190,14 @@
   (let ((files (tokenize args)))
     (dolist (file files)
       (compile-file file))))
+
+(defvar *last-files-cloaded* nil)
+
+(defun cload-command (args)
+  (let ((files (if args (tokenize args) *last-files-cloaded*)))
+    (setf *last-files-cloaded* files)
+    (dolist (file files)
+      (load (compile-file file)))))
 
 (defun rq-command (args)
   (let ((modules (tokenize (string-upcase args))))
@@ -244,6 +252,7 @@
     ("bt" nil backtrace-command "backtrace n stack frames (default all)")
     ("cd" nil cd-command "change default directory")
     ("cf" nil cf-command "compile file(s)")
+    ("cload" "cl" cload-command "compile and load file(s)")
     ("continue" "cont" continue-command "invoke restart n")
     ("describe" "de" describe-command "describe an object")
     ("error" "err" error-command "print the current error message")
