@@ -2,7 +2,7 @@
  * SendMail.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SendMail.java,v 1.4 2002-12-03 17:36:01 piso Exp $
+ * $Id: SendMail.java,v 1.5 2003-02-13 00:33:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -536,7 +536,7 @@ public final class SendMail extends Buffer
                 if (line.getText().equals(HEADER_SEPARATOR)) {
                     Position pos = new Position(line, 0);
                     insertString(pos,
-                        "Attachment: " + file.netPath() + "\n");
+                        "Attachment: " + file.canonicalPath() + "\n");
                     break;
                 }
             }
