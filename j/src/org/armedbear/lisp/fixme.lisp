@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: fixme.lisp,v 1.23 2004-07-12 19:18:00 piso Exp $
+;;; $Id: fixme.lisp,v 1.24 2004-07-13 00:57:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -47,18 +47,10 @@
               (setf jvm::*speed* val))
              (SAFETY
               (setf jvm::*safety* val)))))))
-    (INLINE
+    ((INLINE NOTINLINE)
      (dolist (name (cdr declaration-specifier))
-       (format t "inline ~S~%" name)
        (when (symbolp name) ; FIXME Need to support non-symbol function names.
-         (setf (get name 'jvm::%inline) t)
-         (remprop name 'jvm::%notinline))))
-    (NOTINLINE
-     (dolist (name (cdr declaration-specifier))
-       (format t "notinline ~S~%" name)
-       (when (symbolp name) ; FIXME Need to support non-symbol function names.
-         (setf (get name 'jvm::%notinline) t)
-         (remprop name 'jvm::%inline))))))
+         (setf (get name 'jvm::%inline) (car declaration-specifier)))))))
 
 (defun disassemble (fn)
   (%format t "; DISASSEMBLE is not implemented.")
