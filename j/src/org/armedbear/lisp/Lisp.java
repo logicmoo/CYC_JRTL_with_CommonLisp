@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.212 2004-03-03 19:46:41 piso Exp $
+ * $Id: Lisp.java,v 1.213 2004-03-06 04:04:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1315,8 +1315,9 @@ public abstract class Lisp
         catch (ConditionThrowable t) {
             Debug.trace(t);
         }
-        symbol.setConstant(true);
+        symbol.setSpecial(true);
         symbol.setSymbolValue(value);
+        symbol.setConstant(true);
         return symbol;
     }
 
@@ -1458,8 +1459,11 @@ public abstract class Lisp
     };
 
     // ### t
+    // We can't use exportConstant() here since we need to set T's value to
+    // itself.
     public static final Symbol T = PACKAGE_CL.addExternalSymbol("T");
     static {
+        T.setSpecial(true);
         T.setSymbolValue(T);
         T.setConstant(true);
     }
