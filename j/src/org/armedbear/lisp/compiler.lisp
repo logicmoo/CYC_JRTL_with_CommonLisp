@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.25 2003-06-22 20:59:10 piso Exp $
+;;; $Id: compiler.lisp,v 1.26 2003-06-24 18:22:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -218,7 +218,7 @@
            (setq expr definition))
           (t
            (error 'type-error)))
-    (setq result (coerce (compile-sexp expr) 'function))
+    (setq result (coerce-to-function (compile-sexp expr)))
     (when (and name (functionp result))
       (%set-lambda-name result name)
       (%set-call-count result (%call-count definition))
