@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.4 2003-07-03 01:57:36 piso Exp $
+ * $Id: LispAPI.java,v 1.5 2003-07-03 18:05:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,6 +80,19 @@ public final class LispAPI extends Lisp
         }
     }
 
+    public static final Line checkLine(LispObject obj)
+        throws LispError
+    {
+        if (obj == null)
+            throw new NullPointerException();
+        try {
+            return (Line) ((JavaObject)obj).getObject();
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "line");
+        }
+    }
+
     // ### current-editor
     private static final Primitive0 CURRENT_EDITOR =
         new Primitive0("current-editor", PACKAGE_J, true) {
@@ -139,6 +152,28 @@ public final class LispAPI extends Lisp
                 return new LispString(file.canonicalPath());
             }
             return NIL;
+        }
+    };
+
+    // ### current-line
+    private static final Primitive0 CURRENT_LINE =
+        new Primitive0("current-line", PACKAGE_J, true) {
+        public LispObject execute()
+        {
+            Editor editor = Editor.currentEditor();
+            Position dot = Editor.currentEditor().getDot();
+            if (dot != null)
+                return new JavaObject(dot.getLine());
+            return NIL;
+        }
+    };
+
+    // ### line-flags
+    private static final Primitive1 LINE_FLAGS =
+        new Primitive1("LINE-FLAGS", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return number(checkLine(arg).flags());
         }
     };
 
