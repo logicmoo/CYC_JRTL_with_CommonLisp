@@ -1,7 +1,7 @@
 ;;; defpackage.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defpackage.lisp,v 1.2 2003-07-06 20:04:16 piso Exp $
+;;; $Id: defpackage.lisp,v 1.3 2003-07-07 20:25:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,14 +19,19 @@
 
 (in-package "SYSTEM")
 
-;; From CMUCL.
+;;; From CMUCL.
 
 (defun stringify-names (names)
   (mapcar #'string names))
 
-;; FIXME
+;; FIXME Better error reporting!
 (defun check-disjoint (&rest args)
-  nil)
+  (let ((rest-args args))
+    (dolist (arg1 args)
+      (setf rest-args (cdr rest-args))
+      (dolist (arg2 rest-args)
+        (when (remove-duplicates (intersection arg1 arg2 :test #'string=))
+          (error 'program-error))))))
 
 (defmacro defpackage (package &rest options)
   "Defines a new package called PACKAGE.  Each of OPTIONS should be one of the
