@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: dolist.java,v 1.3 2003-11-19 17:27:20 piso Exp $
+ * $Id: dolist.java,v 1.4 2003-11-19 17:34:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,6 +81,9 @@ public final class dolist extends SpecialOperator
                 thread.bindSpecial(var, null);
                 binding = thread.getDynamicEnvironment().getBinding(var);
                 ext.declareSpecial(var);
+            } else if (var.isSpecialVariable()) {
+                thread.bindSpecial(var, null);
+                binding = thread.getDynamicEnvironment().getBinding(var);
             } else {
                 ext.bind(var, null);
                 binding = ext.getBinding(var);
