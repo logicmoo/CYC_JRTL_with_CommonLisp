@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Ratio.java,v 1.41 2004-05-27 17:00:13 piso Exp $
+ * $Id: Ratio.java,v 1.42 2004-06-13 18:46:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -292,7 +292,7 @@ public final class Ratio extends LispObject
             return (numerator.equals(((Ratio)obj).numerator) &&
                     denominator.equals(((Ratio)obj).denominator));
         if (obj instanceof LispFloat)
-            return floatValue() == ((LispFloat)obj).getValue();
+            return isEqualTo(((LispFloat)obj).rational());
         if (obj.numberp())
             return false;
         signal(new TypeError(obj, "number"));
@@ -320,10 +320,9 @@ public final class Ratio extends LispObject
             BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
             return n1.compareTo(n2) < 0;
         }
-        if (obj instanceof LispFloat) {
-            return floatValue() < ((LispFloat)obj).getValue();
-        }
-        signal(new TypeError(obj, "real"));
+        if (obj instanceof LispFloat)
+            return isLessThan(((LispFloat)obj).rational());
+        signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -343,10 +342,9 @@ public final class Ratio extends LispObject
             BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
             return n1.compareTo(n2) > 0;
         }
-        if (obj instanceof LispFloat) {
-            return floatValue() > ((LispFloat)obj).getValue();
-        }
-        signal(new TypeError(obj, "real"));
+        if (obj instanceof LispFloat)
+            return isGreaterThan(((LispFloat)obj).rational());
+        signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -366,10 +364,9 @@ public final class Ratio extends LispObject
             BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
             return n1.compareTo(n2) <= 0;
         }
-        if (obj instanceof LispFloat) {
-            return floatValue() <= ((LispFloat)obj).getValue();
-        }
-        signal(new TypeError(obj, "real"));
+        if (obj instanceof LispFloat)
+            return isLessThanOrEqualTo(((LispFloat)obj).rational());
+        signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -389,10 +386,9 @@ public final class Ratio extends LispObject
             BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
             return n1.compareTo(n2) >= 0;
         }
-        if (obj instanceof LispFloat) {
-            return floatValue() >= ((LispFloat)obj).getValue();
-        }
-        signal(new TypeError(obj, "real"));
+        if (obj instanceof LispFloat)
+            return isGreaterThanOrEqualTo(((LispFloat)obj).rational());
+        signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
