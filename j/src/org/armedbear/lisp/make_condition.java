@@ -2,7 +2,7 @@
  * make_condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_condition.java,v 1.14 2004-01-18 20:10:02 piso Exp $
+ * $Id: make_condition.java,v 1.15 2004-02-02 19:23:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,10 +49,20 @@ public final class make_condition extends Primitive2
             return new LispError(initArgs);
         if (type == Symbol.FILE_ERROR)
             return new FileError(initArgs);
+        if (type == Symbol.FLOATING_POINT_INEXACT)
+            return new FloatingPointInexact(initArgs);
+        if (type == Symbol.FLOATING_POINT_INVALID_OPERATION)
+            return new FloatingPointInvalidOperation(initArgs);
+        if (type == Symbol.FLOATING_POINT_OVERFLOW)
+            return new FloatingPointOverflow(initArgs);
+        if (type == Symbol.FLOATING_POINT_UNDERFLOW)
+            return new FloatingPointUnderflow(initArgs);
         if (type == Symbol.PACKAGE_ERROR)
             return new PackageError(initArgs);
         if (type == Symbol.PARSE_ERROR)
             return new ParseError(initArgs);
+        if (type == Symbol.PRINT_NOT_READABLE)
+            return new PrintNotReadable(initArgs);
         if (type == Symbol.PROGRAM_ERROR)
             return new ProgramError(initArgs);
         if (type == Symbol.READER_ERROR)
@@ -67,8 +77,12 @@ public final class make_condition extends Primitive2
             return new SimpleTypeError(initArgs);
         if (type == Symbol.SIMPLE_WARNING)
             return new SimpleWarning(initArgs);
+        if (type == Symbol.STORAGE_CONDITION)
+            return new StorageCondition(initArgs);
         if (type == Symbol.STREAM_ERROR)
             return new StreamError(initArgs);
+        if (type == Symbol.STYLE_WARNING)
+            return new StyleWarning(initArgs);
         if (type == Symbol.TYPE_ERROR)
             return new TypeError(initArgs);
         if (type == Symbol.UNBOUND_SLOT)
