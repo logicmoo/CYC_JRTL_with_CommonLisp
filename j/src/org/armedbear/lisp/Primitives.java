@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.625 2004-04-04 00:31:23 piso Exp $
+ * $Id: Primitives.java,v 1.626 2004-04-05 01:08:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4523,6 +4523,21 @@ public final class Primitives extends Lisp
         public LispObject execute() throws ConditionThrowable
         {
             return number(System.currentTimeMillis() - Main.startTimeMillis);
+        }
+    };
+
+    // ### built-in-function-p
+    private static final Primitive1 BUILT_IN_FUNCTION_P =
+        new Primitive1("built-in-function-p", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((Symbol)arg).isBuiltInFunction() ? T : NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.SYMBOL));
+            }
         }
     };
 
