@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.35 2003-10-17 19:10:19 piso Exp $
+;;; $Id: setf.lisp,v 1.36 2003-10-28 23:25:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -82,7 +82,6 @@
       (setq store-forms (cons store-form store-forms))
       (setq access-forms (cons access-form access-forms)))))
 
-
 (defmacro setf (&rest args)
   (let ((count (length args)))
     (cond
@@ -91,16 +90,19 @@
             (value-form (second args)))
         (if (atom place)
             `(setq ,place ,value-form)
-            (multiple-value-bind (dummies vals newval setter getter)
-              (get-setf-expansion place nil)
-              (let ((inverse (get (car place) 'setf-inverse)))
-                (if (and inverse (eq inverse (car setter)))
-                    (if (functionp inverse)
-                        `(funcall ,inverse ,@(cdr place) ,value-form)
-                        `(,inverse ,@(cdr place) ,value-form))
-                    `(let* (,@(mapcar #'list dummies vals))
-                       (multiple-value-bind ,newval ,value-form
-                         ,setter))))))))
+            (progn
+              (when (symbolp (car place))
+                (resolve (car place)))
+              (multiple-value-bind (dummies vals newval setter getter)
+                (get-setf-expansion place)
+                (let ((inverse (get (car place) 'setf-inverse)))
+                  (if (and inverse (eq inverse (car setter)))
+                      (if (functionp inverse)
+                          `(funcall ,inverse ,@(cdr place) ,value-form)
+                          `(,inverse ,@(cdr place) ,value-form))
+                      `(let* (,@(mapcar #'list dummies vals))
+                         (multiple-value-bind ,newval ,value-form
+                           ,setter)))))))))
      ((oddp count)
       (error "odd number of args to SETF"))
      (t
