@@ -1,8 +1,8 @@
 /*
  * ConfirmDialog.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: ConfirmDialog.java,v 1.1.1.1 2002-09-24 16:08:30 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: ConfirmDialog.java,v 1.2 2004-02-27 16:46:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,18 +48,20 @@ public class ConfirmDialog extends MessageDialog implements Constants
     }
 
     public static int showConfirmDialog(Editor editor, String text,
-        String title)
+                                        String title)
     {
         ConfirmDialog d = new ConfirmDialog(editor);
         d.initialize(text, title);
         if (editor != null)
             editor.setDefaultCursor();
         d.show();
+        if (editor != null && Editor.getEditorList().contains(editor))
+            editor.setFocusToDisplay();
         return d.result;
     }
 
     public static int showConfirmAllDialog(Editor editor, String text,
-        String title)
+                                           String title)
     {
         ConfirmDialog d = new ConfirmDialog(editor);
         d.confirmAll = true;
@@ -67,11 +69,14 @@ public class ConfirmDialog extends MessageDialog implements Constants
         if (editor != null)
             editor.setDefaultCursor();
         d.show();
+        if (editor != null && Editor.getEditorList().contains(editor))
+            editor.setFocusToDisplay();
         return d.result;
     }
 
     public static int showConfirmDialogWithCancelButton(Editor editor,
-        String text, String title)
+                                                        String text,
+                                                        String title)
     {
         ConfirmDialog d = new ConfirmDialog(editor);
         d.cancel = true;
@@ -79,6 +84,8 @@ public class ConfirmDialog extends MessageDialog implements Constants
         if (editor != null)
             editor.setDefaultCursor();
         d.show();
+        if (editor != null && Editor.getEditorList().contains(editor))
+            editor.setFocusToDisplay();
         return d.result;
     }
 
