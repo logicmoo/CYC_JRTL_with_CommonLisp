@@ -2,7 +2,7 @@
  * Session.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Session.java,v 1.1.1.1 2002-09-24 16:08:34 piso Exp $
+ * $Id: Session.java,v 1.2 2002-11-13 01:07:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,6 +182,9 @@ public final class Session extends HandlerBase implements Constants
         }
         editor.unsplitWindow();
         Buffer toBeActivated = session.createBuffers();
+        // Make sure read-only status is correct for each buffer.
+        for (BufferIterator it = new BufferIterator(); it.hasNext();)
+            editor.reactivate(it.nextBuffer());
         for (EditorIterator it = new EditorIterator(); it.hasNext();)
             it.nextEditor().activate(toBeActivated);
         Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_CHANGED);
