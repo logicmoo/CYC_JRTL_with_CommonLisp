@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.87 2003-10-01 17:30:53 piso Exp $
+ * $Id: Symbol.java,v 1.88 2003-10-10 14:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -396,9 +396,10 @@ public class Symbol extends LispObject
 
     public String toString()
     {
+        if (pkg == PACKAGE_KEYWORD)
+            return ":".concat(name);
         if (_PRINT_ESCAPE_.symbolValueNoThrow() == NIL)
             return name;
-
         boolean escape = false;
         for (int i = name.length(); i-- > 0;) {
             char c = name.charAt(i);
@@ -422,8 +423,6 @@ public class Symbol extends LispObject
             else
                 return s;
         }
-        if (pkg == PACKAGE_KEYWORD)
-            return ":".concat(s);
         final Package currentPackage = (Package) _PACKAGE_.getSymbolValue();
         if (pkg == currentPackage)
             return s;
