@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.13 2003-08-13 15:13:13 piso Exp $
+ * $Id: XmlMode.java,v 1.14 2003-10-15 14:57:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,13 +106,12 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_M, CTRL_MASK, "xmlFindMatch");
         km.mapKey('=', "xmlElectricEquals");
         km.mapKey('>', "electricCloseAngleBracket");
-        km.mapKey(KeyEvent.VK_L, CTRL_MASK | SHIFT_MASK, "sidebarListTags");
         km.mapKey(KeyEvent.VK_E, CTRL_MASK, "xmlInsertMatchingEndTag");
         km.mapKey('/', "xmlElectricSlash");
         km.mapKey(KeyEvent.VK_I, ALT_MASK, "cycleIndentSize");
         km.mapKey(KeyEvent.VK_COMMA, CTRL_MASK | SHIFT_MASK, "xmlInsertTag");
         km.mapKey(KeyEvent.VK_PERIOD, CTRL_MASK | SHIFT_MASK,
-            "xmlInsertEmptyElementTag");
+                  "xmlInsertEmptyElementTag");
         km.mapKey(KeyEvent.VK_P, CTRL_MASK, "xmlParseBuffer");
         km.mapKey(KeyEvent.VK_P, CTRL_MASK | SHIFT_MASK, "xmlValidateBuffer");
         km.mapKey(KeyEvent.VK_EQUALS, CTRL_MASK, "xmlFindCurrentNode");
