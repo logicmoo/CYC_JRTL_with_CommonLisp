@@ -1,7 +1,7 @@
 ;;; swank-protocol.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-protocol.lisp,v 1.1 2004-09-01 19:56:06 piso Exp $
+;;; $Id: swank-protocol.lisp,v 1.2 2004-09-10 15:52:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from SLIME.
+;;; Adapted from SLIME, the "Superior Lisp Interaction Mode for Emacs",
+;;; originally written by Eric Marsden, Luke Gorrie and Helmut Eller.
 
 (defpackage #:swank-protocol (:use #:cl))
 
