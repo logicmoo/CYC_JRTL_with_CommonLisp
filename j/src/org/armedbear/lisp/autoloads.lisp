@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.75 2003-12-15 17:12:44 piso Exp $
+;;; $Id: autoloads.lisp,v 1.76 2003-12-15 17:43:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -113,7 +113,7 @@
 (autoload-macro 'formatter "format.lisp")
 
 (autoload '(find-restart invoke-restart restart-name compute-restarts
-            abort continue muffle-warning store-value use-value warn)
+            abort continue muffle-warning store-value use-value warn cerror)
           "restart.lisp")
 (autoload-macro '(with-simple-restart restart-bind restart-case
                   with-condition-restarts)

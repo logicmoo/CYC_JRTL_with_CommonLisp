@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.3 2003-12-15 14:07:22 piso Exp $
+;;; $Id: restart.lisp,v 1.4 2003-12-15 17:43:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -206,4 +206,12 @@
                      (warning 'warning))))
       (fresh-line *error-output*)
       (format *error-output* "~S: ~A~%" badness condition)))
+  nil)
+
+(defun cerror (continue-string datum &rest arguments)
+  (with-simple-restart (continue "~A" (apply #'format nil continue-string arguments))
+    (let ((condition (coerce-to-condition datum arguments 'simple-error 'error)))
+      (with-condition-restarts condition (list (find-restart 'continue))
+        (signal condition)
+        (invoke-debugger condition))))
   nil)
