@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.123 2004-01-02 19:13:17 piso Exp $
+ * $Id: Autoload.java,v 1.124 2004-01-03 16:51:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -297,6 +297,7 @@ public class Autoload extends Function
         autoload(PACKAGE_PROF, "%start-profiler", "Profiler", true);
         autoload(PACKAGE_PROF, "stop-profiler", "Profiler", true);
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
+        autoload(PACKAGE_SYS, "%directory", "Pathname");
         autoload(PACKAGE_SYS, "%make-array", "make_array");
         autoload(PACKAGE_SYS, "%make-condition", "make_condition");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
