@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.185 2003-05-22 00:29:24 piso Exp $
+ * $Id: Primitives.java,v 1.186 2003-05-23 17:34:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -827,6 +827,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### vector-nreverse*
     private static final Primitive1 VECTOR_NREVERSE_ =
         new Primitive1("vector-nreverse*") {
         public LispObject execute (LispObject arg) throws LispError {
@@ -1347,36 +1348,22 @@ public final class Primitives extends Module
             LispObject rest = args.cdr();
             LispObject parameters = rest.car();
             LispObject body = rest.cdr();
-            return __defmacro(symbol, parameters, body, env);
+            body = new Cons(symbol, body);
+            body = new Cons(Symbol.BLOCK, body);
+            body = new Cons(body, NIL);
+            symbol.setSymbolFunction(new Macro(parameters, body, env));
+            LispThread.currentThread().clearValues();
+            return symbol;
         }
     };
 
-    // %defmacro name parameters body env
-    private static final Primitive _DEFMACRO = new Primitive("%defmacro") {
-        public LispObject execute(LispObject[] args) throws LispError
+    // ### make-macro
+    private static final Primitive1 MAKE_MACRO = new Primitive1("make-macro") {
+        public LispObject execute(LispObject arg) throws LispError
         {
-            Symbol symbol = checkSymbol(args[0]);
-            LispObject parameters = checkList(args[1]);
-            LispObject body = checkList(args[2]);
-            Environment env;
-            if (args.length == 4)
-                env = checkEnvironment(args[3]);
-            else
-                env = new Environment();
-            return __defmacro(symbol, parameters, body, env);
+            return new MacroObject(arg);
         }
     };
-
-    private static final Symbol __defmacro(Symbol symbol, LispObject parameters,
-        LispObject body, Environment env) throws LispError
-    {
-        body = new Cons(symbol, body);
-        body = new Cons(Symbol.BLOCK, body);
-        body = new Cons(body, NIL);
-        symbol.setSymbolFunction(new Macro(parameters, body, env));
-        LispThread.currentThread().clearValues();
-        return symbol;
-    }
 
     // ### defparameter
     // defparameter name initial-value [documentation]
