@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Nil.java,v 1.32 2004-03-06 04:07:04 piso Exp $
+ * $Id: Nil.java,v 1.33 2004-03-10 20:09:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -147,6 +147,8 @@ public final class Nil extends Symbol
 
     public String toString()
     {
+        if (_PRINT_READABLY_.symbolValueNoThrow() != NIL)
+            return "|COMMON-LISP|::|NIL|";
         return "NIL";
     }
 }
