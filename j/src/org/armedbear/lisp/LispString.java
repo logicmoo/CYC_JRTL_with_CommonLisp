@@ -1,8 +1,8 @@
 /*
  * LispString.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.72 2004-01-24 22:51:00 asimon Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: LispString.java,v 1.73 2004-02-04 15:19:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,6 +87,11 @@ public final class LispString extends AbstractVector
     public LispObject STRINGP()
     {
         return T;
+    }
+
+    public boolean stringp()
+    {
+        return true;
     }
 
     public LispObject SIMPLE_STRING_P()
@@ -290,6 +295,17 @@ public final class LispString extends AbstractVector
         }
     }
 
+    public LispString adjustArray(int size)
+    {
+        if (array.length != size) {
+            char[] newArray = new char[size];
+            System.arraycopy(array, 0, newArray, 0,
+                             Math.min(array.length, size));
+            array = newArray;
+        }
+        return this;
+    }
+
     public final int length()
     {
         return fillPointer >= 0 ? fillPointer : array.length;
@@ -333,13 +349,17 @@ public final class LispString extends AbstractVector
         return cachedHashCode = hashCode;
     }
 
-    public final String toString()
+    public final String toString(int beginIndex, int endIndex)
     {
+        if (beginIndex < 0)
+            beginIndex = 0;
+        final int limit = fillPointer >= 0 ? fillPointer : array.length;
+        if (endIndex > limit)
+            endIndex = limit;
         if (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL) {
             StringBuffer sb = new StringBuffer();
             sb.append('"');
-            final int limit = fillPointer >= 0 ? fillPointer : array.length;
-            for (int i = 0; i < limit; i++) {
+            for (int i = beginIndex; i < endIndex; i++) {
                 char c = array[i];
                 if (c == '\"' || c == '\\')
                     sb.append('\\');
@@ -348,10 +368,15 @@ public final class LispString extends AbstractVector
             sb.append('"');
             return sb.toString();
         } else
-            return getValue();
+            return getValue().substring(beginIndex, endIndex);
     }
 
-    public static final Primitive1 STRINGP = new Primitive1("stringp","object")
+    public final String toString()
+    {
+        return toString(0, array.length);
+    }
+
+    public static final Primitive1 STRINGP = new Primitive1("stringp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -408,26 +433,36 @@ public final class LispString extends AbstractVector
         }
     };
 
-    private static final Primitive2 CHAR = new Primitive2("char","string index")
+    // ### char
+    private static final Primitive2 CHAR = new Primitive2("char", "string index")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return checkString(first).get(Fixnum.getInt(second));
+            if (first.stringp())
+                return ((AbstractArray)first).getRowMajor(Fixnum.getInt(second));
+            return signal(new TypeError(first, Symbol.STRING));
         }
     };
 
+    // ### %set-char
     private static final Primitive3 _SET_CHAR =
-        new Primitive3("%set-char", PACKAGE_SYS, false) {
+        new Primitive3("%set-char", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third) throws ConditionThrowable
         {
-            checkString(first).set(Fixnum.getInt(second), checkCharacter(third));
-            return third;
+            if (first.stringp()) {
+                ((AbstractArray)first).setRowMajor(Fixnum.getInt(second),
+                                                   checkCharacter(third));
+                return third;
+            }
+            return signal(new TypeError(first, Symbol.STRING));
         }
     };
 
-    private static final Primitive2 SCHAR = new Primitive2("schar","string index") {
+    // ### schar
+    private static final Primitive2 SCHAR = new Primitive2("schar", "string index") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -435,8 +470,10 @@ public final class LispString extends AbstractVector
         }
     };
 
+    // ### %set-schar
     private static final Primitive3 _SET_SCHAR =
-        new Primitive3("%set-schar", PACKAGE_SYS, false) {
+        new Primitive3("%set-schar", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third) throws ConditionThrowable
         {
