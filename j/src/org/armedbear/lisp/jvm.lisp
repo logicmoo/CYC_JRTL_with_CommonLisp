@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.29 2003-11-15 16:15:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.30 2003-11-15 18:23:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 (export '(jvm-compile jvm-compile-package))
 
 (shadow 'method)
+
+(defvar *debug* nil)
 
 (defvar *instructions*
   '(nop             aconst_null  iconst_m1       iconst_0      iconst_1     ;   0
@@ -742,19 +744,56 @@
 (defun finalize-code ()
   (setf *code* (nreverse (coerce *code* 'vector))))
 
-(defun optimize-code ()
+(defun print-code()
   (dotimes (i (length *code*))
     (let ((instruction (svref *code* i)))
-      (when (and (< i (1- (length *code*)))
-                 (= (instruction-opcode instruction) 167) ; GOTO
-                 (let ((next-instruction (svref *code* (1+ i))))
-                   (when (and (= (instruction-opcode next-instruction) 202) ; LABEL
-                              (eq (car (instruction-args instruction))
-                                  (car (instruction-args next-instruction))))
-                     (setf (instruction-opcode instruction) 0)))))))
+      (format t "~A ~S~%"
+              (instr (instruction-opcode instruction))
+              (instruction-args instruction)))))
 
-  (setf *code* (delete 0 *code* :key #'instruction-opcode))
-  )
+(defun optimize-code ()
+  (when *debug*
+    (format t "----- before optimization -----~%")
+    (print-code))
+  (loop
+    (let ((changed-p nil))
+      ;; Make a list of the labels that are actually branched to.
+      (let ((branch-targets ()))
+        (dotimes (i (length *code*))
+          (let ((instruction (svref *code* i)))
+            (when (branch-opcode-p (instruction-opcode instruction))
+              (push (car (instruction-args instruction)) branch-targets))))
+;;         (format t "branch-targets = ~S~%" branch-targets)
+        ;; Remove labels that are not used as branch targets.
+        (dotimes (i (length *code*))
+          (let ((instruction (svref *code* i)))
+            (when (= (instruction-opcode instruction) 202) ; LABEL
+              (let ((label (car (instruction-args instruction))))
+                (unless (member label branch-targets)
+                  (setf (instruction-opcode instruction) 0)'
+                  (setf changed-p t)))))))
+      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      (dotimes (i (length *code*))
+        (let ((instruction (svref *code* i)))
+          (when (and (< i (1- (length *code*)))
+                     (= (instruction-opcode instruction) 167) ; GOTO
+                     (let ((next-instruction (svref *code* (1+ i))))
+                       (cond ((and (= (instruction-opcode next-instruction) 202) ; LABEL
+                                   (eq (car (instruction-args instruction))
+                                       (car (instruction-args next-instruction))))
+                              (setf (instruction-opcode instruction) 0)
+                              (setf changed-p t))
+                             ((= (instruction-opcode next-instruction) 167) ; GOTO
+                              ;; One GOTO right after another.
+                              (setf (instruction-opcode next-instruction) 0)
+                              (setf changed-p t))
+                              ))))))
+      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      (unless changed-p
+          (return))))
+  (when *debug*
+    (format t "----- after optimization -----~%")
+    (print-code)))
 
 (defvar *max-stack*)
 
