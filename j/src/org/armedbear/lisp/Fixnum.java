@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.113 2005-03-23 18:30:39 piso Exp $
+ * $Id: Fixnum.java,v 1.114 2005-03-25 19:32:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -679,8 +679,13 @@ public final class Fixnum extends LispObject
         }
         if (shift < 0)
             return new Fixnum((int)(n >> -shift));
-        if (shift <= 32)
-            return number(n << shift);
+        if (shift <= 32) {
+            n = n << shift;
+            if (n >= Integer.MIN_VALUE && n <= Integer.MAX_VALUE)
+                return new Fixnum((int)n);
+            else
+                return new Bignum(n);
+        }
         // BigInteger.shiftLeft() succumbs to a stack overflow if shift
         // is Integer.MIN_VALUE, so...
         if (shift == Integer.MIN_VALUE)
