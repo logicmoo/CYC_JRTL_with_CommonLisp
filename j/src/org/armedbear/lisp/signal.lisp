@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: signal.lisp,v 1.5 2004-03-08 02:58:21 piso Exp $
+;;; $Id: signal.lisp,v 1.6 2004-05-05 18:01:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -68,15 +68,14 @@
 	(dolist (handler cluster)
 	  (when (typep condition (car handler))
 	    (funcall (cdr handler) condition)))))
-    (when (typep condition 'error)
-      (let ((*current-error-depth* (1+ *current-error-depth*)))
-        (cond ((> *current-error-depth* *maximum-error-depth*)
-               (%format t "~%Maximum error depth exceeded (~D nested errors).~%"
-                        *current-error-depth*)
-               (internal-debug))
-              (t
-               (setf *saved-backtrace* (backtrace-as-list))
-               (invoke-debugger condition)))))
+    (let ((*current-error-depth* (1+ *current-error-depth*)))
+      (cond ((> *current-error-depth* *maximum-error-depth*)
+             (%format t "~%Maximum error depth exceeded (~D nested errors).~%"
+                      *current-error-depth*)
+             (internal-debug))
+            (t
+             (setf *saved-backtrace* (backtrace-as-list))
+             (invoke-debugger condition))))
     nil))
 
 (defmacro handler-bind (bindings &body forms)
