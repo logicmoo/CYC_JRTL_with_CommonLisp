@@ -2,7 +2,7 @@
  * PopURL.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: PopURL.java,v 1.1.1.1 2002-09-24 16:10:15 piso Exp $
+ * $Id: PopURL.java,v 1.2 2002-12-27 03:53:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,23 +35,54 @@ public final class PopURL extends MailboxURL
             throw new MalformedURLException();
         s = s.substring(6);
         port = DEFAULT_PORT;
-        int index = s.indexOf(':');
-        if (index >= 0) {
-            try {
-                port = Integer.parseInt(s.substring(index + 1));
-            }
-            catch (Exception e) {
+        // The user name may be enclosed in quotes.
+        if (s.length() > 0 && s.charAt(0) == '"') {
+            int index = s.indexOf('"', 1);
+            if (index >= 0) {
+                user = s.substring(1, index);
+                s = s.substring(index + 1);
+            } else
                 throw new MalformedURLException();
+            // We've got the user name.
+            if (s.length() == 0) {
+                // No host specified.
+                host = "127.0.0.1";
+                return;
             }
-            s = s.substring(0, index);
-        }
-        index = s.indexOf('@');
-        if (index >= 0) {
-            user = s.substring(0, index);
-            host = s.substring(index + 1);
+            if (s.charAt(0) != '@')
+                throw new MalformedURLException();
+            s = s.substring(1); // Skip '@'.
+            index = s.indexOf(':');
+            if (index >= 0) {
+                try {
+                    port = Integer.parseInt(s.substring(index + 1));
+                }
+                catch (Exception e) {
+                    throw new MalformedURLException();
+                }
+                s = s.substring(0, index);
+            }
+            // What's left is the host name.
+            host = s;
         } else {
-            user = s;
-            host = "127.0.0.1";
+            int index = s.indexOf(':');
+            if (index >= 0) {
+                try {
+                    port = Integer.parseInt(s.substring(index + 1));
+                }
+                catch (Exception e) {
+                    throw new MalformedURLException();
+                }
+                s = s.substring(0, index);
+            }
+            index = s.indexOf('@');
+            if (index >= 0) {
+                user = s.substring(0, index);
+                host = s.substring(index + 1);
+            } else {
+                user = s;
+                host = "127.0.0.1";
+            }
         }
     }
 
@@ -81,7 +112,12 @@ public final class PopURL extends MailboxURL
     {
         FastStringBuffer sb = new FastStringBuffer("pop://");
         if (user != null) {
-            sb.append(user);
+            if (user.indexOf('@') >= 0) {
+                sb.append('"');
+                sb.append(user);
+                sb.append('"');
+            } else
+                sb.append(user);
             sb.append('@');
         }
         sb.append(host);
@@ -95,10 +131,13 @@ public final class PopURL extends MailboxURL
     public String getCanonicalName()
     {
         FastStringBuffer sb = new FastStringBuffer("pop://");
-        if (user != null)
-            sb.append(user);
-        else
-            sb.append(System.getProperty("user.name"));
+        String s = user != null ? user : System.getProperty("user.name");
+        if (s.indexOf('@') >= 0) {
+            sb.append('"');
+            sb.append(s);
+            sb.append('"');
+        } else
+            sb.append(s);
         sb.append('@');
         sb.append(host);
         sb.append(':');
