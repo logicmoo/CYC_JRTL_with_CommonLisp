@@ -397,6 +397,7 @@ read-sequence
 readtable-case
 readtablep
 reduce
+rem
 remf
 remhash
 remove
