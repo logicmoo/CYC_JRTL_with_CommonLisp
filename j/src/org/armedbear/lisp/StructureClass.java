@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureClass.java,v 1.2 2003-09-21 15:06:39 piso Exp $
+ * $Id: StructureClass.java,v 1.3 2003-09-22 12:05:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,6 +63,7 @@ public class StructureClass extends LispClass
         {
             Symbol symbol = checkSymbol(arg);
             StructureClass c = new StructureClass(symbol);
+            c.setCPL(c, BuiltInClass.STRUCTURE_OBJECT, BuiltInClass.CLASS_T);
             addClass(symbol, c);
             return c;
         }
