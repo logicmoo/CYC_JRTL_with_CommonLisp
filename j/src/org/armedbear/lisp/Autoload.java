@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.147 2004-01-31 13:45:24 piso Exp $
+ * $Id: Autoload.java,v 1.148 2004-01-31 20:15:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -270,6 +270,7 @@ public class Autoload extends Function
         autoload("make-echo-stream", "EchoStream");
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-string-output-stream", "StringOutputStream");
+        autoload("make-synonym-stream", "SynonymStream");
         autoload("open-stream-p", "open_stream_p");
         autoload("output-stream-p", "output_stream_p");
         autoload("package-name", "PackageFunctions");
@@ -289,6 +290,7 @@ public class Autoload extends Function
         autoload("stream-element-type", "stream_element_type");
         autoload("stream-external-format", "stream_external_format");
         autoload("sxhash", "HashTable");
+        autoload("synonym-stream-symbol", "SynonymStream");
         autoload("truename", "probe_file");
         autoload("unbound-slot-instance", "unbound_slot_instance");
         autoload("unexport", "PackageFunctions");
