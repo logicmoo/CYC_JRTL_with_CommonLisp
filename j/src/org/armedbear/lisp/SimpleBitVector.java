@@ -2,7 +2,7 @@
  * SimpleBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleBitVector.java,v 1.4 2004-02-25 16:01:53 piso Exp $
+ * $Id: SimpleBitVector.java,v 1.5 2004-02-25 16:12:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,7 +123,7 @@ public final class SimpleBitVector extends AbstractBitVector
             }
         }
         catch (ClassCastException e) {
-            // Fall through.
+            // Fall through...
         }
         signal(new TypeError(newValue, Symbol.BIT));
     }
@@ -149,20 +149,20 @@ public final class SimpleBitVector extends AbstractBitVector
     public void fill(LispObject obj) throws ConditionThrowable
     {
         try {
-            int n = Fixnum.getValue(obj);
-            if (n == 1) {
-                for (int i = bits.length; i-- > 0;)
-                    bits[i] = -1L;
-                return;
+            switch (((Fixnum)obj).value) {
+                case 0:
+                    for (int i = bits.length; i-- > 0;)
+                        bits[i] = 0;
+                    return;
+                case 1:
+                    for (int i = bits.length; i-- > 0;)
+                        bits[i] = -1L;
+                    return;
             }
-            if (n == 0) {
-                for (int i = bits.length; i-- > 0;)
-                    bits[i] = 0;
-                return;
-            }
-            // None of the above...
         }
-        catch (ConditionThrowable t) {}
+        catch (ClassCastException e) {
+            // Fall through...
+        }
         signal(new TypeError(obj, Symbol.BIT));
     }
 
