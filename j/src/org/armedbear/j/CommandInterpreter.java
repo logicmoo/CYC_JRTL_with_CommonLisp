@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandInterpreter.java,v 1.24 2004-04-13 15:12:33 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.25 2004-05-21 16:51:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -251,13 +251,8 @@ public class CommandInterpreter extends Buffer
             editor.escape();
             return;
         }
-        // Check for transient buffer in other editor in current frame.
-        Editor ed = editor.getOtherEditor();
-        if (ed != null && ed.getBuffer().isTransient()) {
-            editor.unsplitWindow();
-            editor.maybeKillBuffer(ed.getBuffer());
+        if (editor.escapeInternal())
             return;
-        }
         CompoundEdit compoundEdit = beginCompoundEdit();
         editor.addUndo(SimpleEdit.MOVE);
         editor.moveDotTo(endOfOutput);
