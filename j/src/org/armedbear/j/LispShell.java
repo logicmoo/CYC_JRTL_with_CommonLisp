@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.56 2004-04-22 00:47:14 piso Exp $
+ * $Id: LispShell.java,v 1.57 2004-05-02 14:55:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,7 +110,8 @@ public class LispShell extends Shell
             shell.setPromptRE(SBCL_PROMPT_PATTERN);
             shell.setResetCommand(":abort");
             shell.setExitCommand("(quit)");
-        } else if (shellCommand.indexOf("org.armedbear.lisp") >= 0) {
+        } else if (shellCommand.indexOf("org.armedbear.lisp") >= 0 ||
+            shellCommand.indexOf("abcl") >= 0) {
             shell.setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
             shell.setResetCommand(":reset");
         } else {
@@ -375,6 +376,12 @@ public class LispShell extends Shell
                         vendor.indexOf("Blackdown") >= 0) {
                         sb.append(" -server");
                         sb.append(" -Xmx128M");
+                        String lispHome = org.armedbear.lisp.Site.getLispHome();
+                        if (lispHome != null) {
+                            sb.append(" -Xrs -Djava.library.path=");
+                            sb.append(lispHome);
+                            sb.append(":/usr/local/lib/abcl");
+                        }
                     } else if (vendor.indexOf("IBM") >= 0) {
                         sb.append(" -Xss512K");
                         sb.append(" -Xmx128M");
@@ -387,7 +394,7 @@ public class LispShell extends Shell
             sb.append(" org.armedbear.lisp.Main");
             shellCommand = sb.toString();
         }
-        lisp(shellCommand, "lisp", false);
+        lisp(shellCommand, "abcl", false);
     }
 
     public static void lisp(String shellCommand)
