@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.5 2003-05-08 00:42:42 piso Exp $
+;;; $Id: init.lisp,v 1.6 2003-06-13 17:27:49 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -47,12 +47,13 @@
   (jstatic "addIncomingFilter" "org.armedbear.j.mail.IncomingFilter"
            mailbox pattern action parameter))
 
-(reset-incoming-filters)
-
-(add-incoming-filter "inbox"
-                     "~C linux-kernel"
-                     "move"
-                     "{annie}mail/linux-kernel")
+(add-hook 'mailbox-mode-hook
+          (lambda ()
+            (reset-incoming-filters)
+            (add-incoming-filter "inbox"
+                                 "~C linux-kernel"
+                                 "move"
+                                 "{annie}mail/linux-kernel")))
 
 (when (probe-file "/home/peter/.j/key-pressed.lisp")
   (load "/home/peter/.j/key-pressed.lisp"))
