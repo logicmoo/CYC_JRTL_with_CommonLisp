@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.299 2003-07-17 17:17:42 piso Exp $
+ * $Id: Primitives.java,v 1.300 2003-07-18 15:12:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2268,6 +2268,19 @@ public final class Primitives extends Module
 
     // ### funcall
     private static final Primitive FUNCALL = new Primitive("funcall") {
+        public LispObject execute(LispObject first) throws Condition
+        {
+            LispObject fun;
+            if (first instanceof Symbol) {
+                fun = first.getSymbolFunction();
+                if (fun instanceof SpecialOperator)
+                    throw new UndefinedFunctionError(first);
+            } else
+                fun = first;
+            if (fun instanceof Function)
+                return funcall0(fun, LispThread.currentThread());
+            throw new TypeError(fun, "function");
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws Condition
         {
