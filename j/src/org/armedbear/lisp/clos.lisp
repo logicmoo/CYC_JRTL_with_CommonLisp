@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.94 2004-03-02 00:03:08 piso Exp $
+;;; $Id: clos.lisp,v 1.95 2004-03-04 20:17:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -990,7 +990,6 @@
   (let ((function-name (car args))
         (qualifiers ())
         (specialized-lambda-list ())
-        (specializers ())
         (body ())
         (parse-state :qualifiers))
     (dolist (arg (cdr args))
@@ -998,17 +997,16 @@
         (:qualifiers
          (if (and (atom arg) (not (null arg)))
              (push-on-end arg qualifiers)
-             (progn (setf specialized-lambda-list arg)
+             (progn
+               (setf specialized-lambda-list arg)
                (setf parse-state :body))))
         (:body (push-on-end arg body))))
-    (setf specializers
-          (canonicalize-specializers (extract-specializers specialized-lambda-list)))
     (multiple-value-bind (real-body declarations documentation)
       (parse-body body)
         (values function-name
                 qualifiers
                 (extract-lambda-list specialized-lambda-list)
-                specializers
+                (extract-specializers specialized-lambda-list)
                 documentation
                 declarations
                 (list* 'block
@@ -1190,7 +1188,7 @@
   (let ((method (std-allocate-instance the-class-standard-method)))
     (setf (method-lambda-list method) lambda-list)
     (setf (method-qualifiers method) qualifiers)
-    (setf (method-specializers method) specializers)
+    (setf (method-specializers method) (canonicalize-specializers specializers))
     (setf (method-documentation method) documentation)
     (setf (method-declarations method) declarations)
     (setf (method-body method) (precompile-form body nil))
