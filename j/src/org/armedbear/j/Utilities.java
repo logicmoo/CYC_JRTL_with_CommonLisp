@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.28 2003-07-04 17:04:21 piso Exp $
+ * $Id: Utilities.java,v 1.29 2003-07-04 17:10:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1467,6 +1467,10 @@ public final class Utilities implements Constants
             }
             // No more modifiers.  What's left is the key name.
             break;
+        }
+        if (modifiers == 0 && keyText.length() == 1) {
+            char c = keyText.charAt(0);
+            return KeyStroke.getKeyStroke(c);
         }
         if (modifiers == SHIFT_MASK && keyText.length() == 1) {
             char c = Character.toUpperCase(keyText.charAt(0));
