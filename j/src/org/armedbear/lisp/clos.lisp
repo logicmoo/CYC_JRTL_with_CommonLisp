@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.39 2003-12-19 16:50:00 piso Exp $
+;;; $Id: clos.lisp,v 1.40 2003-12-19 17:02:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1189,14 +1189,13 @@
                    (generic-function-methods gf)))
    (if (eq (class-of gf) the-class-standard-gf)
        #'(lambda (m1 m2)
-          (funcall #'std-method-more-specific-p gf m1 m2 required-classes))
+          (funcall #'std-method-more-specific-p m1 m2 required-classes))
        #'(lambda (m1 m2)
           (funcall #'method-more-specific-p gf m1 m2 required-classes)))))
 
 ;;; method-more-specific-p
 
-(defun std-method-more-specific-p (gf method1 method2 required-classes)
-  (declare (ignore gf))
+(defun std-method-more-specific-p (method1 method2 required-classes)
   (mapc #'(lambda (spec1 spec2 arg-class)
            (unless (eq spec1 spec2)
              (return-from std-method-more-specific-p
@@ -1573,9 +1572,10 @@
   (std-compute-discriminating-function gf))
 
 (defgeneric method-more-specific-p (gf method1 method2 required-classes))
-(defmethod method-more-specific-p
-  ((gf standard-generic-function) method1 method2 required-classes)
-  (std-method-more-specific-p gf method1 method2 required-classes))
+
+(defmethod method-more-specific-p ((gf standard-generic-function)
+                                   method1 method2 required-classes)
+  (std-method-more-specific-p method1 method2 required-classes))
 
 (defgeneric compute-effective-method-function (gf methods))
 (defmethod compute-effective-method-function ((gf standard-generic-function) methods)
