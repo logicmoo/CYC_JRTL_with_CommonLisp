@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.39 2004-10-04 18:14:05 piso Exp $
+;;; $Id: pprint.lisp,v 1.40 2004-10-04 18:47:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -99,7 +99,8 @@
   (defvar queue-min-size #.(* 75. queue-entry-size))
   (defvar buffer-min-size 256.)
   (defvar prefix-min-size 256.)
-  (defvar suffix-min-size 256.))
+  (defvar suffix-min-size 256.)
+  )
 
 (defstruct (xp-structure (:conc-name nil) #+nil (:print-function describe-xp))
   (base-stream nil) ;;The stream io eventually goes to.
@@ -107,65 +108,65 @@
   line-limit ;;If non-NIL the max number of lines to print.
   line-no ;;number of next line to be printed.
   depth-in-blocks
-   ;;Number of logical blocks at QRIGHT that are started but not ended.
-  (BLOCK-STACK (make-array #.block-stack-min-size)) BLOCK-STACK-PTR
-   ;;This stack is pushed and popped in accordance with the way blocks are
-   ;;nested at the moment they are entered into the queue.  It contains the
-   ;;following block specific value.
-   ;;SECTION-START total position where the section (see AIM-1102)
-   ;;that is rightmost in the queue started.
-  (BUFFER (make-array #.buffer-min-size :element-type
-              #-(or symbolics armedbear) 'string-char #+(or symbolics armedbear) 'character))
-   CHARPOS BUFFER-PTR BUFFER-OFFSET
-   ;;This is a vector of characters (eg a string) that builds up the
-   ;;line images that will be printed out.  BUFFER-PTR is the
-   ;;buffer position where the next character should be inserted in
-   ;;the string.  CHARPOS is the output character position of the
-   ;;first character in the buffer (non-zero only if a partial line
-   ;;has been output).  BUFFER-OFFSET is used in computing total lengths.
-   ;;It is changed to reflect all shifting and insertion of prefixes so that
-   ;;total length computes things as they would be if they were
-   ;;all on one line.  Positions are kept three different ways
-   ;; Buffer position (eg BUFFER-PTR)
-   ;; Line position (eg (+ BUFFER-PTR CHARPOS)).  Indentations are stored in this form.
-   ;; Total position if all on one line (eg (+ BUFFER-PTR BUFFER-OFFSET))
-   ;;  Positions are stored in this form.
-  (QUEUE (make-array #.queue-min-size)) QLEFT QRIGHT
-   ;;This holds a queue of action descriptors.  QLEFT and QRIGHT
-   ;;point to the next entry to dequeue and the last entry enqueued
-   ;;respectively.  The queue is empty when
-   ;;(> QLEFT QRIGHT).  The queue entries have several parts:
-   ;;QTYPE one of :NEWLINE/:IND/:START-BLOCK/:END-BLOCK
-   ;;QKIND :LINEAR/:MISER/:FILL/:MANDATORY or :UNCONDITIONAL/:FRESH
-   ;; or :BLOCK/:CURRENT
-   ;;QPOS total position corresponding to this entry
-   ;;QDEPTH depth in blocks of this entry.
-   ;;QEND offset to entry marking end of section this entry starts. (NIL until known.)
-   ;; Only :start-block and non-literal :newline entries can start sections.
-   ;;QOFFSET offset to :END-BLOCK for :START-BLOCK (NIL until known).
-   ;;QARG for :IND indentation delta
-   ;;     for :START-BLOCK suffix in the block if any.
-   ;;                      or if per-line-prefix then cons of suffix and
-   ;;                      per-line-prefix.
-   ;;     for :END-BLOCK suffix for the block if any.
-  (PREFIX (make-array #.buffer-min-size :element-type
-                      #-(or symbolics armedbear) 'string-char #+(or symbolics armedbear) 'character))
-   ;;this stores the prefix that should be used at the start of the line
-  (PREFIX-STACK (make-array #.prefix-stack-min-size)) PREFIX-STACK-PTR
-   ;;This stack is pushed and popped in accordance with the way blocks
-   ;;are nested at the moment things are taken off the queue and printed.
-   ;;It contains the following block specific values.
-   ;;PREFIX-PTR current length of PREFIX.
-   ;;SUFFIX-PTR current length of pending suffix
-   ;;NON-BLANK-PREFIX-PTR current length of non-blank prefix.
-   ;;INITIAL-PREFIX-PTR prefix-ptr at the start of this block.
-   ;;SECTION-START-LINE line-no value at last non-literal break at this level.
-  (SUFFIX (make-array #.buffer-min-size :element-type
-                      #-(or symbolics armedbear) 'string-char #+(or symbolics armedbear) 'character)))
-   ;;this stores the suffixes that have to be printed to close of the current
-   ;;open blocks.  For convenient in popping, the whole suffix
-   ;;is stored in reverse order.
-
+  ;;Number of logical blocks at QRIGHT that are started but not ended.
+  (block-stack (make-array #.block-stack-min-size)) block-stack-ptr
+  ;;This stack is pushed and popped in accordance with the way blocks are
+  ;;nested at the moment they are entered into the queue.  It contains the
+  ;;following block specific value.
+  ;;SECTION-START total position where the section (see AIM-1102)
+  ;;that is rightmost in the queue started.
+  (buffer (make-array #.buffer-min-size :element-type 'character))
+  charpos buffer-ptr buffer-offset
+  ;;This is a vector of characters (eg a string) that builds up the
+  ;;line images that will be printed out.  BUFFER-PTR is the
+  ;;buffer position where the next character should be inserted in
+  ;;the string.  CHARPOS is the output character position of the
+  ;;first character in the buffer (non-zero only if a partial line
+  ;;has been output).  BUFFER-OFFSET is used in computing total lengths.
+  ;;It is changed to reflect all shifting and insertion of prefixes so that
+  ;;total length computes things as they would be if they were
+  ;;all on one line.  Positions are kept three different ways
+  ;; Buffer position (eg BUFFER-PTR)
+  ;; Line position (eg (+ BUFFER-PTR CHARPOS)).  Indentations are stored in this form.
+  ;; Total position if all on one line (eg (+ BUFFER-PTR BUFFER-OFFSET))
+  ;;  Positions are stored in this form.
+  (queue (make-array #.queue-min-size))
+  qleft
+  qright
+  ;;This holds a queue of action descriptors.  QLEFT and QRIGHT
+  ;;point to the next entry to dequeue and the last entry enqueued
+  ;;respectively.  The queue is empty when
+  ;;(> QLEFT QRIGHT).  The queue entries have several parts:
+  ;;QTYPE one of :NEWLINE/:IND/:START-BLOCK/:END-BLOCK
+  ;;QKIND :LINEAR/:MISER/:FILL/:MANDATORY or :UNCONDITIONAL/:FRESH
+  ;; or :BLOCK/:CURRENT
+  ;;QPOS total position corresponding to this entry
+  ;;QDEPTH depth in blocks of this entry.
+  ;;QEND offset to entry marking end of section this entry starts. (NIL until known.)
+  ;; Only :start-block and non-literal :newline entries can start sections.
+  ;;QOFFSET offset to :END-BLOCK for :START-BLOCK (NIL until known).
+  ;;QARG for :IND indentation delta
+  ;;     for :START-BLOCK suffix in the block if any.
+  ;;                      or if per-line-prefix then cons of suffix and
+  ;;                      per-line-prefix.
+  ;;     for :END-BLOCK suffix for the block if any.
+  (prefix (make-array #.buffer-min-size :element-type 'character))
+  ;;this stores the prefix that should be used at the start of the line
+  (prefix-stack (make-array #.prefix-stack-min-size))
+  prefix-stack-ptr
+  ;;This stack is pushed and popped in accordance with the way blocks
+  ;;are nested at the moment things are taken off the queue and printed.
+  ;;It contains the following block specific values.
+  ;;PREFIX-PTR current length of PREFIX.
+  ;;SUFFIX-PTR current length of pending suffix
+  ;;NON-BLANK-PREFIX-PTR current length of non-blank prefix.
+  ;;INITIAL-PREFIX-PTR prefix-ptr at the start of this block.
+  ;;SECTION-START-LINE line-no value at last non-literal break at this level.
+  (suffix (make-array #.buffer-min-size :element-type 'character))
+  ;;this stores the suffixes that have to be printed to close of the current
+  ;;open blocks.  For convenient in popping, the whole suffix
+  ;;is stored in reverse order.
+)
 
 (defmacro LP<-BP (xp &optional (ptr nil))
   (if (null ptr) (setq ptr `(buffer-ptr ,xp)))
@@ -223,9 +224,11 @@
   `(aref (prefix-stack ,xp) (+ (prefix-stack-ptr ,xp) 3)))
 (defmacro section-start-line (xp)
   `(aref (prefix-stack ,xp) (+ (prefix-stack-ptr ,xp) 4)))
-
+
 (defun push-prefix-stack (xp)
-  (let ((old-prefix 0) (old-suffix 0) (old-non-blank 0))
+  (let ((old-prefix 0)
+        (old-suffix 0)
+        (old-non-blank 0))
     (when (not (minusp (prefix-stack-ptr xp)))
       (setq old-prefix (prefix-ptr xp)
 	    old-suffix (suffix-ptr xp)
@@ -268,26 +271,6 @@
   (setf (Qarg xp (Qright xp)) arg))
 
 (defmacro Qnext (index) `(+ ,index #.queue-entry-size))
-
-;This maintains a list of XP structures.  We save them
-;so that we don't have to create new ones all of the time.
-;We have separate objects so that many can be in use at once.
-
-;(Note should really be doing some locking here, but CL does not have the
-;primitives for it.  There is a tiny probability here that two different
-;processes could end up trying to use the same xp-stream)
-
-(defvar *free-xps* nil "free list of XP stream objects") ; never bound
-
-(defun get-pretty-print-stream (stream)
-  (let ((xp (pop *free-xps*)))
-    (initialize-xp (if xp xp (make-xp-structure)) stream)))
-
-;If you call this, the xp-stream gets efficiently recycled.
-
-(defun free-pretty-print-stream (xp)
-  (setf (base-stream xp) nil)
-  (pushnew xp *free-xps*))
 
 ;This is called to initialize things when you start pretty printing.
 
@@ -587,7 +570,7 @@
          (maybe-initiate-xp-printing #'(lambda (s o) (write+ o s))
                                      stream object))
 	(t
-         (sys::output-object object stream))))
+         (sys:output-object object stream))))
 
 (defun write (object &key
 		     ((:stream stream) *standard-output*)
@@ -641,7 +624,7 @@
     (setq *result* (do-xp-printing fn stream args))))
 
 (defun do-xp-printing (fn stream args)
-  (let ((xp (get-pretty-print-stream stream))
+  (let ((xp (initialize-xp (make-xp-structure) stream))
 	(*current-level* 0)
 	(result nil))
     (catch 'line-limit-abbreviation-exit
@@ -656,7 +639,6 @@
     (when (catch 'line-limit-abbreviation-exit
 	    (attempt-to-output xp nil T) nil)
       (attempt-to-output xp T T))
-    (free-pretty-print-stream xp)
     result))
 
 (defun write+ (object xp)
@@ -819,7 +801,7 @@
                                ((:lines *print-lines*) *print-lines*)
                                ((:pprint-dispatch *print-pprint-dispatch*) *print-pprint-dispatch*))
   (let ((stream (make-string-output-stream)))
-    (sys::output-object object stream)
+    (sys:output-object object stream)
     (get-output-stream-string stream)))
 
 (defun prin1-to-string (object)
