@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.25 2003-10-17 02:33:41 piso Exp $
+;;; $Id: defclass.lisp,v 1.26 2003-10-19 18:33:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -530,6 +530,8 @@
    (method-class              ; :accessor generic-function-method-class
     :initarg :method-class)
 ;;    (discriminating-function)  ; :accessor generic-function-discriminating-function
+   (method-combination
+    :initarg :method-combination)
    (classes-to-emf-table      ; :accessor classes-to-emf-table
     :initform (make-hash-table :test #'equal))))
 
@@ -561,6 +563,11 @@
   (slot-value gf 'method-class))
 (defun (setf generic-function-method-class) (new-value gf)
   (setf (slot-value gf 'method-class) new-value))
+
+(defun generic-function-method-combination (gf)
+  (slot-value gf 'method-combination))
+(defun (setf generic-function-method-combination) (new-value gf)
+  (setf (slot-value gf 'method-combination) new-value))
 
 ;;; Internal accessor for effective method function table
 
@@ -671,6 +678,7 @@
                                 &key
                                 (generic-function-class the-class-standard-gf)
                                 (method-class the-class-standard-method)
+                                (method-combination 'standard)
                                 &allow-other-keys)
   (if (find-generic-function function-name nil)
       (find-generic-function function-name)
@@ -685,6 +693,7 @@
                          generic-function-class
                          :name function-name
                          :method-class method-class
+                         :method-combination method-combination
                          all-keys)))
           (setf (find-generic-function function-name) gf)
           gf))))
@@ -712,7 +721,9 @@
 ;;; However, it cannot be called until standard-generic-function exists.
 
 (defun make-instance-standard-generic-function (generic-function-class
-                                                &key name lambda-list method-class)
+                                                &key name lambda-list
+                                                method-class
+                                                method-combination)
   (declare (ignore generic-function-class))
   (let ((gf (std-allocate-instance the-class-standard-gf)))
 ;;     (format t "gf = ~S~%" gf)
@@ -720,6 +731,7 @@
     (setf (generic-function-lambda-list gf) lambda-list)
     (setf (generic-function-methods gf) ())
     (setf (generic-function-method-class gf) method-class)
+    (setf (generic-function-method-combination gf) method-combination)
     (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
     (finalize-generic-function gf)
     gf))
@@ -1076,17 +1088,22 @@
                 gf (remove around methods))))
           #'(lambda (args)
              (funcall (method-function around) args next-emfun)))
-        (let ((next-emfun (compute-primary-emfun (cdr primaries)))
-              (befores (remove-if-not #'before-method-p methods))
-              (reverse-afters
-               (reverse (remove-if-not #'after-method-p methods))))
-          #'(lambda (args)
-             (dolist (before befores)
-               (funcall (method-function before) args nil))
-             (multiple-value-prog1
-              (funcall (method-function (car primaries)) args next-emfun)
-              (dolist (after reverse-afters)
-                (funcall (method-function after) args nil))))))))
+        (case (generic-function-method-combination gf)
+          (STANDARD
+           (let ((next-emfun (compute-primary-emfun (cdr primaries)))
+                 (befores (remove-if-not #'before-method-p methods))
+                 (reverse-afters
+                  (reverse (remove-if-not #'after-method-p methods))))
+             #'(lambda (args)
+                (dolist (before befores)
+                  (funcall (method-function before) args nil))
+                (multiple-value-prog1
+                 (funcall (method-function (car primaries)) args next-emfun)
+                 (dolist (after reverse-afters)
+                   (funcall (method-function after) args nil))))))
+          (t
+           (error "unsupported method combination type ~S~"
+                  (generic-function-method-combination gf)))))))
 
 ;;; compute an effective method function from a list of primary methods:
 
