@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.6 2003-10-17 15:02:12 piso Exp $
+;;; $Id: debug.lisp,v 1.7 2003-11-04 19:01:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -41,4 +41,6 @@
 (defun break (&optional format-control &rest format-arguments)
   (fresh-line *debug-io*)
   (format *debug-io* "BREAK called.~%")
+  (if format-control
+      (apply #'format *debug-io* format-control format-arguments))
   (invoke-debugger nil))
