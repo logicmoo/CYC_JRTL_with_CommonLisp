@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.46 2004-02-02 01:05:20 piso Exp $
+ * $Id: Pathname.java,v 1.47 2004-02-03 02:03:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,22 +25,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-public final class Pathname extends LispObject
+public class Pathname extends LispObject
 {
-    private LispObject host = NIL;
-    private LispObject device = NIL;
-    private LispObject directory = NIL;
-    private LispObject name = NIL;
+    protected LispObject host = NIL;
+    protected LispObject device = NIL;
+    protected LispObject directory = NIL;
+    protected LispObject name = NIL;
 
     // A string, NIL, :wild or :unspecific.
-    private LispObject type = NIL;
+    protected LispObject type = NIL;
 
     // A positive integer, or NIL, :WILD, :UNSPECIFIC, or :NEWEST.
-    private LispObject version = NIL;
+    protected LispObject version = NIL;
 
     private String namestring;
 
-    private Pathname()
+    protected Pathname()
     {
     }
 

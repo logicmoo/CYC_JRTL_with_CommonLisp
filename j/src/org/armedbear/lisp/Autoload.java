@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.149 2004-02-01 20:40:51 piso Exp $
+ * $Id: Autoload.java,v 1.150 2004-02-03 02:03:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,12 +252,15 @@ public class Autoload extends Function
         autoload("lisp-implementation-version", "lisp_implementation_version");
         autoload("list-all-packages", "PackageFunctions");
         autoload("listen", "listen");
+        autoload("load-logical-pathname-translations", "LogicalPathnames");
         autoload("logand", "logand");
         autoload("logandc1", "logandc1");
         autoload("logandc2", "logandc2");
         autoload("logbitp", "logbitp");
         autoload("logcount", "logcount");
         autoload("logeqv", "logeqv");
+        autoload("logical-pathname", "LogicalPathname");
+        autoload("logical-pathname-translations", "LogicalPathname");
         autoload("logior", "logior");
         autoload("lognand", "lognand");
         autoload("lognor", "lognor");
@@ -327,6 +330,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObject");
+        autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
         autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-equal", "StringFunctions");
