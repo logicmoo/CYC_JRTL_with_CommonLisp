@@ -2,7 +2,7 @@
  * PasswordDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: PasswordDialog.java,v 1.2 2003-07-04 12:45:41 piso Exp $
+ * $Id: PasswordDialog.java,v 1.3 2003-07-23 16:23:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,13 +22,13 @@
 package org.armedbear.j;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
@@ -37,7 +37,7 @@ public final class PasswordDialog extends JDialog implements FocusListener,
     KeyListener
 {
     private final Editor editor;
-    private final JPasswordField textField;
+    private final PasswordField textField;
     private String input;
 
     private PasswordDialog(Editor editor, String prompt, String title)
@@ -48,9 +48,9 @@ public final class PasswordDialog extends JDialog implements FocusListener,
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        JLabel label = new JLabel(prompt);
+        Label label = new Label(prompt);
         panel.add(label);
-        textField = new JPasswordField(20);
+        textField = new PasswordField(20);
         textField.setAlignmentX(LEFT_ALIGNMENT);
         textField.addKeyListener(this);
         panel.add(textField);
@@ -96,4 +96,18 @@ public final class PasswordDialog extends JDialog implements FocusListener,
     }
 
     public void focusLost(FocusEvent e) {}
+
+    private static class PasswordField extends JPasswordField
+    {
+        public PasswordField(int columns)
+        {
+            super(columns);
+        }
+
+        public void paintComponent(Graphics g)
+        {
+            Display.setRenderingHints(g);
+            super.paintComponent(g);
+        }
+    }
 }
