@@ -1,5 +1,5 @@
 # Kodiak 4/14/2000-11/1/2000
-# $Id: Kodiak,v 1.4 2002-11-24 14:32:26 piso Exp $
+# $Id: Kodiak,v 1.5 2002-12-24 20:32:39 piso Exp $
 
 color.text                              = 0 0 0
 color.background                        = 255 255 224
@@ -31,6 +31,14 @@ CSSMode.style.property                  = 0
 
 PerlMode.color.scalar                   = 51 51 0
 PerlMode.color.list                     = 0 51 51
+
+#LispMode.color.keyword                  = 255 0 0
+LispMode.color.substitution             = 153 0 153
+LispMode.color.punctuation              = 102 102 102
+LispMode.color.parenthesis              = 102 102 102
+#LispMode.color.secondaryKeyword         = 51 51 204
+#LispMode.color.secondaryKeyword         = 0 0 102
+LispMode.color.secondaryKeyword         = 0 103 153
 
 TclMode.color.brace                     = 153 0 51
 TclMode.style.brace                     = 1
