@@ -1,7 +1,7 @@
 /*
  * jpty.c
  *
- * Copyright (C) 2000-2001 Peter Graves
+ * Copyright (C) 2000-2004 Peter Graves
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <termios.h>
+#define __USE_XOPEN
 #endif
 
 #include <stdlib.h>
@@ -39,20 +40,19 @@ static int  open_master_pty(char *name, size_t size);
 int main(int argc, char *argv[]) 
 {
 #ifndef __CYGWIN__
-    char slave_name[20];
+    char slave_name[256];
     pid_t pid;
     int fdm;
 #endif
     int i = 1;
 
-    if (argc < 2) exit(1);
+    if (argc < 2)
+	exit(1);
 
     /* Check for -cd option. */
-    if (!strcmp("-cd", argv[i]))
-    {
+    if (!strcmp("-cd", argv[i])) {
         /* Next arg is directory to change to. */
-        if (++i < argc)
-        {
+        if (++i < argc) {
             if (chdir(argv[i]) < 0)
                 exit(1);
             ++i;
@@ -60,46 +60,51 @@ int main(int argc, char *argv[])
     }
 
     /* We should not be out of args here! */
-    if (i >= argc) exit(1);
+    if (i >= argc)
+	exit(1);
 
 #ifdef __CYGWIN__
     setenv("TERM", "dumb", 1);
     execvp(argv[i], &argv[i]);
     exit(1); /* Not reached. */
 #else
-
     fdm = open_master_pty(slave_name, sizeof(slave_name));
 
-    if (fdm < 0) exit(1);
+    if (fdm < 0)
+	exit(1);
 
     pid = fork();
 
-    if (pid < 0) exit(1);
+    if (pid < 0)
+	exit(1);
 
-    if (pid == 0)
-    { 
+    if (pid == 0) { 
         /* Child process. */
         int slave;
 
         close(fdm);
 
-        if (setsid() < 0) exit(1);
+        if (setsid() < 0)
+	    exit(1);
 
         slave = open(slave_name, O_RDWR);
 
-        if (slave < 0) exit(1);
+        if (slave < 0)
+	    exit(1);
 
 #ifdef __linux__
-        if (ioctl(slave, TIOCSCTTY, NULL) < 0) exit(1);
+        if (ioctl(slave, TIOCSCTTY, NULL) < 0)
+	    exit(1);
 #endif
+        if (dup2(slave, STDIN_FILENO) != STDIN_FILENO)
+	    exit(1);
+        if (dup2(slave, STDOUT_FILENO) != STDOUT_FILENO)
+	    exit(1);
+        if (dup2(slave, STDERR_FILENO) != STDERR_FILENO)
+	    exit(1);
 
-        if (dup2(slave, STDIN_FILENO) != STDIN_FILENO) exit(1);
-
-        if (dup2(slave, STDOUT_FILENO) != STDOUT_FILENO) exit(1);
-
-        if (dup2(slave, STDERR_FILENO) != STDERR_FILENO) exit(1);
-
-        if (slave > STDERR_FILENO) close(slave);
+        if (slave > STDERR_FILENO)
+	    close(slave);
 
         set_noecho(STDIN_FILENO);
 
@@ -112,11 +117,8 @@ int main(int argc, char *argv[])
     }
 
     /* Parent process. */
-
     loop(fdm);
-
     exit(0);
-
 #endif
 }
 
@@ -124,10 +126,12 @@ int main(int argc, char *argv[])
 static void set_noecho(int fd)
 {
     struct termios t;
-    if (tcgetattr(fd, &t) < 0) exit(1);
+    if (tcgetattr(fd, &t) < 0)
+	exit(1);
     t.c_lflag &= ~(ECHO | ECHOCTL | ECHOE | ECHOK | ECHOKE | ECHONL | ECHOPRT);
     t.c_oflag &= ~(ONLCR);
-    if (tcsetattr(fd, TCSANOW, &t) < 0) exit(1);
+    if (tcsetattr(fd, TCSANOW, &t) < 0)
+	exit(1);
 }
 
 /* Copy stdin to fdm, copy fdm to stdout. */
@@ -137,16 +141,14 @@ static void loop(int fdm)
     fd_set fdset;
     int done = 0;
 
-    while (!done)
-    {
+    while (!done) {
         FD_ZERO(&fdset);
         FD_SET(STDIN_FILENO, &fdset);
         FD_SET(fdm, &fdset);
 
         select(fdm + 1, &fdset, NULL, NULL, NULL);
 
-        if (FD_ISSET(fdm, &fdset))
-        {
+        if (FD_ISSET(fdm, &fdset)) {
             int i = read(fdm, buf, sizeof(buf));
 
             if (i > 0)
@@ -155,8 +157,7 @@ static void loop(int fdm)
                 done = 1;
         }
 
-        if (FD_ISSET(STDIN_FILENO, &fdset))
-        {
+        if (FD_ISSET(STDIN_FILENO, &fdset)) {
             int i = read(STDIN_FILENO, buf, sizeof(buf));
 
             if (i > 0)
@@ -169,42 +170,21 @@ static void loop(int fdm)
 
 static int open_master_pty(char *namebuf, size_t bufsize)
 { 
-    char pattern[] = "/dev/ptyXX";
+    int fdm;
+    char *sname;
 
-    if (bufsize >= sizeof(pattern))
-    {
-        int i, j;
+    fdm = open("/dev/ptmx", O_RDWR);
+    if (fdm < 0)
+	return -1;
 
-        strcpy(namebuf, pattern);
+    unlockpt(fdm);
+    grantpt(fdm);
 
-        for (i = 0; i < 16; i++)
-        {
-            struct stat statbuf;
+    sname = ptsname(fdm);
+    if (strlen(sname) >= bufsize)
+	return -1;
+    strcpy(namebuf, sname);
 
-            namebuf[8] = "pqrstuvwxyzabcde"[i];
-            namebuf[9] = '0';
-
-            if (stat(namebuf, &statbuf) < 0)
-                continue;
-
-            for (j = 0; j < 16; j++)
-            {
-                int fdm;
-
-                namebuf[9] = "0123456789abcdef"[j];
-
-                fdm = open(namebuf, O_RDWR);
-
-                if (fdm > 0)
-                {
-                    namebuf[5] = 't';
-                    return fdm;
-                }
-            }
-        }
-    }
-
-    return -1;
+    return fdm;
 }
 #endif
-
