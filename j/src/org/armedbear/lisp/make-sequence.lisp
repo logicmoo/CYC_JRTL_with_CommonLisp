@@ -1,7 +1,7 @@
 ;;; make-sequence.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: make-sequence.lisp,v 1.2 2003-06-11 00:22:18 piso Exp $
+;;; $Id: make-sequence.lisp,v 1.3 2003-06-20 01:25:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@
                             (if iesp
                                 (make-list size :initial-element initial-element)
                                 (make-list size))))
-              ((memq type '(STRING SIMPLE-STRING))
+              ((memq type '(STRING SIMPLE-STRING BASE-STRING SIMPLE-BASE-STRING))
                (return-from make-sequence
                             (if iesp
                                 (make-string size :initial-element initial-element)
@@ -76,10 +76,11 @@
                              (make-list size :initial-element initial-element)
                              (make-list size))))
           (unless (memq name '(ARRAY VECTOR SIMPLE-VECTOR BIT-VECTOR
-                               SIMPLE-BIT-VECTOR STRING SIMPLE-STRING))
+                               SIMPLE-BIT-VECTOR STRING SIMPLE-STRING
+                               BASE-STRING SIMPLE-BASE-STRING))
             (error 'type-error "~S is not a sequence type" type))
           (let ((len nil))
-            (cond ((memq name '(STRING SIMPLE-STRING))
+            (cond ((memq name '(STRING SIMPLE-STRING BASE-STRING SIMPLE-BASE-STRING))
                    (setq element-type 'character
                          len (car args)))
                   (t
