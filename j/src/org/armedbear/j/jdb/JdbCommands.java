@@ -2,7 +2,7 @@
  * JdbCommands.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbCommands.java,v 1.6 2003-05-18 16:02:06 piso Exp $
+ * $Id: JdbCommands.java,v 1.7 2003-05-18 17:04:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j.jdb;
 
 import com.sun.jdi.Bootstrap;
 import org.armedbear.j.Help;
+import org.armedbear.j.JavaMode;
 import org.armedbear.j.Log;
 import org.armedbear.j.MessageDialog;
 
@@ -90,26 +91,32 @@ public final class JdbCommands implements JdbConstants
 
     public static void jdb()
     {
-        try {
-            Bootstrap.virtualMachineManager();
-        }
-        catch (NoClassDefFoundError e) {
-            Log.error("unable to load com.sun.jdi.Bootstrap");
-            String classpath = System.getProperty("java.class.path");
-            Log.error("classpath = " + classpath);
-            Help.help("jdb.html");
-            MessageDialog.showMessageDialog(
-                "Unable to find tools.jar. " +
-                "See doc/jdb.html for installation instructions.",
-                "Jdb");
-            return;
+        if (JavaMode.getJdb() == null) {
+            try {
+                Bootstrap.virtualMachineManager();
+            }
+            catch (NoClassDefFoundError e) {
+                Log.error("unable to load com.sun.jdi.Bootstrap");
+                String classpath = System.getProperty("java.class.path");
+                Log.error("classpath = " + classpath);
+                Help.help("jdb.html");
+                MessageDialog.showMessageDialog(
+                    "Unable to find tools.jar. " +
+                    "See doc/jdb.html for installation instructions.",
+                    "Jdb");
+                return;
+            }
         }
         Jdb.jdb();
     }
 
     public static void jdb(String s)
     {
-        command(s);
+        if (JavaMode.getJdb() != null)
+            command(s);
+        else
+            MessageDialog.showMessageDialog("The debugger is not running.",
+                "Error");
     }
 
     public static void jdbContinue()
