@@ -2,7 +2,7 @@
  * SidebarBufferTree.java
  *
  * Copyright (C) 2003 Mike Rutter, Peter Graves
- * $Id: SidebarBufferTree.java,v 1.5 2003-08-13 18:37:57 piso Exp $
+ * $Id: SidebarBufferTree.java,v 1.6 2003-09-19 23:29:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.j;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -68,7 +69,7 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
 
     public SidebarBufferTree(Sidebar sidebar)
     {
-        super(new DefaultTreeModel(new DefaultMutableTreeNode("")));
+        super(null);
         this.sidebar = sidebar;
         setCellRenderer(new SidebarTreeCellRenderer(sidebar));
         setFocusTraversalKeysEnabled(false);
@@ -100,17 +101,7 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         // Re-create the tree.
         rootNode = new DefaultMutableTreeNode("");
         buildTreeFromList(rootNode, arrayList);
-        DefaultTreeModel model = (DefaultTreeModel)getModel();
-        model.setRoot(rootNode);
-        // See if we should display the root handles or not.
-        boolean showRootHandles = false;
-        for (int i = 0, n = rootNode.getChildCount(); i < n; i++) {
-            if (rootNode.getChildAt(i).getChildCount() > 0) {
-                showRootHandles = true;
-                break;
-            }
-        }
-        setShowsRootHandles(showRootHandles);
+        setModel(new DefaultTreeModel(rootNode));
     }
 
     private void buildTreeFromList(DefaultMutableTreeNode node, List buffers)
@@ -148,7 +139,8 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         Buffer buffer = sidebar.getEditor().getBuffer();
         if (buffer != getSelectedBuffer())
             setSelectedBuffer(buffer);
-        scrollPathToVisible(getSelectionPath());
+        else
+            scrollPathToVisible(getSelectionPath());
         boolean repaint = (updateFlag & SIDEBAR_REPAINT_BUFFER_LIST) != 0;
         updateFlag = 0;
         if (repaint) {
@@ -208,6 +200,21 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         }
     }
 
+    public void scrollPathToVisible(TreePath path)
+    {
+	if (path != null) {
+	    makeVisible(path);
+	    Rectangle bounds = getPathBounds(path);
+	    if (bounds != null) {
+                bounds.y = Math.max(bounds.y - 17, 0);
+                bounds.height = bounds.height + 34;
+		scrollRectToVisible(bounds);
+		if (accessibleContext != null)
+		    ((AccessibleJTree)accessibleContext).fireVisibleDataPropertyChange();
+	    }
+	}
+    }
+
     public String getLabelText()
     {
         int total = 0;
@@ -235,23 +242,21 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         updateFlag &= ~SIDEBAR_MODIFIED_BUFFER_COUNT;
     }
 
-    public void refresh()
-    {
-        if (SwingUtilities.isEventDispatchThread()) {
+    private final Runnable refreshRunnable = new Runnable() {
+        public void run()
+        {
             if ((updateFlag & SIDEBAR_MODIFIED_BUFFER_COUNT) != 0)
                 updateLabel();
             initializeTreeStructure();
-        } else {
-            Runnable r = new Runnable() {
-                public void run()
-                {
-                    if ((updateFlag & SIDEBAR_MODIFIED_BUFFER_COUNT) != 0)
-                        updateLabel();
-                    initializeTreeStructure();
-                }
-            };
-            SwingUtilities.invokeLater(r);
         }
+    };
+
+    public void refresh()
+    {
+        if (SwingUtilities.isEventDispatchThread())
+            refreshRunnable.run();
+        else
+            SwingUtilities.invokeLater(refreshRunnable);
     }
 
     public void updatePosition()
@@ -548,12 +553,10 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
             setOpaque(true);
         }
 
-        public Component getTreeCellRendererComponent(JTree tree,
-                                                      Object value,
+        public Component getTreeCellRendererComponent(JTree tree, Object value,
                                                       boolean selected,
                                                       boolean expanded,
-                                                      boolean leaf,
-                                                      int row,
+                                                      boolean leaf, int row,
                                                       boolean hasFocus)
         {
             Object userObject = null;
@@ -566,13 +569,8 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
                 setIcon(buffer.getIcon());
                 if (buffer.isSecondary())
                     innerBorder = new EmptyBorder(0, 10, 0, 0);
-            } else if (userObject instanceof LocalTag) {
-                LocalTag tag = (LocalTag) userObject;
-                setText(tag.getSidebarText());
-                setIcon(tag.getIcon());
-            } else {
+            } else
                 setIcon(null);
-            }
             Frame frame = sidebar.getFrame();
             if (selected) {
                 if (frame.isActive() && tree.hasFocus())
