@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.535 2003-12-15 14:39:55 piso Exp $
+ * $Id: Primitives.java,v 1.536 2003-12-16 00:35:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3565,47 +3565,6 @@ public final class Primitives extends Lisp
         {
             first.setCallCount(Fixnum.getValue(second));
             return second;
-        }
-    };
-
-    // ### get-dispatch-macro-character
-    // get-dispatch-macro-character disp-char sub-char &optional readtable
-    // => function
-    private static final Primitive GET_DISPATCH_MACRO_CHARACTER =
-        new Primitive("get-dispatch-macro-character","disp-char sub-char &optional readtable") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            if (args.length < 2 || args.length > 3)
-                signal(new WrongNumberOfArgumentsException(this));
-            char dispChar = LispCharacter.getValue(args[0]);
-            char subChar = LispCharacter.getValue(args[1]);
-            Readtable readtable;
-            if (args.length == 3)
-                readtable = checkReadtable(args[2]);
-            else
-                readtable = getCurrentReadtable();
-            return readtable.getDispatchMacroCharacter(dispChar, subChar);
-        }
-    };
-
-    // ### set-dispatch-macro-character
-    // set-dispatch-macro-character disp-char sub-char new-function &optional readtable
-    // => t
-    private static final Primitive SET_DISPATCH_MACRO_CHARACTER =
-        new Primitive("set-dispatch-macro-character","disp-char sub-char new-function &optional readtable") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            if (args.length < 3 || args.length > 4)
-                signal(new WrongNumberOfArgumentsException(this));
-            char dispChar = LispCharacter.getValue(args[0]);
-            char subChar = LispCharacter.getValue(args[1]);
-            LispObject function = args[2];
-            Readtable readtable;
-            if (args.length == 4)
-                readtable = checkReadtable(args[3]);
-            else
-                readtable = getCurrentReadtable();
-            return readtable.setDispatchMacroCharacter(dispChar, subChar, function);
         }
     };
 
