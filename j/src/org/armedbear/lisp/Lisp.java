@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.36 2003-03-13 18:23:56 piso Exp $
+ * $Id: Lisp.java,v 1.37 2003-03-14 01:02:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -305,8 +305,8 @@ public abstract class Lisp
         throws Condition
     {
         _values = null;
-        LispObject result = null;
         if (obj instanceof Symbol) {
+            LispObject result = null;
             if (obj.isSpecialVariable()) {
                 if (dynEnv != null)
                     result = dynEnv.lookup(obj);
@@ -317,6 +317,7 @@ public abstract class Lisp
                 if (result == null)
                     throw new UnboundVariableException(obj.getName());
             }
+            return result;
         } else if (obj instanceof Cons) {
             LispObject first = obj.car();
             if (first instanceof Symbol) {
@@ -331,14 +332,58 @@ public abstract class Lisp
                         if (profiling)
                             fun.incrementCallCount();
                         // Don't eval args!
-                        result = fun.execute(obj.cdr(), env);
-                        break;
+                        return fun.execute(obj.cdr(), env);
                     }
                     case TYPE_MACRO:
-                        result = eval(macroexpand(obj, env), env);
-                        break;
+                        return eval(macroexpand(obj, env), env);
+                    case TYPE_PRIMITIVE0: {
+                        if (debug)
+                            return apply(fun, evalList(obj.cdr(), env));
+                        if (obj.cdr() != NIL)
+                            throw new WrongNumberOfArgumentsException(fun);
+                        if (profiling)
+                            fun.incrementCallCount();
+                        return fun.execute();
+                    }
+                    case TYPE_PRIMITIVE1: {
+                        if (debug)
+                            return apply(fun, evalList(obj.cdr(), env));
+                        LispObject args = obj.cdr();
+                        if (args.length() != 1)
+                            throw new WrongNumberOfArgumentsException(fun);
+                        if (profiling)
+                            fun.incrementCallCount();
+                        return fun.execute(value(eval(args.car(), env)));
+                    }
+                    case TYPE_PRIMITIVE2: {
+                        if (debug)
+                            return apply(fun, evalList(obj.cdr(), env));
+                        LispObject args = obj.cdr();
+                        if (args.length() != 2)
+                            throw new WrongNumberOfArgumentsException(fun);
+                        if (profiling)
+                            fun.incrementCallCount();
+                        return fun.execute(eval(args.car(), env),
+                            value(eval(args.cadr(), env)));
+                    }
+                    case TYPE_PRIMITIVE3: {
+                        if (debug)
+                            return apply(fun, evalList(obj.cdr(), env));
+                        LispObject args = obj.cdr();
+                        if (args.length() != 3)
+                            throw new WrongNumberOfArgumentsException(fun);
+                        if (profiling)
+                            fun.incrementCallCount();
+                        return fun.execute(eval(args.car(), env),
+                            eval(args.cadr(), env),
+                            value(eval(args.cdr().cdr().car(), env)));
+                    }
                     default:
-                        result = apply(fun, evalList(obj.cdr(), env));
+                        if (debug)
+                            return apply(fun, evalList(obj.cdr(), env));
+                        if (profiling)
+                            fun.incrementCallCount();
+                        return fun.execute(evalList(obj.cdr(), env));
                 }
             } else {
                 LispObject args = obj.cdr();
@@ -349,21 +394,19 @@ public abstract class Lisp
                 Symbol symbol = checkSymbol(funcar);
                 if (symbol == Symbol.LAMBDA) {
                     Closure closure = new Closure(rest.car(), rest.cdr(), env);
-                    result = closure.execute(evalList(args, env));
+                    return closure.execute(evalList(args, env));
                 } else
                     throw new ProgramError("illegal function object: " + first);
             }
         } else
-            result = obj;
-        return result;
+            return obj;
     }
 
+    // Debug only.
     private static final LispObject apply(LispObject fun, LispObject[] argv)
         throws Condition
     {
-        if (debug) {
-            stack.push(new StackFrame(fun, argv));
-        }
+        stack.push(new StackFrame(fun, argv));
         if (profiling)
             fun.incrementCallCount();
         LispObject result;
@@ -396,10 +439,8 @@ public abstract class Lisp
                 result = fun.execute(argv);
                 break;
         }
-        if (debug) {
-            if (!stack.empty())
-                stack.pop();
-        }
+        if (!stack.empty())
+            stack.pop();
         return result;
     }
 
