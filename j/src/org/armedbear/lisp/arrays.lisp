@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: arrays.lisp,v 1.16 2004-03-06 18:33:47 piso Exp $
+;;; $Id: arrays.lisp,v 1.17 2004-03-18 19:09:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,9 +46,6 @@
 (defun array-row-major-index (array &rest subscripts)
   (%array-row-major-index array subscripts))
 
-(defsetf aref %aset)
-(defsetf row-major-aref %set-row-major-aref)
-
 (defun bit (bit-array &rest subscripts)
   (row-major-aref bit-array (%array-row-major-index bit-array subscripts)))
 
@@ -56,5 +53,22 @@
   (row-major-aref simple-bit-array
 		  (%array-row-major-index simple-bit-array subscripts)))
 
+(defsetf row-major-aref %set-row-major-aref)
+(defsetf aref %aset)
 (defsetf bit %aset)
 (defsetf sbit %aset)
+
+;; (SETF (APPLY #'AREF ...
+(defun (setf aref) (new-value array &rest subscripts)
+  (%set-row-major-aref array (%array-row-major-index array subscripts)
+                       new-value))
+
+;; (SETF (APPLY #'BIT ...
+(defun (setf bit) (new-value array &rest subscripts)
+  (%set-row-major-aref array (%array-row-major-index array subscripts)
+                       new-value))
+
+;; (SETF (APPLY #'SBIT ...
+(defun (setf sbit) (new-value array &rest subscripts)
+  (%set-row-major-aref array (%array-row-major-index array subscripts)
+                       new-value))
