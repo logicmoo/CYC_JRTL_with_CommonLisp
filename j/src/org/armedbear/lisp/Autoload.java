@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.93 2003-10-16 15:00:17 piso Exp $
+ * $Id: Autoload.java,v 1.94 2003-10-17 14:29:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,8 +48,13 @@ public class Autoload extends Function
 
     public static void autoload(Package pkg, String symbolName, String className)
     {
+        autoload(pkg, symbolName, className, false);
+    }
+
+    public static void autoload(Package pkg, String symbolName, String className, boolean exported)
+    {
         Symbol symbol = intern(symbolName.toUpperCase(), pkg);
-        if (pkg != PACKAGE_CL) {
+        if (pkg != PACKAGE_CL && exported) {
             try {
                 pkg.export(symbol);
             }
@@ -128,7 +133,7 @@ public class Autoload extends Function
     }
 
     private static final Primitive AUTOLOAD =
-        new Primitive("autoload", PACKAGE_SYS, true)
+        new Primitive("autoload", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first) throws ConditionThrowable
         {
@@ -252,12 +257,12 @@ public class Autoload extends Function
         autoload("unexport", "PackageFunctions");
         autoload("unuse-package", "PackageFunctions");
         autoload("user-homedir-pathname", "Pathname");
-        autoload(PACKAGE_EXT, "add-class", "LispClass");
-        autoload(PACKAGE_EXT, "assq", "assq");
-        autoload(PACKAGE_EXT, "classp", "LispClass");
-        autoload(PACKAGE_EXT, "file-directory-p", "probe_file");
-        autoload(PACKAGE_EXT, "gc", "gc");
-        autoload(PACKAGE_EXT, "probe-directory", "probe_file");
+        autoload(PACKAGE_EXT, "add-class", "LispClass", true);
+        autoload(PACKAGE_EXT, "assq", "assq", true);
+        autoload(PACKAGE_EXT, "classp", "LispClass", true);
+        autoload(PACKAGE_EXT, "file-directory-p", "probe_file", true);
+        autoload(PACKAGE_EXT, "gc", "gc", true);
+        autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
         autoload(PACKAGE_SYS, "%define-condition", "define_condition");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
         autoload(PACKAGE_SYS, "%make-array", "make_array");
