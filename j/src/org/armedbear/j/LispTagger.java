@@ -97,8 +97,7 @@ public final class LispTagger extends Tagger
                         state = NEUTRAL;
                         continue;
                     }
-                    String token = gatherToken(pos);
-                    if (isDefinitionStart(token, pos))
+                    if (LispMode.isDefiner(gatherToken(pos)))
                         state = DEFUN;
                     else
                         state = NEUTRAL;
@@ -111,21 +110,6 @@ public final class LispTagger extends Tagger
             pos.next();
         }
         buffer.setTags(tags);
-    }
-
-    private static final String[] tokens = new String[] {
-        "defclass", "defconstant", "define-condition", "defmacro", "defmethod",
-        "defparameter", "defstruct", "defun", "defvar"
-    };
-
-    // pos points to first char after token.
-    private boolean isDefinitionStart(String token, Position pos)
-    {
-        if (token.startsWith("def"))
-            if (Utilities.isOneOf(token, tokens))
-                return true;
-
-        return false;
     }
 
     // Advances pos past token.
