@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.18 2004-05-21 12:03:22 piso Exp $
+;;; $Id: compile-file.lisp,v 1.19 2004-05-27 00:35:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -86,6 +86,9 @@
                         (fset name compiled-function)))
                     (progn
                       (%format t ";  Unable to compile function ~A~%" name)
+                      (let ((precompiled-function (precompile-form expr nil)))
+                        (setf form
+                              `(fset ',name ,precompiled-function)))
                       (when compile-time-too
                         (eval form))))
                 (push name jvm::*toplevel-defuns*)
