@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.18 2004-11-21 00:06:28 piso Exp $
+;;; $Id: format.lisp,v 1.19 2004-11-21 01:48:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -790,21 +790,23 @@
   (expand-format-integer 16 colonp atsignp params))
 
 (def-format-directive #\R (colonp atsignp params)
-  (if params
-      (expand-bind-defaults
-       ((base 10) (mincol 0) (padchar #\space) (commachar #\,)
-        (commainterval 3))
-       params
-       `(format-print-integer stream ,(expand-next-arg) ,colonp ,atsignp
-                              ,base ,mincol
-                              ,padchar ,commachar ,commainterval))
-      (if atsignp
-	  (if colonp
-	      `(format-print-old-roman stream ,(expand-next-arg))
-	      `(format-print-roman stream ,(expand-next-arg)))
-	  (if colonp
-	      `(format-print-ordinal stream ,(expand-next-arg))
-	      `(format-print-cardinal stream ,(expand-next-arg))))))
+  (expand-bind-defaults
+   ((base nil) (mincol 0) (padchar #\space) (commachar #\,)
+    (commainterval 3))
+   params
+   (let ((n-arg (gensym))) 
+     `(let ((,n-arg ,(expand-next-arg)))
+        (if ,base
+            (format-print-integer stream ,n-arg ,colonp ,atsignp
+                                  ,base ,mincol
+                                  ,padchar ,commachar ,commainterval)
+            ,(if atsignp
+                 (if colonp
+                     `(format-print-old-roman stream ,n-arg)
+                     `(format-print-roman stream ,n-arg))
+                 (if colonp
+                     `(format-print-ordinal stream ,n-arg)
+                     `(format-print-cardinal stream ,n-arg))))))))
 
 ;;;; format directive for pluralization
 
@@ -1963,20 +1965,21 @@
   (interpret-format-integer 16))
 
 (def-format-interpreter #\R (colonp atsignp params)
-  (if params
-      (interpret-bind-defaults
-       ((base 10) (mincol 0) (padchar #\space) (commachar #\,)
-        (commainterval 3))
-       params
-       (format-print-integer stream (next-arg) colonp atsignp base mincol
-                             padchar commachar commainterval))
-      (if atsignp
-	  (if colonp
-	      (format-print-old-roman stream (next-arg))
-	      (format-print-roman stream (next-arg)))
-	  (if colonp
-	      (format-print-ordinal stream (next-arg))
-	      (format-print-cardinal stream (next-arg))))))
+  (interpret-bind-defaults
+   ((base nil) (mincol 0) (padchar #\space) (commachar #\,)
+    (commainterval 3))
+   params
+   (let ((arg (next-arg)))
+     (if base
+         (format-print-integer stream arg colonp atsignp base mincol
+                               padchar commachar commainterval)
+         (if atsignp
+             (if colonp
+                 (format-print-old-roman stream arg)
+                 (format-print-roman stream arg))
+             (if colonp
+                 (format-print-ordinal stream arg)
+                 (format-print-cardinal stream arg)))))))
 
 (defparameter *cardinal-ones*
   #(nil "one" "two" "three" "four" "five" "six" "seven" "eight" "nine"))
