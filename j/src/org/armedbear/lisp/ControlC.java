@@ -2,7 +2,7 @@
  * ControlC.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ControlC.java,v 1.3 2004-05-02 01:46:27 piso Exp $
+ * $Id: ControlC.java,v 1.4 2004-05-29 15:19:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public class ControlC implements Runnable
 
     public static void callback()
     {
-        Lisp.interrupted = true;
+        Lisp.setInterrupted(true);
     }
 
     public void run() {
