@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.209 2004-07-09 17:58:11 piso Exp $
+;;; $Id: jvm.lisp,v 1.210 2004-07-11 12:46:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,6 +74,8 @@
 
 ;; True for local functions defined with FLET or LABELS.
 (defvar *child-p* nil)
+
+(defvar *child-count* 0)
 
 (defvar *context* nil)
 
@@ -309,6 +311,11 @@
 
 (defun ensure-thread-var-initialized ()
   (setf *initialize-thread-var* t))
+
+(defun emit-push-current-thread ()
+  (declare (optimize speed (safety 0)))
+  (ensure-thread-var-initialized)
+  (emit 'aload *thread*))
 
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
@@ -898,7 +905,22 @@
     (setf (method-name-index constructor) (pool-name (method-name constructor)))
     (setf (method-descriptor-index constructor) (pool-name (method-descriptor constructor)))
     (setf (method-max-locals constructor) 1)
-    (cond (*hairy-arglist-p*
+    (cond (*child-p*
+           (emit 'aload_0) ;; this
+           (let* ((*print-level* nil)
+                  (*print-length* nil)
+                  (s (format nil "~S" args)))
+             (emit 'ldc
+                   (pool-string s))
+             (emit-invokestatic +lisp-class+
+                                "readObjectFromString"
+                                "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
+                                0))
+           (emit-invokespecial super
+                               "<init>"
+                               "(Lorg/armedbear/lisp/LispObject;)V"
+                               0))
+          (*hairy-arglist-p*
            (emit 'aload_0) ;; this
            (emit 'aconst_null) ;; name
            (let* ((*print-level* nil)
@@ -908,8 +930,7 @@
                    (pool-string s))
              (emit-invokestatic +lisp-class+
                                 "readObjectFromString"
-;;                                 "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
-                                `((,+java-string+) ,+lisp-object+)
+                                "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
                                 0))
            (emit-push-nil) ;; body
            (emit 'aconst_null) ;; environment
@@ -922,8 +943,7 @@
            (emit 'aload_0)
            (emit-invokespecial super
                                "<init>"
-;;                                "()V"
-                               '(nil nil)
+                               "()V"
                                0)))
     (setf *code* (append *static-code* *code*))
     (emit 'return)
@@ -1560,8 +1580,9 @@
         (args (cdr form)))
     (unless (symbolp fun)
       (error "COMPILE-FUNCTION-CALL ~S is not a symbol" fun))
-    (let ((numargs (length args))
-          local-function)
+    (when (find fun *local-functions* :key #'local-function-name)
+      (return-from compile-function-call (compile-local-function-call form for-effect)))
+    (let ((numargs (length args)))
       (when (sys::built-in-function-p fun)
         (case numargs
           (1
@@ -1574,25 +1595,6 @@
            (when (compile-function-call-3 fun args)
              (return-from compile-function-call)))))
       (cond
-       ((setf local-function
-              (find fun *local-functions* :key #'local-function-name))
-        (format t "compiling call to local function ~S~%" local-function)
-        ;; Compile call to LispThread.pushContext().
-        (ensure-thread-var-initialized)
-        (emit 'aload *thread*)
-        (emit 'aload 1)
-        (emit-invokevirtual +lisp-thread-class+
-                            "pushContext"
-                            "([Lorg/armedbear/lisp/LispObject;)V"
-                            -2)
-        (emit 'aload *thread*) ; Stack: thread
-        (let* ((g (if *compile-file-truename*
-                      (declare-local-function local-function)
-                      (declare-object (local-function-function local-function)))))
-          (emit 'getstatic
-                *this-class*
-                g
-                +lisp-object+)))
        ((eq fun *defun-name*)
         (emit 'aload 0)) ; this
        ((or (sys::built-in-function-p fun) (memq fun *toplevel-defuns*))
@@ -1611,17 +1613,7 @@
                             "getSymbolFunctionOrDie"
                             "()Lorg/armedbear/lisp/LispObject;"
                             0)))
-      (cond ((or local-function (> numargs 4))
-;;              (when local-function
-;;                (ensure-thread-var-initialized)
-;;                (emit 'aload *thread*)
-;;                (emit 'aload 1)
-;;                (emit-invokevirtual +lisp-thread-class+
-;;                                    "pushContext"
-;;                                    "([Lorg/armedbear/lisp/LispObject;)V"
-;;                                    -2)
-;;                (emit 'aload *thread*)
-;;                (emit 'swap))
+      (cond ((> numargs 4)
              (emit 'sipush (length args))
              (emit 'anewarray "org/armedbear/lisp/LispObject")
              (let ((i 0))
@@ -1634,17 +1626,11 @@
                  (emit 'aastore) ; store value in array
                  (maybe-emit-clear-values arg)
                  (incf i))) ; array left on stack here
-             (if local-function
-                 ;; Stack: thread function array
-                 (emit-invokevirtual +lisp-thread-class+
-                                     "callLocalFunction"
-                                     "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                     -2)
-                 ;; Stack: function array
-                 (emit-invokevirtual +lisp-object-class+
-                                     "execute"
-                                     "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                     -1)))
+             ;; Stack: function array
+             (emit-invokevirtual +lisp-object-class+
+                                 "execute"
+                                 "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                                 -1))
             (t
              (case numargs
                (0
@@ -1681,6 +1667,49 @@
             (emit 'pop)
             (maybe-emit-clear-values form))
           (emit-store-value)))))
+
+(defun compile-local-function-call (form for-effect)
+  (let* ((fun (car form))
+         (args (cdr form))
+         (local-function (find fun *local-functions* :key #'local-function-name)))
+    (assert (not (null local-function)))
+    (format t "compiling call to local function ~S~%" local-function)
+    (let* ((g (if *compile-file-truename*
+                  (declare-local-function local-function)
+                  (declare-object (local-function-function local-function)))))
+      (emit 'getstatic
+            *this-class*
+            g
+            +lisp-object+)) ; Stack: template-function
+    (assert (not *child-p*)) ; FIXME! Child case needs code!
+;;     (emit 'aload 1) ; Stack: template-function context
+;;     (emit-invokestatic +lisp-class+
+;;                        "makeCompiledClosure"
+;;                        "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+;;                        -1) ; Stack: compiled-closure
+    (emit 'sipush (length args))
+    (emit 'anewarray "org/armedbear/lisp/LispObject")
+    (let ((i 0))
+      (dolist (arg args)
+        (emit 'dup)
+        (emit 'sipush i)
+        (compile-form arg)
+        (unless (remove-store-value)
+          (emit-push-value)) ; leaves value on stack
+        (emit 'aastore) ; store value in array
+        (maybe-emit-clear-values arg)
+        (incf i))) ; array left on stack here
+    ;; Stack: template-function args
+    (emit 'aload 1) ; template-function args context
+    (emit-invokevirtual +lisp-object-class+
+                        "execute"
+                        "([Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                        -1)
+    (if for-effect
+        (progn
+          (emit 'pop)
+          (maybe-emit-clear-values form))
+        (emit-store-value))))
 
 (defun compile-test-not/null (form)
   (let ((arg (second form)))
@@ -1863,15 +1892,13 @@
     (when specialp
       ;; Save current dynamic environment.
       (setf env-var (allocate-register))
-      (ensure-thread-var-initialized)
-      (emit 'aload *thread*)
+      (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
       (emit 'astore env-var))
     (compile-form (third form)) ;; Values form.
     (unless (remove-store-value)
       (emit-push-value))
-    (ensure-thread-var-initialized)
-    (emit 'aload *thread*)
+    (emit-push-current-thread)
     (emit 'swap)
     (emit 'bipush (length vars))
     (emit-invokevirtual +lisp-thread-class+
@@ -1930,8 +1957,7 @@
     (when specialp
       ;; Save current dynamic environment.
       (setf env-var (allocate-register))
-      (ensure-thread-var-initialized)
-      (emit 'aload *thread*)
+      (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
       (emit 'astore env-var))
     (ecase (car form)
@@ -1956,8 +1982,7 @@
   (cond ((variable-register variable)
          (emit 'astore (variable-register variable)))
         ((variable-special-p variable)
-         (ensure-thread-var-initialized)
-         (emit 'aload *thread*)
+         (emit-push-current-thread)
          (emit 'swap)
          (emit 'getstatic
                *this-class*
@@ -1969,15 +1994,21 @@
                              "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
                              -2))
         (*child-p*
-         ;; Compile call to LispThread.setVariableValue().
-         (ensure-thread-var-initialized)
-         (emit 'aload *thread*)
-         (emit 'swap)
-         (emit 'bipush (variable-index variable)) ; Stack: thread value index
-         (emit-invokevirtual +lisp-thread-class+
-                             "setVariableValue"
-                             "(Lorg/armedbear/lisp/LispObject;I)V"
-                             -3))
+;;          ;; Compile call to setVariableValue().
+;;          (emit 'aload 0) ; this
+
+;;          (emit 'swap) ; Stack: this value
+;;          (emit 'bipush (variable-index variable)) ; Stack: thread value index
+;;          (emit-invokevirtual *this-class*
+;;                              "setVariableValue"
+;;                              "(Lorg/armedbear/lisp/LispObject;I)V"
+;;                              -3)
+         (emit 'aload 2) ; Stack: value context
+         (emit 'swap) ; context value
+         (emit 'bipush (variable-index variable)) ; context value index
+         (emit 'swap) ; context index value
+         (emit 'aastore)
+         )
         (*use-locals-vector*
          (let ((index (variable-index variable)))
            (emit 'aload 1) ; Stack: value array
@@ -1986,6 +2017,7 @@
            (emit 'swap) ; array index value
            (emit 'aastore)))
         (t
+         (format t "line 2020~%")
          (assert nil) ; FIXME!
          (emit 'astore (variable-register variable)))))
 
@@ -2152,8 +2184,7 @@
     (when (contains-return body)
       ;; Save current dynamic environment.
       (setf env-var (allocate-register))
-      (ensure-thread-var-initialized)
-      (emit 'aload *thread*)
+      (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
       (emit 'astore env-var))
     ;; Compile subforms.
@@ -2292,7 +2323,7 @@
         (setf classfile (compile-defun name form nil (sys::next-classfile-name)))
         (setf function
               (sys::load-compiled-function (compile-defun name form nil
-                                                          (concatenate 'string (symbol-name (gensym "flet-")) ".class")))))
+                                                          (format nil "flet-~D.class" *child-count*)))))
     (format t "function = ~S~%" function)
     (push (make-local-function :name name
                                :function function
@@ -2324,13 +2355,20 @@
      (cond ((symbolp name)
             (cond ((setf local-function (find name *local-functions* :key #'local-function-name))
                    (sys::%format t "compile-function local function case~%")
+                   (when *child-p*
+                     (error "compile-function *child-p* case needs code!~%"))
                    (let ((g (if *compile-file-truename*
                                 (declare-local-function local-function)
                                 (declare-object (local-function-function local-function)))))
                      (emit 'getstatic
                            *this-class*
                            g
-                           +lisp-object+)
+                           +lisp-object+) ; Stack: template-function
+                     (emit 'aload 1) ; Stack: template-function context
+                     (emit-invokestatic +lisp-class+
+                                        "makeCompiledClosure"
+                                        "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                                        -1) ; Stack: compiled-closure
                      (emit-store-value)))
                   ((or (sys::built-in-function-p name) (memq name *toplevel-defuns*))
                    (let ((g (declare-function name)))
@@ -2487,8 +2525,7 @@
        (compile-form (car args))
        (maybe-emit-clear-values (car args)))
       (2
-       (ensure-thread-var-initialized)
-       (emit 'aload *thread*)
+       (emit-push-current-thread)
        (cond ((and (eq (car args) t)
                    (eq (cadr args) t))
               (emit-push-t)
@@ -2519,8 +2556,7 @@
         *this-class*
         (declare-symbol name)
         +lisp-symbol+)
-  (ensure-thread-var-initialized)
-  (emit 'aload *thread*)
+  (emit-push-current-thread)
   (emit-invokevirtual +lisp-symbol-class+
                       "symbolValue"
                       "(Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
@@ -2547,14 +2583,20 @@
 ;;                            (neq (variable-context variable) *context*))
                       *child-p*
 
-                      ;; Compile call to LispThread.getVariableValue().
-                      (ensure-thread-var-initialized)
-                      (emit 'aload *thread*)
+;;                       ;; Compile call to getVariableValue().
+;;                       (emit 'aload 0) ; this
+
+;;                       (emit 'bipush (variable-index variable))
+;;                       (emit-invokevirtual *this-class*
+;;                                           "getVariableValue"
+;;                                           "(I)Lorg/armedbear/lisp/LispObject;"
+;;                                           -1))
+
+                      (emit 'aload 2) ; FIXME 2 => *context-register* (or something)
                       (emit 'bipush (variable-index variable))
-                      (emit-invokevirtual +lisp-thread-class+
-                                          "getVariableValue"
-                                          "(I)Lorg/armedbear/lisp/LispObject;"
-                                          -1))
+                      (emit 'aaload))
+
+
                      (*use-locals-vector*
                       (emit 'aload 1)
                       (emit 'bipush (variable-index variable))
@@ -2565,14 +2607,17 @@
 ;;                            (neq (variable-context variable) *context*))
                       *child-p*
 
-                      ;; Compile call to LispThread.getVariableValue().
-                      (ensure-thread-var-initialized)
-                      (emit 'aload *thread*)
+;;                       ;; Compile call to LispThread.getVariableValue().
+;;                       (emit 'aload 0) ; this
+
+;;                       (emit 'bipush (variable-index variable))
+;;                       (emit-invokevirtual *this-class*
+;;                                           "getVariableValue"
+;;                                           "(I)Lorg/armedbear/lisp/LispObject;"
+;;                                           -1))
+                      (emit 'aload 2) ; FIXME 2 => *context-register* (or something)
                       (emit 'bipush (variable-index variable))
-                      (emit-invokevirtual +lisp-thread-class+
-                                          "getVariableValue"
-                                          "(I)Lorg/armedbear/lisp/LispObject;"
-                                          -1))
+                      (emit 'aaload))
                      (t
                       (emit 'aload 1)
                       (emit 'bipush (variable-index variable))
@@ -2580,6 +2625,7 @@
             (emit-store-value)))))
 
 (defun compile-setq (form for-effect)
+;;   (format t "compile-setq form = ~S~%" form)
   (unless (= (length form) 3)
     (return-from compile-setq (compile-form (precompiler::precompile-setq form)
                                             for-effect)))
@@ -2611,14 +2657,18 @@
                 *child-p*
 
                 ;; Compile call to LispThread.setVariableValue().
-                (ensure-thread-var-initialized)
-                (emit 'aload *thread*)
-                (emit 'swap)
-                (emit 'bipush (variable-index variable)) ; Stack: value thread value index
-                (emit-invokevirtual +lisp-thread-class+
-                                    "setVariableValue"
-                                    "(Lorg/armedbear/lisp/LispObject;I)V"
-                                    -3) ; Stack: value
+;;                 (emit 'aload 0) ; this
+;;                 (emit 'swap) ; Stack: this value
+;;                 (emit 'bipush (variable-index variable)) ; Stack: value thread value index
+;;                 (emit-invokevirtual *this-class*
+;;                                     "setVariableValue"
+;;                                     "(Lorg/armedbear/lisp/LispObject;I)V"
+;;                                     -3) ; Stack: value
+                (emit 'aload 2) ; Stack: value context
+                (emit 'swap) ; context value
+                (emit 'bipush (variable-index variable)) ; context value index
+                (emit 'swap) ; context index value
+                (emit 'aastore)
                 )
                (*use-locals-vector*
                 (emit 'aload 1) ; Stack: value array
@@ -2627,39 +2677,59 @@
                 (emit 'swap) ; array index value
                 (emit 'aastore))
                (t
+                (format t "line 2673~%")
                 (assert nil) ; FIXME!
                 (emit 'astore (variable-register variable))))
          (unless for-effect
            (emit-store-value))
          )
         (ARG
+;;          (format t "ARG case (cadr rest) = ~S~%" (cadr rest))
+         (compile-form (cadr rest))
+         (unless (remove-store-value)
+           (emit-push-value))
+         (maybe-emit-clear-values (cadr rest))
+         (unless for-effect
+           (emit 'dup)) ; Stack: value value
          (cond (
 ;;                 (and (variable-context variable)
 ;;                      (neq (variable-context variable) *context*))
                 *child-p*
 
-                ;; Compile call to LispThread.setVariableValue().
-                (ensure-thread-var-initialized)
-                (emit 'aload *thread*)
-                (emit 'swap)
-                (emit 'bipush (variable-index variable)) ; Stack: value thread value index
-                (emit-invokevirtual +lisp-thread-class+
-                                    "setVariableValue"
-                                    "(Lorg/armedbear/lisp/LispObject;I)V"
-                                    -3) ; Stack: value
+;;                 ;; Compile call to setVariableValue().
+;;                 (emit 'aload 0) ; this
+;;                 (emit 'swap) ; Stack: this value
+;;                 (emit 'bipush (variable-index variable)) ; Stack: value thread value index
+;;                 (emit-invokevirtual *this-class*
+;;                                     "setVariableValue"
+;;                                     "(Lorg/armedbear/lisp/LispObject;I)V"
+;;                                     -3) ; Stack: value
+
+                (format t "compile-setq *child-p* case~%")
+                (emit 'aload 2) ; Stack: value context
+                (emit 'swap) ; context value
+                (emit 'bipush (variable-index variable)) ; context value index
+                (emit 'swap) ; context index value
+                (emit 'aastore)
+                (unless for-effect
+                  (emit-store-value))
                 )
                (*using-arg-array*
+;;                 (format t "compile-setq *using-arg-array* case~%")
                 (emit 'aload 1)
+                (emit 'swap)
                 (emit 'bipush (variable-index variable))
-                (compile-form (cadr rest))
-                (unless (remove-store-value)
-                  (emit-push-value))
-                (maybe-emit-clear-values (cadr rest))
+;;                 (compile-form (cadr rest))
+;;                 (unless (remove-store-value)
+;;                   (emit-push-value))
+;;                 (maybe-emit-clear-values (cadr rest))
+                (emit 'swap)
+                (emit 'aastore)
                 (unless for-effect
-                  (emit 'dup)
                   (emit-store-value))
-                (emit 'aastore))
+                )
                (t
+                (format t "line 2725~%")
                 (assert nil) ; FIXME!
                 (compile-form (cadr rest))
                 (unless (remove-store-value)
@@ -2688,8 +2758,7 @@
       (unless (remove-store-value)
         (emit-push-value))
       (maybe-emit-clear-values (cadr rest))
-      (ensure-thread-var-initialized)
-      (emit 'aload *thread*)
+      (emit-push-current-thread)
       (emit-invokestatic +lisp-class+
                          "setSpecialVariable"
                          "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
@@ -2713,8 +2782,7 @@
     (unless (remove-store-value)
       (emit-push-value))
     (emit 'astore tag-var)
-    (ensure-thread-var-initialized)
-    (emit 'aload *thread*)
+    (emit-push-current-thread)
     (emit 'aload tag-var)
     (emit-invokevirtual +lisp-thread-class+
                         "pushCatchTag"
@@ -2800,8 +2868,7 @@
   (let ((new-form (rewrite-throw form)))
     (when (neq new-form form)
       (return-from compile-throw (compile-form new-form))))
-  (ensure-thread-var-initialized)
-  (emit 'aload *thread*)
+  (emit-push-current-thread)
   (compile-form (second form)) ; Tag.
   (unless (remove-store-value)
     (emit-push-value))
@@ -2866,7 +2933,10 @@
             (memq '&REST args))
     (setq *using-arg-array* t)
     (setq *hairy-arglist-p* t)
-    (return-from analyze-args #.(format nil "([~A)~A" +lisp-object+ +lisp-object+)))
+    (return-from analyze-args
+                 (if *child-p*
+                     #.(format nil "([~A[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
+                     #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
   (case (length args)
     (0 #.(format nil "()~A" +lisp-object+))
     (1 #.(format nil "(~A)~A" +lisp-object+ +lisp-object+))
@@ -2901,6 +2971,11 @@
          (body (cddr form))
          (*using-arg-array* nil)
          (*hairy-arglist-p* nil)
+
+         (*child-p* (if *context* t nil))
+
+         (*child-count* (if *child-p* (1+ *child-count*) 0))
+
          (descriptor (analyze-args args))
          (execute-method (make-method :name "execute"
                                       :descriptor descriptor))
@@ -2914,7 +2989,6 @@
          (*handlers* ())
 
 ;;          (*context* (make-context :parent *context*))
-         (*child-p* (if *context* t nil))
          (*context* (if *context* *context* (make-context)))
 
          (*variables* *variables*)
@@ -2977,6 +3051,9 @@
         (allocate-register) ;; One slot for arg array.
         (dolist (arg args) ;; One slot for each argument.
           (allocate-register)))
+    (when *child-p*
+      (let ((context-register (allocate-register)))
+        (assert (eql context-register 2))))
     ;; Reserve the next available slot for the value register.
     (setf *val* (allocate-register))
     ;; Reserve the next available slot for the thread register.
@@ -2986,8 +3063,7 @@
       (cond ((variable-special-p variable)
              ;; Establish dynamic bindings for any variables declared special.
              (cond ((variable-register variable)
-                    (ensure-thread-var-initialized)
-                    (emit 'aload *thread*)
+                    (emit-push-current-thread)
                     (emit 'getstatic
                           *this-class*
                           (declare-symbol (variable-name variable))
@@ -2999,8 +3075,7 @@
                                         -2)
                     (setf (variable-register variable) nil))
                    ((variable-index variable)
-                    (ensure-thread-var-initialized)
-                    (emit 'aload *thread*)
+                    (emit-push-current-thread)
                     (emit 'getstatic
                           *this-class*
                           (declare-symbol (variable-name variable))
@@ -3017,21 +3092,27 @@
                     (error "error: need to establish dynamic binding"))))
             ;; Copy args to context vector.
             (*child-p*
+             (format t "line 3088~%")
+;;              (assert nil) ; FIXME! Needs code!
              (format t "*child-p* case: variable = ~S index = ~S arg-index = ~S~%"
                      (variable-name variable)
                      (variable-index variable)
                      (variable-arg-index variable))
+             ;; Destination first.
+             (emit 'aload 2)
+             (emit 'bipush (variable-index variable))
+             ;; Now value.
              (emit 'aload 1)
              (emit 'bipush (variable-arg-index variable))
              (emit 'aaload)
-             (ensure-thread-var-initialized)
-             (emit 'aload *thread*)
-             (emit 'swap) ; Stack: thread value
-             (emit 'bipush (variable-index variable)) ; thread value index
-             (emit-invokevirtual +lisp-thread-class+
-                                 "setVariableValue"
-                                 "(Lorg/armedbear/lisp/LispObject;I)V"
-                                 -3))
+;;              (emit-push-current-thread)
+;;              (emit 'swap) ; Stack: thread value
+;;              (emit 'bipush (variable-index variable)) ; thread value index
+;;              (emit-invokevirtual +lisp-thread-class+
+;;                                  "setVariableValue"
+;;                                  "(Lorg/armedbear/lisp/LispObject;I)V"
+;;                                  -3))
+             (emit 'aastore))
             ))
 
     (process-optimization-declarations body)
@@ -3096,15 +3177,18 @@
     (setf (method-handlers execute-method) (nreverse *handlers*))
 
     (let* ((super
-            (if *hairy-arglist-p*
-                "org.armedbear.lisp.CompiledFunction"
-                (case (length args)
-                  (0 "org.armedbear.lisp.Primitive0")
-                  (1 "org.armedbear.lisp.Primitive1")
-                  (2 "org.armedbear.lisp.Primitive2")
-                  (3 "org.armedbear.lisp.Primitive3")
-                  (4 "org.armedbear.lisp.Primitive4")
-                  (t "org.armedbear.lisp.Primitive"))))
+            (cond (*child-p*
+                   "org.armedbear.lisp.ClosureTemplateFunction")
+                  (*hairy-arglist-p*
+                   "org.armedbear.lisp.CompiledFunction")
+                  (t
+                   (case (length args)
+                     (0 "org.armedbear.lisp.Primitive0")
+                     (1 "org.armedbear.lisp.Primitive1")
+                     (2 "org.armedbear.lisp.Primitive2")
+                     (3 "org.armedbear.lisp.Primitive3")
+                     (4 "org.armedbear.lisp.Primitive4")
+                     (t "org.armedbear.lisp.Primitive")))))
            (this-index (pool-class *this-class*))
            (super-index (pool-class super))
            (constructor (make-constructor super *defun-name* args body)))
