@@ -2,7 +2,7 @@
  * SimpleTypeError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleTypeError.java,v 1.3 2004-02-23 00:36:08 piso Exp $
+ * $Id: SimpleTypeError.java,v 1.4 2004-03-10 01:53:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,15 +54,29 @@ public final class SimpleTypeError extends TypeError
     public String getMessage()
     {
         try {
-            // (apply 'format (append '(nil format-control) format-arguments))
-            LispObject result =
-                Primitives.APPLY.execute(Symbol.FORMAT,
-                                         Primitives.APPEND.execute(list2(NIL, getFormatControl()),
-                                                                   getFormatArguments()));
-            return result.getStringValue();
+            LispObject formatControl = getFormatControl();
+            if (formatControl != NIL) {
+                LispObject formatArguments = getFormatArguments();
+                if (formatArguments != NIL) {
+                    // (apply 'format (append '(nil format-control) format-arguments))
+                    LispObject result =
+                        Primitives.APPLY.execute(Symbol.FORMAT,
+                                                 Primitives.APPEND.execute(list2(NIL,
+                                                                                 formatControl),
+                                                                   formatArguments));
+                    return result.getStringValue();
+                }
+            }
+            if (datum != null && expectedType != null) {
+                StringBuffer sb = new StringBuffer("The value ");
+                sb.append(String.valueOf(datum));
+                sb.append(" is not of type ");
+                sb.append(String.valueOf(expectedType));
+                sb.append('.');
+                return sb.toString();
+            }
         }
-        catch (Throwable t) {
-            return "simple type error";
-        }
+        catch (Throwable t) {}
+        return null;
     }
 }
