@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.6 2003-08-24 13:30:43 piso Exp $
+;;; $Id: numbers.lisp,v 1.7 2003-08-26 02:28:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -138,3 +138,16 @@
 ;;; FIXME
 (defun rationalize (x)
   (rational x))
+
+(when (and (find-package "JVM")
+           (fboundp 'jvm::jvm-compile))
+  (mapcar #'jvm::jvm-compile '(floor
+                               ceiling
+                               round
+                               rem
+                               ftruncate
+                               ffloor
+                               fceiling
+                               fround
+                               rational
+                               rationalize)))
