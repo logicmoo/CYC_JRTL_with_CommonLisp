@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.110 2003-07-29 23:29:08 piso Exp $
+ * $Id: Lisp.java,v 1.111 2003-07-31 18:59:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -780,9 +780,13 @@ public abstract class Lisp
     }
 
     // Used by jvm compiler.
-    public static final Symbol internInCurrentPackage(String name)
+    public static final Symbol internInPackage(String name, String packageName)
+        throws LispError
     {
-        return getCurrentPackage().intern(name);
+        Package pkg = Packages.findPackage(packageName);
+        if (pkg == null)
+            throw new LispError(packageName + " is not the name of a package");
+        return pkg.intern(name);
     }
 
     public static final Symbol export(String name, Package pkg)
