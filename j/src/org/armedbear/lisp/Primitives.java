@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.711 2004-12-07 01:11:23 piso Exp $
+ * $Id: Primitives.java,v 1.712 2004-12-07 01:16:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -592,6 +592,10 @@ public final class Primitives extends Lisp
     private static final Primitive SUBTRACT =
         new Primitive("-", "minuend &rest subtrahends")
     {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return Fixnum.ZERO.subtract(arg);
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -603,6 +607,7 @@ public final class Primitives extends Lisp
                 case 0:
                     signal(new WrongNumberOfArgumentsException("-"));
                 case 1:
+                    Debug.assertTrue(false);
                     return Fixnum.ZERO.subtract(args[0]);
                 case 2:
                     Debug.assertTrue(false);
@@ -618,7 +623,7 @@ public final class Primitives extends Lisp
     };
 
     // ### 1-
-    private static final Primitive ONE_MINUS = new Primitive("1-","number")
+    private static final Primitive ONE_MINUS = new Primitive("1-", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
