@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.523 2003-12-11 19:34:39 piso Exp $
+ * $Id: Primitives.java,v 1.524 2003-12-12 16:18:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1176,28 +1176,48 @@ public final class Primitives extends Lisp
             if (args.length < 1)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             LispObject datum = args[0];
-            if (datum instanceof LispError)
-                throw new ConditionThrowable((LispError)datum);
+            if (datum instanceof Condition)
+                throw new ConditionThrowable((Condition)datum);
             if (datum instanceof Symbol) {
+                LispObject initargs = NIL;
+                for (int i = 1; i < args.length; i++)
+                    initargs = new Cons(args[i], initargs);
+                initargs = initargs.nreverse();
+                Condition condition;
                 if (datum == Symbol.PACKAGE_ERROR)
-                    throw new ConditionThrowable(new PackageError(_format(args, 1)));
-                if (datum == Symbol.PARSE_ERROR)
-                    throw new ConditionThrowable(new ParseError(_format(args, 1)));
-                if (datum == Symbol.PROGRAM_ERROR)
-                    throw new ConditionThrowable(new ProgramError(_format(args, 1)));
-                if (datum == Symbol.SIMPLE_ERROR)
-                    throw new ConditionThrowable(new SimpleError(_format(args, 1)));
-                if (datum == Symbol.TYPE_ERROR)
-                    throw new ConditionThrowable(new TypeError(_format(args, 1)));
-                // Default.
-                throw new ConditionThrowable(new SimpleError(((Symbol)datum).getName()));
+                    condition = new PackageError(initargs);
+                else if (datum == Symbol.PARSE_ERROR)
+                    condition = new ParseError(initargs);
+                else if (datum == Symbol.PROGRAM_ERROR)
+                    condition = new ProgramError(initargs);
+                else if (datum == Symbol.SIMPLE_CONDITION)
+                    condition = new SimpleCondition(initargs);
+                else if (datum == Symbol.SIMPLE_WARNING)
+                    condition = new SimpleWarning(initargs);
+                else if (datum == Symbol.WARNING)
+                    condition = new Warning(initargs);
+                else if (datum == Symbol.SIMPLE_ERROR)
+                    condition = new SimpleError(initargs);
+                else if (datum == Symbol.TYPE_ERROR)
+                    condition = new TypeError(initargs);
+                else
+                    // Default.
+                    condition = new  SimpleError(initargs);
+                throw new ConditionThrowable(condition);
             }
-            throw new ConditionThrowable(new SimpleError(_format(args)));
+            // Default is SIMPLE-ERROR.
+            LispObject formatControl = args[0];
+            LispObject formatArguments = NIL;
+            for (int i = 1; i < args.length; i++)
+                formatArguments = new Cons(formatArguments, new Cons(args[i]));
+            throw new ConditionThrowable(new SimpleError(formatControl,
+                                                         formatArguments));
         }
     };
 
     // ### signal
-    private static final Primitive SIGNAL = new Primitive("signal","datum &rest arguments")
+    private static final Primitive SIGNAL =
+        new Primitive("signal", "datum &rest arguments")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -1210,7 +1230,8 @@ public final class Primitives extends Lisp
     };
 
     // ### format
-    private static final Primitive FORMAT = new Primitive("format","destination control-string &rest args")
+    private static final Primitive FORMAT =
+        new Primitive("format", "destination control-string &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -1218,7 +1239,8 @@ public final class Primitives extends Lisp
         }
     };
 
-    private static final Primitive _FORMAT = new Primitive("%format", PACKAGE_SYS, false)
+    private static final Primitive _FORMAT =
+        new Primitive("%format", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
