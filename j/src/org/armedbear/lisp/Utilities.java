@@ -1,8 +1,8 @@
 /*
  * Utilities.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Utilities.java,v 1.5 2003-12-13 00:28:08 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Utilities.java,v 1.6 2004-01-05 02:11:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.lisp;
 
 import java.io.File;
+import java.io.IOException;
 
 public final class Utilities extends Lisp
 {
@@ -94,9 +95,30 @@ public final class Utilities extends Lisp
             }
             return new File(namestring);
         }
-        return new File(
-            LispString.getValue(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue()),
-            namestring);
+        Pathname pathname = Pathname.coerceToPathname(pathspec);
+        Pathname defaultPathname =
+            Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
+        Pathname merged =
+            Pathname.mergePathnames(pathname, defaultPathname, NIL);
+        return new File(merged.getNamestring());
+    }
+
+    public static Pathname getDirectoryPathname(File file)
+        throws ConditionThrowable
+    {
+        try {
+            String namestring = file.getCanonicalPath();
+            if (namestring != null && namestring.length() > 0) {
+                if (namestring.charAt(namestring.length() - 1) != File.separatorChar)
+                    namestring = namestring.concat(File.separator);
+            }
+            return new Pathname(namestring);
+        }
+        catch (IOException e) {
+            signal(new LispError(e.getMessage()));
+            // Not reached.
+            return null;
+        }
     }
 
     public static final char toUpperCase(char c)
