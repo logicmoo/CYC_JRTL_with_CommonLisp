@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.58 2003-09-23 18:17:02 piso Exp $
+ * $Id: Closure.java,v 1.59 2003-09-26 16:54:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@ public class Closure extends Function
     private final Environment environment;
     private final boolean allowOtherKeys;
     private Symbol restVar;
+    private Symbol envVar;
     private int arity;
 
     private int minArgs;
@@ -103,6 +104,10 @@ public class Closure extends Function
                             throw new ConditionThrowable(new LispError(
                                 "&REST/&BODY must be followed by a variable"));
                         }
+                    } else if (obj == Symbol.AND_ENVIRONMENT) {
+                        remaining = remaining.cdr();
+                        envVar = (Symbol) remaining.car();
+                        arity = -1; // FIXME
                     } else if (obj == Symbol.AND_KEY) {
                         state = STATE_KEYWORD;
                         arity = -1;
