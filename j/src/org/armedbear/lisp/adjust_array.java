@@ -2,7 +2,7 @@
  * adjust_array.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.9 2004-02-25 13:50:54 piso Exp $
+ * $Id: adjust_array.java,v 1.10 2004-02-25 18:37:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,8 @@
 package org.armedbear.lisp;
 
 // ### %adjust-array array new-dimensions element-type initial-element
-// initial-element-p initial-contents fill-pointer displaced-to displaced-index-offset
-// => new-array
+// initial-element-p initial-contents initial-contents-p fill-pointer
+// displaced-to displaced-index-offset => new-array
 public final class adjust_array extends Primitive
 {
     public adjust_array()
@@ -33,7 +33,7 @@ public final class adjust_array extends Primitive
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        if (args.length != 9)
+        if (args.length != 10)
             return signal(new WrongNumberOfArgumentsException(this));
         AbstractArray array = checkArray(args[0]);
         LispObject dimensions = args[1];
@@ -41,9 +41,10 @@ public final class adjust_array extends Primitive
         LispObject initialElement = args[3];
         LispObject initialElementProvided = args[4];
         LispObject initialContents = args[5];
-        LispObject fillPointer = args[6];
-        LispObject displacedTo = args[7];
-        LispObject displacedIndexOffset = args[8];
+        LispObject initialContentsProvided = args[6];
+        LispObject fillPointer = args[7];
+        LispObject displacedTo = args[8];
+        LispObject displacedIndexOffset = args[9];
         if (initialElementProvided != NIL && initialContents != NIL) {
             return signal(new LispError("ADJUST-ARRAY: cannot specify both initial element and initial contents."));
         }
@@ -51,6 +52,11 @@ public final class adjust_array extends Primitive
             getUpgradedArrayElementType(elementType) != array.getElementType())
         {
             return signal(new LispError("ADJUST-ARRAY: incompatible element type."));
+        }
+        if (array.getRank() == 0) {
+            if (initialContentsProvided != NIL)
+                array.setRowMajor(0, initialContents);
+            return array;
         }
         if (array.getRank() == 1) {
             final int newSize;
