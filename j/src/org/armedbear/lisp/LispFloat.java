@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.22 2003-08-15 17:18:02 piso Exp $
+ * $Id: LispFloat.java,v 1.23 2003-08-16 17:13:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -258,7 +258,20 @@ public final class LispFloat extends LispObject
 
     public LispObject truncate(LispObject obj) throws LispError
     {
-        throw new LispError("TRUNCATE is not yet implemented for floats");
+        final LispThread thread = LispThread.currentThread();
+        LispObject[] values = new LispObject[2];
+        if (obj instanceof Fixnum) {
+            long divisor = ((Fixnum)obj).getValue();
+            float quotient = value / divisor;
+            float remainder = value % divisor;
+            if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
+                values[0] = new Fixnum((int)quotient);
+                values[1] = new LispFloat(remainder);
+                thread.setValues(values);
+                return values[0];
+            }
+        }
+        throw new LispError("LispFloat.truncate(): not implemented: " + obj.typeOf());
     }
 
     public int hashCode()
@@ -271,6 +284,7 @@ public final class LispFloat extends LispObject
         return String.valueOf(value);
     }
 
+    // ### integer-decode-float
     // integer-decode-float float => significand, exponent, integer-sign
     private static final Primitive1 INTEGER_DECODE_FLOAT =
         new Primitive1("integer-decode-float") {
