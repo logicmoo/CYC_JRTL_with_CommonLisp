@@ -50,11 +50,6 @@
 (defun notevery (predicate sequence &rest more-sequences)
   (not (apply #'every predicate sequence more-sequences)))
 
-(defmacro apply-key (key element)
-  `(if ,key
-       (funcall ,key ,element)
-       ,element))
-
 (defmacro seq-dispatch (sequence list-form array-form)
   `(if (listp ,sequence)
        ,list-form
