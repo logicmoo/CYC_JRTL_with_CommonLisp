@@ -1,8 +1,8 @@
 /*
  * ControlC.c
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: ControlC.c,v 1.1 2004-04-30 01:45:44 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: ControlC.c,v 1.2 2005-01-30 02:34:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 #include "ControlC.h"
 #include <signal.h>
+#include <sys/times.h>
 
 JNIEnv *_env;
 jclass _cls;
@@ -40,4 +41,20 @@ Java_org_armedbear_lisp_ControlC_installControlCHandler(JNIEnv *env, jclass cls)
     signal(SIGINT, ctrl_c_handler);
     while (1)
         sleep(31536000);
+}
+
+JNIEXPORT jlong JNICALL
+Java_org_armedbear_lisp_ControlC_getCurrentThreadUserTime(JNIEnv *env, jclass cls)
+{
+    struct tms buf;
+    times(&buf);
+    return buf.tms_utime;
+}
+
+JNIEXPORT jlong JNICALL
+Java_org_armedbear_lisp_ControlC_getCurrentThreadSystemTime(JNIEnv *env, jclass cls)
+{
+    struct tms buf;
+    times(&buf);
+    return buf.tms_stime;
 }

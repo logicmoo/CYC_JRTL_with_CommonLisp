@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Time.java,v 1.24 2005-01-10 17:43:07 piso Exp $
+ * $Id: Time.java,v 1.25 2005-01-30 02:35:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,20 +33,41 @@ public final class Time extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Cons.setCount(0);
-            long start = System.currentTimeMillis();
+            long userStart = -1;
+            long systemStart = -1;
+            try {
+                userStart = ControlC.getCurrentThreadUserTime();
+                systemStart = ControlC.getCurrentThreadSystemTime();
+            }
+            catch (Throwable t) {}
+            long realStart = System.currentTimeMillis();
             try {
                 return arg.execute();
             }
             finally {
-                long elapsed = System.currentTimeMillis() - start;
+                long realElapsed = System.currentTimeMillis() - realStart;
+                long userStop = -1;
+                long systemStop = -1;
+                if (userStart > 0) {
+                    userStop = ControlC.getCurrentThreadUserTime();
+                    systemStop = ControlC.getCurrentThreadSystemTime();
+                }
                 long count = Cons.getCount();
                 Stream out =
                     checkCharacterOutputStream(_TRACE_OUTPUT_.symbolValue());
                 out.freshLine();
-                StringBuffer sb =
-                    new StringBuffer(String.valueOf((float)elapsed/1000));
-                sb.append(" seconds");
+                StringBuffer sb = new StringBuffer();
+                sb.append(String.valueOf((float)realElapsed/1000));
+                sb.append(" seconds real time");
                 sb.append(System.getProperty("line.separator"));
+                if (userStart > 0) {
+                    sb.append(String.valueOf((float)(userStop - userStart)/100));
+                    sb.append(" seconds user run time");
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(String.valueOf((float)(systemStop - systemStart)/100));
+                    sb.append(" seconds system run time");
+                    sb.append(System.getProperty("line.separator"));
+                }
                 if (count > 0) {
                     sb.append(count);
                     sb.append(" cons cell");

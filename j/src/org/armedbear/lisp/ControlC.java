@@ -1,8 +1,8 @@
 /*
  * ControlC.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: ControlC.java,v 1.4 2004-05-29 15:19:15 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: ControlC.java,v 1.5 2005-01-30 02:34:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +25,16 @@ public class ControlC implements Runnable
 {
     public static native void installControlCHandler();
 
+    public static native long getCurrentThreadUserTime();
+    public static native long getCurrentThreadSystemTime();
+
     public static void callback()
     {
         Lisp.setInterrupted(true);
     }
 
-    public void run() {
+    public void run()
+    {
         installControlCHandler(); // Never returns.
     }
 
