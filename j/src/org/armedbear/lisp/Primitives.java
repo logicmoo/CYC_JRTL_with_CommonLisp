@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.532 2003-12-15 00:37:19 piso Exp $
+ * $Id: Primitives.java,v 1.533 2003-12-15 01:55:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4095,7 +4095,7 @@ public final class Primitives extends Lisp
             if (key != NIL) {
                 if (key instanceof Symbol)
                     key = key.getSymbolFunction();
-                if (!(key instanceof Function))
+                if (!(key instanceof Function || key instanceof GenericFunction))
                     signal(new UndefinedFunction(args[2]));
             }
             LispObject test = args[3];
@@ -4107,12 +4107,12 @@ public final class Primitives extends Lisp
             } else if (test != NIL) {
                 if (test instanceof Symbol)
                     test = test.getSymbolFunction();
-                if (!(test instanceof Function))
+                if (!(test instanceof Function || test instanceof GenericFunction))
                     signal(new UndefinedFunction(args[3]));
             } else if (testNot != NIL) {
                 if (testNot instanceof Symbol)
                     testNot = testNot.getSymbolFunction();
-                if (!(testNot instanceof Function))
+                if (!(testNot instanceof Function || testNot instanceof GenericFunction))
                     signal(new UndefinedFunction(args[3]));
             }
             if (key == NIL && test == EQL) {
