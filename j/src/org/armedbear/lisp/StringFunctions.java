@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.26 2004-08-15 11:25:07 piso Exp $
+ * $Id: StringFunctions.java,v 1.27 2004-08-15 12:40:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,8 +113,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -149,8 +149,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -182,8 +182,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -225,8 +225,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -268,8 +268,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -309,8 +309,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -350,8 +350,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -393,8 +393,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -436,8 +436,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -477,8 +477,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -520,8 +520,8 @@ public final class StringFunctions extends Lisp
         {
             if (args.length != 6)
                 return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = string(args[0]).chars();
-            char[] array2 = string(args[1]).chars();
+            char[] array1 = args[0].STRING().chars();
+            char[] array2 = args[1].STRING().chars();
             int start1 = Fixnum.getInt(args[2]);
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
@@ -559,7 +559,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispObject s = string(first);
+            LispObject s = first.STRING();
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
@@ -593,7 +593,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispObject s = string(first);
+            LispObject s = first.STRING();
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
@@ -627,7 +627,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispObject s = string(first);
+            LispObject s = first.STRING();
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
