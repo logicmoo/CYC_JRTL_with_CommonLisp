@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: restart.lisp,v 1.16 2004-05-04 17:33:18 piso Exp $
+;;; $Id: restart.lisp,v 1.17 2004-09-07 15:39:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+;;; Adapted from CMUCL/SBCL.
 
-;;; Adapted from GCL.
+(in-package #:system)
 
 (defun read-evaluated-form ()
   (fresh-line *query-io*)
@@ -49,7 +49,6 @@
                 *restart-clusters*)))
      ,@forms))
 
-;;; Adapted from SBCL.
 (defun compute-restarts (&optional condition)
   (let ((associated ())
 	(other ()))
@@ -109,7 +108,6 @@
                                  :format-arguments (list restart)))))
     (%invoke-restart-interactively real-restart)))
 
-;;; RESTART-CASE (adapted from SBCL)
 (defun parse-keyword-pairs (list keys)
   (do ((l list (cddr l))
        (k '() (list* (cadr l) (car l) k)))
@@ -222,10 +220,9 @@
   `(restart-case (progn ,@forms)
                  (,restart-name ()
                                 :report (lambda (stream)
-                                          (format stream ,format-string ,@format-arguments))
+                                          (simple-format stream ,format-string ,@format-arguments))
                                 (values nil t))))
 
-;;; WITH-CONDITION-RESTARTS (from CMUCL)
 (defmacro with-condition-restarts (condition-form restarts-form &body body)
   (let ((n-cond (gensym)))
     `(let ((*condition-restarts*
@@ -259,7 +256,6 @@
     (when restart
       (invoke-restart restart value))))
 
-;;; Adapted from SBCL.
 (defun warn (datum &rest arguments)
   (let ((condition (coerce-to-condition datum arguments 'simple-warning 'warn)))
     (require-type condition 'warning)
@@ -271,11 +267,11 @@
                      (style-warning 'style-warning)
                      (warning 'warning))))
       (fresh-line *error-output*)
-      (format *error-output* "~S: ~A~%" badness condition)))
+      (simple-format *error-output* "~S: ~A~%" badness condition)))
   nil)
 
 (defun cerror (continue-string datum &rest arguments)
-  (with-simple-restart (continue "~A" (apply #'format nil continue-string arguments))
+  (with-simple-restart (continue "~A" (apply #'simple-format nil continue-string arguments))
     (let ((condition (coerce-to-condition datum arguments 'simple-error 'error)))
       (with-condition-restarts condition (list (find-restart 'continue))
         (signal condition)
