@@ -249,6 +249,14 @@
     <li><a href="commands.html#openMailbox">openMailbox</a></li>
     <li><a href="commands.html#otherWindow">otherWindow</a></li>
     <li><a href="commands.html#p4">p4</a></li>
+    <li><a href="commands.html#p4Add">p4Add</a></li>
+    <li><a href="commands.html#p4Change">p4Change</a></li>
+    <li><a href="commands.html#p4Diff">p4Diff</a></li>
+    <li><a href="commands.html#p4DiffDir">p4DiffDir</a></li>
+    <li><a href="commands.html#p4Edit">p4Edit</a></li>
+    <li><a href="commands.html#p4Log">p4Log</a></li>
+    <li><a href="commands.html#p4Revert">p4Revert</a></li>
+    <li><a href="commands.html#p4Submit">p4Submit</a></li>
     <li><a href="commands.html#pageDown">pageDown</a></li>
     <li><a href="commands.html#pageUp">pageUp</a></li>
     <li><a href="commands.html#paste">paste</a></li>
@@ -3400,6 +3408,82 @@ or:
 <pre>
         p4 help commands
 </pre>
+<p>
+<b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
+<a name="p4Add">p4Add</a><dl><dd>
+<p>
+Runs the Perforce "add" command on the file associated with the current buffer.
+<p>
+<b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
+<a name="p4Change">p4Change</a><dl><dd>
+<p>
+Runs the Perforce "change" command.
+<p>
+<b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
+<a name="p4Diff">p4Diff</a><dl><dd>
+<p>
+Opens a diff output buffer showing the changes between your local copy of the
+file associated with the current buffer and the version in the Perforce
+repository.
+<p>
+<b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
+<a name="p4DiffDir">p4DiffDir</a><dl><dd>
+<p>
+Opens a diff output buffer showing the changes between the checked-in version
+and your local copy for all files that are open in Perforce.
+<p>
+<b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
+<a name="p4Edit">p4Edit</a><dl><dd>
+<p>
+Runs the Perforce "edit" command on the file associated with the current
+buffer.
+<p>
+<b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
+<a name="p4Log">p4Log</a><dl><dd>
+<p>
+Runs the Perforce "filelog" command on the file associated with the current
+buffer. The output is displayed in a transient output buffer.
+<p>
+<b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
+<a name="p4Revert">p4Revert</a><dl><dd>
+<p>
+Runs the Perforce "revert" command on the file associated with the current
+buffer.
+<p>
+<b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
+<a name="p4Submit">p4Submit</a><dl><dd>
+<p>
+Opens a checkin buffer in which you can compose a Perforce checkin comment for
+the default changelist (or you can use the "-c" option to specify a different
+numbered changelist).
+<p>
+When your comment is ready, you can use the command
+<a href="commands.html#finish">finish</a>, mapped by default to Ctrl Enter in
+the checkin buffer, to complete the checkin operation.
 <p>
 <b>Default key mapping:</b> None
 <br><br>
