@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.43 2003-06-09 00:50:21 piso Exp $
+ * $Id: Closure.java,v 1.44 2003-06-09 01:06:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -438,49 +438,11 @@ public class Closure extends Function
         }
         // Keyword parameters.
         if (keywordParameters != null) {
-            if (((args.length - argsUsed) % 2) != 0)
-                throw new ProgramError("odd number of keyword arguments");
-            boolean[] boundpArray = new boolean[keywordParameters.length];
-            LispObject allowOtherKeysValue = null;
-            LispObject unrecognizedKeyword = null;
-            for (int j = argsUsed; j < args.length; j += 2) {
-                LispObject keyword = args[j];
-                // Find it.
-                int k;
-                for (k = keywordParameters.length; k-- > 0;) {
-                    if (keywordParameters[k].keyword == keyword) {
-                        // Found it!
-                        if (!boundpArray[k]) {
-                            Parameter parameter = keywordParameters[k];
-                            Symbol symbol = parameter.var;
-                            bind(symbol, args[j+1], ext);
-                            if (parameter.svar != NIL)
-                                bind((Symbol)parameter.svar, T, ext);
-                            boundpArray[k] = true;
-                        }
-                        break;
-                    }
-                }
-                if (k < 0) {
-                    // Not found.
-                    if (keyword == Keyword.ALLOW_OTHER_KEYS) {
-                        if (allowOtherKeysValue == null)
-                            allowOtherKeysValue = args[j+1];
-                        continue;
-                    }
-                    if (unrecognizedKeyword == null)
-                        unrecognizedKeyword = keyword;
-                }
-            }
-            if (unrecognizedKeyword != null) {
-                if (!allowOtherKeys &&
-                    (allowOtherKeysValue == null || allowOtherKeysValue == NIL))
-                    throw new ProgramError("unrecognized keyword argument " +
-                        unrecognizedKeyword);
-            }
-            // Now bind any unbound keyword arguments to their defaults.
-            for (int n = 0; n < keywordParameters.length; n++) {
-                if (!boundpArray[n]) {
+            int argsLeft = args.length - argsUsed;
+            if (argsLeft == 0) {
+                // No keyword arguments were supplied.
+                // Bind all keyword parameters to their defaults.
+                for (int n = 0; n < keywordParameters.length; n++) {
                     Parameter parameter = keywordParameters[n];
                     LispObject initForm = parameter.initForm;
                     LispObject value =
@@ -488,7 +450,59 @@ public class Closure extends Function
                     bind(parameter.var, value, ext);
                     if (parameter.svar != NIL)
                         bind((Symbol)parameter.svar, NIL, ext);
-                    boundpArray[n] = true;
+                }
+            } else {
+                if ((argsLeft % 2) != 0)
+                    throw new ProgramError("odd number of keyword arguments");
+                boolean[] boundpArray = new boolean[keywordParameters.length];
+                LispObject allowOtherKeysValue = null;
+                LispObject unrecognizedKeyword = null;
+                for (int j = argsUsed; j < args.length; j += 2) {
+                    LispObject keyword = args[j];
+                    // Find it.
+                    int k;
+                    for (k = keywordParameters.length; k-- > 0;) {
+                        if (keywordParameters[k].keyword == keyword) {
+                            // Found it!
+                            if (!boundpArray[k]) {
+                                Parameter parameter = keywordParameters[k];
+                                Symbol symbol = parameter.var;
+                                bind(symbol, args[j+1], ext);
+                                if (parameter.svar != NIL)
+                                    bind((Symbol)parameter.svar, T, ext);
+                                boundpArray[k] = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (k < 0) {
+                        // Not found.
+                        if (keyword == Keyword.ALLOW_OTHER_KEYS) {
+                            if (allowOtherKeysValue == null)
+                                allowOtherKeysValue = args[j+1];
+                            continue;
+                        }
+                        if (unrecognizedKeyword == null)
+                            unrecognizedKeyword = keyword;
+                    }
+                }
+                if (unrecognizedKeyword != null) {
+                    if (!allowOtherKeys &&
+                        (allowOtherKeysValue == null || allowOtherKeysValue == NIL))
+                        throw new ProgramError("unrecognized keyword argument " +
+                            unrecognizedKeyword);
+                }
+                // Now bind any unbound keyword parameters to their defaults.
+                for (int n = 0; n < keywordParameters.length; n++) {
+                    if (!boundpArray[n]) {
+                        Parameter parameter = keywordParameters[n];
+                        LispObject initForm = parameter.initForm;
+                        LispObject value =
+                            initForm != null ? eval(initForm, ext, thread) : NIL;
+                        bind(parameter.var, value, ext);
+                        if (parameter.svar != NIL)
+                            bind((Symbol)parameter.svar, NIL, ext);
+                    }
                 }
             }
         } else {
