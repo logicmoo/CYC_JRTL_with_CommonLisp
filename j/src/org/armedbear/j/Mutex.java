@@ -1,8 +1,8 @@
 /*
  * Mutex.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: Mutex.java,v 1.1.1.1 2002-09-24 16:09:33 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Mutex.java,v 1.2 2004-09-09 11:13:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,8 @@ public final class Mutex
             throw new InterruptedException();
         synchronized(this) {
             try {
-                while (inUse) wait();
+                while (inUse)
+                    wait();
                 inUse = true;
             }
             catch (InterruptedException e) {
