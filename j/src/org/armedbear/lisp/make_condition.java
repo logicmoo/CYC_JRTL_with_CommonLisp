@@ -1,8 +1,8 @@
 /*
  * make_condition.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: make_condition.java,v 1.12 2003-12-15 14:34:07 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: make_condition.java,v 1.13 2004-01-16 15:16:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,34 +33,36 @@ public final class make_condition extends Primitive2
     public LispObject execute(LispObject type, LispObject initArgs)
         throws ConditionThrowable
     {
-        if (type == Symbol.CONDITION)
-            return new Condition(initArgs);
-        if (type == Symbol.SIMPLE_CONDITION)
-            return new SimpleCondition(initArgs);
-        if (type == Symbol.ERROR)
-            return new LispError(initArgs);
         if (type == Symbol.ARITHMETIC_ERROR)
             return new ArithmeticError(initArgs);
         if (type == Symbol.CELL_ERROR)
             return new CellError(initArgs);
+        if (type == Symbol.CONDITION)
+            return new Condition(initArgs);
         if (type == Symbol.CONTROL_ERROR)
             return new ControlError(initArgs);
         if (type == Symbol.DIVISION_BY_ZERO)
             return new DivisionByZero(initArgs);
         if (type == Symbol.END_OF_FILE)
             return new EndOfFile(initArgs);
+        if (type == Symbol.ERROR)
+            return new LispError(initArgs);
+        if (type == Symbol.FILE_ERROR)
+            return new FileError(initArgs);
         if (type == Symbol.PACKAGE_ERROR)
             return new PackageError(initArgs);
+        if (type == Symbol.SIMPLE_CONDITION)
+            return new SimpleCondition(initArgs);
         if (type == Symbol.SIMPLE_ERROR)
             return new SimpleError(initArgs);
-        if (type == Symbol.STREAM_ERROR)
-            return new StreamError(initArgs);
-        if (type == Symbol.TYPE_ERROR)
-            return new TypeError(initArgs);
         if (type == Symbol.SIMPLE_TYPE_ERROR)
             return new SimpleTypeError(initArgs);
         if (type == Symbol.SIMPLE_WARNING)
             return new SimpleWarning(initArgs);
+        if (type == Symbol.STREAM_ERROR)
+            return new StreamError(initArgs);
+        if (type == Symbol.TYPE_ERROR)
+            return new TypeError(initArgs);
         if (type == Symbol.UNBOUND_SLOT)
             return new UnboundSlot(initArgs);
         if (type == Symbol.UNBOUND_VARIABLE)
@@ -73,5 +75,5 @@ public final class make_condition extends Primitive2
         return NIL;
     }
 
-    private static final make_condition MAKE_CONDITION = new make_condition();
+    private static final Primitive2 MAKE_CONDITION = new make_condition();
 }
