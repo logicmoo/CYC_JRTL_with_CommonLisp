@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.140 2003-10-09 16:42:42 piso Exp $
+;;; $Id: rt.lisp,v 1.141 2003-11-17 15:24:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -453,6 +453,7 @@
                               "substitute-if"
                               "substitute-if-not"
                               "subtypep"
+                              "subtypep-eql"
                               "subtypep-float"
                               "subtypep-integer"
                               "subtypep-rational"
