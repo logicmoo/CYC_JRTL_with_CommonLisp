@@ -176,6 +176,7 @@ fceiling
 fdefinition
 ffloor
 fifth
+file-length
 file-namestring
 fill
 fill-pointer
