@@ -2,7 +2,7 @@
  * AboutDialog.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: AboutDialog.java,v 1.3 2004-09-24 15:11:37 piso Exp $
+ * $Id: AboutDialog.java,v 1.4 2004-09-24 15:15:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@ public class AboutDialog extends AbstractDialog
         addStaticText(panel, "The latest version of j is available from:");
         addStaticText(panel, "    http://armedbear.org");
         addStaticText(panel, "Please report bugs to:");
-        addStaticText(panel, "    peter@armedbear.org");
+        addStaticText(panel, "    armedbear-j-devel@lists.sourceforge.net");
         addStaticText(panel, getUptimeString());
         panel = Utilities.createPanel("System Information");
         addVerticalStrut();
