@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.50 2003-06-22 18:21:03 piso Exp $
+;;; $Id: sequences.lisp,v 1.51 2003-07-02 16:56:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,8 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "COMMON-LISP")
-
-(autoload 'make-sequence)
 
 (defmacro type-specifier-atom (type)
   `(if (atom ,type) ,type (car ,type)))
@@ -58,9 +56,6 @@
       (vector-subseq sequence start end)))
 
 
-(autoload '(copy-seq fill replace))
-
-
 ;;; CONCATENATE (from GCL)
 
 (defun concatenate (result-type &rest sequences)
@@ -74,16 +69,3 @@
       ((>= j n))
       (setf (elt x i) (elt (car s) j))
       (incf i))))
-
-
-(autoload '(map map-into))
-(autoload 'reduce)
-(autoload '(delete delete-if delete-if-not) "delete.lisp")
-(autoload '(remove remove-if remove-if-not) "remove.lisp")
-(autoload '(remove-duplicates delete-duplicates))
-(autoload '(substitute substitute-if substitute-if-not) "substitute.lisp")
-(autoload '(nsubstitute nsubstitute-if nsubstitute-if-not) "nsubstitute.lisp")
-(autoload '(position position-if position-if-not find find-if find-if-not)
-          "find.lisp")
-(autoload '(count count-if count-if-not) "count.lisp")
-(autoload '(mismatch search))

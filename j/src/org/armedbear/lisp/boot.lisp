@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.66 2003-07-02 16:43:10 piso Exp $
+;;; $Id: boot.lisp,v 1.67 2003-07-02 16:55:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -85,7 +85,8 @@
 (set-dispatch-macro-character #\# #\- #'read-conditional)
 
 
-(dolist (name '("early-defuns.lisp"
+(dolist (name '("autoloads.lisp"
+                "early-defuns.lisp"
                 "backquote.lisp"
                 "setf.lisp"
                 "macros.lisp"
@@ -100,23 +101,6 @@
                 "loop.lisp"))
   (%load name))
 
-(autoload '(digit-char-p alphanumericp
-            char/= char< char> char<= char>=
-            char-not-equal)
-          "chars.lisp")
-(autoload '(string-upcase string-downcase string-capitalize
-            nstring-upcase nstring-downcase nstring-capitalize
-            string= string/= string-equal string-not-equal
-            string< string>
-            string<= string>=
-            string-lessp string-greaterp
-            string-not-lessp string-not-greaterp)
-          "strings.lisp")
-(autoload '(remprop get-properties copy-symbol) "symbol.lisp")
-(autoload '(open sort merge parse-integer))
-(autoload 'tree-equal)
-(autoload 'make-hash-table)
-(autoload 'documentation)
 
 ;;; Miscellany.
 

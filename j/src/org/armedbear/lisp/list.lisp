@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.40 2003-06-22 18:19:30 piso Exp $
+;;; $Id: list.lisp,v 1.41 2003-07-02 16:56:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,8 +19,6 @@
 
 (in-package "COMMON-LISP")
 
-(autoload 'list-length)
-
 (defun fifth (list)
   (car (cddddr list)))
 (defun sixth (list)
@@ -37,16 +35,10 @@
 (defun make-list (size &key initial-element)
   (%make-list size initial-element))
 
-(autoload 'copy-list)
-
 (defun copy-tree (object)
   (if (consp object)
       (cons (copy-tree (car object)) (copy-tree (cdr object)))
       object))
-
-(autoload 'revappend)
-(autoload '(butlast nbutlast) "butlast.lisp")
-(autoload 'ldiff)
 
 (defmacro apply-key (key element)
   `(if ,key
@@ -59,26 +51,5 @@
 (defun constantly (x)
   #'(lambda (&rest args) x))
 
-(autoload '(subst subst-it subst-if-not nsubst nsubst-if nsubst-if-not)
-          "subst.lisp")
-(autoload '(sublis nsublis) "sublis.lisp")
-
 (defun member (item list &key key test test-not)
   (%member item list key test test-not))
-
-(autoload '(member-if member-if-not) "member-if.lisp")
-(autoload 'tailp)
-(autoload 'adjoin)
-
-(autoload '(union nunion
-            intersection nintersection
-            set-difference nset-difference
-            set-exclusive-or nset-exclusive-or
-            subsetp)
-          "sets.lisp")
-
-(autoload '(assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not
-            acons pairlis copy-alist)
-          "assoc.lisp")
-
-(autoload '(mapc mapcan mapl maplist mapcon) "map1.lisp")
