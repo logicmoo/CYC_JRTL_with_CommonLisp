@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Layout.java,v 1.10 2004-11-06 20:04:46 piso Exp $
+ * $Id: Layout.java,v 1.11 2004-11-12 13:57:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,16 @@ public final class Layout extends LispObject
     public LispClass getLispClass()
     {
         return cls;
+    }
+
+    public LispObject[] getSlotNames()
+    {
+        return slotNames;
+    }
+
+    public String writeToString()
+    {
+        return unreadableString("LAYOUT");
     }
 
     // ### make-layout
