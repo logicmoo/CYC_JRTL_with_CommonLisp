@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Keyword.java,v 1.33 2004-04-02 03:20:12 piso Exp $
+ * $Id: Keyword.java,v 1.34 2004-05-11 15:12:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ public final class Keyword extends Lisp
         COMMON_LISP         = internKeyword("COMMON-LISP"),
         COMPILE_TOPLEVEL    = internKeyword("COMPILE-TOPLEVEL"),
         COUNT_ONLY          = internKeyword("COUNT-ONLY"),
+        DARWIN              = internKeyword("DARWIN"),
         DATUM               = internKeyword("DATUM"),
         DECLARED            = internKeyword("DECLARED"),
         DEFAULT             = internKeyword("DEFAULT"),
@@ -70,6 +71,7 @@ public final class Keyword extends Lisp
         INVERT              = internKeyword("INVERT"),
         IO                  = internKeyword("IO"),
         J                   = internKeyword("J"),
+        LINUX               = internKeyword("LINUX"),
         LOAD_TOPLEVEL       = internKeyword("LOAD-TOPLEVEL"),
         LOCAL               = internKeyword("LOCAL"),
         NAME                = internKeyword("NAME"),
@@ -92,11 +94,13 @@ public final class Keyword extends Lisp
         SUPERSEDE           = internKeyword("SUPERSEDE"),
         TIME                = internKeyword("TIME"),
         TYPE                = internKeyword("TYPE"),
+        UNIX                = internKeyword("UNIX"),
         UNSPECIFIC          = internKeyword("UNSPECIFIC"),
         UP                  = internKeyword("UP"),
         UPCASE              = internKeyword("UPCASE"),
         USE                 = internKeyword("USE"),
         VERSION             = internKeyword("VERSION"),
         WILD                = internKeyword("WILD"),
-        WILD_INFERIORS      = internKeyword("WILD-INFERIORS");
+        WILD_INFERIORS      = internKeyword("WILD-INFERIORS"),
+        WINDOWS             = internKeyword("WINDOWS");
 }
