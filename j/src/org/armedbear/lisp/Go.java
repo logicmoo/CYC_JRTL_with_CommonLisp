@@ -2,7 +2,7 @@
  * Go.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Go.java,v 1.1 2003-02-19 17:45:06 piso Exp $
+ * $Id: Go.java,v 1.2 2003-09-19 14:18:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class Go extends LispError
+public final class Go extends ConditionThrowable
 {
     private final LispObject tag;
 
@@ -35,11 +35,11 @@ public final class Go extends LispError
         return tag;
     }
 
-    public String getMessage()
+    public Condition getCondition()
     {
         StringBuffer sb = new StringBuffer("no tag named ");
         sb.append(tag);
         sb.append(" is currently visible");
-        return sb.toString();
+        return new ControlError(sb.toString());
     }
 }
