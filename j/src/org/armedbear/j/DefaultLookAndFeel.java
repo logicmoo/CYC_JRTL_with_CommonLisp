@@ -1,8 +1,8 @@
 /*
  * DefaultLookAndFeel.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: DefaultLookAndFeel.java,v 1.1.1.1 2002-09-24 16:08:45 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: DefaultLookAndFeel.java,v 1.2 2003-03-11 14:00:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,11 @@ public final class DefaultLookAndFeel extends DefaultMetalTheme
         String lookAndFeelClassName = "javax.swing.plaf.metal.MetalLookAndFeel";
 
         Editor.lookAndFeel = preferences.getStringProperty(Property.LOOK_AND_FEEL);
+
+        if (Editor.lookAndFeel == null) {
+            if (Platform.isPlatformMacOSX())
+                Editor.lookAndFeel = "Aqua";
+        }
 
         if (Editor.lookAndFeel != null) {
             // User has indicated a preference.
