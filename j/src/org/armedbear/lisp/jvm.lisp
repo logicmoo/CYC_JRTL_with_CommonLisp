@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.17 2003-11-08 16:16:18 piso Exp $
+;;; $Id: jvm.lisp,v 1.18 2003-11-08 16:43:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -415,7 +415,9 @@
 (defun emit (instr &rest args)
   (unless (numberp instr)
     (setq instr (get instr 'opcode)))
-  (setq *code* (cons (inst instr args) *code*)))
+  (let ((instruction (inst instr args)))
+    (setq *code* (cons instruction *code*))
+    instruction))
 
 (defmacro emit-store-value ()
   `(case *val*
@@ -501,20 +503,21 @@
       (setf *code* (append code *code*)))
     (setf *thread-var-initialized* t)))
 
-(defun emit-invokevirtual (class-name method-name descriptor)
+(defun emit-invokevirtual (class-name method-name descriptor stack)
   (emit 'invokevirtual class-name method-name descriptor))
 
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
   (emit 'aload *thread*)
-  (emit-invokevirtual +lisp-thread-class+ "clearValues" "()V"))
+  (emit-invokevirtual +lisp-thread-class+ "clearValues" "()V" -1))
 
 (defun emit-invoke-method (method-name)
   (unless (remove-store-value)
     (emit-push-value))
   (emit-invokevirtual +lisp-object-class+
                       method-name
-                      "()Lorg/armedbear/lisp/LispObject;")
+                      "()Lorg/armedbear/lisp/LispObject;"
+                      0)
   (emit-store-value))
 
 ;; CODE is a list.
@@ -632,7 +635,7 @@
       )))
 
 (defun analyze-stack (code)
-  (require-type code vector)
+  (sys::require-type code 'vector)
   )
 
 ;; CODE is a list of INSTRUCTIONs.
@@ -912,7 +915,8 @@
         (declare-field f "Lorg/armedbear/lisp/LispObject;")
         (emit-invokevirtual +lisp-symbol-class+
                             "getSymbolFunctionOrDie"
-                            "()Lorg/armedbear/lisp/LispObject;")
+                            "()Lorg/armedbear/lisp/LispObject;"
+                            0)
         (emit 'putstatic
               *this-class*
               f
@@ -1078,7 +1082,8 @@
     (emit-push-value))
   (emit-invokevirtual +lisp-object-class+
                       op
-                      "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+                      "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                      -1)
   (emit-store-value))
 
 (defparameter unary-operators (make-hash-table))
@@ -1262,19 +1267,22 @@
               "Lorg/armedbear/lisp/Symbol;"))
       (emit-invokevirtual +lisp-symbol-class+
                           "getSymbolFunctionOrDie"
-                          "()Lorg/armedbear/lisp/LispObject;")))
+                          "()Lorg/armedbear/lisp/LispObject;"
+                          0)))
     (case numargs
       (0
        (emit-invokevirtual +lisp-object-class+
                            "execute"
-                           "()Lorg/armedbear/lisp/LispObject;"))
+                           "()Lorg/armedbear/lisp/LispObject;"
+                           0))
       (1
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
-                           "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"))
+                           "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                           -1))
       (2
        (compile-form (first args))
        (unless (remove-store-value)
@@ -1284,7 +1292,8 @@
          (emit-push-value))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
-                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"))
+                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                           -2))
       (3
        (compile-form (first args))
        (unless (remove-store-value)
@@ -1297,7 +1306,8 @@
          (emit-push-value))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
-                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"))
+                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                           -3))
       (t
        (emit 'sipush (length args))
        (emit 'anewarray "org/armedbear/lisp/LispObject")
@@ -1313,7 +1323,8 @@
        ;; Stack: function array-ref
        (emit-invokevirtual +lisp-object-class+
                            "execute"
-                           "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")))
+                           "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                           -1)))
     (if for-effect
         (emit 'pop)
         (emit-store-value))))
@@ -1349,7 +1360,8 @@
                (emit-push-value))
              (emit-invokevirtual +lisp-object-class+
                                  s
-                                 "()Z")
+                                 "()Z"
+                                 0)
              (return-from compile-test 'ifeq))))
       (3 (when (eq (car form) 'EQ)
            (compile-form (second form))
@@ -1379,7 +1391,8 @@
                (emit-push-value))
              (emit-invokevirtual +lisp-object-class+
                                  s
-                                 "(Lorg/armedbear/lisp/LispObject;)Z")
+                                 "(Lorg/armedbear/lisp/LispObject;)Z"
+                                 -1)
              (return-from compile-test 'ifeq))))))
   ;; Otherwise...
   (compile-form form)
@@ -1433,7 +1446,8 @@
       (emit 'aload *thread*)
       (emit-invokevirtual +lisp-thread-class+
                           "getDynamicEnvironment"
-                          "()Lorg/armedbear/lisp/Environment;")
+                          "()Lorg/armedbear/lisp/Environment;"
+                          0)
       (emit 'astore env-var))
     (ecase (car form)
       (LET
@@ -1451,7 +1465,8 @@
       (emit 'aload env-var)
       (emit-invokevirtual +lisp-thread-class+
                           "setDynamicEnvironment"
-                          "(Lorg/armedbear/lisp/Environment;)V"))
+                          "(Lorg/armedbear/lisp/Environment;)V"
+                          -2))
     ;; Restore fill pointer to its saved value so the slots used by these
     ;; bindings will again be available.
     (setf (fill-pointer *locals*) saved-fp)))
@@ -1669,7 +1684,8 @@
                     "Lorg/armedbear/lisp/Symbol;")
               (emit-invokevirtual +lisp-object-class+
                                   "getSymbolFunctionOrDie"
-                                  "()Lorg/armedbear/lisp/LispObject;")
+                                  "()Lorg/armedbear/lisp/LispObject;"
+                                  0)
               (emit-store-value)))
            #+nil
            ((and (consp obj) (eq (car obj) 'LAMBDA))
@@ -1761,7 +1777,8 @@
           "Lorg/armedbear/lisp/Symbol;")
     (emit-invokevirtual +lisp-symbol-class+
                         "symbolValue"
-                        "()Lorg/armedbear/lisp/LispObject;")
+                        "()Lorg/armedbear/lisp/LispObject;"
+                        0)
     (emit-store-value)
     (return-from compile-variable-ref)))
 
@@ -1885,7 +1902,8 @@
       (emit 'aload_1)
       (emit-invokevirtual *this-class*
                           "processArgs"
-                          "([Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;")
+                          "([Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;"
+                          -1)
       (emit 'astore_1))
     (dolist (f body)
       (compile-form f))
