@@ -2,7 +2,7 @@
  * XmlParserImpl.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: XmlParserImpl.java,v 1.3 2003-06-04 00:24:16 piso Exp $
+ * $Id: XmlParserImpl.java,v 1.4 2003-06-04 18:14:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,9 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -43,18 +46,68 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public final class XmlParserImpl extends DefaultHandler implements Runnable,
     ContentHandler, EntityResolver
 {
+    private static final String DEFAULT_XML_READER =
+        "org.apache.crimson.parser.XMLReaderImpl";
+
+    private static final String VALIDATION =
+        "http://xml.org/sax/features/validation";
+
     private String parserClassName;
     private boolean aelfred;
-    private Buffer buffer;
+    private final Buffer buffer;
     private Reader reader;
+    private XMLReader xmlReader;
     private TreeModel treeModel;
     private Stack stack;
     private Exception exception;
     private DefaultMutableTreeNode current;
     private Locator locator;
+    private FastStringBuffer output;
 
-    public XmlParserImpl()
+    public XmlParserImpl(Buffer buffer)
     {
+        Debug.assertTrue(buffer != null);
+        this.buffer = buffer;
+    }
+
+    public boolean initialize()
+    {
+        String className =
+            Editor.preferences().getStringProperty("org.xml.sax.driver");
+        if (className == null) {
+            className = System.getProperty("org.xml.sax.driver");
+            if (className == null)
+                className = DEFAULT_XML_READER;
+        }
+        try {
+            xmlReader = XMLReaderFactory.createXMLReader(className);
+        }
+        catch (Exception e) {
+            Log.debug(e);
+        }
+        if (xmlReader == null) {
+            if (className != null && !className.equals(DEFAULT_XML_READER)) {
+                try {
+                    xmlReader =
+                        XMLReaderFactory.createXMLReader(DEFAULT_XML_READER);
+                }
+                catch (Exception e) {
+                    Log.debug(e);
+                }
+            }
+        }
+        if (xmlReader == null) {
+            parserClassName = null;
+            aelfred = false;
+            Log.error("no parser found");
+        } else {
+            parserClassName = xmlReader.getClass().getName();
+            if (parserClassName.equals("org.armedbear.j.aelfred.SAXDriver"))
+                aelfred = true;
+            else
+                aelfred = false;
+        }
+        return xmlReader != null;
     }
 
     public String getParserClassName()
@@ -62,14 +115,44 @@ public final class XmlParserImpl extends DefaultHandler implements Runnable,
         return parserClassName;
     }
 
-    public void setBuffer(Buffer buffer)
-    {
-        this.buffer = buffer;
-    }
-
     public void setReader(Reader reader)
     {
         this.reader = reader;
+    }
+
+    public boolean enableValidation(boolean enable)
+    {
+        if (xmlReader == null) {
+            Debug.bug();
+            return false;
+        }
+        String id = "http://xml.org/sax/features/validation";
+        try {
+            xmlReader.setFeature(id, enable);
+        }
+        catch (SAXNotRecognizedException e) {
+            Log.error(e);
+            return false;
+        }
+        catch (SAXNotSupportedException e) {
+            Log.error(e);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidating()
+    {
+        if (xmlReader == null) {
+            Debug.bug();
+            return false;
+        }
+        try {
+            return xmlReader.getFeature(VALIDATION);
+        }
+        catch (SAXNotRecognizedException e) {}
+        catch (SAXNotSupportedException e) {}
+        return false;
     }
 
     public Exception getException()
@@ -77,12 +160,41 @@ public final class XmlParserImpl extends DefaultHandler implements Runnable,
         return exception;
     }
 
+    public String getOutput()
+    {
+        return output != null ? output.toString() : "";
+    }
+
     public void run()
     {
-        exception = null;
-        // Parser must be associated with a buffer.
-        if (buffer == null)
+        if (xmlReader == null) {
+            Debug.bug();
+            initialize();
+        }
+
+        if (xmlReader == null) {
+            Log.error("no XML reader available");
             return;
+        }
+
+        exception = null;
+        output = new FastStringBuffer();
+
+        final boolean validating = isValidating();
+
+        output.append("Using ");
+        output.append(xmlReader.getClass().getName());
+        output.append(" (");
+        if (!validating)
+            output.append("not ");
+        output.append("validating) ...\n");
+
+        // Parser must be associated with a buffer.
+        if (buffer == null) {
+            Debug.bug();
+            return;
+        }
+
         InputSource inputSource = null;
         final File file = buffer.getFile();
         if (reader != null) {
@@ -113,12 +225,13 @@ public final class XmlParserImpl extends DefaultHandler implements Runnable,
         }
         treeModel = null;
         stack = new Stack();
-        XMLReader xmlReader = getXMLReader();
+
         if (xmlReader != null) {
             xmlReader.setContentHandler(this);
             xmlReader.setErrorHandler(this);
             xmlReader.setEntityResolver(this);
             buffer.exception = null;
+            long start = System.currentTimeMillis();
             try {
                 xmlReader.parse(inputSource);
             }
@@ -126,51 +239,13 @@ public final class XmlParserImpl extends DefaultHandler implements Runnable,
                 exception = e;
                 buffer.exception = e;
             }
+            long elapsed = System.currentTimeMillis() - start;
+            output.append('\n');
+            output.append(validating ? "Validation" : "Parsing");
+            output.append(" finished (");
+            output.append(elapsed);
+            output.append(" ms)");
         }
-    }
-
-    private static final String DEFAULT_XML_READER =
-        "org.apache.crimson.parser.XMLReaderImpl";
-
-    private XMLReader getXMLReader()
-    {
-        XMLReader xmlReader = null;
-        String className =
-            Editor.preferences().getStringProperty("org.xml.sax.driver");
-        if (className == null) {
-            className = System.getProperty("org.xml.sax.driver");
-            if (className == null)
-                className = DEFAULT_XML_READER;
-        }
-        try {
-            xmlReader = XMLReaderFactory.createXMLReader(className);
-        }
-        catch (Exception e) {
-            Log.debug(e);
-        }
-        if (xmlReader == null) {
-            if (className != null && !className.equals(DEFAULT_XML_READER))
-                try {
-                    xmlReader =
-                        XMLReaderFactory.createXMLReader(DEFAULT_XML_READER);
-                }
-            catch (Exception e) {
-                Log.debug(e);
-            }
-        }
-        if (xmlReader == null) {
-            parserClassName = null;
-            aelfred = false;
-            Log.error("no parser found");
-        } else {
-            parserClassName = xmlReader.getClass().getName();
-            if (parserClassName.equals("org.armedbear.j.aelfred.SAXDriver"))
-                aelfred = true;
-            else
-                aelfred = false;
-        }
-        Log.debug("XmlParserImpl.getXMLReader xmlReader = " + xmlReader);
-        return xmlReader;
     }
 
     public InputSource resolveEntity(String publicId, String systemId)
@@ -272,6 +347,50 @@ public final class XmlParserImpl extends DefaultHandler implements Runnable,
             current = null;
         else
             current = (DefaultMutableTreeNode) stack.pop();
+    }
+
+    public void warning(SAXParseException e)
+	throws SAXException
+    {
+        appendMessage("Warning", e);
+    }
+
+    public void error(SAXParseException e)
+	throws SAXException
+    {
+        appendMessage("Error", e);
+    }
+
+    public void fatalError(SAXParseException e)
+	throws SAXException
+    {
+        appendMessage("Fatal error", e);
+    }
+
+    private void appendMessage(String what, SAXParseException e)
+    {
+        FastStringBuffer sb = new FastStringBuffer();
+        final String systemId = e.getSystemId();
+        final int lineNumber = e.getLineNumber();
+        if (systemId.startsWith("file://")) {
+            sb.append(systemId.substring(7));
+            sb.append(':');
+            sb.append(lineNumber);
+        } else if (systemId.startsWith("file:")) {
+            sb.append(systemId.substring(5));
+            sb.append(':');
+            sb.append(lineNumber);
+        } else {
+            sb.append(systemId);
+            sb.append(" line ");
+            sb.append(lineNumber);
+        }
+        sb.append(": ");
+        sb.append(what);
+        sb.append(": ");
+        sb.append(e.getMessage());
+        sb.append('\n');
+        output.append(sb.toString());
     }
 
     public TreeModel getTreeModel()
