@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.392 2003-09-14 15:33:05 piso Exp $
+ * $Id: Primitives.java,v 1.393 2003-09-14 16:28:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1173,12 +1173,14 @@ public final class Primitives extends Module
                 throw new WrongNumberOfArgumentsException(this);
             LispObject datum = args[0];
             if (datum instanceof Symbol) {
-                if (datum == Symbol.TYPE_ERROR)
-                    throw new TypeError(_format(args, 1));
+                if (datum == Symbol.PACKAGE_ERROR)
+                    throw new PackageError(_format(args, 1));
                 if (datum == Symbol.PARSE_ERROR)
                     throw new ParseError(_format(args, 1));
                 if (datum == Symbol.PROGRAM_ERROR)
                     throw new ProgramError(_format(args, 1));
+                if (datum == Symbol.TYPE_ERROR)
+                    throw new TypeError(_format(args, 1));
                 // Default.
                 throw new SimpleError(((Symbol)datum).getName());
             }
