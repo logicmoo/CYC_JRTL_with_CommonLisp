@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.46 2003-10-16 20:31:16 piso Exp $
+;;; $Id: compiler.lisp,v 1.47 2003-10-16 23:12:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -160,7 +160,7 @@
       (MULTIPLE-VALUE-PROG1
        (list* 'unwind-protect (compile-sexp (cadr form)) (mapcar #'compile-sexp (cddr form))))
       (THE
-       (caddr form))
+       (compile-sexp (caddr form)))
       (GO form)
       (t
 ;;        (format t "COMPILE-SPECIAL skipping ~S~%" first)
