@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.5 2003-08-10 04:27:50 piso Exp $
+ * $Id: Pathname.java,v 1.6 2003-08-10 04:34:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,18 @@ public final class Pathname extends LispObject
             sb.append(name);
         }
         namestring = sb.toString();
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.PATHNAME;
+    }
+
+    public LispObject typep(LispObject typeSpecifier) throws LispError
+    {
+        if (typeSpecifier == Symbol.PATHNAME)
+            return T;
+        return super.typep(typeSpecifier);
     }
 
     public String getNamestring()
