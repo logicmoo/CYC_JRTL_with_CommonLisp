@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.13 2004-03-15 19:30:43 piso Exp $
+ * $Id: SimpleString.java,v 1.14 2004-05-22 17:24:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,17 @@ public final class SimpleString extends AbstractString
     public LispClass classOf()
     {
         return BuiltInClass.SIMPLE_STRING;
+    }
+
+    public LispObject getDescription()
+    {
+        StringBuffer sb = new StringBuffer("A simple-string (");
+        sb.append(capacity);
+        sb.append(") \"");
+        sb.append(chars);
+        sb.append("\" at #x");
+        sb.append(Integer.toHexString(System.identityHashCode(this)));
+        return new SimpleString(sb);
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable

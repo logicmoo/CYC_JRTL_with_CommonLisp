@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.48 2004-04-23 00:49:08 piso Exp $
+ * $Id: LispCharacter.java,v 1.49 2004-05-22 17:25:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,15 @@ public final class LispCharacter extends LispObject
     public LispClass classOf()
     {
         return BuiltInClass.CHARACTER;
+    }
+
+    public LispObject getDescription()
+    {
+        StringBuffer sb = new StringBuffer("character #\\");
+        sb.append(value);
+        sb.append(" char-code #x");
+        sb.append(Integer.toHexString(value));
+        return new SimpleString(sb);
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
