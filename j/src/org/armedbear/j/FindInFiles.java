@@ -2,7 +2,7 @@
  * FindInFiles.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindInFiles.java,v 1.13 2003-10-15 15:08:33 piso Exp $
+ * $Id: FindInFiles.java,v 1.14 2003-11-13 16:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -322,7 +322,7 @@ public final class FindInFiles extends Replacement implements Constants,
             }
             Debug.assertTrue(outputBuffer != null);
             processFile(file);
-                ++numFilesExamined;
+            ++numFilesExamined;
         }
     }
 
