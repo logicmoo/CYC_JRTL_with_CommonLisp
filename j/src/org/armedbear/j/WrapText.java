@@ -2,7 +2,7 @@
  * WrapText.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: WrapText.java,v 1.9 2004-09-19 19:01:04 piso Exp $
+ * $Id: WrapText.java,v 1.10 2004-09-19 23:40:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,7 +289,7 @@ public final class WrapText implements Constants
             s = s.substring(prefixLength);
 
         if (!Utilities.isWhitespace(prefix)) {
-            // Replace prefix with whitespace.
+            // Replace prefix with spaces.
             sb.setLength(0);
             int index;
             int begin = 0;
@@ -303,29 +303,35 @@ public final class WrapText implements Constants
             s = sb.toString();
         }
 
-        // Replace line separators with spaces.
-        s = s.replace('\n', ' ');
-
-        // Now s is one long line. Remove duplicate spaces.
         sb.setLength(0);
         sb.append(prefix);
         final int start = buffer.getAbsoluteOffset(r.getBegin());
-        boolean lastCharWasSpace = false;
+        char lastChar = '\0';
         int numSkipped = 0;
-        for (int i = 0; i < s.length(); i++) {
+        final int limit = s.length();
+        for (int i = 0; i < limit; i++) {
             char c = s.charAt(i);
+            if (c == '\n') {
+                if (lastChar == '-') {
+                    // Line ends with '-'. We want to remove the '\n' and skip
+                    // leading spaces on the next line. We can accomplish this
+                    // by pretending the '-' is a space...
+                    lastChar = ' ';
+                }
+                c = ' ';
+            }
             if (c == ' ') {
-                if (lastCharWasSpace) {
+                if (lastChar == ' ') {
                     if (start + prefixLength + i <= savedOffset)
                         ++numSkipped;
                 } else {
                     sb.append(c);
-                    lastCharWasSpace = true;
+                    lastChar = c;
                 }
             } else {
                 // Not a space.
                 sb.append(c);
-                lastCharWasSpace = false;
+                lastChar = c;
             }
         }
 
