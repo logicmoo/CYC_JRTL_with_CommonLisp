@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.16 2002-11-05 15:35:53 piso Exp $
+ * $Id: Editor.java,v 1.17 2002-11-13 01:06:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3952,7 +3952,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             // Read-only status has changed.
             buf.readOnly = !buf.readOnly;
             changed = true;
-            // Let the user know if the file associated with a modified buffer 
+            // Let the user know if the file associated with a modified buffer
             // is no longer writable.
             if (buf.readOnly && buf.isLoaded() && buf.isModified())
                 MessageDialog.showMessageDialog(
@@ -5712,8 +5712,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public void activate(Buffer buf)
     {
-        if (buffer != null)
-            Debug.assertTrue(bufferList.contains(buffer));
         if (buf == null)
             return;
         Debug.assertTrue(bufferList.contains(buf));
@@ -5722,7 +5720,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         if (!buf.initialized())
             buf.initialize();
         clearStatusText();
-        if (buffer != null) {
+        if (buffer != null && bufferList.contains(buffer)) {
             // Save information about buffer being deactivated.
             buffer.autosave();
             saveView();
@@ -6149,7 +6147,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         } else
             setFocusToTextField();
     }
-    
+
     private static Method evaluateMethod;
 
     public void executeCommand(String input)
