@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.3 2004-03-04 01:17:48 piso Exp $
+;;; $Id: compile-file.lisp,v 1.4 2004-03-18 02:14:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,12 +23,15 @@
   (unless output-file
     (setf output-file (compile-file-pathname input-file)))
   (with-open-file (in input-file :direction :input)
-    (with-open-file (out output-file :direction :output :if-exists :supersede)
-      (loop
-        (let ((line (read-line in nil :eof)))
-          (when (eq line :eof)
-            (return))
-          (write-line line out)))))
+    (let ((*compile-file-pathname* (pathname in))
+          (*compile-file-truename* (truename in)))
+      (with-open-file (out output-file :direction :output :if-exists :supersede)
+        ;; FIXME For now we just copy the source file.
+        (loop
+          (let ((line (read-line in nil in)))
+            (when (eq line in)
+              (return))
+            (write-line line out))))))
   (values (truename output-file) nil nil))
 
 ;; Adapted from SBCL.
