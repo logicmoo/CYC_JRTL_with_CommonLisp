@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.603 2004-03-11 11:01:11 piso Exp $
+ * $Id: Primitives.java,v 1.604 2004-03-11 11:34:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3604,15 +3604,8 @@ public final class Primitives extends Lisp
             int length = args.length;
             if (length > 4)
                 signal(new WrongNumberOfArgumentsException(this));
-            Stream stream = null;
-            if (length == 0)
-                stream = getStandardInput();
-            else if (args[0] instanceof TwoWayStream)
-                stream = ((TwoWayStream)args[0]).getInputStream();
-            else if (args[0] instanceof Stream)
-                stream = (Stream) args[0];
-            if (stream == null)
-                signal(new TypeError(args[0], "character input stream"));
+            Stream stream =
+                length > 0 ? inSynonymOf(args[0]) : getStandardInput();
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
