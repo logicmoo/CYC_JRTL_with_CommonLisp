@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.4 2003-10-02 00:23:21 piso Exp $
+ * $Id: SpecialOperators.java,v 1.5 2003-10-12 18:22:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -266,6 +266,8 @@ public final class SpecialOperators extends Lisp
                     functional = autoload.getSymbol().getSymbolFunction();
                 }
                 if (functional instanceof Function)
+                    return functional;
+                if (functional instanceof GenericFunction)
                     return functional;
                 throw new ConditionThrowable(new UndefinedFunction(arg));
             }
