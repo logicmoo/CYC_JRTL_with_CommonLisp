@@ -2,7 +2,7 @@
  * JdbCommands.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbCommands.java,v 1.2 2003-05-11 02:46:04 piso Exp $
+ * $Id: JdbCommands.java,v 1.3 2003-05-15 01:23:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,12 @@ public final class JdbCommands
         if (cmd.equals("p"))
             return "print";
 
+        if ("break".startsWith(cmd))
+            return "stop";
         if ("clear".startsWith(cmd))
             return "clear";
+        if ("finish".startsWith(cmd))
+            return "finish";
         if ("go".startsWith(cmd))
             return "resume";
         if ("locals".startsWith(cmd))
