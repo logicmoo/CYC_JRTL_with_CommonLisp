@@ -235,6 +235,7 @@ multiple-value-bind
 multiple-value-call
 multiple-value-list
 multiple-value-prog1
+multiple-value-setq
 nbutlast
 nconc
 ninth
