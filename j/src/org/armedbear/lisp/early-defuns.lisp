@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.22 2005-03-23 18:24:43 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.23 2005-03-24 13:09:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -121,8 +121,10 @@
          (0
           (return-from normalize-type '(array * (*))))
          (1
+          (setf (car i) (normalize-type (car i)))
           (return-from normalize-type (list 'array (car i) '(*))))
          (2
+          (setf (car i) (normalize-type (car i)))
           (return-from normalize-type (list 'array (car i) (list (cadr i)))))
          (t
           (error "Invalid type specifier ~S." type))))
