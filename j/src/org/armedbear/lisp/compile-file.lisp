@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.55 2005-02-12 03:49:03 piso Exp $
+;;; $Id: compile-file.lisp,v 1.56 2005-02-18 18:19:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -91,7 +91,14 @@
             ;; it always evaluates to the same value."
             (eval form))
            (DEFUN
-            (let ((name (second form)))
+            (let* ((name (second form))
+                   (block-name (cond ((symbolp name)
+                                      name)
+                                     ((and (consp name)
+                                           (eq (car name) 'SETF))
+                                      (cadr name))
+                                     (t
+                                      (error "Invalid function name: ~S~%" name)))))
               (%format t "; Processing function ~A~%" name)
               (let* ((lambda-list (third form))
                      (body (nthcdr 3 form))
@@ -101,7 +108,7 @@
                 (jvm::process-optimization-declarations body)
                 (multiple-value-bind (body decls)
                     (parse-body body)
-                  (let* ((expr `(lambda ,lambda-list ,@decls (block ,name ,@body)))
+                  (let* ((expr `(lambda ,lambda-list ,@decls (block ,block-name ,@body)))
                          (classfile-name (next-classfile-name))
                          (classfile (report-error
                                      (jvm:compile-defun name expr nil classfile-name)))
