@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.24 2004-01-31 01:14:53 piso Exp $
+ * $Id: BuiltInClass.java,v 1.25 2004-02-10 15:51:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,7 +250,7 @@ public class BuiltInClass extends LispClass
     }
 
     public static final StandardClass GENERIC_FUNCTION =
-        new StandardClass(Symbol.GENERIC_FUNCTION, list1(FUNCTION));
+        new StandardClass(Symbol.GENERIC_FUNCTION, list2(FUNCTION, STANDARD_OBJECT));
     static {
         addClass(Symbol.GENERIC_FUNCTION, GENERIC_FUNCTION);
     }
@@ -328,8 +328,8 @@ public class BuiltInClass extends LispClass
                                         STANDARD_OBJECT, CLASS_T);
         FUNCTION.setDirectSuperclass(CLASS_T);
         FUNCTION.setCPL(FUNCTION, CLASS_T);
-        GENERIC_FUNCTION.setDirectSuperclass(FUNCTION);
-        GENERIC_FUNCTION.setCPL(GENERIC_FUNCTION, FUNCTION, CLASS_T);
+        GENERIC_FUNCTION.setCPL(GENERIC_FUNCTION, STANDARD_OBJECT, FUNCTION,
+                                CLASS_T);
         HASH_TABLE.setDirectSuperclass(CLASS_T);
         HASH_TABLE.setCPL(HASH_TABLE, CLASS_T);
         INTEGER.setDirectSuperclass(RATIONAL);
