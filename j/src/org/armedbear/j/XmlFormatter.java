@@ -1,8 +1,8 @@
 /*
  * XmlFormatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: XmlFormatter.java,v 1.1.1.1 2002-09-24 16:08:42 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: XmlFormatter.java,v 1.2 2003-06-29 17:34:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ public final class XmlFormatter extends Formatter
     private void endToken(int state)
     {
         if (sb.length() > 0) {
-            byte format = XML_FORMAT_TEXT;
+            byte format;
             switch (state) {
                 case STATE_COMMENT:
                     format = XML_FORMAT_COMMENT;
@@ -75,6 +75,7 @@ public final class XmlFormatter extends Formatter
                     break;
                 case STATE_NEUTRAL:
                 default:
+                    format = XML_FORMAT_TEXT;
                     break;
             }
             addSegment(sb.toString(), format);
@@ -86,18 +87,16 @@ public final class XmlFormatter extends Formatter
     {
         clearSegmentList();
         if (line != null)
-            parseLine(line.getText(), line.flags());
+            parseLine(line);
         else
             addSegment("", XML_FORMAT_TEXT);
         return segmentList;
     }
 
-    private void parseLine(String text, int state)
+    private void parseLine(Line line)
     {
-        if (Editor.tabsAreVisible())
-            text = Utilities.makeTabsVisible(text, buffer.getTabWidth());
-        else
-            text = Utilities.detab(text, buffer.getTabWidth());
+        final String text = getDetabbedText(line);
+        int state = line.flags();
         sb.setLength(0);
         int i = 0;
         final int limit = text.length();
@@ -115,16 +114,59 @@ public final class XmlFormatter extends Formatter
                 }
                 continue;
             }
+            if (state == STATE_CDATA) {
+                if (c == ']') {
+                    if (text.regionMatches(i, "]]>", 0, 3)) {
+                        endToken(state);
+                        sb.append("]]");
+                        endToken(STATE_TAG);
+                        sb.append('>');
+                        endToken(STATE_TAG_ENDING);
+                        state = STATE_NEUTRAL;
+                        i += 3;
+                        continue;
+                    }
+                }
+                sb.append(c);
+                ++i;
+                continue;
+            }
             if (state == STATE_TAG_STARTING) {
                 if (c == '/' || c == '?') {
                     sb.append(c);
                     endToken(state);
                     state = STATE_NAMESPACE;
-                } else {
-                    endToken(state);
-                    state = STATE_NAMESPACE;
-                    sb.append(c);
+                    ++i;
+                    continue;
                 }
+                if (c == '!') {
+                    if (text.regionMatches(i, "![CDATA[", 0, 8)) {
+                        sb.append(c);
+                        endToken(state);
+                        sb.append("[CDATA[");
+                        endToken(STATE_TAG);
+                        state = STATE_CDATA;
+                        i += 8;
+                        continue;
+                    }
+                    if (text.regionMatches(i, "!DOCTYPE", 0, 8)) {
+                        sb.append(c);
+                        endToken(state);
+                        sb.append("DOCTYPE");
+                        endToken(STATE_TAG);
+                        state = STATE_NEUTRAL;
+                        i += 8;
+                        continue;
+                    }
+                    sb.append(c);
+                    endToken(state);
+                    state = STATE_TAG;
+                    ++i;
+                    continue;
+                }
+                endToken(state);
+                state = STATE_NAMESPACE;
+                sb.append(c);
                 ++i;
                 continue;
             }
@@ -328,6 +370,17 @@ public final class XmlFormatter extends Formatter
                     }
                     continue;
                 }
+                if (state == STATE_CDATA) {
+                    if (c == ']') {
+                        pos.moveTo(line, i);
+                        if (pos.lookingAt("]]>")) {
+                            state = STATE_NEUTRAL;
+                            i += 2;
+                            continue;
+                        }
+                    }
+                    continue;
+                }
                 if (state == STATE_TAG) {
                     if (!isWhitespace(c)) {
                         // OK, we shouldn't really be in STATE_ATTRIBUTE just
@@ -364,6 +417,17 @@ public final class XmlFormatter extends Formatter
                     if (pos.lookingAt("<!--")) {
                         state = STATE_COMMENT;
                         i += 3;
+                        continue;
+                    }
+                    if (pos.lookingAt("<![CDATA[")) {
+                        state = STATE_CDATA;
+                        i += 8;
+                        continue;
+                    }
+                    if (pos.lookingAt("<!DOCTYPE")) {
+                        // There is no STATE_DOCTYPE...
+                        state = STATE_NEUTRAL;
+                        i += 8;
                         continue;
                     }
                     state = STATE_TAG;
