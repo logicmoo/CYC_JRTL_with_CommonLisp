@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.6 2003-02-27 15:36:56 piso Exp $
+ * $Id: Nil.java,v 1.7 2003-02-27 15:55:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,11 @@ public final class Nil extends LispObject implements SequenceType
         if (typeSpecifier == Symbol.SYMBOL)
             return T;
         return super.typep(typeSpecifier);
+    }
+
+    public LispObject constantp()
+    {
+        return T;
     }
 
     public LispObject car()
