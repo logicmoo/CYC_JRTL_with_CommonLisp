@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.417 2003-09-20 00:39:25 piso Exp $
+ * $Id: Primitives.java,v 1.418 2003-09-20 14:15:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1169,6 +1169,8 @@ public final class Primitives extends Module
         {
             if (args.length < 1)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            if (args[0] instanceof Condition)
+                throw new ConditionThrowable((Condition)args[0]);
             throw new ConditionThrowable(new SimpleCondition());
         }
     };
