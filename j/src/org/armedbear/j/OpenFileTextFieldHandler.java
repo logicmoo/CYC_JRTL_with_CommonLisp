@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.44 2003-06-17 15:29:15 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.45 2003-06-18 16:12:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -275,7 +275,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         if (parentDir != null && parentDir.isDirectory())
             return true;
         FastStringBuffer sb = new FastStringBuffer("Invalid path \"");
-        sb.append(file.netPath());
+        sb.append(file.canonicalPath());
         sb.append('"');
         MessageDialog.showMessageDialog(sb.toString(), context);
         return false;
