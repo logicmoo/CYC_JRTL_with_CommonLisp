@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.52 2003-07-31 16:54:47 piso Exp $
+ * $Id: Closure.java,v 1.53 2003-09-14 17:36:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,11 +263,6 @@ public class Closure extends Function
     {
         throw new LispError(String.valueOf(obj) +
             " may not be used as a variable in a lambda list");
-    }
-
-    public int getType()
-    {
-        return TYPE_CLOSURE;
     }
 
     public LispObject typep(LispObject typeSpecifier) throws LispError

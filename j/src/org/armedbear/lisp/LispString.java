@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.55 2003-09-14 13:05:45 piso Exp $
+ * $Id: LispString.java,v 1.56 2003-09-14 17:36:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,11 +56,6 @@ public final class LispString extends AbstractVector
     public static LispString getInstance(String s)
     {
         return new LispString(s);
-    }
-
-    public int getType()
-    {
-        return TYPE_STRING | TYPE_VECTOR;
     }
 
     public LispObject typeOf()

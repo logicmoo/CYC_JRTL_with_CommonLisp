@@ -2,7 +2,7 @@
  * Primitive3.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive3.java,v 1.5 2003-07-02 15:24:25 piso Exp $
+ * $Id: Primitive3.java,v 1.6 2003-09-14 17:36:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,11 +45,6 @@ public class Primitive3 extends Function
     public Primitive3(Module module, String name, int index)
     {
         super(module, name, index);
-    }
-
-    public final int getType()
-    {
-        return TYPE_PRIMITIVE3;
     }
 
     public LispObject execute() throws Condition

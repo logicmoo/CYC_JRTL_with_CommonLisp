@@ -2,7 +2,7 @@
  * Primitive0.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive0.java,v 1.5 2003-07-27 18:54:05 piso Exp $
+ * $Id: Primitive0.java,v 1.6 2003-09-14 17:36:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,11 +51,6 @@ public class Primitive0 extends Function
     public Primitive0(Module module, String name, int index)
     {
         super(module, name, index);
-    }
-
-    public final int getType()
-    {
-        return TYPE_PRIMITIVE0;
     }
 
     public LispObject execute(LispObject first) throws Condition

@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.7 2003-08-09 17:16:07 piso Exp $
+ * $Id: CompiledFunction.java,v 1.8 2003-09-14 17:36:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,11 +28,6 @@ public class CompiledFunction extends Closure
         throws LispError
     {
         super(name, lambdaList, body, env);
-    }
-
-    public final int getType()
-    {
-        return TYPE_COMPILED_FUNCTION;
     }
 
     public LispObject typep(LispObject typeSpecifier) throws LispError

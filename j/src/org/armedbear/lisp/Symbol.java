@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.70 2003-09-13 23:56:29 piso Exp $
+ * $Id: Symbol.java,v 1.71 2003-09-14 17:36:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,11 +207,6 @@ public class Symbol extends LispObject
     public void setPackage(LispObject obj)
     {
         pkg = obj;
-    }
-
-    public int getType()
-    {
-        return TYPE_SYMBOL;
     }
 
     public final boolean isSpecialVariable()

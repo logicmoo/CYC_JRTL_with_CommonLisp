@@ -24,11 +24,6 @@ public abstract class AbstractVector extends AbstractArray
 {
     protected int fillPointer = -1; // -1 indicates no fill pointer.
 
-    public int getType()
-    {
-        return TYPE_VECTOR;
-    }
-
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
         if (typeSpecifier instanceof Symbol) {

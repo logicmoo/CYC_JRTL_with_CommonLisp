@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.21 2003-09-14 12:26:32 piso Exp $
+ * $Id: BitVector.java,v 1.22 2003-09-14 17:36:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,11 +51,6 @@ public final class BitVector extends AbstractVector
             else
                 Debug.assertTrue(false);
         }
-    }
-
-    public int getType()
-    {
-        return TYPE_BIT_VECTOR | TYPE_VECTOR;
     }
 
     public LispObject typeOf()
