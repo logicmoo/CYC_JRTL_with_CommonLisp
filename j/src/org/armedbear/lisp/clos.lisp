@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.77 2004-02-09 18:54:52 piso Exp $
+;;; $Id: clos.lisp,v 1.78 2004-02-09 19:01:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1200,6 +1200,10 @@
   (unless (lambda-lists-congruent-p (generic-function-lambda-list gf)
                                     (method-lambda-list method))
     (error 'program-error "ADD-METHOD: lambda list of method does not match lambda list of generic function."))
+  (when (method-generic-function method)
+    (error 'simple-error
+           :format-control "ADD-METHOD: ~S is a method of ~S."
+           :format-arguments (list method (method-generic-function method))))
   ;; Remove existing method with same qualifiers and specializers (if any).
   (let ((old-method (find-method gf (method-qualifiers method)
                                  (method-specializers method) nil)))
