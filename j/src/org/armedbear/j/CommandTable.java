@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.33 2003-06-28 01:21:01 piso Exp $
+ * $Id: CommandTable.java,v 1.34 2003-06-28 01:50:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -315,6 +315,7 @@ public class CommandTable
             addCommand("p4Edit", "P4", "edit");
             addCommand("p4Revert", "P4", "revert");
             addCommand("p4Submit", "P4", "submit");
+            addCommand("pastePrimarySelection", "SystemSelection");
             addCommand("phpHelp", "PHPMode");
             addCommand("previousChange", "ChangeMarks");
             addCommand("previousComment", "CheckinBuffer");
