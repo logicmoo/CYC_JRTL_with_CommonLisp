@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.153 2004-03-04 11:35:59 piso Exp $
+;;; $Id: rt.lisp,v 1.154 2004-04-25 14:36:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -497,18 +497,6 @@
 (defun do-all-tests (&optional (compile-tests t))
   (let ((regression-test::*compile-tests* compile-tests))
     (time (do-tests))))
-
-#+armedbear
-(when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
-  (mapcar #'jvm::jvm-compile '(sys::list-remove-duplicates
-                               sys::vector-remove-duplicates
-                               remove-duplicates
-                               union
-                               nunion
-                               intersection
-                               nintersection
-                               subsetp
-                               copy-tree)))
 
 (load (concatenate 'string regression-test::*prefix* "universe.lsp"))
 (load (concatenate 'string regression-test::*prefix* "ansi-aux.lsp"))
