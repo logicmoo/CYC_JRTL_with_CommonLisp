@@ -1,7 +1,7 @@
 ;;; socket.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: socket.lisp,v 1.1 2004-05-25 18:00:43 piso Exp $
+;;; $Id: socket.lisp,v 1.2 2004-08-03 16:47:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,3 +43,5 @@
 
 (defun server-socket-close (socket)
   (%server-socket-close socket))
+
+(provide '#:socket)
