@@ -1,7 +1,7 @@
 /*
  * ReaderThread.java
  *
- * Copyright (C) 2000-2002 Peter Graves
+ * Copyright (C) 2000-2004 Peter Graves
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 public class ReaderThread extends Thread
 {
@@ -37,7 +38,16 @@ public class ReaderThread extends Thread
     {
         super("reader thread");
         this.inputStream = inputStream;
-        reader = new BufferedReader(new InputStreamReader(inputStream));
+        String encoding =
+            Editor.preferences().getStringProperty(Property.DEFAULT_ENCODING);
+        try {
+            reader = new BufferedReader(new InputStreamReader(inputStream,
+                                                              encoding));
+        }
+        catch (UnsupportedEncodingException e) {
+            Log.debug(e);
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+        }
     }
 
     public void setTimeOut(int n)
