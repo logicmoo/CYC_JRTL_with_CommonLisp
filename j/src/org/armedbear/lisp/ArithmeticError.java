@@ -2,7 +2,7 @@
  * ArithmeticError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ArithmeticError.java,v 1.7 2003-09-22 11:07:58 piso Exp $
+ * $Id: ArithmeticError.java,v 1.8 2003-11-02 04:36:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,10 @@ package org.armedbear.lisp;
 public class ArithmeticError extends LispError
 {
     public ArithmeticError()
+    {
+    }
+
+    public ArithmeticError(LispObject initArgs)
     {
     }
 
