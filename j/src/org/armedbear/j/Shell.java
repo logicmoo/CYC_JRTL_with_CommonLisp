@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.12 2002-10-15 16:27:31 piso Exp $
+ * $Id: Shell.java,v 1.13 2002-10-16 02:00:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,11 +44,9 @@ public class Shell extends CommandInterpreter implements Constants
 
     protected Shell()
     {
-        initializeUndo();
         type = TYPE_SHELL;
         mode = Editor.getModeList().getMode(SHELL_MODE);
         formatter = mode.getFormatter(this);
-        initializeHistory();
         setInitialized(true);
     }
 
@@ -62,12 +60,10 @@ public class Shell extends CommandInterpreter implements Constants
 
     protected Shell(String shellCommand, Mode mode)
     {
-        initializeUndo();
         type = TYPE_SHELL;
         this.shellCommand = shellCommand;
         this.mode = mode;
         formatter = mode.getFormatter(this);
-        initializeHistory();
         setInitialized(true);
     }
 
