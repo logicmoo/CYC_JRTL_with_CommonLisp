@@ -1,7 +1,7 @@
 ;;; member-if.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: member-if.lisp,v 1.1 2003-06-22 18:18:18 piso Exp $
+;;; $Id: member-if.lisp,v 1.2 2003-07-02 17:58:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,11 +22,11 @@
 (defun member-if (test list &key key)
   (do ((list list (cdr list)))
       ((endp list) nil)
-    (if (funcall test (apply-key key (car list)))
+    (if (funcall test (sys::apply-key key (car list)))
 	(return list))))
 
 (defun member-if-not (test list &key key)
   (do ((list list (cdr list)))
       ((endp list) ())
-    (if (not (funcall test (apply-key key (car list))))
+    (if (not (funcall test (sys::apply-key key (car list))))
 	(return list))))

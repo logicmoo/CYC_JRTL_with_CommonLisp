@@ -1,7 +1,7 @@
 ;;; count.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: count.lisp,v 1.1 2003-06-10 16:22:39 piso Exp $
+;;; $Id: count.lisp,v 1.2 2003-07-02 17:55:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,13 +19,11 @@
 
 (in-package "COMMON-LISP")
 
-(export '(count count-if count-if-not))
-
 ;;; From CMUCL.
 
 (defmacro vector-count-if (not-p from-end-p predicate sequence)
   (let ((next-index (if from-end-p '(1- index) '(1+ index)))
-        (pred `(funcall ,predicate (apply-key key (aref ,sequence index)))))
+        (pred `(funcall ,predicate (sys::apply-key key (aref ,sequence index)))))
     `(let ((%start ,(if from-end-p '(1- end) 'start))
            (%end ,(if from-end-p '(1- start) 'end)))
        (do ((index %start ,next-index)
@@ -35,7 +33,7 @@
            (setq count (1+ count)))))))
 
 (defmacro list-count-if (not-p from-end-p predicate sequence)
-  (let ((pred `(funcall ,predicate (apply-key key (pop sequence)))))
+  (let ((pred `(funcall ,predicate (sys::apply-key key (pop sequence)))))
     `(let ((%start ,(if from-end-p '(- length end) 'start))
            (%end ,(if from-end-p '(- length start) 'end))
            (sequence ,(if from-end-p '(reverse sequence) 'sequence)))

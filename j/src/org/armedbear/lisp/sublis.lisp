@@ -1,7 +1,7 @@
 ;;; sublis.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sublis.lisp,v 1.2 2003-06-24 15:30:21 piso Exp $
+;;; $Id: sublis.lisp,v 1.3 2003-07-02 17:59:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,13 +19,11 @@
 
 (in-package "COMMON-LISP")
 
-(export '(sublis nsublis))
-
 ;;; From CMUCL.
 
 (defun sublis (alist tree &key key (test #'eql) (test-not nil notp))
   (labels ((s (subtree)
-              (let* ((key-val (apply-key key subtree))
+              (let* ((key-val (sys::apply-key key subtree))
                      (assoc (if notp
                                 (assoc key-val alist :test-not test-not)
                                 (assoc key-val alist :test test))))
@@ -41,7 +39,7 @@
 
 (defmacro nsublis-macro ()
   (let ((key-tmp (gensym)))
-    `(let ((,key-tmp (apply-key key subtree)))
+    `(let ((,key-tmp (sys::apply-key key subtree)))
        (if notp
            (assoc ,key-tmp alist :test-not test-not)
            (assoc ,key-tmp alist :test test)))))

@@ -1,7 +1,7 @@
 ;;; find.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: find.lisp,v 1.1 2003-06-10 16:35:30 piso Exp $
+;;; $Id: find.lisp,v 1.2 2003-07-02 17:57:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,9 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "COMMON-LISP")
-
-(export '(position position-if position-if-not
-          find find-if find-if-not))
 
 ;;; From CMUCL.
 
@@ -47,9 +44,9 @@
 		  (:position 'index)
 		  (:element 'current))))
     `(if test-not
-	 (if (not (funcall test-not ,item (apply-key key ,seq-ref)))
+	 (if (not (funcall test-not ,item (sys::apply-key key ,seq-ref)))
 	     (return ,return))
-	 (if (funcall test ,item (apply-key key ,seq-ref))
+	 (if (funcall test ,item (sys::apply-key key ,seq-ref))
 	     (return ,return)))))
 
 (defmacro vector-locater (item sequence return-type)
@@ -68,9 +65,9 @@
 		  (:position 'index)
 		  (:element 'current))))
     (if sense
-	`(if (funcall ,test (apply-key key ,seq-ref))
+	`(if (funcall ,test (sys::apply-key key ,seq-ref))
 	     (return ,return))
-	`(if (not (funcall ,test (apply-key key ,seq-ref)))
+	`(if (not (funcall ,test (sys::apply-key key ,seq-ref)))
 	     (return ,return)))))
 
 (defmacro vector-locater-if-macro (test sequence return-type sense)

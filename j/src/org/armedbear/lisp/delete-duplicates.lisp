@@ -1,7 +1,7 @@
 ;;; delete-duplicates.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: delete-duplicates.lisp,v 1.1 2003-06-10 01:33:17 piso Exp $
+;;; $Id: delete-duplicates.lisp,v 1.2 2003-07-02 17:57:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,8 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "COMMON-LISP")
-
-(export 'delete-duplicates)
 
 ;;; From CMUCL.
 
@@ -41,11 +39,11 @@
              nil)
 	    (if (if test-not
 		    (not (funcall test-not
-				  (apply-key key (car current))
-				  (apply-key key (car x))))
+				  (sys::apply-key key (car current))
+				  (sys::apply-key key (car x))))
 		    (funcall test
-			     (apply-key key (car current))
-			     (apply-key key (car x))))
+			     (sys::apply-key key (car current))
+			     (sys::apply-key key (car x))))
 		(return t)))
 	  (rplacd previous (cdr current))
 	  (setq previous (cdr previous))))))
@@ -64,7 +62,7 @@
         vector)
        (setf (aref vector jndex) (aref vector index))))
     (setf (aref vector jndex) (aref vector index))
-    (unless (position (apply-key key (aref vector index)) vector :key key
+    (unless (position (sys::apply-key key (aref vector index)) vector :key key
 		      :start (if from-end start (1+ index)) :test test
 		      :end (if from-end jndex end) :test-not test-not)
       (setq jndex (1+ jndex)))))
@@ -76,4 +74,3 @@
       (if sequence
           (list-delete-duplicates* sequence test test-not key from-end start end))
       (vector-delete-duplicates* sequence test test-not key from-end start end)))
-
