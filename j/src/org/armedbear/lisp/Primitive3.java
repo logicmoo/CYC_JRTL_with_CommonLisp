@@ -2,7 +2,7 @@
  * Primitive3.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive3.java,v 1.2 2003-04-16 16:59:13 piso Exp $
+ * $Id: Primitive3.java,v 1.3 2003-04-16 19:28:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,10 @@ package org.armedbear.lisp;
 
 public class Primitive3 extends Function
 {
+    public Primitive3()
+    {
+    }
+
     public Primitive3(String name)
     {
         super(name);
