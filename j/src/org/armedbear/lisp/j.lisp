@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: j.lisp,v 1.39 2004-09-23 14:35:48 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: j.lisp,v 1.40 2005-02-04 04:27:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
           buffer-substring
           char-after
           char-before
+          copy-mark
           current-buffer
           current-editor
           current-line
@@ -72,6 +73,7 @@
           map-key-for-mode
           mark-charpos
           mark-line
+          mark=
           move-to-position
           open-file-hook
           other-editor
