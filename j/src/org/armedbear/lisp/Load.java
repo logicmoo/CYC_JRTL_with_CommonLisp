@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.46 2004-04-19 17:56:08 piso Exp $
+ * $Id: Load.java,v 1.47 2004-04-21 13:55:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,11 +201,12 @@ public final class Load extends Lisp
         _FASL_VERSION_.setConstant(true);
     }
 
-    // ### *load-fasl-version*
+    // ### *fasl-anonymous-package*
     // internal symbol
-    private static final Symbol _LOAD_FASL_VERSION_ =
-        internSpecial("*LOAD-FASL-VERSION*", PACKAGE_SYS, NIL);
+    public static final Symbol _FASL_ANONYMOUS_PACKAGE_ =
+        internSpecial("*FASL-ANONYMOUS-PACKAGE*", PACKAGE_SYS, NIL);
 
+    // ### init-fasl
     private static final Primitive2 INIT_FASL =
         new Primitive2("init-fasl", PACKAGE_SYS, false)
     {
@@ -215,8 +216,11 @@ public final class Load extends Lisp
             if (first == Keyword.VERSION) {
                 if (second.eql(_FASL_VERSION_.getSymbolValue())){
                     // OK
-                    LispThread.currentThread().bindSpecial(_LOAD_FASL_VERSION_,
-                                                           second);
+                    final LispThread thread = LispThread.currentThread();
+                    Readtable readtable = new Readtable();
+                    readtable.setDispatchMacroCharacter('#', ':', FASL_SHARP_COLON);
+                    thread.bindSpecial(_READTABLE_, readtable);
+                    thread.bindSpecial(_FASL_ANONYMOUS_PACKAGE_, NIL);
                     return T;
                 }
             }
@@ -241,14 +245,11 @@ public final class Load extends Lisp
         LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
         thread.bindSpecial(_PACKAGE_, _PACKAGE_.symbolValue());
-        thread.bindSpecial(_LOAD_FASL_VERSION_, NIL);
         int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue());
         thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
         final String prefix = getLoadVerbosePrefix(loadDepth);
         try {
             Pathname p = Pathname.parseNamestring(truename);
-            boolean isFasl = truename.endsWith("." + COMPILE_FILE_TYPE) ||
-                truename.endsWith(".lisp-obj"); // FIXME (special case for SBCL)
             thread.bindSpecial(_LOAD_PATHNAME_, p);
             thread.bindSpecial(_LOAD_TRUENAME_, p);
             if (verbose) {
@@ -259,7 +260,7 @@ public final class Load extends Lisp
                 out._writeString(truename);
                 out._writeLine(" ...");
                 out._finishOutput();
-                LispObject result = loadStream(in, print, isFasl);
+                LispObject result = loadStream(in, print);
                 long elapsed = System.currentTimeMillis() - start;
                 out.freshLine();
                 out._writeString(prefix);
@@ -271,7 +272,7 @@ public final class Load extends Lisp
                 out._finishOutput();
                 return result;
             } else
-                return loadStream(in, print, isFasl);
+                return loadStream(in, print);
         }
         finally {
             thread.setDynamicEnvironment(oldDynEnv);
@@ -285,11 +286,6 @@ public final class Load extends Lisp
             sb.append(' ');
         return sb.toString();
     }
-
-    // ### *fasl-anonymous-package*
-    // internal symbol
-    public static final Symbol _FASL_ANONYMOUS_PACKAGE_ =
-        internSpecial("*FASL-ANONYMOUS-PACKAGE*", PACKAGE_SYS, NIL);
 
     // ### fasl-sharp-colon
     public static final DispatchMacroFunction FASL_SHARP_COLON =
@@ -313,19 +309,13 @@ public final class Load extends Lisp
     };
 
     private static final LispObject loadStream(InputStream inputStream,
-                                               boolean print, boolean isFasl)
+                                               boolean print)
         throws ConditionThrowable
     {
         Stream in = new Stream(inputStream, Symbol.CHARACTER);
         final LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
         thread.bindSpecial(_LOAD_STREAM_, in);
-        if (isFasl) {
-            Readtable readtable = new Readtable();
-            readtable.setDispatchMacroCharacter('#', ':', FASL_SHARP_COLON);
-            thread.bindSpecial(_READTABLE_, readtable);
-            thread.bindSpecial(_FASL_ANONYMOUS_PACKAGE_, NIL);
-        }
         try {
             final Environment env = new Environment();
             while (true) {
