@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.17 2003-03-31 02:13:45 piso Exp $
+ * $Id: CommandTable.java,v 1.18 2003-04-04 15:07:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -132,6 +132,7 @@ public class CommandTable
             addCommand("killWordLeft");
             addCommand("killWordRight");
             addCommand("left");
+            addCommand("mode");
             addCommand("movePastCloseAndReindent");
             addCommand("newBuffer");
             addCommand("newFrame");
