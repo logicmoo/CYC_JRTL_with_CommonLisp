@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AbstractArray.java,v 1.4 2003-08-02 19:37:59 piso Exp $
+ * $Id: AbstractArray.java,v 1.5 2003-08-03 01:33:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,25 @@ public abstract class AbstractArray extends LispObject
     public final LispObject constantp()
     {
         return T;
+    }
+
+    public boolean equalp(LispObject obj) throws LispError
+    {
+        if (obj instanceof AbstractArray) {
+            AbstractArray a = (AbstractArray) obj;
+            if (getRank() != a.getRank())
+                return false;
+            for (int i = getRank(); i-- > 0;) {
+                if (getDimension(i) != a.getDimension(i))
+                    return false;
+            }
+            for (int i = getTotalSize(); i--> 0;) {
+                if (!getRowMajor(i).equalp(a.getRowMajor(i)))
+                    return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public LispObject AREF(LispObject index) throws LispError
