@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.234 2003-06-11 02:05:20 piso Exp $
+ * $Id: Primitives.java,v 1.235 2003-06-11 17:39:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2492,6 +2492,38 @@ public final class Primitives extends Module
 
     // ### mapcar
     private static final Primitive MAPCAR = new Primitive("mapcar") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws Condition
+        {
+            // First argument must be a function.
+            LispObject fun = first;
+            if (fun instanceof Symbol)
+                fun = fun.getSymbolFunction();
+            if (!(fun instanceof Function))
+                throw new UndefinedFunctionError(first);
+
+            // Second argument must be a list.
+            LispObject list = checkList(second);
+
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = NIL;
+            LispObject splice = null;
+            final LispObject[] funArgs = new LispObject[1];
+            while (list != NIL) {
+                funArgs[0] = list.car();
+                LispObject obj = funcall(fun, funArgs, thread);
+                if (splice == null) {
+                    result = new Cons(obj, result);
+                    splice = result;
+                } else {
+                    Cons cons = new Cons(obj);
+                    splice.setCdr(cons);
+                    splice = cons;
+                }
+                list = list.cdr();
+            }
+            return result;
+        }
         public LispObject execute(final LispObject[] args) throws Condition
         {
             final int numArgs = args.length;
