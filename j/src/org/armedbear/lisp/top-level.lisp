@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.34 2004-05-28 11:27:02 asimon Exp $
+;;; $Id: top-level.lisp,v 1.35 2004-08-04 02:01:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -174,7 +174,7 @@
   (do* ((res nil)
         (string (string-left-trim " " string)
                 (string-left-trim " " (subseq string end)))
-        (end (position #\Space string) (position #\Space string)))
+        (end (position #\space string) (position #\space string)))
        ((zerop (length string)) (nreverse res))
     (unless end
       (setf end (length string)))
@@ -192,21 +192,20 @@
       (compile-file file))))
 
 (defun rq-command (args)
-  (let ((modules (tokenize args)))
+  (let ((modules (tokenize (string-upcase args))))
     (dolist (module modules)
       (require module))))
 
 (defun pwd-command (ignored)
   (format t "~A~%" (namestring *default-pathname-defaults*)))
 
-
-(defun trace-command (args) 
+(defun trace-command (args)
   (if (null args)
     (format t "~A~%" (list-traced-functions))
     (dolist (f (tokenize args))
       (trace-1 (read-from-string f)))))
 
-(defun untrace-command (args) 
+(defun untrace-command (args)
   (if (null args)
     (untrace-all)
     (dolist (f (tokenize args))
