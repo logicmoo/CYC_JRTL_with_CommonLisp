@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.132 2003-12-06 00:03:09 piso Exp $
+;;; $Id: boot.lisp,v 1.133 2003-12-06 14:10:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -325,8 +325,8 @@
 (defmacro dotimes ((var count &optional (result nil)) &body body)
   (if (numberp count)
       (let ((tag (gensym)))
-        `(let ((,var 0))
-           (block nil
+        `(block nil
+           (let ((,var 0))
              (tagbody
               ,tag
               (if (>= ,var ,count)
@@ -336,9 +336,9 @@
               (go ,tag)))))
       (let ((limit (gensym))
             (tag (gensym)))
-        `(let ((,limit ,count)
-               (,var 0))
-           (block nil
+        `(block nil
+           (let ((,limit ,count)
+                 (,var 0))
              (tagbody
               ,tag
               (if (>= ,var ,limit)
