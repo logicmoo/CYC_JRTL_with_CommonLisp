@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.77 2003-06-28 15:58:32 piso Exp $
+ * $Id: Editor.java,v 1.78 2003-06-28 16:11:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6347,44 +6347,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             }
             ((Directory)buffer).deleteFiles();
         }
-    }
-
-    public void doShellCommandOnRegion()
-    {
-        if (!checkExperimental())
-            return;
-        if (!checkReadOnly())
-            return;
-        if (mark == null) {
-            MessageDialog.showMessageDialog(this, "No region selected", "Error");
-            return;
-        }
-        InputDialog d = new InputDialog(this, "Command:", "Do Shell Command On Region", null);
-        d.setHistory(new History("doShellCommandOnRegion"));
-        centerDialog(d);
-        d.show();
-        String command = d.getInput();
-        if (command == null || command.length() == 0)
-            return;
-        setWaitCursor();
-        Region r = new Region(buffer, mark, dot);
-        // BUG! We should pass the contents of the region line by line in case
-        // it's big.
-        ShellCommand shellCommand =
-            new ShellCommand(command, null, r.toString());
-        shellCommand.run();
-        String output = shellCommand.getOutput();
-        if (output != null && output.length() > 0) {
-            CompoundEdit compoundEdit = beginCompoundEdit();
-            deleteRegion();
-            addUndo(SimpleEdit.INSERT_STRING);
-            insertStringInternal(output);
-            moveCaretToDotCol();
-            endCompoundEdit(compoundEdit);
-            if (getFormatter().parseBuffer())
-                buffer.repaint();
-        }
-        setDefaultCursor();
     }
 
     public void dirCopyFile()

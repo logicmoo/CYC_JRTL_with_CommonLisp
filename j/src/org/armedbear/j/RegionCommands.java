@@ -1,8 +1,8 @@
 /*
  * RegionCommands.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: RegionCommands.java,v 1.2 2002-11-20 18:35:31 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: RegionCommands.java,v 1.3 2003-06-28 16:11:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -440,5 +440,46 @@ public final class RegionCommands
         if (after < text.length() && mode.isIdentifierPart(text.charAt(after)))
             return false;
         return true;
+    }
+
+    public void doShellCommandOnRegion()
+    {
+        if (!Editor.checkExperimental())
+            return;
+        final Editor editor = Editor.currentEditor();
+        if (!editor.checkReadOnly())
+            return;
+        if (editor.getMark() == null) {
+            MessageDialog.showMessageDialog(editor, "No region selected",
+                                            "Error");
+            return;
+        }
+        InputDialog d = new InputDialog(editor, "Command:",
+                                        "Do Shell Command On Region", null);
+        d.setHistory(new History("doShellCommandOnRegion"));
+        editor.centerDialog(d);
+        d.show();
+        String command = d.getInput();
+        if (command == null || command.length() == 0)
+            return;
+        editor.setWaitCursor();
+        Region r = new Region(editor);
+        // BUG! We should pass the contents of the region line by line in case
+        // it's big.
+        ShellCommand shellCommand =
+            new ShellCommand(command, null, r.toString());
+        shellCommand.run();
+        String output = shellCommand.getOutput();
+        if (output != null && output.length() > 0) {
+            CompoundEdit compoundEdit = editor.beginCompoundEdit();
+            editor.deleteRegion();
+            editor.addUndo(SimpleEdit.INSERT_STRING);
+            editor.insertStringInternal(output);
+            editor.moveCaretToDotCol();
+            editor.endCompoundEdit(compoundEdit);
+            if (editor.getFormatter().parseBuffer())
+                editor.getBuffer().repaint();
+        }
+        editor.setDefaultCursor();
     }
 }

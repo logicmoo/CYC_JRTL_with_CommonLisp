@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.35 2003-06-28 15:58:49 piso Exp $
+ * $Id: CommandTable.java,v 1.36 2003-06-28 16:12:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -238,6 +238,7 @@ public class CommandTable
             addCommand("dirForward", "Directory");
             addCommand("dirOpenFile", "Directory");
             addCommand("dirOpenFileAndKillDirectory", "Directory");
+            addCommand("doShellCommandOnRegion", "RegionCommands");
             addCommand("downList", "LispMode");
             addCommand("editRegister", "Registers");
             addCommand("entabRegion", "RegionCommands");
