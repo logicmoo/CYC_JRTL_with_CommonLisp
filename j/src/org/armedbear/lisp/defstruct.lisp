@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.51 2004-04-18 14:49:44 piso Exp $
+;;; $Id: defstruct.lisp,v 1.52 2004-04-18 18:45:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -292,20 +292,22 @@
              `((defun ,pred (object)
                  (typep object ',*dd-name*))))))))
 
-(defun slot-reader (index)
+(defun slot-reader-definition (accessor-name index)
   (cond ((eq *dd-type* 'list)
-         `(lambda (instance) (elt instance ,index)))
+         `(defun ,accessor-name (instance) (elt instance ,index)))
         ((or (eq *dd-type* 'vector)
              (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
-         `(lambda (instance) (aref instance ,index)))
+         `(defun ,accessor-name (instance) (aref instance ,index)))
         (t
          (case index
-           (0 '(function %structure-ref-0))
-           (1 '(function %structure-ref-1))
-           (2 '(function %structure-ref-2))
+           (0
+            `(defun ,accessor-name (instance) (%structure-ref-0 instance)))
+           (1
+            `(defun ,accessor-name (instance) (%structure-ref-1 instance)))
+           (2
+            `(defun ,accessor-name (instance) (%structure-ref-2 instance)))
            (t
-            `(lambda (instance)
-               (%structure-ref instance ,index)))))))
+            `(defun ,accessor-name (instance) (%structure-ref instance ,index)))))))
 
 (defun slot-writer (index)
   (cond ((eq *dd-type* 'list)
@@ -315,20 +317,20 @@
          `(lambda (instance value) (%aset instance ,index value)))
         (t
          (case index
-           (0 '(function %structure-set-0))
-           (1 '(function %structure-set-1))
-           (2 '(function %structure-set-2))
+           (0 '%structure-set-0)
+           (1 '%structure-set-1)
+           (2 '%structure-set-2)
            (t
             `(lambda (instance value)
                (%structure-set instance ,index value)))))))
 
 (defun define-access-function (slot-name index)
-  (let ((accessor
+  (let ((accessor-name
          (if *dd-conc-name*
              (intern (concatenate 'string (symbol-name *dd-conc-name*) (symbol-name slot-name)))
              slot-name)))
-    `((setf (symbol-function ',accessor) ,(slot-reader index))
-      (%put ',accessor 'setf-inverse ,(slot-writer index )))))
+    `(,(slot-reader-definition accessor-name index)
+      (%put ',accessor-name 'setf-inverse ',(slot-writer index )))))
 
 (defun define-access-functions ()
   (let ((index 0)
