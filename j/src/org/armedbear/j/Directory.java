@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.18 2003-05-12 02:26:04 piso Exp $
+ * $Id: Directory.java,v 1.19 2003-05-13 17:12:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1999,13 +1999,24 @@ public final class Directory extends Buffer
         return -1; // Error!
     }
 
-    private Line findName(final String name)
+    private Line findName(String name)
     {
         if (name != null) {
-            for (Line line = getFirstLine(); line != null; line = line.next()) {
-                if (line.getText().indexOf(name) >= 0) // Performance!
-                    if (name.equals(getName(line)))
-                        return line;
+            if (Platform.isPlatformWindows()) {
+                // Case-insensitive filesystem.
+                name = name.toLowerCase();
+                for (Line line = getFirstLine(); line != null; line = line.next()) {
+                    String text = line.getText().toLowerCase();
+                    if (text.indexOf(name) >= 0) // Performance!
+                        if (name.equalsIgnoreCase(getName(line)))
+                            return line;
+                }
+            } else {
+                for (Line line = getFirstLine(); line != null; line = line.next()) {
+                    if (line.getText().indexOf(name) >= 0) // Performance!
+                        if (name.equals(getName(line)))
+                            return line;
+                }
             }
         }
         return null;
