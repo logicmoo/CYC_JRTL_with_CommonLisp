@@ -2,7 +2,7 @@
  * Method.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: Method.java,v 1.2 2004-10-11 19:06:40 piso Exp $
+ * $Id: Method.java,v 1.3 2004-10-11 23:13:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ public final class Method extends StandardObject
 {
     private LispObject genericFunction;
     private LispObject function;
+    private LispObject specializers;
 
     public Method(LispClass cls, SimpleVector slots)
     {
@@ -49,6 +50,16 @@ public final class Method extends StandardObject
     public void setFunction(LispObject function)
     {
         this.function = function;
+    }
+
+    public LispObject getSpecializers()
+    {
+        return specializers;
+    }
+
+    public void setSpecializers(LispObject specializers)
+    {
+        this.specializers = specializers;
     }
 
     private static final Primitive1 _METHOD_GENERIC_FUNCTION =
@@ -103,6 +114,36 @@ public final class Method extends StandardObject
         {
             try {
                 ((Method)first).setFunction(second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.METHOD));
+            }
+        }
+    };
+
+    private static final Primitive1 _METHOD_SPECIALIZERS =
+        new Primitive1("%method-specializers", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((Method)arg).getSpecializers();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.METHOD));
+            }
+        }
+    };
+
+    private static final Primitive1 _SET_METHOD_SPECIALIZERS =
+        new Primitive1("%set-method-specializers", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((Method)first).setSpecializers(second);
                 return second;
             }
             catch (ClassCastException e) {
