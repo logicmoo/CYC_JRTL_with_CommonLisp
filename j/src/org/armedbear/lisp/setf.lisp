@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.22 2003-08-25 18:21:31 piso Exp $
+;;; $Id: setf.lisp,v 1.23 2003-09-08 01:38:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@
                   ((symbolp expander)
                    `(,expander ,@(cdr place) ,value))
                   ((functionp expander)
-                   `(funcall ,expander ,@(cdr place) value))
+                   `(funcall ,expander ,@(cdr place) ,value))
                   (t
                    (error "SETF: unhandled case")))))
          (t nil))))
