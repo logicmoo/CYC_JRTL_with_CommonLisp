@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.221 2003-06-02 01:20:52 piso Exp $
+ * $Id: Primitives.java,v 1.222 2003-06-02 01:40:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1190,39 +1190,6 @@ public final class Primitives extends Module
                 alist = alist.cdr();
             }
             return NIL;
-        }
-    };
-
-    // ### get
-    // get symbol indicator &optional default => value
-    private static final Primitive GET = new Primitive("get") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            Symbol symbol;
-            LispObject indicator;
-            LispObject defaultValue;
-            switch (args.length) {
-                case 2:
-                    symbol = checkSymbol(args[0]);
-                    indicator = args[1];
-                    defaultValue = NIL;
-                    break;
-                case 3:
-                    symbol = checkSymbol(args[0]);
-                    indicator = args[1];
-                    defaultValue = args[2];
-                    break;
-                default:
-                    throw new WrongNumberOfArgumentsException(this);
-            }
-            LispObject list = checkList(symbol.getPropertyList());
-            while (list != NIL) {
-                LispObject obj = list.car();
-                if (obj.eql(indicator))
-                    return list.cadr();
-                list = list.cdr().cdr();
-            }
-            return defaultValue;
         }
     };
 
@@ -3044,16 +3011,48 @@ public final class Primitives extends Module
         }
     };
 
-    // ### %put
-    // %put symbol indicator value
-    private static final Primitive _PUT = new Primitive("%put") {
+    // ### get
+    // get symbol indicator &optional default => value
+    private static final Primitive GET = new Primitive("get") {
         public LispObject execute(LispObject[] args) throws LispError
         {
-            if (args.length != 3)
-                throw new WrongNumberOfArgumentsException(this);
-            Symbol symbol = checkSymbol(args[0]);
-            LispObject indicator = args[1];
-            LispObject value = args[2];
+            Symbol symbol;
+            LispObject indicator;
+            LispObject defaultValue;
+            switch (args.length) {
+                case 2:
+                    symbol = checkSymbol(args[0]);
+                    indicator = args[1];
+                    defaultValue = NIL;
+                    break;
+                case 3:
+                    symbol = checkSymbol(args[0]);
+                    indicator = args[1];
+                    defaultValue = args[2];
+                    break;
+                default:
+                    throw new WrongNumberOfArgumentsException(this);
+            }
+            LispObject list = checkList(symbol.getPropertyList());
+            while (list != NIL) {
+                LispObject obj = list.car();
+                if (obj.eql(indicator))
+                    return list.cadr();
+                list = list.cdr().cdr();
+            }
+            return defaultValue;
+        }
+    };
+
+    // ### %put
+    // %put symbol indicator value
+    private static final Primitive3 _PUT = new Primitive3("%put") {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
+        {
+            Symbol symbol = checkSymbol(first);
+            LispObject indicator = second;
+            LispObject value = third;
             LispObject list = checkList(symbol.getPropertyList());
             while (list != NIL) {
                 if (list.car().eql(indicator)) {
