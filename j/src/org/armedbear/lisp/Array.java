@@ -1,8 +1,8 @@
 /*
  * Array.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.17 2003-12-13 00:02:46 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Array.java,v 1.18 2004-02-25 23:56:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,14 +79,14 @@ public final class Array extends AbstractArray
                 data[index] = contents;
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                signal(new LispError("bad initial contents for array"));
+                signal(new LispError("Bad initial contents for array."));
                 return -1;
             }
             ++index;
         } else {
             int dim = dims[0];
             if (dim != contents.length()) {
-                signal(new LispError("bad initial contents for array"));
+                signal(new LispError("Bad initial contents for array."));
                 return -1;
             }
             int[] newDims = new int[dims.length-1];
@@ -178,7 +178,7 @@ public final class Array extends AbstractArray
             return data[index];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("bad row major index " + index));
+            return signal(new TypeError("Bad row major index " + index + "."));
         }
     }
 
@@ -188,7 +188,7 @@ public final class Array extends AbstractArray
             data[index] = newValue;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            signal(new TypeError("bad row major index " + index));
+            signal(new TypeError("Bad row major index " + index + "."));
         }
     }
 
