@@ -1,8 +1,8 @@
 /*
  * SmtpSession.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: SmtpSession.java,v 1.1.1.1 2002-09-24 16:10:06 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: SmtpSession.java,v 1.2 2003-06-05 15:48:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,6 +125,7 @@ public final class SmtpSession extends Writer
         if (!connect())
             return false;
         try {
+            setEcho(true);
             writeLine("mail from:<" + sm.getFromAddress() + ">");
             if (getResponse() != 250)
                 return false;
@@ -144,10 +145,12 @@ public final class SmtpSession extends Writer
             writeLine("data");
             if (getResponse() != 354)
                 return false;
+            setEcho(false);
             BufferedReader messageFileReader = new BufferedReader(new InputStreamReader(messageFile.getInputStream()));
             String s;
             while ((s = messageFileReader.readLine()) != null)
                 writeLine(s);
+            setEcho(true);
             writeLine(".");
             if (getResponse() != 250)
                 return false;
@@ -157,6 +160,7 @@ public final class SmtpSession extends Writer
             Log.error(t);
         }
         finally {
+            setEcho(false);
             disconnect();
         }
         // Add addressees to address book.
