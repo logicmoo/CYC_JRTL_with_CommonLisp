@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.353 2005-01-17 03:34:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.354 2005-01-17 04:50:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2359,6 +2359,7 @@
                                  "<init>"
                                  "(Lorg/armedbear/lisp/LispObject;)V"
                                  -2)
+             (emit-move-from-stack target)
              t)
             (t
              nil)))))
