@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.148 2004-05-05 19:04:10 piso Exp $
+;;; $Id: jvm.lisp,v 1.149 2004-05-06 11:17:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1785,6 +1785,7 @@
            (return-from compile-test 'ifne))
          (let ((s (cdr (assq op
                              '((CHARACTERP . "characterp")
+                               (ENDP       . "endp")
                                (EVENP      . "evenp")
                                (FLOATP     . "floatp")
                                (INTEGERP   . "integerp")
