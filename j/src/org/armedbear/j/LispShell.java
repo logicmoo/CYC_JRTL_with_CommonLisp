@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.3 2002-10-24 17:33:53 piso Exp $
+ * $Id: LispShell.java,v 1.4 2002-10-24 19:40:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,9 @@ public final class LispShell extends Shell
     private static final String DEFAULT_PROMPT_PATTERN =
         "^[^>\\*\\]]*[>\\*\\]] *";
 
+    private static final String CMUCL_PROMPT_PATTERN =
+        "^\\* |^[0-9]+\\] ";
+
     private LispShell(String shellCommand)
     {
         super(shellCommand, LispShellMode.getMode());
@@ -35,7 +38,6 @@ public final class LispShell extends Shell
     private static Shell createLispShell(String shellCommand)
     {
         LispShell shell = new LispShell(shellCommand);
-        shell.setPromptRE(DEFAULT_PROMPT_PATTERN);
         shell.startProcess();
         if (shell.getProcess() == null) {
             Editor.getBufferList().remove(shell);
@@ -47,6 +49,10 @@ public final class LispShell extends Shell
             MessageDialog.showMessageDialog(message, "Error");
             return null;
         }
+        if (shellCommand.equals("/usr/bin/lisp"))
+            shell.setPromptRE(CMUCL_PROMPT_PATTERN);
+        else
+            shell.setPromptRE(DEFAULT_PROMPT_PATTERN);
         shell.needsRenumbering = true;
         return shell;
     }
