@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.33 2003-07-26 18:17:52 piso Exp $
+ * $Id: Utilities.java,v 1.34 2003-10-07 13:58:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -425,6 +425,9 @@ public final class Utilities implements Constants
                 } else if (c == 'h' && lookingAt(s, i, "ttp://", false)) {
                     inUrl = true;
                     i += 6;
+                } else if (c == 'h' && lookingAt(s, i, "ttps://", false)) {
+                    inUrl = true;
+                    i += 7;
                 } else if (c == 'f' && lookingAt(s, i, "tp://", false)) {
                     inUrl = true;
                     i += 5;
