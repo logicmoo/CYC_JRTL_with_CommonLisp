@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.55 2003-03-11 13:50:31 piso Exp $
+;;; $Id: rt.lisp,v 1.56 2003-03-12 18:42:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,9 +21,10 @@
 
 (unless (find-package :regression-test)
   (make-package :regression-test :nicknames '(:rt))
-  (use-package "COMMON-LISP" :rt))
+  (use-package :cl :rt))
 
 (in-package :rt)
+
 (export '(deftest))
 
 (defvar *prefix* "/home/peter/gcl/ansi-tests/")
