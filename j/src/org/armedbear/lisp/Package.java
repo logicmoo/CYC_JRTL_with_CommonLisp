@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.27 2003-07-06 19:03:24 piso Exp $
+ * $Id: Package.java,v 1.28 2003-07-06 19:26:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -302,16 +302,32 @@ public final class Package extends LispObject
             sb.append(sym.getQualifiedName());
             sb.append(" is already accessible in package ");
             sb.append(name);
-            // FIXME Should be a correctable error of type PACKAGE-ERROR.
-            throw new LispError(sb.toString());
+            throw new PackageError(sb.toString());
         }
         internalSymbols.put(symbol.getName(), symbol);
     }
 
     public synchronized void export(Symbol symbol) throws LispError
     {
-        if (symbol.getPackage() != this)
-            importSymbol(symbol);
+        if (symbol.getPackage() != this) {
+            Symbol sym = findAccessibleSymbol(symbol.getName());
+            if (sym == null) {
+                StringBuffer sb = new StringBuffer("the symbol ");
+                sb.append(symbol.getQualifiedName());
+                sb.append(" is not accessible in package ");
+                sb.append(name);
+                throw new PackageError(sb.toString());
+            }
+            if (sym != symbol) {
+                // Conflict.
+                StringBuffer sb = new StringBuffer("the symbol ");
+                sb.append(sym.getQualifiedName());
+                sb.append(" is already accessible in package ");
+                sb.append(name);
+                throw new PackageError(sb.toString());
+            }
+            internalSymbols.put(symbol.getName(), symbol);
+        }
         final String symbolName = symbol.getName();
         if (internalSymbols.get(symbolName) == symbol) {
             // Found existing internal symbol in this package.
@@ -341,7 +357,7 @@ public final class Package extends LispObject
         sb.append(symbol.getQualifiedName());
         sb.append(" is not accessible in package ");
         sb.append(name);
-        throw new LispError(sb.toString());
+        throw new PackageError(sb.toString());
     }
 
     public synchronized void shadow(String name) throws LispError
