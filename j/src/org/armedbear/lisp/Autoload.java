@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.5 2003-06-10 18:38:55 piso Exp $
+ * $Id: Autoload.java,v 1.6 2003-06-20 14:59:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,12 +38,17 @@ public final class Autoload extends Function
         this.fileName = fileName;
     }
 
+    public void load() throws Condition
+    {
+        Load._load(getFileName(), true, false);
+    }
+
     public final Symbol getSymbol()
     {
         return symbol;
     }
 
-    public final String getFileName()
+    private final String getFileName()
     {
         if (fileName != null)
             return fileName;
