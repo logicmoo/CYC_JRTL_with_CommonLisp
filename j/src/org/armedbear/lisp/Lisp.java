@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.227 2004-04-14 14:31:09 piso Exp $
+ * $Id: Lisp.java,v 1.228 2004-04-15 15:48:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1195,62 +1195,64 @@ public abstract class Lisp
         String control = formatControl.getStringValue();
         LispObject[] args = formatArguments.copyToArray();
         StringBuffer sb = new StringBuffer();
-        final int limit = control.length();
-        int j = 0;
-        final int NEUTRAL = 0;
-        final int TILDE = 1;
-        int state = NEUTRAL;
-        for (int i = 0; i < limit; i++) {
-            char c = control.charAt(i);
-            if (state == NEUTRAL) {
-                if (c == '~')
-                    state = TILDE;
-                else
-                    sb.append(c);
-            } else if (state == TILDE) {
-                if (c == 'A' || c == 'a') {
-                    if (j < args.length) {
-                        LispObject obj = args[j++];
-                        Environment oldDynEnv = thread.getDynamicEnvironment();
-                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-                        sb.append(String.valueOf(obj));
-                        thread.setDynamicEnvironment(oldDynEnv);
+        if (control != null) {
+            final int limit = control.length();
+            int j = 0;
+            final int NEUTRAL = 0;
+            final int TILDE = 1;
+            int state = NEUTRAL;
+            for (int i = 0; i < limit; i++) {
+                char c = control.charAt(i);
+                if (state == NEUTRAL) {
+                    if (c == '~')
+                        state = TILDE;
+                    else
+                        sb.append(c);
+                } else if (state == TILDE) {
+                    if (c == 'A' || c == 'a') {
+                        if (j < args.length) {
+                            LispObject obj = args[j++];
+                            Environment oldDynEnv = thread.getDynamicEnvironment();
+                            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                            sb.append(String.valueOf(obj));
+                            thread.setDynamicEnvironment(oldDynEnv);
+                        }
+                    } else if (c == 'S' || c == 's') {
+                        if (j < args.length) {
+                            LispObject obj = args[j++];
+                            Environment oldDynEnv = thread.getDynamicEnvironment();
+                            thread.bindSpecial(_PRINT_ESCAPE_, T);
+                            sb.append(String.valueOf(obj));
+                            thread.setDynamicEnvironment(oldDynEnv);
+                        }
+                    } else if (c == 'D' || c == 'd') {
+                        if (j < args.length) {
+                            LispObject obj = args[j++];
+                            Environment oldDynEnv = thread.getDynamicEnvironment();
+                            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                            thread.bindSpecial(_PRINT_RADIX_, NIL);
+                            thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
+                            sb.append(String.valueOf(obj));
+                            thread.setDynamicEnvironment(oldDynEnv);
+                        }
+                    } else if (c == 'X' || c == 'x') {
+                        if (j < args.length) {
+                            LispObject obj = args[j++];
+                            Environment oldDynEnv = thread.getDynamicEnvironment();
+                            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                            thread.bindSpecial(_PRINT_RADIX_, NIL);
+                            thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));
+                            sb.append(String.valueOf(obj));
+                            thread.setDynamicEnvironment(oldDynEnv);
+                        }
+                    } else if (c == '%') {
+                        sb.append(System.getProperty("line.separator"));
                     }
-                } else if (c == 'S' || c == 's') {
-                    if (j < args.length) {
-                        LispObject obj = args[j++];
-                        Environment oldDynEnv = thread.getDynamicEnvironment();
-                        thread.bindSpecial(_PRINT_ESCAPE_, T);
-                        sb.append(String.valueOf(obj));
-                        thread.setDynamicEnvironment(oldDynEnv);
-                    }
-                } else if (c == 'D' || c == 'd') {
-                    if (j < args.length) {
-                        LispObject obj = args[j++];
-                        Environment oldDynEnv = thread.getDynamicEnvironment();
-                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-                        thread.bindSpecial(_PRINT_RADIX_, NIL);
-                        thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
-                        sb.append(String.valueOf(obj));
-                        thread.setDynamicEnvironment(oldDynEnv);
-                    }
-                } else if (c == 'X' || c == 'x') {
-                    if (j < args.length) {
-                        LispObject obj = args[j++];
-                        Environment oldDynEnv = thread.getDynamicEnvironment();
-                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-                        thread.bindSpecial(_PRINT_RADIX_, NIL);
-                        thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));
-                        sb.append(String.valueOf(obj));
-                        thread.setDynamicEnvironment(oldDynEnv);
-                    }
-                } else if (c == '%') {
-                    sb.append(System.getProperty("line.separator"));
+                    state = NEUTRAL;
+                } else {
+                    // There are no other valid states.
+                    Debug.assertTrue(false);
                 }
-                state = NEUTRAL;
-            } else {
-                // There are no other valid states.
-                Debug.assertTrue(false);
             }
         }
         return sb.toString();
