@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.355 2003-08-26 14:38:57 piso Exp $
+ * $Id: Primitives.java,v 1.356 2003-08-26 16:19:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -388,9 +388,9 @@ public final class Primitives extends Module
             case SIMPLE_STRING_P:               // ### simple-string-p
                 return arg.typep(Symbol.SIMPLE_STRING);
             case SUCCESSOR:                     // ### 1+
-                return arg.add(Fixnum.ONE);
+                return arg.incr();
             case PREDECESSOR:                   // ### 1-
-                return arg.subtract(Fixnum.ONE);
+                return arg.decr();
             case VALUES_LIST:                   // ### values-list
                 return values(arg.copyToArray());
             case EVAL:                          // ### eval
