@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.78 2003-12-19 03:04:38 piso Exp $
+;;; $Id: autoloads.lisp,v 1.79 2003-12-20 15:21:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
             string-not-lessp string-not-greaterp
             string-left-trim string-right-trim string-trim)
           "strings.lisp")
-(autoload '(get-properties copy-symbol) "symbol.lisp")
+(autoload 'copy-symbol)
 (autoload '(open parse-integer))
 (autoload '(sort stable-sort merge) "sort.lisp")
 (autoload 'tree-equal)
