@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.52 2004-04-18 18:45:07 piso Exp $
+;;; $Id: defstruct.lisp,v 1.53 2004-04-20 15:25:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -99,6 +99,9 @@
 (defvar *dd-direct-slots*)
 (defvar *dd-slots*)
 
+(defun keywordify (symbol)
+  (intern (symbol-name symbol) *keyword-package*))
+
 (defun define-keyword-constructor (constructor)
   (let* ((constructor-name (intern (car constructor)))
          (keys ())
@@ -106,16 +109,13 @@
     (dolist (slot *dd-slots*)
       (let ((name (dsd-name slot))
             (initform (dsd-initform slot)))
-        (when name
-          (push (list name initform) keys))))
-    (setf keys (cons '&key (nreverse keys)))
-    (dolist (dsd *dd-slots*)
-      (let ((name (dsd-name dsd))
-            (initform (dsd-initform dsd)))
         (if name
-            (push name values)
+            (progn
+              (push (list (list (keywordify name) name) initform) keys)
+              (push name values))
             (push initform values))))
-    (setf values (nreverse values))
+    (setf keys (cons '&key (nreverse keys))
+          values (nreverse values))
     (cond ((eq *dd-type* 'list)
            `((defun ,constructor-name ,keys
                (list ,@values))))
