@@ -2,7 +2,7 @@
  * JdbCommands.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbCommands.java,v 1.8 2003-05-18 19:22:54 piso Exp $
+ * $Id: JdbCommands.java,v 1.9 2003-05-19 02:04:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,9 @@ public final class JdbCommands implements JdbConstants
 
         if ("break".startsWith(cmd))
             return JDB_BREAK;
+        if (cmd.startsWith("ca"))
+            if ("catch".startsWith(cmd))
+                return JDB_CATCH;
         if (cmd.startsWith("co"))
             if ("continue".startsWith(cmd))
                 return JDB_CONTINUE;
