@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.11 2003-05-25 23:31:08 piso Exp $
+ * $Id: Load.java,v 1.12 2003-06-03 00:32:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,14 +201,15 @@ public final class Load extends Lisp
     private static final LispObject loadStream(InputStream inputStream,
         boolean print) throws Condition
     {
-        final LispThread thread = LispThread.currentThread();
         CharacterInputStream in = new CharacterInputStream(inputStream);
         try {
+            final Environment env = new Environment();
+            final LispThread thread = LispThread.currentThread();
             while (true) {
                 LispObject obj = in.read(false, EOF, true);
                 if (obj == EOF)
                     break;
-                LispObject result = eval(obj, new Environment(), thread);
+                LispObject result = eval(obj, env, thread);
                 if (print) {
                     CharacterOutputStream out = getStandardOutput();
                     out.writeLine(String.valueOf(result));
