@@ -1,8 +1,8 @@
 /*
  * Pathname.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.27 2004-01-02 19:10:07 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Pathname.java,v 1.28 2004-01-03 16:49:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.lisp;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.StringTokenizer;
 
 public final class Pathname extends LispObject
@@ -393,6 +394,32 @@ public final class Pathname extends LispObject
                 default:
                     return signal(new WrongNumberOfArgumentsException(this));
             }
+        }
+    };
+
+    private static final Primitive1 _DIRECTORY =
+        new Primitive1("%directory", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Pathname pathname = Pathname.coerceToPathname(arg);
+            LispObject result = NIL;
+            String s = pathname.getNamestring();
+            File f = new File(s);
+            if (f.isDirectory()) {
+                File[] files = f.listFiles();
+                try {
+                    for (int i = files.length; i-- > 0;) {
+                        Pathname p = new Pathname(files[i].getCanonicalPath());
+                        result = new Cons(p, result);
+                    }
+                }
+                catch (IOException e) {
+                    return signal(new FileError("Unable to list directory " +
+                                                pathname + "."));
+                }
+            }
+            return result;
         }
     };
 }
