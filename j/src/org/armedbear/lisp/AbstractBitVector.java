@@ -2,7 +2,7 @@
  * AbstractBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractBitVector.java,v 1.5 2004-03-15 19:29:58 piso Exp $
+ * $Id: AbstractBitVector.java,v 1.6 2004-04-26 17:28:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,7 +159,7 @@ public abstract class AbstractBitVector extends AbstractVector
         return hashCode;
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         try {
             final int limit = length();
