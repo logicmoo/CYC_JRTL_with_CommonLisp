@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.11 2003-03-25 17:47:06 piso Exp $
+;;; $Id: compiler.lisp,v 1.12 2003-03-30 02:04:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -172,8 +172,7 @@
               ((special-operator-p first)
                (compile-special form))
               (t
-               (let* ((args (mapcar #'compile-sexp (cdr form)))
-                      (n-args (length args)))
+               (let ((args (mapcar #'compile-sexp (cdr form))))
                  (append (list first) args)))))))
 
 
