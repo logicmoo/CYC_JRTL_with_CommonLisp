@@ -1,8 +1,8 @@
 /*
  * DirectoryMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: DirectoryMode.java,v 1.2 2002-10-03 17:40:25 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: DirectoryMode.java,v 1.3 2003-05-11 14:36:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,7 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "dirOpenFile");
         km.mapKey(VK_DOUBLE_MOUSE_1, 0, "dirOpenFile");
         km.mapKey(VK_MOUSE_2, 0, "dirOpenFile");
+        km.mapKey(KeyEvent.VK_ENTER, CTRL_MASK, "dirOpenFileAndKillDirectory");
         km.mapKey(KeyEvent.VK_B, CTRL_MASK | SHIFT_MASK, "dirBrowseFile");
         km.mapKey(KeyEvent.VK_BACK_SPACE, 0, "dirUpDir");
         km.mapKey('u', "dirUpDir");
