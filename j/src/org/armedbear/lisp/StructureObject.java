@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.32 2004-10-01 00:36:54 piso Exp $
+ * $Id: StructureObject.java,v 1.33 2004-10-01 15:17:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,55 +127,85 @@ public final class StructureObject extends LispObject
 
     public String writeToString() throws ConditionThrowable
     {
-        // FIXME
-        if (typep(Symbol.RESTART) != NIL) {
-            Symbol PRINT_RESTART = PACKAGE_SYS.intern("PRINT-RESTART");
-            LispObject fun = PRINT_RESTART.getSymbolFunction();
-            StringOutputStream stream = new StringOutputStream();
-            funcall2(fun, this, stream, LispThread.currentThread());
-            return stream.getString().getStringValue();
-        }
-        final LispThread thread = LispThread.currentThread();
-        int maxLevel = Integer.MAX_VALUE;
-        LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
-        if (printLevel instanceof Fixnum)
-            maxLevel = ((Fixnum)printLevel).value;
-        LispObject currentPrintLevel =
-            _CURRENT_PRINT_LEVEL_.symbolValue(thread);
-        int currentLevel = Fixnum.getValue(currentPrintLevel);
-        if (currentLevel >= maxLevel && slots.length > 0)
-            return "#";
-        StringBuffer sb = new StringBuffer("#S(");
-        sb.append(structureClass.getSymbol().writeToString());
-        if (currentLevel < maxLevel) {
-            LispObject effectiveSlots = structureClass.getEffectiveSlots();
-            LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
-            Debug.assertTrue(effectiveSlotsArray.length == slots.length);
-            final LispObject printLength = _PRINT_LENGTH_.symbolValue();
-            final int limit;
-            if (printLength instanceof Fixnum)
-                limit = Math.min(slots.length,
-                                 ((Fixnum)printLength).getValue());
-            else
-                limit = slots.length;
-            for (int i = 0; i < limit; i++) {
-                sb.append(' ');
-                SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
-                LispObject slotName = slotDefinition.getRowMajor(1);
-                if (slotName instanceof Symbol) {
-                    sb.append(':');
-                    sb.append(((Symbol)slotName).getName());
-                } else
-                    sb.append(slotName);
-                sb.append(' ');
-                sb.append(slots[i].writeToString());
+        try {
+            // FIXME
+            if (typep(Symbol.RESTART) != NIL) {
+                Symbol PRINT_RESTART = PACKAGE_SYS.intern("PRINT-RESTART");
+                LispObject fun = PRINT_RESTART.getSymbolFunction();
+                StringOutputStream stream = new StringOutputStream();
+                funcall2(fun, this, stream, LispThread.currentThread());
+                return stream.getString().getStringValue();
             }
-            if (limit < slots.length)
-                sb.append(" ...");
+            final LispThread thread = LispThread.currentThread();
+            int maxLevel = Integer.MAX_VALUE;
+            LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+            if (printLevel instanceof Fixnum)
+                maxLevel = ((Fixnum)printLevel).value;
+            LispObject currentPrintLevel =
+                _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+            int currentLevel = Fixnum.getValue(currentPrintLevel);
+            if (currentLevel >= maxLevel && slots.length > 0)
+                return "#";
+            StringBuffer sb = new StringBuffer("#S(");
+            sb.append(structureClass.getSymbol().writeToString());
+            if (currentLevel < maxLevel) {
+                LispObject effectiveSlots = structureClass.getEffectiveSlots();
+                LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
+                Debug.assertTrue(effectiveSlotsArray.length == slots.length);
+                final LispObject printLength = _PRINT_LENGTH_.symbolValue();
+                final int limit;
+                if (printLength instanceof Fixnum)
+                    limit = Math.min(slots.length,
+                                     ((Fixnum)printLength).getValue());
+                else
+                    limit = slots.length;
+                final boolean printCircle =
+                    _PRINT_CIRCLE_.symbolValue(thread) != NIL;
+                for (int i = 0; i < limit; i++) {
+                    sb.append(' ');
+                    SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
+                    LispObject slotName = slotDefinition.getRowMajor(1);
+                    if (slotName instanceof Symbol) {
+                        sb.append(':');
+                        sb.append(((Symbol)slotName).getName());
+                    } else
+                        sb.append(slotName);
+                    sb.append(' ');
+                    if (printCircle) {
+                        StringOutputStream stream = new StringOutputStream();
+                        funcall2(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
+                                 slots[i], stream, thread);
+                        sb.append(stream.getString().getStringValue());
+                    } else
+                        sb.append(slots[i].writeToString());
+                }
+                if (limit < slots.length)
+                    sb.append(" ...");
+            }
+            sb.append(')');
+            return sb.toString();
         }
-        sb.append(')');
-        return sb.toString();
+        catch (StackOverflowError e) {
+            signal(new StorageCondition("Stack overflow."));
+            return null; // Not reached.
+        }
     }
+
+    // ### structure-length instance => length
+    private static final Primitive STRUCTURE_LENGTH =
+        new Primitive("structure-length", PACKAGE_SYS, true, "instance")
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            try {
+                return new Fixnum(((StructureObject)arg).slots.length);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.STRUCTURE_OBJECT));
+            }
+        }
+    };
 
     // ### %structure-ref
     // %structure-ref instance index => value
