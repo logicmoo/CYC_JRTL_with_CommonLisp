@@ -923,6 +923,10 @@ file associated with the current buffer. For example:
 If you don't explicitly specify any command line switches (e.g. "-ub", "-c",
 "--normal"), j will run "diff -u".
 <p>
+If no arguments are provided, this command diffs the file associated with the
+current buffer against its <a href="preferences.html#patchMode">patchMode</a>
+backup file (if it exists).
+<p>
 Because it uses diff, this command will not work unless diff is installed and
 in your path, which is more likely to be the case on Unix than on Windows.
 <p>
