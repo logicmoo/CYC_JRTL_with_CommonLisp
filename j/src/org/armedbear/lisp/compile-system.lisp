@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.1 2004-04-16 20:02:42 piso Exp $
+;;; $Id: compile-system.lisp,v 1.2 2004-04-16 20:32:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,6 +24,13 @@
 (require '#:jvm)
 
 (defun compile-system ()
+  (loop
+    (cond ((and *lisp-home*
+                (probe-directory (pathname *lisp-home*)))
+           (return))
+          (t
+           (cerror "Continue"
+                   "*LISP-HOME* is NIL or invalid.~%  Please set *LISP-HOME* to the full pathname of the directory containing the Lisp system files."))))
   (time
    (let ((*default-pathname-defaults* (pathname *lisp-home*)))
      (unless (compiled-function-p 'precompile)
