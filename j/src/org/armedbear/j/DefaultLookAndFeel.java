@@ -2,7 +2,7 @@
  * DefaultLookAndFeel.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: DefaultLookAndFeel.java,v 1.3 2003-07-23 04:54:54 piso Exp $
+ * $Id: DefaultLookAndFeel.java,v 1.4 2003-07-24 16:27:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,27 +57,33 @@ public final class DefaultLookAndFeel extends DefaultMetalTheme
 
         if (Editor.lookAndFeel != null) {
             // User has indicated a preference.
-            if (Editor.lookAndFeel.equals("Metal"))
+            if (Editor.lookAndFeel.equals("Metal")) {
                 ; // Default look and feel, but don't do customizations.
-            else if (Editor.lookAndFeel.equals("Motif"))
-                lookAndFeelClassName = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-            else if (Editor.lookAndFeel.equals("Windows"))
-                lookAndFeelClassName = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-            else if (Editor.lookAndFeel.equals("Aqua")) {
+            } else if (Editor.lookAndFeel.equals("Motif")) {
+                lookAndFeelClassName =
+                    "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+            } else if (Editor.lookAndFeel.equals("Windows")) {
+                lookAndFeelClassName =
+                    "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+            } else if (Editor.lookAndFeel.equals("Aqua")) {
                 lookAndFeelClassName = "com.apple.mrj.swing.MacLookAndFeel";
                 // Jun 21 2002 7:16 AM
                 // Using the menu bar at the top of the screen (and having it
                 // actually work) seems to require some further unknown
                 // magic...
                 //System.setProperty("com.apple.macos.useScreenMenuBar", "true");
-            } else
-                Editor.lookAndFeel = null; // Not recognized. Revert to default behavior.
+            } else {
+                // Not recognized. Revert to default behavior.
+                Editor.lookAndFeel = null;
+            }
         }
         if (Editor.lookAndFeel == null) {
             // Default customizations.
             MetalLookAndFeel.setCurrentTheme(new DefaultLookAndFeel());
-            UIManager.put("Tree.collapsedIcon", Utilities.getIconFromFile("collapsed.png"));
-            UIManager.put("Tree.expandedIcon", Utilities.getIconFromFile("expanded.png"));
+            UIManager.put("Tree.collapsedIcon",
+                          Utilities.getIconFromFile("collapsed.png"));
+            UIManager.put("Tree.expandedIcon",
+                          Utilities.getIconFromFile("expanded.png"));
         } else {
             MetalLookAndFeel.setCurrentTheme(new DefaultMetalTheme());
         }
@@ -88,6 +94,7 @@ public final class DefaultLookAndFeel extends DefaultMetalTheme
         // We want to do this in any case.
         UIManager.put("ToolBarUI", "org.armedbear.j.ToolBarUI");
         UIManager.put("ButtonUI", "org.armedbear.j.ButtonUI");
+        UIManager.put("LabelUI", "org.armedbear.j.LabelUI");
     }
 
     private DefaultLookAndFeel()
