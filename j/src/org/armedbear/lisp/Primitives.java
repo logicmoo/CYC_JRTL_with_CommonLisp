@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.653 2004-06-07 12:41:13 piso Exp $
+ * $Id: Primitives.java,v 1.654 2004-06-07 18:01:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1289,16 +1289,6 @@ public final class Primitives extends Lisp
             if (args[0] instanceof Condition)
                 throw new ConditionThrowable((Condition)args[0]);
             throw new ConditionThrowable (new SimpleCondition());
-        }
-    };
-
-    // ### format
-    private static final Primitive FORMAT =
-        new Primitive("format", "destination control-string &rest args")
-    {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            return _FORMAT.execute(args);
         }
     };
 

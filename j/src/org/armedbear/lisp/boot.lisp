@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.169 2004-06-07 01:52:48 piso Exp $
+;;; $Id: boot.lisp,v 1.170 2004-06-07 18:06:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,8 +19,8 @@
 
 (sys::%in-package "SYSTEM")
 
-(unless (ext:memq :j *features*)
-    (format t "Low-level initialization completed in ~A seconds.~%"
+(unless (memq :j *features*)
+    (%format t "Low-level initialization completed in ~A seconds.~%"
             (float (/ (ext:uptime) 1000))))
 
 (setq ext:*autoload-verbose* nil)
@@ -66,6 +66,9 @@
 
 (defun write-char (character &optional output-stream)
   (sys::%write-char character output-stream))
+
+(defun format (destination control-string &rest args)
+  (apply #'sys::%format destination control-string args))
 
 ;; SYS::OUTPUT-OBJECT is redefined in print.lisp.
 (defun sys::output-object (object stream)
@@ -181,7 +184,8 @@
              (dolist (x pathnames)
                (load x)))
             (t
-             (sys::load-system-file (string-downcase (string module-name)))))
+             (let ((*readtable* (copy-readtable nil)))
+               (sys::load-system-file (string-downcase (string module-name))))))
       (set-difference *modules* saved-modules))))
 
 (defun read-from-string (string &optional eof-error-p eof-value
