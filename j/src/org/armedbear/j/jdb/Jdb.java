@@ -1,8 +1,8 @@
 /*
  * Jdb.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: Jdb.java,v 1.3 2002-10-11 16:17:40 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: Jdb.java,v 1.4 2003-05-11 02:54:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,9 @@ import com.sun.jdi.request.ExceptionRequest;
 import com.sun.jdi.request.StepRequest;
 import com.sun.jdi.request.ThreadDeathRequest;
 import com.sun.jdi.request.ThreadStartRequest;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -348,6 +350,9 @@ public final class Jdb extends Buffer
         } else if (command.equals("resume")) {
             logCommand("resume");
             doResume();
+        } else if (command.equals("stdin")) {
+            logCommand("stdin", args);
+            doStdin(args);
         } else if (command.equals("step")) {
             logCommand("step", args);
             doStep(args);
@@ -636,7 +641,6 @@ public final class Jdb extends Buffer
 
     public void resolveDeferredRequests(ClassPrepareEvent event)
     {
-        Log.debug("resolveDeferredRequests");
         synchronized(breakpoints) {
             Iterator iter = breakpoints.iterator();
             while (iter.hasNext()) {
@@ -712,7 +716,6 @@ public final class Jdb extends Buffer
 
     public void saveSession()
     {
-        Log.debug("Jdb.saveSession");
         session.setBreakpoints(breakpoints);
         session.saveDefaults();
     }
@@ -966,7 +969,6 @@ public final class Jdb extends Buffer
 
     private void doNext(String args)
     {
-        Log.debug("doNext");
         if (vm == null)
             return;
         if (currentThread == null) {
@@ -995,7 +997,6 @@ public final class Jdb extends Buffer
 
     private void doStep(String args)
     {
-        Log.debug("doStep");
         if (vm == null)
             return;
         if (currentThread == null) {
@@ -1072,10 +1073,27 @@ public final class Jdb extends Buffer
         }
     }
 
+    private void doStdin(String s)
+    {
+        Process process = vm.process();
+        if (process != null) {
+            OutputStream out = process.getOutputStream();
+            try {
+                if (s != null)
+                    out.write(s.getBytes());
+                out.write('\n');
+                out.flush();
+            }
+            catch (IOException e) {
+                Log.error(e);
+            }
+        }
+    }
+
     private void doLocals()
     {
-        Log.debug("doLocals");
-        if (vm == null) return;
+        if (vm == null)
+            return;
         if (currentThread == null) {
             Log.debug("currentThread is null");
             return;
