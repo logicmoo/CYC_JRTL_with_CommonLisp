@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.60 2003-09-10 16:49:58 piso Exp $
+ * $Id: Autoload.java,v 1.61 2003-09-10 17:26:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,15 +175,15 @@ public final class Autoload extends Function
         autoload("hash-table-p", "HashTable");
         autoload("import", "PackageFunctions");
         autoload("list-all-packages", "PackageFunctions");
-        autoload("logand", "LogicalOperations");
+        autoload("logand", "logand");
         autoload("logandc1", "logandc1");
         autoload("logandc2", "logandc2");
-        autoload("logbitp", "LogicalOperations");
+        autoload("logbitp", "logbitp");
         autoload("logeqv", "logeqv");
-        autoload("logior", "LogicalOperations");
+        autoload("logior", "logior");
         autoload("lognand", "lognand");
         autoload("lognor", "lognor");
-        autoload("lognot", "LogicalOperations");
+        autoload("lognot", "lognot");
         autoload("logorc1", "logorc1");
         autoload("logorc2", "logorc2");
         autoload("logxor", "logxor");
