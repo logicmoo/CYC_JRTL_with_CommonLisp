@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.64 2004-05-02 15:02:20 piso Exp $
+ * $Id: Interpreter.java,v 1.65 2004-05-11 20:02:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,27 +119,37 @@ public final class Interpreter extends Lisp
                     autoload.load();
                 }
                 _LOAD_VERBOSE_.setSymbolValue(T);
-                String userHome = System.getProperty("user.home");
-                File file = new File(userHome, ".abclrc");
-                if (file.isFile())
-                    Load.load(file.getCanonicalPath());
-                else {
+                do {
+                    String userHome = System.getProperty("user.home");
+                    File file = new File(userHome, ".abclrc");
+                    if (file.isFile()) {
+                        Load.load(file.getCanonicalPath());
+                        break;
+                    }
+                    if (Utilities.isPlatformWindows()) {
+                        file = new File("C:\\.abclrc");
+                        if (file.isFile()) {
+                            Load.load(file.getCanonicalPath());
+                            break;
+                        }
+                    }
                     file = new File(userHome, ".ablrc");
                     if (file.isFile()) {
                         String message =
                             "Warning: use of .ablrc is deprecated; use .abclrc instead.";
                         getStandardOutput()._writeLine(message);
                         Load.load(file.getCanonicalPath());
-                    } else {
-                        file = new File(userHome, ".ablisprc");
-                        if (file.isFile()) {
-                            String message =
-                                "Warning: use of .ablisprc is deprecated; use .abclrc instead.";
-                            getStandardOutput()._writeLine(message);
-                            Load.load(file.getCanonicalPath());
-                        }
+                        break;
                     }
-                }
+                    file = new File(userHome, ".ablisprc");
+                    if (file.isFile()) {
+                        String message =
+                            "Warning: use of .ablisprc is deprecated; use .abclrc instead.";
+                        getStandardOutput()._writeLine(message);
+                        Load.load(file.getCanonicalPath());
+                        break;
+                    }
+                } while (false);
             }
             catch (Throwable t) {
                 t.printStackTrace();
