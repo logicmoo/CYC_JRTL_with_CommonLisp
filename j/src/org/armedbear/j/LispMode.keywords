@@ -402,6 +402,7 @@ sort
 special
 special-operator-p
 stable-sort
+standard-char-p
 store-value
 string
 string-capitalize
