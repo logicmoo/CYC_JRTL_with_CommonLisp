@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.5 2003-06-21 03:51:54 piso Exp $
+ * $Id: LispClass.java,v 1.6 2003-06-21 17:02:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,41 +27,35 @@ public final class LispClass extends LispObject
 {
     private static final HashMap map = new HashMap();
 
-    private final String name;
+    private final Symbol symbol;
 
-    public LispClass(String name)
+    private LispClass(Symbol symbol)
     {
-        this.name = name;
+        this.symbol = symbol;
     }
 
     public String getName()
     {
-        return name;
+        return symbol.getName();
     }
 
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#<BUILT-IN-CLASS ");
-        sb.append(name);
+        sb.append(symbol.getName());
         sb.append('>');
         return sb.toString();
     }
 
-    private static LispObject findClass(Symbol symbol)
+    private static void addClass(Symbol symbol)
     {
-        LispObject obj = (LispObject) map.get(symbol.getName());
-        return obj != null ? obj : NIL;
-    }
-
-    private static void addClass(String name)
-    {
-        map.put(name, new LispClass(name));
+        map.put(symbol, new LispClass(symbol));
     }
 
     static {
-        addClass("ARRAY");
-        addClass("BIT-VECTOR");
-        addClass("VECTOR");
+        addClass(Symbol.ARRAY);
+        addClass(Symbol.BIT_VECTOR);
+        addClass(Symbol.VECTOR);
     }
 
     // ### find-class
@@ -70,7 +64,8 @@ public final class LispClass extends LispObject
         {
             if (args.length < 1)
                 throw new WrongNumberOfArgumentsException(this);
-            return findClass(checkSymbol(args[0]));
+            LispObject obj = (LispObject) map.get(checkSymbol(args[0]));
+            return obj != null ? obj : NIL;
         }
     };
 
@@ -78,9 +73,12 @@ public final class LispClass extends LispObject
     private static final Primitive1 CLASS_NAME = new Primitive1("class-name") {
         public LispObject execute(LispObject arg) throws LispError
         {
-            if (arg instanceof LispClass)
-                return new LispString(((LispClass)arg).getName());
-            throw new TypeError(arg, "class");
+            try {
+                return ((LispClass)arg).symbol;
+            }
+            catch (ClassCastException e) {
+                throw new TypeError(arg, "class");
+            }
         }
     };
 }
