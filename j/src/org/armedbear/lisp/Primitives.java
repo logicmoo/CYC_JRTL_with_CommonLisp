@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.57 2003-02-28 19:25:45 piso Exp $
+ * $Id: Primitives.java,v 1.58 2003-03-01 01:08:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1794,7 +1794,8 @@ public final class Primitives extends Module
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
                 throw new TypeError("array does not have a fill pointer");
-            v.checkIndex(fillPointer);
+            if (fillPointer >= v.capacity())
+                return NIL;
             v.set(fillPointer, first);
             v.setFillPointer(fillPointer + 1);
             return new Fixnum(fillPointer);
