@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.11 2003-04-27 16:08:05 piso Exp $
+ * $Id: Package.java,v 1.12 2003-05-24 00:37:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -234,7 +234,7 @@ public final class Package extends LispObject
         return (nicknames.size() > 0) ? (String) nicknames.get(0) : null;
     }
 
-    public LispObject getNicknames()
+    public LispObject packageNicknames()
     {
         LispObject list = NIL;
         for (int i = nicknames.size(); i-- > 0;) {
