@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.16 2003-07-19 15:20:40 piso Exp $
+ * $Id: LispAPI.java,v 1.17 2003-07-19 16:38:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.TypeError;
 import org.armedbear.lisp.WrongNumberOfArgumentsException;
 
-public final class LispAPI extends Lisp implements Constants
+public final class LispAPI extends Lisp
 {
     private static final Preferences preferences = Editor.preferences();
 
@@ -285,27 +285,84 @@ public final class LispAPI extends Lisp implements Constants
     {
         if (n != 0) {
             final Editor editor = Editor.currentEditor();
-            editor.addUndo(SimpleEdit.MOVE);
             Position pos = editor.getDot();
-            final Line oldLine = pos.getLine();
-            if (n > 0) {
-                while (n-- > 0) {
-                    if (!pos.next())
-                        throw new LispError("reached end of buffer");
+            if (pos != null) {
+                editor.addUndo(SimpleEdit.MOVE);
+                if (n > 0) {
+                    while (n-- > 0) {
+                        if (!pos.next())
+                            throw new LispError("reached end of buffer");
+                    }
+                } else {
+                    Debug.assertTrue(n < 0);
+                    while (n++ < 0) {
+                        if (!pos.prev())
+                            throw new LispError("reached beginning of buffer");
+                    }
                 }
-            } else {
-                Debug.assertTrue(n < 0);
-                while (n++ < 0) {
-                    if (!pos.prev())
-                        throw new LispError("reached beginning of buffer");
-                }
+                editor.moveCaretToDotCol();
             }
-            editor.moveCaretToDotCol();
-            if (pos.getLine() != oldLine)
-                editor.setUpdateFlag(REFRAME);
         }
         return NIL;
     }
+
+    // ### beginning-of-line
+    private static final Primitive BEGINNING_OF_LINE =
+        new Primitive("beginning-of-line", PACKAGE_J, true) {
+        public LispObject execute() throws LispError
+        {
+            Editor.currentEditor().bol();
+            return NIL;
+        }
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            int n = (arg != NIL) ? Fixnum.getValue(arg) : 1;
+            final Editor editor = Editor.currentEditor();
+            Position pos = editor.getDot();
+            if (pos != null) {
+                editor.addUndo(SimpleEdit.MOVE);
+                while (--n > 0) {
+                    Line nextLine = pos.getNextLine();
+                    if (nextLine != null)
+                        pos.setLine(nextLine);
+                    else
+                        break;
+                }
+                pos.setOffset(0);
+                editor.moveCaretToDotCol();
+            }
+            return NIL;
+        }
+    };
+
+    // ### end-of-line
+    private static final Primitive END_OF_LINE =
+        new Primitive("end-of-line", PACKAGE_J, true) {
+        public LispObject execute() throws LispError
+        {
+            Editor.currentEditor().eol();
+            return NIL;
+        }
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            int n = (arg != NIL) ? Fixnum.getValue(arg) : 1;
+            final Editor editor = Editor.currentEditor();
+            Position pos = editor.getDot();
+            if (pos != null) {
+                editor.addUndo(SimpleEdit.MOVE);
+                while (--n > 0) {
+                    Line nextLine = pos.getNextLine();
+                    if (nextLine != null)
+                        pos.setLine(nextLine);
+                    else
+                        break;
+                }
+                pos.setOffset(pos.getLineLength());
+                editor.moveCaretToDotCol();
+            }
+            return NIL;
+        }
+    };
 
     private static final Symbol KEYWORD_GLOBAL =
         Keyword.internKeyword("GLOBAL");
