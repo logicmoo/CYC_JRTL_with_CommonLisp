@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.35 2003-07-14 13:21:50 piso Exp $
+# $Id: Makefile.in,v 1.36 2003-07-15 03:10:25 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ CLASSFILES =	AbstractArray.class \
 		AbstractVector.class \
 		Array.class \
 		ArrayType.class \
+		ArrayTypeSpecifier.class \
 		Autoload.class \
 		Bignum.class \
 		BinaryInputStream.class \
@@ -103,6 +104,7 @@ CLASSFILES =	AbstractArray.class \
 		UndefinedFunctionError.class \
 		Utilities.class \
 		Vector.class \
+		VectorTypeSpecifier.class \
 		Version.class \
 		WrongNumberOfArgumentsException.class \
 		coerce.class \
