@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.14 2002-11-09 19:19:56 piso Exp $
+ * $Id: LispMode.java,v 1.15 2002-11-22 02:03:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 
 public class LispMode extends AbstractMode implements Constants, Mode
 {
@@ -67,6 +68,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_PERIOD, ALT_MASK, "findTagAtDot");
         km.mapKey(KeyEvent.VK_L, CTRL_MASK | SHIFT_MASK, "listTags");
         km.mapKey(')', "closeParen");
+        km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
     }
 
     public boolean isTaggable()
@@ -297,5 +299,75 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 break;
         }
         return pos;
+    }
+
+    private static HashMap map;
+
+    public static void hyperspec()
+    {
+        hyperspec(null);
+    }
+
+    public static void hyperspec(String s)
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getDot() == null)
+            return;
+        if (s == null)
+            s = mode.getIdentifier(editor.getDot());
+        if (s == null || s.length() == 0)
+            return;
+        final Buffer buffer = editor.getBuffer();
+        String clhsRoot = buffer.getStringProperty(Property.CLHS_ROOT);
+        File rootDir = File.getInstance(clhsRoot);
+        if (rootDir == null || rootDir.isRemote() || !rootDir.isDirectory())
+            return;
+        if (map == null) {
+            File file = File.getInstance(rootDir, "Data/Map_Sym.txt");
+            if (!file.isFile())
+                return;
+            SystemBuffer buf = new SystemBuffer(file);
+            buf.load();
+            if (!buf.isLoaded())
+                return;
+            map = new HashMap();
+            Line line = buf.getFirstLine();
+            while (true) {
+                String key = line.trim().toLowerCase();
+                line = line.next();
+                if (line == null)
+                    break;
+                if (line != null) {
+                    String value = line.trim();
+                    if (key.length() > 0 && value.length() > 0)
+                        map.put(key, value);
+                }
+                line = line.next();
+                if (line == null)
+                    break;
+            }
+        }
+        String filename = (String) map.get(s.toLowerCase());
+        if (filename == null)
+            return;
+        File dataDir = File.getInstance(rootDir, "Data");
+        File file = File.getInstance(dataDir, filename);
+        Buffer buf = null;
+        // Look for existing buffer.
+        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+            Buffer b = it.nextBuffer();
+            if (b instanceof WebBuffer && b.getFile().equals(file)) {
+                buf = b;
+                break;
+            }
+        }
+        if (buf == null) {
+            buf = WebBuffer.createWebBuffer(file, null, null);
+            buf.setTransient(true);
+        }
+        if (editor.getBuffer() != buf) {
+            editor.makeNext(buf);
+            editor.activateInOtherWindow(buf);
+        }
     }
 }
