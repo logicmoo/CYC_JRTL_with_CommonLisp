@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.11 2003-03-08 16:56:22 piso Exp $
+ * $Id: Closure.java,v 1.12 2003-03-10 19:33:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,8 @@ public class Closure extends Function
     private static final int KEYWORD  = 2;
     private static final int REST     = 3;
     private static final int AUX      = 4;
+
+    protected LispObject envVar = NIL;
 
     private final LispObject parameterList;
     private final Parameter[] parameterArray;
@@ -74,6 +76,16 @@ public class Closure extends Function
                         if (auxVars == null)
                             auxVars = new ArrayList();
                         auxVars.add(new Parameter((Symbol)obj, NIL, AUX));
+                    } else if (obj == Symbol.AND_ENVIRONMENT) {
+                        remaining = remaining.cdr();
+                        if (remaining == NIL)
+                            throw new LispError(
+                                "&ENVIRONMENT must be followed by a variable");
+                        envVar = checkSymbol(remaining.car());
+                        arity = -1;
+                        remaining = remaining.cdr();
+                        ++i;
+                        continue;
                     } else if (obj == Symbol.AND_OPTIONAL) {
                         optional = true;
                         arity = -1;
@@ -228,6 +240,12 @@ public class Closure extends Function
     }
 
     public final LispObject execute(LispObject[] args) throws Condition
+    {
+        return execute(args, env);
+    }
+
+    protected LispObject execute(LispObject[] args, Environment env)
+        throws Condition
     {
         if (arity >= 0) {
             if (args.length != arity)
