@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.58 2003-09-02 18:26:05 piso Exp $
+ * $Id: Fixnum.java,v 1.59 2003-09-02 18:51:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -270,6 +270,11 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof LispFloat)
             return new LispFloat(value * LispFloat.getValue(obj));
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(multiplyBy(c.getRealPart()),
+                                       multiplyBy(c.getImaginaryPart()));
+        }
         throw new TypeError(obj, "number");
     }
 
@@ -280,7 +285,7 @@ public final class Fixnum extends LispObject
             if (value % divisor == 0)
                 return new Fixnum(value / divisor);
             return number(BigInteger.valueOf(value),
-                BigInteger.valueOf(divisor));
+                          BigInteger.valueOf(divisor));
         }
         if (obj instanceof Bignum)
             return number(getBigInteger(), ((Bignum)obj).getValue());
@@ -292,6 +297,15 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof LispFloat)
             return new LispFloat(value / LispFloat.getValue(obj));
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            LispObject realPart = c.getRealPart();
+            LispObject imagPart = c.getImaginaryPart();
+            LispObject denominator =
+                realPart.multiplyBy(realPart).add(imagPart.multiplyBy(imagPart));
+            return Complex.getInstance(multiplyBy(realPart).divideBy(denominator),
+                                       Fixnum.ZERO.subtract(multiplyBy(imagPart).divideBy(denominator)));
+        }
         throw new TypeError(obj, "number");
     }
 
