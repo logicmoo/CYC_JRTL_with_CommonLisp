@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.51 2004-09-07 20:22:46 piso Exp $
+ * $Id: LispAPI.java,v 1.52 2004-09-11 12:07:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -249,13 +249,15 @@ public final class LispAPI extends Lisp
     private static final Primitive BUFFER_PATHNAME =
         new Primitive("buffer-pathname", PACKAGE_J, true, "&optional buffer")
     {
-        public LispObject execute()
+        public LispObject execute() throws ConditionThrowable
         {
             File file = Editor.currentEditor().getBuffer().getFile();
-            if (file != null) {
-                if (file.isRemote())
-                    return new SimpleString(file.netPath());
-                return new SimpleString(file.canonicalPath());
+            if (file != null && file.isLocal()) {
+                String s = file.canonicalPath();
+                if (file.isDirectory())
+                    if (!s.endsWith(LocalFile.getSeparator()))
+                        s = s.concat(LocalFile.getSeparator());
+                return new Pathname(s);
             }
             return NIL;
         }
@@ -263,10 +265,12 @@ public final class LispAPI extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             File file = checkBuffer(arg).getFile();
-            if (file != null) {
-                if (file.isRemote())
-                    return new SimpleString(file.netPath());
-                return new SimpleString(file.canonicalPath());
+            if (file != null && file.isLocal()) {
+                String s = file.canonicalPath();
+                if (file.isDirectory())
+                    if (!s.endsWith(LocalFile.getSeparator()))
+                        s = s.concat(LocalFile.getSeparator());
+                return new Pathname(s);
             }
             return NIL;
         }
