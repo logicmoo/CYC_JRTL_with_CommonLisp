@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.129 2004-01-05 19:06:40 piso Exp $
+ * $Id: Autoload.java,v 1.130 2004-01-06 15:08:39 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,7 +288,10 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "gc", "gc", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
         autoload(PACKAGE_EXT, "string-input-stream-current", "StringInputStream", true);
+        autoload(PACKAGE_JAVA, "%load-java-class-from-byte-array", "RuntimeClass");
         autoload(PACKAGE_JAVA, "%jnew-proxy", "JProxy");
+        autoload(PACKAGE_JAVA, "%jnew-runtime-class", "RuntimeClass");
+        autoload(PACKAGE_JAVA, "%jredefine-method", "RuntimeClass");
         autoload(PACKAGE_JAVA, "%jregister-handler", "JHandler");
         autoload(PACKAGE_PROF, "%start-profiler", "Profiler", true);
         autoload(PACKAGE_PROF, "stop-profiler", "Profiler", true);
