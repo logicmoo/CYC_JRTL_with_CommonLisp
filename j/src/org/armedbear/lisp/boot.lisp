@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.58 2003-06-20 03:03:03 piso Exp $
+;;; $Id: boot.lisp,v 1.59 2003-06-20 14:05:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -166,5 +166,26 @@
 ;; FIXME
 (defun proclaim (decl)
   nil)
+
+
+;; AND, OR (from CMUCL)
+
+(defmacro and (&rest forms)
+  (cond ((endp forms) t)
+	((endp (rest forms)) (first forms))
+	(t
+	 `(if ,(first forms)
+	      (and ,@(rest forms))
+	      nil))))
+
+(defmacro or (&rest forms)
+  (cond ((endp forms) nil)
+	((endp (rest forms)) (first forms))
+	(t
+	 (let ((n-result (gensym)))
+	   `(let ((,n-result ,(first forms)))
+	      (if ,n-result
+		  ,n-result
+		  (or ,@(rest forms))))))))
 
 (debug)
