@@ -1,8 +1,8 @@
 /*
  * OpenFileTextFieldHandler.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.50 2003-07-04 12:57:58 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: OpenFileTextFieldHandler.java,v 1.51 2004-02-27 15:47:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,6 +276,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             return;
         }
         Debug.assertTrue(editor != null);
+        editor.setFocusToDisplay(); // Added for Java 1.5.0 Beta 1.
         Buffer buf = null;
         if (returned instanceof Buffer) {
             buf = (Buffer) returned;
