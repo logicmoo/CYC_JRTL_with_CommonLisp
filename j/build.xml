@@ -309,8 +309,13 @@
     />
   </target>
 
-  <target name="j-jar.zip" depends="j.jar">
+  <target name="j-jar.zip">
     <delete file="${topdir}/j-jar.zip"/>
+    <delete file="${topdir}/j.jar"/>
+    <antcall target="j.jar">
+      <param name="debug" value="yes"/>
+      <param name="build.compiler" value="javac1.4"/>
+    </antcall>
     <zip zipfile="${topdir}/j-jar.zip" basedir="${topdir}" includes="j.jar"/>
   </target>
 
