@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.57 2003-04-24 14:56:35 piso Exp $
+ * $Id: Lisp.java,v 1.58 2003-04-26 21:13:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,11 @@ public abstract class Lisp
         }
     }
 
+    public static final void clearValues()
+    {
+        _values = null;
+    }
+
     public static final LispObject nothing()
     {
         _values = new LispObject[0];
@@ -76,7 +81,7 @@ public abstract class Lisp
     // ignored.
     private static final LispObject value(LispObject obj)
     {
-        _values = null;
+        clearValues();
         return obj;
     }
 
@@ -86,7 +91,7 @@ public abstract class Lisp
         if (debug) {
             stack.push(new StackFrame(fun, argv));
         }
-        _values = null;
+        clearValues();
         LispObject result;
         if (profiling)
             fun.incrementCallCount();
@@ -289,7 +294,7 @@ public abstract class Lisp
     public static final LispObject eval(LispObject obj, Environment env)
         throws Condition
     {
-        _values = null;
+        clearValues();
         if (obj instanceof Symbol) {
             LispObject result = null;
             if (obj.isSpecialVariable()) {
@@ -374,7 +379,7 @@ public abstract class Lisp
             exps = exps.cdr();
         }
         // Ignore multiple values!
-        _values = null;
+        clearValues();
         return results;
     }
 

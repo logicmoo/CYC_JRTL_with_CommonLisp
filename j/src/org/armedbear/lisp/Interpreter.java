@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.19 2003-04-01 14:35:49 piso Exp $
+ * $Id: Interpreter.java,v 1.20 2003-04-26 21:13:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,7 +142,7 @@ public final class Interpreter extends Lisp
                     LispObject object = null;
                     if (c == ':') {
                         LispObject input = getStandardInput().readLine(false, EOF);
-                        setValues(null); // Ignore multiple values.
+                        clearValues(); // Ignore multiple values.
                         if (input == EOF)
                             break;
                         String s = LispString.getValue(input);

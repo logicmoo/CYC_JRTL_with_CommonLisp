@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.179 2003-04-26 16:07:49 piso Exp $
+ * $Id: Primitives.java,v 1.180 2003-04-26 21:14:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -574,7 +574,7 @@ public final class Primitives extends Module
     private static final LispObject values(LispObject[] args)
     {
         if (args.length == 1) {
-            setValues(null);
+            clearValues();
             return args[0];
         }
         setValues(args);
@@ -1327,7 +1327,7 @@ public final class Primitives extends Module
         symbol.setSymbolFunction(new Closure(symbol.getName(), parameters,
             body, env));
         // INTERN returns multiple values, but DEFUN does not.
-        setValues(null);
+        clearValues();
         return symbol;
     }
 
@@ -1368,7 +1368,7 @@ public final class Primitives extends Module
         body = new Cons(Symbol.BLOCK, body);
         body = new Cons(body, NIL);
         symbol.setSymbolFunction(new Macro(parameters, body, env));
-        setValues(null);
+        clearValues();
         return symbol;
     }
 
@@ -1386,7 +1386,7 @@ public final class Primitives extends Module
             LispObject initialValue = eval(args.cadr(), env);
             symbol.setSymbolValue(initialValue);
             symbol.setSpecial(true);
-            setValues(null);
+            clearValues();
             return symbol;
         }
     };
@@ -1407,7 +1407,7 @@ public final class Primitives extends Module
                     symbol.setSymbolValue(initialValue);
             }
             symbol.setSpecial(true);
-            setValues(null);
+            clearValues();
             return symbol;
         }
     };
@@ -1424,7 +1424,7 @@ public final class Primitives extends Module
             Symbol symbol = checkSymbol(args.car());
             symbol.setSymbolValue(eval(args.cadr(), env));
             symbol.setConstant(true);
-            setValues(null);
+            clearValues();
             return symbol;
         }
     };
@@ -1438,7 +1438,7 @@ public final class Primitives extends Module
             while (args != NIL) {
                 LispObject clause = args.car();
                 result = eval(clause.car(), env);
-                setValues(null);
+                clearValues();
                 if (result != NIL) {
                     LispObject body = clause.cdr();
                     while (body != NIL) {
@@ -3032,7 +3032,7 @@ public final class Primitives extends Module
                 }
                 remaining = remaining.cdr();
             }
-            setValues(null);
+            clearValues();
             return NIL;
         }
     };
@@ -3333,7 +3333,7 @@ public final class Primitives extends Module
                         if (result == NIL) {
                             if (args.cdr() != NIL) {
                                 // Not the last form.
-                                setValues(null);
+                                clearValues();
                             }
                             return NIL;
                         }
@@ -3362,7 +3362,7 @@ public final class Primitives extends Module
                         if (result != NIL) {
                             if (args.cdr() != NIL) {
                                 // Not the last form.
-                                setValues(null);
+                                clearValues();
                             }
                             return result;
                         }
@@ -3552,7 +3552,7 @@ public final class Primitives extends Module
                 throw new WrongNumberOfArgumentsException(this);
             LispObject result = eval(args.car(), env);
             LispObject[] values = getValues();
-            setValues(null);
+            clearValues();
             if (values == null)
                 return new Cons(result, NIL);
             LispObject list = NIL;
@@ -3579,7 +3579,7 @@ public final class Primitives extends Module
                 n = 0;
             LispObject result = eval(args.cadr(), env);
             LispObject[] values = getValues();
-            setValues(null);
+            clearValues();
             if (values == null) {
                 // A single value was returned.
                 return n == 0 ? result : NIL;
