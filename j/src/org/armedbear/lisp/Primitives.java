@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.474 2003-10-14 16:04:01 piso Exp $
+ * $Id: Primitives.java,v 1.475 2003-10-15 20:40:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1303,11 +1303,6 @@ public final class Primitives extends Module
             }
             if (first instanceof Cons && first.car() == Symbol.SETF) {
                 Symbol symbol = checkSymbol(first.cadr());
-//                 if (symbol.getSymbolFunction() instanceof SpecialOperator) {
-//                     String message =
-//                         symbol.getName() + " is a special operator and may not be redefined";
-//                     throw new ConditionThrowable(new ProgramError(message));
-//                 }
                 LispObject arglist = checkList(second);
                 LispObject body = checkList(third);
                 if (body.car() instanceof LispString && body.cdr() != NIL) {
@@ -1320,7 +1315,6 @@ public final class Primitives extends Module
                 body = new Cons(body, NIL);
                 Closure closure = new Closure(arglist, body, new Environment());
                 closure.setArglist(arglist);
-//                 symbol.setSymbolFunction(closure);
                 put(symbol, PACKAGE_SYS.intern("SETF-FUNCTION"), closure);
                 return symbol;
             }
@@ -1329,8 +1323,8 @@ public final class Primitives extends Module
     };
 
     // ### lambda
-    private static final SpecialOperator LAMBDA =
-        new SpecialOperator("lambda") {
+    private static final SpecialOperator LAMBDA = new SpecialOperator("lambda")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
