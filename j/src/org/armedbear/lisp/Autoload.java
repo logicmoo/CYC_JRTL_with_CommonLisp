@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.220 2005-03-17 14:44:23 piso Exp $
+ * $Id: Autoload.java,v 1.221 2005-03-18 18:42:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -459,7 +459,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-function-info", "function_info");
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
-        autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
         autoload(PACKAGE_SYS, "%set-schar", "StringFunctions");
         autoload(PACKAGE_SYS, "%set-std-slot-value", "StandardObjectFunctions");
@@ -512,7 +511,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "get-function-info-value", "function_info");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
-        autoload(PACKAGE_SYS, "instance-ref", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "layout-class", "Layout");
         autoload(PACKAGE_SYS, "layout-length", "Layout");
         autoload(PACKAGE_SYS, "layout-slot-index", "Layout");
@@ -526,7 +524,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "make-layout", "Layout");
         autoload(PACKAGE_SYS, "make-structure-class", "StructureClass");
         autoload(PACKAGE_SYS, "make-symbol-macro", "SymbolMacro");
-        autoload(PACKAGE_SYS, "mix", "HashTableFunctions");
         autoload(PACKAGE_SYS, "psxhash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
