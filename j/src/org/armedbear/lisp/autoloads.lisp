@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.136 2004-04-04 00:52:03 piso Exp $
+;;; $Id: autoloads.lisp,v 1.137 2004-04-16 20:04:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -226,6 +226,8 @@
 (autoload 'run-shell-command)
 (export 'make-socket)
 (autoload 'make-socket)
+(export 'compile-system)
+(autoload 'compile-system)
 
 ;; JVM compiler.
 (in-package "JVM")
