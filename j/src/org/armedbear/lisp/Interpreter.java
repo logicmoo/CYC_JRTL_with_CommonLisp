@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.40 2003-10-04 10:48:10 piso Exp $
+ * $Id: Interpreter.java,v 1.41 2003-10-16 14:34:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,15 +91,15 @@ public final class Interpreter extends Lisp
     {
         if (!initialized) {
             try {
-                Load._load("boot.lisp", true, false);
+                Load._load("boot.lisp", true, false, false);
                 if (jlisp) {
                     Class.forName("org.armedbear.j.LispAPI");
-                    Load._load("j.lisp", true, false);
+                    Load._load("j.lisp");
                 } else {
                     File file = new File(System.getProperty("user.home"),
-                        ".ablisprc");
+                                         ".ablisprc");
                     if (file.isFile())
-                        Load.load(file.getCanonicalPath());
+                        Load.load(file.getCanonicalPath(), true, false);
                 }
             }
             catch (Throwable t) {
@@ -120,6 +120,7 @@ public final class Interpreter extends Lisp
         try {
             CharacterOutputStream out = getStandardOutput();
             out.writeString(banner());
+            out.flushOutput();
             initialize(jlisp);
             Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
             LispObject tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
