@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.11 2003-02-09 18:46:57 piso Exp $
+ * $Id: Primitives.java,v 1.12 2003-02-10 18:51:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1549,7 +1549,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws LispException
         {
-            Vector v = checkVector(first);
+            AbstractVector v = checkVector(first);
             if (!v.isSimpleVector())
                 throw new WrongTypeException(first, "simple vector");
             int index = v.checkIndex(second);
@@ -1563,7 +1563,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispException
         {
-            Vector v = checkVector(first);
+            AbstractVector v = checkVector(first);
             if (!v.isSimpleVector())
                 throw new WrongTypeException(first, "simple vector");
             int i = v.checkIndex(second);
@@ -1635,7 +1635,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws LispException
         {
-            Vector v = checkVector(first);
+            AbstractVector v = checkVector(first);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
                 throw new LispException("array does not have a fill pointer");
@@ -1651,7 +1651,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws LispException
         {
-            Vector v = checkVector(second);
+            AbstractVector v = checkVector(second);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
                 throw new LispException("array does not have a fill pointer");
@@ -1667,7 +1667,7 @@ public final class Primitives extends Module
     private static final Primitive1 VECTOR_POP = new Primitive1("vector-pop") {
         public LispObject execute(LispObject arg) throws LispException
         {
-            Vector v = checkVector(arg);
+            AbstractVector v = checkVector(arg);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
                 throw new LispException("array does not have a fill pointer");

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.9 2003-01-30 22:25:10 piso Exp $
+ * $Id: Lisp.java,v 1.10 2003-02-10 18:50:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -494,13 +494,13 @@ public abstract class Lisp
         }
     }
 
-    public static final Vector checkVector(LispObject obj)
+    public static final AbstractVector checkVector(LispObject obj)
         throws LispException
     {
         if (obj == null)
             throw new NullPointerException();
         try {
-            return (Vector) obj;
+            return (AbstractVector) obj;
         }
         catch (ClassCastException e) {
             throw new WrongTypeException(obj, "vector");
