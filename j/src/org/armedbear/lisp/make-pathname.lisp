@@ -1,7 +1,7 @@
 ;;; make-pathname.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: make-pathname.lisp,v 1.1 2003-08-10 00:36:59 piso Exp $
+;;; $Id: make-pathname.lisp,v 1.2 2004-01-01 01:38:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,3 +28,18 @@
 			   defaults
 			   (case :local))
   (%make-pathname host device directory name type version defaults case))
+
+(defun pathname-host (pathname &key (case :local))
+  (%pathname-host pathname case))
+
+(defun pathname-device (pathname &key (case :local))
+  (%pathname-device pathname case))
+
+(defun pathname-directory (pathname &key (case :local))
+  (%pathname-directory pathname case))
+
+(defun pathname-name (pathname &key (case :local))
+  (%pathname-name pathname case))
+
+(defun pathname-type (pathname &key (case :local))
+  (%pathname-type pathname case))
