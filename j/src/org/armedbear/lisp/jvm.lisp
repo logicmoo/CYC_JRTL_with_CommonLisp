@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.394 2005-02-09 18:33:07 piso Exp $
+;;; $Id: jvm.lisp,v 1.395 2005-02-10 01:43:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2446,7 +2446,6 @@
 (define-binary-operator '>=                  "IS_GE")
 (define-binary-operator ' =                  "IS_E")
 (define-binary-operator '/=                  "IS_NE")
-(define-binary-operator 'mod                 "MOD")
 (define-binary-operator 'ash                 "ash")
 (define-binary-operator 'logand              "logand")
 (define-binary-operator 'aref                "AREF")
@@ -4231,6 +4230,29 @@
   (dformat t "p2-logand default case~%")
   (compile-function-call form target representation))
 
+(defun p2-mod (form &key (target :stack) representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-mod))
+  (let* ((args (cdr form))
+         (arg1 (car args))
+         (arg2 (cadr args)))
+    (cond ((fixnump arg2)
+           (compile-form arg1 :target :stack)
+           (maybe-emit-clear-values arg1)
+           (emit-push-constant-int arg2)
+           (emit-invokevirtual +lisp-object-class+ "MOD" '("I") +lisp-object+))
+          (t
+           (compile-form arg1 :target :stack)
+           (compile-form arg2 :target :stack)
+           (unless (and (single-valued-p arg1)
+                        (single-valued-p arg2))
+             (emit-clear-values))
+           (emit-invokevirtual +lisp-object-class+ "MOD" (list +lisp-object+) +lisp-object+)))
+    (when (eq representation :unboxed-fixnum)
+      (emit-unbox-fixnum))
+    (emit-move-from-stack target representation)))
+
 (defun p2-zerop (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -4329,11 +4351,7 @@
                        (emit-push-int arg2)
                        (emit 'iadd))
                       (t
-;;                        (emit 'iload (variable-register var1))
-;;                        (emit 'i2l)
                        (emit-push-long var1)
-;;                        (emit 'iload (variable-register var2))
-;;                        (emit 'i2l)
                        (emit-push-long var2)
                        (emit 'ladd)
                        (emit-box-long)))
@@ -4346,11 +4364,7 @@
                      (emit-push-int arg2)
                      (emit 'iadd))
                     (t
-;;                      (emit-push-int var1)
-;;                      (emit 'i2l)
                      (emit-push-long var1)
-;;                      (emit-push-int arg2)
-;;                      (emit 'i2l)
                      (emit-push-long arg2)
                      (emit 'ladd)
                      (emit-box-long)))
@@ -4363,11 +4377,7 @@
                      (emit-push-int var2)
                      (emit 'iadd))
                     (t
-;;                      (emit-push-int arg1)
-;;                      (emit 'i2l)
                      (emit-push-long arg1)
-;;                      (emit-push-int var2)
-;;                      (emit 'i2l)
                      (emit-push-long var2)
                      (emit 'ladd)
                      (emit-box-long)))
@@ -4568,7 +4578,9 @@
                (single-valued-p (third form)))
     (emit-clear-values))
   (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
-  (emit-move-from-stack target))
+  (when (eq representation :unboxed-fixnum)
+    (emit-unbox-fixnum))
+  (emit-move-from-stack target representation))
 
 (defun p2-not/null (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
@@ -4706,16 +4718,16 @@
           (list 'LET (list (list sym expr)) (list 'SETQ (second form) sym)))
         form)))
 
-(defun compile-setq (form &key (target :stack) representation)
-;;   (dformat t "compile-setq form = ~S target = ~S representation = ~S~%"
+(defun p2-setq (form &key (target :stack) representation)
+;;   (dformat t "p2-setq form = ~S target = ~S representation = ~S~%"
 ;;            form target representation)
   (unless (= (length form) 3)
-    (return-from compile-setq (compile-form (precompiler::precompile-setq form)
+    (return-from p2-setq (compile-form (precompiler::precompile-setq form)
                                             :target target)))
   (let ((expansion (macroexpand (second form))))
     (unless (eq expansion (second form))
       (compile-form (list 'SETF expansion (third form)))
-      (return-from compile-setq)))
+      (return-from p2-setq)))
   (let* ((name (second form))
          (value-form (third form))
          (variable (find-visible-variable name)))
@@ -4723,7 +4735,7 @@
                (variable-special-p variable))
            (let ((new-form (rewrite-setq form)))
              (when (neq new-form form)
-               (return-from compile-setq
+               (return-from p2-setq
                             (compile-form (p1 new-form) :target target))))
            (emit-push-current-thread)
            (emit 'getstatic *this-class* (declare-symbol name) +lisp-symbol+)
@@ -4736,10 +4748,10 @@
                 (or (equal value-form (list '1+ (variable-name variable)))
                     (equal value-form (list '+ (variable-name variable) 1))
                     (equal value-form (list '+ 1 (variable-name variable)))))
-           (dformat t "compile-setq incf unboxed-fixnum case~%")
+           (dformat t "p2-setq incf unboxed-fixnum case~%")
            (emit 'iinc (variable-register variable) 1)
            (when target
-             (dformat t "compile-setq constructing boxed fixnum for ~S~%"
+             (dformat t "p2-setq constructing boxed fixnum for ~S~%"
                       (variable-name variable))
              (emit 'new +lisp-fixnum-class+)
              (emit 'dup)
@@ -4748,16 +4760,22 @@
              (emit-invokespecial-init +lisp-fixnum-class+ '("I"))
              (emit-move-from-stack target)))
           ((eq (variable-representation variable) :unboxed-fixnum)
-           (dformat t "compile-setq unboxed-fixnum case value-form = ~S~%"
+           (dformat t "p2-setq unboxed-fixnum case value-form = ~S~%"
                     value-form)
-           (compile-form value-form :target :stack)
+           (compile-form value-form :target :stack :representation :unboxed-fixnum)
            (maybe-emit-clear-values value-form)
            (when target
              (emit 'dup))
-           (emit-unbox-fixnum)
            (emit 'istore (variable-register variable))
            (when target
-             (emit-move-from-stack target)))
+             ;; int on stack here
+             (unless (eq representation :unboxed-fixnum)
+               ;; need to box int
+               (emit 'new +lisp-fixnum-class+) ; stack: int new-fixnum
+               (emit 'dup_x1)                  ; stack: new-fixnum int new-fixnum
+               (emit 'swap)                    ; stack: new-fixnum new-fixnum int
+               (emit-invokespecial-init +lisp-fixnum-class+ '("I")) ; stack: fixnum
+             (emit-move-from-stack target representation))))
           (t
            (compile-form value-form :target :stack)
            (maybe-emit-clear-values value-form)
@@ -4767,7 +4785,7 @@
            (when target
              (when (eq representation :unboxed-fixnum)
                (emit-unbox-fixnum))
-             (emit-move-from-stack target))))))
+             (emit-move-from-stack target representation))))))
 
 (defun p2-the (form &key (target :stack) representation)
 ;;   (compile-form (third form) :target target :representation representation)
@@ -5781,7 +5799,6 @@
                              nth
                              progn
                              quote
-                             setq
                              throw
                              values))
 
@@ -5805,11 +5822,13 @@
 (install-p2-handler 'labels         'p2-labels)
 (install-p2-handler 'length         'p2-length)
 (install-p2-handler 'logand         'p2-logand)
+(install-p2-handler 'mod            'p2-mod)
 (install-p2-handler 'not            'p2-not/null)
 (install-p2-handler 'null           'p2-not/null)
 (install-p2-handler 'return-from    'p2-return-from)
 (install-p2-handler 'rplacd         'p2-rplacd)
 (install-p2-handler 'schar          'p2-schar)
+(install-p2-handler 'setq           'p2-setq)
 (install-p2-handler 'the            'p2-the)
 (install-p2-handler 'zerop          'p2-zerop)
 
