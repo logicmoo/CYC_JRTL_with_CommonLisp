@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.13 2003-11-24 17:15:00 piso Exp $
+;;; $Id: precompiler.lisp,v 1.14 2003-11-24 21:25:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -170,6 +170,15 @@
     (when auxvars
       (setf lambda-list (subseq lambda-list 0 (position '&AUX lambda-list)))
       (setf body (list (append (list 'LET* (cdr auxvars)) body))))
+    (let ((specials ()))
+      (dolist (var lambda-list)
+        (when (special-variable-p var)
+          (push var specials)))
+      (when specials
+        (dolist (var specials)
+          (let ((sym (gensym)))
+            (setf lambda-list (subst sym var lambda-list))
+            (setf body (list (append (list 'LET* (list (list var sym))) body)))))))
     (list* 'LAMBDA lambda-list (mapcar #'precompile1 body))))
 
 (defun define-local-macro (name lambda-list body)
