@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.44 2003-06-09 01:06:06 piso Exp $
+ * $Id: Closure.java,v 1.45 2003-06-09 01:38:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,12 +304,20 @@ public class Closure extends Function
     public LispObject execute(LispObject first, LispObject second)
         throws Condition
     {
-        if (arity == 2) {
+        if (minArgs == 2) {
             final LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(environment);
             bind(requiredParameters[0].var, first, ext);
             bind(requiredParameters[1].var, second, ext);
+            if (arity != 2) {
+                if (optionalParameters != null)
+                    bindOptionalParameterDefaults(ext, thread);
+                if (restVar != null)
+                    bind(restVar, NIL, ext);
+                if (keywordParameters != null)
+                    bindKeywordParameterDefaults(ext, thread);
+            }
             if (auxVars != null)
                 bindAuxVars(ext, thread);
             LispObject result = NIL;
@@ -442,15 +450,7 @@ public class Closure extends Function
             if (argsLeft == 0) {
                 // No keyword arguments were supplied.
                 // Bind all keyword parameters to their defaults.
-                for (int n = 0; n < keywordParameters.length; n++) {
-                    Parameter parameter = keywordParameters[n];
-                    LispObject initForm = parameter.initForm;
-                    LispObject value =
-                        initForm != null ? eval(initForm, ext, thread) : NIL;
-                    bind(parameter.var, value, ext);
-                    if (parameter.svar != NIL)
-                        bind((Symbol)parameter.svar, NIL, ext);
-                }
+                bindKeywordParameterDefaults(ext, thread);
             } else {
                 if ((argsLeft % 2) != 0)
                     throw new ProgramError("odd number of keyword arguments");
@@ -523,6 +523,34 @@ public class Closure extends Function
         }
         thread.setDynamicEnvironment(oldDynEnv);
         return result;
+    }
+
+    private final void bindOptionalParameterDefaults(Environment env,
+        LispThread thread) throws Condition
+    {
+        for (int i = 0; i < optionalParameters.length; i++) {
+            Parameter parameter = optionalParameters[i];
+            LispObject initForm = parameter.initForm;
+            bind(parameter.var,
+                initForm != null ? eval(initForm, env, thread) : NIL,
+                env);
+            if (parameter.svar != NIL)
+                bind((Symbol)parameter.svar, NIL, env);
+        }
+    }
+
+    private final void bindKeywordParameterDefaults(Environment env,
+        LispThread thread) throws Condition
+    {
+        for (int i = 0; i < keywordParameters.length; i++) {
+            Parameter parameter = keywordParameters[i];
+            LispObject initForm = parameter.initForm;
+            bind(parameter.var,
+                initForm != null ? eval(initForm, env, thread) : NIL,
+                env);
+            if (parameter.svar != NIL)
+                bind((Symbol)parameter.svar, NIL, env);
+        }
     }
 
     private final void bindAuxVars(Environment env, LispThread thread)
