@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.178 2003-04-25 02:21:05 piso Exp $
+ * $Id: Primitives.java,v 1.179 2003-04-26 16:07:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3921,7 +3921,7 @@ public final class Primitives extends Module
                 if (second == Symbol.VECTOR ||
                     second == Symbol.SIMPLE_VECTOR ||
                     (second instanceof LispClass &&
-                    second.getName().equals("VECTOR"))) {
+                        second.getName().equals("VECTOR"))) {
                     Vector v = new Vector(first.length());
                     int i = 0;
                     while (first != NIL) {
