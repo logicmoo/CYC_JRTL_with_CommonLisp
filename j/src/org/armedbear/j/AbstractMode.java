@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.6 2003-05-14 00:08:23 piso Exp $
+ * $Id: AbstractMode.java,v 1.7 2003-05-17 19:25:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -362,30 +362,18 @@ public abstract class AbstractMode implements Constants, Mode
         menu.add(editor, "About J", 'A', "about");
     }
 
-    /**
-     * {@inheritDoc}
-     * This creates a menu with the given items:<br>
-     * <li>Cut
-     * <li>Copy
-     * <li>Paste
-     * <li>--separator--
-     * <li>List occurances
-     * <li>Find tag (if applicable)
-     * <li>--separator--
-     * <li>Properties (if applicable)
-     * <ul>
-     * The names and actions are sensitive to whether or not text is currently
-     * selected, the buffer is taggable, if the buffer has properties, and
-     * whether or not there is a search in progress.
-     *
-     * @param editor    {@inheritDoc}
-     * @return          {@inheritDoc}
-     */
     public JPopupMenu getContextMenu(Editor editor)
+    {
+        final JPopupMenu popup = new JPopupMenu();
+        addDefaultContextMenuItems(editor, popup);
+        popup.pack();
+        return popup;
+    }
+
+    protected void addDefaultContextMenuItems(Editor editor, JPopupMenu popup)
     {
         final Buffer buffer = editor.getBuffer();
         final Dispatcher dispatcher = editor.getDispatcher();
-        final JPopupMenu popup = new JPopupMenu();
 
         JMenuItem menuItem;
 
@@ -467,27 +455,25 @@ public abstract class AbstractMode implements Constants, Mode
 
         // Folding.
         popup.addSeparator();
-        addPopupMenuItem("Fold", "fold", popup, dispatcher);
-        addPopupMenuItem("Unfold", "unfold", popup, dispatcher);
-        addPopupMenuItem("Unfold all", "unfoldAll", popup, dispatcher);
+        addContextMenuItem("Fold", "fold", popup, dispatcher);
+        addContextMenuItem("Unfold", "unfold", popup, dispatcher);
+        addContextMenuItem("Unfold all", "unfoldAll", popup, dispatcher);
 
         // Properties.
         if (buffer.getFile() != null && !(buffer instanceof Directory)) {
             popup.addSeparator();
-            addPopupMenuItem("Properties", "properties", popup, dispatcher);
+            addContextMenuItem("Properties", "properties", popup, dispatcher);
         }
-
-        popup.pack();
-        return popup;
     }
 
-    private void addPopupMenuItem(String text, String command,
+    protected JMenuItem addContextMenuItem(String text, String command,
         JPopupMenu popup, Dispatcher dispatcher)
     {
         JMenuItem menuItem = new JMenuItem(text);
         menuItem.setActionCommand(command);
         menuItem.addActionListener(dispatcher);
         popup.add(menuItem);
+        return menuItem;
     }
 
     public ToolBar getToolBar(Frame frame)
