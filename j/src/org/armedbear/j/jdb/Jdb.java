@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.17 2003-05-18 17:05:56 piso Exp $
+ * $Id: Jdb.java,v 1.18 2003-05-18 19:24:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,7 @@ import org.armedbear.j.JavaMode;
 import org.armedbear.j.JavaSource;
 import org.armedbear.j.Line;
 import org.armedbear.j.Log;
+import org.armedbear.j.Platform;
 import org.armedbear.j.Position;
 import org.armedbear.j.ReaderThread;
 import org.armedbear.j.SimpleEdit;
@@ -350,7 +351,7 @@ public final class Jdb extends Buffer implements JdbConstants
         switch (command) {
             case JDB_BREAK:
                 logCommand("break", args);
-                doStop(args);
+                doBreak(args, false);
                 break;
             case JDB_CLEAR:
                 logCommand("clear", args);
@@ -394,6 +395,10 @@ public final class Jdb extends Buffer implements JdbConstants
             case JDB_SUSPEND:
                 logCommand("suspend");
                 doSuspend();
+                break;
+            case JDB_TBREAK:
+                logCommand("tbreak", args);
+                doBreak(args, true);
                 break;
             default:
                 Log.error("Jdb.doCommand unknown command " + command);
@@ -1004,23 +1009,144 @@ public final class Jdb extends Buffer implements JdbConstants
         }
     }
 
-    // e.g. "stop org.armedbear.j.Editor.main"
-    private void doStop(String args)
+    private void doBreak(String arg, boolean temporary)
     {
-        if (args == null) {
+        if (arg == null) {
             log("No location specified");
             return;
         }
-        if (args.startsWith(" in "))
-            args = args.substring(4).trim();
-        int index = args.lastIndexOf('.');
-        if (index < 0) {
-            log("No class specified");
+        int index = arg.indexOf(':');
+        if (index >= 0) {
+            String fileName = arg.substring(0, index);
+            try {
+                int lineNumber = Integer.parseInt(arg.substring(index+1).trim());
+                doBreakAtLineNumber(fileName, lineNumber, temporary);
+            }
+            catch (NumberFormatException e) {
+                log("Invalid line number");
+            }
+        } else {
+            index = arg.lastIndexOf('.');
+            if (index < 0) {
+                log("No class specified");
+                return;
+            }
+            String className = arg.substring(0, index);
+            String methodName = arg.substring(index+1);
+            doBreakAtMethod(className, methodName, temporary);
+        }
+    }
+
+    private void doBreakAtLineNumber(String fileName, int lineNumber,
+        boolean temporary)
+    {
+        File file = findSourceFile(fileName);
+        if (file == null) {
+            log("File not found: ".concat(fileName));
             return;
         }
-        String className = args.substring(0, index);
-        String methodName = args.substring(index+1);
+        String className = file.getName();
+        if (className.toLowerCase().endsWith(".java"))
+            className = className.substring(0, className.length() - 5);
+        Buffer buffer = Editor.getBuffer(file);
+        if (buffer != null) {
+            if (!buffer.initialized())
+                buffer.initialize();
+            if (!buffer.isLoaded())
+                buffer.load();
+            String packageName = JavaSource.getPackageName(buffer);
+            if (packageName != null)
+                className = packageName.concat(".").concat(className);
+            LineNumberBreakpoint bp =
+                new LineNumberBreakpoint(this, className, file, lineNumber);
+            if (temporary)
+                bp.setTemporary();
+
+            try {
+                EventRequest eventRequest = bp.resolveAgainstPreparedClasses();
+                if (eventRequest != null) {
+                    eventRequest.enable();
+                } else {
+                    EventRequestManager mgr = getVM().eventRequestManager();
+                    ClassPrepareRequest cpr = mgr.createClassPrepareRequest();
+                    String classFilter = className;
+                    cpr.addClassFilter(classFilter);
+                    cpr.enable();
+                }
+                addBreakpoint(bp);
+                saveSession();
+                fireBreakpointChanged();
+            }
+            catch (AbsentInformationException absent) {
+                log("Line number information is not available.");
+            }
+            catch (Exception e) {
+                Log.error(e);
+            }
+        }
+    }
+
+    private File findSourceFile(String fileName)
+    {
+        String canonicalPath = null;
+        if (Utilities.isFilenameAbsolute(fileName)) {
+            File file = File.getInstance(fileName);
+            if (file != null && file.isFile())
+                return file;
+            // File does not exist.
+            return null;
+        }
+        // Filename is not absolute.
+        Log.debug("mainClass = |" + mainClass + "|");
+        File mainFile = JavaSource.findSource(mainClass, sourcePath);
+        if (mainFile != null && mainFile.isFile()) {
+            File dir = mainFile.getParentFile();
+            if (dir != null) {
+                File file = File.getInstance(dir, fileName);
+                if (file != null && file.isFile())
+                    return file;
+            }
+        }
+        // Try current directory.
+        File dir = Editor.currentEditor().getCurrentDirectory();
+        Log.debug("trying dir = " + dir);
+        File file = File.getInstance(dir, fileName);
+        if (file != null && file.isFile())
+            return file;
+        // Look for match in buffer list.
+        List dirs = Utilities.getDirectoriesInPath(sourcePath);
+        for (BufferIterator iter = new BufferIterator(); iter.hasNext();) {
+            Buffer b = iter.nextBuffer();
+            file = b.getFile();
+            if (file.getName().equals(fileName)) {
+                File rootDir = JavaSource.getPackageRootDirectory(b);
+                for (Iterator it = dirs.iterator(); it.hasNext();) {
+                    String dirname = (String) it.next();
+                    if (dirname.equals(rootDir.canonicalPath()))
+                        return file;
+                }
+            }
+            if (Platform.isPlatformWindows()) {
+                if (file.getName().equalsIgnoreCase(fileName)) {
+                    File rootDir = JavaSource.getPackageRootDirectory(b);
+                    for (Iterator it = dirs.iterator(); it.hasNext();) {
+                        String dirname = (String) it.next();
+                        if (dirname.equalsIgnoreCase(rootDir.canonicalPath()))
+                            return file;
+                    }
+                }
+            }
+        }
+        // Not found.
+        return null;
+    }
+
+    private void doBreakAtMethod(String className, String methodName,
+        boolean temporary)
+    {
         MethodBreakpoint bp = new MethodBreakpoint(this, className, methodName);
+        if (temporary)
+            bp.setTemporary();
         try {
             EventRequest eventRequest = bp.resolveAgainstPreparedClasses();
             if (eventRequest != null) {
@@ -1034,9 +1160,6 @@ public final class Jdb extends Buffer implements JdbConstants
             addBreakpoint(bp);
             saveSession();
             fireBreakpointChanged();
-        }
-        catch (AbsentInformationException e) {
-            Log.error(e);
         }
         catch (Exception e) {
             Log.error(e);
@@ -1052,51 +1175,55 @@ public final class Jdb extends Buffer implements JdbConstants
         }
         if (args.equals("all")) {
             // Disable resolved breakpoints.
-            Iterator iter = breakpoints.iterator();
-            while (iter.hasNext()) {
-                Object obj = iter.next();
+            for (Iterator it = breakpoints.iterator(); it.hasNext();) {
+                Object obj = it.next();
                 if (obj instanceof ResolvableBreakpoint)
                     ((ResolvableBreakpoint)obj).clear();
             }
             // Clear the list.
             breakpoints.clear();
             fireBreakpointChanged();
-            return;
-        }
-        int index = args.indexOf(':');
-        if (index < 0) {
-            log("Invalid breakpoint");
-            return;
-        }
-        String fileName = args.substring(0, index);
-        if (!fileName.toLowerCase().endsWith(".java"))
-            fileName = fileName.concat(".java");
-        int lineNumber = -1;
-        try {
-            lineNumber = Integer.parseInt(args.substring(index+1));
-        }
-        catch (NumberFormatException e) {}
-        if (lineNumber < 1) {
-            log("Invalid breakpoint");
-            return;
-        }
-        Iterator iter = breakpoints.iterator();
-        while (iter.hasNext()) {
-            Object obj = iter.next();
-            if (obj instanceof LineNumberBreakpoint) {
-                LineNumberBreakpoint bp = (LineNumberBreakpoint) obj;
-                File file = bp.getFile();
-                if (file != null) {
-                    if (fileName.equals(file.getName())) {
-                        if (lineNumber == bp.getLineNumber()) {
-                            // Found it.
-                            deleteBreakpoint(bp);
-                            fireBreakpointChanged();
-                            break;
+        } else {
+            int index = args.indexOf(':');
+            if (index < 0) {
+                log("Invalid breakpoint");
+                return;
+            }
+            String fileName = args.substring(0, index);
+            if (!fileName.toLowerCase().endsWith(".java"))
+                fileName = fileName.concat(".java");
+            int lineNumber = -1;
+            try {
+                lineNumber = Integer.parseInt(args.substring(index+1));
+            }
+            catch (NumberFormatException e) {}
+            if (lineNumber < 1) {
+                log("Invalid breakpoint");
+                return;
+            }
+            for (Iterator it = breakpoints.iterator(); it.hasNext();) {
+                Object obj = it.next();
+                if (obj instanceof LineNumberBreakpoint) {
+                    LineNumberBreakpoint bp = (LineNumberBreakpoint) obj;
+                    File file = bp.getFile();
+                    if (file != null) {
+                        if (fileName.equals(file.getName())) {
+                            if (lineNumber == bp.getLineNumber()) {
+                                // Found it.
+                                deleteBreakpoint(bp);
+                                fireBreakpointChanged();
+                                break;
+                            }
                         }
                     }
                 }
             }
+        }
+        // Repaint editors with buffers in Java mode.
+        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+            Editor ed = it.nextEditor();
+            if (ed.getModeId() == JAVA_MODE)
+                ed.repaint();
         }
     }
 
