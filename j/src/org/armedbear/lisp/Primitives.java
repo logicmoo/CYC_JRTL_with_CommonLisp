@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.108 2003-03-10 20:45:13 piso Exp $
+ * $Id: Primitives.java,v 1.109 2003-03-11 14:12:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3544,15 +3544,17 @@ public final class Primitives extends Module
         }
     };
 
-    // ### make-hash-table
-    // make-hash-table &key test size rehash-size rehash-threshold => hash-table
-    // FIXME Support keyword arguments!
-    // FIXME Implementation only supports EQ hash tables.
-    private static final Primitive0 MAKE_HASH_TABLE =
-        new Primitive0("make-hash-table") {
-        public LispObject execute() throws LispError
+    private static final Primitive _MAKE_HASH_TABLE =
+        new Primitive("%make-hash-table") {
+        public LispObject execute(LispObject[] args) throws LispError
         {
-            return new HashTable();
+            if (args.length > 4)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject test = args[0];
+            LispObject size = args[1];
+            LispObject rehashSize = args[2];
+            LispObject rehashThreshold = args[3];
+            return new HashTable(test, size, rehashSize, rehashThreshold);
         }
     };
 
@@ -3609,6 +3611,15 @@ public final class Primitives extends Module
                 return ht.remhash(key);
             }
             throw new TypeError(second, "hash table");
+        }
+    };
+
+    // ### sxhash
+    // sxhash object => hash-code
+    private static final Primitive1 SXHASH = new Primitive1("sxhash") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return new Fixnum(arg.hashCode());
         }
     };
 
