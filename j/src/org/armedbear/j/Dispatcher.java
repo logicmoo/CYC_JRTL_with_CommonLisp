@@ -2,7 +2,7 @@
  * Dispatcher.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Dispatcher.java,v 1.12 2004-06-27 14:14:08 piso Exp $
+ * $Id: Dispatcher.java,v 1.13 2004-09-13 13:48:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -645,13 +645,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
 
     private boolean dispatchActionPerformed(ActionEvent event)
     {
-        try {
-            editor.execute(event.getActionCommand());
-            return true;
-        }
-        catch (NoSuchMethodException e) {
-            return false;
-        }
+        editor.executeCommand(event.getActionCommand());
+        return true;
     }
 
     public void actionPerformed(final ActionEvent e)
