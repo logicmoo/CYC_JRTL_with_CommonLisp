@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: pathnames.lisp,v 1.4 2004-01-04 16:00:45 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: pathnames.lisp,v 1.5 2004-01-26 14:25:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,9 +33,6 @@
 
 (defun pathname-type (pathname &key (case :local))
   (%pathname-type pathname case))
-
-(defun directory (pathspec &key)
-  (%directory pathspec))
 
 (defun wild-pathname-p (pathname &optional field-key)
   (%wild-pathname-p pathname field-key))
