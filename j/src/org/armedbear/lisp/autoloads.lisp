@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.135 2004-04-04 00:29:43 piso Exp $
+;;; $Id: autoloads.lisp,v 1.136 2004-04-04 00:52:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -157,6 +157,7 @@
                   multiple-value-bind multiple-value-list multiple-value-setq
                   nth-value
                   or))
+(autoload-macro '(do do*) "do")
 
 ;; Java interface.
 (in-package "JAVA")
