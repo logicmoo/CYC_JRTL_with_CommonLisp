@@ -2,7 +2,7 @@
  * SmtpSession.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: SmtpSession.java,v 1.2 2003-06-05 15:48:22 piso Exp $
+ * $Id: SmtpSession.java,v 1.3 2003-06-28 00:19:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,7 +126,10 @@ public final class SmtpSession extends Writer
             return false;
         try {
             setEcho(true);
-            writeLine("mail from:<" + sm.getFromAddress() + ">");
+            FastStringBuffer sb = new FastStringBuffer("mail from:<");
+            sb.append(sm.getFromAddress());
+            sb.append('>');
+            writeLine(sb.toString());
             if (getResponse() != 250)
                 return false;
             for (int i = 0; i < addressees.size(); i++) {
@@ -136,7 +139,10 @@ public final class SmtpSession extends Writer
                     errorText = "Invalid addressee \"" + addressee + "\"";
                     return false;
                 }
-                writeLine("rcpt to: ".concat(addr));
+                sb.setText("rcpt to:<");
+                sb.append(addr);
+                sb.append('>');
+                writeLine(sb.toString());
                 if (getResponse() != 250) {
                     errorText = "Address not accepted \"" + addr + "\"";
                     return false;
