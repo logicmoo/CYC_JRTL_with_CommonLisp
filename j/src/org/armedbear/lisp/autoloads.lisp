@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.62 2003-11-12 21:31:44 piso Exp $
+;;; $Id: autoloads.lisp,v 1.63 2003-11-14 13:39:32 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -127,7 +127,10 @@
 (autoload 'print-object)
 (autoload-macro '(prog prog*) "prog.lisp")
 (autoload 'concatenate)
+(autoload '(java::jregister-handler) "java.lisp")
+(export 'java::jregister-handler "JAVA")
 
 ;; Profiler.
 (autoload 'prof:show-call-counts "profiler.lisp")
 (autoload-macro '(prof:profile) "profiler.lisp")
+
