@@ -2,7 +2,7 @@
  * Tagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Tagger.java,v 1.2 2002-11-10 00:51:18 piso Exp $
+ * $Id: Tagger.java,v 1.3 2002-12-08 01:25:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,10 @@ public abstract class Tagger implements Constants, Runnable
         List tags = buffer.getTags();
         if (tags == null)
             return;
+        File file = buffer.getFile();
+        if (file == null)
+            return;
+        final String canonicalPath = file.canonicalPath();
         try {
             final int limit = tags.size();
             for (int i = 0; i < limit; i++) {
@@ -56,7 +60,7 @@ public abstract class Tagger implements Constants, Runnable
                         case TAG_EXPLICIT:
                             writer.write(localTag.getName());
                             writer.write(separatorChar);
-                            writer.write(buffer.canonicalPath());
+                            writer.write(canonicalPath);
                             writer.write(separatorChar);
                             writer.write(localTag.getLine().getText());
                             final String canonicalSignature =
