@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: fixme.lisp,v 1.18 2004-02-27 01:12:41 piso Exp $
+;;; $Id: fixme.lisp,v 1.19 2004-03-02 00:04:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,3 +42,6 @@
 
 (defun disassemble (fn)
   (%format t "; DISASSEMBLE is not implemented."))
+
+(defmacro with-compilation-unit (options &body body)
+  `(progn ,@body))
