@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.59 2005-02-23 04:25:40 piso Exp $
+;;; $Id: compile-file.lisp,v 1.60 2005-02-24 00:37:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -69,6 +69,8 @@
              (return))
            (write-char #\space stream)
            (when (atom object)
+             (write-char #\. stream)
+             (write-char #\space stream)
              (dump-object object stream)
              (return)))
          (write-char #\) stream))
