@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.15 2004-11-20 19:29:02 piso Exp $
+;;; $Id: format.lisp,v 1.16 2004-11-20 21:45:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2666,7 +2666,7 @@
 	  (1 (interpret-bind-defaults ((count 0)) params
                                       (and (numberp count) (zerop count))))
 	  (2 (interpret-bind-defaults ((arg1 0) (arg2 0)) params
-                                      (= arg1 arg2)))
+                                      (equal arg1 arg2)))
 	  (t (interpret-bind-defaults ((arg1 0) (arg2 0) (arg3 0)) params
                                       (<= arg1 arg2 arg3))))
     (throw (if colonp 'up-up-and-out 'up-and-out)
