@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.729 2005-02-03 20:37:52 piso Exp $
+ * $Id: Primitives.java,v 1.730 2005-02-06 01:59:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1274,7 +1274,8 @@ public final class Primitives extends Lisp
     };
 
     // ### error
-    private static final Primitive ERROR = new Primitive("error", "datum &rest arguments")
+    private static final Primitive ERROR =
+        new Primitive("error", "datum &rest arguments")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -1303,6 +1304,8 @@ public final class Primitives extends Lisp
                     condition = new PrintNotReadable(initArgs);
                 else if (datum == Symbol.PROGRAM_ERROR)
                     condition = new ProgramError(initArgs);
+                else if (datum == Symbol.READER_ERROR)
+                    condition = new ReaderError(initArgs);
                 else if (datum == Symbol.SIMPLE_CONDITION)
                     condition = new SimpleCondition(initArgs);
                 else if (datum == Symbol.SIMPLE_WARNING)
