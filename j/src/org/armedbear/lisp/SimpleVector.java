@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.4 2004-02-24 15:04:20 piso Exp $
+ * $Id: SimpleVector.java,v 1.5 2004-02-24 15:39:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,11 +93,6 @@ public final class SimpleVector extends AbstractVector
     public int capacity()
     {
         return capacity;
-    }
-
-    public final void ensureCapacity(int minCapacity)
-    {
-        Debug.assertTrue(false);
     }
 
     public AbstractArray adjustArray(int size, LispObject initialElement,

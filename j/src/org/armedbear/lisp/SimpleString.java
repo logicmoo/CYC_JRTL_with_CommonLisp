@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.6 2004-02-24 14:03:57 piso Exp $
+ * $Id: SimpleString.java,v 1.7 2004-02-24 15:38:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -306,13 +306,6 @@ public final class SimpleString extends AbstractString
     public final int capacity()
     {
         return capacity;
-    }
-
-    // FIXME This is required by AbstractVector, but should be removed when
-    // ComplexVector is implemented.
-    public void ensureCapacity(int minCapacity)
-    {
-        Debug.assertTrue(false);
     }
 
     public AbstractArray adjustArray(int size, LispObject initialElement,
