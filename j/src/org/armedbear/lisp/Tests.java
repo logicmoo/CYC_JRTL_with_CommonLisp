@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.7 2003-02-17 15:25:56 piso Exp $
+ * $Id: Tests.java,v 1.8 2003-02-19 00:42:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -365,6 +365,18 @@ public class Tests extends TestCase
         verify("(zerop 1234)", "NIL");
         verify("(zerop '(a b c))", ERROR);
         verify("(zerop (- 3 3))", "T");
+
+        // min, max
+        verify("(max 3)", "3");
+        verify("(min 3)", "3");
+        verify("(max 6 12)", "12");
+        verify("(min 6 12)", "6");
+        verify("(max -6 -12)", "-6");
+        verify("(min -6 -12)", "-12");
+        verify("(max 1 3 2 -7)", "3");
+        verify("(min 1 3 2 -7)", "-7");
+        verify("(max -2 3 0 7)", "7");
+        verify("(min -2 3 0 7)", "-2");
 
         // defun
         verify("(setq x 1234)", "1234");

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.31 2003-02-19 00:12:48 piso Exp $
+ * $Id: Primitives.java,v 1.32 2003-02-19 00:42:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,41 +69,43 @@ public final class Primitives extends Module
     private static final int LIST_ALL_PACKAGES          = 41;
     private static final int MAKE_SYMBOL                = 42;
     private static final int MAKUNBOUND                 = 43;
-    private static final int MEMBER                     = 44;
-    private static final int MOD                        = 45;
-    private static final int MULTIPLY                   = 46;
-    private static final int NOT                        = 47;
-    private static final int NULL                       = 48;
-    private static final int NUMBERP                    = 49;
-    private static final int ODDP                       = 50;
-    private static final int PREDECESSOR                = 51;
-    private static final int PROGN                      = 52;
-    private static final int QUOTE                      = 53;
-    private static final int REST                       = 54;
-    private static final int ROOM                       = 55;
-    private static final int RPLACA                     = 56;
-    private static final int RPLACD                     = 57;
-    private static final int SECOND                     = 58;
-    private static final int SET                        = 59;
-    private static final int SIMPLE_VECTOR_P            = 60;
-    private static final int SPECIAL_OPERATOR_P         = 61;
-    private static final int STRINGP                    = 62;
-    private static final int STRING_EQUAL               = 63;
-    private static final int STRING_EQUAL_IGNORE_CASE   = 64;
-    private static final int SUBSEQ                     = 65;
-    private static final int SUBTRACT                   = 66;
-    private static final int SUCCESSOR                  = 67;
-    private static final int SYMBOLP                    = 68;
-    private static final int SYMBOL_FUNCTION            = 69;
-    private static final int SYMBOL_NAME                = 70;
-    private static final int SYMBOL_PACKAGE             = 71;
-    private static final int SYMBOL_PLIST               = 72;
-    private static final int SYMBOL_VALUE               = 73;
-    private static final int THIRD                      = 74;
-    private static final int VALUES                     = 75;
-    private static final int VALUES_LIST                = 76;
-    private static final int VECTORP                    = 77;
-    private static final int ZEROP                      = 78;
+    private static final int MAX                        = 44;
+    private static final int MEMBER                     = 45;
+    private static final int MIN                        = 46;
+    private static final int MOD                        = 47;
+    private static final int MULTIPLY                   = 48;
+    private static final int NOT                        = 49;
+    private static final int NULL                       = 50;
+    private static final int NUMBERP                    = 51;
+    private static final int ODDP                       = 52;
+    private static final int PREDECESSOR                = 53;
+    private static final int PROGN                      = 54;
+    private static final int QUOTE                      = 55;
+    private static final int REST                       = 56;
+    private static final int ROOM                       = 57;
+    private static final int RPLACA                     = 58;
+    private static final int RPLACD                     = 59;
+    private static final int SECOND                     = 60;
+    private static final int SET                        = 61;
+    private static final int SIMPLE_VECTOR_P            = 62;
+    private static final int SPECIAL_OPERATOR_P         = 63;
+    private static final int STRINGP                    = 64;
+    private static final int STRING_EQUAL               = 65;
+    private static final int STRING_EQUAL_IGNORE_CASE   = 66;
+    private static final int SUBSEQ                     = 67;
+    private static final int SUBTRACT                   = 68;
+    private static final int SUCCESSOR                  = 69;
+    private static final int SYMBOLP                    = 70;
+    private static final int SYMBOL_FUNCTION            = 71;
+    private static final int SYMBOL_NAME                = 72;
+    private static final int SYMBOL_PACKAGE             = 73;
+    private static final int SYMBOL_PLIST               = 74;
+    private static final int SYMBOL_VALUE               = 75;
+    private static final int THIRD                      = 76;
+    private static final int VALUES                     = 77;
+    private static final int VALUES_LIST                = 78;
+    private static final int VECTORP                    = 79;
+    private static final int ZEROP                      = 80;
 
     private Primitives()
     {
@@ -127,6 +129,8 @@ public final class Primitives extends Module
         definePrimitive("list", LIST);
         definePrimitive("list*", LISTX);
         definePrimitive("list-all-packages", LIST_ALL_PACKAGES); // FIXME Primitive0
+        definePrimitive("max", MAX);
+        definePrimitive("min", MIN);
         definePrimitive("room", ROOM);
         definePrimitive("subseq", SUBSEQ);
         definePrimitive("values", VALUES);
@@ -275,6 +279,28 @@ public final class Primitives extends Module
                 long result = Fixnum.getValue(args[0]);
                 for (int i = 1; i < args.length; i++)
                     result /= Fixnum.getValue(args[i]);
+                return new Fixnum(result);
+            }
+            case MIN: {                         // ### min
+                if (args.length < 1)
+                    throw new WrongNumberOfArgumentsException("MIN");
+                long result = Fixnum.getValue(args[0]);
+                for (int i = 1; i < args.length; i++) {
+                    long n = Fixnum.getValue(args[i]);
+                    if (n < result)
+                        result = n;
+                }
+                return new Fixnum(result);
+            }
+            case MAX: {                         // ### max
+                if (args.length < 1)
+                    throw new WrongNumberOfArgumentsException("MAX");
+                long result = Fixnum.getValue(args[0]);
+                for (int i = 1; i < args.length; i++) {
+                    long n = Fixnum.getValue(args[i]);
+                    if (n > result)
+                        result = n;
+                }
                 return new Fixnum(result);
             }
             case LIST: {                        // ### list
