@@ -77,6 +77,7 @@ cdddr
 cddr
 cdr
 ceiling
+cell-error-name
 cerror
 char
 char-code
