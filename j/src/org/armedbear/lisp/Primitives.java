@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.333 2003-08-15 18:03:28 piso Exp $
+ * $Id: Primitives.java,v 1.334 2003-08-16 01:19:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -809,14 +809,10 @@ public final class Primitives extends Module
         {
             if (args.length > 1)
                 throw new WrongNumberOfArgumentsException(this);
-            CharacterOutputStream out = null;
-            if (args.length == 1) {
-                if (args[0] instanceof CharacterOutputStream)
-                    out = (CharacterOutputStream) args[0];
-                else
-                    throw new TypeError(args[0], "output stream");
-            }
-            if (out == null)
+            CharacterOutputStream out;
+            if (args.length == 1)
+                out = checkOutputStream(args[0]);
+            else
                 out = getStandardOutput();
             return out.freshLine();
         }
