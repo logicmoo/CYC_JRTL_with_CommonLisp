@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.92 2004-01-17 13:13:59 piso Exp $
+;;; $Id: autoloads.lisp,v 1.93 2004-01-20 00:18:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -135,6 +135,7 @@
 (autoload-macro 'with-input-from-string)
 (autoload 'ensure-directories-exist)
 (autoload 'coerce)
+(autoload 'read-sequence)
 
 ;; Java interface.
 (in-package "JAVA")
