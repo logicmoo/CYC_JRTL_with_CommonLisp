@@ -2,7 +2,7 @@
  * Search.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Search.java,v 1.8 2004-09-04 16:49:52 piso Exp $
+ * $Id: Search.java,v 1.9 2004-09-05 20:01:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -374,7 +374,7 @@ public class Search implements Cloneable
 
     // Search is restricted to region if restrictToSelection is true and
     // region is not null.
-    private final Position findRegExp(Buffer buffer, Position start)
+    public final Position findRegExp(Buffer buffer, Position start)
     {
         if (isMultilinePattern)
             return findMultilineRegExp(buffer, start);
@@ -557,7 +557,7 @@ public class Search implements Cloneable
     }
 
     // Region is ignored.
-    private Position reverseFindRegExp(Buffer buffer, Position start)
+    public Position reverseFindRegExp(Buffer buffer, Position start)
     {
         if (re == null) {
             try {
