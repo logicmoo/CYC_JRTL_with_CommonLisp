@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.50 2004-05-01 00:04:26 piso Exp $
+;;; $Id: precompiler.lisp,v 1.51 2004-05-01 23:40:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -575,6 +575,9 @@
         (push (car body) result)
         (push (precompile1 (car body)) result))))
 
+(defun precompile-eval-when (form)
+  (list* 'EVAL-WHEN (cadr form) (mapcar #'precompile1 (cddr form))))
+
 (defun precompile-the (form)
   (precompile1 (caddr form)))
 
@@ -616,6 +619,7 @@
                             cond
                             dolist
                             dotimes
+                            eval-when
                             flet
                             function
                             if
@@ -738,6 +742,8 @@
 
 ;; Redefine DEFUN to precompile the definition on the fly.
 (defmacro defun (name lambda-list &rest body &environment env)
+  (when (and env (empty-environment-p env))
+    (setf env nil))
   `(progn
      (%defun ',name ',lambda-list ',body ,env)
      (precompile ',name)
