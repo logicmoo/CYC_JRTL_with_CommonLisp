@@ -2,7 +2,7 @@
  * API.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: API.java,v 1.1.1.1 2002-09-24 16:09:26 piso Exp $
+ * $Id: API.java,v 1.2 2002-10-26 01:28:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,8 +30,7 @@ public final class API
     public static void globalMapKey(String keyText, String command)
     {
         KeyMap km = KeyMap.getGlobalOverrides(true);
-        synchronized(km)
-        {
+        synchronized(km) {
             km.mapKey(keyText, command);
         }
     }
@@ -39,8 +38,7 @@ public final class API
     public static void globalUnmapKey(String keyText)
     {
         KeyMap km = KeyMap.getGlobalOverrides(true);
-        synchronized(km)
-        {
+        synchronized(km) {
             km.mapKey(keyText, null);
         }
     }
