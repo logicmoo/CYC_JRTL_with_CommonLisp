@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.111 2004-04-16 20:06:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.112 2004-04-17 01:40:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -430,56 +430,15 @@
     instruction))
 
 (defmacro emit-store-value ()
-;;   `(case *val*
-;;      (0
-;;       (emit 'astore_0))
-;;      (1
-;;       (emit 'astore_1))
-;;      (2
-;;       (emit 'astore_2))
-;;      (3
-;;       (emit 'astore_3))
-;;      (t
-;;       (emit 'astore *val*))))
   `(emit 'store-value))
 
 (defmacro emit-push-value ()
-;;   `(case *val*
-;;      (0
-;;       (emit 'aload_0))
-;;      (1
-;;       (emit 'aload_1))
-;;      (2
-;;       (emit 'aload_2))
-;;      (3
-;;       (emit 'aload_3))
-;;      (t
-;;       (emit 'aload *val*))))
   `(emit 'push-value))
 
 (defun remove-store-value ()
-;;   (let* ((instruction (car *code*))
-;;          (opcode (instruction-opcode instruction))
-;;          slot)
-;;     (case opcode
-;;       (75
-;;        (setf slot 0))
-;;       (76
-;;        (setf slot 1))
-;;       (77
-;;        (setf slot 2))
-;;       (78
-;;        (setf slot 3))
-;;       (58
-;;        (setf slot (car (instruction-args instruction)))))
-;;     (when (and slot (= slot *val*))
-;;       (setf *code* (cdr *code*))
-;;       t)))
   (let* ((instruction (car *code*))
          (opcode (instruction-opcode instruction)))
-;;     (format t "REMOVE-STORE-VALUE called opcode = ~S~%" opcode)
     (when (eql opcode 204) ; STORE-VALUE
-;;       (format t "removing STORE-VALUE~%")
       (setf *code* (cdr *code*))
       t)))
 
@@ -1613,111 +1572,112 @@
 (defvar *toplevel-defuns* nil)
 
 (defun process-args (args)
-  (dolist (arg args)
-    (compile-form arg)
+  (dolist (form args)
+    (compile-form form)
     (unless (remove-store-value)
       (emit-push-value))
-    (maybe-emit-clear-values arg)))
+    (maybe-emit-clear-values form)))
 
-(defun compile-function-call (fun args &optional for-effect)
-;;   (format t "compile-function-call fun = ~S args = ~S~%" fun args)
-  (unless (symbolp fun)
-    (error "COMPILE-FUNCTION-CALL ~S is not a symbol" fun))
-  (let ((numargs (length args))
-        local-function)
-    (when (sys::built-in-function-p fun)
-      (cond ((= numargs 1)
-             (when (compile-function-call-1 fun args)
-               (return-from compile-function-call)))
-            ((= numargs 2)
-             (when (compile-function-call-2 fun args)
-               (return-from compile-function-call)))
-            ((= numargs 3)
-             (when (compile-function-call-3 fun args)
-               (return-from compile-function-call)))))
-    (cond
-     ((setf local-function
-            (find fun *local-functions* :key #'local-function-name))
-      (format t "compiling call to local function ~S~%" local-function)
-      (when (local-function-args-to-add local-function)
-        (format t "args-to-add = ~S~%" (local-function-args-to-add local-function))
-        (setf args (append (local-function-args-to-add local-function) args))
-        (setf numargs (length args))
-        (format t "args = ~S~%" args))
-      (let* ((g (declare-object (local-function-function local-function))))
-        (emit 'getstatic
-              *this-class*
-              g
-              +lisp-object+)))
-     ((eq fun *defun-name*)
-      (emit 'aload 0)) ; this
-     ((or (sys::built-in-function-p fun) (memq fun *toplevel-defuns*))
-      (let ((f (declare-function fun)))
-        (emit 'getstatic
-              *this-class*
-              f
-              +lisp-object+)))
-     (t
-      (let ((g (declare-symbol fun)))
-        (emit 'getstatic
-              *this-class*
-              g
-              "Lorg/armedbear/lisp/Symbol;"))
-      (emit-invokevirtual +lisp-symbol-class+
-                          "getSymbolFunctionOrDie"
-                          "()Lorg/armedbear/lisp/LispObject;"
-                          0)))
-    (case numargs
-      (0
-       (emit-invokevirtual +lisp-object-class+
-                           "execute"
-                           "()Lorg/armedbear/lisp/LispObject;"
-                           0))
-      (1
-       (process-args args)
-       (emit-invokevirtual +lisp-object-class+
-                           "execute"
-                           "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                           -1))
-      (2
-       (process-args args)
-       (emit-invokevirtual +lisp-object-class+
-                           "execute"
-                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                           -2))
-      (3
-       (process-args args)
-       (emit-invokevirtual +lisp-object-class+
-                           "execute"
-                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                           -3))
-      (4
-       (process-args args)
-       (emit-invokevirtual +lisp-object-class+
-                           "execute"
-                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                           -4))
-      (t
-       (emit 'sipush (length args))
-       (emit 'anewarray "org/armedbear/lisp/LispObject")
-       (let ((i 0))
-         (dolist (form args)
-           (emit 'dup)
-           (emit 'sipush i)
-           (compile-form form)
-           (unless (remove-store-value)
-             (emit-push-value)) ; leaves value on stack
-           (emit 'aastore) ; store value in array
-           (maybe-emit-clear-values form)
-           (incf i))) ; array left on stack here
-       ;; Stack: function array-ref
-       (emit-invokevirtual +lisp-object-class+
-                           "execute"
-                           "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                           -1)))
-    (if for-effect
-        (emit 'pop)
-        (emit-store-value))))
+(defun compile-function-call (form &optional for-effect)
+  (let ((fun (car form))
+        (args (cdr form)))
+    (unless (symbolp fun)
+      (error "COMPILE-FUNCTION-CALL ~S is not a symbol" fun))
+    (let ((numargs (length args))
+          local-function)
+      (when (sys::built-in-function-p fun)
+        (cond ((= numargs 1)
+               (when (compile-function-call-1 fun args)
+                 (return-from compile-function-call)))
+              ((= numargs 2)
+               (when (compile-function-call-2 fun args)
+                 (return-from compile-function-call)))
+              ((= numargs 3)
+               (when (compile-function-call-3 fun args)
+                 (return-from compile-function-call)))))
+      (cond
+       ((setf local-function
+              (find fun *local-functions* :key #'local-function-name))
+        (format t "compiling call to local function ~S~%" local-function)
+        (when (local-function-args-to-add local-function)
+          (format t "args-to-add = ~S~%" (local-function-args-to-add local-function))
+          (setf args (append (local-function-args-to-add local-function) args))
+          (setf numargs (length args))
+          (format t "args = ~S~%" args))
+        (let* ((g (declare-object (local-function-function local-function))))
+          (emit 'getstatic
+                *this-class*
+                g
+                +lisp-object+)))
+       ((eq fun *defun-name*)
+        (emit 'aload 0)) ; this
+       ((or (sys::built-in-function-p fun) (memq fun *toplevel-defuns*))
+        (let ((f (declare-function fun)))
+          (emit 'getstatic
+                *this-class*
+                f
+                +lisp-object+)))
+       (t
+        (let ((g (declare-symbol fun)))
+          (emit 'getstatic
+                *this-class*
+                g
+                "Lorg/armedbear/lisp/Symbol;"))
+        (emit-invokevirtual +lisp-symbol-class+
+                            "getSymbolFunctionOrDie"
+                            "()Lorg/armedbear/lisp/LispObject;"
+                            0)))
+      (case numargs
+        (0
+         (emit-invokevirtual +lisp-object-class+
+                             "execute"
+                             "()Lorg/armedbear/lisp/LispObject;"
+                             0))
+        (1
+         (process-args args)
+         (emit-invokevirtual +lisp-object-class+
+                             "execute"
+                             "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                             -1))
+        (2
+         (process-args args)
+         (emit-invokevirtual +lisp-object-class+
+                             "execute"
+                             "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                             -2))
+        (3
+         (process-args args)
+         (emit-invokevirtual +lisp-object-class+
+                             "execute"
+                             "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                             -3))
+        (4
+         (process-args args)
+         (emit-invokevirtual +lisp-object-class+
+                             "execute"
+                             "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                             -4))
+        (t
+         (emit 'sipush (length args))
+         (emit 'anewarray "org/armedbear/lisp/LispObject")
+         (let ((i 0))
+           (dolist (form args)
+             (emit 'dup)
+             (emit 'sipush i)
+             (compile-form form)
+             (unless (remove-store-value)
+               (emit-push-value)) ; leaves value on stack
+             (emit 'aastore) ; store value in array
+             (maybe-emit-clear-values form)
+             (incf i))) ; array left on stack here
+         ;; Stack: function array-ref
+         (emit-invokevirtual +lisp-object-class+
+                             "execute"
+                             "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                             -1)))
+      (if for-effect
+          (emit 'pop)
+          (emit-store-value)))))
 
 (defun compile-test (form)
   ;; Use a Java boolean if possible.
@@ -1908,7 +1868,6 @@
     (setf (fill-pointer *locals*) saved-fp)))
 
 (defun compile-let-vars (varlist specials)
-;;   (format t "compile-let-vars *locals* = ~S~%" *locals*)
   ;; Generate code to evaluate the initforms and leave the resulting values
   ;; on the stack.
   (let ((last-push-was-nil nil))
@@ -1923,8 +1882,6 @@
                (compile-form initform)
                (unless (remove-store-value)
                  (emit-push-value))
-;;                (unless (single-valued-p initform)
-;;                  (emit-clear-values))
                (maybe-emit-clear-values initform)
                (setf last-push-was-nil nil))
               (t
@@ -1939,10 +1896,7 @@
            (index (if specialp nil (fill-pointer *locals*))))
       (push-variable var specialp index)
       (unless specialp
-;;         (format t "pushing ~S~%" var)
-        (vector-push var *locals*)
-;;         (format t "after push *locals* = ~S~%" *locals*)
-        )))
+        (vector-push var *locals*))))
   (setq *max-locals* (max *max-locals* (fill-pointer *locals*)))
   ;; At this point the initial values are on the stack. Now generate code to
   ;; pop them off one by one and store each one in the corresponding local or
@@ -1950,13 +1904,9 @@
   ;; in reverse order.
   (do* ((varlist (reverse varlist) (cdr varlist))
         (varspec (car varlist) (car varlist)))
-;;         (i (1- (fill-pointer *locals*)) (1- i)))
        ((null varlist))
     (let* ((var (if (consp varspec) (car varspec) varspec))
            (v (find-variable var)))
-;;       (format t "varlist = ~S varspec = ~S var = ~S~%" varlist varspec var)
-;;       (format t "processing ~S~%" var)
-;;       (format t "var = ~S v = ~S~%" var v)
       (cond ((or (memq var specials) (special-variable-p var))
              (let ((g (declare-symbol var)))
                (emit 'getstatic
@@ -1970,10 +1920,6 @@
                                   -2)))
             (t
              (let ((index (position var *locals* :from-end t)))
-;;                (format t "index = ~S i = ~S~%" index i)
-;;                (unless (= index i)
-;;                  (format t "*locals* = ~S~%" *locals*)))
-;;              (emit 'astore i))))))
                (unless index
                  (error "COMPILE-LET-VARS can't find local variable"))
                (unless (eql index (variable-index v))
@@ -1996,8 +1942,6 @@
                (compile-form initform)
                (unless (remove-store-value)
                  (emit-push-value))
-;;                (unless (single-valued-p initform)
-;;                  (emit-clear-values)))
                (maybe-emit-clear-values initform))
               (t
                (emit-push-nil)))
@@ -2049,7 +1993,6 @@
 
 (defun label-for-tag (name)
   (let ((index (position name *tags* :from-end t :key #'tag-name)))
-;;     (format t "find-tag index = ~S~%" index)
     (when index
       (tag-label (aref *tags* index)))))
 
@@ -2071,10 +2014,9 @@
             (t
              (compile-form f t))))
     (setf (fill-pointer *tags*) saved-fp))
+  ;; TAGBODY returns NIL.
+  (emit-clear-values)
   (unless for-effect
-    ;; TAGBODY returns NIL.
-;;     (format t "COMPILE-TAGBODY calling EMIT-CLEAR-VALUES~%")
-    (emit-clear-values)
     (emit-push-nil)
     (emit-store-value)))
 
@@ -2107,9 +2049,13 @@
          (block-label (car rest))
          (block-exit (gensym))
          (*blocks* (acons block-label block-exit *blocks*)))
-    (do ((forms (cdr rest) (cdr forms)))
-        ((null forms))
-      (compile-form (car forms) (or (cdr forms) for-effect)))
+    (do ((subforms (cdr rest) (cdr subforms)))
+        ((null subforms))
+      (let ((subform (car subforms))
+            (really-for-effect (or (cdr subforms) for-effect)))
+        (compile-form subform really-for-effect)
+        (when really-for-effect
+          (maybe-emit-clear-values subform))))
     (emit 'label `,block-exit)))
 
 (defun compile-cons (form for-effect)
@@ -2371,7 +2317,7 @@
           (t
            (compile-binary-operation "add" args)))))
       (t
-       (compile-function-call '+ args)))))
+       (compile-function-call form for-effect)))))
 
 (defun compile-minus (form for-effect)
   (let* ((args (cdr form))
@@ -2387,7 +2333,7 @@
           (t
            (compile-binary-operation "subtract" args)))))
       (t
-       (compile-function-call '- args)))))
+       (compile-function-call form for-effect)))))
 
 (defun compile-values (form for-effect)
   (let ((args (cdr form)))
@@ -2415,7 +2361,7 @@
                                -2)
            (emit-store-value))
           (t
-           (compile-function-call (car form) (cdr form))))))
+           (compile-function-call form for-effect)))))
 
 (defun compile-variable-ref (var)
   (let ((v (find-variable var)))
@@ -2485,7 +2431,7 @@
                  ((special-operator-p op)
                   (error "COMPILE-FORM: unsupported special operator ~S." op))
                  (t ; Function call.
-                  (compile-function-call op (cdr form) for-effect)))))
+                  (compile-function-call form for-effect)))))
         ((eq form '())
          (unless for-effect
            (emit-push-nil)
