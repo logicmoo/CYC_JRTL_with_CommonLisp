@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: DisplacedArray.java,v 1.20 2004-02-04 15:20:37 piso Exp $
+ * $Id: DisplacedArray.java,v 1.21 2004-02-14 15:33:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@ public final class DisplacedArray extends AbstractArray
     {
         if (dimv.length == 1)
             return fillPointer >= 0 ? fillPointer : size;
-        signal(new TypeError(this, "sequence"));
+        signal(new TypeError(this, Symbol.SEQUENCE));
         // Not reached.
         return 0;
     }
@@ -108,7 +108,7 @@ public final class DisplacedArray extends AbstractArray
     {
         if (dimv.length == 1)
             return getRowMajor(index);
-        return signal(new TypeError(this, "sequence"));
+        return signal(new TypeError(this, Symbol.SEQUENCE));
     }
 
     public LispObject AREF(LispObject index) throws ConditionThrowable
@@ -140,7 +140,7 @@ public final class DisplacedArray extends AbstractArray
             return dimv[n];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            signal(new TypeError("bad array dimension"));
+            signal(new TypeError("Bad array dimension."));
             // Not reached.
             return 0;
         }
@@ -160,7 +160,7 @@ public final class DisplacedArray extends AbstractArray
     {
         if (index >= 0 && index < size)
             return array.getRowMajor(index + offset);
-        return signal(new TypeError("bad row major index " + index));
+        return signal(new TypeError("Bad row major index " + index + "."));
     }
 
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
@@ -168,7 +168,7 @@ public final class DisplacedArray extends AbstractArray
         if (index >= 0 && index < size)
             array.setRowMajor(index + offset, newValue);
         else
-            signal(new TypeError("bad row major index " + index));
+            signal(new TypeError("Bad row major index " + index + "."));
     }
 
     public int getFillPointer()
