@@ -2,7 +2,7 @@
  * History.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: History.java,v 1.1.1.1 2002-09-24 16:08:34 piso Exp $
+ * $Id: History.java,v 1.2 2002-10-13 16:57:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,15 +40,18 @@ public final class History
         this.name = name;
         this.limit = limit;
         strings = new String[limit];
-        int i;
-        for (i = 0; i < limit; i++) {
-            String key = "history." + name + "." + String.valueOf(i);
-            String value = Editor.getSessionProperties().getStringProperty(key, null);
-            if (value == null)
-                break;
-            strings[i] = value;
+        if (name != null) {
+            SessionProperties sessionProperties = Editor.getSessionProperties();
+            int i;
+            for (i = 0; i < limit; i++) {
+                String key = "history." + name + "." + String.valueOf(i);
+                String value = sessionProperties.getStringProperty(key, null);
+                if (value == null)
+                    break;
+                strings[i] = value;
+            }
+            count = i;
         }
-        count = i;
         reset();
     }
 
@@ -59,11 +62,14 @@ public final class History
 
     public void save()
     {
-        for (int i = 0; i < count; i++) {
-            if (strings[i] == null)
-                break;
-            String key = "history." + name + "." + String.valueOf(i);
-            Editor.getSessionProperties().setStringProperty(key, strings[i]);
+        if (name != null) {
+            SessionProperties sessionProperties = Editor.getSessionProperties();
+            for (int i = 0; i < count; i++) {
+                if (strings[i] == null)
+                    break;
+                String key = "history." + name + "." + String.valueOf(i);
+                sessionProperties.setStringProperty(key, strings[i]);
+            }
         }
     }
 
