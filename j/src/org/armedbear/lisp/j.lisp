@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: j.lisp,v 1.41 2005-03-01 20:26:04 piso Exp $
+;;; $Id: j.lisp,v 1.42 2005-03-03 14:09:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@
           defun-at-point
           delete-region
           editor-buffer
+          emacs
           end-of-line
           execute-command
           find-file-buffer
@@ -99,6 +100,8 @@
           with-editor
           with-other-editor
           with-single-undo))
+
+(autoload 'emacs)
 
 (defun set-global-property (&rest args)
   (let ((count (length args)) key value)
