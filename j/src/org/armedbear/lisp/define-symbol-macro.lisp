@@ -1,7 +1,7 @@
 ;;; define-symbol-macro.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: define-symbol-macro.lisp,v 1.1 2003-10-25 21:54:36 piso Exp $
+;;; $Id: define-symbol-macro.lisp,v 1.2 2003-10-26 19:13:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,5 +23,5 @@
   (when (special-variable-p symbol)
     (error 'program-error "~S has already been defined as a global variable" symbol))
   `(progn
-     (setf (symbol-value ',symbol) (make-symbol-macro ,expansion))
+     (setf (symbol-value ',symbol) (make-symbol-macro ',expansion))
      ',symbol))
