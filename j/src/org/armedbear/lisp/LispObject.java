@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.75 2004-02-24 12:53:49 piso Exp $
+ * $Id: LispObject.java,v 1.76 2004-02-25 23:45:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -444,37 +444,37 @@ public class LispObject extends Lisp
 
     public LispObject incr() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "number"));
+        return signal(new TypeError(this, Symbol.NUMBER));
     }
 
     public LispObject decr() throws ConditionThrowable
     {
-        return signal(new TypeError(this, "number"));
+        return signal(new TypeError(this, Symbol.NUMBER));
     }
 
     public LispObject add(LispObject obj) throws ConditionThrowable
     {
-        return signal(new TypeError(this, "number"));
+        return signal(new TypeError(this, Symbol.NUMBER));
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
     {
-        return signal(new TypeError(this, "number"));
+        return signal(new TypeError(this, Symbol.NUMBER));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
     {
-        return signal(new TypeError(this, "number"));
+        return signal(new TypeError(this, Symbol.NUMBER));
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
     {
-        return signal(new TypeError(this, "number"));
+        return signal(new TypeError(this, Symbol.NUMBER));
     }
 
     public boolean isEqualTo(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, "number"));
+        signal(new TypeError(this, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -486,7 +486,7 @@ public class LispObject extends Lisp
 
     public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, "number"));
+        signal(new TypeError(this, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -498,7 +498,7 @@ public class LispObject extends Lisp
 
     public boolean isLessThan(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, "number"));
+        signal(new TypeError(this, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -510,7 +510,7 @@ public class LispObject extends Lisp
 
     public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, "number"));
+        signal(new TypeError(this, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -522,7 +522,7 @@ public class LispObject extends Lisp
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, "number"));
+        signal(new TypeError(this, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -534,7 +534,7 @@ public class LispObject extends Lisp
 
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, "number"));
+        signal(new TypeError(this, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -546,7 +546,12 @@ public class LispObject extends Lisp
 
     public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
-        return signal(new TypeError(this, "real number"));
+        return signal(new TypeError(this, Symbol.REAL));
+    }
+
+    public LispObject ash(LispObject obj) throws ConditionThrowable
+    {
+        return signal(new TypeError(obj, Symbol.INTEGER));
     }
 
     public Fixnum sxhash() throws ConditionThrowable
