@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.172 2003-04-16 17:01:24 piso Exp $
+ * $Id: Primitives.java,v 1.173 2003-04-24 14:03:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -292,8 +292,10 @@ public final class Primitives extends Module
                 return result;
             }
             case DIVIDE: {                      // ### /
-                if (args.length < 2)
+                if (args.length < 1)
                     throw new WrongNumberOfArgumentsException("/");
+                if (args.length == 1)
+                    return Fixnum.ONE.divideBy(args[0]);
                 LispObject result = args[0];
                 for (int i = 1; i < args.length; i++)
                     result = result.divideBy(args[i]);
