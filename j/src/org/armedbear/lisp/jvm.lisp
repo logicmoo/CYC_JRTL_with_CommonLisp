@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.194 2004-07-03 17:03:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.195 2004-07-03 17:24:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -116,9 +116,6 @@
 (defvar *args* nil)
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
-
-(defvar *env* nil)
-(defvar *closure-vars* nil)
 
 (defvar *val* nil) ; index of value register
 
@@ -2628,27 +2625,6 @@
                  (emit 'aload (1+ index))
                  (emit-store-value)
                  (return-from compile-variable-reference)))))))
-  (when (memq var *closure-vars*)
-;;     (let ((g (declare-object *env*)))
-;;       (emit 'getstatic
-;;             *this-class*
-;;             g
-;;             +lisp-object+))
-;;     ;; FIXME Move this to constructor!
-;;     ;; Cast it to an Environment object.
-;;     (emit 'checkcast +lisp-environment-class+)
-;;     (let ((g (declare-symbol var)))
-;;       (emit 'getstatic
-;;             *this-class*
-;;             g
-;;             +lisp-symbol+))
-;;     (emit-invokevirtual +lisp-environment-class+
-;;                         "lookup"
-;;                         "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-;;                         -1)
-;;     (emit-store-value)
-;;     (return-from compile-variable-reference))
-    (error "COMPILE-VARIABLE-REF: unsupported case."))
   ;; Otherwise it must be a global variable.
   (unless (special-variable-p var)
     ;; FIXME This should be a warning!
@@ -2744,32 +2720,6 @@
                     (emit 'astore (1+ index))
                     (emit-store-value)))))
       (maybe-emit-clear-values (cadr rest))
-      (return-from compile-setq))
-    (when (memq sym *closure-vars*)
-      (let ((g (declare-object *env*)))
-        (emit 'getstatic
-              *this-class*
-              g
-              +lisp-object+))
-      ;; FIXME Move this to constructor!
-      ;; Cast it to an Environment object.
-      (emit 'checkcast +lisp-environment-class+)
-      (let ((g (declare-symbol sym)))
-        (emit 'getstatic
-              *this-class*
-              g
-              +lisp-symbol+))
-      (compile-form (cadr rest))
-      (unless (remove-store-value)
-        (emit-push-value))
-      (maybe-emit-clear-values (cadr rest))
-      ;; stack: env sym val
-      (emit 'dup_x2)
-      (emit-invokevirtual +lisp-environment-class+
-                          "rebind"
-                          "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                          -3)
-      (emit-store-value)
       (return-from compile-setq))
     ;; still not found
     ;; must be a global variable
@@ -2976,6 +2926,8 @@
 (defun compile-defun (name form environment &optional (classfile "out.class"))
   (unless (eq (car form) 'LAMBDA)
     (return-from compile-defun nil))
+  (unless (null environment)
+    (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (setf form (precompile-form form t))
   (let* ((*speed* *speed*)
          (*safety* *safety*)
@@ -3009,8 +2961,6 @@
          (*max-locals* 0)
          (*all-locals* ())
          (*handlers* ())
-         (*env* environment)
-         (*closure-vars* (if environment (sys::environment-vars environment) nil))
 
          (*context* (make-context :parent *context*))
 
