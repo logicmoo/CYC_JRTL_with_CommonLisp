@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.6 2003-03-03 03:04:50 piso Exp $
+ * $Id: Load.java,v 1.7 2003-03-04 12:57:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,18 +113,32 @@ public final class Load extends Lisp
     /*package*/ static final LispObject _load(final String filename,
         boolean verbose, boolean print) throws Condition
     {
+        InputStream in = null;
+        String truename = null;
         URL url = Lisp.class.getResource(filename);
         if (url != null) {
-            InputStream in;
             try {
                 in = url.openStream();
+                truename = url.getPath();
             }
             catch (IOException e) {
                 in = null;
             }
-            if (in != null)
-                return loadFileFromStream(url.getPath(), in, verbose, print);
+        } else {
+            // Look in current directory.
+            File file = new File(System.getProperty("user.dir"), filename);
+            if (file.isFile()) {
+                try {
+                    in = new FileInputStream(file);
+                    truename = file.getCanonicalPath();
+                }
+                catch (IOException e) {
+                    in = null;
+                }
+            }
         }
+        if (in != null)
+            return loadFileFromStream(truename, in, verbose, print);
         throw new LispError("file not found: " + filename);
     }
 
