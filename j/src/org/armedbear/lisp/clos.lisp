@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.46 2003-12-19 19:26:04 piso Exp $
+;;; $Id: clos.lisp,v 1.47 2003-12-19 19:42:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1460,14 +1460,13 @@
     (let ((slot-name (slot-definition-name slot)))
       (multiple-value-bind (init-key init-value foundp)
         (get-properties all-keys (slot-definition-initargs slot))
-        (declare (ignore init-key))
         (if foundp
-            (setf (slot-value instance slot-name) init-value)
-            (when (and (not (slot-boundp instance slot-name))
-                       (not (null (slot-definition-initfunction slot)))
+            (setf (std-slot-value instance slot-name) init-value)
+            (when (and (not (std-slot-boundp instance slot-name))
+                       (slot-definition-initfunction slot)
                        (or (eq slot-names t)
                            (member slot-name slot-names)))
-              (setf (slot-value instance slot-name)
+              (setf (std-slot-value instance slot-name)
                     (funcall (slot-definition-initfunction slot))))))))
   instance)
 
