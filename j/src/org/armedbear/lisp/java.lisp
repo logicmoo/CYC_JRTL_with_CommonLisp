@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: java.lisp,v 1.9 2003-12-03 11:13:20 asimon Exp $
+;;; $Id: java.lisp,v 1.10 2003-12-20 22:40:02 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,6 +62,9 @@
   "Returns the component type of the array type ATYPE"
   (assert (jclass-array-p atype))
   (jcall (jmethod "java.lang.Class" "getComponentType") atype))
+
+(defun (setf jarray-ref) (new-value java-array &rest indices)
+  (apply #'jarray-set java-array new-value indices))
 
 (defun jclass-constructors (class)
   "Returns a vector of constructors for CLASS"
