@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.25 2003-05-30 16:17:18 piso Exp $
+;;; $Id: list.lisp,v 1.26 2003-06-01 15:32:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,7 +72,7 @@
       (let ((result (list (car list))))
 	(do ((x (cdr list) (cdr x))
 	     (splice result
-		     (cdr (rplacd splice (cons (car x) '() ))) ))
+		     (cdr (rplacd splice (cons (car x) '())))))
             ((atom x)
              (unless (null x)
                (rplacd splice x))))
@@ -120,7 +120,7 @@
       list))
 
 (defun require-type (arg type)
-  (unless (typep  arg type)
+  (unless (typep arg type)
     (error 'type-error)))
 
 (defun butlast (list &optional (n 1))
