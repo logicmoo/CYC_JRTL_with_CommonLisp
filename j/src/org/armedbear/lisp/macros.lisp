@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: macros.lisp,v 1.28 2004-04-04 00:51:39 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: macros.lisp,v 1.29 2005-02-10 01:50:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defmacro prog1 (first-form &rest forms)
   (let ((result (gensym)))
@@ -100,7 +100,8 @@
           (close ,var :abort ,abortp))))))
 
 (defun ansi-loop (exps)
-  (require 'loop)
+  (let ((*warn-on-redefinition* nil))
+    (require 'loop))
   (fmakunbound 'ansi-loop)
   `(loop ,@exps))
 
