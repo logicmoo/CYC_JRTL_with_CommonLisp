@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.21 2003-10-13 13:11:20 piso Exp $
+;;; $Id: defclass.lisp,v 1.22 2003-10-13 14:12:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -57,6 +57,8 @@
 (defsetf class-direct-slots %set-class-direct-slots)
 (defsetf class-precedence-list %set-class-precedence-list)
 (defsetf class-slots %set-class-slots)
+(defsetf std-instance-class %set-std-instance-class)
+(defsetf std-instance-slots %set-std-instance-slots)
 
 (defun (setf find-class) (new-value symbol &optional errorp environment)
   (%set-find-class symbol new-value))
