@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.44 2004-03-11 10:41:47 piso Exp $
+ * $Id: LispCharacter.java,v 1.45 2004-03-14 00:37:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -259,7 +259,7 @@ public final class LispCharacter extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                int n = ((Fixnum)arg).getValue();
+                int n = ((Fixnum)arg).value;
                 if (n < CHAR_MAX)
                     return characters[n];
             }
