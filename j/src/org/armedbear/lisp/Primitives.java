@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.629 2004-04-16 01:08:48 piso Exp $
+ * $Id: Primitives.java,v 1.630 2004-04-18 04:51:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2598,16 +2598,16 @@ public final class Primitives extends Lisp
             Package pkg =
                 Packages.findPackage(packageName);
             if (pkg != null)
-                signal(new LispError("package " + packageName +
-                                                           " already exists"));
+                signal(new LispError("Package " + packageName +
+                                     " already exists."));
             LispObject nicknames = checkList(second);
             if (nicknames != NIL) {
                 LispObject list = nicknames;
                 while (list != NIL) {
                     String nick = javaString(list.car());
                     if (Packages.findPackage(nick) != null) {
-                        signal(new PackageError("a package named " + nick +
-                                                                      " already exists"));
+                        signal(new PackageError("A package named " + nick +
+                                                " already exists."));
                     }
                     list = list.cdr();
                 }
@@ -2649,7 +2649,7 @@ public final class Primitives extends Lisp
                     Package p = Packages.findPackage(s);
                     if (p == null) {
                         signal(new LispError(String.valueOf(obj) +
-                                             " is not the name of a package"));
+                                             " is not the name of a package."));
                         return NIL;
                     }
                     pkg.usePackage(p);
