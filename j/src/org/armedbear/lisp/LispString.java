@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.35 2003-04-25 02:21:30 piso Exp $
+ * $Id: LispString.java,v 1.36 2003-04-25 03:25:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -636,7 +636,7 @@ public final class LispString extends AbstractVector implements SequenceType,
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
-            String s = LispString.getValue(string(first));
+            LispString s = string(first);
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
@@ -650,11 +650,15 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new TypeError("invalid end position " + start);
             if (start > end)
                 throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
-            if (start == 0 && end == length)
-                return new LispString(s.toUpperCase());
-            StringBuffer sb = new StringBuffer(s.substring(0, start));
-            sb.append(s.substring(start, end).toUpperCase());
-            sb.append(s.substring(end));
+            StringBuffer sb = new StringBuffer(length);
+            char[] array = s.array;
+            int i;
+            for (i = 0; i < start; i++)
+                sb.append(array[i]);
+            for (i = start; i < end; i++)
+                sb.append(Character.toUpperCase(array[i]));
+            for (i = end; i < length; i++)
+                sb.append(array[i]);
             return new LispString(sb.toString());
         }
     };
@@ -665,7 +669,7 @@ public final class LispString extends AbstractVector implements SequenceType,
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
-            String s = LispString.getValue(string(first));
+            LispString s = string(first);
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
@@ -679,11 +683,60 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new TypeError("invalid end position " + start);
             if (start > end)
                 throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
-            if (start == 0 && end == length)
-                return new LispString(s.toLowerCase());
-            StringBuffer sb = new StringBuffer(s.substring(0, start));
-            sb.append(s.substring(start, end).toLowerCase());
-            sb.append(s.substring(end));
+            StringBuffer sb = new StringBuffer(length);
+            char[] array = s.array;
+            int i;
+            for (i = 0; i < start; i++)
+                sb.append(array[i]);
+            for (i = start; i < end; i++)
+                sb.append(Character.toLowerCase(array[i]));
+            for (i = end; i < length; i++)
+                sb.append(array[i]);
+            return new LispString(sb.toString());
+        }
+    };
+
+    // ### %string-capitalize
+    private static final Primitive3 _STRING_CAPITALIZE=
+        new Primitive3("%string-capitalize") {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
+        {
+            LispString s = string(first);
+            final int length = s.length();
+            int start = (int) Fixnum.getValue(second);
+            if (start < 0 || start > length)
+                throw new TypeError("invalid start position " + start);
+            int end;
+            if (third == NIL)
+                end = length;
+            else
+                end = (int) Fixnum.getValue(third);
+            if (end < 0 || end > length)
+                throw new TypeError("invalid end position " + start);
+            if (start > end)
+                throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
+            StringBuffer sb = new StringBuffer(length);
+            char[] array = s.array;
+            boolean lastCharWasAlphanumeric = false;
+            int i;
+            for (i = 0; i < start; i++)
+                sb.append(array[i]);
+            for (i = start; i < end; i++) {
+                char c = array[i];
+                if (Character.isLowerCase(c)) {
+                    sb.append(lastCharWasAlphanumeric ? c : Character.toUpperCase(c));
+                    lastCharWasAlphanumeric = true;
+                } else if (Character.isUpperCase(c)) {
+                    sb.append(lastCharWasAlphanumeric ? Character.toLowerCase(c) : c);
+                    lastCharWasAlphanumeric = true;
+                } else {
+                    sb.append(c);
+                    lastCharWasAlphanumeric = Character.isDigit(c);
+                }
+            }
+            for (i = end; i < length; i++)
+                sb.append(array[i]);
             return new LispString(sb.toString());
         }
     };
@@ -738,6 +791,45 @@ public final class LispString extends AbstractVector implements SequenceType,
             char[] array = s.array;
             for (int i = start; i < end; i++)
                 array[i] = Character.toLowerCase(array[i]);
+            return s;
+        }
+    };
+
+    // ### %nstring-capitalize
+    private static final Primitive3 _NSTRING_CAPITALIZE =
+        new Primitive3("%nstring-capitalize") {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
+        {
+            LispString s = checkString(first);
+            final int length = s.length();
+            int start = (int) Fixnum.getValue(second);
+            if (start < 0 || start > length)
+                throw new TypeError("invalid start position " + start);
+            int end;
+            if (third == NIL)
+                end = s.length();
+            else
+                end = (int) Fixnum.getValue(third);
+            if (end < 0 || end > length)
+                throw new TypeError("invalid end position " + start);
+            if (start > end)
+                throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
+            char[] array = s.array;
+            boolean lastCharWasAlphanumeric = false;
+            for (int i = start; i < end; i++) {
+                char c = array[i];
+                if (Character.isLowerCase(c)) {
+                    if (!lastCharWasAlphanumeric)
+                        array[i] = Character.toUpperCase(c);
+                    lastCharWasAlphanumeric = true;
+                } else if (Character.isUpperCase(c)) {
+                    if (lastCharWasAlphanumeric)
+                        array[i] = Character.toLowerCase(c);
+                    lastCharWasAlphanumeric = true;
+                } else
+                    lastCharWasAlphanumeric = Character.isDigit(c);
+            }
             return s;
         }
     };
