@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.45 2004-02-10 15:48:39 piso Exp $
+;;; $Id: subtypep.lisp,v 1.46 2004-02-13 00:29:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
              (ARRAY)
              (BASE-STRING SIMPLE-STRING)
              (BIGNUM INTEGER)
+             (BIT FIXNUM)
              (BIT-VECTOR VECTOR)
              (BOOLEAN SYMBOL)
              (BUILT-IN-CLASS CLASS)
@@ -297,6 +298,9 @@
                          (values nil t))))
                  ((and (eq t2 #.(find-class 'bit-vector))
                        (eq t1 'simple-bit-vector))
+                  (values t t))
+                 ((and (eq t2 #.(find-class 'string))
+                       (memq t1 '(string simple-string)))
                   (values t t))
                  (t
                   (values nil nil))))
