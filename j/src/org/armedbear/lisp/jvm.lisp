@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.86 2004-03-25 23:47:11 piso Exp $
+;;; $Id: jvm.lisp,v 1.87 2004-03-26 04:27:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -556,6 +556,55 @@
   (ensure-thread-var-initialized)
   (emit 'aload *thread*)
   (emit-invokevirtual +lisp-thread-class+ "clearValues" "()V" -1))
+
+(defun single-valued-p (form)
+  (cond ((atom form)
+         t)
+        ((memq (car form) '(1+ 1- + - < > <= >= = /=
+                            car cdr cadr cdar cddr caddr cdddr
+                            first second third
+                            eq eql equal equalp
+                            length
+                            constantp symbolp
+                            list list*
+                            macro-function
+                            compiler-macro-function
+                            get
+                            special-operator-p keywordp functionp fboundp zerop
+                            complexp arrayp
+                            array-dimensions upgraded-array-element-type
+                            array-element-type
+                            simple-vector-p simple-string-p bit-vector-p
+                            quote
+                            mapcar
+                            find position
+                            append
+                            memq
+                            special-variable-p
+                            gensym
+                            symbol-name symbol-function
+                            coerce
+                            reverse nreverse
+                            cons
+                            copy-list
+                            make-sequence
+                            nthcdr
+                            aref elt
+                            not null endp
+                            concatenate
+                            string
+                            string=
+                            setq
+                            multiple-value-list
+                            ))
+         t)
+        (t
+         nil)))
+
+(defun maybe-emit-clear-values (form)
+  (unless (single-valued-p form)
+    (format t "Not single-valued: ~S~%" form)
+    (emit-clear-values)))
 
 (defun emit-invoke-method (method-name)
   (unless (remove-store-value)
@@ -1323,11 +1372,13 @@
   (compile-form (first args))
   (unless (remove-store-value)
     (emit-push-value))
+;;   (unless (single-valued-p (first args))
+;;     (emit-clear-values))
   (compile-form (second args))
   (unless (remove-store-value)
     (emit-push-value))
-  (unless (every 'constantp args)
-    (emit-clear-values))
+;;   (unless (single-valued-p (second args))
+;;     (emit-clear-values))
   (emit-invokevirtual +lisp-object-class+
                       op
                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1376,11 +1427,12 @@
 
 (defun compile-function-call-1 (fun args)
   (let ((s (gethash fun unary-operators)))
-    (when s
-      (compile-form (first args))
-      (emit-invoke-method s)
-      (return-from compile-function-call-1 t)))
-    nil)
+    (if s
+        (progn
+          (compile-form (first args))
+          (emit-invoke-method s)
+          t)
+        nil)))
 
 (defun compile-function-call-2 (fun args)
   (case fun
@@ -1466,14 +1518,21 @@
      (compile-form (first args))
      (unless (remove-store-value)
        (emit-push-value))
+;;      (unless (single-valued-p (first args))
+;;        (emit-clear-values))
+     (maybe-emit-clear-values (first args))
      (compile-form (second args))
      (unless (remove-store-value)
        (emit-push-value))
+;;      (unless (single-valued-p (second args))
+;;        (emit-clear-values))
+     (maybe-emit-clear-values (second args))
      (compile-form (third args))
      (unless (remove-store-value)
        (emit-push-value))
-     (unless (every 'constantp args)
-       (emit-clear-values))
+;;      (unless (single-valued-p (third args))
+;;        (emit-clear-values))
+     (maybe-emit-clear-values (third args))
      (emit-invokestatic +lisp-class+
                         "list3"
                         "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
@@ -1486,21 +1545,6 @@
 (defconstant +known-packages+ (list (find-package "COMMON-LISP")
                                     (find-package "SYSTEM")
                                     (find-package "EXTENSIONS")))
-
-(defun single-valued-p (form)
-  (cond ((atom form)
-         t)
-        ((memq (car form) '(1+ 1- + - < > <= >=
-                            car cdr cadr caddr
-                            eq eql equal equalp
-                            length constantp list
-                            macro-function
-                            compiler-macro-function
-                            get
-                            special-operator-p))
-         t)
-        (t
-         nil)))
 
 (defun compile-function-call (fun args &optional for-effect)
 ;;   (format t "compile-function-call fun = ~S args = ~S~%" fun args)
@@ -1564,8 +1608,9 @@
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (single-valued-p (first args))
-         (emit-clear-values))
+;;        (unless (single-valued-p (first args))
+;;          (emit-clear-values))
+       (maybe-emit-clear-values (first args))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1574,13 +1619,15 @@
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (single-valued-p (first args))
-         (emit-clear-values))
+;;        (unless (single-valued-p (first args))
+;;          (emit-clear-values))
+       (maybe-emit-clear-values (first args))
        (compile-form (second args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (single-valued-p (second args))
-         (emit-clear-values))
+;;        (unless (single-valued-p (second args))
+;;          (emit-clear-values))
+       (maybe-emit-clear-values (second args))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1589,18 +1636,21 @@
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (single-valued-p (first args))
-         (emit-clear-values))
+;;        (unless (single-valued-p (first args))
+;;          (emit-clear-values))
+       (maybe-emit-clear-values (first args))
        (compile-form (second args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (single-valued-p (second args))
-         (emit-clear-values))
+;;        (unless (single-valued-p (second args))
+;;          (emit-clear-values))
+       (maybe-emit-clear-values (second args))
        (compile-form (third args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (single-valued-p (third args))
-         (emit-clear-values))
+;;        (unless (single-valued-p (third args))
+;;          (emit-clear-values))
+       (maybe-emit-clear-values (third args))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1616,8 +1666,9 @@
            (unless (remove-store-value)
              (emit-push-value)) ; leaves value on stack
            (emit 'aastore) ; store value in array
-           (unless (single-valued-p form)
-             (emit-clear-values))
+;;            (unless (single-valued-p form)
+;;              (emit-clear-values))
+           (maybe-emit-clear-values form)
            (incf i))) ; array left on stack here
        ;; Stack: function array-ref
        (emit-invokevirtual +lisp-object-class+
@@ -1714,8 +1765,9 @@
   (compile-form form)
   (unless (remove-store-value)
     (emit-push-value))
-  (unless (single-valued-p form)
-    (emit-clear-values))
+;;   (unless (single-valued-p form)
+;;     (emit-clear-values))
+  (maybe-emit-clear-values form)
   (emit-push-nil)
   'if_acmpeq)
 
@@ -1816,8 +1868,9 @@
                (compile-form initform)
                (unless (remove-store-value)
                  (emit-push-value))
-               (unless (single-valued-p initform)
-                 (emit-clear-values))
+;;                (unless (single-valued-p initform)
+;;                  (emit-clear-values))
+               (maybe-emit-clear-values initform)
                (setf last-push-was-nil nil))
               (t
                (if last-push-was-nil
@@ -1888,8 +1941,9 @@
                (compile-form initform)
                (unless (remove-store-value)
                  (emit-push-value))
-               (unless (single-valued-p initform)
-                 (emit-clear-values)))
+;;                (unless (single-valued-p initform)
+;;                  (emit-clear-values)))
+               (maybe-emit-clear-values initform))
               (t
                (emit-push-nil)))
         (cond (specialp
@@ -1964,6 +2018,7 @@
     (setf (fill-pointer *tags*) saved-fp))
   (unless for-effect
     ;; TAGBODY returns NIL.
+    (format t "COMPILE-TAGBODY calling EMIT-CLEAR-VALUES~%")
     (emit-clear-values)
     (emit-push-nil)
     (emit-store-value)))
@@ -2355,44 +2410,41 @@
 
 ;; If for-effect is true, no value needs to be left on the stack.
 (defun compile-form (form &optional for-effect)
-  (cond
-   ((consp form)
-    (let ((op (car form)))
-      (when (symbolp op)
-        (let ((handler (get op 'jvm-compile-handler)))
-          (when handler
-            (funcall handler form for-effect)
-            (return-from compile-form))))
-      (when (macro-function op)
-        (compile-form (macroexpand form))
-        (return-from compile-form))
-      (cond
-       ((special-operator-p op)
-        (error "COMPILE-FORM unsupported special operator ~S" op))
-       (t ; Function call.
-        (compile-function-call op (cdr form) for-effect)))))
-   ((eq form '())
-    (unless for-effect
-      (emit-push-nil)
-      (emit-store-value)))
-   ((eq form t)
-    (unless for-effect
-      (emit-push-t)
-      (emit-store-value)))
-   ((keywordp form)
-    (let ((g (declare-keyword form)))
-      (emit 'getstatic
-            *this-class*
-            g
-            "Lorg/armedbear/lisp/Symbol;")
-      (emit-store-value)))
-   ((symbolp form)
-    (compile-variable-ref form))
-   ((constantp form)
-    (unless for-effect
-      (compile-constant form)))
-   (t
-    (error "COMPILE-FORM unhandled case ~S" form))))
+  (cond ((consp form)
+         (let ((op (car form)))
+           (when (symbolp op)
+             (let ((handler (get op 'jvm-compile-handler)))
+               (when handler
+                 (funcall handler form for-effect)
+                 (return-from compile-form))))
+           (cond ((macro-function op)
+                  (compile-form (macroexpand form)))
+                 ((special-operator-p op)
+                  (error "COMPILE-FORM: unsupported special operator ~S." op))
+                 (t ; Function call.
+                  (compile-function-call op (cdr form) for-effect)))))
+        ((eq form '())
+         (unless for-effect
+           (emit-push-nil)
+           (emit-store-value)))
+        ((eq form t)
+         (unless for-effect
+           (emit-push-t)
+           (emit-store-value)))
+        ((keywordp form)
+         (let ((g (declare-keyword form)))
+           (emit 'getstatic
+                 *this-class*
+                 g
+                 "Lorg/armedbear/lisp/Symbol;")
+           (emit-store-value)))
+        ((symbolp form)
+         (compile-variable-ref form))
+        ((constantp form)
+         (unless for-effect
+           (compile-constant form)))
+        (t
+         (error "COMPILE-FORM unhandled case ~S" form))))
 
 ;; Returns descriptor.
 (defun analyze-args (args)
