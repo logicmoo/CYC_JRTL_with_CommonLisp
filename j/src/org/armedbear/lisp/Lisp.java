@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.222 2004-03-30 22:13:44 piso Exp $
+ * $Id: Lisp.java,v 1.223 2004-04-02 03:16:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1526,6 +1526,12 @@ public abstract class Lisp
     // ### *read-eval*
     public static final Symbol _READ_EVAL_ =
         exportSpecial("*READ-EVAL*", PACKAGE_CL, T);
+
+    // ### *features*
+    public static final Symbol _FEATURES_ =
+        exportSpecial("*FEATURES*", PACKAGE_CL, list3(Keyword.ARMEDBEAR,
+                                                      Keyword.COMMON_LISP,
+                                                      Keyword.ANSI_CL));
 
     // ### *modules*
     public static final Symbol _MODULES_ =
