@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.31 2003-03-11 16:10:07 piso Exp $
+ * $Id: LispShell.java,v 1.32 2003-03-29 01:17:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,11 +113,6 @@ public final class LispShell extends Shell
         history = new History("lisp.history", 30);
     }
 
-    private Position findContainingSexp(Position pos)
-    {
-        return ((LispMode)LispMode.getMode()).findContainingSexp(pos);
-    }
-
     public void enter()
     {
         if (!checkProcess())
@@ -138,7 +133,7 @@ public final class LispShell extends Shell
         }
         dotLine.setFlags(STATE_INPUT);
         Position end = editor.getBuffer().getEnd();
-        Position pos = findContainingSexp(end);
+        Position pos = LispMode.findContainingSexp(end);
         boolean isComplete = (pos == null || pos.isBefore(posEndOfOutput));
         if (isComplete) {
             // Complete sexp.
