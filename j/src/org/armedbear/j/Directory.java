@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.21 2003-05-23 17:23:53 piso Exp $
+ * $Id: Directory.java,v 1.22 2003-06-16 15:44:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1418,8 +1418,15 @@ public final class Directory extends Buffer
 
     private String doCommandOnFile(String command, String filename)
     {
-        String cmdline = "(\\cd " + getFile().canonicalPath() + " && " + command + " " + filename + ")";
-        ShellCommand shellCommand = new ShellCommand(cmdline);
+        FastStringBuffer sb = new FastStringBuffer(command);
+        sb.append(' ');
+        if (filename.indexOf(' ') >= 0) {
+            sb.append('"');
+            sb.append(filename);
+            sb.append('"');
+        } else
+            sb.append(filename);
+        ShellCommand shellCommand = new ShellCommand(sb.toString(), getFile());
         shellCommand.run();
         return shellCommand.getOutput();
     }
@@ -1441,16 +1448,22 @@ public final class Directory extends Buffer
             showMessageDialog("No command specified");
             return null;
         }
-        String cmdline = "(\\cd " + getFile().canonicalPath() + " && " + before;
+        FastStringBuffer sb = new FastStringBuffer(before);
         for (int i = 0; i < files.size(); i++) {
+            sb.append(' ');
             String filename = (String) files.get(i);
-            cmdline += ' ';
-            cmdline += filename;
+            if (filename.indexOf(' ') >= 0) {
+                sb.append('"');
+                sb.append(filename);
+                sb.append('"');
+            } else
+                sb.append(filename);
         }
-        cmdline += ' ';
-        cmdline += after + ")";
-        Log.debug(cmdline);
-        ShellCommand shellCommand = new ShellCommand(cmdline);
+        if (after.length() > 0) {
+            sb.append(' ');
+            sb.append(after);
+        }
+        ShellCommand shellCommand = new ShellCommand(sb.toString(), getFile());
         shellCommand.run();
         return shellCommand.getOutput();
     }
