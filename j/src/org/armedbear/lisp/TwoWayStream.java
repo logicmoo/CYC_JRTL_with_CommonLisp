@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.15 2004-01-31 01:12:58 piso Exp $
+ * $Id: TwoWayStream.java,v 1.16 2004-01-31 20:10:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,12 +30,13 @@ public final class TwoWayStream extends Stream
     {
         this.in = in;
         this.out = out;
+        isInputStream = true;
+        isOutputStream = true;
     }
 
     public TwoWayStream(Stream in, Stream out, boolean interactive)
     {
-        this.in = in;
-        this.out = out;
+        this(in, out);
         setInteractive(interactive);
     }
 
