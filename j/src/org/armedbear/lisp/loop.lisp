@@ -1,5 +1,5 @@
 ;;;   -*- Mode: LISP; Package: ANSI-LOOP; Syntax: Common-lisp; Base: 10; Lowercase:T -*-
-;;; $Id: loop.lisp,v 1.7 2003-09-20 00:28:46 piso Exp $
+;;; $Id: loop.lisp,v 1.8 2003-09-22 17:00:52 piso Exp $
 ;;;>
 ;;;> Portions of LOOP are Copyright (c) 1986 by the Massachusetts Institute of Technology.
 ;;;> All Rights Reserved.
@@ -52,8 +52,6 @@
 (defpackage :ansi-loop (:use :cl))
 
 (in-package :ansi-loop)
-
-(provide :loop)
 
 ;;; Technology.
 ;;;
@@ -2222,3 +2220,5 @@ collected result will be returned as the value of the LOOP."
 #+allegro
 (defun excl::complex-loop-expander (body env)
   (loop-standard-expansion body env *loop-ansi-universe*))
+
+(provide :loop)
