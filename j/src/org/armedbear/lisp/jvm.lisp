@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.32 2003-11-15 20:06:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.33 2003-11-16 00:57:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1579,6 +1579,7 @@
   (compile-form form)
   (unless (remove-store-value)
     (emit-push-value))
+  (emit-clear-values)
   (emit-push-nil)
   'if_acmpeq)
 
@@ -1587,10 +1588,8 @@
          (consequent (third form))
          (alternate (fourth form))
          (label1 (gensym))
-         (label2 (gensym))
-         (instr (compile-test test)))
-    (emit-clear-values)
-    (emit instr `,label1)
+         (label2 (gensym)))
+    (emit (compile-test test) `,label1)
     (compile-form consequent for-effect)
     (emit 'goto `,label2)
     (emit 'label `,label1)
