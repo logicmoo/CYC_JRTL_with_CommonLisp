@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.6 2003-11-04 18:35:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.7 2003-11-05 17:20:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -303,11 +303,17 @@
 (defvar *locals* ())
 (defvar *max-locals* 0)
 
+(defun allocate-local ()
+  (let ((index (fill-pointer *locals*)))
+    (incf (fill-pointer *locals*))
+    (setf *max-locals* (fill-pointer *locals*))
+    index))
+
 (defvar *args* nil)
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
 
-(defvar *val* ()) ; index of value register
+(defvar *val* nil) ; index of value register
 
 (defun clear ()
   (setq *pool* nil
@@ -477,11 +483,26 @@
         "T"
         "Lorg/armedbear/lisp/Symbol;"))
 
+;; Index of local variable used to hold the current thread.
+(defvar *thread* nil)
+
 (defun emit-clear-values ()
-  (emit 'invokestatic
-        +lisp-thread-class+
-        "currentThread"
-        "()Lorg/armedbear/lisp/LispThread;")
+  (unless *thread*
+    ;; Allocate a local variable to hold the current thread.
+    (setf *thread* (allocate-local))
+    ;; Put the code to initialize the local at the very beginning of the
+    ;; function, to guarantee that the local gets initialized even if the code
+    ;; at our current location is never executed, since the local may be
+    ;; referenced elsewhere too.
+    (let ((code *code*))
+      (setf *code* ())
+      (emit 'invokestatic
+            +lisp-thread-class+
+            "currentThread"
+            "()Lorg/armedbear/lisp/LispThread;")
+      (emit 'astore *thread*)
+      (setf *code* (append code *code*))))
+  (emit 'aload *thread*)
   (emit 'invokevirtual
         +lisp-thread-class+
         "clearValues"
@@ -1730,7 +1751,6 @@
     (emit-store-value)
     (return-from compile-variable-ref)))
 
-
 ;; If for-effect is true, no value needs to be left on the stack.
 (defun compile-form (form &optional for-effect)
   (cond
@@ -1817,7 +1837,8 @@
          (*max-locals* 0)
          (*pool* ())
          (*pool-count* 1)
-         (*val* 0))
+         (*val* nil)
+         (*thread* nil))
     (setf (method-name-index execute-method)
           (pool-name (method-name execute-method)))
     (setf (method-descriptor-index execute-method)
@@ -1837,9 +1858,7 @@
         ;; for args.
         (setf (fill-pointer *locals*) (1+ (length args))))
     ;; Reserve the next available slot for the value register.
-    (setq *val* (fill-pointer *locals*))
-    (incf (fill-pointer *locals*))
-    (setf *max-locals* (fill-pointer *locals*))
+    (setf *val* (allocate-local))
     (when *hairy-arglist-p*
       (emit 'aload_0)
       (emit 'aload_1)
