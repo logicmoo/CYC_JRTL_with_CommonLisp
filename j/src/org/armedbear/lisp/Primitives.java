@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.242 2003-06-20 17:23:32 piso Exp $
+ * $Id: Primitives.java,v 1.243 2003-06-20 17:43:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3788,86 +3788,6 @@ public final class Primitives extends Module
             if (n < values.length)
                 return values[n];
             return NIL;
-        }
-    };
-
-    // ### %make-hash-table
-    private static final Primitive _MAKE_HASH_TABLE =
-        new Primitive("%make-hash-table") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            if (args.length != 4)
-                throw new WrongNumberOfArgumentsException(this);
-            LispObject test = args[0];
-            int size = Fixnum.getValue(args[1]);
-            LispObject rehashSize = args[2];
-            LispObject rehashThreshold = args[3];
-            return new HashTable(test, size, rehashSize, rehashThreshold);
-        }
-    };
-
-    // ### gethash
-    // gethash key hash-table &optional default => value, present-p
-    private static final Primitive GETHASH = new Primitive("gethash") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            final int length = args.length;
-            if (length < 2 || length > 3)
-                throw new WrongNumberOfArgumentsException(this);
-            if (args[1] instanceof HashTable) {
-                LispObject key = args[0];
-                HashTable ht = (HashTable) args[1];
-                LispObject defaultValue =
-                    length == 3 ? args[2] : NIL;
-                return ht.gethash(key, defaultValue);
-            }
-            throw new TypeError(args[1], "hash table");
-        }
-    };
-
-    // puthash key hash-table default &optional (value default) => value
-    private static final Primitive PUTHASH = new Primitive("puthash") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            final int length = args.length;
-            if (length < 3 || length > 4)
-                throw new WrongNumberOfArgumentsException(this);
-            if (args[1] instanceof HashTable) {
-                LispObject key = args[0];
-                HashTable ht = (HashTable) args[1];
-                LispObject value;
-                if (length == 3)
-                    value = args[2];
-                else {
-                    Debug.assertTrue(length == 4);
-                    value = args[3];
-                }
-                return ht.puthash(key, value);
-            }
-            throw new TypeError(args[1], "hash table");
-        }
-    };
-
-    // remhash key hash-table => generalized-boolean
-    private static final Primitive2 REMHASH = new Primitive2("remhash") {
-        public LispObject execute(LispObject first, LispObject second)
-            throws LispError
-        {
-            if (second instanceof HashTable) {
-                LispObject key = first;
-                HashTable ht = (HashTable) second;
-                return ht.remhash(key);
-            }
-            throw new TypeError(second, "hash table");
-        }
-    };
-
-    // ### sxhash
-    // sxhash object => hash-code
-    private static final Primitive1 SXHASH = new Primitive1("sxhash") {
-        public LispObject execute(LispObject arg) throws LispError
-        {
-            return new Fixnum(arg.hashCode());
         }
     };
 
