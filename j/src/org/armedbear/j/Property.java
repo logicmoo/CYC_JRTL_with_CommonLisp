@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.1.1.1 2002-09-24 16:08:01 piso Exp $
+ * $Id: Property.java,v 1.2 2002-09-25 13:31:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,6 +290,8 @@ public final class Property implements Comparable, Constants
         createProperty("theme");
     public static final Property THEME_PATH =
         createProperty("themePath");
+    public static final Property TUNNEL =
+        createProperty("tunnel");
     public static final Property USER_FULL_NAME =
         createProperty("userFullName");
     public static final Property USER_MAIL_ADDRESS =
