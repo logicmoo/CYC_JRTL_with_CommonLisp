@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.506 2003-11-28 06:00:24 piso Exp $
+ * $Id: Primitives.java,v 1.507 2003-11-28 06:08:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,10 +75,6 @@ public final class Primitives extends Module
     private static final int UPPER_CASE_P               = 41;
     private static final int VECTORP                    = 42;
 
-    // Primitive2
-    private static final int RPLACA                     = 43;
-    private static final int RPLACD                     = 44;
-
     private Primitives()
     {
         definePrimitive("*", MULTIPLY);
@@ -124,9 +120,6 @@ public final class Primitives extends Module
         definePrimitive1("third", THIRD);
         definePrimitive1("upper-case-p", UPPER_CASE_P);
         definePrimitive1("vectorp", VECTORP);
-
-        definePrimitive2("rplaca", RPLACA);
-        definePrimitive2("rplacd", RPLACD);
     }
 
     // Primitive
@@ -289,23 +282,6 @@ public final class Primitives extends Module
                 return arg.decr();
             case EVAL:                          // ### eval
                 return eval(arg, new Environment(), LispThread.currentThread());
-            default:
-                Debug.trace("bad index " + index);
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException((String)null));
-        }
-    }
-
-    // Primitive2
-    public LispObject dispatch(LispObject first, LispObject second, int index)
-        throws ConditionThrowable
-    {
-        switch (index) {
-            case RPLACA:                        // ### rplaca
-                first.setCar(second);
-                return first;
-            case RPLACD:                        // ### rplacd
-                first.setCdr(second);
-                return first;
             default:
                 Debug.trace("bad index " + index);
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException((String)null));
@@ -557,6 +533,28 @@ public final class Primitives extends Module
             }
             symbol.setSymbolValue(second);
             return second;
+        }
+    };
+
+    // ### rplaca
+    private static final Primitive2 RPLACA = new Primitive2("rplaca")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+                first.setCar(second);
+                return first;
+        }
+    };
+
+    // ### rplacd
+    private static final Primitive2 RPLACD = new Primitive2("rplacd")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+                first.setCdr(second);
+                return first;
         }
     };
 
