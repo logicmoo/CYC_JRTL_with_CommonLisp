@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.7 2003-03-04 15:29:48 piso Exp $
+;;; $Id: setf.lisp,v 1.8 2003-03-13 15:38:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -96,6 +96,8 @@
 (%put 'get *setf-expander* '%put)
 (%put 'gethash *setf-expander* 'puthash)
 (%put 'documentation *setf-expander* '%set-documentation)
+(%put 'char *setf-expander* '%set-char)
+(%put 'schar *setf-expander* '%set-schar)
 
 (defmacro defsetf (access-function update-function)
   `(%put ',access-function *setf-expander* ',update-function))
