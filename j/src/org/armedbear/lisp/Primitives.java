@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.623 2004-03-30 17:29:21 piso Exp $
+ * $Id: Primitives.java,v 1.624 2004-03-31 03:09:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1447,10 +1447,13 @@ public final class Primitives extends Lisp
             if (obj instanceof MacroObject)
                 return ((MacroObject)obj).getExpander();
             if (obj instanceof SpecialOperator) {
-                LispObject macroObject =
-                    get((Symbol)arg, Symbol.MACROEXPAND_MACRO, NIL);
-                if (macroObject instanceof MacroObject)
-                    return ((MacroObject)macroObject).getExpander();
+                obj = get((Symbol) arg, Symbol.MACROEXPAND_MACRO, NIL);
+                if (obj instanceof AutoloadMacro) {
+                    ((AutoloadMacro)obj).load();
+                    obj = get((Symbol) arg, Symbol.MACROEXPAND_MACRO, NIL);
+                }
+                if (obj instanceof MacroObject)
+                    return ((MacroObject)obj).getExpander();
             }
             return NIL;
         }
