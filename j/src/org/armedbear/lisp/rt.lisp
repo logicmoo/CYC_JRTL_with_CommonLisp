@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.88 2003-07-15 18:29:48 piso Exp $
+;;; $Id: rt.lisp,v 1.89 2003-07-16 18:19:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,9 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; Adapted from rt.lsp and ansi-aux.lsp in the GCL ANSI test suite.
+
+(require 'defstruct)
+(require 'loop)
 
 (unless (find-package :regression-test)
   (make-package :regression-test :nicknames '(:rt))
