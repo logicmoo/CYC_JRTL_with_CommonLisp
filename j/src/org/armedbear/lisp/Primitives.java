@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.258 2003-06-23 17:41:00 piso Exp $
+ * $Id: Primitives.java,v 1.259 2003-06-23 17:41:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1927,6 +1927,39 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws LispError
         {
             return checkArray(arg).getElementType();
+        }
+    };
+
+    // ### array-in-bounds-p
+    // array-in-bounds-p array &rest subscripts => generalized-boolean
+    private static final Primitive ARRAY_IN_BOUNDS_P =
+        new Primitive("array-in-bounds-p") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length < 1)
+                throw new WrongNumberOfArgumentsException(this);
+            AbstractArray array = checkArray(args[0]);
+            int rank = array.getRank();
+            if (rank != args.length - 1) {
+                StringBuffer sb = new StringBuffer("ARRAY-IN-BOUNDS-P: ");
+                sb.append("wrong number of subscripts (");
+                sb.append(args.length - 1);
+                sb.append(") for array of rank ");
+                sb.append(rank);
+                throw new ProgramError(sb.toString());
+            }
+            for (int i = 0; i < rank; i++) {
+                LispObject arg = args[i+1];
+                if (arg instanceof Fixnum) {
+                    int subscript = ((Fixnum)arg).getValue();
+                    if (subscript < 0 || subscript >= array.getDimension(i))
+                        return NIL;
+                } else if (arg instanceof Bignum) {
+                    return NIL;
+                } else
+                    throw new TypeError(arg, "integer");
+            }
+            return T;
         }
     };
 
