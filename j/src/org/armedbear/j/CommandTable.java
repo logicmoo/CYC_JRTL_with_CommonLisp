@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.25 2003-05-18 16:02:51 piso Exp $
+ * $Id: CommandTable.java,v 1.26 2003-06-04 18:09:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -361,6 +361,7 @@ public class CommandTable
             addCommand("xmlInsertMatchingEndTag", "XmlMode");
             addCommand("xmlInsertTag", "XmlMode");
             addCommand("xmlParseBuffer", "XmlMode");
+            addCommand("xmlValidateBuffer", "XmlMode");
 
             // Mail commands.
             addCommand("attachFile", "mail.MailCommands");
