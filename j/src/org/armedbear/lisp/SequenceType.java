@@ -2,7 +2,7 @@
  * Sequence.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SequenceType.java,v 1.2 2003-02-15 16:48:17 piso Exp $
+ * $Id: SequenceType.java,v 1.3 2003-03-18 03:47:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public interface SequenceType
 {
     int length() throws LispError;
 
-    LispObject elt(long index) throws LispError;
+    LispObject elt(int index) throws LispError;
 
     LispObject remove(LispObject item) throws LispError;
 }

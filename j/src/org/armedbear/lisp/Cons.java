@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.9 2003-03-15 13:55:08 piso Exp $
+ * $Id: Cons.java,v 1.10 2003-03-18 03:48:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,13 +116,13 @@ public final class Cons extends LispObject implements SequenceType
         return length;
     }
 
-    public LispObject elt(long index) throws LispError
+    public LispObject elt(int index) throws LispError
     {
         if (index < 0) {
             throw new TypeError("ELT: invalid index " + index + " for " +
                 this);
         }
-        long i = 0;
+        int i = 0;
         LispObject obj = this;
         while (true) {
             if (i == index)
