@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.28 2004-01-03 16:49:39 piso Exp $
+ * $Id: Pathname.java,v 1.29 2004-01-03 17:44:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -420,6 +420,61 @@ public final class Pathname extends LispObject
                 }
             }
             return result;
+        }
+    };
+
+    private static final Primitive2 _WILD_PATHNAME_P =
+        new Primitive2("%wild-pathname-p", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Pathname pathname = Pathname.coerceToPathname(first);
+            if (second == NIL) {
+                if (pathname.host == Keyword.WILD || pathname.host == Keyword.WILD_INFERIORS)
+                    return T;
+                if (pathname.device == Keyword.WILD || pathname.device == Keyword.WILD_INFERIORS)
+                    return T;
+                if (pathname.directory instanceof Cons) {
+                    if (memq(Keyword.WILD, pathname.directory))
+                        return T;
+                    if (memq(Keyword.WILD_INFERIORS, pathname.directory))
+                        return T;
+                }
+                if (pathname.name == Keyword.WILD || pathname.name == Keyword.WILD_INFERIORS)
+                    return T;
+                if (pathname.type == Keyword.WILD || pathname.type == Keyword.WILD_INFERIORS)
+                    return T;
+                if (pathname.version == Keyword.WILD || pathname.version == Keyword.WILD_INFERIORS)
+                    return T;
+                return NIL;
+            }
+            if (second == Keyword.DIRECTORY) {
+                if (pathname.directory instanceof Cons) {
+                    if (memq(Keyword.WILD, pathname.directory))
+                        return T;
+                    if (memq(Keyword.WILD_INFERIORS, pathname.directory))
+                        return T;
+                }
+                return NIL;
+            }
+            LispObject value;
+            if (second == Keyword.HOST)
+                value = pathname.host;
+            else if (second == Keyword.DEVICE)
+                value = pathname.device;
+            else if (second == Keyword.NAME)
+                value = pathname.name;
+            else if (second == Keyword.TYPE)
+                value = pathname.type;
+            else if (second == Keyword.VERSION)
+                value = pathname.version;
+            else
+                return signal(new ProgramError("Unrecognized keyword " + second + "."));
+            if (value == Keyword.WILD || value == Keyword.WILD_INFERIORS)
+                return T;
+            else
+                return NIL;
         }
     };
 }

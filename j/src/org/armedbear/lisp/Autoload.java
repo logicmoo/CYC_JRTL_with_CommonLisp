@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.124 2004-01-03 16:51:16 piso Exp $
+ * $Id: Autoload.java,v 1.125 2004-01-03 17:45:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -344,6 +344,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%structure-set-1", "StructureObject");
         autoload(PACKAGE_SYS, "%structure-set-2", "StructureObject");
         autoload(PACKAGE_SYS, "%time", "Time");
+        autoload(PACKAGE_SYS, "%wild-pathname-p", "Pathname");
         autoload(PACKAGE_SYS, "allocate-slot-storage", "StandardObject");
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObject");
         autoload(PACKAGE_SYS, "class-direct-methods", "LispClass");
