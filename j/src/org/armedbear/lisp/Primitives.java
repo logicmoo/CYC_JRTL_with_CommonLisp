@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.480 2003-10-21 19:10:36 piso Exp $
+ * $Id: Primitives.java,v 1.481 2003-10-23 12:54:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3608,7 +3608,8 @@ public final class Primitives extends Module
     // read-from-string string &optional eof-error-p eof-value &key start end
     // preserve-whitespace => object, position
     private static final Primitive _READ_FROM_STRING =
-        new Primitive("%read-from-string", PACKAGE_SYS, false) {
+        new Primitive("%read-from-string", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 6)
@@ -3637,7 +3638,7 @@ public final class Primitives extends Module
                 result = in.read(eofError, eofValue, false);
             LispObject[] values = new LispObject[2];
             values[0] = result;
-            values[1] = new Fixnum(startIndex + in.getOffset());
+            values[1] = new Fixnum(in.getOffset());
             LispThread.currentThread().setValues(values);
             return result;
         }
