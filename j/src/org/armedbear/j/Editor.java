@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.24 2002-12-14 02:30:06 piso Exp $
+ * $Id: Editor.java,v 1.25 2002-12-24 16:26:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4455,9 +4455,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
 
         if (buffer.isTransient()) {
-            buffer.windowClosing();
-            otherWindow();
-            unsplitWindow();
+            if (buffer.unsplitOnClose()) {
+                buffer.windowClosing();
+                otherWindow();
+                unsplitWindow();
+            }
             maybeKillBuffer(buffer);
             restoreFocus();
             Sidebar.refreshSidebarInAllFrames();
@@ -4484,8 +4486,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 return;
             }
             if (buf.isTransient()) {
-                unsplitWindow();
+                if (buf.unsplitOnClose())
+                    unsplitWindow();
                 maybeKillBuffer(buf);
+                if (!buf.unsplitOnClose())
+                    ed.updateDisplay();
                 Sidebar.refreshSidebarInAllFrames();
                 return;
             }
