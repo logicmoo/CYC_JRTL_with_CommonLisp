@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.98 2003-06-25 00:43:43 piso Exp $
+ * $Id: Lisp.java,v 1.99 2003-07-02 15:22:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,10 @@ public abstract class Lisp
     }
     public static final Package PACKAGE_CL_USER =
         Packages.createPackage("COMMON-LISP-USER", 1024);
+    public static final Package PACKAGE_SYS =
+        Packages.createPackage("SYSTEM");
+    public static final Package PACKAGE_EXT =
+        Packages.createPackage("EXTENSIONS");
     public static final Package PACKAGE_JAVA =
         Packages.createPackage("JAVA");
     static {
@@ -41,7 +45,12 @@ public abstract class Lisp
             PACKAGE_CL.addNickname("CL");
             PACKAGE_CL_USER.addNickname("CL-USER");
             PACKAGE_CL_USER.usePackage(PACKAGE_CL);
+            PACKAGE_CL_USER.usePackage(PACKAGE_EXT);
             PACKAGE_CL_USER.usePackage(PACKAGE_JAVA);
+            PACKAGE_SYS.addNickname("SYS");
+            PACKAGE_SYS.usePackage(PACKAGE_CL);
+            PACKAGE_EXT.addNickname("EXT");
+            PACKAGE_EXT.usePackage(PACKAGE_CL);
         }
         catch (LispError e) {
             e.printStackTrace();
