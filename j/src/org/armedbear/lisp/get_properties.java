@@ -1,8 +1,8 @@
 /*
  * get_properties.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: get_properties.java,v 1.1 2003-12-20 15:15:27 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: get_properties.java,v 1.2 2004-03-17 17:58:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.lisp;
 
+// ### get-properties
 public final class get_properties extends Primitive2
 {
     private get_properties()
