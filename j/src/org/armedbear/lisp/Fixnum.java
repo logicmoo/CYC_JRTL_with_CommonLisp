@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.84 2004-02-25 23:51:31 piso Exp $
+ * $Id: Fixnum.java,v 1.85 2004-03-13 17:54:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -322,7 +322,7 @@ public final class Fixnum extends LispObject
         if (obj instanceof Fixnum)
             return number((long) value * ((Fixnum)obj).value);
         if (obj instanceof Bignum)
-            return number(getBigInteger().multiply(Bignum.getValue(obj)));
+            return number(getBigInteger().multiply(((Bignum)obj).value));
         if (obj instanceof Ratio) {
             BigInteger numerator = ((Ratio)obj).numerator();
             BigInteger denominator = ((Ratio)obj).denominator();
