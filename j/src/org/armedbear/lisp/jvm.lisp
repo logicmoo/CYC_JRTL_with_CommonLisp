@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.411 2005-03-29 17:26:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.412 2005-03-29 19:25:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1156,6 +1156,7 @@
                 maybe-emit-clear-values
                 single-valued-p
                 sys:single-valued-p
+                sys:read-8-bits
                 sys:write-8-bits
                 sys::require-type
                 ))
