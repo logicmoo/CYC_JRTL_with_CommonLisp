@@ -1,8 +1,8 @@
 /*
  * CompilationMode.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: CompilationMode.java,v 1.1.1.1 2002-09-24 16:08:06 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: CompilationMode.java,v 1.2 2005-03-03 19:37:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@ public final class CompilationMode extends AbstractMode implements Constants, Mo
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "thisError");
         km.mapKey(VK_DOUBLE_MOUSE_1, 0, "thisError");
         km.mapKey(VK_MOUSE_2, 0, "thisError");
+        km.mapKey('q', "tempBufferQuit");
     }
 
     public Formatter getFormatter(Buffer buffer)

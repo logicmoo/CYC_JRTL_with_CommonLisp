@@ -1,8 +1,8 @@
 /*
  * DiffMode.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: DiffMode.java,v 1.12 2004-08-08 00:54:04 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: DiffMode.java,v 1.13 2005-03-03 19:30:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,7 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "diffGotoFile");
         km.mapKey(VK_DOUBLE_MOUSE_1, 0, "diffGotoFile");
         km.mapKey(VK_MOUSE_2, 0, "diffGotoFile");
+        km.mapKey('q', "tempBufferQuit");
     }
 
     public static void diff()
