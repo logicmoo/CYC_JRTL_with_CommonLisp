@@ -1,7 +1,7 @@
 ;;; runtime-class.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: runtime-class.lisp,v 1.8 2004-04-19 05:50:52 asimon Exp $
+;;; $Id: runtime-class.lisp,v 1.9 2004-05-29 23:23:53 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -375,26 +375,28 @@
 (defun size (type)
   (if (or (string= type "long") (string= type "double")) 2 1))
 
-(defun field-modifier (m)
+(defun modifier (m)
   (cond ((string= "public" m) constants.acc-public)
         ((string= "protected" m) constants.acc-protected)
         ((string= "private" m) constants.acc-private)
         ((string= "static" m) constants.acc-static)
+        ((string= "abstract" m) constants.acc-abstract)
         ((string= "final" m) constants.acc-final)
         ((string= "transient" m) constants.acc-transient)
         ((string= "volatile" m) constants.acc-volatile)
-        (t (error "Invalid field modifier ~s." m))))
+        ((string= "synchronized" m) constants.acc-synchronized)
+    (t (error "Invalid modifier ~s." m))))
 
 
 (defun write-method
-  (class-writer class-name method-name unique-method-name result-type arg-types &optional super-invocation)
+  (class-writer class-name method-name unique-method-name modifiers result-type arg-types &optional super-invocation)
 
   (let* ((arg-count (length arg-types))
          (args-size (reduce #'+ arg-types :key #'size))
          (index (+ 2 args-size))
          (cv (visit-method-3
               class-writer
-              constants.acc-public
+              (reduce #'+ modifiers :key #'modifier)
               method-name
               (format nil "(~{~a~})~a"
                       (mapcar #'decorated-type-name arg-types) (decorated-type-name result-type)))))
@@ -523,7 +525,7 @@
    be called with the second and first arguments.
 
    Method definitions are lists of the form
-   (method-name return-type argument-types function)
+   (method-name return-type argument-types function modifier*)
    where method-name and return-type are strings, argument-types is a list of strings and function
    is a lisp function of (1+ (length argument-types)) arguments; the instance (`this') is
    passed in as the last argument.
@@ -544,7 +546,7 @@
 
     (dolist (field-def fields)
       (visit-field-3 cw
-                     (reduce #'+ (cddr field-def) :key #'field-modifier)
+                     (reduce #'+ (cddr field-def) :key #'modifier)
                      (car field-def)
                      (decorated-type-name (cadr field-def))))
 
@@ -556,7 +558,7 @@
           collect unique-method-name into args
           collect constr-def into args
           do
-          (write-method cw class-type-name "<init>" unique-method-name "void" arg-types
+          (write-method cw class-type-name "<init>" unique-method-name '("public") "void" arg-types
                         (cons super-type-name super-invocation-args))
           finally
           (setf args-for-%jnew (append args-for-%jnew args)))
@@ -566,13 +568,13 @@
           (visit-insn-1 cv constants.return)
           (visit-maxs-2 cv 1 1)))
 
-    (loop for (method-name ret-type arg-types method-def) in methods
+    (loop for (method-name ret-type arg-types method-def . modifiers) in methods
       for unique-method-name = (apply #'concatenate 'string method-name "|" arg-types)
       then (apply #'concatenate 'string method-name "|" arg-types)
       collect unique-method-name into args
       collect method-def into args
       do
-      (write-method cw class-type-name method-name unique-method-name ret-type arg-types)
+      (write-method cw class-type-name method-name unique-method-name modifiers ret-type arg-types)
       finally
       (apply #'java::%jnew-runtime-class class-name (append args-for-%jnew args)))
 
