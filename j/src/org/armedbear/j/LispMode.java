@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.37 2003-03-31 02:13:00 piso Exp $
+ * $Id: LispMode.java,v 1.38 2003-03-31 03:00:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -383,7 +383,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         final Editor editor = Editor.currentEditor();
         if (editor.getMode() != mode)
             return;
-        Position pos = mode.findContainingSexp(editor.getDot());
+        Position pos = findContainingSexp(editor.getDot());
         if (pos != null)
             editor.moveDotTo(pos);
     }
@@ -480,9 +480,30 @@ public class LispMode extends AbstractMode implements Constants, Mode
 
     private Position backwardSexp(Position start)
     {
-        Position pos = mode.findContainingSexp(start);
-        if (pos == null)
-            return null;
+        Position pos = findContainingSexp(start);
+        if (pos == null) {
+            // Top level.
+            LispSyntaxIterator it = new LispSyntaxIterator(start);
+            while (true) {
+                char c = it.prevChar();
+                if (c == SyntaxIterator.DONE)
+                    return null;
+                if (!Character.isWhitespace(c)) {
+                    pos = it.getPosition();
+                    break;
+                }
+            }
+            if (pos.getChar() == ')')
+                return findContainingSexp(pos);
+            while (true) {
+                if (!pos.prev())
+                    return pos;
+                if (Character.isWhitespace(pos.getChar())) {
+                    pos.next();
+                    return pos;
+                }
+            }
+        }
         pos = downList(pos);
         if (pos == null)
             return null;
