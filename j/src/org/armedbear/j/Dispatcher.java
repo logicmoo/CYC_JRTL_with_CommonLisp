@@ -2,7 +2,7 @@
  * Dispatcher.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Dispatcher.java,v 1.9 2003-06-28 15:59:24 piso Exp $
+ * $Id: Dispatcher.java,v 1.10 2003-08-01 17:53:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -386,7 +386,14 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
 
     public void mousePressed(MouseEvent e)
     {
-        LocationBar.cancelInput();
+        if (editor.getFocusedComponent() == editor.getLocationBarTextField()) {
+            TextFieldHandler handler = editor.getLocationBarTextField().getHandler();
+            if (handler instanceof IncrementalFindTextFieldHandler) {
+                handler.enter();
+            } else
+                handler.escape();
+        } else
+            LocationBar.cancelInput();
         editor.ensureActive();
         if (editor != Editor.currentEditor()) {
             Editor oldEditor = Editor.currentEditor();
