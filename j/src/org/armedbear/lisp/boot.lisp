@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.13 2003-03-06 04:27:56 piso Exp $
+;;; $Id: boot.lisp,v 1.14 2003-03-07 02:28:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,7 +40,8 @@
           open
           call-arguments-limit
           lambda-parameters-limit
-          multiple-values-limit))
+          multiple-values-limit
+          char-code-limit))
 
 (defun plusp (n)
   (> n 0))
@@ -73,9 +74,11 @@
 
 (defconstant multiple-values-limit 20)
 
+(defconstant char-code-limit 96)
+
 
 ;; Compile the world.
-(format t "; Compiling Lisp code ... ")
+(format t "; Compiling ... ")
 (finish-output)
 (dolist (sym (package-symbols :cl))
   (when (fboundp sym)
