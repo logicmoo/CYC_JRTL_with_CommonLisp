@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.9 2004-05-10 01:10:05 piso Exp $
+;;; $Id: pprint.lisp,v 1.10 2004-05-15 14:39:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -256,7 +256,7 @@
 
 ;                       ---- DISPATCHING ----
 
-(cl:defstruct (pprint-dispatch (:conc-name nil) (:copier nil))
+(cl:defstruct (pprint-dispatch-table (:conc-name nil) (:copier nil))
   (conses-with-cars (make-hash-table :test #'eq) :type hash-table)
   (structures (make-hash-table :test #'eq) :type hash-table)
   (others nil :type list))
@@ -284,7 +284,7 @@
     (maphash #'(lambda (key value)
 		 (setf (gethash key new-structures) (copy-entry value)))
 	     (structures table))
-    (make-pprint-dispatch
+    (make-pprint-dispatch-table
       :conses-with-cars new-conses-with-cars
       :structures new-structures
       :others (copy-list (others table)))))
@@ -359,7 +359,8 @@
 	   (structures table)))
 
 (defun pprint-dispatch (object &optional (table *print-pprint-dispatch*))
-  (when (null table) (setq table *IPD*))
+  (unless table
+    (setf table *IPD*))
   (let ((fn (get-printer object table)))
     (values (or fn #'non-pretty-print) (not (null fn)))))
 
@@ -2736,7 +2737,7 @@
 	(t (list (make-bq-struct :code (cond (copy-p ",@") (T ",."))
 				 :data (car loc))))))
 
-(setq *IPD* (make-pprint-dispatch))
+(setq *IPD* (make-pprint-dispatch-table))
 
 (set-pprint-dispatch+ '(satisfies function-call-p) #'fn-call '(-5) *IPD*)
 (set-pprint-dispatch+ 'cons #'pprint-fill '(-10) *IPD*)
@@ -2828,9 +2829,10 @@
 	      (format xp (formatter "~{~_P=~4D ~W~} F=~W ")
 		      (full-spec entry) (fn entry)))))))
 
-(setf (get 'pprint-dispatch 'structure-printer) #'pprint-dispatch-print)
+;;; FIXME
+(setf (get 'pprint-dispatch-table 'structure-printer) #'pprint-dispatch-print)
 
-(set-pprint-dispatch+ 'pprint-dispatch #'pprint-dispatch-print '(0) *IPD*)
+(set-pprint-dispatch+ 'pprint-dispatch-table #'pprint-dispatch-print '(0) *IPD*)
 
 ;       ---- THINGS THAT ONLY WORK ON SYMBOLICS MACHINES ----
 
