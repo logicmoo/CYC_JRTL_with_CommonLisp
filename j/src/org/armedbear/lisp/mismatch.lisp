@@ -1,7 +1,7 @@
 ;;; mismatch.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: mismatch.lisp,v 1.2 2003-06-10 18:57:28 piso Exp $
+;;; $Id: mismatch.lisp,v 1.3 2003-07-02 16:42:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
   (error "bad sequence limit ~a" (if y (list x y) x)))
 
 (defun the-end (x y)
-  (cond ((fixnump x)
+  (cond ((sys:fixnump x)
 	 (unless (<= x (length y))
 	   (bad-seq-limit x))
 	 x)
@@ -37,7 +37,7 @@
 	(t (bad-seq-limit x))))
 
 (defun the-start (x)
-  (cond ((fixnump x)
+  (cond ((sys:fixnump x)
 	 (unless (>= x 0)
            (bad-seq-limit x))
 	 x)

@@ -1,7 +1,7 @@
 ;;; delete.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: delete.lisp,v 1.3 2003-06-24 18:32:16 piso Exp $
+;;; $Id: delete.lisp,v 1.4 2003-07-02 16:43:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 
 (defmacro real-count (count)
   `(cond ((null ,count) most-positive-fixnum)
-         ((fixnump ,count) (if (minusp ,count) 0 ,count))
+         ((sys:fixnump ,count) (if (minusp ,count) 0 ,count))
          ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
          (t ,count)))
 

@@ -1,7 +1,7 @@
 ;;; remove.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: remove.lisp,v 1.1 2003-06-10 15:26:57 piso Exp $
+;;; $Id: remove.lisp,v 1.2 2003-07-02 16:44:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,13 +19,11 @@
 
 (in-package "COMMON-LISP")
 
-(export '(remove remove-if remove-if-not))
-
 ;;; From CMUCL.
 
 (defmacro real-count (count)
   `(cond ((null ,count) most-positive-fixnum)
-         ((fixnump ,count) (if (minusp ,count) 0 ,count))
+         ((sys:fixnump ,count) (if (minusp ,count) 0 ,count))
          ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
          (t ,count)))
 
