@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.65 2004-09-08 19:33:31 piso Exp $
+ * $Id: LispShell.java,v 1.66 2004-09-12 01:47:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,6 +87,19 @@ public class LispShell extends Shell
     private static Shell createLispShell(String shellCommand, String title,
                                          boolean startSlime)
     {
+        if (startSlime) {
+            if (shellCommand.indexOf("sbcl") >= 0 ||
+                shellCommand.indexOf("abcl") >= 0 ||
+                shellCommand.indexOf("org.armedbear.lisp") >= 0)
+            {
+                File lispHome = File.getInstance(Site.getLispHome());
+                File swankLoader = File.getInstance(lispHome,
+                                                    "swank-loader.lisp");
+                shellCommand =
+                    shellCommand + " --load " + swankLoader.canonicalPath();
+            }
+        }
+
         LispShell lisp = new LispShell(shellCommand, title);
         lisp.startProcess();
         if (lisp.getProcess() == null) {
@@ -126,7 +139,6 @@ public class LispShell extends Shell
         }
         lisp.needsRenumbering(true);
         if (startSlime) {
-            Log.debug("starting slime...");
             try {
                 JLisp.runLispCommand("(sys:load-system-file \"slime-loader.lisp\")");
                 JLisp.runLispCommand("(setq slime::*repl-buffer-name* \"" + title + "\")");
@@ -134,15 +146,6 @@ public class LispShell extends Shell
             catch (Throwable t) {
                 Log.debug(t);
             }
-            FastStringBuffer sb =
-                new FastStringBuffer("(load (merge-pathnames \"swank-loader.lisp\" \"");
-            sb.append(Site.getLispHome());
-            // The string returned by getLispHome() may not end with a file
-            // separator character.
-            if (!sb.toString().endsWith(LocalFile.getSeparator()))
-                sb.append(LocalFile.getSeparator());
-            sb.append("\"))");
-            lisp.send("(progn (terpri) " + sb.toString() + ")");
         }
         if (Editor.isLispInitialized())
             LispAPI.invokeLispShellStartupHook(lisp, shellCommand);
