@@ -1,8 +1,8 @@
 /*
  * BuiltInClass.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.35 2004-11-08 18:26:28 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: BuiltInClass.java,v 1.36 2005-02-28 00:56:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass DIVISION_BY_ZERO                 = addClass(Symbol.DIVISION_BY_ZERO);
     public static final BuiltInClass ECHO_STREAM                      = addClass(Symbol.ECHO_STREAM);
     public static final BuiltInClass END_OF_FILE                      = addClass(Symbol.END_OF_FILE);
+    public static final BuiltInClass ENVIRONMENT                      = addClass(Symbol.ENVIRONMENT);
     public static final BuiltInClass FILE_STREAM                      = addClass(Symbol.FILE_STREAM);
     public static final BuiltInClass FIXNUM                           = addClass(Symbol.FIXNUM);
     public static final BuiltInClass FLOAT                            = addClass(Symbol.FLOAT);
@@ -320,6 +321,8 @@ public class BuiltInClass extends LispClass
         END_OF_FILE.setDirectSuperclass(STREAM_ERROR);
         END_OF_FILE.setCPL(END_OF_FILE, STREAM_ERROR, ERROR, SERIOUS_CONDITION,
                            CONDITION, STANDARD_OBJECT, CLASS_T);
+        ENVIRONMENT.setDirectSuperclass(CLASS_T);
+        ENVIRONMENT.setCPL(ENVIRONMENT, CLASS_T);
         ERROR.setCPL(ERROR, SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                      CLASS_T);
         FIXNUM.setDirectSuperclass(INTEGER);
