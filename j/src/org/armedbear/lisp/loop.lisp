@@ -1,5 +1,5 @@
 ;;;   -*- Mode: LISP; Package: ANSI-LOOP; Syntax: Common-lisp; Base: 10; Lowercase:T -*-
-;;; $Id: loop.lisp,v 1.8 2003-09-22 17:00:52 piso Exp $
+;;; $Id: loop.lisp,v 1.9 2004-01-20 00:13:51 piso Exp $
 ;;;>
 ;;;> Portions of LOOP are Copyright (c) 1986 by the Massachusetts Institute of Technology.
 ;;;> All Rights Reserved.
@@ -943,7 +943,7 @@ a LET-like macro, and a SETQ-like macro, which perform LOOP-style destructuring.
   #-armedbear
   (error 'program-error "~?~%Current LOOP context:~{ ~S~}." format-string format-args (loop-context))
   #+armedbear
-  (error 'program-error "LOOP error"))
+  (error 'program-error :format-control format-string :format-arguments format-args))
 
 
 (defun loop-warn (format-string &rest format-args)
