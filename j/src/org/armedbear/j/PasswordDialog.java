@@ -1,8 +1,8 @@
 /*
  * PasswordDialog.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: PasswordDialog.java,v 1.3 2003-07-23 16:23:47 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: PasswordDialog.java,v 1.4 2004-09-13 00:45:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 package org.armedbear.j;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -76,7 +78,8 @@ public final class PasswordDialog extends JDialog implements FocusListener,
 
     public void keyTyped(KeyEvent e) {}
 
-    public static String showPasswordDialog(Editor editor, String prompt, String title)
+    public static String showPasswordDialog(Editor editor, String prompt,
+                                            String title)
     {
         PasswordDialog d = new PasswordDialog(editor, prompt, title);
         editor.centerDialog(d);
@@ -102,6 +105,23 @@ public final class PasswordDialog extends JDialog implements FocusListener,
         public PasswordField(int columns)
         {
             super(columns);
+            final Preferences preferences = Editor.preferences();
+            final String fontName =
+                preferences.getStringProperty(Property.TEXT_FIELD_FONT_NAME);
+            if (fontName != null) {
+                int fontSize =
+                    preferences.getIntegerProperty(Property.TEXT_FIELD_FONT_SIZE);
+                if (fontSize == 0)
+                    fontSize =
+                    preferences.getIntegerProperty(Property.DIALOG_FONT_SIZE);
+                setFont(new Font(fontName, Font.PLAIN, fontSize));
+            }
+        }
+
+        public Dimension getPreferredSize() {
+            Dimension size = super.getPreferredSize();
+            size.width = getColumns() * 11;
+            return size;
         }
 
         public void paintComponent(Graphics g)
