@@ -1,8 +1,8 @@
 /*
  * ComplexString.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.23 2004-12-12 18:31:12 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: ComplexString.java,v 1.24 2005-03-20 01:18:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,6 +168,8 @@ public final class ComplexString extends AbstractString
             }
             return true;
         }
+        if (obj instanceof AbstractBitVector)
+            return false;
         if (obj instanceof AbstractArray)
             return obj.equalp(this);
         return false;

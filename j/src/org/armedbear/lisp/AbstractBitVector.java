@@ -1,8 +1,8 @@
 /*
  * AbstractBitVector.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: AbstractBitVector.java,v 1.9 2004-10-13 00:22:17 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: AbstractBitVector.java,v 1.10 2005-03-20 01:19:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,6 +90,8 @@ public abstract class AbstractBitVector extends AbstractVector
             }
             return true;
         }
+        if (obj instanceof AbstractString)
+            return false;
         if (obj instanceof AbstractVector)
             return ((AbstractVector)obj).equalp(this);
         return false;

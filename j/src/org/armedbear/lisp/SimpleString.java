@@ -1,8 +1,8 @@
 /*
  * SimpleString.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.26 2004-12-19 18:33:06 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: SimpleString.java,v 1.27 2005-03-20 01:18:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -183,6 +183,8 @@ public final class SimpleString extends AbstractString
             }
             return true;
         }
+        if (obj instanceof AbstractBitVector)
+            return false;
         if (obj instanceof AbstractArray)
             return obj.equalp(this);
         return false;
