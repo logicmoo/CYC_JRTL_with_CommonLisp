@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.12 2003-07-07 13:46:30 piso Exp $
+ * $Id: PackageFunctions.java,v 1.13 2003-07-07 14:15:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,6 +94,26 @@ public final class PackageFunctions extends Lisp
         }
     };
 
+    // ### unexport
+    // unexport symbols &optional package => t
+    private static final Primitive UNEXPORT = new Primitive("unexport") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length == 0 || args.length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject symbols = args[0];
+            Package pkg =
+                args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
+            if (symbols.listp()) {
+                while (symbols != NIL) {
+                    pkg.unexport(checkSymbol(symbols.car()));
+                    symbols = symbols.cdr();
+                }
+            } else
+                pkg.unexport(checkSymbol(symbols));
+            return T;
+        }
+    };
 
     // ### shadow
     // shadow symbol-names &optional package => t
