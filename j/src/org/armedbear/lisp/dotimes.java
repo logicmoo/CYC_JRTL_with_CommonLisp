@@ -2,7 +2,7 @@
  * dotimes.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: dotimes.java,v 1.8 2004-03-16 02:43:40 piso Exp $
+ * $Id: dotimes.java,v 1.9 2004-04-30 12:23:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,6 +63,7 @@ public final class dotimes extends SpecialOperator
         try {
             LispObject limit = eval(countForm, env, thread);
             Environment ext = new Environment(env);
+            LispObject localTags = NIL; // Tags that are local to this TAGBODY.
             // Look for tags.
             LispObject remaining = bodyForm;
             while (remaining != NIL) {
@@ -72,6 +73,7 @@ public final class dotimes extends SpecialOperator
                     continue;
                 // It's a tag.
                 ext.addTagBinding(current, remaining);
+                localTags = new Cons(current, localTags);
             }
             // Implicit block.
             ext.addBlock(NIL, new Block());
@@ -102,10 +104,12 @@ public final class dotimes extends SpecialOperator
                                 // Handle GO inline if possible.
                                 if (current.car() == Symbol.GO) {
                                     LispObject tag = current.cadr();
-                                    Binding b = ext.getTagBinding(tag);
-                                    if (b != null && b.value != null) {
-                                        body = b.value;
-                                        continue;
+                                    if (memql(tag, localTags)) {
+                                        Binding b = ext.getTagBinding(tag);
+                                        if (b != null && b.value != null) {
+                                            body = b.value;
+                                            continue;
+                                        }
                                     }
                                     throw new Go(tag);
                                 }
@@ -113,11 +117,13 @@ public final class dotimes extends SpecialOperator
                             }
                             catch (Go go) {
                                 LispObject tag = go.getTag();
-                                Binding b = ext.getTagBinding(tag);
-                                if (b != null && b.value != null) {
-                                    body = b.value;
-                                    thread.setStackDepth(depth);
-                                    continue;
+                                if (memql(tag, localTags)) {
+                                    Binding b = ext.getTagBinding(tag);
+                                    if (b != null && b.value != null) {
+                                        body = b.value;
+                                        thread.setStackDepth(depth);
+                                        continue;
+                                    }
                                 }
                                 throw go;
                             }
@@ -139,10 +145,12 @@ public final class dotimes extends SpecialOperator
                                 // Handle GO inline if possible.
                                 if (current.car() == Symbol.GO) {
                                     LispObject tag = current.cadr();
-                                    Binding b = ext.getTagBinding(tag);
-                                    if (b != null && b.value != null) {
-                                        body = b.value;
-                                        continue;
+                                    if (memql(tag, localTags)) {
+                                        Binding b = ext.getTagBinding(tag);
+                                        if (b != null && b.value != null) {
+                                            body = b.value;
+                                            continue;
+                                        }
                                     }
                                     throw new Go(tag);
                                 }
@@ -151,11 +159,13 @@ public final class dotimes extends SpecialOperator
                             catch (Go go) {
                                 LispObject code = null;
                                 LispObject tag = go.getTag();
-                                Binding b = ext.getTagBinding(tag);
-                                if (b != null && b.value != null) {
-                                    body = b.value;
-                                    thread.setStackDepth(depth);
-                                    continue;
+                                if (memql(tag, localTags)) {
+                                    Binding b = ext.getTagBinding(tag);
+                                    if (b != null && b.value != null) {
+                                        body = b.value;
+                                        thread.setStackDepth(depth);
+                                        continue;
+                                    }
                                 }
                                 throw go;
                             }
