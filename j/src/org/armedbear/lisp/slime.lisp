@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.14 2004-09-11 02:08:39 piso Exp $
+;;; $Id: slime.lisp,v 1.15 2004-09-11 03:50:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 (in-package #:system)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
+  (resolve 'with-mutex)
   (require '#:swank-protocol)
   (sys:load-system-file "swank-package"))
 
@@ -68,20 +69,25 @@
      (close *stream*))
     (setf *stream* nil)))
 
-(defun slime-busy-p ()
-  (not (null *continuations*)))
-
 (defvar *continuation-counter* 0)
 
 (defvar *continuations* '())
+
+(defvar *continuations-lock* (make-mutex))
+
+(defun slime-busy-p ()
+  (not (null *continuations*)))
 
 (defun dispatch-return (message)
   (assert (eq (first message) :return))
   (let* ((value (second message))
          (id (third message))
-         (rec (and id (assoc id *continuations*))))
+         rec)
+    (with-mutex (*continuations-lock*)
+      (setf rec (and id (assoc id *continuations*)))
+      (when rec
+        (setf *continuations* (remove rec *continuations*))))
     (cond (rec
-           (setf *continuations* (remove rec *continuations*))
            (cond ((eq (first value) :ok)
                   (funcall (cdr rec) (second value)))
                  ((eq (first value) :abort)
@@ -89,17 +95,18 @@
                       (funcall (cdr rec) (second value))
                       (status "Evaluation aborted.")))))
           (t
-           (sys::%format t "*continuations* = ~S~%" *continuations*)
-           (error "Unexpected message: ~S" message)
-           ))))
+           (error "Unexpected message: ~S" message)))))
 
 (defun dispatch-loop ()
-  (let ((message (swank-protocol:decode-message *stream*)))
-    (sys::%format t "message = ~S~%" message)
-    (when (eq (first message) :return)
-      (invoke-later #'(lambda () (dispatch-return message)))))
-  (sys::%format t "leaving dispatch-loop~%")
-  )
+  (loop
+    (let ((message (swank-protocol:decode-message *stream*)))
+      (sys::%format t "message = ~S~%" message)
+      (when (eq (first message) :return)
+        (dispatch-return message)))
+    (with-mutex (*continuations-lock*)
+      (unless *continuations*
+        (return))))
+  (sys::%format t "leaving dispatch-loop~%"))
 
 (defun slime-eval (form)
   (if (slime-local-p)
@@ -117,15 +124,17 @@
         (stream-error () (disconnect)))))
 
 (defun slime-eval-async (form continuation)
-  (let ((id (incf *continuation-counter*)))
-    (push (cons id 'display-eval-result) *continuations*)
     (if (slime-local-p)
         nil ;; FIXME
         (handler-case
-            (progn
-              (swank-protocol:encode-message `(:eval-async ,form ,id) *stream*)
-              (make-thread #'(lambda () (dispatch-loop))))
-          (stream-error () (disconnect))))))
+            (with-mutex (*continuations-lock*)
+              (let ((continuations *continuations*)
+                    (id (incf *continuation-counter*)))
+                (push (cons id 'display-eval-result) *continuations*)
+                (swank-protocol:encode-message `(:eval-async ,form ,id) *stream*)
+                (unless continuations
+                  (make-thread #'(lambda () (dispatch-loop))))))
+          (stream-error () (disconnect)))))
 
 (defun read-port-and-connect (retries)
   (status "Slime polling for connection...")
