@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.239 2004-05-22 19:30:02 piso Exp $
+ * $Id: Lisp.java,v 1.240 2004-05-25 15:53:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -800,6 +800,20 @@ public abstract class Lisp
         }
         catch (Throwable t) {
             return null;
+        }
+    }
+
+    public static final String safeWriteToString(LispObject obj)
+    {
+        try {
+            return obj.writeToString();
+        }
+        catch (ConditionThrowable t) {
+            return obj.toString();
+        }
+        catch (NullPointerException e) {
+            Debug.trace(e);
+            return "null";
         }
     }
 
