@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2004 Peter Graves
- * $Id: Property.java,v 1.28 2004-09-03 19:31:43 piso Exp $
+ * $Id: Property.java,v 1.29 2004-11-07 15:11:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -237,6 +237,8 @@ public final class Property implements Comparable, Constants
         createProperty("defaultEncoding", "ISO-8859-1");
     public static final Property DIALOG_FONT_NAME =
         createProperty("dialogFontName", "Dialog");
+    public static final Property EXPLICIT_TAG =
+        createProperty("explicitTag", "###");
     public static final Property FONT_NAME =
         createProperty("fontName", "Monospaced");
     public static final Property PRINTER_FONT_NAME =
@@ -261,8 +263,6 @@ public final class Property implements Comparable, Constants
         createProperty("docPath");
     public static final Property EOM =
         createProperty("eom");
-    public static final Property EXPLICIT_TAG =
-        createProperty("explicitTag");
     public static final Property EXTENSION =
         createProperty("extension");
     public static final Property FCC =
