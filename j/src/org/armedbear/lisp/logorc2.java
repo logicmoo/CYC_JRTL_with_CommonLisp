@@ -1,8 +1,8 @@
 /*
  * logorc2.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: logorc2.java,v 1.5 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: logorc2.java,v 1.6 2004-02-28 17:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@ import java.math.BigInteger;
 // or integer-1 with complement of integer-2
 public final class logorc2 extends Primitive2
 {
-    private logorc2(String name, String arglist)
+    private logorc2()
     {
-        super(name,arglist);
+        super("logorc2", "integer-1 integer-2");
     }
 
     public LispObject execute(LispObject first, LispObject second)
@@ -38,29 +38,29 @@ public final class logorc2 extends Primitive2
     {
         if (first instanceof Fixnum) {
             if (second instanceof Fixnum)
-                return new Fixnum(((Fixnum)first).getValue() |
-                                  ~((Fixnum)second).getValue());
+                return new Fixnum(((Fixnum)first).value |
+                                  ~((Fixnum)second).value);
             if (second instanceof Bignum) {
                 BigInteger n1 = ((Fixnum)first).getBigInteger();
-                BigInteger n2 = ((Bignum)second).getValue();
+                BigInteger n2 = ((Bignum)second).value;
                 return number(n1.or(n2.not()));
             }
-            return signal(new TypeError(second, "integer"));
+            return signal(new TypeError(second, Symbol.INTEGER));
         }
         if (first instanceof Bignum) {
-            BigInteger n1 = ((Bignum)first).getValue();
+            BigInteger n1 = ((Bignum)first).value;
             if (second instanceof Fixnum) {
                 BigInteger n2 = ((Fixnum)second).getBigInteger();
                 return number(n1.or(n2.not()));
             }
             if (second instanceof Bignum) {
-                BigInteger n2 = ((Bignum)second).getValue();
+                BigInteger n2 = ((Bignum)second).value;
                 return number(n1.or(n2.not()));
             }
-            return signal(new TypeError(second, "integer"));
+            return signal(new TypeError(second, Symbol.INTEGER));
         }
-        return signal(new TypeError(first, "integer"));
+        return signal(new TypeError(first, Symbol.INTEGER));
     }
 
-    private static final logorc2 LOGORC2 = new logorc2("logorc2","integer-1 integer-2");
+    private static final Primitive2 LOGORC2 = new logorc2();
 }
