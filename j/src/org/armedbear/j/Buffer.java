@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.38 2003-06-06 15:43:16 piso Exp $
+ * $Id: Buffer.java,v 1.39 2003-06-09 17:55:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,10 +224,13 @@ public class Buffer extends SystemBuffer
         if (file instanceof HttpFile) {
             if (Editor.getModeList().modeAccepts(IMAGE_MODE, file.getName()))
                 return new RemoteBuffer(file);
-            else if (Editor.preferences().getBooleanProperty(Property.ENABLE_WEB))
-                return WebBuffer.createWebBuffer(file, null, null);
-            else
-                return new RemoteBuffer(file);
+            if (Editor.preferences().getBooleanProperty(Property.ENABLE_WEB)) {
+                int modeId =
+                    Editor.getModeList().getModeIdForFileName(file.getName());
+                if (modeId < 0 || modeId == HTML_MODE)
+                    return WebBuffer.createWebBuffer(file, null, null);
+            }
+            return new RemoteBuffer(file);
         }
         if (file instanceof SshFile) {
             SshFile sshFile = (SshFile) file;
