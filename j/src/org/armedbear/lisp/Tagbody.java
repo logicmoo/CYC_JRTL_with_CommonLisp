@@ -2,7 +2,7 @@
  * Tagbody.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Tagbody.java,v 1.2 2003-03-02 02:07:34 piso Exp $
+ * $Id: Tagbody.java,v 1.3 2003-03-15 02:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public final class Tagbody extends Lisp
     {
         for (int i = tagArray.length; i-- > 0;) {
             Pair pair = tagArray[i];
-            if (eql(pair.first, tag))
+            if (pair.first.eql(tag))
                 return pair.second;
         }
         return null;

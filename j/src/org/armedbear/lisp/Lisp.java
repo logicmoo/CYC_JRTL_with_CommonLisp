@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.40 2003-03-14 20:51:19 piso Exp $
+ * $Id: Lisp.java,v 1.41 2003-03-15 02:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -487,29 +487,6 @@ public abstract class Lisp
             dynEnv.rebind(symbol, value);
         } else
             env.rebind(symbol, value);
-    }
-
-    public static final boolean eql(LispObject first, LispObject second)
-    {
-        if (first == second)
-            return true;
-        if (first instanceof Fixnum && second instanceof Fixnum)
-            if (((Fixnum)first).getValue() == ((Fixnum)second).getValue())
-                return true;
-            else
-                return false;
-        if (first instanceof LispCharacter && second instanceof LispCharacter)
-            if (((LispCharacter)first).getValue() == ((LispCharacter)second).getValue())
-                return true;
-            else
-                return false;
-        if (first instanceof Bignum && second instanceof Bignum)
-            if (((Bignum)first).getValue().equals(((Bignum)second).getValue()))
-                return true;
-        if (first instanceof LispFloat && second instanceof LispFloat)
-            if (((LispFloat)first).getValue() == ((LispFloat)second).getValue())
-                return true;
-        return false;
     }
 
     public static final boolean equal(LispObject first, LispObject second)

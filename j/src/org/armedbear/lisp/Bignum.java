@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.1 2003-03-14 18:44:57 piso Exp $
+ * $Id: Bignum.java,v 1.2 2003-03-15 02:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,17 @@ public final class Bignum extends LispObject
     public LispObject constantp()
     {
         return T;
+    }
+
+    public boolean eql(LispObject obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof Bignum) {
+            if (value.equals(((Bignum)obj).value))
+                return true;
+        }
+        return false;
     }
 
     public static BigInteger getValue(LispObject obj) throws LispError

@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.1 2003-03-14 02:53:48 piso Exp $
+ * $Id: LispFloat.java,v 1.2 2003-03-15 02:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,17 @@ public final class LispFloat extends LispObject
     public LispObject constantp()
     {
         return T;
+    }
+
+    public boolean eql(LispObject obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof LispFloat) {
+            if (value == ((LispFloat)obj).value)
+                return true;
+        }
+        return false;
     }
 
     public static float getValue(LispObject obj) throws LispError

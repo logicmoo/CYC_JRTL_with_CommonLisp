@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.12 2003-03-14 18:41:57 piso Exp $
+ * $Id: LispObject.java,v 1.13 2003-03-15 02:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +76,11 @@ public class LispObject extends Lisp
     public LispObject cddr() throws LispError
     {
         throw new TypeError(this, "list");
+    }
+    
+    public boolean eql(LispObject obj)
+    {
+        return this == obj;
     }
 
     public int length() throws LispError

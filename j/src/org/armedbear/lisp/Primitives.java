@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.124 2003-03-14 21:20:30 piso Exp $
+ * $Id: Primitives.java,v 1.125 2003-03-15 02:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -532,7 +532,7 @@ public final class Primitives extends Module
             case ELT:                           // ### elt
                 return first.elt(Fixnum.getValue(second));
             case EQL:                           // ### eql
-                return eql(first, second) ? T : NIL;
+                return first.eql(second) ? T : NIL;
             case EQUAL:                         // ### equal
                 return equal(first, second) ? T : NIL;
             case EQUALP:                        // ### equalp
@@ -542,7 +542,7 @@ public final class Primitives extends Module
                 // FIXME Support keyword arguments!
                 LispObject rest = checkList(second);
                 while (rest != NIL) {
-                    if (eql(first, rest.car()))
+                    if (first.eql(rest.car()))
                         return rest;
                     rest = rest.cdr();
                 }
@@ -1083,7 +1083,7 @@ public final class Primitives extends Module
             while (alist != NIL) {
                 LispObject cons = alist.car();
                 if (cons instanceof Cons) {
-                    if (eql(cons.car(), item))
+                    if (cons.car().eql(item))
                         return cons;
                 } else if (cons != NIL)
                     throw new TypeError(cons, "list");
@@ -1118,7 +1118,7 @@ public final class Primitives extends Module
             LispObject list = checkList(symbol.getPropertyList());
             while (list != NIL) {
                 LispObject obj = list.car();
-                if (eql(obj, indicator))
+                if (obj.eql(indicator))
                     return list.cadr();
                 list = list.cdr().cdr();
             }
@@ -1477,7 +1477,7 @@ public final class Primitives extends Module
                 if (keys.listp()) {
                     while (keys != NIL) {
                         LispObject candidate = keys.car();
-                        if (eql(key, candidate)) {
+                        if (key.eql(candidate)) {
                             match = true;
                             break;
                         }
@@ -1487,7 +1487,7 @@ public final class Primitives extends Module
                     LispObject candidate = keys;
                     if (candidate == T || candidate == Symbol.OTHERWISE)
                         match = true;
-                    else if (eql(key, candidate))
+                    else if (key.eql(candidate))
                         match = true;
                 }
                 if (match) {
@@ -1513,7 +1513,7 @@ public final class Primitives extends Module
                 if (keys instanceof Cons) {
                     while (keys != NIL) {
                         LispObject candidate = keys.car();
-                        if (eql(key, candidate)) {
+                        if (key.eql(candidate)) {
                             match = true;
                             break;
                         }
@@ -1521,7 +1521,7 @@ public final class Primitives extends Module
                     }
                 } else {
                     LispObject candidate = keys;
-                    if (eql(key, candidate))
+                    if (key.eql(candidate))
                         match = true;
                 }
                 if (match) {
@@ -2839,7 +2839,7 @@ public final class Primitives extends Module
             LispObject value = args[2];
             LispObject list = checkList(symbol.getPropertyList());
             while (list != NIL) {
-                if (eql(list.car(), indicator)) {
+                if (list.car().eql(indicator)) {
                     // Found it!
                     LispObject rest = list.cdr();
                     rest.setCar(value);
