@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.446 2003-09-28 00:47:10 piso Exp $
+ * $Id: Primitives.java,v 1.447 2003-09-28 01:14:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,78 +29,69 @@ import java.util.Random;
 
 public final class Primitives extends Module
 {
-    // SpecialOperator
-    private static final int FLET                       = 1;
-    private static final int LABELS                     = 2;
-    private static final int PROGN                      = 3;
-
     // Primitive
-    private static final int DIVIDE                     = 4;
-    private static final int EXIT                       = 5;
-    private static final int MAX                        = 6;
-    private static final int MIN                        = 7;
-    private static final int MULTIPLY                   = 8;
-    private static final int VALUES                     = 9;
+    private static final int DIVIDE                     = 1;
+    private static final int EXIT                       = 2;
+    private static final int MAX                        = 3;
+    private static final int MIN                        = 4;
+    private static final int MULTIPLY                   = 5;
+    private static final int VALUES                     = 6;
 
     // Primitive1
-    private static final int ABS                        = 10;
-    private static final int ARRAYP                     = 11;
-    private static final int ARRAY_HAS_FILL_POINTER_P   = 12;
-    private static final int BIT_VECTOR_P               = 13;
-    private static final int BOTH_CASE_P                = 14;
-    private static final int CHARACTERP                 = 15;
-    private static final int CHAR_CODE                  = 16;
-    private static final int CHAR_DOWNCASE              = 17;
-    private static final int CHAR_INT                   = 18;
-    private static final int CHAR_UPCASE                = 19;
-    private static final int CODE_CHAR                  = 20;
-    private static final int COMPILED_FUNCTION_P        = 21;
-    private static final int CONSP                      = 22;
-    private static final int EVAL                       = 23;
-    private static final int EVENP                      = 24;
-    private static final int FBOUNDP                    = 25;
-    private static final int FMAKUNBOUND                = 26;
-    private static final int FOURTH                     = 27;
-    private static final int FUNCTIONP                  = 28;
-    private static final int IDENTITY                   = 29;
-    private static final int KEYWORDP                   = 30;
-    private static final int LENGTH                     = 31;
-    private static final int LISTP                      = 32;
-    private static final int LOWER_CASE_P               = 33;
-    private static final int MAKE_SYMBOL                = 34;
-    private static final int MAKUNBOUND                 = 35;
-    private static final int NUMBERP                    = 36;
-    private static final int ODDP                       = 37;
-    private static final int PREDECESSOR                = 38;
-    private static final int SECOND                     = 39;
-    private static final int SIMPLE_BIT_VECTOR_P        = 40;
-    private static final int SIMPLE_STRING_P            = 41;
-    private static final int SIMPLE_VECTOR_P            = 42;
-    private static final int SPECIAL_OPERATOR_P         = 43;
-    private static final int STRINGP                    = 44;
-    private static final int SUCCESSOR                  = 45;
-    private static final int SYMBOL_FUNCTION            = 46;
-    private static final int SYMBOL_NAME                = 47;
-    private static final int SYMBOL_PACKAGE             = 48;
-    private static final int SYMBOL_PLIST               = 49;
-    private static final int SYMBOL_VALUE               = 50;
-    private static final int THIRD                      = 51;
-    private static final int UPPER_CASE_P               = 52;
-    private static final int VALUES_LIST                = 53;
-    private static final int VECTORP                    = 54;
+    private static final int ABS                        = 7;
+    private static final int ARRAYP                     = 8;
+    private static final int ARRAY_HAS_FILL_POINTER_P   = 9;
+    private static final int BIT_VECTOR_P               = 10;
+    private static final int BOTH_CASE_P                = 11;
+    private static final int CHARACTERP                 = 12;
+    private static final int CHAR_CODE                  = 13;
+    private static final int CHAR_DOWNCASE              = 14;
+    private static final int CHAR_INT                   = 15;
+    private static final int CHAR_UPCASE                = 16;
+    private static final int CODE_CHAR                  = 17;
+    private static final int COMPILED_FUNCTION_P        = 18;
+    private static final int CONSP                      = 19;
+    private static final int EVAL                       = 20;
+    private static final int EVENP                      = 21;
+    private static final int FBOUNDP                    = 22;
+    private static final int FMAKUNBOUND                = 23;
+    private static final int FOURTH                     = 24;
+    private static final int FUNCTIONP                  = 25;
+    private static final int IDENTITY                   = 26;
+    private static final int KEYWORDP                   = 27;
+    private static final int LENGTH                     = 28;
+    private static final int LISTP                      = 29;
+    private static final int LOWER_CASE_P               = 30;
+    private static final int MAKE_SYMBOL                = 31;
+    private static final int MAKUNBOUND                 = 32;
+    private static final int NUMBERP                    = 33;
+    private static final int ODDP                       = 34;
+    private static final int PREDECESSOR                = 35;
+    private static final int SECOND                     = 36;
+    private static final int SIMPLE_BIT_VECTOR_P        = 37;
+    private static final int SIMPLE_STRING_P            = 38;
+    private static final int SIMPLE_VECTOR_P            = 39;
+    private static final int SPECIAL_OPERATOR_P         = 40;
+    private static final int STRINGP                    = 41;
+    private static final int SUCCESSOR                  = 42;
+    private static final int SYMBOL_FUNCTION            = 43;
+    private static final int SYMBOL_NAME                = 44;
+    private static final int SYMBOL_PACKAGE             = 45;
+    private static final int SYMBOL_PLIST               = 46;
+    private static final int SYMBOL_VALUE               = 47;
+    private static final int THIRD                      = 48;
+    private static final int UPPER_CASE_P               = 49;
+    private static final int VALUES_LIST                = 50;
+    private static final int VECTORP                    = 51;
 
     // Primitive2
-    private static final int MEMBER                     = 55;
-    private static final int RPLACA                     = 56;
-    private static final int RPLACD                     = 57;
-    private static final int SET                        = 58;
+    private static final int MEMBER                     = 52;
+    private static final int RPLACA                     = 53;
+    private static final int RPLACD                     = 54;
+    private static final int SET                        = 55;
 
     private Primitives()
     {
-        defineSpecialOperator("flet", FLET);
-        defineSpecialOperator("labels", LABELS);
-        defineSpecialOperator("progn", PROGN);
-
         definePrimitive("*", MULTIPLY);
         definePrimitive("/", DIVIDE);
         definePrimitive("exit", EXIT);
@@ -158,24 +149,6 @@ public final class Primitives extends Module
         definePrimitive2("rplaca", RPLACA);
         definePrimitive2("rplacd", RPLACD);
         definePrimitive2("set", SET);
-    }
-
-    // SpecialOperator
-    public LispObject dispatch(LispObject args, Environment env, int index)
-        throws ConditionThrowable
-    {
-        switch (index) {
-            case FLET:                          // ### flet
-                return _flet(args, env, false);
-            case LABELS:                        // ### labels
-                return _flet(args, env, true);
-            case PROGN:                         // ### progn
-                return progn(args, env, LispThread.currentThread());
-            default:
-                Debug.trace("bad index " + index);
-                Debug.assertTrue(false);
-                return NIL;
-        }
     }
 
     // Primitive
@@ -2752,41 +2725,6 @@ public final class Primitives extends Module
             return put(symbol, indicator, value);
         }
     };
-
-    private static final LispObject _flet(LispObject args, Environment env,
-        boolean recursive) throws ConditionThrowable
-    {
-        // First argument is a list of local function definitions.
-        LispObject defs = checkList(args.car());
-        final LispThread thread = LispThread.currentThread();
-        LispObject result;
-        if (defs != NIL) {
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            Environment ext = new Environment(env);
-            while (defs != NIL) {
-                LispObject def = checkList(defs.car());
-                Symbol symbol = checkSymbol(def.car());
-                LispObject rest = def.cdr();
-                LispObject parameters = rest.car();
-                LispObject body = rest.cdr();
-                body = new Cons(symbol, body);
-                body = new Cons(Symbol.BLOCK, body);
-                body = new Cons(body, NIL);
-                Closure closure;
-                if (recursive)
-                    closure = new Closure(parameters, body, ext);
-                else
-                    closure = new Closure(parameters, body, env);
-                closure.setLambdaName(list2(Symbol.FLET, symbol));
-                ext.bindFunctional(symbol, closure);
-                defs = defs.cdr();
-            }
-            result = progn(args.cdr(), ext, thread);
-            thread.setDynamicEnvironment(oldDynEnv);
-        } else
-            result = progn(args.cdr(), env, thread);
-        return result;
-    }
 
     // ### macrolet
     private static final SpecialOperator MACROLET =
