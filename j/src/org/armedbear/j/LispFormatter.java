@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.23 2003-03-08 03:35:33 piso Exp $
+ * $Id: LispFormatter.java,v 1.24 2003-03-09 22:16:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -491,7 +491,8 @@ public final class LispFormatter extends Formatter
                     return i;
                 case ':':
                     if (i > 0) {
-                        if (!mode.isIdentifierPart(text.charAt(i-1)))
+                        char c = text.charAt(i-1);
+                        if (!mode.isIdentifierPart(c) && c != ':')
                             return i;
                     }
                     ++i;
