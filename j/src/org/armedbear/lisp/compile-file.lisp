@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.46 2004-10-22 15:54:38 piso Exp $
+;;; $Id: compile-file.lisp,v 1.47 2004-10-25 15:59:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -165,9 +165,9 @@
               (return-from process-toplevel-form)))
            (LOCALLY
             ;; FIXME Need to handle special declarations too!
-            (let ((jvm::*speed* jvm::*speed*)
-                  (jvm::*safety* jvm::*safety*)
-                  (jvm::*debug* jvm::*debug*))
+            (let ((jvm:*speed* jvm:*speed*)
+                  (jvm:*safety* jvm:*safety*)
+                  (jvm:*debug* jvm:*debug*))
               (jvm::process-optimization-declarations (cdr form))
               (process-toplevel-progn (cdr form) stream compile-time-too)
               (return-from process-toplevel-form)))
@@ -237,9 +237,9 @@
         (with-open-file (out temp-file :direction :output :if-exists :supersede)
           (let ((*readtable* *readtable*)
                 (*package* *package*)
-                (jvm::*speed* jvm::*speed*)
-                (jvm::*safety* jvm::*safety*)
-                (jvm::*debug* jvm::*debug*)
+                (jvm:*speed* jvm:*speed*)
+                (jvm:*safety* jvm:*safety*)
+                (jvm:*debug* jvm:*debug*)
                 (jvm::*toplevel-defuns* ())
                 (*fbound-names* ()))
             (write "; -*- Mode: Lisp -*-" :escape nil :stream out)
