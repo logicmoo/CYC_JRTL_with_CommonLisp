@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.18 2003-10-12 18:40:17 piso Exp $
+;;; $Id: defclass.lisp,v 1.19 2003-10-12 19:14:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,6 +16,8 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+;;; Adapted from Closette.
 
 (in-package "SYSTEM")
 
@@ -128,11 +130,15 @@
 ;;; N.B. Quietly retain all unknown slot options (rather than signaling an
 ;;; error), so that it's easy to add new ones.
 
-(defun make-direct-slot-definition
-  (&rest properties
-         &key name (initargs ()) (initform nil) (initfunction nil)
-         (readers ()) (writers ()) (allocation :instance)
-         &allow-other-keys)
+(defun make-direct-slot-definition (&rest properties
+                                          &key name
+                                          (initargs ())
+                                          (initform nil)
+                                          (initfunction nil)
+                                          (readers ())
+                                          (writers ())
+                                          (allocation :instance)
+                                          &allow-other-keys)
   (let ((slot (copy-list properties))) ; Don't want to side effect &rest list
     (setf (getf* slot ':name) name)
     (setf (getf* slot ':initargs) initargs)
@@ -143,11 +149,13 @@
     (setf (getf* slot ':allocation) allocation)
     slot))
 
-(defun make-effective-slot-definition
-  (&rest properties
-         &key name (initargs ()) (initform nil) (initfunction nil)
-         (allocation :instance)
-         &allow-other-keys)
+(defun make-effective-slot-definition (&rest properties
+                                             &key name
+                                             (initargs ())
+                                             (initform nil)
+                                             (initfunction nil)
+                                             (allocation :instance)
+                                             &allow-other-keys)
   (let ((slot (copy-list properties)))  ; Don't want to side effect &rest list
     (setf (getf* slot ':name) name)
     (setf (getf* slot ':initargs) initargs)
@@ -464,7 +472,6 @@
                     (apply #'make-direct-slot-definition
                            slot-properties))
                  direct-slots)))
-;;     (format t "slots = ~S~%" slots)
     (setf (class-direct-slots class) slots)
     (dolist (direct-slot slots)
       (dolist (reader (slot-definition-readers direct-slot))
@@ -472,18 +479,28 @@
          class reader (slot-definition-name direct-slot)))
       (dolist (writer (slot-definition-writers direct-slot))
         (add-writer-method
-         class writer (slot-definition-name direct-slot))))
-    )
+         class writer (slot-definition-name direct-slot)))))
   (funcall (if (eq (class-of class) (find-class 'standard-class))
                #'std-finalize-inheritance
                #'finalize-inheritance)
            class)
   (values))
 
+(defun canonical-slot-name (canonical-slot)
+  (getf canonical-slot :name))
+
 (defun ensure-class (name &rest all-keys &allow-other-keys)
+  ;; Check for duplicate slots.
+  (let ((slots (getf all-keys :direct-slots)))
+    (dolist (s1 slots)
+      (let ((name1 (canonical-slot-name s1)))
+        (dolist (s2 (cdr (memq s1 slots)))
+	  (when (eq name1 (canonical-slot-name s2))
+            (error 'program-error "duplicate slot ~S" name1))))))
   (let ((class (find-class name nil)))
     (unless class
-      (setf class (apply #'make-instance-standard-class (find-class 'standard-class) :name name all-keys))
+      (setf class (apply #'make-instance-standard-class
+                         (find-class 'standard-class) :name name all-keys))
       (add-class class))
     class))
 
