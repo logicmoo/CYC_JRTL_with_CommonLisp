@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.7 2003-06-12 13:50:21 piso Exp $
+ * $Id: XmlMode.java,v 1.8 2003-06-12 15:54:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,11 +69,6 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         return errorBuffer;
     }
 
-    public static final void setErrorBuffer(XmlErrorBuffer buf)
-    {
-        errorBuffer = buf;
-    }
-
     public NavigationComponent getSidebarComponent(Editor editor)
     {
         Debug.assertTrue(editor.getBuffer().getMode() == getMode());
@@ -135,36 +130,18 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         return MENU_NAME;
     }
 
-    public MenuBar createMenuBar(Frame frame)
+    public void populateModeMenu(Editor editor, Menu menu)
     {
-        MenuBar menuBar = new MenuBar(MENU_NAME);
-        menuBar.add(new Menu("File", 'F'));
-        menuBar.add(new Menu("Edit", 'E'));
-        menuBar.add(new Menu("View", 'V'));
-        menuBar.add(new Menu("Search", 'S'));
-        menuBar.add(new Menu("Go", 'G'));
-        menuBar.add(new Menu("Mode", 'M'));
-        menuBar.add(new Menu("Help", 'H'));
-        return menuBar;
-    }
-
-    public void populateMenu(Editor editor, Menu menu)
-    {
-        final String text = menu.getText();
-        if (menu.getText().equals("Mode")) {
-            menu.add(editor, "Insert Element", 'I', "xmlInsertTag");
-            menu.add(editor, "End Current Element", 'E', "xmlInsertMatchingEndTag");
-            menu.addSeparator();
-            menu.add(editor, "Parse Buffer", 'P', "xmlParseBuffer");
-            menu.add(editor, "Validate Buffer", 'V', "xmlValidateBuffer");
-            boolean enabled = errorBuffer != null;
-            menu.addSeparator();
-            menu.add(editor, "Next Error", 'N', "nextError", enabled);
-            menu.add(editor, "Previous Error", 'R', "previousError", enabled);
-            menu.add(editor, "Show Error Message", 'S', "showMessage", enabled);
-        }
-        else
-            super.populateMenu(editor, menu);
+        menu.add(editor, "Insert Element", 'I', "xmlInsertTag");
+        menu.add(editor, "End Current Element", 'E', "xmlInsertMatchingEndTag");
+        menu.addSeparator();
+        menu.add(editor, "Parse Buffer", 'P', "xmlParseBuffer");
+        menu.add(editor, "Validate Buffer", 'V', "xmlValidateBuffer");
+        boolean enabled = errorBuffer != null;
+        menu.addSeparator();
+        menu.add(editor, "Next Error", 'N', "nextError", enabled);
+        menu.add(editor, "Previous Error", 'R', "previousError", enabled);
+        menu.add(editor, "Show Error Message", 'M', "showMessage", enabled);
     }
 
     public void loadFile(Buffer buffer, File file)
@@ -703,8 +680,11 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                 // Note that with the current implementation, there will always
                 // be output...
                 if (output != null && output.length() > 0) {
-                    errorBuffer =
-                        new XmlErrorBuffer(buffer.getFile(), output);
+                    if (errorBuffer == null) {
+                        errorBuffer =
+                            new XmlErrorBuffer(buffer.getFile(), output);
+                    } else
+                        errorBuffer.recycle(buffer.getFile(), output);
                     Editor otherEditor = editor.getOtherEditor();
                     if (otherEditor != null) {
                         errorBuffer.setUnsplitOnClose(
@@ -749,8 +729,11 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                 }
                 String output = parser.getOutput();
                 if (output != null && output.length() > 0) {
-                    errorBuffer =
-                        new XmlErrorBuffer(buffer.getFile(), output);
+                    if (errorBuffer == null) {
+                        errorBuffer =
+                            new XmlErrorBuffer(buffer.getFile(), output);
+                    } else
+                        errorBuffer.recycle(buffer.getFile(), output);
                     Editor otherEditor = editor.getOtherEditor();
                     if (otherEditor != null) {
                         errorBuffer.setUnsplitOnClose(
