@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.483 2003-10-25 18:55:08 dmcnaught Exp $
+ * $Id: Primitives.java,v 1.484 2003-10-25 21:56:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,17 +74,16 @@ public final class Primitives extends Module
     private static final int SYMBOL_NAME                = 40;
     private static final int SYMBOL_PACKAGE             = 41;
     private static final int SYMBOL_PLIST               = 42;
-    private static final int SYMBOL_VALUE               = 43;
-    private static final int THIRD                      = 44;
-    private static final int UPPER_CASE_P               = 45;
-    private static final int VALUES_LIST                = 46;
-    private static final int VECTORP                    = 47;
+    private static final int THIRD                      = 43;
+    private static final int UPPER_CASE_P               = 44;
+    private static final int VALUES_LIST                = 45;
+    private static final int VECTORP                    = 46;
 
     // Primitive2
-    private static final int MEMBER                     = 48;
-    private static final int RPLACA                     = 49;
-    private static final int RPLACD                     = 50;
-    private static final int SET                        = 51;
+    private static final int MEMBER                     = 47;
+    private static final int RPLACA                     = 48;
+    private static final int RPLACD                     = 49;
+    private static final int SET                        = 50;
 
     private Primitives()
     {
@@ -131,7 +130,6 @@ public final class Primitives extends Module
         definePrimitive1("symbol-name", SYMBOL_NAME);
         definePrimitive1("symbol-package", SYMBOL_PACKAGE);
         definePrimitive1("symbol-plist", SYMBOL_PLIST);
-        definePrimitive1("symbol-value", SYMBOL_VALUE);
         definePrimitive1("third", THIRD);
         definePrimitive1("upper-case-p", UPPER_CASE_P);
         definePrimitive1("values-list", VALUES_LIST);
@@ -242,12 +240,6 @@ public final class Primitives extends Module
                 throw new ConditionThrowable(new TypeError(arg, "symbol"));
             case SYMBOL_PACKAGE:                // ### symbol-package
                 return checkSymbol(arg).getPackage();
-            case SYMBOL_VALUE:                  // ### symbol-value
-                if (arg == T)
-                    return T;
-                if (arg == NIL)
-                    return NIL;
-                return checkSymbol(arg).symbolValue();
             case SYMBOL_FUNCTION: {             // ### symbol-function
                 LispObject function = arg.getSymbolFunction();
                 if (function != null)
@@ -502,8 +494,25 @@ public final class Primitives extends Module
         }
     };
 
+    // ### symbol-value
+    private static final Primitive1 SYMBOL_VALUE = new Primitive1("symbol-value")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg == T)
+                return T;
+            if (arg == NIL)
+                return NIL;
+            LispObject value = checkSymbol(arg).symbolValue();
+            if (value instanceof SymbolMacro)
+                throw new ConditionThrowable(new LispError(arg + " has no dynamic value"));
+            return value;
+        }
+    };
+
     // ### +
-    private static final Primitive ADD = new Primitive("+") {
+    private static final Primitive ADD = new Primitive("+")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -520,7 +529,8 @@ public final class Primitives extends Module
     };
 
     // ### -
-    private static final Primitive SUBTRACT = new Primitive("-") {
+    private static final Primitive SUBTRACT = new Primitive("-")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -4521,9 +4531,9 @@ public final class Primitives extends Module
                 phase = new LispFloat(Math.atan2(im.getValue(), re.getValue()));  // atan(y/x)
                 abs = (LispFloat)((Complex)obj).ABS();
                 return Complex.getInstance(new LispFloat(Math.log(abs.getValue())), phase);
-            }           
+            }
         }
-            
+
         throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
