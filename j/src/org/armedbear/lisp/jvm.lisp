@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.331 2004-12-31 02:22:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.332 2004-12-31 16:49:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -124,7 +124,6 @@
 (defun dump-1-variable (variable)
   (%format t "  ~S special-p = ~S register = ~S level = ~S index = ~S declared-type = ~S~%"
            (variable-name variable)
-;;            (variable-kind variable)
            (variable-special-p variable)
            (variable-register variable)
            (variable-level variable)
@@ -152,7 +151,9 @@
   (level *nesting-level*)
   index
   (reads 0)
-  (writes 0))
+  (writes 0)
+  used-non-locally-p
+  (compiland *current-compiland*))
 
 ;; obj can be a symbol or variable
 ;; returns variable or nil
@@ -394,6 +395,7 @@
   form)
 
 (defun p1-flet/labels (form)
+  (dformat t "p1-flet/labels~%")
   (when *current-compiland*
     (incf (compiland-children *current-compiland*) (length (cadr form))))
   ;; Do pass 1 on the local definitions, discarding the result (we're just
@@ -432,8 +434,13 @@
     (let ((variable (find-visible-variable arg1)))
       (if variable
           (progn
-            (dformat t "p1-setq: write to ~S~%" arg1)
-            (incf (variable-writes variable)))
+            (incf (variable-writes variable))
+            (cond
+             ((eq (variable-compiland variable) *current-compiland*)
+              (dformat t "p1-setq: write ~S~%" arg1))
+             (t
+              (dformat t "p1-setq: non-local write ~S~%" arg1)
+              (setf (variable-used-non-locally-p variable) t))))
           (dformat t "p1-setq: unknown variable ~S~%" arg1)))
     (list 'SETQ arg1 (p1 arg2))))
 
@@ -491,7 +498,20 @@
         (if (numberp value)
             value
             form)))
+     ((keywordp form)
+      form)
      (t
+      (let ((variable (find-visible-variable form)))
+        (if variable
+            (progn
+              (incf (variable-reads variable))
+              (cond
+               ((eq (variable-compiland variable) *current-compiland*)
+                (dformat t "p1: read ~S~%" form))
+               (t
+                (dformat t "p1: non-local read ~S~%" form)
+                (setf (variable-used-non-locally-p variable) t))))
+            (dformat t "p1: unknown variable ~S~%" form)))
       form)))
    ((atom form)
     form)
@@ -4991,6 +5011,7 @@
       (write-u2 0 stream))))
 
 (defun compile-1 (compiland)
+  (dformat t "compile-1 ~S~%" (compiland-name compiland))
   (let ((*current-compiland* compiland)
         (precompiled-form (compiland-lambda-expression compiland))
         (classfile (compiland-classfile compiland))
@@ -5000,7 +5021,7 @@
         )
     (process-optimization-declarations (cddr precompiled-form))
     ;; Pass 1.
-    (let ((*visible-variables* ()))
+    (let ((*visible-variables* *visible-variables*))
       (setf precompiled-form (p1 precompiled-form)))
     ;; Pass 2.
     (let* ((*declared-symbols* (make-hash-table :test 'eq))
@@ -5022,7 +5043,7 @@
            (*hairy-arglist-p* nil)
            (*arity* nil)
 
-           (*child-p* (if *context* t nil))
+           (*child-p* (not (null (compiland-parent compiland))))
 
            (*use-locals-vector* (or (> (compiland-children *current-compiland*) 0)
                                     (compiland-contains-lambda *current-compiland*)))
