@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.5 2003-10-01 01:13:36 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.6 2003-10-06 00:03:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -329,7 +329,7 @@
 (defun push-optional-binding (value-var init-form supplied-var condition path
 					name error-kind error-fun)
   (unless supplied-var
-    (setf supplied-var (gensym "SUPLIEDP-")))
+    (setf supplied-var (gensym "SUPPLIEDP-")))
   (push-let-binding supplied-var condition t)
   (cond ((consp value-var)
 	 (let ((whole-thing (gensym "OPTIONAL-SUBLIST-")))
