@@ -1,8 +1,8 @@
 /*
  * BuiltInClass.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.21 2003-12-15 14:10:56 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: BuiltInClass.java,v 1.22 2004-01-17 00:37:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,8 +291,8 @@ public class BuiltInClass extends LispClass
         DIVISION_BY_ZERO.setDirectSuperclass(ARITHMETIC_ERROR);
         DIVISION_BY_ZERO.setCPL(DIVISION_BY_ZERO, ARITHMETIC_ERROR, ERROR,
                                 SERIOUS_CONDITION, CONDITION, CLASS_T);
-        ECHO_STREAM.setDirectSuperclass(CLASS_T);
-        ECHO_STREAM.setCPL(ECHO_STREAM, CLASS_T);
+        ECHO_STREAM.setDirectSuperclass(STREAM);
+        ECHO_STREAM.setCPL(ECHO_STREAM, STREAM, CLASS_T);
         END_OF_FILE.setDirectSuperclass(STREAM_ERROR);
         END_OF_FILE.setCPL(END_OF_FILE, STREAM_ERROR, ERROR, SERIOUS_CONDITION,
                            CONDITION, CLASS_T);
