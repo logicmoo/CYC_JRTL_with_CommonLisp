@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandInterpreter.java,v 1.18 2003-05-16 17:43:01 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.19 2003-09-16 16:54:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,6 +88,12 @@ public class CommandInterpreter extends Buffer
 
     public final synchronized Position getEndOfOutput()
     {
+        if (posEndOfOutput != null) {
+            if (posEndOfOutput.getOffset() > posEndOfOutput.getLineLength()) {
+                Log.debug("posEndOfOutput adjusting offset");
+                posEndOfOutput.setOffset(posEndOfOutput.getLineLength());
+            }
+        }
         return posEndOfOutput;
     }
 
@@ -132,7 +138,7 @@ public class CommandInterpreter extends Buffer
             return;
         final Editor editor = Editor.currentEditor();
         final Line dotLine = editor.getDotLine();
-        if (posEndOfOutput == null) {
+        if (getEndOfOutput() == null) {
             // Ignore input before first prompt is displayed.
             dotLine.setText("");
             return;
@@ -216,7 +222,7 @@ public class CommandInterpreter extends Buffer
     protected void escape()
     {
         Editor editor = Editor.currentEditor();
-        if (editor.getMark() != null || posEndOfOutput == null ||
+        if (editor.getMark() != null || getEndOfOutput() == null ||
             editor.getDot().isBefore(posEndOfOutput)) {
             // There's a marked block, or we're not at the command line.
             editor.escape();
@@ -266,7 +272,7 @@ public class CommandInterpreter extends Buffer
 
     protected void backspace()
     {
-        if (posEndOfOutput == null)
+        if (getEndOfOutput() == null)
             return;
         boolean ok = true;
         final Editor editor = Editor.currentEditor();
@@ -299,7 +305,7 @@ public class CommandInterpreter extends Buffer
 
     private void getInputFromHistory(int direction)
     {
-        if (posEndOfOutput == null) {
+        if (getEndOfOutput() == null) {
             // No prompt yet.
             return;
         }
@@ -312,7 +318,7 @@ public class CommandInterpreter extends Buffer
         if (editor.getLastCommand() != COMMAND_HISTORY)
             history.reset();
 
-        Position begin = posEndOfOutput.copy();
+        Position begin = getEndOfOutput().copy();
         Position end = getEnd();
         Region r = new Region(editor.getBuffer(), begin, end);
         String currentInput = r.toString();
@@ -328,7 +334,7 @@ public class CommandInterpreter extends Buffer
         if (s != null) {
             CompoundEdit compoundEdit = beginCompoundEdit();
             editor.addUndo(SimpleEdit.MOVE);
-            editor.setDot(posEndOfOutput.copy());
+            editor.setDot(getEndOfOutput().copy());
             editor.setMark(getEnd());
             editor.deleteRegion();
             editor.addUndo(SimpleEdit.INSERT_STRING);
@@ -339,7 +345,7 @@ public class CommandInterpreter extends Buffer
             // (posEndOfOutput!)
             resetUndo();
         }
-        for (Line line = posEndOfOutput.getLine(); line != null; line = line.next())
+        for (Line line = getEndOfOutput().getLine(); line != null; line = line.next())
             line.setFlags(STATE_INPUT);
         editor.setCurrentCommand(COMMAND_HISTORY);
     }
@@ -360,10 +366,10 @@ public class CommandInterpreter extends Buffer
                 if (needsRenumbering())
                     renumber();
                 enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
-                posEndOfOutput = pos.copy();
+                setEndOfOutput(pos.copy());
             } else {
                 setText(s);
-                posEndOfOutput = getEnd().copy();
+                setEndOfOutput(getEnd().copy());
             }
         }
         finally {
