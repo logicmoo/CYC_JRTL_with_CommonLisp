@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.33 2003-07-07 16:42:57 piso Exp $
+ * $Id: Package.java,v 1.34 2003-07-07 17:25:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -282,9 +282,34 @@ public final class Package extends LispObject
         return symbol;
     }
 
-    public synchronized LispObject unintern(Symbol symbol)
+    public synchronized LispObject unintern(Symbol symbol) throws PackageError
     {
         final String symbolName = symbol.getName();
+        final boolean shadow = shadowingSymbols.contains(symbol);
+        if (shadow) {
+            // Check for conflicts that might be exposed in used package list
+            // if we remove the shadowing symbol.
+            Symbol sym = null;
+            for (Iterator it = useList.iterator(); it.hasNext();) {
+                Package pkg = (Package) it.next();
+                Symbol s = pkg.findExternalSymbol(symbolName);
+                if (s != null) {
+                    if (sym == null)
+                        sym = s;
+                    else if (sym != s) {
+                        StringBuffer sb =
+                            new StringBuffer("uninterning the symbol ");
+                        sb.append(symbol.getQualifiedName());
+                        sb.append(" causes a name conflict between ");
+                        sb.append(sym.getQualifiedName());
+                        sb.append(" and ");
+                        sb.append(s.getQualifiedName());
+                        throw new PackageError(sb.toString());
+                    }
+                }
+            }
+        }
+        // Reaching here, it's OK to remove the symbol.
         if (internalSymbols.get(symbolName) == symbol) {
             internalSymbols.remove(symbolName);
         } else if (externalSymbols.get(symbolName) == symbol) {
@@ -293,6 +318,8 @@ public final class Package extends LispObject
             // Not found.
             return NIL;
         }
+        if (shadow)
+            shadowingSymbols.remove(symbol);
         if (symbol.getPackage() == this)
             symbol.setPackage(NIL);
         return T;
@@ -394,13 +421,15 @@ public final class Package extends LispObject
         }
     }
 
-    public synchronized void shadow(String name) throws LispError
+    public synchronized void shadow(String symbolName) throws LispError
     {
-        Symbol symbol = (Symbol) externalSymbols.get(name);
+        Symbol symbol = (Symbol) externalSymbols.get(symbolName);
         if (symbol == null)
-            symbol = (Symbol) internalSymbols.get(name);
-        if (symbol == null)
-            symbol = addSymbol(name);
+            symbol = (Symbol) internalSymbols.get(symbolName);
+        if (symbol == null) {
+            symbol = new Symbol(symbolName, this);
+            internalSymbols.put(symbolName, symbol);
+        }
         if (!shadowingSymbols.contains(symbol))
             shadowingSymbols.add(symbol);
     }
