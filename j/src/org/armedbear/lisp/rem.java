@@ -2,7 +2,7 @@
  * rem.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: rem.java,v 1.1 2004-03-13 19:25:45 piso Exp $
+ * $Id: rem.java,v 1.2 2004-03-14 00:23:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,10 +29,10 @@ public final class rem extends Primitive2
         super("rem", "number divisor");
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    public LispObject execute(LispObject number, LispObject divisor)
         throws ConditionThrowable
     {
-        first.truncate(second);
+        number.truncate(divisor);
         final LispThread thread = LispThread.currentThread();
         LispObject remainder = thread._values[1];
         thread.clearValues();
