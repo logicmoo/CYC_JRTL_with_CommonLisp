@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.670 2004-08-15 10:59:07 piso Exp $
+ * $Id: Primitives.java,v 1.671 2004-08-16 17:53:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3513,12 +3513,17 @@ public final class Primitives extends Lisp
         public LispObject execute (LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            int n = Fixnum.getValue(first);
+            int n;
+            try {
+                n = ((Fixnum)first).value;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.FIXNUM));
+            }
             if (n < 0 || n > 255)
                 signal(new TypeError(first,
                                      list2(Symbol.UNSIGNED_BYTE, new Fixnum(8))));
-            final Stream out = checkBinaryOutputStream(second);
-            out._writeByte(n);
+            checkBinaryOutputStream(second)._writeByte(n);
             return first;
         }
     };
