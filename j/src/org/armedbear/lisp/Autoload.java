@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.190 2004-07-09 17:39:31 piso Exp $
+ * $Id: Autoload.java,v 1.191 2004-07-20 13:16:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,7 +78,7 @@ public class Autoload extends Function
             int loadDepth = Fixnum.getInt(_LOAD_DEPTH_.symbolValue());
             thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
             try {
-                if (_AUTOLOAD_VERBOSE_.symbolValueNoThrow() != NIL) {
+                if (_AUTOLOAD_VERBOSE_.symbolValue(thread) != NIL) {
                     final String prefix = Load.getLoadVerbosePrefix(loadDepth);
                     Stream out = getStandardOutput();
                     out._writeString(prefix);
