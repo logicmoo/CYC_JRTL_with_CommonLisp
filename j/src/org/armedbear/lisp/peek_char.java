@@ -2,7 +2,7 @@
  * peek_char.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: peek_char.java,v 1.3 2004-02-15 19:56:33 piso Exp $
+ * $Id: peek_char.java,v 1.4 2004-03-12 18:48:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,11 +47,12 @@ public final class peek_char extends Primitive
             return result;
         }
         if (peekType == T) {
+            Readtable rt = currentReadtable();
             while (true) {
                 LispObject result = stream.readChar(eofError, eofValue);
                 if (result instanceof LispCharacter) {
-                    char c = ((LispCharacter)result).getValue();
-                    if (!Character.isWhitespace(c)) {
+                    char c = ((LispCharacter)result).value;
+                    if (!rt.isWhitespace(c)) {
                         stream.unreadChar((LispCharacter)result);
                         return result;
                     }
@@ -60,11 +61,11 @@ public final class peek_char extends Primitive
             }
         }
         if (peekType instanceof LispCharacter) {
-            char c = ((LispCharacter)peekType).getValue();
+            char c = ((LispCharacter)peekType).value;
             while (true) {
                 LispObject result = stream.readChar(eofError, eofValue);
                 if (result instanceof LispCharacter) {
-                    if (((LispCharacter)result).getValue() == c) {
+                    if (((LispCharacter)result).value == c) {
                         stream.unreadChar((LispCharacter)result);
                         return result;
                     }
