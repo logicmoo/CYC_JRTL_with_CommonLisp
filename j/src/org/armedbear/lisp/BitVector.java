@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.18 2003-08-02 19:38:42 piso Exp $
+ * $Id: BitVector.java,v 1.19 2003-08-17 15:02:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,6 +98,19 @@ public final class BitVector extends AbstractVector
     public int capacity()
     {
         return capacity;
+    }
+
+    public final void ensureCapacity(int minCapacity)
+    {
+        if (capacity < minCapacity) {
+            int size = minCapacity >>> 6;
+            if ((minCapacity & LONG_MASK) != 0)
+                ++size;
+            long[] newBits = new long[size];
+            System.arraycopy(bits, 0, newBits, 0, bits.length);
+            bits = newBits;
+            capacity = minCapacity;
+        }
     }
 
     public int length()
