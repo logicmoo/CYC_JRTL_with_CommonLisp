@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.50 2003-09-14 16:43:19 piso Exp $
+ * $Id: LispObject.java,v 1.51 2003-09-14 17:00:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,6 +224,16 @@ public class LispObject extends Lisp
     }
 
     public boolean integerp()
+    {
+        return false;
+    }
+
+    public boolean rationalp()
+    {
+        return false;
+    }
+
+    public boolean realp()
     {
         return false;
     }

@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.64 2003-09-14 15:33:05 piso Exp $
+ * $Id: Fixnum.java,v 1.65 2003-09-14 17:04:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,16 @@ public final class Fixnum extends LispObject
     }
 
     public boolean integerp()
+    {
+        return true;
+    }
+
+    public boolean rationalp()
+    {
+        return true;
+    }
+
+    public boolean realp()
     {
         return true;
     }

@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.30 2003-09-14 15:33:05 piso Exp $
+ * $Id: Ratio.java,v 1.31 2003-09-14 17:06:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,16 @@ public final class Ratio extends LispObject
     }
 
     public boolean numberp()
+    {
+        return true;
+    }
+
+    public boolean rationalp()
+    {
+        return true;
+    }
+
+    public boolean realp()
     {
         return true;
     }
