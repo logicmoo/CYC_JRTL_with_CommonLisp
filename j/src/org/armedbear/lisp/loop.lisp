@@ -1,4 +1,5 @@
 ;;;   -*- Mode: LISP; Package: ANSI-LOOP; Syntax: Common-lisp; Base: 10; Lowercase:T -*-
+;;; $Id: loop.lisp,v 1.6 2003-08-03 16:32:11 piso Exp $
 ;;;>
 ;;;> Portions of LOOP are Copyright (c) 1986 by the Massachusetts Institute of Technology.
 ;;;> All Rights Reserved.
