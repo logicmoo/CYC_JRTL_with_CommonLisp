@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.16 2003-10-15 12:44:03 piso Exp $
+ * $Id: KeyMap.java,v 1.17 2003-10-15 12:54:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -343,7 +343,7 @@ public final class KeyMap implements Constants
         // Sidebar.
         mapKey(KeyEvent.VK_EQUALS, ALT_MASK, "toggleSidebar");
         mapKey(KeyEvent.VK_B, ALT_MASK, "sidebarListBuffers");
-        mapKey(KeyEvent.VK_L, CTRL_MASK | SHIFT_MASK, "sidebarListTags");
+        mapKey(KeyEvent.VK_T, CTRL_MASK | SHIFT_MASK, "sidebarListTags");
 
         mapKey(KeyEvent.VK_F10, 0, "splitWindow");
         mapKey(KeyEvent.VK_F10, SHIFT_MASK, "unsplitWindow");
