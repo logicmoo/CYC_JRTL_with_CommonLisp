@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.16 2003-06-02 02:04:57 piso Exp $
+;;; $Id: compiler.lisp,v 1.17 2003-06-02 13:52:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -171,10 +171,10 @@
         (cond ((eq first 'LAMBDA)
                (append (list 'LAMBDA (second form))
                        (mapcar #'compile-sexp (cddr form))))
-              ((macro-function first)
-               (compile-sexp (macroexpand form)))
               ((special-operator-p first)
                (compile-special form))
+              ((macro-function first)
+               (compile-sexp (macroexpand form)))
               (t
                (let ((args (mapcar #'compile-sexp (cdr form))))
                  (append (list first) args)))))))
@@ -239,4 +239,9 @@
          (body (parse-defmacro lambda-list form body name 'defmacro
                                :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body))))
-    `(fset ',name (make-macro (compile nil ,expander)))))
+    `(if (special-operator-p ',name)
+         (%put ',name 'macroexpand-macro (make-macro (compile nil ,expander)))
+         (fset ',name (make-macro (compile nil ,expander))))))
+
+;; Make an exception just this one time...
+(fset 'defmacro (get 'defmacro 'macroexpand-macro))
