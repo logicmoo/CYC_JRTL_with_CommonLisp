@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.19 2004-02-26 01:36:34 piso Exp $
+ * $Id: AbstractArray.java,v 1.20 2004-02-26 19:28:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,6 +103,48 @@ public abstract class AbstractArray extends LispObject
         for (int i = dimensions.length; i-- > 0;)
             size *= dimensions[i];
         return size;
+    }
+
+    public final int getRowMajorIndex(LispObject[] subscripts)
+        throws ConditionThrowable
+    {
+        int[] subs = new int[subscripts.length];
+        for (int i = 0; i < subscripts.length; i++) {
+            LispObject subscript = subscripts[i];
+            if (subscript instanceof Fixnum)
+                subs[i] = ((Fixnum)subscript).value;
+            else
+                signal(new TypeError(subscript, Symbol.FIXNUM));
+        }
+        return getRowMajorIndex(subs);
+    }
+
+    public final int getRowMajorIndex(int[] subscripts)
+        throws ConditionThrowable
+    {
+        final int rank = getRank();
+        if (rank != subscripts.length) {
+            StringBuffer sb = new StringBuffer("Wrong number of subscripts (");
+            sb.append(subscripts.length);
+            sb.append(") for array of rank ");
+            sb.append(rank);
+            sb.append('.');
+            signal(new ProgramError(sb.toString()));
+        }
+        if (rank == 0)
+            return 0;
+        int sum = 0;
+        int size = 1;
+        for (int i = rank; i-- > 0;) {
+            int dim = getDimension(i);
+            int lastSize = size;
+            size *= dim;
+            int n = subscripts[i];
+            if (n < 0 || n >= getDimension(i))
+                signal(new ProgramError());
+            sum += n * lastSize;
+        }
+        return sum;
     }
 
     // Helper for toString().
