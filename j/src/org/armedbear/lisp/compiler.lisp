@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.4 2003-03-08 04:09:35 piso Exp $
+;;; $Id: compiler.lisp,v 1.5 2003-03-08 04:26:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,6 +19,10 @@
 
 (unless (find-package "C")
   (make-package "C" :nicknames '("COMPILER")))
+
+(in-package "COMMON-LISP")
+
+(export 'compile)
 
 (in-package "C")
 
@@ -203,9 +207,19 @@
 (defun compile-sexp (form)
   (if (atom form) form (compile-list form)))
 
-(in-package "COMMON-LISP")
 
-(export 'compile)
+(defun compile-package (pkg &key verbose)
+  (dolist (sym (package-symbols pkg))
+    (when (fboundp sym)
+      (unless (or (special-operator-p sym) (macro-function sym))
+        (let ((f (fdefinition sym)))
+          (unless (compiled-function-p f)
+            (when verbose
+              (format t "compiling ~S~%" sym)
+              (finish-output))
+            (compile sym))))))
+  t)
+
 
 (defun compile (name &optional (definition (fdefinition name)))
   (let (expr result)

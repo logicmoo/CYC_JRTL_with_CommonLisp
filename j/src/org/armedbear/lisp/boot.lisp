@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.17 2003-03-07 19:22:47 piso Exp $
+;;; $Id: boot.lisp,v 1.18 2003-03-08 04:27:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -82,16 +82,8 @@
 (defconstant char-code-limit 96)
 
 
-;; Compile the world.
 (format t "; Compiling ... ")
 (finish-output)
-(dolist (sym (package-symbols :cl))
-  (when (fboundp sym)
-    (unless (or (special-operator-p sym) (macro-function sym))
-      (let ((f (fdefinition sym)))
-        (unless (compiled-function-p f)
-;;           (format t "compiling ~S~%" sym)
-;;           (finish-output)
-          (compile sym))))))
+(c::compile-package :cl)
 (format t "done~%")
 (finish-output)

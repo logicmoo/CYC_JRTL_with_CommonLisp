@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.38 2003-03-07 20:05:36 piso Exp $
+;;; $Id: rt.lisp,v 1.39 2003-03-08 04:28:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -542,3 +542,6 @@
 
 (load (concatenate 'string rt::*prefix* "char-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cl-symbols-aux.lsp"))
+
+(c::compile-package :cl-test :verbose t)
+(c::compile-package :rt :verbose t)
