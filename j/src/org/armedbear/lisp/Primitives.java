@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.228 2003-06-02 16:56:09 piso Exp $
+ * $Id: Primitives.java,v 1.229 2003-06-02 17:45:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -884,27 +884,30 @@ public final class Primitives extends Module
                 case 1:
                     return array[0];
                 default: {
-                    Cons result = null;
-                    Cons splice = null;
+                    LispObject result = null;
+                    LispObject splice = null;
                     final int limit = array.length - 1;
                     int i;
                     for (i = 0; i < limit; i++) {
-                        LispObject top = array[i];
-                        if (top == NIL)
+                        LispObject list = array[i];
+                        if (list == NIL)
                             continue;
-                        if (splice != null) {
-                            splice.setCdr(top);
-                            splice = checkCons(top);
-                        }
-                        while (top != NIL) {
-                            if (result == null) {
-                                result = checkCons(top);
-                                splice = result;
-                            } else {
-                                splice = checkCons(top);
+                        if (list instanceof Cons) {
+                            if (splice != null) {
+                                splice.setCdr(list);
+                                splice = list;
                             }
-                            top = top.cdr();
-                        }
+                            while (list instanceof Cons) {
+                                if (result == null) {
+                                    result = list;
+                                    splice = result;
+                                } else {
+                                    splice = list;
+                                }
+                                list = list.cdr();
+                            }
+                        } else
+                            throw new TypeError(list, "list");
                     }
                     if (result == null)
                         return array[i];
