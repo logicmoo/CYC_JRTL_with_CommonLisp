@@ -2,7 +2,7 @@
  * News.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: News.java,v 1.2 2002-10-11 01:42:37 piso Exp $
+ * $Id: News.java,v 1.3 2002-11-11 18:12:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,70 +72,87 @@ public final class News extends Buffer
     private Runnable loadRunnable = new Runnable() {
         public void run()
         {
-            File file = File.getInstance(newsDir, session.getHost());
-            if (newsDir.isDirectory()) {
-                if (file.isFile()) {
-                    try {
-                        InputStream in = file.getInputStream();
-                        if (in != null) {
-                            load(in, null);
-                            in.close();
-                        }
-                    }
-                    catch (IOException e) {
-                        Log.error(e);
-                    }
-                }
-            } else
-                newsDir.mkdirs();
-            if (getFirstLine() == null) {
-                if (session.connect()) {
-                    if (session.writeLine("LIST")) {
-                        String response = session.readLine();
-                        if (response.startsWith("215")) {
-                            session.setEcho(false);
-                            int count = 0;
-                            progressNotifier.progressStart();
-                            while (true) {
-                                String s = session.readLine();
-                                if (s == null)
-                                    break;
-                                if (s.equals("."))
-                                    break;
-                                int index = s.indexOf(' ');
-                                if (index >= 0)
-                                    appendLine(s.substring(0, index));
-                                else
-                                    appendLine(s);
-                                ++count;
-                                progressNotifier.progress(String.valueOf(count));
-                            }
-                            if (newsDir.isDirectory()) {
-                                try {
-                                    BufferedWriter writer = new BufferedWriter(
-                                        new OutputStreamWriter(file.getOutputStream()));
-                                    for (Line line = getFirstLine(); line != null; line = line.next()) {
-                                        writer.write(line.getText());
-                                        writer.write('\n');
-                                    }
-                                    writer.flush();
-                                    writer.close();
-                                }
-                                catch (IOException e) {
-                                    Log.error(e);
-                                }
-                            }
-                            progressNotifier.progressStop();
-                            session.setEcho(NntpSession.DEFAULT_ECHO);
-                        }
-                    }
-                    session.disconnect();
-                }
+            try {
+                lockWrite();
             }
-            renumber();
+            catch (InterruptedException e) {
+                Log.error(e);
+                return;
+            }
+            try {
+                _load();
+            }
+            finally {
+                unlockWrite();
+            }
             SwingUtilities.invokeLater(updateDisplayRunnable);
         }
     };
+
+    private void _load()
+    {
+        File file = File.getInstance(newsDir, session.getHost());
+        if (newsDir.isDirectory()) {
+            if (file.isFile()) {
+                try {
+                    InputStream in = file.getInputStream();
+                    if (in != null) {
+                        load(in, null);
+                        in.close();
+                    }
+                }
+                catch (IOException e) {
+                    Log.error(e);
+                }
+            }
+        } else
+            newsDir.mkdirs();
+        if (getFirstLine() == null) {
+            if (session.connect()) {
+                if (session.writeLine("LIST")) {
+                    String response = session.readLine();
+                    if (response.startsWith("215")) {
+                        session.setEcho(false);
+                        int count = 0;
+                        progressNotifier.progressStart();
+                        while (true) {
+                            String s = session.readLine();
+                            if (s == null)
+                                break;
+                            if (s.equals("."))
+                                break;
+                            int index = s.indexOf(' ');
+                            if (index >= 0)
+                                appendLine(s.substring(0, index));
+                            else
+                                appendLine(s);
+                            ++count;
+                            progressNotifier.progress(String.valueOf(count));
+                        }
+                        if (newsDir.isDirectory()) {
+                            try {
+                                BufferedWriter writer = new BufferedWriter(
+                                    new OutputStreamWriter(file.getOutputStream()));
+                                for (Line line = getFirstLine(); line != null; line = line.next()) {
+                                    writer.write(line.getText());
+                                    writer.write('\n');
+                                }
+                                writer.flush();
+                                writer.close();
+                            }
+                            catch (IOException e) {
+                                Log.error(e);
+                            }
+                        }
+                        progressNotifier.progressStop();
+                        session.setEcho(NntpSession.DEFAULT_ECHO);
+                    }
+                }
+                session.disconnect();
+            }
+        }
+        renumber();
+    }
 
     private Runnable updateDisplayRunnable = new Runnable() {
         public void run()
