@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.63 2003-03-02 01:49:52 piso Exp $
+ * $Id: Primitives.java,v 1.64 2003-03-02 11:58:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3020,36 +3020,6 @@ public final class Primitives extends Module
             out.writeString(sb.toString());
             out.finishOutput();
             return result;
-        }
-    };
-
-    // ### loop
-    // Should be a macro.
-    private static final SpecialOperator LOOP = new SpecialOperator("loop")
-    {
-        public LispObject execute(LispObject args, Environment env)
-            throws LispError
-        {
-            int length = args.length();
-            if (length < 1)
-                throw new WrongNumberOfArgumentsException(this);
-            Block block = new Block(NIL, args);
-            while (true) {
-                LispObject body = block.getBody();
-                int depth = stack.size();
-                try {
-                    while (body != NIL) {
-                        eval(body.car(), env);
-                        body = body.cdr();
-                    }
-                }
-                catch (Return ret) {
-                    stack.setSize(depth);
-                    if (ret.getName() == block.getName())
-                        return ret.getResult();
-                    throw ret;
-                }
-            }
         }
     };
 
