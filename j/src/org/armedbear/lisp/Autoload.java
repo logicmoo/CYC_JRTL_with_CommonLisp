@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.47 2003-08-11 18:02:19 piso Exp $
+ * $Id: Autoload.java,v 1.48 2003-08-24 16:41:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,7 +185,6 @@ public final class Autoload extends Function
         autoload("pathname", "Pathname");
         autoload("pathnamep", "Pathname");
         autoload("probe-file", "probe_file");
-        autoload("puthash", "HashTable");
         autoload("remhash", "HashTable");
         autoload("rename-package", "PackageFunctions");
         autoload("room", "room");
@@ -222,5 +221,6 @@ public final class Autoload extends Function
         autoload(PACKAGE_SYS, "%structure-set", "StructureObject");
         autoload(PACKAGE_SYS, "%time", "Time");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
+        autoload(PACKAGE_SYS, "puthash", "HashTable");
     }
 }
