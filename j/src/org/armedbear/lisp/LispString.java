@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.25 2003-03-17 18:24:12 piso Exp $
+ * $Id: LispString.java,v 1.26 2003-03-18 04:00:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,6 +143,27 @@ public final class LispString extends AbstractVector implements SequenceType,
             throw new TypeError(obj, "sequence");
     }
 
+    public LispObject getRowMajor(int index) throws LispError
+    {
+        try {
+            return new LispCharacter(array[index]);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, array.length);
+            return NIL; // Not reached.
+        }
+    }
+
+    public void setRowMajor(int index, LispObject newValue) throws LispError
+    {
+        try {
+            array[index] = LispCharacter.getValue(newValue);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, array.length);
+        }
+    }
+
     public LispObject get(int index) throws LispError
     {
         try {
@@ -189,12 +210,12 @@ public final class LispString extends AbstractVector implements SequenceType,
         return fillPointer >= 0 ? fillPointer : array.length;
     }
 
-    public LispObject elt(long index) throws LispError
+    public LispObject elt(int index) throws LispError
     {
-        long limit = fillPointer >= 0 ? fillPointer : array.length;
+        int limit = fillPointer >= 0 ? fillPointer : array.length;
         if (index < 0 || index >= limit)
             badIndex(index, limit);
-        return new LispCharacter(array[(int)index]);
+        return new LispCharacter(array[index]);
     }
 
     public LispObject remove(LispObject item) throws LispError
