@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.309 2004-12-16 18:13:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.310 2004-12-17 16:08:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -610,7 +610,7 @@
 
 (defvar *initialize-thread-var* nil)
 
-(defun initialize-thread-var ()
+(defun maybe-initialize-thread-var ()
   (when *initialize-thread-var*
     (emit-invokestatic +lisp-thread-class+
                        "currentThread"
@@ -626,7 +626,7 @@
   (ensure-thread-var-initialized)
   (emit 'aload *thread*))
 
-(defun generate-interrupt-check ()
+(defun maybe-generate-interrupt-check ()
   (unless (> *speed* *safety*)
     (let ((label1 (gensym)))
       (emit 'getstatic +lisp-class+ "interrupted" "Z")
@@ -2902,7 +2902,7 @@
              (when (and (null (cdr rest)) ;; Last subform.
                         (consp subform)
                         (eq (car subform) 'GO))
-               (generate-interrupt-check))
+               (maybe-generate-interrupt-check))
              (compile-form subform :target nil)
              (unless must-clear-values
                (unless (single-valued-p subform)
@@ -3988,8 +3988,8 @@
             (memq '&KEY args)
             (memq '&OPTIONAL args)
             (memq '&REST args))
-    (setq *using-arg-array* t)
-    (setq *hairy-arglist-p* t)
+    (setf *using-arg-array* t)
+    (setf *hairy-arglist-p* t)
     (return-from analyze-args
                  (if *child-p*
                      #.(%format nil "([~A[[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
@@ -4114,36 +4114,37 @@
             (pool-name (method-name execute-method)))
       (setf (method-descriptor-index execute-method)
             (pool-name (method-descriptor execute-method)))
-      (if *hairy-arglist-p*
-          (let* ((closure (sys::make-closure precompiled-form nil))
-                 (vars (sys::varlist closure))
-                 (index 0))
-            (dolist (var vars)
-              (let ((variable (make-variable :name var
-                                             :kind 'ARG
-                                             :special-p nil ;; FIXME
-                                             :register nil
-                                             :index index)))
-                (push variable *all-variables*)
-                (push variable *visible-variables*)
-                (push variable parameters)
-                (add-variable-to-context variable)
-                (incf index))))
-          (let ((register 1)
-                (index 0))
-            (dolist (arg args)
-              (aver (= index (length (context-vars *context*))))
-              (let ((variable (make-variable :name arg
-                                             :kind 'ARG
-                                             :special-p nil ;; FIXME
-                                             :register (if *using-arg-array* nil register)
-                                             :index index)))
-                (push variable *all-variables*)
-                (push variable *visible-variables*)
-                (push variable parameters)
-                (add-variable-to-context variable)
-                (incf register)
-                (incf index)))))
+      (cond (*hairy-arglist-p*
+             (let* ((closure (sys::make-closure precompiled-form nil))
+                    (vars (sys::varlist closure))
+                    (index 0))
+               (dolist (var vars)
+                 (let ((variable (make-variable :name var
+                                                :kind 'ARG
+                                                :special-p nil ;; FIXME
+                                                :register nil
+                                                :index index)))
+                   (push variable *all-variables*)
+                   (push variable *visible-variables*)
+                   (push variable parameters)
+                   (add-variable-to-context variable)
+                   (incf index)))))
+            (t
+             (let ((register 1)
+                   (index 0))
+               (dolist (arg args)
+                 (aver (= index (length (context-vars *context*))))
+                 (let ((variable (make-variable :name arg
+                                                :kind 'ARG
+                                                :special-p nil ;; FIXME
+                                                :register (if *using-arg-array* nil register)
+                                                :index index)))
+                   (push variable *all-variables*)
+                   (push variable *visible-variables*)
+                   (push variable parameters)
+                   (add-variable-to-context variable)
+                   (incf register)
+                   (incf index))))))
 
       (let ((specials (process-special-declarations body)))
         (dolist (name specials)
@@ -4222,22 +4223,24 @@
       ;; Go back and fill in prologue.
       (let ((code *code*))
         (setf *code* ())
-        (generate-interrupt-check)
+        (maybe-generate-interrupt-check)
         (when (or *hairy-arglist-p* *use-locals-vector*)
-          (emit 'aload_0)
-          (emit 'aload_1)
+          (emit 'aload_0) ; this
+          (emit 'aload_1) ; arg vector
           ; Reserve extra slots for locals if applicable.
           (let ((extra (if *use-locals-vector*
                            (length (context-vars *context*))
                            0)))
             (emit 'sipush extra))
           (emit-invokevirtual *this-class*
-                              "processArgs"
+                              (if (or (memq '&optional args) (memq '&key args))
+                                  "processArgs"
+                                  "fastProcessArgs")
                               "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
                               -2)
           (emit 'astore_1))
 
-        (initialize-thread-var)
+        (maybe-initialize-thread-var)
         (setf *code* (append code *code*)))
 
       (finalize-code)
