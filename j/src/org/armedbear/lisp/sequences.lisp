@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.23 2003-03-08 18:45:00 piso Exp $
+;;; $Id: sequences.lisp,v 1.24 2003-03-12 19:56:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,6 +24,8 @@
           concatenate
           map
           reduce
+          delete delete-if delete-if-not
+          remove remove-if remove-if-not
           remove-duplicates delete-duplicates
           substitute substitute-if substitute-if-not
           nsubstitute nsubstitute-if nsubstitute-if-not
@@ -392,6 +394,398 @@
                  index (+ index disp)
                  element (if key (funcall key element) element)
                  value (funcall function (if from-end element value) (if from-end value element))))))))
+
+
+;;; DELETE (from CMUCL)
+
+(eval-when (compile eval)
+
+           (defmacro mumble-delete (pred)
+             `(do ((index start (1+ index))
+                   (jndex start)
+                   (number-zapped 0))
+                ((or (= index (the fixnum end)) (= number-zapped (the fixnum count)))
+                 (do ((index index (1+ index))		; copy the rest of the vector
+                      (jndex jndex (1+ jndex)))
+                   ((= index (the fixnum length))
+                    (shrink-vector sequence jndex))
+                   (declare (fixnum index jndex))
+                   (setf (aref sequence jndex) (aref sequence index))))
+                (declare (fixnum index jndex number-zapped))
+                (setf (aref sequence jndex) (aref sequence index))
+                (if ,pred
+                    (setq number-zapped (1+ number-zapped))
+                    (setq jndex (1+ jndex)))))
+
+           (defmacro mumble-delete-from-end (pred)
+             `(do ((index (1- (the fixnum end)) (1- index)) ; find the losers
+                   (number-zapped 0)
+                   (losers ())
+                   this-element
+                   (terminus (1- start)))
+                ((or (= index terminus) (= number-zapped (the fixnum count)))
+                 (do ((losers losers)			 ; delete the losers
+                      (index start (1+ index))
+                      (jndex start))
+                   ((or (null losers) (= index (the fixnum end)))
+                    (do ((index index (1+ index))	 ; copy the rest of the vector
+                         (jndex jndex (1+ jndex)))
+                      ((= index (the fixnum length))
+                       (shrink-vector sequence jndex))
+                      (declare (fixnum index jndex))
+                      (setf (aref sequence jndex) (aref sequence index))))
+                   (declare (fixnum index jndex))
+                   (setf (aref sequence jndex) (aref sequence index))
+                   (if (= index (the fixnum (car losers)))
+                       (pop losers)
+                       (setq jndex (1+ jndex)))))
+                (declare (fixnum index number-zapped terminus))
+                (setq this-element (aref sequence index))
+                (when ,pred
+                  (setq number-zapped (1+ number-zapped))
+                  (push index losers))))
+
+           (defmacro normal-mumble-delete ()
+             `(mumble-delete
+               (if test-not
+                   (not (funcall test-not item (apply-key key (aref sequence index))))
+                   (funcall test item (apply-key key (aref sequence index))))))
+
+           (defmacro normal-mumble-delete-from-end ()
+             `(mumble-delete-from-end
+               (if test-not
+                   (not (funcall test-not item (apply-key key this-element)))
+                   (funcall test item (apply-key key this-element)))))
+
+           (defmacro list-delete (pred)
+             `(let ((handle (cons nil sequence)))
+                (do ((current (nthcdr start sequence) (cdr current))
+                     (previous (nthcdr start handle))
+                     (index start (1+ index))
+                     (number-zapped 0))
+                  ((or (= index (the fixnum end)) (= number-zapped (the fixnum count)))
+                   (cdr handle))
+                  (declare (fixnum index number-zapped))
+                  (cond (,pred
+                         (rplacd previous (cdr current))
+                         (setq number-zapped (1+ number-zapped)))
+                        (t
+                         (setq previous (cdr previous)))))))
+
+           (defmacro list-delete-from-end (pred)
+             `(let* ((reverse (nreverse (the list sequence)))
+                     (handle (cons nil reverse)))
+                (do ((current (nthcdr (- (the fixnum length) (the fixnum end)) reverse)
+                              (cdr current))
+                     (previous (nthcdr (- (the fixnum length) (the fixnum end)) handle))
+                     (index start (1+ index))
+                     (number-zapped 0))
+                  ((or (= index (the fixnum end)) (= number-zapped (the fixnum count)))
+                   (nreverse (cdr handle)))
+                  (declare (fixnum index number-zapped))
+                  (cond (,pred
+                         (rplacd previous (cdr current))
+                         (setq number-zapped (1+ number-zapped)))
+                        (t
+                         (setq previous (cdr previous)))))))
+
+           (defmacro normal-list-delete ()
+             '(list-delete
+               (if test-not
+                   (not (funcall test-not item (apply-key key (car current))))
+                   (funcall test item (apply-key key (car current))))))
+
+           (defmacro normal-list-delete-from-end ()
+             '(list-delete-from-end
+               (if test-not
+                   (not (funcall test-not item (apply-key key (car current))))
+                   (funcall test item (apply-key key (car current))))))
+
+           (defmacro real-count (count)
+             `(cond ((null ,count) most-positive-fixnum)
+                    ((fixnump ,count) (if (minusp ,count) 0 ,count))
+                    ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
+                    (t ,count)))
+
+           )
+
+
+
+
+(defun delete (item sequence &key from-end (test #'eql) test-not (start 0)
+                    end count key)
+  "Returns a sequence formed by destructively removing the specified Item from
+   the given Sequence."
+  (declare (fixnum start))
+  (let* ((length (length sequence))
+	 (end (or end length))
+	 (count (real-count count)))
+    (declare (type index length end)
+	     (fixnum count))
+    (seq-dispatch sequence
+		  (if from-end
+		      (normal-list-delete-from-end)
+		      (normal-list-delete))
+		  (if from-end
+		      (normal-mumble-delete-from-end)
+		      (normal-mumble-delete)))))
+
+(eval-when (compile eval)
+
+           (defmacro if-mumble-delete ()
+             `(mumble-delete
+               (funcall predicate (apply-key key (aref sequence index)))))
+
+           (defmacro if-mumble-delete-from-end ()
+             `(mumble-delete-from-end
+               (funcall predicate (apply-key key this-element))))
+
+           (defmacro if-list-delete ()
+             '(list-delete
+               (funcall predicate (apply-key key (car current)))))
+
+           (defmacro if-list-delete-from-end ()
+             '(list-delete-from-end
+               (funcall predicate (apply-key key (car current)))))
+
+           )
+
+(defun delete-if (predicate sequence &key from-end (start 0) key end count)
+  "Returns a sequence formed by destructively removing the elements satisfying
+   the specified Predicate from the given Sequence."
+  (declare (fixnum start))
+  (let* ((length (length sequence))
+	 (end (or end length))
+	 (count (real-count count)))
+    (declare (type index length end)
+	     (fixnum count))
+    (seq-dispatch sequence
+		  (if from-end
+		      (if-list-delete-from-end)
+		      (if-list-delete))
+		  (if from-end
+		      (if-mumble-delete-from-end)
+		      (if-mumble-delete)))))
+
+(eval-when (compile eval)
+
+           (defmacro if-not-mumble-delete ()
+             `(mumble-delete
+               (not (funcall predicate (apply-key key (aref sequence index))))))
+
+           (defmacro if-not-mumble-delete-from-end ()
+             `(mumble-delete-from-end
+               (not (funcall predicate (apply-key key this-element)))))
+
+           (defmacro if-not-list-delete ()
+             '(list-delete
+               (not (funcall predicate (apply-key key (car current))))))
+
+           (defmacro if-not-list-delete-from-end ()
+             '(list-delete-from-end
+               (not (funcall predicate (apply-key key (car current))))))
+
+           )
+
+(defun delete-if-not (predicate sequence &key from-end (start 0) end key count)
+  "Returns a sequence formed by destructively removing the elements not
+   satisfying the specified Predicate from the given Sequence."
+  (declare (fixnum start))
+  (let* ((length (length sequence))
+	 (end (or end length))
+	 (count (real-count count)))
+    (declare (type index length end)
+	     (fixnum count))
+    (seq-dispatch sequence
+		  (if from-end
+		      (if-not-list-delete-from-end)
+		      (if-not-list-delete))
+		  (if from-end
+		      (if-not-mumble-delete-from-end)
+		      (if-not-mumble-delete)))))
+
+
+;;; REMOVE (from CMUCL)
+
+(eval-when (compile eval)
+
+           ;;; MUMBLE-REMOVE-MACRO does not include (removes) each element that
+           ;;; satisfies the predicate.
+           (defmacro mumble-remove-macro (bump left begin finish right pred)
+             `(do ((index ,begin (,bump index))
+                   (result
+                    (do ((index ,left (,bump index))
+                         (result (make-sequence-like sequence length)))
+                      ((= index (the fixnum ,begin)) result)
+                      (declare (fixnum index))
+                      (setf (aref result index) (aref sequence index))))
+                   (new-index ,begin)
+                   (number-zapped 0)
+                   (this-element))
+                ((or (= index (the fixnum ,finish)) (= number-zapped (the fixnum count)))
+                 (do ((index index (,bump index))
+                      (new-index new-index (,bump new-index)))
+                   ((= index (the fixnum ,right)) (shrink-vector result new-index))
+                   (declare (fixnum index new-index))
+                   (setf (aref result new-index) (aref sequence index))))
+                (declare (fixnum index new-index number-zapped))
+                (setq this-element (aref sequence index))
+                (cond (,pred (setq number-zapped (1+ number-zapped)))
+                      (t (setf (aref result new-index) this-element)
+                         (setq new-index (,bump new-index))))))
+
+           (defmacro mumble-remove (pred)
+             `(mumble-remove-macro 1+ 0 start end length ,pred))
+
+           (defmacro mumble-remove-from-end (pred)
+             `(let ((sequence (copy-seq sequence)))
+                (mumble-delete-from-end ,pred)))
+
+           (defmacro normal-mumble-remove ()
+             `(mumble-remove
+               (if test-not
+                   (not (funcall test-not item (apply-key key this-element)))
+                   (funcall test item (apply-key key this-element)))))
+
+           (defmacro normal-mumble-remove-from-end ()
+             `(mumble-remove-from-end
+               (if test-not
+                   (not (funcall test-not item (apply-key key this-element)))
+                   (funcall test item (apply-key key this-element)))))
+
+           (defmacro if-mumble-remove ()
+             `(mumble-remove (funcall predicate (apply-key key this-element))))
+
+           (defmacro if-mumble-remove-from-end ()
+             `(mumble-remove-from-end (funcall predicate (apply-key key this-element))))
+
+           (defmacro if-not-mumble-remove ()
+             `(mumble-remove (not (funcall predicate (apply-key key this-element)))))
+
+           (defmacro if-not-mumble-remove-from-end ()
+             `(mumble-remove-from-end
+               (not (funcall predicate (apply-key key this-element)))))
+
+           ;;; LIST-REMOVE-MACRO does not include (removes) each element that satisfies
+           ;;; the predicate.
+           (defmacro list-remove-macro (pred reverse-p)
+             `(let* ((sequence ,(if reverse-p
+                                    '(reverse (the list sequence))
+                                    'sequence))
+                     (%start ,(if reverse-p '(- length end) 'start))
+                     (%end ,(if reverse-p '(- length start) 'end))
+                     (splice (list nil))
+                     (results (do ((index 0 (1+ index))
+                                   (before-start splice))
+                                ((= index (the fixnum %start)) before-start)
+                                (declare (fixnum index))
+                                (setq splice
+                                      (cdr (rplacd splice (list (pop sequence))))))))
+                (do ((index %start (1+ index))
+                     (this-element)
+                     (number-zapped 0))
+                  ((or (= index (the fixnum %end)) (= number-zapped (the fixnum count)))
+                   (do ((index index (1+ index)))
+                     ((null sequence)
+                      ,(if reverse-p
+                           '(nreverse (the list (cdr results)))
+                           '(cdr results)))
+                     (declare (fixnum index))
+                     (setq splice (cdr (rplacd splice (list (pop sequence)))))))
+                  (declare (fixnum index number-zapped))
+                  (setq this-element (pop sequence))
+                  (if ,pred
+                      (setq number-zapped (1+ number-zapped))
+                      (setq splice (cdr (rplacd splice (list this-element))))))))
+
+
+           (defmacro list-remove (pred)
+             `(list-remove-macro ,pred nil))
+
+           (defmacro list-remove-from-end (pred)
+             `(list-remove-macro ,pred t))
+
+           (defmacro normal-list-remove ()
+             `(list-remove
+               (if test-not
+                   (not (funcall test-not item (apply-key key this-element)))
+                   (funcall test item (apply-key key this-element)))))
+
+           (defmacro normal-list-remove-from-end ()
+             `(list-remove-from-end
+               (if test-not
+                   (not (funcall test-not item (apply-key key this-element)))
+                   (funcall test item (apply-key key this-element)))))
+
+           (defmacro if-list-remove ()
+             `(list-remove
+               (funcall predicate (apply-key key this-element))))
+
+           (defmacro if-list-remove-from-end ()
+             `(list-remove-from-end
+               (funcall predicate (apply-key key this-element))))
+
+           (defmacro if-not-list-remove ()
+             `(list-remove
+               (not (funcall predicate (apply-key key this-element)))))
+
+           (defmacro if-not-list-remove-from-end ()
+             `(list-remove-from-end
+               (not (funcall predicate (apply-key key this-element)))))
+
+           )
+
+(defun remove (item sequence &key from-end (test #'eql) test-not (start 0)
+                    end count key)
+  "Returns a copy of SEQUENCE with elements satisfying the test (default is
+   EQL) with ITEM removed."
+  (declare (fixnum start))
+  (let* ((length (length sequence))
+	 (end (or end length))
+	 (count (real-count count)))
+    (declare (type index length end)
+	     (fixnum count))
+    (seq-dispatch sequence
+		  (if from-end
+		      (normal-list-remove-from-end)
+		      (normal-list-remove))
+		  (if from-end
+		      (normal-mumble-remove-from-end)
+		      (normal-mumble-remove)))))
+
+(defun remove-if (predicate sequence &key from-end (start 0) end count key)
+  "Returns a copy of sequence with elements such that predicate(element)
+   is non-null are removed"
+  (declare (fixnum start))
+  (let* ((length (length sequence))
+	 (end (or end length))
+	 (count (real-count count)))
+    (declare (type index length end)
+	     (fixnum count))
+    (seq-dispatch sequence
+		  (if from-end
+		      (if-list-remove-from-end)
+		      (if-list-remove))
+		  (if from-end
+		      (if-mumble-remove-from-end)
+		      (if-mumble-remove)))))
+
+(defun remove-if-not (predicate sequence &key from-end (start 0) end count key)
+  "Returns a copy of sequence with elements such that predicate(element)
+   is null are removed"
+  (declare (fixnum start))
+  (let* ((length (length sequence))
+	 (end (or end length))
+	 (count (real-count count)))
+    (declare (type index length end)
+	     (fixnum count))
+    (seq-dispatch sequence
+		  (if from-end
+		      (if-not-list-remove-from-end)
+		      (if-not-list-remove))
+		  (if from-end
+		      (if-not-mumble-remove-from-end)
+		      (if-not-mumble-remove)))))
 
 
 ;;; REMOVE-DUPLICATES (from CMUCL)
