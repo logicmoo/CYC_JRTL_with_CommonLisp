@@ -209,6 +209,8 @@
       <fileset dir="${topdir}" includes="**/*.jar"/>
       <fileset dir="${topdir}" includes="**/*.class"/>
       <fileset dir="${topdir}" includes="**/*~"/>
+      <fileset dir="${topdir}" includes="**/.#*"/>
+      <fileset dir="${topdir}" includes="**/TEST-*.txt"/>
     </delete>
     <delete file="${topdir}/j"/>
     <delete file="${topdir}/j.bat"/>
