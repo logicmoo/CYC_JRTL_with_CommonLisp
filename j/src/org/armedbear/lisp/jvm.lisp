@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.232 2004-07-22 14:42:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.233 2004-07-22 17:25:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,6 +32,11 @@
 ;; FIXME
 ;; This controls compiler debugging output, not debuggability of compiled code!
 (defvar *debug* nil)
+
+(defstruct compiland
+  name)
+
+(defvar *current-compiland*)
 
 (defvar *pool* nil)
 (defvar *pool-count* 1)
@@ -2046,6 +2051,28 @@
                      0)
   (emit-move-from-stack target))
 
+(defun compile-multiple-value-prog1 (form &key (target *val*))
+  (let ((first-subform (cadr form))
+        (subforms (cddr form))
+        (result-register (allocate-register))
+        (values-register (allocate-register)))
+    (compile-form first-subform :target result-register)
+    ;; Save multiple values returned by first subform.
+    (emit-push-current-thread)
+    (emit 'getfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
+    (emit 'astore values-register)
+    (maybe-emit-clear-values first-subform)
+    (dolist (subform subforms)
+      (compile-form subform :target nil)
+      (maybe-emit-clear-values subform))
+    ;; Restore multiple values returned by first subform.
+    (emit-push-current-thread)
+    (emit 'aload values-register)
+    (emit 'putfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
+    ;; Result.
+    (emit 'aload result-register)
+    (emit-move-from-stack target)))
+
 ;; Generates code to bind variable to value at top of runtime stack.
 (defun compile-binding (variable)
   (cond ((variable-register variable)
@@ -2253,32 +2280,47 @@
                ((null forms))
              (compile-form (car forms) :target (if (cdr forms) nil target)))))))
 
-(defvar *tags* ())
+;; Tags defined in the current compiland that are visible at the current point
+;; of compilation.
+(defvar *local-tags* ())
 
-(defstruct tag name label)
+;; All tags visible at the current point of compilation, some of which may not
+;; be in the current compiland.
+(defvar *all-tags* ())
+
+(defstruct tag
+  name
+  label
+  (compiland *current-compiland*))
+
+(defun find-tag (name)
+  (dolist (tag *all-tags*)
+    (when (eql name (tag-name tag))
+      (return tag))))
 
 (defun label-for-tag (name)
-  (dolist (tag *tags*)
+  (dolist (tag *local-tags*)
     (when (eql name (tag-name tag))
       (return (tag-label tag)))))
 
 (defun compile-tagbody (form &key (target *val*))
-  (let ((*tags* *tags*)
+  (let ((*local-tags* *local-tags*)
+        (*all-tags* *all-tags*)
         (body (cdr form)))
     ;; Scan for tags.
-    (dolist (f body)
-      (when (atom f)
-        (let ((name f)
-              (label (gensym)))
-          (push (make-tag :name name :label label) *tags*))))
+    (dolist (subform body)
+      (when (atom subform)
+        (let* ((tag (make-tag :name subform :label (gensym))))
+          (push tag *local-tags*)
+          (push tag *all-tags*))))
     (do* ((rest body (cdr rest))
           (subform (car rest) (car rest)))
          ((null rest))
       (cond ((atom subform)
-             (let ((label (label-for-tag subform)))
-               (unless label
-                 (error "COMPILE-TAGBODY: tag not found: ~S" subform))
-               (emit 'label label)))
+             (let ((tag (find-tag subform)))
+               (unless tag
+                 (error "COMPILE-TAGBODY: tag not found: ~S~%" subform))
+               (emit 'label (tag-label tag))))
             (t
              (when (and (null (cdr rest)) ;; Last subform.
                         (consp subform)
@@ -2294,10 +2336,12 @@
 
 (defun compile-go (form &key target)
   (let* ((name (cadr form))
-         (label (label-for-tag name)))
-    (unless label
+         (tag (find-tag name)))
+    (unless tag
       (error "COMPILE-GO: tag not found: ~S" name))
-    (emit 'goto label)))
+    (unless (eq (tag-compiland tag) *current-compiland*)
+      (error "COMPILE-GO: tag not local: ~S" name))
+    (emit 'goto (tag-label tag))))
 
 (defun compile-atom (form &key (target *val*))
   (unless (= (length form) 2)
@@ -3296,9 +3340,10 @@
   (unless (null environment)
     (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (multiple-value-bind (precompiled-form obstacles) (precompile-form form t)
-    (let* ((*speed* *speed*)
-           (*safety* *safety*)
+    (let* ((*current-compiland* (make-compiland :name name))
            (*defun-name* name)
+           (*speed* *speed*)
+           (*safety* *safety*)
            (*declared-symbols* (make-hash-table :test 'eq))
            (*declared-functions* (make-hash-table :test 'equal))
            (*declared-strings* (make-hash-table :test 'eq))
@@ -3328,7 +3373,7 @@
            (*fields* ())
            (*blocks* ())
 
-           (*tags* nil)
+           (*local-tags* nil)
 
            (*register* 0)
            (*registers-allocated* 0)
@@ -3659,6 +3704,7 @@
                           locally
                           multiple-value-bind
                           multiple-value-list
+                          multiple-value-prog1
                           progn
                           quote
                           return-from
