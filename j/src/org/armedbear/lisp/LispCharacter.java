@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.47 2004-04-17 10:52:39 piso Exp $
+ * $Id: LispCharacter.java,v 1.48 2004-04-23 00:49:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -386,6 +386,45 @@ public final class LispCharacter extends LispObject
             if (weight < 10)
                 return characters['0' + weight];
             return characters['A' + weight - 10];
+        }
+    };
+
+    // ### digit-char-p char &optional radix => weight
+    private static final Primitive DIGIT_CHAR_P =
+        new Primitive("digit-char-p", "char &optional radix")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                int n = Character.digit(((LispCharacter)arg).value, 10);
+                return n < 0 ? NIL : new Fixnum(n);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CHARACTER));
+            }
+        }
+
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            char c;
+            try {
+                c = ((LispCharacter)first).value;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.CHARACTER));
+            }
+            try {
+                int radix = ((Fixnum)second).value;
+                if (radix >= 2 && radix <= 36) {
+                    int n = Character.digit(c, radix);
+                    return n < 0 ? NIL : new Fixnum(n);
+                }
+            }
+            catch (ClassCastException e) {}
+            return signal(new TypeError(second,
+                                        list3(Symbol.INTEGER, Fixnum.TWO,
+                                              new Fixnum(36))));
         }
     };
 
