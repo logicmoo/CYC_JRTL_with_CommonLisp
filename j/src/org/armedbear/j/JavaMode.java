@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaMode.java,v 1.4 2002-10-26 15:05:36 piso Exp $
+ * $Id: JavaMode.java,v 1.5 2002-12-08 03:46:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,7 +291,9 @@ public class JavaMode extends AbstractMode implements Constants, Mode
     private final int indentClosingBrace(Line line, Buffer buffer)
     {
         Position pos = matchClosingBrace(new Position(line, 0));
-        if (!pos.getLine().trim().startsWith("{"))
+        if (isOpeningBraceOfClassOrMethod(pos.getLine()))
+            pos = findBeginningOfStatement(pos);
+        else if (!pos.getLine().trim().startsWith("{"))
             pos = findPreviousConditional(pos);
         return buffer.getIndentation(pos.getLine());
     }
@@ -322,23 +324,24 @@ public class JavaMode extends AbstractMode implements Constants, Mode
     private final int indentAfterOpeningBrace(Line model, String modelText,
         Buffer buffer)
     {
+        final int indentSize = buffer.getIndentSize();
+        if (isOpeningBraceOfClassOrMethod(model)) {
+            Position pos = findBeginningOfStatement(new Position(model, 0));
+            int indent = buffer.getIndentation(pos.getLine());
+            if (buffer.getBooleanProperty(Property.INDENT_AFTER_OPENING_BRACE))
+                indent += indentSize;
+            return indent;
+        }
         Position pos = new Position(model, model.length()-1);
         if (modelText.charAt(0) != '{')
             pos = findPreviousConditional(pos);
         int indent = buffer.getIndentation(pos.getLine());
-        final int indentSize = buffer.getIndentSize();
-        if (isOpeningBraceOfClassOrMethod(model)) {
-            if (buffer.getBooleanProperty(Property.INDENT_AFTER_OPENING_BRACE))
-                indent += indentSize;
-        } else {
-            // Not opening brace.
-            if (buffer.getBooleanProperty(Property.INDENT_AFTER_BRACE))
-                indent += indentSize;
-            final boolean indentBeforeBrace =
-                buffer.getBooleanProperty(Property.INDENT_BEFORE_BRACE);
-            if (indentBeforeBrace && pos.getLine() != model)
-                indent += indentSize;
-        }
+        if (buffer.getBooleanProperty(Property.INDENT_AFTER_BRACE))
+            indent += indentSize;
+        final boolean indentBeforeBrace =
+            buffer.getBooleanProperty(Property.INDENT_BEFORE_BRACE);
+        if (indentBeforeBrace && pos.getLine() != model)
+            indent += indentSize;
         return indent;
     }
 
