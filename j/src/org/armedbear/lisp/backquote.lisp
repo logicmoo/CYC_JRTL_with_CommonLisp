@@ -1,7 +1,7 @@
 ;;; backquote.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: backquote.lisp,v 1.2 2003-03-06 02:22:59 piso Exp $
+;;; $Id: backquote.lisp,v 1.3 2003-06-01 17:44:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -71,14 +71,14 @@
          (list *bq-clobberable* (cadr x)))
         (t (list *bq-list* (bq-process x)))))
 
-(defun maptree (fn x)
-  (if (atom x)
-      (funcall fn x)
-      (let ((a (funcall fn (car x)))
-            (d (maptree fn (cdr x))))
-        (if (and (eql a (car x)) (eql d (cdr x)))
-            x
-            (cons a d)))))
+;; (defun maptree (fn x)
+;;   (if (atom x)
+;;       (funcall fn x)
+;;       (let ((a (funcall fn (car x)))
+;;             (d (maptree fn (cdr x))))
+;;         (if (and (eql a (car x)) (eql d (cdr x)))
+;;             x
+;;             (cons a d)))))
 
 (defun bq-remove-tokens (x)
   (cond ((eq x *bq-list*) 'list)
