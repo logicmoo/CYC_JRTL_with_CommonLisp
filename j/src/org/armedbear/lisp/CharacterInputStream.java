@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.58 2003-12-13 00:02:47 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.59 2003-12-16 02:23:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -317,7 +317,7 @@ public class CharacterInputStream extends LispInputStream
     private LispObject readSharp() throws ConditionThrowable
     {
         try {
-            int numArg = 0;
+            int numArg = -1;
             char c;
             while (true) {
                 int n = read();
@@ -326,6 +326,8 @@ public class CharacterInputStream extends LispInputStream
                 c = (char) n;
                 if (c < '0' || c > '9')
                     break;
+                if (numArg < 0)
+                    numArg = 0;
                 numArg = numArg * 10 + c - '0';
             }
             LispObject fun =
@@ -336,7 +338,7 @@ public class CharacterInputStream extends LispInputStream
                 LispObject result = funcall3(fun,
                                              this,
                                              LispCharacter.getInstance(c),
-                                             new Fixnum(numArg),
+                                             (numArg < 0) ? NIL : new Fixnum(numArg),
                                              thread);
                 LispObject[] values = thread.getValues();
                 if (values != null && values.length == 0)
