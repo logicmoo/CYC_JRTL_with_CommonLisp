@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.32 2003-07-26 17:05:32 piso Exp $
+ * $Id: Utilities.java,v 1.33 2003-07-26 18:17:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,7 +137,7 @@ public final class Utilities implements Constants
         return true;
     }
 
-    public static boolean isDelimited(final String s, final int index, final int length)
+    public static boolean isDelimited(String s, int index, int length)
     {
         final int before = index - 1;
         if (before >= 0 && Character.isJavaIdentifierPart(s.charAt(before)))
@@ -148,8 +148,11 @@ public final class Utilities implements Constants
         return true;
     }
 
-    public static boolean isDelimited(String s, int index, int length, Mode mode)
+    public static boolean isDelimited(String s, int index, int length,
+                                      Mode mode)
     {
+        if (mode == null)
+            return isDelimited(s, index, length);
         final int before = index - 1;
         if (before >= 0 && mode.isIdentifierPart(s.charAt(before)))
             return false;
@@ -159,9 +162,11 @@ public final class Utilities implements Constants
         return true;
     }
 
-    public static boolean isDelimited(final Mode mode, final String s,
-        final int startIndex, final int endIndex)
+    public static boolean isDelimited(Mode mode, String s,
+                                      int startIndex, int endIndex)
     {
+        if (mode == null)
+            mode = JavaMode.getMode();
         final int before = startIndex - 1;
         if (before >= 0 && mode.isIdentifierPart(s.charAt(before)))
             return false;
