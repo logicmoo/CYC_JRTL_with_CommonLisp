@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.684 2004-09-27 11:20:33 piso Exp $
+ * $Id: Primitives.java,v 1.685 2004-09-29 18:52:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2164,6 +2164,12 @@ public final class Primitives extends Lisp
                 if (function instanceof Function || function instanceof GenericFunction)
                     return function;
                 return signal(new UndefinedFunction(arg));
+            }
+            if (arg.listp()) && arg.car() == Symbol.LAMBDA) {
+                LispObject rest = arg.cdr();
+                Closure closure = new Closure(rest.car(), rest.cdr(),
+                                              new Environment());
+                return closure;
             }
             return signal(new TypeError(arg, list3(Symbol.OR, Symbol.FUNCTION,
                                                    Symbol.SYMBOL)));
