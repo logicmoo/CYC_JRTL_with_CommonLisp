@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.96 2003-08-25 13:03:00 piso Exp $
+;;; $Id: boot.lisp,v 1.97 2003-08-25 13:23:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -268,6 +268,20 @@
          ,@clauses
          (otherwise
           (error 'type-error "~S fell through ETYPECASE expression" ,var))))))
+
+
+(defmacro ctypecase (keyplace &rest clauses)
+  (let ((g (gensym))
+        (h (gensym)))
+    `(block ,g
+            (tagbody
+             ,h
+             (return-from ,g
+                          (typecase ,keyplace
+                            ,@clauses
+                            (otherwise
+                             (error 'type-error "CTYPECASE error") ;; FIXME
+                             (go ,h))))))))
 
 
 (defmacro cond (&rest clauses)
