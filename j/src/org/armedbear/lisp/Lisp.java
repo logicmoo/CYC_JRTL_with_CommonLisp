@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.285 2004-10-06 23:21:55 piso Exp $
+ * $Id: Lisp.java,v 1.286 2004-10-12 15:49:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1809,6 +1809,9 @@ public abstract class Lisp
 
     public static final Symbol _PRINT_RIGHT_MARGIN_ =
         exportSpecial("*PRINT-RIGHT-MARGIN*", PACKAGE_CL, NIL);
+
+    public static final Symbol _PRINT_STRUCTURE_ =
+        exportSpecial("*PRINT-STRUCTURE*", PACKAGE_EXT, T);
 
     // ### *current-print-length*
     public static final Symbol _CURRENT_PRINT_LENGTH_ =
