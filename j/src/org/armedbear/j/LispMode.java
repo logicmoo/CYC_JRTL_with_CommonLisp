@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.75 2004-09-03 19:26:06 piso Exp $
+ * $Id: LispMode.java,v 1.76 2004-09-05 00:17:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,6 +134,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         // SBCL
         definers.put("def!struct", "defstruct");
         definers.put("defmacro-mundanely", "defmacro");
+        definers.put("def!macro", "defmacro");
     }
 
     public static final String translateDefiner(String s)
