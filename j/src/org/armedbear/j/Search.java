@@ -2,7 +2,7 @@
  * Search.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Search.java,v 1.2 2003-07-26 17:06:21 piso Exp $
+ * $Id: Search.java,v 1.3 2003-07-26 17:53:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,12 +165,7 @@ public class Search implements Cloneable
 
     protected Position findInBuffer(Buffer buffer)
     {
-        return find(buffer, new Position(buffer.getFirstLine(), 0));
-    }
-
-    public final Position find(Buffer buffer, Position start)
-    {
-        return regularExpression ? findRegExp(buffer, start) : findString(buffer, start);
+        return find(buffer.getMode(), new Position(buffer.getFirstLine(), 0));
     }
 
     public final Position reverseFind(Buffer buffer, Position start)
