@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.112 2003-10-03 00:34:39 piso Exp $
+;;; $Id: boot.lisp,v 1.113 2003-10-04 10:55:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -100,7 +100,6 @@
 (set-dispatch-macro-character #\# #\+ #'read-conditional)
 (set-dispatch-macro-character #\# #\- #'read-conditional)
 
-
 (sys::%load "macros.lisp")
 (sys::%load "fixme.lisp")
 (sys::%load "destructuring-bind.lisp")
@@ -110,11 +109,9 @@
 (sys::%load "sequences.lisp")
 (sys::%load "error.lisp")
 (sys::%load "defpackage.lisp")
-(sys::%load "debug.lisp")
-
-
 (defpackage "JVM" (:use "COMMON-LISP" "EXTENSIONS"))
-
+(sys::%load "top-level.lisp")
+(sys::%load "debug.lisp")
 
 ;;; PROVIDE, REQUIRE (from SBCL)
 (defun provide (module-name)
@@ -415,6 +412,3 @@
     (dolist (var varlist) (setq poplist (cons `(,var (pop ,g)) poplist)))
     `(let* ((,g (multiple-value-list ,form)) ,@(nreverse poplist))
            ,@body)))
-
-
-(sys::%load "top-level.lisp")
