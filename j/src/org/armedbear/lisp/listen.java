@@ -2,7 +2,7 @@
  * listen.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: listen.java,v 1.1 2004-01-31 13:41:46 piso Exp $
+ * $Id: listen.java,v 1.2 2004-03-11 11:37:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.lisp;
 
+// ### listen
 public final class listen extends Primitive
 {
     private listen()
@@ -37,7 +38,7 @@ public final class listen extends Primitive
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        return checkCharacterInputStream(arg).listen();
+        return inSynonymOf(arg).listen();
     }
 
     private static final Primitive LISTEN = new listen();
