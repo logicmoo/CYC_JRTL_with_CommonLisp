@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.3 2003-03-08 03:34:45 piso Exp $
+;;; $Id: compiler.lisp,v 1.4 2003-03-08 04:09:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,9 +31,13 @@
   (when (= (length exprs) 2)
     (unless (symbolp (first exprs))
       (error 'type-error))
-    (return-from compile-setq
-                 (append '(cl::%%setq2)
-                         (list (first exprs) (compile-sexp (cadr exprs))))))
+    (let ((sym (car exprs))
+          (val (compile-sexp (cadr exprs))))
+      (when (and (consp val) (eq (car val) '1+) (eq (cadr val) sym))
+        (return-from compile-sexp
+                     (list 'cl::%%incq sym)))
+      (return-from compile-setq
+                   (append '(cl::%%setq2) (list sym val)))))
   (do* ((result '(setq))
         (sym (car exprs) (car exprs))
         (val (cadr exprs) (cadr exprs)))
@@ -91,6 +95,8 @@
       (if (consp var)
           (let* ((v (car var))
                  (expr (cadr var)))
+            (unless (symbolp v)
+              (error 'type-error))
             (setq result (append result (list (list v (compile-sexp expr))))))
           (setq result (append result (list var)))))
     result))
