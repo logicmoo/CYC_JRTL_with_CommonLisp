@@ -2,7 +2,7 @@
  * DescribeKeyDialog.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: DescribeKeyDialog.java,v 1.3 2003-06-13 14:58:25 piso Exp $
+ * $Id: DescribeKeyDialog.java,v 1.4 2003-06-13 17:06:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public final class DescribeKeyDialog extends AbstractDialog
 {
@@ -85,8 +86,15 @@ public final class DescribeKeyDialog extends AbstractDialog
     {
         if (seenKeyPressed && !disposed) {
             dispose();
-            MessageDialog.showMessageDialog(editor,
-                keyStrokeText + " is not mapped", title);
+            // Use invokeLater() so message dialog will get focus.
+            Runnable r = new Runnable() {
+                public void run()
+                {
+                    MessageDialog.showMessageDialog(editor,
+                        keyStrokeText + " is not mapped", title);
+                }
+            };
+            SwingUtilities.invokeLater(r);
         }
     }
 
@@ -108,7 +116,7 @@ public final class DescribeKeyDialog extends AbstractDialog
             mapping =
                 KeyMap.getGlobalKeyMap().lookup(keyChar, keyCode, modifiers);
         }
-        FastStringBuffer sb = new FastStringBuffer();
+        final FastStringBuffer sb = new FastStringBuffer();
         if (mapping != null) {
             sb.append(mapping.getKeyText());
             sb.append(" is mapped to ");
@@ -120,8 +128,15 @@ public final class DescribeKeyDialog extends AbstractDialog
             } else
                 sb.append(" (global mapping)");
             dispose();
-            MessageDialog.showMessageDialog(editor, sb.toString(),
-                "Describe Key");
+            // Use invokeLater() so message dialog will get focus.
+            Runnable r = new Runnable() {
+                public void run()
+                {
+                    MessageDialog.showMessageDialog(editor, sb.toString(),
+                        "Describe Key");
+                }
+            };
+            SwingUtilities.invokeLater(r);
         }
     }
 
