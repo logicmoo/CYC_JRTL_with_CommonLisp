@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.170 2004-11-26 15:10:22 piso Exp $
+;;; $Id: autoloads.lisp,v 1.171 2004-12-26 03:59:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -264,6 +264,7 @@
 (autoload-macro 'with-thread-lock)
 (export 'aver)
 (autoload-macro 'aver)
+(autoload sys::%failed-aver)
 (export 'collect)
 (autoload-macro 'collect)
 (export 'with-mutex)
