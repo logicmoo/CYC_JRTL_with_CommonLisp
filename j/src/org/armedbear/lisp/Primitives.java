@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.51 2003-02-27 17:57:23 piso Exp $
+ * $Id: Primitives.java,v 1.52 2003-02-27 18:33:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1667,25 +1667,11 @@ public final class Primitives extends Module
                 throw new LispError("MAKE-ARRAY: cannot specify both " +
                     ":initial-element and :initial-contents");
             }
-            if (elementType == Symbol.CHARACTER) {
-                LispString string = new LispString(size);
-                if (initialElement != null) {
-                    // Initial element was specified.
-                    char c = checkCharacter(initialElement).getValue();
-                    string.fill(c);
-                } else if (initialContents != null) {
-                    // Since we only support one-dimensional arrays, this
-                    // must be a sequence (and not a nested structure of
-                    // sequences).
-                    checkSequence(initialContents);
-                    for (int i = 0; i < size; i++)
-                        string.set(i, initialContents.elt(i));
-                }
-                if (fillPointer != NIL)
-                    string.setFillPointer(fillPointer);
-                return string;
-            }
-            Vector v = new Vector(size);
+            AbstractVector v;
+            if (elementType == Symbol.CHARACTER)
+                v = new LispString(size);
+            else
+                v = new Vector(size);
             if (initialElement != null) {
                 // Initial element was specified.
                 v.fill(initialElement);
