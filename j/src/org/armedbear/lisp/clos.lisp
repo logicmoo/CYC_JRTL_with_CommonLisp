@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.68 2004-02-07 20:12:35 piso Exp $
+;;; $Id: clos.lisp,v 1.69 2004-02-08 00:50:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -866,7 +866,8 @@
 (defun make-instance-standard-generic-function (generic-function-class
                                                 &key name lambda-list
                                                 method-class
-                                                method-combination)
+                                                method-combination
+                                                documentation)
   (declare (ignore generic-function-class))
   (let ((gf (std-allocate-instance the-class-standard-gf)))
     (setf (generic-function-name gf) name)
@@ -874,6 +875,7 @@
     (setf (generic-function-methods gf) ())
     (setf (generic-function-method-class gf) method-class)
     (setf (generic-function-method-combination gf) method-combination)
+    (setf (generic-function-documentation gf) documentation)
     (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
     (setf (slot-value gf 'required-args)
           (let ((plist (analyze-lambda-list (generic-function-lambda-list gf))))
@@ -1470,6 +1472,12 @@
   (generic-function-documentation x))
 
 (defmethod (setf documentation) (new-value (x standard-generic-function) (doc-type (eql 't)))
+  (setf (generic-function-documentation x) new-value))
+
+(defmethod documentation ((x standard-generic-function) (doc-type (eql 'function)))
+  (generic-function-documentation x))
+
+(defmethod (setf documentation) (new-value (x standard-generic-function) (doc-type (eql 'function)))
   (setf (generic-function-documentation x) new-value))
 
 (defmethod documentation ((x standard-method) (doc-type (eql 't)))
