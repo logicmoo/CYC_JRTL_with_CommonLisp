@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2000 Peter Graves
-# $Id: Makefile.in,v 1.3 2003-03-01 02:02:11 piso Exp $
+# $Id: Makefile.in,v 1.4 2003-03-20 20:23:18 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -47,7 +47,9 @@ classes:
 	set -e; \
 	for i in src/bsh src/bsh/classpath src/bsh/commands src/bsh/reflect src/gnu/regexp \
 	  src/org/xml/sax src/org/xml/sax/helpers src/org/xml/sax/ext \
-	  src/org/armedbear/j/aelfred src/org/armedbear/j/mail src/org/armedbear/j \
+	  src/org/armedbear/j/aelfred src/org/armedbear/j/mail \
+	  src/org/armedbear/j/jdb \
+	  src/org/armedbear/j \
 	  src/org/armedbear/lisp src; \
 	do \
 	  ( cd $$i && $(MAKE) ); \
@@ -69,6 +71,7 @@ j.jar: classes.stamp
 	  gnu/regexp/*.class gnu/regexp/MessagesBundle.properties org/xml/sax/*.class \
 	  org/xml/sax/helpers/*.class org/xml/sax/ext/*.class org/armedbear/j/aelfred/*.class \
 	  org/armedbear/j/mail/*.class \
+	  org/armedbear/j/jdb/*.class \
 	  org/armedbear/j/*.keywords org/armedbear/j/mail/*.keywords \
 	  org/armedbear/lisp/*.class org/armedbear/lisp/*.lisp org/armedbear/lisp/build
 
@@ -78,46 +81,58 @@ classes.stamp: classes
 distdir:
 	-rm -rf $(distdir)
 	mkdir $(distdir)
-	cp -p j.in j.bat.in configure configure.in Makefile.in install-sh mkinstalldirs COPYING $(distdir)
-	cp -p build.properties build.xml $(distdir)
+	find . | xargs chmod u+w
+	chmod +x configure
+	chmod +x install-sh
+	chmod +x mkinstalldirs
+	cp -p  j.in j.bat.in configure configure.in Makefile.in install-sh mkinstalldirs COPYING $(distdir)
+	cp -p  build.properties build.xml $(distdir)
 	mkdir $(distdir)/src
-	cp -p src/Makefile.in src/manifest src/*.java $(distdir)/src
+	cp -p  src/Makefile.in src/manifest src/*.java $(distdir)/src
 	mkdir $(distdir)/src/jpty
-	cp -p src/jpty/Makefile.in src/jpty/jpty.c $(distdir)/src/jpty
-	cp -p src/jpty/build.xml $(distdir)/src/jpty
+	cp -p  src/jpty/Makefile.in src/jpty/jpty.c $(distdir)/src/jpty
+	cp -p  src/jpty/build.xml $(distdir)/src/jpty
 	mkdir $(distdir)/src/org
 	mkdir $(distdir)/src/org/armedbear
 	mkdir $(distdir)/src/org/armedbear/j
-	-cp -p src/org/armedbear/j/Makefile.in src/org/armedbear/j/version.in src/org/armedbear/j/*.java src/org/armedbear/j/*.bsh $(distdir)/src/org/armedbear/j
+	-cp -p  src/org/armedbear/j/Makefile.in $(distdir)/src/org/armedbear/j
+	-cp -p  src/org/armedbear/j/version.in  $(distdir)/src/org/armedbear/j
+	-cp -p  src/org/armedbear/j/*.java      $(distdir)/src/org/armedbear/j
+	-cp -p  src/org/armedbear/j/*.keywords  $(distdir)/src/org/armedbear/j
+	-cp -p  src/org/armedbear/j/*.bsh       $(distdir)/src/org/armedbear/j
 	mkdir $(distdir)/src/org/armedbear/j/mail
-	-cp -p src/org/armedbear/j/mail/Makefile.in src/org/armedbear/j/mail/*.java $(distdir)/src/org/armedbear/j/mail
+	-cp -p  src/org/armedbear/j/mail/Makefile.in src/org/armedbear/j/mail/*.java src/org/armedbear/j/mail/*.keywords $(distdir)/src/org/armedbear/j/mail
+	mkdir $(distdir)/src/org/armedbear/j/jdb
+	-cp -p  src/org/armedbear/j/jdb/Makefile.in src/org/armedbear/j/jdb/*.java $(distdir)/src/org/armedbear/j/jdb
 	mkdir $(distdir)/src/org/armedbear/j/aelfred
-	-cp -p src/org/armedbear/j/aelfred/Makefile.in src/org/armedbear/j/aelfred/*.java $(distdir)/src/org/armedbear/j/aelfred
+	-cp -p  src/org/armedbear/j/aelfred/Makefile.in src/org/armedbear/j/aelfred/*.java $(distdir)/src/org/armedbear/j/aelfred
 	mkdir $(distdir)/src/org/armedbear/j/images
-	-cp -p src/org/armedbear/j/images/*.gif $(distdir)/src/org/armedbear/j/images
+	-cp -p  src/org/armedbear/j/images/*.png $(distdir)/src/org/armedbear/j/images
+	mkdir $(distdir)/src/org/armedbear/lisp
+	-cp -p  src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml src/org/armedbear/lisp/*.java src/org/armedbear/lisp/*.lisp $(distdir)/src/org/armedbear/lisp
 	mkdir $(distdir)/src/bsh
-	-cp -p src/bsh/Makefile.in src/bsh/*.java  src/bsh/bsh.jj src/bsh/bsh.jjt $(distdir)/src/bsh
+	-cp -p  src/bsh/Makefile.in src/bsh/*.java  src/bsh/bsh.jj src/bsh/bsh.jjt $(distdir)/src/bsh
 	mkdir $(distdir)/src/bsh/classpath
-	-cp -p src/bsh/classpath/Makefile.in src/bsh/classpath/*.java  $(distdir)/src/bsh/classpath
+	-cp -p  src/bsh/classpath/Makefile.in src/bsh/classpath/*.java  $(distdir)/src/bsh/classpath
 	mkdir $(distdir)/src/bsh/commands
-	-cp -p src/bsh/commands/Makefile.in src/bsh/commands/*.java src/bsh/commands/*.bsh $(distdir)/src/bsh/commands
+	-cp -p  src/bsh/commands/Makefile.in src/bsh/commands/*.java src/bsh/commands/*.bsh $(distdir)/src/bsh/commands
 	mkdir $(distdir)/src/bsh/reflect
-	-cp -p src/bsh/reflect/Makefile.in src/bsh/reflect/*.java  $(distdir)/src/bsh/reflect
+	-cp -p  src/bsh/reflect/Makefile.in src/bsh/reflect/*.java  $(distdir)/src/bsh/reflect
 	mkdir $(distdir)/src/gnu
 	mkdir $(distdir)/src/gnu/regexp
-	-cp -p src/gnu/regexp/Makefile.in src/gnu/regexp/*.java  src/gnu/regexp/MessagesBundle.properties $(distdir)/src/gnu/regexp
+	-cp -p  src/gnu/regexp/Makefile.in src/gnu/regexp/*.java  src/gnu/regexp/MessagesBundle.properties $(distdir)/src/gnu/regexp
 	mkdir $(distdir)/src/org/xml
 	mkdir $(distdir)/src/org/xml/sax
-	-cp -p src/org/xml/sax/Makefile.in src/org/xml/sax/*.java $(distdir)/src/org/xml/sax
+	-cp -p  src/org/xml/sax/Makefile.in src/org/xml/sax/*.java $(distdir)/src/org/xml/sax
 	mkdir $(distdir)/src/org/xml/sax/helpers
-	-cp -p src/org/xml/sax/helpers/Makefile.in src/org/xml/sax/helpers/*.java $(distdir)/src/org/xml/sax/helpers
+	-cp -p  src/org/xml/sax/helpers/Makefile.in src/org/xml/sax/helpers/*.java $(distdir)/src/org/xml/sax/helpers
 	mkdir $(distdir)/src/org/xml/sax/ext
-	-cp -p src/org/xml/sax/ext/Makefile.in src/org/xml/sax/ext/*.java $(distdir)/src/org/xml/sax/ext
+	-cp -p  src/org/xml/sax/ext/Makefile.in src/org/xml/sax/ext/*.java $(distdir)/src/org/xml/sax/ext
 	mkdir $(distdir)/doc
-	cp -p doc/*.html $(distdir)/doc
-	cp -p doc/*.css $(distdir)/doc
+	cp -p  doc/*.html $(distdir)/doc
+	cp -p  doc/*.css $(distdir)/doc
 	mkdir $(distdir)/themes
-	-cp -p themes/* $(distdir)/themes
+	-cp -p  themes/* $(distdir)/themes
 
 dist: distdir
 	-rm -f $(distdir).zip
@@ -138,12 +153,12 @@ dist: distdir
 bindistdir: j.jar
 	-rm -rf $(distdir)
 	mkdir $(distdir)
-	cp -p j.jar COPYING $(distdir)
+	cp -p  j.jar COPYING $(distdir)
 	mkdir $(distdir)/doc
-	cp -p doc/*.html $(distdir)/doc
-	cp -p doc/*.css $(distdir)/doc
+	cp -p  doc/*.html $(distdir)/doc
+	cp -p  doc/*.css $(distdir)/doc
 	mkdir $(distdir)/themes
-	-cp -p themes/* $(distdir)/themes
+	-cp -p  themes/* $(distdir)/themes
 
 bindist: bindistdir
 	-rm -f $(distdir)-binary.tar.gz
@@ -195,6 +210,9 @@ clean:
 	-rm -f src/org/armedbear/j/build
 	-rm -f src/org/armedbear/j/aelfred/*.class
 	-rm -f src/org/armedbear/j/mail/*.class
+	-rm -f src/org/armedbear/j/jdb/*.class
+	-rm -f src/org/armedbear/lisp/*.class
+	-rm -f src/org/armedbear/lisp/build
 	-rm -f src/bsh/*.class
 	-rm -f src/bsh/classpath/*.class
 	-rm -f src/bsh/commands/*.class
@@ -222,16 +240,30 @@ distclean: clean
 	-rm -f src/org/armedbear/j/version
 	-rm -f src/org/armedbear/j/aelfred/Makefile
 	-rm -f src/org/armedbear/j/mail/Makefile
+	-rm -f src/org/armedbear/j/jdb/Makefile
+	-rm -f src/org/armedbear/lisp/Makefile
 
 j.zip:
 	-rm -f j.zip
-	zip -q j.zip j.in j.bat.in configure configure.in Makefile.in install-sh mkinstalldirs COPYING \
+	find . | xargs chmod u+w
+	chmod +x configure
+	chmod +x install-sh
+	chmod +x mkinstalldirs
+	zip -q j.zip \
+		j.in j.bat.in configure configure.in Makefile.in \
+		install-sh mkinstalldirs COPYING \
+		build.xml build.properties \
 		src/Makefile.in src/manifest src/*.java \
-		src/jpty/Makefile.in src/jpty/jpty.c \
+		src/jpty/Makefile.in src/jpty/build.xml src/jpty/jpty.c \
 		src/org/armedbear/j/Makefile.in src/org/armedbear/j/version.in src/org/armedbear/j/*.java \
+		src/org/armedbear/j/*.keywords \
 		src/org/armedbear/j/mail/Makefile.in src/org/armedbear/j/mail/*.java \
+		src/org/armedbear/j/mail/*.keywords \
+		src/org/armedbear/j/jdb/Makefile.in src/org/armedbear/j/jdb/*.java \
 		src/org/armedbear/j/*.bsh \
-		src/org/armedbear/j/images/*.gif \
+		src/org/armedbear/j/images/*.png \
+		src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml \
+		src/org/armedbear/lisp/*.java src/org/armedbear/lisp/*.lisp \
 		src/bsh/Makefile.in src/bsh/*.j* \
 		src/bsh/classpath/Makefile.in src/bsh/classpath/*.java \
 		src/bsh/commands/Makefile.in src/bsh/commands/*.java src/bsh/commands/*.bsh \
@@ -242,7 +274,8 @@ j.zip:
 		src/org/xml/sax/ext/Makefile.in src/org/xml/sax/ext/*.java \
 		src/org/armedbear/j/aelfred/Makefile.in src/org/armedbear/j/aelfred/*.java \
 		doc/*.html doc/*.css \
-		themes/*
+		themes/* \
+		-x themes/CVS/
 	unzip -t -qq j.zip
 
 j-jar.zip: j.jar

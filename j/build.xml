@@ -249,9 +249,10 @@
         <exclude name="**/*.tar"/>
         <exclude name="**/*.tar.gz"/>
         <exclude name="src/test/**"/>
-        <exclude name="src/org/armedbear/lisp/**"/>
+        <exclude name="src/org/armedbear/lisp/lisp"/>
         <exclude name="**/Makefile"/>
-        <exclude name="**/config.*"/>
+        <exclude name="config.*"/>
+        <exclude name="autom4te.cache/**"/>
         <exclude name="**/classes.stamp"/>
         <exclude name="**/build"/>
         <exclude name="**/version"/>
@@ -305,10 +306,10 @@
     <zip
       zipfile="${topdir}/j.zip"
       basedir="${topdir}"
-      excludes="src/TEST-*.txt, **/*.class, **/*.jar, **/*.zip, src/test/**, **/Makefile.in, **/Makefile,
-        **/configure.in, **/configure, **/config.status, **/config.cache, **/config.log,
-        **/install-sh, **/mkinstalldirs, **/classes.stamp, **/build, **/version,
-        **/j, **/j.bat, **/jpty, **/ChangeLog"
+      excludes="src/TEST-*.txt, **/*.class, **/*.jar, **/*.zip, src/test/**, **/Makefile,
+        config.status, config.cache, config.log, autom4te.cache/**,
+        **/classes.stamp, **/build, **/version,
+        **/j, **/j.bat, **/jpty, **/ChangeLog, src/org/armedbear/lisp/lisp"
     />
   </target>
 
