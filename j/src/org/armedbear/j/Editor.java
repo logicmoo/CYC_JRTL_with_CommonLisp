@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Editor.java,v 1.130 2004-09-19 18:27:45 piso Exp $
+ * $Id: Editor.java,v 1.131 2004-10-17 13:00:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4482,10 +4482,17 @@ public final class Editor extends JPanel implements Constants,
                         if (buf == buffer) {
                             // Current buffer.
                             Line line = buffer.getLine(lineNumber);
-                            if (line == null)
-                                eob();
-                            else {
+                            if (line == null) {
+                                if (mark != null)
+                                    unmark();
+                                updateDotLine();
+                                dot.moveTo(getEob());
+                                updateDotLine();
+                                moveCaretToDotCol();
+                            } else {
                                 addUndo(SimpleEdit.MOVE);
+                                if (mark != null)
+                                    unmark();
                                 updateDotLine();
                                 dot.moveTo(line, 0);
                                 updateDotLine();
@@ -4500,6 +4507,8 @@ public final class Editor extends JPanel implements Constants,
                             findOrCreateView(buffer);
                             restoreView();
                             addUndo(SimpleEdit.MOVE);
+                            if (mark != null)
+                                unmark();
                             Line line = buffer.getLine(lineNumber);
                             if (line == null) {
                                 line = buffer.getFirstLine();
