@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.12 2002-12-08 02:25:11 piso Exp $
+ * $Id: File.java,v 1.13 2002-12-09 15:00:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,10 +126,13 @@ public class File implements Comparable
             name = name.substring(PREFIX_FILE.length());
             if (name.length() == 0)
                 return null;
-        }
-        if (name.startsWith(PREFIX_LOCAL_HOST)) {
+        } else if (name.startsWith(PREFIX_LOCAL_HOST)) {
             name = name.substring(PREFIX_LOCAL_HOST.length());
             if (name.length() == 0)
+                return null;
+        } else if (name.charAt(0) == ':') {
+            name = name.substring(1);
+            if (--length == 0)
                 return null;
         }
         name = normalize(name);
@@ -448,6 +451,8 @@ public class File implements Comparable
         if (name.startsWith(PREFIX_FILE))
             return true;
         if (name.startsWith(PREFIX_LOCAL_HOST))
+            return true;
+        if (name.length() > 0 && name.charAt(0) == ':')
             return true;
         return false;
     }
