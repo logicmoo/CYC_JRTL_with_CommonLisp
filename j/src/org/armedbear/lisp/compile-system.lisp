@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.27 2004-09-29 00:47:28 piso Exp $
+;;; $Id: compile-system.lisp,v 1.28 2004-09-29 19:04:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -61,6 +61,7 @@
 ;;                                   "format.lisp"))
      (load (maybe-compile-file "typep.lisp"))
      (load (maybe-compile-file "print.lisp"))
+     (load (maybe-compile-file "pprint-dispatch.lisp"))
      (load (maybe-compile-file "pprint.lisp"))
      (load (maybe-compile-file "format.lisp"))
      (load (maybe-compile-file "delete.lisp"))
