@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.280 2004-08-17 20:16:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.281 2004-08-18 14:10:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1866,22 +1866,22 @@
 (defun define-binary-operator (operator translation)
   (setf (gethash operator binary-operators) translation))
 
-(define-binary-operator 'eql               "EQL")
-(define-binary-operator 'equal             "EQUAL")
-(define-binary-operator '+                 "add")
-(define-binary-operator '-                 "subtract")
-(define-binary-operator '/                 "divideBy")
-(define-binary-operator '*                 "multiplyBy")
-(define-binary-operator '<                 "IS_LT")
-(define-binary-operator '<=                "IS_LE")
-(define-binary-operator '>                 "IS_GT")
-(define-binary-operator '>=                "IS_GE")
-(define-binary-operator '=                 "IS_E")
-(define-binary-operator '/=                "IS_NE")
-(define-binary-operator 'mod               "MOD")
-(define-binary-operator 'ash               "ash")
-(define-binary-operator 'aref              "AREF")
-(define-binary-operator 'sys::simple-typep "typep")
+(define-binary-operator 'eql                 "EQL")
+(define-binary-operator 'equal               "EQUAL")
+(define-binary-operator '+                   "add")
+(define-binary-operator '-                   "subtract")
+(define-binary-operator '/                   "divideBy")
+(define-binary-operator '*                   "multiplyBy")
+(define-binary-operator '<                   "IS_LT")
+(define-binary-operator '<=                  "IS_LE")
+(define-binary-operator '>                   "IS_GT")
+(define-binary-operator '>=                  "IS_GE")
+(define-binary-operator ' =                  "IS_E")
+(define-binary-operator '/=                  "IS_NE")
+(define-binary-operator 'mod                 "MOD")
+(define-binary-operator 'ash                 "ash")
+(define-binary-operator 'aref                "AREF")
+(define-binary-operator 'sys::simple-typep   "typep")
 
 (defun compile-function-call-2 (fun args :target target)
   (let ((translation (gethash fun binary-operators)))
@@ -1914,6 +1914,17 @@
                               -1)
            (emit-move-from-stack target)
            t)
+          (SYS::%STRUCTURE-REF
+           (when (fixnump (second args))
+             (compile-form (first args) :target :stack)
+             (maybe-emit-clear-values (first args))
+             (emit 'sipush (second args))
+             (emit-invokevirtual +lisp-object-class+
+                                 "getSlotValue"
+                                 "(I)Lorg/armedbear/lisp/LispObject;"
+                                 -1)
+             (emit-move-from-stack target)
+             t))
           (t
            nil)))))
 
@@ -1932,6 +1943,17 @@
                         -2)
      (emit-move-from-stack target)
      t)
+;;     (SYS::%STRUCTURE-SET
+;;      (when (fixnump (second args))
+;;        (compile-form (first args) :target :stack)
+;;        (maybe-emit-clear-values (first args))
+;;        (emit 'sipush (second args))
+;;        (emit-invokevirtual +lisp-object-class+
+;;                            "getSlotValue"
+;;                            "(I)Lorg/armedbear/lisp/LispObject;"
+;;                            -1)
+;;        (emit-move-from-stack target)
+;;        t))
     (t
      nil)))
 
