@@ -1,8 +1,8 @@
 /*
  * InsertTagDialog.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: InsertTagDialog.java,v 1.1.1.1 2002-09-24 16:09:18 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: InsertTagDialog.java,v 1.2 2003-06-12 18:50:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ public final class InsertTagDialog extends InputDialog implements Constants
 
     public InsertTagDialog(Editor editor)
     {
-        super(editor, "Tag:", "Insert Tag", null);
+        super(editor, "Element:", "Insert Element", null);
         setHistory(new History("insertTag"));
     }
 
