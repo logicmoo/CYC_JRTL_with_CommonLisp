@@ -1,8 +1,8 @@
 /*
  * Primitive3.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive3.java,v 1.12 2003-12-20 09:01:10 asimon Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Primitive3.java,v 1.13 2004-04-16 00:23:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public class Primitive3 extends Function
 
     public Primitive3(String name, String arglist)
     {
-        super(name,arglist);
+        super(name, arglist);
     }
 
     public Primitive3(String name, Package pkg)
@@ -48,32 +48,8 @@ public class Primitive3 extends Function
     }
 
     public Primitive3(String name, Package pkg, boolean exported,
-                     String arglist)
+                      String arglist)
     {
         super(name, pkg, exported, arglist);
-    }
-
-    public LispObject execute() throws ConditionThrowable
-    {
-        return signal(new WrongNumberOfArgumentsException(this));
-    }
-
-    public LispObject execute(LispObject first)
-        throws ConditionThrowable
-    {
-        return signal(new WrongNumberOfArgumentsException(this));
-    }
-
-    public LispObject execute(LispObject first, LispObject second)
-        throws ConditionThrowable
-    {
-        return signal(new WrongNumberOfArgumentsException(this));
-    }
-
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
-    {
-        if (args.length != 3)
-            return signal(new WrongNumberOfArgumentsException(this));
-        return execute(args[0], args[1], args[2]);
     }
 }

@@ -2,7 +2,7 @@
  * Primitive2.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitive2.java,v 1.12 2004-01-25 16:54:16 piso Exp $
+ * $Id: Primitive2.java,v 1.13 2004-04-16 00:23:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,30 +51,5 @@ public class Primitive2 extends Function
                       String arglist)
     {
         super(name, pkg, exported, arglist);
-    }
-
-    public LispObject execute() throws ConditionThrowable
-    {
-        return signal(new WrongNumberOfArgumentsException(this));
-    }
-
-    public LispObject execute(LispObject first)
-        throws ConditionThrowable
-    {
-        return signal(new WrongNumberOfArgumentsException(this));
-    }
-
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third)
-        throws ConditionThrowable
-    {
-        return signal(new WrongNumberOfArgumentsException(this));
-    }
-
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
-    {
-        if (args.length != 2)
-            return signal(new WrongNumberOfArgumentsException(this));
-        return execute(args[0], args[1]);
     }
 }

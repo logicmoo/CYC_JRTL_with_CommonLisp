@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.33 2004-04-05 01:06:58 piso Exp $
+ * $Id: Function.java,v 1.34 2004-04-16 00:23:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,28 +126,37 @@ public abstract class Function extends Functional
         return name;
     }
 
-    // Primitive
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    // Primitive0
+    public LispObject execute() throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(name));
+        return signal(new WrongNumberOfArgumentsException(this));
     }
 
     // Primitive1
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[1];
-        args[0] = arg;
-        return execute(args);
+        return signal(new WrongNumberOfArgumentsException(this));
     }
 
     // Primitive2
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[2];
-        args[0] = first;
-        args[1] = second;
-        return execute(args);
+        return signal(new WrongNumberOfArgumentsException(this));
+    }
+
+    // Primitive3
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third)
+        throws ConditionThrowable
+    {
+        return signal(new WrongNumberOfArgumentsException(this));
+    }
+
+    // Primitive
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        return signal(new WrongNumberOfArgumentsException(this));
     }
 
     public String toString()

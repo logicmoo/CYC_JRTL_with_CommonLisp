@@ -2,7 +2,7 @@
  * Primitive1.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitive1.java,v 1.13 2004-01-05 18:20:19 piso Exp $
+ * $Id: Primitive1.java,v 1.14 2004-04-16 00:24:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public class Primitive1 extends Function
 
     public Primitive1(String name, String arglist)
     {
-        super(name,arglist);
+        super(name, arglist);
     }
 
     public Primitive1(String name, Package pkg)
@@ -57,29 +57,5 @@ public class Primitive1 extends Function
                       String arglist, String docstring)
     {
         super(name, pkg, exported, arglist, docstring);
-    }
-
-    public LispObject execute() throws ConditionThrowable
-    {
-        return signal(new WrongNumberOfArgumentsException(this));
-    }
-
-    public LispObject execute(LispObject first, LispObject second)
-        throws ConditionThrowable
-    {
-        return signal(new WrongNumberOfArgumentsException(this));
-    }
-
-    public LispObject execute(LispObject first, LispObject second,
-        LispObject third) throws ConditionThrowable
-    {
-        return signal(new WrongNumberOfArgumentsException(this));
-    }
-
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
-    {
-        if (args.length != 1)
-            return signal(new WrongNumberOfArgumentsException(this));
-        return execute(args[0]);
     }
 }
