@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: opcodes.lisp,v 1.12 2004-12-18 22:25:49 piso Exp $
+;;; $Id: opcodes.lisp,v 1.13 2004-12-21 14:15:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -137,7 +137,7 @@
 (define-opcode fadd 98 1 nil)
 (define-opcode dadd 99 1 nil)
 (define-opcode isub 100 1 nil)
-(define-opcode lsub 101 1 nil)
+(define-opcode lsub 101 1 -2)
 (define-opcode fsub 102 1 nil)
 (define-opcode dsub 103 1 nil)
 (define-opcode imul 104 1 nil)
