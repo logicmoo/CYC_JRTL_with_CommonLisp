@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.37 2004-08-31 18:14:52 piso Exp $
+ * $Id: LispAPI.java,v 1.38 2004-08-31 23:18:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -471,12 +471,14 @@ public final class LispAPI extends Lisp
 
     // ### beginning-of-line
     private static final Primitive BEGINNING_OF_LINE =
-        new Primitive("beginning-of-line", PACKAGE_J, true) {
+        new Primitive("beginning-of-line", PACKAGE_J, true)
+    {
         public LispObject execute() throws ConditionThrowable
         {
             Editor.currentEditor().bol();
             return NIL;
         }
+
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             int n = (arg != NIL) ? Fixnum.getValue(arg) : 1;
@@ -500,12 +502,14 @@ public final class LispAPI extends Lisp
 
     // ### end-of-line
     private static final Primitive END_OF_LINE =
-        new Primitive("end-of-line", PACKAGE_J, true) {
+        new Primitive("end-of-line", PACKAGE_J, true)
+    {
         public LispObject execute() throws ConditionThrowable
         {
             Editor.currentEditor().eol();
             return NIL;
         }
+
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             int n = (arg != NIL) ? Fixnum.getValue(arg) : 1;
@@ -524,6 +528,37 @@ public final class LispAPI extends Lisp
                 editor.moveCaretToDotCol();
             }
             return NIL;
+        }
+    };
+
+    // ### backward-up-list
+    private static final Primitive BACKWARD_UP_LIST =
+        new Primitive("backward-up-list", PACKAGE_J, true)
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            LispMode.backwardUpList();
+            return NIL;
+        }
+    };
+
+    // ### looking-at pattern => generalized-boolean
+    private static final Primitive LOOKING_AT =
+        new Primitive("looking-at", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof AbstractString) {
+                String pattern = arg.getStringValue();
+                Editor editor = Editor.currentEditor();
+                Position dot = editor.getDot();
+                if (dot != null) {
+                    if (dot.getLine().substring(dot.getOffset()).startsWith(pattern))
+                        return T;
+                }
+                return NIL;
+            }
+            return signal(new TypeError(arg, Symbol.STRING));
         }
     };
 
