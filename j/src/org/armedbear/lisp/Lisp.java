@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.74 2003-06-01 02:08:36 piso Exp $
+ * $Id: Lisp.java,v 1.75 2003-06-01 02:47:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,16 +131,18 @@ public abstract class Lisp
             thread.setValues(results);
             return results[0];
         }
-        Symbol symbol = checkSymbol(form.car());
-        LispObject macro = symbol.getSymbolFunction();
-        if (macro instanceof MacroObject) {
-            LispObject expander = ((MacroObject)macro).getExpander();
-            if (profiling)
-                expander.incrementCallCount();
-            results[0] = expander.execute(form, env);
-            results[1] = T;
-            thread.setValues(results);
-            return results[0];
+        LispObject car = form.car();
+        if (car instanceof Symbol) {
+            LispObject macro = car.getSymbolFunction();
+            if (macro instanceof MacroObject) {
+                LispObject expander = ((MacroObject)macro).getExpander();
+                if (profiling)
+                    expander.incrementCallCount();
+                results[0] = expander.execute(form, env);
+                results[1] = T;
+                thread.setValues(results);
+                return results[0];
+            }
         }
         // Not a macro.
         results[0] = form;
