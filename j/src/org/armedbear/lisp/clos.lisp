@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.73 2004-02-08 17:50:25 piso Exp $
+;;; $Id: clos.lisp,v 1.74 2004-02-08 18:08:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -860,25 +860,24 @@
                                 &allow-other-keys)
   (when (autoloadp function-name)
     (resolve function-name))
-  (if (find-generic-function function-name nil)
-      (find-generic-function function-name)
-      (progn
-        (when (fboundp function-name)
-          (error 'program-error
-                 :format-control "~A already names an ordinary function, macro, or special operator."
-                 :format-arguments (list function-name)))
-        (let ((gf (apply (if (eq generic-function-class the-class-standard-gf)
-                             #'make-instance-standard-generic-function
-                             #'make-instance)
-                         generic-function-class
-                         :name function-name
-                         :method-class method-class
-                         :method-combination method-combination
-                         all-keys)))
+  (let ((gf (find-generic-function function-name nil)))
+    (if gf
+        gf
+        (progn
+          (when (fboundp function-name)
+            (error 'program-error
+                   :format-control "~A already names an ordinary function, macro, or special operator."
+                   :format-arguments (list function-name)))
+          (setf gf (apply (if (eq generic-function-class the-class-standard-gf)
+                              #'make-instance-standard-generic-function
+                              #'make-instance)
+                          generic-function-class
+                          :name function-name
+                          :method-class method-class
+                          :method-combination method-combination
+                          all-keys))
           (setf (find-generic-function function-name) gf)
           gf))))
-
-;;; finalize-generic-function
 
 (defun finalize-generic-function (gf)
   (setf (generic-function-discriminating-function gf)
