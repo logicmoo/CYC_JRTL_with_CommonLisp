@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.11 2003-01-09 15:35:19 piso Exp $
+ * $Id: Utilities.java,v 1.12 2003-01-10 01:50:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1375,7 +1375,7 @@ public final class Utilities implements Constants
         final int limit = s.length();
         for (int i = 0; i < limit; i++) {
             char c = s.charAt(i);
-            switch (c){
+            switch (c) {
                 case ' ':
                     if (inQuote)
                         sb.append(c);
