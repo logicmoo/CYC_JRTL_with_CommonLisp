@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: KeyMap.java,v 1.23 2005-03-03 19:45:59 piso Exp $
+ * $Id: KeyMap.java,v 1.24 2005-03-05 04:00:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -488,7 +488,7 @@ public final class KeyMap implements Constants
         mappings.add(new KeyMapping(keyCode, modifiers, command));
     }
 
-    public synchronized void mapKey(char keyChar, String command)
+    public synchronized void mapKey(char keyChar, Object command)
     {
         // See if we already have a mapping for this keystroke.
         for (int i = 0; i < mappings.size(); i++) {
