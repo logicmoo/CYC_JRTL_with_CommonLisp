@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.216 2004-07-13 00:56:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.217 2004-07-14 19:50:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -200,6 +200,13 @@
   (list (ash n -8) (logand n #xff)))
 
 (defstruct instruction opcode args stack depth)
+
+(defun print-instruction (instruction)
+  (format nil "~A ~A stack = ~S depth = ~S"
+          (opcode-name (instruction-opcode instruction))
+          (instruction-args instruction)
+          (instruction-stack instruction)
+          (instruction-depth instruction)))
 
 (defun inst (instr &optional args)
   (let ((opcode (if (numberp instr)
@@ -418,6 +425,8 @@
                 ext:memql
                 sys::generic-function-name
                 precompiler::precompile1
+                declare
+                go
                 ))
     (setf (gethash op single-valued-operators) t)))
 
@@ -427,6 +436,10 @@
 (defun single-valued-p (form)
   (cond ((atom form)
          t)
+        ((eq (first form) 'if)
+         (and (single-valued-p (second form))
+              (single-valued-p (third form))
+              (single-valued-p (fourth form))))
         ((memq (car form) '(and or))
          (every #'single-valued-p (cdr form)))
         (t
@@ -437,14 +450,13 @@
 ;;     (format t "Not single-valued: ~S~%" form)
     (emit-clear-values)))
 
-(defun emit-invoke-method (method-name)
-  (unless (remove-store-value)
-    (emit-push-value))
+;; Expects value on stack.
+(defun emit-invoke-method (method-name &key (target *val*))
   (emit-invokevirtual +lisp-object-class+
                       method-name
                       "()Lorg/armedbear/lisp/LispObject;"
                       0)
-  (emit-store-value))
+  (emit-move-from-stack target))
 
 (defparameter *resolvers* (make-hash-table :test #'eql))
 
@@ -456,7 +468,8 @@
   (setf (gethash n *resolvers*) #'unsupported-opcode))
 
 ;; The following opcodes resolve to themselves.
-(dolist (n '(1 ; ACONST_NULL
+(dolist (n '(0 ; NOP
+             1 ; ACONST_NULL
              2 ; ICONST_M1
              3 ; ICONST_0
              4 ; ICONST_1
@@ -625,12 +638,21 @@
     (let ((instruction (aref code i)))
       (when (instruction-depth instruction)
         (return-from walk-code))
-      (setf (instruction-depth instruction) depth)
+
+;;       (setf (instruction-depth instruction) depth)
+;;       (setf depth (+ depth (instruction-stack instruction)))
       (setf depth (+ depth (instruction-stack instruction)))
-      (if (branch-opcode-p (instruction-opcode instruction))
+      (setf (instruction-depth instruction) depth)
+
+      (let ((opcode (instruction-opcode instruction)))
+        (when (branch-opcode-p opcode)
           (let ((label (car (instruction-args instruction))))
-            (walk-code code (symbol-value label) depth))
-          ()))))
+            (walk-code code (symbol-value label) depth)))
+        (when (eql opcode 167) ; GOTO
+          ;; Current path ends.
+          (return-from walk-code)))
+
+      )))
 
 (defun analyze-stack ()
   (sys::require-type *code* 'vector)
@@ -640,14 +662,39 @@
       (when (eql opcode 202) ; LABEL
         (let ((label (car (instruction-args instruction))))
           (set label i)))
-      (unless (instruction-stack instruction)
-        (setf (instruction-stack instruction) (opcode-stack-effect opcode)))))
+;;       (unless (instruction-stack instruction)
+;;         (setf (instruction-stack instruction) (opcode-stack-effect opcode)))
+      (if (instruction-stack instruction)
+          (when (opcode-stack-effect opcode)
+            (unless (eql (instruction-stack instruction) (opcode-stack-effect opcode))
+              (format t "instruction-stack = ~S opcode-stack-effect = ~S~%"
+                      (instruction-stack instruction)
+                      (opcode-stack-effect opcode))
+              (format t "index = ~D instruction = ~A~%" i (print-instruction instruction))))
+          (setf (instruction-stack instruction) (opcode-stack-effect opcode)))
+      (assert (not (null (instruction-stack instruction))))
+      ))
   (walk-code *code* 0 0)
   (let ((max-stack 0))
     (dotimes (i (length *code*))
-      (let ((instruction (aref *code* i)))
-        (setf max-stack (max max-stack (instruction-depth instruction)))))
+      (let* ((instruction (aref *code* i))
+             (depth (instruction-depth instruction)))
+        (when depth
+          (setf max-stack (max max-stack depth)))))
+    (when *debug*
+      (format t "max-stack = ~D~%" max-stack)
+      (format t "----- after stack analysis -----~%")
+      (print-code))
     max-stack))
+
+(defun emit-move-from-stack (target)
+  (cond ((null target)
+         (emit 'pop))
+        ((eq target :stack))
+        ((fixnump target)
+         (emit 'astore target))
+        (t
+         (assert nil))))
 
 (defun resolve-variables ()
   (let ((code (nreverse *code*)))
@@ -655,23 +702,30 @@
     (dolist (instruction code)
       (case (instruction-opcode instruction)
         (206 ; VAR-REF
-         (let ((variable (car (instruction-args instruction))))
+         (let ((variable (first (instruction-args instruction)))
+               (target (second (instruction-args instruction))))
            (assert (variable-p variable))
            (cond ((variable-register variable)
                   (emit 'aload (variable-register variable))
-                  (emit-store-value))
+;;                   (emit-store-value)
+                  (emit-move-from-stack target)
+                  )
                  ((variable-special-p variable)
-                  (compile-special-reference (variable-name variable)))
+                  (compile-special-reference (variable-name variable) target))
                  (*child-p*
                   (emit 'aload *context-register*)
                   (emit 'bipush (variable-index variable))
                   (emit 'aaload)
-                  (emit-store-value))
+;;                   (emit-store-value)
+                  (emit-move-from-stack target)
+                  )
                  (t
                   (emit 'aload 1)
                   (emit 'bipush (variable-index variable))
                   (emit 'aaload)
-                  (emit-store-value)))))
+;;                   (emit-store-value)
+                  (emit-move-from-stack target)
+                  ))))
         (207 ; VAR-SET
          (let ((variable (car (instruction-args instruction))))
            (assert (variable-p variable))
@@ -698,10 +752,13 @@
 
 (defun print-code()
   (dotimes (i (length *code*))
-    (let ((instruction (svref *code* i)))
-      (format t "~A ~S~%"
+    (let ((instruction (aref *code* i)))
+      (format t "~D ~A ~S ~S ~S~%"
+              i
               (opcode-name (instruction-opcode instruction))
-              (instruction-args instruction)))))
+              (instruction-args instruction)
+              (instruction-stack instruction)
+              (instruction-depth instruction)))))
 
 (defun validate-labels ()
   (dotimes (i (length *code*))
@@ -711,111 +768,169 @@
         (let ((label (car (instruction-args instruction))))
           (set label i))))))
 
+;; Remove unused labels.
+(defun optimize-1 ()
+;;   (sys::%format t "optimize-1~%")
+  (let ((locally-changed-p nil)
+        (branch-targets ()))
+    ;; Make a list of the labels that are actually branched to.
+    (dotimes (i (length *code*))
+      (let ((instruction (svref *code* i)))
+        (when (branch-opcode-p (instruction-opcode instruction))
+          (push (car (instruction-args instruction)) branch-targets))))
+    ;; Add labels used for exception handlers.
+    (dolist (handler *handlers*)
+      (push (handler-from handler) branch-targets)
+      (push (handler-to handler) branch-targets)
+      (push (handler-code handler) branch-targets))
+    ;; Remove labels that are not used as branch targets.
+    (dotimes (i (length *code*))
+      (let ((instruction (svref *code* i)))
+        (when (= (instruction-opcode instruction) 202) ; LABEL
+          (let ((label (car (instruction-args instruction))))
+            (unless (memq label branch-targets)
+              (setf (instruction-opcode instruction) 0)
+              (setf locally-changed-p t))))))
+    (when locally-changed-p
+      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      t)))
+
+(defun optimize-2 ()
+;;   (sys::%format t "optimize-2~%")
+  (let ((locally-changed-p nil))
+    (dotimes (i (length *code*))
+      (let ((instruction (svref *code* i)))
+        (when (and (< i (1- (length *code*)))
+                   (= (instruction-opcode instruction) 167) ; GOTO
+                   (let ((next-instruction (svref *code* (1+ i))))
+                     (cond ((and (= (instruction-opcode next-instruction) 202) ; LABEL
+                                 (eq (car (instruction-args instruction))
+                                     (car (instruction-args next-instruction))))
+                            ;; GOTO next instruction.
+                            (setf (instruction-opcode instruction) 0)
+                            (setf locally-changed-p t))
+                           ((= (instruction-opcode next-instruction) 167) ; GOTO
+                            ;; One GOTO right after another.
+                            (setf (instruction-opcode next-instruction) 0)
+                            (setf locally-changed-p t))))))))
+    (when locally-changed-p
+      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      t)))
+
+;; Reduce GOTOs.
+(defun optimize-3 ()
+;;   (sys::%format t "optimize-3~%")
+  (validate-labels)
+  (let ((locally-changed-p nil))
+    (dotimes (i (length *code*))
+      (let ((instruction (svref *code* i)))
+        (when (eql (instruction-opcode instruction) 167) ; GOTO
+          (let* ((label (car (instruction-args instruction)))
+                 ;; The actual jump is to the first real instruction after the label.
+                 (target-index (1+ (symbol-value label)))
+                 (instr1 (svref *code* target-index))
+                 (instr2 (if (eql (instruction-opcode instr1) 203) ; PUSH-VALUE
+                             (svref *code* (1+ target-index))
+                             nil)))
+            (when (and instr2 (eql (instruction-opcode instr2) 176)) ; ARETURN
+              (let ((previous-instruction (svref *code* (1- i))))
+                (when (eql (instruction-opcode previous-instruction) 204) ; STORE-VALUE
+                  (setf (instruction-opcode previous-instruction) 176) ; ARETURN
+                  (setf (instruction-opcode instruction) 0)
+                  (setf locally-changed-p t))))))))
+    (when locally-changed-p
+      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      t)))
+
+;; Look for the sequence STORE-VALUE LOAD-VALUE ARETURN.
+(defun optimize-4 ()
+;;   (sys::%format t "optimize-4~%")
+  (let ((locally-changed-p nil))
+    (dotimes (i (- (length *code*) 2))
+      (let ((instr1 (svref *code* i))
+            (instr2 (svref *code* (+ i 1)))
+            (instr3 (svref *code* (+ i 2))))
+        (when (and (eql (instruction-opcode instr1) 204)
+                   (eql (instruction-opcode instr2) 203)
+                   (eql (instruction-opcode instr3) 176))
+          (setf (instruction-opcode instr1) 176)
+          (setf (instruction-opcode instr2) 0)
+          (setf (instruction-opcode instr3) 0)
+          (setf locally-changed-p t))))
+    (when locally-changed-p
+      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      t)))
+
+;; Don't do CLEAR-VALUES twice in a row.
+(defun optimize-5 ()
+;;   (sys::%format t "optimize-5~%")
+  (let ((locally-changed-p nil)
+        (previous-opcode nil))
+    (dotimes (i (length *code*))
+      (let ((instruction (svref *code* i)))
+        (when (eql (instruction-opcode instruction) 205) ; CLEAR-VALUES
+          (when (eql previous-opcode 205)
+            (setf (instruction-opcode instruction) 0)
+            (setf locally-changed-p t)))
+        (setf previous-opcode (instruction-opcode instruction))))
+    (when locally-changed-p
+      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      t)))
+
+(defvar *delete-unreachable-code-flag* t)
+
+(defun delete-unreachable-code ()
+  (when *delete-unreachable-code-flag*
+;;     (format t "deleting unreachable code~%")
+    ;; Look for unreachable code after GOTO.
+    (validate-labels)
+    (let (;;(locally-changed-p nil)
+          (after-goto nil))
+      (dotimes (i (length *code*))
+        (let ((instruction (svref *code* i)))
+          (cond (after-goto
+                 (if (= (instruction-opcode instruction) 202) ; LABEL
+                     (setf after-goto nil)
+                     ;; Unreachable.
+                     (progn
+;;                        (format t "deleting unreachable code at index ~D: ~S~%"
+;;                                i (print-instruction instruction))
+                       (setf (instruction-opcode instruction) 0)
+                       (setf (instruction-args instruction) nil)
+                       (setf (instruction-stack instruction) nil)
+                       (setf (instruction-depth instruction) nil)
+                       )))
+                ((= (instruction-opcode instruction) 167) ; GOTO
+                 (setf after-goto t)))))
+      ;;       (when locally-changed-p
+      ;;         ;;             (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      ;;         (setf changed-p t))
+      )))
+
 (defun optimize-code ()
+;;   (sys::%format t "entering optimize-code~%")
   (when *debug*
-    (format t "----- before optimization -----~%")
+    (sys::%format t "----- before optimization -----~%")
     (print-code))
   (loop
     (let ((changed-p nil))
-      (let ((locally-changed-p nil)
-            (branch-targets ()))
-        ;; Make a list of the labels that are actually branched to.
-        (dotimes (i (length *code*))
-          (let ((instruction (svref *code* i)))
-            (when (branch-opcode-p (instruction-opcode instruction))
-              (push (car (instruction-args instruction)) branch-targets))))
-        ;; Add labels used for exception handlers.
-        (dolist (handler *handlers*)
-          (push (handler-from handler) branch-targets)
-          (push (handler-to handler) branch-targets)
-          (push (handler-code handler) branch-targets))
-        ;; Remove labels that are not used as branch targets.
-        (dotimes (i (length *code*))
-          (let ((instruction (svref *code* i)))
-            (when (= (instruction-opcode instruction) 202) ; LABEL
-              (let ((label (car (instruction-args instruction))))
-                (unless (memq label branch-targets)
-                  (setf (instruction-opcode instruction) 0)
-                  (setf locally-changed-p t))))))
-        (when locally-changed-p
-          (setf *code* (delete 0 *code* :key #'instruction-opcode))
-          (setf changed-p t)))
-      (let ((locally-changed-p nil))
-        (dotimes (i (length *code*))
-          (let ((instruction (svref *code* i)))
-            (when (and (< i (1- (length *code*)))
-                       (= (instruction-opcode instruction) 167) ; GOTO
-                       (let ((next-instruction (svref *code* (1+ i))))
-                         (cond ((and (= (instruction-opcode next-instruction) 202) ; LABEL
-                                     (eq (car (instruction-args instruction))
-                                         (car (instruction-args next-instruction))))
-                                ;; GOTO next instruction.
-                                (setf (instruction-opcode instruction) 0)
-                                (setf locally-changed-p t))
-                               ((= (instruction-opcode next-instruction) 167) ; GOTO
-                                ;; One GOTO right after another.
-                                (setf (instruction-opcode next-instruction) 0)
-                                (setf locally-changed-p t))))))))
-        (when locally-changed-p
-          (setf *code* (delete 0 *code* :key #'instruction-opcode))
-          (setf changed-p t)))
-      ;; Reduce GOTOs.
-      (validate-labels)
-      (let ((locally-changed-p nil))
-        (dotimes (i (length *code*))
-          (let ((instruction (svref *code* i)))
-            (when (eql (instruction-opcode instruction) 167) ; GOTO
-              (let* ((label (car (instruction-args instruction)))
-                     (target-index (1+ (symbol-value label)))
-                     (instr1 (svref *code* target-index))
-                     (instr2 (if (eql (instruction-opcode instr1) 203) ; PUSH-VALUE
-                                 (svref *code* (1+ target-index))
-                                 nil)))
-                (when (and instr2 (eql (instruction-opcode instr2) 176)) ; ARETURN
-                  (let ((previous-instruction (svref *code* (1- i))))
-                    (when (eql (instruction-opcode previous-instruction) 204) ; STORE-VALUE
-                      (setf (instruction-opcode previous-instruction) 176) ; ARETURN
-                      (setf (instruction-opcode instruction) 0)
-                      (setf locally-changed-p t))))))))
-        (when locally-changed-p
-          (setf *code* (delete 0 *code* :key #'instruction-opcode))
-          (setf changed-p t)))
-      ;; Look for sequence STORE-VALUE LOAD-VALUE ARETURN.
-      (let ((locally-changed-p nil))
-        (dotimes (i (- (length *code*) 2))
-          (let ((instr1 (svref *code* i))
-                (instr2 (svref *code* (+ i 1)))
-                (instr3 (svref *code* (+ i 2))))
-            (when (and (eql (instruction-opcode instr1) 204)
-                       (eql (instruction-opcode instr2) 203)
-                       (eql (instruction-opcode instr3) 176))
-              (setf (instruction-opcode instr1) 176)
-              (setf (instruction-opcode instr2) 0)
-              (setf (instruction-opcode instr3) 0)
-              (setf locally-changed-p t))))
-        (when locally-changed-p
-          (setf *code* (delete 0 *code* :key #'instruction-opcode))
-          (setf changed-p t)))
-      ;; Don't do CLEAR-VALUES twice in a row.
-      (let ((locally-changed-p nil)
-            (previous-opcode nil))
-        (dotimes (i (length *code*))
-          (let ((instruction (svref *code* i)))
-            (when (eql (instruction-opcode instruction) 205) ; CLEAR-VALUES
-              (when (eql previous-opcode 205)
-                (setf (instruction-opcode instruction) 0)
-                (setf locally-changed-p t)))
-            (setf previous-opcode (instruction-opcode instruction))))
-        (when locally-changed-p
-          (setf *code* (delete 0 *code* :key #'instruction-opcode))
-          (setf changed-p t)))
+      (setf changed-p (or (optimize-1) changed-p))
+      (setf changed-p (or (optimize-2) changed-p))
+      (setf changed-p (or (optimize-3) changed-p))
+      (setf changed-p (or (optimize-4) changed-p))
+      (setf changed-p (or (optimize-5) changed-p))
+;;       (sys::%format t "changed-p = ~S~%" changed-p)
       (unless changed-p
+;;         (sys::%format t "returning...~%")
         (return))))
+  (delete-unreachable-code)
   (when *debug*
     (format t "----- after optimization -----~%")
-    (print-code)))
+    (print-code))
+;;   (format t "leaving optimize-code~%")
+  )
 
-(defvar *max-stack*)
+;; (defvar *max-stack*)
 
 (defun code-bytes (code)
   (let ((length 0))
@@ -932,7 +1047,8 @@
   handlers)
 
 (defun make-constructor (super name args body)
-  (let* ((constructor (make-method :name "<init>"
+  (let* ((*debug* nil) ; We don't normally need to see debugging output for constructors.
+         (constructor (make-method :name "<init>"
                                    :descriptor "()V"))
          (*code* ())
          (*handlers* nil))
@@ -982,7 +1098,7 @@
     (setf *code* (append *static-code* *code*))
     (emit 'return)
     (finalize-code)
-    (optimize-code)
+;;     (optimize-code)
     (setf *code* (resolve-opcodes *code*))
     (setf (method-max-stack constructor) (analyze-stack))
     (setf (method-code constructor) (code-bytes *code*))
@@ -1325,7 +1441,11 @@
         (setf (gethash string *declared-strings*) g)))
     g))
 
-(defun compile-constant (form)
+(defun compile-constant (form &key (target *val*))
+;;   (format t "compile-constant form = ~S target = ~S~%" form target)
+  (unless target
+;;     (format t "compile-constant returning (no target)~%")
+    (return-from compile-constant))
   (cond
    ((fixnump form)
     (let* ((n form)
@@ -1339,43 +1459,37 @@
           (emit 'getstatic
                 *this-class*
                 (declare-fixnum n)
-                +lisp-fixnum+))
-          (emit-store-value)))
+                +lisp-fixnum+))))
    ((numberp form)
     (let ((g (declare-object-as-string form)))
       (emit 'getstatic
             *this-class*
             g
-            +lisp-object+)
-      (emit-store-value)))
+            +lisp-object+)))
    ((stringp form)
     (if *compile-file-truename*
         (let ((g (declare-string form)))
           (emit 'getstatic
                 *this-class*
                 g
-                +lisp-simple-string+)
-          (emit-store-value))
+                +lisp-simple-string+))
         (let ((g (declare-object form)))
           (emit 'getstatic
                 *this-class*
                 g
-                +lisp-object+)
-          (emit-store-value))))
+                +lisp-object+))))
    ((vectorp form)
     (let ((g (declare-object-as-string form)))
       (emit 'getstatic
             *this-class*
             g
-            +lisp-object+)
-      (emit-store-value)))
+            +lisp-object+)))
    ((characterp form)
     (let ((g (declare-object-as-string form)))
       (emit 'getstatic
             *this-class*
             g
-            +lisp-object+)
-      (emit-store-value)))
+            +lisp-object+)))
    ((symbolp form)
     (when (null (symbol-package form))
       ;; An uninterned symbol.
@@ -1385,15 +1499,13 @@
         (emit 'getstatic
               *this-class*
               g
-              +lisp-object+)
-        (emit-store-value))))
+              +lisp-object+))))
    ((or (classp form) (hash-table-p form) (typep form 'generic-function))
     (let ((g (declare-object form)))
       (emit 'getstatic
             *this-class*
             g
-            +lisp-object+)
-      (emit-store-value)))
+            +lisp-object+)))
    ((pathnamep form)
     (let ((g (if *compile-file-truename*
                  (declare-object-as-string form)
@@ -1401,8 +1513,7 @@
       (emit 'getstatic
             *this-class*
             g
-            +lisp-object+)
-      (emit-store-value)))
+            +lisp-object+)))
    ((packagep form)
     (let ((g (if *compile-file-truename*
                  (declare-package form)
@@ -1410,25 +1521,25 @@
       (emit 'getstatic
             *this-class*
             g
-            +lisp-object+)
-      (emit-store-value)))
+            +lisp-object+)))
    (t
-    (error "COMPILE-CONSTANT unhandled case ~S" form))))
+    (error "COMPILE-CONSTANT unhandled case ~S" form)))
+  (emit-move-from-stack target))
 
-(defun compile-binary-operation (op args)
-  (compile-form (first args))
-  (unless (remove-store-value)
-    (emit-push-value))
+(defun compile-binary-operation (op args &key (target *val*))
+  (compile-form (first args) :target :stack)
+;;   (unless (remove-store-value)
+;;     (emit-push-value))
   (maybe-emit-clear-values (first args))
-  (compile-form (second args))
-  (unless (remove-store-value)
-    (emit-push-value))
+  (compile-form (second args) :target :stack)
+;;   (unless (remove-store-value)
+;;     (emit-push-value))
   (maybe-emit-clear-values (second args))
   (emit-invokevirtual +lisp-object-class+
                       op
                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                       -1)
-  (emit-store-value))
+  (emit-move-from-stack target))
 
 (defparameter unary-operators (make-hash-table :test 'eq))
 
@@ -1471,13 +1582,13 @@
 (define-unary-operator 'VECTORP         "VECTORP")
 (define-unary-operator 'ZEROP           "ZEROP")
 
-(defun compile-function-call-1 (fun args)
+(defun compile-function-call-1 (fun args &key (target *val*))
   (let ((s (gethash fun unary-operators)))
     (if s
         (progn
-          (compile-form (first args))
+          (compile-form (first args) :target :stack)
           (maybe-emit-clear-values (first args))
-          (emit-invoke-method s)
+          (emit-invoke-method s :target target)
           t)
         nil)))
 
@@ -1503,19 +1614,15 @@
 (define-binary-operator 'aref              "AREF")
 (define-binary-operator 'sys::simple-typep "typep")
 
-(defun compile-function-call-2 (fun args)
+(defun compile-function-call-2 (fun args :target target)
   (let ((translation (gethash fun binary-operators)))
     (if translation
-        (compile-binary-operation translation args)
+        (compile-binary-operation translation args :target target)
         (case fun
           (EQ
-           (compile-form (first args))
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form (first args) :target :stack)
            (maybe-emit-clear-values (first args))
-           (compile-form (second args))
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form (second args) :target :stack)
            (maybe-emit-clear-values (second args))
            (let ((label1 (gensym))
                  (label2 (gensym)))
@@ -1525,46 +1632,36 @@
              (emit 'label `,label1)
              (emit-push-t)
              (emit 'label `,label2))
-           (emit-store-value)
+           (emit-move-from-stack target)
            t)
           (LIST
-           (compile-form (first args))
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form (first args) :target :stack)
            (maybe-emit-clear-values (first args))
-           (compile-form (second args))
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form (second args) :target :stack)
            (maybe-emit-clear-values (second args))
            (emit-invokestatic +lisp-class+
                               "list2"
                               "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
                               -1)
-           (emit-store-value)
+           (emit-move-from-stack target)
            t)
           (t
            nil)))))
 
-(defun compile-function-call-3 (fun args)
+(defun compile-function-call-3 (fun args :target target)
   (case fun
     (LIST
-     (compile-form (first args))
-     (unless (remove-store-value)
-       (emit-push-value))
+     (compile-form (first args) :target :stack)
      (maybe-emit-clear-values (first args))
-     (compile-form (second args))
-     (unless (remove-store-value)
-       (emit-push-value))
+     (compile-form (second args) :target :stack)
      (maybe-emit-clear-values (second args))
-     (compile-form (third args))
-     (unless (remove-store-value)
-       (emit-push-value))
+     (compile-form (third args) :target :stack)
      (maybe-emit-clear-values (third args))
      (emit-invokestatic +lisp-class+
                         "list3"
                         "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
                         -2)
-     (emit-store-value)
+     (emit-move-from-stack target)
      t)
     (t
      nil)))
@@ -1616,32 +1713,33 @@
 
 (defun process-args (args)
   (dolist (form args)
-    (compile-form form)
-    (unless (remove-store-value)
-      (emit-push-value))
+    (compile-form form :target :stack)
     (maybe-emit-clear-values form)))
 
-(defun compile-function-call (form &optional for-effect)
+(defun compile-function-call (form &key (target *val*))
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
-      (return-from compile-function-call (compile-form new-form))))
+;;       (format t "old form = ~S~%" form)
+;;       (format t "new form = ~S~%" new-form)
+;;       (format t "compile-function-call target = ~S~%" target)
+      (return-from compile-function-call (compile-form new-form :target target))))
   (let ((fun (car form))
         (args (cdr form)))
     (unless (symbolp fun)
       (error "COMPILE-FUNCTION-CALL ~S is not a symbol" fun))
     (when (find fun *local-functions* :key #'local-function-name)
-      (return-from compile-function-call (compile-local-function-call form for-effect)))
+      (return-from compile-function-call (compile-local-function-call form target)))
     (let ((numargs (length args)))
       (when (sys::built-in-function-p fun)
         (case numargs
           (1
-           (when (compile-function-call-1 fun args)
+           (when (compile-function-call-1 fun args :target target)
              (return-from compile-function-call)))
           (2
-           (when (compile-function-call-2 fun args)
+           (when (compile-function-call-2 fun args :target target)
              (return-from compile-function-call)))
           (3
-           (when (compile-function-call-3 fun args)
+           (when (compile-function-call-3 fun args :target target)
              (return-from compile-function-call)))))
       (cond
        ((eq fun *defun-name*)
@@ -1669,9 +1767,9 @@
                (dolist (arg args)
                  (emit 'dup)
                  (emit 'sipush i)
-                 (compile-form arg)
-                 (unless (remove-store-value)
-                   (emit-push-value)) ; leaves value on stack
+                 (compile-form arg :target :stack)
+;;                  (unless (remove-store-value)
+;;                    (emit-push-value)) ; leaves value on stack
                  (emit 'aastore) ; store value in array
                  (maybe-emit-clear-values arg)
                  (incf i))) ; array left on stack here
@@ -1711,13 +1809,11 @@
                                     "execute"
                                     "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                                     -4)))))
-      (if for-effect
-          (progn
-            (emit 'pop)
-            (maybe-emit-clear-values form))
-          (emit-store-value)))))
+      (unless target
+        (maybe-emit-clear-values form))
+      (emit-move-from-stack target))))
 
-(defun compile-local-function-call (form for-effect)
+(defun compile-local-function-call (form target)
   (let* ((fun (car form))
          (args (cdr form))
          (local-function (find fun *local-functions* :key #'local-function-name)))
@@ -1748,26 +1844,25 @@
                         "execute"
                         "([Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                         -1)
-    (if for-effect
-        (progn
-          (emit 'pop)
-          (maybe-emit-clear-values form))
-        (emit-store-value))))
+    (cond ((null target)
+           (emit 'pop)
+           (maybe-emit-clear-values form))
+          ((eq target :stack))
+          ((fixnump target)
+           (emit 'astore target))
+          (t
+           (assert nil)))))
 
 (defun compile-test-not/null (form)
   (let ((arg (second form)))
     (cond ((and (consp arg)
                 (memq (car arg) '(NOT NULL)))
-           (compile-form (second arg))
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form (second arg) :target :stack)
            (maybe-emit-clear-values (second arg))
            (emit-push-nil)
            'if_acmpeq)
           (t
-           (compile-form arg)
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
            (emit-push-nil)
            'if_acmpne))))
@@ -1808,31 +1903,23 @@
          (when (memq op '(NOT NULL))
            (return-from compile-test (compile-test-not/null form)))
          (when (eq op 'SYMBOLP)
-           (compile-form arg)
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
            (emit 'instanceof +lisp-symbol-class+)
            (return-from compile-test 'ifeq))
          (when (eq op 'CONSP)
-           (compile-form arg)
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
            (emit 'instanceof +lisp-cons-class+)
            (return-from compile-test 'ifeq))
          (when (eq op 'ATOM)
-           (compile-form arg)
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
            (emit 'instanceof +lisp-cons-class+)
            (return-from compile-test 'ifne))
          (let ((s (gethash op java-predicates)))
            (when s
-             (compile-form arg)
-             (unless (remove-store-value)
-               (emit-push-value))
+             (compile-form arg :target :stack)
              (maybe-emit-clear-values arg)
              (emit-invokevirtual +lisp-object-class+
                                  s
@@ -1844,13 +1931,9 @@
              (arg1 (second form))
              (arg2 (third form)))
          (when (eq op 'EQ)
-           (compile-form arg1)
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form arg1 :target :stack)
            (maybe-emit-clear-values arg1)
-           (compile-form arg2)
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form arg2 :target :stack)
            (maybe-emit-clear-values arg2)
            (return-from compile-test 'if_acmpne))
          (let ((s (cdr (assq op
@@ -1864,13 +1947,9 @@
                                (EQUAL  . "equal")
                                (EQUALP . "equalp"))))))
            (when s
-             (compile-form arg1)
-             (unless (remove-store-value)
-               (emit-push-value))
+             (compile-form arg1 :target :stack)
              (maybe-emit-clear-values arg1)
-             (compile-form arg2)
-             (unless (remove-store-value)
-               (emit-push-value))
+             (compile-form arg2 :target :stack)
              (maybe-emit-clear-values arg2)
              (emit-invokevirtual +lisp-object-class+
                                  s
@@ -1878,38 +1957,44 @@
                                  -1)
              (return-from compile-test 'ifeq)))))))
   ;; Otherwise...
-  (compile-form form)
-  (unless (remove-store-value)
-    (emit-push-value))
+  (compile-form form :target :stack)
   (maybe-emit-clear-values form)
   (emit-push-nil)
   'if_acmpeq)
 
-(defun compile-if (form for-effect)
+(defun compile-if (form &key (target *val*))
+;;   (format t "compile-if target = ~S~%" target)
   (let* ((test (second form))
          (consequent (third form))
          (alternate (fourth form))
          (label1 (gensym))
          (label2 (gensym)))
     (cond ((eq test t)
-           (compile-form consequent for-effect))
+           (compile-form consequent :target target))
           (t
            (emit (compile-test test) `,label1)
-           (compile-form consequent for-effect)
+;;            (format t "consequent = ~S~%" consequent)
+           (compile-form consequent :target :stack)
+           (emit-move-from-stack target)
+;;            (compile-form consequent :target target)
+
            (emit 'goto `,label2)
            (emit 'label `,label1)
-           (compile-form alternate for-effect)
-           (emit 'label `,label2)))))
+;;            (format t "alternate = ~S~%" alternate)
+           (compile-form alternate :target :stack)
+           (emit-move-from-stack target)
+;;            (compile-form consequent :target target)
 
-(defun compile-multiple-value-list (form for-effect)
-  (compile-form (second form))
-  (unless (remove-store-value)
-    (emit-push-value))
+           (emit 'label `,label2)
+           ))))
+
+(defun compile-multiple-value-list (form &key (target *val*))
+  (compile-form (second form) :target :stack)
   (emit-invokestatic +lisp-class+
                      "multipleValueList"
                      "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                      0)
-  (emit-store-value))
+  (emit-move-from-stack target))
 
 ;; Generates code to bind variable to value at top of runtime stack.
 (defun compile-binding (variable)
@@ -1940,7 +2025,7 @@
          (emit 'swap) ; array index value
          (emit 'aastore))))
 
-(defun compile-multiple-value-bind (form for-effect)
+(defun compile-multiple-value-bind (form &key (target *val*))
   (let* ((*register* *register*)
          (*variables* *variables*)
          (specials ())
@@ -1967,9 +2052,7 @@
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
       (emit 'astore env-var))
-    (compile-form (third form)) ;; Values form.
-    (unless (remove-store-value)
-      (emit-push-value))
+    (compile-form (third form) :target :stack) ;; Values form.
     (emit-push-current-thread)
     (emit 'swap)
     (emit 'bipush (length vars))
@@ -1995,8 +2078,8 @@
     ;; Body.
     (do ((body (cdddr form) (cdr body)))
         ((null (cdr body))
-         (compile-form (car body) for-effect))
-      (compile-form (car body) t)
+         (compile-form (car body) :target target))
+      (compile-form (car body) :target nil)
       (maybe-emit-clear-values (car body)))
     (when specialp
       ;; Restore dynamic environment.
@@ -2004,13 +2087,13 @@
       (emit 'aload env-var)
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
-(defun compile-let/let* (form for-effect)
+(defun compile-let/let* (form &key (target *val*))
   (let* ((*register* *register*)
          (*variables* *variables*)
          (specials ())
          (varlist (cadr form))
          (specialp nil)
-         env-var)
+         env-register)
     ;; Process declarations.
     (dolist (f (cddr form))
       (unless (and (consp f) (eq (car f) 'declare))
@@ -2028,10 +2111,10 @@
     ;; If so...
     (when specialp
       ;; Save current dynamic environment.
-      (setf env-var (allocate-register))
+      (setf env-register (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
-      (emit 'astore env-var))
+      (emit 'astore env-register))
     (ecase (car form)
       (LET
        (compile-let-vars varlist specials))
@@ -2040,13 +2123,13 @@
     ;; Body of LET/LET*.
     (do ((body (cddr form) (cdr body)))
         ((null (cdr body))
-         (compile-form (car body) for-effect))
-      (compile-form (car body) t)
+         (compile-form (car body) :target target))
+      (compile-form (car body) :target nil)
       (maybe-emit-clear-values (car body)))
     (when specialp
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
-      (emit 'aload env-var)
+      (emit 'aload env-register)
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-let-vars (varlist specials)
@@ -2057,9 +2140,7 @@
       (dolist (varspec varlist)
         (let ((initform (if (consp varspec) (cadr varspec) nil)))
           (cond (initform
-                 (compile-form initform)
-                 (unless (remove-store-value)
-                   (emit-push-value))
+                 (compile-form initform :target :stack)
                  (maybe-emit-clear-values initform)
                  (setf last-push-was-nil nil))
                 (t
@@ -2089,9 +2170,7 @@
            (specialp (if (or (memq var specials) (special-variable-p var)) t nil))
            variable)
       (cond (initform
-             (compile-form initform)
-             (unless (remove-store-value)
-               (emit-push-value))
+             (compile-form initform :target :stack)
              (maybe-emit-clear-values initform))
             (t
              (emit-push-nil)))
@@ -2112,18 +2191,19 @@
             (setf specials (append (cdr decl) specials))))))
     specials))
 
-(defun compile-locally (form for-effect)
+(defun compile-locally (form &key (target *val*))
   (let ((*variables* *variables*)
         (specials (process-special-declarations (cdr form))))
     (dolist (var specials)
       (push-variable var t))
     (cond ((null (cdr form))
-           (emit-push-nil)
-           (emit-store-value))
+           (when target
+             (emit-push-nil)
+             (emit-move-from-stack target)))
           (t
            (do ((forms (cdr form) (cdr forms)))
                ((null forms))
-             (compile-form (car forms) (cdr forms)))))))
+             (compile-form (car forms) :target (if (cdr forms) nil target)))))))
 
 (defvar *tags* ())
 
@@ -2134,7 +2214,8 @@
     (when index
       (tag-label (aref *tags* index)))))
 
-(defun compile-tagbody (form for-effect)
+(defun compile-tagbody (form &key (target *val*))
+;;   (format t "compile-tagbody target = ~S~%" target)
   (let ((saved-fp (fill-pointer *tags*))
         (body (cdr form)))
     ;; Scan for tags.
@@ -2150,34 +2231,34 @@
              (let ((label (label-for-tag subform)))
                (unless label
                  (error "COMPILE-TAGBODY: tag not found: ~S" subform))
+;;                (format t "emitting label ~S~%" label)
                (emit 'label label)))
             (t
              (when (and (null (cdr rest)) ;; Last subform.
                         (consp subform)
                         (eq (car subform) 'GO))
                (generate-interrupt-check))
-             (compile-form subform t)
+;;              (format t "compile-tagbody target = nil subform = ~S~%" subform)
+             (compile-form subform :target nil)
              (maybe-emit-clear-values subform))))
     (setf (fill-pointer *tags*) saved-fp))
   ;; TAGBODY returns NIL.
   (emit-clear-values)
-  (unless for-effect
+  (when target
     (emit-push-nil)
-    (emit-store-value)))
+    (emit-move-from-stack target)))
 
-(defun compile-go (form for-effect)
+(defun compile-go (form &key target)
   (let* ((name (cadr form))
          (label (label-for-tag name)))
     (unless label
       (error "COMPILE-GO: tag not found: ~S" name))
   (emit 'goto label)))
 
-(defun compile-atom (form for-effect)
+(defun compile-atom (form &key (target *val*))
   (unless (= (length form) 2)
     (error "Wrong number of arguments for ATOM."))
-  (compile-form (cadr form) nil)
-  (unless (remove-store-value)
-    (emit-push-value))
+  (compile-form (cadr form) :target :stack)
   (emit 'instanceof +lisp-cons-class+)
   (let ((label1 (gensym))
         (label2 (gensym)))
@@ -2187,7 +2268,7 @@
     (emit 'label `,label1)
     (emit-push-t)
     (emit 'label `,label2)
-    (emit-store-value)))
+    (emit-move-from-stack target)))
 
 (defun contains-return (form)
   (if (atom form)
@@ -2202,83 +2283,114 @@
            (when (contains-return subform)
              (return t)))))))
 
-(defun compile-block (form for-effect)
-  (let* ((block-label (cadr form))
+(defstruct cblock
+  label
+  exit
+  target)
+
+(defun compile-block (form &key (target *val*))
+;;   (format t "compile-block form = ~S~%" form)
+;;   (format t "compile-block target = ~S~%" target)
+  (let* (;;(original-target target)
+         (block-label (cadr form))
          (body (cddr form))
          (block-exit (gensym))
-         (*blocks* (acons block-label block-exit *blocks*))
+         (cblock (make-cblock :label block-label
+                              :exit block-exit
+                              :target target))
+;;          (*blocks* (acons block-label block-exit *blocks*))
+;;          (*blocks* (push cblock *blocks*))
+         (*blocks* *blocks*)
+
          (*register* *register*)
-         env-var)
+         env-register)
+;;     (format t "entering compile-block ~A A~%" block-label block-exit)
+    (push cblock *blocks*)
     (when (contains-return body)
       ;; Save current dynamic environment.
-      (setf env-var (allocate-register))
+      (setf env-register (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
-      (emit 'astore env-var))
+      (emit 'astore env-register)
+;;       (unless original-target
+;;         (setf target *val*))
+      )
     ;; Compile subforms.
     (do ((subforms body (cdr subforms)))
         ((null subforms))
-      (let ((subform (car subforms))
-            (really-for-effect (or (cdr subforms) for-effect)))
-        (compile-form subform really-for-effect)
-        (when really-for-effect
+      (let* ((subform (car subforms))
+             (last-subform-p (null (cdr subforms)))
+             (real-target (if last-subform-p target nil)))
+        (compile-form subform :target real-target)
+        (unless last-subform-p
           (maybe-emit-clear-values subform))))
     (emit 'label `,block-exit)
-    (when env-var
+;;     (unless (eql target original-target)
+;;       (assert (eql target *val*))
+;;       (emit 'aload target)
+;;       (emit-move-from-stack original-target))
+    (when env-register
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
-      (emit 'aload env-var)
-      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
+      (emit 'aload env-register)
+      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))
+;;     (format t "leaving compile-block ~S~%" block-label)
+    ))
 
-(defun compile-return-from (form for-effect)
+(defun compile-return-from (form &key (target *val*))
+;;   (format t "compile-return-from blocks:~%")
+;;   (dolist (cb *blocks*)
+;;     (format t "block ~A ~A~%" (cblock-label cb) (cblock-exit cb)))
+;;   (format t "compile-return-from end blocks~%")
+;;   (format t "compile-return-from form = ~S target = ~S~%" form target)
   (let* ((rest (cdr form))
          (block-label (car rest))
-         (block-exit (cdr (assoc block-label *blocks*)))
+         (cblock (find block-label *blocks* :key #'cblock-label))
+;;          (block-exit (cdr (assoc block-label *blocks*)))
+         (block-exit (and cblock (cblock-exit cblock)))
          (result-form (cadr rest)))
     (unless block-exit
       (error "No block named ~S is currently visible." block-label))
-    (compile-form result-form)
+    (compile-form result-form :target (cblock-target cblock))
+;;     (format t "compile-return-from GOTO ~S~%" `,block-exit)
     (emit 'goto `,block-exit)))
 
-(defun compile-cons (form for-effect)
+(defun compile-cons (form &key (target *val*))
   (unless (= (length form) 3)
     (error "Wrong number of arguments for CONS."))
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
-      (return-from compile-cons (compile-form new-form))))
+      (return-from compile-cons (compile-form new-form :target target))))
   (emit 'new +lisp-cons-class+)
   (emit 'dup)
-  (compile-form (second form))
-  (unless (remove-store-value)
-    (emit-push-value))
+  (compile-form (second form) :target :stack)
   (maybe-emit-clear-values (second form))
-  (compile-form (third form))
-  (unless (remove-store-value)
-    (emit-push-value))
+  (compile-form (third form) :target :stack)
   (maybe-emit-clear-values (third form))
   (emit-invokespecial "org/armedbear/lisp/Cons"
                       "<init>"
                       "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
                       -3)
-  (emit-store-value))
+  (emit-move-from-stack target))
 
-(defun compile-progn (form for-effect)
+(defun compile-progn (form &key (target *val*))
   (cond ((null (cdr form))
-         (unless for-effect
+         (when target
            (emit-push-nil)
-           (emit-store-value)))
+           (emit-move-from-stack target)))
         (t
          (do ((forms (cdr form) (cdr forms)))
              ((null forms))
-           (compile-form (car forms) (cdr forms))
+           (compile-form (car forms) :target (if (cdr forms) nil target))
            (when (cdr forms)
              (maybe-emit-clear-values (car forms)))))))
 
-(defun compile-quote (form for-effect)
+(defun compile-quote (form &key (target *val*))
    (let ((obj (second form)))
      (cond ((null obj)
-            (emit-push-nil)
-            (emit-store-value))
+            (when target
+              (emit-push-nil)
+              (emit-move-from-stack target)))
            ((symbolp obj)
             (if (symbol-package obj)
                 (let ((g (declare-symbol obj)))
@@ -2286,8 +2398,8 @@
                         *this-class*
                         g
                         +lisp-symbol+)
-                  (emit-store-value))
-                (compile-constant obj)))
+                  (emit-move-from-stack target))
+                (compile-constant obj :target target)))
            ((listp obj)
             (let ((g (if *compile-file-truename*
                          (declare-object-as-string obj)
@@ -2296,32 +2408,28 @@
                     *this-class*
                     g
                     +lisp-object+)
-              (emit-store-value)))
+              (emit-move-from-stack target)))
            ((constantp obj)
-            (compile-constant obj))
+            (compile-constant obj :target target))
            (t
             (error "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
-(defun compile-rplacd (form for-effect)
+(defun compile-rplacd (form &key (target *val*))
   (let ((args (cdr form)))
     (unless (= (length args) 2)
       (error "wrong number of arguments for RPLACD"))
-    (compile-form (first args))
-    (unless (remove-store-value)
-      (emit-push-value))
-    (unless for-effect
+    (compile-form (first args) :target :stack)
+    (when target
       (emit 'dup))
-    (compile-form (second args))
-    (unless (remove-store-value)
-      (emit-push-value))
+    (compile-form (second args) :target :stack)
     (emit-invokevirtual +lisp-object-class+
                         "setCdr"
                         "(Lorg/armedbear/lisp/LispObject;)V"
                         -2)
-    (unless for-effect
-      (emit-store-value))))
+    (when target
+      (emit-move-from-stack target))))
 
-(defun compile-declare (form for-effect)
+(defun compile-declare (form &key target)
   ;; Nothing to do.
   )
 
@@ -2340,7 +2448,7 @@
                 ((memq state '(&optional &key))
                  (when (and (consp arg)
                             (not (constantp (second arg))))
-                   (error "COMPILE-LOCAL-FUNCTION: can't handle optional argument with non-constant init-form.")))))))
+                   (error "COMPILE-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
     (multiple-value-bind (body decls) (sys::parse-body (cddr def))
       (setf body (list (list* 'BLOCK name body)))
       (dolist (decl decls)
@@ -2356,7 +2464,7 @@
                                :classfile classfile)
           *local-functions*)))
 
-(defun compile-flet (form for-effect)
+(defun compile-flet (form &key (target *val*))
   (if *use-locals-vector*
       (let ((*local-functions* *local-functions*)
             (definitions (cadr form))
@@ -2365,13 +2473,13 @@
           (compile-local-function definition))
         (do ((forms body (cdr forms)))
             ((null forms))
-          (compile-form (car forms) (cdr forms))))
+          (compile-form (car forms) :target (if (cdr forms) nil target))))
       (error "COMPILE-FLET: unsupported case.")))
 
-(defun compile-labels (form for-effect)
+(defun compile-labels (form &key target)
   (error "COMPILE-LABELS: unsupported case."))
 
-(defun compile-function (form for-effect)
+(defun compile-function (form &key (target *val*))
    (let ((name (second form))
          (local-function))
      (cond ((symbolp name)
@@ -2388,14 +2496,14 @@
                                         "makeCompiledClosure"
                                         "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                                         -1) ; Stack: compiled-closure
-                     (emit-store-value)))
+                     (emit-move-from-stack target)))
                   ((inline-ok name)
                    (let ((g (declare-function name)))
                      (emit 'getstatic
                            *this-class*
                            g
                            +lisp-object+)
-                     (emit-store-value)))
+                     (emit-move-from-stack target)))
                   (t
                    (let ((g (declare-symbol name)))
                      (emit 'getstatic
@@ -2406,7 +2514,7 @@
                                          "getSymbolFunctionOrDie"
                                          "()Lorg/armedbear/lisp/LispObject;"
                                          0)
-                     (emit-store-value)))))
+                     (emit-move-from-stack target)))))
            ((and (consp name) (eq (car name) 'SETF))
             ; FIXME Need to check for NOTINLINE declaration!
             (if (member name *toplevel-defuns* :test #'equal)
@@ -2415,7 +2523,7 @@
                         *this-class*
                         g
                         +lisp-object+)
-                  (emit-store-value))
+                  (emit-move-from-stack target))
                 (progn
                   (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
            ((and (consp name) (eq (car name) 'LAMBDA))
@@ -2453,10 +2561,10 @@
 ;;            (t
             (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
-(defun compile-plus (form for-effect)
+(defun compile-plus (form &key (target *val*))
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
-      (return-from compile-plus (compile-form new-form))))
+      (return-from compile-plus (compile-form new-form :target target))))
   (let* ((args (cdr form))
          (len (length args)))
     (case len
@@ -2465,20 +2573,20 @@
              (second (second args)))
          (cond
           ((eql first 1)
-           (compile-form second)
-           (emit-invoke-method "incr"))
+           (compile-form second :target :stack)
+           (emit-invoke-method "incr" :target target))
           ((eql second 1)
-           (compile-form first)
-           (emit-invoke-method "incr"))
+           (compile-form first :target :stack)
+           (emit-invoke-method "incr" :target target))
           (t
-           (compile-binary-operation "add" args)))))
+           (compile-binary-operation "add" args :target target)))))
       (t
-       (compile-function-call form for-effect)))))
+       (compile-function-call form :target target)))))
 
-(defun compile-minus (form for-effect)
+(defun compile-minus (form &key (target *val*))
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
-      (return-from compile-minus (compile-form new-form))))
+      (return-from compile-minus (compile-form new-form :target target))))
   (let* ((args (cdr form))
          (len (length args)))
     (case len
@@ -2487,14 +2595,14 @@
              (second (second args)))
          (cond
           ((eql second 1)
-           (compile-form first)
-           (emit-invoke-method "decr"))
+           (compile-form first :target :stack)
+           (emit-invoke-method "decr" :target target))
           (t
-           (compile-binary-operation "subtract" args)))))
+           (compile-binary-operation "subtract" args :target target)))))
       (t
-       (compile-function-call form for-effect)))))
+       (compile-function-call form :target target)))))
 
-(defun compile-not/null (form for-effect)
+(defun compile-not/null (form &key (target *val*))
   (unless (= (length form) 2)
     (error 'simple-program-error
            :format-control "Wrong number of arguments for ~S."
@@ -2506,9 +2614,7 @@
            (emit-push-nil))
           ((and (consp arg)
                 (memq (car arg) '(NOT NULL)))
-           (compile-form (second arg))
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form (second arg) :target :stack)
            (maybe-emit-clear-values (second arg))
            (emit-push-nil)
            (let ((label1 (gensym))
@@ -2520,9 +2626,7 @@
              (emit-push-nil)
              (emit 'label `,label2)))
           (t
-           (compile-form arg)
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
            (emit-push-nil)
            (let ((label1 (gensym))
@@ -2533,16 +2637,16 @@
              (emit 'label `,label1)
              (emit-push-t)
              (emit 'label `,label2)))))
-  (emit-store-value))
+  (emit-move-from-stack target))
 
-(defun compile-values (form for-effect)
+(defun compile-values (form &key (target *val*))
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
-      (return-from compile-values (compile-form new-form))))
+      (return-from compile-values (compile-form new-form :target target))))
   (let ((args (cdr form)))
     (case (length args)
       (1
-       (compile-form (car args))
+       (compile-form (car args) :target target)
        (maybe-emit-clear-values (car args)))
       (2
        (emit-push-current-thread)
@@ -2555,23 +2659,19 @@
               (emit-push-nil)
               (emit 'dup))
              (t
-              (compile-form (car args))
-              (unless (remove-store-value)
-                (emit-push-value))
+              (compile-form (car args) :target :stack)
               (maybe-emit-clear-values (car args))
-              (compile-form (cadr args))
-              (unless (remove-store-value)
-                (emit-push-value))
+              (compile-form (cadr args) :target :stack)
               (maybe-emit-clear-values (cadr args))))
        (emit-invokevirtual +lisp-thread-class+
                            "setValues"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                            -2)
-       (emit-store-value))
+       (emit-move-from-stack target))
       (t
-       (compile-function-call form for-effect)))))
+       (compile-function-call form :target target)))))
 
-(defun compile-special-reference (name)
+(defun compile-special-reference (name target)
   (emit 'getstatic
         *this-class*
         (declare-symbol name)
@@ -2581,17 +2681,23 @@
                       "symbolValue"
                       "(Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
                       -1)
-  (emit-store-value))
+  (cond ((null target)
+         (emit 'pop))
+        ((eq target :stack))
+        ((fixnump target)
+         (emit 'astore target))
+        (t
+         (assert nil))))
 
-(defun compile-variable-reference (name)
+(defun compile-variable-reference (name target)
   (let ((variable (find-visible-variable name)))
     (cond ((null variable)
            (unless (special-variable-p name)
              ;; FIXME This should be a warning!
              (%format t "~A Note: undefined variable ~S~%" (load-verbose-prefix) name))
-           (compile-special-reference name))
+           (compile-special-reference name target))
           (t
-           (emit 'var-ref variable)))))
+           (emit 'var-ref variable target)))))
 
 (defun rewrite-setq (form)
   (let ((expr (third form)))
@@ -2600,10 +2706,10 @@
           (list 'LET (list (list sym expr)) (list 'SETQ (second form) sym)))
         form)))
 
-(defun compile-setq (form for-effect)
+(defun compile-setq (form &key (target *val*))
   (unless (= (length form) 3)
     (return-from compile-setq (compile-form (precompiler::precompile-setq form)
-                                            for-effect)))
+                                            :target target)))
   (let* ((name (second form))
          (value-form (third form))
          (variable (find-visible-variable name)))
@@ -2611,51 +2717,48 @@
                (variable-special-p variable))
            (let ((new-form (rewrite-setq form)))
              (when (neq new-form form)
-               (return-from compile-setq (compile-form new-form))))
+;;                (format t "old form = ~S~%" form)
+;;                (format t "new form = ~S~%" new-form)
+               (return-from compile-setq (compile-form new-form :target target))))
            (emit 'getstatic
                  *this-class*
                  (declare-symbol name)
                  +lisp-symbol+)
-           (compile-form value-form)
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form value-form :target :stack)
            (maybe-emit-clear-values value-form)
            (emit-push-current-thread)
            (emit-invokestatic +lisp-class+
                               "setSpecialVariable"
                               "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
                               -1)
-           (emit-store-value))
+           (emit-move-from-stack target))
           (t
-           (compile-form value-form)
-           (unless (remove-store-value)
-             (emit-push-value))
+           (compile-form value-form :target :stack)
            (maybe-emit-clear-values value-form)
-           (unless for-effect
+           (when target
              (emit 'dup))
            (emit 'var-set variable)
-           (unless for-effect
-             (emit-store-value))))))
+           (when target
+             (emit-move-from-stack target))))))
 
-(defun compile-catch (form &optional for-effect)
+(defun compile-catch (form &key (target *val*))
   (when (= (length form) 2) ; (catch 'foo)
-    (unless for-effect
+    (when target
       (emit-push-nil)
-      (emit-store-value))
+      (emit-move-from-stack target))
     (return-from compile-catch))
   (let* ((*register* *register*)
-         (tag-var (allocate-register))
+         (tag-register (allocate-register))
          (label1 (gensym))
          (label2 (gensym))
          (label3 (gensym))
          (label4 (gensym))
          (label5 (gensym)))
-    (compile-form (second form)) ; Tag.
-    (unless (remove-store-value)
-      (emit-push-value))
-    (emit 'astore tag-var)
+;;     (compile-form (second form) :target :stack) ; Tag.
+;;     (emit 'astore tag-register)
+    (compile-form (second form) :target tag-register) ; Tag.
     (emit-push-current-thread)
-    (emit 'aload tag-var)
+    (emit 'aload tag-register)
     (emit-invokevirtual +lisp-thread-class+
                         "pushCatchTag"
                         "(Lorg/armedbear/lisp/LispObject;)V"
@@ -2664,7 +2767,7 @@
     ;; Implicit PROGN.
     (do ((forms (cddr form) (cdr forms)))
         ((null forms))
-      (compile-form (car forms) (cdr forms))
+      (compile-form (car forms) :target (if (cdr forms) nil target))
       (when (cdr forms)
         (maybe-emit-clear-values (car forms))))
     (emit 'label `,label2) ; End of protected range.
@@ -2673,14 +2776,17 @@
     ;; The Throw object is on the runtime stack. Stack depth is 1.
     (emit 'dup) ; Stack depth is 2.
     (emit 'getfield +lisp-throw-class+ "tag" +lisp-object+) ; Still 2.
-    (emit 'aload tag-var) ; Stack depth is 3.
+    (emit 'aload tag-register) ; Stack depth is 3.
     (emit 'if_acmpne `,label4) ; Stack depth is 1.
     (emit 'aload *thread*)
     (emit-invokevirtual +lisp-throw-class+
                         "getResult"
                         "(Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
                         -1)
-    (emit-store-value) ; Stack depth is 0.
+
+;;     (emit-store-value) ; Stack depth is 0.
+    (emit-move-from-stack target)
+
     (emit 'goto `,label5)
     (emit 'label `,label4) ; Start of handler for all other Throwables.
     ;; A Throwable object is on the runtime stack here. Stack depth is 1.
@@ -2736,63 +2842,64 @@
           (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
         form)))
 
-(defun compile-throw (form &optional for-effect)
+(defun compile-throw (form &key (target *val*))
+;;   (format t "compile-throw form = ~S target = ~S~%" form target)
   (let ((new-form (rewrite-throw form)))
     (when (neq new-form form)
-      (return-from compile-throw (compile-form new-form))))
+;;       (format t "old form = ~S~%" form)
+;;       (format t "new form = ~S~%" new-form)
+      (return-from compile-throw (compile-form new-form :target target))))
   (emit-push-current-thread)
-  (compile-form (second form)) ; Tag.
-  (unless (remove-store-value)
-    (emit-push-value))
-  (compile-form (third form)) ; Result.
-  (unless (remove-store-value)
-    (emit-push-value))
+  (compile-form (second form) :target :stack) ; Tag.
+  (compile-form (third form) :target :stack) ; Result.
   (emit-invokevirtual +lisp-thread-class+
                       "throwToTag"
                       "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
                       -2)
   ;; Following code will not be reached.
-  (emit-push-nil)
-  (emit-store-value))
+  (when target
+    (emit-push-nil)
+    (emit-move-from-stack target)))
 
-(defun compile-form (form &optional for-effect)
+(defun compile-form (form &key (target *val* target-supplied-p))
+;;   (format t "target = ~S target-supplied-p = ~S~%" target target-supplied-p)
   (cond ((consp form)
          (let ((op (car form))
                handler)
            (cond ((symbolp op)
                   (cond ((setf handler (get op 'jvm-compile-handler))
-                         (funcall handler form for-effect))
+                         (funcall handler form :target target)
+                         )
                         ((macro-function op)
                          (compile-form (macroexpand form)))
                         ((special-operator-p op)
                          (error "COMPILE-FORM: unsupported special operator ~S." op))
                         (t
-                         (compile-function-call form for-effect))))
+                         (compile-function-call form :target target))))
                  ((and (consp op) (eq (car op) 'LAMBDA))
                   (let ((new-form (list* 'FUNCALL form)))
                     (compile-form new-form)))
                  (t
                   (error "COMPILE-FORM unhandled case ~S" form)))))
         ((null form)
-         (unless for-effect
-           (emit-push-nil)
-           (emit-store-value)))
+         (emit-push-nil)
+         (emit-move-from-stack target))
         ((eq form t)
-         (unless for-effect
-           (emit-push-t)
-           (emit-store-value)))
+         (emit-push-t)
+         (emit-move-from-stack target))
         ((keywordp form)
          (let ((g (declare-keyword form)))
            (emit 'getstatic
                  *this-class*
                  g
                  +lisp-symbol+)
-           (emit-store-value)))
+;;            (emit-store-value)
+           (emit-move-from-stack target)
+           ))
         ((symbolp form)
-         (compile-variable-reference form))
+         (compile-variable-reference form target))
         ((constantp form)
-         (unless for-effect
-           (compile-constant form)))
+         (compile-constant form :target target))
         (t
          (error "COMPILE-FORM unhandled case ~S" form))))
 
@@ -2981,10 +3088,16 @@
                (emit 'aastore))))
 
       (process-optimization-declarations body)
-      (dolist (f body)
-        (compile-form f))
-      (unless (remove-store-value)
-        (emit-push-value)) ; leave result on stack
+;;       (dolist (f body)
+;;         (compile-form f))
+;;       (unless (remove-store-value)
+;;         (emit-push-value)) ; leave result on stack
+      (do ((forms body (cdr forms)))
+          ((null forms))
+        (compile-form (car forms) :target (if (cdr forms) nil :stack))
+        (when (cdr forms)
+          (maybe-emit-clear-values (car forms))))
+
       (emit 'areturn)
 
       (resolve-variables)
