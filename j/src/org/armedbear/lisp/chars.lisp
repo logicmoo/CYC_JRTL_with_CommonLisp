@@ -1,7 +1,7 @@
 ;;; chars.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: chars.lisp,v 1.4 2003-06-26 01:27:12 piso Exp $
+;;; $Id: chars.lisp,v 1.5 2003-06-26 02:37:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -102,22 +102,4 @@
 	      (if (= (equal-char-code head)
 		     (equal-char-code (car l)))
 		  (return nil)))
-      (return nil))))
-
-
-(defun char-lessp (character &rest more-characters)
-  (do* ((c character (car list))
-	(list more-characters (cdr list)))
-       ((atom list) T)
-    (unless (< (equal-char-code c)
-	       (equal-char-code (car list)))
-      (return nil))))
-
-
-(defun char-greaterp (character &rest more-characters)
-  (do* ((c character (car list))
-	(list more-characters (cdr list)))
-       ((atom list) T)
-    (unless (> (equal-char-code c)
-	       (equal-char-code (car list)))
       (return nil))))

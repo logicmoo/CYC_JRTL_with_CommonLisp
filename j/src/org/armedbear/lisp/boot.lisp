@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.64 2003-06-22 18:34:09 piso Exp $
+;;; $Id: boot.lisp,v 1.65 2003-06-26 02:37:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -102,8 +102,7 @@
 
 (autoload '(digit-char-p alphanumericp
             char/= char< char> char<= char>=
-            char-not-equal
-            char-lessp char-greaterp)
+            char-not-equal)
           "chars.lisp")
 (autoload '(string-upcase string-downcase string-capitalize
             nstring-upcase nstring-downcase nstring-capitalize
