@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.12 2003-11-01 20:26:19 piso Exp $
+ * $Id: BuiltInClass.java,v 1.13 2003-11-02 18:14:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,7 +154,7 @@ public class BuiltInClass extends LispClass
     }
 
     public static final StandardClass CONDITION =
-        new StandardClass(Symbol.CONDITION, list1(CLASS_T));
+        new StandardClass(Symbol.CONDITION, list1(STANDARD_OBJECT));
     static {
         addClass(Symbol.CONDITION, CONDITION);
     }
