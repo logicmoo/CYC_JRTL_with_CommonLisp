@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.34 2004-01-05 15:39:44 piso Exp $
+ * $Id: Pathname.java,v 1.35 2004-01-06 16:34:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,15 @@ public final class Pathname extends LispObject
                 else if (s.startsWith("~/"))
                     s = System.getProperty("user.home").concat(s.substring(1));
             }
-            this.namestring = s;
+            namestring = s;
+            if (s.equals(".") || s.equals("./")) {
+                directory = new Cons(Keyword.RELATIVE);
+                return;
+            }
+            if (s.equals("..") || s.equals("../")) {
+                directory = list2(Keyword.RELATIVE, Keyword.BACK);
+                return;
+            }
             String d = null;
             // Find last file separator char.
             for (int i = s.length(); i-- > 0;) {
@@ -64,8 +72,17 @@ public final class Pathname extends LispObject
                     break;
                 }
             }
-            if (d != null)
+            if (d != null) {
+                if (s.equals("..")) {
+                    d = d.concat(s);
+                    s = "";
+                }
                 directory = parseDirectory(d);
+            }
+            if (s.startsWith(".")) {
+                name = new LispString(s);
+                return;
+            }
             int index = s.lastIndexOf('.');
             String n = null;
             String t = null;
@@ -93,8 +110,12 @@ public final class Pathname extends LispObject
         throws ConditionThrowable
     {
         if (d.equals("/"))
-            return list1(Keyword.ABSOLUTE);
-        LispObject result = new Cons(Keyword.ABSOLUTE);
+            return new Cons(Keyword.ABSOLUTE);
+        LispObject result;
+        if (d.startsWith("/"))
+            result = new Cons(Keyword.ABSOLUTE);
+        else
+            result = new Cons(Keyword.RELATIVE);
         StringTokenizer st = new StringTokenizer(d, "/\\");
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
@@ -103,7 +124,13 @@ public final class Pathname extends LispObject
                 obj = Keyword.WILD;
             else if (token.equals("**"))
                 obj = Keyword.WILD_INFERIORS;
-            else
+            else if (token.equals("..")) {
+                if (result.car() instanceof LispString) {
+                    result = result.cdr();
+                    continue;
+                }
+                obj= Keyword.UP;
+            } else
                 obj = new LispString(token);
             result = new Cons(obj, result);
         }
