@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.17 2003-07-19 16:38:42 piso Exp $
+ * $Id: LispAPI.java,v 1.18 2003-07-19 18:32:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,12 +185,21 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### move-marker
-    private static final Primitive2 MOVE_MARKER =
-        new Primitive2("move-marker", PACKAGE_J, true) {
+    // ### goto-char
+    // goto-char position &optional marker
+    private static final Primitive GOTO_CHAR =
+        new Primitive("goto-char", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            // Move dot to position.
+            final Editor editor = Editor.currentEditor();
+            editor.moveDotTo(checkMarker(arg));
+            return new JavaObject(editor.getDot());
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
+            Log.debug("goto-char two argument case");
             Position pos1 = checkMarker(first);
             Position pos2 = checkMarker(second);
             pos1.moveTo(pos2);
@@ -376,7 +385,7 @@ public final class LispAPI extends Lisp
     // ### %variable-value
     // %variable-value symbol kind where => value
     private static final Primitive3 _VARIABLE_VALUE =
-        new Primitive3("%variable-value", LispAPI.PACKAGE_J) {
+        new Primitive3("%variable-value", PACKAGE_J, false) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -434,7 +443,7 @@ public final class LispAPI extends Lisp
     // ### %set-variable-value
     // %set-variable-value symbol kind where new-value => new-value
     private static final Primitive _SET_VARIABLE_VALUE =
-        new Primitive("%set-variable-value", LispAPI.PACKAGE_J) {
+        new Primitive("%set-variable-value", PACKAGE_J, false) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 4)
@@ -631,6 +640,30 @@ public final class LispAPI extends Lisp
             }
             finally {
                 editor.endCompoundEdit(compoundEdit);
+            }
+        }
+    };
+
+    private static final Primitive0 BEGIN_COMPOUND_EDIT =
+        new Primitive0("begin-compound-edit", PACKAGE_J, false) {
+        public LispObject execute()
+        {
+            return new JavaObject(Editor.currentEditor().beginCompoundEdit());
+        }
+    };
+
+    private static final Primitive1 END_COMPOUND_EDIT =
+        new Primitive1("end-compound-edit", PACKAGE_J, false) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            try {
+                CompoundEdit compoundEdit =
+                    (CompoundEdit) ((JavaObject)arg).getObject();
+                Editor.currentEditor().endCompoundEdit(compoundEdit);
+                return NIL;
+            }
+            catch (ClassCastException e) {
+                throw new TypeError(arg, "compound edit");
             }
         }
     };
