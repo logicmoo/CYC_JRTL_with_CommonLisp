@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.38 2005-03-25 03:19:20 piso Exp $
+ * $Id: AbstractArray.java,v 1.39 2005-03-25 19:31:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,15 +83,6 @@ public abstract class AbstractArray extends LispObject
         return true;
     }
 
-    public LispObject AREF(LispObject index) throws ConditionThrowable
-    {
-        StringBuffer sb = new StringBuffer("AREF: ");
-        sb.append("wrong number of subscripts (1) for array of rank ");
-        sb.append(getRank());
-        sb.append(".");
-        return signal(new ProgramError(sb.toString()));
-    }
-
     public abstract int getRank();
 
     public abstract LispObject getDimensions();
@@ -101,8 +92,6 @@ public abstract class AbstractArray extends LispObject
     public abstract LispObject getElementType();
 
     public abstract int getTotalSize();
-
-    public abstract LispObject AREF(int index) throws ConditionThrowable;
 
     public abstract void aset(int index, LispObject newValue)
         throws ConditionThrowable;
@@ -281,6 +270,28 @@ public abstract class AbstractArray extends LispObject
                 }
             } else
                 sb.append('#');
+        }
+    }
+
+    // For EQUALP hash tables.
+    public int psxhash()
+    {
+        try {
+            long result = 128387; // Chosen at random.
+            final int rank = getRank();
+            int limit = rank < 4 ? rank : 4;
+            for (int i = 0; i < limit; i++)
+                result = mix(result, getDimension(i));
+            final int length = getTotalSize();
+            limit = length < 4 ? length : 4;
+            for (int i = 0; i < length; i++)
+                result = mix(result, AREF(i).psxhash());
+            return (int) (result & 0x7fffffff);
+        }
+        catch (Throwable t) {
+            // Shouldn't happen.
+            Debug.trace(t);
+            return 0;
         }
     }
 }
