@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.49 2003-07-03 14:54:42 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.50 2003-07-04 12:57:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@ import javax.swing.JScrollPane;
 import javax.swing.MenuElement;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
+import org.armedbear.j.mail.MailCommands;
 
 public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     implements Constants, MouseListener
@@ -120,7 +121,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             entry = value;
         if (entry.startsWith("pop://") || entry.startsWith("{") ||
             entry.startsWith("mailbox:")) {
-            openMailbox(editor, entry);
+            MailCommands.openMailbox(editor, entry);
             editor.ensureActive();
             editor.setFocusToDisplay();
             editor.updateLocation();
@@ -251,24 +252,6 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             return s; // No encoding specified.
         encoding = s.substring(index+4).trim();
         return s.substring(0, index).trim();
-    }
-
-    private void openMailbox(Editor editor, String input)
-    {
-        try {
-            Class c = Class.forName("org.armedbear.j.mail.MailCommands");
-            Class[] parameterTypes = new Class[2];
-            parameterTypes[0] = Class.forName("org.armedbear.j.Editor");
-            parameterTypes[1] = Class.forName("java.lang.String");
-            Method method = c.getMethod("openMailbox", parameterTypes);
-            Object[] parameters = new Object[2];
-            parameters[0] = editor;
-            parameters[1] = input;
-            method.invoke(null, parameters);
-        }
-        catch (Throwable t) {
-            Log.error(t);
-        }
     }
 
     private boolean checkParentDirectory(File file, String context)
@@ -1034,6 +1017,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
 
     public void mousePressed(MouseEvent e)
     {
+        Editor.setCurrentEditor(editor);
         originalText = null;
         originalPrefix = null;
     }
