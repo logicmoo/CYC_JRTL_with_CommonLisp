@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.7 2004-01-17 17:31:22 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.8 2004-01-18 02:01:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,6 +45,16 @@
        (return-from normalize-type 'float))
       (ARRAY
        (return-from normalize-type '(array * *)))
+      (SIMPLE-ARRAY
+       (return-from normalize-type '(simple-array * *)))
+      (VECTOR
+       (return-from normalize-type '(array * (*))))
+      (SIMPLE-VECTOR
+       (return-from normalize-type '(simple-array t (*))))
+      (BASE-STRING
+       (return-from normalize-type '(array base-char (*))))
+      (SIMPLE-BASE-STRING
+       (return-from normalize-type '(simple-array base-char (*))))
       (t
        (unless (get type 'deftype-definition)
          (return-from normalize-type type)))))
@@ -72,21 +82,34 @@
       ((ARRAY SIMPLE-ARRAY)
        (unless i
          (return-from normalize-type (list tp '* '*)))
-       (when (null (car i)) ; Element type is NIL.
-         (if (eq tp 'simple-array)
-             (setf tp 'simple-string)
-             (setf tp 'string))
-         (when (cadr i) ; rank/dimensions
-           (cond ((and (consp (cadr i)) (= (length (cadr i)) 1))
-                  (if (eq (caadr i) '*)
-                      (setf i nil)
-                      (setf i (cadr i))))
-                 ((eql (cadr i) 1)
-                  (setf i nil))
-                 (t
-                  (error "invalid type specifier ~S" type)))))
        (when (= (length i) 1)
          (setf i (append i '(*)))))
+      (VECTOR
+       (case (length i)
+         (0
+          (return-from normalize-type '(array * (*))))
+         (1
+          (return-from normalize-type (list 'array (car i) '(*))))
+         (2
+          (return-from normalize-type (list 'array (car i) (list (cadr i)))))
+         (t
+          (error "Invalid type specifier ~S." type))))
+      (SIMPLE-VECTOR
+       (case (length i)
+         (0
+          (return-from normalize-type '(simple-array t (*))))
+         (1
+          (return-from normalize-type (list 'simple-array t (list (car i)))))
+         (t
+          (error "Invalid type specifier ~S." type))))
+      (BASE-STRING
+       (if i
+           (return-from normalize-type (list 'array 'base-char (list (car i))))
+           (return-from normalize-type '(array base-char (*)))))
+      (SIMPLE-BASE-STRING
+       (if i
+           (return-from normalize-type (list 'simple-array 'base-char (list (car i))))
+           (return-from normalize-type '(simple-array base-char (*)))))
       ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
        (setf tp 'float)))
     (if i (cons tp i) tp)))
@@ -107,7 +130,6 @@
 (defun cdadar (list) (cdr (car (cdr (car list)))))
 (defun cdaddr (list) (cdr (car (cdr (cdr list)))))
 (defun cddadr (list) (cdr (cdr (car (cdr list)))))
-
 
 ;;; SOME, EVERY, NOTANY, NOTEVERY (from ECL)
 
