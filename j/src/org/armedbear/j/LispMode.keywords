@@ -245,6 +245,7 @@ gethash
 go
 handler-bind
 handler-case
+hash-table-count
 hash-table-p
 host-namestring
 identity
