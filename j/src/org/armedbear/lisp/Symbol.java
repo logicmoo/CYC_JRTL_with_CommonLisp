@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.160 2004-11-08 18:24:30 piso Exp $
+ * $Id: Symbol.java,v 1.161 2004-11-18 16:04:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -242,6 +242,17 @@ public class Symbol extends LispObject
         StringBuffer sb = new StringBuffer("The symbol ");
         sb.append(name);
         return new SimpleString(sb);
+    }
+
+    public LispObject getParts() throws ConditionThrowable
+    {
+        LispObject parts = NIL;
+        parts = parts.push(new Cons("name", new SimpleString(name)));
+        parts = parts.push(new Cons("package", pkg));
+        parts = parts.push(new Cons("value", value));
+        parts = parts.push(new Cons("function", function));
+        parts = parts.push(new Cons("plist", getPropertyList()));
+        return parts.nreverse();
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
@@ -675,19 +686,6 @@ public class Symbol extends LispObject
             }
         }
         return sb.toString();
-    }
-
-    public LispObject getParts() throws ConditionThrowable
-    {
-        LispObject result = NIL;
-        result = result.push(new Cons(new SimpleString("name"), new SimpleString(name)));
-        result = result.push(new Cons(new SimpleString("package"), pkg));
-        result = result.push(new Cons(new SimpleString("value"),
-                                      value != null ? value : UNBOUND));
-        result = result.push(new Cons(new SimpleString("function"),
-                                      function != null ? function : UNBOUND));
-        result = result.push(new Cons(new SimpleString("plist"), getPropertyList()));
-        return result.nreverse();
     }
 
     public final int hashCode()
