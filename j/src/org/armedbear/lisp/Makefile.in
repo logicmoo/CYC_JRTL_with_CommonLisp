@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.10 2003-03-18 03:47:09 piso Exp $
+# $Id: Makefile.in,v 1.11 2003-03-21 11:54:57 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -69,6 +69,7 @@ CLASSFILES =	AbstractArray.class \
 		Primitive3.class \
 		Primitives.class \
 		ProgramError.class \
+		Ratio.class \
 		Readtable.class \
 		Return.class \
 		SequenceType.class \
