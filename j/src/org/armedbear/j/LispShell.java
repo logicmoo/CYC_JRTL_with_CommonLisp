@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.7 2002-11-02 23:13:10 piso Exp $
+ * $Id: LispShell.java,v 1.8 2002-11-23 19:26:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,102 @@ public final class LispShell extends Shell
     protected void initializeHistory()
     {
         history = new History("lisp.history", 30);
+    }
+
+    private Position findContainingSexp(Position pos)
+    {
+        return ((LispMode)LispMode.getMode()).findContainingSexp(pos);
+    }
+
+    public void enter()
+    {
+        if (!checkProcess())
+            return;
+        final Editor editor = Editor.currentEditor();
+        Position dot = editor.getDotCopy();
+        if (dot == null)
+            return;
+        Line dotLine = dot.getLine();
+        if (posEndOfOutput == null) {
+            // Ignore input before first prompt is displayed.
+            dotLine.setText("");
+            return;
+        }
+        if (dot.isBefore(posEndOfOutput)) {
+            editor.newlineAndIndent();
+            return; // For now.
+        }
+        Position pos = findContainingSexp(editor.getDot());
+        int flags = dotLine.flags();
+        if (flags == 0 || flags == STATE_AUTOINDENT)
+            dotLine.setFlags(STATE_INPUT);
+        editor.eol();
+        editor.insertLineSeparator();
+        editor.getDotLine().setFlags(0);
+        if (needsRenumbering)
+            renumber();
+        editor.moveCaretToDotCol();
+        editor.getDisplay().setReframe(-2);
+        resetUndo();
+        stripEcho = true;
+        if (pos == null) {
+            // No containing sexp. Send input to lisp process.
+            Position begin = posEndOfOutput;
+            Position end = editor.getDotCopy();
+            end.setOffset(end.getLineLength());
+            String s = new Region(this, begin, end).toString();
+            sendInputToLisp(s);
+        } else
+            indentLineAtDot(editor);
+    }
+
+    private void indentLineAtDot(Editor editor)
+    {
+        final Line dotLine = editor.getDotLine();
+        if (dotLine.length() > 0)
+            return;
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+            return;
+        }
+        try {
+            getFormatter().parseBuffer();
+            int indent = mode.getCorrectIndentation(dotLine, this);
+            if (indent != getIndentation(dotLine)) {
+                editor.addUndo(SimpleEdit.LINE_EDIT);
+                setIndentation(dotLine, indent);
+                dotLine.setFlags(STATE_AUTOINDENT);
+                modified();
+            }
+            if (dotLine.length() > 0) {
+                editor.moveDotToIndentation();
+                editor.moveCaretToDotCol();
+            } else {
+                final Display display = editor.getDisplay();
+                display.setCaretCol(indent - display.getShift());
+                if (getBooleanProperty(Property.RESTRICT_CARET))
+                    editor.fillToCaret();
+            }
+            resetUndo(); // Why?
+        }
+        finally {
+            unlockWrite();
+        }
+    }
+
+    private void sendInputToLisp(String input)
+    {
+        // Save history unless input is very short (e.g. ":q"). Ignore
+        // whitespace at end of line.
+        String trim = input.trim();
+        if (trim.length() > 2) {
+            history.append(trim);
+            history.save();
+        }
+        send(input);
     }
 
     public static void lisp()

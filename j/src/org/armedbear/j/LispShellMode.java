@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShellMode.java,v 1.5 2002-10-24 21:52:42 piso Exp $
+ * $Id: LispShellMode.java,v 1.6 2002-11-23 19:27:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,49 +80,9 @@ public final class LispShellMode extends LispMode implements Constants, Mode
             Debug.bug();
             return;
         }
-        
-        Line dotLine = editor.getDotLine();
-        Position pos = mode.findContainingSexp(
-            new Position(dotLine, editor.getDotOffset()));
-        
-        CommandInterpreter.shellEnter();
-        
-        if (pos == null)
-            return;
-
-        dotLine = editor.getDotLine();
-        if (dotLine.length() > 0)
-            return;
-
-        try {
-            buffer.lockWrite();
-        }
-        catch (InterruptedException e) {
-            Log.error(e);
-            return;
-        }
-        try {
-            buffer.getFormatter().parseBuffer();
-            int indent = mode.getCorrectIndentation(dotLine, buffer);
-            if (indent != buffer.getIndentation(dotLine)) {
-                editor.addUndo(SimpleEdit.LINE_EDIT);
-                buffer.setIndentation(dotLine, indent);
-                dotLine.setFlags(STATE_AUTOINDENT);
-                buffer.modified();
-            }
-            if (dotLine.length() > 0) {
-                editor.moveDotToIndentation();
-                editor.moveCaretToDotCol();
-            } else {
-                final Display display = editor.getDisplay();
-                display.setCaretCol(indent - display.getShift());
-                if (buffer.getBooleanProperty(Property.RESTRICT_CARET))
-                    editor.fillToCaret();
-            }
-            buffer.resetUndo();
-        }
-        finally {
-            buffer.unlockWrite();
-        }
+        if (buffer instanceof CommandInterpreter)
+            ((CommandInterpreter)buffer).enter();
+        else
+            Debug.bug();
     }
 }
