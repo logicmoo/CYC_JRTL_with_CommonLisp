@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.10 2004-01-26 00:27:14 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.11 2004-02-09 11:24:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,42 +26,45 @@
            :format-arguments (list arg type))))
 
 (defun normalize-type (type)
-  (when (symbolp type)
-    (case type
-      (BIT
-       (return-from normalize-type '(integer 0 1)))
-      (CONS
-       (return-from normalize-type '(cons t t)))
-      (FIXNUM
-       (return-from normalize-type
-                    '(integer #.most-negative-fixnum #.most-positive-fixnum)))
-      (SIGNED-BYTE
-       (return-from normalize-type 'integer))
-      (UNSIGNED-BYTE
-       (return-from normalize-type '(integer 0 *)))
-      (BASE-CHAR
-       (return-from normalize-type 'character))
-      ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
-       (return-from normalize-type 'float))
-      (ARRAY
-       (return-from normalize-type '(array * *)))
-      (SIMPLE-ARRAY
-       (return-from normalize-type '(simple-array * *)))
-      (VECTOR
-       (return-from normalize-type '(array * (*))))
-      (SIMPLE-VECTOR
-       (return-from normalize-type '(simple-array t (*))))
-      (BIT-VECTOR
-       (return-from normalize-type '(array bit (*))))
-      (SIMPLE-BIT-VECTOR
-       (return-from normalize-type '(simple-array bit (*))))
-      (BASE-STRING
-       (return-from normalize-type '(array base-char (*))))
-      (SIMPLE-BASE-STRING
-       (return-from normalize-type '(simple-array base-char (*))))
-      (t
-       (unless (get type 'deftype-definition)
-         (return-from normalize-type type)))))
+  (cond ((symbolp type)
+         (case type
+           (BIT
+            (return-from normalize-type '(integer 0 1)))
+           (CONS
+            (return-from normalize-type '(cons t t)))
+           (FIXNUM
+            (return-from normalize-type
+                         '(integer #.most-negative-fixnum #.most-positive-fixnum)))
+           (SIGNED-BYTE
+            (return-from normalize-type 'integer))
+           (UNSIGNED-BYTE
+            (return-from normalize-type '(integer 0 *)))
+           (BASE-CHAR
+            (return-from normalize-type 'character))
+           ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
+            (return-from normalize-type 'float))
+           (ARRAY
+            (return-from normalize-type '(array * *)))
+           (SIMPLE-ARRAY
+            (return-from normalize-type '(simple-array * *)))
+           (VECTOR
+            (return-from normalize-type '(array * (*))))
+           (SIMPLE-VECTOR
+            (return-from normalize-type '(simple-array t (*))))
+           (BIT-VECTOR
+            (return-from normalize-type '(array bit (*))))
+           (SIMPLE-BIT-VECTOR
+            (return-from normalize-type '(simple-array bit (*))))
+           (BASE-STRING
+            (return-from normalize-type '(array base-char (*))))
+           (SIMPLE-BASE-STRING
+            (return-from normalize-type '(simple-array base-char (*))))
+           (t
+            (unless (get type 'deftype-definition)
+              (return-from normalize-type type)))))
+        ((and (consp type)
+              (memq (car type) '(and or not eql member satisfies mod values)))
+         (return-from normalize-type type)))
   ;; Fall through...
   (let (tp i)
     (loop
@@ -82,7 +85,7 @@
            (setf car-typespec t))
          (when (eq cdr-typespec '*)
            (setf cdr-typespec t))
-         (setf i (list car-typespec cdr-typespec))))
+         (return-from normalize-type (cons tp (list car-typespec cdr-typespec)))))
       (SIGNED-BYTE
        (if (eq (car i) '*)
            (return-from normalize-type 'integer)
@@ -95,7 +98,8 @@
        (unless i
          (return-from normalize-type (list tp '* '*)))
        (when (= (length i) 1)
-         (setf i (append i '(*)))))
+         (setf i (append i '(*))))
+       (return-from normalize-type (cons tp i)))
       (VECTOR
        (case (length i)
          (0
