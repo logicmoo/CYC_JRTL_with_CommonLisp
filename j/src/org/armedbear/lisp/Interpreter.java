@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.14 2003-02-23 01:36:46 piso Exp $
+ * $Id: Interpreter.java,v 1.15 2003-03-03 03:04:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -257,7 +257,7 @@ public final class Interpreter extends Lisp
         return null;
     }
 
-    private static boolean doCommand(String s) throws LispError
+    private static boolean doCommand(String s) throws Condition
     {
         s = s.trim();
         String command, args;
@@ -458,7 +458,7 @@ public final class Interpreter extends Lisp
         System.err.println("Interpreter.finalize");
     }
 
-    public static LispObject evaluate(String s) throws LispError
+    public static LispObject evaluate(String s) throws Condition
     {
         StringInputStream stream = new StringInputStream(s);
         LispObject obj = stream.read(false, EOF, false);

@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.4 2003-02-28 18:43:12 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.5 2003-03-03 03:04:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ public class CharacterInputStream extends LispStream
     }
 
     public LispObject read(boolean eofError, LispObject eofValue,
-        boolean recursive) throws LispError
+        boolean recursive) throws Condition
     {
         try {
             LispObject result = readPreservingWhitespace(eofError, eofValue,
@@ -82,7 +82,7 @@ public class CharacterInputStream extends LispStream
     }
 
     public LispObject readPreservingWhitespace(boolean eofError,
-        LispObject eofValue, boolean recursive) throws LispError
+        LispObject eofValue, boolean recursive) throws Condition
     {
         while (true) {
             LispObject obj = readChar(eofError, EOF);
@@ -97,7 +97,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject processChar(char c) throws LispError
+    private LispObject processChar(char c) throws Condition
     {
         switch (c) {
             case '"':
@@ -150,12 +150,12 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readQuote() throws LispError
+    private LispObject readQuote() throws Condition
     {
         return new Cons(Symbol.QUOTE, new Cons(read(true, NIL, true)));
     }
 
-    private LispObject readList() throws LispError
+    private LispObject readList() throws Condition
     {
         try {
             Cons first = null;
@@ -237,7 +237,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readComma() throws LispError
+    private LispObject readComma() throws Condition
     {
         try {
             int n = read();
@@ -262,12 +262,12 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readBackquote() throws LispError
+    private LispObject readBackquote() throws Condition
     {
         return new Cons(Symbol.BACKQUOTE, new Cons(read(true, NIL, true)));
     }
 
-    private LispObject readSharp() throws LispError
+    private LispObject readSharp() throws Condition
     {
         try {
             int numArg = 0;
@@ -317,7 +317,7 @@ public class CharacterInputStream extends LispStream
     }
 
     // FIXME
-    private LispObject handleFeature(char c) throws LispError
+    private LispObject handleFeature(char c) throws Condition
     {
         LispObject feature = read(true, NIL, true);
         LispObject form = read(true, NIL, true);
@@ -409,7 +409,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readArray(int dimensions) throws LispError
+    private LispObject readArray(int dimensions) throws Condition
     {
         LispObject obj = read(true, NIL, true);
         return NIL; // FIXME

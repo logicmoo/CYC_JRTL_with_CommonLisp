@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SpecialOperator.java,v 1.2 2003-02-15 16:48:17 piso Exp $
+ * $Id: SpecialOperator.java,v 1.3 2003-03-03 03:04:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public class SpecialOperator extends LispObject
     }
 
     public LispObject execute(LispObject args, Environment env)
-        throws LispError
+        throws Condition
     {
         return module.dispatch(args, env, index);
     }

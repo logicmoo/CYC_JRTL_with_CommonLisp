@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.22 2003-02-27 13:44:42 piso Exp $
+ * $Id: Lisp.java,v 1.23 2003-03-03 03:04:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,7 +78,7 @@ public abstract class Lisp
     }
 
     public static final LispObject funcall(LispObject fun, LispObject[] args)
-        throws LispError
+        throws Condition
     {
         final int length = args.length;
         switch (fun.getType()) {
@@ -108,7 +108,7 @@ public abstract class Lisp
     }
 
     public static final LispObject macroexpand(LispObject form)
-        throws LispError
+        throws Condition
     {
         LispObject expanded = NIL;
         while (true) {
@@ -123,7 +123,7 @@ public abstract class Lisp
     }
 
     public static final LispObject macroexpand_1(LispObject form)
-        throws LispError
+        throws Condition
     {
         LispObject[] results = new LispObject[2];
         if (!(form instanceof Cons)) {
@@ -247,7 +247,7 @@ public abstract class Lisp
     private static boolean debug = true;
 
     public static final LispObject eval(LispObject obj, Environment env)
-        throws LispError
+        throws Condition
     {
         if (debug) {
             stack.push(obj);
@@ -338,7 +338,7 @@ public abstract class Lisp
     }
 
     private static final LispObject[] evalList(LispObject exps, Environment env)
-        throws LispError
+        throws Condition
     {
         final int length = exps.length();
         LispObject[] results = new LispObject[length];
@@ -352,7 +352,7 @@ public abstract class Lisp
     }
 
     public static final LispObject progn(LispObject body, Environment env)
-        throws LispError
+        throws Condition
     {
         LispObject result = NIL;
         while (body != NIL) {
