@@ -2,7 +2,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(push prog1 pop the coerce declare declaim defstruct))
+(export '(push prog1 pop the declare declaim defstruct))
 
 (defmacro push (x place)
   `(setf ,place (cons ,x ,place)))
