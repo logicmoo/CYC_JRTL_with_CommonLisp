@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.333 2005-03-23 18:30:40 piso Exp $
+ * $Id: Lisp.java,v 1.334 2005-03-24 14:13:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -896,7 +896,8 @@ public abstract class Lisp
                 return UNSIGNED_BYTE_32;
             if (type.equal(UNSIGNED_BYTE_32))
                 return type;
-            if (type.car() == Symbol.INTEGER) {
+            LispObject car = type.car();
+            if (car == Symbol.INTEGER) {
                 LispObject lower = type.cadr();
                 LispObject upper = type.cdr().cadr();
                 // Convert to inclusive bounds.
@@ -915,6 +916,23 @@ public abstract class Lisp
                 if (lower.isGreaterThanOrEqualTo(Fixnum.ZERO)) {
                     if (lower.isLessThan(UNSIGNED_BYTE_32_MAX_VALUE)) {
                         if (upper.isLessThan(UNSIGNED_BYTE_32_MAX_VALUE))
+                            return UNSIGNED_BYTE_32;
+                    }
+                }
+            } else if (car == Symbol.EQL) {
+                LispObject obj = type.cadr();
+                if (obj instanceof Fixnum) {
+                    int val = ((Fixnum)obj).value;
+                    if (val >= 0) {
+                        if (val <= 1)
+                            return Symbol.BIT;
+                        if (val <= 255)
+                            return UNSIGNED_BYTE_8;
+                        return UNSIGNED_BYTE_32;
+                    }
+                } else if (obj instanceof Bignum) {
+                    if (obj.isGreaterThanOrEqualTo(Fixnum.ZERO)) {
+                        if (obj.isLessThan(UNSIGNED_BYTE_32_MAX_VALUE))
                             return UNSIGNED_BYTE_32;
                     }
                 }
