@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.7 2002-11-19 19:37:51 piso Exp $
+ * $Id: Directory.java,v 1.8 2002-12-07 10:13:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +22,9 @@
 package org.armedbear.j;
 
 import gnu.regexp.RE;
-import gnu.regexp.REException;
 import gnu.regexp.REMatch;
 import gnu.regexp.RESyntax;
+import gnu.regexp.UncheckedRE;
 import java.awt.AWTEvent;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -58,8 +58,8 @@ public final class Directory extends Buffer
 
     private DirectoryHistory history = new DirectoryHistory();
 
-    private static RE nativeMoveToFilenameRegExp;
-    private static RE internalMoveToFilenameRegExp;
+    private static final RE nativeMoveToFilenameRegExp;
+    private static final RE internalMoveToFilenameRegExp;
 
     private long totalSize;
 
@@ -90,26 +90,21 @@ public final class Directory extends Buffer
         final String timeOrYear =
             "(" + HHMM + "|" + s + yyyy + "|" + yyyy + s + ")";
 
-        try {
-            RESyntax syntax = new RESyntax(RESyntax.RE_SYNTAX_PERL5);
-            syntax.set(RESyntax.RE_CHAR_CLASSES);
+        RESyntax syntax = new RESyntax(RESyntax.RE_SYNTAX_PERL5);
+        syntax.set(RESyntax.RE_CHAR_CLASSES);
 
-            String normal = "[0-9]+" + s + monthAndDay + s + timeOrYear + s;
+        String normal = "[0-9]+" + s + monthAndDay + s + timeOrYear + s;
 
-            // --time-style=long-iso
-            // -rw-r--r--    1 peter    peter         147 2002-11-13 13:10 notes
-            // --time-style=iso
-            // -rw-r--r--    1 peter    peter       69016 11-16 18:29 Directory.java
-            // -rw-r--r--    1 peter    peter       13274 2001-09-08  thinbox.tar.gz
-            String iso = "[0-9]+" + s + "[0-9\\-]+" + s + "(" + HHMM + ")? *";
+        // --time-style=long-iso
+        // -rw-r--r--    1 peter    peter         147 2002-11-13 13:10 notes
+        // --time-style=iso
+        // -rw-r--r--    1 peter    peter       69016 11-16 18:29 Directory.java
+        // -rw-r--r--    1 peter    peter       13274 2001-09-08  thinbox.tar.gz
+        String iso = "[0-9]+" + s + "[0-9\\-]+" + s + "(" + HHMM + ")? *";
 
-            nativeMoveToFilenameRegExp =
-                new RE("(" + normal + ")|(" + iso + ")", 0, syntax);
-            internalMoveToFilenameRegExp = new RE(":[0-5][0-9]" + s);
-        }
-        catch (REException e) {
-            Log.error(e);
-        }
+        nativeMoveToFilenameRegExp =
+            new UncheckedRE("(" + normal + ")|(" + iso + ")", 0, syntax);
+        internalMoveToFilenameRegExp = new UncheckedRE(":[0-5][0-9]" + s);
     }
 
     public static final RE getNativeMoveToFilenameRegExp()
