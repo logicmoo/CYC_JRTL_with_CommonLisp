@@ -1,7 +1,7 @@
 ;;; define-condition.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: define-condition.lisp,v 1.2 2003-09-21 15:08:43 piso Exp $
+;;; $Id: define-condition.lisp,v 1.3 2003-10-29 18:52:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,13 @@
 
 (in-package "SYSTEM")
 
+(require 'clos)
+
 (defmacro define-condition (name (&rest parent-types) (&rest slot-specs)
 				 &body options)
   (let ((parent-types (or parent-types '(condition))))
-    `(%define-condition ',name ',parent-types ',slot-specs ',options)))
+    (setf parent-types (mapcar #'(lambda (sym) (find-class sym)) parent-types))
+    `(progn
+       (std-finalize-inheritance (%define-condition ',name ',parent-types
+                                                    ',slot-specs ',options))
+       ',name)))
