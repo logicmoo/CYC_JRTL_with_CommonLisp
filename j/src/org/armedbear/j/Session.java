@@ -2,7 +2,7 @@
  * Session.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Session.java,v 1.2 2002-11-13 01:07:23 piso Exp $
+ * $Id: Session.java,v 1.3 2002-11-14 15:36:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -195,6 +195,12 @@ public final class Session extends HandlerBase implements Constants
 
     public Buffer restore()
     {
+        if (file == null) {
+            Debug.bug();
+            return null;
+        }
+        if (!file.isFile())
+            return null;
         if (!load()) {
             Log.error("Session.restore unable to load " + file);
             return null;
