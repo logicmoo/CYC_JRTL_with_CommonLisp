@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.39 2004-01-24 20:13:01 piso Exp $
+ * $Id: LispClass.java,v 1.40 2004-01-27 14:46:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -202,8 +202,9 @@ public class LispClass extends StandardObject
         {
             LispObject c = findClass(checkSymbol(symbol));
             if (c == null) {
-                StringBuffer sb = new StringBuffer("there is no class named ");
+                StringBuffer sb = new StringBuffer("There is no class named ");
                 sb.append(symbol);
+                sb.append('.');
                 return signal(new LispError(sb.toString()));
             }
             return c;
@@ -214,8 +215,9 @@ public class LispClass extends StandardObject
             LispObject c = findClass(checkSymbol(symbol));
             if (c == null) {
                 if (errorp != NIL) {
-                    StringBuffer sb = new StringBuffer("there is no class named ");
+                    StringBuffer sb = new StringBuffer("There is no class named ");
                     sb.append(symbol);
+                    sb.append('.');
                     return signal(new LispError(sb.toString()));
                 }
                 return NIL;

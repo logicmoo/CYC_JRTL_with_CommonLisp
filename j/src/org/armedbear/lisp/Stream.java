@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.10 2004-01-27 14:01:37 piso Exp $
+ * $Id: Stream.java,v 1.11 2004-01-27 14:46:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -828,8 +828,8 @@ public class Stream extends LispObject
             String symbolName = token.substring(index + 2);
             Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
-                return signal(new LispError("package \"" + packageName +
-                                            "\" not found"));
+                return signal(new LispError("Package \"" + packageName +
+                                            "\" not found."));
             return pkg.intern(symbolName);
         }
         index = token.indexOf(':');
@@ -838,20 +838,20 @@ public class Stream extends LispObject
             String symbolName = token.substring(index + 1);
             Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
-                return signal(new PackageError("package \"" + packageName +
-                                                              "\" not found"));
+                return signal(new PackageError("Package \"" + packageName +
+                                               "\" not found."));
             Symbol symbol = pkg.findExternalSymbol(symbolName);
             if (symbol != null)
                 return symbol;
             // Error!
             if (pkg.findInternalSymbol(symbolName) != null)
-                return signal(new LispError("symbol \"" + symbolName +
+                return signal(new LispError("The symbol \"" + symbolName +
                                             "\" is not external in package " +
-                                            packageName));
+                                            packageName + '.'));
             else
-                return signal(new LispError("symbol \"" + symbolName +
-                                            "\" not found in package " +
-                                            packageName));
+                return signal(new LispError("The symbol \"" + symbolName +
+                                            "\" was not found in package " +
+                                            packageName + '.'));
         }
         // Intern token in current package.
         return ((Package)_PACKAGE_.symbolValueNoThrow(thread)).intern(token);
