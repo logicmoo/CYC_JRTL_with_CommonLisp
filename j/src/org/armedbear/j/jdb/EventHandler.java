@@ -2,7 +2,7 @@
  * EventHandler.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: EventHandler.java,v 1.4 2003-05-18 01:32:44 piso Exp $
+ * $Id: EventHandler.java,v 1.5 2003-05-19 02:05:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,25 +176,16 @@ public final class EventHandler implements Runnable
 
     private boolean handleExceptionEvent(Event event)
     {
-        jdb.log("handleExceptionEvent");
         ExceptionEvent ee = (ExceptionEvent) event;
-        jdb.log(ee.exception().toString());
-        ObjectReference obj = ee.exception();
-        ThreadReference thread = ee.thread();
-        ReferenceType type = obj.referenceType();
-        List methods = type.methodsByName("getMessage");
-        Method method = (Method) methods.get(0);
-        try {
-            Value returned =
-                obj.invokeMethod(thread, method, new ArrayList(), 0);
-            if (returned != null)
-                jdb.log(returned.toString());
-        }
-        catch (Exception e) {
-            Log.error(e);
-        }
-        jdb.log("catch location = " + ee.catchLocation());
-        return true;
+        if (ee.catchLocation() != null)
+            jdb.log("Exception encountered: " + ee.exception());
+        else
+            jdb.log("Uncaught exception encountered " + ee.exception());
+        jdb.printCurrentLocation(ee);
+        jdb.setLocation(ee.location());
+        jdb.source();
+        // Suspend the VM.
+        return false;
     }
 
     private boolean handleBreakpointEvent(Event event)
