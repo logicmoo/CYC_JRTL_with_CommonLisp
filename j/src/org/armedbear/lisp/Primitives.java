@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.642 2004-05-22 17:20:40 piso Exp $
+ * $Id: Primitives.java,v 1.643 2004-05-27 20:42:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -301,23 +301,28 @@ public final class Primitives extends Lisp
     private static final Primitive VALUES = new Primitive("values", "&rest object")
     {
         public LispObject execute()
+            throws ConditionThrowable
         {
             return LispThread.currentThread().setValues();
         }
         public LispObject execute(LispObject arg)
+            throws ConditionThrowable
         {
             return LispThread.currentThread().setValues(arg);
         }
         public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
             return LispThread.currentThread().setValues(first, second);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
+            throws ConditionThrowable
         {
             return LispThread.currentThread().setValues(first, second, third);
         }
         public LispObject execute(LispObject[] args)
+            throws ConditionThrowable
         {
             return LispThread.currentThread().setValues(args);
         }
@@ -2503,7 +2508,7 @@ public final class Primitives extends Lisp
             _GENSYM_COUNTER_.setSymbolValue(oldValue.incr());
         }
         StringBuffer sb = new StringBuffer(prefix);
-        sb.append(String.valueOf(oldValue));
+        sb.append(oldValue.writeToString());
         return new Symbol(sb.toString());
     }
 

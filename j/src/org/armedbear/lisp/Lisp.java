@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.244 2004-05-27 16:39:22 piso Exp $
+ * $Id: Lisp.java,v 1.245 2004-05-27 20:43:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -527,6 +527,7 @@ public abstract class Lisp
     // Environment wrappers.
     public static final void bind(Symbol symbol, LispObject value,
                                   Environment env)
+        throws ConditionThrowable
     {
         if (env.isDeclaredSpecial(symbol) || symbol.isSpecialVariable())
             LispThread.currentThread().bindSpecial(symbol, value);
@@ -536,6 +537,7 @@ public abstract class Lisp
 
     public static final void rebind(Symbol symbol, LispObject value,
                                     Environment env)
+        throws ConditionThrowable
     {
         if (env.isDeclaredSpecial(symbol) || symbol.isSpecialVariable()) {
             Environment dynEnv =
@@ -548,6 +550,7 @@ public abstract class Lisp
 
     public static final void bindSpecialVariable(Symbol symbol,
                                                  LispObject value)
+        throws ConditionThrowable
     {
         LispThread.currentThread().bindSpecial(symbol, value);
     }
@@ -647,6 +650,7 @@ public abstract class Lisp
 
     // Used by jvm compiler.
     public static final LispObject multipleValueList(LispObject result)
+        throws ConditionThrowable
     {
         LispThread thread = LispThread.currentThread();
         LispObject[] values = thread.getValues();

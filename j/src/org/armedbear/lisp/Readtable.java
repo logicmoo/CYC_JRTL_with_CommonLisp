@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.30 2004-05-26 01:20:27 piso Exp $
+ * $Id: Readtable.java,v 1.31 2004-05-27 20:47:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,7 +188,7 @@ public final class Readtable extends LispObject
             return null;
     }
 
-    private LispObject getMacroCharacter(char c)
+    private LispObject getMacroCharacter(char c) throws ConditionThrowable
     {
         LispObject function = getReaderMacroFunction(c);
         LispObject non_terminating_p;

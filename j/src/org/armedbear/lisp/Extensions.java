@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.23 2004-03-13 17:53:16 piso Exp $
+ * $Id: Extensions.java,v 1.24 2004-05-27 20:40:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,7 +107,7 @@ public final class Extensions extends Lisp
     private static final Primitive0 EXIT =
         new Primitive0("exit", PACKAGE_EXT, true)
     {
-        public LispObject execute()
+        public LispObject execute() throws ConditionThrowable
         {
             exit();
             return LispThread.currentThread().nothing();
@@ -117,7 +117,7 @@ public final class Extensions extends Lisp
     private static final Primitive0 QUIT =
         new Primitive0("quit", PACKAGE_EXT, true)
     {
-        public LispObject execute()
+        public LispObject execute() throws ConditionThrowable
         {
             exit();
             return LispThread.currentThread().nothing();
