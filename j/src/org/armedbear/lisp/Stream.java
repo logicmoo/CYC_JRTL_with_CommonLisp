@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.75 2004-06-11 14:45:46 piso Exp $
+ * $Id: Stream.java,v 1.76 2004-06-11 17:18:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1017,22 +1017,6 @@ public class Stream extends LispObject
     public void print(char c) throws ConditionThrowable
     {
         _writeChar(c);
-    }
-
-    // PRINC is just like PRIN1 except that the output has no escape
-    // characters. It binds *PRINT-ESCAPE* to false and *PRINT-READABLY* to
-    // false. The general rule is that output from PRINC is intended to look
-    // good to people, while output from PRIN1 is intended to be acceptable to
-    // READ.
-    public void princ(LispObject obj) throws ConditionThrowable
-    {
-        LispThread thread = LispThread.currentThread();
-        Environment oldDynEnv = thread.getDynamicEnvironment();
-        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-        thread.bindSpecial(_PRINT_READABLY_, NIL);
-        String s = obj.writeToString();
-        thread.setDynamicEnvironment(oldDynEnv);
-        _writeString(s);
     }
 
     // PRIN1 produces output suitable for input to READ.
