@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Ratio.java,v 1.42 2004-06-13 18:46:53 piso Exp $
+ * $Id: Ratio.java,v 1.43 2004-06-21 16:41:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,18 +154,21 @@ public final class Ratio extends LispObject
     public double floatValue()
     {
         double result = numerator.doubleValue() / denominator.doubleValue();
-        if (!Double.isNaN(result))
+        if (result != 0 && !Double.isNaN(result))
             return result;
         boolean negative = numerator.signum() < 0;
         BigInteger n = negative ? numerator.negate() : numerator;
         BigInteger d = denominator;
         int numLen = n.bitLength();
         int denLen = d.bitLength();
-        int maxLength = Math.max(numLen, denLen);
-        int shift = maxLength - 52;
-        n = n.shiftRight(shift);
-        d = d.shiftRight(shift);
-        result = n.doubleValue() / d.doubleValue();
+        int minLength = Math.min(numLen, denLen);
+        for (int i = 1; i < minLength; i++) {
+            n = n.shiftRight(i);
+            d = d.shiftRight(i);
+            result = n.doubleValue() / d.doubleValue();
+            if (result != 0)
+                break;
+        }
         return negative ? -result : result;
     }
 
