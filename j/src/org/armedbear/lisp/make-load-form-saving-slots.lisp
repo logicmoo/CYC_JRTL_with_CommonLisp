@@ -1,7 +1,7 @@
 ;;; make-load-form-saving-slots.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: make-load-form-saving-slots.lisp,v 1.1 2004-01-23 00:56:20 piso Exp $
+;;; $Id: make-load-form-saving-slots.lisp,v 1.2 2004-11-21 04:34:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (resolve 'defstruct)
 
@@ -41,5 +41,5 @@
                  (when (slot-boundp object slot-name)
                    (let ((value (slot-value object slot-name)))
                      (push `(setf (slot-value ,object ',slot-name) ',value) inits))))))))
-    (values `(allocate-instance (find-class ',(class-name class)))
+    (values `(allocate-instance (find-class ',(sys::%class-name class)))
             `(progn ,@inits))))

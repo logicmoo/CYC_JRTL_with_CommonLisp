@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.130 2004-11-09 01:48:29 piso Exp $
+;;; $Id: clos.lisp,v 1.131 2004-11-21 04:35:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -561,7 +561,7 @@
                :format-control "Duplicate initialization argument name ~S in :DEFAULT-INITARGS."
                :format-arguments (list name)))))
   (let ((old-class (find-class name nil)))
-    (cond ((and old-class (eq name (class-name old-class)))
+    (cond ((and old-class (eq name (%class-name old-class)))
            (if (typep old-class 'forward-referenced-class)
                (let ((new-class (apply #'make-instance-standard-class
                                      (find-class 'standard-class)
@@ -1917,7 +1917,7 @@
   (apply #'no-applicable-method #'make-load-form (list object)))
 
 (defmethod make-load-form ((class class) &optional environment)
-  (let ((name (class-name class)))
+  (let ((name (%class-name class)))
     (unless (and name (eq (find-class name nil) class))
       (error 'simple-type-error
              :format-control "Can't use anonymous or undefined class as a constant: ~S."

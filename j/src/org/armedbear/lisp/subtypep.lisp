@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.52 2004-10-20 00:17:42 piso Exp $
+;;; $Id: subtypep.lisp,v 1.53 2004-11-21 04:33:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from GCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defparameter *known-types* (make-hash-table))
 
@@ -456,8 +456,8 @@
         (return-from %subtypep
                      (values (if (member class2 (class-precedence-list class1)) t nil) t)))
       (when (or classp-1 classp-2)
-        (let ((t1 (if classp-1 (class-name type1) type1))
-              (t2 (if classp-2 (class-name type2) type2)))
+        (let ((t1 (if classp-1 (%class-name type1) type1))
+              (t2 (if classp-2 (%class-name type2) type2)))
           (return-from %subtypep (values (simple-subtypep t1 t2) t))))))
   (setf type1 (normalize-type type1)
         type2 (normalize-type type2))

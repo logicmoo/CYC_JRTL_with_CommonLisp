@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.17 2004-10-20 00:16:17 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.18 2004-11-21 04:34:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@
             (unless (get type 'deftype-definition)
               (return-from normalize-type type)))))
         ((classp type)
-         (when (eq (class-name type) 'fixnum)
+         (when (eq (%class-name type) 'fixnum)
            (return-from normalize-type
                         '(integer #.most-negative-fixnum #.most-positive-fixnum))))
         ((and (consp type)
