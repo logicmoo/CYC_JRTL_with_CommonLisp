@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.6 2003-05-27 02:12:58 piso Exp $
+ * $Id: LispThread.java,v 1.7 2003-06-01 15:07:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@ public final class LispThread extends LispObject
             public void run()
             {
                 try {
-                    funcall(fun, null, LispThread.this);
+                    funcall(fun, new LispObject[0], LispThread.this);
                 }
                 catch (Throwable t) {
                     t.printStackTrace();
