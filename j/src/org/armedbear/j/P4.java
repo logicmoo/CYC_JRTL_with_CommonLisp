@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: P4.java,v 1.10 2003-06-16 15:44:49 piso Exp $
+ * $Id: P4.java,v 1.11 2003-07-01 17:25:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -454,10 +454,6 @@ public class P4 implements Constants
         Buffer parentBuffer = editor.getBuffer();
         if (parentBuffer instanceof DiffOutputBuffer)
             parentBuffer = parentBuffer.getParentBuffer();
-        if (parentBuffer == null)
-            return;
-        if (parentBuffer.getFile() == null)
-            return;
         FastStringBuffer sb = new FastStringBuffer("p4 submit");
         if (arg != null) {
             sb.append(" -c ");
@@ -487,7 +483,7 @@ public class P4 implements Constants
             for (BufferIterator it = new BufferIterator(); it.hasNext();) {
                 Buffer buf = it.nextBuffer();
                 if (buf instanceof CheckinBuffer) {
-                    if (buf.getParentBuffer() == parentBuffer) {
+                    if (title.equals(buf.getTitle())) {
                         checkinBuffer = (CheckinBuffer) buf;
                         break;
                     }
@@ -671,8 +667,6 @@ public class P4 implements Constants
     public static void finish(Editor editor, CheckinBuffer checkinBuffer)
     {
         final Buffer parentBuffer = checkinBuffer.getParentBuffer();
-        if (parentBuffer.getFile() == null)
-            return;
         editor.getFrame().setWaitCursor();
         final boolean editOnly = checkinBuffer.isEditOnly();
         final String cmd;
@@ -712,7 +706,7 @@ public class P4 implements Constants
         } else {
             // Success. Kill old diff and output buffers, if any: their
             // contents are no longer correct.
-            if (!editOnly) {
+            if (!editOnly && parentBuffer != null) {
                 for (BufferIterator it = new BufferIterator(); it.hasNext();) {
                     Buffer b = it.nextBuffer();
                     if (b instanceof DiffOutputBuffer) {
