@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.92 2004-03-28 00:12:18 piso Exp $
+;;; $Id: jvm.lisp,v 1.93 2004-03-28 02:03:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -570,9 +570,13 @@
               macro-function
               compiler-macro-function
               get
+              atom
+              compiled-function-p
+              fdefinition
               special-operator-p keywordp functionp fboundp zerop consp listp
+              numberp integerp floatp
               plusp minusp
-              complexp arrayp readtablep
+              complexp arrayp readtablep packagep
               array-dimensions array-rank array-total-size
               array-element-type upgraded-array-element-type
               simple-vector-p simple-string-p bit-vector-p simple-bit-vector-p
@@ -581,7 +585,7 @@
               mapcar
               find position
               append nconc subseq
-              memq
+              member ext:memq
               special-variable-p
               gensym
               symbol-name symbol-function
@@ -589,8 +593,10 @@
               reverse nreverse
               cons
               copy-list
-              make-sequence make-list make-array make-package
-              pathname make-pathname
+              make-sequence make-list make-array make-package make-hash-table
+              find-package
+              pathname make-pathname directory
+              package-used-by-list package-shadowing-symbols
               nthcdr
               aref elt
               not null endp
@@ -600,25 +606,35 @@
               setq
               multiple-value-list pop
               type-of class-of
+              typep sys::%typep
               abs
               ash
+              float-radix
               logand logandc1 logandc2 logeqv logior lognand
               lognot logorc1 logorc2 logxor
               logbitp
-              slot-boundp slot-value
+              slot-boundp slot-value slot-exists-p
+              allocate-instance
               find-class
+              class-name
               constantly
               exp expt log
               min max
               realpart imagpart
               ext:classp
-              ext:fixnump))
+              ext:fixnump
+              sys::generic-function-name
+              precompiler::precompile1
+              ))
   (setf (gethash op single-valued-operators) t))
 
 (defun single-valued-p (form)
-  (if (atom form)
-      t
-      (gethash (car form) single-valued-operators)))
+  (cond ((atom form)
+         t)
+        ((memq (car form) '(and or))
+         (every #'single-valued-p (cdr form)))
+        (t
+         (gethash (car form) single-valued-operators))))
 
 (defun maybe-emit-clear-values (form)
   (unless (single-valued-p form)
@@ -1391,13 +1407,15 @@
   (compile-form (first args))
   (unless (remove-store-value)
     (emit-push-value))
-  (unless (single-valued-p (first args))
-    (emit-clear-values))
+;;   (unless (single-valued-p (first args))
+;;     (emit-clear-values))
+  (maybe-emit-clear-values (first args))
   (compile-form (second args))
   (unless (remove-store-value)
     (emit-push-value))
-  (unless (single-valued-p (second args))
-    (emit-clear-values))
+;;   (unless (single-valued-p (second args))
+;;     (emit-clear-values))
+  (maybe-emit-clear-values (second args))
   (emit-invokevirtual +lisp-object-class+
                       op
                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
