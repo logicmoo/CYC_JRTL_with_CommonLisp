@@ -211,6 +211,7 @@ in-package
 incf
 integerp
 intern
+keywordp
 labels
 lambda
 last
