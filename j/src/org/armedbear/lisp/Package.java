@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.6 2003-03-15 13:53:19 piso Exp $
+ * $Id: Package.java,v 1.7 2003-03-25 16:41:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,6 +139,11 @@ public final class Package extends LispObject
         }
         // Not found.
         map.put(name, symbol = new Symbol(name, this));
+        if (this == PACKAGE_KEYWORD) {
+            symbol.setSymbolValue(symbol);
+            symbol.setConstant(true);
+            symbol.setExternal(true);
+        }
         values[0] = symbol;
         values[1] = NIL;
         setValues(values);
