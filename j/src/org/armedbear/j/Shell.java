@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.16 2002-11-23 19:22:35 piso Exp $
+ * $Id: Shell.java,v 1.17 2002-12-05 21:22:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -432,6 +432,11 @@ public class Shell extends CommandInterpreter implements Constants
     }
 
     public File getCurrentDirectory()
+    {
+        return currentDir;
+    }
+
+    public File getCompletionDirectory()
     {
         return currentDir;
     }
