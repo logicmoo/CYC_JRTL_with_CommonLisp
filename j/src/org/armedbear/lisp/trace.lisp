@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: trace.lisp,v 1.1 2003-10-23 13:08:01 piso Exp $
+;;; $Id: trace.lisp,v 1.2 2003-11-17 15:22:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -47,14 +47,14 @@
          (untraced-function (symbol-function symbol))
          (trace-function
           (lambda (&rest args)
-            (format t (indent "~A: ~A ~A~%" depth) depth
+            (format t (indent "~D: ~S~%" depth) depth
                     (append (list symbol) args))
             (incf depth)
             (let ((r (multiple-value-list (apply untraced-function args))))
               (decf depth)
-              (format t (indent "~A: ~A returned" depth) depth symbol)
+              (format t (indent "~D: ~A returned" depth) depth symbol)
               (dolist (val r)
-                (format t " ~A" val))
+                (format t " ~S" val))
               (format t "~%")
               (values-list r)))))
     (setf (symbol-function symbol) trace-function)
