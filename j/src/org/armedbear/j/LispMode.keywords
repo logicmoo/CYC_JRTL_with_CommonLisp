@@ -168,6 +168,7 @@ fill
 fill-pointer
 find
 find-all-symbols
+find-class
 find-if
 find-if-not
 find-package
