@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.77 2003-09-27 19:24:15 piso Exp $
+ * $Id: Autoload.java,v 1.78 2003-09-28 18:33:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -232,6 +232,7 @@ public class Autoload extends Function
         autoload("unexport", "PackageFunctions");
         autoload("unuse-package", "PackageFunctions");
         autoload("user-homedir-pathname", "Pathname");
+        autoload(PACKAGE_EXT, "add-class", "LispClass");
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file");
         autoload(PACKAGE_EXT, "probe-directory", "probe_file");
         autoload(PACKAGE_SYS, "%define-condition", "define_condition");
@@ -271,6 +272,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%time", "Time");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTable");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
+        autoload(PACKAGE_SYS, "make-instance-standard-class", "StandardClass");
         autoload(PACKAGE_SYS, "make-structure-class", "StructureClass");
         autoload(PACKAGE_SYS, "puthash", "HashTable");
     }
