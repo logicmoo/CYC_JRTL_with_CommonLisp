@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.15 2003-11-19 02:44:16 piso Exp $
+ * $Id: SpecialOperators.java,v 1.16 2003-11-19 13:51:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -326,13 +326,6 @@ public final class SpecialOperators extends Lisp
             final LispThread thread = LispThread.currentThread();
             final LispObject symbols = checkList(eval(args.car(), env, thread));
             LispObject values = checkList(eval(args.cadr(), env, thread));
-            // Save current values of symbols.
-            final LispObject[] oldValues = new LispObject[symbols.length()];
-            int i = 0;
-            for (LispObject list = symbols; list != NIL; list = list.cdr()) {
-                LispObject symbol = list.car();
-                oldValues[i++] = symbol.getSymbolValue();
-            }
             Environment oldDynEnv = thread.getDynamicEnvironment();
             try {
                 // Set up the new bindings.
@@ -344,10 +337,7 @@ public final class SpecialOperators extends Lisp
                         values = values.cdr();
                     } else
                         value = null;
-                    if (symbol.isSpecialVariable())
-                        thread.bindSpecial(symbol, value);
-                    else
-                        symbol.setSymbolValue(value);
+                    thread.bindSpecial(symbol, value);
                 }
                 // Implicit PROGN.
                 LispObject result = NIL;
@@ -360,12 +350,6 @@ public final class SpecialOperators extends Lisp
             }
             finally {
                 thread.setDynamicEnvironment(oldDynEnv);
-                // Undo bindings.
-                i = 0;
-                for (LispObject list = symbols; list != NIL; list = list.cdr()) {
-                    Symbol symbol = (Symbol) list.car();
-                    symbol.setSymbolValue(oldValues[i]);
-                }
             }
         }
     };
