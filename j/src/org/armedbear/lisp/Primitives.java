@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.437 2003-09-25 15:36:14 piso Exp $
+ * $Id: Primitives.java,v 1.438 2003-09-25 16:33:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3439,30 +3439,60 @@ public final class Primitives extends Module
         }
     };
 
-    // ### write-string
-    // write-string string &optional output-stream &key start end => string
-    private static final Primitive WRITE_STRING =
-        new Primitive("write-string") {
+    // ### %write-string
+    // write-string string output-stream start end => string
+    private static final Primitive _WRITE_STRING =
+        new Primitive("%write-string", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
-            if (args.length == 0)
+            if (args.length != 4)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            LispString string = checkString(args[0]);
+            String s = LispString.getValue(args[0]);
             CharacterOutputStream out = null;
             if (args.length == 1)
                 out = getStandardOutput();
             else {
                 LispObject streamArg = args[1];
+                if (streamArg == T)
+                    streamArg = _TERMINAL_IO_.symbolValue();
+                else if (streamArg == NIL)
+                    streamArg = _STANDARD_OUTPUT_.symbolValue();
                 if (streamArg instanceof CharacterOutputStream)
                     out = (CharacterOutputStream) streamArg;
-                else if (streamArg == T || streamArg == NIL)
-                    out = getStandardOutput();
+                else if (streamArg instanceof TwoWayStream)
+                    out = ((TwoWayStream)streamArg).getOutputStream();
                 else
-                    throw new ConditionThrowable(new TypeError(args[1],
-                                                               "character output stream"));
+                    throw new ConditionThrowable(new TypeError(args[1], "character output stream"));
             }
-            out.writeString(string);
-            return string;
+            int start = Fixnum.getValue(args[2]);
+            int end = Fixnum.getValue(args[3]);
+            out.writeString(s.substring(start, end));
+            return args[0];
+        }
+    };
+
+    // ### %write-newline
+    // write-string string output-stream start end => string
+    private static final Primitive1 _WRITE_NEWLINE =
+        new Primitive1("%write-newline", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            LispObject streamArg = arg;
+            if (streamArg == T)
+                streamArg = _TERMINAL_IO_.symbolValue();
+            else if (streamArg == NIL)
+                streamArg = _STANDARD_OUTPUT_.symbolValue();
+            final CharacterOutputStream out;
+            if (streamArg instanceof CharacterOutputStream)
+                out = (CharacterOutputStream) streamArg;
+            else if (streamArg instanceof TwoWayStream)
+                out = ((TwoWayStream)streamArg).getOutputStream();
+            else
+                throw new ConditionThrowable(new TypeError(streamArg, "character output stream"));
+            out.writeString(System.getProperty("line.separator"));
+            return NIL;
         }
     };
 
@@ -3505,7 +3535,7 @@ public final class Primitives extends Module
             else if (streamArg instanceof TwoWayStream)
                 out = ((TwoWayStream)streamArg).getOutputStream();
             else
-                throw new ConditionThrowable(new TypeError(args[1], "character output stream"));
+                throw new ConditionThrowable(new TypeError(args[0], "character output stream"));
         }
         out.flushOutput();
         return NIL;
