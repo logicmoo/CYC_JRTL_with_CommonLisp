@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.66 2003-09-08 13:33:18 piso Exp $
+ * $Id: Symbol.java,v 1.67 2003-09-08 17:15:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,7 @@ public class Symbol extends LispObject
     public static final Symbol BIGNUM               = PACKAGE_CL.addExternalSymbol("BIGNUM");
     public static final Symbol BIT                  = PACKAGE_CL.addExternalSymbol("BIT");
     public static final Symbol BIT_VECTOR           = PACKAGE_CL.addExternalSymbol("BIT-VECTOR");
+    public static final Symbol BOOLEAN              = PACKAGE_CL.addExternalSymbol("BOOLEAN");
     public static final Symbol CHARACTER            = PACKAGE_CL.addExternalSymbol("CHARACTER");
     public static final Symbol COMPILED_FUNCTION    = PACKAGE_CL.addExternalSymbol("COMPILED-FUNCTION");
     public static final Symbol COMPLEX              = PACKAGE_CL.addExternalSymbol("COMPLEX");
