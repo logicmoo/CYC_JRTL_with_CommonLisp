@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.17 2003-12-08 21:28:44 piso Exp $
+;;; $Id: clos.lisp,v 1.18 2003-12-09 02:48:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -150,6 +150,8 @@
                  (cdr option))))))
     (t (list `',(car option) `',(cadr option)))))
 
+(defconstant +slot-unbound+ (make-symbol "SLOT-UNBOUND"))
+
 ;;; Slot definition metaobjects
 
 (defstruct slot-definition
@@ -211,9 +213,13 @@
                  class))
   (let ((location 0))
     (dolist (slot (class-slots class))
-      (when (instance-slot-p slot)
-        (setf (slot-definition-location slot) location)
-        (incf location))))
+      (case (slot-definition-allocation slot)
+        (:instance
+         (setf (slot-definition-location slot) location)
+         (incf location))
+        (:class
+         (setf (slot-definition-location slot)
+               (cons (slot-definition-name slot) +slot-unbound+))))))
   (setf (class-default-initargs class)
         (compute-class-default-initargs class))
   (values))
@@ -376,13 +382,16 @@
   (setf (svref slots location) new-value))
 
 (defun std-slot-value (instance slot-name)
-  (let ((location (slot-location (class-of instance) slot-name)))
-    (if location
-        (let ((val (slot-contents (std-instance-slots instance) location)))
-          (if (eq secret-unbound-value val)
-              (error "the slot ~S is unbound in the object ~S" slot-name instance)
-              val))
-        (slot-missing (class-of instance) instance slot-name 'slot-value))))
+  (let* ((location (slot-location (class-of instance) slot-name))
+         (value (cond ((fixnump location)
+                       (slot-contents (std-instance-slots instance) location))
+                      ((consp location)
+                       (cdr location))
+                      (t
+                       (slot-missing (class-of instance) instance slot-name 'slot-value)))))
+    (if (eq +slot-unbound+ value)
+        (error "the slot ~S is unbound in the object ~S" slot-name instance)
+        value)))
 
 (defun slot-value (object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
@@ -390,13 +399,15 @@
       (slot-value-using-class (class-of object) object slot-name)))
 
 (defun (setf std-slot-value) (new-value instance slot-name)
-  (let ((location (slot-location (class-of instance) slot-name))
-        (slots (std-instance-slots instance)))
-    (if location
-        (setf (slot-contents slots location) new-value)
-        (progn
-          (slot-missing (class-of instance) instance slot-name 'setf new-value)
-          new-value))))
+  (let ((location (slot-location (class-of instance) slot-name)))
+    (cond ((fixnump location)
+           (setf (slot-contents (std-instance-slots instance) location) new-value))
+          ((consp location)
+           (setf (cdr location) new-value))
+          (t
+           (slot-missing (class-of instance) instance slot-name 'setf new-value))))
+  new-value)
+
 (defun (setf slot-value) (new-value object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (setf (std-slot-value object slot-name) new-value)
@@ -404,23 +415,29 @@
        new-value (class-of object) object slot-name)))
 
 (defun std-slot-boundp (instance slot-name)
-  (let ((location (slot-location (class-of instance) slot-name))
-        (slots (std-instance-slots instance)))
-    (if location
-        (not (eq secret-unbound-value (slot-contents slots location)))
-        (not (null (slot-missing (class-of instance) instance slot-name 'slot-boundp))))))
+  (let ((location (slot-location (class-of instance) slot-name)))
+    (cond ((fixnump location)
+           (neq +slot-unbound+ (slot-contents (std-instance-slots instance) location)))
+          ((consp location)
+           (neq +slot-unbound+ (cdr location)))
+          (t
+           (not (null (slot-missing (class-of instance) instance slot-name 'slot-boundp)))))))
+
 (defun slot-boundp (object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (std-slot-boundp object slot-name)
       (slot-boundp-using-class (class-of object) object slot-name)))
 
 (defun std-slot-makunbound (instance slot-name)
-  (let ((location (slot-location (class-of instance) slot-name))
-        (slots (std-instance-slots instance)))
-    (if location
-        (setf (slot-contents slots location) secret-unbound-value)
-        (slot-missing (class-of instance) instance slot-name 'slot-makunbound))
-  instance))
+  (let ((location (slot-location (class-of instance) slot-name)))
+    (cond ((fixnump location)
+           (setf (slot-contents (std-instance-slots instance) location) +slot-unbound+))
+          ((consp location)
+           (setf (cdr location) +slot-unbound+))
+          (t
+           (slot-missing (class-of instance) instance slot-name 'slot-makunbound))))
+  instance)
+
 (defun slot-makunbound (object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (std-slot-makunbound object slot-name)
@@ -436,16 +453,14 @@
 
 ;;; Standard instance allocation
 
-(defparameter secret-unbound-value (list "slot unbound"))
-
 (defun instance-slot-p (slot)
-  (eq (slot-definition-allocation slot) ':instance))
+  (eq (slot-definition-allocation slot) :instance))
 
 (defun std-allocate-instance (class)
   (allocate-std-instance
    class
    (allocate-slot-storage (count-if #'instance-slot-p (class-slots class))
-                          secret-unbound-value)))
+                          +slot-unbound+)))
 
 (defun allocate-instance (class)
   (std-allocate-instance class))
