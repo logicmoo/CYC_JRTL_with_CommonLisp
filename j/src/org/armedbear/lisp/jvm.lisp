@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.384 2005-02-02 16:47:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.385 2005-02-02 21:42:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1598,7 +1598,7 @@
                   (emit 'aload (variable-register variable))
                   (emit-move-from-stack target))
                  ((variable-special-p variable)
-                  (dformat t "soecial~%")
+                  (dformat t "special~%")
                   (compile-special-reference (variable-name variable) target nil))
                  ((variable-closure-index variable)
                   (dformat t "closure-index = ~S~%" (variable-closure-index variable))
@@ -2352,7 +2352,7 @@
 (define-unary-operator 'STRINGP         "STRINGP")
 (define-unary-operator 'SYMBOLP         "SYMBOLP")
 (define-unary-operator 'VECTORP         "VECTORP")
-(define-unary-operator 'ZEROP           "ZEROP")
+;; (define-unary-operator 'ZEROP           "ZEROP")
 
 (defun compile-function-call-1 (op args target representation)
   (let ((arg (first args)))
@@ -2883,13 +2883,23 @@
          variable)
     (when (memq op '(NOT NULL))
       (return-from compile-test-2 (compile-test arg (not negatep))))
-    (when (setf variable (unboxed-fixnum-variable arg))
+;;     (when (setf variable (unboxed-fixnum-variable arg))
+;;       (case op
+;;         (MINUSP
+;;          (dformat t "compile-test-2 minusp case~%")
+;;          (aver (variable-register variable))
+;;          (emit 'iload (variable-register variable))
+;;          (return-from compile-test-2 (if negatep 'iflt 'ifge)))))
+    (when (subtypep (derive-type arg) 'FIXNUM)
       (case op
         (MINUSP
          (dformat t "compile-test-2 minusp case~%")
-         (aver (variable-register variable))
-         (emit 'iload (variable-register variable))
-         (return-from compile-test-2 (if negatep 'iflt 'ifge)))))
+         (compile-form arg :target :stack :representation :unboxed-fixnum)
+         (return-from compile-test-2 (if negatep 'iflt 'ifge)))
+        (ZEROP
+         (dformat t "compile-test-2 zerop case~%")
+         (compile-form arg :target :stack :representation :unboxed-fixnum)
+         (return-from compile-test-2 (if negatep 'ifeq 'ifne)))))
     (when (eq op 'SYMBOLP)
       (process-args args)
       (emit 'instanceof +lisp-symbol-class+)
@@ -3108,10 +3118,10 @@
            (compile-form consequent :target target :representation representation))
           (t
            (emit (compile-test test nil) LABEL1)
-           (compile-form consequent :target target)
+           (compile-form consequent :target target :representation representation)
            (emit 'goto LABEL2)
            (label LABEL1)
-           (compile-form alternate :target target)
+           (compile-form alternate :target target :representation representation)
            (label LABEL2)))))
 
 (defun compile-multiple-value-list (form &key (target :stack) representation)
@@ -4125,6 +4135,28 @@
   (dformat t "p2-logand default case~%")
   (compile-function-call form target representation))
 
+(defun p2-zerop (form &key (target :stack) representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-zerop))
+  (let* ((arg (cadr form))
+         (var (unboxed-fixnum-variable arg)))
+    (cond ((subtypep (derive-type arg) 'FIXNUM)
+           (compile-form arg :target :stack :representation :unboxed-fixnum)
+           (let ((LABEL1 (gensym))
+                 (LABEL2 (gensym)))
+             (emit 'ifne LABEL1)
+             (emit-push-t)
+             (emit 'goto LABEL2)
+             (label LABEL1)
+             (emit-push-nil)
+             (label LABEL2)
+             (emit-move-from-stack target)))
+          (t
+           (compile-form arg :target :stack)
+           (maybe-emit-clear-values arg)
+           (emit-invoke-method "ZEROP" target representation)))))
+
 (defun derive-type (form)
   (cond ((fixnump form)
          (return-from derive-type 'fixnum))
@@ -4148,8 +4180,10 @@
                 (return-from derive-type 'FIXNUM)))))))
   t)
 
-(defun compile-length (form &key (target :stack) representation)
-  (check-arg-count form 1)
+(defun p2-length (form &key (target :stack) representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-length))
   (let ((arg (cadr form)))
     (compile-form arg :target :stack)
     (maybe-emit-clear-values arg)
@@ -4461,7 +4495,7 @@
     (case (length args)
       (1
        (let ((arg (first args)))
-         (compile-form arg :target target)
+         (compile-form arg :target target :representation representation)
          (unless (single-valued-p arg)
            (emit-clear-values))))
       (2
@@ -4614,7 +4648,9 @@
 
 (defun p2-the (form &key (target :stack) representation)
 ;;   (compile-form (third form) :target target :representation representation)
+  (dformat t "p2-the ~S ~S ~S~%" form target representation)
   (cond ((subtypep (second form) 'FIXNUM)
+         (dformat t "p2-the fixnum case~%")
          (unless (eq representation :unboxed-fixnum)
            (emit 'new +lisp-fixnum-class+)
            (emit 'dup))
@@ -4835,7 +4871,9 @@
                ((equal (block-name form) '(UNWIND-PROTECT))
                 (p2-unwind-protect-node form target))
                (t
-                (p2-block-node form target))))
+                (p2-block-node form target)))
+         (when (eq representation :unboxed-fixnum)
+           (emit-unbox-fixnum)))
         ((constantp form)
          (compile-constant form :target target :representation representation))
         (t
@@ -5163,6 +5201,7 @@
 
     (let ((specials (process-special-declarations body)))
       (dolist (name specials)
+        (dformat t "recognizing ~S as special~%" name)
         (let ((variable (find-visible-variable name)))
           (cond ((null variable)
                  (setf variable (make-variable :name name
@@ -5596,7 +5635,6 @@
                              declare
                              funcall
                              if
-                             length
                              locally
                              multiple-value-call
                              multiple-value-list
@@ -5625,6 +5663,7 @@
 (install-p2-handler 'go             'p2-go)
 (install-p2-handler 'function       'p2-function)
 (install-p2-handler 'labels         'p2-labels)
+(install-p2-handler 'length         'p2-length)
 (install-p2-handler 'logand         'p2-logand)
 (install-p2-handler 'not            'p2-not/null)
 (install-p2-handler 'null           'p2-not/null)
@@ -5632,6 +5671,7 @@
 (install-p2-handler 'rplacd         'p2-rplacd)
 (install-p2-handler 'schar          'p2-schar)
 (install-p2-handler 'the            'p2-the)
+(install-p2-handler 'zerop          'p2-zerop)
 
 (install-p2-handler '%call-internal 'p2-%call-internal)
 
