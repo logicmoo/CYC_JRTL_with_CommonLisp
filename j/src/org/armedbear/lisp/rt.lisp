@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.61 2003-03-13 21:00:34 piso Exp $
+;;; $Id: rt.lisp,v 1.62 2003-03-15 19:08:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -678,7 +678,9 @@
                               "make-sequence"
                               "make-string"
                               "map"
+                              "map-into"
                               "merge"
+                              "mismatch"
                               "multiple-value-bind"
                               "multiple-value-call"
                               "multiple-value-list"
@@ -690,6 +692,7 @@
                               "nsubstitute"
                               "nsubstitute-if"
                               "nsubstitute-if-not"
+                              "nth-value"
                               "or"
                               "position"
                               "position-if"
