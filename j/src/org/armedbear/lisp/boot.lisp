@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.60 2003-06-20 16:44:01 piso Exp $
+;;; $Id: boot.lisp,v 1.61 2003-06-20 16:57:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@
           lambda
           defun
           *features*
-          make-hash-table
           plusp minusp integerp
           character
           read-from-string
@@ -87,16 +86,6 @@
 (set-dispatch-macro-character #\# #\- #'read-conditional)
 
 
-(defun make-hash-table (&key (test 'eql) (size 11) (rehash-size nil)
-			     (rehash-threshold nil))
-  (setq test (coerce test 'function))
-  (unless (and (typep size 'integer) (>= size 0))
-    (error 'type-error "MAKE-HASH-TABLE: ~S is not a non-negative integer" size))
-  ;; %make-hash-table expects size to be a fixnum.
-  (when (> size array-dimension-limit)
-    (setq size array-dimension-limit))
-  (%make-hash-table test size rehash-size rehash-threshold))
-
 (dolist (name '("exports.lisp"
                 "early-defuns.lisp"
                 "backquote.lisp"
@@ -129,6 +118,7 @@
 (autoload '(remprop get-properties copy-symbol) "symbol.lisp")
 (autoload '(open sort merge parse-integer))
 (autoload 'tree-equal)
+(autoload 'make-hash-table)
 (autoload 'documentation)
 
 ;;; Miscellany.
