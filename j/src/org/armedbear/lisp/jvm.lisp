@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.142 2004-04-30 12:50:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.143 2004-05-03 01:59:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -515,6 +515,7 @@
                 list list*
                 macro-function
                 compiler-macro-function
+                sys::%defun
                 get
                 atom
                 compiled-function-p
