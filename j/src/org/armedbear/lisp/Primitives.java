@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.367 2003-09-03 23:44:01 piso Exp $
+ * $Id: Primitives.java,v 1.368 2003-09-04 00:16:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4813,6 +4813,30 @@ public final class Primitives extends Module
             return new LispFloat(Math.sqrt(((LispFloat)obj).getValue()));
         throw new TypeError(obj, "number");
     }
+
+    // ### gcd-2
+    private static final Primitive2 GCD_2 =
+        new Primitive2("gcd-2", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            BigInteger n1, n2;
+            if (first instanceof Fixnum)
+                n1 = BigInteger.valueOf(((Fixnum)first).getValue());
+            else if (first instanceof Bignum)
+                n1 = ((Bignum)first).getValue();
+            else
+                throw new TypeError(first, "integer");
+            if (second instanceof Fixnum)
+                n2 = BigInteger.valueOf(((Fixnum)second).getValue());
+            else if (second instanceof Bignum)
+                n2 = ((Bignum)second).getValue();
+            else
+                throw new TypeError(second, "integer");
+            return number(n1.gcd(n2));
+        }
+    };
 
     // ### hashcode-to-string
     private static final Primitive1 HASHCODE_TO_STRING =
