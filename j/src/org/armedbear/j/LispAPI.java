@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.45 2004-09-05 19:10:18 piso Exp $
+ * $Id: LispAPI.java,v 1.46 2004-09-05 20:04:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1090,6 +1090,20 @@ public final class LispAPI extends Lisp
             Editor editor = Editor.currentEditor();
             editor.makeNext(buffer);
             editor.activateInOtherWindow(buffer);
+            return arg;
+        }
+    };
+
+    // ### switch-to-buffer buffer => buffer
+    private static final Primitive switch_TO_BUFFER =
+        new Primitive("switch-to-buffer", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Buffer buffer = checkBuffer(arg);
+            Editor editor = Editor.currentEditor();
+            editor.makeNext(buffer);
+            editor.activate(buffer);
             return arg;
         }
     };
