@@ -230,6 +230,7 @@ in-package
 incf
 input-stream-p
 inspect
+integer-length
 integerp
 intern
 intersection
