@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Display.java,v 1.12 2003-06-26 00:43:48 piso Exp $
+ * $Id: Display.java,v 1.13 2003-07-23 00:16:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -698,9 +698,10 @@ public final class Display extends JComponent implements Constants,
         paintLineImageHeight = height;
         paintLineGraphics = (Graphics2D) paintLineImage.getGraphics();
 
-        if (antialias)
+        if (antialias) {
             paintLineGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                                               RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        }
     }
 
     private final void paintLine(Line line, Graphics2D g2d, int y)
@@ -1005,7 +1006,7 @@ public final class Display extends JComponent implements Constants,
         Graphics2D g2d = (Graphics2D) g;
         if (antialias) {
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         }
         final Rectangle clipBounds = g2d.getClipBounds();
         final int displayWidth = getWidth();
@@ -1944,6 +1945,15 @@ public final class Display extends JComponent implements Constants,
             Display display = it.nextEditor().getDisplay();
             display.initialize();
             display.repaint();
+        }
+    }
+
+    public static void setRenderingHints(Graphics g)
+    {
+        if (antialias) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         }
     }
 
