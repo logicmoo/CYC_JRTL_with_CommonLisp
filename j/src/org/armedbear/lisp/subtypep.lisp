@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.43 2004-02-02 20:53:26 piso Exp $
+;;; $Id: subtypep.lisp,v 1.44 2004-02-09 11:25:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -210,9 +210,7 @@
                                   type2
                                   (and (symbolp type2) (find-class type2 nil)))))
         (return-from subtypep
-                     (if (member class2 (class-precedence-list class1))
-                         (values t t)
-                         (values nil t))))
+                     (values (if (member class2 (class-precedence-list class1)) t nil) t)))
       (when (or classp-1 classp-2)
         (let ((t1 (if classp-1 (class-name type1) type1))
               (t2 (if classp-2 (class-name type2) type2)))
@@ -223,11 +221,11 @@
     (return-from subtypep (values t t)))
   (let (t1 t2 i1 i2)
     (if (atom type1)
-        (setq t1 type1 i1 nil)
-        (setq t1 (car type1) i1 (cdr type1)))
+        (setf t1 type1 i1 nil)
+        (setf t1 (car type1) i1 (cdr type1)))
     (if (atom type2)
-        (setq t2 type2 i2 nil)
-        (setq t2 (car type2) i2 (cdr type2)))
+        (setf t2 type2 i2 nil)
+        (setf t2 (car type2) i2 (cdr type2)))
     (cond ((eq t1 'atom)
            (return-from subtypep (values (eq t2 t) t)))
           ((eq t2 'atom)
@@ -333,10 +331,7 @@
                (values (sub-interval-p i1 i2) t)
                (values nil (known-type-p t2))))
           ((and (eq t1 #.(find-class 'array)) (eq t2 'array))
-           (cond ((equal i2 '(* *))
-                  (values t t))
-                 (t
-                  (values nil t))))
+           (values (equal i2 '(* *)) t))
           ((and (memq t1 '(array simple-array)) (eq t2 'array))
            (let ((e1 (car i1))
                  (e2 (car i2))
@@ -398,43 +393,45 @@
                        (and (consp dim) (= (length dim) 1)))
                    (return-from subtypep (values t t))
                    (return-from subtypep (values nil t))))))
-          ((and (eq t1 'simple-array) (eq t2 'simple-array))
-           (let ((e1 (car i1))
-                 (e2 (car i2))
-                 (d1 (cadr i1))
-                 (d2 (cadr i2)))
-             (cond ((and (eq e2 '*) (eq d2 '*))
-                    (values t t))
-                   ((or (eq e2 '*)
-                        (equal e1 e2)
-                        (equal (upgraded-array-element-type e1)
-                               (upgraded-array-element-type e2)))
-                    (values (dimension-subtypep d1 d2) t))
-                   (t
-                    (values nil t)))))
-          ((and (eq t1 'simple-string) (eq t2 'simple-array))
-           (let ((element-type (car i2))
-                 (dim (cadr i2))
-                 (size (car i1)))
-             (unless (eq element-type '*)
-               (return-from subtypep (values nil t)))
-             (when (integerp size)
-               (if (or (eq dim '*)
-                       (and (consp dim) (= (length dim) 1) (eql (car dim) size)))
-                   (return-from subtypep (values t t))
-                   (return-from subtypep (values nil t))))
-             (when (or (null size) (eql size '*))
-               (if (or (eq dim '*)
-                       (eql dim 1)
-                       (and (consp dim) (= (length dim) 1)))
-                   (return-from subtypep (values t t))
-                   (return-from subtypep (values nil t))))))
           ((eq t2 'simple-array)
-           (values nil t))
+           (case t1
+             (simple-array
+              (let ((e1 (car i1))
+                    (e2 (car i2))
+                    (d1 (cadr i1))
+                    (d2 (cadr i2)))
+                (cond ((and (eq e2 '*) (eq d2 '*))
+                       (values t t))
+                      ((or (eq e2 '*)
+                           (equal e1 e2)
+                           (equal (upgraded-array-element-type e1)
+                                  (upgraded-array-element-type e2)))
+                       (values (dimension-subtypep d1 d2) t))
+                      (t
+                       (values nil t)))))
+             (simple-string
+              (let ((element-type (car i2))
+                    (dim (cadr i2))
+                    (size (car i1)))
+                (unless (eq element-type '*)
+                  (return-from subtypep (values nil t)))
+                (when (integerp size)
+                  (if (or (eq dim '*)
+                          (and (consp dim) (= (length dim) 1) (eql (car dim) size)))
+                      (return-from subtypep (values t t))
+                      (return-from subtypep (values nil t))))
+                (when (or (null size) (eql size '*))
+                  (if (or (eq dim '*)
+                          (eql dim 1)
+                          (and (consp dim) (= (length dim) 1)))
+                      (return-from subtypep (values t t))
+                      (return-from subtypep (values nil t))))))
+             (t
+              (values nil t))))
           (t
            (values nil nil)))))
 
-(when (and (fboundp 'jvm::jvmcompile) (not (autoloadp 'jvm::jvm-compile)))
+(when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
   (mapcar #'jvm::jvm-compile '(normalize-type
                                sub-interval-p
                                simple-subtypep
