@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.108 2003-08-04 15:46:05 piso Exp $
+ * $Id: Editor.java,v 1.109 2003-08-06 13:08:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1847,7 +1847,7 @@ public final class Editor extends JPanel implements Constants,
 
         if (getDotLine() != beginLine) {
             addUndo(SimpleEdit.MOVE);
-            dot.setLine(beginLine);
+            dot.moveTo(beginLine, 0);
         }
 
         boolean modified = false;
@@ -1908,7 +1908,7 @@ public final class Editor extends JPanel implements Constants,
                 break;
 
             addUndo(SimpleEdit.MOVE);
-            dot.setLine(dotLine.next());
+            dot.moveTo(dotLine.next(), 0);
         }
 
         addUndo(SimpleEdit.MOVE);
