@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.8 2003-08-15 15:52:28 piso Exp $
+ * $Id: Pathname.java,v 1.9 2003-08-15 17:29:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,12 +28,12 @@ public final class Pathname extends LispObject
 {
     private String namestring;
 
-    public Pathname(String namestring)
+    private Pathname(String namestring)
     {
         this.namestring = namestring;
     }
 
-    public Pathname(String directory, String name)
+    private Pathname(String directory, String name)
     {
         StringBuffer sb = new StringBuffer();
         if (directory != null && directory.length() > 0) {
@@ -62,6 +62,18 @@ public final class Pathname extends LispObject
     public String getNamestring()
     {
         return namestring;
+    }
+
+    public boolean equal(LispObject obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof Pathname) {
+            if (Utilities.isPlatformWindows())
+                return namestring.equalsIgnoreCase(((Pathname)obj).getNamestring());
+            return namestring.equals(((Pathname)obj).getNamestring());
+        }
+        return false;
     }
 
     public String toString()
