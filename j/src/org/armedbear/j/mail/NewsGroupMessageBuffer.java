@@ -2,7 +2,7 @@
  * NewsGroupMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupMessageBuffer.java,v 1.2 2002-10-11 01:42:37 piso Exp $
+ * $Id: NewsGroupMessageBuffer.java,v 1.3 2002-11-11 18:20:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,6 +139,7 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         {
             setBackgroundProcess(this);
             progressNotifier = new StatusBarProgressNotifier(NewsGroupMessageBuffer.this);
+            cancelled = false;
             loadMessage(progressNotifier);
             progressNotifier.setText("");
             progressNotifier.progressStop();
@@ -150,6 +151,7 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
             Log.debug("loadProcess cancelled!!");
             cancelled = true;
             progressNotifier.cancel();
+            summary.getSession().abort();
             setBusy(false);
             kill();
         }
