@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.26 2004-09-21 13:53:08 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: slime.lisp,v 1.27 2005-02-01 03:38:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -106,7 +106,8 @@
     (disconnect))
   (setf *repl-buffer* (current-buffer))
   (unless (slime-local-p)
-    (make-thread #'(lambda () (read-port-and-connect 60)))))
+    (make-thread #'(lambda () (read-port-and-connect 60))
+                 :name "slime read-port-and-connect")))
 
 (defun slime-busy-p ()
   (not (null *continuations*)))
@@ -446,7 +447,7 @@
 (map-key-for-mode "Tab" "(slime:slime-complete-symbol)" "Lisp Shell")
 (map-key-for-mode "Ctrl Alt I" "(slime:slime-complete-symbol)" "Lisp")
 (map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
-(map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
+;; (map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
 (map-key-for-mode "Alt ." "(slime:slime-edit-definition)" "Lisp Shell")
 (map-key-for-mode "Alt ." "(slime:slime-edit-definition)" "Lisp")
 (map-key-for-mode "Ctrl Alt R" "(slime:slime-eval-region)" "Lisp")
