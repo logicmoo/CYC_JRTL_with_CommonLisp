@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: Constants.java,v 1.5 2002-10-19 14:37:57 piso Exp $
+ * $Id: Constants.java,v 1.6 2002-11-10 00:28:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,7 @@ public interface Constants
     int TAG_FIELD                = 4;
     int TAG_EXTENDS              = 5;
     int TAG_IMPLEMENTS           = 6;
+    int TAG_EXPLICIT             = 7;
 
     int TAG_FUNCTION             = TAG_METHOD;
 
