@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.10 2003-01-31 18:12:46 piso Exp $
+ * $Id: Primitives.java,v 1.11 2003-02-09 18:46:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1566,35 +1566,53 @@ public final class Primitives extends Module
             Vector v = checkVector(first);
             if (!v.isSimpleVector())
                 throw new WrongTypeException(first, "simple vector");
-            int index = v.checkIndex(second);
-            v.set(index, third);
+            int i = v.checkIndex(second);
+            v.set(i, third);
             return third;
         }
     };
 
     // ### aref
+    // aref array &rest subscripts => element
     private static final Primitive AREF = new Primitive("aref") {
         public LispObject execute(LispObject[] args)
             throws LispException
         {
             if (args.length < 2)
                 throw new WrongNumberOfArgumentsException(this);
-            Vector v = checkVector(args[0]);
-            int index = v.checkIndex(args[1]);
-            return v.get(index);
+            if (args[0] instanceof LispString) {
+                LispString string = (LispString) args[0];
+                int i = string.checkIndex(args[1]);
+                return string.get(i);
+            }
+            if (args[0] instanceof Vector) {
+                Vector v = (Vector) args[0];
+                int i = v.checkIndex(args[1]);
+                return v.get(i);
+            }
+            throw new WrongTypeException(args[0], "array");
         }
     };
 
     // ### %aset
-    // %aset vector index element
+    // %aset array &rest subscripts element
     private static final Primitive3 _ASET = new Primitive3("%aset") {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispException
         {
-            Vector v = checkVector(first);
-            int index = v.checkIndex(second);
-            v.set(index, third);
-            return third;
+            if (first instanceof LispString) {
+                LispString string = (LispString) first;
+                int i = string.checkIndex(second);
+                string.set(i, third);
+                return third;
+            }
+            if (first instanceof Vector) {
+                Vector v = (Vector) first;
+                int i = v.checkIndex(second);
+                v.set(i, third);
+                return third;
+            }
+            throw new WrongTypeException(first, "array");
         }
     };
 
