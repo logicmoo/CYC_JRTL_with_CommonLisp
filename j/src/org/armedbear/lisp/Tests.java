@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.8 2003-02-19 00:42:41 piso Exp $
+ * $Id: Tests.java,v 1.9 2003-02-19 02:21:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -468,6 +468,17 @@ public class Tests extends TestCase
         verify("(equal \"FOO\" \"foo\")", "NIL");
         verify("(equal \"This-string\" \"This-string\")", "T");
         verify("(equal \"This-string\" \"this-string\")", "NIL");
+
+        // equalp
+        verify("(equalp 'a 'b)", "NIL");
+        verify("(equalp 'a 'a)", "T");
+        verify("(equalp 3 3)", "T");
+        verify("(equalp (cons 'a 'b) (cons 'a 'c))", "NIL");
+        verify("(equalp (cons 'a 'b) (cons 'a 'b))", "T");
+        verify("(equalp #\\A #\\A)", "T");
+        verify("(equalp #\\A #\\a)", "T");
+        verify("(equalp \"Foo\" \"Foo\")", "T");
+        verify("(equalp \"FOO\" \"foo\")", "T");
 
         // string
         verify("(string \"already a string\")", "\"already a string\"");
