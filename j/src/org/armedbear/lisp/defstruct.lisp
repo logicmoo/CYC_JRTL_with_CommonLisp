@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.10 2003-07-12 19:18:04 piso Exp $
+;;; $Id: defstruct.lisp,v 1.11 2003-07-12 22:42:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,35 +27,36 @@
 (defvar *ds-predicate*)
 (defvar *ds-print-function*)
 
-(defun make-constructor (slots)
-  (let ((constructor-name (intern (concatenate 'string "MAKE-" (symbol-name *ds-name*))))
+(defun define-constructor (slots)
+  (let ((constructor (intern (concatenate 'string "MAKE-" (symbol-name *ds-name*))))
         (keys (cons '&key slots)))
-    `((defun ,constructor-name ,keys
+    `((defun ,constructor ,keys
         (%make-structure ',*ds-name* (list ,@slots))))))
 
-(defun make-predicate ()
-  (let ((pred (intern (concatenate 'string (symbol-name *ds-name*) "-p"))))
+(defun define-predicate ()
+  (let ((pred (intern (concatenate 'string (symbol-name *ds-name*) "-P"))))
     `((defun ,pred (object)
         (typep object ',*ds-name*)))))
 
-(defun make-access-function (conc-name slot index)
+(defun define-access-function (slot index)
   (let ((accessor
-         (if conc-name
-             (intern (concatenate 'string (symbol-name conc-name) (symbol-name slot)))
+         (if *ds-conc-name*
+             (intern (concatenate 'string (symbol-name *ds-conc-name*) (symbol-name slot)))
              slot))
         (setf-expander (gensym)))
-    (eval `(progn
-             (defun ,accessor (instance)
-               (%structure-ref instance ,index))
-             (defun ,setf-expander (instance new-value)
-               (%structure-set instance ,index new-value))
-             (defsetf ,accessor ,setf-expander)))))
+    `((defun ,accessor (instance)
+        (%structure-ref instance ,index))
+      (defun ,setf-expander (instance new-value)
+        (%structure-set instance ,index new-value))
+      (defsetf ,accessor ,setf-expander))))
 
-(defun make-access-functions (name slots)
-  (let ((index 0))
+(defun define-access-functions (slots)
+  (let ((index 0)
+        (result ()))
     (dolist (slot slots)
-      (make-access-function name slot index)
-      (incf index))))
+      (setq result (append result (define-access-function slot index)))
+      (incf index))
+    result))
 
 (defun parse-1-option (option)
   (case (car option)
@@ -90,7 +91,7 @@
                                 (list name-and-options)
                                 name-and-options))
     `(progn
-       ,@(make-constructor slots)
-       ,@(make-predicate)
-       (make-access-functions ',*ds-conc-name* ',slots)
+       ,@(define-constructor slots)
+       ,@(define-predicate)
+       ,@(define-access-functions slots)
        ',*ds-name*)))
