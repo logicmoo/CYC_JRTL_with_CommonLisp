@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.13 2003-06-20 18:28:26 piso Exp $
+ * $Id: Autoload.java,v 1.14 2003-06-20 18:56:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,6 +140,24 @@ public final class Autoload extends Function
 
     static {
         autoload("%make-hash-table", "HashTable");
+        autoload("%nstring-capitalize", "StringFunctions");
+        autoload("%nstring-downcase", "StringFunctions");
+        autoload("%nstring-upcase", "StringFunctions");
+        autoload("%string-capitalize", "StringFunctions");
+        autoload("%string-downcase", "StringFunctions");
+        autoload("%string-equal", "StringFunctions");
+        autoload("%string-greaterp", "StringFunctions");
+        autoload("%string-lessp", "StringFunctions");
+        autoload("%string-not-equal", "StringFunctions");
+        autoload("%string-not-greaterp", "StringFunctions");
+        autoload("%string-not-lessp", "StringFunctions");
+        autoload("%string-upcase", "StringFunctions");
+        autoload("%string/=", "StringFunctions");
+        autoload("%string<", "StringFunctions");
+        autoload("%string<=", "StringFunctions");
+        autoload("%string=", "StringFunctions");
+        autoload("%string>", "StringFunctions");
+        autoload("%string>=", "StringFunctions");
         autoload("%time", "Time");
         autoload("char-equal", "CharacterFunctions");
         autoload("char-not-greaterp", "CharacterFunctions");
