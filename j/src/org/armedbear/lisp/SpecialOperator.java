@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SpecialOperator.java,v 1.12 2004-09-19 16:19:19 asimon Exp $
+ * $Id: SpecialOperator.java,v 1.13 2004-10-22 19:22:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public class SpecialOperator extends Functional
         this(name);
         setArglist(new SimpleString(arglist));
     }
-      
+
     public final int getFunctionalType()
     {
         return FTYPE_SPECIAL_OPERATOR;
@@ -49,6 +49,41 @@ public class SpecialOperator extends Functional
     public final String getName()
     {
         return name;
+    }
+
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(getLambdaName()));
+    }
+
+    public LispObject execute() throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(getLambdaName()));
+    }
+
+    public LispObject execute(LispObject arg) throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(getLambdaName()));
+    }
+
+    public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(getLambdaName()));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third)
+        throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(getLambdaName()));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth)
+        throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(getLambdaName()));
     }
 
     public String toString()
