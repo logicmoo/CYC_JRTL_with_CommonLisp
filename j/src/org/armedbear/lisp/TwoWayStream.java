@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.14 2004-01-24 19:46:44 piso Exp $
+ * $Id: TwoWayStream.java,v 1.15 2004-01-31 01:12:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,7 +93,8 @@ public final class TwoWayStream extends Stream
     // ### make-two-way-stream
     // input-stream output-stream => two-way-stream
     private static final Primitive2 MAKE_TWO_WAY_STREAM =
-        new Primitive2("make-two-way-stream","input-stream output-stream") {
+        new Primitive2("make-two-way-stream", "input-stream output-stream")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -105,7 +106,7 @@ public final class TwoWayStream extends Stream
             if (!in.isInputStream())
                 return signal(new TypeError(in, "input stream"));
             Stream out = (Stream) second;
-            if (!in.isOutputStream())
+            if (!out.isOutputStream())
                 return signal(new TypeError(out, "output stream"));
             return new TwoWayStream(in, out);
         }
@@ -114,24 +115,26 @@ public final class TwoWayStream extends Stream
     // ### two-way-stream-input-stream
     // two-way-stream => input-stream
     private static final Primitive1 TWO_WAY_STREAM_INPUT_STREAM =
-        new Primitive1("two-way-stream-input-stream","two-way-stream") {
+        new Primitive1("two-way-stream-input-stream", "two-way-stream")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof TwoWayStream)
                 return ((TwoWayStream)arg).getInputStream();
-            return signal(new TypeError(arg, "two-way-stream"));
+            return signal(new TypeError(arg, Symbol.TWO_WAY_STREAM));
         }
     };
 
     // ### two-way-stream-output-stream
     // two-way-stream => output-stream
     private static final Primitive1 TWO_WAY_STREAM_OUTPUT_STREAM =
-        new Primitive1("two-way-stream-output-stream","two-way-stream") {
+        new Primitive1("two-way-stream-output-stream", "two-way-stream")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof TwoWayStream)
                 return ((TwoWayStream)arg).getOutputStream();
-            return signal(new TypeError(arg, "two-way-stream"));
+            return signal(new TypeError(arg, Symbol.TWO_WAY_STREAM));
         }
     };
 }
