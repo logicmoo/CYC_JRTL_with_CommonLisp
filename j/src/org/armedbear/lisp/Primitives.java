@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.137 2003-03-17 14:41:31 piso Exp $
+ * $Id: Primitives.java,v 1.138 2003-03-17 15:11:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -767,6 +767,8 @@ public final class Primitives extends Module
     private static final Primitive1 BOUNDP = new Primitive1("boundp") {
         public LispObject execute(LispObject obj) throws LispError
         {
+            if (obj == NIL)
+                return T;
             Symbol symbol = checkSymbol(obj);
             if (dynEnv != null && dynEnv.lookup(symbol) != null)
                 return T;
