@@ -1,8 +1,8 @@
 /*
  * LispAPI.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.30 2003-12-04 19:39:04 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: LispAPI.java,v 1.31 2004-02-11 02:32:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -509,32 +509,38 @@ public final class LispAPI extends Lisp
             final Editor editor = Editor.currentEditor();
             if (kind == KEYWORD_CURRENT) {
                 if (where != NIL)
-                    throw new ConditionThrowable(new LispError("bad argument " + where));
+                    return signal(new LispError("Bad argument: " + where + "."));
                 final Buffer buffer = editor.getBuffer();
                 if (property.isBooleanProperty())
                     return buffer.getBooleanProperty(property) ? T : NIL;
                 if (property.isIntegerProperty())
                     return number(buffer.getIntegerProperty(property));
-                return new LispString(buffer.getStringProperty(property));
+                String value = buffer.getStringProperty(property);
+                return value != null ? new LispString(value) : NIL;
             }
             if (kind == KEYWORD_GLOBAL) {
                 if (property.isBooleanProperty())
                     return preferences.getBooleanProperty(property) ? T : NIL;
                 if (property.isIntegerProperty())
                     return number(preferences.getIntegerProperty(property));
-                return new LispString(preferences.getStringProperty(property));
+                String value = preferences.getStringProperty(property);
+                return value != null ? new LispString(value) : NIL;
             }
             if (kind == KEYWORD_MODE) {
                 final Mode mode;
                 if (where == NIL)
                     mode = editor.getMode();
-                else
+                else {
                     mode = Editor.getModeList().getModeFromModeName(LispString.getValue(where));
+                    if (mode == null)
+                        return signal(new LispError("Unknown mode: " + where + "."));
+                }
                 if (property.isBooleanProperty())
                     return mode.getBooleanProperty(property) ? T : NIL;
                 if (property.isIntegerProperty())
                     return number(mode.getIntegerProperty(property));
-                return new LispString(mode.getStringProperty(property));
+                String value = mode.getStringProperty(property);
+                return value != null ? new LispString(value) : NIL;
             }
             if (kind == KEYWORD_BUFFER) {
                 final Buffer buffer;
@@ -546,9 +552,10 @@ public final class LispAPI extends Lisp
                     return buffer.getBooleanProperty(property) ? T : NIL;
                 if (property.isIntegerProperty())
                     return number(buffer.getIntegerProperty(property));
-                return new LispString(buffer.getStringProperty(property));
+                String value = buffer.getStringProperty(property);
+                return value != null ? new LispString(value) : NIL;
             }
-            throw new ConditionThrowable(new LispError("bad keyword argument: " + kind));
+            return signal(new LispError("Invalid parameter: " + kind + "."));
         }
     };
 
@@ -617,7 +624,7 @@ public final class LispAPI extends Lisp
                 buffer.setProperty(property, LispString.getValue(newValue));
                 return newValue;
             }
-            throw new ConditionThrowable(new LispError("bad keyword argument: " + kind));
+            return signal(new LispError("Invalid parameter: " + kind));
         }
     };
 
