@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.2 2004-01-26 00:28:52 piso Exp $
+ * $Id: FileStream.java,v 1.3 2004-01-26 14:31:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,16 +30,20 @@ import java.io.OutputStream;
 
 public final class FileStream extends Stream
 {
+    private final Pathname pathname;
+
     public FileStream(InputStream inputStream, LispObject elementType,
                       Pathname pathname)
     {
-        super(inputStream, elementType, pathname);
+        super(inputStream, elementType);
+        this.pathname = pathname;
     }
 
     public FileStream(OutputStream outputStream, LispObject elementType,
                       Pathname pathname)
     {
-        super(outputStream, elementType, pathname);
+        super(outputStream, elementType);
+        this.pathname = pathname;
     }
 
     public LispObject typeOf()
@@ -54,6 +58,11 @@ public final class FileStream extends Stream
         if (typeSpecifier == BuiltInClass.FILE_STREAM)
             return T;
         return super.typep(typeSpecifier);
+    }
+
+    public Pathname getPathname()
+    {
+        return pathname;
     }
 
     // ### make-file-input-stream pathname element-type => stream

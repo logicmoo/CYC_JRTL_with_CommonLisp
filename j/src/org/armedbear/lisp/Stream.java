@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.3 2004-01-26 00:29:40 piso Exp $
+ * $Id: Stream.java,v 1.4 2004-01-26 14:30:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,6 @@ public class Stream extends LispObject
     protected boolean isCharacterStream;
     protected boolean isBinaryStream;
 
-    private LispObject pathname;
     private boolean interactive;
     private boolean open = true;
 
@@ -92,13 +91,6 @@ public class Stream extends LispObject
         setInteractive(interactive);
     }
 
-    // Should be a file-stream.
-    public Stream(InputStream inputStream, LispObject elementType, LispObject pathname)
-    {
-        this(inputStream, elementType);
-        setPathname(pathname);
-    }
-
     // Output stream constructors.
     public Stream(OutputStream outputStream, LispObject elementType)
     {
@@ -121,13 +113,6 @@ public class Stream extends LispObject
         setInteractive(interactive);
     }
 
-    public Stream(OutputStream outputStream, LispObject elementType,
-                  LispObject pathname)
-    {
-        this(outputStream, elementType);
-        setPathname(pathname);
-    }
-
     public boolean isInputStream()
     {
         return isInputStream;
@@ -146,16 +131,6 @@ public class Stream extends LispObject
     public boolean isBinaryStream()
     {
         return isBinaryStream;
-    }
-
-    public LispObject getPathname()
-    {
-        return pathname;
-    }
-
-    protected void setPathname(LispObject pathname)
-    {
-        this.pathname = pathname;
     }
 
     public boolean isInteractive()
