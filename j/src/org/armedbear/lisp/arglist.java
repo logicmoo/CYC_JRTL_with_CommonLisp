@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: arglist.java,v 1.3 2003-12-10 08:04:17 asimon Exp $
+ * $Id: arglist.java,v 1.4 2003-12-10 21:36:12 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,19 +24,19 @@ package org.armedbear.lisp;
 public final class arglist extends Lisp
 {
 
-    private static final Primitive1 ARGLIST =
+    static final Primitive1 ARGLIST =
         new Primitive1("arglist", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispThread thread = LispThread.currentThread();
-            Function function = coerceToFunction(arg);
-            if (function instanceof Autoload) {
-                Autoload autoload = (Autoload) function;
+            Functional functional = coerceToFunctional(arg);
+            if (functional instanceof Autoload) {
+                Autoload autoload = (Autoload) functional;
                 autoload.load();
-                function = (Function)autoload.getSymbol().getSymbolFunction();
-	    }
-            LispObject arglist = function.getArglist();
+                functional = (Functional)autoload.getSymbol().getSymbolFunction();
+            }
+            LispObject arglist = functional.getArglist();
             final LispObject value1, value2;
             if (arglist instanceof LispString) {
                 String s = ((LispString)arglist).getValue();
@@ -52,7 +52,7 @@ public final class arglist extends Lisp
                 finally {
                     thread.setDynamicEnvironment(oldDynEnv);
                 }
-                function.setArglist(arglist);
+                functional.setArglist(arglist);
             }
             if (arglist != null) {
                 value1 = arglist;
@@ -61,6 +61,8 @@ public final class arglist extends Lisp
                 value1 = NIL;
                 value2 = NIL;
             }
+	
+
             return thread.setValues(value1, value2);
         }
     };
@@ -72,7 +74,7 @@ public final class arglist extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            coerceToFunction(first).setArglist(second);
+            coerceToFunctional(first).setArglist(second);
             return second;
         }
     };
