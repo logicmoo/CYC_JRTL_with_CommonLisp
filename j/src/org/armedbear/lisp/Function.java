@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.35 2004-04-16 01:06:23 piso Exp $
+ * $Id: Function.java,v 1.36 2004-05-05 18:09:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,20 +24,17 @@ package org.armedbear.lisp;
 public abstract class Function extends Functional
 {
     private final String name;
-    protected final int index;
 
     private int callCount;
 
     protected Function()
     {
         name = null;
-        index = 0;
     }
 
     public Function(String name)
     {
         this.name = name != null ? name.toUpperCase() : null;
-        index = 0;
         if (name != null) {
             Symbol symbol = Symbol.addFunction(this.name, this);
             if (cold)
@@ -72,7 +69,6 @@ public abstract class Function extends Functional
                     String arglist, String docstring)
     {
         this.name = name != null ? name.toUpperCase() : null;
-        index = 0;
         if (arglist instanceof String)
             setArglist(new SimpleString(arglist));
         if (name != null) {
