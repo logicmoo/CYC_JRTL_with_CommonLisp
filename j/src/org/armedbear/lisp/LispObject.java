@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.100 2004-10-13 00:22:19 piso Exp $
+ * $Id: LispObject.java,v 1.101 2004-10-23 19:28:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -577,7 +577,7 @@ public class LispObject extends Lisp
 
     public boolean isLessThan(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, Symbol.NUMBER));
+        signal(new TypeError(this, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -589,7 +589,7 @@ public class LispObject extends Lisp
 
     public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, Symbol.NUMBER));
+        signal(new TypeError(this, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -601,7 +601,7 @@ public class LispObject extends Lisp
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, Symbol.NUMBER));
+        signal(new TypeError(this, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -613,7 +613,7 @@ public class LispObject extends Lisp
 
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(this, Symbol.NUMBER));
+        signal(new TypeError(this, Symbol.REAL));
         // Not reached.
         return false;
     }
