@@ -2,7 +2,7 @@
  * SshFile.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshFile.java,v 1.6 2002-12-07 02:10:39 piso Exp $
+ * $Id: SshFile.java,v 1.7 2002-12-07 11:16:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -193,10 +193,8 @@ public final class SshFile extends File
         if (!forceRefresh) {
             String listing =
                 DirectoryCache.getDirectoryCache().getListing(this);
-            if (listing != null) {
-                Log.debug("using cached listing for " + this);
+            if (listing != null)
                 return listing;
-            }
         }
         SshSession session = SshSession.getSession(this);
         if (session == null)
