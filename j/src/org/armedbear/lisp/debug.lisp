@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.26 2004-08-26 14:55:53 piso Exp $
+;;; $Id: debug.lisp,v 1.27 2004-09-29 19:07:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "EXTENSIONS")
+(in-package #:extensions)
 
 (export '(*debug-condition* *debug-level* show-restarts))
 
@@ -27,7 +27,7 @@
 
 (defvar *debug-level* 0)
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun show-restarts (restarts stream)
   (when restarts
@@ -68,27 +68,19 @@
 (defun invoke-debugger-report-condition (condition)
   (when condition
     (fresh-line *debug-io*)
-    (when (and *load-truename* (streamp *load-stream*))
-      (%format *debug-io*
-               "Error loading ~A at line ~D (offset ~D).~%"
-               *load-truename*
-               (stream-line-number *load-stream*)
-               (stream-offset *load-stream*)))
-    (%format *debug-io*
-             (if (fboundp 'tpl::repl)
-                 "Debugger invoked on condition of type ~A:~%"
-                 "Unhandled condition of type ~A:~%")
-             (type-of condition))
-;;     (if (and (fboundp 'print-object)
-;;              (not (autoloadp 'print-object)))
-;;         (progn
-;;           (write-string "  " *debug-io*)
-;;           (let ((*print-escape* nil))
-;;             (print-object condition *debug-io*))
-;;           (terpri *debug-io*))
-        (%format *debug-io* "  ~A~%" condition)
-;;     )
-  ))
+    (with-standard-io-syntax
+      (when (and *load-truename* (streamp *load-stream*))
+        (sys:simple-format *debug-io*
+                           "Error loading ~A at line ~D (offset ~D).~%"
+                           *load-truename*
+                           (stream-line-number *load-stream*)
+                           (stream-offset *load-stream*)))
+      (sys:simple-format *debug-io*
+                         (if (fboundp 'tpl::repl)
+                             "Debugger invoked on condition of type ~A:~%"
+                             "Unhandled condition of type ~A:~%")
+                         (type-of condition))
+      (sys:simple-format *debug-io* "  ~A~%" condition))))
 
 (defun invoke-debugger (condition)
   (when *debugger-hook*
