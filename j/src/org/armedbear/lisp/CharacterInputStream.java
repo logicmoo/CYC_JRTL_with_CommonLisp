@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.24 2003-04-01 14:34:58 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.25 2003-04-04 03:40:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -411,19 +411,17 @@ public class CharacterInputStream extends LispStream
                 while (true) {
                     n = read();
                     if (n < 0)
-                        return new Symbol(sb.toString());
+                        break;
                     c = (char) n;
                     if (Character.isWhitespace(c))
-                        return new Symbol(sb.toString());
-                    switch (c) {
-                        case '(':
-                        case ')':
-                            unread(c);
-                            return new Symbol(sb.toString());
-                        default:
-                            sb.append(c);
+                        break;
+                    if (c == '(' || c == ')') {
+                        unread(c);
+                        break;
                     }
+                    sb.append(c);
                 }
+                return new Symbol(sb.toString().toUpperCase());
             }
         }
         catch (IOException e) {
