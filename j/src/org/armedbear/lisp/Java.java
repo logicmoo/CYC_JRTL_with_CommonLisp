@@ -1,8 +1,8 @@
 /*
  * Java.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.46 2005-01-22 09:57:06 asimon Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: Java.java,v 1.47 2005-01-22 11:54:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +21,12 @@
 
 package org.armedbear.lisp;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Array;
 import java.util.Map;
 import java.util.WeakHashMap;
 
