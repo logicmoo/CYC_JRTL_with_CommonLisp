@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.25 2003-04-04 03:40:25 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.26 2003-04-06 18:36:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -556,7 +556,7 @@ public class CharacterInputStream extends LispStream
             if (pkg == null)
                 throw new LispError("package \"" + packageName +
                     "\" not found");
-            return intern(symbolName, pkg);
+            return pkg.intern(symbolName);
         }
         index = token.indexOf(':');
         if (index > 0) {
@@ -575,7 +575,7 @@ public class CharacterInputStream extends LispStream
                     "\" is not external in package " + packageName);
             return symbol;
         }
-        return intern(token, getCurrentPackage());
+        return getCurrentPackage().intern(token);
     }
 
     private LispObject makeNumber(String token) throws LispError
