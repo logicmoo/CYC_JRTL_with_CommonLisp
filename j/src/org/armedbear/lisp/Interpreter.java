@@ -1,8 +1,8 @@
 /*
  * Interpreter.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.77 2004-11-13 15:01:57 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: Interpreter.java,v 1.78 2005-02-01 03:25:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -368,7 +368,6 @@ public final class Interpreter extends Lisp
         }
     };
 
-    // Used only by org.armedbear.j.Editor.executeCommand().
     public static LispObject evaluate(String s) throws ConditionThrowable
     {
         if (!initialized)
