@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.39 2003-04-09 23:22:25 piso Exp $
+ * $Id: LispMode.java,v 1.40 2003-04-14 15:43:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,8 +180,14 @@ public class LispMode extends AbstractMode implements Constants, Mode
             return 0;
         Debug.bugIfNot(pos.getChar() == '(');
         int offset = pos.getOffset();
-        if (offset > 0 && pos.getLine().charAt(offset-1) == '\'')
-            return buffer.getCol(pos) + 1;
+        if (offset > 1) {
+            if (new Position(pos.getLine(), offset - 2).lookingAt("'#("))
+                return buffer.getCol(pos) + 1;
+        }
+        if (offset > 0) {
+            if (pos.getLine().charAt(offset-1) == '\'')
+                return buffer.getCol(pos) + 1;
+        }
         Position posFirst = downList(pos);
         if (posFirst != null) {
             if (posFirst.getChar() == '(') {
@@ -222,8 +228,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
             Position posSecond = forwardSexp(posFirst);
             if (posSecond != null) {
                 posSecond.skipWhitespace();
-                if (posSecond.getLine() == pos.getLine())
-                    return buffer.getCol(posSecond);
+                if (posSecond.getChar() != ';')
+                    if (posSecond.getLine() == pos.getLine())
+                        return buffer.getCol(posSecond);
             }
         }
         return buffer.getCol(pos) + 1;
