@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: JavaMode.java,v 1.8 2003-05-08 02:41:10 piso Exp $
+ * $Id: JavaMode.java,v 1.9 2003-05-17 19:25:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ import gnu.regexp.REMatch;
 import gnu.regexp.UncheckedRE;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.undo.CompoundEdit;
 
 public class JavaMode extends AbstractMode implements Constants, Mode
@@ -44,6 +46,7 @@ public class JavaMode extends AbstractMode implements Constants, Mode
     };
 
     private static Mode mode;
+    private static Object jdb;
 
     protected String[] conditionals;
 
@@ -66,6 +69,16 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         if (mode == null)
             mode = new JavaMode();
         return mode;
+    }
+
+    public static final Object getJdb()
+    {
+        return jdb;
+    }
+
+    public static final void setJdb(Object obj)
+    {
+        jdb = obj;
     }
 
     public boolean canIndent()
@@ -143,6 +156,36 @@ public class JavaMode extends AbstractMode implements Constants, Mode
             km.mapKey(0x69, CTRL_MASK | SHIFT_MASK, "movePastCloseAndReindent");
             km.mapKey(0xbb, CTRL_MASK | SHIFT_MASK, "insertBraces");
         }
+    }
+
+    public JPopupMenu getContextMenu(Editor editor)
+    {
+        final JPopupMenu popup = new JPopupMenu();
+        if (jdb != null) {
+            final Line line = editor.getDotLine();
+            if (line != null) {
+                final Dispatcher dispatcher = editor.getDispatcher();
+                JMenuItem menuItem =
+                    addContextMenuItem("Set breakpoint",
+                        "jdbSetBreakpoint", popup, dispatcher);
+                if (line.isBlank() || line.getAnnotation() != null)
+                    menuItem.setEnabled(false);
+                menuItem =
+                    addContextMenuItem("Delete breakpoint",
+                        "jdbDeleteBreakpoint", popup, dispatcher);
+                if (line.getAnnotation() == null)
+                    menuItem.setEnabled(false);
+                menuItem =
+                    addContextMenuItem("Run to current line",
+                        "jdbRunToCurrentLine", popup, dispatcher);
+                if (line.isBlank())
+                    menuItem.setEnabled(false);
+                popup.addSeparator();
+            }
+        }
+        addDefaultContextMenuItems(editor, popup);
+        popup.pack();
+        return popup;
     }
 
     public NavigationComponent getSidebarComponent(Editor editor)
