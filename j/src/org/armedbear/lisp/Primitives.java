@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.616 2004-03-17 12:59:32 piso Exp $
+ * $Id: Primitives.java,v 1.617 2004-03-17 13:19:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2439,7 +2439,7 @@ public final class Primitives extends Lisp
     }
 
     // ### gensym
-    private static final Primitive GENSYM = new Primitive("gensym","&optional x")
+    private static final Primitive GENSYM = new Primitive("gensym", "&optional x")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -2451,8 +2451,7 @@ public final class Primitives extends Lisp
             if (arg instanceof Fixnum) {
                 int n = ((Fixnum)arg).getValue();
                 if (n < 0)
-                    signal(new TypeError(arg,
-                                                               "non-negative integer"));
+                    signal(new TypeError(arg, "non-negative integer"));
                 StringBuffer sb = new StringBuffer(prefix);
                 sb.append(n);
                 return new Symbol(sb.toString());
@@ -2460,8 +2459,7 @@ public final class Primitives extends Lisp
             if (arg instanceof Bignum) {
                 BigInteger n = ((Bignum)arg).getValue();
                 if (n.signum() < 0)
-                    signal(new TypeError(arg,
-                                                               "non-negative integer"));
+                    signal(new TypeError(arg, "non-negative integer"));
                 StringBuffer sb = new StringBuffer(prefix);
                 sb.append(n.toString());
                 return new Symbol(sb.toString());
@@ -2494,7 +2492,8 @@ public final class Primitives extends Lisp
     }
 
     // ### string
-    private static final Primitive1 STRING = new Primitive1("string","x") {
+    private static final Primitive1 STRING = new Primitive1("string", "x")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return string(arg);
@@ -2505,16 +2504,16 @@ public final class Primitives extends Lisp
     // intern string &optional package => symbol, status
     // status is one of :INHERITED, :EXTERNAL, :INTERNAL or NIL.
     private static final Primitive INTERN =
-        new Primitive("intern"," string &optional package")
+        new Primitive("intern", "string &optional package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String s = arg.getStringValue();
             final LispThread thread = LispThread.currentThread();
-            Package pkg =
-                (Package) _PACKAGE_.symbolValueNoThrow(thread);
+            Package pkg = (Package) _PACKAGE_.symbolValueNoThrow(thread);
             return pkg.intern(s, thread);
         }
+
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
