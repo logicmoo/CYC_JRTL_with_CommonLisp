@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.17 2003-10-12 18:23:50 piso Exp $
+;;; $Id: defclass.lisp,v 1.18 2003-10-12 18:40:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -372,8 +372,7 @@
          (slots (std-instance-slots instance))
          (val (slot-contents slots location)))
     (if (eq secret-unbound-value val)
-        (error "The slot ~S is unbound in the object ~S."
-               slot-name instance)
+        (error "the slot ~S is unbound in the object ~S" slot-name instance)
         val)))
 (defun slot-value (object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
@@ -768,7 +767,7 @@
 (defun required-portion (gf args)
   (let ((number-required (length (gf-required-arglist gf))))
     (when (< (length args) number-required)
-      (error "not enough arguments for generic function ~S" gf))
+      (error 'program-error "not enough arguments for generic function ~S" gf))
     (subseq args 0 number-required)))
 
 (defun gf-required-arglist (gf)
