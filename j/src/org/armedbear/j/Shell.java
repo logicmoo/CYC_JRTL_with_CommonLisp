@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.15 2002-11-08 17:09:16 piso Exp $
+ * $Id: Shell.java,v 1.16 2002-11-23 19:22:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -545,7 +545,7 @@ public class Shell extends CommandInterpreter implements Constants
                 try {
                     stdin.write(password + "\n");
                     stdin.flush();
-                    posEndOfOutput = new Position(posEndOfBuffer);
+                    posEndOfOutput = new Position(getEnd());
                 }
                 catch (IOException e) {
                     Log.error(e);
