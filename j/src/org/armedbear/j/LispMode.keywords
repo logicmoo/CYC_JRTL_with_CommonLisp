@@ -180,6 +180,7 @@ ffloor
 fifth
 file-length
 file-namestring
+file-write-date
 fill
 fill-pointer
 find
