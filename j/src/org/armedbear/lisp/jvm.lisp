@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.242 2004-07-26 02:23:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.243 2004-07-26 05:31:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1712,10 +1712,15 @@
                    (declare-object form)
                    +lisp-object+)))
         ((vectorp form)
-         (emit 'getstatic
-               *this-class*
-               (declare-object-as-string form)
-               +lisp-object+))
+         (if *compile-file-truename*
+             (emit 'getstatic
+                   *this-class*
+                   (declare-object-as-string form)
+                   +lisp-object+)
+             (emit 'getstatic
+                   *this-class*
+                   (declare-object form)
+                   +lisp-object+)))
         ((characterp form)
          (emit 'getstatic
                *this-class*
@@ -1743,7 +1748,12 @@
                  g
                  +lisp-object+)))
         (t
-         (error "COMPILE-CONSTANT unhandled case ~S" form)))
+         (if *compile-file-truename*
+             (error "COMPILE-CONSTANT unhandled case ~S" form)
+             (emit 'getstatic
+                   *this-class*
+                   (declare-object form)
+                   +lisp-object+))))
   (emit-move-from-stack target))
 
 (defun compile-binary-operation (op args &key (target *val*))
