@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.40 2003-12-19 17:02:28 piso Exp $
+;;; $Id: clos.lisp,v 1.41 2003-12-19 17:13:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1189,9 +1189,9 @@
                    (generic-function-methods gf)))
    (if (eq (class-of gf) the-class-standard-gf)
        #'(lambda (m1 m2)
-          (funcall #'std-method-more-specific-p m1 m2 required-classes))
+          (std-method-more-specific-p m1 m2 required-classes))
        #'(lambda (m1 m2)
-          (funcall #'method-more-specific-p gf m1 m2 required-classes)))))
+          (method-more-specific-p gf m1 m2 required-classes)))))
 
 ;;; method-more-specific-p
 
