@@ -2,7 +2,7 @@
  * JHandler.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: JHandler.java,v 1.2 2003-11-14 15:33:20 piso Exp $
+ * $Id: JHandler.java,v 1.3 2003-11-14 15:49:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@ public final class JHandler extends Lisp
             if (args[3] != NIL) entry.addData (args[3]);
             if (args[4] != NIL) entry.addCount (((Fixnum)args[4]).getValue());
             entryTable.put(event,entry);
-            return null; // FIXME
+            return T;
         }
     };
 }
