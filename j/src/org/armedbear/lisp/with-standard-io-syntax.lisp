@@ -1,7 +1,7 @@
 ;;; with-standard-io-syntax.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: with-standard-io-syntax.lisp,v 1.2 2004-04-03 00:20:09 piso Exp $
+;;; $Id: with-standard-io-syntax.lisp,v 1.3 2004-06-07 01:56:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; From CMUCL.
+;;; Adapted from SBCL.
 
 (in-package "SYSTEM")
 
@@ -41,31 +41,8 @@
         (*read-default-float-format* 'single-float)
         (*read-eval* t)
         (*read-suppress* nil)
-        #+nil ; FIXME
-        (*readtable* std-lisp-readtable))
+        (*readtable* (copy-readtable nil)))
     (funcall function)))
 
 (defmacro with-standard-io-syntax (&body body)
-  "Bind the reader and printer control variables to values that enable READ
-   to reliably read the results of PRINT.  These values are:
-   *PACKAGE*                            The COMMON-LISP-USER package
-   *PRINT-ARRAY*                        T
-   *PRINT-BASE*                         10
-   *PRINT-CASE*                         :UPCASE
-   *PRINT-CIRCLE*                       NIL
-   *PRINT-ESCAPE*                       T
-   *PRINT-GENSYM*                       T
-   *PRINT-LENGTH*                       NIL
-   *PRINT-LEVEL*                        NIL
-   *PRINT-LINES*                        NIL
-   *PRINT-MISER-WIDTH*                  NIL
-   *PRINT-PRETTY*                       NIL
-   *PRINT-RADIX*                        NIL
-   *PRINT-READABLY*                     T
-   *PRINT-RIGHT-MARGIN*                 NIL
-   *READ-BASE*                          10
-   *READ-DEFAULT-FLOAT-FORMAT*          SINGLE-FLOAT
-   *READ-EVAL*                          T
-   *READ-SUPPRESS*                      NIL
-   *READTABLE*                          the standard readtable."
   `(%with-standard-io-syntax #'(lambda () ,@body)))
