@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.148 2005-03-08 02:24:03 piso Exp $
+ * $Id: Editor.java,v 1.149 2005-04-05 01:31:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2270,6 +2270,8 @@ public final class Editor extends JPanel implements Constants,
                 buf.dispose();
             }
         }
+
+        setSessionName(null);
 
         Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_ALL);
         Sidebar.refreshSidebarInAllFrames();
@@ -7830,24 +7832,11 @@ public final class Editor extends JPanel implements Constants,
 
     private static String sessionName;
 
-    /**
-     * Returns the name of the active named session (if any).
-     *
-     * @return  the name of the active named session, or <code>null</code> if
-     *          there is no named session.
-     */
     public static String getSessionName()
     {
         return sessionName;
     }
 
-    /**
-     * Sets the name of the active named session.
-     *
-     * @param name      the name of the session
-     * @see             Session#loadSession
-     * @see             Session#saveSession
-     */
     public static void setSessionName(String name)
     {
         sessionName = name;
