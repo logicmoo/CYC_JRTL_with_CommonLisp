@@ -1,8 +1,8 @@
 /*
  * ExecuteCommandTextFieldHandler.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: ExecuteCommandTextFieldHandler.java,v 1.2 2003-06-13 00:36:45 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: ExecuteCommandTextFieldHandler.java,v 1.3 2003-06-13 00:37:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
