@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.228 2004-04-15 15:48:21 piso Exp $
+ * $Id: Lisp.java,v 1.229 2004-04-16 01:00:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,6 +129,9 @@ public abstract class Lisp
                 break;
             case 3:
                 result = fun.execute(argv[0], argv[1], argv[2]);
+                break;
+            case 4:
+                result = fun.execute(argv[0], argv[1], argv[2], argv[3]);
                 break;
             default:
                 result = fun.execute(argv);
@@ -441,13 +444,21 @@ public abstract class Lisp
                             return fun.execute(eval(arg1, env, thread),
                                                eval(arg2, env, thread),
                                                thread.value(eval(arg3, env, thread)));
-                        // More than 3 arguments.
-                        final int length = args.length() + 3;
+                        LispObject arg4 = args.car();
+                        args = args.cdr();
+                        if (args == NIL)
+                            return fun.execute(eval(arg1, env, thread),
+                                               eval(arg2, env, thread),
+                                               eval(arg3, env, thread),
+                                               thread.value(eval(arg4, env, thread)));
+                        // More than 4 arguments.
+                        final int length = args.length() + 4;
                         LispObject[] results = new LispObject[length];
                         results[0] = eval(arg1, env, thread);
                         results[1] = eval(arg2, env, thread);
                         results[2] = eval(arg3, env, thread);
-                        for (int i = 3; i < length; i++) {
+                        results[3] = eval(arg4, env, thread);
+                        for (int i = 4; i < length; i++) {
                             results[i] = eval(args.car(), env, thread);
                             args = args.cdr();
                         }
