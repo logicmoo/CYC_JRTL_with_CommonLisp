@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.37 2003-06-22 16:15:14 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.38 2003-06-24 20:30:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -299,11 +299,12 @@ public class CharacterInputStream extends LispStream
                 getCurrentReadtable().getDispatchMacroCharacter('#', c);
             if (fun != NIL) {
                 LispObject[] args = new LispObject[3];
-                args[0] = this;
-                args[1] = new LispCharacter(c);
-                args[2] = new Fixnum(numArg);
                 final LispThread thread = LispThread.currentThread();
-                LispObject result = funcall(fun, args, thread);
+                LispObject result = funcall3(fun,
+                                             this,
+                                             new LispCharacter(c),
+                                             new Fixnum(numArg),
+                                             thread);
                 LispObject[] values = thread.getValues();
                 if (values != null && values.length == 0)
                     return null; // Function returned no values.
