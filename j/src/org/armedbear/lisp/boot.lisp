@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.130 2003-11-29 06:03:20 piso Exp $
+;;; $Id: boot.lisp,v 1.131 2003-11-30 03:12:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -117,6 +117,12 @@
 (sys::%load "arrays.lisp")
 (sys::%load "compiler-macro.lisp")
 (sys::%load "precompiler.lisp")
+
+(sys::precompile-package "PRECOMPILER")
+(sys::precompile-package "EXTENSIONS")
+(sys::precompile-package "SYSTEM")
+(sys::precompile-package "COMMON-LISP")
+
 (sys::%load "list.lisp")
 (sys::%load "sequences.lisp")
 (sys::%load "error.lisp")

@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.16 2003-11-29 03:41:23 piso Exp $
+;;; $Id: precompiler.lisp,v 1.17 2003-11-30 03:11:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -542,11 +542,6 @@
               (finish-output))
             (precompile sym))))))
   t)
-
-(precompile-package "PRECOMPILER")
-(precompile-package "EXTENSIONS")
-(precompile-package "SYSTEM")
-(precompile-package "COMMON-LISP")
 
 (defun compile (name &optional definition)
   (if (and name (fboundp name) (typep (symbol-function name) 'generic-function))
