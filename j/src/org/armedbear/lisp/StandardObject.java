@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.30 2004-11-06 18:52:38 piso Exp $
+ * $Id: StandardObject.java,v 1.31 2004-11-06 20:02:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,9 +33,14 @@ public class StandardObject extends LispObject
 
     protected StandardObject(LispClass cls, SimpleVector slots)
     {
-        layout = cls.getLayout();
+        layout = cls.getClassLayout();
         Debug.assertTrue(layout != null);
         this.slots = slots;
+    }
+
+    public final Layout getInstanceLayout()
+    {
+        return layout;
     }
 
     public LispObject getParts() throws ConditionThrowable
@@ -115,7 +120,7 @@ public class StandardObject extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return ((StandardObject)arg).layout;
+                return ((StandardObject)arg).getInstanceLayout();
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.STANDARD_OBJECT));
@@ -220,6 +225,35 @@ public class StandardObject extends LispObject
             catch (ClassCastException e) {
                 return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
             }
+        }
+    };
+
+    private static final Primitive STD_SLOT_VALUE =
+        new Primitive("std-slot-value", PACKAGE_SYS, false, "instance slot-name")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            LispObject value = null;
+            StandardObject instance = (StandardObject) first;
+            Layout layout = instance.getInstanceLayout();
+            int index = layout.getSlotIndex(second);
+            if (index >= 0) {
+                // Found instance slot.
+                value = instance.slots.getRowMajor(index);
+            } else {
+                // Check for class slot.
+                LispObject location = layout.getClassSlotLocation(second);
+                if (location == null)
+                    return Symbol.SLOT_MISSING.execute(instance.getLispClass(),
+                                                       instance, second,
+                                                       Symbol.SLOT_VALUE);
+                value = location.cdr();
+            }
+            if (value == UNBOUND_SLOT_VALUE)
+                return Symbol.SLOT_UNBOUND.execute(instance.getLispClass(),
+                                                   instance, second);
+            return value;
         }
     };
 
