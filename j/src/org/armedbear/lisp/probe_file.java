@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: probe_file.java,v 1.11 2004-01-05 02:13:43 piso Exp $
+ * $Id: probe_file.java,v 1.12 2004-01-08 16:34:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,8 @@ public final class probe_file extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Pathname pathname = Pathname.coerceToPathname(arg);
+            if (pathname.isWild())
+                signal(new FileError("Bad place for a wild pathname."));
             File file = Utilities.getFile(pathname);
             if (file.isDirectory())
                 return Utilities.getDirectoryPathname(file);
@@ -57,6 +59,8 @@ public final class probe_file extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Pathname pathname = Pathname.coerceToPathname(arg);
+            if (pathname.isWild())
+                signal(new FileError("Bad place for a wild pathname."));
             File file = Utilities.getFile(pathname);
             if (file.isDirectory())
                 return Utilities.getDirectoryPathname(file);
@@ -83,6 +87,8 @@ public final class probe_file extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Pathname pathname = Pathname.coerceToPathname(arg);
+            if (pathname.isWild())
+                signal(new FileError("Bad place for a wild pathname."));
             File file = Utilities.getFile(pathname);
             return file.isDirectory() ? Utilities.getDirectoryPathname(file) : NIL;
         }
@@ -96,6 +102,8 @@ public final class probe_file extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Pathname pathname = Pathname.coerceToPathname(arg);
+            if (pathname.isWild())
+                signal(new FileError("Bad place for a wild pathname."));
             File file = Utilities.getFile(pathname);
             return file.isDirectory() ? T : NIL;
         }
