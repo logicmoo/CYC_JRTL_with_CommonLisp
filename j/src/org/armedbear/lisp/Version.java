@@ -1,8 +1,8 @@
 /*
  * Version.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Version.java,v 1.182 2005-02-09 03:16:01 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Version.java,v 1.183 2005-02-09 03:16:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
