@@ -2,7 +2,7 @@
  * DiffMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DiffMode.java,v 1.4 2003-04-14 15:45:29 piso Exp $
+ * $Id: DiffMode.java,v 1.5 2003-04-21 02:14:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,23 +186,29 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         if (--lineNumber < 0)
             return;
         lineNumber += count;
-        Buffer buf = diffOutputBuffer.getParentBuffer();
-        if (buf == null) {
+        Buffer parentBuffer = diffOutputBuffer.getParentBuffer();
+        File dir;
+        if (parentBuffer != null)
+            dir = parentBuffer.getCurrentDirectory();
+        else
+            dir = diffOutputBuffer.getDirectory();
+
+        line = line.previous();
+        while (line != null && !line.getText().startsWith("Index: "))
             line = line.previous();
-            while (line != null && !line.getText().startsWith("Index: "))
-                line = line.previous();
-            if (line == null)
-                return;
-            Debug.assertTrue(line.getText().startsWith("Index: "));
-            if (line.getText().startsWith("Index: ")) {
-                String filename = line.getText().substring(7);
-                File file =
-                    File.getInstance(diffOutputBuffer.getDirectory(),
-                        filename);
-                buf = editor.getBuffer(file);
+        if (line == null)
+            return;
+        if (line.getText().startsWith("Index: ")) {
+            String filename = line.getText().substring(7);
+            File file = File.getInstance(dir, filename);
+            if (file != null && file.isFile()) {
+                Buffer buf = editor.getBuffer(file);
+                if (buf != null)
+                    gotoLocation(editor, buf, lineNumber,
+                        dotOffset > 0 ? dotOffset-1 : 0);
             }
-        }
-        gotoLocation(editor, buf, lineNumber, dotOffset > 0 ? dotOffset-1 : 0);
+        } else
+            Debug.bug();
     }
 
     private static void p4GotoFile(Editor editor, DiffOutputBuffer diffOutputBuffer)
@@ -231,37 +237,39 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         if (--lineNumber < 0)
             return;
         lineNumber += count;
-        Buffer buf = diffOutputBuffer.getParentBuffer();
-        if (buf == null) {
+        Buffer parentBuffer = diffOutputBuffer.getParentBuffer();
+        File dir;
+        if (parentBuffer != null)
+            dir = parentBuffer.getCurrentDirectory();
+        else
+            dir = diffOutputBuffer.getDirectory();
+        line = line.previous();
+        while (line != null && !line.getText().endsWith(" ===="))
             line = line.previous();
-            while (line != null && !line.getText().endsWith(" ===="))
-                line = line.previous();
-            if (line == null)
-                return;
-            String filename = null;
-            int index = line.getText().lastIndexOf(" - ");
-            if (index >= 0) {
-                filename = line.getText().substring(index+3);
-                if (filename.endsWith(" ===="))
-                    filename = filename.substring(0, filename.length()-5);
-            }
-            if (filename != null) {
-                File file =
-                    File.getInstance(diffOutputBuffer.getDirectory(),
-                        filename);
-                buf = editor.getBuffer(file);
+        if (line == null)
+            return;
+        int index = line.getText().lastIndexOf(" - ");
+        if (index >= 0) {
+            String filename = line.getText().substring(index+3);
+            if (filename.endsWith(" ===="))
+                filename = filename.substring(0, filename.length()-5);
+            File file = File.getInstance(dir, filename);
+            if (file != null && file.isFile()) {
+                Buffer buf = editor.getBuffer(file);
+                if (buf != null)
+                    gotoLocation(editor, buf, lineNumber,
+                        dotOffset > 0 ? dotOffset-1 : 0);
             }
         }
-        gotoLocation(editor, buf, lineNumber, dotOffset > 0 ? dotOffset-1 : 0);
     }
 
     private static void gotoLocation(Editor editor, Buffer buf, int lineNumber,
         int offset)
     {
         if (buf != null) {
-            Position pos = buf.findOriginal(lineNumber, offset);
             editor.makeNext(buf);
             Editor ed = editor.activateInOtherWindow(buf);
+            Position pos = buf.findOriginal(lineNumber, offset);
             ed.moveDotTo(pos);
             ed.setUpdateFlag(REFRAME);
             ed.updateDisplay();
