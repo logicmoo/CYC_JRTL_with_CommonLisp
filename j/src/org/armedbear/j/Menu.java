@@ -1,8 +1,8 @@
 /*
  * Menu.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Menu.java,v 1.1.1.1 2002-09-24 16:09:02 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Menu.java,v 1.2 2003-06-12 16:43:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public final class Menu extends JMenu implements Constants
             removeAll();
     }
 
-    public void add(Editor editor, String label, char mnemonic,
+    public MenuItem add(Editor editor, String label, char mnemonic,
         String methodName, boolean enabled)
     {
         KeyStroke keyStroke = null;
@@ -77,11 +77,12 @@ public final class Menu extends JMenu implements Constants
         if (!enabled)
             menuItem.setEnabled(false);
         add(menuItem);
+        return menuItem;
     }
 
-    public void add(Editor editor, String label, char mnemonic,
+    public MenuItem add(Editor editor, String label, char mnemonic,
         String methodName)
     {
-        add(editor, label, mnemonic, methodName, true);
+        return add(editor, label, mnemonic, methodName, true);
     }
 }
