@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.86 2004-03-14 02:16:47 piso Exp $
+ * $Id: Fixnum.java,v 1.87 2004-04-08 17:06:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -548,12 +548,12 @@ public final class Fixnum extends LispObject
     public LispObject ash(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
+            if (value == 0)
+                return this;
             int count = ((Fixnum)obj).value;
             if (count == 0)
                 return this;
             long n = value;
-            if (n == 0)
-                return this;
             if (count < -32) {
                 // Right shift.
                 return n >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
@@ -567,6 +567,8 @@ public final class Fixnum extends LispObject
             return number(BigInteger.valueOf(value).shiftLeft(count));
         }
         if (obj instanceof Bignum) {
+            if (value == 0)
+                return this;
             BigInteger n = BigInteger.valueOf(value);
             BigInteger count = ((Bignum)obj).value;
             if (count.signum() > 0)
