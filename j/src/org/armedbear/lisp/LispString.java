@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.68 2003-12-07 16:44:06 piso Exp $
+ * $Id: LispString.java,v 1.69 2003-12-07 18:31:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -344,11 +344,33 @@ public final class LispString extends AbstractVector
             return getValue();
     }
 
+    public static final Primitive1 STRINGP = new Primitive1("stringp")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            // Displaced arrays might be strings.
+            return arg.STRINGP();
+        }
+    };
+
+    public static final Primitive1 SIMPLE_STRING_P = new Primitive1("simple-string-p")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            // Displaced arrays are not simple.
+            if (arg instanceof LispString)
+                return ((LispString)arg).fillPointer < 0 ? T : NIL;
+            else
+                return NIL;
+        }
+    };
+
     // ### %make-string
     // %make-string size initial-element element-type => string
     // Returns a simple string.
     private static final Primitive3 _MAKE_STRING =
-        new Primitive3("%make-string", PACKAGE_SYS, false) {
+        new Primitive3("%make-string", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject size, LispObject initialElement,
                                   LispObject elementType) throws ConditionThrowable
         {
@@ -379,7 +401,8 @@ public final class LispString extends AbstractVector
         }
     };
 
-    private static final Primitive2 CHAR = new Primitive2("char") {
+    private static final Primitive2 CHAR = new Primitive2("char")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
