@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.87 2005-02-16 13:49:43 piso Exp $
+ * $Id: LispMode.java,v 1.88 2005-02-16 21:40:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,6 +146,101 @@ public class LispMode extends AbstractMode implements Constants, Mode
     public final boolean isIdentifierPart(char c)
     {
         return validChars.indexOf(c) >= 0;
+    }
+
+    // This needs to pick out a keyword (":FOO"), but should ignore embedded
+    // colons ("FOO:BAR").
+    public String getIdentifier(Line line, int offset)
+    {
+        final int limit = line.length();
+        if (offset < limit) {
+            char c = line.charAt(offset);
+
+            if (c == ':') {
+                if (offset == 0 || !isIdentifierPart(line.charAt(offset - 1)))
+                    ; // OK, we're looking at the first character of a keyword.
+                else
+                    return null; // We're looking at an embedded ':'.
+            } else if (isIdentifierPart(c)) {
+                // Backtrack to find the start of the identifier.
+                while (offset > 0) {
+                    --offset;
+                    c = line.charAt(offset);
+                    if (!isIdentifierPart(c)) {
+                        if (c == ':') {
+                            if (offset == 0)
+                                break; // It's a keyword.
+                            c = line.charAt(offset - 1);
+                            if (c == ':') {
+                                // Two colons in a row. The character after the
+                                // second colon is the start of the identifier.
+                                ++offset;
+                                break;
+                            }
+                            if (!isIdentifierPart(line.charAt(offset - 1)))
+                                break; // It's a keyword.
+                        }
+                        // Reaching here, if c is a ':', it's an embedded ':'.
+                        // The next character is the start of the identifier we
+                        // want.
+                        ++offset;
+                        break;
+                    }
+                }
+            } else
+                return null;
+
+            // Now we're looking at the first character of the identifier.
+            c = line.charAt(offset);
+            FastStringBuffer sb = new FastStringBuffer(c);
+            while (++offset < limit) {
+                c = line.charAt(offset);
+                if (isIdentifierPart(c))
+                    sb.append(c);
+                else
+                    break;
+            }
+            return sb.toString();
+        }
+        return null;
+    }
+
+    public boolean isDelimited(Position pos, int length)
+    {
+        final Line line = pos.getLine();
+        final int offset = pos.getOffset();
+        if (offset > 0) {
+            // Not at start of line.
+            final int before = offset - 1;
+            char c = line.charAt(before);
+            if (isIdentifierPart(c))
+                return false;
+            if (c == ':') {
+                if (before == 0) {
+                    // It's a keyword, so no match.
+                    return false;
+                }
+                // before > 0
+                c = line.charAt(before - 1);
+                if (isIdentifierPart(c)) {
+                    // The ':' is embedded, and we've matched the part of the
+                    // string after the ':'.
+                    ;
+                } else if (c == ':') {
+                    // Two colons in a row, and we've matched the part of the
+                    // string after the second one.
+                    ;
+                } else {
+                    // Not an identifier part or a colon. The colon is preceded
+                    // by whitespace or maybe a '(', so it's a keyword. No match.
+                    return false;
+                }
+            }
+        }
+        final int after = pos.getOffset() + length;
+        if (after < pos.getLineLength() && isIdentifierPart(pos.getLine().charAt(after)))
+            return false;
+        return true;
     }
 
     private static final HashMap definers = new HashMap();
