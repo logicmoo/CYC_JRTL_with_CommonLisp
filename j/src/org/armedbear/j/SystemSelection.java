@@ -2,7 +2,7 @@
  * SystemSelection.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SystemSelection.java,v 1.1.1.1 2002-09-24 16:09:15 piso Exp $
+ * $Id: SystemSelection.java,v 1.2 2002-10-05 18:08:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,8 +45,10 @@ public final class SystemSelection implements ClipboardOwner
     {
         if (instance == null) {
             try {
-                Method method = Toolkit.class.getMethod("getSystemSelection", new Class[0]);
-                Clipboard clipboard = (Clipboard) method.invoke(Toolkit.getDefaultToolkit(), new Object[0]);
+                Method method = Toolkit.class.getMethod("getSystemSelection",
+                    new Class[0]);
+                Clipboard clipboard = (Clipboard) method.invoke(
+                    Toolkit.getDefaultToolkit(), new Object[0]);
                 instance = new SystemSelection(clipboard);
             }
             catch (Exception e) {}
@@ -61,17 +63,22 @@ public final class SystemSelection implements ClipboardOwner
 
     public void update(Editor editor)
     {
-        if (clipboard != null) {
-            StringSelection ss = null;
-            if (editor.getMark() != null && !editor.isColumnSelection()) {
-                primarySelection = new Region(editor).toString();
-                ss = new StringSelection(primarySelection);
-            } else if (primarySelection != null) {
-                // We own the primary selection.
-                ss = new StringSelection("");
+        try {
+            if (clipboard != null) {
+                StringSelection ss = null;
+                if (editor.getMark() != null && !editor.isColumnSelection()) {
+                    primarySelection = new Region(editor).toString();
+                    ss = new StringSelection(primarySelection);
+                } else if (primarySelection != null) {
+                    // We own the primary selection.
+                    ss = new StringSelection("");
+                }
+                if (ss != null)
+                    clipboard.setContents(ss, this);
             }
-            if (ss != null)
-                clipboard.setContents(ss, this);
+        }
+        catch (OutOfMemoryError e) {
+            Log.error("SystemSelection.update() OutOfMemoryError");
         }
     }
 
