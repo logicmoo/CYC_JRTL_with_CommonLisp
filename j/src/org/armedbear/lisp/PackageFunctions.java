@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.10 2003-07-06 19:04:49 piso Exp $
+ * $Id: PackageFunctions.java,v 1.11 2003-07-07 00:41:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,16 +225,16 @@ public final class PackageFunctions extends Lisp
             LispObject interns = checkList(args[7]);
             LispObject exports = checkList(args[8]);
             LispObject docString = args[9];
-            Debug.trace("packageName = " + packageName);
-            Debug.trace("nicknames = " + nicknames);
-            Debug.trace("size = " + size);
-            Debug.trace("shadows = " + shadows);
-            Debug.trace("shadowingImports = " + shadowingImports);
-            Debug.trace("use = " + use);
-            Debug.trace("imports = " + imports);
-            Debug.trace("interns = " + interns);
-            Debug.trace("exports = " + exports);
-            Debug.trace("docString = " + docString);
+//             Debug.trace("packageName = " + packageName);
+//             Debug.trace("nicknames = " + nicknames);
+//             Debug.trace("size = " + size);
+//             Debug.trace("shadows = " + shadows);
+//             Debug.trace("shadowingImports = " + shadowingImports);
+//             Debug.trace("use = " + use);
+//             Debug.trace("imports = " + imports);
+//             Debug.trace("interns = " + interns);
+//             Debug.trace("exports = " + exports);
+//             Debug.trace("docString = " + docString);
             Package pkg = Packages.findPackage(packageName);
             if (pkg != null) {
                 Debug.trace("package " + packageName + " already exists");
@@ -242,40 +242,16 @@ public final class PackageFunctions extends Lisp
             }
             pkg = Packages.createPackage(packageName);
 
-            if (nicknames != NIL) {
-                LispObject list = checkCons(nicknames);
-                while (list != NIL) {
-                    LispString string = string(list.car());
-                    pkg.addNickname(string.getValue());
-                    list = list.cdr();
-                }
+            while (nicknames != NIL) {
+                LispString string = string(nicknames.car());
+                pkg.addNickname(string.getValue());
+                nicknames = nicknames.cdr();
             }
 
-            if (use != NIL) {
-                LispObject list = checkCons(use);
-                while (list != NIL) {
-                    LispObject obj = list.car();
-                    if (obj instanceof Package)
-                        pkg.usePackage((Package)obj);
-                    else {
-                        LispString string = string(obj);
-                        Package p = Packages.findPackage(string.getValue());
-                        if (p == null)
-                            throw new LispError(String.valueOf(obj) +
-                                                " is not the name of a package");
-                        pkg.usePackage(p);
-                    }
-                    list = list.cdr();
-                }
-            }
-
-            if (shadows != NIL) {
-                LispObject list = checkCons(shadows);
-                while (list != NIL) {
-                    String symbolName = LispString.getValue(list.car());
-                    pkg.shadow(symbolName);
-                    list = list.cdr();
-                }
+            while (shadows != NIL) {
+                String symbolName = LispString.getValue(shadows.car());
+                pkg.shadow(symbolName);
+                shadows = shadows.cdr();
             }
 
             while (shadowingImports != NIL) {
@@ -296,13 +272,25 @@ public final class PackageFunctions extends Lisp
                 shadowingImports = shadowingImports.cdr();
             }
 
-            if (interns != NIL) {
-                LispObject list = checkCons(interns);
-                while (list != NIL) {
-                    String symbolName = LispString.getValue(list.car());
-                    pkg.intern(symbolName);
-                    list = list.cdr();
+            while (use != NIL) {
+                LispObject obj = use.car();
+                if (obj instanceof Package)
+                    pkg.usePackage((Package)obj);
+                else {
+                    LispString string = string(obj);
+                    Package p = Packages.findPackage(string.getValue());
+                    if (p == null)
+                        throw new LispError(String.valueOf(obj) +
+                                            " is not the name of a package");
+                    pkg.usePackage(p);
                 }
+                use = use.cdr();
+            }
+
+            while (interns != NIL) {
+                String symbolName = LispString.getValue(interns.car());
+                pkg.intern(symbolName);
+                interns = interns.cdr();
             }
 
             while (exports != NIL) {
@@ -312,7 +300,7 @@ public final class PackageFunctions extends Lisp
                 exports = exports.cdr();
             }
 
-            return NIL;
+            return pkg;
         }
     };
 }
