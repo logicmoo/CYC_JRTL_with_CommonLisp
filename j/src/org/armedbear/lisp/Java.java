@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.16 2003-10-30 08:16:11 asimon Exp $
+ * $Id: Java.java,v 1.17 2003-11-04 22:26:36 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -316,15 +316,7 @@ public final class Java extends Module
                 Constructor constructor = (Constructor) JavaObject.getObject(classRef);
                 Object[] initargs = new Object[args.length-1];
                 for (int i = 1; i < args.length; i++) {
-                    LispObject arg = args[i];
-                    if (arg instanceof LispString)
-                        initargs[i-1] = ((LispString)arg).getValue();
-                    else if (arg instanceof Fixnum)
-                        initargs[i-1] = new Integer(((Fixnum)arg).getValue());
-                    else if (arg instanceof LispFloat)
-                        initargs[i-1] = new Double(((LispFloat)arg).getValue());
-                    else if (arg instanceof JavaObject)
-                        initargs[i-1] = ((JavaObject)arg).getObject();
+		    initargs[i-1] = args[i].javaInstance();
                 }
                 return new JavaObject(constructor.newInstance(initargs));
             }
