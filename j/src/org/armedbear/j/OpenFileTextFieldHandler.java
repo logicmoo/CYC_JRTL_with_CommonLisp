@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.40 2003-02-06 16:25:21 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.41 2003-02-08 14:59:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -949,6 +949,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     break;
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_KP_RIGHT:
+                case KeyEvent.VK_END:
                     textField.getCaret().setVisible(true);
                     break;
                 default:
