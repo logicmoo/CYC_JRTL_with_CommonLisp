@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: probe_file.java,v 1.6 2003-09-25 13:17:54 piso Exp $
+ * $Id: probe_file.java,v 1.7 2003-10-17 17:31:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,10 +28,11 @@ public final class probe_file extends Lisp
 {
     // ### probe-file
     // probe-file pathspec => truename
-    private static final Primitive1 PROBE_FILE = new Primitive1("probe-file") {
+    private static final Primitive1 PROBE_FILE = new Primitive1("probe-file")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            File file = getFile(arg);
+            File file = Utilities.getFile(arg);
             if (!file.exists())
                 return NIL;
             try {
@@ -50,7 +51,7 @@ public final class probe_file extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            File file = getFile(arg);
+            File file = Utilities.getFile(arg);
             if (!file.isDirectory())
                 return NIL;
             try {
@@ -69,40 +70,8 @@ public final class probe_file extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            File file = getFile(arg);
+            File file = Utilities.getFile(arg);
             return file.isDirectory() ? T : NIL;
         }
     };
-
-    private static File getFile(LispObject pathspec) throws ConditionThrowable
-    {
-        String namestring;
-        if (pathspec instanceof LispString)
-            namestring = ((LispString)pathspec).getValue();
-        else if (pathspec instanceof Pathname)
-            namestring = ((Pathname)pathspec).getNamestring();
-        else
-            throw new ConditionThrowable(new TypeError(pathspec,
-                                                       "pathname designator"));
-        if (isNamestringAbsolute(namestring))
-            return new File(namestring);
-        return new File(
-            LispString.getValue(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue()),
-            namestring);
-    }
-
-    private static boolean isNamestringAbsolute(String namestring)
-    {
-        if (System.getProperty("os.name").startsWith("Windows")) {
-            if (namestring.length() >= 3) {
-                if (namestring.charAt(1) == ':')
-                    if (namestring.charAt(2) == '\\')
-                        return true;
-            }
-        } else if (namestring.length() > 0) {
-            if (namestring.charAt(0) == '/')
-                return true;
-        }
-        return false;
-    }
 }
