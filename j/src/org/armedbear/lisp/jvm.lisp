@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.70 2004-02-17 15:24:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.71 2004-02-18 14:00:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2498,8 +2498,6 @@
       definition-designator
       (multiple-value-bind (lambda-expression environment)
         (function-lambda-expression definition-designator)
-        (when environment
-          (warn "Function defined in non-null lexical environment."))
 	(unless lambda-expression
 	  (error :format-control "Can't find a definition for ~S."
                  :format-arguments (list definition-designator)))
@@ -2642,8 +2640,7 @@
           (precompile name definition)
           (jvm-compile name definition))
         (progn
-          (precompile name definition)
-          ))))
+          (precompile name definition)))))
 
 (defmacro defun (name lambda-list &rest body &environment environment)
   `(progn
