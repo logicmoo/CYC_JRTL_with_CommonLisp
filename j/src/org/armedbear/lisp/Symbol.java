@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.100 2003-12-14 17:40:09 piso Exp $
+ * $Id: Symbol.java,v 1.101 2003-12-21 15:56:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -498,7 +498,8 @@ public class Symbol extends LispObject
     };
 
     // ### symbol-function
-    public static final Primitive1 SYMBOL_FUNCTION = new Primitive1("symbol-function","symbol")
+    public static final Primitive1 SYMBOL_FUNCTION =
+        new Primitive1("symbol-function", "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -506,12 +507,11 @@ public class Symbol extends LispObject
                 LispObject function = ((Symbol)arg).function;
                 if (function != null)
                     return function;
+                return signal(new UndefinedFunction(arg));
             }
             catch (ClassCastException e) {
-                ; // Fall through.
+                return signal(new TypeError(arg, "symbol"));
             }
-            // function == null or ClassCastException
-            return signal(new TypeError(arg, "symbol"));
         }
     };
 
