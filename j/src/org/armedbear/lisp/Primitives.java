@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.276 2003-07-02 18:59:58 piso Exp $
+ * $Id: Primitives.java,v 1.277 2003-07-06 01:14:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2856,31 +2856,20 @@ public final class Primitives extends Module
     // ### make-string
     // make-string size &key initial-element element-type => string
     // Returns a simple string.
-    private static final Primitive MAKE_STRING = new Primitive("make-string") {
-        public LispObject execute(LispObject[] args) throws LispError
+    private static final Primitive3 _MAKE_STRING =
+        new Primitive3("%make-string", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject size, LispObject initialElement,
+                                  LispObject elementType) throws LispError
         {
-            if (args.length == 0)
-                throw new WrongNumberOfArgumentsException(this);
-            if (args.length > 1)
-                if ((args.length - 1) % 2 != 0)
-                    throw new ProgramError("odd number of keyword arguments");
-            long lsize;
-            LispObject sizeArg = args[0];
-            if (sizeArg instanceof Cons) {
-                if (sizeArg.length() > 1)
-                    throw new LispError(
-                        "only one-dimensional arrays are supported");
-                lsize = Fixnum.getValue(sizeArg.car());
-            } else
-                lsize = Fixnum.getValue(args[0]);
-            long limit =
+            final int n = Fixnum.getValue(size);
+            final int limit =
                 Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
-            if (lsize < 0 && lsize >= limit) {
+            if (n < 0 || n >= limit) {
                 StringBuffer sb = new StringBuffer();
                 sb.append("the size specified for this string (");
-                sb.append(lsize);
+                sb.append(n);
                 sb.append(')');
-                if (lsize >= limit) {
+                if (n >= limit) {
                     sb.append(" is >= ARRAY-DIMENSION-LIMIT (");
                     sb.append(limit);
                     sb.append(')');
@@ -2888,29 +2877,9 @@ public final class Primitives extends Module
                     sb.append(" is negative");
                 throw new LispError(sb.toString());
             }
-            final int size = (int) lsize;
-            LispObject elementType = Symbol.CHARACTER;
-            LispObject initialElement = null;
-            // Process keyword arguments (if any).
-            for (int i = 1; i < args.length; i += 2) {
-                LispObject keyword = checkSymbol(args[i]);
-                LispObject value = args[i+1];
-                if (keyword == Keyword.ELEMENT_TYPE)
-                    elementType = value;
-                else if (keyword == Keyword.INITIAL_ELEMENT)
-                    initialElement = value;
-                else {
-                    String s = "MAKE-STRING: unsupported keyword " + keyword;
-                    throw new ProgramError(s);
-                }
-            }
-            if (elementType != Symbol.CHARACTER &&
-                elementType != Symbol.BASE_CHAR &&
-                elementType != Symbol.STANDARD_CHAR)
-                throw new TypeError(String.valueOf(elementType) +
-                    " is an invalid element-type");
-            LispString string = new LispString(size);
-            if (initialElement != null) {
+            // Ignore elementType.
+            LispString string = new LispString(n);
+            if (initialElement != NIL) {
                 // Initial element was specified.
                 char c = checkCharacter(initialElement).getValue();
                 string.fill(c);
