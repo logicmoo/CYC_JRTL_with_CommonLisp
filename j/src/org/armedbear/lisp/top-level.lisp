@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.9 2003-10-06 17:14:19 piso Exp $
+;;; $Id: top-level.lisp,v 1.10 2003-10-17 14:06:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,7 +72,7 @@
                    most-positive-fixnum))
         (n 0))
     (dolist (frame *saved-backtrace*)
-      (format t "  ~D: ~A~%" n frame)
+      (format t "  ~D: ~S~%" n frame)
       (incf n)
       (when (>= n count)
         (return))))
