@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.266 2003-06-24 20:12:13 piso Exp $
+ * $Id: Primitives.java,v 1.267 2003-06-24 20:20:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2300,6 +2300,9 @@ public final class Primitives extends Module
                         return funcall1(fun, spread.car(), thread);
                     case 2:
                         return funcall2(fun, spread.car(), spread.cadr(), thread);
+                    case 3:
+                        return funcall3(fun, spread.car(), spread.cadr(),
+                                        spread.cdr().cdr().car(), thread);
                     default: {
                         final LispObject[] funArgs = new LispObject[numFunArgs];
                         int j = 0;
