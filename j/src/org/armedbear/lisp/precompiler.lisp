@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.59 2004-05-04 18:31:13 piso Exp $
+;;; $Id: precompiler.lisp,v 1.60 2004-05-09 14:14:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -590,16 +590,15 @@
       (precompile1 (macroexpand form))
       (precompile-cons form)))
 
+;; MULTIPLE-VALUE-BIND is handled explicitly by the JVM compiler.
 (defun precompile-multiple-value-bind (form)
-  (if *in-jvm-compile*
-      (precompile1 (macroexpand form))
-      (let ((vars (cadr form))
-            (values-form (caddr form))
-            (body (cdddr form)))
-        (list* 'MULTIPLE-VALUE-BIND
-               vars
-               (precompile1 values-form)
-               (mapcar #'precompile1 body)))))
+  (let ((vars (cadr form))
+        (values-form (caddr form))
+        (body (cdddr form)))
+    (list* 'MULTIPLE-VALUE-BIND
+           vars
+           (precompile1 values-form)
+           (mapcar #'precompile1 body))))
 
 ;; MULTIPLE-VALUE-LIST is handled explicitly by the JVM compiler.
 (defun precompile-multiple-value-list (form)
