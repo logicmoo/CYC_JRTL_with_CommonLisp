@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.15 2003-09-19 11:50:18 piso Exp $
+ * $Id: LispClass.java,v 1.16 2003-09-19 16:04:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,42 +65,52 @@ public final class LispClass extends LispObject
     }
 
     // We can't call this class T!
-    public static final LispClass CLASS_T          = addClass(T);
+    public static final LispClass CLASS_T            = addClass(T);
 
-    public static final LispClass ARRAY            = addClass(Symbol.ARRAY);
-    public static final LispClass BIGNUM           = addClass(Symbol.BIGNUM);
-    public static final LispClass BIT_VECTOR       = addClass(Symbol.BIT_VECTOR);
-    public static final LispClass BUILT_IN_CLASS   = addClass(Symbol.BUILT_IN_CLASS);
-    public static final LispClass CHARACTER        = addClass(Symbol.CHARACTER);
-    public static final LispClass CLASS            = addClass(Symbol.CLASS);
-    public static final LispClass COMPLEX          = addClass(Symbol.COMPLEX);
-    public static final LispClass CONDITION        = addClass(Symbol.CONDITION);
-    public static final LispClass CONS             = addClass(Symbol.CONS);
-    public static final LispClass FIXNUM           = addClass(Symbol.FIXNUM);
-    public static final LispClass FLOAT            = addClass(Symbol.FLOAT);
-    public static final LispClass FUNCTION         = addClass(Symbol.FUNCTION);
-    public static final LispClass HASH_TABLE       = addClass(Symbol.HASH_TABLE);
-    public static final LispClass INTEGER          = addClass(Symbol.INTEGER);
-    public static final LispClass LIST             = addClass(Symbol.LIST);
-    public static final LispClass NULL             = addClass(Symbol.NULL);
-    public static final LispClass NUMBER           = addClass(Symbol.NUMBER);
-    public static final LispClass PACKAGE          = addClass(Symbol.PACKAGE);
-    public static final LispClass PATHNAME         = addClass(Symbol.PATHNAME);
-    public static final LispClass RANDOM_STATE     = addClass(Symbol.RANDOM_STATE);
-    public static final LispClass RATIO            = addClass(Symbol.RATIO);
-    public static final LispClass RATIONAL         = addClass(Symbol.RATIONAL);
-    public static final LispClass REAL             = addClass(Symbol.REAL);
-    public static final LispClass SEQUENCE         = addClass(Symbol.SEQUENCE);
-    public static final LispClass STANDARD_CLASS   = addClass(Symbol.STANDARD_CLASS);
-    public static final LispClass STANDARD_OBJECT  = addClass(Symbol.STANDARD_OBJECT);
-    public static final LispClass STREAM           = addClass(Symbol.STREAM);
-    public static final LispClass STRING           = addClass(Symbol.STRING);
-    public static final LispClass STRING_STREAM    = addClass(Symbol.STRING_STREAM);
-    public static final LispClass STRUCTURE_CLASS  = addClass(Symbol.STRUCTURE_CLASS);
-    public static final LispClass STRUCTURE_OBJECT = addClass(Symbol.STRUCTURE_OBJECT);
-    public static final LispClass SYMBOL           = addClass(Symbol.SYMBOL);
-    public static final LispClass TWO_WAY_STREAM   = addClass(Symbol.TWO_WAY_STREAM);
-    public static final LispClass VECTOR           = addClass(Symbol.VECTOR);
+    public static final LispClass ARITHMETIC_ERROR   = addClass(Symbol.ARITHMETIC_ERROR);
+    public static final LispClass ARRAY              = addClass(Symbol.ARRAY);
+    public static final LispClass BIGNUM             = addClass(Symbol.BIGNUM);
+    public static final LispClass BIT_VECTOR         = addClass(Symbol.BIT_VECTOR);
+    public static final LispClass BUILT_IN_CLASS     = addClass(Symbol.BUILT_IN_CLASS);
+    public static final LispClass CHARACTER          = addClass(Symbol.CHARACTER);
+    public static final LispClass CLASS              = addClass(Symbol.CLASS);
+    public static final LispClass COMPLEX            = addClass(Symbol.COMPLEX);
+    public static final LispClass CONDITION          = addClass(Symbol.CONDITION);
+    public static final LispClass CONS               = addClass(Symbol.CONS);
+    public static final LispClass CONTROL_ERROR      = addClass(Symbol.CONTROL_ERROR);
+    public static final LispClass FIXNUM             = addClass(Symbol.FIXNUM);
+    public static final LispClass FLOAT              = addClass(Symbol.FLOAT);
+    public static final LispClass FUNCTION           = addClass(Symbol.FUNCTION);
+    public static final LispClass HASH_TABLE         = addClass(Symbol.HASH_TABLE);
+    public static final LispClass INTEGER            = addClass(Symbol.INTEGER);
+    public static final LispClass LIST               = addClass(Symbol.LIST);
+    public static final LispClass NULL               = addClass(Symbol.NULL);
+    public static final LispClass NUMBER             = addClass(Symbol.NUMBER);
+    public static final LispClass PACKAGE            = addClass(Symbol.PACKAGE);
+    public static final LispClass PACKAGE_ERROR      = addClass(Symbol.PACKAGE_ERROR);
+    public static final LispClass PARSE_ERROR        = addClass(Symbol.PARSE_ERROR);
+    public static final LispClass PATHNAME           = addClass(Symbol.PATHNAME);
+    public static final LispClass PROGRAM_ERROR      = addClass(Symbol.PROGRAM_ERROR);
+    public static final LispClass RANDOM_STATE       = addClass(Symbol.RANDOM_STATE);
+    public static final LispClass RATIO              = addClass(Symbol.RATIO);
+    public static final LispClass RATIONAL           = addClass(Symbol.RATIONAL);
+    public static final LispClass REAL               = addClass(Symbol.REAL);
+    public static final LispClass SEQUENCE           = addClass(Symbol.SEQUENCE);
+    public static final LispClass SIMPLE_ERROR       = addClass(Symbol.SIMPLE_ERROR);
+    public static final LispClass STANDARD_CLASS     = addClass(Symbol.STANDARD_CLASS);
+    public static final LispClass STANDARD_OBJECT    = addClass(Symbol.STANDARD_OBJECT);
+    public static final LispClass STREAM             = addClass(Symbol.STREAM);
+    public static final LispClass STREAM_ERROR       = addClass(Symbol.STREAM_ERROR);
+    public static final LispClass STRING             = addClass(Symbol.STRING);
+    public static final LispClass STRING_STREAM      = addClass(Symbol.STRING_STREAM);
+    public static final LispClass STRUCTURE_CLASS    = addClass(Symbol.STRUCTURE_CLASS);
+    public static final LispClass STRUCTURE_OBJECT   = addClass(Symbol.STRUCTURE_OBJECT);
+    public static final LispClass SYMBOL             = addClass(Symbol.SYMBOL);
+    public static final LispClass TWO_WAY_STREAM     = addClass(Symbol.TWO_WAY_STREAM);
+    public static final LispClass TYPE_ERROR         = addClass(Symbol.TYPE_ERROR);
+    public static final LispClass UNBOUND_VARIABLE   = addClass(Symbol.UNBOUND_VARIABLE);
+    public static final LispClass UNDEFINED_FUNCTION = addClass(Symbol.UNDEFINED_FUNCTION);
+    public static final LispClass VECTOR             = addClass(Symbol.VECTOR);
 
     public static LispClass findClass(Symbol symbol)
     {

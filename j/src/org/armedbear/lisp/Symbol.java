@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.79 2003-09-19 14:44:10 piso Exp $
+ * $Id: Symbol.java,v 1.80 2003-09-19 16:04:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -317,7 +317,7 @@ public class Symbol extends LispObject
     public final LispObject getSymbolFunctionOrDie() throws ConditionThrowable
     {
         if (function == null)
-            throw new ConditionThrowable(new UndefinedFunctionError(this));
+            throw new ConditionThrowable(new UndefinedFunction(this));
         return function;
     }
 

@@ -2,7 +2,7 @@
  * ProgramError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ProgramError.java,v 1.7 2003-09-19 14:55:06 piso Exp $
+ * $Id: ProgramError.java,v 1.8 2003-09-19 16:04:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,16 @@ public class ProgramError extends LispError
     public ProgramError(String message)
     {
         super(message);
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.PROGRAM_ERROR;
+    }
+
+    public LispClass classOf()
+    {
+        return LispClass.PROGRAM_ERROR;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable

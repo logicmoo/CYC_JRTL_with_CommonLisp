@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.413 2003-09-19 14:44:10 piso Exp $
+ * $Id: Primitives.java,v 1.414 2003-09-19 16:04:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -305,7 +305,7 @@ public final class Primitives extends Module
                 LispObject function = arg.getSymbolFunction();
                 if (function != null)
                     return function;
-                throw new ConditionThrowable(new UndefinedFunctionError(arg));
+                throw new ConditionThrowable(new UndefinedFunction(arg));
             }
             case SYMBOL_PLIST:                  // ### symbol-plist
                 try {
@@ -1727,7 +1727,7 @@ public final class Primitives extends Module
                         if (obj instanceof Symbol) {
                             handler = obj.getSymbolFunction();
                             if (handler == null)
-                                throw new ConditionThrowable(new UndefinedFunctionError(obj));
+                                throw new ConditionThrowable(new UndefinedFunction(obj));
                         } else
                             handler = obj;
                         LispObject[] handlerArgs = new LispObject[1];
@@ -1793,7 +1793,7 @@ public final class Primitives extends Module
         if (type == Symbol.STREAM_ERROR)
             return c.getCondition() instanceof StreamError;
         if (type == Symbol.UNDEFINED_FUNCTION)
-            return c.getCondition() instanceof UndefinedFunctionError;
+            return c.getCondition() instanceof UndefinedFunction;
         if (type == Symbol.TYPE_ERROR)
             return c.getCondition() instanceof TypeError;
         if (type == Symbol.PACKAGE_ERROR)
@@ -2225,7 +2225,7 @@ public final class Primitives extends Module
                 fun = arg;
             if (fun instanceof Function)
                 return funcall0(fun, LispThread.currentThread());
-            throw new ConditionThrowable(new UndefinedFunctionError(arg));
+            throw new ConditionThrowable(new UndefinedFunction(arg));
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -2237,7 +2237,7 @@ public final class Primitives extends Module
                 fun = first;
             if (fun instanceof Function)
                 return funcall1(fun, second, LispThread.currentThread());
-            throw new ConditionThrowable(new UndefinedFunctionError(first));
+            throw new ConditionThrowable(new UndefinedFunction(first));
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -2250,7 +2250,7 @@ public final class Primitives extends Module
                 fun = first;
             if (fun instanceof Function)
                 return funcall2(fun, second, third, LispThread.currentThread());
-            throw new ConditionThrowable(new UndefinedFunctionError(first));
+            throw new ConditionThrowable(new UndefinedFunction(first));
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -2272,7 +2272,7 @@ public final class Primitives extends Module
                     return funcall(fun, funArgs, LispThread.currentThread());
                 }
             }
-            throw new ConditionThrowable(new UndefinedFunctionError(args[0]));
+            throw new ConditionThrowable(new UndefinedFunction(args[0]));
         }
     };
 
@@ -2344,7 +2344,7 @@ public final class Primitives extends Module
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
             if (!(fun instanceof Function))
-                throw new ConditionThrowable(new UndefinedFunctionError(first));
+                throw new ConditionThrowable(new UndefinedFunction(first));
             // Second argument must be a list.
             LispObject list = checkList(second);
             final LispThread thread = LispThread.currentThread();
@@ -2372,7 +2372,7 @@ public final class Primitives extends Module
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
             if (!(fun instanceof Function))
-                throw new ConditionThrowable(new UndefinedFunctionError(first));
+                throw new ConditionThrowable(new UndefinedFunction(first));
             // Remaining arguments must be lists.
             LispObject list1 = checkList(second);
             LispObject list2 = checkList(third);
@@ -2405,7 +2405,7 @@ public final class Primitives extends Module
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
             if (!(fun instanceof Function))
-                throw new ConditionThrowable(new UndefinedFunctionError(args[0]));
+                throw new ConditionThrowable(new UndefinedFunction(args[0]));
             // Remaining arguments must be lists.
             int commonLength = -1;
             for (int i = 1; i < numArgs; i++) {
@@ -3343,13 +3343,13 @@ public final class Primitives extends Module
                 }
                 if (functional instanceof Function)
                     return functional;
-                throw new ConditionThrowable(new UndefinedFunctionError(arg));
+                throw new ConditionThrowable(new UndefinedFunction(arg));
             }
             if (arg instanceof Cons) {
                 if (arg.car() == Symbol.LAMBDA)
                     return new Closure(arg.cadr(), arg.cddr(), env);
             }
-            throw new ConditionThrowable(new UndefinedFunctionError(String.valueOf(arg)));
+            throw new ConditionThrowable(new UndefinedFunction(String.valueOf(arg)));
         }
     };
 
@@ -3521,7 +3521,7 @@ public final class Primitives extends Module
             if (obj instanceof Symbol) {
                 function = obj.getSymbolFunction();
                 if (function == null)
-                    throw new ConditionThrowable(new UndefinedFunctionError(obj));
+                    throw new ConditionThrowable(new UndefinedFunction(obj));
             } else if (obj instanceof Function) {
                 function = obj;
             } else
@@ -4463,7 +4463,7 @@ public final class Primitives extends Module
                 if (key instanceof Symbol)
                     key = key.getSymbolFunction();
                 if (!(key instanceof Function))
-                    throw new ConditionThrowable(new UndefinedFunctionError(args[2]));
+                    throw new ConditionThrowable(new UndefinedFunction(args[2]));
             }
             LispObject test = args[3];
             LispObject testNot = args[4];
@@ -4475,12 +4475,12 @@ public final class Primitives extends Module
                 if (test instanceof Symbol)
                     test = test.getSymbolFunction();
                 if (!(test instanceof Function))
-                    throw new ConditionThrowable(new UndefinedFunctionError(args[3]));
+                    throw new ConditionThrowable(new UndefinedFunction(args[3]));
             } else if (testNot != NIL) {
                 if (testNot instanceof Symbol)
                     testNot = testNot.getSymbolFunction();
                 if (!(testNot instanceof Function))
-                    throw new ConditionThrowable(new UndefinedFunctionError(args[3]));
+                    throw new ConditionThrowable(new UndefinedFunction(args[3]));
             }
             if (key == NIL && test == EQL) {
                 while (tail != NIL) {
