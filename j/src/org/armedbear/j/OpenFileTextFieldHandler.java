@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.19 2002-12-11 16:03:03 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.20 2002-12-12 19:44:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -782,23 +782,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                         break;
                 }
             } else if (id == KeyEvent.KEY_TYPED) {
-                char c = e.getKeyChar();
-                if (c >= ' ') {
-                    popup.setVisible(false);
-                    popup = null;
-                    String text = textField.getText();
-                    if (textField.getSelectionStart() != textField.getSelectionEnd())
-                        text = text.substring(0, textField.getSelectionStart());
-                    text += e.getKeyChar();
-                    textField.setText(text);
-                    textField.requestFocus();
-                    end();
-                    e.consume();
-                    return;
-                } else {
-                    e.consume();
-                    return;
-                }
+                // Forward event to textfield.
+                keyTyped(e);
             }
             super.processKeyEvent(e);
         }
@@ -882,5 +867,37 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             }
         }
         super.keyPressed(e);
+    }
+
+    public void keyTyped(KeyEvent e)
+    {
+        char c = e.getKeyChar();
+        if (c == 8) // backspace
+            return;
+        if (c >= ' ') {
+            if (popup != null) {
+                popup.setVisible(false);
+                popup = null;
+            }
+            String text = textField.getText();
+            // Delete selected text (if any).
+            if (textField.getSelectionStart() != textField.getSelectionEnd())
+                text = text.substring(0, textField.getSelectionStart());
+            // Restore original text if possible.
+            if (originalText != null) {
+                int end = text.length();
+                int begin = end - originalText.length();
+                if (text.substring(begin, end).equalsIgnoreCase(originalText)) {
+                    text = text.substring(0, begin);
+                    text += originalText;
+                }
+            }
+            // Append typed char.
+            text += c;
+            textField.setText(text);
+            textField.requestFocus();
+            end();
+        }
+        e.consume();
     }
 }
