@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.135 2004-01-16 17:10:26 piso Exp $
+ * $Id: Autoload.java,v 1.136 2004-01-17 13:14:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,7 +219,6 @@ public class Autoload extends Function
         autoload("char=", "CharacterFunctions");
         autoload("class-name", "LispClass");
         autoload("clrhash", "HashTable");
-        autoload("coerce", "coerce");
         autoload("copy-structure", "StructureObject");
         autoload("delete-file", "delete_file");
         autoload("delete-package", "PackageFunctions");
