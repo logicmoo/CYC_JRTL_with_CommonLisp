@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.11 2004-08-26 14:52:16 piso Exp $
+;;; $Id: format.lisp,v 1.12 2004-09-07 15:42:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2810,5 +2810,7 @@
                    (:remaining (args (length args)))
                    (t (args param)))))
              (apply (fdefinition symbol) stream (next-arg) colonp atsignp (args)))))
+
+(setf sys::*simple-format-function* #'format)
 
 (provide 'format)
