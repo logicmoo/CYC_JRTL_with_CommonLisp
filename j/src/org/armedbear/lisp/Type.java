@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.3 2003-03-21 15:31:18 piso Exp $
+ * $Id: Type.java,v 1.4 2003-03-27 17:45:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,24 +125,24 @@ public class Type extends Lisp
     public static final Type NULL      = new Type(Symbol.NULL, SYMBOL);
 
     // Subtypes of SEQUENCE
-    public static final Type VECTOR    = new Type(Symbol.VECTOR, ARRAY);
+    public static final Type VECTOR    = new Type(Symbol.VECTOR, ARRAY, SEQUENCE);
     public static final Type STRING    = new Type(Symbol.STRING, VECTOR);
     public static final Type LIST      = new Type(Symbol.LIST, SEQUENCE);
     public static final Type CONS      = new Type(Symbol.CONS, LIST);
-
-    // Subtypes of STRING
-    public static final Type SIMPLE_STRING =
-        new Type(Symbol.SIMPLE_STRING, STRING);
-    public static final Type BASE_STRING =
-        new Type(Symbol.BASE_STRING, STRING);
-    public static final Type SIMPLE_BASE_STRING =
-        new Type(Symbol.SIMPLE_BASE_STRING, SIMPLE_STRING, BASE_STRING);
 
     // SIMPLE-ARRAY, SIMPLE-VECTOR
     public static final Type SIMPLE_ARRAY =
         new Type(Symbol.SIMPLE_ARRAY, ARRAY);
     public static final Type SIMPLE_VECTOR =
         new Type(Symbol.SIMPLE_VECTOR, VECTOR, SIMPLE_ARRAY);
+
+    // Subtypes of STRING
+    public static final Type SIMPLE_STRING =
+        new Type(Symbol.SIMPLE_STRING, STRING, SIMPLE_ARRAY);
+    public static final Type BASE_STRING =
+        new Type(Symbol.BASE_STRING, STRING);
+    public static final Type SIMPLE_BASE_STRING =
+        new Type(Symbol.SIMPLE_BASE_STRING, SIMPLE_STRING, BASE_STRING);
 
     public static final Type BIT_VECTOR =
         new Type(Symbol.BIT_VECTOR, VECTOR);
