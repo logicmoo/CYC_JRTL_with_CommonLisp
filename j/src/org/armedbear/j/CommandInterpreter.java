@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandInterpreter.java,v 1.19 2003-09-16 16:54:30 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.20 2003-11-21 17:05:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -303,6 +303,8 @@ public class CommandInterpreter extends Buffer
         getInputFromHistory(1);
     }
 
+    private String currentInput;
+
     private void getInputFromHistory(int direction)
     {
         if (getEndOfOutput() == null) {
@@ -315,20 +317,22 @@ public class CommandInterpreter extends Buffer
             editor.status("Not at command prompt");
             return;
         }
-        if (editor.getLastCommand() != COMMAND_HISTORY)
+        if (editor.getLastCommand() != COMMAND_HISTORY) {
             history.reset();
-
-        Position begin = getEndOfOutput().copy();
-        Position end = getEnd();
-        Region r = new Region(editor.getBuffer(), begin, end);
-        String currentInput = r.toString();
+            Position begin = getEndOfOutput().copy();
+            Position end = getEnd();
+            Region r = new Region(editor.getBuffer(), begin, end);
+            currentInput = r.toString();
+        }
         String s;
         while (true) {
             s = direction < 0 ? history.getPrevious() : history.getNext();
             if (s == null)
                 break;
             s = s.trim();
-            if (!s.equals(currentInput))
+            if (s.equals(currentInput))
+                continue;
+            if (currentInput.length() == 0 || s.startsWith(currentInput))
                 break;
         }
         if (s != null) {
