@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.34 2003-12-09 20:26:22 asimon Exp $
+ * $Id: LispClass.java,v 1.35 2003-12-11 19:10:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ public class LispClass extends StandardObject
     }
 
     protected Symbol symbol;
+    private Layout layout;
     private LispObject directSuperclasses;
     private LispObject directSubclasses;
     private LispObject classPrecedenceList = NIL;
@@ -66,6 +67,16 @@ public class LispClass extends StandardObject
     public final Symbol getSymbol()
     {
         return symbol;
+    }
+
+    public final Layout getLayout()
+    {
+        return layout;
+    }
+
+    public final void setLayout(Layout layout)
+    {
+        this.layout = layout;
     }
 
     public final LispObject getDirectSuperclasses()
@@ -253,6 +264,44 @@ public class LispClass extends StandardObject
             }
             catch (ClassCastException e) {
                 throw new ConditionThrowable(new TypeError(first, "class"));
+            }
+        }
+    };
+
+    // ### class-layout
+    private static final Primitive1 CLASS_LAYOUT =
+        new Primitive1("class-layout", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                Layout layout = ((LispClass)arg).getLayout();
+                return layout != null ? layout : NIL;
+            }
+            catch (ClassCastException e) {
+                throw new ConditionThrowable(new TypeError(arg, "class"));
+            }
+        }
+    };
+
+    // ### %set-class-layout
+    private static final Primitive2 _SET_CLASS_LAYOUT =
+        new Primitive2("%set-class-layout", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((LispClass)first).setLayout((Layout)second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                if (!(first instanceof LispClass))
+                    throw new ConditionThrowable(new TypeError(first, "class"));
+                if (!(second instanceof Layout))
+                    throw new ConditionThrowable(new TypeError(second, "layout"));
+                // Not reached.
+                return NIL;
             }
         }
     };
