@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.31 2003-10-20 15:33:11 piso Exp $
+;;; $Id: defclass.lisp,v 1.32 2003-10-20 17:23:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -437,8 +437,6 @@
   (eq (slot-definition-allocation slot) ':instance))
 
 (defun std-allocate-instance (class)
-;;   (format t "std-allocate-instance class = ~S~%" class)
-;;   (format t "class-slots = ~S~%" (class-slots class))
   (allocate-std-instance
    class
    (allocate-slot-storage (count-if #'instance-slot-p (class-slots class))
@@ -450,9 +448,6 @@
 (defun make-instance-standard-class (metaclass &key name direct-superclasses direct-slots
                                                &allow-other-keys)
   (declare (ignore metaclass))
-;;   (format t "name = ~S~%" name)
-;;   (format t "direct-superclasses = ~S~%" direct-superclasses)
-;;   (format t "direct-slots = ~S~%" direct-slots)
   (let ((class (std-allocate-instance (find-class 'standard-class))))
     (setf (class-name class) name)
     (setf (class-direct-subclasses class) ())
@@ -462,7 +457,6 @@
                                           :direct-superclasses direct-superclasses)
     class))
 
-;; FIXME
 (defun std-after-initialization-for-classes (class
                                              &key direct-superclasses direct-slots
                                              &allow-other-keys)
@@ -522,6 +516,16 @@
 ;;; Generic function metaobjects and standard-generic-function
 ;;;
 
+(defun method-combination-type (method-combination)
+  (if (atom method-combination)
+      method-combination
+      (car method-combination)))
+
+(defun method-combination-options (method-combination)
+  (if (atom method-combination)
+      nil
+      (cdr method-combination)))
+
 (defclass standard-generic-function (generic-function)
   ((name :initarg :name)      ; :accessor generic-function-name
    (lambda-list               ; :accessor generic-function-lambda-list
@@ -530,7 +534,7 @@
    (method-class              ; :accessor generic-function-method-class
     :initarg :method-class)
 ;;    (discriminating-function)  ; :accessor generic-function-discriminating-function
-   (method-combination-type
+   (method-combination
     :initarg :method-combination)
    (classes-to-emf-table      ; :accessor classes-to-emf-table
     :initform (make-hash-table :test #'equal))))
@@ -564,10 +568,10 @@
 (defun (setf generic-function-method-class) (new-value gf)
   (setf (slot-value gf 'method-class) new-value))
 
-(defun generic-function-method-combination-type (gf)
-  (slot-value gf 'method-combination-type))
-(defun (setf generic-function-method-combination-type) (new-value gf)
-  (setf (slot-value gf 'method-combination-type) new-value))
+(defun generic-function-method-combination (gf)
+  (slot-value gf 'method-combination))
+(defun (setf generic-function-method-combination) (new-value gf)
+  (setf (slot-value gf 'method-combination) new-value))
 
 ;;; Internal accessor for effective method function table
 
@@ -649,12 +653,13 @@
 (defun canonicalize-defgeneric-option (option)
   (case (car option)
     (:generic-function-class
-     (list ':generic-function-class
-           `(find-class ',(cadr option))))
+     (list ':generic-function-class `(find-class ',(cadr option))))
     (:method-class
-     (list ':method-class
-           `(find-class ',(cadr option))))
-    (t (list `',(car option) `',(cadr option)))))
+     (list ':method-class `(find-class ',(cadr option))))
+    (:method-combination
+     (list `',(car option) `',(cdr option)))
+    (t
+     (list `',(car option) `',(cadr option)))))
 
 ;;; find-generic-function looks up a generic function by name.  It's an
 ;;; artifact of the fact that our generic function metaobjects can't legally
@@ -726,12 +731,11 @@
                                                 method-combination)
   (declare (ignore generic-function-class))
   (let ((gf (std-allocate-instance the-class-standard-gf)))
-;;     (format t "gf = ~S~%" gf)
     (setf (generic-function-name gf) name)
     (setf (generic-function-lambda-list gf) lambda-list)
     (setf (generic-function-methods gf) ())
     (setf (generic-function-method-class gf) method-class)
-    (setf (generic-function-method-combination-type gf) method-combination)
+    (setf (generic-function-method-combination gf) method-combination)
     (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
     (finalize-generic-function gf)
     gf))
@@ -887,18 +891,6 @@
 ;;; ensure method
 
 (defun ensure-method (gf &rest all-keys)
-;;   (format t "ENSURE-METHOD ~S all-keys = ~S~%" (generic-function-name gf) all-keys)
-;;   (format t "ENSURE-METHOD gf type = ~S~%" (generic-function-method-combination gf))
-;;   (format t "ENSURE-METHOD qualifiers = ~S~%" (getf all-keys :qualifiers))
-;;   (let ((gf-method-combination-type (generic-function-method-combination gf))
-;;         (qualifiers (getf all-keys :qualifiers)))
-;;     (if (eq gf-method-combination-type 'standard)
-;;         (unless (or (null qualifiers)
-;;                     (and (= (length qualifiers) 1)
-;;                          (memq (car qualifiers) '(:before :after :around))))
-;;           (error "method combination type mismatch"))
-;;         (unless (memq gf-method-combination-type qualifiers)
-;;           (error "method combination type mismatch"))))
   (let ((new-method
          (apply
           (if (eq (generic-function-method-class gf) the-class-standard-method)
@@ -976,7 +968,6 @@
 ;;; Reader and write methods
 
 (defun add-reader-method (class fn-name slot-name)
-;;   (format t "add-reader-method ~S~%" fn-name)
   (ensure-method
    (ensure-generic-function fn-name :lambda-list '(object))
    :lambda-list '(object)
@@ -1088,17 +1079,14 @@
   (equal '(:around) (method-qualifiers method)))
 
 (defun std-compute-effective-method-function (gf methods)
-;;   (let ((primaries (remove-if-not #'primary-method-p methods))
-;;         (around (find-if #'around-method-p methods)))
-  (let ((type (generic-function-method-combination-type gf))
-        (primaries ())
-        (arounds ())
-        around)
+  (let* ((mc (generic-function-method-combination gf))
+         (type (method-combination-type mc))
+         (options (method-combination-options mc))
+         (order (car options))
+         (primaries ())
+         (arounds ())
+         around)
     (dolist (m methods)
-;;       (cond ((around-method-p m)
-;;              (push m arounds))
-;;             ((primary-method-p m)
-;;              (push m primaries))))
       (let ((qualifiers (method-qualifiers m)))
         (cond ((null qualifiers)
                (if (eq type 'standard)
@@ -1113,7 +1101,8 @@
               ((memq (car qualifiers) '(:before :after)))
               (t
                (invalid generic-function combin m)))))
-    (setq primaries (nreverse primaries))
+    (unless (eq order :most-specific-last)
+      (setq primaries (nreverse primaries)))
     (setq arounds (nreverse arounds))
     (setq around (car arounds))
     (when (null primaries)
@@ -1127,7 +1116,7 @@
                 gf (remove around methods))))
           #'(lambda (args)
              (funcall (method-function around) args next-emfun)))
-        (case (generic-function-method-combination-type gf)
+        (case type
           (STANDARD
            (let ((next-emfun (compute-primary-emfun (cdr primaries)))
                  (befores (remove-if-not #'before-method-p methods))
@@ -1155,9 +1144,35 @@
                              (funcall (method-function primary) args nil)))
                   (unless result (return)))
                 result)))
+          (OR
+           #'(lambda (args)
+              (let ((result nil))
+                (dolist (primary primaries)
+                  (setf result
+                        (or result
+                            (funcall (method-function primary) args nil)))
+                  (when result (return)))
+                result)))
+          (+
+           #'(lambda (args)
+              (let ((result 0)
+                (dolist (primary primaries)
+                  (incf result (funcall (method-function primary) args nil)))
+                result))))
+          (MAX
+           #'(lambda (args)
+              (let ((result ()))
+                (dolist (primary primaries)
+                  (push (funcall (method-function primary) args nil) result))
+                (apply #'max result))))
+          (MIN
+           #'(lambda (args)
+              (let ((result ()))
+                (dolist (primary primaries)
+                  (push (funcall (method-function primary) args nil) result))
+                (apply #'min result))))
           (t
-           (error "unsupported method combination type ~S~"
-                  (generic-function-method-combination-type gf)))))))
+           (error "unsupported method combination type ~S~" type))))))
 
 ;;; compute an effective method function from a list of primary methods:
 
@@ -1241,10 +1256,6 @@
   (std-slot-makunbound instance slot-name))
 
 ;;; Instance creation and initialization
-
-;; (defgeneric allocate-instance (class))
-;; (defmethod allocate-instance ((class standard-class))
-;;   (std-allocate-instance class))
 
 (defgeneric make-instance (class &key))
 (defmethod make-instance ((class standard-class) &rest initargs)
