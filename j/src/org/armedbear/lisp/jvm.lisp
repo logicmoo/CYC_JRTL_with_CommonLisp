@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.413 2005-03-30 14:57:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.414 2005-03-30 20:06:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4212,7 +4212,16 @@
          (arg1 (first args))
          (arg2 (second args))
          (var1 (unboxed-fixnum-variable arg1))
-         (var2 (unboxed-fixnum-variable arg2)))
+         (var2 (unboxed-fixnum-variable arg2))
+         (type1 t))
+    (cond ((symbolp arg1)
+           (let ((variable (find-visible-variable arg1)))
+             (when variable
+               (dformat t "found variable for ~S~%" arg1)
+               (setf type1 (variable-declared-type variable)))))
+          (t
+           nil))
+    (dformat t "type1 = ~S~%" type1)
     (cond ((and (numberp arg1) (numberp arg2))
            (dformat t "p2-ash case 1~%")
            (compile-constant (ash arg1 arg2)
@@ -4227,6 +4236,19 @@
               (emit 'ishl))
              (t
               (emit-push-int var1)
+              (emit 'i2l)
+              (emit-push-constant-int arg2)
+              (emit 'lshl)
+              (emit-box-long)))
+           (emit-move-from-stack target representation))
+          ((and (subtypep type1 'FIXNUM) (fixnump arg2) (< 0 arg2 32))
+           (dformat t "p2-ash case 2a~%")
+           (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+           (case representation
+             (:unboxed-fixnum
+              (emit-push-constant-int arg2)
+              (emit 'ishl))
+             (t
               (emit 'i2l)
               (emit-push-constant-int arg2)
               (emit 'lshl)
@@ -4389,13 +4411,7 @@
          (let ((op (first form)))
            (case op
              (ASH
-              (dformat t "derive-type ASH case form = ~S~%" form)
-              (let* ((arg1 (second form))
-                     (var1 (unboxed-fixnum-variable arg1))
-                     (arg2 (third form)))
-                (dformat t "derive-type ASH case var1 = ~S~%" var1)
-                (when (and var1 (fixnump arg2) (minusp arg2))
-                  (return-from derive-type 'FIXNUM))))
+              (return-from derive-type (derive-type-ash (second form) (third form))))
              (-
               (when (and (= (length form) 2)
                          (or (fixnump (cadr form))
@@ -4407,6 +4423,37 @@
                 (dformat t "derive-type THE case form = ~S returning FIXNUM~%" form)
                 (return-from derive-type 'FIXNUM)))))))
   t)
+
+(defun derive-type-ash (arg1 arg2)
+  (dformat t "derive-type-ash ~S ~S~%" arg1 arg2)
+  (let* ((type1 t)
+         (result-type 'INTEGER))
+    (when (symbolp arg1)
+      (let ((variable (find-visible-variable arg1)))
+        (when variable
+          (setf type1 (sys::normalize-type (variable-declared-type variable))))))
+    (dformat t "derive-type-ash type1 = ~S~%" type1)
+    (when (subtypep type1 'fixnum)
+      (let ((low most-negative-fixnum)
+            (high most-positive-fixnum))
+        (when (and (consp type1) (eq (car type1) 'INTEGER))
+          (let ((second (second type1))
+                (third (third type1)))
+            (when second
+              (setf low (if (atom second) second (1+ (car second)))))
+            (when third
+              (setf high (if (atom third) third (1- (car third)))))))
+        (dformat t "low = ~S high = ~S~%" low high)
+        (when (fixnump arg2)
+          (cond ((= arg2 0)
+                 (setf result-type type1))
+                ((= arg2 1)
+                 (setf result-type (list 'INTEGER (* low 2) (* high 2))))
+                ((minusp arg2)
+                 ;; Shift right.
+                 (setf result-type 'FIXNUM))))))
+    (dformat t "derive-type-ash returning ~S~%" result-type)
+    result-type))
 
 (defun p2-length (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
@@ -4472,7 +4519,8 @@
             (arg1 (first args))
             (arg2 (second args))
             (var1 (unboxed-fixnum-variable arg1))
-            (var2 (unboxed-fixnum-variable arg2)))
+            (var2 (unboxed-fixnum-variable arg2))
+            (type1 t))
        (dformat t "p2-plus form = ~S~%" form)
        (when (fixnump arg1)
          (dformat t "p2-plus arg1 is a fixnum, swapping...~%")
@@ -4480,6 +4528,14 @@
          (rotatef var1 var2)
          (dformat t "arg1 => ~S~%" arg1)
          (dformat t "arg2 => ~S~%" arg2))
+       (cond ((symbolp arg1)
+              (let ((variable (find-visible-variable arg1)))
+                (when variable
+                  (dformat t "found variable for ~S~%" arg1)
+                  (setf type1 (variable-declared-type variable)))))
+             (t
+              (setf type1 (derive-type arg1))))
+       (dformat t "p2-plus type1 = ~S~%" type1)
        (cond ((and (numberp arg1) (numberp arg2))
               (compile-constant (+ arg1 arg2)
                                 :target target
@@ -4534,11 +4590,23 @@
              ((eql arg2 1)
               (dformat t "p2-plus case 5~%")
               (cond ((and (eq representation :unboxed-fixnum)
-                          (subtypep (derive-type arg1) 'FIXNUM))
+                          (subtypep type1 'FIXNUM))
                      (compile-form arg1 :target :stack :representation :unboxed-fixnum)
                      (maybe-emit-clear-values arg1)
                      (emit-push-int 1)
                      (emit 'iadd)
+                     (emit-move-from-stack target representation))
+                    ((subtypep type1 '(INTEGER #.most-negative-fixnum #.(1- most-positive-fixnum)))
+                     (dformat t "p2-plus case 5a~%")
+                     (unless (eq representation :unboxed-fixnum)
+                       (emit 'new +lisp-fixnum-class+)
+                       (emit 'dup))
+                     (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+                     (maybe-emit-clear-values arg1)
+                     (emit-push-int 1)
+                     (emit 'iadd)
+                     (unless (eq representation :unboxed-fixnum)
+                       (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
                      (emit-move-from-stack target representation))
                     (t
                      (compile-form arg1 :target :stack)
@@ -4721,6 +4789,28 @@
     (emit-clear-values))
   (emit-invokevirtual +lisp-object-class+ "SCHAR" '("I") +lisp-object+)
   (emit-move-from-stack target))
+
+(defun p2-svref (form &key (target :stack) representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-svref))
+  (let ((vector-declared-type t))
+    (when (symbolp (second form))
+      (let ((variable (find-visible-variable (second form))))
+        (when variable
+          (setf vector-declared-type (variable-declared-type variable)))))
+    (unless (subtypep vector-declared-type 'simple-vector)
+      (compile-function-call form target representation)
+      (return-from p2-svref))
+    (compile-form (second form) :target :stack)
+    (compile-form (third form) :target :stack :representation :unboxed-fixnum)
+    (unless (and (single-valued-p (second form))
+                 (single-valued-p (third form)))
+      (emit-clear-values))
+    (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
+    (when (eq representation :unboxed-fixnum)
+      (emit-unbox-fixnum))
+    (emit-move-from-stack target representation)))
 
 (defun p2-aref (form &key (target :stack) representation)
   ;; We only optimize the 2-arg case.
@@ -5570,37 +5660,40 @@
 
     ;; Process type declarations.
     (when *trust-user-type-declarations*
-      (unless (or *child-p*
-                  (plusp (compiland-children *current-compiland*)))
-        (dolist (subform body)
-          (unless (and (consp subform) (eq (car subform) 'DECLARE))
-            (return))
-          (let ((decls (cdr subform)))
-            (dolist (decl decls)
-              (case (car decl)
-                (TYPE
-                 (dolist (name (cddr decl))
-                   (let ((variable (find-visible-variable name)))
-                     (when variable
-                       (setf (variable-declared-type variable) (cadr decl))
+      (dolist (subform body)
+        (unless (and (consp subform) (eq (car subform) 'DECLARE))
+          (return))
+        (let ((decls (cdr subform)))
+          (dolist (decl decls)
+            (case (car decl)
+              (TYPE
+               (dolist (name (cddr decl))
+                 (let ((variable (find-visible-variable name)))
+                   (when variable
+                     (setf (variable-declared-type variable) (cadr decl))
+                     (unless (or *child-p*
+                                 (plusp (compiland-children *current-compiland*)))
                        (when (and (variable-register variable)
                                   (not (variable-special-p variable))
                                   (not (variable-used-non-locally-p variable))
                                   (subtypep (variable-declared-type variable) 'FIXNUM))
-                         (setf (variable-representation variable) :unboxed-fixnum))))))
-                ((DYNAMIC-EXTENT FTYPE IGNORE IGNORABLE INLINE NOTINLINE OPTIMIZE SPECIAL)
-                 ;; Nothing to do here.
-                 )
-                (t
-                 (dolist (name (cdr decl))
-                   (let ((variable (find-visible-variable name)))
-                     (when variable
-                       (setf (variable-declared-type variable) (car decl))
+                         (setf (variable-representation variable) :unboxed-fixnum)))))))
+              ((DYNAMIC-EXTENT FTYPE IGNORE IGNORABLE INLINE NOTINLINE OPTIMIZE SPECIAL)
+               ;; Nothing to do here.
+               )
+              (t
+               (dolist (name (cdr decl))
+                 (let ((variable (find-visible-variable name)))
+                   (when variable
+                     (setf (variable-declared-type variable) (car decl))
+                     (unless (or *child-p*
+                                 (plusp (compiland-children *current-compiland*)))
                        (when (and (variable-register variable)
                                   (not (variable-special-p variable))
                                   (not (variable-used-non-locally-p variable))
                                   (subtypep (variable-declared-type variable) 'FIXNUM))
-                         (setf (variable-representation variable) :unboxed-fixnum))))))))))))
+                         (setf (variable-representation variable) :unboxed-fixnum)))))))))))
+      )
 
     (dump-variables (reverse parameters)
                     (sys::%format nil "Arguments to ~A:~%" (compiland-name *current-compiland*))
@@ -6047,6 +6140,7 @@
   (install-p2-handler 'return-from     'p2-return-from)
   (install-p2-handler 'rplacd          'p2-rplacd)
   (install-p2-handler 'schar           'p2-schar)
+  (install-p2-handler 'svref           'p2-svref)
   (install-p2-handler 'setq            'p2-setq)
   (install-p2-handler 'the             'p2-the)
   (install-p2-handler 'zerop           'p2-zerop)
