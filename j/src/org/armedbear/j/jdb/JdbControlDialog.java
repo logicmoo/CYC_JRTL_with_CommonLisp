@@ -2,7 +2,7 @@
  * JdbControlDialog.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbControlDialog.java,v 1.5 2003-05-18 01:33:25 piso Exp $
+ * $Id: JdbControlDialog.java,v 1.6 2003-05-18 17:03:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -205,7 +205,8 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
                     commandTextField.setText("");
                 } else {
                     int command = jdb.getLastCommand();
-                    if (command == JDB_NEXT || command == JDB_STEP)
+                    if (command == JDB_CONTINUE || command == JDB_NEXT ||
+                        command == JDB_STEP)
                         jdb.doCommand(command, null);
                 }
             }
