@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.36 2003-06-11 00:33:52 piso Exp $
+;;; $Id: list.lisp,v 1.37 2003-06-11 00:45:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -80,43 +80,13 @@
        (result y (cons (car top) result)))
       ((endp top) result)))
 
-(defun require-type (arg type)
-  (unless (typep arg type)
-    (error 'type-error)))
-
-(defun butlast (list &optional (n 1))
-  (require-type list 'list)
-  (unless (null list)
-    (let ((length (do ((list list (cdr list))
-		       (i 0 (1+ i)))
-                      ((atom list) (1- i)))))
-      (unless (< length n)
-	(do* ((top (cdr list) (cdr top))
-	      (result (list (car list)))
-	      (splice result)
-	      (count length (1- count)))
-             ((= count n) result)
-	  (setq splice (cdr (rplacd splice (list (car top))))))))))
-
-(defun nbutlast (list &optional (n 1))
-  (require-type list 'list)
-  (unless (null list)
-    (let ((length (do ((list list (cdr list))
-		       (i 0 (1+ i)))
-                      ((atom list) (1- i)))))
-      (unless (< length n)
-	(do ((1st (cdr list) (cdr 1st))
-	     (2nd list 1st)
-	     (count length (1- count)))
-            ((= count n)
-             (rplacd 2nd ())
-             list))))))
-
+(autoload '(butlast nbutlast) "butlast.lisp")
 
 ;;; LDIFF (from SBCL)
 
 (defun ldiff (list object)
-  (require-type list 'list)
+  (unless (listp list)
+    (error 'type-error))
   (do* ((list list (cdr list))
 	(result (list ()))
 	(splice result))
