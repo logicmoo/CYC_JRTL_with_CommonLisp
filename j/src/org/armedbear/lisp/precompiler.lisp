@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.52 2004-05-03 02:03:31 piso Exp $
+;;; $Id: precompiler.lisp,v 1.53 2004-05-03 14:20:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -383,7 +383,9 @@
           (let* ((v (car var))
                  (expr (cadr var)))
             (unless (symbolp v)
-              (error 'type-error))
+              (error 'simple-type-error
+                     :format-control "The variable ~S is not a symbol."
+                     :format-arguments (list v)))
             (push (list v (precompile1 expr)) result))
           (push var result)))
     (nreverse result)))
