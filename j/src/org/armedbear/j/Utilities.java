@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.5 2002-11-14 15:33:29 piso Exp $
+ * $Id: Utilities.java,v 1.6 2002-11-22 23:35:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1115,7 +1115,7 @@ public final class Utilities implements Constants
 
     public static final void setUserHome(String s)
     {
-        Debug.assertTrue(userHome == null); // We only want to do this once!
+        Debug.bugIfNot(userHome == null); // We only want to do this once!
         userHome = s;
     }
 
@@ -1132,8 +1132,13 @@ public final class Utilities implements Constants
                         userHome = output;
                 }
             }
-            if (userHome == null)
+            if (userHome == null) {
                 userHome = System.getProperty("user.home");
+                // Expand links.
+                File home = File.getInstance(userHome);
+                if (home != null)
+                    userHome = home.canonicalPath();
+            }
         }
         return userHome;
     }
