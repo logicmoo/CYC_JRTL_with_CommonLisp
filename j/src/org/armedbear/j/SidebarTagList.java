@@ -2,7 +2,7 @@
  * SidebarTagList.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SidebarTagList.java,v 1.2 2002-10-09 13:05:20 piso Exp $
+ * $Id: SidebarTagList.java,v 1.3 2002-12-24 17:02:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,7 +127,10 @@ public class SidebarTagList extends SidebarList implements Constants,
                 }
             }
         };
-        new Thread(runTaggerRunnable).start();
+        Thread thread =
+            new Thread(runTaggerRunnable, "SidebarTagList.refresh()");
+        thread.setDaemon(true);
+        thread.start();
     }
 
     private synchronized void replaceListData(Buffer buf, Object[] listData)
