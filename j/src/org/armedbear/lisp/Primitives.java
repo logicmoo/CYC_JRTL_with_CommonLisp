@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.338 2003-08-16 18:23:59 piso Exp $
+ * $Id: Primitives.java,v 1.339 2003-08-17 00:15:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3392,7 +3392,11 @@ public final class Primitives extends Module
                 values = thread.getValues();
             }
             finally {
-                eval(args.cadr(), env, thread);
+                LispObject body = args.cdr();
+                while (body != NIL) {
+                    eval(body.car(), env, thread);
+                    body = body.cdr();
+                }
             }
             thread.setValues(values);
             return result;
