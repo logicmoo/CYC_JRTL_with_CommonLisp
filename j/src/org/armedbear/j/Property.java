@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.5 2002-11-11 18:13:11 piso Exp $
+ * $Id: Property.java,v 1.6 2002-11-17 15:26:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -270,6 +270,8 @@ public final class Property implements Comparable, Constants
         createProperty("globalKeyMap");
     public static final Property LOOK_AND_FEEL =
         createProperty("lookAndFeel");
+    public static final Property LS_EXTRA_OPTIONS =
+        createProperty("lsExtraOptions");
     public static final Property NEWS =
         createProperty("news");
     public static final Property ORG_XML_SAX_PARSER =
