@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.696 2004-10-23 19:27:11 piso Exp $
+ * $Id: Primitives.java,v 1.697 2004-10-24 18:04:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1434,6 +1434,14 @@ public final class Primitives extends Lisp
         {
             Symbol symbol = checkSymbol(arg);
             symbol.setSpecial(true);
+            return symbol;
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Symbol symbol = checkSymbol(first);
+            symbol.setSpecial(true);
+            symbol.setSymbolValue(second);
             return symbol;
         }
     };
