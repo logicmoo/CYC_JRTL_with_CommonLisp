@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.52 2003-08-10 17:45:56 piso Exp $
+ * $Id: LispString.java,v 1.53 2003-08-17 15:14:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -253,6 +253,15 @@ public final class LispString extends AbstractVector
     public final int capacity()
     {
         return array.length;
+    }
+
+    public final void ensureCapacity(int minCapacity)
+    {
+        if (array.length < minCapacity) {
+            char[] newArray = new char[minCapacity];
+            System.arraycopy(array, 0, newArray, 0, array.length);
+            array = newArray;
+        }
     }
 
     public final int length()
