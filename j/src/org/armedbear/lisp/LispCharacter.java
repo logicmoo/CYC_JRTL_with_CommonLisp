@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.36 2004-02-16 12:41:20 piso Exp $
+ * $Id: LispCharacter.java,v 1.37 2004-02-19 01:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,16 @@ public final class LispCharacter extends LispObject
         if (type == Symbol.STANDARD_CHAR)
             return isStandardChar();
         return super.typep(type);
+    }
+
+    public LispObject CHARACTERP()
+    {
+        return T;
+    }
+
+    public boolean characterp()
+    {
+        return true;
     }
 
     public LispObject isStandardChar()

@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.73 2004-02-14 18:51:52 piso Exp $
+ * $Id: LispObject.java,v 1.74 2004-02-19 01:44:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,6 +295,16 @@ public class LispObject extends Lisp
     }
 
     public boolean vectorp()
+    {
+        return false;
+    }
+
+    public LispObject CHARACTERP()
+    {
+        return NIL;
+    }
+
+    public boolean characterp()
     {
         return false;
     }
