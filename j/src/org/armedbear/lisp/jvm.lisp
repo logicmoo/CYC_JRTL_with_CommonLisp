@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.137 2004-04-28 16:16:08 piso Exp $
+;;; $Id: jvm.lisp,v 1.138 2004-04-28 18:53:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2726,9 +2726,10 @@
           (error (c)
                  (fresh-line)
                  (%format t "~A Note: ~A~%" prefix c)
-                 (when name
-                   (%format t "~A Unabled to compile ~S~%" prefix name))
-                 (values (or name (sys::coerce-to-function definition)) nil t))))
+                 (if name
+                     (%format t "~A Unable to compile ~S.~%" prefix name)
+                     (%format t "~A Unable to compile top-level form.~%" prefix))
+                 (precompiler::precompile name definition))))
       (%jvm-compile name definition)))
 
 (defun jvm-compile-package (package-designator)
