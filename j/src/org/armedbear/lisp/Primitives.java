@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.705 2004-11-21 06:03:46 piso Exp $
+ * $Id: Primitives.java,v 1.706 2004-11-21 14:17:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3477,7 +3477,7 @@ public final class Primitives extends Lisp
     // ### write-8-bits
     // write-8-bits byte stream => byte
     private static final Primitive WRITE_8_BITS =
-        new Primitive("write-8-bits", PACKAGE_SYS, false, "byte stream")
+        new Primitive("write-8-bits", PACKAGE_SYS, true, "byte stream")
     {
         public LispObject execute (LispObject first, LispObject second)
             throws ConditionThrowable
@@ -3490,17 +3490,28 @@ public final class Primitives extends Lisp
                 return signal(new TypeError(first, Symbol.FIXNUM));
             }
             if (n < 0 || n > 255)
-                signal(new TypeError(first,
-                                     list2(Symbol.UNSIGNED_BYTE, new Fixnum(8))));
-            checkBinaryOutputStream(second)._writeByte(n);
-            return first;
+                return signal(new TypeError(first,
+                                            list2(Symbol.UNSIGNED_BYTE,
+                                                  new Fixnum(8))));
+            try {
+                Stream stream = (Stream) second;
+                if (stream.isBinaryOutputStream()) {
+                    stream._writeByte(n);
+                    return first;
+                }
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(second, Symbol.STREAM));
+            }
+            return signal(new TypeError(second.writeToString() +
+                                        " is not a binary output stream."));
         }
     };
 
     // ### read-8-bits
     // read-8-bits stream &optional eof-error-p eof-value => byte
     private static final Primitive READ_8_BITS =
-        new Primitive("read-8-bits", PACKAGE_SYS, false,
+        new Primitive("read-8-bits", PACKAGE_SYS, true,
                       "stream &optional eof-error-p eof-value")
     {
         public LispObject execute (LispObject[] args) throws ConditionThrowable
