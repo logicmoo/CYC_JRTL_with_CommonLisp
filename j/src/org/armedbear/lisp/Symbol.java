@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.8 2003-02-25 16:44:21 piso Exp $
+ * $Id: Symbol.java,v 1.9 2003-02-27 03:09:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class Symbol extends LispObject
+public class Symbol extends LispObject
 {
     public static final Symbol AND_KEY            = export("&KEY");
     public static final Symbol AND_OPTIONAL       = export("&OPTIONAL");
@@ -33,14 +33,20 @@ public final class Symbol extends LispObject
     public static final Symbol QUOTE              = export("QUOTE");
 
     // Type specifiers.
+    public static final Symbol BASE_STRING        = export("BASE-STRING");
     public static final Symbol BIT_VECTOR         = export("BIT-VECTOR");
     public static final Symbol CONS               = export("CONS");
     public static final Symbol CHARACTER          = export("CHARACTER");
     public static final Symbol FIXNUM             = export("FIXNUM");
     public static final Symbol FUNCTION           = export("FUNCTION");
+    public static final Symbol INTEGER            = export("INTEGER");
+    public static final Symbol LIST               = export("LIST");
     public static final Symbol NULL               = export("NULL");
     public static final Symbol PACKAGE            = export("PACKAGE");
+    public static final Symbol SEQUENCE           = export("SEQUENCE");
     public static final Symbol SIMPLE_BIT_VECTOR  = export("SIMPLE-BIT-VECTOR");
+    public static final Symbol SIMPLE_STRING      = export("SIMPLE-STRING");
+    public static final Symbol SIMPLE_VECTOR      = export("SIMPLE-VECTOR");
     public static final Symbol STRING             = export("STRING");
     public static final Symbol SYMBOL             = export("SYMBOL");
     public static final Symbol VECTOR             = export("VECTOR");
@@ -107,6 +113,13 @@ public final class Symbol extends LispObject
     public LispObject typeOf()
     {
         return Symbol.SYMBOL;
+    }
+
+    public LispObject typep(LispObject typeSpecifier)
+    {
+        if (typeSpecifier == Symbol.SYMBOL)
+            return T;
+        return super.typep(typeSpecifier);
     }
 
     public LispObject getPackage()
