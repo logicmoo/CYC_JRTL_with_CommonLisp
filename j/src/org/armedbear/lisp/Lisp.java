@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.185 2003-12-10 21:35:47 asimon Exp $
+ * $Id: Lisp.java,v 1.186 2003-12-11 20:37:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -575,6 +575,21 @@ public abstract class Lisp
                                                    new Cons(obj5,
                                                             new Cons(obj6,
                                                                      new Cons(obj7)))))));
+    }
+
+    public static final Cons list8(LispObject obj1, LispObject obj2,
+                                   LispObject obj3, LispObject obj4,
+                                   LispObject obj5, LispObject obj6,
+                                   LispObject obj7, LispObject obj8)
+    {
+        return new Cons(obj1,
+                        new Cons(obj2,
+                                 new Cons(obj3,
+                                          new Cons(obj4,
+                                                   new Cons(obj5,
+                                                            new Cons(obj6,
+                                                                     new Cons(obj7,
+                                                                              new Cons(obj8))))))));
     }
 
     // Used by jvm compiler.
