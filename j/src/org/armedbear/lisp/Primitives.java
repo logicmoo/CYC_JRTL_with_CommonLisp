@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.211 2003-05-31 20:20:52 piso Exp $
+ * $Id: Primitives.java,v 1.212 2003-05-31 20:36:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1988,11 +1988,18 @@ public final class Primitives extends Module
                     // Initial element was specified.
                     v.fill(initialElement);
                 } else if (initialContents != NIL) {
-                    if ((initialContents.getType() & TYPE_SEQUENCE) == 0)
+                    final int type = initialContents.getType();
+                    if ((type & TYPE_LIST) != 0) {
+                        LispObject list = initialContents;
+                        for (int i = 0; i < size; i++) {
+                            v.set(i, list.car());
+                            list = list.cdr();
+                        }
+                    } else if ((type & TYPE_VECTOR) != 0) {
+                        for (int i = 0; i < size; i++)
+                            v.set(i, initialContents.elt(i));
+                    } else
                         throw new TypeError(initialContents, "sequence");
-                    // FIXME Don't use ELT for lists!
-                    for (int i = 0; i < size; i++)
-                        v.set(i, initialContents.elt(i));
                 }
                 if (fillPointer != NIL)
                     v.setFillPointer(fillPointer);
