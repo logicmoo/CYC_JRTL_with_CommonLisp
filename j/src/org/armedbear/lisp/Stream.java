@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.21 2004-02-14 02:04:48 piso Exp $
+ * $Id: Stream.java,v 1.22 2004-02-15 17:49:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1017,7 +1017,7 @@ public class Stream extends LispObject
 
     // read-char-no-hang &optional stream eof-error-p eof-value recursive-p => char
     // recursive-p is ignored
-    public final LispObject readCharNoHang(boolean eofError, LispObject eofValue)
+    public LispObject readCharNoHang(boolean eofError, LispObject eofValue)
         throws ConditionThrowable
     {
         return _charReady() ? readChar(eofError, eofValue) : NIL;
