@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: arrays.lisp,v 1.14 2004-02-04 15:14:56 piso Exp $
+;;; $Id: arrays.lisp,v 1.15 2004-02-25 18:38:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,10 +35,12 @@
                            &key
                            (element-type (array-element-type array))
                            (initial-element nil initial-element-p)
-                           initial-contents fill-pointer
+                           (initial-contents nil initial-contents-p)
+                           fill-pointer
                            displaced-to displaced-index-offset)
   (%adjust-array array new-dimensions element-type
-                 initial-element initial-element-p initial-contents
+                 initial-element initial-element-p
+                 initial-contents initial-contents-p
                  fill-pointer displaced-to displaced-index-offset))
 
 (defun array-row-major-index (array &rest subscripts)
