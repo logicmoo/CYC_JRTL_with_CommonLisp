@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.61 2003-10-17 13:10:48 piso Exp $
+ * $Id: LispObject.java,v 1.62 2003-10-30 08:17:14 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,6 +67,11 @@ public class LispObject extends Lisp
     public String getName()
     {
         return null;
+    }
+
+    public Object javaInstance() throws ConditionThrowable
+    {
+        throw new ConditionThrowable(new TypeError(this, "primitive type"));
     }
 
     public LispObject car() throws ConditionThrowable
