@@ -17,7 +17,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "JAVA")
-(cl:use-package "COMMON-LISP")
 
 (defun jregister-handler (object event handler &key data count)
-  (java::jregister-handler1 object event handler data count))
+  (%jregister-handler object event handler data count))
