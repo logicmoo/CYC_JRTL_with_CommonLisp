@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.98 2003-03-08 04:08:38 piso Exp $
+ * $Id: Primitives.java,v 1.99 2003-03-08 18:14:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3606,6 +3606,44 @@ public final class Primitives extends Module
             catch (FileNotFoundException e) {
                 throw new LispError(" file not found: " + pathname);
             }
+        }
+    };
+
+    // read-from-string string &optional eof-error-p eof-value &key start end
+    // preserve-whitespace => object, position
+    private static final Primitive _READ_FROM_STRING =
+        new Primitive("%read-from-string") {
+        public LispObject execute(LispObject[] args) throws Condition
+        {
+            if (args.length < 6)
+                throw new WrongNumberOfArgumentsException(this);
+            String s = LispString.getValue(args[0]);
+            boolean eofError = args[1] != NIL;
+            LispObject eofValue = args[2];
+            LispObject start = args[3];
+            LispObject end = args[4];
+            boolean preserveWhitespace = args[5] != NIL;
+            int startIndex, endIndex;
+            if (start != NIL)
+                startIndex = (int) Fixnum.getValue(start);
+            else
+                startIndex = 0;
+            if (end != NIL)
+                endIndex = (int) Fixnum.getValue(end);
+            else
+                endIndex = s.length();
+            CharacterInputStream in =
+                new CharacterInputStream(s.substring(startIndex, endIndex));
+            LispObject result;
+            if (preserveWhitespace)
+                result = in.readPreservingWhitespace(eofError, eofValue, false);
+            else
+                result = in.read(eofError, eofValue, false);
+            LispObject[] values = new LispObject[2];
+            values[0] = result;
+            values[1] = new Fixnum(startIndex + in.getOffset());
+            setValues(values);
+            return result;
         }
     };
 
