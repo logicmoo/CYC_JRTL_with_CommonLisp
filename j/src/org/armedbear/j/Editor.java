@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.111 2003-08-08 13:46:19 piso Exp $
+ * $Id: Editor.java,v 1.112 2003-08-09 15:21:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6610,7 +6610,6 @@ public final class Editor extends JPanel implements Constants,
             insertStringInternal(parensRequireSpaces ? "(  )" : "()");
             addUndo(SimpleEdit.MOVE);
             dot.skip(parensRequireSpaces ? -2 : -1);
-            buffer.modified();
         }
         moveCaretToDotCol();
         endCompoundEdit(compoundEdit);
