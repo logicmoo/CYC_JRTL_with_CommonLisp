@@ -2,7 +2,7 @@
  * PackageError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageError.java,v 1.6 2003-09-20 17:02:05 piso Exp $
+ * $Id: PackageError.java,v 1.7 2003-09-22 11:08:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,11 @@ public class PackageError extends LispError
     {
     }
 
+    public PackageError(LispObject initArgs)
+    {
+        this(); // FIXME
+    }
+
     public PackageError(String message)
     {
         super(message);
@@ -45,6 +50,8 @@ public class PackageError extends LispError
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.PACKAGE_ERROR)
+            return T;
+        if (type == BuiltInClass.PACKAGE_ERROR)
             return T;
         return super.typep(type);
     }
