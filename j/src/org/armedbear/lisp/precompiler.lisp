@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.82 2004-12-04 15:48:38 piso Exp $
+;;; $Id: precompiler.lisp,v 1.83 2004-12-15 16:30:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -609,7 +609,8 @@
        (let ((test (precompile1 (car args))))
          (cond ((null test)
                 nil)
-               ((constantp test)
+               (;;(constantp test)
+                (eq test t)
                 (precompile1 (cadr args)))
                (t
                 (list 'IF
@@ -619,7 +620,8 @@
        (let ((test (precompile1 (car args))))
          (cond ((null test)
                 (precompile1 (caddr args)))
-               ((constantp test)
+               (;;(constantp test)
+                (eq test t)
                 (precompile1 (cadr args)))
                (t
                 (list 'IF
