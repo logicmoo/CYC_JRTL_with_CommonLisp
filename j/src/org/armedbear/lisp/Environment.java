@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Environment.java,v 1.11 2004-02-16 19:59:52 piso Exp $
+ * $Id: Environment.java,v 1.12 2004-02-17 01:38:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -191,6 +191,26 @@ public final class Environment extends LispObject
         {
             try {
                 return ((Environment)arg).isEmpty() ? T : NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(String.valueOf(arg) + " is not an environment."));
+            }
+        }
+    };
+
+    // ### environment-vars
+    private static final Primitive1 ENVIRONMENT_VARS =
+        new Primitive1("environment-vars", PACKAGE_SYS, false, "environment")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                Environment env = (Environment) arg;
+                LispObject result = NIL;
+                for (Binding binding = env.vars; binding != null; binding = binding.next)
+                    if (!binding.specialp)
+                        result = new Cons(binding.symbol, result);
+                return result;
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(String.valueOf(arg) + " is not an environment."));
