@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.9 2004-01-26 20:34:36 piso Exp $
+;;; $Id: open.lisp,v 1.10 2004-01-26 20:49:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
                    :new-version
                    :error)))
        (case if-exists
-         ((:error :new-version)
+         (:error
           (when (probe-file pathname)
             (error 'file-error
                    :format-control "The file ~S already exists."
@@ -50,7 +50,7 @@
          ((nil)
           (when (probe-file pathname)
             (return-from open nil)))
-         (:supersede) ; OK to proceed.
+         ((:new-version :supersede :overwrite)) ; OK to proceed.
          (t
           (error 'simple-error
                  :format-control "Option not supported: ~S."
