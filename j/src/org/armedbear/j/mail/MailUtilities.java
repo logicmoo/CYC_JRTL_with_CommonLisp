@@ -1,8 +1,8 @@
 /*
  * MailUtilities.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: MailUtilities.java,v 1.1.1.1 2002-09-24 16:10:11 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: MailUtilities.java,v 1.2 2003-03-09 14:01:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public class MailUtilities
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 MailAddress a = (MailAddress) list.get(i);
-                String s = a.toString();
+                String s = a.toEncodedString();
                 if (i > 0 && length + s.length() > 74) {
                     // Won't fit on current line.
                     sb.append(',');
