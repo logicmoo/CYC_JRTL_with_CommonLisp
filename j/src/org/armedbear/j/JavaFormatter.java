@@ -1,8 +1,8 @@
 /*
  * JavaFormatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaFormatter.java,v 1.2 2004-02-28 17:58:51 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: JavaFormatter.java,v 1.3 2004-02-28 17:59:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
