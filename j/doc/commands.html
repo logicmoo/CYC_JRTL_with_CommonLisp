@@ -65,6 +65,7 @@
     <li><a href="commands.html#deleteWordRight">deleteWordRight</a></li>
     <li><a href="commands.html#describeKey">describeKey</a></li>
     <li><a href="commands.html#detabRegion">detabRegion</a></li>
+    <li><a href="commands.html#diff">diff</a></li>
     <li><a href="commands.html#diffGotoFile">diffGotoFile</a></li>
     <li><a href="commands.html#dir">dir</a></li>
     <li><a href="commands.html#dirBack">dirBack</a></li>
@@ -514,12 +515,12 @@ Centers the current function vertically in the edit window.
 
 <a name="changes">changes</a><dl><dd>
 <p>
-Runs diff to display unsaved changes to the current buffer (if any). In the
+Runs diff to show the unsaved changes to the current buffer (if any). In the
 resulting output buffer, you can use <a href="#diffGotoFile">diffGotoFile</a>,
 mapped by default to Enter, to jump to the location of a particular change.
 <p>
 Because it uses diff, this command will not work unless diff is installed and
-in your path, which is more likely to be the case on Unix than Windows.
+in your path, which is more likely to be the case on Unix than on Windows.
 <p>
 <b>Default key mapping:</b> None
 <br><br>
@@ -890,6 +891,25 @@ Deletes the word to the right of the caret.
 Displays information about the command mapped to a particular key or key combination.
 <br><br>
 <b>Default key mapping:</b> Alt K
+<br><br>
+</dl><!--<hr>-->
+
+<a name="diff">diff</a><dl><dd>
+<p>
+Runs diff with the supplied arguments and presents the output in a diff output
+buffer.
+<p>
+When constructing the command line, you can use "%" as a dynamic alias for the
+file associated with the current buffer. For example:
+<pre>
+        diff -ub % ~/backup
+</pre>
+Because it uses diff, this command will not work unless diff is installed and
+in your path, which is more likely to be the case on Unix than on Windows.
+<p>
+<b>Default key mapping:</b> None
+<p>
+<b>See also:</b> <a href="#changes">changes</a>
 <br><br>
 </dl><!--<hr>-->
 
