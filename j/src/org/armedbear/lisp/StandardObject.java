@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.8 2003-10-12 16:13:54 piso Exp $
+ * $Id: StandardObject.java,v 1.9 2003-10-13 14:11:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,34 @@ public class StandardObject extends LispObject
         return sb.toString();
     }
 
+    // ### std-instance-class
+    private static final Primitive1 STD_INSTANCE_CLASS =
+        new Primitive1("std-instance-class", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof StandardObject)
+                return ((StandardObject)arg).cls;
+            throw new ConditionThrowable(new TypeError(arg, "standard object"));
+        }
+    };
+
+    // ### %set-std-instance-class
+    private static final Primitive2 _SET_STD_INSTANCE_CLASS =
+        new Primitive2("%set-std-instance-class", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof StandardObject) {
+                ((StandardObject)first).cls = (LispClass) second;
+                return second;
+            }
+            throw new ConditionThrowable(new TypeError(first, "standard object"));
+        }
+    };
+
+    // ### std-instance-slots
     private static final Primitive1 STD_INSTANCE_SLOTS =
         new Primitive1("std-instance-slots", PACKAGE_SYS, false)
     {
@@ -91,6 +119,21 @@ public class StandardObject extends LispObject
             if (arg instanceof StandardObject)
                 return ((StandardObject)arg).slots;
             throw new ConditionThrowable(new TypeError(arg, "standard object"));
+        }
+    };
+
+    // ### %set-std-instance-slots
+    private static final Primitive2 _SET_STD_INSTANCE_SLOTS =
+        new Primitive2("%set-std-instance-slots", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof StandardObject) {
+                ((StandardObject)first).slots = second;
+                return second;
+            }
+            throw new ConditionThrowable(new TypeError(first, "standard object"));
         }
     };
 
