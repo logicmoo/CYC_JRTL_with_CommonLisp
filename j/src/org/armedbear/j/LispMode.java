@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.2 2002-10-13 16:51:57 piso Exp $
+ * $Id: LispMode.java,v 1.3 2002-10-13 18:21:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,7 +126,9 @@ public final class LispMode extends AbstractMode implements Constants, Mode
             else if (c == ')')
                 --depth;
         }
-        return buffer.getIndentSize() * depth;
+        if (depth > 0)
+            return buffer.getIndentSize() * depth;
+        return 0;
     }
 
     private Position findStartOfDefun(Position pos)
