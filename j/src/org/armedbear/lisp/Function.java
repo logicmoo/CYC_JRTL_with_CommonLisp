@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.15 2003-05-25 17:18:11 piso Exp $
+ * $Id: Function.java,v 1.16 2003-06-30 19:16:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,11 @@ public abstract class Function extends Functional
 
     public Function(String name, Package pkg)
     {
+        this(name, pkg, false);
+    }
+
+    public Function(String name, Package pkg, boolean exported)
+    {
         module = null;
         this.name = name != null ? name.toUpperCase() : null;
         index = 0;
@@ -54,6 +59,14 @@ public abstract class Function extends Functional
             Symbol symbol = pkg.intern(this.name);
             symbol.setSymbolFunction(this);
             setLambdaName(symbol);
+            if (exported) {
+                try {
+                    pkg.export(symbol);
+                }
+                catch (LispError e) {
+                    Debug.assertTrue(false);
+                }
+            }
         }
     }
 
