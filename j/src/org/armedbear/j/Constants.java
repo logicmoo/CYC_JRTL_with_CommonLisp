@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Constants.java,v 1.12 2003-07-05 15:30:43 piso Exp $
+ * $Id: Constants.java,v 1.13 2003-08-01 16:13:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,8 @@ public interface Constants
     int COMMAND_UNDO             = 18;
     int COMMAND_EXPAND           = 19;
     int COMMAND_HISTORY          = 20;
+    int COMMAND_WINDOW_UP        = 21;
+    int COMMAND_WINDOW_DOWN      = 22;
 
     int FILETYPE_UNKNOWN         = -1;
     int FILETYPE_TEXT            = 0;
