@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.7 2003-10-06 01:03:57 piso Exp $
+;;; $Id: top-level.lisp,v 1.8 2003-10-06 15:20:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,13 +152,15 @@
       string))
 
 (defun help-command (ignored)
-  (format t "COMMAND     ABBR DESCRIPTION~%")
+  (format t "~%  COMMAND     ABBR DESCRIPTION~%")
   (dolist (entry *command-table*)
-    (format t "~A~A~A~%"
+    (format t "  ~A~A~A~%"
             (pad (entry-name entry) 12)
             (pad (entry-abbr entry) 5)
             (entry-help entry)
-            )))
+            ))
+  (format t "~%Commands must be prefixed by the command character, which is '~A' by default.~%~%"
+          *command-char*))
 
 (defparameter *command-table*
   '(("apropos" 2 apropos-command "show apropos")
