@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.237 2004-07-24 03:01:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.238 2004-07-24 03:10:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2039,28 +2039,27 @@
   (let* ((test (second form))
          (consequent (third form))
          (alternate (fourth form))
-         (label1 (gensym))
-         (label2 (gensym)))
+         (LABEL1 (gensym))
+         (LABEL2 (gensym)))
     (cond ((eq test t)
            (compile-form consequent :target target))
           (t
-           (emit (compile-test test) `,label1)
+           (emit (compile-test test) LABEL1)
 ;;            (format t "consequent = ~S~%" consequent)
 
            (compile-form consequent :target :stack)
            (emit-move-from-stack target)
 ;;            (compile-form consequent :target target)
 
-           (emit 'goto `,label2)
-           (emit 'label `,label1)
+           (emit 'goto LABEL2)
+           (label LABEL1)
 ;;            (format t "alternate = ~S~%" alternate)
 
            (compile-form alternate :target :stack)
            (emit-move-from-stack target)
 ;;            (compile-form consequent :target target)
 
-           (emit 'label `,label2)
-           ))))
+           (label LABEL2)))))
 
 (defun compile-multiple-value-list (form &key (target *val*))
   (compile-form (second form) :target :stack)
@@ -2367,14 +2366,14 @@
     (error "Wrong number of arguments for ATOM."))
   (compile-form (cadr form) :target :stack)
   (emit 'instanceof +lisp-cons-class+)
-  (let ((label1 (gensym))
-        (label2 (gensym)))
-    (emit 'ifeq `,label1)
+  (let ((LABEL1 (gensym))
+        (LABEL2 (gensym)))
+    (emit 'ifeq LABEL1)
     (emit-push-nil)
-    (emit 'goto `,label2)
-    (emit 'label `,label1)
+    (emit 'goto LABEL2)
+    (label LABEL1)
     (emit-push-t)
-    (emit 'label `,label2)
+    (label LABEL2)
     (emit-move-from-stack target)))
 
 (defun contains-return (form)
