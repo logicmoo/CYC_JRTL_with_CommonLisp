@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Keyword.java,v 1.10 2003-09-28 18:42:23 piso Exp $
+ * $Id: Keyword.java,v 1.11 2003-11-14 14:26:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ public final class Keyword extends Lisp
         ABORT               = internKeyword("ABORT"),
         ALLOW_OTHER_KEYS    = internKeyword("ALLOW-OTHER-KEYS"),
         CAPITALIZE          = internKeyword("CAPITALIZE"),
+        COUNT_ONLY          = internKeyword("COUNT-ONLY"),
         DATUM               = internKeyword("DATUM"),
         DIRECT_SUPERCLASSES = internKeyword("DIRECT-SUPERCLASSES"),
         DOWNCASE            = internKeyword("DOWNCASE"),
@@ -50,6 +51,7 @@ public final class Keyword extends Lisp
         NICKNAMES           = internKeyword("NICKNAMES"),
         NO_ERROR            = internKeyword("NO-ERROR"),
         SUPERSEDE           = internKeyword("SUPERSEDE"),
+        TIME                = internKeyword("TIME"),
         UPCASE              = internKeyword("UPCASE"),
         USE                 = internKeyword("USE"),
         WILD                = internKeyword("WILD");
