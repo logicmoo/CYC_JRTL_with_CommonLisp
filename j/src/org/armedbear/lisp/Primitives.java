@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.677 2004-09-19 00:08:23 piso Exp $
+ * $Id: Primitives.java,v 1.678 2004-09-19 16:50:28 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1469,7 +1469,7 @@ public final class Primitives extends Lisp
     };
 
     // ### cond
-    private static final SpecialOperator COND = new SpecialOperator("cond") {
+    private static final SpecialOperator COND = new SpecialOperator("cond", "&rest clauses") {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -1494,7 +1494,7 @@ public final class Primitives extends Lisp
     };
 
     // ### case
-    private static final SpecialOperator CASE = new SpecialOperator("case")
+    private static final SpecialOperator CASE = new SpecialOperator("case", "keyform &body cases")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -1532,7 +1532,7 @@ public final class Primitives extends Lisp
     };
 
     // ### ecase
-    private static final SpecialOperator ECASE = new SpecialOperator("ecase")
+    private static final SpecialOperator ECASE = new SpecialOperator("ecase", "keyform &body cases")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -2837,7 +2837,7 @@ public final class Primitives extends Lisp
     };
 
     // ### macrolet
-    private static final SpecialOperator MACROLET = new SpecialOperator("macrolet")
+    private static final SpecialOperator MACROLET = new SpecialOperator("macrolet", "definitions &rest body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -2877,7 +2877,7 @@ public final class Primitives extends Lisp
     };
 
     // ### tagbody
-    private static final SpecialOperator TAGBODY = new SpecialOperator("tagbody")
+    private static final SpecialOperator TAGBODY = new SpecialOperator("tagbody", "&rest statements")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -2938,7 +2938,7 @@ public final class Primitives extends Lisp
     };
 
     // ### go
-    private static final SpecialOperator GO = new SpecialOperator("go")
+    private static final SpecialOperator GO = new SpecialOperator("go", "tag")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -2955,7 +2955,7 @@ public final class Primitives extends Lisp
     };
 
     // ### block
-    private static final SpecialOperator BLOCK = new SpecialOperator("block")
+    private static final SpecialOperator BLOCK = new SpecialOperator("block", "name &rest forms")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -2995,7 +2995,7 @@ public final class Primitives extends Lisp
 
     // ### return-from
     private static final SpecialOperator RETURN_FROM =
-        new SpecialOperator("return-from")
+        new SpecialOperator("return-from", "name &optional value")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3027,7 +3027,7 @@ public final class Primitives extends Lisp
     };
 
     // ### catch
-    private static final SpecialOperator CATCH = new SpecialOperator("catch")
+    private static final SpecialOperator CATCH = new SpecialOperator("catch", "tag &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3064,7 +3064,7 @@ public final class Primitives extends Lisp
     };
 
     // ### throw
-    private static final SpecialOperator THROW = new SpecialOperator("throw")
+    private static final SpecialOperator THROW = new SpecialOperator("throw", "tag result")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3081,7 +3081,7 @@ public final class Primitives extends Lisp
 
     // ### unwind-protect
     private static final SpecialOperator UNWIND_PROTECT =
-        new SpecialOperator("unwind-protect")
+        new SpecialOperator("unwind-protect", "protected &body cleanup")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3110,7 +3110,7 @@ public final class Primitives extends Lisp
 
     // ### eval-when
     private static final SpecialOperator EVAL_WHEN =
-        new SpecialOperator("eval-when")
+        new SpecialOperator("eval-when", "situations &rest forms")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3132,7 +3132,7 @@ public final class Primitives extends Lisp
     // multiple-value-bind (var*) values-form declaration* form*
     // Should be a macro.
     private static final SpecialOperator MULTIPLE_VALUE_BIND =
-        new SpecialOperator("multiple-value-bind") {
+        new SpecialOperator("multiple-value-bind", "vars value-form &body body") {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3204,7 +3204,7 @@ public final class Primitives extends Lisp
 
     // ### multiple-value-prog1
     private static final SpecialOperator MULTIPLE_VALUE_PROG1 =
-        new SpecialOperator("multiple-value-prog1")
+        new SpecialOperator("multiple-value-prog1", "values-form &rest forms")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3226,7 +3226,7 @@ public final class Primitives extends Lisp
 
     // ### multiple-value-call
     private static final SpecialOperator MULTIPLE_VALUE_CALL =
-        new SpecialOperator("multiple-value-call")
+        new SpecialOperator("multiple-value-call", "fun &rest args")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3268,7 +3268,7 @@ public final class Primitives extends Lisp
 
     // ### and
     // Should be a macro.
-    private static final SpecialOperator AND = new SpecialOperator("and") {
+    private static final SpecialOperator AND = new SpecialOperator("and", "&rest forms") {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3291,7 +3291,7 @@ public final class Primitives extends Lisp
 
     // ### or
     // Should be a macro.
-    private static final SpecialOperator OR = new SpecialOperator("or") {
+    private static final SpecialOperator OR = new SpecialOperator("or", "&rest forms") {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3474,7 +3474,7 @@ public final class Primitives extends Lisp
     // Evaluates form and creates a list of the multiple values it returns.
     // Should be a macro.
     private static final SpecialOperator MULTIPLE_VALUE_LIST =
-        new SpecialOperator("multiple-value-list")
+        new SpecialOperator("multiple-value-list", "value-form")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3500,7 +3500,7 @@ public final class Primitives extends Lisp
     // NIL if n >= number of values returned.
     // Should be a macro.
     private static final SpecialOperator NTH_VALUE =
-        new SpecialOperator("nth-value")
+        new SpecialOperator("nth-value", "n form")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
