@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.12 2003-05-15 15:38:58 piso Exp $
+ * $Id: Jdb.java,v 1.13 2003-05-16 15:19:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -642,8 +642,21 @@ public final class Jdb extends Buffer
 
     public void doSuspend()
     {
-        if (vm != null) {
+        if (vm != null && !isSuspended()) {
             vm.suspend();
+            ThreadReference threadRef = null;
+            List threads = vm.allThreads();
+            for (int i = 0; i < threads.size(); i++) {
+                ThreadReference tr = (ThreadReference) threads.get(i);
+                if ("main".equals(tr.name()))
+                    threadRef = tr;
+            }
+            if (threadRef == null) {
+                if (threads.size() > 0)
+                    threadRef = (ThreadReference) threads.get(0);
+            }
+            setCurrentThread(threadRef);
+            fireContextChanged();
         }
     }
 
