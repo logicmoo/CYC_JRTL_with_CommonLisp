@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.512 2003-12-07 17:43:06 piso Exp $
+ * $Id: Primitives.java,v 1.513 2003-12-07 18:10:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,22 +50,18 @@ public final class Primitives extends Module
     private static final int COMPILED_FUNCTION_P        = 16;
     private static final int CONSP                      = 17;
     private static final int EVAL                       = 18;
-    private static final int IDENTITY                   = 20;
-    private static final int KEYWORDP                   = 21;
-    private static final int LISTP                      = 22;
-    private static final int LOWER_CASE_P               = 23;
-    private static final int MAKE_SYMBOL                = 24;
-    private static final int MAKUNBOUND                 = 25;
-    private static final int SIMPLE_BIT_VECTOR_P        = 28;
-    private static final int SIMPLE_STRING_P            = 29;
-    private static final int SIMPLE_VECTOR_P            = 30;
-    private static final int STRINGP                    = 31;
-    private static final int SYMBOL_FUNCTION            = 33;
-    private static final int SYMBOL_NAME                = 34;
-    private static final int SYMBOL_PACKAGE             = 35;
-    private static final int SYMBOL_PLIST               = 36;
-    private static final int UPPER_CASE_P               = 38;
-    private static final int VECTORP                    = 39;
+    private static final int IDENTITY                   = 19;
+    private static final int KEYWORDP                   = 20;
+    private static final int LISTP                      = 21;
+    private static final int LOWER_CASE_P               = 22;
+    private static final int MAKE_SYMBOL                = 23;
+    private static final int MAKUNBOUND                 = 24;
+    private static final int SIMPLE_BIT_VECTOR_P        = 25;
+    private static final int SIMPLE_STRING_P            = 26;
+    private static final int SIMPLE_VECTOR_P            = 27;
+    private static final int STRINGP                    = 28;
+    private static final int UPPER_CASE_P               = 29;
+    private static final int VECTORP                    = 30;
 
     private Primitives()
     {
@@ -98,10 +94,6 @@ public final class Primitives extends Module
         definePrimitive1("simple-string-p", SIMPLE_STRING_P);
         definePrimitive1("simple-vector-p", SIMPLE_VECTOR_P);
         definePrimitive1("stringp", STRINGP);
-        definePrimitive1("symbol-function", SYMBOL_FUNCTION);
-        definePrimitive1("symbol-name", SYMBOL_NAME);
-        definePrimitive1("symbol-package", SYMBOL_PACKAGE);
-        definePrimitive1("symbol-plist", SYMBOL_PLIST);
         definePrimitive1("upper-case-p", UPPER_CASE_P);
         definePrimitive1("vectorp", VECTORP);
     }
@@ -181,25 +173,6 @@ public final class Primitives extends Module
             case MAKUNBOUND:                    // ### makunbound
                 checkSymbol(arg).setSymbolValue(null);
                 return arg;
-            case SYMBOL_NAME:                   // ### symbol-name
-                if (arg.typep(Symbol.SYMBOL) != NIL)
-                    return new LispString(arg.getName());
-                throw new ConditionThrowable(new TypeError(arg, "symbol"));
-            case SYMBOL_PACKAGE:                // ### symbol-package
-                return checkSymbol(arg).getPackage();
-            case SYMBOL_FUNCTION: {             // ### symbol-function
-                LispObject function = arg.getSymbolFunction();
-                if (function != null)
-                    return function;
-                throw new ConditionThrowable(new UndefinedFunction(arg));
-            }
-            case SYMBOL_PLIST:                  // ### symbol-plist
-                try {
-                    return ((Symbol)arg).getPropertyList();
-                }
-                catch (ClassCastException e) {
-                    throw new ConditionThrowable(new TypeError(arg, "symbol"));
-                }
             case ABS:                           // ### abs
                 return arg.ABS();
             case ARRAYP:                        // ### arrayp

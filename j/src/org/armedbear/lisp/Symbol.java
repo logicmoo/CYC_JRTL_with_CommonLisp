@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.93 2003-12-06 01:24:58 piso Exp $
+ * $Id: Symbol.java,v 1.94 2003-12-07 18:12:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -450,4 +450,62 @@ public class Symbol extends LispObject
     {
         return this == obj;
     }
+
+    public static final Primitive1 SYMBOL_NAME = new Primitive1("symbol-name")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return new LispString(((Symbol)arg).name);
+            }
+            catch (ClassCastException e) {
+                throw new ConditionThrowable(new TypeError(arg, "symbol"));
+            }
+        }
+    };
+
+    public static final Primitive1 SYMBOL_PACKAGE = new Primitive1("symbol-package")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                LispObject pkg = ((Symbol)arg).pkg;
+                return pkg != null ? pkg : NIL;
+            }
+            catch (ClassCastException e) {
+                throw new ConditionThrowable(new TypeError(arg, "symbol"));
+            }
+        }
+    };
+
+    public static final Primitive1 SYMBOL_FUNCTION = new Primitive1("symbol-function")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                LispObject function = ((Symbol)arg).function;
+                if (function != null)
+                    return function;
+            }
+            catch (ClassCastException e) {
+                ; // Fall through.
+            }
+            // function == null or ClassCastException
+            throw new ConditionThrowable(new TypeError(arg, "symbol"));
+        }
+    };
+
+    public static final Primitive1 SYMBOL_PLIST = new Primitive1("symbol-plist")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                LispObject propertyList = ((Symbol)arg).propertyList;
+                return propertyList != null ? propertyList : NIL;
+            }
+            catch (ClassCastException e) {
+                throw new ConditionThrowable(new TypeError(arg, "symbol"));
+            }
+        }
+    };
 }
