@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.15 2002-11-22 02:03:39 piso Exp $
+ * $Id: LispMode.java,v 1.16 2002-11-23 17:32:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,6 +69,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_L, CTRL_MASK | SHIFT_MASK, "listTags");
         km.mapKey(')', "closeParen");
         km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
+        km.mapKey(KeyEvent.VK_F, CTRL_MASK | ALT_MASK, "forwardSexp");
+        km.mapKey(KeyEvent.VK_D, CTRL_MASK | ALT_MASK, "downList");
+        km.mapKey(KeyEvent.VK_U, CTRL_MASK | ALT_MASK, "upList");
     }
 
     public boolean isTaggable()
@@ -152,34 +155,33 @@ public class LispMode extends AbstractMode implements Constants, Mode
             return modelIndent;
         final int indentSize = buffer.getIndentSize();
         Position pos = findContainingSexp(new Position(line, 0));
-        if (pos != null) {
-            SyntaxIterator it = getSyntaxIterator(pos);
-            while (true) {
-                char c = it.nextChar();
-                if (Character.isWhitespace(c))
-                    continue;
-                if (c == '(') {
-                    // First element of containing sexp is a list. Indent
-                    // under that list.
-                    return buffer.getCol(it.getPosition());
-                }
-                // Otherwise...
-                String token = gatherToken(it.getPosition());
-                if (token.startsWith("def"))
-                    return buffer.getCol(pos) + indentSize;
-                if (Utilities.isOneOf(token, specials))
-                    return buffer.getCol(pos) + indentSize;
-                if (Utilities.isOneOf(token, elispSpecials))
-                    return buffer.getCol(pos) + indentSize;
-                if (Utilities.isOneOf(token, hemlockSpecials))
-                    return buffer.getCol(pos) + indentSize;
-                Position next = forwardSexp(pos);
-                if (next != null && next.getLine() == pos.getLine())
-                    return buffer.getCol(next);
-                return buffer.getCol(pos) + 1;
+        if (pos == null) // Top level.
+            return 0;
+        Debug.bugIfNot(pos.getChar() == '(');
+        Position posFirst = downList(pos);
+        if (posFirst != null) {
+            if (posFirst.getChar() == '(') {
+                // First element of containing sexp is a list. Indent
+                // under that list.
+                return buffer.getCol(posFirst);
+            }
+            // Otherwise...
+            String token = gatherToken(posFirst);
+            if (token.startsWith("def") ||
+                Utilities.isOneOf(token, specials) ||
+                Utilities.isOneOf(token, elispSpecials) ||
+                Utilities.isOneOf(token, hemlockSpecials))
+                return buffer.getCol(pos) + indentSize;
+            // Not special. Indent under the second element of the containing
+            // list, if the second element is on the same line as the first.
+            Position posSecond = forwardSexp(posFirst);
+            if (posSecond != null) {
+                posSecond.skipWhitespace();
+                if (posSecond.getLine() == pos.getLine())
+                    return buffer.getCol(posSecond);
             }
         }
-        return 0;
+        return buffer.getCol(pos) + 1;
     }
 
     private static Line findModel(Line line)
@@ -210,8 +212,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return true;
     }
 
-    private String gatherToken(Position pos)
+    private String gatherToken(Position start)
     {
+        Position pos = start.copy();
         FastStringBuffer sb = new FastStringBuffer();
         while (true) {
             char c = pos.getChar();
@@ -259,7 +262,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         }
     }
 
-    protected Position findContainingSexp(Position start)
+    public Position findContainingSexp(Position start)
     {
         SyntaxIterator it = getSyntaxIterator(start);
         int parenCount = 0;
@@ -283,22 +286,187 @@ public class LispMode extends AbstractMode implements Constants, Mode
         }
     }
 
-    protected Position forwardSexp(Position start)
+    private Position downList(Position start)
     {
-        // Skip to whitespace.
+        if (start == null)
+            return null;
         Position pos = start.copy();
-        while (pos.next()) {
-            char c = pos.getChar();
-            if (Character.isWhitespace(c))
+        // Skip whitespace and comments.
+        char c;
+        while (true) {
+            pos.skipWhitespace();
+            c = pos.getChar();
+            if (c == ';')
+                skipComment(pos);
+            else
                 break;
         }
-        // Skip whitespace.
-        while (pos.next()) {
-            char c = pos.getChar();
-            if (!Character.isWhitespace(c))
+        // Reached non-whitespace char.
+        while (true) {
+            if (c == ')')
+                return null; // "Containing expression ends prematurely."
+            if (c == '(') {
+                // List starting.
+                if (!pos.next())
+                    return null;
+                // Skip whitespace and comments.
+                while (true) {
+                    pos.skipWhitespace();
+                    c = pos.getChar();
+                    if (c == ';')
+                        skipComment(pos);
+                    else
+                        break;
+                }
+                if (pos.atEnd())
+                    return null;
+                return pos;
+            }
+            if (c == '"') {
+                // Skip string.
+                skipString(pos);
+                if (pos.atEnd())
+                    return null;
+                continue;
+            }
+            if (c == ';') {
+                skipComment(pos);
+                if (pos.atEnd())
+                    return null;
+                continue;
+            }
+            if (!pos.next())
+                return null;
+            c = pos.getChar();
+        }
+    }
+
+    public static void downList()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        Position pos = mode.downList(editor.getDot());
+        if (pos != null)
+            editor.moveDotTo(pos);
+    }
+
+    public static void upList()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        Position pos = mode.findContainingSexp(editor.getDot());
+        if (pos != null)
+            editor.moveDotTo(pos);
+    }
+
+    private void skipString(Position pos)
+    {
+        while (true) {
+            if (!pos.next())
+                return;
+            switch (pos.getChar()) {
+                case '\\':
+                    if (!pos.next())
+                        return;
+                    break;
+                case '"':
+                    pos.next();
+                    return;
+            }
+        }
+    }
+
+    private Position forwardSexp(Position start)
+    {
+        if (start == null)
+            return null;
+        Position pos = start.copy();
+        // Skip whitespace and comments.
+        char c;
+        while (true) {
+            pos.skipWhitespace();
+            c = pos.getChar();
+            if (c == ';')
+                skipComment(pos);
+            else
                 break;
         }
-        return pos;
+        // Reached non-whitespace char.
+        if (c == ')')
+            return null; // "Containing expression ends prematurely."
+        if (c == '(') {
+            // List starting.
+            int parenCount = 1;
+            while (true) {
+                if (!pos.next())
+                    return null;
+                switch (pos.getChar()) {
+                    case ';':
+                        skipComment(pos);
+                        break;
+                    case ')':
+                        --parenCount;
+                        if (parenCount == 0) {
+                            if (pos.next())
+                                return pos;
+                            else
+                                return null;
+                        }
+                        break;
+                    case '(':
+                        ++parenCount;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        if (c == '"') {
+            while (true) {
+                if (!pos.next())
+                    return null;
+                switch (pos.getChar()) {
+                    case '\\':
+                        if (!pos.next())
+                            return null;
+                        break;
+                    case '"':
+                        if (!pos.next())
+                            return null;
+                        return pos;
+                    default:
+                        break;
+                }
+            }
+        }
+        // Otherwise...
+        while (true) {
+            if (!pos.next())
+                return null;
+            c = pos.getChar();
+            if (Character.isWhitespace(c) || c == '(' || c == ')')
+                return pos;
+        }
+    }
+
+    // Advances pos to start of next line.
+    private void skipComment(Position pos)
+    {
+        Line nextLine = pos.getNextLine();
+        if (nextLine != null)
+            pos.moveTo(nextLine, 0);
+    }
+
+    public static void forwardSexp()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        Position pos = mode.forwardSexp(editor.getDot());
+        if (pos != null)
+            editor.moveDotTo(pos);
     }
 
     private static HashMap map;
