@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.79 2004-08-23 03:38:41 piso Exp $
+ * $Id: Stream.java,v 1.80 2004-08-24 20:11:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -817,19 +817,15 @@ public class Stream extends LispObject
         }
         if (!numeric) // Can't be an integer.
             return makeFloat(token, length);
+        if (token.charAt(0) == '+')
+            token = token.substring(1);
         try {
-            if (token.charAt(0) == '+')
-                return new Fixnum(Integer.parseInt(token.substring(1), radix));
-            else
-                return new Fixnum(Integer.parseInt(token, radix));
+            return new Fixnum(Integer.parseInt(token, radix));
         }
         catch (NumberFormatException e) {}
         // parseInt() failed.
         try {
-            if (token.charAt(0) == '+')
-                return new Bignum(new BigInteger(token.substring(1), radix));
-            else
-                return new Bignum(new BigInteger(token, radix));
+            return new Bignum(new BigInteger(token, radix));
         }
         catch (NumberFormatException e) {}
         // Not a number.
