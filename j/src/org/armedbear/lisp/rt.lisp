@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.102 2003-08-22 18:46:24 piso Exp $
+;;; $Id: rt.lisp,v 1.103 2003-08-22 19:08:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -162,6 +162,7 @@
                               "case"
                               "catch"
                               "ccase"
+                              "ceiling"
                               "char-compare"
                               "char-schar"
                               "character"
@@ -211,6 +212,7 @@
                               "find-if"
                               "find-if-not"
                               "flet"
+                              "floor"
                               "fmakunbound"
                               "funcall"
                               "function"
@@ -379,6 +381,7 @@
                               "tagbody"
                               "tailp"
                               "tree-equal"
+                              "truncate"
                               "typecase"
                               "union"
                               "unless"
