@@ -8,13 +8,15 @@
 
 (export '(global-map-key global-unmap-key map-key-for-mode unmap-key-for-mode
           set-global-property
+          reset-display
           run-hooks
           current-editor
           update-display
           update-location-bar
+          location-bar-cancel-input
           restore-focus
           status
-          execute-command
+          log
           defcommand
           key-pressed-hook))
 
@@ -34,13 +36,18 @@
   (jstatic "setGlobalProperty" "org.armedbear.j.Editor" key value))
 
 (defun set-global-property (&rest args)
-  (let ((nargs (length args)) key value)
-    (when (oddp nargs)
-      (error "odd number of arguments to SET-GLOBAL-PROPERTY"))
-    (loop
-      (when (null args) (return (values)))
-      (%set-global-property (first args) (second args))
-      (setf args (cddr args)))))
+  (let ((n-args (length args)) key value)
+    (cond ((oddp n-args)
+           (error "odd number of arguments to SET-GLOBAL-PROPERTY"))
+          ((= n-args 2)
+           (%set-global-property (string (first args)) (second args)))
+          (t
+           (do ((args args (cddr args)))
+               ((null args) (values))
+             (%set-global-property (string (first args)) (second args)))))))
+
+(defun reset-display ()
+  (jstatic "resetDisplay" "org.armedbear.j.Editor"))
 
 (defun run-hooks (hook &rest args)
   (when (symbolp hook)
@@ -66,6 +73,9 @@
         (ed (or ed (current-editor))))
     (jcall method ed)))
 
+(defun location-bar-cancel-input ()
+  (jstatic "cancelInput" "org.armedbear.j.LocationBar"))
+
 (defun restore-focus ()
   (let ((method (jmethod "org.armedbear.j.Editor" "restoreFocus")))
     (jstatic method nil)))
@@ -75,6 +85,12 @@
         (ed (or ed (current-editor))))
     (jcall method ed string)))
 
+(defmacro log (&rest args)
+  (when args
+    `(let ((method (jmethod "org.armedbear.j.Log" "debug" "java.lang.String")))
+       (jstatic method nil (format nil ,@args)))))
+
+;; Internal.
 (defun execute-command (command &optional ed)
   (let ((method (jmethod "org.armedbear.j.Editor"
                          "executeCommand" "java.lang.String"))
@@ -82,7 +98,9 @@
     (jcall method ed command)
     (update-display ed)))
 
-(defmacro defcommand (name command)
+(defmacro defcommand (name &optional (command nil))
+  (unless command
+    (setq command (remove #\- (string `,name))))
   `(setf (symbol-function ',name)
          (lambda () (execute-command ,command))))
 
