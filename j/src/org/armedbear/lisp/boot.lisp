@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.127 2003-11-14 17:51:44 piso Exp $
+;;; $Id: boot.lisp,v 1.128 2003-11-15 00:50:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -129,7 +129,6 @@
   t)
 
 (defun require (module-name &optional pathnames)
-  (finish-output)
   (unless (member (string module-name) *modules* :test #'string=)
     (let ((saved-modules (copy-list *modules*)))
       (cond (pathnames
