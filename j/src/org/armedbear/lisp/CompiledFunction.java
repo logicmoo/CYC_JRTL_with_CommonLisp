@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.2 2003-04-09 18:11:35 piso Exp $
+ * $Id: CompiledFunction.java,v 1.3 2003-07-31 16:55:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,15 +21,48 @@
 
 package org.armedbear.lisp;
 
-public class CompiledFunction extends Function
+public class CompiledFunction extends Closure
 {
+    public CompiledFunction(String name, LispObject lambdaList,
+                            LispObject body, Environment env)
+        throws LispError
+    {
+        super(name, lambdaList, body, env);
+    }
+
     public final int getType()
     {
         return TYPE_COMPILED_FUNCTION;
     }
 
-    public LispObject execute(LispObject[] args)
+    public LispObject execute(LispObject arg) throws Condition
+    {
+        LispObject[] args = new LispObject[1];
+        args[0] = arg;
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject first, LispObject second)
         throws Condition
+    {
+        LispObject[] args = new LispObject[2];
+        args[0] = first;
+        args[1] = second;
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third)
+        throws Condition
+    {
+        LispObject[] args = new LispObject[3];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject[] args) throws Condition
     {
         throw new LispError("not implemented");
     }
@@ -38,4 +71,33 @@ public class CompiledFunction extends Function
     {
         return "#<COMPILED-FUNCTION>";
     }
+
+    // ### make-compiled-function
+    // make-compiled-function name lambda-list body => object
+    private static final Primitive3 MAKE_COMPILED_FUNCTION =
+        new Primitive3("make-compiled-function", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws LispError
+        {
+            String name;
+            if (first == NIL)
+                name = null;
+            else
+                name = LispString.getValue(first);
+            LispObject lambdaList = second;
+            LispObject body = third;
+            return new CompiledFunction(name, lambdaList, body,
+                                        new Environment());
+        }
+    };
+
+    private static final Primitive1 VARLIST =
+        new Primitive1("varlist", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject arg) throws LispError {
+            if (arg instanceof CompiledFunction)
+                return ((CompiledFunction)arg).getVariableList();
+            throw new TypeError(arg, "compiled function");
+        }
+    };
 }
