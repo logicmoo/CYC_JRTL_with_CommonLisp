@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.63 2005-02-25 04:20:07 piso Exp $
+;;; $Id: defstruct.lisp,v 1.64 2005-03-18 18:41:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -284,7 +284,9 @@
 (defun define-predicate ()
   (when (and *dd-predicate*
              (or *dd-named* (null *dd-type*)))
-    (let ((pred (intern *dd-predicate*)))
+    (let ((pred (if (symbolp *dd-predicate*)
+                    *dd-predicate*
+                    (intern *dd-predicate*))))
       (cond ((eq *dd-type* 'list)
              (let ((index (name-index)))
                `((defun ,pred (object)
@@ -392,19 +394,15 @@
          (2
           (push args *dd-constructors*)))))
     (:copier
-     (let* ((args (cdr option))
-            (numargs (length args)))
-       (when (= numargs 1)
-          (setf *dd-copier* (car args)))))
+     (when (= (length option) 2)
+       (setf *dd-copier* (cadr option))))
     (:include
      (setf *dd-include* (cdr option)))
     (:initial-offset
      (setf *dd-initial-offset* (cadr option)))
     (:predicate
      (when (= (length option) 2)
-       (if (null (cadr option))
-           (setf *dd-predicate* nil)
-           (setf *dd-predicate* (symbol-name (cadr option))))))
+       (setf *dd-predicate* (cadr option))))
     (:print-function
      (setf *dd-print-function* option))
     (:print-object
@@ -527,7 +525,7 @@
                                                :type ',*dd-type*
                                                :named ,*dd-named*
                                                :initial-offset ,*dd-initial-offset*
-                                               :predicate ,*dd-predicate*
+                                               :predicate ',*dd-predicate*
                                                :print-function ',*dd-print-function*
                                                :print-object ',*dd-print-object*
                                                :direct-slots ',*dd-direct-slots*
@@ -552,7 +550,7 @@
                                                :type ',*dd-type*
                                                :named ,*dd-named*
                                                :initial-offset ,*dd-initial-offset*
-                                               :predicate ,*dd-predicate*
+                                               :predicate ',*dd-predicate*
                                                :print-function ',*dd-print-function*
                                                :print-object ',*dd-print-object*
                                                :direct-slots ',*dd-direct-slots*
