@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.38 2004-01-17 14:16:44 piso Exp $
+;;; $Id: subtypep.lisp,v 1.39 2004-01-17 17:48:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -158,6 +158,22 @@
 	       (when (> high1 high2)
 		     (return-from sub-interval-p nil)))))
     (return-from sub-interval-p t)))
+
+(defun dimension-subtypep (dim1 dim2)
+  (cond ((or (eq dim1 '*) (eq dim2 '*))
+         t)
+        ((equal dim1 dim2)
+         t)
+        ((integerp dim2)
+         (and (consp dim1) (= (length dim1) dim2)))
+        ((zerop dim1)
+         (null dim2))
+        ((integerp dim1)
+         (and (consp dim2)
+              (= (length dim2) dim1)
+              (equal dim2 (make-list dim1 :initial-element '*))))
+        (t
+         nil)))
 
 (defun simple-subtypep (type1 type2)
   (multiple-value-bind (type1-supertypes type1-known-p) (gethash type1 *known-types*)
@@ -325,6 +341,22 @@
                       (values nil t)))
                  (t
                   (values nil (known-type-p t2)))))
+          ((and (eq t1 #.(find-class 'array)) (eq t2 'array))
+           (cond ((equal i2 '(* *))
+                  (values t t))
+                 (t
+                  (values nil t))))
+          ((and (eq t1 'array) (eq t2 'array))
+           (let ((e1 (car i1))
+                 (e2 (car i2))
+                 (d1 (cadr i1))
+                 (d2 (cadr i2)))
+             (cond ((and (eq e2 '*) (eq d2 '*))
+                    (values t t))
+                   ((eq e1 e2)
+                    (values (dimension-subtypep d1 d2) t))
+                   (t
+                    (values nil t)))))
           (t
            (values nil nil)))))
 
