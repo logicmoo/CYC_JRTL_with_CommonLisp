@@ -372,6 +372,7 @@ remprop
 rename-package
 replace
 require
+rest
 restart-case
 return
 return-from
