@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.39 2003-06-09 17:55:48 piso Exp $
+ * $Id: Buffer.java,v 1.40 2003-06-11 15:09:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1302,6 +1302,7 @@ public class Buffer extends SystemBuffer
         Debug.assertTrue(SwingUtilities.isEventDispatchThread());
         if (!isModified())
             return true;
+        addEdit(new UndoSave());
         final File file = getFile();
         if (file != null) {
             if (file.isLocal())
