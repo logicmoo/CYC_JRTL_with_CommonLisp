@@ -1,8 +1,8 @@
 /*
  * JHandler.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: JHandler.java,v 1.1 2003-11-14 13:34:31 asimon Exp $
+ * Copyright (C) 2003 Peter Graves
+ * $Id: JHandler.java,v 1.2 2003-11-14 15:33:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,17 +21,13 @@
 
 package org.armedbear.lisp;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.WeakHashMap;
 
-public final class JHandler extends Module
+public final class JHandler extends Lisp
 {
-    static {
-        table = new WeakHashMap();
-    }
-
-    private static Map table;
+    private static final Map table = new WeakHashMap();
 
     public static void callLisp (String s, Object o) {
         callLisp(s, o, "");
@@ -74,12 +70,13 @@ public final class JHandler extends Module
                 catch (ConditionThrowable t) {
                     t.printStackTrace();
                 }
-            }	
+            }
         }
     }
-	
+
     // jregister-handler1 object event handler data count
-    private static final Primitive JREGISTER_HANDLER1 = new Primitive("jregister-handler1", PACKAGE_JAVA)
+    private static final Primitive _JREGISTER_HANDLER =
+        new Primitive("%jregister-handler", PACKAGE_JAVA)
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -103,7 +100,7 @@ public final class JHandler extends Module
     };
 }
 
-class Entry 
+class Entry
 {
     public Entry (Function handler, String event, Map entryTable) {
         this.entryTable = entryTable;
