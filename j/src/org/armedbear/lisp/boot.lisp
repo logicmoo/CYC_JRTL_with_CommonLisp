@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.126 2003-11-11 19:56:31 piso Exp $
+;;; $Id: boot.lisp,v 1.127 2003-11-14 17:51:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (sys::%in-package "COMMON-LISP")
 
-(setq sys::*autoload-verbose* t)
+(setq ext:*autoload-verbose* t)
 (setq *load-verbose* t)
 
 (defmacro in-package (name)

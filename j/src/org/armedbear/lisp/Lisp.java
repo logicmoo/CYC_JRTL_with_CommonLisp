@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.177 2003-11-14 15:23:04 piso Exp $
+ * $Id: Lisp.java,v 1.178 2003-11-14 17:50:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,8 +72,6 @@ public abstract class Lisp
 
     static {
         PACKAGE_CL.addInitialExports(Exports.COMMON_LISP_SYMBOL_NAMES);
-        PACKAGE_PROF.addExternalSymbol("SHOW-CALL-COUNTS");
-        PACKAGE_PROF.addExternalSymbol("PROFILE");
     }
 
     // ### nil
@@ -1340,7 +1338,7 @@ public abstract class Lisp
     // ### *autoload-verbose*
     // internal symbol
     public static final Symbol _AUTOLOAD_VERBOSE_ =
-        internSpecial("*AUTOLOAD-VERBOSE*", PACKAGE_SYS, NIL);
+        exportSpecial("*AUTOLOAD-VERBOSE*", PACKAGE_EXT, NIL);
 
     // Printer control variables.
     public static final Symbol _PRINT_ARRAY_ =
@@ -1547,11 +1545,6 @@ public abstract class Lisp
     // ### *saved-backtrace*
     public static final Symbol _SAVED_BACKTRACE_ =
         exportSpecial("*SAVED-BACKTRACE*", PACKAGE_EXT, NIL);
-
-    // Profiler.
-    // ### *granularity*
-    public static final Symbol _GRANULARITY_ =
-        exportSpecial("*GRANULARITY*", PACKAGE_PROF, new Fixnum(1));
 
     private static final void loadClass(String className)
     {
