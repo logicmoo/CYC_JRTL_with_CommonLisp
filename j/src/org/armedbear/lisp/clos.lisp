@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.82 2004-02-10 02:14:18 piso Exp $
+;;; $Id: clos.lisp,v 1.83 2004-02-10 14:10:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -865,6 +865,7 @@
                                 (generic-function-class the-class-standard-gf)
                                 (method-class the-class-standard-method)
                                 (method-combination 'standard)
+                                documentation
                                 &allow-other-keys)
   (when (autoloadp function-name)
     (resolve function-name))
@@ -877,6 +878,7 @@
                    :format-control "The lambda list ~S is incompatible with the existing methods of ~S."
                    :format-arguments (list lambda-list gf)))
           (setf (generic-function-lambda-list gf) lambda-list)
+          (setf (generic-function-documentation gf) documentation)
           gf)
         (progn
           (when (fboundp function-name)
