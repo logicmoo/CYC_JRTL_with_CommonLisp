@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.23 2004-06-13 18:18:48 asimon Exp $
+;;; $Id: pprint.lisp,v 1.24 2004-06-20 14:56:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1052,7 +1052,6 @@
 				',(copy-list args))))))))
 	*result*)))
 
-#-symbolics
 (defun xp-print (fn stream args)
   (setq *result* (do-xp-printing fn stream args))
   (when *locating-circularities*
@@ -1154,8 +1153,10 @@
 			(setf (gethash object *circularity-hash-table*)
 			      (incf *locating-circularities*))
 			:subsequent)
-		       (T nil)))
-		(T :subsequent));third or later occurrence
+		       (t
+                        nil)))
+		(t
+                 :subsequent));third or later occurrence
 	  (cond ((or (null id)	;never seen before (note ~@* etc. conses)
 		     (zerop id));no duplicates
 		 nil)
@@ -1163,17 +1164,19 @@
 		 (cond (interior-cdr?
 			(decf *current-level*)
 			(write-string++ ". #" xp 0 3))
-		       (T (write-char++ #\# xp)))
+		       (t
+                        (write-char++ #\# xp)))
 		 (print-fixnum xp id)
 		 (write-char++ #\= xp)
 		 (setf (gethash object *circularity-hash-table*) (- id))
 		 :first)
-		(T (if interior-cdr? (write-string++ ". #" xp 0 3)
-		       (write-char++ #\# xp))
-		   (print-fixnum xp (- id))
-		   (write-char++ #\# xp)
-		   :subsequent))))))
-
+		(t
+                 (if interior-cdr? (write-string++ ". #" xp 0 3)
+                     (write-char++ #\# xp))
+                 (print-fixnum xp (- id))
+                 (write-char++ #\# xp)
+                 :subsequent))))))
+
 ;This prints a few very common, simple atoms very fast.
 ;Pragmatically, this turns out to be an enormous savings over going to the
 ;standard printer all the time.  There would be diminishing returns from making
@@ -2232,11 +2235,13 @@
 ;                ---- PRETTY PRINTING FORMATS ----
 
 (defun pretty-array (xp array)
-  (cond ((vectorp array) (pretty-vector xp array))
+  (cond ((vectorp array)
+         (pretty-vector xp array))
 	((zerop (array-rank array))
-	 (write-string++ "#0A " xp 0 4)
+	 (write-string++ "#0A" xp 0 3)
 	 (write+ (aref array) xp))
-	(T (pretty-non-vector xp array))))
+	(t
+         (pretty-non-vector xp array))))
 
 (defun pretty-vector (xp v)
   (pprint-logical-block (xp nil :prefix "#(" :suffix ")")
