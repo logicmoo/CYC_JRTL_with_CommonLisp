@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.10 2003-03-13 18:18:40 piso Exp $
+ * $Id: LispObject.java,v 1.11 2003-03-14 01:51:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,6 +155,56 @@ public class LispObject extends Lisp
         LispObject third) throws Condition
     {
         throw new LispError();
+    }
+
+    public LispObject add(LispObject obj) throws LispError
+    {
+        throw new TypeError(this, "number");
+    }
+
+    public LispObject subtract(LispObject obj) throws LispError
+    {
+        throw new TypeError(this, "number");
+    }
+
+    public LispObject multiplyBy(LispObject obj) throws LispError
+    {
+        throw new TypeError(this, "number");
+    }
+
+    public LispObject divideBy(LispObject obj) throws LispError
+    {
+        throw new TypeError(this, "number");
+    }
+
+    public LispObject isEqualTo(LispObject obj) throws LispError
+    {
+        throw new TypeError(this, "number");
+    }
+
+    public LispObject isNotEqualTo(LispObject obj) throws LispError
+    {
+        throw new TypeError(this, "number");
+    }
+
+    public LispObject isLessThan(LispObject obj) throws LispError
+    {
+        throw new TypeError(this, "number");
+    }
+
+    public LispObject isGreaterThan(LispObject obj) throws LispError
+    {
+        throw new TypeError(this, "number");
+    }
+
+    public LispObject isLessThanOrEqualTo(LispObject obj) throws LispError
+    {
+        throw new TypeError(this, "number");
+    }
+
+    public LispObject isGreaterThanOrEqualTo(LispObject obj) throws LispError
+    {
+        throw new TypeError(this, "number");
     }
 
     // Profiling.

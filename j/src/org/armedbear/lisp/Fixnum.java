@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.12 2003-03-13 20:42:20 piso Exp $
+ * $Id: Fixnum.java,v 1.13 2003-03-14 01:51:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,6 +74,106 @@ public final class Fixnum extends LispObject
     public final long getValue()
     {
         return value;
+    }
+
+    public LispObject add(LispObject obj) throws LispError
+    {
+        try {
+            return new Fixnum(value + ((Fixnum)obj).value);
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
+    public LispObject subtract(LispObject obj) throws LispError
+    {
+        try {
+            return new Fixnum(value - ((Fixnum)obj).value);
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
+    public LispObject multiplyBy(LispObject obj) throws LispError
+    {
+        try {
+            return new Fixnum(value * ((Fixnum)obj).value);
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
+    public LispObject divideBy(LispObject obj) throws LispError
+    {
+        try {
+            return new Fixnum(value / ((Fixnum)obj).value);
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
+    public LispObject isEqualTo(LispObject obj) throws LispError
+    {
+        try {
+            return value == ((Fixnum)obj).value ? T : NIL;
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
+    public LispObject isNotEqualTo(LispObject obj) throws LispError
+    {
+        try {
+            return value != ((Fixnum)obj).value ? T : NIL;
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
+    public LispObject isLessThan(LispObject obj) throws LispError
+    {
+        try {
+            return value < ((Fixnum)obj).value ? T : NIL;
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
+    public LispObject isGreaterThan(LispObject obj) throws LispError
+    {
+        try {
+            return value > ((Fixnum)obj).value ? T : NIL;
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
+    public LispObject isLessThanOrEqualTo(LispObject obj) throws LispError
+    {
+        try {
+            return value <= ((Fixnum)obj).value ? T : NIL;
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
+    public LispObject isGreaterThanOrEqualTo(LispObject obj) throws LispError
+    {
+        try {
+            return value >= ((Fixnum)obj).value ? T : NIL;
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
     }
 
     public static Fixnum sum(LispObject first, LispObject second)
