@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.30 2003-11-17 15:19:47 piso Exp $
+;;; $Id: subtypep.lisp,v 1.31 2003-11-17 18:04:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -112,6 +112,8 @@
 (defun subtypep-normalize-type (type)
   (when (symbolp type)
     (case type
+      (CONS
+       (return-from subtypep-normalize-type '(cons t t)))
       (FIXNUM
        (return-from subtypep-normalize-type
                     '(integer #.most-negative-fixnum #.most-positive-fixnum)))
@@ -132,6 +134,17 @@
           (setq type (apply (get tp 'deftype-definition) i))
           (return)))
     (case tp
+      (CONS
+       (let* ((len (length i))
+              (car-typespec (if (> len 0) (car i) t))
+              (cdr-typespec (if (> len 1) (cadr i) t)))
+         (unless (and car-typespec cdr-typespec)
+           (return-from subtypep-normalize-type nil))
+         (when (eq car-typespec '*)
+           (setf car-typespec t))
+         (when (eq cdr-typespec '*)
+           (setf cdr-typespec t))
+         (setf i (list car-typespec cdr-typespec))))
       ((ARRAY SIMPLE-ARRAY)
        (when (and i (eq (car i) nil)) ; Element type is NIL.
          (if (eq tp 'simple-array)
@@ -244,7 +257,9 @@
     (if (atom type2)
         (setq t2 type2 i2 nil)
         (setq t2 (car type2) i2 (cdr type2)))
-    (cond ((eq t2 'atom)
+    (cond ((eq t1 'atom)
+           (return-from subtypep (values (eq t2 t) t)))
+          ((eq t2 'atom)
            (return-from subtypep (cond ((memq t1 '(cons list)) (values nil t))
                                        ((known-type-p t1) (values t t))
                                        (t (values nil nil)))))
@@ -270,6 +285,15 @@
              (let ((tv (subtypep tt type2)))
                (when tv (return-from subtypep (values t t)))))
            (return-from subtypep (values nil nil)))
+          ((eq t1 'cons)
+           (case t2
+             ((LIST SEQUENCE)
+              (return-from subtypep (values t t)))
+             (CONS
+              (when (and (subtypep (car i1) (car i2))
+                         (subtypep (cadr i1) (cadr i2)))
+                (return-from subtypep (values t t)))))
+           (return-from subtypep (values nil (known-type-p t2))))
           ((eq t2 'or)
            (dolist (tt i2)
              (let ((tv (subtypep type1 tt)))
