@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.14 2003-09-19 01:46:41 piso Exp $
+ * $Id: LispClass.java,v 1.15 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,7 +126,7 @@ public final class LispClass extends LispObject
                 return ((LispClass)arg).symbol;
             }
             catch (ClassCastException e) {
-                throw new TypeError(arg, "class");
+                throw new ConditionThrowable(new TypeError(arg, "class"));
             }
         }
     };

@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.58 2003-09-19 01:46:41 piso Exp $
+ * $Id: LispString.java,v 1.59 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -243,7 +243,7 @@ public final class LispString extends AbstractVector
             return ((LispString)obj).getValue();
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "string");
+            throw new ConditionThrowable(new TypeError(obj, "string"));
         }
     }
 

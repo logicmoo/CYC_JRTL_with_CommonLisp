@@ -2,7 +2,7 @@
  * AutoloadMacro.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AutoloadMacro.java,v 1.3 2003-09-19 01:46:39 piso Exp $
+ * $Id: AutoloadMacro.java,v 1.4 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ public final class AutoloadMacro extends Autoload
                 }
                 return T;
             }
-            throw new TypeError(first);
+            throw new ConditionThrowable(new TypeError(first));
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -83,7 +83,7 @@ public final class AutoloadMacro extends Autoload
                 }
                 return T;
             }
-            throw new TypeError(first);
+            throw new ConditionThrowable(new TypeError(first));
         }
     };
 }

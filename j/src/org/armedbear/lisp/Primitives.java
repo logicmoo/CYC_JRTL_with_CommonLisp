@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.405 2003-09-19 01:46:42 piso Exp $
+ * $Id: Primitives.java,v 1.406 2003-09-19 11:50:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -212,7 +212,7 @@ public final class Primitives extends Module
                     throw new ConditionThrowable(new WrongNumberOfArgumentsException("MIN"));
                 LispObject result = args[0];
                 if (!result.realp())
-                    throw new TypeError(result, "real");
+                    throw new ConditionThrowable(new TypeError(result, "real"));
                 for (int i = 1; i < args.length; i++) {
                     if (args[i].isLessThan(result))
                         result = args[i];
@@ -224,7 +224,7 @@ public final class Primitives extends Module
                     throw new ConditionThrowable(new WrongNumberOfArgumentsException("MAX"));
                 LispObject result = args[0];
                 if (!result.realp())
-                    throw new TypeError(result, "real");
+                    throw new ConditionThrowable(new TypeError(result, "real"));
                 for (int i = 1; i < args.length; i++) {
                     if (args[i].isGreaterThan(result))
                         result = args[i];
@@ -292,7 +292,7 @@ public final class Primitives extends Module
             case SYMBOL_NAME:                   // ### symbol-name
                 if (arg.typep(Symbol.SYMBOL) != NIL)
                     return new LispString(arg.getName());
-                throw new TypeError(arg, "symbol");
+                throw new ConditionThrowable(new TypeError(arg, "symbol"));
             case SYMBOL_PACKAGE:                // ### symbol-package
                 return checkSymbol(arg).getPackage();
             case SYMBOL_VALUE:                  // ### symbol-value
@@ -312,7 +312,7 @@ public final class Primitives extends Module
                     return ((Symbol)arg).getPropertyList();
                 }
                 catch (ClassCastException e) {
-                    throw new TypeError(arg, "symbol");
+                    throw new ConditionThrowable(new TypeError(arg, "symbol"));
                 }
             case ABS:                           // ### abs
                 return arg.ABS();
@@ -323,7 +323,7 @@ public final class Primitives extends Module
                     return ((AbstractVector)arg).getFillPointer() >= 0 ? T : NIL;
                 if (arg instanceof AbstractArray)
                     return NIL;
-                throw new TypeError(arg, "array");
+                throw new ConditionThrowable(new TypeError(arg, "array"));
             case VECTORP:                       // ### vectorp
                 return arg.VECTORP();
             case SIMPLE_VECTOR_P:               // ### simple-vector-p
@@ -526,7 +526,7 @@ public final class Primitives extends Module
 
     // ### plusp
     private static final Primitive1 PLUSP = new Primitive1("plusp") {
-        public LispObject execute(LispObject arg) throws TypeError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.PLUSP();
         }
@@ -534,7 +534,7 @@ public final class Primitives extends Module
 
     // ### minusp
     private static final Primitive1 MINUSP = new Primitive1("minusp") {
-        public LispObject execute(LispObject arg) throws TypeError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.MINUSP();
         }
@@ -542,7 +542,7 @@ public final class Primitives extends Module
 
     // ### zerop
     private static final Primitive1 ZEROP = new Primitive1("zerop") {
-        public LispObject execute(LispObject arg) throws TypeError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.ZEROP();
         }
@@ -676,7 +676,7 @@ public final class Primitives extends Module
                 if (args[1] instanceof CharacterOutputStream)
                     out = (CharacterOutputStream) args[1];
                 else
-                    throw new TypeError(args[0], "output stream");
+                    throw new ConditionThrowable(new TypeError(args[0], "output stream"));
             }
             if (out == null)
                 out = getStandardOutput();
@@ -721,7 +721,7 @@ public final class Primitives extends Module
             else if (second == NIL)
                 out = getStandardOutput();
             else
-                throw new TypeError(second, "output stream");
+                throw new ConditionThrowable(new TypeError(second, "output stream"));
             out.prin1(first);
             return first;
         }
@@ -763,7 +763,7 @@ public final class Primitives extends Module
                 if (args[0] instanceof CharacterOutputStream)
                     out = (CharacterOutputStream) args[0];
                 else
-                    throw new TypeError(args[0], "output stream");
+                    throw new ConditionThrowable(new TypeError(args[0], "output stream"));
             }
             if (out == null)
                 out = getStandardOutput();
@@ -897,7 +897,7 @@ public final class Primitives extends Module
                                 list = list.cdr();
                             }
                         } else
-                            throw new TypeError(list, "list");
+                            throw new ConditionThrowable(new TypeError(list, "list"));
                     }
                     if (result == null)
                         return array[i];
@@ -1070,7 +1070,7 @@ public final class Primitives extends Module
                     if (cons.car().eql(item))
                         return cons;
                 } else if (cons != NIL)
-                    throw new TypeError(cons, "list");
+                    throw new ConditionThrowable(new TypeError(cons, "list"));
                 alist = alist.cdr();
             }
             return NIL;
@@ -1130,7 +1130,7 @@ public final class Primitives extends Module
         {
             final int index = Fixnum.getValue(first);
             if (index < 0)
-                throw new TypeError("bad index to NTHCDR: " + index);
+                throw new ConditionThrowable(new TypeError("bad index to NTHCDR: " + index));
             for (int i = 0; i < index; i++) {
                 second = second.cdr();
                 if (second == NIL)
@@ -1155,7 +1155,7 @@ public final class Primitives extends Module
                 if (datum == Symbol.PROGRAM_ERROR)
                     throw new ConditionThrowable(new ProgramError(_format(args, 1)));
                 if (datum == Symbol.TYPE_ERROR)
-                    throw new TypeError(_format(args, 1));
+                    throw new ConditionThrowable(new TypeError(_format(args, 1)));
                 // Default.
                 throw new SimpleError(((Symbol)datum).getName());
             }
@@ -1397,7 +1397,7 @@ public final class Primitives extends Module
             if (third instanceof LispString)
                 symbol.setVariableDocumentation(third);
             else if (third != NIL)
-                throw new TypeError(third, "string");
+                throw new ConditionThrowable(new TypeError(third, "string"));
             symbol.setSymbolValue(second);
             symbol.setSpecial(true);
             return symbol;
@@ -1426,7 +1426,7 @@ public final class Primitives extends Module
             if (third instanceof LispString)
                 symbol.setVariableDocumentation(third);
             else if (third != NIL)
-                throw new TypeError(third, "string");
+                throw new ConditionThrowable(new TypeError(third, "string"));
             symbol.setSymbolValue(second);
             symbol.setConstant(true);
             return symbol;
@@ -1526,7 +1526,7 @@ public final class Primitives extends Module
                 }
                 args = args.cdr();
             }
-            throw new TypeError("ECASE: no match for " + key);
+            throw new ConditionThrowable(new TypeError("ECASE: no match for " + key));
         }
     };
 
@@ -1794,7 +1794,7 @@ public final class Primitives extends Module
         if (type == Symbol.UNDEFINED_FUNCTION)
             return c instanceof UndefinedFunctionError;
         if (type == Symbol.TYPE_ERROR)
-            return c instanceof TypeError;
+            return c.getCondition() instanceof TypeError;
         if (type == Symbol.PACKAGE_ERROR)
             return c instanceof PackageError;
         if (type == Symbol.PARSE_ERROR)
@@ -1812,6 +1812,8 @@ public final class Primitives extends Module
             if (condition instanceof ParseError)
                 return true;
             if (condition instanceof ProgramError)
+                return true;
+            if (condition instanceof TypeError)
                 return true;
             return false;
         }
@@ -1922,7 +1924,7 @@ public final class Primitives extends Module
                 } else if (arg instanceof Bignum) {
                     return NIL;
                 } else
-                    throw new TypeError(arg, "integer");
+                    throw new ConditionThrowable(new TypeError(arg, "integer"));
             }
             return T;
         }
@@ -2001,7 +2003,7 @@ public final class Primitives extends Module
             } else if (subscript instanceof Bignum) {
                 throw new ConditionThrowable(new ProgramError());
             } else
-                throw new TypeError(subscript, "integer");
+                throw new ConditionThrowable(new TypeError(subscript, "integer"));
         }
         return sum;
     }
@@ -2045,7 +2047,7 @@ public final class Primitives extends Module
         {
             AbstractVector v = checkVector(first);
             if (!v.isSimpleVector())
-                throw new TypeError(first, "simple vector");
+                throw new ConditionThrowable(new TypeError(first, "simple vector"));
             int index = v.checkIndex(second);
             return v.get(index);
         }
@@ -2061,7 +2063,7 @@ public final class Primitives extends Module
         {
             AbstractVector v = checkVector(first);
             if (!v.isSimpleVector())
-                throw new TypeError(first, "simple vector");
+                throw new ConditionThrowable(new TypeError(first, "simple vector"));
             int i = v.checkIndex(second);
             v.set(i, third);
             return third;
@@ -2076,7 +2078,7 @@ public final class Primitives extends Module
         {
             int fillPointer = checkVector(arg).getFillPointer();
             if (fillPointer < 0)
-                throw new TypeError("array does not have a fill pointer");
+                throw new ConditionThrowable(new TypeError("array does not have a fill pointer"));
             return new Fixnum(fillPointer);
         }
     };
@@ -2090,7 +2092,7 @@ public final class Primitives extends Module
             AbstractVector v = checkVector(first);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
-                throw new TypeError("array does not have a fill pointer");
+                throw new ConditionThrowable(new TypeError("array does not have a fill pointer"));
             v.setFillPointer(second);
             return second;
         }
@@ -2106,7 +2108,7 @@ public final class Primitives extends Module
             AbstractVector v = checkVector(second);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
-                throw new TypeError("array does not have a fill pointer");
+                throw new ConditionThrowable(new TypeError("array does not have a fill pointer"));
             if (fillPointer >= v.capacity())
                 return NIL;
             v.set(fillPointer, first);
@@ -2131,7 +2133,7 @@ public final class Primitives extends Module
             }
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
-                throw new TypeError("array does not have a fill pointer");
+                throw new ConditionThrowable(new TypeError("array does not have a fill pointer"));
             if (fillPointer >= v.capacity()) {
                 // Need to extend vector.
                 extension = Math.max(extension, v.capacity() + 1);
@@ -2151,7 +2153,7 @@ public final class Primitives extends Module
             AbstractVector v = checkVector(arg);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
-                throw new TypeError("array does not have a fill pointer");
+                throw new ConditionThrowable(new TypeError("array does not have a fill pointer"));
             if (fillPointer == 0)
                 throw new LispError("nothing left to pop");
             int newFillPointer = v.checkIndex(fillPointer - 1);
@@ -2310,7 +2312,7 @@ public final class Primitives extends Module
                     }
                 }
             }
-            throw new TypeError(fun, "function");
+            throw new ConditionThrowable(new TypeError(fun, "function"));
         }
         public LispObject execute(final LispObject[] args) throws ConditionThrowable
         {
@@ -2333,7 +2335,7 @@ public final class Primitives extends Module
                 }
                 return funcall(fun, funArgs, LispThread.currentThread());
             }
-            throw new TypeError(fun, "function");
+            throw new ConditionThrowable(new TypeError(fun, "function"));
         }
     };
 
@@ -2413,7 +2415,7 @@ public final class Primitives extends Module
             int commonLength = -1;
             for (int i = 1; i < numArgs; i++) {
                 if (!args[i].listp())
-                    throw new TypeError(args[i], "list");
+                    throw new ConditionThrowable(new TypeError(args[i], "list"));
                 int len = args[i].length();
                 if (commonLength < 0)
                     commonLength = len;
@@ -2487,8 +2489,8 @@ public final class Primitives extends Module
                 if (arg instanceof Fixnum) {
                     int n = ((Fixnum)arg).getValue();
                     if (n < 0)
-                        throw new TypeError(arg,
-                            "non-negative integer");
+                        throw new ConditionThrowable(new TypeError(arg,
+                                                                   "non-negative integer"));
                     StringBuffer sb = new StringBuffer(prefix);
                     sb.append(n);
                     return new Symbol(sb.toString());
@@ -2496,8 +2498,8 @@ public final class Primitives extends Module
                 if (arg instanceof Bignum) {
                     BigInteger n = ((Bignum)arg).getValue();
                     if (n.signum() < 0)
-                        throw new TypeError(arg,
-                            "non-negative integer");
+                        throw new ConditionThrowable(new TypeError(arg,
+                                                                   "non-negative integer"));
                     StringBuffer sb = new StringBuffer(prefix);
                     sb.append(n.toString());
                     return new Symbol(sb.toString());
@@ -2505,7 +2507,7 @@ public final class Primitives extends Module
                 if (arg instanceof LispString)
                     prefix = ((LispString)arg).getValue();
                 else
-                    throw new TypeError(arg, "string or non-negative integer");
+                    throw new ConditionThrowable(new TypeError(arg, "string or non-negative integer"));
             }
             return gensym(prefix);
         }
@@ -3627,8 +3629,8 @@ public final class Primitives extends Module
                 else if (streamArg == T || streamArg == NIL)
                     out = getStandardOutput();
                 else
-                    throw new TypeError(args[1],
-                                        "character output stream");
+                    throw new ConditionThrowable(new TypeError(args[1],
+                                                               "character output stream"));
             }
             out.writeChar(c);
             return args[0];
@@ -3654,8 +3656,8 @@ public final class Primitives extends Module
                 else if (streamArg == T || streamArg == NIL)
                     out = getStandardOutput();
                 else
-                    throw new TypeError(args[1],
-                        "character output stream");
+                    throw new ConditionThrowable(new TypeError(args[1],
+                                                               "character output stream"));
             }
             out.writeString(string);
             return string;
@@ -3682,7 +3684,7 @@ public final class Primitives extends Module
                 else if (streamArg == T || streamArg == NIL)
                     out = getStandardOutput();
                 else
-                    throw new TypeError(args[1], "character output stream");
+                    throw new ConditionThrowable(new TypeError(args[1], "character output stream"));
             }
             out.finishOutput();
             return NIL;
@@ -3776,12 +3778,12 @@ public final class Primitives extends Module
         {
             int n = Fixnum.getValue(first);
             if (n < 0 || n > 255)
-                throw new TypeError(first, "unsigned byte");
+                throw new ConditionThrowable(new TypeError(first, "unsigned byte"));
             if (second instanceof BinaryOutputStream) {
                 ((BinaryOutputStream)second).writeByte(n);
                 return first;
             }
-            throw new TypeError(second, "binary output stream");
+            throw new ConditionThrowable(new TypeError(second, "binary output stream"));
         }
     };
 
@@ -3798,7 +3800,7 @@ public final class Primitives extends Module
             if (args[0] instanceof BinaryInputStream)
                 stream = (BinaryInputStream) args[0];
             else
-                throw new TypeError(args[0], "binary input stream");
+                throw new ConditionThrowable(new TypeError(args[0], "binary input stream"));
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
             return stream.readByte(eofError, eofValue);
@@ -3823,7 +3825,7 @@ public final class Primitives extends Module
             else if (args[0] instanceof TwoWayStream)
                 stream = ((TwoWayStream)args[0]).getInputStream();
             else
-                throw new TypeError(args[0], "input stream");
+                throw new ConditionThrowable(new TypeError(args[0], "input stream"));
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
@@ -4041,7 +4043,7 @@ public final class Primitives extends Module
                 f.setLambdaName(second);
                 return second;
             } else
-                throw new TypeError(first, "function");
+                throw new ConditionThrowable(new TypeError(first, "function"));
         }
     };
 
@@ -4103,7 +4105,7 @@ public final class Primitives extends Module
                     return new LispFloat(rand * limit);
                 }
             }
-            throw new TypeError(args[0], "positive integer or positive float");
+            throw new ConditionThrowable(new TypeError(args[0], "positive integer or positive float"));
         }
     };
 
@@ -4134,7 +4136,7 @@ public final class Primitives extends Module
                 return ((Ratio)n).truncate(d);
             if (n instanceof LispFloat)
                 return ((LispFloat)n).truncate(d);
-            throw new TypeError(n, "number");
+            throw new ConditionThrowable(new TypeError(n, "number"));
         }
     };
 
@@ -4150,7 +4152,7 @@ public final class Primitives extends Module
             else if (first instanceof Bignum)
                 n = ((Bignum)first).getValue();
             else
-                throw new TypeError(first, "integer");
+                throw new ConditionThrowable(new TypeError(first, "integer"));
             if (second instanceof Fixnum) {
                 int count = Fixnum.getInt(second);
                 if (count == 0)
@@ -4169,7 +4171,7 @@ public final class Primitives extends Module
                     return Fixnum.ZERO;
                 Debug.bug(); // Shouldn't happen.
             }
-            throw new TypeError(second, "integer");
+            throw new ConditionThrowable(new TypeError(second, "integer"));
         }
     };
 
@@ -4359,7 +4361,7 @@ public final class Primitives extends Module
             }
             if (arg == NIL)
                 return NIL;
-            throw new TypeError(arg, "proper sequence");
+            throw new ConditionThrowable(new TypeError(arg, "proper sequence"));
         }
     };
 
@@ -4372,7 +4374,7 @@ public final class Primitives extends Module
             if (first instanceof Cons) {
                 int index = Fixnum.getValue(second);
                 if (index < 0)
-                    throw new TypeError();
+                    throw new ConditionThrowable(new TypeError());
                 LispObject list = first;
                 int i = 0;
                 while (true) {
@@ -4382,14 +4384,14 @@ public final class Primitives extends Module
                     }
                     list = list.cdr();
                     if (list == NIL)
-                        throw new TypeError();
+                        throw new ConditionThrowable(new TypeError());
                     ++i;
                 }
             } else if (first instanceof AbstractVector) {
                 ((AbstractVector)first).set(Fixnum.getValue(second), third);
                 return third;
             } else
-                throw new TypeError(first, "sequence");
+                throw new ConditionThrowable(new TypeError(first, "sequence"));
         }
     };
 
@@ -4428,8 +4430,8 @@ public final class Primitives extends Module
         {
             int size = Fixnum.getValue(first);
             if (size < 0)
-                throw new TypeError("MAKE-LIST: " + size +
-                                    " is not a valid list length");
+                throw new ConditionThrowable(new TypeError("MAKE-LIST: " + size +
+                                                           " is not a valid list length"));
             LispObject result = NIL;
             for (int i = size; i-- > 0;)
                 result = new Cons(second, result);
@@ -4602,7 +4604,7 @@ public final class Primitives extends Module
                 return Complex.getInstance(arg, LispFloat.ZERO);
             if (arg.realp())
                 return arg;
-            throw new TypeError(arg, "real number");
+            throw new ConditionThrowable(new TypeError(arg, "real number"));
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -4643,7 +4645,7 @@ public final class Primitives extends Module
                 return ((Complex)arg).getRealPart();
             if (arg.numberp())
                 return arg;
-            throw new TypeError(arg, "number");
+            throw new ConditionThrowable(new TypeError(arg, "number"));
         }
     };
 
@@ -4660,7 +4662,7 @@ public final class Primitives extends Module
     // ### integer-length
     private static final Primitive1 INTEGER_LENGTH =
         new Primitive1("integer-length") {
-        public LispObject execute(LispObject arg) throws TypeError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             BigInteger value;
             if (arg instanceof Fixnum)
@@ -4668,7 +4670,7 @@ public final class Primitives extends Module
             else if (arg instanceof Bignum)
                 value = ((Bignum)arg).getValue();
             else
-                throw new TypeError(arg, "integer");
+                throw new ConditionThrowable(new TypeError(arg, "integer"));
             return new Fixnum(value.bitLength());
         }
     };
@@ -4687,7 +4689,7 @@ public final class Primitives extends Module
         }
     };
 
-    private static final LispFloat sqrt(LispObject obj) throws TypeError
+    private static final LispFloat sqrt(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return new LispFloat(Math.sqrt(((Fixnum)obj).getValue()));
@@ -4697,7 +4699,7 @@ public final class Primitives extends Module
             return new LispFloat(Math.sqrt(((Ratio)obj).floatValue()));
         if (obj instanceof LispFloat)
             return new LispFloat(Math.sqrt(((LispFloat)obj).getValue()));
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     private static final Primitive LOG = new Primitive("log") {
@@ -4712,7 +4714,7 @@ public final class Primitives extends Module
         }
     };
 
-    private static final LispFloat log(LispObject obj) throws TypeError
+    private static final LispFloat log(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return new LispFloat(Math.log(((Fixnum)obj).getValue()));
@@ -4722,7 +4724,7 @@ public final class Primitives extends Module
             return new LispFloat(Math.log(((Ratio)obj).floatValue()));
         if (obj instanceof LispFloat)
             return new LispFloat(Math.log(((LispFloat)obj).getValue()));
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     // ### gcd-2
@@ -4738,13 +4740,13 @@ public final class Primitives extends Module
             else if (first instanceof Bignum)
                 n1 = ((Bignum)first).getValue();
             else
-                throw new TypeError(first, "integer");
+                throw new ConditionThrowable(new TypeError(first, "integer"));
             if (second instanceof Fixnum)
                 n2 = BigInteger.valueOf(((Fixnum)second).getValue());
             else if (second instanceof Bignum)
                 n2 = ((Bignum)second).getValue();
             else
-                throw new TypeError(second, "integer");
+                throw new ConditionThrowable(new TypeError(second, "integer"));
             return number(n1.gcd(n2));
         }
     };

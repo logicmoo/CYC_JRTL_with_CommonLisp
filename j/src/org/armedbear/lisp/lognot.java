@@ -2,7 +2,7 @@
  * lognot.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: lognot.java,v 1.2 2003-09-19 01:46:42 piso Exp $
+ * $Id: lognot.java,v 1.3 2003-09-19 11:50:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public final class lognot extends Primitive
             return new Fixnum(~((Fixnum)arg).getValue());
         if (arg instanceof Bignum)
             return number(((Bignum)arg).getValue().not());
-        throw new TypeError(arg, "integer");
+        throw new ConditionThrowable(new TypeError(arg, "integer"));
     }
 
     private static final lognot LOGNOT = new lognot("lognot");

@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Complex.java,v 1.22 2003-09-19 01:46:40 piso Exp $
+ * $Id: Complex.java,v 1.23 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,12 +34,12 @@ public final class Complex extends LispObject
 
     public static LispObject getInstance(LispObject realpart,
                                          LispObject imagpart)
-        throws TypeError
+        throws ConditionThrowable
     {
         if (!realpart.realp())
-            throw new TypeError(realpart, "real number");
+            throw new ConditionThrowable(new TypeError(realpart, "real number"));
         if (!imagpart.realp())
-            throw new TypeError(imagpart, "real number");
+            throw new ConditionThrowable(new TypeError(imagpart, "real number"));
         if (realpart instanceof LispFloat)
             imagpart = LispFloat.coerceToFloat(imagpart);
         else if (imagpart instanceof LispFloat)
@@ -200,7 +200,7 @@ public final class Complex extends LispObject
             }
             return false;
         }
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
@@ -208,14 +208,14 @@ public final class Complex extends LispObject
         return !isEqualTo(obj);
     }
 
-    public LispObject ABS() throws TypeError
+    public LispObject ABS() throws ConditionThrowable
     {
         double real = LispFloat.coerceToFloat(realpart).getValue();
         double imag = LispFloat.coerceToFloat(imagpart).getValue();
         return new LispFloat(Math.sqrt(real * real + imag * imag));
     }
 
-    public boolean zerop() throws TypeError
+    public boolean zerop() throws ConditionThrowable
     {
         return realpart.zerop() && imagpart.zerop();
     }

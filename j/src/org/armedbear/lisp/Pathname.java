@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.12 2003-09-19 01:46:42 piso Exp $
+ * $Id: Pathname.java,v 1.13 2003-09-19 11:50:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@ public final class Pathname extends LispObject
                 return arg;
             if (arg instanceof Pathname)
                 return new LispString(((Pathname)arg).getNamestring());
-            throw new TypeError(arg, "pathname designator");
+            throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
         }
     };
 
@@ -113,7 +113,7 @@ public final class Pathname extends LispObject
             else if (arg instanceof Pathname)
                 namestring = ((Pathname)arg).getNamestring();
             else
-                throw new TypeError(arg, "pathname designator");
+                throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
             if (namestring != null) {
                 for (int i = namestring.length(); i-- > 0;) {
                     char c = namestring.charAt(i);
@@ -135,7 +135,7 @@ public final class Pathname extends LispObject
                 return arg;
             if (arg instanceof LispString)
                 return new Pathname(((LispString)arg).getValue());
-            throw new TypeError(arg, "pathname designator");
+            throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
         }
     };
 

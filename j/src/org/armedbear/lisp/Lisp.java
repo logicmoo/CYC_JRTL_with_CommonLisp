@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.134 2003-09-19 01:46:40 piso Exp $
+ * $Id: Lisp.java,v 1.135 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -339,7 +339,7 @@ public abstract class Lisp
             } else {
                 LispObject args = obj.cdr();
                 if (!args.listp())
-                    throw new TypeError(args, "list");
+                    throw new ConditionThrowable(new TypeError(args, "list"));
                 LispObject funcar = first.car();
                 LispObject rest = first.cdr();
                 Symbol symbol = checkSymbol(funcar);
@@ -459,7 +459,7 @@ public abstract class Lisp
             return (Symbol) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "symbol");
+            throw new ConditionThrowable(new TypeError(obj, "symbol"));
         }
     }
 
@@ -471,7 +471,7 @@ public abstract class Lisp
             return (Cons) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "cons");
+            throw new ConditionThrowable(new TypeError(obj, "cons"));
         }
     }
 
@@ -482,7 +482,7 @@ public abstract class Lisp
             throw new NullPointerException();
         if (obj.listp())
             return obj;
-        throw new TypeError(obj, "list");
+        throw new ConditionThrowable(new TypeError(obj, "list"));
     }
 
     public static final AbstractArray checkArray(LispObject obj)
@@ -494,7 +494,7 @@ public abstract class Lisp
             return (AbstractArray) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "array");
+            throw new ConditionThrowable(new TypeError(obj, "array"));
         }
     }
 
@@ -507,7 +507,7 @@ public abstract class Lisp
             return (AbstractVector) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "vector");
+            throw new ConditionThrowable(new TypeError(obj, "vector"));
         }
     }
 
@@ -520,7 +520,7 @@ public abstract class Lisp
             return (LispString) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "string");
+            throw new ConditionThrowable(new TypeError(obj, "string"));
         }
     }
 
@@ -532,8 +532,8 @@ public abstract class Lisp
             return new LispString(arg.getName());
         if (arg instanceof LispCharacter)
             return new LispString(((LispCharacter)arg).getValue());
-        throw new TypeError(String.valueOf(arg) +
-            " cannot be coerced to a string");
+        throw new ConditionThrowable(new TypeError(String.valueOf(arg) +
+                                                   " cannot be coerced to a string"));
     }
 
     public static final String javaString(LispObject arg) throws ConditionThrowable
@@ -544,8 +544,8 @@ public abstract class Lisp
             return arg.getName();
         if (arg instanceof LispCharacter)
             return String.valueOf(new char[] {((LispCharacter)arg).getValue()});
-        throw new TypeError(String.valueOf(arg) +
-            " cannot be coerced to a string");
+        throw new ConditionThrowable(new TypeError(String.valueOf(arg) +
+                                                   " cannot be coerced to a string"));
     }
 
     public static final LispObject number(long n)
@@ -654,7 +654,7 @@ public abstract class Lisp
             return (LispCharacter) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "character");
+            throw new ConditionThrowable(new TypeError(obj, "character"));
         }
     }
 
@@ -667,7 +667,7 @@ public abstract class Lisp
             return (Package) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "package");
+            throw new ConditionThrowable(new TypeError(obj, "package"));
         }
     }
 
@@ -680,7 +680,7 @@ public abstract class Lisp
             return (Function) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "function");
+            throw new ConditionThrowable(new TypeError(obj, "function"));
         }
     }
 
@@ -693,7 +693,7 @@ public abstract class Lisp
             return (LispStream) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "stream");
+            throw new ConditionThrowable(new TypeError(obj, "stream"));
         }
     }
 
@@ -706,7 +706,7 @@ public abstract class Lisp
             return (CharacterInputStream) obj;
         if (obj instanceof TwoWayStream)
             return ((TwoWayStream)obj).getInputStream();
-        throw new TypeError(obj, "input stream");
+        throw new ConditionThrowable(new TypeError(obj, "input stream"));
     }
 
     public static final CharacterOutputStream checkOutputStream(LispObject obj)
@@ -718,7 +718,7 @@ public abstract class Lisp
             return (CharacterOutputStream) obj;
         if (obj instanceof TwoWayStream)
             return ((TwoWayStream)obj).getOutputStream();
-        throw new TypeError(obj, "output stream");
+        throw new ConditionThrowable(new TypeError(obj, "output stream"));
     }
 
     public static final Readtable checkReadtable(LispObject obj)
@@ -730,7 +730,7 @@ public abstract class Lisp
             return (Readtable) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "readtable");
+            throw new ConditionThrowable(new TypeError(obj, "readtable"));
         }
     }
 
@@ -743,7 +743,7 @@ public abstract class Lisp
             return (Environment) obj;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "environment");
+            throw new ConditionThrowable(new TypeError(obj, "environment"));
         }
     }
 

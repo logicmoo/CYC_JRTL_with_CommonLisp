@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: StringOutputStream.java,v 1.3 2003-09-19 01:46:42 piso Exp $
+ * $Id: StringOutputStream.java,v 1.4 2003-09-19 11:50:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ public final class StringOutputStream extends CharacterOutputStream
         {
             if (arg instanceof StringOutputStream)
                 return ((StringOutputStream)arg).getString();
-            throw new TypeError(this, "string output stream");
+            throw new ConditionThrowable(new TypeError(this, "string output stream"));
         }
     };
 }

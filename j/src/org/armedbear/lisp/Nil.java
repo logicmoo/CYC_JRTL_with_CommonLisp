@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.23 2003-09-19 01:46:41 piso Exp $
+ * $Id: Nil.java,v 1.24 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ public final class Nil extends Symbol
 
     public LispObject elt(int index) throws ConditionThrowable
     {
-        throw new TypeError("ELT: invalid index " + index + " for " + this);
+        throw new ConditionThrowable(new TypeError("ELT: invalid index " + index + " for " + this));
     }
 
     public LispObject[] copyToArray()

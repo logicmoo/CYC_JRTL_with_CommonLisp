@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.18 2003-09-19 01:46:40 piso Exp $
+ * $Id: HashTable.java,v 1.19 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -303,7 +303,7 @@ public final class HashTable extends LispObject
                     length == 3 ? args[2] : NIL;
                 return ht.gethash(key, defaultValue);
             }
-            throw new TypeError(args[1], "hash-table");
+            throw new ConditionThrowable(new TypeError(args[1], "hash-table"));
         }
     };
 
@@ -328,7 +328,7 @@ public final class HashTable extends LispObject
                 }
                 return ht.puthash(key, value);
             }
-            throw new TypeError(args[1], "hash-table");
+            throw new ConditionThrowable(new TypeError(args[1], "hash-table"));
         }
     };
 
@@ -342,7 +342,7 @@ public final class HashTable extends LispObject
                 HashTable ht = (HashTable) second;
                 return ht.remhash(key);
             }
-            throw new TypeError(second, "hash-table");
+            throw new ConditionThrowable(new TypeError(second, "hash-table"));
         }
     };
 
@@ -371,7 +371,7 @@ public final class HashTable extends LispObject
         {
             if (arg instanceof HashTable)
                 return ((HashTable)arg).ENTRIES();
-            throw new TypeError(arg, "hash-table");
+            throw new ConditionThrowable(new TypeError(arg, "hash-table"));
         }
     };
 }

@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.9 2003-09-19 01:46:40 piso Exp $
+ * $Id: Extensions.java,v 1.10 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class Extensions extends Lisp
         {
             if (arg instanceof CharacterOutputStream)
                 return new Fixnum(((CharacterOutputStream)arg).getCharPos());
-            throw new TypeError(arg, "character output stream");
+            throw new ConditionThrowable(new TypeError(arg, "character output stream"));
         }
     };
 

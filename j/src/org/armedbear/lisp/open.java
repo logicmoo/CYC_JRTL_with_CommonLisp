@@ -2,7 +2,7 @@
  * open.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: open.java,v 1.3 2003-09-19 01:46:43 piso Exp $
+ * $Id: open.java,v 1.4 2003-09-19 11:50:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class open extends Lisp
             else if (first instanceof Pathname)
                 namestring = ((Pathname)first).getNamestring();
             else
-                throw new TypeError(first, "pathname designator");
+                throw new ConditionThrowable(new TypeError(first, "pathname designator"));
             boolean binary;
             LispObject elementType = second;
             if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER)
@@ -90,7 +90,7 @@ public final class open extends Lisp
             else if (first instanceof Pathname)
                 namestring = ((Pathname)first).getNamestring();
             else
-                throw new TypeError(first, "pathname designator");
+                throw new ConditionThrowable(new TypeError(first, "pathname designator"));
             boolean binary;
             LispObject elementType = second;
             if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER)

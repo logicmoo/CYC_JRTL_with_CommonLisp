@@ -73,7 +73,7 @@ public abstract class AbstractVector extends AbstractArray
     public final int getDimension(int n) throws ConditionThrowable
     {
         if (n != 0)
-            throw new TypeError("bad dimension for vector");
+            throw new ConditionThrowable(new TypeError("bad dimension for vector"));
         return capacity();
     }
 
@@ -122,7 +122,7 @@ public abstract class AbstractVector extends AbstractArray
             sb.append(limit);
             sb.append(')');
         }
-        throw new TypeError(sb.toString());
+        throw new ConditionThrowable(new TypeError(sb.toString()));
     }
 
     public int getFillPointer()

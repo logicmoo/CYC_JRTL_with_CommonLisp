@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.70 2003-09-19 01:46:40 piso Exp $
+ * $Id: Fixnum.java,v 1.71 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,12 +153,12 @@ public final class Fixnum extends LispObject
         return ONE;
     }
 
-    public boolean evenp() throws TypeError
+    public boolean evenp() throws ConditionThrowable
     {
         return (value & 0x01) == 0;
     }
 
-    public boolean oddp() throws TypeError
+    public boolean oddp() throws ConditionThrowable
     {
         return (value & 0x01) != 0;
     }
@@ -184,7 +184,7 @@ public final class Fixnum extends LispObject
             return ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            throw new ConditionThrowable(new TypeError(obj, "fixnum"));
         }
     }
 
@@ -194,7 +194,7 @@ public final class Fixnum extends LispObject
             return (int) ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            throw new ConditionThrowable(new TypeError(obj, "fixnum"));
         }
     }
 
@@ -204,7 +204,7 @@ public final class Fixnum extends LispObject
             return BigInteger.valueOf(((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            throw new ConditionThrowable(new TypeError(obj, "fixnum"));
         }
     }
 
@@ -214,7 +214,7 @@ public final class Fixnum extends LispObject
             return (float) ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            throw new ConditionThrowable(new TypeError(obj, "fixnum"));
         }
     }
 
@@ -261,7 +261,7 @@ public final class Fixnum extends LispObject
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
@@ -284,7 +284,7 @@ public final class Fixnum extends LispObject
             return Complex.getInstance(subtract(c.getRealPart()),
                                        ZERO.subtract(c.getImaginaryPart()));
         }
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
@@ -307,7 +307,7 @@ public final class Fixnum extends LispObject
             return Complex.getInstance(multiplyBy(c.getRealPart()),
                                        multiplyBy(c.getImaginaryPart()));
         }
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -339,7 +339,7 @@ public final class Fixnum extends LispObject
                 return Complex.getInstance(multiplyBy(realPart).divideBy(denominator),
                                            Fixnum.ZERO.subtract(multiplyBy(imagPart).divideBy(denominator)));
             }
-            throw new TypeError(obj, "number");
+            throw new ConditionThrowable(new TypeError(obj, "number"));
         }
         catch (ArithmeticException e) {
             if (obj.zerop())
@@ -358,7 +358,7 @@ public final class Fixnum extends LispObject
             return obj.isEqualTo(this);
         if (obj.numberp())
             return false;
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
@@ -372,7 +372,7 @@ public final class Fixnum extends LispObject
             return obj.isNotEqualTo(this);
         if (obj.numberp())
             return true;
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public boolean isLessThan(LispObject obj) throws ConditionThrowable
@@ -388,7 +388,7 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof LispFloat)
             return (float) value < LispFloat.getValue(obj);
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
@@ -404,7 +404,7 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof LispFloat)
             return (float) value > LispFloat.getValue(obj);
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
@@ -420,7 +420,7 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof LispFloat)
             return (float) value <= LispFloat.getValue(obj);
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
@@ -436,7 +436,7 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof LispFloat)
             return (float) value >= LispFloat.getValue(obj);
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public LispObject truncate(LispObject obj) throws ConditionThrowable

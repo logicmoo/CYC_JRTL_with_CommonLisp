@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.11 2003-09-19 01:46:40 piso Exp $
+ * $Id: CompiledFunction.java,v 1.12 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,7 +134,7 @@ public class CompiledFunction extends Closure
         public LispObject execute(LispObject arg) throws ConditionThrowable {
             if (arg instanceof CompiledFunction)
                 return ((CompiledFunction)arg).getVariableList();
-            throw new TypeError(arg, "compiled function");
+            throw new ConditionThrowable(new TypeError(arg, "compiled function"));
         }
     };
 }

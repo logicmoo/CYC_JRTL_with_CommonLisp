@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: probe_file.java,v 1.3 2003-09-19 01:46:43 piso Exp $
+ * $Id: probe_file.java,v 1.4 2003-09-19 11:50:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ public final class probe_file extends Lisp
             else if (arg instanceof Pathname)
                 namestring = ((Pathname)arg).getNamestring();
             else
-                throw new TypeError(arg, "pathname designator");
+                throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
             boolean absolute = false;
             if (System.getProperty("os.name").startsWith("Windows")) {
                 if (namestring.length() >= 3) {

@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.33 2003-09-19 01:46:42 piso Exp $
+ * $Id: Ratio.java,v 1.34 2003-09-19 11:50:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,7 +187,7 @@ public final class Ratio extends LispObject
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
@@ -219,7 +219,7 @@ public final class Ratio extends LispObject
             return Complex.getInstance(subtract(c.getRealPart()),
                                        Fixnum.ZERO.subtract(c.getImaginaryPart()));
         }
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
@@ -240,7 +240,7 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return new LispFloat(floatValue() * ((LispFloat)obj).getValue());
         }
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -263,7 +263,7 @@ public final class Ratio extends LispObject
                 throw new DivisionByZero();
             return new LispFloat(floatValue() / ((LispFloat)obj).getValue());
         }
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public boolean isEqualTo(LispObject obj) throws ConditionThrowable
@@ -275,7 +275,7 @@ public final class Ratio extends LispObject
             return floatValue() == ((LispFloat)obj).getValue();
         if (obj.numberp())
             return false;
-        throw new TypeError(obj, "number");
+        throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
     public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
@@ -301,7 +301,7 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return floatValue() < ((LispFloat)obj).getValue();
         }
-        throw new TypeError(obj, "real");
+        throw new ConditionThrowable(new TypeError(obj, "real"));
     }
 
     public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
@@ -322,7 +322,7 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return floatValue() > ((LispFloat)obj).getValue();
         }
-        throw new TypeError(obj, "real");
+        throw new ConditionThrowable(new TypeError(obj, "real"));
     }
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
@@ -343,7 +343,7 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return floatValue() <= ((LispFloat)obj).getValue();
         }
-        throw new TypeError(obj, "real");
+        throw new ConditionThrowable(new TypeError(obj, "real"));
     }
 
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
@@ -364,7 +364,7 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return floatValue() >= ((LispFloat)obj).getValue();
         }
-        throw new TypeError(obj, "real");
+        throw new ConditionThrowable(new TypeError(obj, "real"));
     }
 
     public LispObject truncate(LispObject obj) throws ConditionThrowable
@@ -381,7 +381,7 @@ public final class Ratio extends LispObject
             d = ((Ratio)obj).denominator();
         } else {
             Thread.dumpStack();
-            throw new TypeError(obj, "number");
+            throw new ConditionThrowable(new TypeError(obj, "number"));
         }
 
         // Invert and multiply.

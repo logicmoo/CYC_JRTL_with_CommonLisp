@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Time.java,v 1.5 2003-09-19 01:46:42 piso Exp $
+ * $Id: Time.java,v 1.6 2003-09-19 11:50:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ public final class Time extends Lisp
             else if (arg instanceof Pathname)
                 namestring = ((Pathname)arg).getNamestring();
             else
-                throw new TypeError(arg, "pathname designator");
+                throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
             File file = new File(namestring);
             long lastModified = file.lastModified();
             if (lastModified == 0)

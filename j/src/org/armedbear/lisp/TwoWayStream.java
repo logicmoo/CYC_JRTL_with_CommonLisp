@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: TwoWayStream.java,v 1.3 2003-09-19 01:46:42 piso Exp $
+ * $Id: TwoWayStream.java,v 1.4 2003-09-19 11:50:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,9 +69,9 @@ public final class TwoWayStream extends LispStream
             throws ConditionThrowable
         {
             if (!(first instanceof CharacterInputStream))
-                throw new TypeError(first, "input stream");
+                throw new ConditionThrowable(new TypeError(first, "input stream"));
             if (!(second instanceof CharacterOutputStream))
-                throw new TypeError(second, "output stream");
+                throw new ConditionThrowable(new TypeError(second, "output stream"));
             return new TwoWayStream((CharacterInputStream) first,
                 (CharacterOutputStream) second);
         }
@@ -85,7 +85,7 @@ public final class TwoWayStream extends LispStream
         {
             if (arg instanceof TwoWayStream)
                 return ((TwoWayStream)arg).getInputStream();
-            throw new TypeError(arg, "two-way-stream");
+            throw new ConditionThrowable(new TypeError(arg, "two-way-stream"));
         }
     };
 
@@ -97,7 +97,7 @@ public final class TwoWayStream extends LispStream
         {
             if (arg instanceof TwoWayStream)
                 return ((TwoWayStream)arg).getOutputStream();
-            throw new TypeError(arg, "two-way-stream");
+            throw new ConditionThrowable(new TypeError(arg, "two-way-stream"));
         }
     };
 }

@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.27 2003-09-19 01:46:40 piso Exp $
+ * $Id: Cons.java,v 1.28 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,7 +152,7 @@ public final class Cons extends LispObject
             }
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "list");
+            throw new ConditionThrowable(new TypeError(obj, "list"));
         }
         return length;
     }
@@ -160,8 +160,8 @@ public final class Cons extends LispObject
     public LispObject elt(int index) throws ConditionThrowable
     {
         if (index < 0) {
-            throw new TypeError("ELT: invalid index " + index + " for " +
-                this);
+            throw new ConditionThrowable(new TypeError("ELT: invalid index " + index + " for " +
+                                                       this));
         }
         int i = 0;
         Cons cons = this;
@@ -175,10 +175,10 @@ public final class Cons extends LispObject
         }
         catch (ClassCastException e) {
             if (cons.cdr == NIL)
-                throw new TypeError("ELT: invalid index " + index + " for " +
-                    this);
+                throw new ConditionThrowable(new TypeError("ELT: invalid index " + index + " for " +
+                                                           this));
             else
-                throw new TypeError(this, "proper sequence");
+                throw new ConditionThrowable(new TypeError(this, "proper sequence"));
         }
     }
 

@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.11 2003-09-19 01:46:40 piso Exp $
+ * $Id: DisplacedArray.java,v 1.12 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,14 +90,14 @@ public final class DisplacedArray extends AbstractArray
     {
         if (dimv.length == 1)
             return size;
-        throw new TypeError(this, "sequence");
+        throw new ConditionThrowable(new TypeError(this, "sequence"));
     }
 
     public LispObject elt(int index) throws ConditionThrowable
     {
         if (dimv.length == 1)
             return getRowMajor(index);
-        throw new TypeError(this, "sequence");
+        throw new ConditionThrowable(new TypeError(this, "sequence"));
     }
 
     public LispObject AREF(LispObject index) throws ConditionThrowable
@@ -129,7 +129,7 @@ public final class DisplacedArray extends AbstractArray
             return dimv[n];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            throw new TypeError("bad array dimension");
+            throw new ConditionThrowable(new TypeError("bad array dimension"));
         }
     }
 
@@ -147,14 +147,14 @@ public final class DisplacedArray extends AbstractArray
     {
         if (index >= 0 && index < size)
             return array.getRowMajor(index + offset);
-        throw new TypeError("bad row major index " + index);
+        throw new ConditionThrowable(new TypeError("bad row major index " + index));
     }
 
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         if (index >= 0 && index < size)
             array.setRowMajor(index + offset, newValue);
-        throw new TypeError("bad row major index " + index);
+        throw new ConditionThrowable(new TypeError("bad row major index " + index));
     }
 
     // ### array-displacement

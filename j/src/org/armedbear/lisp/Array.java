@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.12 2003-09-19 01:46:39 piso Exp $
+ * $Id: Array.java,v 1.13 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,7 +154,7 @@ public final class Array extends AbstractArray
             return dimv[n];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            throw new TypeError("bad array dimension");
+            throw new ConditionThrowable(new TypeError("bad array dimension"));
         }
     }
 
@@ -174,7 +174,7 @@ public final class Array extends AbstractArray
             return data[index];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            throw new TypeError("bad row major index " + index);
+            throw new ConditionThrowable(new TypeError("bad row major index " + index));
         }
     }
 
@@ -184,7 +184,7 @@ public final class Array extends AbstractArray
             data[index] = newValue;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            throw new TypeError("bad row major index " + index);
+            throw new ConditionThrowable(new TypeError("bad row major index " + index));
         }
     }
 

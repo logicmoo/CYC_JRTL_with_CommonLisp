@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringFunctions.java,v 1.4 2003-09-19 01:46:42 piso Exp $
+ * $Id: StringFunctions.java,v 1.5 2003-09-19 11:50:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -387,16 +387,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new TypeError("invalid start position " + start);
+                throw new ConditionThrowable(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new TypeError("invalid end position " + start);
+                throw new ConditionThrowable(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
+                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             StringBuffer sb = new StringBuffer(length);
             char[] array = s.chars();
             int i;
@@ -420,16 +420,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new TypeError("invalid start position " + start);
+                throw new ConditionThrowable(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new TypeError("invalid end position " + start);
+                throw new ConditionThrowable(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
+                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             StringBuffer sb = new StringBuffer(length);
             char[] array = s.chars();
             int i;
@@ -453,16 +453,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new TypeError("invalid start position " + start);
+                throw new ConditionThrowable(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new TypeError("invalid end position " + start);
+                throw new ConditionThrowable(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
+                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             StringBuffer sb = new StringBuffer(length);
             char[] array = s.chars();
             boolean lastCharWasAlphanumeric = false;
@@ -498,16 +498,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new TypeError("invalid start position " + start);
+                throw new ConditionThrowable(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new TypeError("invalid end position " + start);
+                throw new ConditionThrowable(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
+                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             char[] array = s.chars();
             for (int i = start; i < end; i++)
                 array[i] = Character.toUpperCase(array[i]);
@@ -525,16 +525,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new TypeError("invalid start position " + start);
+                throw new ConditionThrowable(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = s.length();
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new TypeError("invalid end position " + start);
+                throw new ConditionThrowable(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
+                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             char[] array = s.chars();
             for (int i = start; i < end; i++)
                 array[i] = Character.toLowerCase(array[i]);
@@ -552,16 +552,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new TypeError("invalid start position " + start);
+                throw new ConditionThrowable(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = s.length();
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new TypeError("invalid end position " + start);
+                throw new ConditionThrowable(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
+                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             char[] array = s.chars();
             boolean lastCharWasAlphanumeric = false;
             for (int i = start; i < end; i++) {

@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.11 2003-09-19 01:46:41 piso Exp $
+ * $Id: LispThread.java,v 1.12 2003-09-19 11:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -339,7 +339,7 @@ public final class LispThread extends LispObject
             double d =
                 ((LispFloat)arg.multiplyBy(new LispFloat(1000))).getValue();
             if (d < 0)
-                throw new TypeError(arg, "non-negative real");
+                throw new ConditionThrowable(new TypeError(arg, "non-negative real"));
             long millis = d < Long.MAX_VALUE ? (long) d : Long.MAX_VALUE;
             try {
                 Thread.currentThread().sleep(millis);
@@ -379,7 +379,7 @@ public final class LispThread extends LispObject
                 thread.setDestroyed(true);
                 return T;
             } else
-                throw new TypeError(arg, "Lisp thread");
+                throw new ConditionThrowable(new TypeError(arg, "Lisp thread"));
         }
     };
 
