@@ -1,7 +1,7 @@
 ;;; lcm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: lcm.lisp,v 1.1 2003-09-11 01:44:15 piso Exp $
+;;; $Id: lcm.lisp,v 1.2 2004-02-13 08:34:24 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,14 +25,14 @@
         (t
          (/ (abs (* n m)) (gcd n m)))))
 
-(defun lcm (&rest numbers)
-  (unless (every #'integerp numbers)
-    (error 'type-error "arguments to LCM must be integers"))
-  (case (length numbers)
+(defun lcm (&rest integers)
+  (unless (every #'integerp integers)
+    (error 'type-error :datum (find-if-not #'integerp integers) :expected-type 'integer))
+  (case (length integers)
     (0 1)
-    (1 (abs (car numbers)))
-    (2 (two-arg-lcm (car numbers) (cadr numbers)))
+    (1 (abs (car integers)))
+    (2 (two-arg-lcm (car integers) (cadr integers)))
     (t
-     (do ((result (car numbers) (two-arg-lcm result (car rest)))
-          (rest (cdr numbers) (cdr rest)))
+     (do ((result (car integers) (two-arg-lcm result (car rest)))
+          (rest (cdr integers) (cdr rest)))
          ((null rest) result)))))
