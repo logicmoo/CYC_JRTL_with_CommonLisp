@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.72 2003-04-04 00:30:16 piso Exp $
+;;; $Id: rt.lisp,v 1.73 2003-04-04 03:49:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -632,6 +632,7 @@
                               "char-schar"
                               "character"
                               "cl-symbols"
+                              "coerce"
                               "concatenate"
                               "cond"
                               "cons-test-01"
@@ -663,9 +664,11 @@
                               "count"
                               "count-if"
                               "count-if-not"
+                              "defconstant"
                               "defparameter"
                               "defvar"
                               "destructuring-bind"
+                              "ecase"
                               "elt"
                               "equal"
                               "equalp"
@@ -686,6 +689,7 @@
                               "function-lambda-expression"
                               "functionp"
                               "handler-bind"
+                              "handler-case"
                               "identity"
                               "if"
                               "iteration"
@@ -702,6 +706,7 @@
                               "loop5"
                               "loop8"
                               "loop9"
+                              "make-array"
                               "make-sequence"
                               "make-string"
                               "map"
