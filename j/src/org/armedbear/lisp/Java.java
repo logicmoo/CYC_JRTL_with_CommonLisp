@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.21 2003-11-10 09:40:19 asimon Exp $
+ * $Id: Java.java,v 1.22 2003-11-11 09:44:08 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,22 +80,22 @@ public final class Java extends Module
         {
             if (args.length < 2 || args.length > 4)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-	    String fieldName, className = null;
-	    Class c;
-	    Field f;
-	    Object instance = null;
+            String fieldName, className = null;
+            Class c;
+            Field f;
+            Object instance = null;
             try {
                 if (args[1] instanceof LispString) {
                     // Cases 1-5.
                     fieldName = LispString.getValue(args[1]);
-		    if (args[0] instanceof LispString) {
-		      className = LispString.getValue(args[0]);
-		      c = Class.forName(className);
-		    }
-		    else {
-		      c = (Class)JavaObject.getObject(args[0]);
-		      className = c.getName();
-		    }
+                    if (args[0] instanceof LispString) {
+                      className = LispString.getValue(args[0]);
+                      c = Class.forName(className);
+                    }
+                    else {
+                      c = (Class)JavaObject.getObject(args[0]);
+                      className = c.getName();
+                    }
                 } else {
                     // Cases 6 and 7.
                     fieldName = LispString.getValue(args[0]);
@@ -119,8 +119,8 @@ public final class Java extends Module
                                 break;
                             } else {
                                 // Case 3.
-			      f.set(null,args[2].javaInstance());
-			      return args[2];
+                              f.set(null,args[2].javaInstance());
+                              return args[2];
                             }
                         } else {
                             // Case 7.
@@ -161,7 +161,7 @@ public final class Java extends Module
     };
 
     // ### jconstructor
-    // jconstructor class-name &rest parameter-class-names
+    // jconstructor class-ref &rest parameter-class-refs
     private static final Primitive JCONSTRUCTOR =
         new Primitive("jconstructor", PACKAGE_JAVA)
     {
@@ -169,21 +169,35 @@ public final class Java extends Module
         {
             if (args.length < 1)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            String className = LispString.getValue(args[0]);
             try {
-                final Class c = Class.forName(className);
-                Class[] parameterTypes = new Class[args.length-1];
-                for (int i = 1; i < args.length; i++) {
-                    className = LispString.getValue(args[i]);
-                    parameterTypes[i-1] = forName(className);
+                final Class c = forClassRef(args[0]);
+                int argCount = 0;
+                if (args.length == 2 && args[1] instanceof Fixnum) {
+                    argCount = Fixnum.getValue(args[1]);
+                } else { 
+                    Class[] parameterTypes = new Class[args.length-1];
+                    for (int i = 1; i < args.length; i++) {
+                        parameterTypes[i-1] = forClassRef(args[i]);
+                    }
+                    return new JavaObject(c.getConstructor(parameterTypes));
                 }
-                return new JavaObject(c.getConstructor(parameterTypes));
+                // Parameter types not explicitly specified.
+                Constructor[] constructors = c.getConstructors();
+                for (int i = 0; i < constructors.length; i++) {
+                    Constructor constructor = constructors[i];
+                    if (constructor.getParameterTypes().length == argCount)
+                        return new JavaObject(constructor);
+                }
+                throw new NoSuchMethodException();
             }
             catch (ClassNotFoundException e) {
-                throw new ConditionThrowable(new LispError("class not found: " + className));
+              throw new ConditionThrowable(new LispError("class not found: " + e.getMessage()));
             }
             catch (NoSuchMethodException e) {
                 throw new ConditionThrowable(new LispError("no such constructor"));
+            }
+            catch (ConditionThrowable e) {
+              throw e;
             }
             catch (Throwable t) {
                 throw new ConditionThrowable(new LispError(getMessage(t)));
@@ -192,25 +206,23 @@ public final class Java extends Module
     };
 
     // ### jmethod
-    // jmethod class-ref name &rest parameter-class-names
+    // jmethod class-ref name &rest parameter-class-refs
     private static final Primitive JMETHOD = new Primitive("jmethod", PACKAGE_JAVA)
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            String className = LispString.getValue(args[0]);
             String methodName = LispString.getValue(args[1]);
             try {
-                final Class c = Class.forName(className);
+                final Class c = forClassRef(args[0]);
                 int argCount = 0;
                 if (args.length == 3 && args[2] instanceof Fixnum) {
                     argCount = Fixnum.getValue(args[2]);
-                } else if (args.length > 2) {
+                } else { 
                     Class[] parameterTypes = new Class[args.length-2];
                     for (int i = 2; i < args.length; i++) {
-                        className = LispString.getValue(args[i]);
-                        parameterTypes[i-2] = forName(className);
+                        parameterTypes[i-2] = forClassRef(args[i]);
                     }
                     return new JavaObject(c.getMethod(methodName,
                         parameterTypes));
@@ -223,13 +235,16 @@ public final class Java extends Module
                         && method.getParameterTypes().length == argCount)
                         return new JavaObject(method);
                 }
-                throw new ConditionThrowable(new LispError("no such method"));
+                throw new NoSuchMethodException();
             }
             catch (ClassNotFoundException e) {
-                throw new ConditionThrowable(new LispError("class not found: " + className));
+              throw new ConditionThrowable(new LispError("class not found: " + e.getMessage()));
             }
             catch (NoSuchMethodException e) {
-                throw new ConditionThrowable(new LispError("no such method"));
+                throw new ConditionThrowable(new LispError("no such method: " + methodName));
+            }
+            catch (ConditionThrowable e) {
+              throw e;
             }
             catch (Throwable t) {
                 throw new ConditionThrowable(new LispError(getMessage(t)));
@@ -281,7 +296,7 @@ public final class Java extends Module
                     throw new ConditionThrowable(new TypeError("wrong type: " + methodRef));
                 Object[] methodArgs = new Object[args.length-2];
                 for (int i = 2; i < args.length; i++) {
-		  methodArgs[i-2] = args[i].javaInstance();
+                  methodArgs[i-2] = args[i].javaInstance();
                 }
                 Object result = m.invoke(null, methodArgs);
                 return makeLispObject(result);
@@ -305,7 +320,7 @@ public final class Java extends Module
                 Constructor constructor = (Constructor) JavaObject.getObject(classRef);
                 Object[] initargs = new Object[args.length-1];
                 for (int i = 1; i < args.length; i++) {
-		    initargs[i-1] = args[i].javaInstance();
+                    initargs[i-1] = args[i].javaInstance();
                 }
                 return new JavaObject(constructor.newInstance(initargs));
             }
@@ -344,26 +359,38 @@ public final class Java extends Module
     };
 
     // Supports Java primitive types too.
-    private static Class forName(String className) throws ClassNotFoundException
+    private static Class forClassRef(LispObject classRef) throws ClassNotFoundException, ConditionThrowable
     {
-        if (className.equals("boolean"))
-            return Boolean.TYPE;
-        if (className.equals("byte"))
-            return Byte.TYPE;
-        if (className.equals("char"))
-            return Character.TYPE;
-        if (className.equals("short"))
-            return Short.TYPE;
-        if (className.equals("int"))
-            return Integer.TYPE;
-        if (className.equals("long"))
-            return Long.TYPE;
-        if (className.equals("float"))
-            return Float.TYPE;
-        if (className.equals("double"))
-            return Double.TYPE;
-        // Not a primitive Java type.
-        return Class.forName(className);
+        if (classRef instanceof LispString) {
+            String className = LispString.getValue(classRef);
+            if (className.equals("boolean"))
+                return Boolean.TYPE;
+            if (className.equals("byte"))
+                return Byte.TYPE;
+            if (className.equals("char"))
+                return Character.TYPE;
+            if (className.equals("short"))
+                return Short.TYPE;
+            if (className.equals("int"))
+                return Integer.TYPE;
+            if (className.equals("long"))
+                return Long.TYPE;
+            if (className.equals("float"))
+                return Float.TYPE;
+            if (className.equals("double"))
+                return Double.TYPE;
+            // Not a primitive Java type.
+            return Class.forName(className);
+        } else 
+            try {
+                return (Class)JavaObject.getObject(classRef);
+            }
+        catch (ClassCastException e) {
+            throw new ConditionThrowable(new TypeError(classRef, "Java class"));
+        }
+        catch (ConditionThrowable e) {
+            throw new ClassNotFoundException(e.getMessage());
+        }
     }
 
     private static final LispObject makeLispObject(Object obj) throws ConditionThrowable
