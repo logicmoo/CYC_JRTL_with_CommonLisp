@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.243 2004-05-26 01:04:59 piso Exp $
+ * $Id: Lisp.java,v 1.244 2004-05-27 16:39:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1727,6 +1727,9 @@ public abstract class Lisp
 
     public static final Symbol _PRINT_RIGHT_MARGIN_ =
         exportSpecial("*PRINT-RIGHT-MARGIN*", PACKAGE_CL, NIL);
+
+    public static final Symbol _PRINT_FASL_ =
+        internConstant("*PRINT-FASL*", PACKAGE_SYS, NIL);
 
     public static final Symbol _RANDOM_STATE_ =
         exportSpecial("*RANDOM-STATE*", PACKAGE_CL, new RandomState());
