@@ -2,7 +2,7 @@
  * SidebarPanel.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SidebarPanel.java,v 1.1.1.1 2002-09-24 16:08:02 piso Exp $
+ * $Id: SidebarPanel.java,v 1.2 2002-11-11 18:15:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,16 +88,6 @@ public final class SidebarPanel extends JPanel implements MouseListener
             scrollPane.getVerticalScrollBar().addMouseListener(this);
         this.scrollPane = scrollPane;
         add(scrollPane);
-    }
-
-    public void removeScrollPane()
-    {
-        if (scrollPane != null) {
-            if (scrollPane.getVerticalScrollBar() != null)
-                scrollPane.getVerticalScrollBar().removeMouseListener(this);
-            remove(scrollPane);
-            scrollPane = null;
-        }
     }
 
     public void mouseClicked(MouseEvent e) {}
