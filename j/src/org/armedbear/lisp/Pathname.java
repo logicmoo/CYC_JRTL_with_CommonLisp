@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.58 2004-05-12 17:16:05 piso Exp $
+ * $Id: Pathname.java,v 1.59 2004-05-13 17:22:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -330,21 +330,23 @@ public class Pathname extends LispObject
     {
         try {
             StringBuffer sb = new StringBuffer("#P");
-//             boolean printReadably = (_PRINT_READABLY_.symbolValue() != NIL);
-            boolean useNamestring = false;
+            boolean printReadably = (_PRINT_READABLY_.symbolValue() != NIL);
+            boolean useNamestring;
             String s = getNamestring();
             if (s != null) {
-                // We have a namestring. Check for non-NIL values of pathname
-                // components that can't be read from the namestring.
-                if (Utilities.isPlatformWindows()) {
-                    if (host == NIL && version == NIL)
-                        useNamestring = true;
-                } else {
-                    // Unix.
-                    if (host == NIL && device == NIL && version == NIL)
-                        useNamestring = true;
+                useNamestring = true;
+                if (printReadably) {
+                    // We have a namestring. Check for non-NIL values of pathname
+                    // components that can't be read from the namestring.
+                    if (host != NIL || version != NIL) {
+                        useNamestring = false;
+                    } else if (Utilities.isPlatformWindows()) {
+                        if (version != NIL)
+                            useNamestring = false;
+                    }
                 }
-            }
+            } else
+                useNamestring = false;
             if (useNamestring) {
                 sb.append(quoteEscape(s));
             } else {
