@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.7 2003-08-27 17:28:25 piso Exp $
+ * $Id: Array.java,v 1.8 2003-09-14 17:03:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,8 @@ public final class Array extends AbstractArray
     }
 
     private int setInitialContents(int axis, int[] dims, LispObject contents,
-        int index) throws LispError
+                                   int index)
+        throws LispError
     {
         if (dims.length == 0) {
             try {
@@ -82,8 +83,6 @@ public final class Array extends AbstractArray
             }
             ++index;
         } else {
-            if ((contents.getType() & TYPE_SEQUENCE) == 0)
-                throw new TypeError(contents, "sequence");
             int dim = dims[0];
             if (dim != contents.length())
                 throw new LispError("bad initial contents for array");
