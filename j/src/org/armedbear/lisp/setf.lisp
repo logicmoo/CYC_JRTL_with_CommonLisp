@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.10 2003-03-30 02:03:59 piso Exp $
+;;; $Id: setf.lisp,v 1.11 2003-04-02 15:49:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -93,7 +93,9 @@
       (2
        (setq end (car rest)
              v (cadr rest))))
-    (progn (replace sequence v :start1 start :end1 end))))
+    (progn
+      (replace sequence v :start1 start :end1 end)
+      v)))
 
 
 (defconstant *setf-expander* (make-symbol "SETF-EXPANDER"))
