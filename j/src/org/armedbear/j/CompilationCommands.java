@@ -2,7 +2,7 @@
  * ErrorCommands.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompilationCommands.java,v 1.1 2003-06-06 14:28:46 piso Exp $
+ * $Id: CompilationCommands.java,v 1.2 2003-06-06 15:07:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +175,7 @@ public final class CompilationCommands implements Constants
             errorBuffer.relink();
             Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_CHANGED);
         }
-        CompilationError error = errorBuffer.nextErrorInternal();
+        CompilationError error = errorBuffer.nextError();
         if (error == null) {
             editor.status("No more errors");
             return;
