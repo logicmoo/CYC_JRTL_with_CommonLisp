@@ -272,6 +272,7 @@ max
 member
 merge-pathnames
 min
+minusp
 mod
 multiple-value-bind
 multiple-value-call
@@ -323,6 +324,7 @@ pathname-name
 pathname-type
 pathname-version
 peek-char
+plusp
 pop
 position
 position-if
