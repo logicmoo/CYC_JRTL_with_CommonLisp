@@ -1,7 +1,7 @@
 ;;; copy-seq.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: copy-seq.lisp,v 1.1 2003-06-10 16:06:16 piso Exp $
+;;; $Id: copy-seq.lisp,v 1.2 2003-07-02 17:55:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
-
-(export 'copy-seq)
+(in-package "SYSTEM")
 
 ;; From CMUCL.
 
