@@ -2,7 +2,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(setf incf decf))
+(export '(setf incf decf defsetf))
 
 (defun %rplaca (x val) (rplaca x val) val)
 
@@ -52,5 +52,8 @@
 (%put 'get *setf-expander* '%put)
 (%put 'gethash *setf-expander* 'puthash)
 (%put 'documentation *setf-expander* '%set-documentation)
+
+(defmacro defsetf (access-function update-function)
+  `(%put ',access-function *setf-expander* ',update-function))
 
 (provide "setf")
