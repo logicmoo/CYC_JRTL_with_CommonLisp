@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.13 2003-09-21 19:49:33 piso Exp $
+;;; $Id: subtypep.lisp,v 1.14 2003-09-22 12:06:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -132,16 +132,6 @@
        (setq tp 'float)))
     (cons tp i)))
 
-(defun simple-subtypep (type1 type2)
-  (cond ((and (symbolp type1) (symbolp type2))
-         (if (memq type2 (supertypes type1))
-             t
-             (dolist (supertype (supertypes type1))
-               (when (simple-subtypep supertype type2)
-                 (return t)))))
-        (t
-         nil)))
-
 (defun sub-interval-p (i1 i2)
   (let (low1 high1 low2 high2)
     (if (null i1)
@@ -194,20 +184,25 @@
 		     (return-from sub-interval-p nil)))))
     (return-from sub-interval-p t)))
 
+(defun simple-subtypep (type1 type2)
+  (when (and (symbolp type1) (symbolp type2) (known-type-p type1))
+    ;; type1 is a known type. type1 can only be a subtype of type2 if type2 is
+    ;; also a known type.
+    (return-from simple-subtypep (if (memq type2 (supertypes type1))
+                                     t
+                                     (dolist (supertype (supertypes type1))
+                                       (when (simple-subtypep supertype type2)
+                                         (return (values t)))))))
+  (let ((c1 (if (classp type1) type1 (find-class type1 nil)))
+        (c2 (if (classp type2) type2 (find-class type2 nil))))
+    (when (and c1 c2)
+      (return-from simple-subtypep
+                   (if (memq c2 (class-precedence-list c1)) t nil))))
+  nil)
+
 (defun subtypep (type1 type2)
   (when (or (null type1) (eq type2 t))
     (return-from subtypep (values t t)))
-  (let ((c1 (classp type1)) (c2 (classp type2)))
-    (when (and c1 c2)
-      (return-from subtypep
-		   (if (memq type2 (class-precedence-list type1))
-		       (values t t) (values nil t))))
-    (when (and c1 (or (eq type2 'structure-object) (eq type2 'standard-object)))
-      (return-from subtypep
-		   (if (member (find-class type2) (class-precedence-list type1))
-		       (values t t) (values nil t))))
-    (when (or c1 c2)
-      (return-from subtypep (values nil t))))
   (setq type1 (normalize-type type1)
         type2 (normalize-type type2))
   (when (equal type1 type2)
@@ -243,43 +238,43 @@
            ((null (or i1 i2))
             (return-from subtypep (values (simple-subtypep t1 t2) t)))
            ((eq t2 'sequence)
-           (cond ((memq t1 '(null cons list))
-                  (values t t))
-                 ((memq t1 '(array simple-array))
-                  (if (and (cdr i1) (consp (cadr i1)) (null (cdadr i1)))
-                      (values t t)
-                      (values nil t)))
-                 (t (values nil (known-type-p t1)))))
-          ((eq t2 'simple-string)
-           (if (memq t1 '(simple-string simple-base-string))
-               (if (or (null i2) (eq (car i2) '*))
-                   (values t t)
-                   (values nil t))
-               (values nil (known-type-p t2))))
-          (t
-           (cond ((eq t1 'float)
-                  (if (memq t2 '(float real number))
-                      (values (sub-interval-p i1 i2) t)
-                      (values nil (known-type-p t2))))
-                 ((eq t1 'integer)
-                  (if (memq t2 '(integer rational real number))
-                      (values (sub-interval-p i1 i2) t)
-                      (values nil (known-type-p t2))))
-                 ((eq t1 'rational)
-                  (if (memq t2 '(rational real number))
-                      (values (sub-interval-p i1 i2) t)
-                      (values nil (known-type-p t2))))
-                 ((eq t1 'real)
-                  (if (memq t2 '(real number))
-                      (values (sub-interval-p i1 i2) t)
-                      (values nil (known-type-p t2))))
-                 ((memq t1 '(string simple-string base-string
-                             simple-base-string))
-                  (cond ((eq t2 'string)
-                         (if (or (null i2) (eq (car i2) '*))
-                             (values t t)
-                             (values nil t)))
-                        (t
-                         (values nil (known-type-p t2)))))
-                 (t
-                  (values nil nil)))))))
+            (cond ((memq t1 '(null cons list))
+                   (values t t))
+                  ((memq t1 '(array simple-array))
+                   (if (and (cdr i1) (consp (cadr i1)) (null (cdadr i1)))
+                       (values t t)
+                       (values nil t)))
+                  (t (values nil (known-type-p t1)))))
+           ((eq t2 'simple-string)
+            (if (memq t1 '(simple-string simple-base-string))
+                (if (or (null i2) (eq (car i2) '*))
+                    (values t t)
+                    (values nil t))
+                (values nil (known-type-p t2))))
+           (t
+            (cond ((eq t1 'float)
+                   (if (memq t2 '(float real number))
+                       (values (sub-interval-p i1 i2) t)
+                       (values nil (known-type-p t2))))
+                  ((eq t1 'integer)
+                   (if (memq t2 '(integer rational real number))
+                       (values (sub-interval-p i1 i2) t)
+                       (values nil (known-type-p t2))))
+                  ((eq t1 'rational)
+                   (if (memq t2 '(rational real number))
+                       (values (sub-interval-p i1 i2) t)
+                       (values nil (known-type-p t2))))
+                  ((eq t1 'real)
+                   (if (memq t2 '(real number))
+                       (values (sub-interval-p i1 i2) t)
+                       (values nil (known-type-p t2))))
+                  ((memq t1 '(string simple-string base-string
+                              simple-base-string))
+                   (cond ((eq t2 'string)
+                          (if (or (null i2) (eq (car i2) '*))
+                              (values t t)
+                              (values nil t)))
+                         (t
+                          (values nil (known-type-p t2)))))
+                  (t
+                   (values nil nil)))))))
