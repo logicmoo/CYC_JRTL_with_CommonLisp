@@ -2,7 +2,7 @@
  * DescribeKeyDialog.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: DescribeKeyDialog.java,v 1.7 2005-03-03 14:05:00 piso Exp $
+ * $Id: DescribeKeyDialog.java,v 1.8 2005-03-03 19:12:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,9 +37,9 @@ public final class DescribeKeyDialog extends AbstractDialog
 
     private JTextField textField;
     private boolean seenKeyPressed;
+    private String lastKeyText;
     private String keyStrokeText;
     private boolean eventHandled;
-    private boolean failed;
     private boolean disposed;
     private KeyMap requestedKeyMap;
     private boolean local;
@@ -67,13 +67,14 @@ public final class DescribeKeyDialog extends AbstractDialog
             return;
         seenKeyPressed = true;
         final int modifiers = e.getModifiers();
+        KeyMapping mapping = new KeyMapping(keycode, modifiers, null);
+        lastKeyText = mapping.getKeyText();
         Object command = describeKey(e.getKeyChar(), keycode, modifiers);
-        if (eventHandled || failed) {
-            KeyMapping mapping = new KeyMapping(keycode, modifiers, null);
+        if (eventHandled) {
             if (keyStrokeText == null)
-                keyStrokeText = mapping.getKeyText();
+                keyStrokeText = lastKeyText;
             else
-                keyStrokeText = keyStrokeText + " " + mapping.getKeyText();
+                keyStrokeText = keyStrokeText + " " + lastKeyText;
             textField.setText(keyStrokeText);
         }
         if (command != null)
@@ -99,10 +100,6 @@ public final class DescribeKeyDialog extends AbstractDialog
                 }
             }
             Object command = describeKey(c, e.getKeyCode(), modifiers);
-            if (!eventHandled) {
-                Log.debug("failed => true");
-                failed = true;
-            }
             if (command != null)
                 report(command);
         }
@@ -114,8 +111,10 @@ public final class DescribeKeyDialog extends AbstractDialog
         if (keycode == KeyEvent.VK_SHIFT || keycode == KeyEvent.VK_CONTROL ||
             keycode == KeyEvent.VK_ALT || keycode == KeyEvent.VK_META)
             return;
-        if (failed && !disposed) {
+        if (seenKeyPressed && !eventHandled && !disposed) {
             dispose();
+            if (keyStrokeText == null)
+                keyStrokeText = lastKeyText;
             // Use invokeLater() so message dialog will get focus.
             Runnable r = new Runnable() {
                 public void run()
