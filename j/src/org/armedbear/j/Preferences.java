@@ -2,7 +2,7 @@
  * Preferences.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Preferences.java,v 1.4 2003-06-30 17:01:23 piso Exp $
+ * $Id: Preferences.java,v 1.5 2003-07-03 01:56:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Properties;
 
 public final class Preferences
@@ -92,6 +93,23 @@ public final class Preferences
             newProperties.put(key.toLowerCase(), properties.get(key));
         }
         return newProperties;
+    }
+
+    // FIXME This is far from ideal (but it does work).
+    public synchronized void killTheme()
+    {
+        Iterator it = properties.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String) it.next();
+            if (key.startsWith("color."))
+                it.remove();
+            else if (key.indexOf(".color.") >= 0)
+                it.remove();
+            else if (key.startsWith("style."))
+                it.remove();
+            else if (key.indexOf(".style.") >= 0)
+                it.remove();
+        }
     }
 
     private static Properties loadTheme(String themeName, String themePath)
