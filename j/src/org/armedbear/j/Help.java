@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.8 2003-06-19 14:16:08 piso Exp $
+ * $Id: Help.java,v 1.9 2003-06-19 15:04:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,7 +295,6 @@ public final class Help
                 helpFile = null;
             List commands = CommandTable.apropos(arg);
             addAproposEntries(commands, helpFile, writer);
-
             writer.write("<br>");
             writer.write("<b>");
             writer.write("Preferences");
@@ -305,12 +304,13 @@ public final class Help
                 helpFile = null;
             List properties = Property.apropos(arg);
             addAproposEntries(properties, helpFile, writer);
-
             writer.write("</body>\n</html>\n");
             writer.flush();
             writer.close();
+            Editor ed;
             if (isAproposBuffer(editor.getBuffer())) {
                 ((WebBuffer)editor.getBuffer()).go(file, 0, "text/html");
+                ed = editor;
             } else {
                 Buffer buf = null;
                 for (BufferIterator it = new BufferIterator(); it.hasNext();) {
@@ -334,7 +334,21 @@ public final class Help
                     buf.setUnsplitOnClose(true);
                     editor.makeNext(buf);
                 }
-                editor.activateInOtherWindow(buf);
+                ed = editor.activateInOtherWindow(buf);
+            }
+            for (Line line = ed.getBuffer().getFirstLine(); line != null; line = line.next()) {
+                if (WebBuffer.findLink(line, 0) != null) {
+                    int offset = 0;
+                    while (offset < line.length()) {
+                        char c = line.charAt(offset);
+                        if (!Character.isWhitespace(c) && c != 160)
+                            break;
+                        ++offset;
+                    }
+                    ed.moveDotTo(line, offset);
+                    ed.updateDisplay();
+                    break;
+                }
             }
         }
         catch (IOException e) {
