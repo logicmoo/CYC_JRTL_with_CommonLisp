@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.46 2003-06-09 01:59:23 piso Exp $
+ * $Id: Closure.java,v 1.47 2003-07-16 17:20:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,7 +94,13 @@ public class Closure extends Function
                             throw new LispError(
                                 "&REST/&BODY must be followed by a variable");
                         Debug.assertTrue(restVar == null);
-                        restVar = (Symbol) remaining.car();
+                        try {
+                            restVar = (Symbol) remaining.car();
+                        }
+                        catch (ClassCastException e) {
+                            throw new LispError(
+                                "&REST/&BODY must be followed by a variable");
+                        }
                     } else if (obj == Symbol.AND_KEY) {
                         state = STATE_KEYWORD;
                         arity = -1;
