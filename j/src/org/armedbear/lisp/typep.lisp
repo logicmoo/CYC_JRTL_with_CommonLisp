@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: typep.lisp,v 1.2 2003-09-14 12:06:08 piso Exp $
+;;; $Id: typep.lisp,v 1.3 2003-09-14 12:25:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@
       (SIMPLE-ARRAY
        (and (simple-array-p object)
             (or (endp i) (eq (car i) '*)
-                (equal (array-element-type object) (car i)))
+                (equal (array-element-type object) (upgraded-array-element-type (car i))))
             (or (endp (cdr i)) (eq (cadr i) '*)
                 (if (listp (cadr i))
                     (match-dimensions (array-dimensions object) (cadr i))
