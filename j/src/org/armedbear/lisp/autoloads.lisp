@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.161 2004-09-09 12:43:46 piso Exp $
+;;; $Id: autoloads.lisp,v 1.162 2004-09-27 13:57:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package #:system)
 
-(autoload '(alphanumericp char/= char< char> char>= char-not-equal)
+(autoload '(char/= char< char> char>= char-not-equal)
           "chars")
 (autoload '(string-upcase string-downcase string-capitalize
             nstring-upcase nstring-downcase nstring-capitalize
