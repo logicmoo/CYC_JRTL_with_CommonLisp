@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.27 2003-06-01 20:09:34 piso Exp $
+;;; $Id: list.lisp,v 1.28 2003-06-02 14:44:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -310,13 +310,6 @@
 			       (setf (car subtree) (s (car subtree)))))
 			 subtree))))
             (s tree))))
-
-
-(defun memq (item list)
-  (do ((tail list (cdr tail)))
-      ((null tail) nil)
-    (if (eq item (car tail))
-        (return tail))))
 
 
 (defun member (item list &key key (test #'eql testp) (test-not nil notp))
