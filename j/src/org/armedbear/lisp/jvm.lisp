@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.8 2003-11-05 18:45:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.9 2003-11-05 19:34:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -487,8 +487,9 @@
 (defvar *thread* nil)
 (defvar *thread-var-initialized* nil)
 
-(defun emit-clear-values ()
+(defun ensure-thread-var-initialized ()
   (unless *thread-var-initialized*
+    (format t "generating thread variable initialization code~%")
     ;; Put the code to initialize the local at the very beginning of the
     ;; function, to guarantee that the local gets initialized even if the code
     ;; at our current location is never executed, since the local may be
@@ -501,7 +502,10 @@
             "()Lorg/armedbear/lisp/LispThread;")
       (emit 'astore *thread*)
       (setf *code* (append code *code*)))
-    (setf *thread-var-initialized* t))
+    (setf *thread-var-initialized* t)))
+
+(defun emit-clear-values ()
+  (ensure-thread-var-initialized)
   (emit 'aload *thread*)
   (emit 'invokevirtual
         +lisp-thread-class+
@@ -1386,7 +1390,7 @@
   (let* ((saved-fp (fill-pointer *locals*))
          (varlist (second form))
          (specialp nil)
-         thread-var env-var)
+         env-var)
     ;; Are we going to bind any special variables?
     (dolist (varspec varlist)
       (let ((var (if (consp varspec) (car varspec) varspec)))
@@ -1395,18 +1399,11 @@
           (return))))
     ;; If so...
     (when specialp
-      ;; Save current thread in a local variable.
-      (setq thread-var (vector-push nil *locals*))
-      (setq *max-locals* (max *max-locals* (fill-pointer *locals*)))
-      (emit 'invokestatic
-            +lisp-thread-class+
-            "currentThread"
-            "()Lorg/armedbear/lisp/LispThread;")
-      (emit 'astore thread-var)
       ;; Save current dynamic environment.
       (setq env-var (vector-push nil *locals*))
       (setq *max-locals* (max *max-locals* (fill-pointer *locals*)))
-      (emit 'aload thread-var)
+      (ensure-thread-var-initialized)
+      (emit 'aload *thread*)
       (emit 'invokevirtual
             +lisp-thread-class+
             "getDynamicEnvironment"
@@ -1424,7 +1421,7 @@
       (compile-form (car body) t))
     (when specialp
       ;; Restore dynamic environment.
-      (emit 'aload thread-var)
+      (emit 'aload *thread*)
       (emit 'aload env-var)
       (emit 'invokevirtual
             +lisp-thread-class+
