@@ -2,7 +2,7 @@
  * adjust_array.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.6 2004-02-23 19:56:58 piso Exp $
+ * $Id: adjust_array.java,v 1.7 2004-02-24 11:23:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,8 +57,26 @@ public final class adjust_array extends Primitive
             displacement = 0;
         else
             displacement = Fixnum.getValue(displacedIndexOffset);
-        if (array instanceof Vector) {
-            Vector v = (Vector) array;
+        if (array instanceof SimpleVector) {
+            SimpleVector v = (SimpleVector) array;
+            LispObject newSize = null;
+            if (dimensions instanceof Cons) {
+                if (dimensions.length() == 1)
+                    newSize = dimensions.car();
+            } else
+                newSize = dimensions;
+            if (newSize != null) {
+                AbstractVector v2 =
+                    (AbstractVector) v.adjustArray(Fixnum.getValue(newSize),
+                                                   initialElement,
+                                                   initialContents);
+                if (fillPointer != NIL)
+                    v2.setFillPointer(fillPointer);
+                return v2;
+            }
+        }
+        if (array instanceof ComplexVector) {
+            ComplexVector v = (ComplexVector) array;
             LispObject newSize = null;
             if (dimensions instanceof Cons) {
                 if (dimensions.length() == 1)
