@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.40 2004-09-01 18:03:57 piso Exp $
+;;; $Id: compile-file.lisp,v 1.41 2004-09-12 18:50:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -120,7 +120,6 @@
                   ;; getSymbolFunctionOrDie() will succeed when we try to verify that
                   ;; functions defined later in the same file can be loaded correctly.
                   (unless (fboundp name)
-                    (%format t "; Installing dummy function for ~A~%" name)
                     (setf (symbol-function name) #'dummy)
                     (push name *fbound-names*))))))
            (DEFMACRO
@@ -252,7 +251,6 @@
                   (return))
                 (process-toplevel-form form out nil)))
             (dolist (name *fbound-names*)
-              (%format t "; Removing dummy function for ~A~%" name)
               (fmakunbound name))))
         (setf elapsed (/ (- (get-internal-real-time) start) 1000.0))
         (rename-file temp-file output-file)
