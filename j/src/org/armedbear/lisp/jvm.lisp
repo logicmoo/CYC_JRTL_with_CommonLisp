@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.388 2005-02-03 20:36:46 piso Exp $
+;;; $Id: jvm.lisp,v 1.389 2005-02-03 23:16:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1484,29 +1484,31 @@
           (t
            (vector-push-extend (resolve-instruction instruction) vector)))))))
 
-(defconstant +branch-opcodes+
-  '(153 ; IFEQ
-    154 ; IFNE
-    155 ; IFLT
-    156 ; IFGE
-    157 ; IFGT
-    158 ; IFLE
-    159 ; IF_ICMPEQ
-    160 ; IF_ICMPNE
-    161 ; IF_ICMPLT
-    162 ; IF_ICMPGE
-    163 ; IF_ICMPGT
-    164 ; IF_ICMPLE
-    165 ; IF_ACMPEQ
-    166 ; IF_ACMPNE
-    167 ; GOTO
-    168 ; JSR
-    198 ; IFNULL
-    ))
+;; (defconstant +branch-opcodes+
+;;   '(153 ; IFEQ
+;;     154 ; IFNE
+;;     155 ; IFLT
+;;     156 ; IFGE
+;;     157 ; IFGT
+;;     158 ; IFLE
+;;     159 ; IF_ICMPEQ
+;;     160 ; IF_ICMPNE
+;;     161 ; IF_ICMPLT
+;;     162 ; IF_ICMPGE
+;;     163 ; IF_ICMPGT
+;;     164 ; IF_ICMPLE
+;;     165 ; IF_ACMPEQ
+;;     166 ; IF_ACMPNE
+;;     167 ; GOTO
+;;     168 ; JSR
+;;     198 ; IFNULL
+;;     ))
 
-(defsubst branch-opcode-p (opcode)
+(defun branch-opcode-p (opcode)
   (declare (optimize speed))
-  (member opcode +branch-opcodes+))
+;;   (member opcode +branch-opcodes+)
+  (or (<= 153 opcode 168)
+      (= opcode 198)))
 
 (defun walk-code (code start-index depth)
   (declare (optimize speed))
@@ -1751,23 +1753,57 @@
       (setf *code* (delete nil code))
       t)))
 
-(defun optimize-2a ()
+(defun hash-labels (code)
+  (let ((ht (make-hash-table :test 'eq))
+        (code (coerce code 'list))
+        (pending-label nil))
+    (dolist (instruction code)
+      (when pending-label
+        (setf (gethash pending-label ht) instruction)
+        (setf pending-label nil))
+      (when (label-p instruction)
+        (setf pending-label (instruction-label instruction))))
+    ht))
+
+;; (defun optimize-2a ()
+;;   (let* ((code (coerce *code* 'list))
+;;          (tail code)
+;;          (changed nil))
+;;     (dolist (instruction code)
+;;       (when (and instruction (= (instruction-opcode instruction) 167)) ; GOTO
+;;         (let* ((target-label (car (instruction-args instruction)))
+;;                (target-instruction nil)
+;;                (next-instruction nil))
+;;           (dolist (instr code)
+;;             (when target-instruction
+;;               (setf next-instruction instr)
+;;               (return))
+;;             (when (and instr
+;;                        (label-p instr)
+;;                        (eq (car (instruction-args instr)) target-label))
+;;               (setf target-instruction instr)))
+;;           (when next-instruction
+;;             (case (instruction-opcode next-instruction)
+;;               (167 ; GOTO
+;;                (setf (instruction-args instruction)
+;;                      (instruction-args next-instruction)
+;;                      changed t))
+;;               (176 ; ARETURN
+;;                (setf (instruction-opcode instruction) 176
+;;                      (instruction-args instruction) nil
+;;                      changed t)))))))
+;;     (when changed
+;;       (setf *code* (delete nil code))
+;;       t)))
+
+(defun optimize-2b ()
   (let* ((code (coerce *code* 'list))
-         (tail code)
+         (ht (hash-labels code))
          (changed nil))
     (dolist (instruction code)
       (when (and instruction (= (instruction-opcode instruction) 167)) ; GOTO
         (let* ((target-label (car (instruction-args instruction)))
-               (target-instruction nil)
-               (next-instruction nil))
-          (dolist (instr code)
-            (when target-instruction
-              (setf next-instruction instr)
-              (return))
-            (when (and instr
-                       (label-p instr)
-                       (eq (car (instruction-args instr)) target-label))
-              (setf target-instruction instr)))
+               (next-instruction (gethash target-label ht)))
           (when next-instruction
             (case (instruction-opcode next-instruction)
               (167 ; GOTO
@@ -1851,7 +1887,7 @@
       (let ((changed-p nil))
         (setf changed-p (or (optimize-1) changed-p))
         (setf changed-p (or (optimize-2) changed-p))
-        (setf changed-p (or (optimize-2a) changed-p))
+        (setf changed-p (or (optimize-2b) changed-p))
         (setf changed-p (or (optimize-3) changed-p))
         (setf changed-p (or (delete-unreachable-code) changed-p))
         (unless changed-p
@@ -1864,9 +1900,9 @@
 
 (defun code-bytes (code)
   (let ((length 0))
-;;     (declare (type fixnum length))
+    (declare (type fixnum length))
     ;; Pass 1: calculate label offsets and overall length.
-    (dotimes (i (length code))
+    (dotimes (i (the fixnum (length code)))
       (declare (type fixnum i))
       (let* ((instruction (aref code i))
              (opcode (instruction-opcode instruction)))
@@ -4645,9 +4681,15 @@
 
 (defun compile-special-reference (name target representation)
   (emit 'getstatic *this-class* (declare-symbol name) +lisp-symbol+)
-  (emit-push-current-thread)
-  (emit-invokevirtual +lisp-symbol-class+ "symbolValue"
-                      (list +lisp-thread+) +lisp-object+)
+  (cond ((constantp name)
+         ;; "... a reference to a symbol declared with DEFCONSTANT always
+         ;; refers to its global value."
+         (emit-invokevirtual +lisp-symbol-class+ "getSymbolValue"
+                             nil +lisp-object+))
+        (t
+         (emit-push-current-thread)
+         (emit-invokevirtual +lisp-symbol-class+ "symbolValue"
+                             (list +lisp-thread+) +lisp-object+)))
   (when (eq representation :unboxed-fixnum)
     (emit-unbox-fixnum))
   (emit-move-from-stack target representation))
