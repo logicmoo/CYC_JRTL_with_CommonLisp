@@ -2,7 +2,7 @@
  * ModeList.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: ModeList.java,v 1.15 2003-12-29 19:26:01 piso Exp $
+ * $Id: ModeList.java,v 1.16 2003-12-30 18:02:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,9 +109,11 @@ public final class ModeList implements Constants
                 if (modeName.equalsIgnoreCase(entry.getDisplayName()))
                     return entry.getMode(true);
             }
+            if (modeName.equalsIgnoreCase("text"))
+                return getMode(PLAIN_TEXT_MODE);
+            if (modeName.equalsIgnoreCase("objc"))
+            return getMode(OBJC_MODE);
         }
-        if (modeName.equalsIgnoreCase("text"))
-            return getMode(PLAIN_TEXT_MODE);
         return null;
     }
 
@@ -123,9 +125,11 @@ public final class ModeList implements Constants
                 if (modeName.equalsIgnoreCase(entry.getDisplayName()))
                     return entry.getId();
             }
+            if (modeName.equalsIgnoreCase("text"))
+                return PLAIN_TEXT_MODE;
+            if (modeName.equalsIgnoreCase("objc"))
+                return OBJC_MODE;
         }
-        if (modeName.equalsIgnoreCase("text"))
-            return PLAIN_TEXT_MODE;
         return -1;
     }
 
