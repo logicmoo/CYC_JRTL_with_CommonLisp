@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.199 2004-11-21 04:36:49 piso Exp $
+;;; $Id: boot.lisp,v 1.200 2004-11-21 16:03:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,8 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (sys::%in-package "SYSTEM")
-
-(export '(decode-stream-arg))
 
 (setq *autoload-verbose* nil)
 (setq *load-verbose* nil)
@@ -299,15 +297,6 @@
              (let ((*readtable* (copy-readtable nil)))
                (sys::load-system-file (string-downcase (string module-name))))))
       (set-difference *modules* saved-modules))))
-
-(defun decode-stream-arg (stream)
-  (cond ((eq stream t)
-         *terminal-io*)
-	((null stream)
-         *standard-output*)
-	(t stream)))
-
-(declaim (notinline decode-stream-arg))
 
 (defun read-from-string (string &optional (eof-error-p t) eof-value
                                 &key (start 0) end preserve-whitespace)
