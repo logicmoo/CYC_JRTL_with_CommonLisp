@@ -2,7 +2,7 @@
  * UnboundVariable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: UnboundVariable.java,v 1.6 2004-03-11 00:26:45 piso Exp $
+ * $Id: UnboundVariable.java,v 1.7 2004-04-24 14:01:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,11 @@ public final class UnboundVariable extends CellError
         Environment oldDynEnv = thread.getDynamicEnvironment();
         thread.bindSpecial(_PRINT_ESCAPE_, T);
         StringBuffer sb = new StringBuffer("The variable ");
-        sb.append(String.valueOf(getCellName()));
+        // FIXME
+        try {
+            sb.append(getCellName().writeToString());
+        }
+        catch (Throwable t) {}
         sb.append(" is unbound.");
         thread.setDynamicEnvironment(oldDynEnv);
         return sb.toString();
