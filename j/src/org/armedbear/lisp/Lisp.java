@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.300 2004-11-12 14:01:51 piso Exp $
+ * $Id: Lisp.java,v 1.301 2004-11-13 15:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -406,45 +406,21 @@ public abstract class Lisp
                                   Environment env)
         throws ConditionThrowable
     {
-        if (env.isDeclaredSpecial(symbol) || symbol.isSpecialVariable())
+        if (symbol.isSpecialVariable() || env.isDeclaredSpecial(symbol))
             LispThread.currentThread().bindSpecial(symbol, value);
         else
             env.bind(symbol, value);
-    }
-
-    public static final void rebind(Symbol symbol, LispObject value,
-                                    Environment env)
-        throws ConditionThrowable
-    {
-        if (env.isDeclaredSpecial(symbol) || symbol.isSpecialVariable()) {
-            Environment dynEnv =
-                LispThread.currentThread().getDynamicEnvironment();
-            Debug.assertTrue(dynEnv != null);
-            dynEnv.rebind(symbol, value);
-        } else
-            env.rebind(symbol, value);
-    }
-
-    public static final void bindSpecialVariable(Symbol symbol,
-                                                 LispObject value)
-        throws ConditionThrowable
-    {
-        LispThread.currentThread().bindSpecial(symbol, value);
     }
 
     public static final LispObject setSpecialVariable(Symbol symbol,
                                                       LispObject value,
                                                       LispThread thread)
     {
-        Environment dynEnv = thread.getDynamicEnvironment();
-        if (dynEnv != null) {
-            Binding binding = dynEnv.getBinding(symbol);
-            if (binding != null) {
-                binding.value = value;
-                return value;
-            }
-        }
-        symbol.setSymbolValue(value);
+        Binding binding = thread.getSpecialBinding(symbol);
+        if (binding != null)
+            binding.value = value;
+        else
+            symbol.setSymbolValue(value);
         return value;
     }
 
@@ -1252,39 +1228,39 @@ public abstract class Lisp
                     if (c == 'A' || c == 'a') {
                         if (j < args.length) {
                             LispObject obj = args[j++];
-                            Environment oldDynEnv = thread.getDynamicEnvironment();
+                            Binding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
                             thread.bindSpecial(_PRINT_READABLY_, NIL);
                             sb.append(obj.writeToString());
-                            thread.setDynamicEnvironment(oldDynEnv);
+                            thread.lastSpecialBinding = lastSpecialBinding;
                         }
                     } else if (c == 'S' || c == 's') {
                         if (j < args.length) {
                             LispObject obj = args[j++];
-                            Environment oldDynEnv = thread.getDynamicEnvironment();
+                            Binding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(_PRINT_ESCAPE_, T);
                             sb.append(obj.writeToString());
-                            thread.setDynamicEnvironment(oldDynEnv);
+                            thread.lastSpecialBinding = lastSpecialBinding;
                         }
                     } else if (c == 'D' || c == 'd') {
                         if (j < args.length) {
                             LispObject obj = args[j++];
-                            Environment oldDynEnv = thread.getDynamicEnvironment();
+                            Binding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
                             thread.bindSpecial(_PRINT_RADIX_, NIL);
                             thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
                             sb.append(obj.writeToString());
-                            thread.setDynamicEnvironment(oldDynEnv);
+                            thread.lastSpecialBinding = lastSpecialBinding;
                         }
                     } else if (c == 'X' || c == 'x') {
                         if (j < args.length) {
                             LispObject obj = args[j++];
-                            Environment oldDynEnv = thread.getDynamicEnvironment();
+                            Binding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
                             thread.bindSpecial(_PRINT_RADIX_, NIL);
                             thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));
                             sb.append(obj.writeToString());
-                            thread.setDynamicEnvironment(oldDynEnv);
+                            thread.lastSpecialBinding = lastSpecialBinding;
                         }
                     } else if (c == '%') {
                         sb.append('\n');

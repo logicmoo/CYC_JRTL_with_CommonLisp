@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.83 2004-11-03 15:40:08 piso Exp $
+ * $Id: Load.java,v 1.84 2004-11-13 15:01:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,7 +133,7 @@ public final class Load extends Lisp
     {
         LispThread thread = LispThread.currentThread();
         if (auto) {
-            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Binding lastSpecialBinding = thread.lastSpecialBinding;
             thread.bindSpecial(_READTABLE_,
                                Readtable._STANDARD_READTABLE_.symbolValue(thread));
             thread.bindSpecial(_PACKAGE_, PACKAGE_CL_USER);
@@ -144,7 +144,7 @@ public final class Load extends Lisp
                                       auto);
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
         } else {
             return loadSystemFile(filename,
@@ -279,7 +279,7 @@ public final class Load extends Lisp
     {
         long start = System.currentTimeMillis();
         LispThread thread = LispThread.currentThread();
-        Environment oldDynEnv = thread.getDynamicEnvironment();
+        Binding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_PACKAGE_, _PACKAGE_.symbolValue(thread));
         int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue(thread));
         thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
@@ -315,7 +315,7 @@ public final class Load extends Lisp
                 return loadStream(in, print);
         }
         finally {
-            thread.setDynamicEnvironment(oldDynEnv);
+            thread.lastSpecialBinding = lastSpecialBinding;
         }
     }
 
@@ -354,7 +354,7 @@ public final class Load extends Lisp
     {
         Stream in = new Stream(inputStream, Symbol.CHARACTER);
         final LispThread thread = LispThread.currentThread();
-        Environment oldDynEnv = thread.getDynamicEnvironment();
+        Binding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_LOAD_STREAM_, in);
         try {
             final Environment env = new Environment();
@@ -372,7 +372,7 @@ public final class Load extends Lisp
             return T;
         }
         finally {
-            thread.setDynamicEnvironment(oldDynEnv);
+            thread.lastSpecialBinding = lastSpecialBinding;
         }
     }
 

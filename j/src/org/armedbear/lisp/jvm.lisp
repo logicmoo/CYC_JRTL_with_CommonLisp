@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.303 2004-11-03 15:16:27 piso Exp $
+;;; $Id: jvm.lisp,v 1.304 2004-11-13 15:02:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -529,8 +529,8 @@
 (defconstant +lisp-fixnum+ "Lorg/armedbear/lisp/Fixnum;")
 (defconstant +lisp-simple-string-class+ "org/armedbear/lisp/SimpleString")
 (defconstant +lisp-simple-string+ "Lorg/armedbear/lisp/SimpleString;")
-(defconstant +lisp-environment-class+ "org/armedbear/lisp/Environment")
 (defconstant +lisp-environment+ "Lorg/armedbear/lisp/Environment;")
+(defconstant +lisp-binding+ "Lorg/armedbear/lisp/Binding;")
 (defconstant +lisp-throw-class+ "org/armedbear/lisp/Throw")
 (defconstant +lisp-return-class+ "org/armedbear/lisp/Return")
 (defconstant +lisp-go-class+ "org/armedbear/lisp/Go")
@@ -2652,7 +2652,7 @@
       ;; Save current dynamic environment.
       (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
-      (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+      (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)
       (emit 'astore (block-environment-register block)))
     ;; Bind the variables.
     (aver (= (length vars) (length variables)))
@@ -2719,7 +2719,7 @@
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
       (emit 'aload (block-environment-register block))
-      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
+      (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))))
 
 (defun compile-let/let* (form &key (target *val*))
   (let* ((block (make-block-node :name '(LET)))
@@ -2748,7 +2748,7 @@
       ;; Save current dynamic environment.
       (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
-      (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+      (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)
       (emit 'astore (block-environment-register block)))
     (ecase (car form)
       (LET
@@ -2764,7 +2764,7 @@
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
       (emit 'aload (block-environment-register block))
-      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
+      (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))))
 
 (defun compile-let-bindings (varlist specials)
   (let ((variables ()))
@@ -2881,7 +2881,7 @@
     (when (or t (block-non-local-go-p block))
       (setf environment-register (allocate-register))
       (emit-push-current-thread)
-      (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+      (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)
       (emit 'astore environment-register))
 
     (label BEGIN-BLOCK)
@@ -2932,7 +2932,7 @@
             (emit-push-current-thread)
             (aver (fixnump environment-register))
             (emit 'aload environment-register)
-            (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+            (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)
             (emit 'goto (tag-label tag))
             (label NEXT)))
         ;; Not found. Re-throw Go.
@@ -2977,7 +2977,7 @@
                ;; Restore dynamic environment.
                (emit 'aload *thread*)
                (emit 'aload register)
-               (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)))
+               (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)))
            (emit 'goto (tag-label tag)))
           (t
            ;; Non-local GO.
@@ -3048,7 +3048,7 @@
       ;; Save current dynamic environment.
       (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
-      (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+      (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)
       (emit 'astore (block-environment-register block)))
     (setf (block-catch-tag block) (gensym))
     (let* ((*register* *register*)
@@ -3092,7 +3092,7 @@
       ;; We saved the dynamic environment above. Restore it now.
       (emit 'aload *thread*)
       (emit 'aload (block-environment-register block))
-      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
+      (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))))
 
 (defun compile-return-from (form &key (target *val*))
   (let* ((name (second form))

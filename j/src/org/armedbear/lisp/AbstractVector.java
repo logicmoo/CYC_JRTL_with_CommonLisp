@@ -181,7 +181,7 @@ public abstract class AbstractVector extends AbstractArray
                     maxLength = ((Fixnum)printLength).value;
                 final int length = length();
                 final int limit = Math.min(length, maxLength);
-                Environment oldDynEnv = thread.getDynamicEnvironment();
+                Binding lastSpecialBinding = thread.lastSpecialBinding;
                 thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
                 try {
                     for (int i = 0; i < limit; i++) {
@@ -191,7 +191,7 @@ public abstract class AbstractVector extends AbstractArray
                     }
                 }
                 finally {
-                    thread.setDynamicEnvironment(oldDynEnv);
+                    thread.lastSpecialBinding = lastSpecialBinding;
                 }
                 if (limit < length)
                     sb.append(limit > 0 ? " ..." : "...");

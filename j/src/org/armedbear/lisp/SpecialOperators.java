@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SpecialOperators.java,v 1.31 2004-11-13 00:17:49 piso Exp $
+ * $Id: SpecialOperators.java,v 1.32 2004-11-13 15:02:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,7 +83,7 @@ public final class SpecialOperators extends Lisp
     {
         LispObject result = NIL;
         final LispThread thread = LispThread.currentThread();
-        final Environment oldDynEnv = thread.getDynamicEnvironment();
+        final Binding lastSpecialBinding = thread.lastSpecialBinding;
         try {
             LispObject varList = checkList(args.car());
             LispObject body = args.cdr();
@@ -170,7 +170,7 @@ public final class SpecialOperators extends Lisp
             }
         }
         finally {
-            thread.setDynamicEnvironment(oldDynEnv);
+            thread.lastSpecialBinding = lastSpecialBinding;
         }
         return result;
     }
@@ -187,7 +187,7 @@ public final class SpecialOperators extends Lisp
             final LispThread thread = LispThread.currentThread();
             LispObject result = NIL;
             if (varList != NIL) {
-                Environment oldDynEnv = thread.getDynamicEnvironment();
+                Binding lastSpecialBinding = thread.lastSpecialBinding;
                 try {
                     Environment ext = new Environment(env);
                     Environment evalEnv = sequential ? ext : env;
@@ -216,7 +216,7 @@ public final class SpecialOperators extends Lisp
                     }
                 }
                 finally {
-                    thread.setDynamicEnvironment(oldDynEnv);
+                    thread.lastSpecialBinding = lastSpecialBinding;
                 }
             } else {
                 LispObject body = args.cdr();
@@ -309,7 +309,7 @@ public final class SpecialOperators extends Lisp
         final LispThread thread = LispThread.currentThread();
         LispObject result;
         if (defs != NIL) {
-            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Binding lastSpecialBinding = thread.lastSpecialBinding;
             Environment ext = new Environment(env);
             while (defs != NIL) {
                 final LispObject def = checkList(defs.car());
@@ -354,7 +354,7 @@ public final class SpecialOperators extends Lisp
                 result = progn(args.cdr(), ext, thread);
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
         } else
             result = progn(args.cdr(), env, thread);
@@ -384,7 +384,7 @@ public final class SpecialOperators extends Lisp
             final LispThread thread = LispThread.currentThread();
             final LispObject symbols = checkList(eval(args.car(), env, thread));
             LispObject values = checkList(eval(args.cadr(), env, thread));
-            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Binding lastSpecialBinding = thread.lastSpecialBinding;
             try {
                 // Set up the new bindings.
                 for (LispObject list = symbols; list != NIL; list = list.cdr()) {
@@ -407,7 +407,7 @@ public final class SpecialOperators extends Lisp
                 return result;
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
         }
     };
@@ -492,9 +492,7 @@ public final class SpecialOperators extends Lisp
                 args = args.cdr();
                 Binding binding = null;
                 if (symbol.isSpecialVariable() || env.isDeclaredSpecial(symbol)) {
-                    Environment dynEnv = thread.getDynamicEnvironment();
-                    if (dynEnv != null)
-                        binding = dynEnv.getBinding(symbol);
+                    binding = thread.getSpecialBinding(symbol);
                 } else {
                     // Not special.
                     binding = env.getBinding(symbol);

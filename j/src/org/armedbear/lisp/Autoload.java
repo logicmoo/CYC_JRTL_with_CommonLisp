@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.208 2004-11-08 18:25:49 piso Exp $
+ * $Id: Autoload.java,v 1.209 2004-11-13 15:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public class Autoload extends Function
     {
         if (className != null) {
             final LispThread thread = LispThread.currentThread();
-            final Environment oldDynEnv = thread.getDynamicEnvironment();
+            final Binding lastSpecialBinding = thread.lastSpecialBinding;
             int loadDepth = Fixnum.getInt(_LOAD_DEPTH_.symbolValue());
             thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
             try {
@@ -103,7 +103,7 @@ public class Autoload extends Function
                 e.printStackTrace();
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
         } else
             Load.loadSystemFile(getFileName(), true);

@@ -2,7 +2,7 @@
  * describe.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: describe.java,v 1.15 2004-04-24 12:37:04 piso Exp $
+ * $Id: describe.java,v 1.16 2004-11-13 15:02:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@ public final class describe extends Lisp
                         LispObject arglist = ((Function)function).getArglist();
                         if (arglist != null) {
                             LispThread thread = LispThread.currentThread();
-                            Environment oldDynEnv = thread.getDynamicEnvironment();
+                            Binding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
                             sb.append("Function argument list:\n  ");
                             if (arglist instanceof AbstractString)
@@ -84,7 +84,7 @@ public final class describe extends Lisp
                             else
                                 sb.append(arglist.writeToString());
                             sb.append('\n');
-                            thread.setDynamicEnvironment(oldDynEnv);
+                            thread.lastSpecialBinding = lastSpecialBinding;
                         }
                     }
                     LispObject documentation =

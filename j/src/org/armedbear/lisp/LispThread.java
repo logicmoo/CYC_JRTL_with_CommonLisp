@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.65 2004-11-03 15:39:00 piso Exp $
+ * $Id: LispThread.java,v 1.66 2004-11-13 15:01:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ public final class LispThread extends LispObject
     private final Thread javaThread;
     private boolean destroyed;
     private final LispObject name;
-    public Environment dynEnv;
+    public Binding lastSpecialBinding;
     public LispObject[] _values;
     private boolean threadInterrupted;
     private LispObject pending = NIL;
@@ -267,24 +267,37 @@ public final class LispThread extends LispObject
         return obj;
     }
 
-    public final Environment getDynamicEnvironment()
-    {
-        return dynEnv;
-    }
-
-    public final void setDynamicEnvironment(Environment env)
-    {
-        dynEnv = env;
-    }
-
     public final void bindSpecial(Symbol symbol, LispObject value)
     {
-        dynEnv = new Environment(dynEnv, symbol, value);
+        lastSpecialBinding = new Binding(symbol, value, lastSpecialBinding);
     }
 
     public final LispObject lookupSpecial(LispObject symbol)
     {
-        return dynEnv != null ? dynEnv.lookup(symbol) : null;
+        Binding binding = lastSpecialBinding;
+        while (binding != null) {
+            if (binding.symbol == symbol)
+                return binding.value;
+            binding = binding.next;
+        }
+        return null;
+    }
+
+    public final Binding getSpecialBinding(LispObject symbol)
+    {
+        Binding binding = lastSpecialBinding;
+        while (binding != null) {
+            if (binding.symbol == symbol)
+                return binding;
+            binding = binding.next;
+        }
+        return null;
+    }
+
+    public final void rebindSpecial(Symbol symbol, LispObject value)
+    {
+        Binding binding = getSpecialBinding(symbol);
+        binding.value = value;
     }
 
     private LispObject catchTags = NIL;

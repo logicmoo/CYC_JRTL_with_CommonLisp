@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.87 2004-11-05 00:42:46 piso Exp $
+ * $Id: Closure.java,v 1.88 2004-11-13 15:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -367,7 +367,7 @@ public class Closure extends Function
     {
         if (minArgs == 1) {
             final LispThread thread = LispThread.currentThread();
-            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Binding lastSpecialBinding = thread.lastSpecialBinding;
             Environment ext = new Environment(environment);
             if (specials != null) {
                 for (int i = 0; i < specials.length; i++)
@@ -393,7 +393,7 @@ public class Closure extends Function
                 }
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
             return result;
         } else {
@@ -408,7 +408,7 @@ public class Closure extends Function
     {
         if (minArgs == 2) {
             final LispThread thread = LispThread.currentThread();
-            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Binding lastSpecialBinding = thread.lastSpecialBinding;
             Environment ext = new Environment(environment);
             if (specials != null) {
                 for (int i = 0; i < specials.length; i++)
@@ -435,7 +435,7 @@ public class Closure extends Function
                 }
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
             return result;
         } else {
@@ -452,7 +452,7 @@ public class Closure extends Function
     {
         if (minArgs == 3) {
             final LispThread thread = LispThread.currentThread();
-            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Binding lastSpecialBinding = thread.lastSpecialBinding;
             Environment ext = new Environment(environment);
             if (specials != null) {
                 for (int i = 0; i < specials.length; i++)
@@ -480,7 +480,7 @@ public class Closure extends Function
                 }
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
             return result;
         } else {
@@ -498,7 +498,7 @@ public class Closure extends Function
     {
         if (minArgs == 4) {
             final LispThread thread = LispThread.currentThread();
-            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Binding lastSpecialBinding = thread.lastSpecialBinding;
             Environment ext = new Environment(environment);
             if (specials != null) {
                 for (int i = 0; i < specials.length; i++)
@@ -527,7 +527,7 @@ public class Closure extends Function
                 }
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
             return result;
         } else {
@@ -543,7 +543,7 @@ public class Closure extends Function
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        Environment oldDynEnv = thread.getDynamicEnvironment();
+        Binding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         if (specials != null) {
             for (int i = 0; i < specials.length; i++)
@@ -569,7 +569,7 @@ public class Closure extends Function
             }
         }
         finally {
-            thread.setDynamicEnvironment(oldDynEnv);
+            thread.lastSpecialBinding = lastSpecialBinding;
         }
         return result;
     }
@@ -610,7 +610,7 @@ public class Closure extends Function
         // The bindings established here (if any) are lost when this function
         // returns. They are used only in the evaluation of initforms for
         // optional and keyword arguments.
-        Environment oldDynEnv = thread.getDynamicEnvironment();
+        Binding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         // Section 3.4.4: "...the &environment parameter is bound along with
         // &whole before any other variables in the lambda list..."
@@ -810,7 +810,7 @@ public class Closure extends Function
                     signal(new WrongNumberOfArgumentsException(this));
             }
         }
-        thread.setDynamicEnvironment(oldDynEnv);
+        thread.lastSpecialBinding = lastSpecialBinding;
         return array;
     }
 

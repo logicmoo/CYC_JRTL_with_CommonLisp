@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Do.java,v 1.10 2004-09-19 17:12:01 asimon Exp $
+ * $Id: Do.java,v 1.11 2004-11-13 15:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,8 @@ package org.armedbear.lisp;
 public final class Do extends Lisp
 {
     // ### do
-    private static final SpecialOperator DO = new SpecialOperator("do", "varlist endlist &body body")
+    private static final SpecialOperator DO =
+        new SpecialOperator("do", "varlist endlist &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -34,7 +35,8 @@ public final class Do extends Lisp
     };
 
     // ### do*
-    private static final SpecialOperator DO_ = new SpecialOperator("do*", "varlist endlist &body body")
+    private static final SpecialOperator DO_ =
+        new SpecialOperator("do*", "varlist endlist &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -73,7 +75,7 @@ public final class Do extends Lisp
             varList = varList.cdr();
         }
         final LispThread thread = LispThread.currentThread();
-        Environment oldDynEnv = thread.getDynamicEnvironment();
+        Binding lastSpecialBinding = thread.lastSpecialBinding;
         // Process declarations.
         LispObject specials = NIL;
         while (body != NIL) {
@@ -164,11 +166,10 @@ public final class Do extends Lisp
                         if (update != null) {
                             Symbol symbol = variables[i];
                             LispObject value = eval(update, ext, thread);
-                            if (specials != NIL && memq(symbol, specials)) {
-                                thread.getDynamicEnvironment().rebind(symbol, value);
-                            } else if (symbol.isSpecialVariable()) {
-                                thread.getDynamicEnvironment().rebind(symbol, value);
-                            } else
+                            if (symbol.isSpecialVariable() ||
+                                (specials != NIL && memq(symbol, specials)))
+                                thread.rebindSpecial(symbol, value);
+                            else
                                 ext.rebind(symbol, value);
                         }
                     }
@@ -187,11 +188,10 @@ public final class Do extends Lisp
                         if (results[i] != null) {
                             Symbol symbol = variables[i];
                             LispObject value = results[i];
-                            if (specials != NIL && memq(symbol, specials)) {
-                                thread.getDynamicEnvironment().rebind(symbol, value);
-                            } else if (symbol.isSpecialVariable()) {
-                                thread.getDynamicEnvironment().rebind(symbol, value);
-                            } else
+                            if (symbol.isSpecialVariable() ||
+                                (specials != NIL && memq(symbol, specials)))
+                                thread.rebindSpecial(symbol, value);
+                            else
                                 ext.rebind(symbol, value);
                         }
                     }
@@ -210,7 +210,7 @@ public final class Do extends Lisp
             throw ret;
         }
         finally {
-            thread.setDynamicEnvironment(oldDynEnv);
+            thread.lastSpecialBinding = lastSpecialBinding;
         }
     }
 }

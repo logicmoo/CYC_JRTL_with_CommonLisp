@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: dolist.java,v 1.9 2004-08-09 18:45:35 piso Exp $
+ * $Id: dolist.java,v 1.10 2004-11-13 15:02:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public final class dolist extends SpecialOperator
         LispObject listForm = args.cadr();
         final LispThread thread = LispThread.currentThread();
         LispObject resultForm = args.cdr().cdr().car();
-        Environment oldDynEnv = thread.getDynamicEnvironment();
+        Binding lastSpecialBinding = thread.lastSpecialBinding;
         final LispObject stack = thread.getStack();
         // Process declarations.
         LispObject specials = NIL;
@@ -78,13 +78,13 @@ public final class dolist extends SpecialOperator
             ext.addBlock(NIL, new LispObject());
             // Establish a reusable binding.
             final Binding binding;
-            if (var.isSpecialVariable() || (specials != NIL && memq(var, specials))) {
+            if (specials != NIL && memq(var, specials)) {
                 thread.bindSpecial(var, null);
-                binding = thread.getDynamicEnvironment().getBinding(var);
+                binding = thread.getSpecialBinding(var);
                 ext.declareSpecial(var);
             } else if (var.isSpecialVariable()) {
                 thread.bindSpecial(var, null);
-                binding = thread.getDynamicEnvironment().getBinding(var);
+                binding = thread.getSpecialBinding(var);
             } else {
                 ext.bind(var, null);
                 binding = ext.getBinding(var);
@@ -137,7 +137,7 @@ public final class dolist extends SpecialOperator
             throw ret;
         }
         finally {
-            thread.setDynamicEnvironment(oldDynEnv);
+            thread.lastSpecialBinding = lastSpecialBinding;
         }
     }
 

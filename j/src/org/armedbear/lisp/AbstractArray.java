@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.34 2004-11-04 11:25:02 piso Exp $
+ * $Id: AbstractArray.java,v 1.35 2004-11-13 15:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -253,7 +253,7 @@ public abstract class AbstractArray extends LispObject
                 _CURRENT_PRINT_LEVEL_.symbolValue(thread);
             int currentLevel = Fixnum.getValue(currentPrintLevel);
             if (currentLevel < maxLevel) {
-                Environment oldDynEnv = thread.getDynamicEnvironment();
+                Binding lastSpecialBinding = thread.lastSpecialBinding;
                 thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
                 try {
                     sb.append('(');
@@ -276,7 +276,7 @@ public abstract class AbstractArray extends LispObject
                     sb.append(')');
                 }
                 finally {
-                    thread.setDynamicEnvironment(oldDynEnv);
+                    thread.lastSpecialBinding = lastSpecialBinding;
                 }
             } else
                 sb.append('#');

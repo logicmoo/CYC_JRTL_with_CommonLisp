@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.703 2004-11-12 13:59:01 piso Exp $
+ * $Id: Primitives.java,v 1.704 2004-11-13 15:01:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -526,14 +526,11 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(first);
-            Environment dynEnv =
-                LispThread.currentThread().getDynamicEnvironment();
-            if (dynEnv != null) {
-                Binding binding = dynEnv.getBinding(symbol);
-                if (binding != null) {
-                    binding.value = second;
-                    return second;
-                }
+            Binding binding =
+                LispThread.currentThread().getSpecialBinding(symbol);
+            if (binding != null) {
+                binding.value = second;
+                return second;
             }
             symbol.setSymbolValue(second);
             return second;
@@ -728,13 +725,10 @@ public final class Primitives extends Lisp
             // PROGV: "If too few values are supplied, the remaining symbols
             // are bound and then made to have no value." So BOUNDP must
             // explicitly check for a binding with no value.
-            Environment dynEnv =
-                LispThread.currentThread().getDynamicEnvironment();
-            if (dynEnv != null) {
-                Binding binding = dynEnv.getBinding(symbol);
-                if (binding != null)
-                    return binding.value != null ? T : NIL;
-            }
+            Binding binding =
+                LispThread.currentThread().getSpecialBinding(symbol);
+            if (binding != null)
+                return binding.value != null ? T : NIL;
             // No binding.
             return symbol.getSymbolValue() != null ? T : NIL;
         }
@@ -2356,9 +2350,7 @@ public final class Primitives extends Lisp
     private static final Symbol gensym(String prefix) throws ConditionThrowable
     {
         LispThread thread = LispThread.currentThread();
-        Environment dynEnv = thread.getDynamicEnvironment();
-        Binding binding =
-            (dynEnv == null) ? null : dynEnv.getBinding(_GENSYM_COUNTER_);
+        Binding binding = thread.getSpecialBinding(_GENSYM_COUNTER_);
         LispObject oldValue;
         if (binding != null) {
             oldValue = binding.value;
@@ -2535,13 +2527,10 @@ public final class Primitives extends Lisp
                 signal(new PackageError("The name " + packageName +
                                         " does not designate any package."));
             LispThread thread = LispThread.currentThread();
-            Environment dynEnv = thread.getDynamicEnvironment();
-            if (dynEnv != null) {
-                Binding binding = dynEnv.getBinding(_PACKAGE_);
-                if (binding != null) {
-                    binding.value = pkg;
-                    return pkg;
-                }
+            Binding binding = thread.getSpecialBinding(_PACKAGE_);
+            if (binding != null) {
+                binding.value = pkg;
+                return pkg;
             }
             // No dynamic binding.
             _PACKAGE_.setSymbolValue(pkg);
@@ -3120,7 +3109,7 @@ public final class Primitives extends Lisp
                 } else
                     break;
             }
-            final Environment oldDynEnv = thread.getDynamicEnvironment();
+            final Binding lastSpecialBinding = thread.lastSpecialBinding;
             final Environment ext = new Environment(env);
             int i = 0;
             LispObject var = vars.car();
@@ -3147,7 +3136,7 @@ public final class Primitives extends Lisp
                 }
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
             return result;
         }

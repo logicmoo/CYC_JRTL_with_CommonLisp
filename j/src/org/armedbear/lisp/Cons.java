@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.49 2004-10-24 04:05:34 piso Exp $
+ * $Id: Cons.java,v 1.50 2004-11-13 15:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -429,7 +429,7 @@ public final class Cons extends LispObject
             _CURRENT_PRINT_LEVEL_.symbolValue(thread);
         int currentLevel = Fixnum.getValue(currentPrintLevel);
         if (currentLevel < maxLevel) {
-            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Binding lastSpecialBinding = thread.lastSpecialBinding;
             thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
             try {
                 int count = 0;
@@ -460,7 +460,7 @@ public final class Cons extends LispObject
                 sb.append(')');
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
         } else
             sb.append('#');

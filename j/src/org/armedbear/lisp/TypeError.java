@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: TypeError.java,v 1.23 2004-11-03 15:39:02 piso Exp $
+ * $Id: TypeError.java,v 1.24 2004-11-13 15:02:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,7 +98,7 @@ public class TypeError extends LispError
         // FIXME
         try {
             final LispThread thread = LispThread.currentThread();
-            final Environment oldDynEnv = thread.getDynamicEnvironment();
+            final Binding lastSpecialBinding = thread.lastSpecialBinding;
             thread.bindSpecial(_PRINT_ESCAPE_, T);
             try {
                 String s = super.getMessage();
@@ -132,7 +132,7 @@ public class TypeError extends LispError
                 return toString();
             }
             finally {
-                thread.setDynamicEnvironment(oldDynEnv);
+                thread.lastSpecialBinding = lastSpecialBinding;
             }
         }
         catch (Throwable t) {

@@ -2,7 +2,7 @@
  * dotimes.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: dotimes.java,v 1.12 2004-08-09 18:45:35 piso Exp $
+ * $Id: dotimes.java,v 1.13 2004-11-13 15:02:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public final class dotimes extends SpecialOperator
         LispObject countForm = args.cadr();
         final LispThread thread = LispThread.currentThread();
         LispObject resultForm = args.cdr().cdr().car();
-        Environment oldDynEnv = thread.getDynamicEnvironment();
+        Binding lastSpecialBinding = thread.lastSpecialBinding;
         final LispObject stack = thread.getStack();
         // Process declarations.
         LispObject specials = NIL;
@@ -82,11 +82,11 @@ public final class dotimes extends SpecialOperator
             final Binding binding;
             if (specials != NIL && memq(var, specials)) {
                 thread.bindSpecial(var, null);
-                binding = thread.getDynamicEnvironment().getBinding(var);
+                binding = thread.getSpecialBinding(var);
                 ext.declareSpecial(var);
             } else if (var.isSpecialVariable()) {
                 thread.bindSpecial(var, null);
-                binding = thread.getDynamicEnvironment().getBinding(var);
+                binding = thread.getSpecialBinding(var);
             } else {
                 ext.bind(var, null);
                 binding = ext.getBinding(var);
@@ -192,7 +192,7 @@ public final class dotimes extends SpecialOperator
             throw ret;
         }
         finally {
-            thread.setDynamicEnvironment(oldDynEnv);
+            thread.lastSpecialBinding = lastSpecialBinding;
         }
     }
 

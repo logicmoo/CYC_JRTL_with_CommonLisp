@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.76 2004-11-04 10:54:58 piso Exp $
+ * $Id: Interpreter.java,v 1.77 2004-11-13 15:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,7 +255,7 @@ public final class Interpreter extends Lisp
             while (true) {
                 try {
                     thread.resetStack();
-                    thread.setDynamicEnvironment(null);
+                    thread.lastSpecialBinding = null;
                     ++commandNumber;
                     out._writeString(prompt());
                     out._finishOutput();
@@ -378,13 +378,13 @@ public final class Interpreter extends Lisp
         if (obj == EOF)
             return signal(new EndOfFile(stream));
         final LispThread thread = LispThread.currentThread();
-        final Environment oldDynEnv = thread.getDynamicEnvironment();
+        final Binding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_DEBUGGER_HOOK_, _DEBUGGER_HOOK_FUNCTION);
         try {
             return eval(obj, new Environment(), thread);
         }
         finally {
-            thread.setDynamicEnvironment(oldDynEnv);
+            thread.lastSpecialBinding = lastSpecialBinding;
         }
     }
 

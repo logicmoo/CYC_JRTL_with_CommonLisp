@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.94 2004-11-04 11:22:45 piso Exp $
+ * $Id: Stream.java,v 1.95 2004-11-13 15:02:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1104,10 +1104,10 @@ public class Stream extends LispObject
     public void prin1(LispObject obj) throws ConditionThrowable
     {
         LispThread thread = LispThread.currentThread();
-        Environment oldDynEnv = thread.getDynamicEnvironment();
+        Binding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_PRINT_ESCAPE_, T);
         String s = obj.writeToString();
-        thread.setDynamicEnvironment(oldDynEnv);
+        thread.lastSpecialBinding = lastSpecialBinding;
         _writeString(s);
     }
 
