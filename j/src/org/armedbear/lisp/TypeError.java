@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: TypeError.java,v 1.8 2003-09-22 02:17:35 piso Exp $
+ * $Id: TypeError.java,v 1.9 2003-09-22 17:26:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,32 +21,45 @@
 
 package org.armedbear.lisp;
 
-public final class TypeError extends LispError
+public class TypeError extends LispError
 {
-    private final LispObject object;
-    private final String expectedType;
+    protected LispObject datum;
+    protected LispObject expectedType;
+    private String typeString;
 
     public TypeError()
     {
-        this(null, null);
+    }
+
+    public TypeError(LispObject initArgs) throws ConditionThrowable
+    {
+        LispObject datum = NIL;
+        LispObject expectedType = NIL;
+        LispObject first, second;
+        while (initArgs != NIL) {
+            first = initArgs.car();
+            initArgs = initArgs.cdr();
+            second = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.DATUM)
+                datum = second;
+            else if (first == Keyword.EXPECTED_TYPE)
+                expectedType = second;
+        }
+        this.datum = datum;
+        this.expectedType = expectedType;
+        this.typeString = String.valueOf(expectedType);
     }
 
     public TypeError(String message)
     {
         super(message);
-        object = null;
-        expectedType = null;
     }
 
-    public TypeError(LispObject object)
+    public TypeError(LispObject datum, String typeString)
     {
-        this(object, null);
-    }
-
-    public TypeError(LispObject object, String expectedType)
-    {
-        this.object = object;
-        this.expectedType = expectedType;
+        this.datum = datum;
+        this.typeString = typeString;
     }
 
     public LispObject typeOf()
@@ -74,17 +87,17 @@ public final class TypeError extends LispError
         if (s != null)
             return s;
         StringBuffer sb = new StringBuffer("wrong type");
-        String name = object != null ? String.valueOf(object) : null;
-        if (expectedType != null) {
+        String name = datum != null ? String.valueOf(datum) : null;
+        if (typeString != null) {
             if (name == null)
-                name = "object";
+                name = "datum";
             sb.append(": ");
             sb.append(name);
             sb.append(" is not a");
-            if ("aeiou".indexOf(expectedType.charAt(0)) >= 0)
+            if ("aeiou".indexOf(typeString.charAt(0)) >= 0)
                 sb.append('n');
             sb.append(' ');
-            sb.append(expectedType);
+            sb.append(typeString);
         } else if (name != null) {
             sb.append(": ");
             sb.append(name);
