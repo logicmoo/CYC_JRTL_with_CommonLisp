@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.159 2004-04-02 03:21:59 piso Exp $
+;;; $Id: boot.lisp,v 1.160 2004-04-02 14:58:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -156,8 +156,7 @@
              (dolist (x pathnames)
                (load x)))
             (t
-             (sys::load-system-file (concatenate 'string (string-downcase (string module-name))
-                                      ".lisp"))))
+             (sys::load-system-file (string-downcase (string module-name)))))
       (set-difference *modules* saved-modules))))
 
 (defun read-from-string (string &optional eof-error-p eof-value
@@ -174,23 +173,6 @@
 (defconstant multiple-values-limit 20)
 
 (defconstant internal-time-units-per-second 1000)
-
-(defconstant boole-clr    0)
-(defconstant boole-set    1)
-(defconstant boole-1      2)
-(defconstant boole-2      3)
-(defconstant boole-c1     4)
-(defconstant boole-c2     5)
-(defconstant boole-and    6)
-(defconstant boole-ior    7)
-(defconstant boole-xor    8)
-(defconstant boole-eqv    9)
-(defconstant boole-nand  10)
-(defconstant boole-nor   11)
-(defconstant boole-andc1 12)
-(defconstant boole-andc2 13)
-(defconstant boole-orc1  14)
-(defconstant boole-orc2  15)
 
 (sys::load-system-file "restart")
 (sys::load-system-file "late-setf")
