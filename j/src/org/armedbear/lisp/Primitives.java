@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.78 2003-03-06 02:20:19 piso Exp $
+ * $Id: Primitives.java,v 1.79 2003-03-06 04:02:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,20 +104,19 @@ public final class Primitives extends Module
     private static final int STRINGP                    = 73;
     private static final int STRING_EQUAL               = 74;
     private static final int STRING_EQUAL_IGNORE_CASE   = 75;
-    private static final int SUBSEQ                     = 76;
-    private static final int SUBTRACT                   = 77;
-    private static final int SUCCESSOR                  = 78;
-    private static final int SYMBOLP                    = 79;
-    private static final int SYMBOL_FUNCTION            = 80;
-    private static final int SYMBOL_NAME                = 81;
-    private static final int SYMBOL_PACKAGE             = 82;
-    private static final int SYMBOL_PLIST               = 83;
-    private static final int SYMBOL_VALUE               = 84;
-    private static final int THIRD                      = 85;
-    private static final int VALUES                     = 86;
-    private static final int VALUES_LIST                = 87;
-    private static final int VECTORP                    = 88;
-    private static final int ZEROP                      = 89;
+    private static final int SUBTRACT                   = 76;
+    private static final int SUCCESSOR                  = 77;
+    private static final int SYMBOLP                    = 78;
+    private static final int SYMBOL_FUNCTION            = 79;
+    private static final int SYMBOL_NAME                = 80;
+    private static final int SYMBOL_PACKAGE             = 81;
+    private static final int SYMBOL_PLIST               = 82;
+    private static final int SYMBOL_VALUE               = 83;
+    private static final int THIRD                      = 84;
+    private static final int VALUES                     = 85;
+    private static final int VALUES_LIST                = 86;
+    private static final int VECTORP                    = 87;
+    private static final int ZEROP                      = 88;
 
     private Primitives()
     {
@@ -144,7 +143,6 @@ public final class Primitives extends Module
         definePrimitive("max", MAX);
         definePrimitive("min", MIN);
         definePrimitive("room", ROOM);
-        definePrimitive("subseq", SUBSEQ);
         definePrimitive("values", VALUES);
 
         definePrimitive1("1+", SUCCESSOR);
@@ -361,8 +359,6 @@ public final class Primitives extends Module
                 }
                 return result;
             }
-            case SUBSEQ:
-                return subseq(args);
             case VALUES:                        // ### values
                 return values(args);
             case EXIT:                          // ### exit
@@ -2001,26 +1997,6 @@ public final class Primitives extends Module
         }
     };
 
-    // Only implemented for strings.
-    private static final LispObject subseq(LispObject[] args)
-        throws LispError
-    {
-        if (args.length < 2 || args.length > 3)
-            throw new WrongNumberOfArgumentsException("SUBSEQ");
-        String s = LispString.checkString(args[0]).getValue();
-        try {
-            int beginIndex = (int) Fixnum.checkNumber(args[1]).getValue();
-            if (args.length == 2)
-                return new LispString(s.substring(beginIndex));
-            int endIndex = (int) Fixnum.checkNumber(args[2]).getValue();
-            return new LispString(s.substring(beginIndex, endIndex));
-        }
-        catch (StringIndexOutOfBoundsException e) {
-            throw new LispError("SUBSEQ".concat(
-                ": string index out of bounds"));
-        }
-    }
-
     private static final LispObject room() throws LispError
     {
         Runtime runtime = Runtime.getRuntime();
@@ -2045,8 +2021,7 @@ public final class Primitives extends Module
                 break;
         }
         long used = total - free;
-        CharacterOutputStream out =
-            getStandardOutput();
+        CharacterOutputStream out = getStandardOutput();
         StringBuffer sb = new StringBuffer("Total memory ");
         sb.append(total);
         sb.append(" bytes");

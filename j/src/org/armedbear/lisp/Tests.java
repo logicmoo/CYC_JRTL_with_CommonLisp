@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.11 2003-02-25 16:45:49 piso Exp $
+ * $Id: Tests.java,v 1.12 2003-03-06 04:02:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -586,9 +586,9 @@ public class Tests extends TestCase
         verify("(last '(a . b) 2)", "(A . B)");
 
         // subseq
-        verify("(setq str \"012345\")", "\"012345\"");
-        verify("(subseq str 2)", "\"2345\"");
-        verify("(subseq str 3 5)", "\"34\"");
+//         verify("(setq str \"012345\")", "\"012345\"");
+//         verify("(subseq str 2)", "\"2345\"");
+//         verify("(subseq str 3 5)", "\"34\"");
 
         // values
         verify("(values)", "");
