@@ -1,8 +1,8 @@
 /*
  * MailAddress.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: MailAddress.java,v 1.2 2003-03-09 13:58:30 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: MailAddress.java,v 1.3 2003-05-07 18:51:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,7 +101,7 @@ public final class MailAddress implements Serializable
                 sb.append('"');
             } else
                 sb.append(personal);
-            if(address != null && address.length() > 0) {
+            if (address != null && address.length() > 0) {
                 sb.append(" <");
                 sb.append(address);
                 sb.append('>');
@@ -116,8 +116,13 @@ public final class MailAddress implements Serializable
         if (encodedPersonal == null || encodedPersonal.length() == 0)
             return toString();
         FastStringBuffer sb = new FastStringBuffer();
-        sb.append(encodedPersonal);
-        if(address != null && address.length() > 0) {
+        if (encodedPersonal.indexOf(',') >= 0) {
+            sb.append('"');
+            sb.append(encodedPersonal);
+            sb.append('"');
+        } else
+            sb.append(encodedPersonal);
+        if (address != null && address.length() > 0) {
             sb.append(" <");
             sb.append(address);
             sb.append('>');
