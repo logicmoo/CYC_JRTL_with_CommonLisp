@@ -2,7 +2,7 @@
  * SidebarBufferList.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SidebarBufferList.java,v 1.2 2002-10-02 02:11:33 piso Exp $
+ * $Id: SidebarBufferList.java,v 1.3 2002-12-21 15:32:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,8 +220,9 @@ public final class SidebarBufferList extends SidebarList implements Constants,
         int index = locationToIndex(e.getPoint());
         if (index >= 0 && index < getModel().getSize()) {
             Buffer buffer = (Buffer) getModel().getElementAt(index);
-            if (buffer.getFile() != null)
-                text = buffer.getFile().netPath();
+            File file = buffer.getFile();
+            if (file != null)
+                text = file.isRemote() ? file.netPath() : file.canonicalPath();
             else
                 text = buffer.getTitle();
         }
