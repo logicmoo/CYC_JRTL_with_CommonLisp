@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.22 2003-02-03 00:37:00 piso Exp $
+ * $Id: Buffer.java,v 1.23 2003-02-03 01:39:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,6 +280,28 @@ public class Buffer extends SystemBuffer
         if (file.isLocal() && !file.isFile())
             buffer.setNewFile(true);
         return buffer;
+    }
+
+    // For Session.createBuffers().
+    public static Buffer precreateBuffer(File file)
+    {
+        if (file == null) {
+            Debug.bug();
+            return null;
+        }
+        if (file.isRemote()) {
+            Debug.bug();
+            return null;
+        }
+        // Special case for unsent messages.
+        File dir = file.getParentFile();
+        if (dir != null && dir.equals(Directories.getDraftsFolder())) {
+            Mode sendMailMode = Editor.getModeList().getMode(SEND_MAIL_MODE);
+            if (sendMailMode != null)
+                return sendMailMode.createBuffer(file);
+        }
+        // Normal case.
+        return new Buffer(file);
     }
 
     private static final int getFileType(File file, File cache)
