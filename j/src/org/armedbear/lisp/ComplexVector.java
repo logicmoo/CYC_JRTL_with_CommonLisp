@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.15 2004-10-13 00:22:17 piso Exp $
+ * $Id: ComplexVector.java,v 1.16 2004-12-12 18:32:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -293,11 +293,15 @@ public final class ComplexVector extends AbstractVector
                 capacity = minCapacity;
             }
         } else {
+            // Displaced array.
             Debug.assertTrue(array != null);
-            if (array.getTotalSize() - displacement < minCapacity) {
+            if (capacity < minCapacity ||
+                array.getTotalSize() - displacement < minCapacity)
+            {
                 // Copy array.
                 elements = new LispObject[minCapacity];
-                final int limit = array.getTotalSize() - displacement;
+                final int limit =
+                    Math.min(capacity, array.getTotalSize() - displacement);
                 for (int i = 0; i < limit; i++)
                     elements[i] = array.getRowMajor(displacement + i);
                 capacity = minCapacity;

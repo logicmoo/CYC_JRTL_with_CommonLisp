@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.9 2004-05-27 17:11:14 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.10 2004-12-12 18:31:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,13 +256,17 @@ public final class ComplexBitVector extends AbstractBitVector
             }
         } else {
             Debug.assertTrue(array != null);
-            if (array.getTotalSize() - displacement < minCapacity) {
+            if (capacity < minCapacity ||
+                array.getTotalSize() - displacement < minCapacity)
+            {
                 // Copy array.
                 int size = minCapacity >>> 6;
                 if ((minCapacity & LONG_MASK) != 0)
                     ++size;
                 bits = new long[size];
-                for (int i = 0; i < capacity; i++) {
+                final int limit =
+                    Math.min(capacity, array.getTotalSize() - displacement);
+                for (int i = 0; i < limit; i++) {
                     int n = Fixnum.getValue(array.getRowMajor(displacement + i));
                     if (n == 1)
                         setBit(i);

@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.22 2004-11-28 15:43:49 piso Exp $
+ * $Id: ComplexString.java,v 1.23 2004-12-12 18:31:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -459,10 +459,13 @@ public final class ComplexString extends AbstractString
             }
         } else {
             Debug.assertTrue(array != null);
-            if (array.getTotalSize() - displacement < minCapacity) {
+            if (capacity < minCapacity ||
+                array.getTotalSize() - displacement < minCapacity)
+            {
                 // Copy array.
                 chars = new char[minCapacity];
-                final int limit = array.getTotalSize() - displacement;
+                final int limit =
+                    Math.min(capacity, array.getTotalSize() - displacement);
                 if (array instanceof AbstractString) {
                     AbstractString string = (AbstractString) array;
                     for (int i = 0; i < limit; i++) {
@@ -483,11 +486,9 @@ public final class ComplexString extends AbstractString
         }
     }
 
-    public int sxhash() //throws ConditionThrowable
+    public int sxhash()
     {
         int hashCode = 0;
-        //         for (int i = 0; i < capacity; i++)
-        //             hashCode = hashCode * 31 + chars[i];
         final int limit = length();
         for (int i = 0; i < limit; i++) {
             try {
