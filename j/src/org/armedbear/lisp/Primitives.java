@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.105 2003-03-10 15:00:46 piso Exp $
+ * $Id: Primitives.java,v 1.106 2003-03-10 19:38:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1324,6 +1324,7 @@ public final class Primitives extends Module
         return sb.toString();
     }
 
+    // ### %defun
     // %defun name parameters body => name
     private static final Primitive _DEFUN = new Primitive("%defun") {
         public LispObject execute(LispObject[] args) throws LispError
@@ -1333,7 +1334,7 @@ public final class Primitives extends Module
             LispObject body = checkList(args[2]);
             Environment env;
             if (args.length == 4)
-                env = (Environment) args[3];
+                env = checkEnvironment(args[3]);
             else
                 env = new Environment();
             return __defun(symbol, parameters, body, env);
@@ -2236,7 +2237,7 @@ public final class Primitives extends Module
     };
 
     // ### function-lambda-expression
-    // Need to return multiple values.
+    // function-lambda-expression function => lambda-expression, closure-p, name
     private static final Primitive1 FUNCTION_LAMBDA_EXPRESSION =
         new Primitive1("function-lambda-expression") {
         public LispObject execute(LispObject arg) throws LispError
@@ -2251,7 +2252,11 @@ public final class Primitives extends Module
                 expr = new Cons(closure.getParameterList(), expr);
                 expr = new Cons(Symbol.LAMBDA, expr);
                 values[0] = expr;
-                values[1] = closure.getEnvironment() != null ? T : NIL;
+                Environment env = closure.getEnvironment();
+                if (env == null || env.isEmpty())
+                    values[1] = NIL;
+                else
+                    values[1] = T;
             } else
                 values[0] = values[1] = NIL;
             setValues(values);
