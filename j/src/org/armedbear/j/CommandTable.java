@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.26 2003-06-04 18:09:53 piso Exp $
+ * $Id: CommandTable.java,v 1.27 2003-06-06 15:02:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -221,7 +221,7 @@ public class CommandTable
             addCommand("checkPath", "CheckPath");
             addCommand("chmod", "Directory");
             addCommand("clearRegister", "Registers");
-            addCommand("compile", "CompilationBuffer");
+            addCommand("compile", "CompilationCommands");
             addCommand("copyLink", "WebBuffer");
             addCommand("copyXPath", "XmlMode");
             addCommand("cvs", "CVS", "cvs");
@@ -305,7 +305,7 @@ public class CommandTable
             addCommand("mouseJumpToTag", "ListTagsMode");
             addCommand("nextChange", "ChangeMarks");
             addCommand("nextComment", "CheckinBuffer");
-            addCommand("nextError", "CompilationBuffer");
+            addCommand("nextError", "CompilationCommands");
             addCommand("nextTag", "TagCommands");
             addCommand("openFileInOtherFrame", "OpenFileDialog");
             addCommand("p4", "P4");
@@ -325,7 +325,7 @@ public class CommandTable
             addCommand("printRegion", "PrintCommands");
             addCommand("properties", "PropertiesDialog");
             addCommand("recentFiles", "RecentFilesDialog");
-            addCommand("recompile", "CompilationBuffer");
+            addCommand("recompile", "CompilationCommands");
             addCommand("renumberRegion", "RegionCommands");
             addCommand("replace", "ReplaceDialog");
             addCommand("replaceInFiles", "FindInFiles");
@@ -348,7 +348,7 @@ public class CommandTable
             addCommand("tagDown", "ListTagsMode");
             addCommand("tagUp", "ListTagsMode");
             addCommand("telnet", "RemoteShell");
-            addCommand("thisError", "CompilationBuffer");
+            addCommand("thisError", "CompilationCommands");
             addCommand("toggleWrap", "WrapText");
             addCommand("upperCaseRegion", "RegionCommands");
             addCommand("whereIs", "ExecuteCommandDialog");
