@@ -2,6 +2,7 @@
  * MenuItem.java
  *
  * Copyright (C) 1998-2003 Peter Graves
+ * $Id: MenuItem.java,v 1.3 2003-07-25 17:47:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,17 +35,14 @@ import javax.swing.UIManager;
 
 public final class MenuItem extends JMenuItem
 {
-    private static Font acceleratorFont;
-    private static Color acceleratorForeground;
-    private static Color acceleratorSelectionForeground;
+    private static final Font acceleratorFont =
+        UIManager.getFont("MenuItem.acceleratorFont");
+    private static final Color acceleratorForeground =
+         UIManager.getColor("MenuItem.acceleratorForeground");
+    private static final Color acceleratorSelectionForeground =
+        UIManager.getColor("MenuItem.acceleratorSelectionForeground");
 
-    static {
-        acceleratorFont = UIManager.getFont("MenuItem.acceleratorFont");
-        acceleratorForeground = UIManager.getColor("MenuItem.acceleratorForeground");
-        acceleratorSelectionForeground = UIManager.getColor("MenuItem.acceleratorSelectionForeground");
-    }
-
-    private String acceleratorText;
+    private final String acceleratorText;
 
     public MenuItem(String label, String acceleratorText)
     {
@@ -64,6 +62,7 @@ public final class MenuItem extends JMenuItem
     // with our key map format.
     public void paint(Graphics g)
     {
+        Display.setRenderingHints(g);
         super.paint(g);
         if (acceleratorText != null) {
             g.setFont(acceleratorFont);
@@ -71,8 +70,8 @@ public final class MenuItem extends JMenuItem
             FontMetrics fm = g.getFontMetrics();
             Insets insets = getInsets();
             g.drawString(acceleratorText,
-                getWidth() - (fm.stringWidth(acceleratorText) + insets.right + insets.left),
-                getFont().getSize() + (insets.top - 1));
+                         getWidth() - (fm.stringWidth(acceleratorText) + insets.right + insets.left),
+                         getFont().getSize() + (insets.top - 1));
         }
     }
 
