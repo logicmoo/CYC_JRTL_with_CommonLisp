@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.84 2003-07-05 02:05:54 piso Exp $
+;;; $Id: rt.lisp,v 1.85 2003-07-07 00:33:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -288,6 +288,7 @@
                               "position"
                               "position-if"
                               "position-if-not"
+                              "prog"
                               "prog1"
                               "prog2"
                               "progn"
