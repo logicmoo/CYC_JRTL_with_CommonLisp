@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.168 2004-03-17 16:24:08 piso Exp $
+# $Id: Makefile.in,v 1.169 2004-04-16 00:58:41 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -103,6 +103,7 @@ CLASSFILES =	AbstractArray.class \
 		Primitive1.class \
 		Primitive2.class \
 		Primitive3.class \
+		Primitive4.class \
 		Primitives.class \
 		PrintNotReadable.class \
 		Profiler.class \
