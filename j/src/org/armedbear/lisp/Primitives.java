@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.407 2003-09-19 12:10:27 piso Exp $
+ * $Id: Primitives.java,v 1.408 2003-09-19 12:20:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1149,7 +1149,7 @@ public final class Primitives extends Module
             LispObject datum = args[0];
             if (datum instanceof Symbol) {
                 if (datum == Symbol.PACKAGE_ERROR)
-                    throw new PackageError(_format(args, 1));
+                    throw new ConditionThrowable(new PackageError(_format(args, 1)));
                 if (datum == Symbol.PARSE_ERROR)
                     throw new ConditionThrowable(new ParseError(_format(args, 1)));
                 if (datum == Symbol.PROGRAM_ERROR)
@@ -1797,7 +1797,7 @@ public final class Primitives extends Module
         if (type == Symbol.TYPE_ERROR)
             return c.getCondition() instanceof TypeError;
         if (type == Symbol.PACKAGE_ERROR)
-            return c instanceof PackageError;
+            return c.getCondition() instanceof PackageError;
         if (type == Symbol.PARSE_ERROR)
             return c.getCondition() instanceof ParseError;
         if (type == Symbol.PROGRAM_ERROR)
@@ -2628,8 +2628,8 @@ public final class Primitives extends Module
                 while (list != NIL) {
                     String nick = javaString(list.car());
                     if (Packages.findPackage(nick) != null) {
-                        throw new PackageError("a package named " + nick +
-                                               " already exists");
+                        throw new ConditionThrowable(new PackageError("a package named " + nick +
+                                                                      " already exists"));
                     }
                     list = list.cdr();
                 }
@@ -2686,7 +2686,7 @@ public final class Primitives extends Module
             String packageName = javaString(arg);
             Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
-                throw new PackageError("package " + arg + " does not exist");
+                throw new ConditionThrowable(new PackageError("package " + arg + " does not exist"));
             LispThread thread = LispThread.currentThread();
             Environment dynEnv = thread.getDynamicEnvironment();
             if (dynEnv != null) {

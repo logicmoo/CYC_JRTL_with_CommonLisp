@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.17 2003-09-19 01:46:42 piso Exp $
+ * $Id: PackageFunctions.java,v 1.18 2003-09-19 12:20:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,8 +255,8 @@ public final class PackageFunctions extends Lisp
                 while (list != NIL) {
                     String nick = javaString(list.car());
                     if (Packages.findPackage(nick) != null) {
-                        throw new PackageError("a package named " + nick +
-                                            " already exists");
+                        throw new ConditionThrowable(new PackageError("a package named " + nick +
+                                                                      " already exists"));
                     }
                     list = list.cdr();
                 }

@@ -2,7 +2,7 @@
  * Packages.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Packages.java,v 1.9 2003-09-19 01:46:42 piso Exp $
+ * $Id: Packages.java,v 1.10 2003-09-19 12:20:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,8 +89,8 @@ public final class Packages extends Lisp
         throws ConditionThrowable
     {
         if (map.get(nickname) != null)
-            throw new PackageError("a package named " + nickname +
-                                   " already exists");
+            throw new ConditionThrowable(new PackageError("a package named " + nickname +
+                                                          " already exists"));
         map.put(nickname, pkg);
     }
 
