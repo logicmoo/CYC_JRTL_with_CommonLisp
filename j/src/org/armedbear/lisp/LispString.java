@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.67 2003-12-07 01:15:27 piso Exp $
+ * $Id: LispString.java,v 1.68 2003-12-07 16:44:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,7 +157,8 @@ public final class LispString extends AbstractVector
 
     public void fill(char c)
     {
-        for (int i = array.length; i-- > 0;)
+        final int limit = fillPointer >= 0 ? fillPointer : array.length;
+        for (int i = limit; i-- > 0;)
             array[i] = c;
     }
 
@@ -443,6 +444,18 @@ public final class LispString extends AbstractVector
         {
             int index = getValue(second).indexOf(getValue(first));
             return index >= 0 ? new Fixnum(index) : NIL;
+        }
+    };
+
+    // ### simple-string-fill string character => string
+    private static final Primitive2 STRING_FILL =
+        new Primitive2("simple-string-fill", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            checkString(first).fill(LispCharacter.getValue(second));
+            return first;
         }
     };
 }
