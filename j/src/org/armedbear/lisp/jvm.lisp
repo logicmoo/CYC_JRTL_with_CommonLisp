@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.95 2004-03-31 00:24:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.96 2004-04-01 00:38:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -561,7 +561,7 @@
 
 (dolist (op '(+ - * /
               1+ 1- + - < > <= >= = /=
-              car cdr cadr cdar cddr caddr cdddr cddddr
+              car cdr caar cadr cdar cddr cadar caddr cdddr cddddr
               first second third
               eq eql equal equalp
               length
@@ -580,17 +580,24 @@
               array-dimensions array-rank array-total-size
               array-element-type upgraded-array-element-type
               simple-vector-p simple-string-p bit-vector-p simple-bit-vector-p
+              stringp
               row-major-aref
               quote function
               mapcar
               find position
-              append nconc subseq
+              append nconc subseq adjoin
+              revappend nreconc
+              copy-seq
+              assoc assoc-if assoc-if-not acons
+              char-code char-int digit-char-p
               member ext:memq
+              remove remove-if remove-if-not delete delete-if delete-if-not
               special-variable-p
               gensym
               symbol-name symbol-function
               coerce
               reverse nreverse
+              last
               cons rplaca rplacd
               copy-list
               make-sequence make-list make-array make-package make-hash-table
@@ -606,7 +613,7 @@
               string
               string=
               setq
-              multiple-value-list pop
+              multiple-value-list push pop
               type-of class-of
               typep sys::%typep
               abs
