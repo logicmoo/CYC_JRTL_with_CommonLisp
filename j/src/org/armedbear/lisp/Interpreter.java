@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.23 2003-05-27 02:12:57 piso Exp $
+ * $Id: Interpreter.java,v 1.24 2003-06-18 16:31:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -480,6 +480,8 @@ public final class Interpreter extends Lisp
 
     public static LispObject evaluate(String s) throws Condition
     {
+        if (!initialized)
+            initialize(true);
         StringInputStream stream = new StringInputStream(s);
         LispObject obj = stream.read(false, EOF, false);
         if (obj == EOF)
