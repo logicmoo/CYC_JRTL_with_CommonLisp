@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.84 2003-07-01 13:29:04 piso Exp $
+ * $Id: Editor.java,v 1.85 2003-07-01 13:34:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -373,7 +373,7 @@ public final class Editor extends JPanel implements Constants,
         Directories.moveUnsentMessagesToDraftsFolder();
         loadExtensions();
         if (quick == 0) {
-            runStartupScript("org.armedbear.j.JLisp", "init.lisp");
+            runStartupScript();
         }
         DefaultLookAndFeel.setLookAndFeel();
 
@@ -6869,25 +6869,14 @@ public final class Editor extends JPanel implements Constants,
         return c;
     }
 
-    private static void runStartupScript(String className, String fileName)
+    private static void runStartupScript()
     {
         File file =
-            File.getInstance(Directories.getEditorDirectory(), fileName);
+            File.getInstance(Directories.getEditorDirectory(), "init.lisp");
         if (file != null && file.isFile()) {
             try {
                 long start = System.currentTimeMillis();
-                Class c = Class.forName(className);
-                if (c != null) {
-                    Class[] parameterTypes = new Class[1];
-                    parameterTypes[0] = File.class;
-                    Method method =
-                        c.getMethod("runStartupScript", parameterTypes);
-                    if (method != null) {
-                        Object[] args = new Object[1];
-                        args[0] = file;
-                        method.invoke(null, args);
-                    }
-                }
+                JLisp.runStartupScript(file);
                 long elapsed = System.currentTimeMillis() - start;
                 FastStringBuffer sb = new FastStringBuffer("loaded ");
                 sb.append(file.canonicalPath());
@@ -6898,7 +6887,7 @@ public final class Editor extends JPanel implements Constants,
             }
             catch (Throwable t) {
                 Log.error(t);
-                Log.error("unable to load " + file.canonicalPath());
+                Log.error("error loading " + file.canonicalPath());
             }
         }
     }
