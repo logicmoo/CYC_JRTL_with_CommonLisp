@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.60 2004-02-27 14:38:44 piso Exp $
+ * $Id: LispFloat.java,v 1.61 2004-03-15 20:00:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -452,6 +452,19 @@ public final class LispFloat extends LispObject
             if (arg instanceof LispFloat)
                 return new Fixnum(52);
             return signal(new TypeError(arg, Symbol.FLOAT));
+        }
+    };
+
+    // ### scale-float float integer => scaled-float
+    private static final Primitive2 SCALE_FLOAT =
+        new Primitive2("scale-float", "float integer")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            double f = getValue(first);
+            int n = Fixnum.getValue(second);
+            return new LispFloat(f * Math.pow(2, n));
         }
     };
 
