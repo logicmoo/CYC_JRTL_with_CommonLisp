@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: dolist.java,v 1.1 2003-09-23 15:42:41 piso Exp $
+ * $Id: dolist.java,v 1.2 2003-11-19 16:49:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,27 @@ public final class dolist extends SpecialOperator
         LispObject resultForm = args.cdr().cdr().car();
         Environment oldDynEnv = thread.getDynamicEnvironment();
         int depth = thread.getStackDepth();
+        // Process declarations.
+        LispObject specials = NIL;
+        while (bodyForm != NIL) {
+            LispObject obj = bodyForm.car();
+            if (obj instanceof Cons && obj.car() == Symbol.DECLARE) {
+                LispObject decls = obj.cdr();
+                while (decls != NIL) {
+                    LispObject decl = decls.car();
+                    if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
+                        LispObject vars = decl.cdr();
+                        while (vars != NIL) {
+                            specials = new Cons(vars.car(), specials);
+                            vars = vars.cdr();
+                        }
+                    }
+                    decls = decls.cdr();
+                }
+                bodyForm = bodyForm.cdr();
+            } else
+                break;
+        }
         try {
             LispObject list = checkList(eval(listForm, env, thread));
             // Look for tags.
@@ -55,7 +76,13 @@ public final class dolist extends SpecialOperator
             }
             while (list != NIL) {
                 Environment ext = new Environment(env);
-                bind(var, list.car(), ext);
+                if (specials != NIL && memq(var, specials)) {
+                    thread.bindSpecial(var, list.car());
+                    ext.declareSpecial(var);
+                } else if (var.isSpecialVariable()) {
+                    thread.bindSpecial(var, list.car());
+                } else
+                    ext.bind(var, list.car());
                 LispObject body = bodyForm;
                 while (body != NIL) {
                     LispObject current = body.car();
