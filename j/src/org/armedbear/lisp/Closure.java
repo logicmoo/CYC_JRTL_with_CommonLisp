@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.33 2003-06-08 16:30:45 piso Exp $
+ * $Id: Closure.java,v 1.34 2003-06-08 16:39:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,8 +42,8 @@ public class Closure extends Function
     private final LispObject lambdaList;
     private final Parameter[] requiredParameters;
     private final Parameter[] optionalParameters;
+    private final Parameter[] keywordParameters;
     private final Parameter[] parameterArray;
-    private final Parameter[] keywordParameterArray;
     private final Parameter[] auxVarArray;
     private final LispObject body;
     private final Environment environment;
@@ -195,11 +195,8 @@ public class Closure extends Function
             this.optionalParameters = new Parameter[optionalParameters.size()];
             optionalParameters.toArray(this.optionalParameters);
             Debug.assertTrue(keywordParameterCount == keywordParameters.size());
-            if (keywordParameterCount > 0) {
-                keywordParameterArray = new Parameter[keywordParameterCount];
-                keywordParameters.toArray(keywordParameterArray);
-            } else
-                keywordParameterArray = null;
+            this.keywordParameters = new Parameter[keywordParameters.size()];
+            keywordParameters.toArray(this.keywordParameters);
             if (auxVars != null && auxVars.size() > 0) {
                 auxVarArray = new Parameter[auxVars.size()];
                 auxVars.toArray(auxVarArray);
@@ -210,7 +207,7 @@ public class Closure extends Function
             parameterArray = new Parameter[0];
             requiredParameters = null;
             optionalParameters = null;
-            keywordParameterArray = null;
+            keywordParameters = null;
             auxVarArray = null;
             arity = 0;
 
@@ -225,6 +222,13 @@ public class Closure extends Function
         this.restp = restp;
 
         minArgs = required;
+
+        if (required > parameterArray.length) {
+            Debug.trace("invocation error in function " + getName());
+            Debug.trace("required = " + required);
+            Debug.trace("parameterArray.length = " + parameterArray.length);
+            Debug.assertTrue(false);
+        }
     }
 
     private static final void invalidParameter(LispObject obj)
@@ -413,12 +417,6 @@ public class Closure extends Function
             throw new WrongNumberOfArgumentsException(this);
         Environment oldDynEnv = thread.getDynamicEnvironment();
         Environment ext = new Environment(env);
-        if (required > parameterArray.length) {
-            Debug.trace("invocation error in function " + getName());
-            Debug.trace("required = " + required);
-            Debug.trace("parameterArray.length = " + parameterArray.length);
-            Debug.assertTrue(false);
-        }
         // Required parameters.
         int i;
         if (requiredParameters != null) {
@@ -482,10 +480,10 @@ public class Closure extends Function
                 // Find it.
                 int k;
                 for (k = keywordParameterCount; k-- > 0;) {
-                    if (keywordParameterArray[k].keyword == keyword) {
+                    if (keywordParameters[k].keyword == keyword) {
                         // Found it!
                         if (!boundpArray[k]) {
-                            Parameter parameter = keywordParameterArray[k];
+                            Parameter parameter = keywordParameters[k];
                             Symbol symbol = parameter.var;
                             bind(symbol, args[j+1], ext);
                             if (parameter.svar != NIL) {
@@ -517,7 +515,7 @@ public class Closure extends Function
             // Now bind any unbound keyword arguments to their defaults.
             for (int n = 0; n < keywordParameterCount; n++) {
                 if (!boundpArray[n]) {
-                    Parameter parameter = keywordParameterArray[n];
+                    Parameter parameter = keywordParameters[n];
                     LispObject initForm = parameter.initForm;
                     LispObject value =
                         initForm != null ? eval(initForm, ext, thread) : NIL;
