@@ -30,7 +30,7 @@
       destdir="${basedir}"
       classpath="${basedir}:${jdk}/jre/lib/rt.jar:${junit}"
       includeAntRuntime="no"
-      includes="org/armedbear/lisp/*"
+      includes="org/armedbear/lisp/**/*"
       debug="no"
       optimize="yes"
     />
