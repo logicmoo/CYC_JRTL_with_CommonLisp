@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.1 2003-01-17 19:43:30 piso Exp $
+ * $Id: Symbol.java,v 1.2 2003-02-13 17:48:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@ public final class Symbol extends LispObject
     // Type specifiers.
     public static final Symbol CONS          = export("CONS", PACKAGE_CL);
     public static final Symbol CHARACTER     = export("CHARACTER", PACKAGE_CL);
+    public static final Symbol ERROR         = export("ERROR", PACKAGE_CL);
     public static final Symbol FIXNUM        = export("FIXNUM", PACKAGE_CL);
     public static final Symbol FUNCTION      = export("FUNCTION", PACKAGE_CL);
     public static final Symbol PACKAGE       = export("PACKAGE", PACKAGE_CL);
