@@ -1,8 +1,8 @@
 /*
  * Menu.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: Menu.java,v 1.7 2004-12-24 19:16:52 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Menu.java,v 1.8 2005-03-06 20:42:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@
 package org.armedbear.j;
 
 import javax.swing.JMenu;
-import javax.swing.KeyStroke;
 
 public final class Menu extends JMenu implements Constants
 {
@@ -41,15 +40,7 @@ public final class Menu extends JMenu implements Constants
 
     public void setPopupMenuVisible(boolean b)
     {
-//         Log.debug("setPopupMenuVisible " + b);
         super.setPopupMenuVisible(b);
-//         if (b) {
-//             final Editor editor = Editor.currentEditor();
-//             editor.getMode().populateMenu(editor, this);
-//         }
-//         super.setPopupMenuVisible(b);
-//         if (!b)
-//             removeAll();
     }
 
     public MenuItem add(Editor editor, String label, char mnemonic,
