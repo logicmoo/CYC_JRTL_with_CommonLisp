@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.54 2003-10-29 14:17:13 piso Exp $
+;;; $Id: autoloads.lisp,v 1.55 2003-10-30 18:41:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -95,6 +95,7 @@
 (autoload 'deposit-field)
 (autoload 'mask-field)
 (autoload '(ensure-generic-function) "clos.lisp")
+(autoload 'inspect)
 
 (autoload '(tpl::top-level-loop) "top-level.lisp")
 
