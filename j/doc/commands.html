@@ -171,6 +171,8 @@
     <li><a href="commands.html#killWordLeft">killWordLeft</a></li>
     <li><a href="commands.html#killWordRight">killWordRight</a></li>
     <li><a href="commands.html#left">left</a></li>
+    <li><a href="commands.html#lispFindMatchingChar">lispFindMatchingChar</a></li>
+    <li><a href="commands.html#lispSelectSyntax">lispSelectSyntax</a></li>
     <li><a href="commands.html#listBindings">listBindings</a></li>
     <li><a href="commands.html#listFiles">listFiles</a></li>
     <li><a href="commands.html#listIncludes">listIncludes</a></li>
@@ -286,6 +288,7 @@
     <li><a href="commands.html#selectPageDown">selectPageDown</a></li>
     <li><a href="commands.html#selectPageUp">selectPageUp</a></li>
     <li><a href="commands.html#selectRight">selectRight</a></li>
+    <li><a href="commands.html#selectSyntax">selectSyntax</a></li>
     <li><a href="commands.html#selectToMarker">selectToMarker</a></li>
     <li><a href="commands.html#selectUp">selectUp</a></li>
     <li><a href="commands.html#selectWord">selectWord</a></li>
@@ -2409,9 +2412,9 @@ Deletes the word to the left of the caret, appending the deleted text to the
 <p>
 Deletes the word to the right of the caret, appending the deleted text to the
 <a href="killring.html">kill ring</a>.
-<br><br>
+<p>
 <b>Default key mapping:</b> None
-<br><br>
+<p>
 <b>See also:</b> <a href="#deleteWordRight">deleteWordRight</a>
 <br><br>
 </dl><!--<hr>-->
@@ -2419,8 +2422,27 @@ Deletes the word to the right of the caret, appending the deleted text to the
 <a name="left">left</a><dl><dd>
 <p>
 Moves the caret one character to the left.
+<p>
+<b>Default key mapping:</b> Left arrow key
 <br><br>
-<b>Default key mapping:</b>
+</dl><!--<hr>-->
+
+<a name="lispFindMatchingChar">lispFindMatchingChar</a><dl><dd>
+<p>
+Finds the match of the parenthesis at the location of the caret.
+<p>
+<b>Default key mapping:</b> Ctrl M in Lisp mode
+<br><br>
+</dl><!--<hr>-->
+
+<a name="lispSelectSyntax">lispSelectSyntax</a><dl><dd>
+<p>
+Selects the syntactic expression in the vicinity of the caret. (If a region is
+already selected, it is extended to the enclosing syntactic expression.)
+<p>
+<b>Default key mapping:</b> Ctrl Shift M in Lisp mode
+<p>
+<b>See also:</b> <a href="#selectSyntax">selectSyntax</a>
 <br><br>
 </dl><!--<hr>-->
 
@@ -3731,7 +3753,7 @@ prompted for confirmation before they are discarded.
 <p>
 Moves the caret one character to the right.
 <p>
-<b>Default key mapping:</b> Right
+<b>Default key mapping:</b> Right arrow key
 <br><br>
 </dl><!--<hr>-->
 
@@ -3873,7 +3895,7 @@ Extends the selection to the beginning of the current line.
 <a name="selectLeft">selectLeft</a><dl><dd>
 <p>
 Extends the selection one character to the left.
-<br><br>
+<p>
 <b>Default key mapping:</b> Shift Left
 <br><br>
 </dl><!--<hr>-->
@@ -3881,7 +3903,7 @@ Extends the selection one character to the left.
 <a name="selectPageDown">selectPageDown</a><dl><dd>
 <p>
 Extends the selection down one full screen.
-<br><br>
+<p>
 <b>Default key mapping:</b> Shift Page Down
 <br><br>
 </dl><!--<hr>-->
@@ -3889,7 +3911,7 @@ Extends the selection down one full screen.
 <a name="selectPageUp">selectPageUp</a><dl><dd>
 <p>
 Extends the selection up one full screen.
-<br><br>
+<p>
 <b>Default key mapping:</b> Shift Page Up
 <br><br>
 </dl><!--<hr>-->
@@ -3897,8 +3919,18 @@ Extends the selection up one full screen.
 <a name="selectRight">selectRight</a><dl><dd>
 <p>
 Extends the selection one character to the right.
-<br><br>
+<p>
 <b>Default key mapping:</b> Shift Right
+<br><br>
+</dl><!--<hr>-->
+
+<a name="selectSyntax">selectSyntax</a><dl><dd>
+<p>
+Selects the syntactic expression in the vicinity of the caret.
+<p>
+<b>Default key mapping:</b> Ctrl Shift M
+<p>
+<b>See also:</b> <a href="#lispSelectSyntax">lispSelectSyntax</a>
 <br><br>
 </dl><!--<hr>-->
 
