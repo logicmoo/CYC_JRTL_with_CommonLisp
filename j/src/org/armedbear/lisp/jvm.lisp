@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.408 2005-03-24 23:56:54 piso Exp $
+;;; $Id: jvm.lisp,v 1.409 2005-03-25 16:10:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4703,6 +4703,51 @@
         (t
          (compile-function-call form target representation))))
 
+(defun p2-aset (form &key (target :stack) representation)
+  ;; We only optimize the 3-arg case.
+  (cond ((= (length form) 4)
+         (let* ((*register* *register*)
+                (value-register (unless (null target) (allocate-register)))
+                (array-declared-type t))
+           (when (symbolp (second form))
+             (let ((variable (find-visible-variable (second form))))
+               (when variable
+                 (setf array-declared-type (variable-declared-type variable)))))
+           ;; array
+           (compile-form (second form) :target :stack)
+           ;; index
+           (compile-form (third form) :target :stack :representation :unboxed-fixnum)
+           ;; value
+           (cond ((subtypep array-declared-type '(array (unsigned-byte 8)))
+                  (compile-form (fourth form) :target :stack
+                                :representation :unboxed-fixnum)
+                  (when value-register
+                    (emit 'dup)
+                    (emit-move-from-stack value-register :unboxed-fixnum)))
+                 (t
+                  (compile-form (fourth form) :target :stack
+                                :representation nil)
+                  (when value-register
+                    (emit 'dup)
+                    (emit-move-from-stack value-register nil))))
+           (unless (and (single-valued-p (second form))
+                        (single-valued-p (third form))
+                        (single-valued-p (fourth form)))
+             (emit-clear-values))
+           (cond ((subtypep array-declared-type '(array (unsigned-byte 8)))
+                  (emit-invokevirtual +lisp-object-class+ "aset" '("I" "I") nil))
+                 (t
+                  (emit-invokevirtual +lisp-object-class+ "aset" (list "I" +lisp-object+) nil)))
+           (when value-register
+             (cond ((subtypep array-declared-type '(array (unsigned-byte 8)))
+                    (emit 'iload value-register)
+                    (emit-move-from-stack target :unboxed-fixnum))
+                   (t
+                    (emit 'aload value-register)
+                    (emit-move-from-stack target nil))))))
+        (t
+         (compile-function-call form target representation))))
+
 (defun p2-not/null (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -5937,6 +5982,7 @@
 (install-p2-handler '>               'p2-numeric-comparison)
 (install-p2-handler '>=              'p2-numeric-comparison)
 (install-p2-handler 'aref            'p2-aref)
+(install-p2-handler 'sys::aset       'p2-aset)
 (install-p2-handler 'ash             'p2-ash)
 (install-p2-handler 'atom            'p2-atom)
 (install-p2-handler 'cons            'p2-cons)
