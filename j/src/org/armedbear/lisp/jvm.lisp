@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.251 2004-07-28 16:14:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.252 2004-07-28 23:55:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -161,18 +161,21 @@
   (compiland *current-compiland*)
   form)
 
-;; Used to wrap TAGBODYs and LET/LET*/M-V-B forms as well as BLOCKs per se.
+;; Used to wrap TAGBODYs, UNWIND-PROTECTs and LET/LET*/M-V-B forms as well as
+;; BLOCKs per se.
 (defstruct (block-node (:conc-name block-) (:include node))
-  name ; Block name, (TAGBODY) or (LET).
+  ;; Block name, or (TAGBODY), or (LET).
+  name
   (exit (gensym))
   target
   catch-tag
-  return-p ; True if there is any RETURN from this block.
-  non-local-return-p ; True if there is a non-local RETURN from this block.
-  non-local-go-p ; True if a tag in this tagbody is the target of a non-local GO.
-
-  ;; If non-nil, number of register containing saved dynamic environment for
-  ;; this block.
+  ;; True if there is any RETURN from this block.
+  return-p
+  ;; True if there is a non-local RETURN from this block.
+  non-local-return-p
+  ;; True if a tag in this tagbody is the target of a non-local GO.
+  non-local-go-p
+  ;; If non-nil, register containing saved dynamic environment for this block.
   environment-register
   )
 
@@ -188,10 +191,6 @@
   label
   block
   (compiland *current-compiland*))
-
-;; (defstruct (tagbody-node (:conc-name tagbody-) (:include node))
-;;   non-local-go-p ; True if a tag in this tagbody is the target of a non-local GO.
-;;   )
 
 ;;; Pass 1.
 
@@ -2641,8 +2640,18 @@
     (unless tag
       (error "COMPILE-GO: tag not found: ~S" name))
     (cond ((eq (tag-compiland tag) *current-compiland*)
+           ;; Local case.
            (let ((tag-block (tag-block tag))
                  (register nil))
+             ;; Does the GO leave an enclosing UNWIND-PROTECT?
+             (let ((protected
+                    (dolist (enclosing-block *blocks*)
+                      (when (eq enclosing-block tag-block)
+                        (return nil))
+                      (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
+                        (return t)))))
+               (when protected
+                 (error "COMPILE-GO: enclosing UNWIND-PROTECT")))
              (dolist (block *blocks*)
                (if (eq block tag-block)
                    (return)
@@ -2775,9 +2784,20 @@
     (cond ((null block)
            (error "No block named ~S is currently visible." name))
           ((eq (block-compiland block) *current-compiland*)
+           ;; Local case. Is the RETURN nested inside an UNWIND-PROTECT which
+           ;; is inside the block we're returning from?
+           (let ((protected
+                  (dolist (enclosing-block *blocks*)
+                    (when (eq enclosing-block block)
+                      (return nil))
+                    (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
+                      (return t)))))
+             (when protected
+               (error "COMPILE-RETURN-FROM: enclosing UNWIND-PROTECT")))
            (compile-form result-form :target (block-target block))
            (emit 'goto (block-exit block)))
           (t
+           ;; Non-local RETURN.
            (setf (block-non-local-return-p block) t)
            (emit 'new +lisp-return-class+)
            (emit 'dup)
@@ -3604,37 +3624,39 @@
          (result-register (allocate-register))
          (values-register (allocate-register))
          (return-address-register (allocate-register))
-         (label1 (gensym))
-         (label2 (gensym))
-         (label3 (gensym))
-         (label4 (gensym))
-         (cleanup (gensym)))
-    (when (contains-return protected-form)
-      (error "COMPILE-UNWIND-PROTECT: unhandled case (RETURN)"))
-    (when (contains-go protected-form)
-      (error "COMPILE-UNWIND-PROTECT: unhandled case (GO)"))
-    (emit 'label `,label1) ; Start of protected range.
-    (compile-form protected-form :target result-register)
-    (emit-push-current-thread)
-    (emit 'getfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
-    (emit 'astore values-register)
-    (emit 'label `,label2) ; End of protected range.
-    (emit 'jsr `,cleanup)
-    (emit 'goto `,label4) ; Jump over handler.
-    (emit 'label `,label3) ; Start of exception handler.
+         (BEGIN-PROTECTED-RANGE (gensym))
+         (END-PROTECTED-RANGE (gensym))
+         (HANDLER (gensym))
+         (EXIT (gensym))
+         (CLEANUP (gensym)))
+;;     (when (contains-return protected-form)
+;;       (error "COMPILE-UNWIND-PROTECT: unhandled case (RETURN)"))
+;;     (when (contains-go protected-form)
+;;       (error "COMPILE-UNWIND-PROTECT: unhandled case (GO)"))
+    (let* ((block (make-block-node :name '(UNWIND-PROTECT)))
+           (*blocks* (cons block *blocks*)))
+      (label BEGIN-PROTECTED-RANGE)
+      (compile-form protected-form :target result-register)
+      (emit-push-current-thread)
+      (emit 'getfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
+      (emit 'astore values-register)
+      (label END-PROTECTED-RANGE))
+    (emit 'jsr CLEANUP)
+    (emit 'goto EXIT) ; Jump over handler.
+    (label HANDLER) ; Start of exception handler.
     ;; The Throw object is on the runtime stack. Stack depth is 1.
     (emit 'astore exception-register)
-    (emit 'jsr `,cleanup) ; Call cleanup forms.
+    (emit 'jsr CLEANUP) ; Call cleanup forms.
     (emit 'aload exception-register)
     (emit 'athrow) ; Re-throw exception.
-    (emit 'label `,cleanup) ; Cleanup forms.
+    (label CLEANUP) ; Cleanup forms.
     ;; Return address is on stack here.
     (emit 'astore return-address-register)
     (dolist (subform cleanup-forms)
       (compile-form subform :target nil)
       (maybe-emit-clear-values subform))
     (emit 'ret return-address-register)
-    (emit 'label `,label4)
+    (label EXIT)
     ;; Restore multiple values returned by protected form.
     (emit-push-current-thread)
     (emit 'aload values-register)
@@ -3642,9 +3664,9 @@
     ;; Result.
     (emit 'aload result-register)
     (emit-move-from-stack target)
-    (let ((handler (make-handler :from `,label1
-                                 :to `,label2
-                                 :code `,label3
+    (let ((handler (make-handler :from BEGIN-PROTECTED-RANGE
+                                 :to END-PROTECTED-RANGE
+                                 :code HANDLER
                                  :catch-type 0)))
       (push handler *handlers*))))
 
