@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispString.java,v 1.74 2004-02-11 00:11:52 piso Exp $
+ * $Id: LispString.java,v 1.75 2004-02-11 20:00:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,7 +262,7 @@ public final class LispString extends AbstractVector
             return ((LispString)obj).getValue();
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "string"));
+            signal(new TypeError(obj, Symbol.STRING));
             // Not reached.
             return null;
         }
@@ -381,6 +381,7 @@ public final class LispString extends AbstractVector
         return toString(0, array.length);
     }
 
+    // ### string-p
     public static final Primitive1 STRINGP = new Primitive1("stringp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -390,15 +391,13 @@ public final class LispString extends AbstractVector
         }
     };
 
-    public static final Primitive1 SIMPLE_STRING_P = new Primitive1("simple-string-p","object")
+    // ### simple-string-p
+    public static final Primitive1 SIMPLE_STRING_P =
+        new Primitive1("simple-string-p", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            // Displaced arrays are not simple.
-            if (arg instanceof LispString)
-                return ((LispString)arg).fillPointer < 0 ? T : NIL;
-            else
-                return NIL;
+            return arg.SIMPLE_STRING_P();
         }
     };
 
