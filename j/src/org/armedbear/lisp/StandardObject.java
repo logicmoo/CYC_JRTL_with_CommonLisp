@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.35 2004-11-12 13:59:55 piso Exp $
+ * $Id: StandardObject.java,v 1.36 2004-11-18 16:03:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,13 +256,13 @@ public class StandardObject extends LispObject
             if (index >= 0) {
                 // Found instance slot.
                 LispObject value = instance.slots.getRowMajor(index);
-                return value != UNBOUND_SLOT_VALUE ? T : NIL;
+                return value != UNBOUND_VALUE ? T : NIL;
             }
             // Check for class slot.
             LispObject location = layout.getClassSlotLocation(second);
             if (location != null) {
                 LispObject value = location.cdr();
-                return value != UNBOUND_SLOT_VALUE ? T : NIL;
+                return value != UNBOUND_VALUE ? T : NIL;
             }
             final LispThread thread = LispThread.currentThread();
             LispObject value =
@@ -305,7 +305,7 @@ public class StandardObject extends LispObject
                                                        Symbol.SLOT_VALUE);
                 value = location.cdr();
             }
-            if (value == UNBOUND_SLOT_VALUE)
+            if (value == UNBOUND_VALUE)
                 return Symbol.SLOT_UNBOUND.execute(instance.getLispClass(),
                                                    instance, second);
             return value;
