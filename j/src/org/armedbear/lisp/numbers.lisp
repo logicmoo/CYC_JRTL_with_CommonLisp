@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.18 2004-01-09 18:21:49 piso Exp $
+;;; $Id: numbers.lisp,v 1.19 2004-02-06 11:39:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -207,6 +207,12 @@
 	 (float -1 float1)
 	 (float 1 float1))
      (abs float2)))
+
+(defun decode-float (float)
+  (multiple-value-bind (significand exponent sign) (integer-decode-float float)
+    (values (coerce (/ significand (expt 2 53)) 'float)
+            (+ exponent 53)
+            (if (minusp sign) -1.0 1.0))))
 
 (defun conjugate (number)
   (etypecase number
