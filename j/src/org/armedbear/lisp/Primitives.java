@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.16 2003-02-13 20:05:02 piso Exp $
+ * $Id: Primitives.java,v 1.17 2003-02-14 14:01:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2881,6 +2881,7 @@ public final class Primitives extends Module
             Block block = new Block(NIL, args);
             while (true) {
                 LispObject body = block.getBody();
+                int depth = stack.size();
                 try {
                     while (body != NIL) {
                         eval(body.car(), env);
@@ -2888,6 +2889,7 @@ public final class Primitives extends Module
                     }
                 }
                 catch (Return ret) {
+                    stack.setSize(depth);
                     if (ret.getName() == block.getName())
                         return ret.getResult();
                     throw ret;
