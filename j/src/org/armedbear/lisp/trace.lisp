@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: trace.lisp,v 1.4 2004-05-28 11:13:16 asimon Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: trace.lisp,v 1.5 2004-06-20 16:33:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,19 +44,19 @@
   (unless (fboundp symbol)
     (error "~S is not the name of a function" symbol))
   (if (member symbol *traced-functions*)
-    (format t "~S is already being traced." symbol)
+    (%format t "~S is already being traced." symbol)
     (let* ((untraced-function (symbol-function symbol))
             (trace-function
               (lambda (&rest args)
-                (format t (indent "~D: ~S~%") *trace-depth*
+                (%format t (indent "~D: ~S~%") *trace-depth*
                   (append (list symbol) args))
                 (incf *trace-depth*)
                 (let ((r (multiple-value-list (apply untraced-function args))))
                   (decf *trace-depth*)
-                  (format t (indent "~D: ~A returned") *trace-depth* symbol)
+                  (%format t (indent "~D: ~A returned") *trace-depth* symbol)
                   (dolist (val r)
-                    (format t " ~S" val))
-                  (format t "~%")
+                    (%format t " ~S" val))
+                  (%format t "~%")
                   (values-list r)))))
       (setf (symbol-function symbol) trace-function)
       (setf (get symbol *untraced-function*) untraced-function)
@@ -74,7 +74,7 @@
       (dolist (arg args)
         (if (member arg *traced-functions*)
             (untrace-1 arg)
-            (format t "~S is not being traced.~%" arg)))))
+            (%format t "~S is not being traced.~%" arg)))))
 
 (defun untrace-all ()
   (dolist (arg *traced-functions*)
