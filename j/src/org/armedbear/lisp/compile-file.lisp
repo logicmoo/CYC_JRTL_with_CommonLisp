@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.15 2004-05-01 23:44:15 piso Exp $
+;;; $Id: compile-file.lisp,v 1.16 2004-05-11 13:53:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -180,6 +180,11 @@
   (merge-pathnames output-file (merge-pathnames input-file)))
 
 (defun compile-file (input-file &key output-file verbose print external-format)
+  (unless (or (probe-file input-file)
+              (pathname-type input-file))
+    (let ((pathname (merge-pathnames (make-pathname :type "lisp") input-file)))
+      (when (probe-file pathname)
+        (setf input-file pathname))))
   (unless output-file
     (setf output-file (compile-file-pathname input-file)))
   (let* ((type (pathname-type output-file))
