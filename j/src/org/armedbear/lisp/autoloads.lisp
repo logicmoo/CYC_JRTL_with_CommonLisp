@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.88 2004-01-05 19:07:23 piso Exp $
+;;; $Id: autoloads.lisp,v 1.89 2004-01-06 15:10:53 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -180,6 +180,12 @@
 (autoload 'jmember-static-p "java.lisp")
 (export 'jmember-public-p "JAVA")
 (autoload 'jmember-public-p "java.lisp")
+(export 'jnew-runtime-class "JAVA")
+(autoload 'jnew-runtime-class "runtime-class.lisp")
+(export 'jredefine-method "JAVA")
+(autoload 'jredefine-method "runtime-class.lisp")
+(export 'jruntime-class-exists-p "JAVA")
+(autoload 'jruntime-class-exists-p "runtime-class.lisp")
 
 ;; Profiler.
 (in-package "PROFILER")
