@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.127 2004-11-07 15:09:48 piso Exp $
+;;; $Id: clos.lisp,v 1.128 2004-11-08 18:27:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -77,6 +77,7 @@
 (defsetf class-direct-default-initargs %set-class-direct-default-initargs)
 (defsetf class-default-initargs %set-class-default-initargs)
 (defsetf class-precedence-list %set-class-precedence-list)
+(defsetf class-finalized-p %set-class-finalized-p)
 (defsetf std-instance-layout %set-std-instance-layout)
 (defsetf std-instance-slots %set-std-instance-slots)
 (defsetf standard-instance-access %set-standard-instance-access)
@@ -155,10 +156,15 @@
           ,@other-options))))
 
 (defun canonicalize-direct-superclasses (direct-superclasses)
-  `(list ,@(mapcar #'canonicalize-direct-superclass direct-superclasses)))
-
-(defun canonicalize-direct-superclass (class-name)
-  `(find-class ',class-name))
+  (let ((classes '()))
+    (dolist (class-specifier direct-superclasses)
+      (if (classp class-specifier)
+          (push class-specifier classes)
+          (let ((class (find-class class-specifier nil)))
+            (unless class
+              (setf class (make-forward-referenced-class class-specifier)))
+            (push class classes))))
+    (nreverse classes)))
 
 (defun canonicalize-defclass-options (options)
   (mapappend #'canonicalize-defclass-option options))
@@ -245,6 +251,9 @@
                      #'std-compute-class-precedence-list
                      #'compute-class-precedence-list)
                  class))
+  (dolist (class (class-precedence-list class))
+    (when (typep class 'forward-referenced-class)
+      (return-from std-finalize-inheritance)))
   (setf (class-slots class)
         (funcall (if (eq (class-of class) the-class-standard-class)
                      #'std-compute-slots
@@ -269,7 +278,8 @@
          (push (slot-definition-location slot) class-slots))))
     (setf (class-layout class)
           (make-layout class (nreverse instance-slots) (nreverse class-slots))))
-  (setf (class-default-initargs class) (compute-class-default-initargs class)))
+  (setf (class-default-initargs class) (compute-class-default-initargs class))
+  (setf (class-finalized-p class) t))
 
 (defun compute-class-default-initargs (class)
   (mapappend #'class-direct-default-initargs
@@ -536,7 +546,7 @@
       (let ((name1 (canonical-slot-name s1)))
         (dolist (s2 (cdr (memq s1 slots)))
 	  (when (eq name1 (canonical-slot-name s2))
-            (error 'program-error "duplicate slot ~S" name1))))))
+            (error 'program-error "Duplicate slot ~S" name1))))))
   ;; Check for duplicate argument names in :DEFAULT-INITARGS.
   (let ((names ()))
     (do* ((initargs (getf all-keys :direct-default-initargs) (cddr initargs))
@@ -550,19 +560,32 @@
         (error 'program-error
                :format-control "Duplicate initialization argument name ~S in :DEFAULT-INITARGS."
                :format-arguments (list name)))))
-  (let ((class (find-class name nil)))
-    (unless (and class (eq name (class-name class)))
-      (setf class (apply #'make-instance-standard-class (find-class 'standard-class)
-                         :name name all-keys))
-      (%set-find-class name class))
-    class))
+  (let ((old-class (find-class name nil)))
+    (cond ((and old-class (eq name (class-name old-class)))
+           (if (typep old-class 'forward-referenced-class)
+               (let ((new-class (apply #'make-instance-standard-class
+                                     (find-class 'standard-class)
+                                     :name name all-keys)))
+                 (%set-find-class name new-class)
+                 (dolist (subclass (class-direct-subclasses old-class))
+                   (setf (class-direct-superclasses subclass)
+                         (substitute new-class old-class
+                                     (class-direct-superclasses subclass))))
+                 new-class)
+               old-class))
+          (t
+           (let ((class (apply #'make-instance-standard-class
+                               (find-class 'standard-class)
+                               :name name all-keys)))
+             (%set-find-class name class)
+             class)))))
 
 (defmacro defclass (&whole form name direct-superclasses direct-slots &rest options)
   (unless (>= (length form) 3)
     (error 'program-error "Wrong number of arguments for DEFCLASS."))
   `(ensure-class ',name
                  :direct-superclasses
-                 ,(canonicalize-direct-superclasses direct-superclasses)
+                 (canonicalize-direct-superclasses ',direct-superclasses)
                  :direct-slots
                  ,(canonicalize-direct-slots direct-slots)
                  ,@(canonicalize-defclass-options options)))
@@ -1654,6 +1677,8 @@
   (when (oddp (length initargs))
     (error 'program-error
            :format-control "Odd number of keyword arguments."))
+  (unless (class-finalized-p class)
+    (std-finalize-inheritance class))
   (let ((class-default-initargs (class-default-initargs class)))
     (when class-default-initargs
       (let ((default-initargs ()))
