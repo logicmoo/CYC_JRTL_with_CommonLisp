@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: GenericFunction.java,v 1.13 2004-10-11 18:03:59 piso Exp $
+ * $Id: GenericFunction.java,v 1.14 2004-10-23 19:31:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,35 +86,27 @@ public final class GenericFunction extends StandardObject
 
     public LispObject execute() throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[0];
-        return execute(args);
+        return funcall0(getDiscriminatingFunction(), LispThread.currentThread());
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[1];
-        args[0] = arg;
-        return execute(args);
+        return funcall1(getDiscriminatingFunction(), arg, LispThread.currentThread());
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[2];
-        args[0] = first;
-        args[1] = second;
-        return execute(args);
+        return funcall2(getDiscriminatingFunction(), first, second,
+                        LispThread.currentThread());
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
         throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[3];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        return execute(args);
+        return funcall3(getDiscriminatingFunction(), first, second, third,
+                        LispThread.currentThread());
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -126,7 +118,7 @@ public final class GenericFunction extends StandardObject
         args[1] = second;
         args[2] = third;
         args[3] = fourth;
-        return execute(args);
+        return funcall(getDiscriminatingFunction(), args, LispThread.currentThread());
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
