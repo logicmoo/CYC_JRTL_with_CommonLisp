@@ -64,8 +64,6 @@
 (defun make-location (buffer position)
   (list :location buffer position))
 
-;;; FIXME we don't handle the compiled-interactively case yet.  That
-;;; should have NIL :filename & :position, and non-NIL :source-form
 (defun function-source-location (function &optional name)
   "Try to find the canonical source location of FUNCTION."
   (let* ((def (sb-introspect:find-definition-source function))
@@ -101,22 +99,28 @@
   (let ((methods (sb-mop:generic-function-methods gf))
         (name (sb-mop:generic-function-name gf)))
     (loop for method in methods
-      collect (list `(method ,name ,(sb-pcl::unparse-specializers method))
+      collect (list `("method"
+                      ,(princ-to-string name)
+                      ,(sb-pcl::unparse-specializers method))
                     (safe-function-source-location method name)))))
 
 (defun function-definitions (name)
-  (flet ((loc (fn name) (safe-function-source-location fn name)))
     (cond ((and (symbolp name) (macro-function name))
-           (list (list `(defmacro ,name)
-                       (loc (macro-function name) name))))
+           (list (list `("defmacro"
+                         ,(princ-to-string name))
+                       (safe-function-source-location (macro-function name) name))))
           ((fboundp name)
            (let ((fn (fdefinition name)))
              (typecase fn
                (generic-function
-                (cons (list `(defgeneric ,name) (loc fn name))
+                (cons (list `("defgeneric"
+                              ,(princ-to-string name))
+                            (safe-function-source-location fn name))
                       (method-definitions fn)))
                (t
-                (list (list `(function ,name) (loc fn name))))))))))
+                (list (list `("function"
+                              ,(princ-to-string name))
+                            (safe-function-source-location fn name)))))))))
 
 (defun find-definitions (name)
   (function-definitions name))
