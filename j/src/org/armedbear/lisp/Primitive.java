@@ -2,7 +2,7 @@
  * Primitive.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive.java,v 1.2 2003-04-16 17:01:53 piso Exp $
+ * $Id: Primitive.java,v 1.3 2003-07-02 15:23:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,11 @@ public class Primitive extends Function
     public Primitive(String name, Package pkg)
     {
         super(name, pkg);
+    }
+
+    public Primitive(String name, Package pkg, boolean exported)
+    {
+        super(name, pkg, exported);
     }
 
     public Primitive(Module module, String name, int index)
