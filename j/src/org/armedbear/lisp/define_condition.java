@@ -2,7 +2,7 @@
  * define_condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: define_condition.java,v 1.2 2003-09-21 15:09:05 piso Exp $
+ * $Id: define_condition.java,v 1.3 2003-09-21 16:59:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,11 +34,9 @@ public final class define_condition extends Primitive
         if (args.length != 4)
             throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
         Symbol symbol = checkSymbol(args[0]);
-        Debug.trace("symbol = " + symbol);
         LispObject parentTypes = checkCons(args[1]);
         LispObject slotSpecs = args[2];
         LispObject options = args[3];
-
         StandardClass c = new StandardClass(symbol, parentTypes);
         LispClass.addClass(symbol, c);
         return c;
