@@ -2,7 +2,7 @@
  * JavaTree.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JavaTree.java,v 1.3 2003-06-26 00:43:48 piso Exp $
+ * $Id: JavaTree.java,v 1.4 2003-07-23 00:18:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -552,7 +553,7 @@ public final class JavaTree extends SidebarTree implements Constants,
 
         private Color oldBackgroundSelectionColor;
 
-        TreeCellRenderer()
+        public TreeCellRenderer()
         {
             super();
             oldBackgroundSelectionColor = getBackgroundSelectionColor();
@@ -590,6 +591,12 @@ public final class JavaTree extends SidebarTree implements Constants,
                 }
             }
             return this;
+        }
+
+        public void paintComponent(Graphics g)
+        {
+            Display.setRenderingHints(g);
+            super.paintComponent(g);
         }
     }
 }

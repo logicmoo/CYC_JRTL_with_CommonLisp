@@ -2,7 +2,7 @@
  * MenuBar.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: MenuBar.java,v 1.2 2003-06-12 14:30:26 piso Exp $
+ * $Id: MenuBar.java,v 1.3 2003-07-23 00:17:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.j;
 
+import java.awt.Graphics;
 import javax.swing.JMenuBar;
 
 public final class MenuBar extends JMenuBar
@@ -42,5 +43,11 @@ public final class MenuBar extends JMenuBar
     public String getMenuName()
     {
         return menuName;
+    }
+
+    public void paintComponent(Graphics g)
+    {
+        Display.setRenderingHints(g);
+        super.paintComponent(g);
     }
 }
