@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShell.java,v 1.37 2003-05-11 13:04:43 piso Exp $
+ * $Id: LispShell.java,v 1.38 2003-06-26 02:39:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -349,8 +349,11 @@ public final class LispShell extends Shell
                 String vendor = System.getProperty("java.vendor");
                 if (vendor != null) {
                     if (vendor.indexOf("Sun") >= 0 ||
-                        vendor.indexOf("Blackdown") >= 0)
+                        vendor.indexOf("Blackdown") >= 0) {
                         sb.append(" -server");
+                    } else if (vendor.indexOf("IBM") >= 0) {
+                        sb.append(" -Xss512K");
+                    }
                 }
             } else
                 sb.append("java");
@@ -358,6 +361,7 @@ public final class LispShell extends Shell
             sb.append(classPath);
             sb.append(" org.armedbear.lisp.Main");
             shellCommand = sb.toString();
+            Log.debug(shellCommand);
         }
         lisp(shellCommand, "lisp", false);
     }
