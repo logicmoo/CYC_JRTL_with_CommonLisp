@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.46 2003-12-02 19:52:21 piso Exp $
+;;; $Id: jvm.lisp,v 1.47 2003-12-03 00:53:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1798,6 +1798,7 @@
     (setf (fill-pointer *tags*) saved-fp))
   (unless for-effect
     ;; TAGBODY returns NIL.
+    (emit-clear-values)
     (emit-push-nil)
     (emit-store-value)))
 
