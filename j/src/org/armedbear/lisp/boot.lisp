@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.208 2005-03-19 14:39:04 piso Exp $
+;;; $Id: boot.lisp,v 1.209 2005-03-19 14:43:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(sys::%in-package #:system)
+(sys::%in-package "SYSTEM")
 
 (setq *autoload-verbose* nil)
 (setq *load-verbose* nil)
