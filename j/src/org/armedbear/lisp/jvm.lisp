@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.203 2004-07-04 22:28:34 piso Exp $
+;;; $Id: jvm.lisp,v 1.204 2004-07-05 16:02:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2516,49 +2516,7 @@
              (incf depth)
              (setf parent (context-parent parent)))))))
 
-(defun compile-variable-reference (name)
-  (let ((variable (find-visible-variable name)))
-    (when (and variable (not (variable-special-p variable)))
-      (case (variable-kind variable)
-        (LOCAL
-         (cond ((and (variable-context variable)
-                     (neq (variable-context variable) *context*))
-                ;; Compile call to LispThread.getVariableValue().
-                (ensure-thread-var-initialized)
-                (emit 'aload *thread*)
-                (emit 'bipush (context-depth (variable-context variable)))
-                (emit 'bipush index)
-                (emit-invokevirtual +lisp-thread-class+
-                                    "getVariableValue"
-                                    "(II)Lorg/armedbear/lisp/LispObject;"
-                                    -2)
-                (emit-store-value)
-                (return-from compile-variable-reference))
-               (*use-locals-vector*
-                (emit 'aload 1)
-                (emit 'bipush (variable-index variable))
-                (emit 'aaload)
-                (emit-store-value)
-                (return-from compile-variable-reference))
-               (t
-                (emit 'aload (variable-register variable))
-                (emit-store-value)
-                (return-from compile-variable-reference))))
-        (ARG
-         (cond (*using-arg-array*
-                (emit 'aload 1)
-                (emit 'bipush (variable-index variable))
-                (emit 'aaload)
-                (emit-store-value)
-                (return-from compile-variable-reference))
-               (t
-                (emit 'aload (variable-register variable))
-                (emit-store-value)
-                (return-from compile-variable-reference)))))))
-  ;; Otherwise it must be a global variable.
-  (unless (special-variable-p name)
-    ;; FIXME This should be a warning!
-    (%format t "~A Note: undefined variable ~S~%" (load-verbose-prefix) name))
+(defun compile-special-reference (name)
   (emit 'getstatic
         *this-class*
         (declare-symbol name)
@@ -2571,6 +2529,42 @@
                       -1)
   (emit-store-value))
 
+(defun compile-variable-reference (name)
+  (let ((variable (find-visible-variable name)))
+    (cond ((null variable)
+           (unless (special-variable-p name)
+             ;; FIXME This should be a warning!
+             (%format t "~A Note: undefined variable ~S~%" (load-verbose-prefix) name))
+           (compile-special-reference name))
+          ((variable-register variable)
+           (emit 'aload (variable-register variable))
+           (emit-store-value))
+          ((variable-special-p variable)
+           (compile-special-reference name))
+          (t
+            (ecase (variable-kind variable)
+              (LOCAL
+               (cond ((and (variable-context variable)
+                           (neq (variable-context variable) *context*))
+                      ;; Compile call to LispThread.getVariableValue().
+                      (ensure-thread-var-initialized)
+                      (emit 'aload *thread*)
+                      (emit 'bipush (context-depth (variable-context variable)))
+                      (emit 'bipush index)
+                      (emit-invokevirtual +lisp-thread-class+
+                                          "getVariableValue"
+                                          "(II)Lorg/armedbear/lisp/LispObject;"
+                                          -2))
+                     (*use-locals-vector*
+                      (emit 'aload 1)
+                      (emit 'bipush (variable-index variable))
+                      (emit 'aaload))))
+              (ARG
+               (emit 'aload 1)
+               (emit 'bipush (variable-index variable))
+               (emit 'aaload)))
+            (emit-store-value)))))
+
 (defun compile-setq (form for-effect)
   (unless (= (length form) 3)
     (return-from compile-setq (compile-form (precompiler::precompile-setq form)
@@ -2579,7 +2573,17 @@
          (name (car rest))
          (variable (find-visible-variable name)))
     (when (and variable (not (variable-special-p variable)))
-      (case (variable-kind variable)
+      (when (variable-register variable)
+        (compile-form (cadr rest))
+        (unless (remove-store-value)
+          (emit-push-value))
+        (maybe-emit-clear-values (cadr rest))
+        (unless for-effect
+          (emit 'dup)
+          (emit-store-value))
+        (emit 'astore (variable-register variable))
+        (return-from compile-setq))
+      (ecase (variable-kind variable)
         (LOCAL
          (compile-form (cadr rest))
          (unless (remove-store-value)
@@ -2607,10 +2611,11 @@
                 (emit 'swap) ; array index value
                 (emit 'aastore))
                (t
+                (assert false) ; FIXME!
                 (emit 'astore (variable-register variable))))
          (unless for-effect
            (emit-store-value))
-         (return-from compile-setq))
+         )
         (ARG
          (cond (*using-arg-array*
                 (emit 'aload 1)
@@ -2618,26 +2623,28 @@
                 (compile-form (cadr rest))
                 (unless (remove-store-value)
                   (emit-push-value))
-                (cond (for-effect
-                       (emit 'aastore))
-                      (t
-                       (emit 'dup)
-                       (emit-store-value)
-                       (emit 'aastore))))
+                (maybe-emit-clear-values (cadr rest))
+                (unless for-effect
+                  (emit 'dup)
+                  (emit-store-value))
+                (emit 'aastore))
                (t
+                (assert false) ; FIXME!
                 (compile-form (cadr rest))
                 (unless (remove-store-value)
                   (emit-push-value))
-                (cond (for-effect
-                       (emit 'astore (variable-register variable)))
-                      (t
-                       (emit 'dup)
-                       (emit 'astore (variable-register variable))
-                       (emit-store-value)))))
-         (maybe-emit-clear-values (cadr rest))
-         (return-from compile-setq))))
+                (maybe-emit-clear-values (cadr rest))
+                (unless for-effect
+                  (emit 'dup)
+                  (emit-store-value))
+                (emit 'astore (variable-register variable))))
+         )
+        )
+      (return-from compile-setq)
+      )
     ;; still not found
     ;; must be a global variable
+    ;; Why do we call REWRITE-SETQ in this case only?
     (let ((new-form (rewrite-setq form)))
       (when (neq new-form form)
         (return-from compile-setq (compile-form new-form))))
@@ -2908,7 +2915,7 @@
             (let ((v (make-variable :name arg
                                     :kind 'ARG
                                     :special-p nil ;; FIXME
-                                    :register register
+                                    :register (if *using-arg-array* nil register)
                                     :index (length (context-vars *context*)))))
               (push v *all-variables*)
               (push v *variables*)
