@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispString.java,v 1.73 2004-02-04 15:19:43 piso Exp $
+ * $Id: LispString.java,v 1.74 2004-02-11 00:11:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,9 +150,14 @@ public final class LispString extends AbstractVector
     {
         LispString s = new LispString(end - start);
         int i = start, j = 0;
-        while (i < end)
-            s.array[j++] = array[i++];
-        return s;
+        try {
+            while (i < end)
+                s.array[j++] = array[i++];
+            return s;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            return signal(new TypeError("Array index out of bounds: " + i + "."));
+        }
     }
 
     public void fill(LispObject obj) throws ConditionThrowable

@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.29 2003-12-13 00:58:50 piso Exp $
+ * $Id: BitVector.java,v 1.30 2004-02-11 00:11:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,13 +199,18 @@ public final class BitVector extends AbstractVector
     {
         BitVector v = new BitVector(end - start);
         int i = start, j = 0;
-        while (i < end) {
-            if (_get(i++) == 0)
-                v.clear(j++);
-            else
-                v.set(j++);
+        try {
+            while (i < end) {
+                if (_get(i++) == 0)
+                    v.clear(j++);
+                else
+                    v.set(j++);
+            }
+            return v;
         }
-        return v;
+        catch (ArrayIndexOutOfBoundsException e) {
+            return signal(new TypeError("Array index out of bounds: " + i + "."));
+        }
     }
 
     public void fill(LispObject obj) throws ConditionThrowable

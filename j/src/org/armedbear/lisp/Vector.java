@@ -1,8 +1,8 @@
 /*
  * Vector.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.29 2003-12-13 00:28:08 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Vector.java,v 1.30 2004-02-11 00:11:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,9 +164,14 @@ public class Vector extends AbstractVector
     {
         Vector v = new Vector(end - start);
         int i = start, j = 0;
-        while (i < end)
-            v.elements[j++] = elements[i++];
-        return v;
+        try {
+            while (i < end)
+                v.elements[j++] = elements[i++];
+            return v;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            return signal(new TypeError("Array index out of bounds: " + i + "."));
+        }
     }
 
     public void fill(LispObject obj) throws ConditionThrowable
