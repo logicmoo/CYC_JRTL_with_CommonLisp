@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.72 2004-06-21 16:40:39 piso Exp $
+ * $Id: LispFloat.java,v 1.73 2004-08-23 03:36:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -682,6 +682,30 @@ public final class LispFloat extends LispObject
                 return new LispFloat(Double.longBitsToDouble(bits));
             }
             return signal(new TypeError());
+        }
+    };
+
+    private static final Primitive1 FLOAT_INFINITY_P =
+        new Primitive1("float-infinity-p", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            if (arg instanceof LispFloat)
+                return Double.isInfinite(((LispFloat)arg).value) ? T : NIL;
+            return signal(new TypeError(arg, Symbol.FLOAT));
+        }
+    };
+
+    private static final Primitive1 FLOAT_NAN_P =
+        new Primitive1("float-nan-p", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            if (arg instanceof LispFloat)
+                return Double.isNaN(((LispFloat)arg).value) ? T : NIL;
+            return signal(new TypeError(arg, Symbol.FLOAT));
         }
     };
 }
