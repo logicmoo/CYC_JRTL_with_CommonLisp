@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.6 2004-04-17 01:41:29 piso Exp $
+;;; $Id: compile-file.lisp,v 1.7 2004-04-17 03:49:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -120,6 +120,9 @@
                        (eval `(progn ,@body)))))
               (%format t "; Finished processing EVAL-WHEN ~S~%" (cadr form))
               (return-from process-toplevel-form)))
+           (PROGN
+            (process-toplevel-progn (cdr form) stream compile-time-too)
+            (return-from process-toplevel-form))
            (t
             (when compile-time-too
               (eval form))))))
