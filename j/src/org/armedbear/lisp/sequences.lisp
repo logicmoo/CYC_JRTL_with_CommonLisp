@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.31 2003-04-06 19:59:24 piso Exp $
+;;; $Id: sequences.lisp,v 1.32 2003-05-25 12:42:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -312,20 +312,17 @@
 
 ;;; NREVERSE (from CMUCL)
 
-(defmacro list-nreverse-macro (list)
-  `(do ((1st (cdr ,list) (if (atom 1st) 1st (cdr 1st)))
-        (2nd ,list 1st)
-        (3rd '() 2nd))
-     ((atom 2nd) 3rd)
-     (rplacd 2nd 3rd)))
-
-(defun list-nreverse* (sequence)
-  (list-nreverse-macro sequence))
+(defun list-nreverse (list)
+  (do ((1st (cdr list) (if (atom 1st) 1st (cdr 1st)))
+       (2nd list 1st)
+       (3rd '() 2nd))
+      ((atom 2nd) 3rd)
+    (rplacd 2nd 3rd)))
 
 (defun nreverse (sequence)
-  (seq-dispatch sequence
-		(list-nreverse* sequence)
-		(vector-nreverse* sequence)))
+  (if (listp sequence)
+      (list-nreverse sequence)
+      (vector-nreverse sequence)))
 
 
 ;;; CONCATENATE (from GCL)
