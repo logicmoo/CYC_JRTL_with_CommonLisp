@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.7 2002-10-11 01:42:37 piso Exp $
+ * $Id: MessageBuffer.java,v 1.8 2002-10-11 18:34:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,10 +99,8 @@ public class MessageBuffer extends Buffer
         defaultHeaders = getDefaultHeaders(allHeaders);
         rawBody = message.getRawBody();
         setText();
-        unmodified();
         renumber();
         formatter.parseBuffer();
-        setLoaded(true);
         setInitialized(true);
     }
 
@@ -220,7 +218,6 @@ public class MessageBuffer extends Buffer
         defaultHeaders = getDefaultHeaders(allHeaders);
         rawBody = message.getRawBody();
         setText();
-        unmodified();
         formatter.parseBuffer();
         int flags = entry.getFlags();
         if ((flags & MailboxEntry.SEEN) == 0) {
@@ -864,6 +861,7 @@ public class MessageBuffer extends Buffer
         }
         try {
             _setText();
+            setLoaded(true);
         }
         finally {
             unlockWrite();
@@ -916,6 +914,7 @@ public class MessageBuffer extends Buffer
                     appendHeaderLine("");
                     append(body);
                 }
+                renumber();
                 if (!(formatter instanceof MessageFormatter))
                     setFormatter(new MessageFormatter(this));
                 return;
