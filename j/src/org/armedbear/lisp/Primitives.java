@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.213 2003-06-01 01:09:03 piso Exp $
+ * $Id: Primitives.java,v 1.214 2003-06-01 15:11:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3170,7 +3170,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject args, Environment env)
             throws Condition
         {
-            if (args.length() < 1)
+            if (args == NIL)
                 throw new WrongNumberOfArgumentsException(this);
             LispObject name;
             if (args.car() == NIL)
