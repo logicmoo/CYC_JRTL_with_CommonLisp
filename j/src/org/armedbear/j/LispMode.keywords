@@ -392,6 +392,7 @@ push
 pushnew
 quote
 random
+rationalp
 read
 read-byte
 read-char
