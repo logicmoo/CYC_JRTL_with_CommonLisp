@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.1 2003-09-13 17:17:42 piso Exp $
+;;; $Id: subtypep.lisp,v 1.2 2003-09-13 18:00:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -80,6 +80,8 @@
                (setq i (list (cadr i)))))))
       (BASE-CHAR
        (setq tp 'character))
+      (FIXNUM
+       (setq tp 'integer i '(#.most-negative-fixnum #.most-positive-fixnum)))
       ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
        (setq tp 'float)))
     (cons tp i)))
@@ -171,23 +173,28 @@
                (values nil (known-type-p t2))))
           (t
            (cond ((eq t1 'float)
-           (if (eq t2 'float)
-               (values (sub-interval-p i1 i2) t)
-               (values nil (known-type-p t2))))
-          ((eq t1 'integer)
-           (if (member t2 '(integer rational))
-               (values (sub-interval-p i1 i2) t)
-               (values nil (known-type-p t2))))
-          ((eq t1 'rational)
-           (if (member t2 '(rational real))
-               (values (sub-interval-p i1 i2) t)
-               (values nil (known-type-p t2))))
-          ((memq t1 '(string simple-string base-string simple-base-string))
-           (cond ((eq t2 'string)
-                  (if (or (null i2) (eq (car i2) '*))
-                      (values t t)
-                      (values nil t)))
+                  (if (eq t2 'float)
+                      (values (sub-interval-p i1 i2) t)
+                      (values nil (known-type-p t2))))
+                 ((eq t1 'integer)
+                  (if (member t2 '(integer rational real))
+                      (values (sub-interval-p i1 i2) t)
+                      (values nil (known-type-p t2))))
+                 ((eq t1 'rational)
+                  (if (member t2 '(rational real))
+                      (values (sub-interval-p i1 i2) t)
+                      (values nil (known-type-p t2))))
+                 ((eq t1 'real)
+                  (if (eq t2 'real)
+                      (values (sub-interval-p i1 i2) t)
+                      (values nil (known-type-p t2))))
+                 ((memq t1 '(string simple-string base-string
+                             simple-base-string))
+                  (cond ((eq t2 'string)
+                         (if (or (null i2) (eq (car i2) '*))
+                             (values t t)
+                             (values nil t)))
+                        (t
+                         (values nil (known-type-p t2)))))
                  (t
-                  (values nil (known-type-p t2)))))
-          (t
-           (values nil nil)))))))
+                  (values nil nil)))))))
