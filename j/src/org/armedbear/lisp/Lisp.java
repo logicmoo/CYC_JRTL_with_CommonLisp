@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.31 2003-03-10 19:40:01 piso Exp $
+ * $Id: Lisp.java,v 1.32 2003-03-11 02:20:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -339,13 +339,16 @@ public abstract class Lisp
                 }
             } else {
                 LispObject args = obj.cdr();
+                if (!args.listp())
+                    throw new TypeError(args, "list");
                 LispObject funcar = first.car();
                 LispObject rest = first.cdr();
                 Symbol symbol = checkSymbol(funcar);
                 if (symbol == Symbol.LAMBDA) {
                     Closure closure = new Closure(rest.car(), rest.cdr(), env);
                     result = closure.execute(evalList(args, env));
-                }
+                } else
+                    throw new ProgramError("illegal function object: " + first);
             }
         } else
             result = obj;
