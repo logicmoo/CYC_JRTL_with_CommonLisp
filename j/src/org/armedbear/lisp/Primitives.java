@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.676 2004-09-18 17:49:30 piso Exp $
+ * $Id: Primitives.java,v 1.677 2004-09-19 00:08:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1261,19 +1261,6 @@ public final class Primitives extends Lisp
             return NIL;
         }
     };
-
-    private static final String _format(LispObject[] args, int skip)
-        throws ConditionThrowable
-    {
-        final int remaining = args.length - skip;
-        if (remaining > 0) {
-            LispObject[] array = new LispObject[remaining];
-            for (int i = skip, j = 0; i < args.length; i++, j++)
-                array[j] = args[i];
-            return _format(array);
-        } else
-            return null;
-    }
 
     private static final String _format(LispObject[] args) throws ConditionThrowable
     {
