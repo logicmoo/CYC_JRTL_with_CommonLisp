@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.11 2004-09-07 01:04:15 piso Exp $
+;;; $Id: slime.lisp,v 1.12 2004-09-07 20:19:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,11 +33,14 @@
   (:export #:complete-symbol
            #:slime-space
            #:edit-definition
-           #:eval-region))
+           #:eval-region
+           #:eval-last-expression))
 
 (in-package #:slime)
 
 (defvar *stream* nil)
+
+(defvar *repl-buffer-name* nil)
 
 (defun slime-local-p ()
   (let ((name (buffer-name)))
@@ -96,7 +99,7 @@
 (defvar *completion-index* 0)
 
 (defun completions (prefix)
-  (slime-eval `(swank::completion-set ,prefix ,(package-name *package*))))
+  (slime-eval `(swank:completion-set ,prefix ,(package-name *package*))))
 
 (defun delimiter-p (c)
   (member c '(#\space #\( #\) #\')))
@@ -299,8 +302,23 @@
       (let* ((string (buffer-substring (current-point) mark))
              (package (find-buffer-package))
              (result
-              (slime-eval `(swank:interactive-eval-region ,string ,package))))
+              (slime-eval `(swank:interactive-eval-string ,string ,package))))
         (status (write-string result))))))
+
+(defun last-expression ()
+  (let (start end)
+    (backward-sexp)
+    (setf start (current-point))
+    (undo)
+    (setf end (current-point))
+    (buffer-substring start end)))
+
+(defun eval-last-expression ()
+  (let* ((string (last-expression))
+         (package (find-buffer-package))
+         (result
+          (slime-eval `(swank:interactive-eval-string ,string ,package))))
+    (status (write-string result))))
 
 (map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
 (map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")
@@ -309,3 +327,4 @@
 (map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp Shell")
 (map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp")
 (map-key-for-mode "Ctrl Alt R" "(slime:eval-region)" "Lisp")
+(map-key-for-mode "Ctrl Alt E" "(slime:eval-last-expression)" "Lisp")
