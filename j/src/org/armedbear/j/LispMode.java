@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.35 2003-03-31 00:35:39 piso Exp $
+ * $Id: LispMode.java,v 1.36 2003-03-31 01:55:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -478,8 +478,40 @@ public class LispMode extends AbstractMode implements Constants, Mode
         }
     }
 
+    private Position backwardSexp(Position start)
+    {
+        Position pos = mode.findContainingSexp(start);
+        if (pos == null)
+            return null;
+        pos = downList(pos);
+        if (pos == null)
+            return null;
+        while (true) {
+            Position last = pos;
+            pos = forwardSexp(pos);
+            if (pos == null)
+                return last;
+            // Skip whitespace and comments.
+            char c;
+            while (true) {
+                pos.skipWhitespace();
+                c = pos.getChar();
+                if (c == ';')
+                    skipComment(pos);
+                else
+                    break;
+            }
+            if (c == ')')
+                return last;
+            if (pos.equals(start))
+                return last;
+            if (pos.isAfter(start))
+                return last;
+        }
+    }
+
     // Advances pos to start of next line.
-    private void skipComment(Position pos)
+    private static void skipComment(Position pos)
     {
         Line nextLine = pos.getNextLine();
         if (nextLine != null)
@@ -492,6 +524,16 @@ public class LispMode extends AbstractMode implements Constants, Mode
         if (editor.getMode() != mode)
             return;
         Position pos = mode.forwardSexp(editor.getDot());
+        if (pos != null)
+            editor.moveDotTo(pos);
+    }
+
+    public static void backwardSexp()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        Position pos = mode.backwardSexp(editor.getDot());
         if (pos != null)
             editor.moveDotTo(pos);
     }
