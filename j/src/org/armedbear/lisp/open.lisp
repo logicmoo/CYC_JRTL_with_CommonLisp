@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.16 2004-01-30 20:16:56 piso Exp $
+;;; $Id: open.lisp,v 1.17 2004-09-01 17:25:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -114,7 +114,7 @@
           (unless (probe-file pathname)
             (error 'file-error
                    :format-control "The file ~S does not exist."
-                   :format-arguments (list (namestring pathname))))))
+                   :format-arguments (list (truename pathname))))))
        (make-file-stream pathname element-type :input nil))
       (:probe
        (case if-does-not-exist
@@ -122,7 +122,7 @@
           (unless (probe-file pathname)
             (error 'file-error
                    :format-control "The file ~S does not exist."
-                   :format-arguments (list (namestring pathname)))))
+                   :format-arguments (list (truename pathname)))))
          (:create
           (unless (probe-file pathname)
             (create-new-file pathname))))
@@ -136,7 +136,7 @@
           (unless (probe-file pathname)
             (error 'file-error
                    :format-control "The file ~S does not exist."
-                   :format-arguments (list (namestring pathname)))))
+                   :format-arguments (list (truename pathname)))))
          ((nil)
           (unless (probe-file pathname)
             (return-from open nil))))
@@ -145,7 +145,7 @@
           (when (probe-file pathname)
             (error 'file-error
                    :format-control "The file ~S already exists."
-                   :format-arguments (list (namestring pathname)))))
+                   :format-arguments (list (truename pathname)))))
          ((nil)
           (when (probe-file pathname)
             (return-from open nil)))
@@ -155,13 +155,13 @@
             (when (probe-directory pathname)
               (error 'file-error
                      :format-control "The file ~S is a directory."
-                     :format-arguments (list (namestring pathname))))
+                     :format-arguments (list (truename pathname))))
             (let ((backup-name (concatenate 'string (namestring pathname) ".bak")))
               (when (probe-file backup-name)
                 (when (probe-directory backup-name)
                   (error 'file-error
                          :format-control "Unable to rename ~S."
-                         :format-arguments (list (namestring pathname))))
+                         :format-arguments (list (truename pathname))))
                 (delete-file backup-name))
               (rename-file pathname backup-name))))
          ((:new-version :supersede :overwrite :append)) ; OK to proceed.
@@ -169,7 +169,12 @@
           (error 'simple-error
                  :format-control "Option not supported: ~S."
                  :format-arguments (list if-exists))))
-       (make-file-stream pathname element-type direction if-exists))
+       (let ((stream (make-file-stream pathname element-type direction if-exists)))
+         (unless stream
+           (error 'file-error
+                  :format-control "Unable to open ~S."
+                  :format-arguments (list (truename pathname))))
+         stream))
       (t
        (error 'simple-error
               :format-control ":DIRECTION ~S not supported."
