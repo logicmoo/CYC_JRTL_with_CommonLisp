@@ -2,7 +2,7 @@
  * open.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: open.java,v 1.7 2003-10-17 15:36:31 piso Exp $
+ * $Id: open.java,v 1.8 2003-10-17 17:32:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,15 +35,8 @@ public final class open extends Lisp
                                    LispObject third)
             throws ConditionThrowable
         {
-            String namestring;
-            if (first instanceof LispString)
-                namestring = ((LispString)first).getValue();
-            else if (first instanceof Pathname)
-                namestring = ((Pathname)first).getNamestring();
-            else
-                throw new ConditionThrowable(new TypeError(first, "pathname designator"));
+            File file = Utilities.getFile(first);
             boolean binary = checkBinaryElementType(second);
-            File file = new File(namestring);
             LispObject ifExists = third;
             if (ifExists == Keyword.SUPERSEDE) {
                 ;
@@ -76,19 +69,13 @@ public final class open extends Lisp
         public LispObject execute (LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            String namestring;
-            if (first instanceof LispString)
-                namestring = ((LispString)first).getValue();
-            else if (first instanceof Pathname)
-                namestring = ((Pathname)first).getNamestring();
-            else
-                throw new ConditionThrowable(new TypeError(first, "pathname designator"));
+            File file = Utilities.getFile(first);
             boolean binary = checkBinaryElementType(second);
             try {
                 if (binary)
-                    return new BinaryInputStream(new FileInputStream(namestring));
+                    return new BinaryInputStream(new FileInputStream(file));
                 else
-                    return new CharacterInputStream(new FileInputStream(namestring));
+                    return new CharacterInputStream(new FileInputStream(file));
             }
             catch (FileNotFoundException e) {
                 throw new ConditionThrowable(new LispError("file not found: " + first));
