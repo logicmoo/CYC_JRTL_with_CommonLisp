@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.43 2004-08-10 13:49:15 piso Exp $
+ * $Id: Java.java,v 1.44 2004-08-10 22:28:13 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -302,10 +302,12 @@ public final class Java extends Lisp
                     if (c != null) {
                         String methodName = methodRef.getStringValue();
                         Method[] methods = c.getMethods();
+                        int argCount = args.length - 2;
                         for (int i = 0; i < methods.length; i++) {
                             Method method = methods[i];
-                            if (!Modifier.isStatic(method.getModifiers()))
-                                continue;
+                            if (!Modifier.isStatic(method.getModifiers())
+                                || method.getParameterTypes().length != argCount)
+			        continue;
                             if (method.getName().equals(methodName)) {
                                 m = method;
                                 break;
