@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.20 2003-06-02 19:52:00 piso Exp $
+;;; $Id: compiler.lisp,v 1.21 2003-06-02 20:11:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -135,7 +135,7 @@
        (let ((args (cadr form))
              (body (cddr form)))
          (cons first (cons args (compile-progn body)))))
-      ((DO DO*)
+      ((DO DO* MULTIPLE-VALUE-BIND)
        (let ((second (second form))
              (third (third form))
              (body (cdddr form)))
