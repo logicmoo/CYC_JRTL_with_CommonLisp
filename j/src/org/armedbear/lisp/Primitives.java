@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.197 2003-05-27 17:20:39 piso Exp $
+ * $Id: Primitives.java,v 1.198 2003-05-27 17:47:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4427,6 +4427,39 @@ public final class Primitives extends Module
                 }
             }
             return list;
+        }
+    };
+
+    // From CLISP.
+    private static final Primitive2 NRECONC = new Primitive2("nreconc") {
+        public LispObject execute(LispObject list, LispObject obj)
+            throws LispError
+        {
+            if (list instanceof Cons) {
+                LispObject list3 = list.cdr();
+                if (list3 instanceof Cons) {
+                    if (list3.cdr() instanceof Cons) {
+                        LispObject list1 = list3;
+                        LispObject list2 = NIL;
+                        do {
+                            LispObject h = list3.cdr();
+                            list3.setCdr(list2);
+                            list2 = list3;
+                            list3 = h;
+                        } while (list3.cdr() instanceof Cons);
+                        list.setCdr(list2);
+                        list1.setCdr(list3);
+                    }
+                    LispObject h = list.car();
+                    list.setCar(list3.car());
+                    list3.setCar(h);
+                    list3.setCdr(obj);
+                } else {
+                    list.setCdr(obj);
+                }
+                return list;
+            } else
+                return obj;
         }
     };
 }
