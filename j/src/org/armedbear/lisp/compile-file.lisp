@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.14 2004-04-30 17:25:05 piso Exp $
+;;; $Id: compile-file.lisp,v 1.15 2004-05-01 23:44:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,7 +42,9 @@
         (t
          (case (car form)
            (MACROLET
-            (eval form))
+            (let ((new-form (precompiler::precompile-macrolet form)))
+              (process-toplevel-form new-form stream compile-time-too)
+              (return-from process-toplevel-form)))
            ((IN-PACKAGE DEFPACKAGE)
             (eval form))
            ((DEFVAR DEFPARAMETER)
@@ -126,7 +128,8 @@
             (process-toplevel-progn (cdr form) stream compile-time-too)
             (return-from process-toplevel-form))
            (t
-            (when (macro-function (car form))
+            (when (and (symbolp (car form))
+                       (macro-function (car form)))
               (process-toplevel-form (macroexpand-1 form) stream compile-time-too)
               (return-from process-toplevel-form))
             (when compile-time-too
