@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.152 2004-10-20 00:15:22 piso Exp $
+ * $Id: Symbol.java,v 1.153 2004-10-22 00:38:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -695,6 +695,68 @@ public class Symbol extends LispObject
     public final boolean equals(Object obj)
     {
         return this == obj;
+    }
+
+    // Special operator
+    public LispObject execute(LispObject args, Environment env)
+        throws ConditionThrowable
+    {
+        if (function != null)
+            return function.execute(args, env);
+        return signal(new UndefinedFunction(this));
+    }
+
+    // Primitive
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        if (function != null)
+            return function.execute(args);
+        return signal(new UndefinedFunction(this));
+    }
+
+    // Primitive0
+    public LispObject execute() throws ConditionThrowable
+    {
+        if (function != null)
+            return function.execute();
+        return signal(new UndefinedFunction(this));
+    }
+
+    // Primitive1
+    public LispObject execute(LispObject arg) throws ConditionThrowable
+    {
+        if (function != null)
+            return function.execute(arg);
+        return signal(new UndefinedFunction(this));
+    }
+
+    // Primitive2
+    public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+    {
+        if (function != null)
+            return function.execute(first, second);
+        return signal(new UndefinedFunction(this));
+    }
+
+    // Primitive3
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third)
+        throws ConditionThrowable
+    {
+        if (function != null)
+            return function.execute(first, second, third);
+        return signal(new UndefinedFunction(this));
+    }
+
+    // Primitive4
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth)
+        throws ConditionThrowable
+    {
+        if (function != null)
+            return function.execute(first, second, third, fourth);
+        return signal(new UndefinedFunction(this));
     }
 
     // ### symbol-name
