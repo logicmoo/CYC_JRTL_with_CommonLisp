@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.202 2003-05-28 01:46:05 piso Exp $
+ * $Id: Primitives.java,v 1.203 2003-05-29 14:01:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1311,18 +1311,14 @@ public final class Primitives extends Module
 
     // ### %defun
     // %defun name parameters body => name
-    private static final Primitive _DEFUN = new Primitive("%defun") {
-        public LispObject execute(LispObject[] args) throws LispError
+    private static final Primitive3 _DEFUN = new Primitive3("%defun") {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
         {
-            Symbol symbol = checkSymbol(args[0]);
-            LispObject parameters = checkList(args[1]);
-            LispObject body = checkList(args[2]);
-            Environment env;
-            if (args.length == 4)
-                env = checkEnvironment(args[3]);
-            else
-                env = new Environment();
-            return __defun(symbol, parameters, body, env);
+            Symbol symbol = checkSymbol(first);
+            LispObject parameters = checkList(second);
+            LispObject body = checkList(third);
+            return __defun(symbol, parameters, body, new Environment());
         }
     };
 
