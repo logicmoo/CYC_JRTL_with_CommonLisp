@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.21 2003-05-29 14:41:13 piso Exp $
+ * $Id: Closure.java,v 1.22 2003-05-29 14:45:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -297,15 +297,6 @@ public class Closure extends Function
 
     public final LispObject execute(LispObject[] args) throws Condition
     {
-//         if (maxArgs >= 0) {
-//             if (args.length > maxArgs) {
-//                 String name = getName();
-//                 if (name == null)
-//                     name = String.valueOf(getLambdaName());
-//                 Debug.trace(name + " too many arguments: expected " + maxArgs +
-//                     ", received " + args.length);
-//             }
-//         }
         return execute(args, environment);
     }
 
@@ -450,7 +441,6 @@ public class Closure extends Function
                 // No keyword parameters.
                 if (argsUsed < args.length) {
                     if (!haveRest) {
-//                         Debug.trace("way too many arguments");
                         throw new WrongNumberOfArgumentsException(this);
                     }
                 }
