@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.179 2004-06-03 21:40:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.180 2004-06-03 23:23:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2373,7 +2373,6 @@
                         +lisp-object+)
                   (emit-store-value))
                 (progn
-                  (format t "*toplevel-defuns* = ~S~%" *toplevel-defuns*)
                   (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
            ((and (consp name) (eq (car name) 'LAMBDA))
             (let ((closure-vars (remove-duplicates (union (remove nil (coerce *locals* 'list))
