@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.28 2003-04-09 14:47:10 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.29 2003-04-14 15:38:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -578,7 +578,7 @@ public class CharacterInputStream extends LispStream
                     "\" is not external in package " + packageName);
             return symbol;
         }
-        return getCurrentPackage().intern(token);
+        return internInCurrentPackage(token);
     }
 
     private LispObject makeNumber(String token) throws LispError
