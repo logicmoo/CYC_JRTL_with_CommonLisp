@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.8 2002-12-07 19:17:54 piso Exp $
+ * $Id: File.java,v 1.9 2002-12-07 19:25:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -172,7 +172,7 @@ public class File implements Comparable
                 // No ':', no password.
                 userName = before;
             }
-        } else
+        } else if (protocol != PROTOCOL_FTP) // Don't break anonymous FTP!
             userName = System.getProperty("user.name");
         index = s.indexOf(':');
         if (index >= 0) {
