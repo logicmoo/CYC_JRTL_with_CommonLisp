@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.14 2003-03-01 20:40:44 piso Exp $
+ * $Id: LispString.java,v 1.15 2003-03-07 18:33:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +25,6 @@ public final class LispString extends AbstractVector implements SequenceType,
     VectorType
 {
     private char[] array;
-
-    // For CONCATENATE.
-    public LispString()
-    {
-        array = new char[0];
-    }
 
     public LispString(LispCharacter c)
     {
