@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.1 2004-02-23 15:10:21 piso Exp $
+ * $Id: ComplexString.java,v 1.2 2004-02-23 15:55:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,19 +43,6 @@ public final class ComplexString extends AbstractString
     public LispClass classOf()
     {
         return BuiltInClass.STRING;
-    }
-
-    public LispObject typep(LispObject type) throws ConditionThrowable
-    {
-        if (type instanceof Symbol) {
-            if (type == Symbol.STRING)
-                return T;
-            if (type == Symbol.BASE_STRING)
-                return T;
-        }
-        if (type == BuiltInClass.STRING)
-            return T;
-        return super.typep(type);
     }
 
     public boolean equal(LispObject obj) throws ConditionThrowable
@@ -111,10 +98,10 @@ public final class ComplexString extends AbstractString
         fill(LispCharacter.getValue(obj));
     }
 
-    public void fill(char c)
+    public void fill(char c) throws ConditionThrowable
     {
         for (int i = length(); i-- > 0;)
-            chars[i] = c;
+            setChar(i, c);
     }
 
     public void shrink(int n) throws ConditionThrowable

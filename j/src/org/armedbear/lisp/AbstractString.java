@@ -2,7 +2,7 @@
  * AbstractString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractString.java,v 1.1 2004-02-23 14:22:21 piso Exp $
+ * $Id: AbstractString.java,v 1.2 2004-02-23 15:55:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public abstract class AbstractString extends AbstractVector
         return false;
     }
 
-    public abstract void fill(char c);
+    public abstract void fill(char c) throws ConditionThrowable;
 
     public abstract char getChar(int index) throws ConditionThrowable;
 
