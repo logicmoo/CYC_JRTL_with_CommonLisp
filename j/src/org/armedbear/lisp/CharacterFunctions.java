@@ -2,7 +2,7 @@
  * CharacterFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CharacterFunctions.java,v 1.9 2004-10-13 00:01:54 piso Exp $
+ * $Id: CharacterFunctions.java,v 1.10 2004-10-20 17:19:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,11 +24,23 @@ package org.armedbear.lisp;
 public final class CharacterFunctions extends Lisp
 {
     // ### char=
-    private static final Primitive CHAR_EQUALS = new Primitive("char=","&rest characters") {
+    private static final Primitive CHAR_EQUALS =
+        new Primitive("char=", "&rest characters")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return LispCharacter.getValue(first) == LispCharacter.getValue(second) ? T : NIL;
+            try {
+                return ((LispCharacter)first).value == ((LispCharacter)second).value ? T : NIL;
+            }
+            catch (ClassCastException e) {
+                LispObject datum;
+                if (first instanceof LispCharacter)
+                    datum = second;
+                else
+                    datum = first;
+                return signal(new TypeError(datum, Symbol.CHARACTER));
+            }
         }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
@@ -47,7 +59,9 @@ public final class CharacterFunctions extends Lisp
     };
 
     // ### char-equal
-    private static final Primitive CHAR_EQUAL = new Primitive("char-equal","&rest characters") {
+    private static final Primitive CHAR_EQUAL =
+        new Primitive("char-equal", "&rest characters")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
