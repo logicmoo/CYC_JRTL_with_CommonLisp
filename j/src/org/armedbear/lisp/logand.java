@@ -2,7 +2,7 @@
  * logand.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logand.java,v 1.4 2003-09-19 11:50:19 piso Exp $
+ * $Id: logand.java,v 1.5 2003-09-23 17:08:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,14 +27,14 @@ import java.math.BigInteger;
 // logand &rest integers => result-integer
 public final class logand extends Primitive
 {
-    private logand(String name)
+    private logand()
     {
-        super(name);
+        super("logand");
     }
 
     public LispObject execute()
     {
-        return new Fixnum(-1);
+        return Fixnum.MINUS_ONE;
     }
 
     public LispObject execute(LispObject first, LispObject second)
@@ -76,5 +76,5 @@ public final class logand extends Primitive
         return number(result);
     }
 
-    private static final logand LOGAND = new logand("logand");
+    private static final logand LOGAND = new logand();
 }

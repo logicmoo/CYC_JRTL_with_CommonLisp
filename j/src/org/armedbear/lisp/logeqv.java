@@ -2,7 +2,7 @@
  * logeqv.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logeqv.java,v 1.2 2003-09-19 11:50:19 piso Exp $
+ * $Id: logeqv.java,v 1.3 2003-09-23 17:08:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,14 +28,14 @@ import java.math.BigInteger;
 // equivalence (exclusive nor)
 public final class logeqv extends Primitive
 {
-    private logeqv(String name)
+    private logeqv()
     {
-        super(name);
+        super("logeqv");
     }
 
     public LispObject execute()
     {
-        return new Fixnum(-1);
+        return Fixnum.MINUS_ONE;
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -67,5 +67,5 @@ public final class logeqv extends Primitive
         return number(result);
     }
 
-    private static final logeqv LOGEQV = new logeqv("logeqv");
+    private static final logeqv LOGEQV = new logeqv();
 }
