@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.42 2003-09-15 04:59:28 piso Exp $
+ * $Id: Package.java,v 1.43 2003-09-17 14:56:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,9 +52,16 @@ public final class Package extends LispObject
         return Symbol.PACKAGE;
     }
 
+    public LispClass classOf()
+    {
+        return LispClass.PACKAGE;
+    }
+
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
         if (typeSpecifier == Symbol.PACKAGE)
+            return T;
+        if (typeSpecifier == LispClass.PACKAGE)
             return T;
         return super.typep(typeSpecifier);
     }
@@ -209,7 +216,12 @@ public final class Package extends LispObject
     {
         for (int i = names.length; i-- > 0;) {
             String symbolName = names[i];
+            // There shouldn't be any internal symbols in the COMMON-LISP
+            // package.
             Debug.assertTrue(internalSymbols.get(symbolName) == null);
+            // The symbol in question may have been exported already. If we
+            // replace an existing symbol, we'll lose any information that
+            // might be associated with it. So we check first...
             if (externalSymbols.get(symbolName) == null)
                 externalSymbols.put(symbolName, new Symbol(symbolName, this));
         }
