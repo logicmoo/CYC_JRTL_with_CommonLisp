@@ -1,8 +1,8 @@
 /*
  * MethodBreakpoint.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: MethodBreakpoint.java,v 1.1.1.1 2002-09-24 16:09:42 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: MethodBreakpoint.java,v 1.2 2003-05-12 17:08:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,6 +141,20 @@ public final class MethodBreakpoint extends ResolvableBreakpoint
             if (buffer != null)
                 buffer.repaint();
         }
+        jdb.log("Breakpoint resolved: " + getLocationString());
+    }
+
+    public String getLocationString()
+    {
+        FastStringBuffer sb = new FastStringBuffer();
+        if (className != null) {
+            sb.append(className);
+            sb.append('.');
+        }
+        sb.append(methodName);
+        if (!isResolved())
+            sb.append(' ');
+        return sb.toString();
     }
 
     public String toString()

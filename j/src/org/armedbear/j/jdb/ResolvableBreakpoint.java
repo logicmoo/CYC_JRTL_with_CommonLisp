@@ -1,8 +1,8 @@
 /*
  * ResolvableBreakpoint.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: ResolvableBreakpoint.java,v 1.1.1.1 2002-09-24 16:09:39 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: ResolvableBreakpoint.java,v 1.2 2003-05-12 17:06:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,4 +111,6 @@ public abstract class ResolvableBreakpoint
         throws Exception;
 
     public abstract void resolved();
+
+    public abstract String getLocationString();
 }

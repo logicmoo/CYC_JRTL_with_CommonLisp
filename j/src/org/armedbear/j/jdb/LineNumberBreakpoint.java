@@ -1,8 +1,8 @@
 /*
  * LineNumberBreakpoint.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: LineNumberBreakpoint.java,v 1.1.1.1 2002-09-24 16:09:40 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: LineNumberBreakpoint.java,v 1.2 2003-05-12 17:08:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,16 +134,24 @@ public final class LineNumberBreakpoint extends ResolvableBreakpoint
                 }
             }
         }
-        FastStringBuffer sb = new FastStringBuffer("Breakpoint added (");
-        sb.append(file.getName());
-        sb.append(':');
-        sb.append(lineNumber);
-        sb.append(')');
-        jdb.log(sb.toString());
         if (line != null)
             line.setAnnotation(new BreakpointAnnotation(this));
         if (buffer != null)
             buffer.repaint();
+        jdb.log("Breakpoint resolved: " + getLocationString());
+    }
+
+    public String getLocationString()
+    {
+        FastStringBuffer sb = new FastStringBuffer();
+        if (file != null) {
+            sb.append(file.getName());
+            sb.append(':');
+        }
+        sb.append(lineNumber);
+        if (!isResolved())
+            sb.append(' ');
+        return sb.toString();
     }
 
     public String toString()
