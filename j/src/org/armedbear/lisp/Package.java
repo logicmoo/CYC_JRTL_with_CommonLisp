@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.35 2003-07-07 19:21:23 piso Exp $
+ * $Id: Package.java,v 1.36 2003-07-07 19:38:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -496,13 +496,16 @@ public final class Package extends LispObject
 
     public final void addNickname(String s) throws LispError
     {
+        // This call will throw an error if there's a naming conflict.
+        Packages.addNickname(this, s);
+
         if (nicknames != null) {
             if (nicknames.contains(s))
                 return; // Nothing to do.
         } else
             nicknames = new ArrayList();
+
         nicknames.add(s);
-        Packages.addNickname(this, s);
     }
 
     public String getNickname()
