@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.134 2003-12-06 15:47:24 piso Exp $
+;;; $Id: boot.lisp,v 1.135 2003-12-08 03:01:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -308,3 +308,5 @@
   (unless (and (listp varlist) (every #'symbolp varlist))
     (error "~S is not a list of symbols" varlist))
   `(values (setf (values ,@varlist) ,value-form)))
+
+(sys::%load "debug.lisp")
