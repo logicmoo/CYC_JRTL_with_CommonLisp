@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.492 2003-11-06 17:10:55 piso Exp $
+ * $Id: Primitives.java,v 1.493 2003-11-07 20:20:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2834,6 +2834,23 @@ public final class Primitives extends Module
         {
             checkSymbol(first).setPropertyList(checkList(second));
             return second;
+        }
+    };
+
+    // ### getf
+    // getf plist indicator &optional default => value
+    private static final Primitive GETF = new Primitive("getf")
+    {
+        public LispObject execute(LispObject plist, LispObject indicator)
+            throws ConditionThrowable
+        {
+            return getf(plist, indicator, NIL);
+        }
+        public LispObject execute(LispObject plist, LispObject indicator,
+                                  LispObject defaultValue)
+            throws ConditionThrowable
+        {
+            return getf(plist, indicator, defaultValue);
         }
     };
 
