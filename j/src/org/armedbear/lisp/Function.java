@@ -1,8 +1,8 @@
 /*
  * Function.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.30 2003-12-20 09:01:10 asimon Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Function.java,v 1.31 2004-01-10 15:57:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,12 +146,14 @@ public abstract class Function extends Functional
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer("FUNCTION");
         if (name != null) {
+            StringBuffer sb = new StringBuffer("#<FUNCTION");
             sb.append(' ');
             sb.append(name);
+            sb.append('>');
+            return sb.toString();
         }
-        return unreadableString(sb.toString());
+        return unreadableString("FUNCTION");
     }
 
     // Profiling.
