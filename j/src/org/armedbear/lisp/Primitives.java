@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.116 2003-03-13 15:31:01 piso Exp $
+ * $Id: Primitives.java,v 1.117 2003-03-13 18:25:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3921,11 +3921,21 @@ public final class Primitives extends Module
         }
     };
 
-    private static final Primitive1 FUNCTION_CALL_COUNT =
-        new Primitive1("function-call-count") {
+    private static final Primitive1 _CALL_COUNT =
+        new Primitive1("%call-count") {
         public LispObject execute(LispObject arg) throws LispError
         {
             return new Fixnum(arg.getCallCount());
+        }
+    };
+
+    private static final Primitive2 _SET_CALL_COUNT =
+        new Primitive2("%set-call-count") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            first.setCallCount(Fixnum.getValue(second));
+            return second;
         }
     };
 
