@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.431 2003-09-23 15:27:50 piso Exp $
+ * $Id: Primitives.java,v 1.432 2003-09-23 15:43:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1523,98 +1523,6 @@ public final class Primitives extends Module
                 args = args.cdr();
             }
             throw new ConditionThrowable(new TypeError("ECASE: no match for " + key));
-        }
-    };
-
-    // ### dolist
-    private static final SpecialOperator DOLIST = new SpecialOperator("dolist")
-    {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            LispObject bodyForm = args.cdr();
-            args = args.car();
-            Symbol var = checkSymbol(args.car());
-            LispObject listForm = args.cadr();
-            final LispThread thread = LispThread.currentThread();
-            LispObject resultForm = args.cdr().cdr().car();
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            int depth = thread.getStackDepth();
-            try {
-                LispObject list = checkList(eval(listForm, env, thread));
-                // Look for tags.
-                Binding tags = null;
-                LispObject remaining = bodyForm;
-                while (remaining != NIL) {
-                    LispObject current = remaining.car();
-                    remaining = remaining.cdr();
-                    if (current instanceof Cons)
-                        continue;
-                    // It's a tag.
-                    tags = new Binding(current, remaining, tags);
-                }
-                while (list != NIL) {
-                    Environment ext = new Environment(env);
-                    bind(var, list.car(), ext);
-                    LispObject body = bodyForm;
-                    while (body != NIL) {
-                        LispObject current = body.car();
-                        if (current instanceof Cons) {
-                            try {
-                                // Handle GO inline if possible.
-                                if (current.car() == Symbol.GO) {
-                                    LispObject code = null;
-                                    LispObject tag = current.cadr();
-                                    for (Binding binding = tags; binding != null; binding = binding.next) {
-                                        if (binding.symbol.eql(tag)) {
-                                            code = binding.value;
-                                            break;
-                                        }
-                                    }
-                                    if (code != null) {
-                                        body = code;
-                                        continue;
-                                    }
-                                    throw new Go(tag);
-                                }
-                                eval(current, ext, thread);
-                            }
-                            catch (Go go) {
-                                LispObject code = null;
-                                LispObject tag = go.getTag();
-                                for (Binding binding = tags; binding != null; binding = binding.next) {
-                                    if (binding.symbol.eql(tag)) {
-                                        code = binding.value;
-                                        break;
-                                    }
-                                }
-                                if (code != null) {
-                                    body = code;
-                                    thread.setStackDepth(depth);
-                                    continue;
-                                }
-                                throw go;
-                            }
-                        }
-                        body = body.cdr();
-                    }
-                    list = list.cdr();
-                }
-                Environment ext = new Environment(env);
-                bind(var, NIL, ext);
-                LispObject result = eval(resultForm, ext, thread);
-                return result;
-            }
-            catch (Return ret) {
-                if (ret.getTag() == NIL) {
-                    thread.setStackDepth(depth);
-                    return ret.getResult();
-                }
-                throw ret;
-            }
-            finally {
-                thread.setDynamicEnvironment(oldDynEnv);
-            }
         }
     };
 
