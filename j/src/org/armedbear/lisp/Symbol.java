@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.52 2003-07-14 13:20:37 piso Exp $
+ * $Id: Symbol.java,v 1.53 2003-07-27 18:49:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,6 +307,21 @@ public class Symbol extends LispObject
         if (obj == null)
             throw new NullPointerException();
         propertyList = obj;
+    }
+
+    private static final Symbol _FUNCTION_DOCUMENTATION =
+        PACKAGE_SYS.intern("%FUNCTION-DOCUMENTATION");
+
+    // Returns null if there is no function documentation.
+    public final LispObject getFunctionDocumentation() throws LispError
+    {
+        return get(this, _FUNCTION_DOCUMENTATION);
+    }
+
+    public final void setFunctionDocumentation(String docstring)
+        throws LispError
+    {
+        put(this, _FUNCTION_DOCUMENTATION, new LispString(docstring));
     }
 
     public String toString()
