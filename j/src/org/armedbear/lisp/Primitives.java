@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.12 2003-02-10 18:51:16 piso Exp $
+ * $Id: Primitives.java,v 1.13 2003-02-12 02:37:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2935,13 +2935,15 @@ public final class Primitives extends Module
         {
             if (args.length() != 1)
                 throw new WrongNumberOfArgumentsException(this);
-            eval(args.car(), env);
+            LispObject result = eval(args.car(), env);
             LispObject[] values = getValues();
             setValues(null);
-            LispObject result = NIL;
+            if (values == null)
+                return new Cons(result, NIL);
+            LispObject list = NIL;
             for (int i = values.length; i-- > 0;)
-                result = new Cons(values[i], result);
-            return result;
+                list = new Cons(values[i], list);
+            return list;
         }
     };
 
