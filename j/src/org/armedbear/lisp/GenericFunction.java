@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: GenericFunction.java,v 1.9 2004-04-16 05:56:45 piso Exp $
+ * $Id: GenericFunction.java,v 1.10 2004-06-11 23:36:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,29 +90,24 @@ public final class GenericFunction extends StandardObject
         return funcall(getDiscriminatingFunction(), args, LispThread.currentThread());
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         LispObject slots = getSlots();
         if (slots instanceof AbstractVector) {
             AbstractVector v = (AbstractVector) slots;
-            try {
-                if (v.length() > 0) {
-                    LispObject name = v.getRowMajor(0);
-                    if (name != null) {
-                        StringBuffer sb = new StringBuffer("#<");
-                        sb.append(String.valueOf(getLispClass().getSymbol()));
-                        sb.append(' ');
-                        sb.append(String.valueOf(name));
-                        sb.append('>');
-                        return sb.toString();
-                    }
+            if (v.length() > 0) {
+                LispObject name = v.getRowMajor(0);
+                if (name != null) {
+                    StringBuffer sb = new StringBuffer("#<");
+                    sb.append(getLispClass().getSymbol().writeToString());
+                    sb.append(' ');
+                    sb.append(name.writeToString());
+                    sb.append('>');
+                    return sb.toString();
                 }
             }
-            catch (Throwable t) {
-                Debug.trace(t);
-            }
         }
-        return super.toString();
+        return super.writeToString();
     }
 
     // Profiling.
