@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+
+<head>
+<title>J User's Guide - XML Mode</title>
+<LINK REL="stylesheet" HREF="j.css" TYPE="text/css">
+</head>
+
+<body>
+
+<a href="contents.html">Top</a>
+
+<hr>
+
+<h1>XML Mode</h1>
+
+<hr>
+
+<p>
+In XML mode, the bottom pane of the sidebar normally displays a tree
+representing the document you're editing. The tree is enabled by default. To 
+disable it, add the following line to your  
+<a href="preferences.html">preferences</a> file:
+<pre>
+    enableTree=false
+</pre>
+<p>
+If the tree is enabled but no tree appears in the sidebar, the most likely
+reason is that j's XML parser was unable to parse the contents of the buffer.
+Parsing is done in a background thread, so it may take a little while for the
+tree to appear (or possibly a long while, if the document references a DTD on
+the Internet, for example).
+<p>
+The j distribution includes a version of the &AElig;lfred XML parser from 
+<a href="http://www.microstar.com">Microstar</a>, taken from David Brownell's 
+<a href="http://home.pacbell.net/david-b/xml">SAX2 XML Utilities</a>.
+
+<p>
+If you would rather use a different XML parser, you need to do two things:
+
+<ol>
+<li>
+Add the relevant jar file(s) to j's runtime <code>CLASSPATH</code>. If you
+build j from source, you can use the configure script's  
+<code>--with-extensions</code> option to do this:
+<pre>
+    ./configure --with-extensions=/usr/share/java/xerces.jar:/usr/share/java/xp.jar
+</pre>
+The j shell script that is automatically generated and installed will then use
+the correct <code>CLASSPATH</code>.
+<br><br>
+</li>
+
+<li> 
+
+Add a line to your <a href="preferences.html">preferences</a> file to specify
+the <a href="preferences.html#org.xml.sax.parser">org.xml.sax.parser</a>
+property, which tells j the fully qualified class name of the parser to use.
+For example:
+<pre>
+    org.xml.sax.parser=org.apache.xerces.parsers.SAXParser
+</pre>
+</li>
+</ol>
+
+<p>
+When you have a tree in the sidebar, the selection in the tree will follow
+along as you navigate in the edit buffer, but the tree is not automatically
+expanded to show nested nodes. You can use
+<a href="commands.html#xmlFindCurrentNode">xmlFindCurrentNode</a>, mapped by
+default to Ctrl =, to force the tree to expand all the way down to the node
+corresponding to the location of the caret in the edit buffer.
+
+<p>
+Clicking on a node in the tree moves the caret to the corresponding
+location in the edit buffer.
+<p>
+By default, the tree is not refreshed automatically if you make changes to the
+buffer. If you'd like the tree to be refreshed automatically, add a line like
+this to your <a href="preferences.html">preferences</a> file:
+<pre>
+    refreshTree=500
+</pre>
+The numeric parameter is the number of milliseconds the user must be idle
+before j refreshes the tree. A value of zero (which is the default) disables
+the automatic refresh functionality. In the current implementation, the minimum
+effective value is 500 milliseconds.
+<p>
+If the tree is enabled, you can use  
+<a href="commands.html#xmlParseBuffer">xmlParseBuffer</a>, mapped by default to
+Ctrl P, to force the tree to be refreshed. The parser uses the image of the
+buffer in memory, rather than the file on disk, so there's no need to save any
+changes you've made to the buffer before refreshing the tree.
+<p>
+If <a href="commands.html#xmlParseBuffer">xmlParseBuffer</a> encounters an
+error, the tree is not updated.  Instead, a message box displays the parser's
+error message, and the caret is moved to the location of the error in the edit
+buffer (as reported by the parser). You can use  
+<a href="commands.html#showMessage">showMessage</a>, mapped by default to Alt
+M, to have another look at the error message later.
+
+<p>
+Parser errors that occur when j is automatically refreshing the tree are not reported.
+<p>
+<a href="commands.html#xmlParseBuffer">xmlParseBuffer</a> invokes
+<a href="commands.html#xmlFindCurrentNode">xmlFindCurrentNode</a> automatically
+when it succeeds in updating the tree.
+
+<p>
+The following commands are also specifically relevant in XML mode:
+
+<ul>
+<li><a href="commands.html#xmlElectricEquals">xmlElectricEquals</a></li>
+<li><a href="commands.html#xmlFindMatch">xmlFindMatch</a></li>
+<li><a href="commands.html#xmlInsertEmptyElementTag">xmlInsertEmptyElementTag</a></li>
+<li><a href="commands.html#xmlInsertTag">xmlInsertTag</a></li>
+</ul>
+
+</body>
+
+</html>

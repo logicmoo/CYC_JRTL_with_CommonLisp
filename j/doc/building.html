@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+
+<head>
+<title>J User's Guide - Building the Source</title>
+<LINK REL="stylesheet" HREF="j.css" TYPE="text/css">
+</head>
+
+<body>
+
+<a href="contents.html">Top</a>
+
+<hr>
+
+<h1>Building the Source</h1>
+
+<hr>
+
+<p>
+<b>Using configure and make</b>
+<p>
+For Linux:
+
+<pre>
+    $ ./configure --with-jdk=DIR
+    $ make
+    $ make install
+</pre>
+
+The <code>--with-jdk</code> option is <b>always</b> required,
+in order to specify which JDK to use (give the full path of its top-level directory).
+<p>
+You can use the <code>--with-extensions</code> option to specify extensions to
+the <code>CLASSPATH</code>. For example, you may want to build j with XML
+parser support:
+<pre>
+    $ ./configure ... --with-extensions=/usr/share/java/xerces.jar
+</pre>
+Extensions specified in this way are added to the <code>CLASSPATH</code> both
+during the build process and at runtime.
+<p>
+If you want to use certain experimental features such as shell and telnet
+buffers, you should specify the <code>--enable-jpty</code> option (you will
+also need to set <code>enableExperimentalFeatures=true</code>
+in your <a href="preferences.html">preferences</a> file).
+<p>
+For Windows, you'll need the
+<a href="http://sourceware.cygnus.com/cygwin/">Cygwin</a> tools, and you'll need
+to be running bash as your shell.  You can use the Cygwin drive notation (if
+need be) to specify the location of your JDK:
+<pre>
+    $ ./configure --with-jdk=//c/jdk1.3
+</pre>
+
+In addition, you must specify the --unix option when invoking make:
+
+<pre>
+    $ make --unix
+    $ make --unix install
+</pre>
+
+As an alternative, you can set the MAKE_MODE environment variable before running make:
+
+<pre>
+    $ export MAKE_MODE=unix
+    $ make
+    $ make install
+</pre>
+
+By default, j will be installed in /usr/local/bin, which may not be what you
+want if you're running Windows.
+<p>
+After you've built and installed j, you should be able to invoke it from the
+command line by just typing
+<pre>
+    $ j
+</pre>
+if /usr/local/bin is in your PATH.
+<p>
+<b>If you're not using Java 1.4...</b>
+<p>
+If you're not using Java 1.4 to build j, you'll get errors compiling the files
+MouseWheelListener.java and WindowStateListener.java (in src/org/armedbear/j).
+These files contain code specific to Java 1.4. These errors can safely be
+ignored. The classes in question will be loaded dynamically if they exist, but
+they are not required.
+<p>
+If you don't like the compilation errors, you can delete
+MouseWheelListener.java and WindowStateListener.java, use Java 1.4, or use the
+Ant-based build system (see below).
+<p>
+<b>Using Ant</b>
+<p>
+Starting with version 0.11.2, j also comes with an
+<a href="http://jakarta.apache.org/ant">Ant</a>-based build system. Version
+1.4.1 of Ant is required.
+<p>
+Change into the root directory of the j source distribution and edit the file
+build.properties to suit your situation:
+<dl>
+  <dd>
+      <p>
+      If you're not planning to use Java 1.4, you can leave jdk14 unset in
+      build.properties; the source files that require 1.4
+      (MouseWheelListener.java and WindowStateListener.java) just won't get
+      built in that case.
+      <p>
+      If you want to use Java 1.4 and you don't care about earlier versions of
+      Java, the simplest thing to do is to point both jdk and jdk14 at your
+      Java 1.4 JDK.
+      <p>
+      You can also point jdk at your Java 1.3 JDK and jdk14 at your Java 1.4
+      JDK, and the resulting j.jar will work with either 1.3 or 1.4; the
+      distribution binaries are built this way.
+  </dd>
+</dl>
+<p>
+Then:
+<pre>
+    $ ant all
+    $ ant install
+</pre>
+This will install j in /usr/local/bin.
+<p>
+In theory, since Ant is a Java-based, cross-platform tool, the Ant build
+system should work on Windows too, but it has only been tested on Linux. Minor
+adjustments may be required to get it to work correctly on Windows.
+</body> </html>

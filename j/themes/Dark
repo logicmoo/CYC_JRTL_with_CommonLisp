@@ -1,0 +1,67 @@
+# Dark
+# Bruce Hellstrom
+# $Id: Dark,v 1.1.1.1 2002-09-24 16:10:24 piso Exp $
+
+color.text                    = 0 255 0
+color.background              = 0 0 0
+color.caret                   = 255 255 255
+
+color.selectionBackground     = 64 64 64
+color.matchingBracketBackground = 255 0 0
+color.preprocessor            = 0 255 192
+color.comment                 = 128 128 128
+color.keyword                 = 255 255 0
+color.brace                   = 255 255 255
+color.number                  = 0 255 255
+color.currentLineBackground   = 64 64 92
+color.function                = 255 255 255
+color.string                  = 128 128 255
+color.operator                = 0 192 255
+color.disabled                = 128 128 128
+color.change                  = 255   0   0
+color.savedChange             =   0 255   0
+color.verticalRule            = 96 96 96
+color.lineNumber              = 96 96 96
+color.gutterBorder            = 96 96 96
+ShellMode.color.prompt        = 0 255 255
+ShellMode.color.input         = 255 255 0
+
+XmlMode.color.text            = 0 255 0
+XmlMode.color.attribute       = 128 192 255
+XmlMode.color.delimiter       = 255 255 255
+XmlMode.color.namespace       = 255 204 0
+XmlMode.color.tag             = 255 255 0
+XmlMode.color.comment         = 128 128 128
+XmlMode.color.selectionBackground = 32 32 32
+XmlMode.color.currentLineBackground = 16 16 42
+
+HtmlMode.color.tag            = 255 255 0
+HtmlMode.color.anchor         = 192 192 192
+HtmlMode.color.image          = 128 255 128
+HtmlMode.color.table          = 0 0 255
+HtmlMode.color.tableRow       = 128 128 255
+HtmlMode.color.tableData      = 0 255 255
+HtmlMode.color.comment        = 128 128 128
+HtmlMode.color.script         = 0 255 0
+HtmlMode.color.selectionBackground = 32 32 32
+HtmlMode.color.currentLineBackground = 16 16 42
+
+PerlMode.color.scalar         = 0 255 255
+PerlMode.color.list           = 192 255 255
+
+PHPMode.color.var             = 0 255 255
+PHPMode.color.attribute       = 128 192 255
+PHPMode.color.delimiter       = 255 255 255
+PHPMode.color.tag             = 255 255 0
+
+MakefileMode.color.target     = 255 255 255
+
+PropertiesMode.color.section  = 255 255 0
+
+DirectoryMode.color.directory = 255 255 0
+DirectoryMode.color.symlink   = 255 255 0
+DirectoryMode.color.marked    = 255 255 255
+
+style.keyword                 = 0
+style.function                = 0
+DirectoryMode.style.directory = 2

@@ -1,0 +1,21 @@
+BODY
+{
+    font-family: arial, helvetica, sans-serif;
+    color: #000000;
+}
+
+A, P, UL, LI, H1, H2, H3, H4
+{
+    font-family: arial, helvetica, sans-serif;
+}
+
+A:link, A:visited
+{
+    color: blue;
+}
+
+CODE
+{
+    font-family: monospaced;
+}
+

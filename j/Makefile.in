@@ -1,0 +1,251 @@
+# Makefile.in
+
+# Copyright (C) 1998-2000 Peter Graves
+# $Id: Makefile.in,v 1.1.1.1 2002-09-24 16:06:34 piso Exp $
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+version=@version@
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+datadir=@datadir@
+
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
+INSTALL_SCRIPT=@INSTALL_SCRIPT@
+
+JAR=@JAR@
+
+JPTY=@JPTY@
+
+distdir = j-$(version)
+
+all: j.jar $(JPTY)
+
+Makefile: Makefile.in config.status
+	$(SHELL) ./config.status
+
+config.status: configure
+	$(SHELL) ./config.status --recheck
+
+classes:
+	set -e; \
+	for i in src/bsh src/bsh/classpath src/bsh/commands src/bsh/reflect src/gnu/regexp \
+	  src/org/xml/sax src/org/xml/sax/helpers src/org/xml/sax/ext \
+	  src/org/armedbear/j/aelfred src/org/armedbear/j/mail src/org/armedbear/j src; \
+	do \
+	  ( cd $$i && $(MAKE) ); \
+	done
+	cd src/org/armedbear/j && date > build && hostname >> build
+
+jpty:
+	cd src/jpty && $(MAKE)
+
+jpty.exe:
+	cd src/jpty && $(MAKE)
+
+j.jar: classes.stamp
+	cd src && $(JAR) cmf manifest ../j.jar Editor.class org/armedbear/j/*.class \
+	  org/armedbear/j/*.bsh \
+	  org/armedbear/j/version org/armedbear/j/build \
+	  org/armedbear/j/images/*.gif \
+	  bsh/*.class bsh/classpath/*.class bsh/commands/*.class bsh/commands/*.bsh bsh/reflect/*.class \
+	  gnu/regexp/*.class gnu/regexp/MessagesBundle.properties org/xml/sax/*.class \
+	  org/xml/sax/helpers/*.class org/xml/sax/ext/*.class org/armedbear/j/aelfred/*.class \
+	  org/armedbear/j/mail/*.class \
+	  org/armedbear/j/*.keywords org/armedbear/j/mail/*.keywords
+
+classes.stamp: classes
+	test -f classes.stamp || touch classes.stamp
+
+distdir:
+	-rm -rf $(distdir)
+	mkdir $(distdir)
+	cp -p j.in j.bat.in configure configure.in Makefile.in install-sh mkinstalldirs COPYING $(distdir)
+	cp -p build.properties build.xml $(distdir)
+	mkdir $(distdir)/src
+	cp -p src/Makefile.in src/manifest src/*.java $(distdir)/src
+	mkdir $(distdir)/src/jpty
+	cp -p src/jpty/Makefile.in src/jpty/jpty.c $(distdir)/src/jpty
+	cp -p src/jpty/build.xml $(distdir)/src/jpty
+	mkdir $(distdir)/src/org
+	mkdir $(distdir)/src/org/armedbear
+	mkdir $(distdir)/src/org/armedbear/j
+	-cp -p src/org/armedbear/j/Makefile.in src/org/armedbear/j/version.in src/org/armedbear/j/*.java src/org/armedbear/j/*.bsh $(distdir)/src/org/armedbear/j
+	mkdir $(distdir)/src/org/armedbear/j/mail
+	-cp -p src/org/armedbear/j/mail/Makefile.in src/org/armedbear/j/mail/*.java $(distdir)/src/org/armedbear/j/mail
+	mkdir $(distdir)/src/org/armedbear/j/aelfred
+	-cp -p src/org/armedbear/j/aelfred/Makefile.in src/org/armedbear/j/aelfred/*.java $(distdir)/src/org/armedbear/j/aelfred
+	mkdir $(distdir)/src/org/armedbear/j/images
+	-cp -p src/org/armedbear/j/images/*.gif $(distdir)/src/org/armedbear/j/images
+	mkdir $(distdir)/src/bsh
+	-cp -p src/bsh/Makefile.in src/bsh/*.java  src/bsh/bsh.jj src/bsh/bsh.jjt $(distdir)/src/bsh
+	mkdir $(distdir)/src/bsh/classpath
+	-cp -p src/bsh/classpath/Makefile.in src/bsh/classpath/*.java  $(distdir)/src/bsh/classpath
+	mkdir $(distdir)/src/bsh/commands
+	-cp -p src/bsh/commands/Makefile.in src/bsh/commands/*.java src/bsh/commands/*.bsh $(distdir)/src/bsh/commands
+	mkdir $(distdir)/src/bsh/reflect
+	-cp -p src/bsh/reflect/Makefile.in src/bsh/reflect/*.java  $(distdir)/src/bsh/reflect
+	mkdir $(distdir)/src/gnu
+	mkdir $(distdir)/src/gnu/regexp
+	-cp -p src/gnu/regexp/Makefile.in src/gnu/regexp/*.java  src/gnu/regexp/MessagesBundle.properties $(distdir)/src/gnu/regexp
+	mkdir $(distdir)/src/org/xml
+	mkdir $(distdir)/src/org/xml/sax
+	-cp -p src/org/xml/sax/Makefile.in src/org/xml/sax/*.java $(distdir)/src/org/xml/sax
+	mkdir $(distdir)/src/org/xml/sax/helpers
+	-cp -p src/org/xml/sax/helpers/Makefile.in src/org/xml/sax/helpers/*.java $(distdir)/src/org/xml/sax/helpers
+	mkdir $(distdir)/src/org/xml/sax/ext
+	-cp -p src/org/xml/sax/ext/Makefile.in src/org/xml/sax/ext/*.java $(distdir)/src/org/xml/sax/ext
+	mkdir $(distdir)/doc
+	cp -p doc/*.html $(distdir)/doc
+	cp -p doc/*.css $(distdir)/doc
+	mkdir $(distdir)/themes
+	-cp -p themes/* $(distdir)/themes
+
+dist: distdir
+	-rm -f $(distdir).zip
+	-rm -f $(distdir).tar.gz
+	zip -q -r $(distdir).zip $(distdir)
+	-rm -rf temp
+	mkdir temp
+	cd temp && unzip -q ../$(distdir).zip
+	diff --brief -N -r $(distdir) temp/$(distdir)
+	rm -rf temp
+	tar czf $(distdir).tar.gz $(distdir)
+	mkdir temp
+	cd temp && tar xfz ../$(distdir).tar.gz
+	diff --brief -N -r $(distdir) temp/$(distdir)
+	rm -rf temp
+	rm -rf $(distdir)
+
+bindistdir: j.jar
+	-rm -rf $(distdir)
+	mkdir $(distdir)
+	cp -p j.jar COPYING $(distdir)
+	mkdir $(distdir)/doc
+	cp -p doc/*.html $(distdir)/doc
+	cp -p doc/*.css $(distdir)/doc
+	mkdir $(distdir)/themes
+	-cp -p themes/* $(distdir)/themes
+
+bindist: bindistdir
+	-rm -f $(distdir)-binary.tar.gz
+	-rm -f $(distdir)-binary.zip
+	zip -q -r $(distdir)-binary.zip $(distdir)
+	-rm -rf temp
+	mkdir temp
+	cd temp && unzip -q ../$(distdir)-binary.zip
+	diff --brief -N -r $(distdir) temp/$(distdir)
+	rm -rf temp
+	tar czf $(distdir)-binary.tar.gz $(distdir)
+	mkdir temp
+	cd temp && tar xfz ../$(distdir)-binary.tar.gz
+	diff --brief -N -r $(distdir) temp/$(distdir)
+	rm -rf temp
+	-rm -rf $(distdir)
+
+install:
+	./mkinstalldirs $(datadir)/j $(datadir)/j/themes $(datadir)/doc/j $(bindir)
+	$(INSTALL_DATA) j.jar $(datadir)/j
+	$(INSTALL_SCRIPT) j $(bindir)
+	if [ -f src/jpty/$(JPTY) ]; then $(INSTALL_PROGRAM) src/jpty/$(JPTY) $(bindir); fi
+	if [ -f j.bat ]; then $(INSTALL_SCRIPT) j.bat $(bindir); fi
+	for i in themes/* ; do test -f $$i && $(INSTALL_DATA) $$i $(datadir)/j/themes ; done
+	$(INSTALL_DATA) doc/*.html $(datadir)/doc/j
+	$(INSTALL_DATA) doc/*.css $(datadir)/doc/j
+
+uninstall:
+	-rm -f $(datadir)/j/j.jar
+	-rm -f $(bindir)/j
+	-rm -f $(bindir)/jpty.exe
+	-rm -f $(bindir)/jpty
+	-rm -f $(bindir)/j.bat
+	-rm -f $(datadir)/j/themes/*
+	-rmdir $(datadir)/j/themes
+	-rm -f $(datadir)/doc/j/*.html
+	-rm -f $(datadir)/doc/j/*.css
+	-rmdir $(datadir)/doc/j
+	-rmdir $(datadir)/j
+
+clean:
+	-rm -f *.zip
+	-rm -f *.tar.gz
+	-rm -f *.jar
+	-rm -f *.class
+	-rm -f src/*.class
+	-rm -f src/jpty/jpty src/jpty/jpty.exe
+	-rm -f src/org/armedbear/j/*.class
+	-rm -f src/org/armedbear/j/build
+	-rm -f src/org/armedbear/j/aelfred/*.class
+	-rm -f src/org/armedbear/j/mail/*.class
+	-rm -f src/bsh/*.class
+	-rm -f src/bsh/classpath/*.class
+	-rm -f src/bsh/commands/*.class
+	-rm -f src/bsh/reflect/*.class
+	-rm -f src/gnu/regexp/*.class
+	-rm -f src/org/xml/sax/*.class
+	-rm -f src/org/xml/sax/helpers/*.class
+	-rm -f src/org/xml/sax/ext/*.class
+	-rm -rf $(distdir)
+	-rm -f classes.stamp
+
+distclean: clean
+	-rm -f config.status config.log config.cache Makefile j j.bat
+	-rm -f src/Makefile
+	-rm -f src/jpty/Makefile
+	-rm -f src/bsh/Makefile
+	-rm -f src/bsh/classpath/Makefile
+	-rm -f src/bsh/commands/Makefile
+	-rm -f src/bsh/reflect/Makefile
+	-rm -f src/gnu/regexp/Makefile
+	-rm -f src/org/xml/sax/Makefile
+	-rm -f src/org/xml/sax/helpers/Makefile
+	-rm -f src/org/xml/sax/ext/Makefile
+	-rm -f src/org/armedbear/j/Makefile
+	-rm -f src/org/armedbear/j/version
+	-rm -f src/org/armedbear/j/aelfred/Makefile
+	-rm -f src/org/armedbear/j/mail/Makefile
+
+j.zip:
+	-rm -f j.zip
+	zip -q j.zip j.in j.bat.in configure configure.in Makefile.in install-sh mkinstalldirs COPYING \
+		src/Makefile.in src/manifest src/*.java \
+		src/jpty/Makefile.in src/jpty/jpty.c \
+		src/org/armedbear/j/Makefile.in src/org/armedbear/j/version.in src/org/armedbear/j/*.java \
+		src/org/armedbear/j/mail/Makefile.in src/org/armedbear/j/mail/*.java \
+		src/org/armedbear/j/*.bsh \
+		src/org/armedbear/j/images/*.gif \
+		src/bsh/Makefile.in src/bsh/*.j* \
+		src/bsh/classpath/Makefile.in src/bsh/classpath/*.java \
+		src/bsh/commands/Makefile.in src/bsh/commands/*.java src/bsh/commands/*.bsh \
+		src/bsh/reflect/Makefile.in src/bsh/reflect/*.java \
+		src/gnu/regexp/Makefile.in src/gnu/regexp/*.java src/gnu/regexp/MessagesBundle.properties \
+		src/org/xml/sax/Makefile.in src/org/xml/sax/*.java \
+		src/org/xml/sax/helpers/Makefile.in src/org/xml/sax/helpers/*.java \
+		src/org/xml/sax/ext/Makefile.in src/org/xml/sax/ext/*.java \
+		src/org/armedbear/j/aelfred/Makefile.in src/org/armedbear/j/aelfred/*.java \
+		doc/*.html doc/*.css \
+		themes/*
+	unzip -t -qq j.zip
+
+j-jar.zip: j.jar
+	-rm -f j-jar.zip
+	zip -q j-jar.zip j.jar
+	unzip -t -qq j-jar.zip
+
+snapshot: j.zip j-jar.zip

@@ -1,0 +1,287 @@
+<project name="j" default="compile" basedir="./src">
+
+  <!-- Set global properties for this build -->
+  <property name="version" value="0.17.0+"/>
+  <property name="topdir" value="${basedir}/.."/>
+  <property name="distdir" value="/tmp/j-${version}"/>
+  <property file="${topdir}/build.properties"/>
+  <property name="java" value="${jdk}/jre/bin/java"/>
+  <property name="java_options" value=""/>
+  <property name="extensions" value=""/>
+  <property name="datadir" value="/usr/local/share"/>
+  <property name="bindir" value="/usr/local/bin"/>
+
+  <property name="JAVA" value="${java}"/>
+  <property name="JAVA_OPTIONS" value="${java_options}"/>
+
+  <property name="debug" value="no"/>
+
+  <path id="classpath">
+    <pathelement location="${basedir}"/>
+    <pathelement location="${datadir}/j/j.jar"/>
+    <pathelement path="${extensions}"/>
+    <pathelement path="${jdk}/lib/tools.jar"/>
+  </path>
+
+  <property name="CLASSPATH" refid="classpath"/>
+
+  <target name="prepare">
+    <!-- Create the time stamp -->
+    <tstamp>
+      <format property="build" pattern="EEE MMM dd yyyy HH:mm:ss zzz"/>
+    </tstamp>
+    <condition property="unix">
+      <os family="unix"/>
+    </condition>
+    <condition property="windows">
+      <os family="windows"/>
+    </condition>
+    <available
+      classname="com.sun.jdi.Bootstrap"
+      classpath="${jdk}/jre/lib/rt.jar:${extensions}:${jdk}/lib/tools.jar"
+      property="jpda.present"
+    />
+  </target>
+
+  <target
+    name="compile"
+    depends="classes, classes14, jdbclasses, stamp, stamp.hostname"
+  />
+
+  <target name="classes" depends="prepare">
+    <echo message="debug=${debug}" />
+    <javac
+      srcdir="."
+      destdir="${basedir}"
+      classpath="${basedir}:${jdk}/jre/lib/rt.jar:${extensions}"
+      includeAntRuntime="no"
+      excludes="test/**/*, org/armedbear/j/jdb/**/*, org/armedbear/j/MouseWheelListener.java, org/armedbear/j/WindowStateListener.java"
+      debug="${debug}"
+    />
+  </target>
+
+  <target name="classes14" depends="prepare" if="jdk14">
+    <echo message="debug=${debug}" />
+    <javac
+      srcdir="."
+      destdir="${basedir}"
+      classpath="${basedir}:${jdk14}/jre/lib/rt.jar:${extensions}"
+      includeAntRuntime="no"
+      includes="org/armedbear/j/MouseWheelListener.java, org/armedbear/j/WindowStateListener.java"
+      debug="${debug}"
+    />
+  </target>
+
+  <target name="jdbclasses" depends="prepare" if="jpda.present">
+    <echo message="debug=${debug}" />
+    <javac
+      srcdir="."
+      destdir="${basedir}"
+      classpath="${basedir}:${jdk}/jre/lib/rt.jar:${extensions}:${jdk}/lib/tools.jar"
+      includeAntRuntime="no"
+      includes="org/armedbear/j/jdb/*"
+      debug="${debug}"
+    />
+  </target>
+
+  <target name="stamp">
+    <echo message="${version}&#10;" file="${basedir}/org/armedbear/j/version"/>
+    <echo message="${build}&#10;" file="${basedir}/org/armedbear/j/build"/>
+    <exec executable="hostname" os="Linux" outputproperty="hostname"/>
+  </target>
+
+  <target name="stamp.hostname" if="unix">
+    <exec executable="hostname" outputproperty="hostname"/>
+    <echo message="${hostname}&#10;" file="${basedir}/org/armedbear/j/build" append="yes"/>
+  </target>
+
+  <target name="stamp.snapshot">
+    <echo message="${build}&#10;" file="${basedir}/org/armedbear/j/snapshot"/>
+  </target>
+
+  <target name="all" depends="all.unix, all.windows"/>
+
+  <target name="all.unix" depends="j.jar, jpty" if="unix">
+    <filter token="JAVA" value="${JAVA}"/>
+    <filter token="JAVA_OPTIONS" value="${JAVA_OPTIONS}"/>
+    <filter token="CLASSPATH" value="${CLASSPATH}"/>
+    <copy file="${topdir}/j.in" tofile="${topdir}/j" filtering="yes" overwrite="yes"/>
+    <chmod file="${topdir}/j" perm="ugo+rx"/>
+  </target>
+
+  <target name="all.windows" depends="j.jar, jpty" if="windows">
+    <filter token="JAVA" value="${JAVA}"/>
+    <filter token="JAVA_OPTIONS" value="${JAVA_OPTIONS}"/>
+    <filter token="CLASSPATH" value="${CLASSPATH}"/>
+    <copy file="${topdir}/j.bat.in" tofile="${topdir}/j.bat" filtering="yes" overwrite="yes"/>
+  </target>
+
+  <target name="j.jar" depends="compile">
+    <jar
+      jarfile="../j.jar"
+      manifest="manifest"
+      basedir="${basedir}"
+      excludes="pg.class, SampleExtension.class, test/**/*"
+      includes="**/*.class, **/*.keywords, **/*.bsh, org/armedbear/j/version, org/armedbear/j/build, org/armedbear/j/snapshot, org/armedbear/j/images/*.gif, org/armedbear/j/images/*.png, gnu/regexp/MessagesBundle.properties"
+    />
+  </target>
+
+  <target name="jpty" if="jpty">
+    <ant antfile="jpty/build.xml"/>
+  </target>
+
+  <!-- Install -->
+  <target name="install" depends="install.unix, install.windows"/>
+
+  <target name="install.unix" depends="all" if="unix">
+    <mkdir dir="${datadir}/j"/>
+    <mkdir dir="${datadir}/j/themes"/>
+    <mkdir dir="${datadir}/doc/j" />
+    <copy file="${topdir}/j.jar" todir="${datadir}/j"/>
+    <copy file="${topdir}/j" todir="${bindir}"/>
+    <chmod file="${bindir}/j" perm="ugo+rx"/>
+    <copy file="${basedir}/jpty/jpty" todir="${bindir}"/>
+    <chmod file="${bindir}/jpty" perm="ugo+rx"/>
+    <copy todir="${datadir}/j/themes">
+      <fileset dir="${topdir}/themes"/>
+    </copy>
+    <copy todir="${datadir}/doc/j">
+      <fileset dir="${topdir}/doc"/>
+    </copy>
+  </target>
+
+  <target name="install.windows" depends="all" if="windows">
+    <mkdir dir="${datadir}/j"/>
+    <mkdir dir="${datadir}/j/themes"/>
+    <mkdir dir="${datadir}/doc/j" />
+    <copy file="${topdir}/j.jar" todir="${datadir}/j"/>
+    <copy file="${topdir}/j.bat" todir="${bindir}"/>
+    <copy file="${basedir}/jpty/jpty.exe" todir="${bindir}"/>
+    <copy todir="${datadir}/j/themes">
+      <fileset dir="${topdir}/themes"/>
+    </copy>
+    <copy todir="${datadir}/doc/j">
+      <fileset dir="${topdir}/doc"/>
+    </copy>
+  </target>
+
+  <!-- Uninstall -->
+  <target name="uninstall">
+    <delete file="${datadir}/j/j.jar" verbose="true"/>
+    <delete file="${bindir}/j" verbose="true"/>
+    <delete file="${bindir}/jpty" verbose="true"/>
+    <delete file="${bindir}/jpty.exe" verbose="true"/>
+    <delete verbose="true">
+      <fileset dir="${datadir}/j/themes"/>
+    </delete>
+    <delete verbose="true">
+      <fileset dir="${datadir}/doc/j"/>
+    </delete>
+  </target>
+
+  <target name="clean">
+    <delete>
+      <fileset dir="${topdir}" includes="**/*.zip"/>
+      <fileset dir="${topdir}" includes="**/*.tar.gz"/>
+      <fileset dir="${topdir}" includes="**/*.jar"/>
+      <fileset dir="${topdir}" includes="**/*.class"/>
+      <fileset dir="${topdir}" includes="**/*~"/>
+    </delete>
+    <delete file="${topdir}/j"/>
+    <delete file="${topdir}/j.bat"/>
+    <delete file="${basedir}/jpty/jpty"/>
+    <delete file="${basedir}/jpty/jpty.exe"/>
+    <delete file="${basedir}/org/armedbear/j/version"/>
+    <delete file="${basedir}/org/armedbear/j/build"/>
+  </target>
+
+  <!-- Distribution -->
+  <target name="dist" depends="prepare, distdir" if="unix">
+    <tar tarfile="${topdir}/j-${version}.tar" basedir="/tmp">
+      <include name="j-${version}/**"/>
+    </tar>
+    <gzip zipfile="${topdir}/j-${version}.tar.gz" src="${topdir}/j-${version}.tar"/>
+    <delete file="${topdir}/j-${version}.tar"/>
+    <zip zipfile="${topdir}/j-${version}.zip" basedir="/tmp">
+      <include name="j-${version}/**"/>
+    </zip>
+  </target>
+
+  <target name="distdir" depends="prepare" if="unix">
+    <delete dir="${distdir}"/>
+    <mkdir dir="${distdir}"/>
+    <copy todir="${distdir}">
+      <fileset dir="${topdir}">
+        <exclude name="**/*.class"/>
+        <exclude name="**/*.jar"/>
+        <exclude name="**/*.zip"/>
+        <exclude name="**/*.tar"/>
+        <exclude name="**/*.tar.gz"/>
+        <exclude name="src/test/**"/>
+        <exclude name="**/Makefile"/>
+        <exclude name="**/config.*"/>
+        <exclude name="**/classes.stamp"/>
+        <exclude name="**/build"/>
+        <exclude name="**/version"/>
+        <exclude name="**/j"/>
+        <exclude name="**/j.bat"/>
+        <exclude name="**/jpty"/>
+        <exclude name="**/ChangeLog"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="bindist" depends="prepare, bindistdir" if="unix">
+    <tar tarfile="${topdir}/j-${version}-binary.tar" basedir="/tmp">
+      <include name="j-${version}/**"/>
+    </tar>
+    <gzip zipfile="${topdir}/j-${version}-binary.tar.gz" src="${topdir}/j-${version}-binary.tar"/>
+    <delete file="${topdir}/j-${version}-binary.tar"/>
+    <zip zipfile="${topdir}/j-${version}-binary.zip" basedir="/tmp">
+      <include name="j-${version}/**"/>
+    </zip>
+  </target>
+
+  <target name="bindistdir" depends="release" if="unix">
+    <delete dir="${distdir}"/>
+    <mkdir dir="${distdir}"/>
+    <copy todir="${distdir}">
+      <fileset dir="${topdir}">
+        <include name="j.jar"/>
+        <include name="COPYING"/>
+        <include name="doc/*.html"/>
+        <include name="doc/*.css"/>
+        <include name="themes/*"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- Build j.jar from scratch without debug information -->
+  <target name="release" depends="prepare, clean">
+    <antcall target="j.jar">
+      <param name="debug" value="no"/>
+    </antcall>
+  </target>
+
+  <target name="snapshot" depends="clean, prepare, stamp.snapshot, j.zip, j-jar.zip">
+    <delete file="${basedir}/org/armedbear/j/snapshot"/>
+  </target>
+
+  <target name="j.zip">
+    <delete file="${topdir}/j.zip"/>
+    <zip
+      zipfile="${topdir}/j.zip"
+      basedir="${topdir}"
+      excludes="**/*.class, **/*.jar, **/*.zip, src/test/**, **/Makefile.in, **/Makefile,
+        **/configure.in, **/configure, **/config.status, **/config.cache, **/config.log,
+        **/install-sh, **/mkinstalldirs, **/classes.stamp, **/build, **/version,
+        **/j, **/j.bat, **/jpty, **/ChangeLog"
+    />
+  </target>
+
+  <target name="j-jar.zip" depends="j.jar">
+    <delete file="${topdir}/j-jar.zip"/>
+    <zip zipfile="${topdir}/j-jar.zip" basedir="${topdir}" includes="j.jar"/>
+  </target>
+
+</project>

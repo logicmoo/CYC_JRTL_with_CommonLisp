@@ -1,0 +1,210 @@
+/*
+ * Ssh.java
+ *
+ * Copyright (C) 2002 Peter Graves
+ * $Id: Ssh.java,v 1.1.1.1 2002-09-24 16:08:07 piso Exp $
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package org.armedbear.j;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+
+public final class Ssh
+{
+    private InputStreamReader reader;
+    private OutputStreamWriter writer;
+    private String[] cmdarray;
+    private String password;
+    private String errorText;
+    private boolean succeeded;
+
+    public Ssh()
+    {
+    }
+
+    public final String getErrorText()
+    {
+        return errorText;
+    }
+
+    public boolean copy(File source, File destination)
+    {
+        SshFile remote = null;
+        if (source instanceof SshFile)
+            remote = (SshFile) source;
+        else if (destination instanceof SshFile)
+            remote = (SshFile) destination;
+        if (remote == null) {
+            Debug.bug("Ssh.copy no remote file");
+            return false;
+        }
+        String userName = remote.getUserName();
+        password = remote.getPassword();
+        ArrayList list = new ArrayList();
+        list.add("jpty");
+        list.add("scp");
+        list.add("-q");
+        if (remote.getPort() != SshFile.DEFAULT_PORT) {
+            list.add("-P");
+            list.add(String.valueOf(remote.getPort()));
+        }
+        FastStringBuffer sb = new FastStringBuffer();
+        if (source instanceof SshFile) {
+            if (userName != null) {
+                sb.append(userName);
+                sb.append('@');
+            }
+            sb.append(source.getHostName());
+            sb.append(':');
+        }
+        sb.append(Utilities.escapeSpaces(source.canonicalPath()));
+        list.add(sb.toString());
+        sb.setLength(0);
+        if (destination instanceof SshFile) {
+            if (userName != null) {
+                sb.append(userName);
+                sb.append('@');
+            }
+            sb.append(destination.getHostName());
+            sb.append(':');
+        }
+        sb.append(Utilities.escapeSpaces(destination.canonicalPath()));
+        list.add(sb.toString());
+        String[] array = new String[list.size()];
+        cmdarray = (String[]) list.toArray(array);
+        run();
+        return succeeded;
+    }
+
+    public void run()
+    {
+        Process process = null;
+        int result = -1; // Assume error.
+        try {
+            process = Runtime.getRuntime().exec(cmdarray);
+        }
+        catch (Throwable t) {
+            Log.error(t);
+            return;
+        }
+        writer = new OutputStreamWriter(process.getOutputStream());
+        reader = new InputStreamReader(process.getInputStream());
+        SshReaderThread thread = new SshReaderThread();
+        thread.start();
+        try {
+            thread.join();
+            result = process.waitFor();
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+        }
+        if (result == 0) {
+            errorText = thread.getResponse();
+            if (errorText == null) {
+                succeeded = true;
+            } else {
+                errorText = errorText.trim();
+                if (errorText.length() == 0) {
+                    succeeded = true;
+                } else {
+                    // No error if response is a single line starting with
+                    // "warning:".
+                    if (errorText.toLowerCase().startsWith("warning:"))
+                        if (errorText.indexOf('\n') < 0)
+                            succeeded = true;
+                }
+            }
+        }
+    }
+
+    private void sendPassword()
+    {
+        Debug.assertTrue(password != null);
+        try {
+            writer.write(password);
+            writer.write("\n");
+            writer.flush();
+        }
+        catch (IOException e) {
+            Log.error(e);
+        }
+    }
+
+    private class SshReaderThread extends Thread
+    {
+        private char[] buf = new char[4096];
+        private boolean done = false;
+        private String response;
+
+        // If this constructor is private, we run into jikes 1.15 bug #2256.
+        /*private*/ SshReaderThread()
+        {
+        }
+
+        public final String getResponse()
+        {
+            return response;
+        }
+
+        public void run()
+        {
+            FastStringBuffer sb = new FastStringBuffer();
+            while (true) {
+                String s = read();
+                if (s == null) {
+                    response = sb.toString();
+                    return;
+                }
+                if (done) {
+                    if (s.length() > 0)
+                        sb.append(s);
+                    response = sb.toString();
+                    return;
+                }
+                if (s.trim().endsWith("password:")) {
+                    sendPassword();
+                    sb.setLength(0);
+                } else
+                    sb.append(s);
+            }
+        }
+
+        private String read()
+        {
+            FastStringBuffer sb = new FastStringBuffer();
+            try {
+                do {
+                    int numChars = reader.read(buf, 0, buf.length); // Blocks.
+                    if (numChars < 0) {
+                        done = true;
+                        break;
+                    }
+                    if (numChars > 0)
+                        sb.append(buf, 0, numChars);
+                } while (reader.ready());
+            }
+            catch (Exception e) {
+                Log.error(e);
+                return null;
+            }
+            return sb.toString();
+        }
+    }
+}

@@ -1,0 +1,995 @@
+/*
+ * SshSession.java
+ *
+ * Copyright (C) 2002 Peter Graves
+ * $Id: SshSession.java,v 1.1.1.1 2002-09-24 16:08:59 piso Exp $
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package org.armedbear.j;
+
+import gnu.regexp.RE;
+import gnu.regexp.REException;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.SwingUtilities;
+
+public final class SshSession implements Constants
+{
+    public static final int DEFAULT_PORT = 22;
+
+    private static final int TRY_AGAIN     = 0;
+    private static final int AUTHENTICATED = 1;
+    private static final int PASSWORD      = 2;
+    private static final int YES           = 3;
+    private static final int NO            = 4;
+
+    private static final String PROMPT = "$ ";
+
+    private static ArrayList sessionList;
+
+    private String hostName;
+    private String userName;
+    private String password;
+    private int port;
+
+    private boolean locked;
+
+    private Process process;
+
+    private OutputStreamWriter stdin;
+    private StdoutThread stdoutThread;
+    private StderrThread stderrThread;
+
+    private FastStringBuffer output = new FastStringBuffer();
+
+    private boolean connected;
+
+    private String loginDirectory;
+
+    private boolean echo;
+
+    // tcsh doesn't like "\cd", so we may change it to "cd" later.
+    private String cd = "\\cd";
+
+    private Buffer outputBuffer;
+
+    private SshSession(SshFile file, boolean locked)
+    {
+        hostName = file.getHostName();
+        Debug.assertTrue(hostName != null);
+        userName = file.getUserName();
+        password = file.getPassword();
+        port = file.getPort();
+        this.locked = locked;
+        register(this);
+    }
+
+    private static synchronized void register(SshSession session)
+    {
+        if (sessionList == null)
+            sessionList = new ArrayList();
+        sessionList.add(session);
+        Log.debug("register size = " + sessionList.size());
+    }
+
+    private static synchronized void unregister(SshSession session)
+    {
+        if (sessionList == null) {
+            Debug.bug("SshSession.unregister no session list");
+            return;
+        }
+        if (!sessionList.contains(session))
+            Debug.bug("SshSession.unregister session not in list");
+        sessionList.remove(session);
+        Log.debug("unregister size = " + sessionList.size());
+    }
+
+    public static synchronized SshSession getSession(SshFile file)
+    {
+        if (file == null)
+            return null;
+        if (file.getHostName() == null)
+            return null;
+        if (sessionList != null) {
+            for (int i = sessionList.size() - 1; i >= 0; i--) {
+                SshSession session = (SshSession) sessionList.get(i);
+                if (session.getHostName().equals(file.getHostName())) {
+                    if (session.getPort() == file.getPort()) {
+                        if (session.lock()) {
+                            Log.debug(file.netPath().concat(" re-using existing session"));
+                            return session;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Not found.
+        Log.debug("new session");
+        return new SshSession(file, true);
+    }
+
+    public final synchronized boolean isLocked()
+    {
+        return locked;
+    }
+
+    private synchronized boolean lock()
+    {
+        if (locked)
+            return false;
+        locked = true;
+        return true;
+    }
+
+    public synchronized void unlock()
+    {
+        Log.debug("SshSession.unlock");
+        if (locked)
+            locked = false;
+        else
+            Debug.bug("SshSession.unlock session was not locked");
+        synchronized (SshSession.class) {
+            if (sessionList != null)
+                Log.debug("unlock size = " + sessionList.size());
+            else
+                Debug.bug("SshSession.unlock no session list");
+        }
+    }
+
+    public final String getHostName()
+    {
+        return hostName;
+    }
+
+    public final String getUserName()
+    {
+        return userName;
+    }
+
+    public final String getPassword()
+    {
+        return password;
+    }
+
+    public final void setPassword(String password)
+    {
+        this.password = password;
+    }
+
+    public final int getPort()
+    {
+        return port;
+    }
+
+    public final String getLoginDirectory()
+    {
+        return loginDirectory;
+    }
+
+    public void setOutputBuffer(Buffer buf)
+    {
+        outputBuffer = buf;
+    }
+
+    public boolean isDirectory(String canonicalPath)
+    {
+        if (!connect())
+            return false;
+        try {
+            return changeDirectory(canonicalPath);
+        }
+        catch (Exception e) {
+            Log.error(e);
+        }
+        // An exception occurred. We're confused. Wait a moment.
+        try {
+            Thread.sleep(1000);
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+        }
+        //  Try again.
+        try {
+            Log.warn("isDirectory() retrying after exception ...");
+            // Send an empty command to flush the channel.
+            String response = command("");
+            return changeDirectory(canonicalPath);
+        }
+        catch (Exception e) {
+            // Another exception. Give up.
+            Log.error(e);
+            return false;
+        }
+    }
+
+    private String stat(String canonicalPath)
+    {
+        FastStringBuffer sb = new FastStringBuffer("stat -t \"");
+        sb.append(canonicalPath);
+        sb.append('"');
+        String cmd = sb.toString();
+        String response = command(cmd);
+        Log.debug(cmd + " " + response);
+        if (response.startsWith(canonicalPath))
+            return response.substring(canonicalPath.length()).trim();
+        return null;
+    }
+
+    // Determines file type from string returned by stat.
+    private static int getType(String s)
+    {
+        if (s != null) {
+            List tokens = Utilities.tokenize(s);
+            if (tokens.size() == 14) {
+                String token = (String) tokens.get(2);
+                Log.debug("token = |" + token + "|");
+                try {
+                    int n = Integer.parseInt(token, 16);
+                    Log.debug("n = " + Integer.toString(n, 8));
+                    if ((n & 0040000) == 0040000)
+                        return File.TYPE_DIRECTORY;
+                    if ((n & 0120000) == 0120000)
+                        return File.TYPE_LINK;
+                    if ((n & 0100000) == 0100000)
+                        return File.TYPE_FILE;
+                }
+                catch (NumberFormatException e) {}
+            }
+        }
+        return File.TYPE_UNKNOWN;
+    }
+
+    // Throws an exception if we don't recognize the response.
+    private boolean changeDirectory(String canonicalPath) throws Exception
+    {
+        FastStringBuffer sb = new FastStringBuffer(cd);
+        sb.append(" \"");
+        sb.append(canonicalPath);
+        sb.append('"');
+        String cmd = sb.toString();
+        Log.debug("changeDirectory cmd = |" + cmd + "|");
+        String response = command(cmd);
+        Log.debug("changeDirectory response = |" + response + "|");
+        if (response.indexOf("Command not found") >= 0) {
+            if (cd.equals("\\cd")) {
+                // tcsh doesn't like "\cd". Try again with "cd".
+                cd = "cd";
+                response = command(cd + " \"" + canonicalPath + '"');
+            } else
+                return false;
+        }
+        if (response.equals(PROMPT)) {
+            // No news is good news.
+            Log.debug("changeDirectory succeeded");
+            return true;
+        }
+        String lower = response.toLowerCase();
+        if (lower.indexOf("not a directory") >= 0)
+            return false;
+        else if (lower.indexOf("no such file or directory") >= 0)
+            return false;
+        // If the directory name is very long (> 80 chars or so), bash will
+        // wrap (i.e. mangle) the response. Try to detect that situation.
+        int index = response.indexOf('\r');
+        if (index < 0)
+            index = response.indexOf('\n');
+        if (index >= 0) {
+            String beginning = response.substring(0, index);
+            Log.debug("beginning = |" + beginning + "|");
+            if (cmd.startsWith(beginning)) {
+                Log.debug("cmd starts with beginning!");
+                index = response.lastIndexOf((char)8);
+                if (index >= 0) {
+                    Log.debug("backspace found!");
+                    String end = response.substring(index+1);
+                    Log.debug("end = |" + end + "|");
+                    if (cmd.endsWith(end)) {
+                        Log.debug("cmd ends with end!");
+                        return true;
+                    }
+                }
+            }
+        }
+        // Unknown response. We must be confused.
+        throw new Exception();
+    }
+
+    public boolean exists(String canonicalPath)
+    {
+        if (connect()) {
+            String response = lsld(canonicalPath);
+            if (response.length() > 0) {
+                char c = response.charAt(0);
+                if (c == 'd' || c == '-')
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public static String getDirectoryListing(File file)
+    {
+        if (!(file instanceof SshFile)) {
+            Debug.assertTrue(false);
+            return null;
+        }
+        String listing = DirectoryCache.getDirectoryCache().getListing(file);
+        if (listing == null) {
+            SshSession session = SshSession.getSession((SshFile) file);
+            if (session != null) {
+                listing = session.getDirectoryListing(file.canonicalPath());
+                session.unlock();
+                if (listing != null) {
+                    Log.debug("adding " + file + " to cache");
+                    DirectoryCache.getDirectoryCache().put(file, listing);
+                }
+            }
+        }
+        return listing;
+    }
+
+    public String getDirectoryListing(String canonicalPath)
+    {
+        Debug.assertTrue(isLocked());
+        if (!connect())
+            return null;
+        try {
+            // Do it this way to support symlinks.
+            if (!changeDirectory(canonicalPath))
+                return null;
+            // Change directory succeeded. Do ls -la here.
+            return lsla();
+        }
+        catch (Exception e) {
+            Log.error(e);
+            return null;
+        }
+    }
+
+    public synchronized boolean chmod(SshFile file, int permissions)
+    {
+        if (permissions != 0 && connect()) {
+            FastStringBuffer sb = new FastStringBuffer("chmod ");
+            sb.append(Integer.toString(permissions, 8));
+            sb.append(' ');
+            sb.append(file.canonicalPath());
+            final String response = command(sb.toString());
+            // Look for error message in response.
+            if (response.indexOf("chmod:") < 0) {
+                // Success! Remove old entry (if any) from directory cache.
+                DirectoryCache.getDirectoryCache().purge(file);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public synchronized boolean isConnected()
+    {
+        return connected;
+    }
+
+    public synchronized boolean connect()
+    {
+        if (connected) {
+            Log.debug("SshSession.connect already connected");
+            return true;
+        }
+        FastStringBuffer sb = new FastStringBuffer("jpty ssh ");
+        if (userName != null && userName.length() != 0) {
+            sb.append("-l ");
+            sb.append(userName);
+            sb.append(' ');
+        }
+        if (port != DEFAULT_PORT) {
+            sb.append("-p ");
+            sb.append(port);
+            sb.append(' ');
+        }
+        sb.append(hostName);
+        try {
+            process = Runtime.getRuntime().exec(sb.toString());
+        }
+        catch (Throwable t) {
+            Log.error(t);
+            return false;
+        }
+        try {
+            stdin  = new OutputStreamWriter(process.getOutputStream());
+            int timeout =
+                Editor.preferences().getIntegerProperty(Property.SSH_TIMEOUT);
+            Log.debug("ssh timeout is " + timeout + " ms");
+            stdoutThread = new StdoutThread();
+            stdoutThread.setTimeOut(timeout);
+            stderrThread = new StderrThread();
+            stderrThread.setTimeOut(timeout);
+            stdoutThread.start();
+            stderrThread.start();
+        }
+        catch (Throwable t) {
+            Log.error(t);
+            return false;
+        }
+        return authenticate();
+    }
+
+    private void connected()
+    {
+        boolean oldEcho = echo;
+        echo = true;
+        String response = command("/bin/sh");
+        Log.debug("response = |" + response + "|");
+        FastStringBuffer sb = new FastStringBuffer("PS1='");
+        sb.append(PROMPT);
+        sb.append('\'');
+        response = command(sb.toString());
+        Log.debug("response = |" + response + "|");
+        Log.debug("PROMPT   = |" + PROMPT + "|");
+        loginDirectory = getCurrentDirectory();
+        connected = true;
+        echo = oldEcho;
+    }
+
+    private boolean authenticate()
+    {
+        int response;
+        while ((response = checkInitialResponse()) == TRY_AGAIN) {
+            try {
+                final long TIMEOUT = 30000; // 30 seconds
+                long start = System.currentTimeMillis();
+                wait(TIMEOUT);
+                if (System.currentTimeMillis() - start > TIMEOUT)
+                    return false;
+            }
+            catch (InterruptedException e) {
+                Log.debug("SshSession.connect interrupted!");
+                return false;
+            }
+        }
+        if (response == AUTHENTICATED) {
+            Log.debug("pre-authenticated");
+            connected();
+            return true;
+        } else if (response == PASSWORD) {
+            if (password == null) {
+                if (SwingUtilities.isEventDispatchThread())
+                    getPasswordRunnable.run();
+                else {
+                    try {
+                        SwingUtilities.invokeAndWait(getPasswordRunnable);
+                    }
+                    catch (Exception e) {
+                        Log.error(e);
+                    }
+                }
+                if (password == null) {
+                    try {
+                        Log.debug("calling process.destroy()");
+                        process.destroy();
+                        Log.debug("calling process.waitFor()");
+                        process.waitFor();
+                    }
+                    catch (InterruptedException e) {
+                        Log.error(e);
+                    }
+                    connected = false;
+                    dispose();
+                    return false;
+                }
+            }
+
+            output.setLength(0);
+            Log.debug("sending password ...");
+            boolean oldEcho = echo;
+            echo = true;
+            sendPassword();
+
+            if (checkAuthenticationResponse()) {
+                connected();
+                echo = oldEcho;
+                return true;
+            } else {
+                echo = oldEcho;
+                return false;
+            }
+        } else
+            return false;
+    }
+
+    private int checkInitialResponse()
+    {
+        String s = output.toString().trim().toLowerCase();
+        String check;
+        int index = s.lastIndexOf("\r\n");
+        if (index >= 0) {
+            check = s.substring(index+2);
+        } else {
+            index = s.lastIndexOf('\n');
+            if (index >=0 )
+                check = s.substring(index+1);
+            else
+                check = s;
+        }
+        Log.debug("check = |" + check + "|");
+        if (check.endsWith("password:"))
+            return PASSWORD;
+        RE promptRE = getPromptRE();
+        if (promptRE.getMatch(check) != null)
+            return AUTHENTICATED;
+        return TRY_AGAIN;
+    }
+
+    private boolean checkAuthenticationResponse()
+    {
+        String s = output.toString();
+        Log.debug("checkAuthenticationResponse output = |" + output + "|");
+        int result = checkResponse(s);
+        Log.debug("checkAuthenticationResponse result = " + result);
+        while (result == TRY_AGAIN) {
+            try {
+                wait();
+            }
+            catch (InterruptedException e) {
+                Log.error(e);
+                return false;
+            }
+            s = output.toString();
+            Log.debug("checkAuthenticationResponse output = |" + output + "|");
+            result = checkResponse(s);
+            Log.debug("checkAuthenticationResponse result = " + result);
+        }
+        return result == YES;
+    }
+
+    // Helper for checkAuthenticationResponse().
+    private int checkResponse(String s)
+    {
+        if (s.toLowerCase().indexOf("denied") >= 0)
+            return NO;
+        String prompt = null;
+        for (int i = s.length(); i-- > 0;) {
+            char c = s.charAt(i);
+            if (c == '\r' || c == '\n') {
+                prompt = s.substring(i+1);
+                break;
+            }
+        }
+        if (prompt == null)
+            prompt = s;
+        Log.debug("prompt = |" + reveal(prompt) + "|");
+        RE promptRE = getPromptRE();
+        Debug.assertTrue(promptRE != null);
+        REMatch match = promptRE.getMatch(prompt);
+        if (match != null)
+            return YES;
+        return TRY_AGAIN;
+    }
+
+    private RE _promptRE;
+
+    public RE getPromptRE()
+    {
+        if (_promptRE == null) {
+            try {
+                _promptRE = new RE(Editor.preferences().
+                    getStringProperty(Property.SSH_PROMPT_PATTERN));
+            }
+            catch (REException e) {
+                Log.error(e);
+                _promptRE = new UncheckedRE(DEFAULT_SHELL_PROMPT_PATTERN);
+            }
+        }
+        Debug.assertTrue(_promptRE != null);
+        return _promptRE;
+    }
+
+    private Runnable getPasswordRunnable = new Runnable()
+    {
+        public void run()
+        {
+            final Editor editor = Editor.currentEditor();
+            editor.setDefaultCursor();
+            String prompt = "Password for " + userName + " on " + hostName + ":";
+            password = PasswordDialog.showPasswordDialog(editor, prompt, "Password");
+            editor.setWaitCursor();
+        }
+    };
+
+    private String getCurrentDirectory()
+    {
+        final String s = command("pwd");
+        int index = s.indexOf("\r\n");
+        if (index < 0)
+            index = s.indexOf('\n');
+        final String dir = index >= 0 ? s.substring(0, index) : s;
+        Log.debug("getCurrentDirectory() returning |" + dir + "|");
+        return dir;
+    }
+
+    private synchronized void disconnect()
+    {
+        if (connected) {
+            try {
+                stdin.write("exit\n");
+                process.destroy();
+                process.waitFor();
+            }
+            catch (Exception e) {
+                Log.error(e);
+            }
+            connected = false;
+        }
+    }
+
+    public synchronized final void dispose()
+    {
+        Log.debug("SshSession.dispose");
+        if (connected)
+            disconnect();
+        unregister(this);
+    }
+
+    private synchronized String command(String cmd)
+    {
+        write(cmd.concat("\n"));
+        output.setLength(0);
+        while (output.length() == 0) {
+            try {
+                wait();
+            }
+            catch (InterruptedException e) {
+                Log.error(e);
+            }
+        }
+        String s = output.toString();
+        // Strip echo of original command.
+        if (s.startsWith(cmd)) {
+            int i = cmd.length();
+            while (i < s.length()) {
+                char c = s.charAt(i);
+                if (c == '\r' || c == '\n')
+                    ++i;
+                else
+                    break;
+            }
+            if (i > cmd.length())
+                s = s.substring(i);
+        }
+        // Strip prompt.
+        int index = s.lastIndexOf("\r\n");
+        if (index >= 0) {
+            s = s.substring(0, index);
+        } else {
+            index = s.lastIndexOf('\n');
+            if (index >= 0)
+                s = s.substring(0, index);
+        }
+        return s;
+    }
+
+    private synchronized String lsla()
+    {
+        boolean valid = false;
+        write("\\ls -la\n");
+        output.setLength(0);
+        String s = null;
+        for (int i = 0; i < 2; i++) {
+            if (i > 0)
+                Log.debug("lsla retry " + i);
+            try {
+                wait();
+            }
+            catch (InterruptedException e) {
+                Log.error(e);
+            }
+            s = output.toString();
+            int index = 0;
+            if (!s.startsWith("total "))
+                index = s.indexOf("\ntotal ");
+            if (index < 0) {
+                // Shouldn't happen.
+                Log.error("lsla no \"total\" line");
+                Log.error("s = |" + s + "|");
+                continue;
+            }
+            s = s.substring(index + 6);
+            index = s.indexOf('\n');
+            if (index < 0) {
+                // Shouldn't happen.
+                Log.error("lsla no '\\n'");
+                continue;
+            }
+            s = s.substring(index + 1);
+            valid = true;
+            break;
+        }
+        if (!valid) {
+            Log.error("lsla output not valid - returning null");
+            return null;
+        }
+        // Strip prompt.
+        int index = s.lastIndexOf("\r\n");
+        if (index >= 0)
+            s = s.substring(0, index);
+        else {
+            index = s.lastIndexOf('\n');
+            if (index >= 0)
+                s = s.substring(0, index);
+        }
+        return s;
+    }
+
+    // Do ls -ld on one file or directory.
+    private synchronized String lsld(String path)
+    {
+        Debug.assertTrue(path != null);
+        Debug.assertTrue(path.length() != 0);
+        FastStringBuffer sb = new FastStringBuffer("\\ls -ld \"");
+        sb.append(path);
+        sb.append('"');
+        sb.append('\n');
+        write(sb.toString());
+        output.setLength(0);
+        while (output.length() == 0){
+            try {
+                wait();
+            }
+            catch (InterruptedException e) {
+                Log.error(e);
+            }
+        }
+        String s = output.toString();
+
+        // Strip echo of original command.
+        if (s.startsWith("ls -ld ")) {
+            // Strip through end of line.
+            int index = s.indexOf('\n');
+            if (index < 0)
+                return null; // Shouldn't happen.
+            s = s.substring(index + 1);
+        }
+
+        // Skip lines starting with '<'.
+        while (s.length() > 0 && s.charAt(0) == '<') {
+            int index = s.indexOf('\n');
+            if (index < 0)
+                return null; // Shouldn't happen.
+            s = s.substring(index + 1);
+        }
+
+        // Now we've arrived at the line we want. Strip "\r\n" or '\n'.
+        int index = s.indexOf("\r\n");
+        if (index >= 0)
+            s = s.substring(0, index);
+        else
+        {
+            index = s.lastIndexOf('\n');
+            if (index >= 0)
+                s = s.substring(0, index);
+        }
+        return s;
+    }
+
+    private void sendPassword()
+    {
+        Debug.assertTrue(password != null);
+        try {
+            stdin.write(password);
+            stdin.write("\n");
+            stdin.flush();
+            if (outputBuffer != null) {
+                FastStringBuffer sb = new FastStringBuffer("==> ");
+                for (int i = password.length(); i-- > 0;)
+                    sb.append('*');
+                sb.append('\n');
+                writeToOutputBuffer(sb.toString());
+            }
+        }
+        catch (Exception e) {
+            Log.error(e);
+        }
+    }
+
+    private void write(String s)
+    {
+        try {
+            if (echo || Editor.preferences().getBooleanProperty(Property.SSH_ECHO))
+                Log.debug("==> |" + s + "|");
+            if (outputBuffer != null)
+                writeToOutputBuffer("==> " + s);
+            stdin.write(s);
+            stdin.flush();
+        }
+        catch (IOException e) {
+            Log.error(e);
+        }
+    }
+
+    private void writeToOutputBuffer(final String s)
+    {
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                // Avoid race (and NPE) if setOutputBuffer(null) gets called in
+                // another thread.
+                final Buffer buf = outputBuffer;
+                if (buf == null)
+                    return;
+                buf.append(s);
+                buf.renumber();
+                for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+                    Editor ed = it.nextEditor();
+                    if (ed.getBuffer() == buf) {
+                        ed.setDot(buf.getEnd());
+                        ed.moveCaretToDotCol();
+                        ed.setUpdateFlag(REPAINT);
+                        ed.updateDisplay();
+                    }
+                }
+            }
+        };
+        SwingUtilities.invokeLater(r);
+    }
+
+    public boolean checkLogin()
+    {
+        if (userName == null)
+            userName = System.getProperty("user.name");
+        if (password != null)
+            return true;
+        password = Netrc.getPassword(hostName, userName);
+        if (password != null)
+            return true;
+        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+            Buffer buf = it.nextBuffer();
+            if (buf.getFile() instanceof SshFile) {
+                SshFile f = (SshFile) buf.getFile();
+                if (f.hostName != null && f.hostName.equals(hostName)) {
+                    if (f.getUserName() != null && f.getUserName().equals(userName)) {
+                        password = f.getPassword();
+                        break;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public static synchronized void cleanup()
+    {
+        if (sessionList != null) {
+            for (int i = sessionList.size() - 1; i >= 0; i--) {
+                SshSession session = (SshSession) sessionList.get(i);
+                boolean inUse = false;
+                for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+                    Buffer buf = it.nextBuffer();
+                    if (buf.getFile() instanceof SshFile) {
+                        if (session.getHostName().equals(buf.getFile().getHostName())) {
+                            inUse = true;
+                            break;
+                        }
+                    }
+                }
+                if (!inUse) {
+                    if (session.isLocked())
+                        Debug.bug("SshSession.cleanup session is not in use but still locked");
+                    else {
+                        Log.debug("SshSession.cleanup closing connection to " + session.getHostName());
+                        session.dispose();
+                    }
+                }
+            }
+            Log.debug("leaving SshSession.cleanup size = " + sessionList.size());
+            if (sessionList.size() == 0)
+                sessionList = null;
+        }
+        else
+            Debug.bug("SshSession.cleanup no session list");
+    }
+
+    private String stdOutFilter(String s)
+    {
+        return s;
+    }
+
+    private synchronized void stdOutUpdate(final String s)
+    {
+        if (echo || Editor.preferences().getBooleanProperty(Property.SSH_ECHO))
+            Log.debug("<== |" + s + "|");
+        if (outputBuffer != null)
+            writeToOutputBuffer(s);
+        output.append(s);
+        notify();
+    }
+
+    private String stdErrFilter(String s)
+    {
+        return s;
+    }
+
+    private void stdErrUpdate(final String s)
+    {
+        Log.debug("stderr: |" + s + "|");
+    }
+
+    private static String reveal(String s)
+    {
+        FastStringBuffer sb = new FastStringBuffer();
+        final int length = s.length();
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '\r':
+                    sb.append("\\r");
+                    break;
+                case '\n':
+                    sb.append("\\n");
+                    break;
+                case '\t':
+                    sb.append("\\t");
+                    break;
+                default:
+                    sb.append(c);
+                    break;
+            }
+        }
+        return sb.toString();
+    }
+
+    class StdoutThread extends ReaderThread
+    {
+        // If this constructor is private, we run into jikes 1.15 bug #2256.
+        StdoutThread()
+        {
+            super(process.getInputStream());
+        }
+
+        public String filter(String s)
+        {
+            return stdOutFilter(s);
+        }
+
+        public void update(String s)
+        {
+            stdOutUpdate(s);
+        }
+    }
+
+    class StderrThread extends ReaderThread
+    {
+        // If this constructor is private, we run into jikes 1.15 bug #2256.
+        StderrThread()
+        {
+            super(process.getErrorStream());
+        }
+
+        public String filter(String s)
+        {
+            return stdErrFilter(s);
+        }
+
+        public void update(String s)
+        {
+            stdErrUpdate(s);
+        }
+    }
+}
