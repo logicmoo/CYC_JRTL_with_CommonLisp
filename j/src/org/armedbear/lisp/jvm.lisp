@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.130 2004-04-27 00:21:39 piso Exp $
+;;; $Id: jvm.lisp,v 1.131 2004-04-27 00:32:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1584,6 +1584,7 @@
 ;;; MISC.330: RETURN-FROM
 ;;; MISC.332: GO
 ;;; MISC.337, MISC.343: BLOCK
+;;; MISC.338: IF
 (defun rewrite-function-call (form)
   (let ((op (car form))
         (args (cdr form))
@@ -1591,7 +1592,7 @@
         (lets ()))
     (dolist (arg args)
       (cond ((and (consp arg)
-                  (memq (car arg) '(RETURN-FROM GO BLOCK)))
+                  (memq (car arg) '(RETURN-FROM GO BLOCK IF)))
              (let ((sym (gensym)))
                (push sym syms)
                (push (list sym arg) lets)))
