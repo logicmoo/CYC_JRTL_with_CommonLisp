@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.93 2003-07-18 00:17:21 piso Exp $
+ * $Id: Editor.java,v 1.94 2003-07-18 16:06:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,6 +80,9 @@ import javax.swing.undo.CompoundEdit;
 import org.armedbear.j.mail.MailCommands;
 import org.armedbear.j.mail.MailboxURL;
 import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.LispThread;
 
 public final class Editor extends JPanel implements Constants,
     ComponentListener, MouseWheelListener
@@ -2350,18 +2353,19 @@ public final class Editor extends JPanel implements Constants,
         }
         KeyMapping mapping = getKeyMapping(keyChar, keyCode, modifiers);
         if (mapping != null) {
-            String command = mapping.getCommand();
-            if (command != null) {
+            Object command = mapping.getCommand();
+            if (command instanceof String) {
+                String commandString = (String) command;
                 if (isRecordingMacro()) {
-                    if (!command.equals("recordMacro") && !command.equals("playbackMacro"))
-                        Macro.record(this, command);
+                    if (commandString != "recordMacro" && commandString != "playbackMacro")
+                        Macro.record(this, commandString);
                 }
-                if (command.length() > 0 && command.charAt(0) == '(') {
+                if (commandString.length() > 0 && commandString.charAt(0) == '(') {
                     // Lisp form.
-                    executeCommand(command);
+                    executeCommand(commandString);
                     return true;
                 }
-                String[] array = parseCommand(command);
+                String[] array = parseCommand(commandString);
                 if (array != null) {
                     String methodName = array[0];
                     String parameters = array[1];
@@ -2370,6 +2374,15 @@ public final class Editor extends JPanel implements Constants,
                     }
                     catch (NoSuchMethodException e) {}
                 }
+            } else if (command instanceof LispObject) {
+                try {
+                    Lisp.funcall0((LispObject)command,
+                                  LispThread.currentThread());
+                }
+                catch (Throwable t) {
+                    Log.error(t);
+                }
+                return true;
             }
         }
         return false;
