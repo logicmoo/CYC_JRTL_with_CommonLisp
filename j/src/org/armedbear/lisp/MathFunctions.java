@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.12 2004-10-12 16:22:18 piso Exp $
+ * $Id: MathFunctions.java,v 1.13 2004-10-12 17:02:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -432,8 +432,24 @@ public final class MathFunctions extends Lisp
         return result;
     }
 
+    // ### cis
+    private static final Primitive CIS = new Primitive("cis", "radians")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return cis(arg);
+        }
+    };
+
+    private static LispObject cis(LispObject arg) throws ConditionThrowable
+    {
+        if (arg.realp())
+            return Complex.getInstance(cos(arg), sin(arg));
+        return signal(new TypeError(arg, Symbol.REAL));
+    }
+
     // ### exp
-    private static final Primitive1 EXP = new Primitive1("exp", "number")
+    private static final Primitive EXP = new Primitive("exp", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -443,17 +459,14 @@ public final class MathFunctions extends Lisp
 
     private static LispObject exp(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof LispFloat)
-            return new LispFloat(Math.exp(((LispFloat)arg).value));
+        if (arg instanceof LispFloat) {
+            return new LispFloat(Math.pow(Math.E, ((LispFloat)arg).value));
+        }
         if (arg.realp())
-            return new LispFloat(Math.exp(LispFloat.coerceToFloat(arg).value));
+            return new LispFloat(Math.pow(Math.E, LispFloat.coerceToFloat(arg).value));
         if (arg instanceof Complex) {
-            Complex argc = (Complex)arg;
-            double re = LispFloat.coerceToFloat(argc.getRealPart()).getValue();
-            double im = LispFloat.coerceToFloat(argc.getImaginaryPart()).getValue();
-            LispFloat resX = new LispFloat(Math.exp(re) * Math.cos(im));
-            LispFloat resY = new LispFloat(Math.exp(re) * Math.sin(im));
-            return Complex.getInstance(resX, resY);
+            Complex c = (Complex) arg;
+            return exp(c.getRealPart()).multiplyBy(cis(c.getImaginaryPart()));
         }
         return signal(new TypeError(arg, Symbol.NUMBER));
     }
