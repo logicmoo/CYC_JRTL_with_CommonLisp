@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.58 2004-11-21 05:37:26 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: defstruct.lisp,v 1.59 2005-01-27 12:42:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "SYSTEM")
+
+(export 'structure-print-function)
 
 (require :source-transform)
 
@@ -388,6 +390,9 @@
        (if (null (cadr option))
            (setf *dd-predicate* nil)
            (setf *dd-predicate* (symbol-name (cadr option))))))
+    (:print-function
+     (when (= (length option) 2)
+       (setf *dd-print-function* (cadr option))))
     (:type
      (setf *dd-type* (cadr option)))))
 
@@ -496,7 +501,7 @@
                                                :named ,*dd-named*
                                                :initial-offset ,*dd-initial-offset*
                                                :predicate ,*dd-predicate*
-                                               :print-function ,*dd-print-function*
+                                               :print-function ',*dd-print-function*
                                                :direct-slots ',*dd-direct-slots*
                                                :slots ',*dd-slots*))
              (make-structure-class ',*dd-name* ',*dd-direct-slots* ',*dd-slots*
@@ -518,7 +523,7 @@
                                                :named ,*dd-named*
                                                :initial-offset ,*dd-initial-offset*
                                                :predicate ,*dd-predicate*
-                                               :print-function ,*dd-print-function*
+                                               :print-function ',*dd-print-function*
                                                :direct-slots ',*dd-direct-slots*
                                                :slots ',*dd-slots*)))
            ,@(define-constructors)
@@ -526,3 +531,14 @@
            ,@(define-access-functions)
            ,@(define-copier)
            ',*dd-name*))))
+
+(defun structure-print-function (arg)
+  (let ((type (cond ((symbolp arg)
+                     arg)
+                    ((classp arg)
+                     (class-name arg))
+                    (t
+                     (type-of arg)))))
+    (when type
+      (let ((dd (get type 'structure-definition)))
+        (and dd (dd-print-function dd))))))
