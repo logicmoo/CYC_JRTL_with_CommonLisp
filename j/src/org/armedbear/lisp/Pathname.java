@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.22 2003-12-31 19:40:13 piso Exp $
+ * $Id: Pathname.java,v 1.23 2004-01-01 00:40:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,6 +168,78 @@ public final class Pathname extends LispObject
         return new Pathname(namestring);
     }
 
+    private static Pathname coerceToPathname(LispObject arg)
+        throws ConditionThrowable
+    {
+        if (arg instanceof Pathname)
+            return (Pathname) arg;
+        if (arg instanceof LispString)
+            return new Pathname(((LispString)arg).getValue());
+        signal(new TypeError(arg, "pathname designator"));
+        // Not reached.
+        return null;
+    }
+
+    // ### pathname-host
+    private static final Primitive PATHNAME_HOST =
+        new Primitive("pathname-host", "pathname &key case")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return coerceToPathname(arg).host;
+        }
+    };
+
+    // ### pathname-device
+    private static final Primitive PATHNAME_DEVICE =
+        new Primitive("pathname-device", "pathname &key case")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return coerceToPathname(arg).device;
+        }
+    };
+
+    // ### pathname-directory
+    private static final Primitive PATHNAME_DIRECTORY =
+        new Primitive("pathname-directory", "pathname &key case")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return coerceToPathname(arg).directory;
+        }
+    };
+
+    // ### pathname-name
+    private static final Primitive PATHNAME_NAME =
+        new Primitive("pathname-name", "pathname &key case")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return coerceToPathname(arg).name;
+        }
+    };
+
+    // ### pathname-type
+    private static final Primitive PATHNAME_TYPE =
+        new Primitive("pathname-type", "pathname &key case")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return coerceToPathname(arg).type;
+        }
+    };
+
+    // ### pathname-version
+    private static final Primitive PATHNAME_VERSION =
+        new Primitive("pathname-version", "pathname &key case")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return coerceToPathname(arg).version;
+        }
+    };
+
     // ### namestring
     // namestring pathname => namestring
     // FIXME arg can be a stream, too...
@@ -187,7 +259,7 @@ public final class Pathname extends LispObject
     // directory-namestring pathname => namestring
     // FIXME arg can be a stream, too...
     private static final Primitive1 DIRECTORY_NAMESTRING =
-        new Primitive1("directory-namestring","pathname")
+        new Primitive1("directory-namestring", "pathname")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -212,15 +284,12 @@ public final class Pathname extends LispObject
     // ### pathname
     // pathname pathspec => pathname
     // FIXME pathspec can be a stream, too...
-    private static final Primitive1 PATHNAME = new Primitive1("pathname","pathspec")
+    private static final Primitive1 PATHNAME =
+        new Primitive1("pathname", "pathspec")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof Pathname)
-                return arg;
-            if (arg instanceof LispString)
-                return new Pathname(((LispString)arg).getValue());
-            return signal(new TypeError(arg, "pathname designator"));
+            return coerceToPathname(arg);
         }
     };
 
@@ -258,29 +327,29 @@ public final class Pathname extends LispObject
         }
     };
 
-    // ### pathname-type
-    private static final Primitive1 PATHNAME_TYPE =
-        new Primitive1("pathname-type", "pathname &key case")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            String namestring;
-            if (arg instanceof LispString)
-                namestring = ((LispString)arg).getValue();
-            else if (arg instanceof Pathname)
-                namestring = ((Pathname)arg).getNamestring();
-            else
-                return signal(new TypeError(arg, "pathname designator"));
-            if (namestring != null) {
-                for (int i = namestring.length(); i-- > 0;) {
-                    char c = namestring.charAt(i);
-                    if (c == '.')
-                        return new LispString(namestring.substring(i + 1));
-                }
-            }
-            return NIL;
-        }
-    };
+//     // ### pathname-type
+//     private static final Primitive1 PATHNAME_TYPE =
+//         new Primitive1("pathname-type", "pathname &key case")
+//     {
+//         public LispObject execute(LispObject arg) throws ConditionThrowable
+//         {
+//             String namestring;
+//             if (arg instanceof LispString)
+//                 namestring = ((LispString)arg).getValue();
+//             else if (arg instanceof Pathname)
+//                 namestring = ((Pathname)arg).getNamestring();
+//             else
+//                 return signal(new TypeError(arg, "pathname designator"));
+//             if (namestring != null) {
+//                 for (int i = namestring.length(); i-- > 0;) {
+//                     char c = namestring.charAt(i);
+//                     if (c == '.')
+//                         return new LispString(namestring.substring(i + 1));
+//                 }
+//             }
+//             return NIL;
+//         }
+//     };
 
     // ### user-homedir-pathname
     // user-homedir-pathname &optional host => pathname
