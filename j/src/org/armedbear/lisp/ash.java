@@ -2,7 +2,7 @@
  * ash.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ash.java,v 1.2 2003-09-23 17:09:39 piso Exp $
+ * $Id: ash.java,v 1.3 2003-12-10 08:12:43 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ public final class ash extends Primitive2
 {
     private ash()
     {
-        super("ash");
+        super("ash","integer count");
     }
 
     public LispObject execute(LispObject first, LispObject second)

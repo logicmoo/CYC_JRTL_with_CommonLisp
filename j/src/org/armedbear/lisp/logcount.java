@@ -2,7 +2,7 @@
  * logcount.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logcount.java,v 1.1 2003-10-16 01:59:32 piso Exp $
+ * $Id: logcount.java,v 1.2 2003-12-10 08:12:43 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ public final class logcount extends Primitive1
 {
     private logcount()
     {
-        super("logcount");
+        super("logcount","integer");
     }
 
     // FIXME Optimize fixnum case!

@@ -2,7 +2,7 @@
  * logeqv.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logeqv.java,v 1.3 2003-09-23 17:08:08 piso Exp $
+ * $Id: logeqv.java,v 1.4 2003-12-10 08:12:43 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class logeqv extends Primitive
 {
     private logeqv()
     {
-        super("logeqv");
+        super("logeqv","&rest integers");
     }
 
     public LispObject execute()

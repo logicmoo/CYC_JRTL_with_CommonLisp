@@ -2,7 +2,7 @@
  * lisp_implementation_type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: lisp_implementation_type.java,v 1.1 2003-09-29 16:58:09 piso Exp $
+ * $Id: lisp_implementation_type.java,v 1.2 2003-12-10 08:12:43 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ public final class lisp_implementation_type extends Primitive0
 {
     private lisp_implementation_type()
     {
-        super("lisp-implementation-type");
+        super("lisp-implementation-type","");
     }
 
     public LispObject execute()

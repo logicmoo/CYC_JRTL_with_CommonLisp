@@ -2,7 +2,7 @@
  * logtest.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logtest.java,v 1.1 2003-10-16 02:18:21 piso Exp $
+ * $Id: logtest.java,v 1.2 2003-12-10 08:12:43 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class logtest extends Primitive2
 {
     private logtest()
     {
-        super("logtest");
+        super("logtest","integer-1 integer-2");
     }
 
     public LispObject execute(LispObject first, LispObject second)

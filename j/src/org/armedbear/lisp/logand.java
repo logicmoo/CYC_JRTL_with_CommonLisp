@@ -2,7 +2,7 @@
  * logand.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logand.java,v 1.5 2003-09-23 17:08:28 piso Exp $
+ * $Id: logand.java,v 1.6 2003-12-10 08:12:43 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ public final class logand extends Primitive
 {
     private logand()
     {
-        super("logand");
+        super("logand","&rest integers");
     }
 
     public LispObject execute()

@@ -2,7 +2,7 @@
  * delete_file.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: delete_file.java,v 1.1 2003-11-02 00:50:38 piso Exp $
+ * $Id: delete_file.java,v 1.2 2003-12-10 08:12:43 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public final class delete_file extends Primitive1
 {
     private delete_file()
     {
-        super("delete-file");
+        super("delete-file","filespec");
     }
 
     // ### delete-file

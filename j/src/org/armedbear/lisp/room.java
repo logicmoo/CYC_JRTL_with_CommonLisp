@@ -2,7 +2,7 @@
  * room.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: room.java,v 1.4 2003-10-14 12:48:04 piso Exp $
+ * $Id: room.java,v 1.5 2003-12-10 08:12:43 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ public final class room extends Primitive
 {
     private room()
     {
-        super("room");
+        super("room","&optional x");
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
