@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshSession.java,v 1.3 2002-11-28 15:17:55 piso Exp $
+ * $Id: SshSession.java,v 1.4 2002-11-28 16:07:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,24 +107,34 @@ public final class SshSession implements Constants
 
     public static synchronized SshSession getSession(SshFile file)
     {
-        if (file == null)
+        if (file == null) {
+            Debug.bug();
             return null;
-        if (file.getHostName() == null)
+        }
+        if (file.getHostName() == null) {
+            Debug.bug();
             return null;
+        }
+        if (file.getUserName() == null) {
+            Debug.bug();
+            file.setUserName(System.getProperty("user.name"));
+        }
         if (sessionList != null) {
-            for (int i = sessionList.size() - 1; i >= 0; i--) {
+            for (int i = sessionList.size(); i-- > 0;) {
                 SshSession session = (SshSession) sessionList.get(i);
-                if (session.getHostName().equals(file.getHostName())) {
-                    if (session.getPort() == file.getPort()) {
-                        if (session.lock()) {
-                            Log.debug(file.netPath().concat(" re-using existing session"));
-                            return session;
+                if (session.getUserName().equals(file.getUserName())) {
+                    if (session.getHostName().equals(file.getHostName())) {
+                        if (session.getPort() == file.getPort()) {
+                            if (session.lock()) {
+                                Log.debug(file.netPath().concat(
+                                    " re-using existing session"));
+                                return session;
+                            }
                         }
                     }
                 }
             }
         }
-
         // Not found.
         Log.debug("new session");
         return new SshSession(file, true);
