@@ -2,7 +2,7 @@
  * ShellCommand.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ShellCommand.java,v 1.2 2002-10-02 18:16:19 piso Exp $
+ * $Id: ShellCommand.java,v 1.3 2002-10-05 01:32:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,10 +142,11 @@ public final class ShellCommand implements Runnable
 
     public static void shellCommand()
     {
-        if (Platform.isPlatformWindows() && !Platform.isPlatformWindows5())
+        if (!Platform.isPlatformUnix())
             return;
         final Editor editor = Editor.currentEditor();
-        InputDialog d = new InputDialog(editor, "Command:", "Shell Command", null);
+        InputDialog d =
+            new InputDialog(editor, "Command:", "Shell Command", null);
         d.setHistory(new History("shellCommand.command"));
         editor.centerDialog(d);
         d.show();
@@ -155,32 +156,14 @@ public final class ShellCommand implements Runnable
         command = command.trim();
         if (command.length() == 0)
             return;
-        shellCommand(editor, command);
+        AsynchronousShellCommand.startShellCommand(editor, command);
     }
 
     public static void shellCommand(String command)
     {
-        if (Platform.isPlatformWindows() && !Platform.isPlatformWindows5())
+        if (!Platform.isPlatformUnix())
             return;
-        shellCommand(Editor.currentEditor(), command);
-    }
-
-    private static void shellCommand(Editor editor, String command)
-    {
-        final File dir = editor.getCurrentDirectory();
-        if (dir == null || !dir.isDirectory())
-            return;
-        String cmdline = "(\\cd " + dir.canonicalPath() + " && " + command + ")";
-        ShellCommand shellCommand = new ShellCommand(cmdline);
-        shellCommand.run();
-        String output = shellCommand.getOutput();
-        if (output != null && output.length() > 0) {
-            OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
-            if (buf != null) {
-                buf.setTitle(command);
-                editor.makeNext(buf);
-                editor.activateInOtherWindow(buf);
-            }
-        }
+        AsynchronousShellCommand.startShellCommand(Editor.currentEditor(),
+            command);
     }
 }
