@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.31 2003-11-17 18:04:26 piso Exp $
+;;; $Id: subtypep.lisp,v 1.32 2003-11-17 18:25:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -338,33 +338,38 @@
                    (values t t)
                    (values nil t))
                (values nil (known-type-p t2))))
-          (t
-           (cond ((eq t1 'float)
-                  (if (memq t2 '(float real number))
-                      (values (sub-interval-p i1 i2) t)
-                      (values nil (known-type-p t2))))
-                 ((eq t1 'integer)
-                  (if (memq t2 '(integer rational real number))
-                      (values (sub-interval-p i1 i2) t)
-                      (values nil (known-type-p t2))))
-                 ((eq t1 'rational)
-                  (if (memq t2 '(rational real number))
-                      (values (sub-interval-p i1 i2) t)
-                      (values nil (known-type-p t2))))
-                 ((eq t1 'real)
-                  (if (memq t2 '(real number))
-                      (values (sub-interval-p i1 i2) t)
-                      (values nil (known-type-p t2))))
-                 ((memq t1 '(string simple-string base-string
-                             simple-base-string))
-                  (cond ((eq t2 'string)
-                         (if (or (null i2) (eq (car i2) '*))
-                             (values t t)
-                             (values nil t)))
-                        (t
-                         (values nil (known-type-p t2)))))
+          ((eq t1 'float)
+           (if (memq t2 '(float real number))
+               (values (sub-interval-p i1 i2) t)
+               (values nil (known-type-p t2))))
+          ((eq t1 'integer)
+           (cond ((memq t2 '(integer rational real number))
+                  (values (sub-interval-p i1 i2) t))
+                 ((eq t2 'bignum)
+                  (values
+                   (or (sub-interval-p i1 (list '* (list most-negative-fixnum)))
+                       (sub-interval-p i1 (list (list most-positive-fixnum) '*)))
+                   t))
                  (t
-                  (values nil nil)))))))
+                   (values nil (known-type-p t2)))))
+          ((eq t1 'rational)
+           (if (memq t2 '(rational real number))
+               (values (sub-interval-p i1 i2) t)
+               (values nil (known-type-p t2))))
+          ((eq t1 'real)
+           (if (memq t2 '(real number))
+               (values (sub-interval-p i1 i2) t)
+               (values nil (known-type-p t2))))
+          ((memq t1 '(string simple-string base-string
+                      simple-base-string))
+           (cond ((eq t2 'string)
+                  (if (or (null i2) (eq (car i2) '*))
+                      (values t t)
+                      (values nil t)))
+                 (t
+                  (values nil (known-type-p t2)))))
+          (t
+           (values nil nil)))))
 
 (when (fboundp 'jvm::jvm-compile)
   (mapcar #'jvm::jvm-compile '(subtypep-normalize-type
