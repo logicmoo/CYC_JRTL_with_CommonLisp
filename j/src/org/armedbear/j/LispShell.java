@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.9 2002-11-24 01:33:22 piso Exp $
+ * $Id: LispShell.java,v 1.10 2002-11-24 05:05:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,7 +80,7 @@ public final class LispShell extends Shell
         Position dot = editor.getDotCopy();
         if (dot == null)
             return;
-        Line dotLine = dot.getLine();
+        final Line dotLine = dot.getLine();
         if (posEndOfOutput == null) {
             // Ignore input before first prompt is displayed.
             dotLine.setText("");
@@ -90,13 +90,16 @@ public final class LispShell extends Shell
             editor.newlineAndIndent();
             return; // For now.
         }
-        Position pos = findContainingSexp(editor.getBuffer().getEnd());
-        int flags = dotLine.flags();
-        if (flags == 0 || flags == STATE_AUTOINDENT)
-            dotLine.setFlags(STATE_INPUT);
-        editor.eol();
-        editor.insertLineSeparator();
-        editor.getDotLine().setFlags(0);
+        dotLine.setFlags(STATE_INPUT);
+        Position end = editor.getBuffer().getEnd();
+        Position pos = findContainingSexp(end);
+        if (pos == null) {
+            // Complete sexp.
+            editor.eob();
+            editor.insertLineSeparator();
+            editor.getDotLine().setFlags(0);
+        } else
+            editor.insertLineSeparator();
         if (needsRenumbering)
             renumber();
         editor.moveCaretToDotCol();
@@ -106,7 +109,7 @@ public final class LispShell extends Shell
         if (pos == null) {
             // No containing sexp. Send input to lisp process.
             Position begin = posEndOfOutput;
-            Position end = editor.getDotCopy();
+            end = editor.getDotCopy();
             end.setOffset(end.getLineLength());
             String s = new Region(this, begin, end).toString();
             sendInputToLisp(s);
@@ -132,7 +135,7 @@ public final class LispShell extends Shell
             if (indent != getIndentation(dotLine)) {
                 editor.addUndo(SimpleEdit.LINE_EDIT);
                 setIndentation(dotLine, indent);
-                dotLine.setFlags(STATE_AUTOINDENT);
+                dotLine.setFlags(STATE_INPUT);
                 modified();
             }
             if (dotLine.length() > 0) {
@@ -161,6 +164,11 @@ public final class LispShell extends Shell
             history.save();
         }
         send(input);
+    }
+
+    protected void updateLineFlags()
+    {
+        // Nothing to do.
     }
 
     public static void lisp()

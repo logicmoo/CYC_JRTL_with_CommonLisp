@@ -2,7 +2,7 @@
  * LispShellFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispShellFormatter.java,v 1.2 2002-10-24 17:32:59 piso Exp $
+ * $Id: LispShellFormatter.java,v 1.3 2002-11-24 05:05:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,23 +48,26 @@ public final class LispShellFormatter extends Formatter
             return segmentList;
         }
         final String text = getDetabbedText(line);
-        if (line.flags() == STATE_PROMPT) {
-            addSegment(text, FORMAT_PROMPT);
-            return segmentList;
-        }
-        if (line.flags() == STATE_INPUT) {
-            int end = getPromptEndIndex(text);
-            if (end > 0) {
-                addSegment(text, 0, end, FORMAT_PROMPT);
-                addSegment(text, end, FORMAT_INPUT);
-            } else {
-                // No prompt.
-                addSegment(text, FORMAT_INPUT);
+        switch (line.flags()) {
+            case STATE_PROMPT: {
+                addSegment(text, FORMAT_PROMPT);
+                return segmentList;
             }
-            return segmentList;
+            case STATE_INPUT: {
+                int end = getPromptEndIndex(text);
+                if (end > 0) {
+                    addSegment(text, 0, end, FORMAT_PROMPT);
+                    addSegment(text, end, FORMAT_INPUT);
+                } else {
+                    // No prompt.
+                    addSegment(text, FORMAT_INPUT);
+                }
+                return segmentList;
+            }
+            default:
+                break;
         }
-        Line next = line.next();
-        if (next == null) {
+        if (line.next() == null) {
             // Last line of buffer. Check for prompt.
             int end = getPromptEndIndex(text);
             if (end > 0) {
@@ -105,7 +108,7 @@ public final class LispShellFormatter extends Formatter
     public FormatTable getFormatTable()
     {
         if (formatTable == null) {
-            formatTable = new FormatTable("ShellMode");
+            formatTable = new FormatTable("LispShellMode");
             formatTable.addEntryFromPrefs(FORMAT_TEXT, "text");
             formatTable.addEntryFromPrefs(FORMAT_PROMPT, "prompt");
             formatTable.addEntryFromPrefs(FORMAT_INPUT, "input" );

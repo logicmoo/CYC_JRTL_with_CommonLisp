@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.6 2002-11-23 19:21:28 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.7 2002-11-24 05:05:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,7 +150,7 @@ public class CommandInterpreter extends Buffer
             dotLine.setText(dotLine.getText() + s);
         }
         int flags = dotLine.flags();
-        if (flags == 0 || flags == STATE_AUTOINDENT)
+        if (flags == 0)
             dotLine.setFlags(STATE_INPUT);
         editor.eol();
         editor.insertLineSeparator();
@@ -309,6 +309,8 @@ public class CommandInterpreter extends Buffer
             // (posEndOfOutput!)
             resetUndo();
         }
+        for (Line line = posEndOfOutput.getLine(); line != null; line = line.next())
+            line.setFlags(STATE_INPUT);
         editor.setCurrentCommand(COMMAND_HISTORY);
     }
 
@@ -324,13 +326,6 @@ public class CommandInterpreter extends Buffer
         try {
             Position pos = getEnd();
             final Line line = pos.getLine();
-            if (line.flags() == STATE_AUTOINDENT) {
-                if (line.length() > 0 && line.isBlank()) {
-                    line.setText("");
-                    pos.setOffset(0);
-                }
-                line.setFlags(0);
-            }
             insertString(pos, s);
             if (needsRenumbering())
                 renumber();
