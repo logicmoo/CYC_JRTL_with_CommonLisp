@@ -294,6 +294,7 @@
     <li><a href="commands.html#selectRight">selectRight</a></li>
     <li><a href="commands.html#selectSyntax">selectSyntax</a></li>
     <li><a href="commands.html#selectToMarker">selectToMarker</a></li>
+    <li><a href="commands.html#selectToTemporaryMarker">selectToTemporaryMarker</a></li>
     <li><a href="commands.html#selectUp">selectUp</a></li>
     <li><a href="commands.html#selectWord">selectWord</a></li>
     <li><a href="commands.html#selectWordLeft">selectWordLeft</a></li>
@@ -1249,6 +1250,7 @@ bookmarks are not retained from one session to the next.
 <b>Default key mapping:</b> Alt 0 through Alt 9 (bookmarks 0-9)
 <br><br>
 <b>See also:</b> <a href="#gotoBookmark">gotoBookmark</a>,
+<a href="#selectToMarker">selectToMarker</a>,
 <a href="#dropTemporaryMarker">dropTemporaryMarker</a>
 <br><br>
 </dl><!--<hr>-->
@@ -1266,7 +1268,8 @@ can only have one temporary marker at a time.
 <b>Default key mapping:</b> Alt \
 <p>
 <b>See also:</b> <a href="#dropBookmark">dropBookmark</a>,
-<a href="#gotoTemporaryMarker">gotoTemporaryMarker</a>
+<a href="#gotoTemporaryMarker">gotoTemporaryMarker</a>,
+<a href="#selectToTemporaryMarker">selectToTemporaryMarker</a>
 <br><br>
 </dl><!--<hr>-->
 
@@ -1785,14 +1788,15 @@ Ctrl 9. When you drop a bookmark with Alt n, you can return to it with Ctrl n.
 It's possible to unmap these keystrokes or map other commands to them, but the
 current implementation of <code>dropBookmark</code> and <code>gotoBookmark</code> only
 works with these key mappings.
-<br><br>
+<p>
 You can still return to a bookmark even if the buffer it refers to has been
 closed (in that case the buffer will be re-opened in the current frame), but
 bookmarks are not retained from one session to the next.
-<br><br>
+<p>
 <b>Default key mapping:</b> Ctrl 0 through Ctrl 9 (bookmarks 0-9)
-<br><br>
-<b>See also:</b> <a href="#dropBookmark">dropBookmark</a>
+<p>
+<b>See also:</b> <a href="#dropBookmark">dropBookmark</a>,
+<a href="#selectToMarker">selectToMarker</a>,
 <br><br>
 </dl><!--<hr>-->
 
@@ -1810,7 +1814,8 @@ Returns to a previously dropped temporary marker.
 <p>
 <b>Default key mapping:</b> Ctrl \
 <p>
-<b>See also:</b> <a href="#dropTemporaryMarker">dropTemporaryMarker</a>
+<b>See also:</b> <a href="#dropTemporaryMarker">dropTemporaryMarker</a>,
+<a href="#selectToTemporaryMarker">selectToTemporaryMarker</a>
 <br><br>
 </dl><!--<hr>-->
 
@@ -4013,6 +4018,23 @@ Selects the region from the current location of the caret to the specified
 marker (bookmark).
 <p>
 <b>Default key mapping:</b> None
+<p>
+<b>See also:</b> <a href="#dropBookmark">dropBookmark</a>,
+<a href="#gotoBookmark">gotoBookmark</a>,
+<a href="#selectToTemporaryMarker">selectToTemporaryMarker</a>
+<br><br>
+</dl><!--<hr>-->
+
+<a name="selectToTemporaryMarker">selectToTemporaryMarker</a><dl><dd>
+<p>
+Selects the region from the current location of the caret to the temporary
+marker.
+<p>
+<b>Default key mapping:</b> Ctrl Shift \
+<p>
+<b>See also:</b> <a href="#dropTemporaryMarker">dropTemporaryMarker</a>,
+<a href="#gotoTemporaryMarker">gotoTemporaryMarker</a>,
+<a href="#selectToMarker">selectToMarker</a>
 <br><br>
 </dl><!--<hr>-->
 
