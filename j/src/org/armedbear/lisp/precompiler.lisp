@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.14 2003-11-24 21:25:01 piso Exp $
+;;; $Id: precompiler.lisp,v 1.15 2003-11-29 00:51:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,6 +64,17 @@
             (and (sys::quoted-form-p second) (symbolp (cadr second))))
         `(eq ,(car args) ,(cadr args))
         form)))
+
+(define-compiler-macro not (&whole form &rest args)
+  (if (and (= (length args) 1) (consp (car args)))
+      (let ((op (caar args)))
+        (cond ((eq op '>=)
+               (cons '< (cdr (car args))))
+              ((eq op '<)
+               (cons '>= (cdr (car args))))
+              (t
+               form)))
+      form))
 
 (in-package "EXTENSIONS")
 
@@ -128,7 +139,10 @@
          (mapcar #'precompile1 (cdddr form))))
 
 (defun precompile-do-symbols (form)
-   (list* (car form) (cadr form) (mapcar #'precompile1 (cddr form))))
+  (list* (car form) (cadr form) (mapcar #'precompile1 (cddr form))))
+
+(defun precompile-load-time-value (form)
+  form)
 
 (defun precompile-progn (form)
    (let ((body (cdr form)))
@@ -398,9 +412,9 @@
                        (return-from precompile1 (precompile1 result)))))
                 ((compiler-macro-function op)
                  (let ((result (compiler-macroexpand form)))
-                   (if (equal result form)
-                       (return-from precompile1 result)
-                       (return-from precompile1 (precompile1 result)))))
+                   ;; Fall through if no change...
+                   (unless (equal result form)
+                     (return-from precompile1 (precompile1 result)))))
                 ((and (not (eq op 'LAMBDA))
                       (macro-function op))
                  ;; It's a macro...
@@ -469,6 +483,8 @@
 
 (install-handler 'let                  'precompile-let/let*)
 (install-handler 'let*                 'precompile-let/let*)
+
+(install-handler 'load-time-value      'precompile-load-time-value)
 
 (install-handler 'catch                'precompile-identity)
 (install-handler 'declare              'precompile-identity)
