@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.10 2002-12-26 17:46:51 piso Exp $
+ * $Id: LispFormatter.java,v 1.11 2002-12-27 23:29:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -487,6 +487,8 @@ public final class LispFormatter extends Formatter
                 }
                 continue;
             }
+            if (c == ';')
+                return i;
             // Not whitespace or paren.
             while (++i < limit) {
                 c = text.charAt(i);
