@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.51 2003-07-13 14:38:58 piso Exp $
+ * $Id: Symbol.java,v 1.52 2003-07-14 13:20:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,6 +69,7 @@ public class Symbol extends LispObject
     public static final Symbol LONG_FLOAT           = PACKAGE_CL.addExternalSymbol("LONG-FLOAT");
     public static final Symbol NULL                 = PACKAGE_CL.addExternalSymbol("NULL");
     public static final Symbol NUMBER               = PACKAGE_CL.addExternalSymbol("NUMBER");
+    public static final Symbol OR                   = PACKAGE_CL.addExternalSymbol("OR");
     public static final Symbol PACKAGE              = PACKAGE_CL.addExternalSymbol("PACKAGE");
     public static final Symbol RATIO                = PACKAGE_CL.addExternalSymbol("RATIO");
     public static final Symbol RATIONAL             = PACKAGE_CL.addExternalSymbol("RATIONAL");
@@ -163,6 +164,9 @@ public class Symbol extends LispObject
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
+        if (typeSpecifier instanceof Cons)
+            return CompoundTypeSpecifier.getInstance(typeSpecifier).test(this);
+
         if (typeSpecifier == Symbol.SYMBOL)
             return T;
         if (typeSpecifier instanceof LispClass) {
