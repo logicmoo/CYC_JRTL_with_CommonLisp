@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.21 2003-12-13 20:36:07 piso Exp $
+;;; $Id: precompiler.lisp,v 1.22 2003-12-15 01:39:28 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,23 +152,23 @@
   form)
 
 (defun precompile-progn (form)
-   (let ((body (cdr form)))
-     (if (= (length body) 1)
-         (let ((res (precompile1 (car body))))
-           ;; If the result turns out to be a bare symbol, leave it wrapped
-           ;; with PROGN so it won't be mistaken for a tag in an enclosing
-           ;; TAGBODY.
-           (if (symbolp res)
-               (list 'progn res)
-               res))
-         (cons 'PROGN (mapcar #'precompile1 body)))))
+  (let ((body (cdr form)))
+    (if (= (length body) 1)
+        (let ((res (precompile1 (car body))))
+          ;; If the result turns out to be a bare symbol, leave it wrapped
+          ;; with PROGN so it won't be mistaken for a tag in an enclosing
+          ;; TAGBODY.
+          (if (symbolp res)
+              (list 'progn res)
+              res))
+        (cons 'PROGN (mapcar #'precompile1 body)))))
 
 (defun precompile-progv (form)
-   (list* 'PROGV (cadr form) (caddr form) (mapcar #'precompile1 (cdddr form))))
+  (list* 'PROGV (cadr form) (caddr form) (mapcar #'precompile1 (cdddr form))))
 
 (defun precompile-setq (form)
   (let* ((args (cdr form))
-        (len (length args)))
+         (len (length args)))
     (when (oddp len)
       (error "odd number of arguments to SETQ"))
     (if (= len 2)
@@ -347,10 +347,10 @@
            (mapcar #'precompile1 body))))
 
 (defun precompile-multiple-value-list (form)
-   (list 'MULTIPLE-VALUE-LIST (precompile1 (cadr form))))
+  (list 'MULTIPLE-VALUE-LIST (precompile1 (cadr form))))
 
 (defun precompile-return (form)
-   (list 'RETURN (precompile1 (cadr form))))
+  (list 'RETURN (precompile1 (cadr form))))
 
 (defun precompile-return-from (form)
   (list 'RETURN-FROM (cadr form) (precompile1 (caddr form))))
@@ -367,9 +367,9 @@
   (precompile1 (caddr form)))
 
 (defun precompile-unwind-protect (form)
-   (list* 'UNWIND-PROTECT
-          (precompile1 (cadr form))
-          (mapcar #'precompile1 (cddr form))))
+  (list* 'UNWIND-PROTECT
+         (precompile1 (cadr form))
+         (mapcar #'precompile1 (cddr form))))
 
 ;; EXPAND-MACRO is like MACROEXPAND, but EXPAND-MACRO quits if *in-jvm-compile*
 ;; is false and a macro is encountered that's also implemented as a special
@@ -528,10 +528,13 @@
     (when (and name (functionp result))
       (%set-lambda-name result name)
       (%set-call-count result (%call-count definition))
-      (%set-arglist result (arglist definition))
       (if (and (symbolp name) (macro-function name))
-          (setf (fdefinition name) (make-macro result))
-          (setf (fdefinition name) result)))
+          (let ((mac (make-macro result)))
+            (%set-arglist mac (arglist (symbol-function name)))
+            (setf (fdefinition name) mac))
+          (progn 
+            (setf (fdefinition name) result)
+            (%set-arglist result (arglist definition)))))
     (values (or name result) nil nil)))
 
 (defun precompile-package (pkg &key verbose)
@@ -561,11 +564,11 @@
          (expander `(lambda (,form ,env) (block ,name ,body))))
     `(progn
        (let ((mac (make-macro (or (precompile nil ,expander) ,expander))))
-	 (if (special-operator-p ',name)
-           (%put ',name 'macroexpand-macro mac)
-           (fset ',name mac))
-	 (%set-arglist mac ',lambda-list)
-	 ',name))))
+         (if (special-operator-p ',name)
+             (%put ',name 'macroexpand-macro mac)
+             (fset ',name mac))
+         (%set-arglist mac ',lambda-list)
+         ',name))))
 
 ;; Make an exception just this one time...
 (fset 'defmacro (get 'defmacro 'macroexpand-macro))
