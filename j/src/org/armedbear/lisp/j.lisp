@@ -28,7 +28,7 @@
   (jstatic "mapKeyForMode" "org.armedbear.j.API" key command mode))
 
 (defun unmap-key-for-mode (key mode)
-  (jstatic "mapKeyForMode" "org.armedbear.j.API" key mode))
+  (jstatic "unmapKeyForMode" "org.armedbear.j.API" key mode))
 
 (defun %set-global-property (key value)
   (when (integerp value)
