@@ -2,7 +2,7 @@
  * UnboundVariable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UnboundVariable.java,v 1.2 2003-09-20 17:02:05 piso Exp $
+ * $Id: UnboundVariable.java,v 1.3 2003-09-21 01:56:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,20 +21,17 @@
 
 package org.armedbear.lisp;
 
-public final class UnboundVariable extends LispError
+public final class UnboundVariable extends CellError
 {
-    private final String name;
-
-    public UnboundVariable(String name)
+    // obj is either the unbound variable itself or an initArgs list.
+    public UnboundVariable(LispObject obj) throws ConditionThrowable
     {
-        this.name = name;
+        super(obj instanceof Cons ? obj : list2(Keyword.NAME, obj));
     }
 
     public String getMessage()
     {
-        if (name == null)
-            return "unbound variable";
-        return "the variable " + name + " has no value";
+        return "the variable " + getCellName() + " has no value";
     }
 
     public LispObject typeOf()

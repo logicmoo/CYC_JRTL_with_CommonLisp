@@ -2,7 +2,7 @@
  * UndefinedFunction.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UndefinedFunction.java,v 1.3 2003-09-21 01:41:51 piso Exp $
+ * $Id: UndefinedFunction.java,v 1.4 2003-09-21 01:57:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,15 +21,12 @@
 
 package org.armedbear.lisp;
 
-public final class UndefinedFunction extends LispError
+public final class UndefinedFunction extends CellError
 {
-    private final LispObject object;
-    private final String name;
-
-    public UndefinedFunction(LispObject object)
+    // obj is either the undefined function itself or an initArgs list.
+    public UndefinedFunction(LispObject obj) throws ConditionThrowable
     {
-        this.object = object;
-        this.name = null;
+        super(obj instanceof Cons ? obj : list2(Keyword.NAME, obj));
     }
 
     public LispObject typeOf()
@@ -46,19 +43,16 @@ public final class UndefinedFunction extends LispError
     {
         if (type == Symbol.UNDEFINED_FUNCTION)
             return T;
+        if (type == BuiltInClass.UNDEFINED_FUNCTION)
+            return T;
         return super.typep(type);
     }
 
     public String getMessage()
     {
         StringBuffer sb = new StringBuffer("undefined function");
-        if (name != null) {
-            sb.append(' ');
-            sb.append(name);
-        } else if (object != null) {
-            sb.append(' ');
-            sb.append(String.valueOf(object));
-        }
+        sb.append(' ');
+        sb.append(String.valueOf(getCellName()));
         return sb.toString();
     }
 }
