@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.36 2004-01-09 20:50:13 asimon Exp $
+ * $Id: Java.java,v 1.37 2004-01-12 23:50:54 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,17 @@ public final class Java extends Lisp
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
+            return makeLispObject((JFIELD_RAW.execute(args)).javaInstance());
+        }
+    };
+
+    // ### jfield-raw - retrieve or modify a field in a Java class or instance.
+    private static final Primitive JFIELD_RAW =
+        new Primitive("jfield-raw", PACKAGE_JAVA, true,
+                      "class-ref-or-field field-or-instance &optional instance value")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
             if (args.length < 2 || args.length > 4)
                 signal(new WrongNumberOfArgumentsException(this));
             String fieldName = null;
@@ -134,7 +145,7 @@ public final class Java extends Lisp
                         f.set(instance,args[3].javaInstance());
                         return args[3];
                 }
-                return makeLispObject(f.get(instance));
+                return new JavaObject(f.get(instance));
             }
             catch (ClassNotFoundException e) {
                 signal(new LispError("class not found: " + e.getMessage()));
@@ -262,6 +273,18 @@ public final class Java extends Lisp
                                                            "method class &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
+	{
+            return makeLispObject((JSTATIC_RAW.execute(args)).javaInstance());
+	}
+    };
+
+
+    // ### jstatic-raw
+    // jstatic-raw method class &rest args
+    private static final Primitive JSTATIC_RAW = new Primitive("jstatic-raw", PACKAGE_JAVA, true,
+                                                               "method class &rest args")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
                 signal(new WrongNumberOfArgumentsException(this));
@@ -300,7 +323,7 @@ public final class Java extends Lisp
                         methodArgs[i-2] = arg.javaInstance();
                 }
                 Object result = m.invoke(null, methodArgs);
-                return makeLispObject(result);
+                return new JavaObject(result);
             }
             catch (Throwable t) {
                 signal(new LispError(getMessage(t)));
@@ -374,13 +397,24 @@ public final class Java extends Lisp
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
+            return makeLispObject((JARRAY_REF_RAW.execute(args)).javaInstance());
+	}
+    };
+
+    // ### jarray-ref-raw
+    // jarray-ref-raw java-array &rest indices
+    private static final Primitive JARRAY_REF_RAW = new Primitive("jarray-ref-raw", PACKAGE_JAVA, true,
+                                                                  "java-array &rest indices")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
             if (args.length < 2)
                 signal(new WrongNumberOfArgumentsException(this));
             try {
                 Object a = args[0].javaInstance();
                 for (int i = 1; i<args.length - 1; i++)
                     a = Array.get(a, ((Integer)args[i].javaInstance()).intValue());
-                return makeLispObject(Array.get(a, ((Integer)args[args.length - 1].javaInstance()).intValue()));
+                return new JavaObject(Array.get(a, ((Integer)args[args.length - 1].javaInstance()).intValue()));
             }
             catch (Throwable t) {
                 signal(new LispError(getMessage(t)));
@@ -422,6 +456,17 @@ public final class Java extends Lisp
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
+            return makeLispObject((JCALL_RAW.execute(args)).javaInstance());
+	}
+    };
+
+    // ### jcall-raw
+    // jcall-raw method instance &rest args
+    private static final Primitive JCALL_RAW = new Primitive("jcall-raw", PACKAGE_JAVA, true,
+                                                             "method instance &rest args")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
             if (args.length < 2)
                 signal(new WrongNumberOfArgumentsException(this));
             try {
@@ -440,7 +485,7 @@ public final class Java extends Lisp
                         methodArgs[i-2] = arg.javaInstance();
                 }
                 Object result = method.invoke(instance, methodArgs);
-                return makeLispObject(result);
+                return new JavaObject(result);
             }
             catch (Throwable t) {
                 signal(new LispError(getMessage(t)));
