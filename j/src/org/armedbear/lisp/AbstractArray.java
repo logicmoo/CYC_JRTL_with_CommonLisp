@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.23 2004-03-06 18:35:08 piso Exp $
+ * $Id: AbstractArray.java,v 1.24 2004-03-06 20:47:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,8 +100,6 @@ public abstract class AbstractArray extends LispObject
 
     public abstract void setRowMajor(int index, LispObject newValue) throws ConditionThrowable;
 
-    public abstract void fill(LispObject obj) throws ConditionThrowable;
-
     // FIXME Detect overflow!
     protected static final int computeTotalSize(int[] dimensions)
     {
@@ -111,7 +109,7 @@ public abstract class AbstractArray extends LispObject
         return size;
     }
 
-    public final int getRowMajorIndex(LispObject[] subscripts)
+    public int getRowMajorIndex(LispObject[] subscripts)
         throws ConditionThrowable
     {
         int[] subs = new int[subscripts.length];
@@ -125,8 +123,7 @@ public abstract class AbstractArray extends LispObject
         return getRowMajorIndex(subs);
     }
 
-    public final int getRowMajorIndex(int[] subscripts)
-        throws ConditionThrowable
+    public int getRowMajorIndex(int[] subscripts) throws ConditionThrowable
     {
         final int rank = getRank();
         if (rank != subscripts.length) {
@@ -156,6 +153,19 @@ public abstract class AbstractArray extends LispObject
         }
         return sum;
     }
+
+    public LispObject get(int[] subscripts) throws ConditionThrowable
+    {
+        return getRowMajor(getRowMajorIndex(subscripts));
+    }
+
+    public void set(int[] subscripts, LispObject newValue)
+        throws ConditionThrowable
+    {
+        setRowMajor(getRowMajorIndex(subscripts), newValue);
+    }
+
+    public abstract void fill(LispObject obj) throws ConditionThrowable;
 
     // Helper for toString().
     protected void appendContents(int[] dimensions, int index, StringBuffer sb)
