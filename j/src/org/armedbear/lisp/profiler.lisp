@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: profiler.lisp,v 1.2 2003-03-13 18:27:13 piso Exp $
+;;; $Id: profiler.lisp,v 1.3 2003-03-13 19:32:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,15 +24,16 @@
       (show-call-count-for-symbol sym)))
   (values))
 
-;; Returns list of COMMON-LISP symbols with non-zero call counts.
+;; Returns list of al symbols with non-zero call counts.
 (defun list-calls ()
   (let ((result nil))
-    (dolist (sym (package-symbols :cl))
-      (when (fboundp sym)
-        (let* ((f (fdefinition sym))
-               (n (%call-count f)))
-          (unless (zerop n)
-            (setq result (cons sym result))))))
+    (dolist (pkg (list-all-packages))
+      (dolist (sym (package-symbols pkg))
+        (when (fboundp sym)
+          (let* ((f (fdefinition sym))
+                 (n (%call-count f)))
+            (unless (zerop n)
+              (setq result (cons sym result)))))))
     result))
 
 (defun show-call-count-for-symbol (sym)
