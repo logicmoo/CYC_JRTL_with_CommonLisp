@@ -2,7 +2,7 @@
  * BinaryOutputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BinaryOutputStream.java,v 1.2 2003-04-09 18:09:00 piso Exp $
+ * $Id: BinaryOutputStream.java,v 1.3 2003-09-19 12:32:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,35 +34,35 @@ public final class BinaryOutputStream extends LispStream
         out = new BufferedOutputStream(outputStream);
     }
 
-    public void writeByte(int n) throws StreamError
+    public void writeByte(int n) throws ConditionThrowable
     {
         try {
             out.write(n);
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
-    public void finishOutput() throws StreamError
+    public void finishOutput() throws ConditionThrowable
     {
         try {
             out.flush();
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
     // Returns true if stream was open, otherwise implementation-dependent.
-    public LispObject close(LispObject abort) throws StreamError
+    public LispObject close(LispObject abort) throws ConditionThrowable
     {
         try {
             out.close();
             return T;
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 }

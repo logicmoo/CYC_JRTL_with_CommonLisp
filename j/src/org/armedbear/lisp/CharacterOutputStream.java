@@ -2,7 +2,7 @@
  * CharacterOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: CharacterOutputStream.java,v 1.4 2003-08-16 16:53:39 piso Exp $
+ * $Id: CharacterOutputStream.java,v 1.5 2003-09-19 12:32:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ public class CharacterOutputStream extends LispStream
         charPos = n;
     }
 
-    public LispObject terpri() throws StreamError
+    public LispObject terpri() throws ConditionThrowable
     {
         try {
             writer.write(lineSeparator);
@@ -70,12 +70,12 @@ public class CharacterOutputStream extends LispStream
             charPos = 0;
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
         return NIL;
     }
 
-    public LispObject freshLine() throws StreamError
+    public LispObject freshLine() throws ConditionThrowable
     {
         if (charPos == 0)
             return NIL;
@@ -85,22 +85,22 @@ public class CharacterOutputStream extends LispStream
             charPos = 0;
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
         return T;
     }
 
-    public void print(LispObject obj) throws StreamError
+    public void print(LispObject obj) throws ConditionThrowable
     {
         try {
             writer.write(String.valueOf(obj));
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
-    public void print(char c) throws StreamError
+    public void print(char c) throws ConditionThrowable
     {
         try {
             writer.write(c);
@@ -111,7 +111,7 @@ public class CharacterOutputStream extends LispStream
                 ++charPos;
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
@@ -120,7 +120,7 @@ public class CharacterOutputStream extends LispStream
     // false. The general rule is that output from PRINC is intended to look
     // good to people, while output from PRIN1 is intended to be acceptable to
     // READ.
-    public void princ(LispObject obj) throws StreamError
+    public void princ(LispObject obj) throws ConditionThrowable
     {
         LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
@@ -136,13 +136,13 @@ public class CharacterOutputStream extends LispStream
                 charPos = s.length() - (index + 1);
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
     // PRIN1 produces output suitable for input to READ.
     // Binds *PRINT-ESCAPE* to true.
-    public void prin1(LispObject obj) throws StreamError
+    public void prin1(LispObject obj) throws ConditionThrowable
     {
         String s = String.valueOf(obj);
         try {
@@ -154,11 +154,11 @@ public class CharacterOutputStream extends LispStream
                 charPos = s.length() - (index + 1);
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
-    public void writeChar(char c) throws StreamError
+    public void writeChar(char c) throws ConditionThrowable
     {
         try {
             writer.write(c);
@@ -169,16 +169,16 @@ public class CharacterOutputStream extends LispStream
                 ++charPos;
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
-    public void writeString(LispString string) throws StreamError
+    public void writeString(LispString string) throws ConditionThrowable
     {
         writeString(string.getValue());
     }
 
-    public void writeString(String s) throws StreamError
+    public void writeString(String s) throws ConditionThrowable
     {
         try {
             writer.write(s);
@@ -189,11 +189,11 @@ public class CharacterOutputStream extends LispStream
                 charPos = s.length() - (index + 1);
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
-    public void writeLine(String s) throws StreamError
+    public void writeLine(String s) throws ConditionThrowable
     {
         try {
             writer.write(s);
@@ -202,11 +202,11 @@ public class CharacterOutputStream extends LispStream
             charPos = 0;
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
-    public void printStackTrace(Throwable t) throws StreamError
+    public void printStackTrace(Throwable t) throws ConditionThrowable
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -218,29 +218,29 @@ public class CharacterOutputStream extends LispStream
             charPos = 0;
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
-    public void finishOutput() throws StreamError
+    public void finishOutput() throws ConditionThrowable
     {
         try {
             writer.flush();
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 
     // Returns true if stream was open, otherwise implementation-dependent.
-    public LispObject close(LispObject abort) throws StreamError
+    public LispObject close(LispObject abort) throws ConditionThrowable
     {
         try {
             writer.close();
             return T;
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 }

@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.32 2003-09-19 01:46:40 piso Exp $
+ * $Id: Interpreter.java,v 1.33 2003-09-19 12:32:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -373,7 +373,7 @@ public final class Interpreter extends Lisp
                     new StringInputStream("(apropos " + args + ")");
                 LispObject obj = stream.read(false, EOF, false);
                 if (obj == EOF)
-                    throw new EndOfFileException();
+                    throw new ConditionThrowable(new EndOfFileException());
                 eval(obj, new Environment(), LispThread.currentThread());
                 getStandardOutput().freshLine();
                 return true;
@@ -387,7 +387,7 @@ public final class Interpreter extends Lisp
                     new StringInputStream("(describe " + args + ")");
                 LispObject obj = stream.read(false, EOF, false);
                 if (obj == EOF)
-                    throw new EndOfFileException();
+                    throw new ConditionThrowable(new EndOfFileException());
                 eval(obj, new Environment(), LispThread.currentThread());
                 return true;
             }
@@ -530,7 +530,7 @@ public final class Interpreter extends Lisp
         StringInputStream stream = new StringInputStream(s);
         LispObject obj = stream.read(false, EOF, false);
         if (obj == EOF)
-            throw new EndOfFileException();
+            throw new ConditionThrowable(new EndOfFileException());
         return eval(obj, new Environment(), LispThread.currentThread());
     }
 

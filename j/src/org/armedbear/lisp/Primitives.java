@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.408 2003-09-19 12:20:34 piso Exp $
+ * $Id: Primitives.java,v 1.409 2003-09-19 12:32:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1789,9 +1789,9 @@ public final class Primitives extends Module
         throws ConditionThrowable
     {
         if (type == Symbol.END_OF_FILE)
-            return c instanceof EndOfFileException;
+            return c.getCondition() instanceof EndOfFileException;
         if (type == Symbol.STREAM_ERROR)
-            return c instanceof StreamError;
+            return c.getCondition() instanceof StreamError;
         if (type == Symbol.UNDEFINED_FUNCTION)
             return c.getCondition() instanceof UndefinedFunctionError;
         if (type == Symbol.TYPE_ERROR)

@@ -2,7 +2,7 @@
  * BinaryInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BinaryInputStream.java,v 1.2 2003-09-19 01:46:39 piso Exp $
+ * $Id: BinaryInputStream.java,v 1.3 2003-09-19 12:32:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,11 +43,11 @@ public final class BinaryInputStream extends LispStream
             n = in.read();
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
         if (n < 0) {
             if (eofError)
-                throw new EndOfFileException();
+                throw new ConditionThrowable(new EndOfFileException());
             else
                 return eofValue;
         }
@@ -55,14 +55,14 @@ public final class BinaryInputStream extends LispStream
     }
 
     // Returns true if stream was open, otherwise implementation-dependent.
-    public LispObject close(LispObject abort) throws StreamError
+    public LispObject close(LispObject abort) throws ConditionThrowable
     {
         try {
             in.close();
             return T;
         }
         catch (IOException e) {
-            throw new StreamError(e);
+            throw new ConditionThrowable(new StreamError(e));
         }
     }
 }

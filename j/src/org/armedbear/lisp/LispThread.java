@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.12 2003-09-19 11:50:18 piso Exp $
+ * $Id: LispThread.java,v 1.13 2003-09-19 12:32:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,7 +256,7 @@ public final class LispThread extends LispObject
     }
 
     private static void pprint(LispObject obj, int indentBy,
-        CharacterOutputStream stream) throws StreamError
+        CharacterOutputStream stream) throws ConditionThrowable
     {
         if (stream.getCharPos() == 0) {
             StringBuffer sb = new StringBuffer();

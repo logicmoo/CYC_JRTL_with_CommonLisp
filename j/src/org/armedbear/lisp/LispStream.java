@@ -2,7 +2,7 @@
  * LispStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispStream.java,v 1.4 2003-09-19 01:46:41 piso Exp $
+ * $Id: LispStream.java,v 1.5 2003-09-19 12:32:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,5 +30,5 @@ public abstract class LispStream extends LispObject
         return super.typep(typeSpecifier);
     }
 
-    public abstract LispObject close(LispObject abort) throws StreamError;
+    public abstract LispObject close(LispObject abort) throws ConditionThrowable;
 }
