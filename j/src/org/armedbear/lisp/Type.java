@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.9 2003-06-22 16:15:14 piso Exp $
+ * $Id: Type.java,v 1.10 2003-07-08 15:29:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,6 +126,7 @@ public class Type extends Lisp
     public static final Type CHARACTER = new Type(Symbol.CHARACTER, TYPE_T);
     public static final Type NUMBER    = new Type(Symbol.NUMBER, TYPE_T);
     public static final Type STREAM    = new Type(Symbol.STREAM, TYPE_T);
+    public static final Type CONDITION = new Type(Symbol.CONDITION, TYPE_T);
 
     // Subtype of SYMBOL
     public static final Type KEYWORD   = new Type(Symbol.KEYWORD, SYMBOL);
@@ -174,5 +175,14 @@ public class Type extends Lisp
     public static final Type BIGNUM   = new Type(Symbol.BIGNUM, INTEGER);
 
     // Subtypes of STREAM
-    public static final Type TWO_WAY_STREAM = new Type(Symbol.TWO_WAY_STREAM);
+    public static final Type TWO_WAY_STREAM = new Type(Symbol.TWO_WAY_STREAM,
+                                                       STREAM);
+
+    // Subtypes of CONDITION.
+    public static final Type SERIOUS_CONDITION = new Type(Symbol.SERIOUS_CONDITION,
+                                                          CONDITION);
+    public static final Type ERROR             = new Type(Symbol.ERROR,
+                                                          SERIOUS_CONDITION);
+    public static final Type PACKAGE_ERROR     = new Type(Symbol.PACKAGE_ERROR,
+                                                          ERROR);
 }
