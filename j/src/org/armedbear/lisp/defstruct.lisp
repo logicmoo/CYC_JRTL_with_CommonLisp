@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.28 2003-11-18 00:50:48 piso Exp $
+;;; $Id: defstruct.lisp,v 1.29 2003-11-18 01:06:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,8 +65,8 @@
           (typep object ',*ds-name*))))))
 
 
-(defmacro get-slot-accessor (slot type)
-  (case type
+(defun get-slot-accessor (slot)
+  (case *ds-type*
     (LIST
      `(lambda (instance) (elt instance ,slot)))
     (t
@@ -77,8 +77,8 @@
        (t
         `(lambda (instance) (%structure-ref instance ,slot)))))))
 
-(defmacro get-slot-mutator (slot type)
-  (case type
+(defun get-slot-mutator (slot)
+  (case *ds-type*
     (LIST
      `(lambda (instance value) (%set-elt instance ,slot value)))
     (t
@@ -94,8 +94,8 @@
          (if *ds-conc-name*
              (intern (concatenate 'string (symbol-name *ds-conc-name*) (symbol-name slot-name)))
              slot-name)))
-    `((setf (symbol-function ',accessor) (get-slot-accessor ,index ,*ds-type*))
-      (%put ',accessor 'setf-inverse (get-slot-mutator ,index ,*ds-type*)))))
+    `((setf (symbol-function ',accessor) ,(get-slot-accessor index))
+      (%put ',accessor 'setf-inverse ,(get-slot-mutator index )))))
 
 (defun define-access-functions (slots)
   (let ((index 0)
