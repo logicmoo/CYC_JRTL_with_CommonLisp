@@ -1,7 +1,7 @@
 ;;; with-input-from-string.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: with-input-from-string.lisp,v 1.2 2004-02-01 16:47:39 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: with-input-from-string.lisp,v 1.3 2005-01-19 14:56:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,7 +39,8 @@
                                                ,end)))))
        ,@decls
        (unwind-protect
-        (progn ,@forms)
-        (close ,var)
-        ,@(when index
-            `((setf ,index (string-input-stream-current ,var))))))))
+        (multiple-value-prog1
+          (progn ,@forms)
+          ,@(when index
+              `((setf ,index (string-input-stream-current ,var)))))
+        (close ,var)))))
