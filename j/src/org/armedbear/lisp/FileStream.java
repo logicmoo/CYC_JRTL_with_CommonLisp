@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.8 2004-02-01 16:51:34 piso Exp $
+ * $Id: FileStream.java,v 1.9 2004-02-14 02:03:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@ public final class FileStream extends Stream
 
     private final RandomAccessFile raf;
     private final Pathname pathname;
+    private final int bytesPerUnit;
 
     public FileStream(Pathname pathname, String namestring,
                       LispObject elementType, LispObject direction,
@@ -68,10 +69,20 @@ public final class FileStream extends Stream
         }
         this.pathname = pathname;
         this.elementType = elementType;
-        if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR)
+        if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {
             isCharacterStream = true;
-        else
+            bytesPerUnit = 1;
+        } else {
             isBinaryStream = true;
+            int width;
+            try {
+                width = Fixnum.getValue(elementType.cadr());
+            }
+            catch (ConditionThrowable t) {
+                width = 8;
+            }
+            bytesPerUnit = width / 8;
+        }
     }
 
     public LispObject typeOf()
@@ -122,8 +133,6 @@ public final class FileStream extends Stream
             return number(length);
         // "For a binary file, the length is measured in units of the
         // element type of the stream."
-        int width = Fixnum.getValue(elementType.cadr());
-        int bytesPerUnit = width / 8;
         return number(length / bytesPerUnit);
     }
 
@@ -229,7 +238,8 @@ public final class FileStream extends Stream
     protected long _getFilePosition() throws ConditionThrowable
     {
         try {
-            return raf.getFilePointer();
+            long pos = raf.getFilePointer();
+            return pos / bytesPerUnit;
         }
         catch (IOException e) {
             signal(new StreamError(e));
@@ -246,8 +256,10 @@ public final class FileStream extends Stream
                 pos = 0;
             else if (arg == Keyword.END)
                 pos = raf.length();
-            else
-                pos = Fixnum.getValue(arg); // FIXME arg might be a bignum
+            else {
+                long n = Fixnum.getValue(arg); // FIXME arg might be a bignum
+                pos = n * bytesPerUnit;
+            }
             raf.seek(pos);
         }
         catch (IOException e) {
