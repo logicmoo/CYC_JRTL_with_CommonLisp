@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.1 2003-01-17 19:43:25 piso Exp $
+ * $Id: Primitives.java,v 1.2 2003-01-25 18:08:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2008,13 +2008,19 @@ public final class Primitives extends Module
 
     // ### use-package
     // use-package packages-to-use &optional package => t
+    // FIXME packages-to-use can be a list!
     private static final Primitive USE_PACKAGE = new Primitive("use-package") {
         public LispObject execute(LispObject[] args) throws LispException
         {
-            if (args.length == 0)
+            if (args.length < 1 || args.length > 2)
                 throw new WrongNumberOfArgumentsException(this);
             Package toBeUsed = coerceToPackage(args[0]);
-            getCurrentPackage().usePackage(toBeUsed);
+            Package pkg;
+            if (args.length == 2)
+                pkg = coerceToPackage(args[1]);
+            else
+                pkg = getCurrentPackage();
+            pkg.usePackage(toBeUsed);
             return T;
         }
     };
