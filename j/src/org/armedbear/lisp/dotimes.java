@@ -2,7 +2,7 @@
  * dotimes.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: dotimes.java,v 1.3 2003-11-19 17:04:09 piso Exp $
+ * $Id: dotimes.java,v 1.4 2003-11-19 17:33:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,18 +74,25 @@ public final class dotimes extends SpecialOperator
                 tags = new Binding(current, remaining, tags);
             }
             LispObject result;
+            // Establish a reusable binding.
+            Environment ext = new Environment(env);
+            final Binding binding;
+            if (specials != NIL && memq(var, specials)) {
+                thread.bindSpecial(var, null);
+                binding = thread.getDynamicEnvironment().getBinding(var);
+                ext.declareSpecial(var);
+            } else if (var.isSpecialVariable()) {
+                thread.bindSpecial(var, null);
+                binding = thread.getDynamicEnvironment().getBinding(var);
+            } else {
+                ext.bind(var, null);
+                binding = ext.getBinding(var);
+            }
             if (limit instanceof Fixnum) {
                 int count = ((Fixnum)limit).getValue();
                 int i;
                 for (i = 0; i < count; i++) {
-                    Environment ext = new Environment(env);
-                    if (specials != NIL && memq(var, specials)) {
-                        thread.bindSpecial(var, new Fixnum(i));
-                        ext.declareSpecial(var);
-                    } else if (var.isSpecialVariable()) {
-                        thread.bindSpecial(var, new Fixnum(i));
-                    } else
-                        ext.bind(var, new Fixnum(i));
+                    binding.value = new Fixnum(i);
                     LispObject body = bodyForm;
                     while (body != NIL) {
                         LispObject current = body.car();
@@ -95,9 +102,9 @@ public final class dotimes extends SpecialOperator
                                 if (current.car() == Symbol.GO) {
                                     LispObject code = null;
                                     LispObject tag = current.cadr();
-                                    for (Binding binding = tags; binding != null; binding = binding.next) {
-                                        if (binding.symbol.eql(tag)) {
-                                            code = binding.value;
+                                    for (Binding b = tags; b != null; b = b.next) {
+                                        if (b.symbol.eql(tag)) {
+                                            code = b.value;
                                             break;
                                         }
                                     }
@@ -112,9 +119,9 @@ public final class dotimes extends SpecialOperator
                             catch (Go go) {
                                 LispObject code = null;
                                 LispObject tag = go.getTag();
-                                for (Binding binding = tags; binding != null; binding = binding.next) {
-                                    if (binding.symbol.eql(tag)) {
-                                        code = binding.value;
+                                for (Binding b = tags; b != null; b = b.next) {
+                                    if (b.symbol.eql(tag)) {
+                                        code = b.value;
                                         break;
                                     }
                                 }
@@ -129,14 +136,12 @@ public final class dotimes extends SpecialOperator
                         body = body.cdr();
                     }
                 }
-                Environment ext = new Environment(env);
-                bind(var, new Fixnum(i), ext);
+                binding.value = new Fixnum(i);
                 result = eval(resultForm, ext, thread);
             } else if (limit instanceof Bignum) {
                 LispObject i = Fixnum.ZERO;
                 while (i.isLessThan(limit)) {
-                    Environment ext = new Environment(env);
-                    bind(var, i, ext);
+                    binding.value = i;
                     LispObject body = bodyForm;
                     while (body != NIL) {
                         LispObject current = body.car();
@@ -146,9 +151,9 @@ public final class dotimes extends SpecialOperator
                                 if (current.car() == Symbol.GO) {
                                     LispObject code = null;
                                     LispObject tag = current.cadr();
-                                    for (Binding binding = tags; binding != null; binding = binding.next) {
-                                        if (binding.symbol.eql(tag)) {
-                                            code = binding.value;
+                                    for (Binding b = tags; b != null; b = b.next) {
+                                        if (b.symbol.eql(tag)) {
+                                            code = b.value;
                                             break;
                                         }
                                     }
@@ -163,9 +168,9 @@ public final class dotimes extends SpecialOperator
                             catch (Go go) {
                                 LispObject code = null;
                                 LispObject tag = go.getTag();
-                                for (Binding binding = tags; binding != null; binding = binding.next) {
-                                    if (binding.symbol.eql(tag)) {
-                                        code = binding.value;
+                                for (Binding b = tags; b != null; b = b.next) {
+                                    if (b.symbol.eql(tag)) {
+                                        code = b.value;
                                         break;
                                     }
                                 }
@@ -181,8 +186,7 @@ public final class dotimes extends SpecialOperator
                     }
                     i = i.incr();
                 }
-                Environment ext = new Environment(env);
-                bind(var, i, ext);
+                binding.value = i;
                 result = eval(resultForm, ext, thread);
             } else
                 throw new ConditionThrowable(new TypeError(limit, "integer"));
