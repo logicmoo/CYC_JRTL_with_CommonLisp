@@ -86,6 +86,7 @@ clear-output
 close
 code-char
 coerce
+compile
 compile-file
 compile-file-pathname
 compiler-macro-function
