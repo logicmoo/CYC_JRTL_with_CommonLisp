@@ -1,8 +1,8 @@
 /*
  * FindDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: FindDialog.java,v 1.1.1.1 2002-09-24 16:08:06 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: FindDialog.java,v 1.2 2003-07-24 16:48:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@ import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -46,12 +45,12 @@ public final class FindDialog extends AbstractDialog implements ActionListener,
     private final Editor editor;
     private HistoryTextField patternControl;
     private History patternHistory;
-    private JCheckBox ignoreCaseCheckBox;
-    private JCheckBox wholeWordsCheckBox;
-    private JCheckBox regularExpressionCheckBox;
-    private JCheckBox multilinePatternCheckBox;
-    private JCheckBox listOccurrencesCheckBox;
-    private JCheckBox searchFromStartCheckBox;
+    private CheckBox ignoreCaseCheckBox;
+    private CheckBox wholeWordsCheckBox;
+    private CheckBox regularExpressionCheckBox;
+    private CheckBox multilinePatternCheckBox;
+    private CheckBox listOccurrencesCheckBox;
+    private CheckBox searchFromStartCheckBox;
     private boolean listOccurrences;
     private boolean searchFromStart;
 
@@ -69,19 +68,19 @@ public final class FindDialog extends AbstractDialog implements ActionListener,
             patternControl.setText(s);
         else
             patternControl.recallLast();
-        JLabel label = new JLabel("Pattern:");
+        Label label = new Label("Pattern:");
         label.setDisplayedMnemonic('P');
         addLabelAndTextField(label, patternControl);
         addVerticalStrut();
-        ignoreCaseCheckBox = new JCheckBox("Ignore case");
+        ignoreCaseCheckBox = new CheckBox("Ignore case");
         ignoreCaseCheckBox.setMnemonic('I');
         setIgnoreCaseDefault();
         addCheckBox(ignoreCaseCheckBox);
-        wholeWordsCheckBox = new JCheckBox("Whole words only", wholeWordsOnly);
+        wholeWordsCheckBox = new CheckBox("Whole words only", wholeWordsOnly);
         wholeWordsCheckBox.setMnemonic('W');
         addCheckBox(wholeWordsCheckBox);
         regularExpressionCheckBox =
-            new JCheckBox("Regular expression", regularExpression);
+            new CheckBox("Regular expression", regularExpression);
         regularExpressionCheckBox.setMnemonic('X');
         regularExpressionCheckBox.addActionListener(this);
         addCheckBox(regularExpressionCheckBox);
@@ -91,7 +90,7 @@ public final class FindDialog extends AbstractDialog implements ActionListener,
             panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
             panel.add(Box.createHorizontalStrut(17));
             multilinePatternCheckBox =
-                new JCheckBox("Multiline pattern (experimental)", isMultilinePattern);
+                new CheckBox("Multiline pattern (experimental)", isMultilinePattern);
             multilinePatternCheckBox.setMnemonic('M');
             panel.add(multilinePatternCheckBox);
             multilinePatternCheckBox.addKeyListener(this);
@@ -99,12 +98,12 @@ public final class FindDialog extends AbstractDialog implements ActionListener,
             mainPanel.add(panel);
         }
         listOccurrencesCheckBox =
-            new JCheckBox("List occurrences", listOccurrences);
+            new CheckBox("List occurrences", listOccurrences);
         listOccurrencesCheckBox.setMnemonic('L');
         addCheckBox(listOccurrencesCheckBox);
         searchFromStart = Editor.getSessionProperties().getBooleanProperty(searchFromStartKey, false);
         searchFromStartCheckBox =
-            new JCheckBox("Search from start of document", searchFromStart);
+            new CheckBox("Search from start of document", searchFromStart);
         searchFromStartCheckBox.setMnemonic('S');
         addCheckBox(searchFromStartCheckBox);
         addVerticalStrut();

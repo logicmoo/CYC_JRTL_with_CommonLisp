@@ -1,8 +1,8 @@
 /*
  * ReplaceDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: ReplaceDialog.java,v 1.1.1.1 2002-09-24 16:08:13 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: ReplaceDialog.java,v 1.2 2003-07-24 16:52:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,6 @@ import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.undo.CompoundEdit;
 
@@ -58,12 +56,12 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
     private History filesHistory;
 
     // Options.
-    private JCheckBox ignoreCaseCheckBox;
-    private JCheckBox wholeWordsOnlyCheckBox;
-    private JCheckBox regularExpressionCheckBox;
-    private JCheckBox multilinePatternCheckBox;
-    private JCheckBox restrictToSelectionCheckBox;
-    private JCheckBox confirmChangesCheckBox;
+    private CheckBox ignoreCaseCheckBox;
+    private CheckBox wholeWordsOnlyCheckBox;
+    private CheckBox regularExpressionCheckBox;
+    private CheckBox multilinePatternCheckBox;
+    private CheckBox restrictToSelectionCheckBox;
+    private CheckBox confirmChangesCheckBox;
 
     public ReplaceDialog()
     {
@@ -84,11 +82,11 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
         replacementHistory = new History(REPLACE_REPLACEMENT);
         replacementControl.setHistory(replacementHistory);
         replacementControl.recallLast();
-        JLabel label = new JLabel("Pattern:");
+        Label label = new Label("Pattern:");
         label.setDisplayedMnemonic('P');
         addLabelAndTextField(label, patternControl);
         addVerticalStrut();
-        label = new JLabel("Replace with:");
+        label = new Label("Replace with:");
         label.setDisplayedMnemonic('E');
         addLabelAndTextField(label, replacementControl);
         addVerticalStrut();
@@ -96,20 +94,20 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
         replacement.setIgnoreCase(
             sessionProperties.getBooleanProperty(REPLACE_IGNORE_CASE, false));
         ignoreCaseCheckBox =
-            new JCheckBox("Ignore case", replacement.ignoreCase());
+            new CheckBox("Ignore case", replacement.ignoreCase());
         ignoreCaseCheckBox.setMnemonic('I');
         addCheckBox(ignoreCaseCheckBox);
         replacement.setWholeWordsOnly(
             sessionProperties.getBooleanProperty(REPLACE_WHOLE_WORDS_ONLY,
                 false));
         wholeWordsOnlyCheckBox =
-            new JCheckBox("Whole words only", replacement.wholeWordsOnly());
+            new CheckBox("Whole words only", replacement.wholeWordsOnly());
         wholeWordsOnlyCheckBox.setMnemonic('W');
         addCheckBox(wholeWordsOnlyCheckBox);
         replacement.setRegularExpression(
             sessionProperties.getBooleanProperty(REPLACE_REGULAR_EXPRESSION,
                 false));
-        regularExpressionCheckBox = new JCheckBox("Regular expression",
+        regularExpressionCheckBox = new CheckBox("Regular expression",
             replacement.isRegularExpression());
         regularExpressionCheckBox.setMnemonic('X');
         regularExpressionCheckBox.addActionListener(this);
@@ -125,7 +123,7 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
             } else
                 replacement.setMultiline(false);
             multilinePatternCheckBox =
-                new JCheckBox("Multiline pattern (experimental)",
+                new CheckBox("Multiline pattern (experimental)",
                     replacement.isMultilinePattern());
             multilinePatternCheckBox.setMnemonic('M');
             panel.add(multilinePatternCheckBox);
@@ -135,13 +133,13 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
             mainPanel.add(panel);
         }
         restrictToSelectionCheckBox =
-            new JCheckBox("Restrict changes to selected text");
+            new CheckBox("Restrict changes to selected text");
         restrictToSelectionCheckBox.setMnemonic('R');
         replacement.setConfirmChanges(
             sessionProperties.getBooleanProperty(REPLACE_CONFIRM_CHANGES,
                 true));
         confirmChangesCheckBox =
-            new JCheckBox("Confirm changes", replacement.confirmChanges());
+            new CheckBox("Confirm changes", replacement.confirmChanges());
         confirmChangesCheckBox.setMnemonic('C');
         if (restrictToSelectionCheckBox != null) {
             setRestrictToSelectionDefault();
