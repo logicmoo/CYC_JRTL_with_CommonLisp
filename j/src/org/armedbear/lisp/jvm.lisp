@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.293 2004-10-13 00:23:46 piso Exp $
+;;; $Id: jvm.lisp,v 1.294 2004-10-22 15:54:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4227,7 +4227,7 @@
           (sys:set-call-count compiled-definition (sys:call-count definition))
           (sys::%set-arglist compiled-definition (sys::arglist definition))
           (if (macro-function name)
-              (setf (fdefinition name) (sys::make-macro compiled-definition))
+              (setf (fdefinition name) (sys::make-macro name compiled-definition))
               (setf (fdefinition name) compiled-definition)))
         (when *compile-print*
           (if name

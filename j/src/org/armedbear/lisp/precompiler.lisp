@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.77 2004-10-10 17:17:32 piso Exp $
+;;; $Id: precompiler.lisp,v 1.78 2004-10-22 15:53:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -795,7 +795,7 @@
       (%set-lambda-name result name)
       (set-call-count result (call-count definition))
       (if (and (symbolp name) (macro-function name))
-          (let ((mac (make-macro result)))
+          (let ((mac (make-macro name result)))
             (%set-arglist mac (arglist (symbol-function name)))
             (setf (fdefinition name) mac))
           (progn
@@ -832,7 +832,8 @@
                                :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body))))
     `(progn
-       (let ((macro (make-macro (or (precompile nil ,expander) ,expander))))
+       (let ((macro (make-macro ',name
+                                (or (precompile nil ,expander) ,expander))))
          (if (special-operator-p ',name)
              (%put ',name 'macroexpand-macro macro)
              (fset ',name macro))

@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.45 2004-10-18 19:13:42 piso Exp $
+;;; $Id: compile-file.lisp,v 1.46 2004-10-22 15:54:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -141,10 +141,12 @@
                       (setf form
                             (if (special-operator-p name)
                                 `(%put ',name 'macroexpand-macro
-                                       (make-macro (load-compiled-function
+                                       (make-macro ',name
+                                                   (load-compiled-function
                                                     ,(file-namestring classfile))))
                                 `(fset ',name
-                                       (make-macro (load-compiled-function
+                                       (make-macro ',name
+                                                   (load-compiled-function
                                                     ,(file-namestring classfile)))
                                        ,*source-position*
                                        ',(third form)))))
