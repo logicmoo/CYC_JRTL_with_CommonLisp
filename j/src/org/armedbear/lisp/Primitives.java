@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.45 2003-02-21 16:11:56 piso Exp $
+ * $Id: Primitives.java,v 1.46 2003-02-23 02:37:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1310,7 +1310,7 @@ public final class Primitives extends Module
     private static final LispObject _do(LispObject args, Environment env,
         boolean sequential) throws LispError
     {
-        // Process variable specifications:
+        // Process variable specifications.
         LispObject first = args.car();
         args = args.cdr();
         int length = first.length();
@@ -1319,11 +1319,16 @@ public final class Primitives extends Module
         LispObject[] updates = new LispObject[length];
         for (int i = 0; i < length; i++) {
             LispObject obj = first.car();
-            variables[i] = checkSymbol(obj.car());
-            initials[i] = obj.cadr();
-            // Is there a step form?
-            if (obj.cdr().cdr() != NIL)
-                updates[i] = obj.cdr().cdr().car();
+            if (obj instanceof Cons) {
+                variables[i] = checkSymbol(obj.car());
+                initials[i] = obj.cadr();
+                // Is there a step form?
+                if (obj.cdr().cdr() != NIL)
+                    updates[i] = obj.cdr().cdr().car();
+            } else {
+                // Not a cons, must be a symbol.
+                variables[i] = checkSymbol(obj);
+            }
             first = first.cdr();
         }
         Environment oldDynEnv = dynEnv;
