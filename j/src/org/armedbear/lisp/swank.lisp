@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.12 2004-09-10 19:30:07 piso Exp $
+;;; $Id: swank.lisp,v 1.13 2004-09-11 03:22:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,16 +45,17 @@
           (:eval-async
            ;; Forms passed this way get evaluated (in the end) by EVAL-STRING,
            ;; which returns either a list of values or an error object.
-           (let ((values (eval form))
-                 result ok)
-
-             (setf result (format-values-for-echo-area values))
-             (when (listp values) ;; No error.
-               (setf ok t))
-             (swank-protocol:encode-message `(:return
-                                              ,(if ok `(:ok ,result) `(:abort ,result))
-                                              ,id)
-                                            *stream*)))
+           (make-thread
+            (lambda ()
+              (let ((values (eval form))
+                    result ok)
+                (setf result (format-values-for-echo-area values))
+                (when (listp values) ;; No error.
+                  (setf ok t))
+                (swank-protocol:encode-message `(:return
+                                                 ,(if ok `(:ok ,result) `(:abort ,result))
+                                                 ,id)
+                                               *stream*)))))
           (t
            (error "SERVER-LOOP: unhandled case: ~S" message)))))))
 
