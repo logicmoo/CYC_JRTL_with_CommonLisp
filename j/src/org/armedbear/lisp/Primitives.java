@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.482 2003-10-24 20:30:57 piso Exp $
+ * $Id: Primitives.java,v 1.483 2003-10-25 18:55:08 dmcnaught Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4497,16 +4497,33 @@ public final class Primitives extends Module
         }
     };
 
-    private static final LispFloat log(LispObject obj) throws ConditionThrowable
+    private static final LispObject log(LispObject obj) throws ConditionThrowable
     {
-        if (obj instanceof Fixnum)
-            return new LispFloat(Math.log(((Fixnum)obj).getValue()));
-        if (obj instanceof Bignum)
-            return new LispFloat(Math.log(((Bignum)obj).floatValue()));
-        if (obj instanceof Ratio)
-            return new LispFloat(Math.log(((Ratio)obj).floatValue()));
-        if (obj instanceof LispFloat)
-            return new LispFloat(Math.log(((LispFloat)obj).getValue()));
+        if (obj.realp() && !obj.minusp()) {  // real value
+            if (obj instanceof Fixnum)
+                return new LispFloat(Math.log(((Fixnum)obj).getValue()));
+            if (obj instanceof Bignum)
+                return new LispFloat(Math.log(((Bignum)obj).floatValue()));
+            if (obj instanceof Ratio)
+                return new LispFloat(Math.log(((Ratio)obj).floatValue()));
+            if (obj instanceof LispFloat)
+                return new LispFloat(Math.log(((LispFloat)obj).getValue()));
+        } else { // returning Complex
+            LispFloat re, im, phase, abs;
+            if (obj.realp() && obj.minusp()) {
+                re = LispFloat.coerceToFloat(obj);
+                abs = new LispFloat(Math.abs(re.getValue()));
+                phase = new LispFloat(Math.PI);
+                return Complex.getInstance(new LispFloat(Math.log(abs.getValue())), phase);
+            } else if (obj instanceof Complex) {
+                re = LispFloat.coerceToFloat(((Complex)obj).getRealPart());
+                im = LispFloat.coerceToFloat(((Complex)obj).getImaginaryPart());
+                phase = new LispFloat(Math.atan2(im.getValue(), re.getValue()));  // atan(y/x)
+                abs = (LispFloat)((Complex)obj).ABS();
+                return Complex.getInstance(new LispFloat(Math.log(abs.getValue())), phase);
+            }           
+        }
+            
         throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
