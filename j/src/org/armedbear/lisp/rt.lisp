@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.112 2003-09-08 01:43:37 piso Exp $
+;;; $Id: rt.lisp,v 1.113 2003-09-08 01:45:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -153,6 +153,7 @@
                               "array-t"
                               "array-total-size"
                               "arrayp"
+                              "ash"
                               "assoc"
                               "assoc-if"
                               "assoc-if-not"
