@@ -2,7 +2,7 @@
  * LispStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispStream.java,v 1.6 2004-01-02 19:04:24 piso Exp $
+ * $Id: LispStream.java,v 1.7 2004-01-16 16:50:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.lisp;
 public abstract class LispStream extends LispObject
 {
     private LispObject pathname;
+    private boolean interactive;
 
     public LispObject getPathname()
     {
@@ -33,6 +34,16 @@ public abstract class LispStream extends LispObject
     protected void setPathname(LispObject pathname)
     {
         this.pathname = pathname;
+    }
+
+    public boolean isInteractive()
+    {
+        return interactive;
+    }
+
+    public void setInteractive(boolean b)
+    {
+        interactive = b;
     }
 
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
