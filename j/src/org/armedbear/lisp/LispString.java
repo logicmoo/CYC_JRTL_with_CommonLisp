@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.61 2003-09-28 16:26:31 piso Exp $
+ * $Id: LispString.java,v 1.62 2003-10-12 13:45:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,18 +63,25 @@ public final class LispString extends AbstractVector
         return Symbol.STRING;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
+    public LispClass classOf()
     {
-        if (typeSpecifier instanceof Symbol) {
-            if (typeSpecifier == Symbol.STRING)
+        return BuiltInClass.STRING;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type instanceof Symbol) {
+            if (type == Symbol.STRING)
                 return T;
-            if (typeSpecifier == Symbol.BASE_STRING)
+            if (type == Symbol.BASE_STRING)
                 return T;
-            if (typeSpecifier == Symbol.SIMPLE_STRING ||
-                typeSpecifier == Symbol.SIMPLE_BASE_STRING)
+            if (type == Symbol.SIMPLE_STRING ||
+                type == Symbol.SIMPLE_BASE_STRING)
                 return fillPointer < 0 ? T : NIL;
         }
-        return super.typep(typeSpecifier);
+        if (type == BuiltInClass.STRING)
+            return T;
+        return super.typep(type);
     }
 
     public LispObject STRINGP()
