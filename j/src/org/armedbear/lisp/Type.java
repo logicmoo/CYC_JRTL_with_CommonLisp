@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.7 2003-06-06 18:11:59 piso Exp $
+ * $Id: Type.java,v 1.8 2003-06-20 23:58:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,6 +72,12 @@ public class Type extends Lisp
                 if (type != null)
                     return type;
             }
+        }
+        if (typeSpecifier instanceof LispClass) {
+            Symbol symbol =
+                PACKAGE_CL.findSymbolInPackage(typeSpecifier.getName());
+            if (symbol != null)
+                return getInstance(symbol);
         }
         throw new TypeError(typeSpecifier);
     }
