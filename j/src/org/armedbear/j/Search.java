@@ -2,7 +2,7 @@
  * Search.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Search.java,v 1.5 2003-10-13 23:49:47 piso Exp $
+ * $Id: Search.java,v 1.6 2003-10-14 00:12:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +175,13 @@ public class Search implements Cloneable
 
     public final Position reverseFind(Buffer buffer, Position start)
     {
-        return regularExpression ? reverseFindRegExp(buffer, start) : reverseFindString(buffer, start);
+        if (regularExpression) {
+            if (isMultilinePattern)
+                return reverseFindMultilineRegExp(buffer, start);
+            else
+                return reverseFindRegExp(buffer, start);
+        } else
+            return reverseFindString(buffer, start);
     }
 
     public final Position find(Mode mode, Position start)
@@ -415,6 +421,35 @@ public class Search implements Cloneable
                 break;
             startIndex = match.getStartIndex() + 1;
         }
+        return buffer.getPosition(match.getStartIndex());
+    }
+
+    private Position reverseFindMultilineRegExp(Buffer buffer, Position start)
+    {
+        if (re == null) {
+            try {
+                setREFromPattern();
+            }
+            catch (Throwable t) {
+                Log.error(t);
+                return null;
+            }
+        }
+        int startIndex = buffer.getAbsoluteOffset(start);
+        final String s = buffer.getText().substring(0, startIndex);
+        while (startIndex >= 0) {
+            match = findMatch(s, startIndex, -1);
+            if (match != null) {
+                if (!wholeWordsOnly)
+                    break;
+                if (Utilities.isDelimited(buffer.getMode(), s,
+                                          match.getStartIndex(), match.getEndIndex()))
+                    break;
+            }
+            --startIndex;
+        }
+        if (match == null)
+            return null;
         return buffer.getPosition(match.getStartIndex());
     }
 
