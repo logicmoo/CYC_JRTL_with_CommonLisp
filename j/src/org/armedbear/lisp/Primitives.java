@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.362 2003-09-02 15:07:58 piso Exp $
+ * $Id: Primitives.java,v 1.363 2003-09-02 16:14:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,10 +94,9 @@ public final class Primitives extends Module
 
     // Primitive2
     private static final int MEMBER                     = 58;
-    private static final int MOD                        = 59;
-    private static final int RPLACA                     = 60;
-    private static final int RPLACD                     = 61;
-    private static final int SET                        = 62;
+    private static final int RPLACA                     = 59;
+    private static final int RPLACD                     = 60;
+    private static final int SET                        = 61;
 
     private Primitives()
     {
@@ -162,7 +161,6 @@ public final class Primitives extends Module
         definePrimitive1("vectorp", VECTORP);
 
         definePrimitive2("member", MEMBER);
-        definePrimitive2("mod", MOD);
         definePrimitive2("rplaca", RPLACA);
         definePrimitive2("rplacd", RPLACD);
         definePrimitive2("set", SET);
@@ -417,9 +415,6 @@ public final class Primitives extends Module
                 }
                 return NIL;
             }
-            case MOD:                           // ### mod
-                return new Fixnum(Fixnum.getValue(first) %
-                    Fixnum.getValue(second));
             case RPLACA:                        // ### rplaca
                 first.setCar(second);
                 return first;
