@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.121 2003-10-28 02:28:46 piso Exp $
+;;; $Id: boot.lisp,v 1.122 2003-10-28 02:40:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -418,3 +418,9 @@
            ,@body)))
 
 (sys::%load "late-setf.lisp")
+
+;; MULTIPLE-VALUE-SETQ (from CMUCL)
+(defmacro multiple-value-setq (varlist value-form)
+  (unless (and (listp varlist) (every #'symbolp varlist))
+    (error "~S is not a list of symbols" varlist))
+  `(values (setf (values ,@varlist) ,value-form)))
