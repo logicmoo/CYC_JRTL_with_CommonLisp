@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringInputStream.java,v 1.2 2003-09-27 19:23:56 piso Exp $
+ * $Id: StringInputStream.java,v 1.3 2003-09-28 14:16:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,50 @@ package org.armedbear.lisp;
 
 public final class StringInputStream extends CharacterInputStream
 {
+    final String s;
+    final int start;
+    final int end;
+
     public StringInputStream(String s)
     {
-        super(s);
+        this(s, 0, s.length());
+    }
+
+    public StringInputStream(String s, int start)
+    {
+        this(s, start, s.length());
+    }
+
+    public StringInputStream(String s, int start, int end)
+    {
+        this.s = s;
+        this.start = start;
+        this.end = end;
+    }
+
+    protected int read()
+    {
+        if (offset >= end)
+            return -1;
+        int n = s.charAt(offset);
+        ++offset;
+        if (n == '\n')
+            ++lineNumber;
+        return n;
+    }
+
+    protected void unread(int n)
+    {
+        if (offset > start) {
+            --offset;
+            if (n == '\n')
+                --lineNumber;
+        }
+    }
+
+    protected boolean ready()
+    {
+        return true;
     }
 
     // ### make-string-input-stream
