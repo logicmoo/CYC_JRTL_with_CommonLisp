@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.71 2004-09-13 16:05:06 piso Exp $
+ * $Id: Load.java,v 1.72 2004-09-15 13:20:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,9 +34,10 @@ public final class Load extends Lisp
     public static final LispObject load(String filename)
         throws ConditionThrowable
     {
+        final LispThread thread = LispThread.currentThread();
         return load(filename,
-                    _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
-                    _LOAD_PRINT_.symbolValueNoThrow() != NIL,
+                    _LOAD_VERBOSE_.symbolValue(thread) != NIL,
+                    _LOAD_PRINT_.symbolValue(thread) != NIL,
                     true);
     }
 
@@ -100,7 +101,7 @@ public final class Load extends Lisp
             return signal(new LispError(e.getMessage()));
         }
         try {
-            return loadFileFromStream(truename, in, verbose, print, false);
+            return loadFileFromStream(null, truename, in, verbose, print, false);
         }
         catch (FaslVersionMismatch e) {
             StringBuffer sb = new StringBuffer("Incorrect fasl version: ");
@@ -170,6 +171,7 @@ public final class Load extends Lisp
         } else
             candidates.add(filename);
         InputStream in = null;
+        Pathname pathname = null;
         String truename = null;
         for (int i = 0; i < candidates.size(); i++) {
             String s = (String) candidates.get(i);
@@ -177,6 +179,8 @@ public final class Load extends Lisp
             if (url != null) {
                 try {
                     in = url.openStream();
+                    if ("jar".equals(url.getProtocol()))
+                        pathname = new Pathname(url);
                     truename = getPath(url);
                 }
                 catch (IOException e) {
@@ -199,7 +203,7 @@ public final class Load extends Lisp
             }
             if (in != null) {
                 try {
-                    return loadFileFromStream(truename, in, verbose, print, auto);
+                    return loadFileFromStream(pathname, truename, in, verbose, print, auto);
                 }
                 catch (FaslVersionMismatch e) {
                     StringBuffer sb =
@@ -260,7 +264,8 @@ public final class Load extends Lisp
         }
     };
 
-    private static final LispObject loadFileFromStream(String truename,
+    private static final LispObject loadFileFromStream(Pathname pathname,
+                                                       String truename,
                                                        InputStream in,
                                                        boolean verbose,
                                                        boolean print,
@@ -278,9 +283,10 @@ public final class Load extends Lisp
         thread.bindSpecial(_SAFETY_, _SAFETY_.symbolValue(thread));
         final String prefix = getLoadVerbosePrefix(loadDepth);
         try {
-            Pathname p = Pathname.parseNamestring(truename);
-            thread.bindSpecial(_LOAD_PATHNAME_, p);
-            thread.bindSpecial(_LOAD_TRUENAME_, p);
+            if (pathname == null)
+                pathname = Pathname.parseNamestring(truename);
+            thread.bindSpecial(_LOAD_PATHNAME_, pathname);
+            thread.bindSpecial(_LOAD_TRUENAME_, pathname);
             if (verbose) {
                 Stream out = getStandardOutput();
                 out.freshLine();
