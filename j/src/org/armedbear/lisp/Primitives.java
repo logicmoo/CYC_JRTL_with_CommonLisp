@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.424 2003-09-22 17:21:41 piso Exp $
+ * $Id: Primitives.java,v 1.425 2003-09-23 12:42:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1574,6 +1574,17 @@ public final class Primitives extends Module
         LispObject resultForms = second.cdr();
         LispObject body = args.cdr();
         final int depth = thread.getStackDepth();
+        // Look for tags.
+        Binding tags = null;
+        LispObject remaining = args;
+        while (remaining != NIL) {
+            LispObject current = remaining.car();
+            remaining = remaining.cdr();
+            if (current instanceof Cons)
+                continue;
+            // It's a tag.
+            tags = new Binding(current, remaining, tags);
+        }
         try {
             // Implicit block.
             while (true) {
@@ -1581,7 +1592,48 @@ public final class Primitives extends Module
                 // Test for termination.
                 if (eval(test, ext, thread) != NIL)
                     break;
-                progn(body, ext, thread);
+                remaining = body;
+                while (remaining != NIL) {
+                    LispObject current = remaining.car();
+                    if (current instanceof Cons) {
+                        try {
+                            // Handle GO inline if possible.
+                            if (current.car() == Symbol.GO) {
+                                LispObject code = null;
+                                LispObject tag = current.cadr();
+                                for (Binding binding = tags; binding != null; binding = binding.next) {
+                                    if (binding.symbol.eql(tag)) {
+                                        code = binding.value;
+                                        break;
+                                    }
+                                }
+                                if (code != null) {
+                                    remaining = code;
+                                    continue;
+                                }
+                                throw new Go(tag);
+                            }
+                            eval(current, ext, thread);
+                        }
+                        catch (Go go) {
+                            LispObject code = null;
+                            LispObject tag = go.getTag();
+                            for (Binding binding = tags; binding != null; binding = binding.next) {
+                                if (binding.symbol.eql(tag)) {
+                                    code = binding.value;
+                                    break;
+                                }
+                            }
+                            if (code != null) {
+                                remaining = code;
+                                thread.setStackDepth(depth);
+                                continue;
+                            }
+                            throw go;
+                        }
+                    }
+                    remaining = remaining.cdr();
+                }
                 // Update variables.
                 if (sequential) {
                     for (int i = 0; i < length; i++) {
