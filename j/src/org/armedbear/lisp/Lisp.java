@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.16 2003-02-15 17:47:28 piso Exp $
+ * $Id: Lisp.java,v 1.17 2003-02-19 02:20:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -428,6 +428,42 @@ public abstract class Lisp
                 return true;
             else
                 return false;
+        return false;
+    }
+
+    public static final boolean equalp(LispObject first, LispObject second)
+        throws LispError
+    {
+        if (equal(first, second))
+            return true;
+        if (first instanceof LispCharacter && second instanceof LispCharacter) {
+            char c1 = ((LispCharacter)first).getValue();
+            char c2 = ((LispCharacter)second).getValue();
+            return (Character.toLowerCase(c1) == Character.toLowerCase(c2));
+        }
+        if (first instanceof Cons && second instanceof Cons) {
+            if (equalp(first.car(), second.car()) &&
+                equalp(first.cdr(), second.cdr()))
+                return true;
+            else
+                return false;
+        }
+        if (first instanceof LispString && second instanceof LispString) {
+            if (LispString.getValue(first).equalsIgnoreCase(LispString.getValue(second)))
+                return true;
+            else
+                return false;
+        }
+        if (first instanceof Vector && second instanceof Vector) {
+            if (first.length() != second.length())
+                return false;
+            Vector v1 = (Vector) first;
+            Vector v2 = (Vector) second;
+            for (int i = v1.length(); i-- > 0;)
+                if (!equalp(v1.get(i), v2.get(i)))
+                    return false;
+            return true;
+        }
         return false;
     }
 
