@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Bignum.java,v 1.64 2005-03-17 14:47:39 piso Exp $
+ * $Id: Bignum.java,v 1.65 2005-03-23 18:30:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,30 +52,40 @@ public final class Bignum extends LispObject
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
-        if (type == Symbol.BIGNUM)
-            return T;
-        if (type == BuiltInClass.BIGNUM)
-            return T;
-        if (type == Symbol.INTEGER)
-            return T;
-        if (type == BuiltInClass.INTEGER)
-            return T;
-        if (type == Symbol.RATIONAL)
-            return T;
-        if (type == BuiltInClass.RATIONAL)
-            return T;
-        if (type == Symbol.REAL)
-            return T;
-        if (type == BuiltInClass.REAL)
-            return T;
-        if (type == Symbol.NUMBER)
-            return T;
-        if (type == BuiltInClass.NUMBER)
-            return T;
-        if (type == Symbol.SIGNED_BYTE)
-            return T;
-        if (type == Symbol.UNSIGNED_BYTE)
-            return value.signum() >= 0 ? T : NIL;
+        if (type instanceof Symbol) {
+            if (type == Symbol.BIGNUM)
+                return T;
+            if (type == BuiltInClass.BIGNUM)
+                return T;
+            if (type == Symbol.INTEGER)
+                return T;
+            if (type == BuiltInClass.INTEGER)
+                return T;
+            if (type == Symbol.RATIONAL)
+                return T;
+            if (type == BuiltInClass.RATIONAL)
+                return T;
+            if (type == Symbol.REAL)
+                return T;
+            if (type == BuiltInClass.REAL)
+                return T;
+            if (type == Symbol.NUMBER)
+                return T;
+            if (type == BuiltInClass.NUMBER)
+                return T;
+            if (type == Symbol.SIGNED_BYTE)
+                return T;
+            if (type == Symbol.UNSIGNED_BYTE)
+                return value.signum() >= 0 ? T : NIL;
+        } else if (type instanceof Cons) {
+            if (type.equal(UNSIGNED_BYTE_8))
+                return NIL;
+            if (type.equal(UNSIGNED_BYTE_32)) {
+                if (minusp())
+                    return NIL;
+                return isLessThan(UNSIGNED_BYTE_32_MAX_VALUE) ? T : NIL;
+            }
+        }
         return super.typep(type);
     }
 

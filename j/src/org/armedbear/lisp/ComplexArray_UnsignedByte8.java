@@ -2,7 +2,7 @@
  * ComplexArray_UnsignedByte8.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ComplexArray_UnsignedByte8.java,v 1.1 2005-03-22 19:53:58 piso Exp $
+ * $Id: ComplexArray_UnsignedByte8.java,v 1.2 2005-03-23 18:30:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
     {
         if (dims.length == 0) {
             try {
-                data[index] = coerceToJavaByte(contents);
+                data[index] = coerceLispObjectToJavaByte(contents);
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 signal(new LispError("Bad initial contents for array."));
@@ -166,7 +166,7 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
     {
         if (data != null) {
             try {
-                return coerceToLispObject(data[index]);
+                return coerceJavaByteToLispObject(data[index]);
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 return signal(new TypeError("Bad row major index " + index + "."));
@@ -179,7 +179,7 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
     {
         if (data != null) {
             try {
-                data[index] = coerceToJavaByte(newValue);
+                data[index] = coerceLispObjectToJavaByte(newValue);
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 signal(new TypeError("Bad row major index " + index + "."));
@@ -191,7 +191,7 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
     public void fill(LispObject obj) throws ConditionThrowable
     {
         if (data != null) {
-            byte b = coerceToJavaByte(obj);
+            byte b = coerceLispObjectToJavaByte(obj);
             for (int i = data.length; i-- > 0;)
                 data[i] = b;
         } else {

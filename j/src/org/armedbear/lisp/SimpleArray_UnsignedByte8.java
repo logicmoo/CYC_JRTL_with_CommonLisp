@@ -2,7 +2,7 @@
  * SimpleArray_UnsignedByte8.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleArray_UnsignedByte8.java,v 1.1 2005-03-22 19:50:35 piso Exp $
+ * $Id: SimpleArray_UnsignedByte8.java,v 1.2 2005-03-23 18:30:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
     {
         if (dims.length == 0) {
             try {
-                data[index] = coerceToJavaByte(contents);
+                data[index] = coerceLispObjectToJavaByte(contents);
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 signal(new LispError("Bad initial contents for array."));
@@ -170,7 +170,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
     public LispObject getRowMajor(int index) throws ConditionThrowable
     {
         try {
-            return coerceToLispObject(data[index]);
+            return coerceJavaByteToLispObject(data[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             return signal(new TypeError("Bad row major index " + index + "."));
@@ -180,7 +180,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
-            data[index] = coerceToJavaByte(newValue);
+            data[index] = coerceLispObjectToJavaByte(newValue);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             signal(new TypeError("Bad row major index " + index + "."));
@@ -221,7 +221,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
     public LispObject get(int[] subscripts) throws ConditionThrowable
     {
         try {
-            return coerceToLispObject(data[getRowMajorIndex(subscripts)]);
+            return coerceJavaByteToLispObject(data[getRowMajorIndex(subscripts)]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             return signal(new TypeError("Bad row major index " +
@@ -233,7 +233,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
         throws ConditionThrowable
     {
         try {
-            data[getRowMajorIndex(subscripts)] = coerceToJavaByte(newValue);
+            data[getRowMajorIndex(subscripts)] = coerceLispObjectToJavaByte(newValue);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             signal(new TypeError("Bad row major index " +
@@ -243,7 +243,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
 
     public void fill(LispObject obj) throws ConditionThrowable
     {
-        byte b = coerceToJavaByte(obj);
+        byte b = coerceLispObjectToJavaByte(obj);
         for (int i = totalSize; i-- > 0;)
             data[i] = b;
     }

@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.112 2005-03-17 14:50:07 piso Exp $
+ * $Id: Fixnum.java,v 1.113 2005-03-23 18:30:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,32 +83,39 @@ public final class Fixnum extends LispObject
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
-        if (type == Symbol.FIXNUM)
-            return T;
-        if (type == BuiltInClass.FIXNUM)
-            return T;
-        if (type == Symbol.INTEGER)
-            return T;
-        if (type == BuiltInClass.INTEGER)
-            return T;
-        if (type == Symbol.RATIONAL)
-            return T;
-        if (type == BuiltInClass.RATIONAL)
-            return T;
-        if (type == Symbol.REAL)
-            return T;
-        if (type == BuiltInClass.REAL)
-            return T;
-        if (type == Symbol.NUMBER)
-            return T;
-        if (type == BuiltInClass.NUMBER)
-            return T;
-        if (type == Symbol.SIGNED_BYTE)
-            return T;
-        if (type == Symbol.UNSIGNED_BYTE)
-            return value >= 0 ? T : NIL;
-        if (type == Symbol.BIT)
-            return (value == 0 || value == 1) ? T : NIL;
+        if (type instanceof Symbol) {
+            if (type == Symbol.FIXNUM)
+                return T;
+            if (type == BuiltInClass.FIXNUM)
+                return T;
+            if (type == Symbol.INTEGER)
+                return T;
+            if (type == BuiltInClass.INTEGER)
+                return T;
+            if (type == Symbol.RATIONAL)
+                return T;
+            if (type == BuiltInClass.RATIONAL)
+                return T;
+            if (type == Symbol.REAL)
+                return T;
+            if (type == BuiltInClass.REAL)
+                return T;
+            if (type == Symbol.NUMBER)
+                return T;
+            if (type == BuiltInClass.NUMBER)
+                return T;
+            if (type == Symbol.SIGNED_BYTE)
+                return T;
+            if (type == Symbol.UNSIGNED_BYTE)
+                return value >= 0 ? T : NIL;
+            if (type == Symbol.BIT)
+                return (value == 0 || value == 1) ? T : NIL;
+        } else if (type instanceof Cons) {
+            if (type.equal(UNSIGNED_BYTE_8))
+                return (value >= 0 && value <= 255) ? T : NIL;
+            if (type.equal(UNSIGNED_BYTE_32))
+                return value >= 0 ? T : NIL;
+        }
         return super.typep(type);
     }
 

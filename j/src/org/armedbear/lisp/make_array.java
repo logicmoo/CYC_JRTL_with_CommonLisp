@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.25 2005-03-22 20:00:08 piso Exp $
+ * $Id: make_array.java,v 1.26 2005-03-23 18:30:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,6 +127,11 @@ public final class make_array extends Primitive
                     v = new ComplexVector_UnsignedByte8(size);
                 else
                     v = new BasicVector_UnsignedByte8(size);
+            } else if (upgradedType.equal(UNSIGNED_BYTE_32)) {
+                if (fillPointer != NIL || adjustable != NIL)
+                    v = new ComplexVector_UnsignedByte32(size);
+                else
+                    v = new BasicVector_UnsignedByte32(size);
             } else if (upgradedType == NIL)
                 v = new NilVector(size);
             else {
@@ -166,6 +171,14 @@ public final class make_array extends Primitive
                     if (initialElementProvided != NIL)
                         array.fill(initialElement);
                 }
+            } else if (upgradedType.equal(UNSIGNED_BYTE_32)) {
+                    if (initialContents != NIL) {
+                        array = new SimpleArray_UnsignedByte32(dimv, initialContents);
+                    } else {
+                        array = new SimpleArray_UnsignedByte32(dimv);
+                        if (initialElementProvided != NIL)
+                            array.fill(initialElement);
+                    }
             } else {
                 if (initialContents != NIL) {
                     array = new SimpleArray_T(dimv, upgradedType, initialContents);
@@ -185,6 +198,14 @@ public final class make_array extends Primitive
                     if (initialElementProvided != NIL)
                         array.fill(initialElement);
                 }
+            } else if (upgradedType.equal(UNSIGNED_BYTE_32)) {
+                    if (initialContents != NIL) {
+                        array = new ComplexArray_UnsignedByte32(dimv, initialContents);
+                    } else {
+                        array = new ComplexArray_UnsignedByte32(dimv);
+                        if (initialElementProvided != NIL)
+                            array.fill(initialElement);
+                    }
             } else {
                 if (initialContents != NIL) {
                     array = new ComplexArray(dimv, upgradedType, initialContents);

@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte8.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: BasicVector_UnsignedByte8.java,v 1.1 2005-03-22 19:47:33 piso Exp $
+ * $Id: BasicVector_UnsignedByte8.java,v 1.2 2005-03-23 18:30:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,12 +41,12 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
             capacity = objects.length;
             elements = new byte[capacity];
             for (int i = objects.length; i-- > 0;)
-                elements[i] = coerceToJavaByte(objects[i]);
+                elements[i] = coerceLispObjectToJavaByte(objects[i]);
         } else if (obj instanceof AbstractVector) {
             capacity = obj.length();
             elements = new byte[capacity];
             for (int i = 0; i < capacity; i++)
-                elements[i] = coerceToJavaByte(obj.elt(i));
+                elements[i] = coerceLispObjectToJavaByte(obj.elt(i));
         } else
             Debug.assertTrue(false);
     }
@@ -57,7 +57,7 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
         capacity = array.length;
         elements = new byte[capacity];
         for (int i = array.length; i-- > 0;)
-            elements[i] = coerceToJavaByte(array[i]);
+            elements[i] = coerceLispObjectToJavaByte(array[i]);
     }
 
     public LispObject typeOf()
@@ -72,8 +72,6 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
-        if (type == Symbol.VECTOR)
-            return T;
         if (type == Symbol.SIMPLE_ARRAY)
             return T;
         if (type == BuiltInClass.SIMPLE_ARRAY)
@@ -114,7 +112,7 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     public LispObject elt(int index) throws ConditionThrowable
     {
         try {
-            return coerceToLispObject(elements[index]);
+            return coerceJavaByteToLispObject(elements[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
@@ -126,7 +124,7 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     public LispObject AREF(int index) throws ConditionThrowable
     {
         try {
-            return coerceToLispObject(elements[index]);
+            return coerceJavaByteToLispObject(elements[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, elements.length);
@@ -138,7 +136,7 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         try {
-            return coerceToLispObject(elements[((Fixnum)index).value]);
+            return coerceJavaByteToLispObject(elements[((Fixnum)index).value]);
         }
         catch (ClassCastException e) {
             return signal(new TypeError(index, Symbol.FIXNUM));
@@ -152,7 +150,7 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     public LispObject getRowMajor(int index) throws ConditionThrowable
     {
         try {
-            return coerceToLispObject(elements[index]);
+            return coerceJavaByteToLispObject(elements[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
@@ -163,7 +161,7 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
-            elements[index] = coerceToJavaByte(newValue);
+            elements[index] = coerceLispObjectToJavaByte(newValue);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
@@ -186,7 +184,7 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
 
     public void fill(LispObject obj) throws ConditionThrowable
     {
-        byte b = coerceToJavaByte(obj);
+        byte b = coerceLispObjectToJavaByte(obj);
         for (int i = capacity; i-- > 0;)
             elements[i] = b;
     }

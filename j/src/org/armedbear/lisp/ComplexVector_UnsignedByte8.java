@@ -2,7 +2,7 @@
  * ComplexVector_UnsignedByte8.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexVector_UnsignedByte8.java,v 1.1 2005-03-22 19:52:42 piso Exp $
+ * $Id: ComplexVector_UnsignedByte8.java,v 1.2 2005-03-23 18:30:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,8 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         this.capacity = capacity;
     }
 
-    public ComplexVector_UnsignedByte8(int capacity, AbstractArray array, int displacement)
+    public ComplexVector_UnsignedByte8(int capacity, AbstractArray array,
+                                       int displacement)
     {
         this.capacity = capacity;
         this.array = array;
@@ -52,7 +53,7 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
 
     public LispObject typeOf()
     {
-        return list3(Symbol.VECTOR, UNSIGNED_BYTE_8, new Cons(new Fixnum(capacity)));
+        return list3(Symbol.VECTOR, UNSIGNED_BYTE_8, new Fixnum(capacity));
     }
 
     public LispObject classOf()
@@ -149,7 +150,7 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
     {
         if (elements != null) {
             try {
-                return coerceToLispObject(elements[index]);
+                return coerceJavaByteToLispObject(elements[index]);
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 badIndex(index, elements.length);
@@ -170,7 +171,7 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
     {
         if (elements != null) {
             try {
-                return coerceToLispObject(elements[index]);
+                return coerceJavaByteToLispObject(elements[index]);
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 badIndex(index, elements.length);
@@ -184,7 +185,7 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
     {
         if (elements != null) {
             try {
-                elements[index] = coerceToJavaByte(newValue);
+                elements[index] = coerceLispObjectToJavaByte(newValue);
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 badIndex(index, elements.length);
@@ -258,7 +259,7 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
             byte[] data = new byte[length];
             int i, j;
             for (i = 0, j = length - 1; i < length; i++, j--)
-                data[i] = coerceToJavaByte(getRowMajor(j));
+                data[i] = coerceLispObjectToJavaByte(getRowMajor(j));
             elements = data;
             capacity = length;
             array = null;
@@ -317,7 +318,7 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
                 final int limit =
                     Math.min(capacity, array.getTotalSize() - displacement);
                 for (int i = 0; i < limit; i++)
-                    elements[i] = coerceToJavaByte(array.getRowMajor(displacement + i));
+                    elements[i] = coerceLispObjectToJavaByte(array.getRowMajor(displacement + i));
                 capacity = minCapacity;
                 array = null;
                 displacement = 0;
@@ -339,12 +340,12 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
             if (initialContents.listp()) {
                 LispObject list = initialContents;
                 for (int i = 0; i < newCapacity; i++) {
-                    newElements[i] = coerceToJavaByte(list.car());
+                    newElements[i] = coerceLispObjectToJavaByte(list.car());
                     list = list.cdr();
                 }
             } else if (initialContents.vectorp()) {
                 for (int i = 0; i < newCapacity; i++)
-                    newElements[i] = coerceToJavaByte(initialContents.elt(i));
+                    newElements[i] = coerceLispObjectToJavaByte(initialContents.elt(i));
             } else
                 signal(new TypeError(initialContents, Symbol.SEQUENCE));
             elements = newElements;
@@ -354,17 +355,19 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
                 elements = new byte[newCapacity];
                 final int limit = Math.min(capacity, newCapacity);
                 for (int i = 0; i < limit; i++)
-                    elements[i] = coerceToJavaByte(array.getRowMajor(displacement + i));
+                    elements[i] = coerceLispObjectToJavaByte(array.getRowMajor(displacement + i));
             } else if (capacity != newCapacity) {
                 byte[] newElements = new byte[newCapacity];
                 System.arraycopy(elements, 0, newElements, 0,
                                  Math.min(capacity, newCapacity));
                 elements = newElements;
             }
-            // Initialize new elements (if any).
-            byte b = coerceToJavaByte(initialElement);
-            for (int i = capacity; i < newCapacity; i++)
-                elements[i] = b;
+            // Initialize new elements (if aapplicable).
+            if (initialElement != NIL) {
+                byte b = coerceLispObjectToJavaByte(initialElement);
+                for (int i = capacity; i < newCapacity; i++)
+                    elements[i] = b;
+            }
         }
         capacity = newCapacity;
         array = null;

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.332 2005-03-23 00:50:35 piso Exp $
+ * $Id: Lisp.java,v 1.333 2005-03-23 18:30:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -865,6 +865,15 @@ public abstract class Lisp
     public static final LispObject UNSIGNED_BYTE_8 =
         list2(Symbol.UNSIGNED_BYTE, new Fixnum(8));
 
+    public static final LispObject UNSIGNED_BYTE_16 =
+        list2(Symbol.UNSIGNED_BYTE, new Fixnum(16));
+
+    public static final LispObject UNSIGNED_BYTE_32 =
+        list2(Symbol.UNSIGNED_BYTE, new Fixnum(32));
+
+    public static final LispObject UNSIGNED_BYTE_32_MAX_VALUE =
+        new Bignum(4294967296L);
+
     public static final LispObject getUpgradedArrayElementType(LispObject type)
         throws ConditionThrowable
     {
@@ -883,6 +892,10 @@ public abstract class Lisp
         if (type instanceof Cons) {
             if (type.equal(UNSIGNED_BYTE_8))
                 return type;
+            if (type.equal(UNSIGNED_BYTE_16))
+                return UNSIGNED_BYTE_32;
+            if (type.equal(UNSIGNED_BYTE_32))
+                return type;
             if (type.car() == Symbol.INTEGER) {
                 LispObject lower = type.cadr();
                 LispObject upper = type.cdr().cadr();
@@ -899,18 +912,24 @@ public abstract class Lisp
                     if (l >= 0 && u <= 255)
                         return UNSIGNED_BYTE_8;
                 }
+                if (lower.isGreaterThanOrEqualTo(Fixnum.ZERO)) {
+                    if (lower.isLessThan(UNSIGNED_BYTE_32_MAX_VALUE)) {
+                        if (upper.isLessThan(UNSIGNED_BYTE_32_MAX_VALUE))
+                            return UNSIGNED_BYTE_32;
+                    }
+                }
             }
         }
         return T;
     }
 
-    public static final byte coerceToJavaByte(LispObject obj)
+    public static final byte coerceLispObjectToJavaByte(LispObject obj)
         throws ConditionThrowable
     {
         return (byte) Fixnum.getValue(obj);
     }
 
-    public static final LispObject coerceToLispObject(byte b)
+    public static final LispObject coerceJavaByteToLispObject(byte b)
     {
         return new Fixnum(((int)b) & 0xff);
     }
