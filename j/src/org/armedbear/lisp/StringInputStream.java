@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringInputStream.java,v 1.3 2003-09-28 14:16:05 piso Exp $
+ * $Id: StringInputStream.java,v 1.4 2003-10-23 12:53:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ public final class StringInputStream extends CharacterInputStream
         this.s = s;
         this.start = start;
         this.end = end;
+        offset = start;
     }
 
     protected int read()
@@ -71,8 +72,9 @@ public final class StringInputStream extends CharacterInputStream
 
     // ### make-string-input-stream
     // make-string-input-stream string &optional start end => string-stream
-    private static final Primitive MAKE_STRING_OUTPUT_STREAM =
-        new Primitive("make-string-input-stream") {
+    private static final Primitive MAKE_STRING_INPUT_STREAM =
+        new Primitive("make-string-input-stream")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new StringInputStream(LispString.getValue(arg));
