@@ -43,28 +43,28 @@ public abstract class AbstractVector extends LispObject
 
     public int checkIndex(int index) throws LispError
     {
-        if (index < 0 || index >= length())
-            badIndex(index);
+        if (index < 0 || index >= capacity())
+            badIndex(index, capacity());
         return index;
     }
 
     public int checkIndex(LispObject index) throws LispError
     {
         long i = Fixnum.getValue(index);
-        if (i < 0 || i >= length())
-            badIndex(i);
+        if (i < 0 || i >= capacity())
+            badIndex(i, capacity());
         return (int) i;
     }
 
-    protected void badIndex(long index) throws LispError
+    protected void badIndex(long index, long limit) throws LispError
     {
         StringBuffer sb = new StringBuffer("invalid array index ");
         sb.append(index);
         sb.append(" for ");
         sb.append(toString());
-        if (length() > 0) {
+        if (limit > 0) {
             sb.append(" (should be >= 0 and < ");
-            sb.append(length());
+            sb.append(limit);
             sb.append(')');
         }
         throw new TypeError(sb.toString());
