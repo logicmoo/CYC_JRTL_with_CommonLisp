@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Condition.java,v 1.26 2004-09-30 11:10:42 piso Exp $
+ * $Id: Condition.java,v 1.27 2004-09-30 19:21:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,14 +130,26 @@ public class Condition extends StandardObject
 
     public String writeToString() throws ConditionThrowable
     {
-        if (_PRINT_ESCAPE_.symbolValue() == NIL) {
+        final LispThread thread = LispThread.currentThread();
+        if (_PRINT_ESCAPE_.symbolValue(thread) == NIL) {
             String s = getMessage();
             if (s != null)
                 return s;
             if (formatControl != NIL)
                 return format(formatControl, formatArguments);
         }
-        return super.writeToString();
+        final int maxLevel;
+        LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+        if (printLevel instanceof Fixnum)
+            maxLevel = ((Fixnum)printLevel).value;
+        else
+            maxLevel = Integer.MAX_VALUE;
+        LispObject currentPrintLevel =
+            _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+        int currentLevel = ((Fixnum)currentPrintLevel).value;
+        if (currentLevel >= maxLevel)
+            return "#";
+        return unreadableString(typeOf().writeToString());
     }
 
     // ### condition-report
