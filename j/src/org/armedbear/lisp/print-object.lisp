@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: print-object.lisp,v 1.1 2003-11-03 02:52:40 piso Exp $
+;;; $Id: print-object.lisp,v 1.2 2003-12-17 18:39:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -61,3 +61,9 @@
                                    (mapcar #'class-name
                                            (method-specializers method))))
   method)
+
+(defmethod print-object ((restart restart) stream)
+  (if *print-escape*
+      (print-unreadable-object (restart stream :type t :identity t)
+                               (prin1 (restart-name restart) stream))
+      (restart-report restart stream)))
