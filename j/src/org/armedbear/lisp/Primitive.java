@@ -2,7 +2,7 @@
  * Primitive.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive.java,v 1.8 2003-12-09 06:07:05 asimon Exp $
+ * $Id: Primitive.java,v 1.9 2003-12-20 09:01:10 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,12 @@ public class Primitive extends Function
     public Primitive(String name, Package pkg, boolean exported)
     {
         super(name, pkg, exported);
+    }
+
+    public Primitive(String name, Package pkg, boolean exported,
+                     String arglist)
+    {
+        super(name, pkg, exported, arglist);
     }
 
     public LispObject execute() throws ConditionThrowable

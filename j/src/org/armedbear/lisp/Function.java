@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.29 2003-12-13 00:28:08 piso Exp $
+ * $Id: Function.java,v 1.30 2003-12-20 09:01:10 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,12 @@ public abstract class Function extends Functional
     public Function(String name, Package pkg, boolean exported)
     {
         this(name, pkg, exported, null, null);
+    }
+
+    public Function(String name, Package pkg, boolean exported,
+                    String arglist)
+    {
+        this(name, pkg, exported, arglist, null);
     }
 
     public Function(String name, Package pkg, boolean exported,
