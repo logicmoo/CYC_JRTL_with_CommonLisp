@@ -1,8 +1,8 @@
 /*
  * JLisp.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.16 2003-10-23 00:30:45 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: JLisp.java,v 1.17 2004-01-30 15:17:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,7 +131,7 @@ public final class JLisp extends LispShell
                 socket.getOutputStream(), initialDir.canonicalPath());
             if (interpreter != null) {
                 // Print j version banner.
-                interpreter.getStandardOutput().writeLine(
+                interpreter.getStandardOutput()._writeLine(
                     Version.getLongVersionString());
             }
         }
