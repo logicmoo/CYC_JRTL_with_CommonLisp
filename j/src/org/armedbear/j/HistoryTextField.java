@@ -1,8 +1,8 @@
 /*
  * HistoryTextField.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: HistoryTextField.java,v 1.2 2003-07-23 00:24:38 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: HistoryTextField.java,v 1.3 2004-09-13 00:11:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,8 +61,7 @@ public class HistoryTextField extends JTextField implements FocusListener,
         setAlignmentX(LEFT_ALIGNMENT);
         setHandler(new DefaultTextFieldHandler(editor, this));
         addFocusListener(this);
-        if (Platform.isJava14())
-            addMouseListener(this);
+        addMouseListener(this);
     }
 
     public HistoryTextField(int columns)
