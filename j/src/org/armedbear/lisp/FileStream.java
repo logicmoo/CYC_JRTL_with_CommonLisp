@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.5 2004-01-29 14:36:01 piso Exp $
+ * $Id: FileStream.java,v 1.6 2004-01-31 13:43:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,6 +93,18 @@ public final class FileStream extends Stream
         return pathname;
     }
 
+    public LispObject listen() throws ConditionThrowable
+    {
+        try {
+            return raf.getFilePointer() < raf.length() ? T : NIL;
+        }
+        catch (IOException e) {
+            signal(new StreamError(e));
+            // Not reached.
+            return NIL;
+        }
+    }
+
     // Returns -1 at end of file.
     protected int _readChar() throws ConditionThrowable
     {
@@ -120,14 +132,7 @@ public final class FileStream extends Stream
 
     protected boolean _charReady() throws ConditionThrowable
     {
-        try {
-            return raf.getFilePointer() < raf.length();
-        }
-        catch (IOException e) {
-            signal(new StreamError(e));
-            // Not reached.
-            return false;
-        }
+        return true;
     }
 
     public void _writeChar(char c) throws ConditionThrowable
