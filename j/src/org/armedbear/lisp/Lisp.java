@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.55 2003-04-14 15:37:00 piso Exp $
+ * $Id: Lisp.java,v 1.56 2003-04-16 17:19:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,54 +84,28 @@ public abstract class Lisp
         throws Condition
     {
         if (debug) {
-            stack.push(new StackFrame((Function)fun, argv));
+            stack.push(new StackFrame(fun, argv));
         }
         _values = null;
         LispObject result;
-        switch (fun.getType()) {
-            case TYPE_PRIMITIVE0: {
-                if (argv.length != 0)
-                    throw new WrongNumberOfArgumentsException(fun);
-                if (profiling)
-                    fun.incrementCallCount();
+        if (profiling)
+            fun.incrementCallCount();
+        switch (argv.length) {
+            case 0:
                 result = fun.execute();
                 break;
-            }
-            case TYPE_PRIMITIVE1: {
-                if (argv.length != 1)
-                    throw new WrongNumberOfArgumentsException(fun);
-                if (profiling)
-                    fun.incrementCallCount();
+            case 1:
                 result = fun.execute(argv[0]);
                 break;
-            }
-            case TYPE_PRIMITIVE2: {
-                if (argv.length != 2)
-                    throw new WrongNumberOfArgumentsException(fun);
-                if (profiling)
-                    fun.incrementCallCount();
+            case 2:
                 result = fun.execute(argv[0], argv[1]);
                 break;
-            }
-            case TYPE_PRIMITIVE3: {
-                if (argv.length != 3)
-                    throw new WrongNumberOfArgumentsException(fun);
-                if (profiling)
-                    fun.incrementCallCount();
+            case 3:
                 result = fun.execute(argv[0], argv[1], argv[2]);
                 break;
-            }
-            case TYPE_PRIMITIVE:
-            case TYPE_COMPILED_FUNCTION:
-            case TYPE_CLOSURE:
-            case TYPE_MACRO:
-                if (profiling)
-                    fun.incrementCallCount();
+            default:
                 result = fun.execute(argv);
                 break;
-            case TYPE_SPECIAL_OPERATOR:
-            default:
-                throw new UndefinedFunctionError(String.valueOf(fun));
         }
         if (debug) {
             if (!stack.empty())
@@ -347,56 +321,31 @@ public abstract class Lisp
                     }
                     case TYPE_MACRO:
                         return eval(macroexpand(obj, env), env);
-                    case TYPE_PRIMITIVE0: {
+                    default: {
                         if (debug)
-                            return apply(fun, evalList(obj.cdr(), env));
-                        if (obj.cdr() != NIL)
-                            throw new WrongNumberOfArgumentsException(fun);
+                            return funcall(fun, evalList(obj.cdr(), env));
                         if (profiling)
                             fun.incrementCallCount();
-                        return fun.execute();
+                        switch (obj.cdr().length()) {
+                            case 0:
+                                return fun.execute();
+                            case 1:
+                                return fun.execute(value(eval(obj.cadr(), env)));
+                            case 2: {
+                                LispObject args = obj.cdr();
+                                return fun.execute(eval(args.car(), env),
+                                    value(eval(args.cadr(), env)));
+                            }
+                            case 3: {
+                                LispObject args = obj.cdr();
+                                return fun.execute(eval(args.car(), env),
+                                    eval(args.cadr(), env),
+                                    value(eval(args.cdr().cdr().car(), env)));
+                            }
+                            default:
+                                return fun.execute(evalList(obj.cdr(), env));
+                        }
                     }
-                    case TYPE_PRIMITIVE1: {
-                        if (debug)
-                            return apply(fun, evalList(obj.cdr(), env));
-                        LispObject args = obj.cdr();
-                        if (args.length() != 1)
-                            throw new WrongNumberOfArgumentsException(fun);
-                        if (profiling)
-                            fun.incrementCallCount();
-                        return fun.execute(value(eval(args.car(), env)));
-                    }
-                    case TYPE_PRIMITIVE2: {
-                        if (debug)
-                            return apply(fun, evalList(obj.cdr(), env));
-                        LispObject args = obj.cdr();
-                        if (args.length() != 2)
-                            throw new WrongNumberOfArgumentsException(fun);
-                        if (profiling)
-                            fun.incrementCallCount();
-                        return fun.execute(eval(args.car(), env),
-                            value(eval(args.cadr(), env)));
-                    }
-                    case TYPE_PRIMITIVE3: {
-                        if (debug)
-                            return apply(fun, evalList(obj.cdr(), env));
-                        LispObject args = obj.cdr();
-                        if (args.length() != 3)
-                            throw new WrongNumberOfArgumentsException(fun);
-                        if (profiling)
-                            fun.incrementCallCount();
-                        return fun.execute(eval(args.car(), env),
-                            eval(args.cadr(), env),
-                            value(eval(args.cdr().cdr().car(), env)));
-                    }
-                    case TYPE_COMPILED_FUNCTION:
-                        return fun.execute(evalList(obj.cdr(), env));
-                    default:
-                        if (debug)
-                            return apply(fun, evalList(obj.cdr(), env));
-                        if (profiling)
-                            fun.incrementCallCount();
-                        return fun.execute(evalList(obj.cdr(), env));
                 }
             } else {
                 LispObject args = obj.cdr();
@@ -413,48 +362,6 @@ public abstract class Lisp
             }
         } else
             return obj;
-    }
-
-    // Debug only.
-    private static final LispObject apply(LispObject fun, LispObject[] argv)
-        throws Condition
-    {
-        stack.push(new StackFrame(fun, argv));
-        if (profiling)
-            fun.incrementCallCount();
-        LispObject result;
-        switch (fun.getType()) {
-            case TYPE_PRIMITIVE0: {
-                if (argv.length != 0)
-                    throw new WrongNumberOfArgumentsException(fun);
-                result = fun.execute();
-                break;
-            }
-            case TYPE_PRIMITIVE1: {
-                if (argv.length != 1)
-                    throw new WrongNumberOfArgumentsException(fun);
-                result = fun.execute(argv[0]);
-                break;
-            }
-            case TYPE_PRIMITIVE2: {
-                if (argv.length != 2)
-                    throw new WrongNumberOfArgumentsException(fun);
-                result = fun.execute(argv[0], argv[1]);
-                break;
-            }
-            case TYPE_PRIMITIVE3: {
-                if (argv.length != 3)
-                    throw new WrongNumberOfArgumentsException(fun);
-                result = fun.execute(argv[0], argv[1], argv[2]);
-                break;
-            }
-            default:
-                result = fun.execute(argv);
-                break;
-        }
-        if (!stack.empty())
-            stack.pop();
-        return result;
     }
 
     private static final LispObject[] evalList(LispObject exps, Environment env)
@@ -713,6 +620,18 @@ public abstract class Lisp
         if (n.compareTo(INT_MIN) >= 0 && n.compareTo(INT_MAX) <= 0)
             return new Fixnum(n.intValue());
         return new Bignum(n);
+    }
+
+    public static final LispObject list(String s)
+    {
+        try {
+            CharacterInputStream in =
+                new CharacterInputStream(s);
+            return in.read(true, NIL, false);
+        }
+        catch (Throwable t) {
+            return null;
+        }
     }
 
     public static final int nameToChar(String s)
