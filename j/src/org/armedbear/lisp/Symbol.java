@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.16 2003-03-01 20:30:01 piso Exp $
+ * $Id: Symbol.java,v 1.17 2003-03-02 01:46:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ public class Symbol extends LispObject
     public static final Symbol AND_OPTIONAL       = export("&OPTIONAL");
     public static final Symbol AND_REST           = export("&REST");
     public static final Symbol BLOCK              = export("BLOCK");
+    public static final Symbol GO                 = export("GO");
     public static final Symbol LAMBDA             = export("LAMBDA");
     public static final Symbol LET                = export("LET");
     public static final Symbol OTHERWISE          = export("OTHERWISE");
