@@ -1,7 +1,7 @@
 ;;; assoc.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: assoc.lisp,v 1.1 2003-06-10 17:23:42 piso Exp $
+;;; $Id: assoc.lisp,v 1.2 2003-06-11 00:04:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,3 +79,14 @@
   (if key
       (assoc-guts (not (funcall predicate (funcall key (cdar alist)))))
       (assoc-guts (not (funcall predicate (cdar alist))))))
+
+(defun acons (key datum alist)
+  (cons (cons key datum) alist))
+
+(defun pairlis (keys data &optional (alist '()))
+  (do ((x keys (cdr x))
+       (y data (cdr y)))
+      ((and (endp x) (endp y)) alist)
+    (if (or (endp x) (endp y))
+	(error "the lists of keys and data are of unequal length"))
+    (setq alist (acons (car x) (car y) alist))))
