@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: opcodes.lisp,v 1.3 2004-05-31 16:55:24 piso Exp $
+;;; $Id: opcodes.lisp,v 1.4 2004-06-03 18:50:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -123,7 +123,7 @@
 (define-opcode pop 87 1 -1)
 (define-opcode pop2 88 1 nil)
 (define-opcode dup 89 1 1)
-(define-opcode dup_x1 90 1 nil)
+(define-opcode dup_x1 90 1 1)
 (define-opcode dup_x2 91 1 1)
 (define-opcode dup2 92 1 nil)
 (define-opcode dup2_x1 93 1 nil)
@@ -224,7 +224,7 @@
 (define-opcode newarray 188 2 nil)
 (define-opcode anewarray 189 3 0)
 (define-opcode arraylength 190 1 nil)
-(define-opcode athrow 191 1 nil)
+(define-opcode athrow 191 1 0)
 (define-opcode checkcast 192 3 0)
 (define-opcode instanceof 193 3 0)
 (define-opcode monitorenter 194 1 nil)
