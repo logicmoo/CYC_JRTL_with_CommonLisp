@@ -2,7 +2,7 @@
  * FileError.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileError.java,v 1.1 2004-01-02 19:01:36 piso Exp $
+ * $Id: FileError.java,v 1.2 2004-01-16 11:47:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 public final class FileError extends LispError
 {
-    private LispObject pathname;
+    private LispObject pathname = NIL;
 
     // initArgs is either a normal initArgs list or a pathname.
     public FileError(LispObject initArgs) throws ConditionThrowable
