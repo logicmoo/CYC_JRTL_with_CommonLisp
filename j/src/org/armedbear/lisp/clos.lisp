@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.97 2004-03-18 00:12:46 piso Exp $
+;;; $Id: clos.lisp,v 1.98 2004-04-15 00:08:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1543,6 +1543,7 @@
   (%set-class-name class new-value))
 
 (fmakunbound 'documentation)
+(remf (symbol-plist 'documentation) 'setf-inverse)
 
 (defgeneric documentation (x doc-type))
 
