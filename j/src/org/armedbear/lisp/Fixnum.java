@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.38 2003-06-23 11:11:15 piso Exp $
+ * $Id: Fixnum.java,v 1.39 2003-07-06 15:13:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,6 +63,8 @@ public final class Fixnum extends LispObject
             return T;
         if (typeSpecifier == Symbol.NUMBER)
             return T;
+        if (typeSpecifier == Symbol.UNSIGNED_BYTE)
+            return value >= 0 ? T : NIL;
         return super.typep(typeSpecifier);
     }
 
