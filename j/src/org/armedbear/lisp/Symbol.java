@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.94 2003-12-07 18:12:10 piso Exp $
+ * $Id: Symbol.java,v 1.95 2003-12-07 18:39:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -508,4 +508,40 @@ public class Symbol extends LispObject
             }
         }
     };
+
+    public static final Primitive1 KEYWORDP = new Primitive1("keywordp")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof Symbol) {
+                if (((Symbol)arg).pkg == PACKAGE_KEYWORD)
+                    return T;
+            }
+            return NIL;
+        }
+    };
+
+    public static final Primitive1 MAKE_SYMBOL = new Primitive1("make-symbol")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return new Symbol(LispString.getValue(arg));
+        }
+    };
+
+    public static final Primitive1 MAKUNBOUND = new Primitive1("makunbound")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                ((Symbol)arg).value = null;
+                return arg;
+            }
+            catch (ClassCastException e) {
+                throw new ConditionThrowable(new TypeError(arg, "symbol"));
+            }
+        }
+    };
+
 }
+

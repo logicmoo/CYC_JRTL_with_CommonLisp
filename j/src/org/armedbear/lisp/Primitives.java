@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.514 2003-12-07 18:31:00 piso Exp $
+ * $Id: Primitives.java,v 1.515 2003-12-07 18:40:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,15 +51,12 @@ public final class Primitives extends Module
     private static final int CONSP                      = 17;
     private static final int EVAL                       = 18;
     private static final int IDENTITY                   = 19;
-    private static final int KEYWORDP                   = 20;
-    private static final int LISTP                      = 21;
-    private static final int LOWER_CASE_P               = 22;
-    private static final int MAKE_SYMBOL                = 23;
-    private static final int MAKUNBOUND                 = 24;
-    private static final int SIMPLE_BIT_VECTOR_P        = 25;
-    private static final int SIMPLE_VECTOR_P            = 26;
-    private static final int UPPER_CASE_P               = 27;
-    private static final int VECTORP                    = 28;
+    private static final int LISTP                      = 20;
+    private static final int LOWER_CASE_P               = 21;
+    private static final int SIMPLE_BIT_VECTOR_P        = 22;
+    private static final int SIMPLE_VECTOR_P            = 23;
+    private static final int UPPER_CASE_P               = 24;
+    private static final int VECTORP                    = 25;
 
     private Primitives()
     {
@@ -83,11 +80,8 @@ public final class Primitives extends Module
         definePrimitive1("consp", CONSP);
         definePrimitive1("eval", EVAL);
         definePrimitive1("identity", IDENTITY);
-        definePrimitive1("keywordp", KEYWORDP);
         definePrimitive1("listp", LISTP);
         definePrimitive1("lower-case-p", LOWER_CASE_P);
-        definePrimitive1("make-symbol", MAKE_SYMBOL);
-        definePrimitive1("makunbound", MAKUNBOUND);
         definePrimitive1("simple-bit-vector-p", SIMPLE_BIT_VECTOR_P);
         definePrimitive1("simple-vector-p", SIMPLE_VECTOR_P);
         definePrimitive1("upper-case-p", UPPER_CASE_P);
@@ -154,21 +148,10 @@ public final class Primitives extends Module
                 return arg;
             case COMPILED_FUNCTION_P:           // ### compiled-function-p
                 return arg.typep(Symbol.COMPILED_FUNCTION);
-            case KEYWORDP:                      // ### keywordp
-                if (arg instanceof Symbol) {
-                    if (((Symbol)arg).getPackage() == PACKAGE_KEYWORD)
-                        return T;
-                }
-                return NIL;
             case CONSP:                         // ### consp
                 return arg instanceof Cons ? T : NIL;
             case LISTP:                         // ### listp
                 return arg.LISTP();
-            case MAKE_SYMBOL:                   // ### make-symbol
-                return new Symbol(LispString.getValue(arg));
-            case MAKUNBOUND:                    // ### makunbound
-                checkSymbol(arg).setSymbolValue(null);
-                return arg;
             case ABS:                           // ### abs
                 return arg.ABS();
             case ARRAYP:                        // ### arrayp
