@@ -1,8 +1,8 @@
 /*
  * Tag.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Tag.java,v 1.1.1.1 2002-09-24 16:08:05 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Tag.java,v 1.2 2003-10-10 23:55:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,9 +53,6 @@ public abstract class Tag
 
     public abstract String getLongName();
 
-    /**
-     * @since   0.16.1
-     */
     public abstract String getClassName();
 
     public abstract void gotoTag(Editor editor);
