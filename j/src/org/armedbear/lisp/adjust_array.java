@@ -2,7 +2,7 @@
  * adjust_array.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.4 2004-02-16 01:48:59 piso Exp $
+ * $Id: adjust_array.java,v 1.5 2004-02-23 15:12:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,8 +68,8 @@ public final class adjust_array extends Primitive
                 return v;
             }
         }
-        if (array instanceof LispString) {
-            LispString s = (LispString) array;
+        if (array instanceof ComplexString) {
+            ComplexString s = (ComplexString) array;
             LispObject newSize = null;
             if (dimensions instanceof Cons) {
                 if (dimensions.length() == 1)

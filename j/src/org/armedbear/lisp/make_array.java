@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.11 2004-02-23 14:24:48 piso Exp $
+ * $Id: make_array.java,v 1.12 2004-02-23 15:12:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public final class make_array extends Primitive
                 getUpgradedArrayElementType(elementType);
             if (upgradedType == Symbol.CHARACTER) {
                 if (fillPointer != NIL || adjustable != NIL)
-                    v = new LispString(size);
+                    v = new ComplexString(size);
                 else
                     v = new SimpleString(size);
             } else if (upgradedType == Symbol.BIT)
