@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.2 2002-10-10 22:29:57 piso Exp $
+ * $Id: Directory.java,v 1.3 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -281,8 +281,6 @@ public final class Directory extends Buffer
         }
         entries.clear();
         numMarked = 0;
-        Debug.assertTrue(isLoaded == false);
-        isLoaded = false;
         setListing(null);
 
         load();
@@ -332,8 +330,6 @@ public final class Directory extends Buffer
         empty();
         entries.clear();
         numMarked = 0;
-        Debug.assertTrue(isLoaded == false);
-        isLoaded = false;
         load();
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
             Editor ed = it.nextEditor();
@@ -515,7 +511,7 @@ public final class Directory extends Buffer
         }
         if (getFirstLine() == null)
             appendLine("");
-        isLoaded = true;
+        setLoaded(true);
     }
 
     public static void dirCycleSortBy()
@@ -712,7 +708,7 @@ public final class Directory extends Buffer
 
     public int load()
     {
-        if (!isLoaded) {
+        if (!isLoaded()) {
             final Editor editor = Editor.currentEditor();
             String reading = "Reading directory...";
             if (editor != null)

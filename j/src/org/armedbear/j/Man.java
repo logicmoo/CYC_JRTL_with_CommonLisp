@@ -2,7 +2,7 @@
  * Man.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Man.java,v 1.1.1.1 2002-09-24 16:07:43 piso Exp $
+ * $Id: Man.java,v 1.2 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ public final class Man extends Buffer
 
     public int load()
     {
-        if (!isLoaded) {
+        if (!isLoaded()) {
             final File toBeLoaded = getFile();
             if (toBeLoaded.isFile()) {
                 try {
@@ -76,7 +76,7 @@ public final class Man extends Buffer
                 renumber();
                 formatter.parseBuffer();
             }
-            isLoaded = true;
+            setLoaded(true);
         }
         Line line = getFirstLine();
         while (line != null && line.isBlank()) {
@@ -143,7 +143,7 @@ public final class Man extends Buffer
             }
             if (sb.length() > 0)
                 appendLine(sb.toString());
-            isLoaded = true;
+            setLoaded(true);
         }
         catch (IOException e) {
             Log.error(e);

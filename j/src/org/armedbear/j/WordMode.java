@@ -2,7 +2,7 @@
  * WordMode.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: WordMode.java,v 1.2 2002-10-01 19:06:19 piso Exp $
+ * $Id: WordMode.java,v 1.3 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,13 +125,13 @@ public final class WordMode extends AbstractMode implements Constants, Mode
                     buffer.loadProgress(totalBytes = totalBytes + bytesRead);
             }
             buffer.unmodified();
-            buffer.isLoaded = true;
+            buffer.setLoaded(true);
             buffer.setForceReadOnly(true);
         }
         catch (Exception e) {
             Log.error(e);
         }
-        buffer.loadFinished(buffer.isLoaded);
+        buffer.loadFinished(buffer.isLoaded());
     }
 
     private static final void wrapAndAppend(Buffer buffer, String s)

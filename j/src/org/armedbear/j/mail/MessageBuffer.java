@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.6 2002-10-10 17:11:01 piso Exp $
+ * $Id: MessageBuffer.java,v 1.7 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,7 +102,7 @@ public class MessageBuffer extends Buffer
         unmodified();
         renumber();
         formatter.parseBuffer();
-        isLoaded = true;
+        setLoaded(true);
         setInitialized(true);
     }
 

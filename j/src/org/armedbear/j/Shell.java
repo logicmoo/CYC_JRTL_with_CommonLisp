@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.3 2002-10-10 18:26:49 piso Exp $
+ * $Id: Shell.java,v 1.4 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -577,7 +577,7 @@ public class Shell extends Buffer implements Constants
         }
         try {
             appendLine("");
-            isLoaded = true;
+            setLoaded(true);
             posEndOfBuffer = new Position(getFirstLine(), 0);
         }
         finally {

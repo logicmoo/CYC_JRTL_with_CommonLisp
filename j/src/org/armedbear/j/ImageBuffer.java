@@ -2,7 +2,7 @@
  * ImageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImageBuffer.java,v 1.1.1.1 2002-09-24 16:08:44 piso Exp $
+ * $Id: ImageBuffer.java,v 1.2 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ public class ImageBuffer extends Buffer implements Constants
             ib.currentWidth = ib.originalWidth = img.getWidth(null);
             ib.currentHeight = ib.originalHeight = img.getHeight(null);
             ib.setLastModified(toBeLoaded.lastModified());
-            ib.isLoaded = true;
+            ib.setLoaded(true);
             return ib;
         } else
             return null;
@@ -114,7 +114,7 @@ public class ImageBuffer extends Buffer implements Constants
 
     public int load()
     {
-        if (!isLoaded) {
+        if (!isLoaded()) {
             Debug.assertTrue(loader == null);
             final File toBeLoaded = getCache() != null ? getCache() : getFile();
             loader = new ImageLoader(toBeLoaded);
@@ -126,7 +126,7 @@ public class ImageBuffer extends Buffer implements Constants
             } else
                 MessageDialog.showMessageDialog("Error loading image", "Error");
             setLastModified(toBeLoaded.lastModified());
-            isLoaded = true;
+            setLoaded(true);
         }
         return LOAD_COMPLETED;
     }
@@ -343,7 +343,7 @@ public class ImageBuffer extends Buffer implements Constants
         final File file = getFile();
         if (file == null || file.isRemote() || !file.isFile())
             return false;
-        if (isLoaded && file.lastModified() != getLastModified()) {
+        if (isLoaded() && file.lastModified() != getLastModified()) {
             reload();
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                 Editor ed = it.nextEditor();

@@ -2,7 +2,7 @@
  * Drafts.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: Drafts.java,v 1.1.1.1 2002-09-24 16:09:53 piso Exp $
+ * $Id: Drafts.java,v 1.2 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -259,8 +259,8 @@ public final class Drafts extends Mailbox
     {
         if (lock()) {
             setBusy(true);
+            setLoaded(true);
             new Thread(loadRunnable).start();
-            isLoaded = true;
             return LOAD_PENDING;
         } else
             return LOAD_FAILED;

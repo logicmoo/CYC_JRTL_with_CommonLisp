@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Jdb.java,v 1.1.1.1 2002-09-24 16:09:42 piso Exp $
+ * $Id: Jdb.java,v 1.2 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -264,11 +264,11 @@ public final class Jdb extends Buffer
         // Nothing to do.
     }
 
-    public int load()
+    public synchronized int load()
     {
-        if (!isLoaded) {
+        if (!isLoaded()) {
             appendLine("");
-            isLoaded = true;
+            setLoaded(true);
             posEndOfBuffer = new Position(getFirstLine(), 0);
         }
         return LOAD_COMPLETED;

@@ -2,7 +2,7 @@
  * CheckinBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CheckinBuffer.java,v 1.2 2002-10-10 16:31:02 piso Exp $
+ * $Id: CheckinBuffer.java,v 1.3 2002-10-11 01:42:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ public final class CheckinBuffer extends Buffer implements Constants
         finally {
             unlockWrite();
         }
-        isLoaded = true;
+        setLoaded(true);
         setInitialized(true);
     }
 

@@ -2,7 +2,7 @@
  * RemoteBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: RemoteBuffer.java,v 1.1.1.1 2002-09-24 16:07:46 piso Exp $
+ * $Id: RemoteBuffer.java,v 1.2 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public final class RemoteBuffer extends Buffer implements Constants
 
     public int load()
     {
-        isLoaded = true;
+        setLoaded(true);
         mode = Editor.getModeList().getMode(PLAIN_TEXT_MODE);
         formatter = mode.getFormatter(this);
 

@@ -2,7 +2,7 @@
  * LocalMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: LocalMessageBuffer.java,v 1.1.1.1 2002-09-24 16:10:15 piso Exp $
+ * $Id: LocalMessageBuffer.java,v 1.2 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ import org.armedbear.j.Editor;
         if (mailbox.lock()) {
             try {
                 loadMessage(null);
-                isLoaded = true;
+                setLoaded(true);
                 return LOAD_COMPLETED;
             }
             finally {

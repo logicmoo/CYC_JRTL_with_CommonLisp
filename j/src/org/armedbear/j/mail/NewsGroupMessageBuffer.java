@@ -2,7 +2,7 @@
  * NewsGroupMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupMessageBuffer.java,v 1.1.1.1 2002-09-24 16:10:13 piso Exp $
+ * $Id: NewsGroupMessageBuffer.java,v 1.2 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         mode = MessageMode.getMode();
         formatter = mode.getFormatter(this);
         readOnly = true;
-        isLoaded = true;
+        setLoaded(true);
         setBusy(true);
         new Thread(loadProcess).start();
     }
@@ -172,7 +172,7 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
             defaultHeaders = getDefaultHeaders(allHeaders);
             rawBody = message.getRawBody();
             setText();
-            isLoaded = true;
+            setLoaded(true);
             formatter.parseBuffer();
             entry.setFlags(entry.getFlags() | MailboxEntry.SEEN);
             summary.updateEntry(entry);

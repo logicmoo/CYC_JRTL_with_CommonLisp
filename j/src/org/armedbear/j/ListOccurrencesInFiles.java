@@ -2,7 +2,7 @@
  * ListOccurrencesInFiles.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ListOccurrencesInFiles.java,v 1.1.1.1 2002-09-24 16:09:26 piso Exp $
+ * $Id: ListOccurrencesInFiles.java,v 1.2 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class ListOccurrencesInFiles extends ListOccurrences
             renumber();
         }
         title = "\"" + search.getPattern() + "\"";
-        isLoaded = true;
+        setLoaded(true);
     }
 
     private final void setLastDotPos(Position pos)

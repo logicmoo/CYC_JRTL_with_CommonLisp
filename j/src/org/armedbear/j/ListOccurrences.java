@@ -2,7 +2,7 @@
  * ListOccurrences.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ListOccurrences.java,v 1.2 2002-10-10 17:50:53 piso Exp $
+ * $Id: ListOccurrences.java,v 1.3 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,7 +116,7 @@ public class ListOccurrences extends Buffer
         }
         if (listOccurrences != null) {
             listOccurrences.renumber();
-            listOccurrences.isLoaded = true;
+            listOccurrences.setLoaded(true);
         }
         return listOccurrences;
     }

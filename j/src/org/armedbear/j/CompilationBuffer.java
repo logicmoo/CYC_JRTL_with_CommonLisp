@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CompilationBuffer.java,v 1.5 2002-10-10 16:33:00 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.6 2002-10-11 01:42:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ public final class CompilationBuffer extends Buffer implements Runnable
         finally {
             unlockWrite();
         }
-        isLoaded = true;
+        setLoaded(true);
         posEndOfBuffer = new Position(getFirstLine(), 0);
     }
 
@@ -116,7 +116,7 @@ public final class CompilationBuffer extends Buffer implements Runnable
             super.empty();
             appendLine("");
             renumber();
-            isLoaded = true;
+            setLoaded(true);
             posEndOfBuffer = new Position(getFirstLine(), 0);
             lastErrorLine = null;
         }

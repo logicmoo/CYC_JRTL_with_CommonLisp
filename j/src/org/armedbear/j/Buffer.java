@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.4 2002-10-10 17:06:49 piso Exp $
+ * $Id: Buffer.java,v 1.5 2002-10-11 01:42:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,7 +181,7 @@ public class Buffer extends SystemBuffer
         appendLine("");
         lineSeparator = System.getProperty("line.separator");
         renumber();
-        isLoaded = true;
+        setLoaded(true);
         mode = PlainTextMode.getMode();
         formatter = mode.getFormatter(this);
         setNewFile(true);
@@ -878,7 +878,7 @@ public class Buffer extends SystemBuffer
 
     public int load()
     {
-        if (!isLoaded) {
+        if (!isLoaded()) {
             try {
                 lockWrite();
             }
@@ -921,7 +921,7 @@ public class Buffer extends SystemBuffer
                     }
                     renumberOriginal();
                     setModeFromFilename(canonicalPath());
-                    isLoaded = true;
+                    setLoaded(true);
                 }
             }
             finally {
@@ -1020,7 +1020,7 @@ public class Buffer extends SystemBuffer
                     reloadLocal(cache);
                 } else {
                     // User cancelled.
-                    isLoaded = true;
+                    setLoaded(true);
                 }
                 setBusy(false);
                 reloadSucceeded();
@@ -1056,7 +1056,7 @@ public class Buffer extends SystemBuffer
                     reloadLocal(cache);
                 } else {
                     // User cancelled.
-                    isLoaded = true;
+                    setLoaded(true);
                 }
                 setBusy(false);
                 reloadSucceeded();
@@ -2071,7 +2071,7 @@ public class Buffer extends SystemBuffer
                 appendLine("");
             renumber();
             invalidate();
-            isLoaded = true;
+            setLoaded(true);
         }
         finally {
             unlockWrite();

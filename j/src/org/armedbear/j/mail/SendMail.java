@@ -2,7 +2,7 @@
  * SendMail.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SendMail.java,v 1.2 2002-10-10 17:42:06 piso Exp $
+ * $Id: SendMail.java,v 1.3 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,7 +98,7 @@ public final class SendMail extends Buffer
             appendSignature();
             renumber();
             formatter.parseBuffer();
-            isLoaded = true;
+            setLoaded(true);
         }
         finally {
             unlockWrite();
@@ -141,7 +141,7 @@ public final class SendMail extends Buffer
             unmodified();
             renumber();
             formatter.parseBuffer();
-            isLoaded = true;
+            setLoaded(true);
         }
         finally {
             unlockWrite();
@@ -237,7 +237,7 @@ public final class SendMail extends Buffer
             unmodified();
             renumber();
             formatter.parseBuffer();
-            isLoaded = true;
+            setLoaded(true);
         }
         finally {
             unlockWrite();

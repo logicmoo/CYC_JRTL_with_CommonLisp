@@ -2,7 +2,7 @@
  * WebBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WebBuffer.java,v 1.2 2002-10-10 17:49:51 piso Exp $
+ * $Id: WebBuffer.java,v 1.3 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -194,7 +194,7 @@ public final class WebBuffer extends Buffer implements WebConstants
     {
         if (getFirstLine() == null)
             setText("");
-        isLoaded = true;
+        setLoaded(true);
         go(getFile(), 0, contentType);
         return LOAD_COMPLETED;
     }
@@ -225,7 +225,7 @@ public final class WebBuffer extends Buffer implements WebConstants
         final File file = getFile();
         if (file != null && file.equals(localFile))
             setLastModified(localFile.lastModified());
-        isLoaded = true;
+        setLoaded(true);
     }
 
     public Cursor getDefaultCursor(Position pos)

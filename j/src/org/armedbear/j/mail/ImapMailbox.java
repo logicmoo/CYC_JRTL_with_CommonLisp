@@ -2,7 +2,7 @@
  * ImapMailbox.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImapMailbox.java,v 1.3 2002-10-07 23:49:49 piso Exp $
+ * $Id: ImapMailbox.java,v 1.4 2002-10-11 01:42:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,7 +229,7 @@ public final class ImapMailbox extends Mailbox
             Debug.assertTrue(backgroundThread == null);
             backgroundThread = new Thread(loadProcess);
             backgroundThread.start();
-            isLoaded = true;
+            setLoaded(true);
             return LOAD_PENDING;
         } else {
             // Not loaded, lock() failed. Shouldn't happen.
