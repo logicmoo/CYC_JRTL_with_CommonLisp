@@ -2,7 +2,7 @@
  * FtpFile.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: FtpFile.java,v 1.1.1.1 2002-09-24 16:08:12 piso Exp $
+ * $Id: FtpFile.java,v 1.2 2002-11-30 02:16:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,16 +140,24 @@ public final class FtpFile extends File
 
     public String getDirectoryListing()
     {
-        String listing = DirectoryCache.getDirectoryCache().getListing(this);
-        if (listing == null) {
-            FtpSession session = FtpSession.getSession(this);
-            if (session != null) {
-                listing = session.getDirectoryListing(canonicalPath());
-                session.unlock();
-                if (listing != null)
-                    DirectoryCache.getDirectoryCache().put(this, listing);
-            }
+        return getDirectoryListing(false);
+    }
+    
+    public String getDirectoryListing(boolean forceRefresh)
+    {
+        if (!forceRefresh) {
+            String listing =
+                DirectoryCache.getDirectoryCache().getListing(this);
+            if (listing != null)
+                return listing;
         }
+        FtpSession session = FtpSession.getSession(this);
+        if (session == null)
+            return null;
+        String listing = session.getDirectoryListing(canonicalPath());
+        session.unlock();
+        if (listing != null)
+            DirectoryCache.getDirectoryCache().put(this, listing);
         return listing;
     }
 
