@@ -978,6 +978,7 @@ collected result will be returned as the value of the LOOP."
 
 
 
+#+cmu
 (defun subst-gensyms-for-nil (tree)
   (declare (special *ignores*))
   (cond
@@ -986,6 +987,7 @@ collected result will be returned as the value of the LOOP."
     (t (cons (subst-gensyms-for-nil (car tree))
 	     (subst-gensyms-for-nil (cdr tree))))))
 
+#+cmu
 (defun loop-build-destructuring-bindings (crocks forms)
   (if crocks
       (let ((*ignores* ()))
@@ -1039,11 +1041,18 @@ collected result will be returned as the value of the LOOP."
 	    (let ((forms (list answer)))
 	      ;;(when crocks (push crocks forms))
 	      (when dcls (push `(declare ,@dcls) forms))
+              #+cmu
 	      (setq answer `(,(cond ((not vars) 'locally)
 				    (*loop-destructuring-hooks* (first *loop-destructuring-hooks*))
 				    (t 'let))
 			     ,vars
-			     ,@(loop-build-destructuring-bindings crocks forms)))))))
+			     ,@(loop-build-destructuring-bindings crocks forms)))
+              #+armedbear
+	      (setq answer `(,(cond ((not vars) 'locally)
+				    (*loop-destructuring-hooks* (first *loop-destructuring-hooks*))
+				    (t 'let))
+                              ,vars
+                              ,@forms))))))
       (if *loop-names*
 	  (do () ((null (car *loop-names*)) answer)
 	    (setq answer `(block ,(pop *loop-names*) ,answer)))
