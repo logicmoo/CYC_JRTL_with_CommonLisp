@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.6 2003-06-21 17:02:23 piso Exp $
+ * $Id: LispClass.java,v 1.7 2003-07-13 14:39:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,7 @@ public final class LispClass extends LispObject
     static {
         addClass(Symbol.ARRAY);
         addClass(Symbol.BIT_VECTOR);
+        addClass(Symbol.SYMBOL);
         addClass(Symbol.VECTOR);
     }
 
