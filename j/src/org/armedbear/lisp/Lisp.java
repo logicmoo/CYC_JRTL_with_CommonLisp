@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.159 2003-09-29 16:44:30 piso Exp $
+ * $Id: Lisp.java,v 1.160 2003-10-02 00:01:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -954,6 +954,31 @@ public abstract class Lisp
                                         new Cons(value,
                                                  symbol.getPropertyList())));
         return value;
+    }
+
+    public static final LispObject remprop(Symbol symbol, LispObject indicator)
+        throws ConditionThrowable
+    {
+        LispObject list = checkList(symbol.getPropertyList());
+        LispObject prev = null;
+        while (list != NIL) {
+            if (!(list.cdr() instanceof Cons))
+                throw new ConditionThrowable(new ProgramError(String.valueOf(symbol) +
+                                                              " has an odd number of items in its property list"));
+            if (list.car().eql(indicator)) {
+                // Found it!
+                if (prev != null) {
+                    prev.setCdr(list.cddr());
+                } else {
+                    symbol.setPropertyList(list.cddr());
+                }
+                return T;
+            }
+            prev = list;
+            list = list.cddr();
+        }
+        // Not found.
+        return NIL;
     }
 
     public static final Symbol intern(String name, Package pkg)
