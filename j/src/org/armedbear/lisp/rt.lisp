@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.82 2003-06-20 02:05:02 piso Exp $
+;;; $Id: rt.lisp,v 1.83 2003-06-24 17:03:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -374,9 +374,9 @@
 
 (defun do-all-tests (&optional (compile-tests t))
   (let ((rt::*compile-tests* compile-tests))
-    (nodebug)
+    #+armedbear (nodebug)
     (time (do-tests))
-    (debug)))
+    #+armedbear (debug)))
 
 #+armedbear (nodebug)
 (load (concatenate 'string rt::*prefix* "char-aux.lsp"))
