@@ -20,9 +20,9 @@ array-dimensions
 array-has-fill-pointer-p
 array-in-bounds-p
 array-row-major-index
+ash
 assert
 assoc
-ash
 atom
 bit
 bit-vector-p
@@ -431,6 +431,9 @@ string>=
 stringp
 subseq
 subst
+substitute
+substitute-if
+substitute-if-not
 subtypep
 svref
 sxhash
