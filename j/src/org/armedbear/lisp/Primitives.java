@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.693 2004-10-22 17:03:36 piso Exp $
+ * $Id: Primitives.java,v 1.694 2004-10-22 17:36:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2131,37 +2131,29 @@ public final class Primitives extends Lisp
     public static final Primitive APPLY =
         new Primitive("apply", "function &rest args")
     {
-        public LispObject execute(LispObject first, LispObject second)
+        public LispObject execute(LispObject fun, LispObject args)
             throws ConditionThrowable
         {
-            LispObject spread = checkList(second);
-            LispObject fun = first;
-            if (fun instanceof Symbol)
-                fun = fun.getSymbolFunction();
-            if (fun instanceof Function || fun instanceof GenericFunction) {
-                final int numFunArgs = spread.length();
-                final LispThread thread = LispThread.currentThread();
-                switch (numFunArgs) {
-                    case 1:
-                        return funcall1(fun, spread.car(), thread);
-                    case 2:
-                        return funcall2(fun, spread.car(), spread.cadr(), thread);
-                    case 3:
-                        return funcall3(fun, spread.car(), spread.cadr(),
-                                        spread.cdr().cdr().car(), thread);
-                    default: {
-                        final LispObject[] funArgs = new LispObject[numFunArgs];
-                        int j = 0;
-                        while (spread != NIL) {
-                            funArgs[j++] = spread.car();
-                            spread = spread.cdr();
-                        }
-                        return funcall(fun, funArgs, thread);
+            final int length = args.length();
+            final LispThread thread = LispThread.currentThread();
+            switch (length) {
+                case 1:
+                    return funcall1(fun, args.car(), thread);
+                case 2:
+                    return funcall2(fun, args.car(), args.cadr(), thread);
+                case 3:
+                    return funcall3(fun, args.car(), args.cadr(),
+                                    args.cdr().cdr().car(), thread);
+                default: {
+                    final LispObject[] funArgs = new LispObject[length];
+                    int j = 0;
+                    while (args != NIL) {
+                        funArgs[j++] = args.car();
+                        args = args.cdr();
                     }
+                    return funcall(fun, funArgs, thread);
                 }
             }
-            signal(new TypeError(fun, "function"));
-            return NIL;
         }
         public LispObject execute(final LispObject[] args) throws ConditionThrowable
         {
@@ -2169,23 +2161,16 @@ public final class Primitives extends Lisp
             if (numArgs < 2)
                 signal(new WrongNumberOfArgumentsException(this));
             LispObject spread = checkList(args[numArgs - 1]);
-            LispObject fun = args[0];
-            if (fun instanceof Symbol)
-                fun = fun.getSymbolFunction();
-            if (fun instanceof Function || fun instanceof GenericFunction) {
-                final int numFunArgs = numArgs - 2 + spread.length();
-                final LispObject[] funArgs = new LispObject[numFunArgs];
-                int j = 0;
-                for (int i = 1; i < numArgs - 1; i++)
-                    funArgs[j++] = args[i];
-                while (spread != NIL) {
-                    funArgs[j++] = spread.car();
-                    spread = spread.cdr();
-                }
-                return funcall(fun, funArgs, LispThread.currentThread());
+            final int numFunArgs = numArgs - 2 + spread.length();
+            final LispObject[] funArgs = new LispObject[numFunArgs];
+            int j = 0;
+            for (int i = 1; i < numArgs - 1; i++)
+                funArgs[j++] = args[i];
+            while (spread != NIL) {
+                funArgs[j++] = spread.car();
+                spread = spread.cdr();
             }
-            signal(new TypeError(fun, "function"));
-            return NIL;
+            return funcall(args[0], funArgs, LispThread.currentThread());
         }
     };
 
