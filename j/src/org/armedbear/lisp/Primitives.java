@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.345 2003-08-24 18:27:01 piso Exp $
+ * $Id: Primitives.java,v 1.346 2003-08-24 18:27:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1463,10 +1463,9 @@ public final class Primitives extends Module
             throws LispError
         {
             Symbol symbol = checkSymbol(first);
-            if (third instanceof LispString) {
-                // Documentation.
+            if (third instanceof LispString)
                 symbol.setVariableDocumentation(third);
-            } else if (third != NIL)
+            else if (third != NIL)
                 throw new TypeError(third, "string");
             symbol.setSymbolValue(second);
             symbol.setConstant(true);
