@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.164 2003-04-09 16:43:51 piso Exp $
+ * $Id: Primitives.java,v 1.165 2003-04-09 18:09:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3691,13 +3691,26 @@ public final class Primitives extends Module
     };
 
     // ### %open-input-file
-    private static final Primitive1 _OPEN_INPUT_FILE =
-        new Primitive1("%open-input-file") {
-        public LispObject execute (LispObject arg) throws LispError
+    private static final Primitive2 _OPEN_INPUT_FILE =
+        new Primitive2("%open-input-file") {
+        public LispObject execute (LispObject first, LispObject second)
+            throws LispError
         {
-            String pathname = LispString.getValue(arg);
+            String pathname = LispString.getValue(first);
+            boolean binary;
+            LispObject elementType = second;
+            if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER)
+                binary = false;
+            else if (elementType == Symbol.UNSIGNED_BYTE)
+                binary = true;
+            else
+                throw new LispError(String.valueOf(elementType).concat(
+                    " is not a valid stream element type"));
             try {
-                return new CharacterInputStream(new FileInputStream(pathname));
+                if (binary)
+                    return new BinaryInputStream(new FileInputStream(pathname));
+                else
+                    return new CharacterInputStream(new FileInputStream(pathname));
             }
             catch (FileNotFoundException e) {
                 throw new LispError(" file not found: " + pathname);
@@ -3719,6 +3732,25 @@ public final class Primitives extends Module
                 return first;
             }
             throw new TypeError(first, "binary output stream");
+        }
+    };
+
+    // read-byte stream &optional eof-error-p eof-value => byte
+    private static final Primitive READ_BYTE =
+        new Primitive("read-byte") {
+        public LispObject execute (LispObject[] args) throws LispError
+        {
+            int length = args.length;
+            if (length < 1 || length > 3)
+                throw new WrongNumberOfArgumentsException(this);
+            BinaryInputStream stream;
+            if (args[0] instanceof BinaryInputStream)
+                stream = (BinaryInputStream) args[0];
+            else
+                throw new TypeError(args[0], "binary input stream");
+            boolean eofError = length > 1 ? (args[1] != NIL) : true;
+            LispObject eofValue = length > 2 ? args[2] : NIL;
+            return stream.readByte(eofError, eofValue);
         }
     };
 
