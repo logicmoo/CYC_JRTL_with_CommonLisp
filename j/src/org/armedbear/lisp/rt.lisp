@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.98 2003-08-07 16:31:13 piso Exp $
+;;; $Id: rt.lisp,v 1.99 2003-08-12 13:01:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -378,7 +378,8 @@
                               "vector-push"
                               "vector-push-extend"
                               "vectorp"
-                              "when"))))
+                              "when"
+                              "zerop"))))
     (dolist (test tests)
              (load (concatenate 'string rt::*prefix* test suffix)))
     (format t "~A tests: ~A passed, ~A failed~%"
