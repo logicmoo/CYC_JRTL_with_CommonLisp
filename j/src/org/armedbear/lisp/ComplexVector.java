@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.10 2004-02-25 17:29:17 piso Exp $
+ * $Id: ComplexVector.java,v 1.11 2004-02-27 14:32:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,28 +250,6 @@ public final class ComplexVector extends AbstractVector
             --j;
         }
         return this;
-    }
-
-    public String toString()
-    {
-        StringBuffer sb = new StringBuffer("#(");
-        try {
-            // FIXME The limit should be based on the value of *PRINT-LENGTH*.
-            final int limit = Math.min(length(), 10);
-            for (int i = 0; i < limit; i++) {
-                if (i > 0)
-                    sb.append(' ');
-                sb.append(get(i));
-            }
-            if (limit < length())
-                sb.append(" ...");
-            sb.append(')');
-        }
-        catch (ConditionThrowable t) {
-            // Shouldn't happen.
-            Debug.trace(t);
-        }
-        return sb.toString();
     }
 
     public LispObject vectorPushExtend(LispObject element)

@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.9 2004-02-26 02:17:08 piso Exp $
+ * $Id: SimpleVector.java,v 1.10 2004-02-27 14:31:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -223,22 +223,6 @@ public final class SimpleVector extends AbstractVector
             --j;
         }
         return this;
-    }
-
-    public String toString()
-    {
-        StringBuffer sb = new StringBuffer("#(");
-        // FIXME The limit should be based on the value of *PRINT-LENGTH*.
-        final int limit = Math.min(capacity, 10);
-        for (int i = 0; i < limit; i++) {
-            if (i > 0)
-                sb.append(' ');
-            sb.append(elements[i]);
-        }
-        if (limit < length())
-            sb.append(" ...");
-        sb.append(')');
-        return sb.toString();
     }
 
     public AbstractVector adjustVector(int newCapacity,
