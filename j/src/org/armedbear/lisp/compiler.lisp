@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.43 2003-10-12 18:24:27 piso Exp $
+;;; $Id: compiler.lisp,v 1.44 2003-10-15 17:20:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -259,9 +259,9 @@
        (if (special-operator-p ',name)
          (sys::%put ',name
                     'sys::macroexpand-macro
-                    (sys::make-macro (c::%compile nil ,expander)))
+                    (sys::make-macro (or (c::%compile nil ,expander) ,expander)))
          (sys::fset ',name
-                    (sys::make-macro (c::%compile nil ,expander))))
+                    (sys::make-macro (or (c::%compile nil ,expander) ,expander))))
        ',name)))
 
 ;; Make an exception just this one time...
