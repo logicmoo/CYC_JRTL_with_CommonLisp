@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.79 2003-07-29 23:31:12 piso Exp $
+;;; $Id: boot.lisp,v 1.80 2003-07-31 18:53:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -213,6 +213,25 @@
                        ,@(or (cdar typeclauselistr) '(NIL)))
                      condclauselist))))
     `(LET ((,tempvar ,keyform)) (COND ,@(nreverse condclauselist)))))
+
+
+(defmacro cond (&rest clauses)
+  (if (endp clauses)
+      nil
+      (let ((clause (first clauses)))
+	(when (atom clause)
+	  (error "COND clause is not a list: ~S" clause))
+	(let ((test (first clause))
+	      (forms (rest clause)))
+	  (if (endp forms)
+	      (let ((n-result (gensym)))
+		`(let ((,n-result ,test))
+		   (if ,n-result
+		       ,n-result
+		       (cond ,@(rest clauses)))))
+	      `(if ,test
+		   (progn ,@forms)
+		   (cond ,@(rest clauses))))))))
 
 
 ;;; PROG, PROG* (from GCL)
