@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.46 2003-07-05 17:43:38 piso Exp $
+ * $Id: Buffer.java,v 1.47 2003-07-05 18:02:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1317,8 +1317,18 @@ public class Buffer extends SystemBuffer
         }
         if (backedUp)
             return true; // We only want to do the backup once!
+        File file = getFile();
+        if (file == null) {
+            Debug.bug();
+            return false;
+        }
+        String name = file.getName();
+        if (compression != null && compression.getType() == COMPRESSION_GZIP) {
+            if (name.endsWith(".gz"))
+                name = name.substring(0, name.length() - 3);
+        }
         return backedUp =
-            Utilities.makeBackup(cache, getFile().getName(), false);
+            Utilities.makeBackup(cache, name, false);
     }
 
     public boolean save()
@@ -1343,7 +1353,7 @@ public class Buffer extends SystemBuffer
     {
         Debug.assertTrue(file.isLocal());
 
-        if (compression != null)
+        if (compression != null && compression.getType() == COMPRESSION_GZIP)
             return saveLocalCompressed(file);
 
         try {
