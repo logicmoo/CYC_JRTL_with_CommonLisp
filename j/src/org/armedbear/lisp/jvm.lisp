@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.69 2004-02-17 01:40:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.70 2004-02-17 15:24:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -608,6 +608,7 @@
         83 ; AASTORE
         87 ; POP
         89 ; DUP
+        91 ; DUP_X2
         95 ; SWAP
         153 ; IFEQ
         154 ; IFNE
@@ -767,6 +768,8 @@
      0)
     (89 ; DUP
      1)
+    (91
+     1) ; DUP_X2
     (95 ; SWAP
      0)
     (87 ; POP
@@ -2024,7 +2027,30 @@
              (emit 'astore (1+ index))))
       (return-from compile-setq))
     (when (memq sym *closure-vars*)
-      (error "Unable to compile function defined in non-null lexical environment."))
+      (let ((g (declare-object *env*)))
+        (emit 'getstatic
+              *this-class*
+              g
+              "Lorg/armedbear/lisp/LispObject;"))
+      ;; FIXME Move this to constructor!
+      ;; Cast it to an Environment object.
+      (emit 'checkcast +lisp-environment-class+)
+      (let ((g (declare-symbol sym)))
+        (emit 'getstatic
+              *this-class*
+              g
+              "Lorg/armedbear/lisp/Symbol;"))
+      (compile-form (cadr rest))
+      (unless (remove-store-value)
+        (emit-push-value))
+      ;; stack: env sym val
+      (emit 'dup_x2)
+      (emit-invokevirtual +lisp-environment-class+
+                          "rebind"
+                          "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                          -3)
+      (emit-store-value)
+      (return-from compile-setq))
     ;; still not found
     ;; must be a global variable
     (let ((g (declare-symbol sym)))
@@ -2258,6 +2284,7 @@
               *this-class*
               g
               "Lorg/armedbear/lisp/LispObject;"))
+      ;; FIXME Move this to constructor!
       ;; Cast it to an Environment object.
       (emit 'checkcast +lisp-environment-class+)
       (let ((g (declare-symbol var)))
