@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: CommandTable.java,v 1.56 2005-03-05 20:49:10 piso Exp $
+ * $Id: CommandTable.java,v 1.57 2005-03-06 04:45:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -235,6 +235,7 @@ public class CommandTable
             addCommand("cvsLog", "CVS", "log");
             addCommand("decodeRegion", "RegionCommands");
             addCommand("defaultKeyMaps", "KeyMap");
+            addCommand("describeBindings", "Help");
             addCommand("describeKey", "DescribeKeyDialog");
             addCommand("detabRegion", "RegionCommands");
             addCommand("diff", "DiffMode");
@@ -295,7 +296,6 @@ public class CommandTable
             addCommand("jumpToTagAndKillList", "ListTagsMode");
             addCommand("killCompilation", "CompilationBuffer");
             addCommand("lisp", "LispShell");
-            addCommand("listBindings", "Help");
             addCommand("listFiles", "FindInFiles");
             addCommand("lispFindMatchingChar", "LispMode");
             addCommand("lispSelectSyntax", "LispMode");
