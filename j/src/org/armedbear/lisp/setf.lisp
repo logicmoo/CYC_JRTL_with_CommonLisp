@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.34 2003-10-06 00:26:24 piso Exp $
+;;; $Id: setf.lisp,v 1.35 2003-10-17 19:10:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,17 +21,19 @@
 
 (defun get-setf-method-inverse (form inverse setf-function)
   (let ((new-var (gensym))
-	(vars nil)
-	(vals nil))
+        (vars nil)
+        (vals nil))
     (dolist (x (cdr form))
       (push (gensym) vars)
       (push x vals))
     (setq vals (nreverse vals))
     (values vars vals (list new-var)
-	    (if setf-function
-		`(,@inverse ,new-var ,@vars)
-		`(,@inverse ,@vars ,new-var))
-	    `(,(car form) ,@vars))))
+            (if setf-function
+                `(,@inverse ,new-var ,@vars)
+                (if (functionp (car inverse))
+                    `(funcall ,@inverse ,@vars ,new-var)
+                    `(,@inverse ,@vars ,new-var)))
+            `(,(car form) ,@vars))))
 
 ;;; If a macro, expand one level and try again.  If not, go for the
 ;;; SETF function.
@@ -40,9 +42,9 @@
     (expansion expanded)
     (macroexpand-1 form environment)
     (if expanded
-	(get-setf-expansion expansion environment)
-	(get-setf-method-inverse form `(funcall #'(setf ,(car form)))
-				 t))))
+        (get-setf-expansion expansion environment)
+        (get-setf-method-inverse form `(funcall #'(setf ,(car form)))
+                                 t))))
 
 (defun get-setf-expansion (form &optional environment)
   (let (temp)
@@ -50,12 +52,12 @@
            (let ((new-var (gensym)))
              (values nil nil (list new-var)
                      `(setq ,form ,new-var) form)))
-	  ((setq temp (get (car form) 'setf-inverse))
-	   (get-setf-method-inverse form `(,temp) nil))
+          ((setq temp (get (car form) 'setf-inverse))
+           (get-setf-method-inverse form `(,temp) nil))
           ((setq temp (get (car form) 'setf-expander))
            (funcall temp form environment))
-	  (t
-	   (expand-or-get-setf-inverse form environment)))))
+          (t
+           (expand-or-get-setf-inverse form environment)))))
 
 ;;; ROTATEF (from GCL)
 (defmacro rotatef (&rest rest)
@@ -69,8 +71,8 @@
        (setq store-forms (nreverse store-forms))
        (setq access-forms (nreverse access-forms))
        `(let* ,(nconc pairs
-		      (mapcar #'list stores (cdr access-forms))
-		      (list (list (car (last stores)) (car access-forms))))
+                      (mapcar #'list stores (cdr access-forms))
+                      (list (list (car (last stores)) (car access-forms))))
           ,@store-forms
           nil))
     (multiple-value-bind (vars vals stores1 store-form access-form)
@@ -96,15 +98,15 @@
                     (if (functionp inverse)
                         `(funcall ,inverse ,@(cdr place) ,value-form)
                         `(,inverse ,@(cdr place) ,value-form))
-		    `(let* (,@(mapcar #'list dummies vals))
-		       (multiple-value-bind ,newval ,value-form
-			 ,setter))))))))
+                    `(let* (,@(mapcar #'list dummies vals))
+                       (multiple-value-bind ,newval ,value-form
+                         ,setter))))))))
      ((oddp count)
       (error "odd number of args to SETF"))
      (t
       (do ((a args (cddr a)) (l nil))
           ((null a) `(progn ,@(nreverse l)))
-	(setq l (cons (list 'setf (car a) (cadr a)) l)))))))
+        (setq l (cons (list 'setf (car a) (cadr a)) l)))))))
 
 ;;; Redefined in define-modify-macro.lisp.
 (defmacro incf (place &optional (delta 1))
