@@ -2,7 +2,7 @@
  * SimpleBitVector.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SimpleBitVector.java,v 1.12 2005-02-13 04:02:22 piso Exp $
+ * $Id: SimpleBitVector.java,v 1.13 2005-02-13 04:12:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -450,6 +450,22 @@ public final class SimpleBitVector extends AbstractBitVector
         {
             return ((SimpleBitVector)first).orc2((SimpleBitVector)second,
                                                  (SimpleBitVector)third);
+        }
+    };
+
+    // ### %simple-bit-vector-bit-not
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_NOT =
+        new Primitive("%simple-bit-vector-bit-not", PACKAGE_SYS, false,
+                      "bit-vector result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            SimpleBitVector v = (SimpleBitVector) first;
+            SimpleBitVector result = (SimpleBitVector) second;
+            for (int i = v.bits.length; i-- > 0;)
+                result.bits[i] = ~v.bits[i];
+            return result;
         }
     };
 }

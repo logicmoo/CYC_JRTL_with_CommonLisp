@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.215 2005-02-13 04:04:17 piso Exp $
+ * $Id: Autoload.java,v 1.216 2005-02-13 04:12:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -468,6 +468,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-ior", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-nand", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-nor", "SimpleBitVector");
+        autoload(PACKAGE_SYS, "%simple-bit-vector-bit-not", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-orc1", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-orc2", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-xor", "SimpleBitVector");
