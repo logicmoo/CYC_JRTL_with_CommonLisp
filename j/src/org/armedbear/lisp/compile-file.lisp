@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.7 2004-04-17 03:49:51 piso Exp $
+;;; $Id: compile-file.lisp,v 1.8 2004-04-18 14:51:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -124,6 +124,9 @@
             (process-toplevel-progn (cdr form) stream compile-time-too)
             (return-from process-toplevel-form))
            (t
+            (when (macro-function (car form))
+              (process-toplevel-form (macroexpand-1 form) stream compile-time-too)
+              (return-from process-toplevel-form))
             (when compile-time-too
               (eval form))))))
   (let ((*print-level* nil)
