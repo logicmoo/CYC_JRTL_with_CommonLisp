@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.65 2003-03-02 22:33:07 piso Exp $
+ * $Id: Primitives.java,v 1.66 2003-03-03 01:53:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -988,6 +988,8 @@ public final class Primitives extends Module
             if (datum instanceof Symbol) {
                 if (datum == Symbol.TYPE_ERROR)
                     throw new TypeError();
+                if (datum == Symbol.PROGRAM_ERROR)
+                    throw new ProgramError();
                 // Default.
                 throw new LispError(((Symbol)datum).getName());
             }
