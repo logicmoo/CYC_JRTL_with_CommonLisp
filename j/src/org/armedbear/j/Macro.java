@@ -2,7 +2,7 @@
  * Macro.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Macro.java,v 1.2 2002-10-10 18:43:48 piso Exp $
+ * $Id: Macro.java,v 1.3 2002-10-12 00:26:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.j;
 import java.util.ArrayList;
 import javax.swing.undo.CompoundEdit;
 
-public final class Macro
+public final class Macro implements Constants
 {
     private ArrayList list = new ArrayList();
 
@@ -62,11 +62,13 @@ public final class Macro
             CompoundEdit compoundEdit = buffer.beginCompoundEdit();
             final int size = list.size();
             for (int i = 0; i < size; i++) {
+                editor.setCurrentCommand(COMMAND_NOTHING);
                 Object object = list.get(i);
                 if (object instanceof String)
                     editor.executeCommand((String)object);
                 else if (object instanceof Character)
-                    editor.insertNormalChar(((Character) object).charValue());
+                    editor.insertNormalChar(((Character)object).charValue());
+                editor.setLastCommand(editor.getCurrentCommand());
             }
             buffer.endCompoundEdit(compoundEdit);
         }
