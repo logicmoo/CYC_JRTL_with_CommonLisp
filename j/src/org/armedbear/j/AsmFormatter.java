@@ -2,7 +2,7 @@
  * AsmFormatter.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AsmFormatter.java,v 1.1 2003-12-29 19:23:42 piso Exp $
+ * $Id: AsmFormatter.java,v 1.2 2003-12-30 19:54:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,17 @@
 
 package org.armedbear.j;
 
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
+
 public final class AsmFormatter extends Formatter
 {
+    private static final UncheckedRE labelRE = new UncheckedRE("^[a-zA-z0-9_]+:");
+
     private static final int ASM_FORMAT_TEXT    = 0;
     private static final int ASM_FORMAT_COMMENT = 1;
+    private static final int ASM_FORMAT_LABEL   = 2;
 
     public AsmFormatter(Buffer buffer)
     {
@@ -36,12 +43,20 @@ public final class AsmFormatter extends Formatter
         clearSegmentList();
         final String text = getDetabbedText(line);
         if (text.length() > 0) {
-            int index = text.indexOf(';');
+            int start = 0;
+            int index = 0;
+            REMatch match = labelRE.getMatch(text);
+            if (match != null) {
+                index = match.getEndIndex();
+                addSegment(text, 0, index, ASM_FORMAT_LABEL);
+                start = index;
+            }
+            index = text.indexOf(';', start);
             if (index >= 0) {
-                addSegment(text, 0, index, ASM_FORMAT_TEXT);
+                addSegment(text, start, index, ASM_FORMAT_TEXT);
                 addSegment(text, index, ASM_FORMAT_COMMENT);
             } else
-                addSegment(text, ASM_FORMAT_TEXT);
+                addSegment(text, start, ASM_FORMAT_TEXT);
         } else
             addSegment(text, ASM_FORMAT_TEXT);
         return segmentList;
@@ -53,6 +68,7 @@ public final class AsmFormatter extends Formatter
             formatTable = new FormatTable(null);
             formatTable.addEntryFromPrefs(ASM_FORMAT_TEXT, "text");
             formatTable.addEntryFromPrefs(ASM_FORMAT_COMMENT, "comment");
+            formatTable.addEntryFromPrefs(ASM_FORMAT_LABEL, "function");
         }
         return formatTable;
     }
