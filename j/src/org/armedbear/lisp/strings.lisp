@@ -1,7 +1,7 @@
 ;;; strings.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: strings.lisp,v 1.4 2003-04-25 03:26:58 piso Exp $
+;;; $Id: strings.lisp,v 1.5 2003-07-02 15:27:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,15 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
-
-(export '(string-upcase string-downcase string-capitalize
-          nstring-upcase nstring-downcase nstring-capitalize
-          string= string/= string-equal string-not-equal
-          string< string>
-          string<= string>=
-          string-lessp string-greaterp
-          string-not-lessp string-not-greaterp))
+(in-package "SYSTEM")
 
 (defun string-upcase (string &key (start 0) end)
   (%string-upcase string start end))

@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringFunctions.java,v 1.1 2003-06-20 18:54:38 piso Exp $
+ * $Id: StringFunctions.java,v 1.2 2003-07-02 15:27:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ public final class StringFunctions extends Lisp
     // ### %string=
     // Case sensitive.
     private static final Primitive _STRING_EQUAL =
-        new Primitive("%string=") {
+        new Primitive("%string=", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -51,7 +51,7 @@ public final class StringFunctions extends Lisp
     // ### %string/=
     // Case sensitive.
     private static final Primitive _STRING_NOT_EQUAL =
-        new Primitive("%string/=") {
+        new Primitive("%string/=", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -74,7 +74,7 @@ public final class StringFunctions extends Lisp
     // ### %string-equal
     // Case insensitive.
     private static final Primitive _STRING_EQUAL_IGNORE_CASE =
-        new Primitive("%string-equal") {
+        new Primitive("%string-equal", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -106,7 +106,7 @@ public final class StringFunctions extends Lisp
     // ### %string-not-equal
     // Case sensitive.
     private static final Primitive _STRING_NOT_EQUAL_IGNORE_CASE =
-        new Primitive("%string-not-equal") {
+        new Primitive("%string-not-equal", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -136,7 +136,7 @@ public final class StringFunctions extends Lisp
     // ### %string<
     // Case sensitive.
     private static final Primitive _STRING_LESS_THAN =
-        new Primitive("%string<") {
+        new Primitive("%string<", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -166,7 +166,7 @@ public final class StringFunctions extends Lisp
     // ### %string<=
     // Case sensitive.
     private static final Primitive _STRING_GREATER_THAN =
-        new Primitive("%string>") {
+        new Primitive("%string>", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -196,7 +196,7 @@ public final class StringFunctions extends Lisp
     // ### %string<=
     // Case sensitive.
     private static final Primitive _STRING_LE =
-        new Primitive("%string<=") {
+        new Primitive("%string<=", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -225,7 +225,7 @@ public final class StringFunctions extends Lisp
     // ### %string<=
     // Case sensitive.
     private static final Primitive _STRING_GE =
-        new Primitive("%string>=") {
+        new Primitive("%string>=", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -256,7 +256,7 @@ public final class StringFunctions extends Lisp
     // ### %string-lessp
     // Case insensitive.
     private static final Primitive _STRING_LESSP =
-        new Primitive("%string-lessp") {
+        new Primitive("%string-lessp", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -286,7 +286,7 @@ public final class StringFunctions extends Lisp
     // ### %string-greaterp
     // Case insensitive.
     private static final Primitive _STRING_GREATERP =
-        new Primitive("%string-greaterp") {
+        new Primitive("%string-greaterp", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -316,7 +316,7 @@ public final class StringFunctions extends Lisp
     // ### %string-not-lessp
     // Case insensitive.
     private static final Primitive _STRING_NOT_LESSP =
-        new Primitive("%string-not-lessp") {
+        new Primitive("%string-not-lessp", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -346,7 +346,7 @@ public final class StringFunctions extends Lisp
     // ### %string-not-greaterp
     // Case insensitive.
     private static final Primitive _STRING_NOT_GREATERP =
-        new Primitive("%string-not-greaterp") {
+        new Primitive("%string-not-greaterp", PACKAGE_SYS, true) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 6)
@@ -375,7 +375,7 @@ public final class StringFunctions extends Lisp
 
     // ### %string-upcase
     private static final Primitive3 _STRING_UPCASE =
-        new Primitive3("%string-upcase") {
+        new Primitive3("%string-upcase", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -408,7 +408,7 @@ public final class StringFunctions extends Lisp
 
     // ### %string-downcase
     private static final Primitive3 _STRING_DOWNCASE =
-        new Primitive3("%string-downcase") {
+        new Primitive3("%string-downcase", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -441,7 +441,7 @@ public final class StringFunctions extends Lisp
 
     // ### %string-capitalize
     private static final Primitive3 _STRING_CAPITALIZE=
-        new Primitive3("%string-capitalize") {
+        new Primitive3("%string-capitalize", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -486,7 +486,7 @@ public final class StringFunctions extends Lisp
 
     // ### %nstring-upcase
     private static final Primitive3 _NSTRING_UPCASE =
-        new Primitive3("%nstring-upcase") {
+        new Primitive3("%nstring-upcase", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -513,7 +513,7 @@ public final class StringFunctions extends Lisp
 
     // ### %nstring-downcase
     private static final Primitive3 _NSTRING_DOWNCASE =
-        new Primitive3("%nstring-downcase") {
+        new Primitive3("%nstring-downcase", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -540,7 +540,7 @@ public final class StringFunctions extends Lisp
 
     // ### %nstring-capitalize
     private static final Primitive3 _NSTRING_CAPITALIZE =
-        new Primitive3("%nstring-capitalize") {
+        new Primitive3("%nstring-capitalize", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {

@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.21 2003-06-26 02:38:33 piso Exp $
+ * $Id: Autoload.java,v 1.22 2003-07-02 15:28:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,12 @@ public final class Autoload extends Function
 
     public static void autoload(String symbolName, String className)
     {
-        Symbol symbol = intern(symbolName.toUpperCase(), PACKAGE_CL);
+        autoload(PACKAGE_CL, symbolName, className);
+    }
+
+    public static void autoload(Package pkg, String symbolName, String className)
+    {
+        Symbol symbol = intern(symbolName.toUpperCase(), pkg);
         symbol.setSymbolFunction(new Autoload(symbol, null,
             "org.armedbear.lisp.".concat(className)));
     }
@@ -140,24 +145,24 @@ public final class Autoload extends Function
 
     static {
         autoload("%make-hash-table", "HashTable");
-        autoload("%nstring-capitalize", "StringFunctions");
-        autoload("%nstring-downcase", "StringFunctions");
-        autoload("%nstring-upcase", "StringFunctions");
-        autoload("%string-capitalize", "StringFunctions");
-        autoload("%string-downcase", "StringFunctions");
-        autoload("%string-equal", "StringFunctions");
-        autoload("%string-greaterp", "StringFunctions");
-        autoload("%string-lessp", "StringFunctions");
-        autoload("%string-not-equal", "StringFunctions");
-        autoload("%string-not-greaterp", "StringFunctions");
-        autoload("%string-not-lessp", "StringFunctions");
-        autoload("%string-upcase", "StringFunctions");
-        autoload("%string/=", "StringFunctions");
-        autoload("%string<", "StringFunctions");
-        autoload("%string<=", "StringFunctions");
-        autoload("%string=", "StringFunctions");
-        autoload("%string>", "StringFunctions");
-        autoload("%string>=", "StringFunctions");
+        autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
+        autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
+        autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-equal", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-greaterp", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-lessp", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-not-equal", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-not-greaterp", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-not-lessp", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string-upcase", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string/=", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string<", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string<=", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string=", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string>", "StringFunctions");
+        autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
         autoload("%time", "Time");
         autoload("char-equal", "CharacterFunctions");
         autoload("char-greaterp", "CharacterFunctions");
