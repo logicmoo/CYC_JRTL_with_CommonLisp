@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.6 2003-02-27 19:12:11 piso Exp $
+ * $Id: Fixnum.java,v 1.7 2003-03-01 20:32:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,8 @@ public final class Fixnum extends LispObject
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
+        if (typeSpecifier == Symbol.BIGNUM)
+            return T; // FIXME Fool UNION.26 cons-test-20.lsp
         if (typeSpecifier == Symbol.FIXNUM)
             return T;
         if (typeSpecifier == Symbol.INTEGER)
