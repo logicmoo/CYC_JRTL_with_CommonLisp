@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.178 2004-06-01 16:42:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.179 2004-06-03 21:40:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,6 +44,10 @@
 (defvar *blocks* ())
 (defvar *locals* ())
 (defvar *max-locals* 0)
+
+(defvar *handlers* ())
+
+(defstruct handler from to code catch-type)
 
 ;; Returns index of allocated slot.
 (defun allocate-local (symbol)
@@ -209,6 +213,7 @@
 (defconstant +lisp-simple-string+ "Lorg/armedbear/lisp/SimpleString;")
 (defconstant +lisp-environment-class+ "org/armedbear/lisp/Environment")
 (defconstant +lisp-environment+ "Lorg/armedbear/lisp/Environment;")
+(defconstant +lisp-throw-class+ "org/armedbear/lisp/Throw")
 
 (defun emit-push-nil ()
   (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
@@ -438,6 +443,7 @@
              83 ; AASTORE
              87 ; POP
              89 ; DUP
+             90 ; DUP_X1
              91 ; DUP_X2
              95 ; SWAP
              153 ; IFEQ
@@ -447,6 +453,7 @@
              167 ; GOTO
              176 ; ARETURN
              177 ; RETURN
+             191 ; ATHROW
              202 ; LABEL
              ))
   (setf (gethash n *resolvers*) nil))
@@ -596,7 +603,7 @@
   (dotimes (i (length *code*))
     (let* ((instruction (aref *code* i))
            (opcode (instruction-opcode instruction)))
-      (when (eql opcode 202)
+      (when (eql opcode 202) ; LABEL
         (let ((label (car (instruction-args instruction))))
           (set label i)))
       (unless (instruction-stack instruction)
@@ -639,6 +646,11 @@
           (let ((instruction (svref *code* i)))
             (when (branch-opcode-p (instruction-opcode instruction))
               (push (car (instruction-args instruction)) branch-targets))))
+        ;; Add labels used for exception handlers.
+        (dolist (handler *handlers*)
+          (push (handler-from handler) branch-targets)
+          (push (handler-to handler) branch-targets)
+          (push (handler-code handler) branch-targets))
         ;; Remove labels that are not used as branch targets.
         (dotimes (i (length *code*))
           (let ((instruction (svref *code* i)))
@@ -833,12 +845,14 @@
   descriptor-index
   max-stack
   max-locals
-  code)
+  code
+  handlers)
 
 (defun make-constructor (super name args body)
   (let* ((constructor (make-method :name "<init>"
                                    :descriptor "()V"))
-         (*code* ()))
+         (*code* ())
+         (*handlers* nil))
     (setf (method-name-index constructor) (pool-name (method-name constructor)))
     (setf (method-descriptor-index constructor) (pool-name (method-descriptor constructor)))
     (setf (method-max-locals constructor) 1)
@@ -876,13 +890,24 @@
     (setf *code* (resolve-opcodes *code*))
     (setf (method-max-stack constructor) (analyze-stack))
     (setf (method-code constructor) (code-bytes *code*))
+    (setf (method-handlers constructor) (nreverse *handlers*))
     constructor))
+
+(defun write-exception-table (method)
+  (let ((handlers (method-handlers method)))
+    (write-u2 (length handlers)) ; number of entries
+    (dolist (handler handlers)
+      (write-u2 (symbol-value (handler-from handler)))
+      (write-u2 (symbol-value (handler-to handler)))
+      (write-u2 (symbol-value (handler-code handler)))
+      (write-u2 (handler-catch-type handler)))))
 
 (defun write-code-attr (method)
   (let* ((name-index (pool-name "Code"))
          (code (method-code method))
          (code-length (length code))
-         (length (+ code-length 12))
+         (length (+ code-length 12
+                    (* (length (method-handlers method)) 8)))
          (max-stack (or (method-max-stack method) 20))
          (max-locals (or (method-max-locals method) 1)))
     (write-u2 name-index)
@@ -892,7 +917,7 @@
     (write-u4 code-length)
     (dotimes (i code-length)
       (write-u1 (svref code i)))
-    (write-u2 0) ; handler table length
+    (write-exception-table method)
     (write-u2 0) ; attributes count
     ))
 
@@ -1437,7 +1462,7 @@
       (case (car args)
         (QUOTE
          nil)
-        ((RETURN-FROM GO)
+        ((RETURN-FROM GO CATCH THROW)
          t)
         (t
          (dolist (arg args)
@@ -2558,6 +2583,114 @@
     (emit-store-value)
     (return-from compile-variable-ref)))
 
+(defun compile-catch (form &optional for-effect)
+  (let* ((*locals* *locals*)
+         (tag-var (allocate-local nil))
+         (label1 (gensym))
+         (label2 (gensym))
+         (label3 (gensym))
+         (label4 (gensym))
+         (label5 (gensym)))
+    (compile-form (second form)) ; Tag.
+    (unless (remove-store-value)
+      (emit-push-value))
+    (emit 'astore tag-var)
+    (ensure-thread-var-initialized)
+    (emit 'aload *thread*)
+    (emit 'aload tag-var)
+    (emit-invokevirtual +lisp-thread-class+
+                        "pushCatchTag"
+                        "(Lorg/armedbear/lisp/LispObject;)V"
+                        -2)
+    (emit 'label `,label1) ; Start of protected range.
+    ;; Implicit PROGN.
+    (do ((forms (cddr form) (cdr forms)))
+        ((null forms))
+      (compile-form (car forms) (cdr forms))
+      (when (cdr forms)
+        (maybe-emit-clear-values (car forms))))
+    (emit 'label `,label2) ; End of protected range.
+    (emit 'goto `,label5) ; Jump over handlers.
+    (emit 'label `,label3) ; Start of handler for THROW.
+    ;; The Throw object is on the runtime stack. Stack depth is 1.
+    (emit 'dup) ; Stack depth is 2.
+    (emit-invokevirtual +lisp-throw-class+
+                        "getTag"
+                        "()Lorg/armedbear/lisp/LispObject;"
+                        0) ; Still 2.
+    (emit 'aload tag-var) ; Stack depth is 3.
+    (emit 'if_acmpne `,label4) ; Stack depth is 1.
+    (emit-invokevirtual +lisp-throw-class+
+                        "getResult"
+                        "()Lorg/armedbear/lisp/LispObject;"
+                        0)
+    (emit-store-value)
+    (emit 'goto `,label5)
+    (emit 'label `,label4) ; Start of handler for all other Throwables.
+    ;; A Throwable object is on the runtime stack here. Stack depth is 1.
+    (emit 'aload *thread*)
+    (emit-invokevirtual +lisp-thread-class+
+                        "popCatchTag"
+                        "()V"
+                        -1)
+    (emit 'athrow) ; And gone.
+    (emit 'label `,label5)
+    ;; Finally...
+    (emit 'aload *thread*)
+    (emit-invokevirtual +lisp-thread-class+
+                        "popCatchTag"
+                        "()V"
+                        -1)
+    (let ((handler1 (make-handler :from `,label1
+                                  :to `,label2
+                                  :code `,label3
+                                  :catch-type (pool-class +lisp-throw-class+)))
+          (handler2 (make-handler :from `,label1
+                                  :to `,label2
+                                  :code `,label4
+                                  :catch-type 0))
+          )
+      (push handler1 *handlers*)
+      (push handler2 *handlers*))))
+
+(defun compile-throw (form &optional for-effect)
+  (let ((tag-var (allocate-local nil))
+        (label1 (gensym))
+        (label2 (gensym)))
+    (ensure-thread-var-initialized)
+    (emit 'new +lisp-throw-class+)
+    (emit 'dup)
+    (compile-form (second form)) ; Tag.
+    (unless (remove-store-value)
+      (emit-push-value))
+    (emit 'dup)
+    (emit 'astore tag-var)
+    (compile-form (third form)) ; Result.
+    (unless (remove-store-value)
+      (emit-push-value))
+    (emit-invokespecial +lisp-throw-class+
+                        "<init>"
+                        "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
+                        -2)
+    ;; The newly-created Throw object is on the runtime stack at this point.
+    (emit 'aload *thread*)
+    (emit 'aload tag-var)
+    (emit-invokevirtual +lisp-thread-class+
+                        "isValidCatchTag"
+                        "(Lorg/armedbear/lisp/LispObject;)Z"
+                        -1)
+    (emit 'ifeq `,label1)
+    (emit 'athrow)
+    (emit 'label `,label1)
+    ;; Invalid tag.
+    (emit 'pop) ; Drop Throw object.
+    (emit 'aload tag-var)
+    (emit-invokestatic +lisp-throw-class+
+                       "signalInvalidTag"
+                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                       -1)
+    (emit 'areturn)))
+
 (defun compile-form (form &optional for-effect)
   (cond ((consp form)
          (let ((op (car form))
@@ -2649,6 +2782,7 @@
          (*args* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
          (*locals* ())
          (*max-locals* 0)
+         (*handlers* ())
          (*env* environment)
          (*closure-vars* (if environment (sys::environment-vars environment) nil))
          (*variables* ())
@@ -2695,9 +2829,13 @@
     (finalize-code)
     (optimize-code)
     (setf *code* (resolve-opcodes *code*))
-    (setf (method-max-stack execute-method) (analyze-stack))
+    (setf (method-max-stack execute-method)
+          (if *handlers*
+              (max (analyze-stack) 3)
+              (analyze-stack)))
     (setf (method-code execute-method) (code-bytes *code*))
     (setf (method-max-locals execute-method) *max-locals*)
+    (setf (method-handlers execute-method) (nreverse *handlers*))
 
     (let* ((super
             (if *hairy-arglist-p*
@@ -2842,6 +2980,7 @@
 
 (mapc #'install-handler '(atom
                           block
+                          catch
                           cons
                           declare
                           flet
@@ -2858,6 +2997,7 @@
                           rplacd
                           setq
                           tagbody
+                          throw
                           values))
 
 (install-handler 'let  'compile-let/let*)
