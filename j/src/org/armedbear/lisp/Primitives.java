@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.661 2004-06-15 12:03:48 piso Exp $
+ * $Id: Primitives.java,v 1.662 2004-06-15 19:03:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -767,8 +767,8 @@ public final class Primitives extends Lisp
             if (arg instanceof Symbol)
                 return arg.getSymbolFunction() != null ? T : NIL;
             if (arg instanceof Cons && arg.car() == Symbol.SETF) {
-                LispObject f = get(checkSymbol(arg.cadr()),
-                                   PACKAGE_SYS.intern("SETF-FUNCTION"));
+                LispObject f =
+                    get(checkSymbol(arg.cadr()), Symbol._SETF_FUNCTION);
                 return f != null ? T : NIL;
             }
             signal(new TypeError(arg, "valid function name"));
@@ -784,8 +784,7 @@ public final class Primitives extends Lisp
             if (arg instanceof Symbol) {
                 ((Symbol)arg).setSymbolFunction(null);
             } else if (arg instanceof Cons && arg.car() == Symbol.SETF) {
-                remprop(checkSymbol(arg.cadr()),
-                        PACKAGE_SYS.intern("SETF-FUNCTION"));
+                remprop(checkSymbol(arg.cadr()), Symbol._SETF_FUNCTION);
             } else
                 signal(new TypeError(arg, "valid function name"));
             return arg;
@@ -1344,7 +1343,7 @@ public final class Primitives extends Lisp
                 symbol.setSymbolFunction(closure);
             else
                 // SETF function
-                put(symbol, PACKAGE_SYS.intern("SETF-FUNCTION"), closure);
+                put(symbol, Symbol._SETF_FUNCTION, closure);
             return first;
         }
     };
@@ -2727,14 +2726,14 @@ public final class Primitives extends Lisp
                 LispObject source = Load._FASL_SOURCE_.symbolValue();
                 if (source != NIL) {
                     if (args.length == 3 && args[2] != NIL)
-                        put(symbol, Symbol.SOURCE, new Cons(source, args[2]));
+                        put(symbol, Symbol._SOURCE, new Cons(source, args[2]));
                     else
-                        put(symbol, Symbol.SOURCE, source);
+                        put(symbol, Symbol._SOURCE, source);
                 }
             } else if (first instanceof Cons && first.car() == Symbol.SETF) {
                 // SETF function
                 Symbol symbol = checkSymbol(first.cadr());
-                put(symbol, Symbol.SETF_FUNCTION, second);
+                put(symbol, Symbol._SETF_FUNCTION, second);
             } else
                 return signal(new TypeError(first, "valid function name"));
             if (second instanceof Functional)
