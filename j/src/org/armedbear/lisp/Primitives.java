@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.38 2003-02-19 17:41:20 piso Exp $
+ * $Id: Primitives.java,v 1.39 2003-02-19 17:50:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2645,6 +2645,49 @@ public final class Primitives extends Module
             result = progn(args.cdr(), env);
         return result;
     }
+
+    // ### tagbody
+    private static final SpecialOperator TAGBODY =
+        new SpecialOperator("tagbody") {
+        public LispObject execute(LispObject args, Environment env)
+            throws LispError
+        {
+            Tagbody tagbody = new Tagbody(args);
+            final int depth = stack.size();
+            LispObject remaining = args;
+            while (remaining != NIL) {
+                LispObject current = remaining.car();
+                if (current instanceof Cons) {
+                    try {
+                        eval(current, env);
+                    }
+                    catch (Go go) {
+                        LispObject code = tagbody.getCode(go.getTag());
+                        if (code != null) {
+                            remaining = code;
+                            stack.setSize(depth);
+                            continue;
+                        }
+                        throw (go);
+                    }
+                }
+                remaining = remaining.cdr();
+            }
+            setValues(null);
+            return NIL;
+        }
+    };
+
+    // ### go
+    private static final SpecialOperator GO = new SpecialOperator("go") {
+        public LispObject execute(LispObject args, Environment env)
+            throws LispError
+        {
+            if (args.length() != 1)
+                throw new WrongNumberOfArgumentsException(this);
+            throw new Go(args.car());
+        }
+    };
 
     // ### block
     private static final SpecialOperator BLOCK = new SpecialOperator("block") {
