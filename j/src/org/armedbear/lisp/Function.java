@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.8 2003-03-12 18:37:22 piso Exp $
+ * $Id: Function.java,v 1.9 2003-03-12 20:03:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,15 +21,13 @@
 
 package org.armedbear.lisp;
 
-public abstract class Function extends LispObject
+public abstract class Function extends Functional
 {
     private final Module module;
     private final String name;
     protected final int index;
 
     private long callCount;
-
-    private LispObject lambdaName;
 
     protected Function()
     {
@@ -44,7 +42,7 @@ public abstract class Function extends LispObject
         this.name = name != null ? name.toUpperCase() : null;
         index = 0;
         if (name != null)
-            lambdaName = Symbol.addFunction(this.name, this);
+            setLambdaName(Symbol.addFunction(this.name, this));
     }
 
     public Function(String name, Package pkg)
@@ -55,7 +53,7 @@ public abstract class Function extends LispObject
         if (name != null) {
             Symbol symbol = pkg.intern(this.name);
             symbol.setSymbolFunction(this);
-            lambdaName = symbol;
+            setLambdaName(symbol);
         }
     }
 
@@ -64,7 +62,7 @@ public abstract class Function extends LispObject
         this.module = module;
         this.name = name.toUpperCase();
         this.index = index;
-        lambdaName = Symbol.addFunction(this.name, this);
+        setLambdaName(Symbol.addFunction(this.name, this));
     }
 
     public LispObject typeOf()
@@ -84,16 +82,6 @@ public abstract class Function extends LispObject
     public final String getName()
     {
         return name;
-    }
-
-    public final LispObject getLambdaName()
-    {
-        return lambdaName;
-    }
-
-    public final void setLambdaName(LispObject obj)
-    {
-        lambdaName = obj;
     }
 
     // Primitive
