@@ -2,7 +2,7 @@
  * StatusBar.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: StatusBar.java,v 1.1.1.1 2002-09-24 16:07:57 piso Exp $
+ * $Id: StatusBar.java,v 1.2 2003-07-23 00:27:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 
 public final class StatusBar extends JComponent implements PreferencesChangeListener
 {
@@ -114,6 +114,7 @@ public final class StatusBar extends JComponent implements PreferencesChangeList
         g.fillRect(insets.left, insets.top, textAreaWidth, textAreaHeight);
         g.setColor(UIManager.getColor("controlText"));
         g.setFont(font);
+        Display.setRenderingHints(g);
         int x1 = insets.left + LEFT_MARGIN;
         int y = insets.top + charAscent;
         if (messageText == null && displayContext > 0) {
