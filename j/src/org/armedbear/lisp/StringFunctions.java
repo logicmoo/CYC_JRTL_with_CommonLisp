@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.15 2004-02-14 18:13:45 piso Exp $
+ * $Id: StringFunctions.java,v 1.16 2004-02-14 18:58:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -508,7 +508,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispObject s = first.stringp() ? first : string(first);
+            LispObject s = string(first);
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
@@ -542,7 +542,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispObject s = first.stringp() ? first : string(first);
+            LispObject s = string(first);
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
@@ -576,7 +576,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispObject s = first.stringp() ? first : string(first);
+            LispObject s = string(first);
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
