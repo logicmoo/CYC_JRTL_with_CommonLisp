@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.3 2003-02-27 18:39:52 piso Exp $
+ * $Id: BitVector.java,v 1.4 2003-02-27 19:07:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,26 @@ public final class BitVector extends Vector
         if (isSimpleVector())
             return list(Symbol.SIMPLE_BIT_VECTOR, new Fixnum(length()));
         return list(Symbol.BIT_VECTOR, new Fixnum(length()));
+    }
+
+    public LispObject typep(LispObject typeSpecifier) throws LispError
+    {
+        if (typeSpecifier == Symbol.BIT_VECTOR)
+            return T;
+        if (typeSpecifier == Symbol.SIMPLE_BIT_VECTOR)
+            return isSimpleVector() ? T : NIL;
+        if (typeSpecifier instanceof Cons && typeSpecifier.length() == 2) {
+            LispObject first = typeSpecifier.car();
+            if (first == Symbol.BIT_VECTOR ||
+                (first == Symbol.SIMPLE_BIT_VECTOR && isSimpleVector())) {
+                LispObject second = typeSpecifier.cadr();
+                if (second instanceof Fixnum)
+                    return ((Fixnum)second).getValue() == length() ? T : NIL;
+                if (second == Symbol.UNSPECIFIED)
+                    return T;
+            }
+        }
+        return super.typep(typeSpecifier);
     }
 
     public boolean isSimpleVector()
