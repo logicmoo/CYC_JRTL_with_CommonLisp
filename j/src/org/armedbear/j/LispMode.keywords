@@ -479,6 +479,8 @@ shadowing-import
 shiftf
 signal
 simple-bit-vector-p
+simple-condition-format-arguments
+simple-condition-format-control
 simple-string-p
 simple-vector-p
 sixth
