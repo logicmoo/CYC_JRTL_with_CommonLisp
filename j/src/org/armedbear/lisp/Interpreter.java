@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.71 2004-09-12 01:43:07 piso Exp $
+ * $Id: Interpreter.java,v 1.72 2004-09-14 16:41:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,7 +189,6 @@ public final class Interpreter extends Lisp
                     if (i+1 < args.length) {
                         LispObject result = null;
                         try {
-                            // String loadStr = "(load \"" + String.valueOf(args[i+1]) + "\")";
                             result = Load.load(args[i+1], false, false, true);
                         }
                         catch (ConditionThrowable c) {
