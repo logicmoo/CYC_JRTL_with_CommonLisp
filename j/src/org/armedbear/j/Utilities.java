@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.7 2002-12-05 17:01:14 piso Exp $
+ * $Id: Utilities.java,v 1.8 2002-12-08 02:00:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -684,6 +684,8 @@ public final class Utilities implements Constants
                 if (filename.startsWith("ftp://"))
                     return true;
                 if (filename.startsWith("ssh://"))
+                    return true;
+                if (filename.startsWith("file://"))
                     return true;
             }
         }
