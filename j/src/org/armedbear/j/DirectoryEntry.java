@@ -2,7 +2,7 @@
  * DirectoryEntry.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DirectoryEntry.java,v 1.5 2003-05-12 02:27:26 piso Exp $
+ * $Id: DirectoryEntry.java,v 1.6 2003-07-04 18:04:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ public final class DirectoryEntry
         if (c == 'l' && s.startsWith("ls "))
             return null;
         if (filter != null)
-            if (!filter.accept(getName(s)))
+            if (!filter.accepts(getName(s)))
                 return null;
         return new DirectoryEntry(s, c);
     }
