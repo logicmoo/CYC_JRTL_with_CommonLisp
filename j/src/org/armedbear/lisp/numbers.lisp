@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.33 2004-08-15 11:18:36 piso Exp $
+;;; $Id: numbers.lisp,v 1.34 2004-10-12 17:03:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -159,20 +159,3 @@
               (if (zerop (realpart number))
                   (* (/ pi 2) (signum (imagpart number)))
                   (atan (imagpart number) (realpart number))))))
-
-(defun cis (radians)
-  "Return cos(Theta) + i sin(Theta), AKA exp(i Theta)."
-  (if (complexp radians)
-      (error "argument to CIS is complex: ~S" radians)
-      (complex (cos radians) (sin radians))))
-
-(eval-when (:execute)
-  (when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
-    (mapcar #'jvm::jvm-compile '(ceiling
-                                 round
-                                 ftruncate
-                                 ffloor
-                                 fceiling
-                                 fround
-                                 rational
-                                 rationalize))))
