@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.354 2005-01-17 04:50:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.355 2005-01-17 16:34:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -248,6 +248,14 @@
   vars
   free-specials
   )
+
+(defun node-constant-p (object)
+  (cond ((block-node-p object)
+         nil)
+        ((constantp object)
+         t)
+        (t
+         nil)))
 
 (defvar *blocks* ())
 
@@ -3813,7 +3821,7 @@
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))))
 
-(defun compile-return-from (form &key (target *val*) representation)
+(defun p2-return-from (form &key (target *val*) representation)
   (let* ((name (second form))
          (result-form (third form))
          (block (find-block name)))
@@ -3831,41 +3839,37 @@
                  (return t)))))
         (when protected
           (error "COMPILE-RETURN-FROM: enclosing UNWIND-PROTECT")))
-
-      ;; Added Dec 9 2004 7:28 AM
-;;       (dformat t "compile-return-from calling emit-clear-values~%")
       (emit-clear-values)
-
       (compile-form result-form :target (block-target block))
       (emit 'goto (block-exit block)))
      (t
       ;; Non-local RETURN.
       (setf (block-non-local-return-p block) t)
-      (let* ((*register* *register*)
-             (temp-register (allocate-register)))
-
-        (emit-clear-values)
-        (compile-form (third form) :target temp-register) ; Result.
-
-        (emit 'new +lisp-return-class+)
-        (emit 'dup)
-        (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
-
-;        (emit-clear-values)
-
-;;         (compile-form (third form) :target :stack) ; Result.
-        (emit 'aload temp-register)
-
-        (emit-invokespecial +lisp-return-class+
-                            "<init>"
-                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
-                            -3)
-        (emit 'athrow)
-        ;; Following code will not be reached, but is needed for JVM stack
-        ;; consistency.
-        (when target
-          (emit-push-nil)
-          (emit-move-from-stack target)))))))
+      (cond ((node-constant-p result-form)
+             (emit 'new +lisp-return-class+)
+             (emit 'dup)
+             (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
+             (emit-clear-values)
+             (compile-form result-form :target :stack)) ; Result.
+            (t
+             (let* ((*register* *register*)
+                    (temp-register (allocate-register)))
+               (emit-clear-values)
+               (compile-form result-form :target temp-register) ; Result.
+               (emit 'new +lisp-return-class+)
+               (emit 'dup)
+               (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
+               (emit 'aload temp-register))))
+      (emit-invokespecial +lisp-return-class+
+                          "<init>"
+                          "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
+                          -3)
+      (emit 'athrow)
+      ;; Following code will not be reached, but is needed for JVM stack
+      ;; consistency.
+      (when target
+        (emit-push-nil)
+        (emit-move-from-stack target))))))
 
 (defun compile-cons (form &key (target *val*) representation)
   (unless (check-args form 2)
@@ -5747,7 +5751,6 @@
                              nth
                              progn
                              quote
-                             return-from
                              rplacd
                              schar
                              setq
@@ -5755,23 +5758,24 @@
                              unwind-protect
                              values))
 
-(install-p2-handler '<      'p2-numeric-comparison)
-(install-p2-handler '<=     'p2-numeric-comparison)
-(install-p2-handler '>      'p2-numeric-comparison)
-(install-p2-handler '>=     'p2-numeric-comparison)
-(install-p2-handler '=      'p2-numeric-comparison)
-(install-p2-handler '/=     'p2-numeric-comparison)
-(install-p2-handler '+      'compile-plus)
-(install-p2-handler '-      'compile-minus)
-(install-p2-handler 'ash    'p2-ash)
-(install-p2-handler 'eql    'p2-eql)
-(install-p2-handler 'flet   'p2-flet)
-(install-p2-handler 'function   'p2-function)
-(install-p2-handler 'labels 'p2-labels)
-(install-p2-handler 'logand 'p2-logand)
-(install-p2-handler 'not    'compile-not/null)
-(install-p2-handler 'null   'compile-not/null)
-(install-p2-handler 'the    'p2-the)
+(install-p2-handler '<           'p2-numeric-comparison)
+(install-p2-handler '<=          'p2-numeric-comparison)
+(install-p2-handler '>           'p2-numeric-comparison)
+(install-p2-handler '>=          'p2-numeric-comparison)
+(install-p2-handler '=           'p2-numeric-comparison)
+(install-p2-handler '/=          'p2-numeric-comparison)
+(install-p2-handler '+           'compile-plus)
+(install-p2-handler '-           'compile-minus)
+(install-p2-handler 'ash         'p2-ash)
+(install-p2-handler 'eql         'p2-eql)
+(install-p2-handler 'flet        'p2-flet)
+(install-p2-handler 'function    'p2-function)
+(install-p2-handler 'labels      'p2-labels)
+(install-p2-handler 'logand      'p2-logand)
+(install-p2-handler 'not         'compile-not/null)
+(install-p2-handler 'null        'compile-not/null)
+(install-p2-handler 'return-from 'p2-return-from)
+(install-p2-handler 'the         'p2-the)
 
 (defun process-optimization-declarations (forms)
   (let (alist ())
