@@ -1,8 +1,8 @@
 /*
  * SidebarPanel.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: SidebarPanel.java,v 1.2 2002-11-11 18:15:29 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: SidebarPanel.java,v 1.3 2003-07-23 00:26:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
@@ -115,6 +116,12 @@ public final class SidebarPanel extends JPanel implements MouseListener
         {
             super();
             super.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        }
+
+        public void paintComponent(Graphics g)
+        {
+            Display.setRenderingHints(g);
+            super.paintComponent(g);
         }
     }
 }
