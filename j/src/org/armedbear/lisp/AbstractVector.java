@@ -211,6 +211,8 @@ public abstract class AbstractVector extends AbstractArray
         return false;
     }
 
+    public abstract LispObject reverse() throws LispError;
+
     public void nreverse() throws LispError
     {
         int i = 0;

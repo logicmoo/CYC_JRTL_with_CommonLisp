@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.17 2003-04-06 19:54:29 piso Exp $
+ * $Id: Vector.java,v 1.18 2003-05-28 00:14:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,6 +148,16 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
         if (n == elements.length)
             return;
         throw new LispError();
+    }
+
+    public LispObject reverse() throws LispError
+    {
+        int length = length();
+        Vector result = new Vector(length);
+        int i, j;
+        for (i = 0, j = length - 1; i < length; i++, j--)
+            result.elements[i] = elements[j];
+        return result;
     }
 
     public void nreverse() throws LispError
