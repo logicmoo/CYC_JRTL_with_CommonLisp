@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.14 2003-04-16 17:20:31 piso Exp $
+ * $Id: Closure.java,v 1.15 2003-04-24 18:51:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,9 +42,13 @@ public class Closure extends Function
     private final Environment env;
     private final LispObject function;
     private final boolean allowOtherKeys;
+    private final boolean haveRest;
     private int arity;
     private int required;
     private int keywordParameterCount;
+
+    private int minArgs;
+    private int maxArgs;
 
     public Closure(LispObject parameterList, LispObject body, Environment env)
         throws LispError
@@ -59,6 +63,7 @@ public class Closure extends Function
         this.parameterList = parameterList;
         Debug.assertTrue(parameterList == NIL || parameterList instanceof Cons);
         boolean allowOtherKeys = false;
+        boolean haveRest = false;
         if (parameterList instanceof Cons) {
             final int length = parameterList.length();
             ArrayList arrayList = new ArrayList();
@@ -83,6 +88,7 @@ public class Closure extends Function
                                 "&ENVIRONMENT must be followed by a variable");
                         envVar = checkSymbol(remaining.car());
                         arity = -1;
+                        // FIXME maxArgs?
                         remaining = remaining.cdr();
                         ++i;
                         continue;
@@ -90,10 +96,12 @@ public class Closure extends Function
                         optional = true;
                         arity = -1;
                     } else if (obj == Symbol.AND_REST || obj == Symbol.AND_BODY) {
+                        haveRest = true;
                         rest = true;
                         optional = false;
                         key = false;
                         arity = -1;
+                        maxArgs = -1;
                         remaining = remaining.cdr();
                         if (remaining == NIL)
                             throw new LispError(
@@ -107,6 +115,7 @@ public class Closure extends Function
                         arity = -1;
                     } else if (obj == Symbol.AND_ALLOW_OTHER_KEYS) {
                         allowOtherKeys = true;
+                        maxArgs = -1;
                     } else if (obj == Symbol.AND_AUX) {
                         // All remaining specifiers are aux variable specifiers.
                         arity = -1; // FIXME
@@ -115,13 +124,19 @@ public class Closure extends Function
                         if (optional) {
                             arrayList.add(new Parameter((Symbol)obj, NIL,
                                 OPTIONAL));
+                            if (maxArgs >= 0)
+                                ++maxArgs;
                         } else if (key) {
                             arrayList.add(new Parameter((Symbol)obj, NIL, KEYWORD));
                             keywordParameters.add(new Parameter((Symbol)obj, NIL, KEYWORD));
                             ++keywordParameterCount;
+                            if (maxArgs >= 0)
+                                maxArgs += 2;
                         } else {
                             arrayList.add(new Parameter((Symbol)obj));
                             ++required;
+                            if (maxArgs >= 0)
+                                ++maxArgs;
                         }
                     }
                 } else if (obj instanceof Cons) {
@@ -137,6 +152,8 @@ public class Closure extends Function
                         LispObject initForm = obj.cadr();
                         LispObject svar = obj.cdr().cdr().car();
                         arrayList.add(new Parameter(symbol, initForm, svar, OPTIONAL));
+                        if (maxArgs >= 0)
+                            ++maxArgs;
                     } else if (key) {
                         Symbol keyword;
                         Symbol var;
@@ -163,6 +180,8 @@ public class Closure extends Function
                         keywordParameters.add(new Parameter(keyword, var,
                             initForm, svar));
                         ++keywordParameterCount;
+                        if (maxArgs >= 0)
+                            maxArgs += 2;
                     } else
                         invalidParameter(obj);
                 } else if (obj != NIL)
@@ -190,6 +209,8 @@ public class Closure extends Function
             keywordParameterArray = null;
             auxVarArray = null;
             arity = 0;
+
+            minArgs = maxArgs = 0;
         }
         this.body = body;
         this.env = env;
@@ -197,6 +218,9 @@ public class Closure extends Function
         if (arity >= 0)
             Debug.assertTrue(arity == required);
         this.allowOtherKeys = allowOtherKeys;
+        this.haveRest = haveRest;
+
+        minArgs = required;
     }
 
     private static final void invalidParameter(LispObject obj)
@@ -273,6 +297,15 @@ public class Closure extends Function
 
     public final LispObject execute(LispObject[] args) throws Condition
     {
+//         if (maxArgs >= 0) {
+//             if (args.length > maxArgs) {
+//                 String name = getName();
+//                 if (name == null)
+//                     name = String.valueOf(getLambdaName());
+//                 Debug.trace(name + " too many arguments: expected " + maxArgs +
+//                     ", received " + args.length);
+//             }
+//         }
         return execute(args, env);
     }
 
@@ -401,6 +434,14 @@ public class Closure extends Function
                             bind(svar, NIL, ext);
                         }
                         boundpArray[n] = true;
+                    }
+                }
+            } else {
+                // No keyword parameters.
+                if (argsUsed < args.length) {
+                    if (!haveRest) {
+//                         Debug.trace("way too many arguments");
+                        throw new WrongNumberOfArgumentsException(this);
                     }
                 }
             }
