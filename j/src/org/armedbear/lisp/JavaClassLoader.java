@@ -2,7 +2,7 @@
  * JavaClassLoader.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: JavaClassLoader.java,v 1.2 2003-12-02 19:50:51 piso Exp $
+ * $Id: JavaClassLoader.java,v 1.3 2004-01-02 11:33:58 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,15 @@ import java.io.FileInputStream;
 
 public class JavaClassLoader extends ClassLoader
 {
+    private static JavaClassLoader persistentInstance;
+
+    public static JavaClassLoader getPersistentInstance()
+    {
+        if (persistentInstance == null)
+            persistentInstance = new JavaClassLoader();
+        return persistentInstance;
+    }
+
     protected Class loadClassFromFile(File file)
     {
         try {
@@ -49,4 +58,24 @@ public class JavaClassLoader extends ClassLoader
         }
         return null;
     }
+
+
+    public Class loadClassFromByteArray(String className, byte[] classbytes)
+    {
+        try {
+            long length = classbytes.length;
+            if (length < Integer.MAX_VALUE) {
+                Class c = defineClass(className, classbytes, 0, (int) length);
+                if (c != null) {
+                    resolveClass(c);
+                    return c;
+                }
+            }
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
+        return null;
+    }
+
 }
