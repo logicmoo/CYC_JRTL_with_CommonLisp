@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.22 2003-01-04 02:33:37 piso Exp $
+ * $Id: Shell.java,v 1.23 2003-01-04 15:12:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -521,7 +521,8 @@ public class Shell extends CommandInterpreter implements Constants
             last.setFlags(STATE_PASSWORD_PROMPT);
             return;
         }
-        last.setFlags(0);
+        if (last.flags() != STATE_INPUT)
+            last.setFlags(0);
         // Look at the next-to-last line.
         final Line nextToLast = last.previous();
         // For now, this is a hard-coded test for Mikol's prompt. It should
