@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.18 2003-10-08 19:12:00 piso Exp $
+;;; $Id: subtypep.lisp,v 1.19 2003-10-09 01:41:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -110,6 +110,13 @@
     present-p))
 
 (defun subtypep-normalize-type (type)
+  (when (symbolp type)
+    (case type
+      (FIXNUM
+       (return-from subtypep-normalize-type
+                    '(integer #.most-negative-fixnum #.most-positive-fixnum)))
+      (BASE-CHAR
+       (return-from subtypep-normalize-type 'character))))
   (let (tp i)
     (loop
       (if (consp type)
@@ -128,10 +135,6 @@
            (if (consp (cadr i))
                (setq i (cadr i))
                (setq i (list (cadr i)))))))
-      (BASE-CHAR
-       (setq tp 'character))
-      (FIXNUM
-       (setq tp 'integer i '(#.most-negative-fixnum #.most-positive-fixnum)))
       ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
        (setq tp 'float)))
     (if i (cons tp i) tp)))
@@ -308,3 +311,9 @@
                          (values nil (known-type-p t2)))))
                  (t
                   (values nil nil)))))))
+
+(when (fboundp 'jvm::jvm-compile)
+  (mapcar #'jvm::jvm-compile '(sys::subtypep-normalize-type
+                               sys::sub-interval-p
+                               sys::simple-subtypep
+                               subtypep)))
