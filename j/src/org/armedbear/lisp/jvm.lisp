@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.138 2004-04-28 18:53:54 piso Exp $
+;;; $Id: jvm.lisp,v 1.139 2004-04-29 12:16:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1723,7 +1723,11 @@
 
 (defun compile-test (form)
   ;; Use a Java boolean if possible.
-  (when (consp form)
+  (when (and (consp form)
+             (not (special-operator-p (car form))))
+    (let ((new-form (rewrite-function-call form)))
+      (when (neq new-form form)
+        (return-from compile-test (compile-test new-form))))
     (case (length form)
       (2
        (let ((op (car form))
@@ -2485,7 +2489,7 @@
                   (error "COMPILE-FORM: unsupported special operator ~S." op))
                  (t ; Function call.
                   (compile-function-call form for-effect)))))
-        ((eq form '())
+        ((null form)
          (unless for-effect
            (emit-push-nil)
            (emit-store-value)))
