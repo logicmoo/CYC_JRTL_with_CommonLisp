@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.344 2005-01-13 01:58:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.345 2005-01-13 03:01:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4123,8 +4123,8 @@
                     *this-class*
                     g
                     +lisp-object+))) ; Stack: template-function
-        (unless (zerop *nesting-level*)
-          (error "nesting level > 0, not supported"))
+;;         (unless (zerop *nesting-level*)
+;;           (error "nesting level > 0, not supported"))
         (cond
          ((null *closure-variables*)) ; Nothing to do.
          ((compiland-closure-register *current-compiland*)
