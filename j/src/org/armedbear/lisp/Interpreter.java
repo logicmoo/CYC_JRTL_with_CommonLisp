@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.51 2004-01-24 19:34:16 piso Exp $
+ * $Id: Interpreter.java,v 1.52 2004-01-27 02:11:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,21 +226,6 @@ public final class Interpreter extends Lisp
         }
         catch (Throwable t) {
             ;
-        }
-    }
-
-    // Skip whitespace except for newline and peek at the next
-    // character.
-    private char peekCharNonWhitespace(Stream stream) throws ConditionThrowable
-    {
-        while (true) {
-            LispCharacter character =
-                (LispCharacter) stream.readChar(true, NIL);
-            char c = character.getValue();
-            if (!Character.isWhitespace(c) || c == '\n') {
-                stream.unreadChar(character);
-                return c;
-            }
         }
     }
 
