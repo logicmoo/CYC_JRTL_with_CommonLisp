@@ -2,7 +2,7 @@
  * SendMail.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: SendMail.java,v 1.6 2003-05-07 18:03:22 piso Exp $
+ * $Id: SendMail.java,v 1.7 2003-05-21 17:13:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,9 @@
 
 package org.armedbear.j.mail;
 
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -47,6 +50,7 @@ import org.armedbear.j.EditorIterator;
 import org.armedbear.j.Expansion;
 import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.Headers;
 import org.armedbear.j.Line;
 import org.armedbear.j.Log;
 import org.armedbear.j.MessageDialog;
@@ -242,6 +246,9 @@ public final class SendMail extends Buffer
             appendReferences();
             appendDefaultHeaders();
             appendLine(HEADER_SEPARATOR);
+            String attribution = getAttribution(messageBuffer);
+            if (attribution != null)
+                appendLine(attribution);
             String s =
                 messageBuffer.quoteBody(getIntegerProperty(Property.WRAP_COL));
             if (s != null)
@@ -1568,5 +1575,76 @@ public final class SendMail extends Buffer
             return new MailAddressExpansion(dot);
         else
             return super.getExpansion(dot);
+    }
+
+    private static final RE dateRE =
+        new UncheckedRE("[A-Za-z]+, [0-9][0-9]? [A-Za-z]+ [0-9][0-9][0-9][0-9]");
+    private static final RE timeRE =
+        new UncheckedRE("[0-9:]+ [+-][0-9][0-9][0-9][0-9]");
+
+    private static String getAttribution(MessageBuffer messageBuffer)
+    {
+        if (messageBuffer == null)
+            return null;
+        Mailbox mailbox = messageBuffer.getMailbox();
+        if (mailbox == null)
+            return null;
+        MailboxEntry entry = messageBuffer.getMailboxEntry();
+        if (entry == null)
+            return null;
+        String template = preferences.getStringProperty(Property.ATTRIBUTION);
+        if (template == null || template.length() == 0)
+            return null;
+        FastStringBuffer sb = new FastStringBuffer();
+        final int limit = template.length();
+        for (int i = 0; i < limit; i++) {
+            char c = template.charAt(i);
+            if (c == '%' && ++i < limit) {
+                c = template.charAt(i);
+                switch (c) {
+                    case 'd': {
+                        // Date/time in sender's time zone.
+                        Message message = messageBuffer.getMessage();
+                        if (message == null)
+                            return null;
+                        String dateTime = message.getHeaderValue(Headers.DATE);
+                        REMatch m1 = dateRE.getMatch(dateTime);
+                        if (m1 != null) {
+                            REMatch m2 =
+                                timeRE.getMatch(dateTime.substring(m1.getEndIndex()));
+                            if (m2 != null) {
+                                sb.append(m1.toString());
+                                sb.append(" at ");
+                                sb.append(m2.toString());
+                            }
+                        }
+                        break;
+                    }
+                    case 'n': {
+                        // Author's real name (or address if missing).
+                        MailAddress[] from = entry.getFrom();
+                        if (from == null || from.length == 0)
+                            return null;
+                        String personal = from[0].getPersonal();
+                        if (personal != null && personal.length() > 0)
+                            sb.append(personal);
+                        else {
+                            String addr = from[0].getAddress();
+                            if (addr != null && addr.length() > 0)
+                                sb.append(addr);
+                            else
+                                return null;
+                        }
+                        break;
+                    }
+                    default:
+                        Log.error("invalid format sequence \"%" + c + '"' +
+                            " in attribution");
+                        return null;
+                }
+            } else
+                sb.append(c);
+        }
+        return sb.toString();
     }
 }
