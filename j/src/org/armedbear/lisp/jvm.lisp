@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.51 2003-12-05 15:26:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.52 2003-12-06 01:27:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -117,8 +117,7 @@
       (caddr entry))))
 
 (defun read-constant-pool-entry (stream)
-  (let ((tag (read-u1 stream))
-        info)
+  (let ((tag (read-u1 stream)))
     (case tag
       ((7 8)
        (list tag (read-u2 stream)))
@@ -126,7 +125,6 @@
        (let* ((len (read-u2 stream))
               (s (make-string len)))
          (dotimes (i len)
-;;            (setf (char s i) (coerce (read-u1 stream) 'character)))
            (setf (char s i) (code-char (read-u1 stream))))
          (list tag len s)))
       ((3 4)
@@ -303,11 +301,25 @@
 (defvar *locals* ())
 (defvar *max-locals* 0)
 
-;; (defun allocate-local ()
-;;   (let ((index (fill-pointer *locals*)))
-;;     (incf (fill-pointer *locals*))
-;;     (setf *max-locals* (fill-pointer *locals*))
-;;     index))
+(defvar *variables* ())
+
+(defstruct variable
+  name
+  special-p
+  index)
+
+(defun push-variable (var special-p index)
+  (push (make-variable :name var :special-p special-p :index index) *variables*))
+
+(defun find-variable (var)
+  (find var *variables* :key 'variable-name))
+
+;; (defun specialp (var)
+;;   (let ((info (find-variable var)))
+;;     (if info
+;;         (cdr info)
+;;         ;; Not found in variables list.
+;;         (special-variable-p var))))
 
 (defvar *args* nil)
 (defvar *using-arg-array* nil)
@@ -1666,21 +1678,34 @@
   (emit-store-value))
 
 (defun compile-let/let* (form for-effect)
-  (let* ((saved-fp (fill-pointer *locals*))
-         (varlist (second form))
+;;   (format t "compile-let/let* *locals* = ~S~%" *locals*)
+  (let* ((*variables* *variables*)
+         (specials ())
+         (saved-fp (fill-pointer *locals*))
+         (varlist (cadr form))
          (specialp nil)
          env-var)
+    ;; Process declarations.
+    (dolist (f (cddr form))
+      (unless (and (consp f) (eq (car f) 'declare))
+        (return))
+      (let ((decls (cdr f)))
+        (dolist (decl decls)
+          (when (eq (car decl) 'special)
+            (setf specials (append (cdr decl) specials))))))
+;;     (when specials
+;;       (format t "specials = ~S~%" specials))
     ;; Are we going to bind any special variables?
     (dolist (varspec varlist)
       (let ((var (if (consp varspec) (car varspec) varspec)))
-        (when (special-variable-p var)
+        (when (or (memq var specials) (special-variable-p var))
           (setq specialp t)
           (return))))
     ;; If so...
     (when specialp
       ;; Save current dynamic environment.
-      (setq env-var (vector-push nil *locals*))
-      (setq *max-locals* (max *max-locals* (fill-pointer *locals*)))
+      (setf env-var (vector-push nil *locals*))
+      (setf *max-locals* (max *max-locals* (fill-pointer *locals*)))
       (ensure-thread-var-initialized)
       (emit 'aload *thread*)
       (emit-invokevirtual +lisp-thread-class+
@@ -1690,9 +1715,9 @@
       (emit 'astore env-var))
     (ecase (car form)
       (LET
-       (compile-let-vars varlist))
+       (compile-let-vars varlist specials))
       (LET*
-       (compile-let*-vars varlist)))
+       (compile-let*-vars varlist specials)))
     ;; Body of LET/LET*.
     (do ((body (cddr form) (cdr body)))
         ((null (cdr body))
@@ -1710,7 +1735,8 @@
     ;; bindings will again be available.
     (setf (fill-pointer *locals*) saved-fp)))
 
-(defun compile-let-vars (varlist)
+(defun compile-let-vars (varlist specials)
+;;   (format t "compile-let-vars *locals* = ~S~%" *locals*)
   ;; Generate code to evaluate the initforms and leave the resulting values
   ;; on the stack.
   (let ((last-push-was-nil nil))
@@ -1733,34 +1759,53 @@
                (setf last-push-was-nil t))))))
   ;; Add local variables to local variables vector.
   (dolist (varspec varlist)
-    (let ((var (if (consp varspec) (car varspec) varspec)))
-      (unless (special-variable-p var)
-        (vector-push var *locals*))))
+    (let* ((var (if (consp varspec) (car varspec) varspec))
+           (specialp (if (or (memq var specials) (special-variable-p var)) t nil))
+           (index (if specialp nil (fill-pointer *locals*))))
+      (push-variable var specialp index)
+      (unless specialp
+;;         (format t "pushing ~S~%" var)
+        (vector-push var *locals*)
+;;         (format t "after push *locals* = ~S~%" *locals*)
+        )))
   (setq *max-locals* (max *max-locals* (fill-pointer *locals*)))
   ;; At this point the initial values are on the stack. Now generate code to
   ;; pop them off one by one and store each one in the corresponding local or
   ;; special variable. In order to do this, we must process the variable list
   ;; in reverse order.
   (do* ((varlist (reverse varlist) (cdr varlist))
-        (varspec (car varlist) (car varlist))
-        (var (if (consp varspec) (car varspec) varspec))
-        (i (1- (fill-pointer *locals*)) (1- i)))
+        (varspec (car varlist) (car varlist)))
+;;         (i (1- (fill-pointer *locals*)) (1- i)))
        ((null varlist))
-    (cond ((special-variable-p var)
-           (let ((g (declare-symbol var)))
-             (emit 'getstatic
-                   *this-class*
-                   g
-                   "Lorg/armedbear/lisp/Symbol;")
-             (emit 'swap)
-             (emit-invokestatic +lisp-class+
-                                "bindSpecialVariable"
-                                "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                -2)))
-          (t
-           (emit 'astore i)))))
+    (let* ((var (if (consp varspec) (car varspec) varspec))
+           (v (find-variable var)))
+;;       (format t "varlist = ~S varspec = ~S var = ~S~%" varlist varspec var)
+;;       (format t "processing ~S~%" var)
+;;       (format t "var = ~S v = ~S~%" var v)
+      (cond ((or (memq var specials) (special-variable-p var))
+             (let ((g (declare-symbol var)))
+               (emit 'getstatic
+                     *this-class*
+                     g
+                     "Lorg/armedbear/lisp/Symbol;")
+               (emit 'swap)
+               (emit-invokestatic +lisp-class+
+                                  "bindSpecialVariable"
+                                  "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                  -2)))
+            (t
+             (let ((index (position var *locals* :from-end t)))
+;;                (format t "index = ~S i = ~S~%" index i)
+;;                (unless (= index i)
+;;                  (format t "*locals* = ~S~%" *locals*)))
+;;              (emit 'astore i))))))
+               (unless index
+                 (error "COMPILE-LET-VARS can't find local variable"))
+               (unless (eql index (variable-index v))
+                 (error "COMPILE-LET-VARS wrong index"))
+               (emit 'astore index)))))))
 
-(defun compile-let*-vars (varlist)
+(defun compile-let*-vars (varlist specials)
   ;; Generate code to evaluate initforms and bind variables.
   (let ((i (fill-pointer *locals*)))
     (dolist (varspec varlist)
@@ -2087,37 +2132,38 @@
            (compile-function-call (car form) (cdr form))))))
 
 (defun compile-variable-ref (form)
-  (let ((index (position form *locals* :from-end t)))
-    (when index
-      (emit 'aload index)
+  (let ((v (find-variable form)))
+    (unless (and v (variable-special-p v))
+      (let ((index (position form *locals* :from-end t)))
+        (when index
+          (emit 'aload index)
+          (emit-store-value)
+          (return-from compile-variable-ref)))
+      ;; Not found in locals; look in args.
+      (let ((index (position form *args*)))
+        (when index
+          (cond (*using-arg-array*
+                 (emit 'aload 1)
+                 (emit 'bipush index)
+                 (emit 'aaload)
+                 (emit-store-value)
+                 (return-from compile-variable-ref))
+                (t
+                 (emit 'aload (1+ index))
+                 (emit-store-value)
+                 (return-from compile-variable-ref))))))
+    ;; Otherwise it must be a global variable.
+    (let ((g (declare-symbol form)))
+      (emit 'getstatic
+            *this-class*
+            g
+            "Lorg/armedbear/lisp/Symbol;")
+      (emit-invokevirtual +lisp-symbol-class+
+                          "symbolValue"
+                          "()Lorg/armedbear/lisp/LispObject;"
+                          0)
       (emit-store-value)
-      (return-from compile-variable-ref)))
-  ;; Not found in locals; look in args.
-  (let ((index (position form *args*)))
-    (when index
-      (cond (*using-arg-array*
-             (emit 'aload 1)
-             (emit 'bipush index)
-             (emit 'aaload)
-             (emit-store-value)
-             (return-from compile-variable-ref))
-            (t
-             (emit 'aload (1+ index))
-             (emit-store-value)
-             (return-from compile-variable-ref)))))
-
-  ;; Otherwise it must be a global variable.
-  (let ((g (declare-symbol form)))
-    (emit 'getstatic
-          *this-class*
-          g
-          "Lorg/armedbear/lisp/Symbol;")
-    (emit-invokevirtual +lisp-symbol-class+
-                        "symbolValue"
-                        "()Lorg/armedbear/lisp/LispObject;"
-                        0)
-    (emit-store-value)
-    (return-from compile-variable-ref)))
+      (return-from compile-variable-ref))))
 
 ;; If for-effect is true, no value needs to be left on the stack.
 (defun compile-form (form &optional for-effect)
@@ -2203,6 +2249,7 @@
          (*args* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
          (*locals* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
          (*max-locals* 0)
+         (*variables* ())
          (*pool* ())
          (*pool-count* 1)
          (*val* nil)
