@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.45 2004-04-18 15:48:16 piso Exp $
+ * $Id: Load.java,v 1.46 2004-04-19 17:56:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,6 +192,44 @@ public final class Load extends Lisp
         return signal(new LispError("file not found: " + filename));
     }
 
+    // ### *fasl-version*
+    // internal symbol
+    private static final Symbol _FASL_VERSION_ =
+        internSpecial("*FASL-VERSION*", PACKAGE_SYS, Fixnum.ZERO);
+
+    static {
+        _FASL_VERSION_.setConstant(true);
+    }
+
+    // ### *load-fasl-version*
+    // internal symbol
+    private static final Symbol _LOAD_FASL_VERSION_ =
+        internSpecial("*LOAD-FASL-VERSION*", PACKAGE_SYS, NIL);
+
+    private static final Primitive2 INIT_FASL =
+        new Primitive2("init-fasl", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first == Keyword.VERSION) {
+                if (second.eql(_FASL_VERSION_.getSymbolValue())){
+                    // OK
+                    LispThread.currentThread().bindSpecial(_LOAD_FASL_VERSION_,
+                                                           second);
+                    return T;
+                }
+            }
+            StringBuffer sb = new StringBuffer();
+            sb.append("File uses fasl format ");
+            sb.append(second);
+            sb.append(", but fasl format ");
+            sb.append(_FASL_VERSION_.getSymbolValue());
+            sb.append(" is required. Please recompile the source.");
+            return signal(new SimpleError(sb.toString()));
+        }
+    };
+
     private static final LispObject loadFileFromStream(String truename,
                                                        InputStream in,
                                                        boolean verbose,
@@ -203,7 +241,8 @@ public final class Load extends Lisp
         LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
         thread.bindSpecial(_PACKAGE_, _PACKAGE_.symbolValue());
-        int loadDepth = Fixnum.getInt(_LOAD_DEPTH_.symbolValue());
+        thread.bindSpecial(_LOAD_FASL_VERSION_, NIL);
+        int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue());
         thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
         final String prefix = getLoadVerbosePrefix(loadDepth);
         try {
@@ -334,7 +373,7 @@ public final class Load extends Lisp
     }
 
     // ### %load filespec verbose print if-does-not-exist => generalized-boolean
-    public static final Primitive4 _LOAD =
+    private static final Primitive4 _LOAD =
         new Primitive4("%load", PACKAGE_SYS, false,
                        "filespec verbose print if-does-not-exist")
     {
@@ -350,7 +389,7 @@ public final class Load extends Lisp
     };
 
     // ### load-system-file
-    public static final Primitive1 LOAD_SYSTEM_FILE =
+    private static final Primitive1 LOAD_SYSTEM_FILE =
         new Primitive1("load-system-file", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
