@@ -1,7 +1,7 @@
 ;;; key-pressed.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: key-pressed.lisp,v 1.1 2003-03-29 20:04:46 piso Exp $
+;;; $Id: key-pressed.lisp,v 1.2 2003-05-17 15:31:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,7 +94,8 @@
 (assign-key "Ctrl Alt O"
             #'(lambda () (open-file-in-other-window) (update-location-bar)))
 (assign-key "Ctrl Shift O" 'open-file-in-other-frame)
-(assign-key "Ctrl N" 'new-buffer)
+;; Ctrl N is used for history in textfields.
+;; (assign-key "Ctrl N" 'new-buffer)
 (assign-key "Alt R" 'recent-files)
 (assign-key "Ctrl S" 'save)
 (assign-key "Ctrl Shift S" 'save-as)
