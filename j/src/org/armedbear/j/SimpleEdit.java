@@ -1,8 +1,8 @@
 /*
  * SimpleEdit.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: SimpleEdit.java,v 1.1.1.1 2002-09-24 16:08:09 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: SimpleEdit.java,v 1.2 2003-05-13 16:38:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class SimpleEdit
     public static boolean addUndo(Editor editor, int type, String text)
     {
         final Buffer buffer = editor.getBuffer();
-        if (!buffer.supportsUndo)
+        if (!buffer.supportsUndo())
             return true; // Not an error.
         if (editor.getDot() == null)
             return true; // Not an error.
