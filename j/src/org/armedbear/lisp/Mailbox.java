@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: Mailbox.java,v 1.2 2004-06-26 21:22:37 asimon Exp $
+ * $Id: Mailbox.java,v 1.3 2004-09-13 18:10:30 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,25 +20,25 @@
  */
 
 package org.armedbear.lisp;
-import java.util.Stack;
-import java.util.EmptyStackException;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 public final class Mailbox extends LispObject
 {
 
-    private Stack box = new Stack();  
+    private LinkedList box = new LinkedList();  
 
     private void send (LispObject o) 
     {
         synchronized(this) {
-            box.push(o);
+            box.add(o);
             notifyAll();
         }
     }
 
     private LispObject read ()
     {
-        while (box.empty()) 
+        while (box.isEmpty()) 
             synchronized(this) {
                 try {
                     wait();
@@ -46,15 +46,15 @@ public final class Mailbox extends LispObject
                     throw new RuntimeException(e);
                 }
             }
-        return (LispObject) box.pop();
+        return (LispObject) box.removeFirst();
     }
 
     private LispObject peek ()
     {
         synchronized(this) {
             try {
-                return (LispObject) box.peek();
-            } catch(EmptyStackException e) {
+                return (LispObject) box.getFirst();
+            } catch(NoSuchElementException e) {
                 return NIL;
             }
         }
@@ -62,7 +62,7 @@ public final class Mailbox extends LispObject
 
     private LispObject empty ()
     {
-        return box.empty() ? T : NIL;
+        return box.isEmpty() ? T : NIL;
     }
 
     public String toString()
