@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.102 2003-07-06 18:29:53 piso Exp $
+ * $Id: Lisp.java,v 1.103 2003-07-16 17:22:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -236,7 +236,7 @@ public abstract class Lisp
         if (form instanceof Cons) {
             LispObject car = form.car();
             if (car instanceof Symbol) {
-                LispObject obj = car.getSymbolFunction();
+                LispObject obj = env.lookupFunctional(car);
                 if (obj instanceof SpecialOperator)
                     obj = Primitives.get((Symbol)car,
                         Symbol.MACROEXPAND_MACRO, NIL);
