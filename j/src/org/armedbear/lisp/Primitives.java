@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.368 2003-09-04 00:16:39 piso Exp $
+ * $Id: Primitives.java,v 1.369 2003-09-04 03:52:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4811,6 +4811,31 @@ public final class Primitives extends Module
             return new LispFloat(Math.sqrt(((Ratio)obj).floatValue()));
         if (obj instanceof LispFloat)
             return new LispFloat(Math.sqrt(((LispFloat)obj).getValue()));
+        throw new TypeError(obj, "number");
+    }
+
+    private static final Primitive LOG = new Primitive("log") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return log(arg);
+        }
+        public LispObject execute(LispObject number, LispObject base)
+            throws LispError
+        {
+            return log(number).divideBy(log(base));
+        }
+    };
+
+    private static final LispFloat log(LispObject obj) throws TypeError
+    {
+        if (obj instanceof Fixnum)
+            return new LispFloat(Math.log(((Fixnum)obj).getValue()));
+        if (obj instanceof Bignum)
+            return new LispFloat(Math.log(((Bignum)obj).floatValue()));
+        if (obj instanceof Ratio)
+            return new LispFloat(Math.log(((Ratio)obj).floatValue()));
+        if (obj instanceof LispFloat)
+            return new LispFloat(Math.log(((LispFloat)obj).getValue()));
         throw new TypeError(obj, "number");
     }
 
