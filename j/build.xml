@@ -148,7 +148,7 @@
 
   <target name="fasls">
     <exec executable="${java}" dir="${basedir}">
-      <arg line="org.armedbear.lisp.Main --eval '(progn (compile-system) (quit))'"/>
+      <arg line="-cp . org.armedbear.lisp.Main --eval '(progn (compile-system) (quit))'"/>
     </exec>
   </target>
 
