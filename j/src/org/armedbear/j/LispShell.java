@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.30 2003-03-06 04:26:23 piso Exp $
+ * $Id: LispShell.java,v 1.31 2003-03-11 16:10:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -320,9 +320,11 @@ public final class LispShell extends Shell
                 if (java != null && !java.isFile())
                     java = null;
             }
-            String classPath = System.getProperty("java.class.path");
             // If j was invoked via "java -jar j.jar", use the canonical path
             // of j.jar.
+            String classPath = System.getProperty("java.class.path");
+            if (classPath.equals("j.jar:.")) // IBM 1.4.0 on Linux
+                classPath = "j.jar";
             if (classPath.indexOf(LocalFile.getPathSeparatorChar()) < 0) {
                 // Only one component in classpath.
                 String path = classPath;
