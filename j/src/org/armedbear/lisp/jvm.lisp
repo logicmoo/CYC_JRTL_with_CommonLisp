@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.33 2003-11-16 00:57:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.34 2003-11-16 01:47:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -66,7 +66,7 @@
     invokeinterface unused       new             newarray      anewarray    ; 185
     arraylength     athrow       checkcast       instanceof    monitorenter ; 190
     monitorexit     wide         multianewarray  ifnull        ifnonnull    ; 195
-    goto_w          jsr_w        label                                      ; 200
+    goto_w          jsr_w        label           push-value    store-value  ; 200
     ))
 
 (unless (vectorp *instructions*)
@@ -420,49 +420,57 @@
     instruction))
 
 (defmacro emit-store-value ()
-  `(case *val*
-     (0
-      (emit 'astore_0))
-     (1
-      (emit 'astore_1))
-     (2
-      (emit 'astore_2))
-     (3
-      (emit 'astore_3))
-     (t
-      (emit 'astore *val*))))
+;;   `(case *val*
+;;      (0
+;;       (emit 'astore_0))
+;;      (1
+;;       (emit 'astore_1))
+;;      (2
+;;       (emit 'astore_2))
+;;      (3
+;;       (emit 'astore_3))
+;;      (t
+;;       (emit 'astore *val*))))
+  `(emit 'store-value))
 
 (defmacro emit-push-value ()
-  `(case *val*
-     (0
-      (emit 'aload_0))
-     (1
-      (emit 'aload_1))
-     (2
-      (emit 'aload_2))
-     (3
-      (emit 'aload_3))
-     (t
-      (emit 'aload *val*))))
+;;   `(case *val*
+;;      (0
+;;       (emit 'aload_0))
+;;      (1
+;;       (emit 'aload_1))
+;;      (2
+;;       (emit 'aload_2))
+;;      (3
+;;       (emit 'aload_3))
+;;      (t
+;;       (emit 'aload *val*))))
+  `(emit 'push-value))
 
 (defun remove-store-value ()
+;;   (let* ((instruction (car *code*))
+;;          (opcode (instruction-opcode instruction))
+;;          slot)
+;;     (case opcode
+;;       (75
+;;        (setf slot 0))
+;;       (76
+;;        (setf slot 1))
+;;       (77
+;;        (setf slot 2))
+;;       (78
+;;        (setf slot 3))
+;;       (58
+;;        (setf slot (car (instruction-args instruction)))))
+;;     (when (and slot (= slot *val*))
+;;       (setf *code* (cdr *code*))
+;;       t)))
   (let* ((instruction (car *code*))
-         (opcode (instruction-opcode instruction))
-         slot)
-    (case opcode
-      (75
-       (setf slot 0))
-      (76
-       (setf slot 1))
-      (77
-       (setf slot 2))
-      (78
-       (setf slot 3))
-      (58
-       (setf slot (car (instruction-args instruction)))))
-    (when (and slot (= slot *val*))
-      (setf *code* (cdr *code*))
-      t)))
+         (opcode (instruction-opcode instruction)))
+;;     (format t "REMOVE-STORE-VALUE called opcode = ~S~%" opcode)
+    (when (eql opcode 204) ; STORE-VALUE
+;;       (format t "removing STORE-VALUE~%")
+      (setf *code* (cdr *code*)))))
 
 (defconstant +lisp-class+ "org/armedbear/lisp/Lisp")
 (defconstant +lisp-object-class+ "org/armedbear/lisp/LispObject")
@@ -537,6 +545,30 @@
   (let ((opcode (instruction-opcode instruction))
         (args (instruction-args instruction)))
     (case opcode
+      (203 ; PUSH-VALUE
+       (case *val*
+         (0
+          (inst 42)) ; ALOAD_0
+         (1
+          (inst 43)) ; ALOAD_1
+         (2
+          (inst 44)) ; ALOAD_2
+         (3
+          (inst 45)) ; ALOAD_3
+         (t
+          (inst 25 *val*))))
+      (204 ; STORE-VALUE
+       (case *val*
+         (0
+          (inst 75)) ; ASTORE_0
+         (1
+          (inst 76)) ; ASTORE_1
+         (2
+          (inst 77)) ; ASTORE_2
+         (3
+          (inst 78)) ; ASTORE_3
+         (t
+          (inst 58 *val*))))
       ((1 ; ACONST_NULL
         42 ; ALOAD_0
         43 ; ALOAD_1
@@ -651,6 +683,10 @@
 
 (defun stack-effect (opcode)
   (case opcode
+    (203 ; PUSH-VALUE
+     1)
+    (204 ; STORE-VALUE
+     -1)
     ((25 ; ALOAD
       42 ; ALOAD_0
       43 ; ALOAD_1
@@ -785,6 +821,7 @@
                        (cond ((and (= (instruction-opcode next-instruction) 202) ; LABEL
                                    (eq (car (instruction-args instruction))
                                        (car (instruction-args next-instruction))))
+                              ;; GOTO next instruction.
                               (setf (instruction-opcode instruction) 0)
                               (setf changed-p t))
                              ((= (instruction-opcode next-instruction) 167) ; GOTO
