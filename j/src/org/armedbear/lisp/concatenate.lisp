@@ -1,7 +1,7 @@
 ;;; concatenate.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: concatenate.lisp,v 1.3 2004-03-13 19:36:51 piso Exp $
+;;; $Id: concatenate.lisp,v 1.4 2004-03-13 19:44:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 (in-package "SYSTEM")
 
 (defun concatenate (result-type &rest sequences)
-  (if (subtypep result-type 'list)
+  (if (eq result-type 'list)
       (let ((result ()))
         (dolist (seq sequences (nreverse result))
           (dotimes (j (length seq))
