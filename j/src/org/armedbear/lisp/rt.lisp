@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.67 2003-03-19 21:52:30 piso Exp $
+;;; $Id: rt.lisp,v 1.68 2003-03-25 17:46:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -665,6 +665,7 @@
                               "count-if-not"
                               "defparameter"
                               "defvar"
+                              "destructuring-bind"
                               "elt"
                               "equal"
                               "equalp"
