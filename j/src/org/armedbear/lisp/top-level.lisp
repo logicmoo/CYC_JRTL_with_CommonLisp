@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.29 2004-04-22 14:48:01 piso Exp $
+;;; $Id: top-level.lisp,v 1.30 2004-04-27 12:39:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -160,6 +160,16 @@
     (dolist (file files)
       (load file))))
 
+(defun cf-command (args)
+  (let ((files (tokenize args)))
+    (dolist (file files)
+      (compile-file file))))
+
+(defun rq-command (args)
+  (let ((modules (tokenize args)))
+    (dolist (module modules)
+      (require module))))
+
 (defun pwd-command (ignored)
   (format t "~A~%" *default-pathname-defaults*))
 
@@ -184,6 +194,7 @@
   '(("apropos" 2 apropos-command "show apropos")
     ("bt" 2 backtrace-command "backtrace n stack frames (default all)")
     ("cd" 2 cd-command "change default directory")
+    ("cf" 2 cf-command "compile file(s)")
     ("continue" 4 continue-command "invoke restart n")
     ("describe" 2 describe-command "describe an object")
     ("error" 3 error-command "print the current error message")
@@ -195,7 +206,8 @@
     ("macroexpand" 2 macroexpand-command "macroexpand an expression")
     ("package" 2 package-command "change current package")
     ("pwd" 3 pwd-command "print current directory")
-    ("reset" 3 reset-command "return to top level")))
+    ("reset" 3 reset-command "return to top level")
+    ("rq" 2 rq-command "require a module")))
 
 (defun entry-name (entry)
   (first entry))
