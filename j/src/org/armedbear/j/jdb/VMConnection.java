@@ -1,8 +1,8 @@
 /*
  * VMConnection.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: VMConnection.java,v 1.1.1.1 2002-09-24 16:09:39 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: VMConnection.java,v 1.2 2003-05-15 15:49:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,19 +53,36 @@ public final class VMConnection
         ((Connector.Argument)map.get("home")).setValue(javaHome);
         String javaExecutable = jdb.getJavaExecutable();
         ((Connector.Argument)map.get("vmexec")).setValue(javaExecutable);
-        // Construct command line.
+
+        // Command line.
         FastStringBuffer sb = new FastStringBuffer(jdb.getMainClass());
         String mainClassArgs = jdb.getMainClassArgs();
         if (mainClassArgs != null && mainClassArgs.length() > 0) {
             sb.append(' ');
             sb.append(mainClassArgs);
         }
-        String cmdline = sb.toString();
-        ((Connector.Argument)map.get("main")).setValue(cmdline);
+        ((Connector.Argument)map.get("main")).setValue(sb.toString());
+
+        // CLASSPATH and VM options.
+        sb.setLength(0);
+        String vmArgs = jdb.getVMArgs();
+        if (vmArgs != null) {
+            vmArgs = vmArgs.trim();
+            if (vmArgs.length() > 0) {
+                sb.append(vmArgs);
+                sb.append(' ');
+            }
+        }
         String classPath = jdb.getClassPath();
-        String options = "-classpath ".concat(classPath);
-        if (options != null && options.length() > 0)
-            ((Connector.Argument)map.get("options")).setValue(options);
+        if (classPath != null) {
+            classPath = classPath.trim();
+            if (classPath.length() > 0) {
+                sb.append("-classpath ");
+                sb.append(classPath);
+            }
+        }
+        ((Connector.Argument)map.get("options")).setValue(sb.toString());
+
         ((Connector.Argument)map.get("suspend")).setValue("true");
         return new VMConnection(connector, map);
     }
