@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.156 2004-08-26 14:53:11 piso Exp $
+;;; $Id: autoloads.lisp,v 1.157 2004-08-28 12:55:57 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -223,6 +223,8 @@
 (autoload 'jmember-static-p "java")
 (export 'jmember-public-p "JAVA")
 (autoload 'jmember-public-p "java")
+(export 'jmember-protected-p "JAVA")
+(autoload 'jmember-protected-p "java")
 (export 'jnew-runtime-class "JAVA")
 (autoload 'jnew-runtime-class "runtime-class")
 (export 'jredefine-method "JAVA")

@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: java.lisp,v 1.16 2004-07-28 17:54:25 asimon Exp $
+;;; $Id: java.lisp,v 1.17 2004-08-28 12:55:56 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -186,6 +186,12 @@
 (defun jmember-public-p (member)
   "MEMBER is a public member of its declaring class"
   (jstatic (jmethod "java.lang.reflect.Modifier" "isPublic" "int")
+           "java.lang.reflect.Modifier"
+           (jcall (jmethod "java.lang.reflect.Member" "getModifiers") member)))
+
+(defun jmember-protected-p (member)
+  "MEMBER is a protected member of its declaring class"
+  (jstatic (jmethod "java.lang.reflect.Modifier" "isProtected" "int")
            "java.lang.reflect.Modifier"
            (jcall (jmethod "java.lang.reflect.Member" "getModifiers") member)))
 
