@@ -17,6 +17,8 @@ adjust-array
 and
 append
 apply
+apropos
+apropos-list
 aref
 array-dimension
 array-dimensions
