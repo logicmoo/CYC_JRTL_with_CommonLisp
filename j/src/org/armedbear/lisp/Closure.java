@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.67 2004-02-21 00:14:50 piso Exp $
+ * $Id: Closure.java,v 1.68 2004-02-21 13:58:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -544,6 +544,10 @@ public class Closure extends Function
         // keyword arguments.
         Environment oldDynEnv = thread.getDynamicEnvironment();
         Environment ext = new Environment(environment);
+        // Section 3.4.4: "...the &environment parameter is bound along with
+        // &whole before any other variables in the lambda list..."
+        if (envVar != null)
+            bind(envVar, environment, ext);
         LispObject[] array = new LispObject[variables.length];
         int index = 0;
         // Required parameters.
