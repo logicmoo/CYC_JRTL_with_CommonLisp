@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.18 2003-12-13 01:49:57 piso Exp $
+;;; $Id: top-level.lisp,v 1.19 2003-12-14 04:02:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -101,10 +101,10 @@
            (setf args (subseq args 1)))
          (setf args (nstring-upcase args))
          (let ((pkg (find-package args)))
-           (unless pkg
-             (format *standard-output* "Unknown package ~A.~%" args))
-           (setf *old-package* *package*
-                 *package* pkg)))))
+           (if pkg
+               (setf *old-package* *package*
+                     *package* pkg)
+               (format *standard-output* "Unknown package ~A.~%" args))))))
 
 (defun reset-command (ignored)
   (throw 'top-level-catcher nil))
