@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.16 2003-03-18 03:34:43 piso Exp $
+ * $Id: LispObject.java,v 1.17 2003-03-24 18:08:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,6 +165,16 @@ public class LispObject extends Lisp
         LispObject third) throws Condition
     {
         throw new LispError();
+    }
+
+    public LispObject incr() throws LispError
+    {
+        throw new TypeError(this, "number");
+    }
+
+    public LispObject decr() throws LispError
+    {
+        throw new TypeError(this, "number");
     }
 
     public LispObject add(LispObject obj) throws LispError
