@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.8 2003-03-13 15:38:14 piso Exp $
+;;; $Id: setf.lisp,v 1.9 2003-03-18 04:04:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -87,7 +87,6 @@
 (%put 'cdr *setf-expander* '%rplacd)
 (%put 'rest *setf-expander* '%rplacd)
 (%put 'nth *setf-expander* '%setnth)
-(%put 'aref *setf-expander* '%aset)
 (%put 'svref *setf-expander* '%svset)
 (%put 'fill-pointer *setf-expander* '%set-fill-pointer)
 (%put 'fdefinition *setf-expander* '%set-fdefinition)
