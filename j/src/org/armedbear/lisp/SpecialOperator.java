@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SpecialOperator.java,v 1.4 2003-03-05 19:40:40 piso Exp $
+ * $Id: SpecialOperator.java,v 1.5 2003-03-12 20:04:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class SpecialOperator extends LispObject
+public class SpecialOperator extends Functional
 {
     private final Module module;
     private final String name;
@@ -34,7 +34,7 @@ public class SpecialOperator extends LispObject
         this.module = null;
         this.name = name.toUpperCase();
         this.index = 0;
-        Symbol.addFunction(this.name, this);
+        setLambdaName(Symbol.addFunction(this.name, this));
     }
 
     public SpecialOperator(Module module, String name, int index)
@@ -42,7 +42,7 @@ public class SpecialOperator extends LispObject
         this.module = module;
         this.name = name.toUpperCase();
         this.index = index;
-        Symbol.addFunction(this.name, this);
+        setLambdaName(Symbol.addFunction(this.name, this));
     }
 
     public final int getType()
