@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.12 2003-09-21 19:30:29 piso Exp $
+;;; $Id: subtypep.lisp,v 1.13 2003-09-21 19:49:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -133,8 +133,6 @@
     (cons tp i)))
 
 (defun simple-subtypep (type1 type2)
-;;   (assert (symbolp type1))
-;;   (assert (symbolp type2))
   (cond ((and (symbolp type1) (symbolp type2))
          (if (memq type2 (supertypes type1))
              t
@@ -199,6 +197,17 @@
 (defun subtypep (type1 type2)
   (when (or (null type1) (eq type2 t))
     (return-from subtypep (values t t)))
+  (let ((c1 (classp type1)) (c2 (classp type2)))
+    (when (and c1 c2)
+      (return-from subtypep
+		   (if (memq type2 (class-precedence-list type1))
+		       (values t t) (values nil t))))
+    (when (and c1 (or (eq type2 'structure-object) (eq type2 'standard-object)))
+      (return-from subtypep
+		   (if (member (find-class type2) (class-precedence-list type1))
+		       (values t t) (values nil t))))
+    (when (or c1 c2)
+      (return-from subtypep (values nil t))))
   (setq type1 (normalize-type type1)
         type2 (normalize-type type2))
   (when (equal type1 type2)
