@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.2 2003-01-18 18:30:45 piso Exp $
+ * $Id: Java.java,v 1.3 2003-01-18 19:29:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ public final class Java extends Module
     };
 
     // ### jconstructor
-    // jconstructor class-name &rest parameter-types
+    // jconstructor class-name &rest parameter-class-names
     private static final Primitive JCONSTRUCTOR =
         new Primitive("jconstructor", PACKAGE_JAVA) {
         public LispObject execute(LispObject[] args) throws LispException
@@ -55,11 +55,11 @@ public final class Java extends Module
                 throw new WrongNumberOfArgumentsException(this);
             String className = LispString.getValue(args[0]);
             try {
-                Class c = Class.forName(className);
+                final Class c = Class.forName(className);
                 Class[] parameterTypes = new Class[args.length-1];
                 for (int i = 1; i < args.length; i++) {
-                    parameterTypes[i-1] =
-                        Class.forName(LispString.getValue(args[i]));
+                    className = LispString.getValue(args[i]);
+                    parameterTypes[i-1] = forName(className);
                 }
                 return new JavaObject(c.getConstructor(parameterTypes));
             }
@@ -76,7 +76,7 @@ public final class Java extends Module
     };
 
     // ### jmethod
-    // jmethod class-ref name &rest arg-class-refs
+    // jmethod class-ref name &rest parameter-class-names
     private static final Primitive JMETHOD =
         new Primitive("jmethod", PACKAGE_JAVA) {
         public LispObject execute(LispObject[] args) throws LispException
@@ -86,12 +86,12 @@ public final class Java extends Module
             String className = LispString.getValue(args[0]);
             String methodName = LispString.getValue(args[1]);
             try {
-                Class c = Class.forName(className);
+                final Class c = Class.forName(className);
                 if (args.length > 2) {
                     Class[] parameterTypes = new Class[args.length-2];
                     for (int i = 2; i < args.length; i++) {
-                        parameterTypes[i-2] =
-                            Class.forName(LispString.getValue(args[i]));
+                        className = LispString.getValue(args[i]);
+                        parameterTypes[i-2] = forName(className);
                     }
                     return new JavaObject(c.getMethod(methodName,
                         parameterTypes));
@@ -231,6 +231,29 @@ public final class Java extends Module
             }
         }
     };
+
+    // Supports Java primitive types too.
+    private static Class forName(String className) throws ClassNotFoundException
+    {
+        if (className.equals("boolean"))
+            return Boolean.TYPE;
+        if (className.equals("byte"))
+            return Byte.TYPE;
+        if (className.equals("char"))
+            return Character.TYPE;
+        if (className.equals("short"))
+            return Short.TYPE;
+        if (className.equals("int"))
+            return Integer.TYPE;
+        if (className.equals("long"))
+            return Long.TYPE;
+        if (className.equals("float"))
+            return Float.TYPE;
+        if (className.equals("double"))
+            return Double.TYPE;
+        // Not a primitive Java type.
+        return Class.forName(className);
+    }
 
     private static final LispObject makeLispObject(Object obj)
     {
