@@ -2,7 +2,7 @@
  * SimpleBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleBitVector.java,v 1.6 2004-02-25 16:58:19 piso Exp $
+ * $Id: SimpleBitVector.java,v 1.7 2004-02-25 17:29:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,12 +157,13 @@ public final class SimpleBitVector extends AbstractBitVector
         signal(new LispError());
     }
 
-    public AbstractVector adjustVector(int newCapacity, LispObject initialElement,
+    public AbstractVector adjustVector(int newCapacity,
+                                       LispObject initialElement,
                                        LispObject initialContents)
         throws ConditionThrowable
     {
-        SimpleBitVector v = new SimpleBitVector(newCapacity);
         if (initialContents != NIL) {
+            SimpleBitVector v = new SimpleBitVector(newCapacity);
             if (initialContents.listp()) {
                 LispObject list = initialContents;
                 for (int i = 0; i < newCapacity; i++) {
@@ -174,7 +175,10 @@ public final class SimpleBitVector extends AbstractBitVector
                     v.set(i, initialContents.elt(i));
             } else
                 signal(new TypeError(initialContents, Symbol.SEQUENCE));
-        } else {
+            return v;
+        }
+        if (capacity != newCapacity) {
+            SimpleBitVector v = new SimpleBitVector(newCapacity);
             final int limit = Math.min(capacity, newCapacity);
             for (int i = limit; i-- > 0;) {
                 if (getBit(i) == 1)
@@ -182,7 +186,7 @@ public final class SimpleBitVector extends AbstractBitVector
                 else
                     v.clearBit(i);
             }
-            if (newCapacity > capacity) {
+            if (initialElement != NIL && capacity < newCapacity) {
                 int n = Fixnum.getValue(initialElement);
                 if (n == 1)
                     for (int i = capacity; i < newCapacity; i++)
@@ -191,11 +195,14 @@ public final class SimpleBitVector extends AbstractBitVector
                     for (int i = capacity; i < newCapacity; i++)
                         v.clearBit(i);
             }
+            return v;
         }
-        return v;
+        // No change.
+        return this;
     }
 
-    public AbstractVector adjustVector(int newCapacity, AbstractArray displacedTo,
+    public AbstractVector adjustVector(int newCapacity,
+                                       AbstractArray displacedTo,
                                        int displacement)
         throws ConditionThrowable
     {

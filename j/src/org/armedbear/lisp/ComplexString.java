@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.10 2004-02-25 15:44:19 piso Exp $
+ * $Id: ComplexString.java,v 1.11 2004-02-25 17:29:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,9 +104,15 @@ public final class ComplexString extends AbstractString
 
     public LispObject arrayDisplacement()
     {
-        if (array != null)
-            return LispThread.currentThread().setValues(array, new Fixnum(displacement));
-        return super.arrayDisplacement();
+        LispObject value1, value2;
+        if (array != null) {
+            value1 = array;
+            value2 = new Fixnum(displacement);
+        } else {
+            value1 = NIL;
+            value2 = Fixnum.ZERO;
+        }
+        return LispThread.currentThread().setValues(value1, value2);
     }
 
     public char[] chars() throws ConditionThrowable

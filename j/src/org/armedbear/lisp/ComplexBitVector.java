@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.5 2004-02-25 16:58:19 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.6 2004-02-25 17:29:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,9 +92,15 @@ public final class ComplexBitVector extends AbstractBitVector
 
     public LispObject arrayDisplacement()
     {
-        if (array != null)
-            return LispThread.currentThread().setValues(array, new Fixnum(displacement));
-        return super.arrayDisplacement();
+        LispObject value1, value2;
+        if (array != null) {
+            value1 = array;
+            value2 = new Fixnum(displacement);
+        } else {
+            value1 = NIL;
+            value2 = Fixnum.ZERO;
+        }
+        return LispThread.currentThread().setValues(value1, value2);
     }
 
     public int length()
@@ -104,7 +110,8 @@ public final class ComplexBitVector extends AbstractBitVector
 
     public LispObject elt(int index) throws ConditionThrowable
     {
-        if (index < 0 || index >= length())
+        // The index < 0 case is checked in get().
+        if (index >= length())
             badIndex(index, length());
         return get(index);
     }
@@ -131,21 +138,29 @@ public final class ComplexBitVector extends AbstractBitVector
 
     public void set(int index, LispObject newValue) throws ConditionThrowable
     {
-        if (index >= capacity)
+        if (index < 0 || index >= capacity)
             badIndex(index, capacity);
         try {
-            int n = Fixnum.getValue(newValue);
-            if (n == 1) {
-                setBit(index);
-                return;
+            switch (((Fixnum)newValue).value) {
+                case 0:
+                    if (bits != null) {
+                        final int offset = index >> 6;
+                        bits[offset] &= ~(1L << index);
+                    } else
+                        clearBit(index);
+                    return;
+                case 1:
+                    if (bits != null) {
+                        final int offset = index >> 6;
+                        bits[offset] |= 1L << index;
+                    } else
+                        setBit(index);
+                    return;
             }
-            if (n == 0) {
-                clearBit(index);
-                return;
-            }
-            // None of the above...
         }
-        catch (ConditionThrowable t) {}
+        catch (ClassCastException e) {
+            // Fall through...
+        }
         signal(new TypeError(newValue, Symbol.BIT));
     }
 

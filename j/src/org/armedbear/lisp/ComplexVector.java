@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.9 2004-02-25 15:23:33 piso Exp $
+ * $Id: ComplexVector.java,v 1.10 2004-02-25 17:29:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,9 +107,15 @@ public final class ComplexVector extends AbstractVector
 
     public LispObject arrayDisplacement()
     {
-        if (array != null)
-            return LispThread.currentThread().setValues(array, new Fixnum(displacement));
-        return super.arrayDisplacement();
+        LispObject value1, value2;
+        if (array != null) {
+            value1 = array;
+            value2 = new Fixnum(displacement);
+        } else {
+            value1 = NIL;
+            value2 = Fixnum.ZERO;
+        }
+        return LispThread.currentThread().setValues(value1, value2);
     }
 
     public LispObject getElementType()
