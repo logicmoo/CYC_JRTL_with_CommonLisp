@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.2 2003-10-29 18:54:07 piso Exp $
+;;; $Id: clos.lisp,v 1.3 2003-10-29 21:23:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -375,19 +375,11 @@
            (eq class the-class-standard-class))
       (position 'effective-slots the-slots-of-standard-class
                 :key #'slot-definition-name)
-      (let ((slot (find slot-name
-                        (class-slots class)
+      (let ((slot (find slot-name (class-slots class)
                         :key #'slot-definition-name)))
-        (if (null slot)
-            (error "the slot ~S is missing from the class ~S"
-                   slot-name class)
-            (let ((pos (position slot
-                                 (remove-if-not #'instance-slot-p
-                                                (class-slots class)))))
-              (if (null pos)
-                  (error "the slot ~S is not an instance slot in the class ~S"
-                         slot-name class)
-                  pos))))))
+        (if slot
+            (position slot (remove-if-not #'instance-slot-p (class-slots class)))
+            nil))))
 
 (defun slot-contents (slots location)
   (svref slots location))
@@ -396,12 +388,15 @@
   (setf (svref slots location) new-value))
 
 (defun std-slot-value (instance slot-name)
-  (let* ((location (slot-location (class-of instance) slot-name))
-         (slots (std-instance-slots instance))
-         (val (slot-contents slots location)))
-    (if (eq secret-unbound-value val)
-        (error "the slot ~S is unbound in the object ~S" slot-name instance)
-        val)))
+  (let ((location (slot-location (class-of instance) slot-name)))
+    (if location
+        (let* ((slots (std-instance-slots instance))
+               (val (slot-contents slots location)))
+          (if (eq secret-unbound-value val)
+              (error "the slot ~S is unbound in the object ~S" slot-name instance)
+              val))
+        (slot-missing (class-of instance) instance slot-name 'slot-value))))
+
 (defun slot-value (object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (std-slot-value object slot-name)
@@ -410,7 +405,11 @@
 (defun (setf std-slot-value) (new-value instance slot-name)
   (let ((location (slot-location (class-of instance) slot-name))
         (slots (std-instance-slots instance)))
-    (setf (slot-contents slots location) new-value)))
+    (if location
+        (setf (slot-contents slots location) new-value)
+        (progn
+          (slot-missing (class-of instance) instance slot-name 'setf new-value)
+          new-value))))
 (defun (setf slot-value) (new-value object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (setf (std-slot-value object slot-name) new-value)
@@ -420,7 +419,9 @@
 (defun std-slot-boundp (instance slot-name)
   (let ((location (slot-location (class-of instance) slot-name))
         (slots (std-instance-slots instance)))
-    (not (eq secret-unbound-value (slot-contents slots location)))))
+    (if location
+        (not (eq secret-unbound-value (slot-contents slots location)))
+        (not (null (slot-missing (class-of instance) instance slot-name 'slot-boundp))))))
 (defun slot-boundp (object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (std-slot-boundp object slot-name)
@@ -429,8 +430,10 @@
 (defun std-slot-makunbound (instance slot-name)
   (let ((location (slot-location (class-of instance) slot-name))
         (slots (std-instance-slots instance)))
-    (setf (slot-contents slots location) secret-unbound-value))
-  instance)
+    (if location
+        (setf (slot-contents slots location) secret-unbound-value)
+        (slot-missing (class-of instance) instance slot-name 'slot-makunbound))
+  instance))
 (defun slot-makunbound (object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (std-slot-makunbound object slot-name)
@@ -1323,6 +1326,10 @@
 (defmethod slot-makunbound-using-class
   ((class standard-class) instance slot-name)
   (std-slot-makunbound instance slot-name))
+
+(defgeneric slot-missing (class instance slot-name operation &optional new-value))
+(defmethod slot-missing ((class t) instance slot-name operation &optional new-value)
+  (error "the slot ~S is missing from the class ~S" slot-name class))
 
 ;;; Instance creation and initialization
 
