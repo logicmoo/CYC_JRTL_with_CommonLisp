@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.214 2005-02-12 20:57:43 piso Exp $
+ * $Id: Autoload.java,v 1.215 2005-02-13 04:04:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -462,8 +462,14 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-schar", "StringFunctions");
         autoload(PACKAGE_SYS, "%set-std-slot-value", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-and", "SimpleBitVector");
+        autoload(PACKAGE_SYS, "%simple-bit-vector-bit-andc1", "SimpleBitVector");
+        autoload(PACKAGE_SYS, "%simple-bit-vector-bit-andc2", "SimpleBitVector");
+        autoload(PACKAGE_SYS, "%simple-bit-vector-bit-eqv", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-ior", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-nand", "SimpleBitVector");
+        autoload(PACKAGE_SYS, "%simple-bit-vector-bit-nor", "SimpleBitVector");
+        autoload(PACKAGE_SYS, "%simple-bit-vector-bit-orc1", "SimpleBitVector");
+        autoload(PACKAGE_SYS, "%simple-bit-vector-bit-orc2", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-xor", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%socket-accept", "socket_accept");
         autoload(PACKAGE_SYS, "%socket-close", "socket_close");
