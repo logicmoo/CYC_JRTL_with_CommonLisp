@@ -1,8 +1,8 @@
 /*
  * MenuListener.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: MenuListener.java,v 1.1.1.1 2002-09-24 16:08:40 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: MenuListener.java,v 1.2 2004-12-24 19:16:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,15 +25,31 @@ import javax.swing.event.MenuEvent;
 
 public final class MenuListener implements javax.swing.event.MenuListener
 {
-    public void menuCanceled(MenuEvent e) {}
+    public void menuCanceled(MenuEvent e)
+    {
+//         Log.debug("menuCanceled " + e.toString());
+    }
 
     public void menuDeselected(MenuEvent e)
     {
+//         Log.debug("menuDeselected " + e.toString());
+        if (e.getSource() instanceof org.armedbear.j.Menu) {
+//             Log.debug("menuSelected calling removeAll...");
+//             final Editor editor = Editor.currentEditor();
+//             editor.getMode().populateMenu(editor, (Menu) e.getSource());
+            ((Menu)e.getSource()).removeAll();
+        }
         Editor.isMenuSelected = false;
     }
 
     public void menuSelected(MenuEvent e)
     {
+//         Log.debug("menuSelected " + e.toString());
+        if (e.getSource() instanceof org.armedbear.j.Menu) {
+//             Log.debug("menuSelected calling populateMenu...");
+            final Editor editor = Editor.currentEditor();
+            editor.getMode().populateMenu(editor, (Menu) e.getSource());
+        }
         Editor.isMenuSelected = true;
     }
 }

@@ -1,8 +1,8 @@
 /*
  * Menu.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Menu.java,v 1.6 2003-06-13 00:56:55 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Menu.java,v 1.7 2004-12-24 19:16:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,13 +41,15 @@ public final class Menu extends JMenu implements Constants
 
     public void setPopupMenuVisible(boolean b)
     {
-        if (b) {
-            final Editor editor = Editor.currentEditor();
-            editor.getMode().populateMenu(editor, this);
-        }
+//         Log.debug("setPopupMenuVisible " + b);
         super.setPopupMenuVisible(b);
-        if (!b)
-            removeAll();
+//         if (b) {
+//             final Editor editor = Editor.currentEditor();
+//             editor.getMode().populateMenu(editor, this);
+//         }
+//         super.setPopupMenuVisible(b);
+//         if (!b)
+//             removeAll();
     }
 
     public MenuItem add(Editor editor, String label, char mnemonic,
