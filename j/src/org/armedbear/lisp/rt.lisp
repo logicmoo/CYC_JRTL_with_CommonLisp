@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.50 2003-03-10 01:46:47 piso Exp $
+;;; $Id: rt.lisp,v 1.51 2003-03-10 19:30:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -581,6 +581,10 @@
             rt::*failed*)
     (format t "*compile-tests* was ~A~%" rt::*compile-tests*))
   (values))
+
+(defun do-all-tests (&optional (compile-tests t))
+  (let ((rt::*compile-tests* compile-tests))
+    (time (do-tests))))
 
 (load (concatenate 'string rt::*prefix* "char-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cl-symbols-aux.lsp"))
