@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.667 2004-07-29 12:18:34 piso Exp $
+ * $Id: Primitives.java,v 1.668 2004-08-02 14:31:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3858,6 +3858,11 @@ public final class Primitives extends Lisp
             if (power instanceof Ratio) {
                 if (base instanceof Fixnum) {
                     double d = Math.pow(((Fixnum)base).getValue(),
+                                        ((Ratio)power).floatValue());
+                    return new LispFloat(d);
+                }
+                if (base instanceof LispFloat) {
+                    double d = Math.pow(((LispFloat)base).value,
                                         ((Ratio)power).floatValue());
                     return new LispFloat(d);
                 }
