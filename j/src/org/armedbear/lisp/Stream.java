@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.40 2004-03-11 00:48:53 piso Exp $
+ * $Id: Stream.java,v 1.41 2004-03-11 09:38:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -490,7 +490,8 @@ public class Stream extends LispObject
             case '-':
                 return handleFeature(c);
             case ':':
-                return readUninternedSymbol();
+                // An uninterned symbol.
+                return new Symbol(readToken());
             case '|':
                 skipBalancedComment();
                 return null;
@@ -582,70 +583,6 @@ public class Stream extends LispObject
             }
         }
         return null;
-    }
-
-    private Symbol readUninternedSymbol() throws ConditionThrowable
-    {
-        int n = _readChar();
-        if (n < 0) {
-            signal(new EndOfFile(this));
-            // Not reached.
-            return null;
-        }
-        char c = (char) n;
-        StringBuffer sb = new StringBuffer();
-        if (c == '|') {
-            while (true) {
-                n = _readChar();
-                if (n < 0) {
-                    signal(new EndOfFile(this));
-                    // Not reached.
-                    return null;
-                }
-                c = (char) n;
-                if (c == '\\') {
-                    // Single escape.
-                    n = _readChar();
-                    if (n < 0) {
-                        signal(new EndOfFile(this));
-                        // Not reached.
-                        return null;
-                    }
-                    sb.append((char)n);
-                    continue;
-                }
-                if (c == '|')
-                    break;
-                sb.append(c);
-            }
-        } else {
-            sb.append(Utilities.toUpperCase(c));
-            while (true) {
-                n = _readChar();
-                if (n < 0)
-                    break;
-                c = (char) n;
-                if (c == '\\') {
-                    // Single escape.
-                    n = _readChar();
-                    if (n < 0) {
-                        signal(new EndOfFile(this));
-                        // Not reached.
-                        return null;
-                    }
-                    sb.append((char)n);
-                    continue;
-                }
-                if (Character.isWhitespace(c))
-                    break;
-                if (c == '(' || c == ')') {
-                    _unreadChar(c);
-                    break;
-                }
-                sb.append(Utilities.toUpperCase(c));
-            }
-        }
-        return new Symbol(sb.toString());
     }
 
     private void skipBalancedComment() throws ConditionThrowable
