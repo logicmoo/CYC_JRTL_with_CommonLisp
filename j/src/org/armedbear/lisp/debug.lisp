@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.28 2004-10-01 13:12:17 piso Exp $
+;;; $Id: debug.lisp,v 1.29 2005-01-24 14:00:08 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,19 +72,23 @@
 (defun invoke-debugger-report-condition (condition)
   (when condition
     (fresh-line *debug-io*)
-    (with-standard-io-syntax
-      (when (and *load-truename* (streamp *load-stream*))
+    (let* ((type (type-of condition))
+           (report-function (get type 'sys::condition-report-function)))
+      (with-standard-io-syntax
+        (when (and *load-truename* (streamp *load-stream*))
+          (sys:simple-format *debug-io*
+                             "Error loading ~A at line ~D (offset ~D).~%"
+                             *load-truename*
+                             (stream-line-number *load-stream*)
+                             (stream-offset *load-stream*)))
         (sys:simple-format *debug-io*
-                           "Error loading ~A at line ~D (offset ~D).~%"
-                           *load-truename*
-                           (stream-line-number *load-stream*)
-                           (stream-offset *load-stream*)))
-      (sys:simple-format *debug-io*
-                         (if (fboundp 'tpl::repl)
-                             "Debugger invoked on condition of type ~A:~%"
-                             "Unhandled condition of type ~A:~%")
-                         (type-of condition))
-      (sys:simple-format *debug-io* "  ~A~%" condition))))
+                           (if (fboundp 'tpl::repl)
+                               "Debugger invoked on condition of type ~A:~%"
+                               "Unhandled condition of type ~A:~%")
+                           type)
+        (if report-function
+            (funcall report-function condition *debug-io*)
+            (sys:simple-format *debug-io* "  ~A~%" condition))))))
 
 (defun invoke-debugger (condition)
   (when *debugger-hook*

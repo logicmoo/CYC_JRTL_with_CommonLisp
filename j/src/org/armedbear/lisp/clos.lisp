@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.132 2004-11-22 16:18:17 piso Exp $
+;;; $Id: clos.lisp,v 1.133 2005-01-24 14:00:06 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1457,7 +1457,7 @@
                             (dolist (after ',reverse-afters)
                               (funcall (method-function after) args nil)))))
                     nil)))
-             (setf code (or (compile nil code) code))
+	     (setf code (or (compile nil code) code))
              code))
           (t
            (let ((mc-obj (get mc-name 'method-combination-object)))
@@ -1871,6 +1871,7 @@
              (if *print-escape*
                  (call-next-method)
                  (funcall ,report condition stream)))
+	   (setf (get ',name 'sys::condition-report-function) ,report)
            ',name)
         `(progn
            (defclass ,name ,parent-types ,slot-specs ,@options)
