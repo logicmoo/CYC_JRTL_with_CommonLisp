@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.20 2003-12-12 13:40:55 piso Exp $
+ * $Id: BuiltInClass.java,v 1.21 2003-12-15 14:10:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,10 +102,8 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass REAL                             = addClass(Symbol.REAL);
     public static final BuiltInClass RESTART                          = addClass(Symbol.RESTART);
     public static final BuiltInClass SEQUENCE                         = addClass(Symbol.SEQUENCE);
-    public static final BuiltInClass SIMPLE_CONDITION                 = addClass(Symbol.SIMPLE_CONDITION);
     public static final BuiltInClass SIMPLE_ERROR                     = addClass(Symbol.SIMPLE_ERROR);
     public static final BuiltInClass SIMPLE_TYPE_ERROR                = addClass(Symbol.SIMPLE_TYPE_ERROR);
-    public static final BuiltInClass SIMPLE_WARNING                   = addClass(Symbol.SIMPLE_WARNING);
     public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
     public static final BuiltInClass STRING                           = addClass(Symbol.STRING);
@@ -141,6 +139,12 @@ public class BuiltInClass extends LispClass
         addClass(Symbol.CONDITION, CONDITION);
     }
 
+    public static final StandardClass SIMPLE_CONDITION =
+        new StandardClass(Symbol.SIMPLE_CONDITION, list1(CONDITION));
+    static {
+        addClass(Symbol.SIMPLE_CONDITION, SIMPLE_CONDITION);
+    }
+
     public static final StandardClass SERIOUS_CONDITION =
         new StandardClass(Symbol.SERIOUS_CONDITION, list1(CONDITION));
     static {
@@ -151,6 +155,12 @@ public class BuiltInClass extends LispClass
         new StandardClass(Symbol.WARNING, list1(CONDITION));
     static {
         addClass(Symbol.WARNING, WARNING);
+    }
+
+    public static final StandardClass SIMPLE_WARNING =
+        new StandardClass(Symbol.SIMPLE_WARNING, list2(SIMPLE_CONDITION, WARNING));
+    static {
+        addClass(Symbol.SIMPLE_WARNING, SIMPLE_WARNING);
     }
 
     public static final StandardClass ERROR =
@@ -366,8 +376,8 @@ public class BuiltInClass extends LispClass
         SERIOUS_CONDITION.setDirectSuperclass(CONDITION);
         SERIOUS_CONDITION.setCPL(SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                                  CLASS_T);
-        SIMPLE_CONDITION.setDirectSuperclass(CONDITION);
-        SIMPLE_CONDITION.setCPL(SIMPLE_CONDITION, CONDITION, CLASS_T);
+        SIMPLE_CONDITION.setCPL(SIMPLE_CONDITION, CONDITION, STANDARD_OBJECT,
+                                CLASS_T);
         SIMPLE_ERROR.setDirectSuperclass(ERROR);
         SIMPLE_ERROR.setCPL(SIMPLE_ERROR, SIMPLE_CONDITION, ERROR,
                             SERIOUS_CONDITION, CONDITION, CLASS_T);
@@ -375,9 +385,8 @@ public class BuiltInClass extends LispClass
         SIMPLE_TYPE_ERROR.setCPL(SIMPLE_TYPE_ERROR, SIMPLE_CONDITION,
                                  TYPE_ERROR, ERROR, SERIOUS_CONDITION,
                                  CONDITION, CLASS_T);
-        SIMPLE_WARNING.setDirectSuperclasses(list2(SIMPLE_CONDITION, WARNING));
         SIMPLE_WARNING.setCPL(SIMPLE_WARNING, SIMPLE_CONDITION, WARNING,
-                              CONDITION, CLASS_T);
+                              CONDITION, STANDARD_OBJECT, CLASS_T);
         STANDARD_CLASS.setDirectSuperclass(CLASS);
         STANDARD_CLASS.setCPL(STANDARD_CLASS, CLASS, STANDARD_OBJECT, CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
