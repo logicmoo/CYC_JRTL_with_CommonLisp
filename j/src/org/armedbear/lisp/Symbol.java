@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.120 2004-04-03 23:01:14 piso Exp $
+ * $Id: Symbol.java,v 1.121 2004-04-05 01:06:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -172,8 +172,9 @@ public class Symbol extends LispObject
     public static final Symbol MACROEXPAND_MACRO                = PACKAGE_SYS.addInternalSymbol("MACROEXPAND-MACRO");
 
     // Bit flags.
-    private static final int FLAG_SPECIAL  = 0x0001;
-    private static final int FLAG_CONSTANT = 0x0002;
+    private static final int FLAG_SPECIAL           = 0x0001;
+    private static final int FLAG_CONSTANT          = 0x0002;
+    private static final int FLAG_BUILT_IN_FUNCTION = 0x0004;
 
     public static final Symbol addFunction(String name, LispObject obj)
     {
@@ -277,6 +278,19 @@ public class Symbol extends LispObject
             flags |= FLAG_CONSTANT;
         else
             flags &= ~FLAG_CONSTANT;
+    }
+
+    public final boolean isBuiltInFunction()
+    {
+        return (flags & FLAG_BUILT_IN_FUNCTION) != 0;
+    }
+
+    public final void setBuiltInFunction(boolean b)
+    {
+        if (b)
+            flags |= FLAG_BUILT_IN_FUNCTION;
+        else
+            flags &= ~FLAG_BUILT_IN_FUNCTION;
     }
 
     public final String getName()
