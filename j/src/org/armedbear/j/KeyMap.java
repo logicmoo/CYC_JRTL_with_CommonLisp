@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.20 2004-09-13 02:03:08 piso Exp $
+ * $Id: KeyMap.java,v 1.21 2005-03-01 20:24:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +61,11 @@ public final class KeyMap implements Constants
             globalKeyMap.setGlobalDefaults();
         }
         return globalKeyMap;
+    }
+
+    public static synchronized void setGlobalKeyMap(KeyMap keyMap)
+    {
+        globalKeyMap = keyMap;
     }
 
     public static synchronized final File getGlobalKeyMapFile()
@@ -379,7 +384,7 @@ public final class KeyMap implements Constants
     }
 
     public synchronized final KeyMapping lookup(char keyChar, int keyCode,
-        int modifiers)
+                                                int modifiers)
     {
         // Mask off the bits we don't care about (Java 1.4).
         modifiers &= 0x0f;
@@ -480,7 +485,7 @@ public final class KeyMap implements Constants
     private boolean mapKey(String s)
     {
         KeyMapping mapping = KeyMapping.createKeyMapping(s);
-        if (mapping != null)         {
+        if (mapping != null) {
             mappings.add(mapping);
             return true;
         }
