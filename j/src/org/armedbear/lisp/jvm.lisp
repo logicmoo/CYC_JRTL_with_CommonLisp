@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.268 2004-08-07 17:38:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.269 2004-08-08 00:41:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@
 (defstruct compiland
   name
   lambda-expression
+  classfile
   parent
   (children 0) ; Number of local functions defined with FLET or LABELS.
   contains-lambda
@@ -3047,13 +3048,15 @@
         (push decl body))
       (setf form (list* 'LAMBDA arglist body)))
     (let ((*nesting-level* (1+ *nesting-level*)))
-      (if *compile-file-truename*
-          (setf classfile (compile-defun name form nil (sys::next-classfile-name)))
-          (setf function
-                (sys::load-compiled-function (compile-defun name form nil
-                                                            (prog1
-                                                             (format nil "local-~D.class" *child-count*)
-                                                             (incf *child-count*)))))))
+      (cond (*compile-file-truename*
+             (setf classfile (sys::next-classfile-name))
+             (compile-defun name form nil classfile))
+            (t
+             (setf classfile (prog1
+                              (format nil "local-~D.class" *child-count*)
+                              (incf *child-count*)))
+             (compile-defun name form nil classfile)
+             (setf function (sys::load-compiled-function classfile)))))
     (cond (local-function
            (setf (local-function-classfile local-function) classfile)
            (let ((g (if *compile-file-truename*
@@ -3711,236 +3714,6 @@
     (t (setq *using-arg-array* t)
        #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
 
-(defun compile-defun (name form environment &optional (classfile "out.class"))
-;;   (%format t "COMPILE-DEFUN ~S ~S~%" name classfile)
-  (unless (eq (car form) 'LAMBDA)
-    (return-from compile-defun nil))
-  (unless (or (null environment) (sys::empty-environment-p environment))
-    (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
-;;   (prog1
-  (let ((precompiled-form (precompile-form form t)))
-    (let ((*current-compiland* (make-compiland :name name
-                                               :lambda-expression precompiled-form
-                                               :parent *current-compiland*)))
-      ;; Pass 1.
-      (setf precompiled-form (p1 precompiled-form))
-
-;;       (format t "children = ~S~%" (compiland-children *current-compiland*))
-      (let* ((*speed* *speed*)
-             (*safety* *safety*)
-             (*declared-symbols* (make-hash-table :test 'eq))
-             (*declared-functions* (make-hash-table :test 'equal))
-             (*declared-strings* (make-hash-table :test 'eq))
-             (*declared-fixnums* (make-hash-table :test 'eql))
-             (class-name
-              (let* ((pathname (pathname classfile))
-                     (name (pathname-name classfile)))
-                (dotimes (i (length name))
-                  (when (eql (char name i) #\-)
-                    (setf (char name i) #\_)))
-                name))
-             (*this-class*
-              (concatenate 'string "org/armedbear/lisp/" class-name))
-             (args (cadr precompiled-form))
-             (body (cddr precompiled-form))
-             (*using-arg-array* nil)
-             (*hairy-arglist-p* nil)
-
-             (*child-p* (if *context* t nil))
-
-             (*use-locals-vector*
-              (or (> (compiland-children *current-compiland*) 0)
-                  (compiland-contains-lambda *current-compiland*)))
-
-             (descriptor (analyze-args args))
-             (execute-method (make-method :name "execute"
-                                          :descriptor descriptor))
-             (*code* ())
-             (*static-code* ())
-             (*fields* ())
-
-;;              (*local-tags* nil)
-
-             (*register* 0)
-             (*registers-allocated* 0)
-             (*handlers* ())
-
-             (*context* *context*)
-
-             (*context-register* *context-register*)
-
-             (*visible-variables* *visible-variables*)
-
-             (*all-variables* *all-variables*)
-
-             (parameters ())
-
-             (*pool* ())
-             (*pool-count* 1)
-             (*pool-entries* (make-hash-table :test #'equal))
-             (*val* nil)
-             (*thread* nil)
-             (*initialize-thread-var* nil))
-
-        (if (zerop *nesting-level*)
-            (setf *child-count* 0))
-        (setf *context* (make-context))
-        (setf (method-name-index execute-method)
-              (pool-name (method-name execute-method)))
-        (setf (method-descriptor-index execute-method)
-              (pool-name (method-descriptor execute-method)))
-        (if *hairy-arglist-p*
-            (let* ((closure (sys::make-closure precompiled-form nil))
-                   (vars (sys::varlist closure))
-                   (index 0))
-              (dolist (var vars)
-                (let ((variable (make-variable :name var
-                                               :kind 'ARG
-                                               :special-p nil ;; FIXME
-                                               :register nil
-                                               :index index)))
-                  (push variable *all-variables*)
-                  (push variable *visible-variables*)
-                  (push variable parameters)
-                  (add-variable-to-context variable)
-                  (incf index))))
-            (let ((register 1)
-                  (index 0))
-              (dolist (arg args)
-                (aver (= index (length (context-vars *context*))))
-                (let ((variable (make-variable :name arg
-                                               :kind 'ARG
-                                               :special-p nil ;; FIXME
-                                               :register (if *using-arg-array* nil register)
-                                               :index index)))
-                  (push variable *all-variables*)
-                  (push variable *visible-variables*)
-                  (push variable parameters)
-                  (add-variable-to-context variable)
-                  (incf register)
-                  (incf index)))))
-
-        (let ((specials (process-special-declarations body)))
-          (dolist (name specials)
-            (let ((variable (find-visible-variable name)))
-              (cond ((null variable)
-                     (setf variable (make-variable :name name
-                                                   :kind 'SPECIAL
-                                                   :special-p t))
-                     (push variable *all-variables*)
-                     (push variable *visible-variables*))
-                    (t
-                     (setf (variable-special-p variable) t))))))
-
-        (dump-variables (reverse parameters)
-                        (format nil "Arguments to ~A:~%" (compiland-name *current-compiland*)))
-
-        (allocate-register) ;; "this" pointer
-        (if *using-arg-array*
-            ;; One slot for arg array.
-            (allocate-register)
-            ;; Otherwise, one register for each argument.
-            (dolist (arg args)
-              (allocate-register)))
-        (cond (*child-p*
-               (setf *context-register* (allocate-register))
-               (aver (eql *context-register* 2)))
-              (*use-locals-vector*
-               (aver *using-arg-array*)
-               (setf *context-register* 1)))
-        ;; Reserve the next available slot for the value register.
-        (setf *val* (allocate-register))
-        ;; Reserve the next available slot for the thread register.
-        (setf *thread* (allocate-register))
-
-        ;; Establish dynamic bindings for any variables declared special.
-        (dolist (variable parameters)
-          (when (variable-special-p variable)
-            (cond ((variable-register variable)
-                   (emit-push-current-thread)
-                   (emit 'getstatic
-                         *this-class*
-                         (declare-symbol (variable-name variable))
-                         +lisp-symbol+)
-                   (emit 'aload (variable-register variable))
-                   (emit-invokevirtual +lisp-thread-class+
-                                       "bindSpecial"
-                                       "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                       -3)
-                   (setf (variable-register variable) nil))
-                  ((variable-index variable)
-                   (emit-push-current-thread)
-                   (emit 'getstatic
-                         *this-class*
-                         (declare-symbol (variable-name variable))
-                         +lisp-symbol+)
-                   (emit 'aload 1)
-                   (emit 'bipush (variable-index variable))
-                   (emit 'aaload)
-                   (emit-invokevirtual +lisp-thread-class+
-                                       "bindSpecial"
-                                       "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                       -3)
-                   (setf (variable-index variable) nil)))))
-
-        (process-optimization-declarations body)
-
-        (do ((forms body (cdr forms)))
-            ((null forms))
-          (compile-form (car forms) :target (if (cdr forms) nil :stack))
-          (when (cdr forms)
-            (maybe-emit-clear-values (car forms))))
-
-        (unless *code*
-          (emit-push-nil))
-
-        (emit 'areturn)
-
-        (resolve-variables)
-
-        ;; Go back and fill in prologue.
-        (let ((code *code*))
-          (setf *code* ())
-          (generate-interrupt-check)
-          (when (or *hairy-arglist-p* *use-locals-vector*)
-            (emit 'aload_0)
-            (emit 'aload_1)
-            ; Reserve extra slots for locals if applicable.
-            (let ((extra (if *use-locals-vector*
-                             (length (context-vars *context*))
-                             0)))
-              ;;             (emit 'sipush (- (length *all-locals*) (length *args*)))
-              ;;               (emit 'sipush (length (context-vars *context*))) ;; FIXME subtract length of args
-              ;;               (emit 'iconst_0))
-              (emit 'sipush extra))
-            (emit-invokevirtual *this-class*
-                                "processArgs"
-                                "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
-                                -2)
-            (emit 'astore_1))
-
-          (initialize-thread-var)
-          (setf *code* (append code *code*)))
-
-        (finalize-code)
-        (optimize-code)
-
-        (setf *code* (resolve-opcodes *code*))
-        (setf (method-max-stack execute-method) (analyze-stack))
-        (setf (method-code execute-method) (code-bytes *code*))
-
-        ;; Remove handler if its protected range is empty.
-        (delete-if (lambda (handler) (eql (symbol-value (handler-from handler))
-                                          (symbol-value (handler-to handler))))
-                   *handlers*)
-
-        (setf (method-max-locals execute-method) *registers-allocated*)
-        (setf (method-handlers execute-method) (nreverse *handlers*))
-        (write-class-file args body execute-method classfile))))
-;;    (%format t "leaving COMPILE-DEFUN ~S~%" name)
-;;   )
-  )
-
 (defun write-class-file (args body execute-method classfile)
   (let* ((super
           (cond (*child-p*
@@ -3986,8 +3759,236 @@
       (write-method execute-method)
       (write-method constructor)
       ;; attributes count
-      (write-u2 0)))
-  classfile)
+      (write-u2 0))))
+
+(defun compile-1 (compiland)
+  (let ((*current-compiland* compiland)
+        (precompiled-form (compiland-lambda-expression compiland))
+        (classfile (compiland-classfile compiland)))
+    ;; Pass 1.
+    (setf precompiled-form (p1 precompiled-form))
+
+    (let* ((*speed* *speed*)
+           (*safety* *safety*)
+           (*declared-symbols* (make-hash-table :test 'eq))
+           (*declared-functions* (make-hash-table :test 'equal))
+           (*declared-strings* (make-hash-table :test 'eq))
+           (*declared-fixnums* (make-hash-table :test 'eql))
+           (class-name
+            (let* ((pathname (pathname classfile))
+                   (name (pathname-name classfile)))
+              (dotimes (i (length name))
+                (when (eql (char name i) #\-)
+                  (setf (char name i) #\_)))
+              name))
+           (*this-class*
+            (concatenate 'string "org/armedbear/lisp/" class-name))
+           (args (cadr precompiled-form))
+           (body (cddr precompiled-form))
+           (*using-arg-array* nil)
+           (*hairy-arglist-p* nil)
+
+           (*child-p* (if *context* t nil))
+
+           (*use-locals-vector* (or (> (compiland-children *current-compiland*) 0)
+                                    (compiland-contains-lambda *current-compiland*)))
+
+           (descriptor (analyze-args args))
+           (execute-method (make-method :name "execute"
+                                        :descriptor descriptor))
+           (*code* ())
+           (*static-code* ())
+           (*fields* ())
+           (*register* 0)
+           (*registers-allocated* 0)
+           (*handlers* ())
+
+           (*context* *context*)
+
+           (*context-register* *context-register*)
+
+           (*visible-variables* *visible-variables*)
+
+           (*all-variables* *all-variables*)
+
+           (parameters ())
+
+           (*pool* ())
+           (*pool-count* 1)
+           (*pool-entries* (make-hash-table :test #'equal))
+           (*val* nil)
+           (*thread* nil)
+           (*initialize-thread-var* nil))
+
+      (when (zerop *nesting-level*)
+        (setf *child-count* 0))
+      (setf *context* (make-context))
+      (setf (method-name-index execute-method)
+            (pool-name (method-name execute-method)))
+      (setf (method-descriptor-index execute-method)
+            (pool-name (method-descriptor execute-method)))
+      (if *hairy-arglist-p*
+          (let* ((closure (sys::make-closure precompiled-form nil))
+                 (vars (sys::varlist closure))
+                 (index 0))
+            (dolist (var vars)
+              (let ((variable (make-variable :name var
+                                             :kind 'ARG
+                                             :special-p nil ;; FIXME
+                                             :register nil
+                                             :index index)))
+                (push variable *all-variables*)
+                (push variable *visible-variables*)
+                (push variable parameters)
+                (add-variable-to-context variable)
+                (incf index))))
+          (let ((register 1)
+                (index 0))
+            (dolist (arg args)
+              (aver (= index (length (context-vars *context*))))
+              (let ((variable (make-variable :name arg
+                                             :kind 'ARG
+                                             :special-p nil ;; FIXME
+                                             :register (if *using-arg-array* nil register)
+                                             :index index)))
+                (push variable *all-variables*)
+                (push variable *visible-variables*)
+                (push variable parameters)
+                (add-variable-to-context variable)
+                (incf register)
+                (incf index)))))
+
+      (let ((specials (process-special-declarations body)))
+        (dolist (name specials)
+          (let ((variable (find-visible-variable name)))
+            (cond ((null variable)
+                   (setf variable (make-variable :name name
+                                                 :kind 'SPECIAL
+                                                 :special-p t))
+                   (push variable *all-variables*)
+                   (push variable *visible-variables*))
+                  (t
+                   (setf (variable-special-p variable) t))))))
+
+      (dump-variables (reverse parameters)
+                      (format nil "Arguments to ~A:~%" (compiland-name *current-compiland*)))
+
+      (allocate-register) ;; "this" pointer
+      (if *using-arg-array*
+          ;; One slot for arg array.
+          (allocate-register)
+          ;; Otherwise, one register for each argument.
+          (dolist (arg args)
+            (allocate-register)))
+      (cond (*child-p*
+             (setf *context-register* (allocate-register))
+             (aver (eql *context-register* 2)))
+            (*use-locals-vector*
+             (aver *using-arg-array*)
+             (setf *context-register* 1)))
+      ;; Reserve the next available slot for the value register.
+      (setf *val* (allocate-register))
+      ;; Reserve the next available slot for the thread register.
+      (setf *thread* (allocate-register))
+
+      ;; Establish dynamic bindings for any variables declared special.
+      (dolist (variable parameters)
+        (when (variable-special-p variable)
+          (cond ((variable-register variable)
+                 (emit-push-current-thread)
+                 (emit 'getstatic
+                       *this-class*
+                       (declare-symbol (variable-name variable))
+                       +lisp-symbol+)
+                 (emit 'aload (variable-register variable))
+                 (emit-invokevirtual +lisp-thread-class+
+                                     "bindSpecial"
+                                     "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                     -3)
+                 (setf (variable-register variable) nil))
+                ((variable-index variable)
+                 (emit-push-current-thread)
+                 (emit 'getstatic
+                       *this-class*
+                       (declare-symbol (variable-name variable))
+                       +lisp-symbol+)
+                 (emit 'aload 1)
+                 (emit 'bipush (variable-index variable))
+                 (emit 'aaload)
+                 (emit-invokevirtual +lisp-thread-class+
+                                     "bindSpecial"
+                                     "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                     -3)
+                 (setf (variable-index variable) nil)))))
+
+      (process-optimization-declarations body)
+
+      (do ((forms body (cdr forms)))
+          ((null forms))
+        (compile-form (car forms) :target (if (cdr forms) nil :stack))
+        (when (cdr forms)
+          (maybe-emit-clear-values (car forms))))
+
+      (unless *code*
+        (emit-push-nil))
+
+      (emit 'areturn)
+
+      (resolve-variables)
+
+      ;; Go back and fill in prologue.
+      (let ((code *code*))
+        (setf *code* ())
+        (generate-interrupt-check)
+        (when (or *hairy-arglist-p* *use-locals-vector*)
+          (emit 'aload_0)
+          (emit 'aload_1)
+          ; Reserve extra slots for locals if applicable.
+          (let ((extra (if *use-locals-vector*
+                           (length (context-vars *context*))
+                           0)))
+            ;;             (emit 'sipush (- (length *all-locals*) (length *args*)))
+            ;;               (emit 'sipush (length (context-vars *context*))) ;; FIXME subtract length of args
+            ;;               (emit 'iconst_0))
+            (emit 'sipush extra))
+          (emit-invokevirtual *this-class*
+                              "processArgs"
+                              "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
+                              -2)
+          (emit 'astore_1))
+
+        (initialize-thread-var)
+        (setf *code* (append code *code*)))
+
+      (finalize-code)
+      (optimize-code)
+
+      (setf *code* (resolve-opcodes *code*))
+      (setf (method-max-stack execute-method) (analyze-stack))
+      (setf (method-code execute-method) (code-bytes *code*))
+
+      ;; Remove handler if its protected range is empty.
+      (delete-if (lambda (handler) (eql (symbol-value (handler-from handler))
+                                        (symbol-value (handler-to handler))))
+                 *handlers*)
+
+      (setf (method-max-locals execute-method) *registers-allocated*)
+      (setf (method-handlers execute-method) (nreverse *handlers*))
+      (write-class-file args body execute-method classfile)
+      classfile)))
+
+(defun compile-defun (name form environment &optional (classfile "out.class"))
+  ;;   (%format t "COMPILE-DEFUN ~S ~S~%" name classfile)
+  (unless (eq (car form) 'LAMBDA)
+    (return-from compile-defun nil))
+  (unless (or (null environment) (sys::empty-environment-p environment))
+    (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
+  ;;   (prog1
+  (let ((precompiled-form (precompile-form form t)))
+    (compile-1 (make-compiland :name name
+                               :lambda-expression precompiled-form
+                               :classfile classfile
+                               :parent *current-compiland*))))
 
 (defun get-lambda-to-compile (definition-designator)
   (if (and (consp definition-designator)
