@@ -1,7 +1,7 @@
 ;;; chars.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: chars.lisp,v 1.7 2003-08-07 15:12:26 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: chars.lisp,v 1.8 2004-01-09 18:21:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
+(in-package "SYSTEM")
 
 ;;; From CMUCL.
 
@@ -104,8 +104,7 @@
 		  (return nil)))
       (return nil))))
 
-(when (and (find-package "JVM")
-           (fboundp 'jvm::jvm-compile))
+(when (and (fboundp 'jvm::jvmcompile) (not (autoloadp 'jvm::jvm-compile)))
   (mapcar #'jvm::jvm-compile '(digit-char-p
                                alphanumericp
                                char/=

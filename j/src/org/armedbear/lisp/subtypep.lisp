@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.34 2003-12-27 21:29:28 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: subtypep.lisp,v 1.35 2004-01-09 18:21:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -383,7 +383,7 @@
           (t
            (values nil nil)))))
 
-(when (fboundp 'jvm::jvm-compile)
+(when (and (fboundp 'jvm::jvmcompile) (not (autoloadp 'jvm::jvm-compile)))
   (mapcar #'jvm::jvm-compile '(subtypep-normalize-type
                                sub-interval-p
                                simple-subtypep
