@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.6 2003-05-11 14:14:07 piso Exp $
+ * $Id: Jdb.java,v 1.7 2003-05-12 13:34:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,8 +95,6 @@ public final class Jdb extends Buffer
 
     public static void jdb()
     {
-        if (!Editor.checkExperimental())
-            return;
         final Editor editor = Editor.currentEditor();
         final Buffer buffer = editor.getBuffer();
         Jdb jdb = findJdb();
