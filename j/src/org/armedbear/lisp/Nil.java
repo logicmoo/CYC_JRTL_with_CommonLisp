@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.8 2003-02-27 19:12:34 piso Exp $
+ * $Id: Nil.java,v 1.9 2003-03-09 03:41:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,11 @@ public final class Nil extends LispObject implements SequenceType
     public LispObject constantp()
     {
         return T;
+    }
+
+    public String getName()
+    {
+        return "NIL";
     }
 
     public LispObject car()
