@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.188 2004-09-26 08:45:23 asimon Exp $
+# $Id: Makefile.in,v 1.189 2004-10-10 17:10:36 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -100,6 +100,7 @@ CLASSFILES =	AbstractArray.class \
 		Mailbox.class \
 		Main.class \
 		MathFunctions.class \
+		Method.class \
 		Mutex.class \
 		Nil.class \
 		NilVector.class \
