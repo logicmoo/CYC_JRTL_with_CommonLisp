@@ -1,7 +1,7 @@
 ;;; byte-io.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: byte-io.lisp,v 1.2 2004-02-15 17:50:20 piso Exp $
+;;; $Id: byte-io.lisp,v 1.3 2004-02-15 19:29:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
           (dolist (b bytes)
             (write-8-bits b stream))))))
 
-(defun read-byte (stream &optional eof-error-p eof-value)
+(defun read-byte (stream &optional (eof-error-p t) eof-value)
   (let* ((element-type (stream-element-type stream))
          (width (cadr element-type)))
     (unless element-type
