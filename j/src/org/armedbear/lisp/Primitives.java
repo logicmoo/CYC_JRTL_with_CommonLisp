@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.335 2003-08-16 02:09:18 piso Exp $
+ * $Id: Primitives.java,v 1.336 2003-08-16 02:12:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1749,6 +1749,9 @@ public final class Primitives extends Module
             LispObject forms = args.cdr();
             try {
                 return progn(args.cdr(), env, thread);
+            }
+            catch (Return ret) {
+                throw ret;
             }
             catch (Condition c) {
                 while (bindings != NIL) {
