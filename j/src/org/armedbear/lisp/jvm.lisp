@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.298 2004-10-23 19:25:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.299 2004-10-24 00:39:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1902,6 +1902,7 @@
            (emit 'new +lisp-cons-class+)
            (emit 'dup)
            (compile-form (first args) :target :stack)
+           (maybe-emit-clear-values (first args))
            (emit-invokespecial +lisp-cons-class+
                                "<init>"
                                "(Lorg/armedbear/lisp/LispObject;)V"
