@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.264 2004-07-21 18:10:43 piso Exp $
+ * $Id: Lisp.java,v 1.265 2004-08-01 14:59:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -651,19 +651,33 @@ public abstract class Lisp
                                                                               new Cons(obj8))))))));
     }
 
-    // Used by jvm compiler.
+    // Used by JVM compiler.
     public static final LispObject multipleValueList(LispObject result)
+        throws ConditionThrowable
+    {
+        LispThread thread = LispThread.currentThread();
+        LispObject[] values = thread.getValues();
+        if (values == null)
+            return new Cons(result);
+        thread.clearValues();
+        LispObject list = NIL;
+        for (int i = values.length; i-- > 0;)
+            list = new Cons(values[i], list);
+        return list;
+    }
+
+    // Used by JVM compiler for MULTIPLE-VALUE-CALLs with a single values form.
+    public static final LispObject multipleValueCall1(LispObject result,
+                                                      LispObject function)
         throws ConditionThrowable
     {
         LispThread thread = LispThread.currentThread();
         LispObject[] values = thread.getValues();
         thread.clearValues();
         if (values == null)
-            return new Cons(result);
-        LispObject list = NIL;
-        for (int i = values.length; i-- > 0;)
-            list = new Cons(values[i], list);
-        return list;
+            return funcall1(coerceToFunction(function), result, thread);
+        else
+            return funcall(coerceToFunction(function), values, thread);
     }
 
     public static Symbol checkSymbol(LispObject obj) throws ConditionThrowable
