@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.19 2003-12-14 04:02:10 piso Exp $
+;;; $Id: top-level.lisp,v 1.20 2003-12-14 17:17:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -256,6 +256,5 @@
           (repl)
         #+j (stream-error (c) (return-from top-level-loop)) ; FIXME
         (error (c)
-               (%format t "Error: ~A.~%" c)
-               (break)
+               (invoke-debugger c)
                (throw 'top-level-catcher nil))))))
