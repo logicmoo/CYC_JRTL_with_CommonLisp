@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.18 2004-11-21 04:34:58 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: early-defuns.lisp,v 1.19 2005-02-06 13:25:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,6 +43,8 @@
             (return-from normalize-type 'character))
            ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
             (return-from normalize-type 'float))
+           (COMPLEX
+            (return-from normalize-type '(complex *)))
            (ARRAY
             (return-from normalize-type '(array * *)))
            (SIMPLE-ARRAY
@@ -95,11 +97,11 @@
            (setf cdr-typespec t))
          (return-from normalize-type (cons tp (list car-typespec cdr-typespec)))))
       (SIGNED-BYTE
-       (if (eq (car i) '*)
+       (if (or (null i) (eq (car i) '*))
            (return-from normalize-type 'integer)
            (return-from normalize-type (list 'integer (expt -2 (1- (car i))) (1- (expt 2 (1- (car i))))))))
       (UNSIGNED-BYTE
-       (if (eq (car i) '*)
+       (if (or (null i) (eq (car i) '*))
            (return-from normalize-type '(integer 0 *)))
            (return-from normalize-type (list 'integer 0 (1- (expt 2 (car i))))))
       ((ARRAY SIMPLE-ARRAY)
@@ -152,9 +154,11 @@
            (return-from normalize-type '(simple-array base-char (*)))))
       ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
        (setf tp 'float))
-      ((COMPLEX
-        (when (memq i '(short-float single-float double-float long-float))
-          (setf i 'float)))))
+      (COMPLEX
+        (cond ((null i)
+               (setf i '(*)))
+              ((memq i '(short-float single-float double-float long-float))
+               (setf i 'float)))))
     (if i (cons tp i) tp)))
 
 (defun caaaar (list) (car (car (car (car list)))))
