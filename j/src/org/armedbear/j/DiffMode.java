@@ -2,7 +2,7 @@
  * DiffMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: DiffMode.java,v 1.1.1.1 2002-09-24 16:08:14 piso Exp $
+ * $Id: DiffMode.java,v 1.2 2003-04-04 14:05:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,13 +32,16 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
     private DiffMode()
     {
         super(DIFF_MODE, DIFF_MODE_NAME);
-        setProperty(Property.VERTICAL_RULE, 0);
-        setProperty(Property.SHOW_LINE_NUMBERS, false);
     }
 
     public static final DiffMode getMode()
     {
         return mode;
+    }
+
+    public Formatter getFormatter(Buffer buffer)
+    {
+        return new DiffFormatter(buffer);
     }
 
     protected void setKeyMapDefaults( KeyMap km )
