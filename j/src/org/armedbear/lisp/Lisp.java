@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.200 2004-01-27 14:00:39 piso Exp $
+ * $Id: Lisp.java,v 1.201 2004-01-27 16:26:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1534,7 +1534,7 @@ public abstract class Lisp
         exportSpecial("*PRINT-MISER-WIDTH*", PACKAGE_CL, NIL);
 
     public static final Symbol _PRINT_PPRINT_DISPATCH_ =
-        exportSpecial("*PRINT-PPRINT-DISPATCH*", PACKAGE_CL, NIL); // FIXME
+        exportSpecial("*PRINT-PPRINT-DISPATCH*", PACKAGE_CL, T);
 
     public static final Symbol _PRINT_PRETTY_ =
         exportSpecial("*PRINT-PRETTY*", PACKAGE_CL, NIL);
