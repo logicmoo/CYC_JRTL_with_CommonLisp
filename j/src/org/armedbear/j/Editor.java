@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.65 2003-06-13 00:56:16 piso Exp $
+ * $Id: Editor.java,v 1.66 2003-06-13 15:26:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2405,30 +2405,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public KeyMapping getKeyMapping(char keyChar, int keyCode, int modifiers)
     {
-        KeyMapping mapping;
-        final Mode mode = buffer.getMode();
-
-        // Look in user's mode-specific overrides (if any).
-        KeyMap km = mode.getOverrides();
-        if (km != null) {
-            mapping = km.lookup(keyChar, keyCode, modifiers);
-            if (mapping != null)
-                return mapping;
-        }
-
         // Look in mode-specific key map.
-        mapping = mode.getKeyMap().lookup(keyChar, keyCode, modifiers);
+        KeyMapping mapping =
+            buffer.getMode().getKeyMap().lookup(keyChar, keyCode, modifiers);
         if (mapping != null)
             return mapping;
-
-        // Look in user's global overrides (if any).
-        km = KeyMap.getGlobalOverrides();
-        if (km != null) {
-            mapping = km.lookup(keyChar, keyCode, modifiers);
-            if (mapping != null)
-                return mapping;
-        }
-
         // Look in global key map.
         return KeyMap.getGlobalKeyMap().lookup(keyChar, keyCode, modifiers);
     }
