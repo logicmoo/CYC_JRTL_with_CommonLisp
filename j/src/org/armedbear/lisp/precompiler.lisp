@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.37 2004-03-31 03:45:00 piso Exp $
+;;; $Id: precompiler.lisp,v 1.38 2004-03-31 04:09:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -447,7 +447,8 @@
 (defun precompile1 (form)
   (if (atom form)
       form
-      (let ((op (car form)))
+      (let ((op (car form))
+            handler)
         (when (symbolp op)
           (cond ((local-macro-function op)
                  (let ((result (expand-local-macro form)))
@@ -468,22 +469,12 @@
                                     (precompile1 (list* op expansion
                                                         (cddr form))))))
                    (return-from precompile1 (precompile1 (expand-macro form)))))
+                ((setf handler (get op 'precompile-handler))
+                 (return-from precompile1 (funcall handler form)))
+                ((macro-function op)
+                 (return-from precompile1 (precompile1 (expand-macro form))))
                 ((special-operator-p op)
-                 (let ((handler (get op 'precompile-handler)))
-                   (if handler
-                       (return-from precompile1 (funcall handler form))
-                       (error "PRECOMPILE1: unsupported special operator ~S." op))))
-                ((and (macro-function op)
-                      (not (eq op 'LAMBDA)))
-                 ;; It's a macro...
-                 (let ((result (expand-macro form)))
-                   (return-from precompile1 (precompile1 result)))))
-          (let ((handler (get op 'precompile-handler)))
-            (when handler
-              (return-from precompile1 (funcall handler form))))
-;;           (when (special-operator-p op)
-;;             (format t "PRECOMPILE1: unsupported special operator ~S~%" op))
-          )
+                 (error "PRECOMPILE1: unsupported special operator ~S~%." op))))
         (precompile-cons form))))
 
 (defun precompile-form (form in-jvm-compile)
