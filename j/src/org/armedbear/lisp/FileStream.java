@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.6 2004-01-31 13:43:55 piso Exp $
+ * $Id: FileStream.java,v 1.7 2004-01-31 19:04:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,6 +103,23 @@ public final class FileStream extends Stream
             // Not reached.
             return NIL;
         }
+    }
+
+    public LispObject fileLength() throws ConditionThrowable
+    {
+        String namestring = pathname.getNamestring();
+        if (namestring == null)
+            return signal(new SimpleError("Pathname has no namestring: " +
+                                          pathname + '.'));
+        File file = new File(namestring);
+        long length = file.length(); // in 8-bit bytes
+        if (isCharacterStream)
+            return number(length);
+        // "For a binary file, the length is measured in units of the
+        // element type of the stream."
+        int width = Fixnum.getValue(elementType.cadr());
+        int bytesPerUnit = width / 8;
+        return number(length / bytesPerUnit);
     }
 
     // Returns -1 at end of file.
