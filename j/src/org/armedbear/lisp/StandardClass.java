@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardClass.java,v 1.17 2004-10-13 00:22:19 piso Exp $
+ * $Id: StandardClass.java,v 1.18 2004-10-20 21:07:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,9 +55,11 @@ public class StandardClass extends SlotClass
 
     public String writeToString()
     {
-        StringBuffer sb = new StringBuffer("#<STANDARD-CLASS ");
-        sb.append(symbol.getName());
-        sb.append('>');
-        return sb.toString();
+        StringBuffer sb = new StringBuffer("STANDARD-CLASS");
+        if (symbol != null) {
+            sb.append(' ');
+            sb.append(symbol.getName());
+        }
+        return unreadableString(sb.toString());
     }
 }
