@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.12 2003-07-15 17:33:09 piso Exp $
+ * $Id: Type.java,v 1.13 2003-07-15 17:43:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,5 +192,9 @@ public class Type extends Lisp
     public static final Type ERROR             = new Type(Symbol.ERROR,
                                                           SERIOUS_CONDITION);
     public static final Type PACKAGE_ERROR     = new Type(Symbol.PACKAGE_ERROR,
+                                                          ERROR);
+    public static final Type PROGRAM_ERROR     = new Type(Symbol.PROGRAM_ERROR,
+                                                          ERROR);
+    public static final Type TYPE_ERROR        = new Type(Symbol.TYPE_ERROR,
                                                           ERROR);
 }
