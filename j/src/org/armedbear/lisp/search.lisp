@@ -1,7 +1,7 @@
 ;;; search.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: search.lisp,v 1.18 2004-02-09 13:07:22 piso Exp $
+;;; $Id: search.lisp,v 1.19 2004-03-06 14:36:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -106,9 +106,11 @@
         (vector-search sequence2 sequence1))))
 
 (defun simple-search (sequence1 sequence2)
-  (if (and (stringp sequence1) (stringp sequence2))
-      (simple-string-search sequence1 sequence2)
-      (search sequence1 sequence2 :from-end nil)))
+  (cond ((and (stringp sequence1) (stringp sequence2))
+         (simple-string-search sequence1 sequence2))
+        ((vectorp sequence2)
+         (simple-vector-search sequence1 sequence2))
+        (search sequence1 sequence2 :from-end nil)))
 
 (when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
   (jvm::jvm-compile 'search))
