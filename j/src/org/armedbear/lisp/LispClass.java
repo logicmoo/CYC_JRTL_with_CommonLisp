@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.42 2004-02-13 18:05:11 piso Exp $
+ * $Id: LispClass.java,v 1.43 2004-04-16 13:26:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,8 +118,12 @@ public class LispClass extends StandardObject
 
     public final void setCPL(LispObject obj1)
     {
-        Debug.assertTrue(obj1 == this);
-        classPrecedenceList = new Cons(obj1);
+        if (obj1 instanceof Cons)
+            classPrecedenceList = obj1;
+        else {
+            Debug.assertTrue(obj1 == this);
+            classPrecedenceList = new Cons(obj1);
+        }
     }
 
     public final void setCPL(LispObject obj1, LispObject obj2)
