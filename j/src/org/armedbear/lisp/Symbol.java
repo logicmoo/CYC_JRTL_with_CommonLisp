@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.2 2003-02-13 17:48:10 piso Exp $
+ * $Id: Symbol.java,v 1.3 2003-02-14 14:59:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public final class Symbol extends LispObject
     public static final Symbol COMMA_DOT     = intern("COMMA-DOT", PACKAGE_CL);
 
     public static final Symbol ARRAY_DIMENSION_LIMIT =
-        export("array-dimension-limit", PACKAGE_CL);
+        export("ARRAY-DIMENSION-LIMIT", PACKAGE_CL);
 
     static {
         ARRAY_DIMENSION_LIMIT.setSymbolValue(new Fixnum(0x1000000L));
