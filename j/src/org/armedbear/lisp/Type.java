@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.14 2003-08-02 18:55:02 piso Exp $
+ * $Id: Type.java,v 1.15 2003-08-12 15:22:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,6 +173,7 @@ public class Type extends Lisp
         new Type(Symbol.STANDARD_CHAR, BASE_CHAR);
 
     // Subtypes of NUMBER
+    public static final Type COMPLEX  = new Type(Symbol.COMPLEX, NUMBER);
     public static final Type REAL     = new Type(Symbol.REAL, NUMBER);
     public static final Type RATIONAL = new Type(Symbol.RATIONAL, REAL);
     public static final Type FLOAT    = new Type(Symbol.FLOAT, REAL);
