@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispString.java,v 1.84 2004-02-23 14:24:47 piso Exp $
+ * $Id: LispString.java,v 1.85 2004-02-23 14:53:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,9 +37,7 @@ public final class LispString extends AbstractString
 
     public LispObject typeOf()
     {
-        return list2(/*fillPointer < 0 ? Symbol.SIMPLE_STRING :*/
-                     Symbol.STRING,
-                     number(capacity()));
+        return list2(Symbol.STRING, number(capacity()));
     }
 
     public LispClass classOf()
@@ -310,11 +308,6 @@ public final class LispString extends AbstractString
         }
         chars[fillPointer] = LispCharacter.getValue(element);
         return new Fixnum(fillPointer++);
-    }
-
-    public LispObject remove(LispObject item) throws ConditionThrowable
-    {
-        return signal(new LispError("not implemented"));
     }
 
     private int cachedHashCode;

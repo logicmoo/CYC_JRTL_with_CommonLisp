@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Nil.java,v 1.30 2004-01-14 02:23:43 piso Exp $
+ * $Id: Nil.java,v 1.31 2004-02-23 14:52:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,7 @@ public final class Nil extends Symbol
 
     public LispObject elt(int index) throws ConditionThrowable
     {
-        return signal(new TypeError("ELT: invalid index " + index + " for " + this));
+        return signal(new TypeError("ELT: invalid index " + index + " for " + this + "."));
     }
 
     public LispObject nreverse()
@@ -141,11 +141,6 @@ public final class Nil extends Symbol
     public final LispObject getSymbolFunction()
     {
         return null;
-    }
-
-    public LispObject remove(LispObject item) throws ConditionThrowable
-    {
-        return this;
     }
 
     public String toString()

@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.35 2004-01-09 18:08:48 piso Exp $
+ * $Id: Cons.java,v 1.36 2004-02-23 14:51:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,26 +226,6 @@ public final class Cons extends LispObject
     public final LispObject ENDP()
     {
         return NIL;
-    }
-
-    public LispObject remove(LispObject item) throws ConditionThrowable
-    {
-        LispObject result = NIL;
-        LispObject splice = null;
-        for (LispObject list = this; list != NIL; list = list.cdr()) {
-            LispObject obj = list.car();
-            if (!obj.eql(item)) {
-                if (splice == null) {
-                    splice = new Cons(obj);
-                    result = splice;
-                } else {
-                    Cons temp = new Cons(obj);
-                    splice.setCdr(temp);
-                    splice = temp;
-                }
-            }
-        }
-        return result;
     }
 
     public final LispObject[] copyToArray() throws ConditionThrowable
