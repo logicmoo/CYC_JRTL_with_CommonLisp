@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.99 2003-07-02 15:22:45 piso Exp $
+ * $Id: Lisp.java,v 1.100 2003-07-05 02:04:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -852,7 +852,8 @@ public abstract class Lisp
             interpreter.kill();
     }
 
-    public static final Primitive0 DEBUG = new Primitive0("debug") {
+    public static final Primitive0 DEBUG =
+        new Primitive0("%debug", PACKAGE_SYS, false) {
         public LispObject execute() throws LispError
         {
             debug = true;
@@ -860,7 +861,8 @@ public abstract class Lisp
         }
     };
 
-    public static final Primitive0 NODEBUG = new Primitive0("nodebug") {
+    public static final Primitive0 NODEBUG =
+        new Primitive0("%nodebug", PACKAGE_SYS, false) {
         public LispObject execute() throws LispError
         {
             final LispThread thread = LispThread.currentThread();
@@ -876,7 +878,7 @@ public abstract class Lisp
 
     // ### start-profiler
     public static final Primitive0 START_PROFILER =
-        new Primitive0("start-profiler") {
+        new Primitive0("start-profiler", PACKAGE_EXT, true) {
         public LispObject execute() throws LispError
         {
             CharacterOutputStream out = getStandardOutput();
@@ -906,7 +908,7 @@ public abstract class Lisp
 
     // ### stop-profiler
     public static final Primitive0 STOP_PROFILER =
-        new Primitive0("stop-profiler") {
+        new Primitive0("stop-profiler", PACKAGE_EXT, true) {
         public LispObject execute() throws LispError
         {
             CharacterOutputStream out = getStandardOutput();
