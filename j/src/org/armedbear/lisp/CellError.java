@@ -1,8 +1,8 @@
 /*
  * CellError.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: CellError.java,v 1.2 2004-10-13 00:22:17 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: CellError.java,v 1.3 2004-10-18 19:17:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,5 +62,15 @@ public class CellError extends LispError
         if (type == BuiltInClass.CELL_ERROR)
             return T;
         return super.typep(type);
+    }
+
+    public String writeToString() throws ConditionThrowable
+    {
+        if (_PRINT_ESCAPE_.symbolValue() == NIL)
+            return super.writeToString();
+        StringBuffer sb = new StringBuffer(typeOf().writeToString());
+        sb.append(' ');
+        sb.append(getCellName().writeToString());
+        return unreadableString(sb.toString());
     }
 }
