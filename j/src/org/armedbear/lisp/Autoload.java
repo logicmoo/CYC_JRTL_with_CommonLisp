@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.157 2004-02-12 13:18:49 piso Exp $
+ * $Id: Autoload.java,v 1.158 2004-02-15 17:52:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,6 +224,7 @@ public class Autoload extends Function
         autoload("char-not-lessp", "CharacterFunctions");
         autoload("char=", "CharacterFunctions");
         autoload("clrhash", "HashTable");
+        autoload("concatenated-stream-streams", "ConcatenatedStream");
         autoload("copy-structure", "StructureObject");
         autoload("cos", "MathFunctions");
         autoload("cosh", "MathFunctions");
@@ -277,6 +278,7 @@ public class Autoload extends Function
         autoload("logtest", "logtest");
         autoload("logxor", "logxor");
         autoload("make-broadcast-stream", "BroadcastStream");
+        autoload("make-concatenated-stream", "ConcatenatedStream");
         autoload("make-echo-stream", "EchoStream");
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-string-output-stream", "StringOutputStream");
