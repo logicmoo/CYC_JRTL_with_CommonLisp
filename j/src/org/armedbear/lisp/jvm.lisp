@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.14 2003-11-07 19:14:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.15 2003-11-08 14:41:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -625,10 +625,41 @@
 (defun resolve-opcodes (code)
   (map 'vector #'resolve-args code))
 
+(defun is-branch-opcode (opcode)
+  (member opcode
+    '(153 ; IFEQ
+      154 ; IFNE
+      166 ; IF_ACMPNE
+      165 ; IF_ACMPEQ
+      167 ; GOTO
+      )))
+
 ;; CODE is a list of INSTRUCTIONs.
 (defun code-bytes (code)
   (setf code (coerce code 'vector))
   (setf code (nreverse code))
+
+;;   (fresh-line)
+;;   (format t "-- begin code --~%")
+;;   (dotimes (i (length code))
+;;     (format t "~S~%" (svref code i)))
+;;   (format t "--- end code ---~%")
+
+;;   ;; Make a list of the labels that are actually branched to.
+;;   (let ((branch-targets ()))
+;;     (dotimes (i (length code))
+;;       (let ((instruction (svref code i)))
+;;         (when (is-branch-opcode (instruction-opcode instruction))
+;;           (push branch-targets (car (instruction-args instruction))))))
+;;     (format t "branch-targets = ~S~%" branch-targets)
+
+;;     ;; Remove labels that are never branched to.
+;;     (dotimes (i (length code))
+;;       (let ((instruction (svref code i)))
+;;         (when (= (instruction-opcode instruction) 202) ; LABEL
+;;           (let ((label (car (instruction-args instruction))))
+;;             (unless (member label branch-targets)
+;;               (setf (instruction-opcode instruction) 0)))))))
 
   (dotimes (i (length code))
     (let ((instruction (svref code i)))
@@ -638,9 +669,16 @@
           (when (and (= (instruction-opcode next-instruction) 202) ; LABEL
                      (eq (car (instruction-args instruction))
                          (car (instruction-args next-instruction))))
-            (setf (instruction-opcode instruction) 'nop)))))))
+            (setf (instruction-opcode instruction) 0)))))))
 
-  (setf code (delete 'nop code :key #'instruction-opcode))
+  (setf code (delete 0 code :key #'instruction-opcode))
+
+;;   (fresh-line)
+;;   (format t "-- begin code --~%")
+;;   (dotimes (i (length code))
+;;     (format t "~S~%" (svref code i)))
+;;   (format t "--- end code ---~%")
+
 ;;   (setf code (coerce code 'list))
 
   (let ((code (resolve-opcodes code))
@@ -657,16 +695,17 @@
     (let ((index 0))
       (dotimes (i (length code))
         (let ((instruction (aref code i)))
-          (case (instruction-opcode instruction)
-            ((153 ; IFEQ
-              154 ; IFNE
-              166 ; IF_ACMPNE
-              165 ; IF_ACMPEQ
-              167 ; GOTO
-              )
-             (let* ((label (car (instruction-args instruction)))
-                    (offset (- (symbol-value `,label) index)))
-               (setf (instruction-args instruction) (u2 offset)))))
+;;           (case (instruction-opcode instruction)
+;;             ((153 ; IFEQ
+;;               154 ; IFNE
+;;               166 ; IF_ACMPNE
+;;               165 ; IF_ACMPEQ
+;;               167 ; GOTO
+;;               )
+          (when (is-branch-opcode (instruction-opcode instruction))
+            (let* ((label (car (instruction-args instruction)))
+                   (offset (- (symbol-value `,label) index)))
+              (setf (instruction-args instruction) (u2 offset))))
           (unless (= (instruction-opcode instruction) 202) ; LABEL
             (incf index (opcode-size (instruction-opcode instruction)))))))
     ;; FIXME Do stack analysis here!
@@ -1553,10 +1592,10 @@
    (let* ((rest (cdr form))
           (block-label (car rest))
           (block-exit (gensym))
-          (*blocks* (acons block-label block-exit *blocks*))
-          (forms (cdr rest)))
-     (dolist (form forms)
-       (compile-form form))
+          (*blocks* (acons block-label block-exit *blocks*)))
+     (do* ((forms (cdr rest) (cdr forms)))
+          ((null forms))
+       (compile-form (car forms) (cdr forms)))
      (emit 'label `,block-exit)))
 
 (defun compile-progn (form)
