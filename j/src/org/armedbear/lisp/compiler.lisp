@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.10 2003-03-13 19:30:45 piso Exp $
+;;; $Id: compiler.lisp,v 1.11 2003-03-25 17:47:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,8 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(unless (find-package "C")
-  (make-package "C" :nicknames '("COMPILER")))
+(unless (find-package "COMPILER")
+  (make-package "COMPILER" :nicknames '("C")))
 
 (in-package "COMMON-LISP")
 
@@ -32,16 +32,6 @@
 (defun compile-setq (exprs)
   (when (oddp (length exprs))
     (error "odd number of arguments to SETQ"))
-  (when (= (length exprs) 2)
-    (unless (symbolp (first exprs))
-      (error 'type-error))
-    (let ((sym (car exprs))
-          (val (compile-sexp (cadr exprs))))
-      (when (and (consp val) (eq (car val) '1+) (eq (cadr val) sym))
-        (return-from compile-sexp
-                     (list 'cl::%%incq sym)))
-      (return-from compile-setq
-                   (append '(cl::%%setq2) (list sym val)))))
   (do* ((result '(setq))
         (sym (car exprs) (car exprs))
         (val (cadr exprs) (cadr exprs)))
@@ -115,7 +105,7 @@
          (error "wrong number of arguments for BLOCK"))
        (unless (symbolp (cadr form))
          (error 'type-error))
-       (append (list 'cl::%%block (second form))
+       (append (list 'block (second form))
                (mapcar #'compile-sexp (cddr form))))
       (PROGN
        (append '(progn) (mapcar #'compile-sexp (cdr form))))
@@ -123,13 +113,7 @@
        (let ((len (length (cdr form))))
          (unless (<= 2 len 3)
            (error "wrong number of arguments for IF"))
-         (if (= len 2)
-             (append '(cl::%%if2) (mapcar #'compile-sexp (cdr form)))
-             (append '(cl::%%if3) (mapcar #'compile-sexp (cdr form))))))
-      ((WHEN UNLESS)
-       (append (list first)
-               (list (compile-sexp (second form)))
-               (compile-progn (cddr form))))
+         (append '(if) (mapcar #'compile-sexp (cdr form)))))
       (COND
        (append '(cond) (compile-cond (cdr form))))
       (CASE
@@ -138,7 +122,7 @@
        (append (list first)
                (mapcar #'compile-sexp (cdr form))))
       (QUOTE
-       (append '(quote) (list (compile-sexp (cadr form)))))
+       (append '(quote) (list (cadr form))))
       (FUNCTION
        (append '(function) (list (compile-sexp (cadr form)))))
       ((LET LET*)
@@ -190,21 +174,7 @@
               (t
                (let* ((args (mapcar #'compile-sexp (cdr form)))
                       (n-args (length args)))
-                 (if (= n-args 2)
-                     (cond ((eq first 'cl:+)
-                            (cond ((eql (car args) 1)
-                                   (list '1+ (cadr args)))
-                                  ((eql (cadr args) 1)
-                                   (list '1+ (car args)))
-                                  (t
-                                   (append '(cl::sum) args))))
-                           ((eq first 'cl:-)
-                            (if (eql (cadr args) 1)
-                                (list '1- (car args))
-                                (append '(cl::difference) args)))
-                           (t
-                            (append (list first) args)))
-                     (append (list first) args))))))))
+                 (append (list first) args)))))))
 
 
 (defun compile-package (pkg &key verbose)
