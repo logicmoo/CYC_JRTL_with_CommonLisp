@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.18 2003-05-11 16:03:24 piso Exp $
+# $Id: Makefile.in,v 1.19 2003-05-11 16:20:44 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -109,7 +109,7 @@ SOURCEFILES = $(patsubst %.class,%.java,$(CLASSFILES))
 classes: $(CLASSFILES)
 
 lisp: $(CLASSFILES)
-	gcj -O3 $(SOURCEFILES) --main=org.armedbear.lisp.Main -o lisp
+	gcj -O2 $(SOURCEFILES) --main=org.armedbear.lisp.Main -o lisp
 
 clean:
 	-rm -f *.class build
