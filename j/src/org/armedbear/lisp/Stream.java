@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.71 2004-06-10 11:38:36 piso Exp $
+ * $Id: Stream.java,v 1.72 2004-06-10 12:03:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -562,9 +562,10 @@ public class Stream extends LispObject
         final LispThread thread = LispThread.currentThread();
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
-        String token = sb.toString();
+        final String token = sb.toString();
+        final int length = token.length();
         if (!escaped) {
-            if (token.length() > 0) {
+            if (length > 0) {
                 final char firstChar = token.charAt(0);
                 if (firstChar == '.') {
                     // Section 2.3.3: "If a token consists solely of dots (with
@@ -574,7 +575,7 @@ public class Stream extends LispObject
                     // dotted pair notation permits a dot, then it is accepted
                     // as part of such syntax and no error is signaled."
                     boolean ok = false;
-                    for (int i = token.length(); i-- > 1;) {
+                    for (int i = length; i-- > 1;) {
                         if (token.charAt(i) != '.') {
                             ok = true;
                             break;
@@ -582,7 +583,7 @@ public class Stream extends LispObject
                     }
                     if (!ok) {
                         final String message;
-                        if (token.length() > 1)
+                        if (length > 1)
                             message = "Too many dots.";
                         else
                             message = "Dot context error.";
@@ -590,19 +591,19 @@ public class Stream extends LispObject
                     }
                 }
                 if ("-+0123456789".indexOf(firstChar) >= 0) {
-                    LispObject number = makeNumber(token, getReadBase(thread));
+                    LispObject number = makeNumber(token, length, getReadBase(thread));
                     if (number != null)
                         return number;
                 }
                 final int radix = getReadBase(thread);
                 if (Character.digit(firstChar, radix) >= 0) {
-                    LispObject number = makeNumber(token, radix);
+                    LispObject number = makeNumber(token, length, radix);
                     if (number != null)
                         return number;
                 }
             }
         }
-        if (token.length() > 0) {
+        if (length > 0) {
             if (token.charAt(0) == ':')
                 return PACKAGE_KEYWORD.intern(token.substring(1));
             int index = token.indexOf("::");
@@ -731,13 +732,16 @@ public class Stream extends LispObject
         return readBase;
     }
 
-    private static final LispObject makeNumber(String token, int radix)
+    private static final LispObject makeNumber(String token,
+                                               int length,
+                                               int radix)
         throws ConditionThrowable
     {
+        if (length == 0)
+            return null;
         if (token.indexOf('/') >= 0)
             return makeRatio(token, radix);
-        int length = token.length();
-        if (length > 0 && token.charAt(length - 1) == '.') {
+        if (token.charAt(length - 1) == '.') {
             radix = 10;
             token = token.substring(0, --length);
         }
