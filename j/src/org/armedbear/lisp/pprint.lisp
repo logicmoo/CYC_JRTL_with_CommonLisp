@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.30 2004-09-29 00:44:46 piso Exp $
+;;; $Id: pprint.lisp,v 1.31 2004-09-29 14:37:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -919,7 +919,8 @@
 		     ((:lines *print-lines*) *print-lines*)
 		     ((:pprint-dispatch *print-pprint-dispatch*)
 		      *print-pprint-dispatch*))
-  (basic-write object stream))
+  (basic-write object stream)
+  object)
 
 (defun maybe-initiate-xp-printing (fn stream &rest args)
   (if (xp-structure-p stream) (apply fn stream args)
