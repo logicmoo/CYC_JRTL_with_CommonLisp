@@ -404,6 +404,7 @@
                               "fmakunbound"
                               "funcall"
                               "function-lambda-expression"
+                              "handler-bind"
                               "identity"
                               "if"
                               "iteration"
