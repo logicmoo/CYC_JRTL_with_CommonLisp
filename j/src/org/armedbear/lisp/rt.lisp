@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.131 2003-09-18 19:06:36 piso Exp $
+;;; $Id: rt.lisp,v 1.132 2003-09-18 23:39:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -506,8 +506,7 @@
 (load (concatenate 'string rt::*prefix* "remove-aux.lsp"))
 
 #+armedbear
-(when (and (find-package "JVM")
-           (fboundp 'jvm::jvm-compile))
+(when (fboundp 'jvm::jvm-compile)
   (mapcar #'jvm::jvm-compile '(rt::equalp-with-case
                                cl-test::make-scaffold-copy
                                cl-test::check-scaffold-copy
