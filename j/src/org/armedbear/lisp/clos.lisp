@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.42 2003-12-19 17:42:47 piso Exp $
+;;; $Id: clos.lisp,v 1.43 2003-12-19 18:18:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1186,7 +1186,7 @@
           (method-more-specific-p gf m1 m2 required-classes)))))
 
 (defun sub-specializer-p (c1 c2 c-arg)
-  (find c2 (cdr (memq c1 (class-precedence-list c-arg))))))
+  (find c2 (cdr (memq c1 (class-precedence-list c-arg)))))
 
 (defun std-method-more-specific-p (method1 method2 required-classes)
   (mapc #'(lambda (spec1 spec2 arg-class)
