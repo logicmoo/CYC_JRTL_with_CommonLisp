@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.44 2003-03-21 11:53:20 piso Exp $
+ * $Id: Lisp.java,v 1.45 2003-03-25 16:24:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,16 +34,17 @@ public abstract class Lisp
     /*package*/ static final LispObject EOF = new LispObject();
 
     // Types.
-    /*package*/ static final int TYPE_SYMBOL           = 1;
-    /*package*/ static final int TYPE_PRIMITIVE        = 2;
-    /*package*/ static final int TYPE_PRIMITIVE0       = 3;
-    /*package*/ static final int TYPE_PRIMITIVE1       = 4;
-    /*package*/ static final int TYPE_PRIMITIVE2       = 5;
-    /*package*/ static final int TYPE_PRIMITIVE3       = 6;
-    /*package*/ static final int TYPE_CLOSURE          = 7;
-    /*package*/ static final int TYPE_SPECIAL_OPERATOR = 8;
-    /*package*/ static final int TYPE_MACRO            = 9;
-    /*package*/ static final int TYPE_CONS             = 10;
+    /*package*/ static final int TYPE_SYMBOL            = 1;
+    /*package*/ static final int TYPE_PRIMITIVE         = 2;
+    /*package*/ static final int TYPE_PRIMITIVE0        = 3;
+    /*package*/ static final int TYPE_PRIMITIVE1        = 4;
+    /*package*/ static final int TYPE_PRIMITIVE2        = 5;
+    /*package*/ static final int TYPE_PRIMITIVE3        = 6;
+    /*package*/ static final int TYPE_CLOSURE           = 7;
+    /*package*/ static final int TYPE_SPECIAL_OPERATOR  = 8;
+    /*package*/ static final int TYPE_COMPILED_FUNCTION = 9;
+    /*package*/ static final int TYPE_MACRO             = 10;
+    /*package*/ static final int TYPE_CONS              = 11;
 
     public static Environment dynEnv = null;
 
@@ -86,10 +87,9 @@ public abstract class Lisp
             stack.push(new StackFrame((Function)fun, argv));
         }
         LispObject result;
-        final int length = argv.length;
         switch (fun.getType()) {
             case TYPE_PRIMITIVE0: {
-                if (length != 0)
+                if (argv.length != 0)
                     throw new WrongNumberOfArgumentsException(fun);
                 if (profiling)
                     fun.incrementCallCount();
@@ -97,7 +97,7 @@ public abstract class Lisp
                 break;
             }
             case TYPE_PRIMITIVE1: {
-                if (length != 1)
+                if (argv.length != 1)
                     throw new WrongNumberOfArgumentsException(fun);
                 if (profiling)
                     fun.incrementCallCount();
@@ -105,14 +105,23 @@ public abstract class Lisp
                 break;
             }
             case TYPE_PRIMITIVE2: {
-                if (length != 2)
+                if (argv.length != 2)
                     throw new WrongNumberOfArgumentsException(fun);
                 if (profiling)
                     fun.incrementCallCount();
                 result = fun.execute(argv[0], argv[1]);
                 break;
             }
+            case TYPE_PRIMITIVE3: {
+                if (argv.length != 3)
+                    throw new WrongNumberOfArgumentsException(fun);
+                if (profiling)
+                    fun.incrementCallCount();
+                result = fun.execute(argv[0], argv[1], argv[2]);
+                break;
+            }
             case TYPE_PRIMITIVE:
+            case TYPE_COMPILED_FUNCTION:
             case TYPE_CLOSURE:
             case TYPE_MACRO:
                 if (profiling)
@@ -379,6 +388,8 @@ public abstract class Lisp
                             eval(args.cadr(), env),
                             value(eval(args.cdr().cdr().car(), env)));
                     }
+                    case TYPE_COMPILED_FUNCTION:
+                        return fun.execute(evalList(obj.cdr(), env));
                     default:
                         if (debug)
                             return apply(fun, evalList(obj.cdr(), env));
@@ -1030,5 +1041,6 @@ public abstract class Lisp
         loadClass("org.armedbear.lisp.Primitives");
         loadClass("org.armedbear.lisp.Extensions");
         loadClass("org.armedbear.lisp.Java");
+        loadClass("org.armedbear.lisp.CompiledFunction");
     }
 }
