@@ -2,7 +2,7 @@
  * MessageMode.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageMode.java,v 1.2 2002-10-03 17:40:26 piso Exp $
+ * $Id: MessageMode.java,v 1.3 2002-10-04 23:40:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,13 +28,17 @@ import org.armedbear.j.Constants;
 import org.armedbear.j.Editor;
 import org.armedbear.j.Formatter;
 import org.armedbear.j.Frame;
+import org.armedbear.j.HtmlLineSegment;
 import org.armedbear.j.KeyMap;
 import org.armedbear.j.Keywords;
+import org.armedbear.j.Link;
 import org.armedbear.j.Mode;
 import org.armedbear.j.NavigationComponent;
+import org.armedbear.j.Position;
 import org.armedbear.j.Property;
 import org.armedbear.j.ToolBar;
 import org.armedbear.j.View;
+import org.armedbear.j.WebLine;
 
 public final class MessageMode extends AbstractMode implements Constants, Mode
 {
@@ -94,5 +98,32 @@ public final class MessageMode extends AbstractMode implements Constants, Mode
     protected final ToolBar getDefaultToolBar(Frame frame)
     {
         return new MessageModeToolBar(frame);
+    }
+
+    public final String getContextString(Editor editor, boolean verbose /*ignored*/)
+    {
+        return getContextString(editor.getDot());
+    }
+
+    public final String getMouseMovedContextString(Editor editor, Position pos)
+    {
+        // We want to clear the status text if the mouse is not over a link, so
+        // return "" instead of null.
+        final String s = getContextString(pos);
+        return s != null ? s : "";
+    }
+
+    private String getContextString(Position pos)
+    {
+        if (pos != null && pos.getLine() instanceof WebLine) {
+            HtmlLineSegment segment =
+                ((WebLine)pos.getLine()).findSegment(pos.getOffset());
+            if (segment != null) {
+                Link link = segment.getLink();
+                if (link != null)
+                    return link.getTarget();
+            }
+        }
+        return null;
     }
 }
