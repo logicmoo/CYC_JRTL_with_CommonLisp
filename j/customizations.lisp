@@ -17,4 +17,6 @@
 #+linux
 (progn
   (setf *jdk* "/home/peter/blackdown/j2sdk1.4.2/")
-  (setf *java-compiler* "jikes"))
+  (setf *java-compiler* "jikes")
+;;   (setf *java-compiler* "/home/peter/blackdown/j2sdk1.4.2/bin/javac")
+  )
