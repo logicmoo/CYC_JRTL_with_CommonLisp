@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.57 2004-08-21 03:24:23 piso Exp $
+;;; $Id: defstruct.lisp,v 1.58 2004-11-21 05:37:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -292,7 +292,7 @@
                         (eq (aref object ,index) ',*dd-name*))))))
             (t
              `((defun ,pred (object)
-                 (typep object ',*dd-name*))))))))
+                 (simple-typep object ',*dd-name*))))))))
 
 (defun define-reader (slot)
   (let ((accessor-name (if *dd-conc-name*
