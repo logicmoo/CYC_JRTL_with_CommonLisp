@@ -2,7 +2,7 @@
  * Return.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Return.java,v 1.3 2003-06-21 18:54:51 piso Exp $
+ * $Id: Return.java,v 1.4 2003-09-19 14:25:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class Return extends LispError
+public final class Return extends ConditionThrowable
 {
     private final LispObject tag;
     private final Block block;
@@ -56,11 +56,11 @@ public final class Return extends LispError
         return result;
     }
 
-    public String getMessage()
+    public Condition getCondition()
     {
         StringBuffer sb = new StringBuffer("no block named ");
         sb.append(tag.getName());
         sb.append(" is currently visible");
-        return sb.toString();
+        return new ControlError(sb.toString());
     }
 }
