@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Environment.java,v 1.8 2003-11-19 02:39:17 piso Exp $
+ * $Id: Environment.java,v 1.9 2003-12-14 17:12:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ public final class Environment extends LispObject
     private Binding vars;
     private Binding functions;
     private Binding blocks;
+    private Binding tags;
 
     public Environment() {}
 
@@ -35,6 +36,7 @@ public final class Environment extends LispObject
             this.vars = parent.vars;
             this.functions = parent.functions;
             this.blocks = parent.blocks;
+            this.tags = parent.tags;
         }
     }
 
@@ -106,6 +108,22 @@ public final class Environment extends LispObject
         while (binding != null) {
             if (binding.symbol == symbol)
                 return (Block) binding.value;
+            binding = binding.next;
+        }
+        return null;
+    }
+
+    public void addTagBinding(LispObject tag, LispObject code)
+    {
+        tags = new Binding(tag, code, tags);
+    }
+
+    public Binding getTagBinding(LispObject tag)
+    {
+        Binding binding = tags;
+        while (binding != null) {
+            if (binding.symbol.eql(tag))
+                return binding;
             binding = binding.next;
         }
         return null;
