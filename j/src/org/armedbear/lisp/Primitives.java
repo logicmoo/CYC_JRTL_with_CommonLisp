@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.122 2003-03-14 20:09:12 piso Exp $
+ * $Id: Primitives.java,v 1.123 2003-03-14 20:53:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -259,7 +259,7 @@ public final class Primitives extends Module
     {
         switch (index) {
             case ADD: {                         // ### +
-                LispObject result = new Fixnum(0);
+                LispObject result = Fixnum.ZERO;
                 final int length = args.length;
                 for (int i = 0; i < length; i++)
                     result = result.add(args[i]);
@@ -270,7 +270,7 @@ public final class Primitives extends Module
                     case 0:
                         throw new WrongNumberOfArgumentsException("-");
                     case 1: {
-                        LispObject result = new Fixnum(0);
+                        LispObject result = Fixnum.ZERO;
                         return result.subtract(args[0]);
                     }
                     case 2:
@@ -283,7 +283,7 @@ public final class Primitives extends Module
                     }
                 }
             case MULTIPLY: {                    // ### *
-                LispObject result = new Fixnum(1);
+                LispObject result = Fixnum.ONE;
                 for (int i = 0; i < args.length; i++)
                     result = result.multiplyBy(args[i]);
                 return result;
@@ -508,9 +508,9 @@ public final class Primitives extends Module
             case ZEROP:                         // ### zerop
                 return Fixnum.getValue(arg) == 0 ? T : NIL;
             case SUCCESSOR:                     // ### 1+
-                return new Fixnum(Fixnum.getValue(arg) + 1);
+                return arg.add(Fixnum.ONE);
             case PREDECESSOR:                   // ### 1-
-                return new Fixnum(Fixnum.getValue(arg) - 1);
+                return arg.subtract(Fixnum.ONE);
             case VALUES_LIST:                   // ### values-list
                 return values(arg.copyToArray());
             case EVAL:                          // ### eval
@@ -2407,7 +2407,7 @@ public final class Primitives extends Module
     private static final Symbol _GENSYM_COUNTER_ =
         PACKAGE_CL.intern("*GENSYM-COUNTER*");
     static {
-        _GENSYM_COUNTER_.setSymbolValue(new Fixnum(0));
+        _GENSYM_COUNTER_.setSymbolValue(Fixnum.ZERO);
         _GENSYM_COUNTER_.setSpecial(true);
         _GENSYM_COUNTER_.setExternal(true);
     }
@@ -3215,11 +3215,11 @@ public final class Primitives extends Module
                     Binding binding = dynEnv.getBinding(symbol);
                     if (binding != null) {
                         return binding.value =
-                            new Fixnum(Fixnum.getValue(binding.value) + 1);
+                            binding.value.add(Fixnum.ONE);
                     }
                 }
                 LispObject value =
-                    new Fixnum(Fixnum.getValue(symbol.getSymbolValue()) + 1);
+                    symbol.getSymbolValue().add(Fixnum.ONE);
                 symbol.setSymbolValue(value);
                 return value;
             }
@@ -3227,7 +3227,7 @@ public final class Primitives extends Module
             Binding binding = env.getBinding(symbol);
             if (binding != null) {
                 return binding.value =
-                    new Fixnum(Fixnum.getValue(binding.value) + 1);
+                    binding.value.add(Fixnum.ONE);
             }
             throw new UnboundVariableException(symbol.toString());
         }
