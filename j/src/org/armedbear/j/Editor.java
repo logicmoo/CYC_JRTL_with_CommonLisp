@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.44 2003-03-31 16:38:08 piso Exp $
+ * $Id: Editor.java,v 1.45 2003-04-04 15:07:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7180,6 +7180,38 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         runLispCommand(sb.toString());
     }
 
+    public void mode()
+    {
+        String modeName =
+            InputDialog.showInputDialog(this, "New mode:", "Change Mode");
+        if (modeName != null || modeName.length() > 0) {
+            repaintNow();
+            mode(modeName);
+        }
+    }
+
+    public void mode(String modeName)
+    {
+        int modeId = getModeList().getModeIdFromModeName(modeName);
+        if (modeId < 0) {
+            MessageDialog.showMessageDialog("Unknown mode \"" + modeName + '"',
+                "Error");
+        } else if (modeId != buffer.getMode().getId()) {
+            if (buffer.isModified() && modeId == BINARY_MODE ) {
+                String prompt =
+                    "Buffer will be reloaded in binary mode; discard changes?";
+                if (!confirm("Change Mode", prompt))
+                    return;
+            }
+            Mode mode = getModeList().getMode(modeId);
+            if (mode != null) {
+                setWaitCursor();
+                buffer.changeMode(mode);
+                setDefaultCursor();
+            }
+        }
+    }
+
     public void defaultMode()
     {
         Mode mode = buffer.getDefaultMode();
@@ -7189,7 +7221,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                     new FastStringBuffer("Buffer will be reloaded in ");
                 sb.append(mode.toString());
                 sb.append(" mode; discard changes?");
-                if (!confirm(buffer.getFile().getName(), sb.toString()))
+                if (!confirm("Change Mode", sb.toString()))
                     return;
             }
             setWaitCursor();
@@ -7204,7 +7236,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             if (buffer.isModified()) {
                 String prompt =
                     "Buffer will be reloaded in text mode; discard changes?";
-                if (!confirm(buffer.getFile().getName(), prompt))
+                if (!confirm("Change Mode", prompt))
                     return;
             }
             setWaitCursor();
