@@ -1,8 +1,8 @@
 /*
  * OpenFileTextFieldHandler.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.37 2003-01-06 04:05:20 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: OpenFileTextFieldHandler.java,v 1.38 2003-01-25 01:02:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 
 public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
-    implements Constants
+    implements Constants, MouseListener
 {
     private static final boolean filenamesIgnoreCase =
         Platform.isPlatformWindows();
@@ -65,6 +65,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     public OpenFileTextFieldHandler(Editor editor, HistoryTextField textField)
     {
         super(editor, textField);
+        textField.addMouseListener(this);
     }
 
     public final void setTitle(String s)
@@ -983,8 +984,14 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     text = originalText;
                     originalText = null;
                     originalPrefix = null;
-                } else
-                    text = text.substring(0, textField.getSelectionStart());
+                } else {
+                    FastStringBuffer sb =
+                        new FastStringBuffer(text.substring(0,
+                            textField.getSelectionStart()));
+                    sb.append(text.substring(textField.getSelectionEnd()));
+                    text = sb.toString();
+                    textField.setCaretPosition(textField.getSelectionStart());
+                }
             }
             // Insert (or append) typed char.
             final int pos = Math.min(textField.getCaretPosition(), text.length());
@@ -1005,4 +1012,18 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         }
         e.consume();
     }
+
+    public void mousePressed(MouseEvent e)
+    {
+        originalText = null;
+        originalPrefix = null;
+    }
+
+    public void mouseReleased(MouseEvent e) {}
+
+    public void mouseClicked(MouseEvent e) {}
+
+    public void mouseEntered(MouseEvent e) {}
+
+    public void mouseExited(MouseEvent e) {}
 }
