@@ -1,7 +1,7 @@
 ;;; make-sequence.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: make-sequence.lisp,v 1.1 2003-06-10 00:47:18 piso Exp $
+;;; $Id: make-sequence.lisp,v 1.2 2003-06-11 00:22:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -57,6 +57,12 @@
                             (if iesp
                                 (make-string size :initial-element initial-element)
                                 (make-string size))))
+              ((eq type 'NULL)
+               (if (zerop size)
+                   (return-from make-sequence nil)
+                   (error 'type-error
+                          "the requested length (~A) does not match the specified type NULL"
+                          size)))
               (t
                (setq element-type
                      (cond ((memq type '(BIT-VECTOR SIMPLE-BIT-VECTOR)) 'BIT)
@@ -84,8 +90,8 @@
                 (error 'type-error
                        "the requested length (~A) does not match the specified type ~A"
                        size type))))))
-    (setq sequence (make-array size :element-type element-type))
-    (when iesp
-      (dotimes (i size)
-        (setf (elt sequence i) initial-element)))
+    (setq sequence
+          (if iesp
+              (make-array size :element-type element-type :initial-element initial-element)
+              (make-array size :element-type element-type)))
     sequence))
