@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.9 2003-06-12 15:58:00 piso Exp $
+ * $Id: AbstractMode.java,v 1.10 2003-06-12 16:36:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -221,9 +221,11 @@ public abstract class AbstractMode implements Constants, Mode
             populateSearchMenu(editor, menu);
         else if (text == "Go")
             populateGoMenu(editor, menu);
-        else if (text == "Mode")
+        else if (text == "Mode") {
             populateModeMenu(editor, menu);
-        else if (text == "Help")
+            if (menu.getMenuComponentCount() == 0)
+                menu.add(new JMenuItem("This menu isn't here yet!")).setEnabled(false);
+        } else if (text == "Help")
             populateHelpMenu(editor, menu);
     }
 
@@ -346,7 +348,6 @@ public abstract class AbstractMode implements Constants, Mode
 
     public void populateModeMenu(Editor editor, Menu menu)
     {
-        menu.add(new JMenuItem("This menu isn't here yet!")).setEnabled(false);
     }
 
     private static void populateHelpMenu(Editor editor, Menu menu)
