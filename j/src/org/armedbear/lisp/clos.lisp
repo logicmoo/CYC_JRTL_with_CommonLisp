@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.48 2003-12-19 20:26:53 piso Exp $
+;;; $Id: clos.lisp,v 1.49 2003-12-20 02:18:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -269,8 +269,7 @@
     (setf (class-layout class)
           (make-layout class length)))
   (setf (class-default-initargs class)
-        (compute-class-default-initargs class))
-  (values))
+        (compute-class-default-initargs class)))
 
 (defun compute-class-default-initargs (class)
   (mapappend #'class-direct-default-initargs
@@ -770,8 +769,8 @@
       (progn
         (when (fboundp function-name)
           (error 'program-error
-                 "~A already names an ordinary function, macro, or special operator"
-                 function-name))
+                 :format-control "~A already names an ordinary function, macro, or special operator."
+                 :format-args (list function-name)))
         (let ((gf (apply (if (eq generic-function-class the-class-standard-gf)
                              #'make-instance-standard-generic-function
                              #'make-instance)
@@ -1018,17 +1017,19 @@
          (method-allow-other-keys-p (getf method-plist :allow-other-keys)))
     (unless (= (length (getf gf-plist :required-args))
                (length (getf method-plist :required-args)))
-      (error "the method has the wrong number of required arguments for the generic function"))
+      (error "The method has the wrong number of required arguments for the generic function."))
     (unless (= (length (getf gf-plist :optional-args))
                (length (getf method-plist :optional-args)))
-      (error "the method has the wrong number of optional arguments for the generic function"))
+      (error "The method has the wrong number of optional arguments for the generic function."))
     (unless (eq (or gf-restp gf-keysp) (or method-restp method-keysp))
-      (error "the method and the generic function differ in whether they accept &REST or &KEY arguments"))
+      (format t "gf-restp = ~S~% gf-keysp = ~S~% method-restp = ~S~% method-keysp = ~S~%"
+              gf-restp gf-keysp method-restp method-keysp)
+      (error "The method and the generic function differ in whether they accept &REST or &KEY arguments."))
     (when (consp gf-keywords)
       (unless (or (and method-restp (not method-keysp))
                   method-allow-other-keys-p
                   (every (lambda (k) (memq k method-keywords)) gf-keywords))
-        (error "the method does not accept all of the keyword arguments defined for the generic function"))))
+        (error "The method does not accept all of the keyword arguments defined for the generic function."))))
   (let ((new-method
          (apply
           (if (eq (generic-function-method-class gf) the-class-standard-method)
@@ -1233,7 +1234,7 @@
     (setq arounds (nreverse arounds))
     (setq around (car arounds))
     (when (null primaries)
-      (error "no primary methods for the generic function ~S" gf))
+      (error "No primary methods for the generic function ~S." gf))
     (if around
         (let ((next-emfun
                (funcall
@@ -1374,6 +1375,7 @@
   (setf (std-slot-value instance slot-name) new-value))
 
 (defgeneric slot-value-using-class (class instance slot-name))
+
 (defmethod slot-value-using-class ((class standard-class) instance slot-name)
   (std-slot-value instance slot-name))
 
@@ -1518,9 +1520,9 @@
 ;;; Finalize inheritance
 
 (defgeneric finalize-inheritance (class))
+
 (defmethod finalize-inheritance ((class standard-class))
-  (std-finalize-inheritance class)
-  (values))
+  (std-finalize-inheritance class))
 
 ;;; Class precedence lists
 
