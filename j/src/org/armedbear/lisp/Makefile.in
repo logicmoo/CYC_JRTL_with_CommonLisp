@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.5 2003-03-09 17:31:44 piso Exp $
+# $Id: Makefile.in,v 1.6 2003-03-12 20:02:26 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@ CLASSFILES =	AbstractVector.class \
 		Extensions.class \
 		Fixnum.class \
 		Function.class \
+		Functional.class \
 		Go.class \
 		HashTable.class \
 		Interpreter.class \
