@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.91 2003-07-17 13:11:22 piso Exp $
+ * $Id: Editor.java,v 1.92 2003-07-17 14:41:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5706,15 +5706,16 @@ public final class Editor extends JPanel implements Constants,
         } else {
             setWaitCursor();
             int result = LOAD_FAILED;
-            String message = null;
             try {
                 result = buf.load();
             }
             catch (OutOfMemoryError e) {
-                buf._empty();
                 buf.kill();
                 Sidebar.setUpdateFlagInAllFrames(SIDEBAR_ALL);
-                message = "Insufficient memory to load buffer";
+                MessageDialog.showMessageDialog(this,
+                                                "Insufficient memory to load buffer",
+                                                "Error");
+                return;
             }
             switch (result) {
                 case LOAD_COMPLETED:
@@ -5730,9 +5731,9 @@ public final class Editor extends JPanel implements Constants,
                     setDefaultCursor();
                     buffer = buf;
                     bufferActivated(true);
-                    if (message == null)
-                        message = "Unable to load buffer";
-                    MessageDialog.showMessageDialog(this, message, "Error");
+                    MessageDialog.showMessageDialog(this,
+                                                    "Unable to load buffer",
+                                                    "Error");
                     break;
                 default:
                     Debug.assertTrue(false);
