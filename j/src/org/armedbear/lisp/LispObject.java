@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.91 2004-06-19 14:23:07 piso Exp $
+ * $Id: LispObject.java,v 1.92 2004-07-11 12:42:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -480,6 +480,12 @@ public class LispObject extends Lisp
     // Primitive4
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
+        throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.FUNCTION));
+    }
+
+    public LispObject execute(LispObject[] args, LispObject[] context)
         throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.FUNCTION));
