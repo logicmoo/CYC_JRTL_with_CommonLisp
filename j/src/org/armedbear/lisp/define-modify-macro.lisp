@@ -1,7 +1,7 @@
 ;;; define-modify-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: define-modify-macro.lisp,v 1.3 2005-02-07 16:24:03 piso Exp $
+;;; $Id: define-modify-macro.lisp,v 1.4 2005-02-13 16:01:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@
         ((and (consp place) (eq (car place) 'THE))
          (let ((res (gensym)))
            `(let ((,res (the ,(second place) (+ ,place ,delta))))
-              (setq ,(third place) ,res))))
+              (setf ,(third place) ,res))))
         (t
          `(incf-complex ,place ,delta))))
 
@@ -101,6 +101,6 @@
         ((and (consp place) (eq (car place) 'THE))
          (let ((res (gensym)))
            `(let ((,res (the ,(second place) (- ,place ,delta))))
-              (setq ,(third place) ,res))))
+              (setf ,(third place) ,res))))
         (t
          `(decf-complex ,place ,delta))))
