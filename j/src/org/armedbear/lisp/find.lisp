@@ -1,7 +1,7 @@
 ;;; find.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: find.lisp,v 1.7 2004-04-15 12:34:00 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: find.lisp,v 1.8 2005-02-09 15:45:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 ;;; From CMUCL.
 
@@ -25,9 +25,11 @@
   `(let ((incrementer (if from-end -1 1))
 	 (start (if from-end (1- end) start))
 	 (end (if from-end (1- start) end)))
+     (declare (type fixnum incrementer start end))
      (do ((index start (+ index incrementer))
 	  ,@(case return-type (:position nil) (:element '(current))))
          ((= index end) ())
+       (declare (type fixnum index))
        ,@(case return-type
 	   (:position nil)
 	   (:element `((setf current (aref ,sequence index)))))
