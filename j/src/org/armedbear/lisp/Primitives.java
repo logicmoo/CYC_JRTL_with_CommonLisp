@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.70 2003-03-03 15:05:20 piso Exp $
+ * $Id: Primitives.java,v 1.71 2003-03-03 15:18:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1547,11 +1547,11 @@ public final class Primitives extends Module
             try {
                 return progn(args.cdr(), env);
             }
-            catch (LispError e) {
+            catch (Condition c) {
                 while (bindings != NIL) {
                     Cons binding = checkCons(bindings.car());
                     LispObject type = binding.car();
-                    if (isConditionOfType(e, type)) {
+                    if (isConditionOfType(c, type)) {
                         LispObject obj = eval(binding.cadr(), env);
                         LispObject handler;
                         if (obj instanceof Symbol) {
@@ -1561,13 +1561,13 @@ public final class Primitives extends Module
                         } else
                             handler = obj;
                         LispObject[] handlerArgs = new LispObject[1];
-                        handlerArgs[0] = new JavaObject(e);
+                        handlerArgs[0] = new JavaObject(c);
                         funcall(handler, handlerArgs); // Might not return.
                     }
                     bindings = bindings.cdr();
                 }
                 // Re-throw condition.
-                throw e;
+                throw c;
             }
         }
     };
@@ -1584,19 +1584,19 @@ public final class Primitives extends Module
             try {
                 return eval(form, env);
             }
-            catch (LispError e) {
+            catch (Condition c) {
                 stack.setSize(depth);
                 while (clauses != NIL) {
                     Cons clause = checkCons(clauses.car());
                     LispObject type = clause.car();
-                    if (isConditionOfType(e, type)) {
+                    if (isConditionOfType(c, type)) {
                         LispObject parameterList = clause.cadr();
                         LispObject body = clause.cdr().cdr();
                         Closure handler = new Closure(parameterList, body, env);
                         int numArgs = parameterList.length();
                         if (numArgs == 1) {
                             LispObject[] handlerArgs = new LispObject[1];
-                            handlerArgs[0] = new JavaObject(e);
+                            handlerArgs[0] = new JavaObject(c);
                             return funcall(handler, handlerArgs);
                         }
                         if (numArgs == 0) {
@@ -1608,22 +1608,27 @@ public final class Primitives extends Module
                     clauses = clauses.cdr();
                 }
                 // Re-throw condition.
-                throw e;
+                throw c;
             }
         }
     };
 
-    private static boolean isConditionOfType(LispError e, LispObject type)
+    private static boolean isConditionOfType(Condition c, LispObject type)
     {
         if (type == Symbol.UNDEFINED_FUNCTION)
-            return e instanceof UndefinedFunctionError;
+            return c instanceof UndefinedFunctionError;
         if (type == Symbol.TYPE_ERROR)
-            return e instanceof TypeError;
+            return c instanceof TypeError;
         if (type == Symbol.PROGRAM_ERROR)
-            return e instanceof ProgramError;
+            return c instanceof ProgramError;
         if (type == Symbol.SIMPLE_ERROR)
-            return e instanceof SimpleError;
-        return type == Symbol.ERROR;
+            return c instanceof SimpleError;
+        if (type == Symbol.ERROR)
+            return c instanceof LispError;
+        if (type == Symbol.SIMPLE_CONDITION)
+            return c instanceof SimpleCondition;
+
+        return false;
     }
 
     // ### make-array
