@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.15 2003-01-02 05:37:59 piso Exp $
+ * $Id: LispFormatter.java,v 1.16 2003-01-02 15:31:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -415,8 +415,22 @@ public final class LispFormatter extends Formatter
             if (c == '\\') {
                 // Escape.
                 pos.skip();
-                pos.next();
-                continue;
+                if (pos.getChar() == EOL) {
+                    if (pos.nextLine()) {
+                        Line line = pos.getLine();
+                        int oldflags = line.flags();
+                        if (oldflags != STATE_QUOTE) {
+                            line.setFlags(STATE_QUOTE);
+                            changed = true;
+                        }
+                        continue;
+                    } else
+                        break; // End of buffer.
+                } else {
+                    // Not end of line.
+                    pos.next();
+                    continue;
+                }
             }
             if (c == '"') {
                 pos.next();
