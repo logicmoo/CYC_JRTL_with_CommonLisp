@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.94 2004-08-10 13:48:34 piso Exp $
+ * $Id: LispObject.java,v 1.95 2004-08-15 10:56:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -640,6 +640,11 @@ public class LispObject extends Lisp
     public int psxhash() throws ConditionThrowable
     {
         return sxhash();
+    }
+
+    public LispObject STRING() throws ConditionThrowable
+    {
+        return signal(new TypeError(writeToString() + " cannot be coerced to a string."));
     }
 
     public char[] chars() throws ConditionThrowable

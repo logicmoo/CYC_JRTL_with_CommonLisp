@@ -2,7 +2,7 @@
  * AbstractString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractString.java,v 1.5 2004-05-09 16:35:05 piso Exp $
+ * $Id: AbstractString.java,v 1.6 2004-08-15 10:57:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,11 @@ public abstract class AbstractString extends AbstractVector
     public final boolean isSimpleVector()
     {
         return false;
+    }
+
+    public final LispObject STRING()
+    {
+        return this;
     }
 
     public abstract void fill(char c) throws ConditionThrowable;
