@@ -1,8 +1,8 @@
 /*
  * CommmandInterpreter.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandInterpreter.java,v 1.22 2003-12-04 14:56:42 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: CommandInterpreter.java,v 1.23 2004-04-13 00:58:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -557,11 +557,11 @@ public class CommandInterpreter extends Buffer
             if (dot != null) {
                 Line line =
                     direction > 0 ? dot.getLine().next() : dot.getLine().previous();
-                while (line != null) {
-                    int flags = line.flags();
-                    if (flags == STATE_PROMPT || flags == STATE_INPUT) {
-                        RE promptRE = ((CommandInterpreter)buffer).getPromptRE();
-                        if (promptRE != null) {
+                RE promptRE = ((CommandInterpreter)buffer).getPromptRE();
+                if (promptRE != null) {
+                    while (line != null) {
+                        int flags = line.flags();
+                        if (flags == STATE_PROMPT || flags == STATE_INPUT) {
                             final REMatch match = promptRE.getMatch(line.getText());
                             if (match != null && match.getStartIndex() == 0) {
                                 Position pos = new Position(line, match.getEndIndex());
@@ -569,8 +569,8 @@ public class CommandInterpreter extends Buffer
                                 return;
                             }
                         }
+                        line = direction > 0 ? line.next() : line.previous();
                     }
-                    line = direction > 0 ? line.next() : line.previous();
                 }
             }
         }
