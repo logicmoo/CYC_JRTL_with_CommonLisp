@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.11 2003-12-08 14:47:20 piso Exp $
+;;; $Id: clos.lisp,v 1.12 2003-12-08 14:58:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,40 +152,14 @@
 
 ;;; Slot definition metaobjects
 
-(defun slot-definition-name (slot)
-  (getf slot ':name))
-(defun (setf slot-definition-name) (new-value slot)
-  (setf (getf* slot ':name) new-value))
-
-(defun slot-definition-initfunction (slot)
-  (getf slot ':initfunction))
-(defun (setf slot-definition-initfunction) (new-value slot)
-  (setf (getf* slot ':initfunction) new-value))
-
-(defun slot-definition-initform (slot)
-  (getf slot ':initform))
-(defun (setf slot-definition-initform) (new-value slot)
-  (setf (getf* slot ':initform) new-value))
-
-(defun slot-definition-initargs (slot)
-  (getf slot ':initargs))
-(defun (setf slot-definition-initargs) (new-value slot)
-  (setf (getf* slot ':initargs) new-value))
-
-(defun slot-definition-readers (slot)
-  (getf slot ':readers))
-(defun (setf slot-definition-readers) (new-value slot)
-  (setf (getf* slot ':readers) new-value))
-
-(defun slot-definition-writers (slot)
-  (getf slot ':writers))
-(defun (setf slot-definition-writers) (new-value slot)
-  (setf (getf* slot ':writers) new-value))
-
-(defun slot-definition-allocation (slot)
-  (getf slot ':allocation))
-(defun (setf slot-definition-allocation) (new-value slot)
-  (setf (getf* slot ':allocation) new-value))
+(defstruct slot-definition
+  name
+  initfunction
+  initform
+  initargs
+  readers
+  writers
+  allocation)
 
 (defun make-direct-slot-definition (&rest properties
                                           &key name
@@ -196,7 +170,7 @@
                                           (writers ())
                                           (allocation :instance)
                                           &allow-other-keys)
-  (let ((slot (copy-list properties))) ; Don't want to side effect &rest list
+  (let ((slot (make-slot-definition)))
     (setf (slot-definition-name slot) name)
     (setf (slot-definition-initargs slot) initargs)
     (setf (slot-definition-initform slot) initform)
@@ -213,7 +187,7 @@
                                              (initfunction nil)
                                              (allocation :instance)
                                              &allow-other-keys)
-  (let ((slot (copy-list properties)))  ; Don't want to side effect &rest list
+  (let ((slot (make-slot-definition)))
     (setf (slot-definition-name slot) name)
     (setf (slot-definition-initargs slot) initargs)
     (setf (slot-definition-initform slot) initform)
