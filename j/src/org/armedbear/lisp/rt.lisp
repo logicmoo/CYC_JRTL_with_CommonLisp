@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.44 2003-03-08 18:15:50 piso Exp $
+;;; $Id: rt.lisp,v 1.45 2003-03-08 18:45:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -473,6 +473,7 @@
                               "every"
                               "fboundp"
                               "fdefinition"
+                              "fill"
                               "fill-pointer"
                               "find"
                               "find-if"

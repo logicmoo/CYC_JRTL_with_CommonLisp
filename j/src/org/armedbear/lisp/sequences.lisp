@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.22 2003-03-08 17:21:21 piso Exp $
+;;; $Id: sequences.lisp,v 1.23 2003-03-08 18:45:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 (in-package "COMMON-LISP")
 
 (export '(make-sequence
-          some every notany notevery subseq copy-seq reverse nreverse
+          some every notany notevery subseq copy-seq fill reverse nreverse
           concatenate
           map
           reduce
@@ -228,6 +228,40 @@
 (defun vector-copy-seq* (sequence)
   (vector-copy-seq sequence (type-of sequence)))
 
+
+;;; FILL (from CMUCL)
+
+(defmacro vector-fill (sequence item start end)
+  `(do ((index ,start (1+ index)))
+     ((= index (the fixnum ,end)) ,sequence)
+     (declare (fixnum index))
+     (setf (aref ,sequence index) ,item)))
+
+(defmacro list-fill (sequence item start end)
+  `(do ((current (nthcdr ,start ,sequence) (cdr current))
+        (index ,start (1+ index)))
+     ((or (atom current) (and end (= index (the fixnum ,end))))
+      sequence)
+     (declare (fixnum index))
+     (rplaca current ,item)))
+
+(defun list-fill* (sequence item start end)
+  (declare (list sequence))
+  (list-fill sequence item start end))
+
+(defun vector-fill* (sequence item start end)
+  (declare (vector sequence))
+  (when (null end) (setq end (length sequence)))
+  (vector-fill sequence item start end))
+
+(defun fill (sequence item &key (start 0) end)
+  (seq-dispatch sequence
+		(list-fill* sequence item start end)
+		(vector-fill* sequence item start end)))
+
+
+;;; REVERSE (from CMUCL)
+
 (defmacro vector-reverse (sequence type)
   `(let ((length (length ,sequence)))
      (do ((forward-index 0 (1+ forward-index))
@@ -252,6 +286,9 @@
 
 (defun vector-reverse* (sequence)
   (vector-reverse sequence (type-of sequence)))
+
+
+;;; NREVERSE (from CMUCL)
 
 (defmacro list-nreverse-macro (list)
   `(do ((1st (cdr ,list) (if (atom 1st) 1st (cdr 1st)))
