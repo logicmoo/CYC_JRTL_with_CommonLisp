@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.108 2003-12-04 18:40:57 piso Exp $
+ * $Id: Autoload.java,v 1.109 2003-12-07 17:02:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -275,6 +275,7 @@ public class Autoload extends Function
         autoload("unuse-package", "PackageFunctions");
         autoload("user-homedir-pathname", "Pathname");
         autoload(PACKAGE_EXT, "add-class", "LispClass", true);
+        autoload(PACKAGE_EXT, "arglist", "arglist", true);
         autoload(PACKAGE_EXT, "assq", "assq", true);
         autoload(PACKAGE_EXT, "assql", "assql", true);
         autoload(PACKAGE_EXT, "classp", "LispClass", true);
@@ -295,6 +296,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%open-input-file", "open");
         autoload(PACKAGE_SYS, "%open-output-file", "open");
+        autoload(PACKAGE_SYS, "%set-arglist", "arglist");
         autoload(PACKAGE_SYS, "%set-class-direct-methods", "LispClass");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
