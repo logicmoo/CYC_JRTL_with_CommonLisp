@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.90 2004-03-27 16:20:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.91 2004-03-27 19:14:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -571,7 +571,8 @@
               compiler-macro-function
               get
               special-operator-p keywordp functionp fboundp zerop consp listp
-              complexp arrayp
+              plusp minusp
+              complexp arrayp readtablep
               array-dimensions array-rank array-total-size
               array-element-type upgraded-array-element-type
               simple-vector-p simple-string-p bit-vector-p simple-bit-vector-p
@@ -588,7 +589,8 @@
               reverse nreverse
               cons
               copy-list
-              make-sequence make-list make-array
+              make-sequence make-list make-array make-package
+              pathname make-pathname
               nthcdr
               aref elt
               not null endp
@@ -598,16 +600,19 @@
               setq
               multiple-value-list pop
               type-of class-of
+              abs
               ash
               logand logandc1 logandc2 logeqv logior lognand
               lognot logorc1 logorc2 logxor
+              logbitp
               slot-boundp slot-value
               find-class
               constantly
-              exp expt
+              exp expt log
               min max
               realpart imagpart
-              ext:classp))
+              ext:classp
+              ext:fixnump))
   (setf (gethash op single-valued-operators) t))
 
 (defun single-valued-p (form)
@@ -1386,13 +1391,13 @@
   (compile-form (first args))
   (unless (remove-store-value)
     (emit-push-value))
-;;   (unless (single-valued-p (first args))
-;;     (emit-clear-values))
+  (unless (single-valued-p (first args))
+    (emit-clear-values))
   (compile-form (second args))
   (unless (remove-store-value)
     (emit-push-value))
-;;   (unless (single-valued-p (second args))
-;;     (emit-clear-values))
+  (unless (single-valued-p (second args))
+    (emit-clear-values))
   (emit-invokevirtual +lisp-object-class+
                       op
                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
