@@ -1,7 +1,7 @@
 ;;; sort.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sort.lisp,v 1.2 2003-03-08 18:55:53 piso Exp $
+;;; $Id: sort.lisp,v 1.3 2003-06-10 15:38:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,13 +31,11 @@
 ;;; Stable Sorting Lists
 
 ;;; APPLY-PRED saves us a function call sometimes.
-(eval-when (compile eval)
-           (defmacro apply-pred (one two pred key)
-             `(if ,key
-                  (funcall ,pred (funcall ,key ,one)
-                           (funcall ,key  ,two))
-                  (funcall ,pred ,one ,two)))
-           ) ; eval-when
+(defmacro apply-pred (one two pred key)
+  `(if ,key
+       (funcall ,pred (funcall ,key ,one)
+                (funcall ,key  ,two))
+       (funcall ,pred ,one ,two)))
 
 ;;; MERGE-LISTS*   originally written by Jim Large.
 ;;; 		   modified to return a pointer to the end of the result
