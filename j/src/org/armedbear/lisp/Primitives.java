@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.721 2004-12-07 19:28:16 piso Exp $
+ * $Id: Primitives.java,v 1.722 2004-12-07 20:41:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3930,17 +3930,6 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             return inSynonymOf(first).readChar(second != NIL, third);
-        }
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            int length = args.length;
-            if (length > 4)
-                signal(new WrongNumberOfArgumentsException(this));
-            Stream stream =
-                length > 0 ? inSynonymOf(args[0]) : getStandardInput();
-            boolean eofError = length > 1 ? (args[1] != NIL) : true;
-            LispObject eofValue = length > 2 ? args[2] : NIL;
-            return stream.readChar(eofError, eofValue);
         }
     };
 
