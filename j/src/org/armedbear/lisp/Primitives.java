@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.591 2004-03-06 14:35:48 piso Exp $
+ * $Id: Primitives.java,v 1.592 2004-03-06 18:32:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1816,6 +1816,83 @@ public final class Primitives extends Lisp
                 subscripts[i] = args[i+1];
             int rowMajorIndex = array.getRowMajorIndex(subscripts);
             return array.getRowMajor(rowMajorIndex);
+        }
+    };
+
+    // ### %aset
+    // %aset array subscripts new-element => new-element
+    private static final Primitive _ASET =
+        new Primitive("%aset", PACKAGE_SYS, false, "array subscripts new-element")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
+
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
+
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            // Rank zero array.
+            final ZeroRankArray array;
+            try {
+                array = (ZeroRankArray) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first + " is not an array of rank 0."));
+            }
+            array.setRowMajor(0, second);
+            return second;
+        }
+
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            final AbstractVector v;
+            try {
+                v = (AbstractVector) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.VECTOR));
+            }
+            final int index;
+            try {
+                index = ((Fixnum)second).value;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(second, Symbol.FIXNUM));
+            }
+            v.setRowMajor(index, third);
+            return third;
+        }
+
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            final AbstractArray array;
+            try {
+                array = (AbstractArray) args[0];
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(args[0], Symbol.ARRAY));
+            }
+            final int nsubs = args.length - 2;
+            final int[] subs = new int[nsubs];
+            for (int i = nsubs; i-- > 0;) {
+                try {
+                    subs[i] = ((Fixnum)args[i+1]).value;
+                }
+                catch (ClassCastException e) {
+                    signal(new TypeError(args[i+1], Symbol.FIXNUM));
+                }
+            }
+            final LispObject newValue = args[args.length - 1];
+            array.setRowMajor(array.getRowMajorIndex(subs), newValue);
+            return newValue;
         }
     };
 
