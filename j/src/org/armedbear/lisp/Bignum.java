@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.18 2003-08-12 02:06:34 piso Exp $
+ * $Id: Bignum.java,v 1.19 2003-08-12 13:14:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -196,27 +196,23 @@ public final class Bignum extends LispObject
 
     public boolean isEqualTo(LispObject obj) throws LispError
     {
-        if (obj instanceof Fixnum)
-            return false;
         if (obj instanceof Bignum)
             return value.equals(((Bignum)obj).value);
-        if (obj instanceof Ratio)
-            return false;
         if (obj instanceof LispFloat)
             return value.floatValue() == ((LispFloat)obj).getValue();
+        if ((obj.getType() & TYPE_NUMBER) != 0)
+            return false;
         throw new TypeError(obj, "number");
     }
 
     public boolean isNotEqualTo(LispObject obj) throws LispError
     {
-        if (obj instanceof Fixnum)
-            return true;
         if (obj instanceof Bignum)
             return !value.equals(((Bignum)obj).value);
-        if (obj instanceof Ratio)
-            return true;
         if (obj instanceof LispFloat)
             return value.floatValue() != ((LispFloat)obj).getValue();
+        if ((obj.getType() & TYPE_NUMBER) != 0)
+            return true;
         throw new TypeError(obj, "number");
     }
 
