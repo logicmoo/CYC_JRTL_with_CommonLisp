@@ -6,7 +6,7 @@
 
 (export '(set-global-property
           reset-display
-          log.debug
+          log-debug
           add-hook
           invoke-hook
           update-display
@@ -37,10 +37,8 @@
 (defun reset-display ()
   (jstatic "resetDisplay" "org.armedbear.j.Editor"))
 
-(defmacro log.debug (&rest args)
-  (when args
-    `(let ((method (jmethod "org.armedbear.j.Log" "debug" "java.lang.String")))
-       (jstatic method nil (format nil ,@args)))))
+(defun log-debug (control-string &rest args)
+  (%log-debug (apply 'format nil control-string args)))
 
 (defun add-hook (hook function)
   (when (symbolp hook)
