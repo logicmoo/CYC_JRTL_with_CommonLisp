@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.24 2004-09-06 23:25:26 piso Exp $
+;;; $Id: init.lisp,v 1.25 2004-09-11 12:08:46 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -40,20 +40,20 @@
 ;; Turn off the remove-trailing-whitespace preference for files in the
 ;; directory ~/gcl/ansi-tests.
 (defun my-open-file-hook (buf)
-  (let ((filename (buffer-pathname buf)))
-    (when (and filename
-               (string= (directory-namestring filename)
+  (let ((pathname (buffer-pathname buf)))
+    (when (and pathname
+               (string= (directory-namestring pathname)
                         "/home/peter/gcl/ansi-tests/"))
       (setf (variable-value 'remove-trailing-whitespace :buffer) nil))))
 
 (add-hook 'open-file-hook 'my-open-file-hook)
 
 ;; Helper function for MY-BUFFER-ACTIVATED-HOOK.
-(defun sub-p (pathname dirname)
-  "Returns T if PATHNAME is in DIRNAME or one of its subdirectories"
+(defun sub-p (namestring dirname)
+  "Returns T if NAMESTRING is in DIRNAME or one of its subdirectories"
   (let ((dirname-length (length dirname)))
-    (and (> (length pathname) dirname-length)
-         (string= (subseq pathname 0 dirname-length) dirname))))
+    (and (> (length namestring) dirname-length)
+         (string= (subseq namestring 0 dirname-length) dirname))))
 
 (defun my-buffer-activated-hook (buf)
   (let ((pathname (buffer-pathname buf)))
@@ -61,31 +61,35 @@
     (when pathname
       (let ((type (pathname-type pathname)))
         ;; We only care about Lisp and Java buffers.
-        (when (member type '("lisp" "lsp" "cl" "java") :test 'string=)
-          (let ((tagpath
-                 (cond ((sub-p pathname "/home/peter/cmucl/src/")
-                        "/home/peter/cmucl/src/code:/home/peter/cmucl/src/compiler:/home/peter/cmucl/src/pcl")
-                       ((sub-p pathname "/home/peter/cl-bench/")
-                        "/home/peter/cl-bench:/home/peter/cl-bench/files:/home/peter/depot/j/src/org/armedbear/lisp")
-                       ((sub-p pathname "/home/peter/gcl/ansi-tests/")
-                        "/home/peter/gcl/ansi-tests:/home/peter/depot/j/src/org/armedbear/lisp")
-                       ((sub-p pathname "/home/peter/phemlock")
-                        "/home/peter/phemlock/src/core:/home/peter/phemlock/src/user")
-                       (t ; default case: no change
-                        nil))))
-            ;; If we end up here with a non-NIL TAGPATH, use it to set the
-            ;; buffer-specific value of the TAG-PATH preference for the current
-            ;; buffer.
-            (when tagpath
-              (setf (variable-value 'tag-path :buffer) tagpath))))))))
+        (cond ((string= type "el")
+               (setf (variable-value 'tag-path :buffer)
+                     "/home/peter/emacs-21.3/lisp:/home/peter/emacs-21.3/lisp/emacs-lisp"))
+              ((member type '("lisp" "lsp" "cl" "java") :test 'string=)
+               (let* ((namestring (namestring pathname))
+                      (tagpath
+                       (cond ((sub-p namestring "/home/peter/cmucl/src/")
+                              "/home/peter/cmucl/src/code:/home/peter/cmucl/src/compiler:/home/peter/cmucl/src/pcl")
+                             ((sub-p namestring "/home/peter/cl-bench/")
+                              "/home/peter/cl-bench:/home/peter/cl-bench/files:/home/peter/depot/j/src/org/armedbear/lisp")
+                             ((sub-p namestring "/home/peter/gcl/ansi-tests/")
+                              "/home/peter/gcl/ansi-tests:/home/peter/depot/j/src/org/armedbear/lisp")
+                             ((sub-p namestring "/home/peter/phemlock")
+                              "/home/peter/phemlock/src/core:/home/peter/phemlock/src/user")
+                             (t ; default case: no change
+                              nil))))
+                 ;; If we end up here with a non-NIL TAGPATH, use it to set the
+                 ;; buffer-specific value of the TAG-PATH preference for the current
+                 ;; buffer.
+                 (when tagpath
+                   (setf (variable-value 'tag-path :buffer) tagpath)))))))))
 
 ;; Install our hook function.
 (add-hook 'buffer-activated-hook 'my-buffer-activated-hook)
 
 ;; Call ADJUST-APPEARANCE after saving ~/.j/prefs.
 (defun my-after-save-hook (buf)
-  (let ((filename (buffer-pathname buf)))
-    (when (string= filename "/home/peter/.j/prefs")
+  (let ((pathname (buffer-pathname buf)))
+    (when (equal pathname #p"/home/peter/.j/prefs")
       (adjust-appearance))))
 
 (add-hook 'after-save-hook 'my-after-save-hook)
