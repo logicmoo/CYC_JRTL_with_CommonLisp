@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.41 2005-02-05 17:49:12 piso Exp $
+;;; $Id: compile-system.lisp,v 1.42 2005-02-11 19:37:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -156,6 +156,7 @@
                                   "enough-namestring.lisp"
                                   "ensure-directories-exist.lisp"
                                   "error.lisp"
+                                  "fdefinition.lisp"
                                   "fill.lisp"
                                   "find-all-symbols.lisp"
                                   ;;"find.lisp"
