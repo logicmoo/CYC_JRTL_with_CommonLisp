@@ -2,7 +2,7 @@
  * AsmFormatter.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AsmFormatter.java,v 1.2 2003-12-30 19:54:10 piso Exp $
+ * $Id: AsmFormatter.java,v 1.3 2003-12-31 19:41:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ import gnu.regexp.UncheckedRE;
 
 public final class AsmFormatter extends Formatter
 {
-    private static final UncheckedRE labelRE = new UncheckedRE("^[a-zA-z0-9_]+:");
+    private static final UncheckedRE labelRE = new UncheckedRE("^[_a-zA-z0-9]+:");
 
     private static final int ASM_FORMAT_TEXT    = 0;
     private static final int ASM_FORMAT_COMMENT = 1;
@@ -44,12 +44,14 @@ public final class AsmFormatter extends Formatter
         final String text = getDetabbedText(line);
         if (text.length() > 0) {
             int start = 0;
-            int index = 0;
-            REMatch match = labelRE.getMatch(text);
-            if (match != null) {
-                index = match.getEndIndex();
-                addSegment(text, 0, index, ASM_FORMAT_LABEL);
-                start = index;
+            int index = text.indexOf(':');
+            if (index > 0) {
+                REMatch match = labelRE.getMatch(text);
+                if (match != null) {
+                    index = match.getEndIndex();
+                    addSegment(text, 0, index, ASM_FORMAT_LABEL);
+                    start = index;
+                }
             }
             index = text.indexOf(';', start);
             if (index >= 0) {
