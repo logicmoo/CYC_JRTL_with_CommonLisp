@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.44 2005-03-19 19:58:52 piso Exp $
+;;; $Id: compile-system.lisp,v 1.45 2005-03-30 14:57:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@
                                   "asdf.lisp"
                                   "assert.lisp"
                                   "assoc.lisp"
-                                  "autoloads.lisp"
+                                  ;;"autoloads.lisp"
                                   "aver.lisp"
                                   ;;"backquote.lisp"
                                   "bit-array-ops.lisp"
