@@ -1,8 +1,8 @@
 /*
  * Function.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.42 2005-02-12 03:27:16 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: Function.java,v 1.43 2005-02-28 17:19:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 public abstract class Function extends Functional
 {
-    private final Symbol symbol;
+    private Symbol symbol;
 
     private int callCount;
 
@@ -71,29 +71,22 @@ public abstract class Function extends Functional
         if (arglist instanceof String)
             setArglist(new SimpleString(arglist));
         if (name != null) {
-            symbol = pkg.intern(name.toUpperCase());
-            symbol.setSymbolFunction(this);
-            if (cold)
-                symbol.setBuiltInFunction(true);
-            setLambdaName(symbol);
-            if (exported) {
-                try {
-                    pkg.export(symbol);
-                }
-                catch (ConditionThrowable t) {
-                    Debug.assertTrue(false);
-                }
-            }
-            if (docstring != null) {
-                try {
+            try {
+                if (exported)
+                    symbol = pkg.internAndExport(name.toUpperCase());
+                else
+                    symbol = pkg.intern(name.toUpperCase());
+                symbol.setSymbolFunction(this);
+                if (cold)
+                    symbol.setBuiltInFunction(true);
+                setLambdaName(symbol);
+                if (docstring != null)
                     symbol.setFunctionDocumentation(docstring);
-                }
-                catch (ConditionThrowable t) {
-                    Debug.assertTrue(false);
-                }
             }
-        } else
-            symbol = null;
+            catch (ConditionThrowable t) {
+                Debug.assertTrue(false);
+            }
+        }
     }
 
     public Function(Symbol symbol)
