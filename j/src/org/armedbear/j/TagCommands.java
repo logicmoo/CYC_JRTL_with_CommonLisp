@@ -2,7 +2,7 @@
  * TagCommands.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: TagCommands.java,v 1.5 2002-11-05 17:38:09 piso Exp $
+ * $Id: TagCommands.java,v 1.6 2002-11-06 02:51:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,34 +96,31 @@ public final class TagCommands implements Constants
     private static boolean findTag(Editor editor, Expression expression,
         boolean useOtherWindow)
     {
-        final Buffer buffer = editor.getBuffer();
-        boolean succeeded = false;
-        List tags = findMatchingTags(buffer, expression);
-        if (tags != null) {
-            if (tags.size() > 1) {
-                editor.setDefaultCursor();
-                ListTagsBuffer buf =
-                    new ListTagsBuffer(editor, "findTag", expression.getName(), tags);
-                editor.makeNext(buf);
-                Editor ed = editor.activateInOtherWindow(buf);
-                ed.setDot(buf.getInitialDotPos());
-                ed.moveCaretToDotCol();
-                ed.updateDisplay();
-            } else if (tags.size() == 1) {
-                // Exactly one match.
-                Tag tag = (Tag) tags.get(0);
-                editor.pushPosition();
-                if (tag instanceof LocalTag) {
-                    gotoLocalTag(editor, (LocalTag)tag, useOtherWindow);
-                    succeeded = true;
-                } else if (tag instanceof GlobalTag) {
-                    gotoGlobalTag(editor, (GlobalTag)tag, useOtherWindow);
-                    succeeded = true;
-                } else
-                    Debug.bug();
-            }
+        List tags = findMatchingTags(editor.getBuffer(), expression);
+        if (tags == null || tags.size() == 0)
+            return false;
+        if (tags.size() == 1) {
+            // One match.
+            Tag tag = (Tag) tags.get(0);
+            editor.pushPosition();
+            if (tag instanceof LocalTag)
+                gotoLocalTag(editor, (LocalTag)tag, useOtherWindow);
+            else if (tag instanceof GlobalTag)
+                gotoGlobalTag(editor, (GlobalTag)tag, useOtherWindow);
+            else
+                Debug.bug();
+        } else {
+            // More than one match.
+            editor.setDefaultCursor();
+            ListTagsBuffer buf =
+                new ListTagsBuffer(editor, "findTag", expression.getName(), tags);
+            editor.makeNext(buf);
+            Editor ed = editor.activateInOtherWindow(buf);
+            ed.setDot(buf.getInitialDotPos());
+            ed.moveCaretToDotCol();
+            ed.updateDisplay();
         }
-        return succeeded;
+        return true;
     }
 
     public static List findMatchingTags(Buffer buffer, Expression expression)
