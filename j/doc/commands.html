@@ -24,6 +24,7 @@
     <li><a href="commands.html#archiveOpenFile">archiveOpenFile</a></li>
     <li><a href="commands.html#attachFile">attachFile</a></li>
     <li><a href="commands.html#backspace">backspace</a></li>
+    <li><a href="commands.html#backwardSexp">backwardSexp</a></li>
     <li><a href="commands.html#binaryMode">binaryMode</a></li>
     <li><a href="commands.html#bob">bob</a></li>
     <li><a href="commands.html#bol">bol</a></li>
@@ -83,6 +84,7 @@
     <li><a href="commands.html#dirUpDir">dirUpDir</a></li>
     <li><a href="commands.html#doShellCommandOnRegion">doShellCommandOnRegion</a></li>
     <li><a href="commands.html#down">down</a></li>
+    <li><a href="commands.html#downList">downList</a></li>
     <li><a href="commands.html#dropBookmark">dropBookmark</a></li>
     <li><a href="commands.html#editRegister">editRegister</a></li>
     <li><a href="commands.html#electricCloseAngleBracket">electricCloseAngleBracket</a></li>
@@ -115,6 +117,7 @@
     <li><a href="commands.html#fold">fold</a></li>
     <li><a href="commands.html#foldMethods">foldMethods</a></li>
     <li><a href="commands.html#foldRegion">foldRegion</a></li>
+    <li><a href="commands.html#forwardSexp">forwardSexp</a></li>
     <li><a href="commands.html#gotoBookmark">gotoBookmark</a></li>
     <li><a href="commands.html#gotoFile">gotoFile</a></li>
     <li><a href="commands.html#help">help</a></li>
@@ -401,6 +404,17 @@ If a region is marked, deletes it.  Otherwise, deletes the character to the
 left of the caret.
 <br><br>
 <b>Default key mapping:</b> Backspace, Shift Backspace
+<br><br>
+</dl><!--<hr>-->
+
+<a name="backwardSexp">backwardSexp</a><dl><dd>
+<p>
+Moves backward across one balanced syntactic expression, if possible.
+<p>
+<b>Default key mapping:</b> Ctrl Alt B in Lisp mode
+<p>
+<b>See also:</b> <a href="#forwardSexp">forwardSexp</a>,
+<a href="#downList">downList</a>
 <br><br>
 </dl><!--<hr>-->
 
@@ -1116,6 +1130,17 @@ Moves the caret down one line.
 <br><br>
 </dl><!--<hr>-->
 
+<a name="downList">downList</a><dl><dd>
+<p>
+Moves forward down one level of parentheses.
+<p>
+<b>Default key mapping:</b> Ctrl Alt D in Lisp mode
+<p>
+<b>See also:</b> <a href="#forwardSexp">forwardSexp</a>,
+<a href="#backwardSexp">backwardSexp</a>
+<br><br>
+</dl><!--<hr>-->
+
 <a name="dropBookmark">dropBookmark</a><dl><dd>
 <p>
 Drops a numbered bookmark at the location of the caret in the current buffer. By
@@ -1617,6 +1642,17 @@ other words, both dot and mark must be in column 1.
 <b>See also:</b> <a href="#fold">fold</a>,
 <a href="#foldMethods">foldMethods</a>, <a href="#unfold">unfold</a>,
 <a href="#unfoldAll">unfoldAll</a>
+<br><br>
+</dl><!--<hr>-->
+
+<a name="forwardSexp">forwardSexp</a><dl><dd>
+<p>
+Moves forward across one balanced syntactic expression, if possible.
+<p>
+<b>Default key mapping:</b> Ctrl Alt F in Lisp mode
+<p>
+<b>See also:</b> <a href="#backwardSexp">backwardSexp</a>,
+<a href="#downList">downList</a>
 <br><br>
 </dl><!--<hr>-->
 
