@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.11 2004-06-07 01:36:04 piso Exp $
+;;; $Id: pprint.lisp,v 1.12 2004-06-07 01:52:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -97,7 +97,7 @@
 	  #-armedbear prin1-to-string
           write-line
           #-armedbear write-string
-          write-char
+          #-armedbear write-char
           #-armedbear terpri
           #-armedbear fresh-line
 	  defstruct
@@ -1269,14 +1269,14 @@
 (defun print (object &optional (stream *standard-output*))
   (setq stream (decode-stream-arg stream))
   (terpri stream)
-  (let ((*print-escape* T))
+  (let ((*print-escape* t))
     (basic-write object stream))
   (write-char #\space stream)
   object)
 
 (defun prin1 (object &optional (stream *standard-output*))
   (setq stream (decode-stream-arg stream))
-  (let ((*print-escape* T))
+  (let ((*print-escape* t))
     (basic-write object stream))
   object)
 
@@ -1362,10 +1362,10 @@
 	     value))))
 
 (defun write-char (char &optional (stream *standard-output*))
-  (setq stream (decode-stream-arg stream))
+  (setf stream (decode-stream-arg stream))
   (if (xp-structure-p stream)
       (write-char+ char stream)
-      (cl:write-char char stream))
+      (sys::%write-char char stream))
   char)
 
 (defun write-string (string &optional (stream *standard-output*)
