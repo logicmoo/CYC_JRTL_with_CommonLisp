@@ -2,7 +2,7 @@
  * WebBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: WebBuffer.java,v 1.8 2003-08-09 23:46:17 piso Exp $
+ * $Id: WebBuffer.java,v 1.9 2003-08-13 15:13:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -944,8 +944,9 @@ public final class WebBuffer extends Buffer implements WebConstants
                         }
                     }
                     if (copy != null) {
-                        editor.getKillRing().appendNew(copy);
-                        editor.copyKillToSystemClipboard();
+                        KillRing killRing = editor.getKillRing();
+                        killRing.appendNew(copy);
+                        killRing.copyLastKillToSystemClipboard();
                         editor.status("Link copied to clipboard");
                     }
                 }
