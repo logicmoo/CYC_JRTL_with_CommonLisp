@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.10 2003-05-12 17:48:39 piso Exp $
+ * $Id: Jdb.java,v 1.11 2003-05-15 01:21:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ public final class Jdb extends Buffer
     private ArrayList breakpointListeners = new ArrayList();
     private ArrayList contextListeners = new ArrayList();
     private String lastCommand;
-    private List breakpoints = new ArrayList();
+    private final List breakpoints = new ArrayList();
 
     public static void jdb()
     {
@@ -329,6 +329,9 @@ public final class Jdb extends Buffer
         } else if (command.equals("clear")) {
             logCommand("clear", args);
             doClear(args);
+        } else if (command.equals("finish")) {
+            logCommand("finish");
+            doFinish();
         } else if (command.equals("locals")) {
             logCommand("locals");
             doLocals();
@@ -490,14 +493,28 @@ public final class Jdb extends Buffer
     private void addBreakpoint(ResolvableBreakpoint bp)
     {
         breakpoints.add(bp);
-        log("Breakpoint added: " + bp.getLocationString());
+        FastStringBuffer sb = new FastStringBuffer();
+        if (bp.isTemporary())
+            sb.append("Temporary b");
+        else
+            sb.append('B');
+        sb.append("reakpoint added: ");
+        sb.append(bp.getLocationString());
+        log(sb.toString());
     }
 
     public void deleteBreakpoint(ResolvableBreakpoint bp)
     {
         bp.clear();
         breakpoints.remove(bp);
-        log("Breakpoint deleted: " + bp.getLocationString());
+        FastStringBuffer sb = new FastStringBuffer();
+        if (bp.isTemporary())
+            sb.append("Temporary b");
+        else
+            sb.append('B');
+        sb.append("reakpoint deleted: ");
+        sb.append(bp.getLocationString());
+        log(sb.toString());
     }
 
     public static void jdbToggleBreakpoint()
@@ -516,6 +533,21 @@ public final class Jdb extends Buffer
 
     public static void jdbSetBreakpoint()
     {
+        setBreakpointAtCurrentLine(false);
+    }
+
+    public static void jdbRunToCurrentLine()
+    {
+        Jdb jdb = findJdb();
+        if (jdb == null)
+            return;
+        setBreakpointAtCurrentLine(true);
+        jdb.logCommand("continue");
+        jdb.doResume();
+    }
+
+    private static void setBreakpointAtCurrentLine(boolean temporary)
+    {
         Jdb jdb = findJdb();
         if (jdb == null)
             return;
@@ -524,13 +556,18 @@ public final class Jdb extends Buffer
         final File file = buffer.getFile();
         if (file != null && file.getName().toLowerCase().endsWith(".java")) {
             final Line line = editor.getDotLine();
-            FastStringBuffer sb = new FastStringBuffer("stop at ");
+            FastStringBuffer sb = new FastStringBuffer();
+            if (temporary)
+                sb.append('t');
+            sb.append("break ");
             sb.append(file.getName());
             sb.append(':');
             sb.append(line.lineNumber() + 1);
             jdb.logCommand(sb.toString());
             LineNumberBreakpoint bp =
                 new LineNumberBreakpoint(jdb, buffer, editor.getDotLine());
+            if (temporary)
+                bp.setTemporary();
             try {
                 EventRequest eventRequest = bp.resolveAgainstPreparedClasses();
                 if (eventRequest != null) {
@@ -717,7 +754,7 @@ public final class Jdb extends Buffer
 
     private void initializeBreakpoints()
     {
-        breakpoints = new ArrayList();
+        breakpoints.clear();
         List breakpointSpecifications = session.getBreakpointSpecifications();
         if (breakpointSpecifications != null) {
             Iterator iter = breakpointSpecifications.iterator();
@@ -836,7 +873,6 @@ public final class Jdb extends Buffer
 
     public void dispose()
     {
-        Log.debug("Jdb.dispose");
         stop();
         if (controlDialog != null) {
             controlDialog.dispose();
@@ -1053,10 +1089,28 @@ public final class Jdb extends Buffer
         }
         clearStepForThread(currentThread);
         EventRequestManager erm = vm.eventRequestManager();
-        StepRequest request = erm.createStepRequest(currentThread,
-            StepRequest.STEP_LINE,
-            out ? StepRequest.STEP_OUT : StepRequest.STEP_INTO);
+        StepRequest request =
+            erm.createStepRequest(currentThread, StepRequest.STEP_LINE,
+                out ? StepRequest.STEP_OUT : StepRequest.STEP_INTO);
         request.addCountFilter(count);
+        request.enable();
+        doResume();
+    }
+
+    private void doFinish()
+    {
+        if (vm == null)
+            return;
+        if (currentThread == null) {
+            Log.debug("currentThread is null");
+            return;
+        }
+        clearStepForThread(currentThread);
+        EventRequestManager erm = vm.eventRequestManager();
+        StepRequest request =
+            erm.createStepRequest(currentThread, StepRequest.STEP_LINE,
+                StepRequest.STEP_OUT);
+        request.addCountFilter(1);
         request.enable();
         doResume();
     }
