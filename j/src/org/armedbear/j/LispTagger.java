@@ -114,7 +114,8 @@ public final class LispTagger extends Tagger
     }
 
     private static final String[] tokens = new String[] {
-        "defun", "defvar", "defmacro", "defcustom", "defgroup", "defsubst"
+        "defclass", "defconstant", "define-condition", "defmacro", "defmethod",
+        "defparameter", "defun", "defvar"
     };
 
     // pos points to first char after token.
