@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Do.java,v 1.3 2003-09-24 00:06:42 piso Exp $
+ * $Id: Do.java,v 1.4 2003-11-19 16:16:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,8 @@ package org.armedbear.lisp;
 public final class Do extends Lisp
 {
     // ### do
-    private static final SpecialOperator DO = new SpecialOperator("do") {
+    private static final SpecialOperator DO = new SpecialOperator("do")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -33,7 +34,8 @@ public final class Do extends Lisp
     };
 
     // ### do*
-    private static final SpecialOperator DO_ = new SpecialOperator("do*") {
+    private static final SpecialOperator DO_ = new SpecialOperator("do*")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -45,15 +47,18 @@ public final class Do extends Lisp
                                         boolean sequential)
         throws ConditionThrowable
     {
+        LispObject varList = args.car();
+        LispObject second = args.cadr();
+        LispObject endTestForm = second.car();
+        LispObject resultForms = second.cdr();
+        LispObject body = args.cddr();
         // Process variable specifications.
-        LispObject first = args.car();
-        args = args.cdr();
-        int length = first.length();
+        int length = varList.length();
         Symbol[] variables = new Symbol[length];
         LispObject[] initials = new LispObject[length];
         LispObject[] updates = new LispObject[length];
         for (int i = 0; i < length; i++) {
-            LispObject obj = first.car();
+            LispObject obj = varList.car();
             if (obj instanceof Cons) {
                 variables[i] = checkSymbol(obj.car());
                 initials[i] = obj.cadr();
@@ -65,21 +70,44 @@ public final class Do extends Lisp
                 variables[i] = checkSymbol(obj);
                 initials[i] = NIL;
             }
-            first = first.cdr();
+            varList = varList.cdr();
         }
         final LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
+        // Process declarations.
+        LispObject specials = NIL;
+        while (body != NIL) {
+            LispObject obj = body.car();
+            if (obj instanceof Cons && obj.car() == Symbol.DECLARE) {
+                LispObject decls = obj.cdr();
+                while (decls != NIL) {
+                    LispObject decl = decls.car();
+                    if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
+                        LispObject vars = decl.cdr();
+                        while (vars != NIL) {
+                            specials = new Cons(vars.car(), specials);
+                            vars = vars.cdr();
+                        }
+                    }
+                    decls = decls.cdr();
+                }
+                body = body.cdr();
+            } else
+                break;
+        }
         Environment ext = new Environment(env);
         for (int i = 0; i < length; i++) {
             Symbol symbol = variables[i];
             LispObject value =
                 eval(initials[i], (sequential ? ext : env), thread);
-            bind(symbol, value, ext);
+            if (specials != NIL && memq(symbol, specials)) {
+                thread.bindSpecial(symbol, value);
+                ext.declareSpecial(symbol);
+            } else if (symbol.isSpecialVariable()) {
+                thread.bindSpecial(symbol, value);
+            } else
+                ext.bind(symbol, value);
         }
-        LispObject second = args.car();
-        LispObject test = second.car();
-        LispObject resultForms = second.cdr();
-        LispObject body = args.cdr();
         final int depth = thread.getStackDepth();
         // Look for tags.
         Binding tags = null;
@@ -97,7 +125,7 @@ public final class Do extends Lisp
             while (true) {
                 // Execute body.
                 // Test for termination.
-                if (eval(test, ext, thread) != NIL)
+                if (eval(endTestForm, ext, thread) != NIL)
                     break;
                 remaining = body;
                 while (remaining != NIL) {
@@ -145,8 +173,16 @@ public final class Do extends Lisp
                 if (sequential) {
                     for (int i = 0; i < length; i++) {
                         LispObject update = updates[i];
-                        if (update != null)
-                            rebind(variables[i], eval(update, ext, thread), ext);
+                        if (update != null) {
+                            Symbol symbol = variables[i];
+                            LispObject value = eval(update, ext, thread);
+                            if (specials != NIL && memq(symbol, specials)) {
+                                thread.getDynamicEnvironment().rebind(symbol, value);
+                            } else if (symbol.isSpecialVariable()) {
+                                thread.getDynamicEnvironment().rebind(symbol, value);
+                            } else
+                                ext.rebind(symbol, value);
+                        }
                     }
                 } else {
                     // Evaluate step forms.
@@ -162,7 +198,13 @@ public final class Do extends Lisp
                     for (int i = 0; i < length; i++) {
                         if (results[i] != null) {
                             Symbol symbol = variables[i];
-                            rebind(symbol, results[i], ext);
+                            LispObject value = results[i];
+                            if (specials != NIL && memq(symbol, specials)) {
+                                thread.getDynamicEnvironment().rebind(symbol, value);
+                            } else if (symbol.isSpecialVariable()) {
+                                thread.getDynamicEnvironment().rebind(symbol, value);
+                            } else
+                                ext.rebind(symbol, value);
                         }
                     }
                 }
