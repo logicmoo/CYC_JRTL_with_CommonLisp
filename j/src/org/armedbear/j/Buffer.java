@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.34 2003-04-23 00:46:54 piso Exp $
+ * $Id: Buffer.java,v 1.35 2003-05-13 16:36:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,6 +62,11 @@ public class Buffer extends SystemBuffer
     private int visibleLineCount;
 
     protected boolean supportsUndo = true;
+
+    public final boolean supportsUndo()
+    {
+        return supportsUndo;
+    }
 
     private int modCount;
     private int saveModCount; // Value of modCount when last saved.
@@ -2132,6 +2137,11 @@ public class Buffer extends SystemBuffer
             undoManager.appendUndoFold(editor);
     }
 
+    public boolean canUndo()
+    {
+        return (undoManager != null && undoManager.canUndo());
+    }
+
     public void undo()
     {
         if (undoManager != null) {
@@ -2144,6 +2154,11 @@ public class Buffer extends SystemBuffer
                 Editor.currentEditor().status("Nothing to undo");
             }
         }
+    }
+
+    public boolean canRedo()
+    {
+        return (undoManager != null && undoManager.canRedo());
     }
 
     public void redo()
