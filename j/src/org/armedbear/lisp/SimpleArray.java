@@ -2,7 +2,7 @@
  * SimpleArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SimpleArray.java,v 1.8 2004-05-27 20:29:41 piso Exp $
+ * $Id: SimpleArray.java,v 1.9 2004-09-29 00:48:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,11 +261,25 @@ public final class SimpleArray extends AbstractArray
     public String writeToString() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
-        sb.append('#');
-        sb.append(dimv.length);
-        sb.append('A');
-        appendContents(dimv, 0, sb);
-        return sb.toString();
+        LispThread thread = LispThread.currentThread();
+        if (_PRINT_READABLY_.symbolValue(thread) != NIL ||
+            _PRINT_ARRAY_.symbolValue(thread) != NIL)
+        {
+            sb.append('#');
+            sb.append(dimv.length);
+            sb.append('A');
+            appendContents(dimv, 0, sb);
+            return sb.toString();
+        } else {
+            sb.append("(SIMPLE-ARRAY T (");
+            for (int i = 0; i < dimv.length; i++) {
+                sb.append(dimv[i]);
+                if (i < dimv.length - 1)
+                    sb.append(' ');
+            }
+            sb.append("))");
+            return unreadableString(sb.toString());
+        }
     }
 
     public AbstractArray adjustArray(int[] dimv, LispObject initialElement,
