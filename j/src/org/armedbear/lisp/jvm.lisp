@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.368 2005-01-24 15:04:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.369 2005-01-24 18:58:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -75,6 +75,7 @@
   pathname ; pathname of output file
   class
   superclass
+  lambda-list ; as advertised
   methods)
 
 (defstruct compiland
@@ -1827,7 +1828,7 @@
   code
   handlers)
 
-(defun make-constructor (super name args)
+(defun make-constructor (super args)
   (let* ((*compiler-debug* nil) ; We don't normally need to see debugging output for constructors.
          (constructor (make-method :name "<init>"
                                    :descriptor "()V"))
@@ -1855,16 +1856,18 @@
            (cond ((null *closure-variables*)
                   (emit 'aload_0)
                   (emit-invokespecial-init super nil))
-                 (t (emit 'aload_0) ;; this
-                    (let* ((*print-level* nil)
-                           (*print-length* nil)
-                           (s (%format nil "~S" args)))
-                      (emit 'ldc (pool-string s))
-                      (emit-invokestatic +lisp-class+ "readObjectFromString"
-                                         (list +java-string+) +lisp-object+))
-                    (emit-invokespecial-init super (list +lisp-object+)))))
-          (t (emit 'aload_0)
-             (emit-invokespecial-init super nil)))
+                 (t
+                  (emit 'aload_0) ;; this
+                  (let* ((*print-level* nil)
+                         (*print-length* nil)
+                         (s (%format nil "~S" args)))
+                    (emit 'ldc (pool-string s))
+                    (emit-invokestatic +lisp-class+ "readObjectFromString"
+                                       (list +java-string+) +lisp-object+))
+                  (emit-invokespecial-init super (list +lisp-object+)))))
+          (t
+           (emit 'aload_0)
+           (emit-invokespecial-init super nil)))
     (setf *code* (append *static-code* *code*))
     (emit 'return)
     (finalize-code)
@@ -3775,48 +3778,49 @@
                 ((memq state '(&optional &key))
                  (when (and (consp arg)
                             (not (constantp (second arg))))
-                   (error "P2-LOCAL-FUNCTION: can't handle optional argument with non-constant initform."))))))))
-  (let* ((name (compiland-name compiland))
-         form
-         function
-         pathname
-         class-file)
-    (setf form (compiland-lambda-expression compiland))
-    (setf pathname (if *compile-file-truename*
-                        (sys::next-classfile-name)
-                        (prog1
-                          (%format nil "local-~D.class" *child-count*)
-                          (incf *child-count*))))
+                   (error "P2-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
+    (let* ((name (compiland-name compiland))
+           form
+           function
+           pathname
+           class-file)
+      (setf form (compiland-lambda-expression compiland))
+      (setf pathname (if *compile-file-truename*
+                         (sys::next-classfile-name)
+                         (prog1
+                           (%format nil "local-~D.class" *child-count*)
+                           (incf *child-count*))))
 
-    (setf class-file (make-class-file :pathname pathname))
-    (setf (compiland-class-file compiland) class-file)
+      (setf class-file (make-class-file :pathname pathname
+                                        :lambda-list lambda-list))
+      (setf (compiland-class-file compiland) class-file)
 
-    (let ((*current-compiland* compiland)
-          (*speed* *speed*)
-          (*safety* *safety*)
-          (*debug* *debug*))
-      (p2-compiland compiland))
-    (cond (*compile-file-truename*
-           ;; Verify that the class file is loadable.
-           (let ((*default-pathname-defaults* pathname))
-             (unless (ignore-errors (sys:load-compiled-function pathname))
-               (error "P2-LOCAL-FUNCTION: unable to load ~S." pathname))))
-          (t (setf function (sys:load-compiled-function pathname))))
-    (cond (local-function
-           (setf (local-function-class-file local-function) class-file)
-           (let ((g (if *compile-file-truename*
-                        (declare-local-function local-function)
-                        (declare-object function))))
-             (emit 'getstatic
-                   *this-class*
-                   g
-                   +lisp-object+)
-             (emit 'var-set (local-function-variable local-function))))
-          (t
-           (push (make-local-function :name name
-                                      :function function
-                                      :class-file class-file)
-                 *local-functions*)))))
+      (let ((*current-compiland* compiland)
+            (*speed* *speed*)
+            (*safety* *safety*)
+            (*debug* *debug*))
+        (p2-compiland compiland))
+      (cond (*compile-file-truename*
+             ;; Verify that the class file is loadable.
+             (let ((*default-pathname-defaults* pathname))
+               (unless (ignore-errors (sys:load-compiled-function pathname))
+                 (error "P2-LOCAL-FUNCTION: unable to load ~S." pathname))))
+            (t (setf function (sys:load-compiled-function pathname))))
+      (cond (local-function
+             (setf (local-function-class-file local-function) class-file)
+             (let ((g (if *compile-file-truename*
+                          (declare-local-function local-function)
+                          (declare-object function))))
+               (emit 'getstatic
+                     *this-class*
+                     g
+                     +lisp-object+)
+               (emit 'var-set (local-function-variable local-function))))
+            (t
+             (push (make-local-function :name name
+                                        :function function
+                                        :class-file class-file)
+                   *local-functions*))))))
 
 (defun p2-flet (form &key (target *val*) representation)
   (let ((*local-functions* *local-functions*)
@@ -3847,31 +3851,6 @@
         ((null forms))
       (compile-form (car forms) :target (if (cdr forms) nil target)))))
 
-(defun contains-symbol (symbol form)
-  (cond ((node-p form)
-         (contains-symbol symbol (node-form form)))
-        ((atom form)
-         (eq form symbol))
-        (t
-         (or (contains-symbol symbol (car form))
-             (contains-symbol symbol (cdr form))))))
-
-(defun contains-go (form)
-  (cond ((node-p form)
-         (contains-go (node-form form)))
-        ((atom form)
-         nil)
-        (t
-         (case (car form)
-           (QUOTE
-            nil)
-           (GO
-            t)
-           (t
-            (dolist (subform form)
-              (when (contains-go subform)
-                (return t))))))))
-
 (defun p2-lambda (compiland target)
   (let* ((lambda-list (cadr (compiland-lambda-expression compiland))))
     (when (or (memq '&optional lambda-list)
@@ -3883,14 +3862,15 @@
                 ((memq state '(&optional &key))
                  (when (and (consp arg)
                             (not (constantp (second arg))))
-                   (error "P2-LAMBDA: can't handle optional argument with non-constant initform."))))))))
-  (aver (null (compiland-class-file compiland)))
-  (setf (compiland-class-file compiland)
-        (make-class-file :pathname (if *compile-file-truename*
-                                       (sys::next-classfile-name)
-                                       (prog1
-                                         (%format nil "local-~D.class" *child-count*)
-                                         (incf *child-count*)))))
+                   (error "P2-LAMBDA: can't handle optional argument with non-constant initform.")))))))
+    (aver (null (compiland-class-file compiland)))
+    (setf (compiland-class-file compiland)
+          (make-class-file :pathname (if *compile-file-truename*
+                                         (sys::next-classfile-name)
+                                         (prog1
+                                           (%format nil "local-~D.class" *child-count*)
+                                           (incf *child-count*)))
+                           :lambda-list lambda-list)))
   (let ((*current-compiland* compiland)
         (*speed* *speed*)
         (*safety* *safety*)
@@ -4835,21 +4815,10 @@
            (get-descriptor (list +lisp-object-array+) +lisp-object+)))))
 
 (defun write-class-file (args execute-method class-file)
-  (let* ((super (cond (*child-p*
-                       (if *closure-variables*
-                           +lisp-ctf-class+
-                           (if *hairy-arglist-p*
-                               +lisp-compiled-function-class+
-                               +lisp-primitive-class+)))
-                      (*hairy-arglist-p*
-                       +lisp-compiled-function-class+)
-                      (t
-                       +lisp-primitive-class+)))
+  (let* ((super (class-file-superclass class-file))
          (this-index (pool-class *this-class*))
          (super-index (pool-class super))
-         (constructor (make-constructor super
-                                        (compiland-name *current-compiland*)
-                                        args)))
+         (constructor (make-constructor super args)))
     (pool-name "Code") ; Must be in pool!
 
     ;; Write out the class file.
@@ -4882,7 +4851,6 @@
 
 (defun p1-compiland (compiland)
   (let ((form (compiland-lambda-expression compiland)))
-;;     (dformat t "p1-compiland form = ~S~%" form)
     (aver (eq (car form) 'LAMBDA))
     (process-optimization-declarations (cddr form))
 
@@ -5227,6 +5195,19 @@
 
     (setf (method-max-locals execute-method) *registers-allocated*)
     (setf (method-handlers execute-method) (nreverse *handlers*))
+
+    (setf (class-file-superclass (compiland-class-file compiland))
+          (cond (*child-p*
+                 (if *closure-variables*
+                     +lisp-ctf-class+
+                     (if *hairy-arglist-p*
+                         +lisp-compiled-function-class+
+                         +lisp-primitive-class+)))
+                (*hairy-arglist-p*
+                 +lisp-compiled-function-class+)
+                (t
+                 +lisp-primitive-class+)))
+
     (write-class-file args execute-method (compiland-class-file compiland))
     (dformat t "leaving p2-compiland ~S~%" (compiland-name compiland))))
 
@@ -5269,7 +5250,8 @@
   (handler-bind ((warning #'handle-warning))
       (compile-1 (make-compiland :name name
                                  :lambda-expression (precompile-form form t)
-                                 :class-file (make-class-file :pathname filespec)
+                                 :class-file (make-class-file :pathname filespec
+                                                              :lambda-list (cadr form))
                                  :parent *current-compiland*))))
 
 (defun handle-warning (condition)
