@@ -2,7 +2,7 @@
  * XmlTree.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: XmlTree.java,v 1.8 2003-07-17 15:09:54 piso Exp $
+ * $Id: XmlTree.java,v 1.9 2003-07-23 15:46:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -607,47 +608,54 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
         }
         return null;
     }
-}
 
-class XmlTreeCellRenderer extends DefaultTreeCellRenderer
-{
-    XmlTree tree;
-    Editor editor;
-
-    private static Color noFocusSelectionBackground = new Color(208, 208, 208);
-
-    private Color oldBackgroundSelectionColor;
-
-    XmlTreeCellRenderer(XmlTree tree)
+    private static class XmlTreeCellRenderer extends DefaultTreeCellRenderer
     {
-        super();
-        this.tree = tree;
-        editor = tree.getEditor();
-        oldBackgroundSelectionColor = getBackgroundSelectionColor();
-        setOpenIcon(Utilities.getIconFromFile("branch.png"));
-        setClosedIcon(Utilities.getIconFromFile("branch.png"));
-        setLeafIcon(Utilities.getIconFromFile("leaf.png"));
-    }
+        private XmlTree tree;
+        private Editor editor;
 
-    public Component getTreeCellRendererComponent(
-        JTree tree,
-        Object value,
-        boolean selected,
-        boolean expanded,
-        boolean leaf,
-        int row,
-        boolean hasFocus)
-    {
-        super.getTreeCellRendererComponent(tree, value, selected, expanded,
-            leaf, row, hasFocus);
-        if (selected)
-            super.setForeground(getTextSelectionColor());
-        else
-            super.setForeground(getTextNonSelectionColor());
-        if (editor.getFocusedComponent() == tree)
-            setBackgroundSelectionColor(oldBackgroundSelectionColor);
-        else
-            setBackgroundSelectionColor(noFocusSelectionBackground);
-        return this;
+        private static Color noFocusSelectionBackground =
+            new Color(208, 208, 208);
+
+        private Color oldBackgroundSelectionColor;
+
+        public XmlTreeCellRenderer(XmlTree tree)
+        {
+            super();
+            this.tree = tree;
+            editor = tree.getEditor();
+            oldBackgroundSelectionColor = getBackgroundSelectionColor();
+            setOpenIcon(Utilities.getIconFromFile("branch.png"));
+            setClosedIcon(Utilities.getIconFromFile("branch.png"));
+            setLeafIcon(Utilities.getIconFromFile("leaf.png"));
+        }
+
+        public Component getTreeCellRendererComponent(
+            JTree tree,
+            Object value,
+            boolean selected,
+            boolean expanded,
+            boolean leaf,
+            int row,
+            boolean hasFocus)
+        {
+            super.getTreeCellRendererComponent(tree, value, selected, expanded,
+                                               leaf, row, hasFocus);
+            if (selected)
+                super.setForeground(getTextSelectionColor());
+            else
+                super.setForeground(getTextNonSelectionColor());
+            if (editor.getFocusedComponent() == tree)
+                setBackgroundSelectionColor(oldBackgroundSelectionColor);
+            else
+                setBackgroundSelectionColor(noFocusSelectionBackground);
+            return this;
+        }
+
+        public void paintComponent(Graphics g)
+        {
+            Display.setRenderingHints(g);
+            super.paintComponent(g);
+        }
     }
 }
