@@ -1,8 +1,8 @@
 /*
  * CompiledFunction.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.17 2003-12-13 00:58:50 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: CompiledFunction.java,v 1.18 2004-01-05 16:32:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,7 +103,8 @@ public class CompiledFunction extends Closure
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            File file = Utilities.getFile(arg);
+            Pathname pathname = Pathname.coerceToPathname(arg);
+            File file = Utilities.getFile(pathname);
             if (file != null && file.isFile()) {
                 try {
                     JavaClassLoader loader = new JavaClassLoader();
@@ -127,7 +128,7 @@ public class CompiledFunction extends Closure
                 }
             }
             return signal(
-                new LispError("unable to load ".concat(String.valueOf(arg))));
+                new LispError("unable to load ".concat(String.valueOf(pathname))));
         }
     };
 

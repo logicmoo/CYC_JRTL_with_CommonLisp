@@ -1,8 +1,8 @@
 /*
  * open.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: open.java,v 1.10 2004-01-02 19:10:54 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: open.java,v 1.11 2004-01-05 16:33:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ public final class open extends Lisp
             throws ConditionThrowable
         {
             Pathname pathname = Pathname.coerceToPathname(first);
-            File file = Utilities.getFile(first);
+            File file = Utilities.getFile(pathname);
             boolean binary = checkBinaryElementType(second);
             LispObject ifExists = third;
             if (ifExists == Keyword.SUPERSEDE) {
@@ -73,7 +73,7 @@ public final class open extends Lisp
             throws ConditionThrowable
         {
             Pathname pathname = Pathname.coerceToPathname(first);
-            File file = Utilities.getFile(first);
+            File file = Utilities.getFile(pathname);
             boolean binary = checkBinaryElementType(second);
             try {
                 if (binary)

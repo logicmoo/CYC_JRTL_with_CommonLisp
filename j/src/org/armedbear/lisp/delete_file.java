@@ -1,8 +1,8 @@
 /*
  * delete_file.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: delete_file.java,v 1.2 2003-12-10 08:12:43 asimon Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: delete_file.java,v 1.3 2004-01-05 16:32:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,8 @@ public final class delete_file extends Primitive1
     // delete-file filespec => t
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        Utilities.getFile(arg).delete();
+        Pathname pathname = Pathname.coerceToPathname(arg);
+        Utilities.getFile(pathname).delete();
         return T;
     }
 
