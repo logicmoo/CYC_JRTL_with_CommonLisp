@@ -2,7 +2,7 @@
  * Debug.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Debug.java,v 1.4 2003-01-09 16:15:39 piso Exp $
+ * $Id: Debug.java,v 1.5 2003-01-09 18:07:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,7 +122,7 @@ public final class Debug
             if (s != null)
                 Log.debug(s);
             while ((s = reader.readLine()) != null) {
-                if (s.indexOf("java") >= 0 && s.indexOf("grep") < 0) {
+                if (s.indexOf("java") >= 0) {
                     Log.debug(s);
                     ++processCount;
                 }
