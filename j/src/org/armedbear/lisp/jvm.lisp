@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.191 2004-06-28 14:29:10 piso Exp $
+;;; $Id: jvm.lisp,v 1.192 2004-06-28 17:59:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2012,10 +2012,6 @@
                 initform (cadr varspec))
           (setf var varspec
                 initform nil))
-      (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
-      (push-variable var specialp)
-      (when specialp
-        (ensure-thread-var-initialized))
       (cond (initform
              (compile-form initform)
              (unless (remove-store-value)
@@ -2023,6 +2019,10 @@
              (maybe-emit-clear-values initform))
             (t
              (emit-push-nil)))
+      (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
+      (push-variable var specialp)
+      (when specialp
+        (ensure-thread-var-initialized))
       (cond (specialp
              (let ((g (declare-symbol var)))
                ;; Initial value is on the runtime stack at this point.
