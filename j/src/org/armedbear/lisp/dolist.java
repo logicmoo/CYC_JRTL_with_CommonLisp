@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: dolist.java,v 1.4 2003-11-19 17:34:00 piso Exp $
+ * $Id: dolist.java,v 1.5 2003-12-14 17:05:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,8 +63,8 @@ public final class dolist extends SpecialOperator
         }
         try {
             LispObject list = checkList(eval(listForm, env, thread));
+            final Environment ext = new Environment(env);
             // Look for tags.
-            Binding tags = null;
             LispObject remaining = bodyForm;
             while (remaining != NIL) {
                 LispObject current = remaining.car();
@@ -72,10 +72,9 @@ public final class dolist extends SpecialOperator
                 if (current instanceof Cons)
                     continue;
                 // It's a tag.
-                tags = new Binding(current, remaining, tags);
+                ext.addTagBinding(current, remaining);
             }
             // Establish a reusable binding.
-            final Environment ext = new Environment(env);
             final Binding binding;
             if (var.isSpecialVariable() || (specials != NIL && memq(var, specials))) {
                 thread.bindSpecial(var, null);
@@ -97,16 +96,10 @@ public final class dolist extends SpecialOperator
                         try {
                             // Handle GO inline if possible.
                             if (current.car() == Symbol.GO) {
-                                LispObject code = null;
                                 LispObject tag = current.cadr();
-                                for (Binding b = tags; b != null; b = b.next) {
-                                    if (b.symbol.eql(tag)) {
-                                        code = b.value;
-                                        break;
-                                    }
-                                }
-                                if (code != null) {
-                                    body = code;
+                                Binding b = ext.getTagBinding(tag);
+                                if (b != null && b.value != null) {
+                                    body = b.value;
                                     continue;
                                 }
                                 throw new Go(tag);
@@ -114,16 +107,10 @@ public final class dolist extends SpecialOperator
                             eval(current, ext, thread);
                         }
                         catch (Go go) {
-                            LispObject code = null;
                             LispObject tag = go.getTag();
-                            for (Binding b = tags; b != null; b = b.next) {
-                                if (b.symbol.eql(tag)) {
-                                    code = b.value;
-                                    break;
-                                }
-                            }
-                            if (code != null) {
-                                body = code;
+                            Binding b = ext.getTagBinding(tag);
+                            if (b != null && b.value != null) {
+                                body = b.value;
                                 thread.setStackDepth(depth);
                                 continue;
                             }
