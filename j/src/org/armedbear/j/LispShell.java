@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.64 2004-09-07 20:24:39 piso Exp $
+ * $Id: LispShell.java,v 1.65 2004-09-08 19:33:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,9 @@ public class LispShell extends Shell
     private String resetCommand = null;
     private String exitCommand = "(exit)";
 
+    private Position posBeforeLastPrompt;
+    private Position posEndOfInput;
+
     // For JLisp.java.
     protected LispShell()
     {
@@ -84,10 +87,10 @@ public class LispShell extends Shell
     private static Shell createLispShell(String shellCommand, String title,
                                          boolean startSlime)
     {
-        LispShell shell = new LispShell(shellCommand, title);
-        shell.startProcess();
-        if (shell.getProcess() == null) {
-            Editor.getBufferList().remove(shell);
+        LispShell lisp = new LispShell(shellCommand, title);
+        lisp.startProcess();
+        if (lisp.getProcess() == null) {
+            Editor.getBufferList().remove(lisp);
             String message;
             if (Utilities.haveJpty())
                 message = "Unable to start process \"" + shellCommand + "\"";
@@ -97,31 +100,31 @@ public class LispShell extends Shell
             return null;
         }
         if (shellCommand.equals("alisp") || shellCommand.equals("/usr/bin/alisp")) {
-            shell.setPromptRE(ALLEGRO_PROMPT_PATTERN);
-            shell.setResetCommand(":reset");
+            lisp.setPromptRE(ALLEGRO_PROMPT_PATTERN);
+            lisp.setResetCommand(":reset");
         } else if (shellCommand.indexOf("clisp") >= 0) {
             // clisp -I
-            shell.setPromptRE(CLISP_PROMPT_PATTERN);
-            shell.setResetCommand("(sys::debug-unwind)");
+            lisp.setPromptRE(CLISP_PROMPT_PATTERN);
+            lisp.setResetCommand("(sys::debug-unwind)");
         } else if (shellCommand.equals("/usr/bin/lisp")) {
-            shell.setPromptRE(CMUCL_PROMPT_PATTERN);
-            shell.setResetCommand(":q");
-            shell.setExitCommand("(quit)");
+            lisp.setPromptRE(CMUCL_PROMPT_PATTERN);
+            lisp.setResetCommand(":q");
+            lisp.setExitCommand("(quit)");
         } else if (shellCommand.indexOf("sbcl") >= 0) {
-            shell.setPromptRE(SBCL_PROMPT_PATTERN);
-            shell.setResetCommand(":abort");
-            shell.setExitCommand("(quit)");
+            lisp.setPromptRE(SBCL_PROMPT_PATTERN);
+            lisp.setResetCommand(":abort");
+            lisp.setExitCommand("(quit)");
         } else if (shellCommand.indexOf("org.armedbear.lisp") >= 0 ||
                    shellCommand.indexOf("abcl") >= 0)
         {
-            shell.setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
-            shell.setResetCommand(":reset");
+            lisp.setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
+            lisp.setResetCommand(":reset");
         } else {
-            shell.setPromptRE(DEFAULT_PROMPT_PATTERN);
+            lisp.setPromptRE(DEFAULT_PROMPT_PATTERN);
             if (shellCommand.equals("rep") || shellCommand.equals("/usr/bin/rep"))
-                shell.setExitCommand(",quit");
+                lisp.setExitCommand(",quit");
         }
-        shell.needsRenumbering(true);
+        lisp.needsRenumbering(true);
         if (startSlime) {
             Log.debug("starting slime...");
             try {
@@ -139,11 +142,11 @@ public class LispShell extends Shell
             if (!sb.toString().endsWith(LocalFile.getSeparator()))
                 sb.append(LocalFile.getSeparator());
             sb.append("\"))");
-            shell.send(sb.toString());
+            lisp.send("(progn (terpri) " + sb.toString() + ")");
         }
         if (Editor.isLispInitialized())
-            LispAPI.invokeLispShellStartupHook(shell, shellCommand);
-        return shell;
+            LispAPI.invokeLispShellStartupHook(lisp, shellCommand);
+        return lisp;
     }
 
     protected void initializeHistory()
@@ -172,7 +175,7 @@ public class LispShell extends Shell
             editor.newlineAndIndent();
             return; // For now.
         }
-        Line promptLine = endOfOutput.getLine();
+        final Line promptLine = endOfOutput.getLine();
         Annotation a = new Annotation(endOfOutput.getOffset());
         promptLine.setAnnotation(a);
         promptLine.setFlags(STATE_PROMPT);
@@ -201,6 +204,13 @@ public class LispShell extends Shell
             end = editor.getDotCopy();
             end.setOffset(end.getLineLength());
             setEndOfOutput(end);
+            Line lineBeforeLastPrompt = promptLine.previous();
+            if (lineBeforeLastPrompt != null) {
+                posBeforeLastPrompt =
+                    new Position(lineBeforeLastPrompt,
+                                 lineBeforeLastPrompt.length());
+            }
+            posEndOfInput = end.copy();
             String s = new Region(this, begin, end).toString();
             sendInputToLisp(s);
         } else
@@ -227,7 +237,7 @@ public class LispShell extends Shell
             prompt = s.substring(index+1);
         else
             prompt = s;
-        REMatch match = promptRE.getMatch(prompt);
+        final REMatch match = promptRE.getMatch(prompt);
         if (match != null) {
             // Last line of output looks like a prompt.
             String m = match.toString();
@@ -240,7 +250,7 @@ public class LispShell extends Shell
         }
         final String output;
         if (index >= 0)
-            output = s.substring(0, index+1) + prompt;
+            output = s.substring(0, index + 1) + prompt;
         else
             output = prompt;
         Runnable r = new Runnable() {
@@ -249,13 +259,85 @@ public class LispShell extends Shell
                 Position pos = getEnd();
                 if (pos != null)
                     pos.getLine().setFlags(0); // This value will propagate.
-                if (output.length() > 0)
+                if (output.length() > 0) {
                     appendString(output);
+                    if (match != null) {
+                        Line lineBeforeLastPrompt =
+                            getEnd().getLine().previous();
+                        if (lineBeforeLastPrompt != null) {
+                            posBeforeLastPrompt =
+                                new Position(lineBeforeLastPrompt,
+                                             lineBeforeLastPrompt.length());
+                        }
+                    }
+                }
                 updateDisplayInAllFrames();
                 resetUndo();
             }
         };
         SwingUtilities.invokeLater(r);
+    }
+
+    protected void stdErrUpdate(final String s)
+    {
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                appendString(s);
+                updateDisplayInAllFrames();
+                resetUndo();
+            }
+        };
+        SwingUtilities.invokeLater(r);
+    }
+
+    protected void appendString(String s)
+    {
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+            return;
+        }
+        try {
+            if (posEndOfInput == null)
+                posEndOfInput = new Position(getFirstLine(), 0);
+            final Position pos;
+            if (posBeforeLastPrompt != null && posEndOfInput != null) {
+                if (posEndOfInput.isAfter(posBeforeLastPrompt)) {
+                    // There has been user input since the last prompt.
+                    pos = getEnd();
+                } else {
+                    pos = posBeforeLastPrompt;
+                }
+            } else {
+                pos = getEnd();
+            }
+            if (pos != null) {
+                if (pos == posBeforeLastPrompt) {
+                    if (s.length() > 0) {
+                        if (s.charAt(s.length() - 1) == '\n')
+                            s = s.substring(0, s.length() - 1);
+                    }
+                    if (s.length() > 0 && s.charAt(0) != '\n')
+                        insertLineSeparator(pos);
+                }
+                insertString(pos, s);
+                if (needsRenumbering())
+                    renumber();
+                enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
+                if (pos != posBeforeLastPrompt)
+                    setEndOfOutput(pos.copy());
+            } else {
+                // Empty buffer.
+                setText(s);
+                setEndOfOutput(getEnd().copy());
+            }
+        }
+        finally {
+            unlockWrite();
+        }
     }
 
     private void indentLineAtDot(Editor editor)
@@ -305,13 +387,6 @@ public class LispShell extends Shell
             history.save();
         }
         send(input);
-    }
-
-    // This overrides Shell.updateLineFlags(), which does stuff we don't need
-    // to do in a Lisp shell.
-    protected void updateLineFlags()
-    {
-        // Nothing to do.
     }
 
     public void dispose()
