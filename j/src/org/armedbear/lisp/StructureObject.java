@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.29 2004-08-18 14:08:15 piso Exp $
+ * $Id: StructureObject.java,v 1.30 2004-09-20 16:32:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,6 +82,23 @@ public final class StructureObject extends LispObject
             }
         }
         return super.typep(type);
+    }
+
+    public boolean equalp(LispObject obj) throws ConditionThrowable
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof StructureObject) {
+            StructureObject o = (StructureObject) obj;
+            if (structureClass != o.structureClass)
+                return false;
+            for (int i = 0; i < slots.length; i++) {
+                if (!slots[i].equalp(o.slots[i]))
+                    return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public LispObject getSlotValue(int index) throws ConditionThrowable
