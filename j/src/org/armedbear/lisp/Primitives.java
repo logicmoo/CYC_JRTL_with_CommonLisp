@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.508 2003-11-29 19:23:36 piso Exp $
+ * $Id: Primitives.java,v 1.509 2003-12-02 19:43:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2833,36 +2833,12 @@ public final class Primitives extends Module
     };
 
     // ### fset
-    private static final Primitive2 FSET =
-        new Primitive2("fset", PACKAGE_SYS, false) {
+    private static final Primitive2 FSET = new Primitive2("fset", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            Symbol symbol = checkSymbol(first);
-            if (second instanceof LispString) {
-                String className = ((LispString)second).getValue();
-                if (className.endsWith(".class")) {
-                    try {
-                        JavaClassLoader loader = new JavaClassLoader();
-                        Class c = loader.loadClassFromFile(className);
-                        if (c != null) {
-                            Class[] parameterTypes = new Class[0];
-                            java.lang.reflect.Constructor constructor =
-                                c.getConstructor(parameterTypes);
-                            Object[] initargs = new Object[0];
-                            LispObject obj =
-                                (LispObject) constructor.newInstance(initargs);
-                            symbol.setSymbolFunction(obj);
-                            return obj;
-                        }
-                    }
-                    catch (Throwable t) {
-                        Debug.trace(t);
-                    }
-                }
-                throw new ConditionThrowable(new LispError("unable to load ".concat(className)));
-            }
-            symbol.setSymbolFunction(second);
+            checkSymbol(first).setSymbolFunction(second);
             return second;
         }
     };
