@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.379 2005-01-31 05:53:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.380 2005-01-31 17:28:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,7 +30,9 @@
           sys::define-source-transform
           sys::expand-source-transform))
 
-(require :source-transform)
+(require '#:clos)
+
+(require '#:source-transform)
 
 (require '#:opcodes)
 
@@ -1237,6 +1239,12 @@
   (warn 'warning
         :format-control format-control
         :format-arguments format-arguments))
+
+(defun compiler-error (format-control &rest format-arguments)
+  (incf *errors*)
+  (error 'compiler-error
+         :format-control format-control
+         :format-arguments format-arguments))
 
 (defun compiler-unsupported (format-control &rest format-arguments)
   (error 'compiler-unsupported-feature-error
@@ -5385,7 +5393,8 @@
   (unless (or (null environment) (sys::empty-environment-p environment))
     (compiler-unsupported "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (aver (null *current-compiland*))
-  (handler-bind ((warning #'handle-warning))
+  (handler-bind ((warning #'handle-warning)
+                 (compiler-error #'handle-compiler-error))
     (compile-1 (make-compiland :name name
                                :lambda-expression (precompile-form form t)
                                :class-file (make-class-file :pathname filespec
@@ -5397,6 +5406,10 @@
   (fresh-line)
   (format t "; Caught ~A:~%;   ~A~%" (type-of condition) condition)
   (muffle-warning))
+
+(defun handle-compiler-error (condition)
+  (fresh-line)
+  (format t "; Caught ~A:~%;   ~A~%" (type-of condition) condition))
 
 (defun get-lambda-to-compile (definition-designator)
   (if (and (consp definition-designator)
