@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.36 2003-08-25 19:17:23 piso Exp $
+;;; $Id: compiler.lisp,v 1.37 2003-08-30 17:05:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -185,23 +185,7 @@
                (let ((args (mapcar #'compile-sexp (cdr form))))
                  (cons first args)))))))
 
-
-(defun compile-package (pkg &key verbose)
-  (dolist (sym (sys::package-symbols pkg))
-    (when (fboundp sym)
-;;       (unless (or (special-operator-p sym) (macro-function sym))
-      (unless (special-operator-p sym)
-        (let ((f (fdefinition sym)))
-          (unless (compiled-function-p f)
-            (when verbose
-              (format t "compiling ~S~%" sym)
-              (finish-output))
-            (compile sym))))))
-  t)
-
-
-;; (defun compile (name &optional (definition (fdefinition name)))
-(defun compile (name &optional definition)
+(defun %compile (name &optional definition)
   (unless definition
     (setq definition (or (macro-function name) (fdefinition name))))
   (let (expr result)
@@ -222,11 +206,23 @@
       (sys::%set-lambda-name result name)
       (sys::%set-call-count result (sys::%call-count definition))
       (sys::%set-arglist result (sys::arglist definition))
-;;       (setf (fdefinition name) result))
       (if (macro-function name)
           (setf (fdefinition name) (sys::make-macro result))
           (setf (fdefinition name) result)))
     (values (or name result) nil nil)))
+
+(defun compile-package (pkg &key verbose)
+  (dolist (sym (sys::package-symbols pkg))
+    (when (fboundp sym)
+      ;;       (unless (or (special-operator-p sym) (macro-function sym))
+      (unless (special-operator-p sym)
+        (let ((f (fdefinition sym)))
+          (unless (compiled-function-p f)
+            (when verbose
+              (format t "compiling ~S~%" sym)
+              (finish-output))
+            (%compile sym))))))
+  t)
 
 (compile-package :compiler)
 (compile-package :sys)
@@ -234,11 +230,14 @@
 
 (in-package :cl)
 
+(defun compile (name &optional definition)
+  (c::%compile name definition))
+
 ;; Redefine DEFUN to compile the definition on the fly.
 (defmacro defun (name lambda-list &rest body)
   `(prog1
     (sys::%defun ',name ',lambda-list ',body)
-    (compile ',name)))
+    (compiler::%compile ',name)))
 
 ;; Redefine DEFMACRO to compile the expansion function on the fly.
 (defmacro defmacro (name lambda-list &rest body)
@@ -249,8 +248,11 @@
          (expander `(lambda (,form ,env) (block ,name ,body))))
     `(progn
        (if (special-operator-p ',name)
-         (sys::%put ',name 'macroexpand-macro (sys::make-macro (compile nil ,expander)))
-         (sys::fset ',name (sys::make-macro (compile nil ,expander))))
+         (sys::%put ',name
+                    'macroexpand-macro
+                    (sys::make-macro (c::%compile nil ,expander)))
+         (sys::fset ',name
+                    (sys::make-macro (c::%compile nil ,expander))))
        ',name)))
 
 ;; Make an exception just this one time...
