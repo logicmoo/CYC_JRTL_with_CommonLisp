@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.22 2003-08-25 15:01:38 piso Exp $
+ * $Id: Tests.java,v 1.23 2003-09-16 17:39:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -567,23 +567,23 @@ public class Tests extends TestCase
 //             "(SHAKESPEARE WROTE (TWELFTH NIGHT . FOO) . FOO)");
 
         // last
-        verify("(last nil)", "NIL");
-        verify("(last '(1 2 3))", "(3)");
-        verify("(last '(1 2 . 3))", "(2 . 3)");
-        verify("(setq x (list 'a 'b 'c 'd))", "(A B C D)");
-        verify("(last x)", "(D)");
-        verify("(rplacd (last x) (list 'e 'f))", "(D E F)");
-        verify("x", "(A B C D E F)");
-        verify("(last x)", "(F)");
-        verify("(last '(a b c))", "(C)");
-        verify("(last '(a b c) 0)", "NIL");
-        verify("(last '(a b c) 1)", "(C)");
-        verify("(last '(a b c) 2)", "(B C)");
-        verify("(last '(a b c) 3)", "(A B C)");
-        verify("(last '(a b c) 4)", "(A B C)");
-        verify("(last '(a . b) 0)", "B");
-        verify("(last '(a . b) 1)", "(A . B)");
-        verify("(last '(a . b) 2)", "(A . B)");
+//         verify("(last nil)", "NIL");
+//         verify("(last '(1 2 3))", "(3)");
+//         verify("(last '(1 2 . 3))", "(2 . 3)");
+//         verify("(setq x (list 'a 'b 'c 'd))", "(A B C D)");
+//         verify("(last x)", "(D)");
+//         verify("(rplacd (last x) (list 'e 'f))", "(D E F)");
+//         verify("x", "(A B C D E F)");
+//         verify("(last x)", "(F)");
+//         verify("(last '(a b c))", "(C)");
+//         verify("(last '(a b c) 0)", "NIL");
+//         verify("(last '(a b c) 1)", "(C)");
+//         verify("(last '(a b c) 2)", "(B C)");
+//         verify("(last '(a b c) 3)", "(A B C)");
+//         verify("(last '(a b c) 4)", "(A B C)");
+//         verify("(last '(a . b) 0)", "B");
+//         verify("(last '(a . b) 1)", "(A . B)");
+//         verify("(last '(a . b) 2)", "(A . B)");
 
         // subseq
 //         verify("(setq str \"012345\")", "\"012345\"");
