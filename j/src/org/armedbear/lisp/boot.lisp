@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.38 2003-04-09 18:10:46 piso Exp $
+;;; $Id: boot.lisp,v 1.39 2003-05-22 00:29:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
           lambda-parameters-limit
           multiple-values-limit
           char-code-limit
+          internal-time-units-per-second
           proclaim))
 
 
@@ -163,6 +164,8 @@
 
 (defconstant char-code-limit 96)
 
+(defconstant internal-time-units-per-second 1000)
+
 
 ;; FIXME
 (defun proclaim (decl)
@@ -171,9 +174,13 @@
 
 (format t "; Expanding macros ...~%")
 (finish-output)
-(c::compile-package :cl)
-(format t "; Finished expanding macros~%")
-(finish-output)
+(let ((start (get-internal-real-time))
+      elapsed)
+  (c::compile-package :cl)
+  (setq elapsed (- (get-internal-real-time) start))
+  (format t "; Expanded macros (~A seconds)~%"
+          (/ (coerce elapsed 'float) internal-time-units-per-second))
+  (finish-output))
 
 ;; Redefine DEFUN to compile the definition on the fly.
 (defmacro defun (&rest args &environment env)
