@@ -2,7 +2,7 @@
  * EventHandler.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: EventHandler.java,v 1.6 2003-05-23 17:44:17 piso Exp $
+ * $Id: EventHandler.java,v 1.7 2003-05-25 02:28:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,6 +110,14 @@ public final class EventHandler implements Runnable
                     }
                     jdb.fireContextChanged();
                     jdb.prompt();
+                    Runnable r = new Runnable() {
+                        public void run()
+                        {
+                            Editor.getCurrentFrame().toFront();
+                            jdb.getControlDialog().toFront();
+                        }
+                    };
+                    SwingUtilities.invokeLater(r);
                 }
             }
             catch (InterruptedException e) {
@@ -218,14 +226,6 @@ public final class EventHandler implements Runnable
                 }
             }
         }
-        Runnable r = new Runnable() {
-            public void run()
-            {
-                Editor.getCurrentFrame().toFront();
-                jdb.getControlDialog().toFront();
-            }
-        };
-        SwingUtilities.invokeLater(r);
         // Suspend the VM.
         return false;
     }
