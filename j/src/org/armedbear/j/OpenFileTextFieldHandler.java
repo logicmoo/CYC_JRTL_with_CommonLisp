@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.12 2002-12-06 17:32:08 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.13 2002-12-06 22:02:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -515,10 +515,12 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     isMatch = file.getName().startsWith(prefix);
                 if (isMatch) {
                     String name;
-                    if (currentDirectory.equals(file.getParentFile()))
+                    if (currentDirectory != null &&
+                        currentDirectory.equals(file.getParentFile())) {
                         name = file.getName();
-                    else
+                    } else {
                         name = file.canonicalPath();
+                    }
                     addCompletion(list, name);
                 }
             }
