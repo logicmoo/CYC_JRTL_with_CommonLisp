@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.81 2005-02-28 02:50:03 piso Exp $
+ * $Id: Interpreter.java,v 1.82 2005-03-07 19:06:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -415,7 +415,38 @@ public final class Interpreter extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            throw new ConditionThrowable((Condition)first);
+            final Condition condition = (Condition) first;
+            if (interpreter == null) {
+                final LispThread thread = LispThread.currentThread();
+                final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+                thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                try {
+                    final LispObject truename =
+                        _LOAD_TRUENAME_.symbolValue(thread);
+                    if (truename != NIL) {
+                        final LispObject stream =
+                            _LOAD_STREAM_.symbolValue(thread);
+                        if (stream instanceof Stream) {
+                            final int lineNumber =
+                                ((Stream)stream).getLineNumber() + 1;
+                            final int offset =
+                                ((Stream)stream).getOffset();
+                            Debug.trace("Error loading " +
+                                        truename.writeToString() +
+                                        " at line " + lineNumber +
+                                        " (offset " + offset + ")");
+                        }
+                    }
+                    Debug.trace("Encountered unhandled condition of type " +
+                                condition.typeOf().writeToString() + ':');
+                    Debug.trace("  " + condition.writeToString());
+                }
+                catch (Throwable t) {}
+                finally {
+                    thread.lastSpecialBinding = lastSpecialBinding;
+                }
+            }
+            throw new ConditionThrowable(condition);
         }
     };
 
