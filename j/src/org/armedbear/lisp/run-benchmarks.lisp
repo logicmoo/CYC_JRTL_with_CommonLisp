@@ -77,7 +77,7 @@
   (let ((name (symbol-name function)))
     (format t "Running benchmark ~A" (symbol-name function))
     (when (> times 1)
-      (format t " (%D runs)" times))
+      (format t " (~D runs)" times))
     (terpri)
     (force-output)
     (let (before-real after-real before-user after-user)
