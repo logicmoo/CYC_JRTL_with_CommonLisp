@@ -2,7 +2,7 @@
  * Aliases.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Aliases.java,v 1.1.1.1 2002-09-24 16:09:29 piso Exp $
+ * $Id: Aliases.java,v 1.2 2002-12-14 15:14:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,14 +44,14 @@ public final class Aliases implements PreferencesChangeListener
         if (systemAliases == null) {
             systemAliases = new Properties();
             systemAliases.setProperty("prefs",
-                Preferences.getPreferencesFile().canonicalPath());
-            systemAliases.setProperty("aliases", file.canonicalPath());
+                Preferences.getPreferencesFile().netPath());
+            systemAliases.setProperty("aliases", file.netPath());
             String inbox =
                 Editor.preferences().getStringProperty(Property.INBOX);
             if (inbox != null)
                 systemAliases.setProperty("inbox", inbox);
             systemAliases.setProperty("drafts",
-                "mailbox:".concat(Directories.getDraftsFolder().canonicalPath()));
+                "mailbox:".concat(Directories.getDraftsFolder().netPath()));
         }
         // Sign up to be notified when preferences change so we can update the
         // "inbox" system alias.
