@@ -343,6 +343,7 @@
                               "apply"
                               "aref"
                               "bit-vector"
+                              "bit-vector-p"
                               "block"
                               "boundp"
                               "call-arguments-limit"
