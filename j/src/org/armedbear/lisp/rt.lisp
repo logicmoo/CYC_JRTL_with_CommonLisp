@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.97 2003-08-07 13:04:13 piso Exp $
+;;; $Id: rt.lisp,v 1.98 2003-08-07 16:31:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -396,7 +396,13 @@
            (fboundp 'jvm::jvm-compile))
   (mapcar #'jvm::jvm-compile '(sys::list-remove-duplicates*
                                sys::vector-remove-duplicates*
-                               remove-duplicates)))
+                               remove-duplicates
+                               union
+                               nunion
+                               intersection
+                               nintersection
+                               subsetp
+                               copy-tree)))
 
 (load (concatenate 'string rt::*prefix* "char-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cl-symbols-aux.lsp"))
