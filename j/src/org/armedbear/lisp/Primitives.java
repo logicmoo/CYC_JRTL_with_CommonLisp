@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.734 2005-02-11 19:20:54 piso Exp $
+ * $Id: Primitives.java,v 1.735 2005-02-12 02:15:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1541,10 +1541,6 @@ public final class Primitives extends Lisp
             Closure closure = new Closure(first instanceof Symbol ? symbol : null,
                                           arglist, body, env);
             FSET.execute(first, closure, NIL, arglist);
-            // Clear function table entry (if any).
-            if (FUNCTION_TABLE != null) {
-                FUNCTION_TABLE.remhash(first);
-            }
             return first;
         }
     };
@@ -4004,11 +4000,14 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (first instanceof Function) {
-                Function f = (Function) first;
-                f.setLambdaName(second);
+                ((Function)first).setLambdaName(second);
                 return second;
             }
-            return signal(new TypeError(first, "function"));
+            if (first instanceof GenericFunction) {
+                ((GenericFunction)first).setGenericFunctionName(second);
+                return second;
+            }
+            return signal(new TypeError(first, Symbol.FUNCTION));
         }
     };
 
