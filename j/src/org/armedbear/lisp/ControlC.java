@@ -2,7 +2,7 @@
  * ControlC.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ControlC.java,v 1.1 2004-04-30 01:50:29 piso Exp $
+ * $Id: ControlC.java,v 1.2 2004-04-30 12:25:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public class ControlC implements Runnable
         System.loadLibrary("abcl");
     }
 
-    public native static void installControlCHandler();
+    public static native void installControlCHandler();
 
     public static void callback()
     {
