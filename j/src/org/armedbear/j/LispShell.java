@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.22 2003-01-11 20:03:27 piso Exp $
+ * $Id: LispShell.java,v 1.23 2003-01-16 17:05:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@ package org.armedbear.j;
 
 import gnu.regexp.REMatch;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 import javax.swing.SwingUtilities;
 
 public final class LispShell extends Shell
@@ -289,13 +291,57 @@ public final class LispShell extends Shell
         t.start();
     }
 
+    public String getTitle()
+    {
+        return shellCommand;
+    }
+
     public static void lisp()
     {
-        FastStringBuffer sb = new FastStringBuffer();
-        sb.append("java -server -cp ");
-        sb.append(System.getProperty("java.class.path"));
-        sb.append(" org.armedbear.lisp.Main");
-        lisp(sb.toString(), false);
+        String shellCommand =
+            Editor.preferences().getStringProperty(Property.LISP);
+        if (shellCommand == null) {
+            File java = null;
+            File javaHome = File.getInstance(System.getProperty("java.home"));
+            if (javaHome != null && javaHome.isDirectory()) {
+                java = File.getInstance(javaHome,
+                    Platform.isPlatformWindows() ? "bin\\java.exe" : "bin/java");
+                if (java != null && !java.isFile())
+                    java = null;
+            }
+            String classPath = System.getProperty("java.class.path");
+            List paths = Utilities.getDirectoriesInPath(classPath);
+            for (Iterator it = paths.iterator(); it.hasNext();) {
+                String path = (String) it.next();
+                if (Platform.isPlatformWindows())
+                    path = path.toLowerCase();
+                if (path.equals("j.jar") || path.endsWith("/j.jar") ||
+                    path.endsWith("\\j.jar")) {
+                    File dir = File.getInstance(System.getProperty("user.dir"));
+                    File file = File.getInstance(dir, path);
+                    if (file != null && file.isFile()) {
+                        classPath = file.canonicalPath();
+                        break;
+                    }
+                }
+            }
+            FastStringBuffer sb = new FastStringBuffer();
+            if (java != null) {
+                sb.append(java.canonicalPath());
+                String vendor = System.getProperty("java.vendor");
+                if (vendor != null) {
+                    if (vendor.indexOf("Sun") >= 0 ||
+                        vendor.indexOf("Blackdown") >= 0)
+                        sb.append(" -server");
+                }
+            } else
+                sb.append("java");
+            sb.append(" -cp ");
+            sb.append(classPath);
+            sb.append(" org.armedbear.lisp.Main");
+            shellCommand = sb.toString();
+        }
+        lisp(shellCommand, false);
     }
 
     public static void lisp(String shellCommand)
