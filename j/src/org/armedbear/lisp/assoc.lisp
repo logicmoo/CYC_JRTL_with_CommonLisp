@@ -1,7 +1,7 @@
 ;;; assoc.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: assoc.lisp,v 1.4 2003-10-14 16:04:29 piso Exp $
+;;; $Id: assoc.lisp,v 1.5 2003-12-12 13:49:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -88,13 +88,15 @@
 	(error "the lists of keys and data are of unequal length"))
     (setq alist (acons (car x) (car y) alist))))
 
+;;; From SBCL.
 (defun copy-alist (alist)
-  (if (atom alist)
+  "Return a new association list which is EQUAL to ALIST."
+  (if (endp alist)
       alist
       (let ((result
 	     (cons (if (atom (car alist))
 		       (car alist)
-		       (cons (caar alist) (cdar alist)) )
+		       (cons (caar alist) (cdar alist)))
 		   nil)))
 	(do ((x (cdr alist) (cdr x))
 	     (splice result
@@ -104,8 +106,5 @@
 				       (car x)
 				       (cons (caar x) (cdar x)))
 				   nil)))))
-            ;; Non-null terminated alist done here.
-            ((atom x)
-             (unless (null x)
-               (rplacd splice x))))
+	    ((endp x)))
 	result)))
