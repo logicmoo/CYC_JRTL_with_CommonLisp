@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.6 2003-03-27 03:53:36 piso Exp $
+ * $Id: LispFloat.java,v 1.7 2003-03-27 13:53:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,10 @@ public final class LispFloat extends LispObject
         if (typeSpecifier == Symbol.SINGLE_FLOAT)
             return T;
         if (typeSpecifier == Symbol.FLOAT)
+            return T;
+        if (typeSpecifier == Symbol.REAL)
+            return T;
+        if (typeSpecifier == Symbol.NUMBER)
             return T;
         return super.typep(typeSpecifier);
     }
@@ -225,6 +229,31 @@ public final class LispFloat extends LispObject
                 return values[0];
             }
             throw new TypeError(arg, "float");
+        }
+    };
+
+    public static LispObject coerceToFloat(LispObject obj) throws TypeError
+    {
+        if (obj instanceof LispFloat)
+            return obj;
+        if (obj instanceof Fixnum)
+            return new LispFloat(((Fixnum)obj).getValue());
+        if (obj instanceof Bignum)
+            return new LispFloat(((Bignum)obj).getValue().floatValue());
+        if (obj instanceof Ratio)
+            return new LispFloat(((Ratio)obj).floatValue());
+        throw new TypeError(obj, "real number");
+    }
+
+    // float number &optional prototype => float
+    private static final Primitive FLOAT = new Primitive("float") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            final int length = args.length;
+            if (length < 1 || length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            // FIXME Ignore prototype (args[1] if present).
+            return coerceToFloat(args[0]);
         }
     };
 }
