@@ -1,8 +1,8 @@
 /*
  * JavaSyntaxIterator.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaSyntaxIterator.java,v 1.1.1.1 2002-09-24 16:09:00 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: JavaSyntaxIterator.java,v 1.2 2003-10-15 15:32:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ package org.armedbear.j;
 
 // Supports movement through the syntactically important text of a buffer, i.e.
 // skipping whitespace and comments.
-public final class JavaSyntaxIterator extends DefaultSyntaxIterator implements
-    Constants
+public final class JavaSyntaxIterator extends DefaultSyntaxIterator
+    implements Constants
 {
     public JavaSyntaxIterator(Position pos)
     {
@@ -37,8 +37,9 @@ public final class JavaSyntaxIterator extends DefaultSyntaxIterator implements
     {
         if (line.flags() == STATE_COMMENT)
             return hideSyntacticWhitespace(line.getText(), STATE_COMMENT);
-        else
-            return hideSyntacticWhitespace(line.getText(), STATE_NEUTRAL);
+        if (line.flags() == STATE_QUOTE)
+            return hideSyntacticWhitespace(line.getText(), STATE_QUOTE);
+        return hideSyntacticWhitespace(line.getText(), STATE_NEUTRAL);
     }
 
     public char[] hideSyntacticWhitespace(String s)
