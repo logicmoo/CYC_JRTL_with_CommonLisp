@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.151 2003-09-25 18:20:57 piso Exp $
+ * $Id: Lisp.java,v 1.152 2003-09-26 18:48:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,95 +268,104 @@ public abstract class Lisp
                                         final LispThread thread)
         throws ConditionThrowable
     {
-        thread.clearValues();
-        if (thread.isDestroyed())
-            throw new ThreadDestroyed();
-        if (obj instanceof Symbol) {
-            LispObject result = null;
-            if (obj.isSpecialVariable()) {
-                result = thread.lookupSpecial(obj);
-            } else
-                result = env.lookup(obj);
-            if (result == null) {
-                result = obj.getSymbolValue();
-                if (result == null)
-                    throw new ConditionThrowable(new UnboundVariable(obj));
-            }
-            return result;
-        } else if (obj instanceof Cons) {
-            LispObject first = obj.car();
-            if (first instanceof Symbol) {
-                LispObject fun = env.lookupFunctional(first);
-                if (fun == null)
-                    throw new ConditionThrowable(new UndefinedFunction(first));
-                switch (fun.getFunctionalType()) {
-                    case FTYPE_SPECIAL_OPERATOR: {
-                        if (profiling)
-                            fun.incrementCallCount();
-                        // Don't eval args!
-                        return fun.execute(obj.cdr(), env);
-                    }
-                    case FTYPE_MACRO:
-                        return eval(macroexpand(obj, env, thread), env, thread);
-                    case FTYPE_AUTOLOAD: {
-                        Autoload autoload = (Autoload) fun;
-                        autoload.load();
-                        return eval(obj, env, thread);
-                    }
-                    default: {
-                        if (debug)
-                            return funcall(fun,
-                                           evalList(obj.cdr(), env, thread),
-                                           thread);
-                        if (profiling)
-                            fun.incrementCallCount();
-                        LispObject args = obj.cdr();
-                        if (args == NIL)
-                            return fun.execute();
-                        LispObject arg1 = args.car();
-                        args = args.cdr();
-                        if (args == NIL)
-                            return fun.execute(thread.value(eval(arg1, env, thread)));
-                        LispObject arg2 = args.car();
-                        args = args.cdr();
-                        if (args == NIL)
-                            return fun.execute(eval(arg1, env, thread),
-                                               thread.value(eval(arg2, env, thread)));
-                        LispObject arg3 = args.car();
-                        args = args.cdr();
-                        if (args == NIL)
-                            return fun.execute(eval(arg1, env, thread),
-                                               eval(arg2, env, thread),
-                                               thread.value(eval(arg3, env, thread)));
-                        // More than 3 arguments.
-                        final int length = args.length() + 3;
-                        LispObject[] results = new LispObject[length];
-                        results[0] = eval(arg1, env, thread);
-                        results[1] = eval(arg2, env, thread);
-                        results[2] = eval(arg3, env, thread);
-                        for (int i = 3; i < length; i++) {
-                            results[i] = eval(args.car(), env, thread);
-                            args = args.cdr();
-                        }
-                        thread.clearValues();
-                        return fun.execute(results);
-                    }
-                }
-            } else {
-                LispObject args = obj.cdr();
-                if (!args.listp())
-                    throw new ConditionThrowable(new TypeError(args, "list"));
-                LispObject funcar = first.car();
-                LispObject rest = first.cdr();
-                Symbol symbol = checkSymbol(funcar);
-                if (symbol == Symbol.LAMBDA) {
-                    Closure closure = new Closure(rest.car(), rest.cdr(), env);
-                    return closure.execute(evalList(args, env, thread));
+        try {
+            thread.clearValues();
+            if (thread.isDestroyed())
+                throw new ThreadDestroyed();
+            if (obj instanceof Symbol) {
+                LispObject result = null;
+                if (obj.isSpecialVariable()) {
+                    result = thread.lookupSpecial(obj);
                 } else
-                    throw new ConditionThrowable(new ProgramError("illegal function object: " + first));
+                    result = env.lookup(obj);
+                if (result == null) {
+                    result = obj.getSymbolValue();
+                    if (result == null)
+                        throw new ConditionThrowable(new UnboundVariable(obj));
+                }
+                return result;
+            } else if (obj instanceof Cons) {
+                LispObject first = obj.car();
+                if (first instanceof Symbol) {
+                    LispObject fun = env.lookupFunctional(first);
+                    if (fun == null)
+                        throw new ConditionThrowable(new UndefinedFunction(first));
+                    switch (fun.getFunctionalType()) {
+                        case FTYPE_SPECIAL_OPERATOR: {
+                            if (profiling)
+                                fun.incrementCallCount();
+                            // Don't eval args!
+                            return fun.execute(obj.cdr(), env);
+                        }
+                        case FTYPE_MACRO:
+                            return eval(macroexpand(obj, env, thread), env, thread);
+                        case FTYPE_AUTOLOAD: {
+                            Autoload autoload = (Autoload) fun;
+                            autoload.load();
+                            return eval(obj, env, thread);
+                        }
+                        default: {
+                            if (debug)
+                                return funcall(fun,
+                                               evalList(obj.cdr(), env, thread),
+                                               thread);
+                            if (profiling)
+                                fun.incrementCallCount();
+                            LispObject args = obj.cdr();
+                            if (args == NIL)
+                                return fun.execute();
+                            LispObject arg1 = args.car();
+                            args = args.cdr();
+                            if (args == NIL)
+                                return fun.execute(thread.value(eval(arg1, env, thread)));
+                            LispObject arg2 = args.car();
+                            args = args.cdr();
+                            if (args == NIL)
+                                return fun.execute(eval(arg1, env, thread),
+                                                   thread.value(eval(arg2, env, thread)));
+                            LispObject arg3 = args.car();
+                            args = args.cdr();
+                            if (args == NIL)
+                                return fun.execute(eval(arg1, env, thread),
+                                                   eval(arg2, env, thread),
+                                                   thread.value(eval(arg3, env, thread)));
+                            // More than 3 arguments.
+                            final int length = args.length() + 3;
+                            LispObject[] results = new LispObject[length];
+                            results[0] = eval(arg1, env, thread);
+                            results[1] = eval(arg2, env, thread);
+                            results[2] = eval(arg3, env, thread);
+                            for (int i = 3; i < length; i++) {
+                                results[i] = eval(args.car(), env, thread);
+                                args = args.cdr();
+                            }
+                            thread.clearValues();
+                            return fun.execute(results);
+                        }
+                    }
+                } else {
+                    LispObject args = obj.cdr();
+                    if (!args.listp())
+                        throw new ConditionThrowable(new TypeError(args, "list"));
+                    LispObject funcar = first.car();
+                    LispObject rest = first.cdr();
+                    Symbol symbol = checkSymbol(funcar);
+                    if (symbol == Symbol.LAMBDA) {
+                        Closure closure = new Closure(rest.car(), rest.cdr(), env);
+                        return closure.execute(evalList(args, env, thread));
+                    } else
+                        throw new ConditionThrowable(new ProgramError("illegal function object: " + first));
+                }
+            } else
+                return obj;
+        }
+        catch (ConditionThrowable t) {
+            if (debug) {
+                Symbol savedBacktrace = intern("*SAVED-BACKTRACE*", PACKAGE_EXT);
+                savedBacktrace.setSymbolValue(thread.backtraceAsList(0));
             }
-        } else
-            return obj;
+            throw t;
+        }
     }
 
     private static final LispObject[] evalList(LispObject exps,
