@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.25 2004-03-16 18:32:52 piso Exp $
+ * $Id: Readtable.java,v 1.26 2004-03-17 16:21:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -293,7 +293,11 @@ public final class Readtable extends LispObject
             throws ConditionThrowable
         {
             char c = LispCharacter.getValue(first);
-            Readtable rt = checkReadtable(second);
+            Readtable rt;
+            if (second == NIL)
+                rt = new Readtable(); // Standard readtable.
+            else
+                rt = checkReadtable(second);
             return rt.getMacroCharacter(c);
         }
     };
