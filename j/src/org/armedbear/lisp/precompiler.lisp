@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.91 2005-03-21 19:50:22 piso Exp $
+;;; $Id: precompiler.lisp,v 1.92 2005-03-21 21:18:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@
              (eq (car callee) 'function)
              (symbolp (cadr callee))
              (not (special-operator-p (cadr callee)))
-             (not (macro-function (cadr callee)))
+             (not (macro-function (cadr callee) sys:*compile-file-environment*))
              (memq (symbol-package (cadr callee))
                    (list (find-package "CL") (find-package "SYS"))))
         `(,(cadr callee) ,@(cdr args))
@@ -195,15 +195,13 @@
                         (return-from precompile1 (precompile1 result)))))
                    ((setf handler (get op 'precompile-handler))
                     (return-from precompile1 (funcall handler form)))
-
                    ((local-macro-function op)
                     (let ((result (expand-local-macro (precompile-cons form))))
                       (return-from precompile1
                                    (if (equal result form)
                                        result
                                        (precompile1 result)))))
-
-                   ((macro-function op)
+                   ((macro-function op sys:*compile-file-environment*)
                     (return-from precompile1 (precompile1 (expand-macro form))))
                    ((special-operator-p op)
                     (error "PRECOMPILE1: unsupported special operator ~S." op))))
@@ -444,7 +442,7 @@
 ;; precompile the restartable form before macroexpanding RESTART-CASE.
 (defun precompile-restart-case (form)
   (let ((new-form (list* 'RESTART-CASE (precompile1 (cadr form)) (cddr form))))
-    (precompile1 (macroexpand new-form))))
+    (precompile1 (macroexpand new-form sys:*compile-file-environment*))))
 
 (defun precompile-symbol-macrolet (form)
   (let ((*local-variables* *local-variables*)
@@ -712,7 +710,8 @@
                  (symbolp (car form))
                  (special-operator-p (car form)))
         (return-from expand-macro form)))
-    (multiple-value-bind (result expanded) (macroexpand-1 form)
+    (multiple-value-bind (result expanded)
+        (macroexpand-1 form sys:*compile-file-environment*)
       (unless expanded
         (return-from expand-macro result))
       (setf form result))))
