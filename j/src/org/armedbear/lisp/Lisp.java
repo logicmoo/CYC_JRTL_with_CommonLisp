@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.91 2003-06-22 16:35:45 piso Exp $
+ * $Id: Lisp.java,v 1.92 2003-06-22 18:36:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,9 @@ public abstract class Lisp
     // Packages.
     public static final Package PACKAGE_CL =
         Packages.createPackage("COMMON-LISP", 1024);
+    static {
+        PACKAGE_CL.addInitialExports(Exports.COMMON_LISP_SYMBOL_NAMES);
+    }
     public static final Package PACKAGE_CL_USER =
         Packages.createPackage("COMMON-LISP-USER", 1024);
     public static final Package PACKAGE_JAVA =
