@@ -1,8 +1,8 @@
 /*
  * LispFloat.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.82 2004-12-23 12:29:29 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: LispFloat.java,v 1.83 2005-03-12 15:57:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -409,39 +409,6 @@ public final class LispFloat extends LispObject
         }
         return signal(new LispError("LispFloat.truncate(): not implemented: " +
                                     obj.typeOf().writeToString()));
-    }
-
-    public LispObject ftruncate(LispObject obj) throws ConditionThrowable
-    {
-        final LispThread thread = LispThread.currentThread();
-        double divisor, quotient, remainder;
-        if (obj instanceof Fixnum) {
-            divisor = ((Fixnum)obj).value;
-        } else if (obj instanceof LispFloat) {
-            divisor = ((LispFloat)obj).value;
-        } else {
-            return signal(new LispError("LispFloat.ftruncate(): not implemented: " +
-                                        obj.typeOf().writeToString()));
-        }
-        quotient = value / divisor;
-        remainder = value % divisor;
-        if (quotient == 0 ||
-            quotient == Double.POSITIVE_INFINITY ||
-            quotient == Double.NEGATIVE_INFINITY)
-        {
-            return thread.setValues(new LispFloat(quotient),
-                                    new LispFloat(remainder));
-        }
-        if (quotient == remainder) {
-            // "The quotient represents the mathematical integer of the
-            // same sign as the mathematical quotient, and that has the
-            // greatest integral magnitude not greater than that of the
-            // mathematical quotient."
-            return thread.setValues(new LispFloat(quotient < 0 ? -0.0 : 0.0),
-                                    new LispFloat(remainder));
-        }
-        return thread.setValues(new LispFloat(quotient - remainder),
-                                new LispFloat(remainder));
     }
 
     public int hashCode()
