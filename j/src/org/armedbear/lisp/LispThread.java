@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.62 2004-10-22 17:55:40 piso Exp $
+ * $Id: LispThread.java,v 1.63 2004-10-22 19:00:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -318,11 +318,55 @@ public final class LispThread extends LispObject
     private static class StackFrame extends LispObject
     {
         private final LispObject operator;
+        private final LispObject first;
+        private final LispObject second;
+        private final LispObject third;
         private final LispObject[] args;
+
+        public StackFrame(LispObject operator)
+        {
+            this.operator = operator;
+            first = null;
+            second = null;
+            third = null;
+            args = null;
+        }
+
+        public StackFrame(LispObject operator, LispObject arg)
+        {
+            this.operator = operator;
+            first = arg;
+            second = null;
+            third = null;
+            args = null;
+        }
+
+        public StackFrame(LispObject operator, LispObject first,
+                          LispObject second)
+        {
+            this.operator = operator;
+            this.first = first;
+            this.second = second;
+            third = null;
+            args = null;
+        }
+
+        public StackFrame(LispObject operator, LispObject first,
+                          LispObject second, LispObject third)
+        {
+            this.operator = operator;
+            this.first = first;
+            this.second = second;
+            this.third = third;
+            args = null;
+        }
 
         public StackFrame(LispObject operator, LispObject[] args)
         {
             this.operator = operator;
+            first = null;
+            second = null;
+            third = null;
             this.args = args;
         }
 
@@ -331,20 +375,32 @@ public final class LispThread extends LispObject
             return operator;
         }
 
-        public LispObject[] getArguments()
-        {
-            return args;
-        }
-
-        public LispObject toList()
+        public LispObject toList() throws ConditionThrowable
         {
             LispObject list = NIL;
-            for (int j = args.length; j-- > 0;)
-                list = new Cons(args[j], list);
+            if (args != null) {
+                for (int j = args.length; j-- > 0;)
+                    list = new Cons(args[j], list);
+            } else {
+                do {
+                    if (first != null)
+                        list = list.push(first);
+                    else
+                        break;
+                    if (second != null)
+                        list = list.push(second);
+                    else
+                        break;
+                    if (third != null)
+                        list = list.push(third);
+                    else
+                        break;
+                } while (false);
+            }
             if (operator instanceof Functional && ((Functional)operator).getLambdaName() != null)
-                list = new Cons(((Functional)operator).getLambdaName(), list);
+                list = list.push(((Functional)operator).getLambdaName());
             else
-                list = new Cons(operator, list);
+                list = list.push(operator);
             return list;
         }
     }
@@ -359,6 +415,49 @@ public final class LispThread extends LispObject
     public void setStack(LispObject stack)
     {
         this.stack = stack;
+    }
+
+    public void pushStackFrame(LispObject operator)
+        throws ConditionThrowable
+    {
+        if (profiling && sampling) {
+            if (sampleNow)
+                Profiler.sample(this);
+        }
+        stack = new Cons((new StackFrame(operator)), stack);
+    }
+
+    public void pushStackFrame(LispObject operator, LispObject arg)
+        throws ConditionThrowable
+    {
+        if (profiling && sampling) {
+            if (sampleNow)
+                Profiler.sample(this);
+        }
+        stack = new Cons((new StackFrame(operator, arg)), stack);
+    }
+
+    public void pushStackFrame(LispObject operator, LispObject first,
+                               LispObject second)
+        throws ConditionThrowable
+    {
+        if (profiling && sampling) {
+            if (sampleNow)
+                Profiler.sample(this);
+        }
+        stack = new Cons((new StackFrame(operator, first, second)), stack);
+    }
+
+    public void pushStackFrame(LispObject operator, LispObject first,
+                               LispObject second, LispObject third)
+        throws ConditionThrowable
+    {
+        if (profiling && sampling) {
+            if (sampleNow)
+                Profiler.sample(this);
+        }
+        stack = new Cons((new StackFrame(operator, first, second, third)),
+                         stack);
     }
 
     public void pushStackFrame(LispObject operator, LispObject[] args)
@@ -379,7 +478,7 @@ public final class LispThread extends LispObject
     public LispObject execute(LispObject function) throws ConditionThrowable
     {
         LispObject oldStack = stack;
-        pushStackFrame(function, new LispObject[0]);
+        pushStackFrame(function);
         try {
             return function.execute();
         }
@@ -396,9 +495,7 @@ public final class LispThread extends LispObject
         throws ConditionThrowable
     {
         LispObject oldStack = stack;
-        LispObject[] args = new LispObject[1];
-        args[0] = arg;
-        pushStackFrame(function, args);
+        pushStackFrame(function, arg);
         try {
             return function.execute(arg);
         }
@@ -416,10 +513,7 @@ public final class LispThread extends LispObject
         throws ConditionThrowable
     {
         LispObject oldStack = stack;
-        LispObject[] args = new LispObject[2];
-        args[0] = first;
-        args[1] = second;
-        pushStackFrame(function, args);
+        pushStackFrame(function, first, second);
         try {
             return function.execute(first, second);
         }
@@ -437,11 +531,7 @@ public final class LispThread extends LispObject
         throws ConditionThrowable
     {
         LispObject oldStack = stack;
-        LispObject[] args = new LispObject[3];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        pushStackFrame(function, args);
+        pushStackFrame(function, first, second, third);
         try {
             return function.execute(first, second, third);
         }

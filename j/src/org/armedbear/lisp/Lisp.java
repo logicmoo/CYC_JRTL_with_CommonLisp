@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.287 2004-10-20 01:14:26 piso Exp $
+ * $Id: Lisp.java,v 1.288 2004-10-22 19:01:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,42 +106,37 @@ public abstract class Lisp
 
     public static volatile boolean sampleNow;
 
-    // argv must not be null!
-    public static final LispObject funcall(LispObject fun, LispObject[] argv,
+    // args must not be null!
+    public static final LispObject funcall(LispObject fun, LispObject[] args,
                                            LispThread thread)
         throws ConditionThrowable
     {
-        if (fun instanceof Autoload) {
-            Autoload autoload = (Autoload) fun;
-            autoload.load();
-            fun = autoload.getSymbol().getSymbolFunction();
-        }
         LispObject stack = thread.getStack();
-        thread.pushStackFrame(fun, argv);
+        thread.pushStackFrame(fun, args);
         thread.clearValues();
         LispObject result;
         if (profiling)
             if (!sampling)
                 fun.incrementCallCount();
         try {
-            switch (argv.length) {
+            switch (args.length) {
                 case 0:
                     result = fun.execute();
                     break;
                 case 1:
-                    result = fun.execute(argv[0]);
+                    result = fun.execute(args[0]);
                     break;
                 case 2:
-                    result = fun.execute(argv[0], argv[1]);
+                    result = fun.execute(args[0], args[1]);
                     break;
                 case 3:
-                    result = fun.execute(argv[0], argv[1], argv[2]);
+                    result = fun.execute(args[0], args[1], args[2]);
                     break;
                 case 4:
-                    result = fun.execute(argv[0], argv[1], argv[2], argv[3]);
+                    result = fun.execute(args[0], args[1], args[2], args[3]);
                     break;
                 default:
-                    result = fun.execute(argv);
+                    result = fun.execute(args);
                     break;
             }
         }
@@ -154,14 +149,8 @@ public abstract class Lisp
     public static final LispObject funcall0(LispObject fun, LispThread thread)
         throws ConditionThrowable
     {
-        if (fun instanceof Autoload) {
-            Autoload autoload = (Autoload) fun;
-            autoload.load();
-            fun = autoload.getSymbol().getSymbolFunction();
-        }
         LispObject stack = thread.getStack();
-        LispObject[] argv = new LispObject[0];
-        thread.pushStackFrame(fun, argv);
+        thread.pushStackFrame(fun);
         thread.clearValues();
         LispObject result;
         if (profiling)
@@ -180,15 +169,8 @@ public abstract class Lisp
                                             LispThread thread)
         throws ConditionThrowable
     {
-        if (fun instanceof Autoload) {
-            Autoload autoload = (Autoload) fun;
-            autoload.load();
-            fun = autoload.getSymbol().getSymbolFunction();
-        }
         LispObject stack = thread.getStack();
-        LispObject[] argv = new LispObject[1];
-        argv[0] = arg;
-        thread.pushStackFrame(fun, argv);
+        thread.pushStackFrame(fun, arg);
         thread.clearValues();
         LispObject result;
         if (profiling)
@@ -207,16 +189,8 @@ public abstract class Lisp
                                             LispObject second, LispThread thread)
         throws ConditionThrowable
     {
-        if (fun instanceof Autoload) {
-            Autoload autoload = (Autoload) fun;
-            autoload.load();
-            fun = autoload.getSymbol().getSymbolFunction();
-        }
         LispObject stack = thread.getStack();
-        LispObject[] argv = new LispObject[2];
-        argv[0] = first;
-        argv[1] = second;
-        thread.pushStackFrame(fun, argv);
+        thread.pushStackFrame(fun, first, second);
         thread.clearValues();
         LispObject result;
         if (profiling)
@@ -236,17 +210,8 @@ public abstract class Lisp
                                             LispThread thread)
         throws ConditionThrowable
     {
-        if (fun instanceof Autoload) {
-            Autoload autoload = (Autoload) fun;
-            autoload.load();
-            fun = autoload.getSymbol().getSymbolFunction();
-        }
         LispObject stack = thread.getStack();
-        LispObject[] argv = new LispObject[3];
-        argv[0] = first;
-        argv[1] = second;
-        argv[2] = third;
-        thread.pushStackFrame(fun, argv);
+        thread.pushStackFrame(fun, first, second, third);
         thread.clearValues();
         LispObject result;
         if (profiling)
