@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.49 2004-04-29 02:15:46 piso Exp $
+;;; $Id: precompiler.lisp,v 1.50 2004-05-01 00:04:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -452,7 +452,34 @@
     (dolist (def defs (nreverse result))
       (push (precompile-local-function-def def) result))))
 
-(defun precompile-flet/labels (form)
+(defun find-use (symbol expression)
+  (cond ((atom expression)
+         nil)
+        ((eq (car expression) symbol)
+         t)
+        (t
+         (or (find-use symbol (car expression))
+             (find-use symbol (cdr expression))))))
+
+(defun precompile-flet (form)
+  (let ((*local-functions-and-macros* *local-functions-and-macros*)
+        (locals (cadr form))
+        (body (cddr form)))
+    (dolist (local locals)
+      (let ((name (car local)))
+        (unless (find-use name body)
+          (format t "; Note: deleting unused local function FLET ~S~%" name)
+          (let* ((new-locals (remove local locals :test 'eq))
+                 (new-form
+                  (if new-locals
+                      (list* 'FLET new-locals body)
+                      (list* 'PROGN body))))
+            (return-from precompile-flet (precompile1 new-form))))))
+    (list* (car form)
+           (precompile-local-functions locals)
+           (mapcar #'precompile1 body))))
+
+(defun precompile-labels (form)
   (let ((*local-functions-and-macros* *local-functions-and-macros*)
         (locals (cadr form))
         (body (cddr form)))
@@ -589,8 +616,10 @@
                             cond
                             dolist
                             dotimes
+                            flet
                             function
                             if
+                            labels
                             lambda
                             macrolet
                             multiple-value-bind
@@ -618,9 +647,6 @@
 
 (install-handler 'do                   'precompile-do/do*)
 (install-handler 'do*                  'precompile-do/do*)
-
-(install-handler 'flet                 'precompile-flet/labels)
-(install-handler 'labels               'precompile-flet/labels)
 
 (install-handler 'let                  'precompile-let)
 (install-handler 'let*                 'precompile-let*)
