@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.4 2003-01-26 18:10:11 piso Exp $
+ * $Id: JLisp.java,v 1.5 2003-02-04 16:47:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@ public final class JLisp extends CommandInterpreter
         mode = LispShellMode.getMode();
         formatter = mode.getFormatter(this);
         setTransient(true);
+        setInitialized(true);
     }
 
     public final boolean isLisp()
