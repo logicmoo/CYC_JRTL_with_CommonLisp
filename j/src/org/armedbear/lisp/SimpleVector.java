@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.7 2004-02-25 13:50:54 piso Exp $
+ * $Id: SimpleVector.java,v 1.8 2004-02-25 14:50:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,44 +93,6 @@ public final class SimpleVector extends AbstractVector
     public int capacity()
     {
         return capacity;
-    }
-
-    public AbstractVector adjustVector(int size, LispObject initialElement,
-                                     LispObject initialContents)
-        throws ConditionThrowable
-    {
-        SimpleVector v = new SimpleVector(size);
-        LispObject[] newArray = new LispObject[size];
-        if (initialContents != NIL) {
-            if (initialContents.listp()) {
-                LispObject list = initialContents;
-                for (int i = 0; i < size; i++) {
-                    newArray[i] = list.car();
-                    list = list.cdr();
-                }
-            } else if (initialContents.vectorp()) {
-                for (int i = 0; i < size; i++)
-                    newArray[i] = initialContents.elt(i);
-            } else
-                signal(new TypeError(initialContents, Symbol.SEQUENCE));
-        } else {
-            System.arraycopy(elements, 0, newArray, 0,
-                             Math.min(capacity, size));
-            if (size > capacity) {
-                for (int i = capacity; i < size; i++)
-                    newArray[i] = initialElement;
-            }
-        }
-        v.elements = newArray;
-        v.capacity = size;
-        return v;
-    }
-
-    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
-                                     int displacement)
-        throws ConditionThrowable
-    {
-        return new ComplexVector(size, displacedTo, displacement);
     }
 
     public int length()
@@ -277,6 +239,46 @@ public final class SimpleVector extends AbstractVector
             sb.append(" ...");
         sb.append(')');
         return sb.toString();
+    }
+
+    public AbstractVector adjustVector(int newCapacity,
+                                       LispObject initialElement,
+                                       LispObject initialContents)
+        throws ConditionThrowable
+    {
+        if (initialContents != NIL) {
+            LispObject[] newElements = new LispObject[newCapacity];
+            if (initialContents.listp()) {
+                LispObject list = initialContents;
+                for (int i = 0; i < newCapacity; i++) {
+                    newElements[i] = list.car();
+                    list = list.cdr();
+                }
+            } else if (initialContents.vectorp()) {
+                for (int i = 0; i < newCapacity; i++)
+                    newElements[i] = initialContents.elt(i);
+            } else
+                signal(new TypeError(initialContents, Symbol.SEQUENCE));
+            return new SimpleVector(newElements);
+        }
+        if (capacity != newCapacity) {
+            LispObject[] newElements = new LispObject[newCapacity];
+            System.arraycopy(elements, 0, newElements, 0,
+                             Math.min(capacity, newCapacity));
+            for (int i = capacity; i < newCapacity; i++)
+                newElements[i] = initialElement;
+            return new SimpleVector(newElements);
+        }
+        // No change.
+        return this;
+    }
+
+    public AbstractVector adjustVector(int newCapacity,
+                                       AbstractArray displacedTo,
+                                       int displacement)
+        throws ConditionThrowable
+    {
+        return new ComplexVector(newCapacity, displacedTo, displacement);
     }
 
     // ### svref
