@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.91 2004-02-19 19:12:02 piso Exp $
+;;; $Id: clos.lisp,v 1.92 2004-02-19 19:16:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1434,7 +1434,7 @@
                    (make-closure
                     (if (and (null befores) (null reverse-afters))
                         `(lambda (args)
-                           (funcall (method-function ,(car primaries)) args ,next-emfun))
+                           (funcall ,(method-function (car primaries)) args ,next-emfun))
                         `(lambda (args)
                            (dolist (before ',befores)
                              (funcall (method-function before) args nil))
