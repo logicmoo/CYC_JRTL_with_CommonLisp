@@ -1,8 +1,8 @@
 /*
  * API.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: API.java,v 1.2 2002-10-26 01:28:17 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: API.java,v 1.3 2003-06-13 15:34:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,46 +27,34 @@ public final class API
     {
     }
 
-    public static void globalMapKey(String keyText, String command)
+    public static boolean globalMapKey(String keyText, String command)
     {
-        KeyMap km = KeyMap.getGlobalOverrides(true);
-        synchronized(km) {
-            km.mapKey(keyText, command);
-        }
+        return KeyMap.getGlobalKeyMap().mapKey(keyText, command);
     }
 
-    public static void globalUnmapKey(String keyText)
+    public static boolean globalUnmapKey(String keyText)
     {
-        KeyMap km = KeyMap.getGlobalOverrides(true);
-        synchronized(km) {
-            km.mapKey(keyText, null);
-        }
+        return KeyMap.getGlobalKeyMap().unmapKey(keyText);
     }
 
-    public static void mapKeyForMode(String keyText, String command, String modeName)
+    public static boolean mapKeyForMode(String keyText, String command, String modeName)
     {
         Mode mode = Editor.getModeList().getModeFromModeName(modeName);
         if (mode == null) {
             Log.error("mode not found \"".concat(modeName).concat("\""));
-            return;
+            return false;
         }
-        KeyMap km = mode.getOverrides(true);
-        synchronized(km) {
-            km.mapKey(keyText, command);
-        }
+        return mode.getKeyMap().mapKey(keyText, command);
     }
 
-    public static void unmapKeyForMode(String keyText, String modeName)
+    public static boolean unmapKeyForMode(String keyText, String modeName)
     {
         Mode mode = Editor.getModeList().getModeFromModeName(modeName);
         if (mode == null) {
             Log.error("mode not found \"".concat(modeName).concat("\""));
-            return;
+            return false;
         }
-        KeyMap km = mode.getOverrides(true);
-        synchronized(km) {
-            km.mapKey(keyText, null);
-        }
+        return mode.getKeyMap().mapKey(keyText, null);
     }
 
     public static final void setGlobalProperty(String key, String value)
