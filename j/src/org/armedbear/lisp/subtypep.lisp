@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.57 2005-02-06 13:26:20 piso Exp $
+;;; $Id: subtypep.lisp,v 1.58 2005-02-06 18:30:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -568,7 +568,7 @@
                         ((equal i1 '(*))
                          (values nil t))
                         (t
-                         (values (subtypep i1 i2) t))))))
+                         (values (subtypep (car i1) (car i2)) t))))))
           ((and (eq t1 (find-class 'array)) (eq t2 'array))
            (values (equal i2 '(* *)) t))
           ((and (memq t1 '(array simple-array)) (eq t2 'array))
