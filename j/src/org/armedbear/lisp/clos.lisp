@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.60 2004-02-02 18:34:55 piso Exp $
+;;; $Id: clos.lisp,v 1.61 2004-02-04 17:23:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1446,15 +1446,17 @@
 (defgeneric make-instance (class &key))
 
 (defmethod make-instance ((class standard-class) &rest initargs)
+  (when (oddp (length initargs))
+    (error 'program-error
+           :format-control "Odd number of keyword arguments."))
   (let ((class-default-initargs (class-default-initargs class)))
     (when class-default-initargs
-      (let ((default-initargs ())
-            (not-found (gensym)))
+      (let ((default-initargs ()))
         (do* ((list class-default-initargs (cddr list))
               (key (car list) (car list))
               (fn (cadr list) (cadr list)))
              ((null list))
-          (when (eq (getf initargs key not-found) not-found)
+          (when (eq (getf initargs key 'not-found) 'not-found)
             (setf default-initargs (append default-initargs (list key (funcall fn))))))
         (setf initargs (append initargs default-initargs)))))
   (let ((instance (std-allocate-instance class)))
