@@ -2,7 +2,7 @@
  * NewsGroupMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupMessageBuffer.java,v 1.8 2002-12-05 21:20:24 piso Exp $
+ * $Id: NewsGroupMessageBuffer.java,v 1.9 2003-02-12 14:59:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -366,14 +366,14 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
     private static boolean haveUudecode()
     {
         if (haveUudecode < 0)
-            haveUudecode = Utilities.have("uudecode") ? 1 : 0;
+            haveUudecode = Utilities.have("uudecode -h") ? 1 : 0;
         return haveUudecode == 1;
     }
 
     private static boolean haveYydecode()
     {
         if (haveYydecode < 0)
-            haveYydecode = Utilities.have("yydecode") ? 1 : 0;
+            haveYydecode = Utilities.have("yydecode -h") ? 1 : 0;
         return haveYydecode == 1;
     }
 
