@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.6 2003-10-11 00:16:55 piso Exp $
+;;; $Id: defclass.lisp,v 1.7 2003-10-11 14:58:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -494,3 +494,420 @@
                  :direct-slots
                  ,(canonicalize-direct-slots direct-slots)
                  ,@(canonicalize-defclass-options options)))
+
+;;;
+;;; Generic function metaobjects and standard-generic-function
+;;;
+
+(defparameter the-defclass-standard-generic-function
+  '(defclass standard-generic-function ()
+    ((name :initarg :name)      ; :accessor generic-function-name
+     (lambda-list               ; :accessor generic-function-lambda-list
+      :initarg :lambda-list)
+     (methods :initform ())     ; :accessor generic-function-methods
+     (method-class              ; :accessor generic-function-method-class
+      :initarg :method-class)
+     (discriminating-function)  ; :accessor generic-function-
+     ;    -discriminating-function
+     (classes-to-emf-table      ; :accessor classes-to-emf-table
+      :initform (make-hash-table :test #'equal)))))
+
+(defvar the-class-standard-gf (find-class 'standard-generic-function))
+
+(defun generic-function-name (gf)
+  (slot-value gf 'name))
+(defun (setf generic-function-name) (new-value gf)
+  (setf (slot-value gf 'name) new-value))
+
+(defun generic-function-lambda-list (gf)
+  (slot-value gf 'lambda-list))
+(defun (setf generic-function-lambda-list) (new-value gf)
+  (setf (slot-value gf 'lambda-list) new-value))
+
+(defun generic-function-methods (gf)
+  (slot-value gf 'methods))
+(defun (setf generic-function-methods) (new-value gf)
+  (setf (slot-value gf 'methods) new-value))
+
+(defun generic-function-discriminating-function (gf)
+  (slot-value gf 'discriminating-function))
+(defun (setf generic-function-discriminating-function) (new-value gf)
+  (setf (slot-value gf 'discriminating-function) new-value))
+
+(defun generic-function-method-class (gf)
+  (slot-value gf 'method-class))
+(defun (setf generic-function-method-class) (new-value gf)
+  (setf (slot-value gf 'method-class) new-value))
+
+;;; Internal accessor for effective method function table
+
+(defun classes-to-emf-table (gf)
+  (slot-value gf 'classes-to-emf-table))
+(defun (setf classes-to-emf-table) (new-value gf)
+  (setf (slot-value gf 'classes-to-emf-table) new-value))
+
+;;;
+;;; Method metaobjects and standard-method
+;;;
+
+(defparameter the-defclass-standard-method
+  '(defclass standard-method ()
+    ((lambda-list :initarg :lambda-list)     ; :accessor method-lambda-list
+     (qualifiers :initarg :qualifiers)       ; :accessor method-qualifiers
+     (specializers :initarg :specializers)   ; :accessor method-specializers
+     (body :initarg :body)                   ; :accessor method-body
+     (environment :initarg :environment)     ; :accessor method-environment
+     (generic-function :initform nil)        ; :accessor method-generic-function
+     (function))))                           ; :accessor method-function
+
+(defvar the-class-standard-method (find-class 'standard-method))
+
+(defun method-lambda-list (method) (slot-value method 'lambda-list))
+(defun (setf method-lambda-list) (new-value method)
+  (setf (slot-value method 'lambda-list) new-value))
+
+(defun method-qualifiers (method) (slot-value method 'qualifiers))
+(defun (setf method-qualifiers) (new-value method)
+  (setf (slot-value method 'qualifiers) new-value))
+
+(defun method-specializers (method) (slot-value method 'specializers))
+(defun (setf method-specializers) (new-value method)
+  (setf (slot-value method 'specializers) new-value))
+
+(defun method-body (method) (slot-value method 'body))
+(defun (setf method-body) (new-value method)
+  (setf (slot-value method 'body) new-value))
+
+(defun method-environment (method) (slot-value method 'environment))
+(defun (setf method-environment) (new-value method)
+  (setf (slot-value method 'environment) new-value))
+
+(defun method-generic-function (method)
+  (slot-value method 'generic-function))
+(defun (setf method-generic-function) (new-value method)
+  (setf (slot-value method 'generic-function) new-value))
+
+(defun method-function (method) (slot-value method 'function))
+(defun (setf method-function) (new-value method)
+  (setf (slot-value method 'function) new-value))
+
+;;; defgeneric
+
+;; (defmacro defgeneric (function-name lambda-list &rest options)
+;;   `(ensure-generic-function
+;;     ',function-name
+;;     :lambda-list ',lambda-list
+;;     ,@(canonicalize-defgeneric-options options)))
+
+(defun canonicalize-defgeneric-options (options)
+  (mapappend #'canonicalize-defgeneric-option options))
+
+(defun canonicalize-defgeneric-option (option)
+  (case (car option)
+    (:generic-function-class
+     (list ':generic-function-class
+           `(find-class ',(cadr option))))
+    (:method-class
+     (list ':method-class
+           `(find-class ',(cadr option))))
+    (t (list `',(car option) `',(cadr option)))))
+
+;;; find-generic-function looks up a generic function by name.  It's an
+;;; artifact of the fact that our generic function metaobjects can't legally
+;;; be stored a symbol's function value.
+
+(defparameter generic-function-table (make-hash-table :test #'equal))
+
+(defun find-generic-function (symbol &optional (errorp t))
+  (let ((gf (gethash symbol generic-function-table nil)))
+    (if (and (null gf) errorp)
+        (error "No generic function named ~S." symbol)
+        gf)))
+
+(defun (setf find-generic-function) (new-value symbol)
+  (setf (gethash symbol generic-function-table) new-value))
+
+;;; ensure-generic-function
+
+(defun ensure-generic-function
+  (function-name
+   &rest all-keys
+   &key (generic-function-class the-class-standard-gf)
+   (method-class the-class-standard-method)
+   &allow-other-keys)
+  (format t "ensure-generic-function function-name = ~S~%" function-name)
+  (if (find-generic-function function-name nil)
+      (find-generic-function function-name)
+      (let ((gf (apply (if (eq generic-function-class the-class-standard-gf)
+                           #'make-instance-standard-generic-function
+                           #'make-instance)
+                       generic-function-class
+                       :name function-name
+                       :method-class method-class
+                       all-keys)))
+        (setf (find-generic-function function-name) gf)
+        gf)))
+
+;;; finalize-generic-function
+
+;;; N.B. Same basic idea as finalize-inheritance.  Takes care of recomputing
+;;; and storing the discriminating function, and clearing the effective method
+;;; function table.
+
+(defun finalize-generic-function (gf)
+  (setf (generic-function-discriminating-function gf)
+        (funcall (if (eq (class-of gf) the-class-standard-gf)
+                     #'std-compute-discriminating-function
+                     #'compute-discriminating-function)
+                 gf))
+  (setf (fdefinition (generic-function-name gf))
+        (generic-function-discriminating-function gf))
+  (clrhash (classes-to-emf-table gf))
+  (values))
+
+;;; make-instance-standard-generic-function creates and initializes an
+;;; instance of standard-generic-function without falling into method lookup.
+;;; However, it cannot be called until standard-generic-function exists.
+
+(defun make-instance-standard-generic-function
+  (generic-function-class &key name lambda-list method-class)
+  (declare (ignore generic-function-class))
+  (let ((gf (std-allocate-instance the-class-standard-gf)))
+    (setf (generic-function-name gf) name)
+    (setf (generic-function-lambda-list gf) lambda-list)
+    (setf (generic-function-methods gf) ())
+    (setf (generic-function-method-class gf) method-class)
+    (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
+    (finalize-generic-function gf)
+    gf))
+
+;;; defmethod
+
+;; (defmacro defmethod (&rest args)
+;;   (multiple-value-bind (function-name qualifiers
+;;                                       lambda-list specializers body)
+;;     (parse-defmethod args)
+;;     `(ensure-method (find-generic-function ',function-name)
+;;                     :lambda-list ',lambda-list
+;;                     :qualifiers ',qualifiers
+;;                     :specializers ,(canonicalize-specializers specializers)
+;;                     :body ',body
+;;                     :environment (top-level-environment))))
+
+(defun canonicalize-specializers (specializers)
+  `(list ,@(mapcar #'canonicalize-specializer specializers)))
+
+(defun canonicalize-specializer (specializer)
+  `(find-class ',specializer))
+
+(defun parse-defmethod (args)
+  (let ((fn-spec (car args))
+        (qualifiers ())
+        (specialized-lambda-list nil)
+        (body ())
+        (parse-state :qualifiers))
+    (dolist (arg (cdr args))
+      (ecase parse-state
+        (:qualifiers
+         (if (and (atom arg) (not (null arg)))
+             (push-on-end arg qualifiers)
+             (progn (setq specialized-lambda-list arg)
+               (setq parse-state :body))))
+        (:body (push-on-end arg body))))
+    (values fn-spec
+            qualifiers
+            (extract-lambda-list specialized-lambda-list)
+            (extract-specializers specialized-lambda-list)
+            (list* 'block
+                   (if (consp fn-spec)
+                       (cadr fn-spec)
+                       fn-spec)
+                   body))))
+
+;;; Several tedious functions for analyzing lambda lists
+
+(defun required-portion (gf args)
+  (let ((number-required (length (gf-required-arglist gf))))
+    (when (< (length args) number-required)
+      (error "Too few arguments to generic function ~S." gf))
+    (subseq args 0 number-required)))
+
+(defun gf-required-arglist (gf)
+  (let ((plist
+         (analyze-lambda-list
+          (generic-function-lambda-list gf))))
+    (getf plist ':required-args)))
+
+(defun extract-lambda-list (specialized-lambda-list)
+  (let* ((plist (analyze-lambda-list specialized-lambda-list))
+         (requireds (getf plist ':required-names))
+         (rv (getf plist ':rest-var))
+         (ks (getf plist ':key-args))
+         (aok (getf plist ':allow-other-keys))
+         (opts (getf plist ':optional-args))
+         (auxs (getf plist ':auxiliary-args)))
+    `(,@requireds
+      ,@(if rv `(&rest ,rv) ())
+      ,@(if (or ks aok) `(&key ,@ks) ())
+      ,@(if aok '(&allow-other-keys) ())
+      ,@(if opts `(&optional ,@opts) ())
+      ,@(if auxs `(&aux ,@auxs) ()))))
+
+(defun extract-specializers (specialized-lambda-list)
+  (let ((plist (analyze-lambda-list specialized-lambda-list)))
+    (getf plist ':specializers)))
+
+(defun analyze-lambda-list (lambda-list)
+  (labels ((make-keyword (symbol)
+                         (intern (symbol-name symbol)
+                                 (find-package 'keyword)))
+           (get-keyword-from-arg (arg)
+                                 (if (listp arg)
+                                     (if (listp (car arg))
+                                         (caar arg)
+                                         (make-keyword (car arg)))
+                                     (make-keyword arg))))
+          (let ((keys ())           ; Just the keywords
+                (key-args ())       ; Keywords argument specs
+                (required-names ()) ; Just the variable names
+                (required-args ())  ; Variable names & specializers
+                (specializers ())   ; Just the specializers
+                (rest-var nil)
+                (optionals ())
+                (auxs ())
+                (allow-other-keys nil)
+                (state :parsing-required))
+            (dolist (arg lambda-list)
+              (if (member arg lambda-list-keywords)
+                  (ecase arg
+                    (&optional
+                     (setq state :parsing-optional))
+                    (&rest
+                     (setq state :parsing-rest))
+                    (&key
+                     (setq state :parsing-key))
+                    (&allow-other-keys
+                     (setq allow-other-keys 't))
+                    (&aux
+                     (setq state :parsing-aux)))
+                  (case state
+                    (:parsing-required
+                     (push-on-end arg required-args)
+                     (if (listp arg)
+                         (progn (push-on-end (car arg) required-names)
+                           (push-on-end (cadr arg) specializers))
+                         (progn (push-on-end arg required-names)
+                           (push-on-end 't specializers))))
+                    (:parsing-optional (push-on-end arg optionals))
+                    (:parsing-rest (setq rest-var arg))
+                    (:parsing-key
+                     (push-on-end (get-keyword-from-arg arg) keys)
+                     (push-on-end arg key-args))
+                    (:parsing-aux (push-on-end arg auxs)))))
+            (list  :required-names required-names
+                   :required-args required-args
+                   :specializers specializers
+                   :rest-var rest-var
+                   :keywords keys
+                   :key-args key-args
+                   :auxiliary-args auxs
+                   :optional-args optionals
+                   :allow-other-keys allow-other-keys))))
+
+;;; ensure method
+
+(defun ensure-method (gf &rest all-keys)
+  (let ((new-method
+         (apply
+          (if (eq (generic-function-method-class gf)
+                  the-class-standard-method)
+              #'make-instance-standard-method
+              #'make-instance)
+          (generic-function-method-class gf)
+          all-keys)))
+    (add-method gf new-method)
+    new-method))
+
+;;; make-instance-standard-method creates and initializes an instance of
+;;; standard-method without falling into method lookup.  However, it cannot
+;;; be called until standard-method exists.
+
+(defun make-instance-standard-method (method-class
+                                      &key lambda-list qualifiers
+                                      specializers body environment)
+  (declare (ignore method-class))
+  (let ((method (std-allocate-instance the-class-standard-method)))
+    (setf (method-lambda-list method) lambda-list)
+    (setf (method-qualifiers method) qualifiers)
+    (setf (method-specializers method) specializers)
+    (setf (method-body method) body)
+    (setf (method-environment method) environment)
+    (setf (method-generic-function method) nil)
+    (setf (method-function method)
+          (std-compute-method-function method))
+    method))
+
+;;; add-method
+
+;;; N.B. This version first removes any existing method on the generic function
+;;; with the same qualifiers and specializers.  It's a pain to develop
+;;; programs without this feature of full CLOS.
+
+(defun add-method (gf method)
+  (let ((old-method
+         (find-method gf (method-qualifiers method)
+                      (method-specializers method) nil)))
+    (when old-method (remove-method gf old-method)))
+  (setf (method-generic-function method) gf)
+  (push method (generic-function-methods gf))
+  (dolist (specializer (method-specializers method))
+    (pushnew method (class-direct-methods specializer)))
+  (finalize-generic-function gf)
+  method)
+
+(defun remove-method (gf method)
+  (setf (generic-function-methods gf)
+        (remove method (generic-function-methods gf)))
+  (setf (method-generic-function method) nil)
+  (dolist (class (method-specializers method))
+    (setf (class-direct-methods class)
+          (remove method (class-direct-methods class))))
+  (finalize-generic-function gf)
+  method)
+
+(defun find-method (gf qualifiers specializers
+                       &optional (errorp t))
+  (let ((method
+         (find-if #'(lambda (method)
+                     (and (equal qualifiers
+                                 (method-qualifiers method))
+                          (equal specializers
+                                 (method-specializers method))))
+                  (generic-function-methods gf))))
+    (if (and (null method) errorp)
+        (error "No such method for ~S." (generic-function-name gf))
+        method)))
+
+;;; Reader and write methods
+
+(defun add-reader-method (class fn-name slot-name)
+  (ensure-method
+   (ensure-generic-function fn-name :lambda-list '(object))
+   :lambda-list '(object)
+   :qualifiers ()
+   :specializers (list class)
+   :body `(slot-value object ',slot-name)
+   :environment (top-level-environment))
+  (values))
+
+(defun add-writer-method (class fn-name slot-name)
+  (ensure-method
+   (ensure-generic-function
+    fn-name :lambda-list '(new-value object))
+   :lambda-list '(new-value object)
+   :qualifiers ()
+   :specializers (list (find-class 't) class)
+   :body `(setf (slot-value object ',slot-name)
+                new-value)
+   :environment (top-level-environment))
+  (values))
