@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.76 2004-02-08 20:52:43 piso Exp $
+;;; $Id: clos.lisp,v 1.77 2004-02-09 18:54:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1460,6 +1460,7 @@
         (*call-next-method-p* nil)
         (*next-method-p-p* nil))
     (walk-form form)
+    (setf lambda-list (kludge-arglist lambda-list))
     (compile-in-lexical-environment
      (method-environment method)
      (if (or *call-next-method-p* *next-method-p-p*)
@@ -1471,13 +1472,9 @@
                                          (funcall next-emfun (or cnm-args args))))
                    (next-method-p ()
                                   (not (null next-emfun))))
-              (apply #'(lambda ,(kludge-arglist lambda-list)
-                        ,form)
-                     args)))
+              (apply #'(lambda ,lambda-list ,form) args)))
          `(lambda (args next-emfun)
-            (apply #'(lambda ,(kludge-arglist lambda-list)
-                      ,form)
-                   args))))))
+            (apply #'(lambda ,lambda-list ,form) args))))))
 
 ;;; N.B. The function kludge-arglist is used to pave over the differences
 ;;; between argument keyword compatibility for regular functions versus
