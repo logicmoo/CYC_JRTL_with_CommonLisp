@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.272 2004-08-10 00:52:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.273 2004-08-10 03:28:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1692,7 +1692,7 @@
                        0)
     (emit-invokestatic +lisp-class+
                        "coerceToFunction"
-                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
+                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                        0)
     (emit 'putstatic
           *this-class*
@@ -2158,6 +2158,23 @@
         (maybe-emit-clear-values form))
       (emit-move-from-stack target))))
 
+(defun compile-funcall (form &key (target *val*))
+  (unless (> (length form) 1)
+    (error "Wrong number of arguments for FUNCALL."))
+  (let ((new-form (rewrite-function-call form)))
+    (when (neq new-form form)
+      (return-from compile-funcall (compile-form new-form :target target))))
+  (compile-form (cadr form) :target :stack)
+  (maybe-emit-clear-values (cadr form))
+  (emit-invokestatic +lisp-class+
+                     "coerceToFunction"
+                     "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                     0)
+  (compile-call (cddr form))
+  (unless target
+    (maybe-emit-clear-values form))
+  (emit-move-from-stack target))
+
 (defun compile-local-function-call (form target)
   (let* ((fun (car form))
          (args (cdr form))
@@ -2400,7 +2417,7 @@
      (compile-form (second form) :target :stack)
      (emit-invokestatic +lisp-class+
                         "coerceToFunction"
-                        "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
+                        "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                         0)
      (emit-invokevirtual +lisp-object-class+
                          "execute"
@@ -2427,7 +2444,7 @@
        (compile-form (second form) :target :stack)
        (emit-invokestatic +lisp-class+
                           "coerceToFunction"
-                          "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
+                          "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                           0)
        (emit-move-from-stack function-register)
        (emit 'aconst_null)
@@ -3823,6 +3840,7 @@
 
     (let* ((*speed* *speed*)
            (*safety* *safety*)
+           (*debug* *debug*)
            (*declared-symbols* (make-hash-table :test 'eq))
            (*declared-functions* (make-hash-table :test 'equal))
            (*declared-strings* (make-hash-table :test 'eq))
@@ -4146,6 +4164,7 @@
                              cons
                              declare
                              flet
+                             funcall
                              function
                              go
                              if
