@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.557 2004-02-02 18:15:48 piso Exp $
+ * $Id: Primitives.java,v 1.558 2004-02-04 15:17:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1684,7 +1684,8 @@ public final class Primitives extends Lisp
     // ### array-element-type
     // array-element-type array => typespec
     private static final Primitive1 ARRAY_ELEMENT_TYPE =
-        new Primitive1("array-element-type","array") {
+        new Primitive1("array-element-type", "array")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return checkArray(arg).getElementType();
@@ -1692,7 +1693,8 @@ public final class Primitives extends Lisp
     };
 
     private static final Primitive1 ADJUSTABLE_ARRAY_P =
-        new Primitive1("adjustable-array-p", "array") {
+        new Primitive1("adjustable-array-p", "array")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof AbstractArray)
@@ -1704,7 +1706,8 @@ public final class Primitives extends Lisp
     // ### array-in-bounds-p
     // array-in-bounds-p array &rest subscripts => generalized-boolean
     private static final Primitive ARRAY_IN_BOUNDS_P =
-        new Primitive("array-in-bounds-p","array &rest subscripts") {
+        new Primitive("array-in-bounds-p", "array &rest subscripts")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
@@ -1737,7 +1740,8 @@ public final class Primitives extends Lisp
     // ### %array-row-major-index
     // %array-row-major-index array subscripts => index
     private static final Primitive2 _ARRAY_ROW_MAJOR_INDEX =
-        new Primitive2("%array-row-major-index", PACKAGE_SYS, false) {
+        new Primitive2("%array-row-major-index", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -1749,7 +1753,9 @@ public final class Primitives extends Lisp
 
     // ### aref
     // aref array &rest subscripts => element
-    private static final Primitive AREF = new Primitive("aref","array &rest subscripts") {
+    private static final Primitive AREF =
+        new Primitive("aref", "array &rest subscripts")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             AbstractArray array = checkArray(arg);
@@ -2001,29 +2007,6 @@ public final class Primitives extends Lisp
             LispObject element = v.get(newFillPointer);
             v.setFillPointer(newFillPointer);
             return element;
-        }
-    };
-
-    // ### adjust-array
-    // FIXME Very incomplete!
-    private static final Primitive2 ADJUST_ARRAY = new Primitive2("adjust-array","array new-dimensions &key element-type initial-element initial-contents fill-pointer displaced-to displaced-index-offset")
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            if (first instanceof Vector) {
-                Vector v = (Vector) first;
-                LispObject newSize = null;
-                if (second instanceof Cons) {
-                    if (second.length() == 1)
-                        newSize = second.car();
-                } else
-                    newSize = second;
-                if (newSize != null)
-                    return v.adjustArray(Fixnum.getValue(newSize));
-            }
-            signal(new LispError("ADJUST-ARRAY: unsupported case"));
-            return NIL;
         }
     };
 
