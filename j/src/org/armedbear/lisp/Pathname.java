@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.29 2004-01-03 17:44:31 piso Exp $
+ * $Id: Pathname.java,v 1.30 2004-01-04 01:42:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public final class Pathname extends LispObject
     {
     }
 
-    private Pathname(String s) throws ConditionThrowable
+    public Pathname(String s) throws ConditionThrowable
     {
         if (s != null) {
             this.namestring = s;
@@ -175,9 +175,41 @@ public final class Pathname extends LispObject
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#P");
-        sb.append('"');
-        sb.append(getNamestring());
-        sb.append('"');
+        if (name != NIL) {
+            sb.append('"');
+            sb.append(getNamestring());
+            sb.append('"');
+        } else {
+            sb.append('(');
+            if (host != NIL) {
+                sb.append(":HOST ");
+                sb.append(host);
+                sb.append(' ');
+            }
+            if (device != NIL) {
+                sb.append(":DEVICE ");
+                sb.append(device);
+                sb.append(' ');
+            }
+            if (directory != NIL) {
+                sb.append(":DIRECTORY ");
+                sb.append(directory);
+                sb.append(" ");
+            }
+            if (type != NIL) {
+                sb.append(":TYPE ");
+                sb.append(type);
+                sb.append(' ');
+            }
+            if (version != NIL) {
+                sb.append(":VERSION ");
+                sb.append(version);
+                sb.append(' ');
+            }
+            if (sb.charAt(sb.length() - 1) == ' ')
+                sb.setLength(sb.length() - 1);
+            sb.append(')');
+        }
         return sb.toString();
     }
 
@@ -357,6 +389,40 @@ public final class Pathname extends LispObject
             return p;
         }
     };
+
+    public static Pathname makePathname(LispObject args)
+        throws ConditionThrowable
+    {
+        if (args.length() % 2 != 0)
+            signal(new ProgramError("Odd number of keyword arguments."));
+        Pathname p = new Pathname();
+        while (args != NIL) {
+            LispObject key = args.car();
+            LispObject value = args.cadr();
+            args = args.cddr();
+            if (key == Keyword.HOST) {
+                p.host = value;
+            } else if (key == Keyword.DEVICE) {
+                p.device = value;
+            } else if (key == Keyword.DIRECTORY) {
+                if (value instanceof LispString)
+                    p.directory = list2(Keyword.ABSOLUTE, value);
+                else if (value == Keyword.WILD)
+                    p.directory = list2(Keyword.ABSOLUTE, Keyword.WILD);
+                else
+                    p.directory = value;
+            } else if (key == Keyword.NAME) {
+                p.name = value;
+            } else if (key == Keyword.TYPE) {
+                p.type = value;
+            } else if (key == Keyword.VERSION) {
+                p.version = value;
+            } else if (key == Keyword.CASE) {
+                ; // Ignored.
+            }
+        }
+        return p;
+    }
 
     // ### pathnamep
     private static final Primitive1 PATHNAMEP =
