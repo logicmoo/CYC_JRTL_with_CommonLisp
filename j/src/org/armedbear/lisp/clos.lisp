@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.10 2003-12-08 14:41:21 piso Exp $
+;;; $Id: clos.lisp,v 1.11 2003-12-08 14:47:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -197,13 +197,13 @@
                                           (allocation :instance)
                                           &allow-other-keys)
   (let ((slot (copy-list properties))) ; Don't want to side effect &rest list
-    (setf (getf* slot ':name) name)
-    (setf (getf* slot ':initargs) initargs)
-    (setf (getf* slot ':initform) initform)
-    (setf (getf* slot ':initfunction) initfunction)
-    (setf (getf* slot ':readers) readers)
-    (setf (getf* slot ':writers) writers)
-    (setf (getf* slot ':allocation) allocation)
+    (setf (slot-definition-name slot) name)
+    (setf (slot-definition-initargs slot) initargs)
+    (setf (slot-definition-initform slot) initform)
+    (setf (slot-definition-initfunction slot) initfunction)
+    (setf (slot-definition-readers slot) readers)
+    (setf (slot-definition-writers slot) writers)
+    (setf (slot-definition-allocation slot) allocation)
     slot))
 
 (defun make-effective-slot-definition (&rest properties
@@ -214,11 +214,11 @@
                                              (allocation :instance)
                                              &allow-other-keys)
   (let ((slot (copy-list properties)))  ; Don't want to side effect &rest list
-    (setf (getf* slot ':name) name)
-    (setf (getf* slot ':initargs) initargs)
-    (setf (getf* slot ':initform) initform)
-    (setf (getf* slot ':initfunction) initfunction)
-    (setf (getf* slot ':allocation) allocation)
+    (setf (slot-definition-name slot) name)
+    (setf (slot-definition-initargs slot) initargs)
+    (setf (slot-definition-initform slot) initform)
+    (setf (slot-definition-initfunction slot) initfunction)
+    (setf (slot-definition-allocation slot) allocation)
     slot))
 
 ;;; finalize-inheritance
