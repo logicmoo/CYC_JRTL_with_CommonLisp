@@ -113,6 +113,7 @@
     <echo message="${hostname}&#10;" file="${basedir}/org/armedbear/j/build" append="yes"/>
   </target>
 
+  <!-- FIXME If snapshots have version numbers, we don't need this any more. -->
   <target name="stamp.snapshot">
     <echo message="${build}&#10;" file="${basedir}/org/armedbear/j/snapshot"/>
   </target>
@@ -135,13 +136,28 @@
   </target>
 
   <target name="j.jar" depends="compile">
-    <jar
-      jarfile="../j.jar"
-      manifest="manifest"
-      basedir="${basedir}"
-      excludes="pg.class, SampleExtension.class, org/armedbear/lisp/Tests.class"
-      includes="**/*.class, **/*.keywords, **/*.bsh, **/*.lisp, org/armedbear/j/version, org/armedbear/j/build, org/armedbear/j/snapshot, org/armedbear/lisp/build, org/armedbear/j/images/*.gif, org/armedbear/j/images/*.png, gnu/regexp/MessagesBundle.properties"
-    />
+    <jar jarfile="../j.jar" manifest="manifest" basedir="${basedir}">
+      <exclude name="pg.class"/>
+      <exclude name="SampleExtension.class"/>
+      <exclude name="org/armedbear/lisp/Tests.class"/>
+      <include name="**/*.class"/>
+      <include name="**/*.keywords"/>
+      <include name="**/*.bsh"/>
+      <include name="org/armedbear/j/version"/>
+      <include name="org/armedbear/j/build"/>
+      <include name="org/armedbear/j/snapshot"/>
+      <include name="org/armedbear/j/images/*.png"/>
+      <include name="gnu/regexp/MessagesBundle.properties"/>
+      <include name="org/armedbear/lisp/build"/>
+      <!-- Lisp source files (boot.lisp and friends) -->
+      <include name="org/armedbear/lisp/boot.lisp"/>
+      <include name="org/armedbear/lisp/documentation.lisp"/>
+      <include name="org/armedbear/lisp/backquote.lisp"/>
+      <include name="org/armedbear/lisp/setf.lisp"/>
+      <include name="org/armedbear/lisp/macros.lisp"/>
+      <include name="org/armedbear/lisp/list.lisp"/>
+      <include name="org/armedbear/lisp/symbol.lisp"/>
+    </jar>
   </target>
 
   <target name="jpty" if="jpty">
