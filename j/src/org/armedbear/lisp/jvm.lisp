@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.50 2003-12-04 03:19:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.51 2003-12-05 15:26:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2447,8 +2447,9 @@
      (compile ',name)
      ',name))
 
-(mapc #'jvm-compile '(pool-add
-                      pool-find-entry
-                      pool-name
-                      pool-get
-                      compile-form))
+(let ((*auto-compile* nil))
+  (mapc #'jvm-compile '(pool-add
+                        pool-find-entry
+                        pool-name
+                        pool-get
+                        compile-form)))
