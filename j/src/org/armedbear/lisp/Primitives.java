@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.259 2003-06-23 17:41:52 piso Exp $
+ * $Id: Primitives.java,v 1.260 2003-06-23 19:07:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1960,6 +1960,47 @@ public final class Primitives extends Module
                     throw new TypeError(arg, "integer");
             }
             return T;
+        }
+    };
+
+    // ### %array-row-major-index
+    // %array-row-major-index array subscripts => index
+    private static final Primitive2 _ARRAY_ROW_MAJOR_INDEX =
+        new Primitive2("%array-row-major-index") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            AbstractArray array = checkArray(first);
+            LispObject[] subscripts = second.copyToArray();
+            final int rank = array.getRank();
+            if (rank != subscripts.length) {
+                StringBuffer sb = new StringBuffer("%ARRAY-ROW-MAJOR-INDEX: ");
+                sb.append("wrong number of subscripts (");
+                sb.append(subscripts.length);
+                sb.append(") for array of rank ");
+                sb.append(rank);
+                throw new ProgramError(sb.toString());
+            }
+            if (rank == 0)
+                return Fixnum.ZERO;
+            long sum = 0;
+            long size = 1;
+            for (int i = rank; i-- > 0;) {
+                int dim = array.getDimension(i);
+                long lastSize = size;
+                size *= dim;
+                LispObject subscript = subscripts[i];
+                if (subscript instanceof Fixnum) {
+                    int n = ((Fixnum)subscript).getValue();
+                    if (n < 0 || n >= array.getDimension(i))
+                        throw new ProgramError();
+                    sum += n * lastSize;
+                } else if (subscript instanceof Bignum) {
+                    throw new ProgramError();
+                } else
+                    throw new TypeError(subscript, "integer");
+            }
+            return number(sum);
         }
     };
 
