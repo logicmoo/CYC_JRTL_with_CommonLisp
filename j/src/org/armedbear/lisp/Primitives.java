@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.547 2004-01-01 01:34:29 piso Exp $
+ * $Id: Primitives.java,v 1.548 2004-01-01 19:39:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -649,6 +649,17 @@ public final class Primitives extends Lisp
         {
             outSynonymOf(second).writeString(String.valueOf(first));
             return first;
+        }
+    };
+
+    // ### %write-to-string
+    // %write-to-string object => string
+    private static final Primitive1 _WRITE_TO_STRING =
+        new Primitive1("%write-to-string", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return new LispString(String.valueOf(arg));
         }
     };
 
