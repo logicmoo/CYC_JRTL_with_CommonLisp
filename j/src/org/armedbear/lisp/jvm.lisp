@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.206 2004-07-07 15:18:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.207 2004-07-08 06:07:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,8 +53,6 @@
 ;; Total number of registers allocated.
 (defvar *registers-allocated* 0)
 
-(defvar *all-locals* ())
-
 (defvar *handlers* ())
 
 (defstruct handler from to code catch-type)
@@ -89,7 +87,6 @@
          (variable (make-variable :name name :special-p special-p :index index)))
     (push variable *variables*)
     (unless special-p
-      (push name *all-locals*)
       (add-variable-to-context variable))
     variable))
 
@@ -2278,7 +2275,8 @@
     (if *compile-file-truename*
         (setf classfile (compile-defun name form nil (sys::next-classfile-name)))
         (setf function
-              (sys::load-compiled-function (compile-defun name form nil "flet.out"))))
+              (sys::load-compiled-function (compile-defun name form nil
+                                                          (concatenate 'string (symbol-name (gensym "flet-")) ".class")))))
     (format t "function = ~S~%" function)
     (push (make-local-function :name name
                                :function function
@@ -2500,16 +2498,6 @@
       (t
        (compile-function-call form for-effect)))))
 
-(defun context-depth (context)
-  (let ((parent (context-parent *context*))
-        (depth 0))
-    (loop
-      (cond ((eq context parent)
-             (return depth))
-            (t
-             (incf depth)
-             (setf parent (context-parent parent)))))))
-
 (defun compile-special-reference (name)
   (emit 'getstatic
         *this-class*
@@ -2543,12 +2531,11 @@
                       ;; Compile call to LispThread.getVariableValue().
                       (ensure-thread-var-initialized)
                       (emit 'aload *thread*)
-                      (emit 'bipush (context-depth (variable-context variable)))
                       (emit 'bipush (variable-index variable))
                       (emit-invokevirtual +lisp-thread-class+
                                           "getVariableValue"
-                                          "(II)Lorg/armedbear/lisp/LispObject;"
-                                          -2))
+                                          "(I)Lorg/armedbear/lisp/LispObject;"
+                                          -1))
                      (*use-locals-vector*
                       (emit 'aload 1)
                       (emit 'bipush (variable-index variable))
@@ -2559,12 +2546,11 @@
                       ;; Compile call to LispThread.getVariableValue().
                       (ensure-thread-var-initialized)
                       (emit 'aload *thread*)
-                      (emit 'bipush (context-depth (variable-context variable)))
                       (emit 'bipush (variable-index variable))
                       (emit-invokevirtual +lisp-thread-class+
                                           "getVariableValue"
-                                          "(II)Lorg/armedbear/lisp/LispObject;"
-                                          -2))
+                                          "(I)Lorg/armedbear/lisp/LispObject;"
+                                          -1))
                      (t
                       (emit 'aload 1)
                       (emit 'bipush (variable-index variable))
@@ -2603,12 +2589,11 @@
                 (ensure-thread-var-initialized)
                 (emit 'aload *thread*)
                 (emit 'swap)
-                (emit 'bipush (context-depth (variable-context variable)))
                 (emit 'bipush (variable-index variable)) ; Stack: value value depth index
                 (emit-invokevirtual +lisp-thread-class+
                                     "setVariableValue"
-                                    "(Lorg/armedbear/lisp/LispObject;II)V"
-                                    -4) ; Stack: value
+                                    "(Lorg/armedbear/lisp/LispObject;I)V"
+                                    -3) ; Stack: value
                 )
                (*use-locals-vector*
                 (emit 'aload 1) ; Stack: value array
@@ -2629,12 +2614,11 @@
                 (ensure-thread-var-initialized)
                 (emit 'aload *thread*)
                 (emit 'swap)
-                (emit 'bipush (context-depth (variable-context variable)))
                 (emit 'bipush (variable-index variable)) ; Stack: value value depth index
                 (emit-invokevirtual +lisp-thread-class+
                                     "setVariableValue"
-                                    "(Lorg/armedbear/lisp/LispObject;II)V"
-                                    -4) ; Stack: value
+                                    "(Lorg/armedbear/lisp/LispObject;I)V"
+                                    -3) ; Stack: value
                 )
                (*using-arg-array*
                 (emit 'aload 1)
@@ -2899,7 +2883,6 @@
          (*tags* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
          (*register* 0)
          (*registers-allocated* 0)
-         (*all-locals* ())
          (*handlers* ())
 
          (*context* (make-context :parent *context*))
@@ -2919,7 +2902,6 @@
         (let* ((fun (sys::make-compiled-function nil args body))
                (vars (sys::varlist fun)))
           (dolist (var vars)
-            (push var *all-locals*)
             (let ((variable (make-variable :name var
                                            :kind 'ARG
                                            :special-p nil ;; FIXME
@@ -2930,7 +2912,6 @@
               (add-variable-to-context variable))))
         (let ((register 1))
           (dolist (arg args)
-            (push arg *all-locals*)
             (let ((variable (make-variable :name arg
                                            :kind 'ARG
                                            :special-p nil ;; FIXME
@@ -3018,10 +2999,9 @@
         (emit 'aload_0)
         (emit 'aload_1)
         ; Reserve extra slots for locals if applicable.
-        (assert (= (length *all-locals*) (length (context-vars *context*))))
         (if *use-locals-vector*
 ;;             (emit 'sipush (- (length *all-locals*) (length *args*)))
-            (emit 'sipush (length *all-locals*)) ;; FIXME
+            (emit 'sipush (length (context-vars *context*))) ;; FIXME subtract length of args
             (emit 'iconst_0))
         (emit-invokevirtual *this-class*
                             "processArgs"
