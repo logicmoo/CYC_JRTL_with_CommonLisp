@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.7 2003-11-28 05:58:57 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.8 2003-11-29 04:21:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,13 +30,7 @@
 (defvar *ignorable-vars*)
 
 (defun do-arg-count-error (error-kind name arg lambda-list minimum maximum)
-  (error "Error in do-arg-count-error: ~S ~S ~S ~S ~S ~S~%"
-	 error-kind
-	 name
-	 arg
-	 lambda-list
-	 minimum
-	 maximum))
+  (error 'program-error "wrong number of arguments for ~S" name))
 
 (defun parse-defmacro (lambda-list arg-list-name code name error-kind
 				   &key (anonymousp nil)
@@ -277,7 +271,7 @@
 			     `(do-arg-count-error ',error-kind ',name ,arg
 						  ',lambda-list ,minimum
 						  ,(unless restp maximum))
-			   `(,error-fun 'defmacro-ll-arg-count-error
+                             `(,error-fun 'defmacro-ll-arg-count-error
 				 :kind ',error-kind
 				 ,@(when name `(:name ',name))
 				 :argument ,arg
