@@ -2,7 +2,7 @@
  * Packages.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Packages.java,v 1.11 2003-09-19 14:44:10 piso Exp $
+ * $Id: Packages.java,v 1.12 2003-12-13 00:28:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,9 +52,10 @@ public final class Packages extends Lisp
         throws ConditionThrowable
     {
         final String name = pkg.getName();
-        if (map.get(name) != null)
-            throw new ConditionThrowable(new LispError("a package named " + name +
-                                                       " already exists"));
+        if (map.get(name) != null) {
+            signal(new LispError("a package named " + name + " already exists"));
+            return;
+        }
         packages.add(pkg);
         map.put(name, pkg);
         List nicknames = pkg.getNicknames();
@@ -75,9 +76,11 @@ public final class Packages extends Lisp
     public static final synchronized Package makePackage(String name)
         throws ConditionThrowable
     {
-        if (map.get(name) != null)
-            throw new ConditionThrowable(new LispError("a package named " + name +
-                                                       " already exists"));
+        if (map.get(name) != null) {
+            signal(new LispError("a package named " + name + " already exists"));
+            // Not reached.
+            return null;
+        }
         Package pkg = new Package(name);
         packages.add(pkg);
         map.put(name, pkg);
@@ -88,9 +91,10 @@ public final class Packages extends Lisp
                                                       String nickname)
         throws ConditionThrowable
     {
-        if (map.get(nickname) != null)
-            throw new ConditionThrowable(new PackageError("a package named " + nickname +
-                                                          " already exists"));
+        if (map.get(nickname) != null) {
+            signal(new PackageError("a package named " + nickname + " already exists"));
+            return;
+        }
         map.put(nickname, pkg);
     }
 

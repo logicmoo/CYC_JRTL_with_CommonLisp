@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.78 2003-11-16 18:29:19 piso Exp $
+ * $Id: Fixnum.java,v 1.79 2003-12-13 00:28:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,7 +190,9 @@ public final class Fixnum extends LispObject
             return ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "fixnum"));
+            signal(new TypeError(obj, "fixnum"));
+            // Not reached.
+            return 0;
         }
     }
 
@@ -200,7 +202,9 @@ public final class Fixnum extends LispObject
             return (int) ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "fixnum"));
+            signal(new TypeError(obj, "fixnum"));
+            // Not reached.
+            return 0;
         }
     }
 
@@ -210,7 +214,9 @@ public final class Fixnum extends LispObject
             return BigInteger.valueOf(((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "fixnum"));
+            signal(new TypeError(obj, "fixnum"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -220,7 +226,8 @@ public final class Fixnum extends LispObject
             return (float) ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "fixnum"));
+            signal(new TypeError(obj, "fixnum"));
+            return 0;
         }
     }
 
@@ -267,7 +274,7 @@ public final class Fixnum extends LispObject
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
@@ -290,7 +297,7 @@ public final class Fixnum extends LispObject
             return Complex.getInstance(subtract(c.getRealPart()),
                                        ZERO.subtract(c.getImaginaryPart()));
         }
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
@@ -313,7 +320,7 @@ public final class Fixnum extends LispObject
             return Complex.getInstance(multiplyBy(c.getRealPart()),
                                        multiplyBy(c.getImaginaryPart()));
         }
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -345,12 +352,12 @@ public final class Fixnum extends LispObject
                 return Complex.getInstance(multiplyBy(realPart).divideBy(denominator),
                                            Fixnum.ZERO.subtract(multiplyBy(imagPart).divideBy(denominator)));
             }
-            throw new ConditionThrowable(new TypeError(obj, "number"));
+            return signal(new TypeError(obj, "number"));
         }
         catch (ArithmeticException e) {
             if (obj.zerop())
-                throw new ConditionThrowable(new DivisionByZero());
-            throw new ConditionThrowable(new ArithmeticError(e.getMessage()));
+                return signal(new DivisionByZero());
+            return signal(new ArithmeticError(e.getMessage()));
         }
     }
 
@@ -364,7 +371,9 @@ public final class Fixnum extends LispObject
             return obj.isEqualTo(this);
         if (obj.numberp())
             return false;
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        signal(new TypeError(obj, "number"));
+        // Not reached.
+        return false;
     }
 
     public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
@@ -378,7 +387,9 @@ public final class Fixnum extends LispObject
             return obj.isNotEqualTo(this);
         if (obj.numberp())
             return true;
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        signal(new TypeError(obj, "number"));
+        // Not reached.
+        return false;
     }
 
     public boolean isLessThan(LispObject obj) throws ConditionThrowable
@@ -394,7 +405,9 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof LispFloat)
             return (float) value < LispFloat.getValue(obj);
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        signal(new TypeError(obj, "number"));
+        // Not reached.
+        return false;
     }
 
     public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
@@ -410,7 +423,9 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof LispFloat)
             return (float) value > LispFloat.getValue(obj);
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        signal(new TypeError(obj, "number"));
+        // Not reached.
+        return false;
     }
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
@@ -426,7 +441,9 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof LispFloat)
             return (float) value <= LispFloat.getValue(obj);
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        signal(new TypeError(obj, "number"));
+        // Not reached.
+        return false;
     }
 
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
@@ -442,7 +459,9 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof LispFloat)
             return (float) value >= LispFloat.getValue(obj);
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        signal(new TypeError(obj, "number"));
+        // Not reached.
+        return false;
     }
 
     public LispObject truncate(LispObject obj) throws ConditionThrowable
@@ -450,35 +469,36 @@ public final class Fixnum extends LispObject
         final LispThread thread = LispThread.currentThread();
         final LispObject value1, value2;
 	try {
-	  if (obj instanceof Fixnum) {
-            long divisor = ((Fixnum)obj).value;
-            long quotient = value / divisor;
-            long remainder = value % divisor;
-            value1 = number(quotient);
-            value2 = remainder == 0 ? Fixnum.ZERO : number(remainder);
-	  } else if (obj instanceof Bignum) {
-            BigInteger value = getBigInteger();
-            BigInteger divisor = ((Bignum)obj).getValue();
-            BigInteger[] results = value.divideAndRemainder(divisor);
-            BigInteger quotient = results[0];
-            BigInteger remainder = results[1];
-            value1 = number(quotient);
-            value2 = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
-	  } else if (obj instanceof Ratio) {
-            Ratio divisor = (Ratio) obj;
-            LispObject quotient =
-	      multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
-            LispObject remainder =
-	      subtract(quotient.multiplyBy(divisor));
-            value1 = quotient;
-            value2 = remainder;
-	  } else
-            throw new ConditionThrowable(new LispError("Fixnum.truncate(): not implemented: " + obj.typeOf()));
+            if (obj instanceof Fixnum) {
+                long divisor = ((Fixnum)obj).value;
+                long quotient = value / divisor;
+                long remainder = value % divisor;
+                value1 = number(quotient);
+                value2 = remainder == 0 ? Fixnum.ZERO : number(remainder);
+            } else if (obj instanceof Bignum) {
+                BigInteger value = getBigInteger();
+                BigInteger divisor = ((Bignum)obj).getValue();
+                BigInteger[] results = value.divideAndRemainder(divisor);
+                BigInteger quotient = results[0];
+                BigInteger remainder = results[1];
+                value1 = number(quotient);
+                value2 = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
+            } else if (obj instanceof Ratio) {
+                Ratio divisor = (Ratio) obj;
+                LispObject quotient =
+                    multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
+                LispObject remainder =
+                    subtract(quotient.multiplyBy(divisor));
+                value1 = quotient;
+                value2 = remainder;
+            } else
+                return signal(new LispError("Fixnum.truncate(): not implemented: " + obj.typeOf()));
         }
         catch (ArithmeticException e) {
             if (obj.zerop())
-                throw new ConditionThrowable(new DivisionByZero());
-            throw new ConditionThrowable(new ArithmeticError(e.getMessage()));
+                return signal(new DivisionByZero());
+            else
+                return signal(new ArithmeticError(e.getMessage()));
         }
         return thread.setValues(value1, value2);
     }

@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.18 2003-11-28 21:01:58 piso Exp $
+ * $Id: Extensions.java,v 1.19 2003-12-13 00:28:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ public final class Extensions extends Lisp
         {
             if (arg instanceof CharacterOutputStream)
                 return new Fixnum(((CharacterOutputStream)arg).getCharPos());
-            throw new ConditionThrowable(new TypeError(arg, "character output stream"));
+            return signal(new TypeError(arg, "character output stream"));
         }
     };
 
@@ -103,7 +103,7 @@ public final class Extensions extends Lisp
                 ((CharacterOutputStream)first).setCharPos(Fixnum.getValue(second));
                 return second;
             }
-            throw new ConditionThrowable(new TypeError(first, "character output stream"));
+            return signal(new TypeError(first, "character output stream"));
         }
     };
 
@@ -125,7 +125,7 @@ public final class Extensions extends Lisp
                 return new TwoWayStream(in, out);
             }
             catch (Exception e) {
-                throw new ConditionThrowable(new LispError(e.getMessage()));
+                return signal(new LispError(e.getMessage()));
             }
         }
     };
@@ -148,7 +148,7 @@ public final class Extensions extends Lisp
                 return new TwoWayStream(in, out);
             }
             catch (Exception e) {
-                throw new ConditionThrowable(new LispError(e.getMessage()));
+                return signal(new LispError(e.getMessage()));
             }
         }
     };

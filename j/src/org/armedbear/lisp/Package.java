@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.48 2003-11-16 18:35:25 piso Exp $
+ * $Id: Package.java,v 1.49 2003-12-13 00:28:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,7 +277,7 @@ public final class Package extends LispObject
                         sb.append(sym.getQualifiedName());
                         sb.append(" and ");
                         sb.append(s.getQualifiedName());
-                        throw new ConditionThrowable(new PackageError(sb.toString()));
+                        return signal(new PackageError(sb.toString()));
                     }
                 }
             }
@@ -310,7 +310,8 @@ public final class Package extends LispObject
             sb.append(sym.getQualifiedName());
             sb.append(" is already accessible in package ");
             sb.append(name);
-            throw new ConditionThrowable(new PackageError(sb.toString()));
+            signal(new PackageError(sb.toString()));
+            return;
         }
         internalSymbols.put(symbol.getName(), symbol);
     }
@@ -325,7 +326,8 @@ public final class Package extends LispObject
                 sb.append(symbol.getQualifiedName());
                 sb.append(" is not accessible in package ");
                 sb.append(name);
-                throw new ConditionThrowable(new PackageError(sb.toString()));
+                signal(new PackageError(sb.toString()));
+                return;
             }
             if (sym != symbol) {
                 // Conflict.
@@ -333,7 +335,8 @@ public final class Package extends LispObject
                 sb.append(sym.getQualifiedName());
                 sb.append(" is already accessible in package ");
                 sb.append(name);
-                throw new ConditionThrowable(new PackageError(sb.toString()));
+                signal(new PackageError(sb.toString()));
+                return;
             }
             internalSymbols.put(symbolName, symbol);
         }
@@ -352,7 +355,8 @@ public final class Package extends LispObject
                             sb.append(sym.getQualifiedName());
                             sb.append(" is already accessible in package ");
                             sb.append(pkg.getName());
-                            throw new ConditionThrowable(new LispError(sb.toString()));
+                            signal(new LispError(sb.toString()));
+                            return;
                         }
                     }
                 }
@@ -370,7 +374,7 @@ public final class Package extends LispObject
         sb.append(symbol.getQualifiedName());
         sb.append(" is not accessible in package ");
         sb.append(name);
-        throw new ConditionThrowable(new PackageError(sb.toString()));
+        signal(new PackageError(sb.toString()));
     }
 
     public synchronized void unexport(Symbol symbol) throws ConditionThrowable
@@ -392,7 +396,7 @@ public final class Package extends LispObject
             sb.append(symbol.getQualifiedName());
             sb.append(" is not accessible in package ");
             sb.append(name);
-            throw new ConditionThrowable(new PackageError(sb.toString()));
+            signal(new PackageError(sb.toString()));
         }
     }
 

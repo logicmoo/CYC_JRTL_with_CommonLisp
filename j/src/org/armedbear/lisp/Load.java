@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.27 2003-12-09 20:26:22 asimon Exp $
+ * $Id: Load.java,v 1.28 2003-12-13 00:28:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ public final class Load extends Lisp
             }
         }
         if (!isFile)
-            throw new ConditionThrowable(new LispError("file not found: " + filename));
+            return signal(new LispError("file not found: " + filename));
         String truename = filename;
         InputStream in = null;
         try {
@@ -83,10 +83,10 @@ public final class Load extends Lisp
             truename = file.getCanonicalPath();
         }
         catch (FileNotFoundException e) {
-            throw new ConditionThrowable(new LispError("file not found: " + filename));
+            return signal(new LispError("file not found: " + filename));
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new LispError(e.getMessage()));
+            return signal(new LispError(e.getMessage()));
         }
         LispObject result =
             loadFileFromStream(truename, in, verbose, print, false);
@@ -94,7 +94,7 @@ public final class Load extends Lisp
             in.close();
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new LispError(e.getMessage()));
+            return signal(new LispError(e.getMessage()));
         }
         return result;
     }
@@ -160,11 +160,11 @@ public final class Load extends Lisp
                 in.close();
             }
             catch (IOException e) {
-                throw new ConditionThrowable(new LispError(e.getMessage()));
+                return signal(new LispError(e.getMessage()));
             }
             return result;
         }
-        throw new ConditionThrowable(new LispError("file not found: " + filename));
+        return signal(new LispError("file not found: " + filename));
     }
 
     private static final LispObject loadFileFromStream(String truename,
@@ -295,7 +295,7 @@ public final class Load extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             // FIXME Need to support streams as well as pathname designators.
             String filename;
             if (args[0] instanceof LispString)
@@ -303,7 +303,7 @@ public final class Load extends Lisp
             else if (args[0] instanceof Pathname)
                 filename = ((Pathname)args[0]).getNamestring();
             else
-                throw new ConditionThrowable(new TypeError(args[0], "pathname designator"));
+                return signal(new TypeError(args[0], "pathname designator"));
             if (filename.endsWith(".compiled"))
                 filename = filename.substring(0, filename.length() - 9);
             return load(filename,

@@ -72,8 +72,11 @@ public abstract class AbstractVector extends AbstractArray
 
     public final int getDimension(int n) throws ConditionThrowable
     {
-        if (n != 0)
-            throw new ConditionThrowable(new TypeError("bad dimension for vector"));
+        if (n != 0) {
+            signal(new TypeError("bad dimension for vector"));
+            // Not reached.
+            return 0;
+        }
         return capacity();
     }
 
@@ -122,7 +125,7 @@ public abstract class AbstractVector extends AbstractArray
             sb.append(limit);
             sb.append(')');
         }
-        throw new ConditionThrowable(new TypeError(sb.toString()));
+        signal(new TypeError(sb.toString()));
     }
 
     public int getFillPointer()
@@ -147,15 +150,14 @@ public abstract class AbstractVector extends AbstractArray
                 sb.append(") exceeds the capacity of the vector (");
                 sb.append(capacity());
                 sb.append(")");
-                throw new ConditionThrowable(new LispError(sb.toString()));
-            }
-            if (n < 0) {
+                signal(new LispError(sb.toString()));
+            } else if (n < 0) {
                 StringBuffer sb = new StringBuffer("the new fill pointer (");
                 sb.append(n);
                 sb.append(") is negative");
-                throw new ConditionThrowable(new LispError(sb.toString()));
-            }
-            fillPointer = n;
+                signal(new LispError(sb.toString()));
+            } else
+                fillPointer = n;
         }
     }
 

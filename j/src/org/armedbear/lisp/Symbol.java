@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.98 2003-12-12 19:13:14 piso Exp $
+ * $Id: Symbol.java,v 1.99 2003-12-13 00:28:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -313,7 +313,7 @@ public class Symbol extends LispObject
             return val;
         if (value != null)
             return value;
-        throw new ConditionThrowable(new LispError(toString().concat(" has no dynamic value")));
+        return signal(new LispError(toString().concat(" has no dynamic value")));
     }
 
     public final LispObject symbolValueNoThrow()
@@ -344,7 +344,7 @@ public class Symbol extends LispObject
     public final LispObject getSymbolFunctionOrDie() throws ConditionThrowable
     {
         if (function == null)
-            throw new ConditionThrowable(new UndefinedFunction(this));
+            return signal(new UndefinedFunction(this));
         return function;
     }
 
@@ -461,7 +461,7 @@ public class Symbol extends LispObject
                 return new LispString(((Symbol)arg).name);
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(arg, "symbol"));
+                return signal(new TypeError(arg, "symbol"));
             }
         }
     };
@@ -476,7 +476,7 @@ public class Symbol extends LispObject
                 return pkg != null ? pkg : NIL;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(arg, "symbol"));
+                return signal(new TypeError(arg, "symbol"));
             }
         }
     };
@@ -495,7 +495,7 @@ public class Symbol extends LispObject
                 ; // Fall through.
             }
             // function == null or ClassCastException
-            throw new ConditionThrowable(new TypeError(arg, "symbol"));
+            return signal(new TypeError(arg, "symbol"));
         }
     };
 
@@ -509,7 +509,7 @@ public class Symbol extends LispObject
                 return propertyList != null ? propertyList : NIL;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(arg, "symbol"));
+                return signal(new TypeError(arg, "symbol"));
             }
         }
     };
@@ -546,7 +546,7 @@ public class Symbol extends LispObject
                 return arg;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(arg, "symbol"));
+                return signal(new TypeError(arg, "symbol"));
             }
         }
     };

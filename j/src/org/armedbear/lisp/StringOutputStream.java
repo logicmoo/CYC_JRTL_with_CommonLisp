@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: StringOutputStream.java,v 1.6 2003-12-09 20:26:23 asimon Exp $
+ * $Id: StringOutputStream.java,v 1.7 2003-12-13 00:28:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public final class StringOutputStream extends CharacterOutputStream
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length > 1)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             // FIXME Ignore arg for now.
             return new StringOutputStream();
         }
@@ -74,7 +74,7 @@ public final class StringOutputStream extends CharacterOutputStream
         {
             if (arg instanceof StringOutputStream)
                 return ((StringOutputStream)arg).getString();
-            throw new ConditionThrowable(new TypeError(this, "string output stream"));
+            return signal(new TypeError(this, "string output stream"));
         }
     };
 }

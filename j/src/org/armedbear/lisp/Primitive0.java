@@ -2,7 +2,7 @@
  * Primitive0.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive0.java,v 1.10 2003-12-09 15:06:17 asimon Exp $
+ * $Id: Primitive0.java,v 1.11 2003-12-13 00:28:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,25 +55,25 @@ public class Primitive0 extends Function
 
     public LispObject execute(LispObject first) throws ConditionThrowable
     {
-        throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+        return signal(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+        return signal(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject first, LispObject second,
         LispObject third) throws ConditionThrowable
     {
-        throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+        return signal(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         if (args.length != 0)
-            throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            return signal(new WrongNumberOfArgumentsException(this));
         return execute();
     }
 }

@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Utilities.java,v 1.4 2003-10-17 17:30:50 piso Exp $
+ * $Id: Utilities.java,v 1.5 2003-12-13 00:28:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,9 +80,11 @@ public final class Utilities extends Lisp
             namestring = ((LispString)pathspec).getValue();
         else if (pathspec instanceof Pathname)
             namestring = ((Pathname)pathspec).getNamestring();
-        else
-            throw new ConditionThrowable(new TypeError(pathspec,
-                                                       "pathname designator"));
+        else {
+            signal(new TypeError(pathspec, "pathname designator"));
+            // Not reached.
+            return null;
+        }
         if (isFilenameAbsolute(namestring)) {
             if (isPlatformUnix()) {
                 if (namestring.length() > 0 && namestring.charAt(0) == '~') {
