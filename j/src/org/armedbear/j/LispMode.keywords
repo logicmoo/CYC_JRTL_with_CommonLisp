@@ -144,6 +144,7 @@ defun
 defvar
 delete
 delete-duplicates
+delete-file
 delete-if
 delete-if-not
 delete-package
