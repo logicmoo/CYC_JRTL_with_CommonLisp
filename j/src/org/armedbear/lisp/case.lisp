@@ -1,7 +1,7 @@
 ;;; case.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: case.lisp,v 1.1 2003-12-06 15:42:05 piso Exp $
+;;; $Id: case.lisp,v 1.2 2004-04-14 14:33:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,7 +79,6 @@
 				   ',expected-type ',keys)))
 		      (go ,again))))))))
       `(let ((,keyform-value ,keyform))
-	 (declare (ignorable ,keyform-value)) ; e.g. (CASE KEY (T))
 	 (cond
 	  ,@(nreverse clauses)
 	  ,@(if errorp
