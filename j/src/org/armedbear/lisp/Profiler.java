@@ -2,7 +2,7 @@
  * Profiler.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Profiler.java,v 1.1 2003-11-12 21:28:11 piso Exp $
+ * $Id: Profiler.java,v 1.2 2003-11-14 17:55:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@ package org.armedbear.lisp;
 
 public class Profiler extends Lisp
 {
+    private static int sleep = 1;
+
     public static final void sample(LispThread thread)
     {
         sampleNow = false;
@@ -32,35 +34,38 @@ public class Profiler extends Lisp
     private static final Runnable profilerRunnable = new Runnable() {
         public void run()
         {
-            try {
-                int sleep = Fixnum.getValue(_GRANULARITY_.getSymbolValue());
-                while (profiling) {
-                    sampleNow = true;
-                    try {
-                        Thread.sleep(sleep);
-                    }
-                    catch (InterruptedException e) {
-                        Debug.trace(e);
-                    }
+            while (profiling) {
+                sampleNow = true;
+                try {
+                    Thread.sleep(sleep);
                 }
-            }
-            catch (ConditionThrowable t) {
-                Debug.trace(t);
+                catch (InterruptedException e) {
+                    Debug.trace(e);
+                }
             }
         }
     };
 
-    // ### start-profiler
-    public static final Primitive0 START_PROFILER =
-        new Primitive0("start-profiler", PACKAGE_PROF, true)
+    // ### %start-profiler
+    // %start-profiler type granularity
+    public static final Primitive2 _START_PROFILER =
+        new Primitive2("%start-profiler", PACKAGE_PROF, false)
     {
-        public LispObject execute() throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
             CharacterOutputStream out = getStandardOutput();
             out.freshLine();
             if (profiling) {
-                out.writeLine("; Profiling already enabled.");
+                out.writeLine("; Profiler already started.");
             } else {
+                if (first == Keyword.TIME)
+                    sampling = true;
+                else if (first == Keyword.COUNT_ONLY)
+                    sampling = false;
+                else
+                    throw new ConditionThrowable(new LispError(
+                        "%START-PROFILER: argument must be either :TIME or :COUNT-ONLY"));
                 Package[] packages = Packages.getAllPackages();
                 for (int i = 0; i < packages.length; i++) {
                     Package pkg = packages[i];
@@ -72,8 +77,8 @@ public class Profiler extends Lisp
                             f.setCallCount(0);
                     }
                 }
-                sampling = true; // FIXME
                 if (sampling) {
+                    sleep = Fixnum.getValue(second);
                     if (!debug) {
                         debug = true;
                         LispThread.currentThread().resetStack();
@@ -85,7 +90,7 @@ public class Profiler extends Lisp
                     t.setPriority(priority);
                     new Thread(profilerRunnable).start();
                 }
-                out.writeLine("; Profiling started.");
+                out.writeLine("; Profiler started.");
                 profiling = true;
             }
             return LispThread.currentThread().nothing();
@@ -102,9 +107,9 @@ public class Profiler extends Lisp
             out.freshLine();
             if (profiling) {
                 profiling = false;
-                out.writeLine("; Profiling stopped.");
+                out.writeLine("; Profiler stopped.");
             } else
-                out.writeLine("; Profiling not enabled.");
+                out.writeLine("; Profiler was not started.");
             out.flushOutput();
             return LispThread.currentThread().nothing();
         }

@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: profiler.lisp,v 1.7 2003-11-12 21:26:59 piso Exp $
+;;; $Id: profiler.lisp,v 1.8 2003-11-14 17:55:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,9 @@
 
 (in-package "PROFILER")
 
-;; SHOW-CALL-COUNTS and PROFILE are exported in Lisp.java.
+(defparameter *type* nil)
+
+(defparameter *granularity* 1 "Sampling interval (in milliseconds).")
 
 ;; Returns list of all symbols with non-zero call counts.
 (defun list-calls ()
@@ -44,15 +46,30 @@
   (let ((syms (list-calls)))
     (setf syms (sort syms #'<
                      :key #'(lambda (x) (sys::%call-count (fdefinition x)))))
-    (let* ((last-sym (car (last syms)))
-           (max-count (if last-sym
-                          (sys::%call-count (fdefinition last-sym))
-                          nil)))
-      (when (zerop max-count)
-        (setf max-count nil))
+    (let ((max-count nil))
+      (when (eq *type* :time)
+        (let* ((last-sym (car (last syms))))
+          (setf max-count (if last-sym
+                              (sys::%call-count (fdefinition last-sym))
+                              nil))
+          (when (eql max-count 0)
+            (setf max-count nil))))
       (dolist (sym syms)
         (show-call-count-for-symbol sym max-count))))
   (values))
 
-(defmacro profile (&rest forms)
-  `(progn (start-profiler) ,@forms (stop-profiler)))
+(defun start-profiler (&key type)
+  "Starts the profiler.
+  :TYPE may be either :TIME (statistical sampling) or :COUNT-ONLY (exact call
+  counts)."
+  (format t "start-profiler type = ~S~%" type)
+  (unless type
+    (setf type :time))
+  (unless (memq type '(:time :count-only))
+    (error ":TYPE must be :TIME or :COUNT-ONLY"))
+  (setf *type* type)
+  (%start-profiler type *granularity*))
+
+(defmacro with-profiling ((&key type) &body body)
+  `(unwind-protect (progn (start-profiler :type ,type) ,@body)
+                   (stop-profiler)))
