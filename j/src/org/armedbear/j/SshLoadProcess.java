@@ -1,8 +1,8 @@
 /*
  * SshLoadProcess.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: SshLoadProcess.java,v 1.5 2002-12-07 10:17:43 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: SshLoadProcess.java,v 1.6 2003-05-19 12:20:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,9 +77,20 @@ public final class SshLoadProcess extends LoadProcess implements BackgroundProce
         if (session.isDirectory(file.canonicalPath())) {
             fileIsDirectory = true;
             listing = session.retrieveDirectoryListing(file);
-            if (listing != null)
-                DirectoryCache.getDirectoryCache().put(file, listing);
             session.unlock();
+            if (listing != null) {
+                DirectoryCache.getDirectoryCache().put(file, listing);
+            } else {
+                // Report error!
+                if (errorRunnable != null) {
+                    String message =
+                        "Unable to retrieve directory listing for ".concat(
+                            file.netPath());
+                    errorRunnable.setMessage(message);
+                    SwingUtilities.invokeLater(errorRunnable);
+                }
+                return;
+            }
         } else {
             // Not a directory.
             session.unlock();
