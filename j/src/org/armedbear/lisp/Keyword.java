@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Keyword.java,v 1.35 2004-06-02 18:17:28 piso Exp $
+ * $Id: Keyword.java,v 1.36 2004-06-08 10:52:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@ public final class Keyword extends Lisp
         BACK                = internKeyword("BACK"),
         BOOLEAN             = internKeyword("BOOLEAN"),
         CAPITALIZE          = internKeyword("CAPITALIZE"),
+        CAPITALIZE_FIRST    = internKeyword("CAPITALIZE-FIRST"),
         CASE                = internKeyword("CASE"),
         COMMON              = internKeyword("COMMON"),
         COMMON_LISP         = internKeyword("COMMON-LISP"),
