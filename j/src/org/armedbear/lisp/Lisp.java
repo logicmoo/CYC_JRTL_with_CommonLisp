@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.160 2003-10-02 00:01:34 piso Exp $
+ * $Id: Lisp.java,v 1.161 2003-10-03 00:23:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -358,6 +358,13 @@ public abstract class Lisp
                 }
             } else
                 return obj;
+        }
+        catch (StackOverflowError e) {
+            if (debug) {
+                Symbol savedBacktrace = intern("*SAVED-BACKTRACE*", PACKAGE_EXT);
+                savedBacktrace.setSymbolValue(thread.backtraceAsList(0));
+            }
+            throw new ConditionThrowable(new LispError("stack overflow"));
         }
         catch (ConditionThrowable t) {
             if (debug) {
