@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.566 2004-02-12 10:27:40 piso Exp $
+ * $Id: Primitives.java,v 1.567 2004-02-14 00:23:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3875,7 +3875,8 @@ public final class Primitives extends Lisp
 
     // ### expt
     // expt base-number power-number => result
-    public static final Primitive2 EXPT = new Primitive2("expt","base-number power-number") {
+    public static final Primitive2 EXPT = new Primitive2("expt", "base-number power-number")
+    {
         public LispObject execute(LispObject n, LispObject power)
             throws ConditionThrowable
         {
@@ -3917,13 +3918,21 @@ public final class Primitives extends Lisp
                     return new LispFloat(d);
                 }
             }
+            if (power instanceof Ratio) {
+                if (n instanceof Fixnum) {
+                    double d = Math.pow(((Fixnum)n).getValue(),
+                                        ((Ratio)power).floatValue());
+                    return new LispFloat(d);
+                }
+            }
             signal(new LispError("EXPT: unsupported case"));
             return NIL;
         }
     };
 
     // ### list
-    private static final Primitive LIST = new Primitive("list","&rest objects") {
+    private static final Primitive LIST = new Primitive("list", "&rest objects")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new Cons(arg);
@@ -3948,7 +3957,8 @@ public final class Primitives extends Lisp
     };
 
     // ### list*
-    private static final Primitive LIST_ = new Primitive("list*","&rest objects") {
+    private static final Primitive LIST_ = new Primitive("list*", "&rest objects")
+    {
         public LispObject execute() throws ConditionThrowable
         {
             signal(new WrongNumberOfArgumentsException("LIST*"));
