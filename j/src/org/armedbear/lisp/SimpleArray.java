@@ -1,8 +1,8 @@
 /*
  * SimpleArray.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: SimpleArray.java,v 1.13 2005-01-13 12:32:22 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: SimpleArray.java,v 1.14 2005-01-13 12:33:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
