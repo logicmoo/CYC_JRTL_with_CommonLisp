@@ -2,7 +2,7 @@
  * file_length.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: file_length.java,v 1.2 2004-01-31 01:59:20 piso Exp $
+ * $Id: file_length.java,v 1.3 2004-01-31 19:07:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,22 +34,12 @@ public final class file_length extends Primitive1
     // file-length stream => length
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof FileStream) {
-            FileStream stream = (FileStream) arg;
-            Pathname pathname = stream.getPathname();
-            File file = new File(pathname.getNamestring());
-            long length = file.length(); // in 8-bit bytes
-            if (stream.isCharacterStream())
-                return number(length);
-            // "For a binary file, the length is measured in units of the
-            // element type of the stream."
-            LispObject elementType = stream.getElementType();
-            int width = Fixnum.getValue(elementType.cadr());
-            int bytesPerUnit = width / 8;
-            return number(length / bytesPerUnit);
+        try {
+            return ((Stream)arg).fileLength();
         }
-        return signal(new TypeError(String.valueOf(arg) +
-                                    " is not a stream associated with a file."));
+        catch (ClassCastException e) {
+            return signal(new TypeError(arg, Symbol.STREAM));
+        }
     }
 
     private static final Primitive1 FILE_LENGTH = new file_length();
