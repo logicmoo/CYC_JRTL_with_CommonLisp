@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.24 2003-08-16 18:22:22 piso Exp $
+ * $Id: Bignum.java,v 1.25 2003-08-23 00:55:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,12 +86,12 @@ public final class Bignum extends LispObject
         return false;
     }
 
-    public boolean equalp(LispObject obj)
+    public boolean equalp(LispObject obj) throws LispError
     {
         if (obj instanceof Bignum)
             return value.equals(((Bignum)obj).value);
         if (obj instanceof LispFloat)
-            return value.floatValue() == ((LispFloat)obj).getValue();
+            return floatValue() == ((LispFloat)obj).getValue();
         return false;
     }
 
@@ -105,6 +105,14 @@ public final class Bignum extends LispObject
     public LispObject ZEROP()
     {
         return NIL;
+    }
+
+    public float floatValue() throws TypeError
+    {
+        float f = value.floatValue();
+        if (Float.isInfinite(f))
+            throw new TypeError(toString() + " is too large to be converted to a single float");
+        return value.floatValue();
     }
 
     public static BigInteger getValue(LispObject obj) throws LispError
@@ -145,7 +153,7 @@ public final class Bignum extends LispObject
                 denominator);
         }
         if (obj instanceof LispFloat)
-            return new LispFloat(value.floatValue() + ((LispFloat)obj).getValue());
+            return new LispFloat(floatValue() + ((LispFloat)obj).getValue());
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
@@ -166,7 +174,7 @@ public final class Bignum extends LispObject
                 denominator);
         }
         if (obj instanceof LispFloat)
-            return new LispFloat(value.floatValue() - ((LispFloat)obj).getValue());
+            return new LispFloat(floatValue() - ((LispFloat)obj).getValue());
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
             return Complex.getInstance(subtract(c.getRealPart()),
@@ -186,7 +194,7 @@ public final class Bignum extends LispObject
             return number(n.multiply(value), ((Ratio)obj).denominator());
         }
         if (obj instanceof LispFloat)
-            return new LispFloat(value.floatValue() * ((LispFloat)obj).getValue());
+            return new LispFloat(floatValue() * ((LispFloat)obj).getValue());
         throw new TypeError(obj, "number");
     }
 
@@ -201,7 +209,7 @@ public final class Bignum extends LispObject
             return number(d.multiply(value), ((Ratio)obj).numerator());
         }
         if (obj instanceof LispFloat)
-            return new LispFloat(value.floatValue() / ((LispFloat)obj).getValue());
+            return new LispFloat(floatValue() / ((LispFloat)obj).getValue());
         throw new TypeError(obj, "number");
     }
 
@@ -210,7 +218,7 @@ public final class Bignum extends LispObject
         if (obj instanceof Bignum)
             return value.equals(((Bignum)obj).value);
         if (obj instanceof LispFloat)
-            return value.floatValue() == ((LispFloat)obj).getValue();
+            return floatValue() == ((LispFloat)obj).getValue();
         if ((obj.getType() & TYPE_NUMBER) != 0)
             return false;
         throw new TypeError(obj, "number");
@@ -221,7 +229,7 @@ public final class Bignum extends LispObject
         if (obj instanceof Bignum)
             return !value.equals(((Bignum)obj).value);
         if (obj instanceof LispFloat)
-            return value.floatValue() != ((LispFloat)obj).getValue();
+            return floatValue() != ((LispFloat)obj).getValue();
         if ((obj.getType() & TYPE_NUMBER) != 0)
             return true;
         throw new TypeError(obj, "number");
@@ -238,7 +246,7 @@ public final class Bignum extends LispObject
             return n.compareTo(((Ratio)obj).numerator()) < 0;
         }
         if (obj instanceof LispFloat)
-            return value.floatValue() < ((LispFloat)obj).getValue();
+            return floatValue() < ((LispFloat)obj).getValue();
         throw new TypeError(obj, "real");
     }
 
@@ -253,7 +261,7 @@ public final class Bignum extends LispObject
             return n.compareTo(((Ratio)obj).numerator()) > 0;
         }
         if (obj instanceof LispFloat)
-            return value.floatValue() > ((LispFloat)obj).getValue();
+            return floatValue() > ((LispFloat)obj).getValue();
         throw new TypeError(obj, "real");
     }
 
@@ -268,7 +276,7 @@ public final class Bignum extends LispObject
             return n.compareTo(((Ratio)obj).numerator()) <= 0;
         }
         if (obj instanceof LispFloat)
-            return value.floatValue() <= ((LispFloat)obj).getValue();
+            return floatValue() <= ((LispFloat)obj).getValue();
         throw new TypeError(obj, "real");
     }
 
@@ -283,7 +291,7 @@ public final class Bignum extends LispObject
             return n.compareTo(((Ratio)obj).numerator()) >= 0;
         }
         if (obj instanceof LispFloat)
-            return value.floatValue() >= ((LispFloat)obj).getValue();
+            return floatValue() >= ((LispFloat)obj).getValue();
         throw new TypeError(obj, "real");
     }
 
