@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.51 2004-02-23 14:24:47 piso Exp $
+ * $Id: Pathname.java,v 1.52 2004-03-05 17:27:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -910,6 +910,29 @@ public class Pathname extends LispObject
             LispThread.currentThread().setValues(newName, filespec,
                                                  truename(newName, true));
             return newName;
+        }
+    };
+
+    // ### file-namestring pathname => namestring
+    private static final Primitive1 FILE_NAMESTRING =
+        new Primitive1("file-namestring", "pathname")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Pathname p = coerceToPathname(arg);
+            StringBuffer sb = new StringBuffer();
+            if (p.name instanceof AbstractString)
+                sb.append(p.name.getStringValue());
+            else if (p.name == Keyword.WILD)
+                sb.append('*');
+            else
+                signal(new SimpleError("Pathname has no name component: " + p + "."));
+            if (p.type instanceof AbstractString) {
+                sb.append('.');
+                sb.append(p.type.getStringValue());
+            } else if (p.type == Keyword.WILD)
+                sb.append(".*");
+            return new SimpleString(sb);
         }
     };
 
