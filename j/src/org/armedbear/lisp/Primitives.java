@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.147 2003-03-26 01:44:40 piso Exp $
+ * $Id: Primitives.java,v 1.148 2003-03-26 21:47:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3982,6 +3982,26 @@ public final class Primitives extends Module
         {
             // FIXME Ignore arguments (or lack thereof).
             return new JavaObject(new Random());
+        }
+    };
+
+    private static final Primitive FLOOR = new Primitive("floor") {
+        public LispObject execute(LispObject[] args) throws Condition
+        {
+            final int length = args.length;
+            if (length < 1 || length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject n = args[0];
+            LispObject d = length == 1 ? Fixnum.ONE : args[1];
+            if (n instanceof Fixnum)
+                return ((Fixnum)n).floor(d);
+            if (n instanceof Bignum)
+                return ((Bignum)n).floor(d);
+            if (n instanceof Ratio)
+                return ((Ratio)n).floor(d);
+            if (n instanceof LispFloat)
+                return ((LispFloat)n).floor(d);
+            throw new TypeError(n, "number");
         }
     };
 
