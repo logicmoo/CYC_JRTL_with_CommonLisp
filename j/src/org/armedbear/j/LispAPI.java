@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.60 2005-03-01 20:25:23 piso Exp $
+ * $Id: LispAPI.java,v 1.61 2005-03-03 14:01:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -963,15 +963,31 @@ public final class LispAPI extends Lisp
         }
     };
 
+    public static final Symbol _CURRENT_GLOBAL_MAP_ =
+        exportSpecial("*CURRENT-GLOBAL-MAP*", PACKAGE_J, NIL);
+
+    // ### current-global-map
+    private static final Primitive CURRENT_GLOBAL_MAP =
+        new Primitive("current-global-map", PACKAGE_J, true, "")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return _CURRENT_GLOBAL_MAP_.symbolValue();
+        }
+    };
+
     // ### use-global-map keymap => NIL
-    private static final Primitive SET_GLOBAL_KEYMAP =
+    private static final Primitive USE_GLOBAL_MAP =
         new Primitive("use-global-map", PACKAGE_J, true, "keymap")
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
         {
-            KeyMap.setGlobalKeyMap(checkKeymap(arg));
-            return T;
+            if (arg != NIL)
+                KeyMap.setGlobalKeyMap(checkKeymap(arg));
+            LispThread.currentThread().setSpecialVariable(_CURRENT_GLOBAL_MAP_,
+                                                          arg);
+            return NIL; // emacs
         }
     };
 
