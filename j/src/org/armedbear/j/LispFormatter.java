@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.25 2003-03-12 20:04:34 piso Exp $
+ * $Id: LispFormatter.java,v 1.26 2003-03-28 18:08:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,10 @@
  */
 
 package org.armedbear.j;
+
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 
 public final class LispFormatter extends Formatter
 {
@@ -48,6 +52,10 @@ public final class LispFormatter extends Formatter
     private static final int LISP_FORMAT_SUBSTITUTION      = 8;
     private static final int LISP_FORMAT_SECONDARY_KEYWORD = 9;
 
+    private static final RE condRE = new UncheckedRE("cond[ \t]*\\(\\(");
+
+    private static final LispMode lispMode = (LispMode) LispMode.getMode();
+
     private final Mode mode;
 
     public LispFormatter(Buffer buffer)
@@ -56,6 +64,7 @@ public final class LispFormatter extends Formatter
         this.mode = buffer.getMode();
     }
 
+    private Line currentLine;
     private int tokenBegin = 0;
 
     private void endToken(String text, int tokenEnd, int state)
@@ -77,11 +86,17 @@ public final class LispFormatter extends Formatter
                     break;
                 case STATE_CAR: {
                     String token = text.substring(tokenBegin, tokenEnd).trim();
-                    if (LispMode.isDefiner(token))
-                        format = LISP_FORMAT_DEFUN;
-                    else if (isKeyword(token))
-                        format = LISP_FORMAT_KEYWORD;
-                    else
+                    if (LispMode.isDefiner(token)) {
+                        if (isPositionFunctional(text, tokenBegin, currentLine))
+                            format = LISP_FORMAT_DEFUN;
+                        else
+                            format = LISP_FORMAT_TEXT;
+                    } else if (isKeyword(token)) {
+                        if (isPositionFunctional(text, tokenBegin, currentLine))
+                            format = LISP_FORMAT_KEYWORD;
+                        else
+                            format = LISP_FORMAT_TEXT;
+                    } else
                         format = LISP_FORMAT_TEXT;
                     break;
                 }
@@ -113,10 +128,111 @@ public final class LispFormatter extends Formatter
         }
     }
 
+    // Returns true if token at specified offset in detabbed text from line is
+    // in functional position, based on context.
+    private static final boolean isPositionFunctional(
+        String text,    // Detabbed text.
+        int offset,     // Offset of token in detabbed text.
+        Line line)      // Line (which may contain tab characters).
+    {
+        if (offset >= 2) {
+            String preceding =
+                text.substring(offset - 2, offset);
+            if (preceding.equals("((")) {
+                REMatch m = condRE.getMatch(text);
+                if (m != null && m.getEndIndex() == offset) {
+                    return true;
+                }
+                if (countLeadingSpaces(text) == offset - 2) {
+                    Position pos = new Position(line, 0);
+                    pos = lispMode.findContainingSexp(pos);
+                    if (pos != null) {
+                        String s = parseToken(pos);
+                        if (s.equalsIgnoreCase("(cond")) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+        // Reaching here, preceding text is not "((".
+        if (offset >= 1) {
+            char c = text.charAt(offset - 1);
+            if (c == '(') {
+                if (countLeadingSpaces(text) == offset - 1) {
+                    Position pos = new Position(line, 0);
+                    pos = lispMode.findContainingSexp(pos);
+                    if (pos != null) {
+                        if (pos.lookingAt("((")) {
+                            pos = lispMode.findContainingSexp(pos);
+                            if (pos != null && pos.getChar() == '(') {
+                                pos.skip(1);
+                                String s = parseToken(pos).toLowerCase();
+                                if (s.equals("let"))
+                                    return false;
+                                if (s.equals("let*"))
+                                    return false;
+                                if (s.equals("do"))
+                                    return false;
+                                if (s.equals("do*"))
+                                    return false;
+                            }
+                        } else if (pos.getChar() == '(') {
+                            pos.skip(1);
+                            String s = parseToken(pos).toLowerCase();
+                            if (s.equals("case"))
+                                return false;
+                            if (s.equals("ccase"))
+                                return false;
+                            if (s.equals("ecase"))
+                                return false;
+                            if (s.equals("typecase"))
+                                return false;
+                            if (s.equals("ctypecase"))
+                                return false;
+                            if (s.equals("etypecase"))
+                                return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    // Returns next whitespace-delimited token starting at (or after) pos.
+    // Same line only.
+    private static final String parseToken(Position pos)
+    {
+        final Line line = pos.getLine();
+        final int limit = line.length();
+        int begin = pos.getOffset();
+        while (begin < limit && Character.isWhitespace(line.charAt(begin)))
+            ++begin;
+        if (begin == limit)
+            return "";
+        int end = begin + 1;
+        while (end < limit && !Character.isWhitespace(line.charAt(end)))
+            ++end;
+        return line.getText().substring(begin, end);
+    }
+
+    private static final int countLeadingSpaces(String s)
+    {
+        final int limit = s.length();
+        for (int i = 0; i < limit; i++) {
+            if (s.charAt(i) != ' ')
+                return i;
+        }
+        return limit;
+    }
+
     private void parseLine(Line line)
     {
-        final String text = getDetabbedText(line);
+        currentLine = line;
         tokenBegin = 0;
+        final String text = getDetabbedText(line);
         int state = line.flags();
         clearSegmentList();
         final int limit = text.length();
