@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.6 2003-06-20 14:59:22 piso Exp $
+ * $Id: Autoload.java,v 1.7 2003-06-20 16:02:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,22 +25,52 @@ public final class Autoload extends Function
 {
     final Symbol symbol;
     final String fileName;
+    final String className;
 
-    public Autoload(Symbol symbol)
+    private Autoload(Symbol symbol)
     {
         this.symbol = symbol;
-        this.fileName = null;
+        fileName = null;
+        className = null;
     }
 
-    public Autoload(Symbol symbol, String fileName)
+    private Autoload(Symbol symbol, String fileName, String className)
     {
         this.symbol = symbol;
         this.fileName = fileName;
+        this.className = className;
+    }
+
+    public static void autoload(String symbolName, String className)
+    {
+        Symbol symbol = intern(symbolName.toUpperCase(), PACKAGE_CL);
+        symbol.setSymbolFunction(new Autoload(symbol, null, className));
     }
 
     public void load() throws Condition
     {
-        Load._load(getFileName(), true, false);
+        if (className != null) {
+            try {
+                CharacterOutputStream out = getStandardOutput();
+                out.writeString("; Loading ");
+                out.writeString(className);
+                out.writeLine(" ...");
+                out.finishOutput();
+                long start = System.currentTimeMillis();
+                Class.forName(className);
+                long elapsed = System.currentTimeMillis() - start;
+                out.writeString("; Loaded ");
+                out.writeString(className);
+                out.writeString(" (");
+                out.writeString(String.valueOf(((float)elapsed)/1000));
+                out.writeLine(" seconds)");
+                out.finishOutput();
+            }
+            catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else
+            Load._load(getFileName(), true, false);
     }
 
     public final Symbol getSymbol()
@@ -93,17 +123,21 @@ public final class Autoload extends Function
             final String fileName = LispString.getValue(second);
             if (first instanceof Symbol) {
                 Symbol symbol = (Symbol) first;
-                symbol.setSymbolFunction(new Autoload(symbol, fileName));
+                symbol.setSymbolFunction(new Autoload(symbol, fileName, null));
                 return T;
             }
             if (first instanceof Cons) {
                 for (LispObject list = first; list != NIL; list = list.cdr()) {
                     Symbol symbol = checkSymbol(list.car());
-                    symbol.setSymbolFunction(new Autoload(symbol, fileName));
+                    symbol.setSymbolFunction(new Autoload(symbol, fileName, null));
                 }
                 return T;
             }
             throw new TypeError(first);
         }
     };
+
+    static {
+        autoload("room", "org.armedbear.lisp.room");
+    }
 }
