@@ -66,6 +66,7 @@
 (defun make-sequence-of-type (type length)
   (case (type-specifier-atom type)
     (list (make-list length))
+    ((bit-vector simple-bit-vector) (make-array length :element-type 'bit))
     (string (make-string length))
     (vector (make-array length))
     (t
