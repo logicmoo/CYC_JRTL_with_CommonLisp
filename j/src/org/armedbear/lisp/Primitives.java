@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.447 2003-09-28 01:14:59 piso Exp $
+ * $Id: Primitives.java,v 1.448 2003-09-28 14:16:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3557,8 +3557,8 @@ public final class Primitives extends Module
                 endIndex = (int) Fixnum.getValue(end);
             else
                 endIndex = s.length();
-            CharacterInputStream in =
-                new CharacterInputStream(s.substring(startIndex, endIndex));
+            StringInputStream in =
+                new StringInputStream(s, startIndex, endIndex);
             LispObject result;
             if (preserveWhitespace)
                 result = in.readPreservingWhitespace(eofError, eofValue, false);
