@@ -2,7 +2,7 @@
  * CustomFocusManager.java
  *
  * Copyright (C) 1999-2003 Peter Graves
- * $Id: CustomFocusManager.java,v 1.5 2003-06-13 17:52:53 piso Exp $
+ * $Id: CustomFocusManager.java,v 1.6 2003-06-28 15:42:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,30 +25,11 @@ import java.awt.Component;
 import java.awt.event.KeyEvent;
 import javax.swing.DefaultFocusManager;
 import javax.swing.JDialog;
-import javax.swing.JMenu;
 
 public final class CustomFocusManager extends DefaultFocusManager
 {
     public void processKeyEvent(Component focusedComponent, KeyEvent e)
     {
-        if (!Platform.isJava14() && e.getKeyCode() == KeyEvent.VK_TAB) {
-            if (focusedComponent instanceof JMenu ||
-                focusedComponent instanceof Display) {
-                switch (e.getID()) {
-                    case KeyEvent.KEY_PRESSED:
-                        Editor.currentEditor().getDispatcher().keyPressed(e);
-                        e.consume();
-                        break;
-                    case KeyEvent.KEY_RELEASED:
-                        Editor.currentEditor().getDispatcher().keyReleased(e);
-                        e.consume();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return;
-        }
         if (e.getID() == KeyEvent.KEY_PRESSED) {
             if (isComponentHookable(focusedComponent)) {
                 KeyMapping km;
