@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.363 2003-09-02 16:14:16 piso Exp $
+ * $Id: Primitives.java,v 1.364 2003-09-02 16:33:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4730,6 +4730,22 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg)
         {
             return arg.COMPLEXP();
+        }
+    };
+
+    // ### numerator
+    private static final Primitive1 NUMERATOR = new Primitive1("numerator") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg.NUMERATOR();
+        }
+    };
+
+    // ### denominator
+    private static final Primitive1 DENOMINATOR = new Primitive1("denominator") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg.DENOMINATOR();
         }
     };
 
