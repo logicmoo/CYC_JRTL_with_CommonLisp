@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.196 2004-10-05 17:11:38 piso Exp $
+;;; $Id: boot.lisp,v 1.197 2004-10-05 17:25:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,19 +64,6 @@
 
 (defun write-char (character &optional output-stream)
   (sys::%write-char character output-stream))
-
-;; OUTPUT-OBJECT is redefined in print.lisp.
-(defun output-object (object stream)
-  (sys::%output-object object stream))
-
-(defun finish-output (&optional output-stream)
-  (%finish-output output-stream))
-
-(defun force-output (&optional output-stream)
-  (%force-output output-stream))
-
-(defun clear-output (&optional output-stream)
-  (%clear-output output-stream))
 
 (defun simple-format (destination control-string &rest args)
   (apply *simple-format-function* destination control-string args))
