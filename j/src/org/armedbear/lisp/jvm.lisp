@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.87 2004-03-26 04:27:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.88 2004-03-26 17:34:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -557,49 +557,63 @@
   (emit 'aload *thread*)
   (emit-invokevirtual +lisp-thread-class+ "clearValues" "()V" -1))
 
+(defparameter single-valued-operators (make-hash-table :test 'eq))
+
+(dolist (op '(+ - * /
+              1+ 1- + - < > <= >= = /=
+              car cdr cadr cdar cddr caddr cdddr cddddr
+              first second third
+              eq eql equal equalp
+              length
+              constantp symbolp
+              list list*
+              macro-function
+              compiler-macro-function
+              get
+              special-operator-p keywordp functionp fboundp zerop consp listp
+              complexp arrayp
+              array-dimensions array-rank array-total-size
+              array-element-type upgraded-array-element-type
+              simple-vector-p simple-string-p bit-vector-p simple-bit-vector-p
+              row-major-aref
+              quote function
+              mapcar
+              find position
+              append nconc subseq
+              memq
+              special-variable-p
+              gensym
+              symbol-name symbol-function
+              coerce
+              reverse nreverse
+              cons
+              copy-list
+              make-sequence make-list make-array
+              nthcdr
+              aref elt
+              not null endp
+              concatenate
+              string
+              string=
+              setq
+              multiple-value-list pop
+              type-of class-of
+              ash
+              logand logandc1 logandc2 logeqv logior lognand
+              lognot logorc1 logorc2 logxor
+              slot-boundp slot-value
+              find-class
+              constantly
+              exp expt
+              min max
+              realpart imagpart
+              ext:classp))
+  (setf (gethash op single-valued-operators) t))
+
 (defun single-valued-p (form)
-  (cond ((atom form)
-         t)
-        ((memq (car form) '(1+ 1- + - < > <= >= = /=
-                            car cdr cadr cdar cddr caddr cdddr
-                            first second third
-                            eq eql equal equalp
-                            length
-                            constantp symbolp
-                            list list*
-                            macro-function
-                            compiler-macro-function
-                            get
-                            special-operator-p keywordp functionp fboundp zerop
-                            complexp arrayp
-                            array-dimensions upgraded-array-element-type
-                            array-element-type
-                            simple-vector-p simple-string-p bit-vector-p
-                            quote
-                            mapcar
-                            find position
-                            append
-                            memq
-                            special-variable-p
-                            gensym
-                            symbol-name symbol-function
-                            coerce
-                            reverse nreverse
-                            cons
-                            copy-list
-                            make-sequence
-                            nthcdr
-                            aref elt
-                            not null endp
-                            concatenate
-                            string
-                            string=
-                            setq
-                            multiple-value-list
-                            ))
-         t)
-        (t
-         nil)))
+  (if (atom form)
+      t
+      (gethash (car form) single-valued-operators)))
 
 (defun maybe-emit-clear-values (form)
   (unless (single-valued-p form)
