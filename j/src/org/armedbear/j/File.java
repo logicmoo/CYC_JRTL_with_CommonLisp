@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.3 2002-11-30 15:30:04 piso Exp $
+ * $Id: File.java,v 1.4 2002-12-07 01:42:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,12 +291,12 @@ public class File implements Comparable
 
     public String getSeparator()
     {
-        return Platform.isPlatformWindows() ? "\\" : "/";
+        return java.io.File.separator;
     }
 
     public char getSeparatorChar()
     {
-        return Platform.isPlatformWindows() ? '\\' : '/';
+        return java.io.File.separatorChar;
     }
 
     public String getDrive()
@@ -823,7 +823,7 @@ public class File implements Comparable
     {
         return null;
     }
-    
+
     public String getDirectoryListing(boolean forceRefresh)
     {
         return null;
