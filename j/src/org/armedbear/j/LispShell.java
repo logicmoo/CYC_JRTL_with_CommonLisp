@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.73 2004-09-17 19:19:47 piso Exp $
+ * $Id: LispShell.java,v 1.74 2004-09-19 14:14:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,8 @@ public class LispShell extends Shell
 
     private Position posBeforeLastPrompt;
     private Position posEndOfInput;
+
+    private File currentDirectory;
 
     // For JLisp.java.
     protected LispShell()
@@ -152,9 +154,9 @@ public class LispShell extends Shell
             Debug.bug();
             return;
         }
-            File initialDir = Editor.currentEditor().getCurrentDirectory();
-            if (initialDir == null || initialDir.isRemote())
-                initialDir = Directories.getUserHomeDirectory();
+        File initialDirectory = Editor.currentEditor().getCurrentDirectory();
+        if (initialDirectory == null || initialDirectory.isRemote())
+            initialDirectory = Directories.getUserHomeDirectory();
         List tokens = Utilities.tokenize(shellCommand);
         final int tokenCount = tokens.size();
         String[] cmdArray;
@@ -169,13 +171,14 @@ public class LispShell extends Shell
         Process p = null;
         try {
             p = Runtime.getRuntime().exec(cmdArray, null,
-                                          new java.io.File(initialDir.canonicalPath()));
+                                          new java.io.File(initialDirectory.canonicalPath()));
             setProcess(p);
         }
         catch (Throwable t) {
             setProcess(null);
             return;
         }
+        currentDirectory = initialDirectory;
         startWatcherThread();
         // See if the process exits right away (meaning jpty couldn't launch
         // the shell command).
@@ -494,6 +497,16 @@ public class LispShell extends Shell
         t.setPriority(Thread.MIN_PRIORITY);
         t.setDaemon(true);
         t.start();
+    }
+
+    public File getCurrentDirectory()
+    {
+        return currentDirectory;
+    }
+
+    public File getCompletionDirectory()
+    {
+        return currentDirectory;
     }
 
     public String getFileNameForDisplay()
