@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.183 2004-06-14 16:04:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.184 2004-06-19 14:23:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1373,6 +1373,7 @@
   (setf (gethash operator binary-operators) translation))
 
 (define-binary-operator 'eql               "EQL")
+(define-binary-operator 'equal             "EQUAL")
 (define-binary-operator '+                 "add")
 (define-binary-operator '-                 "subtract")
 (define-binary-operator '/                 "divideBy")
