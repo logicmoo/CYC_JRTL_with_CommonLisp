@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.132 2004-04-27 12:38:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.133 2004-04-27 12:38:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1595,6 +1595,7 @@
         (let ((op (car form))
               (syms ())
               (lets ()))
+          ;; Preserve the order of evaluation of the arguments!
           (dolist (arg args)
             (if (constantp arg)
                 (push arg syms)
