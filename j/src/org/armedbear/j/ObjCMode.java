@@ -1,8 +1,8 @@
 /*
  * ObjCMode.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: ObjCMode.java,v 1.3 2003-12-30 17:34:00 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: ObjCMode.java,v 1.4 2004-01-04 01:39:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
