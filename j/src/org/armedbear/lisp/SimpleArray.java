@@ -2,7 +2,7 @@
  * SimpleArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SimpleArray.java,v 1.4 2004-03-04 02:01:45 piso Exp $
+ * $Id: SimpleArray.java,v 1.5 2004-03-06 20:48:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,6 +189,60 @@ public final class SimpleArray extends AbstractArray
         }
         catch (ArrayIndexOutOfBoundsException e) {
             signal(new TypeError("Bad row major index " + index + "."));
+        }
+    }
+
+    public int getRowMajorIndex(int[] subscripts) throws ConditionThrowable
+    {
+        final int rank = dimv.length;
+        if (rank != subscripts.length) {
+            StringBuffer sb = new StringBuffer("Wrong number of subscripts (");
+            sb.append(subscripts.length);
+            sb.append(") for array of rank ");
+            sb.append(rank);
+            sb.append('.');
+            signal(new ProgramError(sb.toString()));
+        }
+        int sum = 0;
+        int size = 1;
+        for (int i = rank; i-- > 0;) {
+            final int dim = dimv[i];
+            final int lastSize = size;
+            size *= dim;
+            int n = subscripts[i];
+            if (n < 0 || n >= dim) {
+                StringBuffer sb = new StringBuffer("Invalid index ");
+                sb.append(n);
+                sb.append(" for array ");
+                sb.append(this);
+                sb.append('.');
+                signal(new ProgramError(sb.toString()));
+            }
+            sum += n * lastSize;
+        }
+        return sum;
+    }
+
+    public LispObject get(int[] subscripts) throws ConditionThrowable
+    {
+        try {
+            return data[getRowMajorIndex(subscripts)];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            return signal(new TypeError("Bad row major index " +
+                                        getRowMajorIndex(subscripts) + "."));
+        }
+    }
+
+    public void set(int[] subscripts, LispObject newValue)
+        throws ConditionThrowable
+    {
+        try {
+            data[getRowMajorIndex(subscripts)] = newValue;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            signal(new TypeError("Bad row major index " +
+                                 getRowMajorIndex(subscripts) + "."));
         }
     }
 
