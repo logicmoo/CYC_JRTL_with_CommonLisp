@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.74 2003-09-19 15:49:13 piso Exp $
+# $Id: Makefile.in,v 1.75 2003-09-19 16:05:11 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -106,7 +106,7 @@ CLASSFILES =	AbstractArray.class \
 		Time.class \
 		TypeError.class \
 		TwoWayStream.class \
-		UnboundVariableException.class \
+		UnboundVariable.class \
 		UndefinedFunction.class \
 		Utilities.class \
 		Vector.class \
