@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.39 2003-06-08 17:38:43 piso Exp $
+ * $Id: Closure.java,v 1.40 2003-06-08 17:51:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,19 +69,19 @@ public class Closure extends Function
         boolean allowOtherKeys = false;
         if (lambdaList instanceof Cons) {
             final int length = lambdaList.length();
-            ArrayList requiredParameters = null;
-            ArrayList optionalParameters = null;
-            ArrayList keywordParameters = null;
-            ArrayList auxVars = null;
+            ArrayList required = null;
+            ArrayList optional = null;
+            ArrayList keywords = null;
+            ArrayList aux = null;
             int state = STATE_REQUIRED;
             LispObject remaining = lambdaList;
             while (remaining != NIL) {
                 LispObject obj = remaining.car();
                 if (obj instanceof Symbol) {
                     if (state == STATE_AUX) {
-                        if (auxVars == null)
-                            auxVars = new ArrayList();
-                        auxVars.add(new Parameter((Symbol)obj, NIL, AUX));
+                        if (aux == null)
+                            aux = new ArrayList();
+                        aux.add(new Parameter((Symbol)obj, NIL, AUX));
                     } else if (obj == Symbol.AND_OPTIONAL) {
                         state = STATE_OPTIONAL;
                         arity = -1;
@@ -107,23 +107,24 @@ public class Closure extends Function
                         arity = -1; // FIXME
                     } else {
                         if (state == STATE_OPTIONAL) {
-                            if (optionalParameters == null)
-                                optionalParameters = new ArrayList();
-                            optionalParameters.add(new Parameter((Symbol)obj,
-                                NIL, OPTIONAL));
+                            if (optional == null)
+                                optional = new ArrayList();
+                            optional.add(new Parameter((Symbol)obj, NIL,
+                                OPTIONAL));
                             if (maxArgs >= 0)
                                 ++maxArgs;
                         } else if (state == STATE_KEYWORD) {
-                            if (keywordParameters == null)
-                                keywordParameters = new ArrayList();
-                            keywordParameters.add(new Parameter((Symbol)obj, NIL, KEYWORD));
+                            if (keywords == null)
+                                keywords = new ArrayList();
+                            keywords.add(new Parameter((Symbol)obj, NIL,
+                                KEYWORD));
                             if (maxArgs >= 0)
                                 maxArgs += 2;
                         } else {
                             Debug.assertTrue(state == STATE_REQUIRED);
-                            if (requiredParameters == null)
-                                requiredParameters = new ArrayList();
-                            requiredParameters.add(new Parameter((Symbol)obj));
+                            if (required == null)
+                                required = new ArrayList();
+                            required.add(new Parameter((Symbol)obj));
                             if (maxArgs >= 0)
                                 ++maxArgs;
                         }
@@ -133,16 +134,17 @@ public class Closure extends Function
                         Symbol symbol = checkSymbol(obj.car());
                         LispObject initForm = obj.cadr();
                         Debug.assertTrue(initForm != null);
-                        if (auxVars == null)
-                            auxVars = new ArrayList();
-                        auxVars.add(new Parameter(symbol, initForm, AUX));
+                        if (aux == null)
+                            aux = new ArrayList();
+                        aux.add(new Parameter(symbol, initForm, AUX));
                     } else if (state == STATE_OPTIONAL) {
                         Symbol symbol = checkSymbol(obj.car());
                         LispObject initForm = obj.cadr();
                         LispObject svar = obj.cdr().cdr().car();
-                        if (optionalParameters == null)
-                            optionalParameters = new ArrayList();
-                        optionalParameters.add(new Parameter(symbol, initForm, svar, OPTIONAL));
+                        if (optional == null)
+                            optional = new ArrayList();
+                        optional.add(new Parameter(symbol, initForm, svar,
+                            OPTIONAL));
                         if (maxArgs >= 0)
                             ++maxArgs;
                     } else if (state == STATE_KEYWORD) {
@@ -166,10 +168,10 @@ public class Closure extends Function
                             if (obj != NIL)
                                 svar = obj.car();
                         }
-                        if (keywordParameters == null)
-                            keywordParameters = new ArrayList();
-                        keywordParameters.add(new Parameter(keyword, var,
-                            initForm, svar));
+                        if (keywords == null)
+                            keywords = new ArrayList();
+                        keywords.add(new Parameter(keyword, var, initForm,
+                            svar));
                         if (maxArgs >= 0)
                             maxArgs += 2;
                     } else
@@ -180,26 +182,26 @@ public class Closure extends Function
             }
             if (arity == 0)
                 arity = length;
-            if (requiredParameters != null) {
-                this.requiredParameters = new Parameter[requiredParameters.size()];
-                requiredParameters.toArray(this.requiredParameters);
+            if (required != null) {
+                requiredParameters = new Parameter[required.size()];
+                required.toArray(requiredParameters);
             } else
-                this.requiredParameters = null;
-            if (optionalParameters != null) {
-                this.optionalParameters = new Parameter[optionalParameters.size()];
-                optionalParameters.toArray(this.optionalParameters);
+                requiredParameters = null;
+            if (optional != null) {
+                optionalParameters = new Parameter[optional.size()];
+                optional.toArray(optionalParameters);
             } else
-                this.optionalParameters = null;
-            if (keywordParameters != null) {
-                this.keywordParameters = new Parameter[keywordParameters.size()];
-                keywordParameters.toArray(this.keywordParameters);
+                optionalParameters = null;
+            if (keywords != null) {
+                keywordParameters = new Parameter[keywords.size()];
+                keywords.toArray(keywordParameters);
             } else
-                this.keywordParameters = null;
-            if (auxVars != null) {
-                this.auxVars = new Parameter[auxVars.size()];
-                auxVars.toArray(this.auxVars);
+                keywordParameters = null;
+            if (aux != null) {
+                auxVars = new Parameter[aux.size()];
+                aux.toArray(auxVars);
             } else
-                this.auxVars = null;
+                auxVars = null;
         } else {
             Debug.assertTrue(lambdaList == NIL);
             requiredParameters = null;
