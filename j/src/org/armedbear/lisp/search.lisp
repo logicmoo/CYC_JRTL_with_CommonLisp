@@ -1,7 +1,7 @@
 ;;; search.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: search.lisp,v 1.20 2004-03-06 18:32:00 piso Exp $
+;;; $Id: search.lisp,v 1.21 2004-03-24 01:17:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -112,6 +112,3 @@
          (simple-vector-search sequence1 sequence2))
         (t
          (search sequence1 sequence2 :from-end nil))))
-
-(when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
-  (jvm::jvm-compile 'search))

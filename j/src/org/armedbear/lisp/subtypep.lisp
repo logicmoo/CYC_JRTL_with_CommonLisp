@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.48 2004-03-15 19:32:17 piso Exp $
+;;; $Id: subtypep.lisp,v 1.49 2004-03-24 01:16:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -198,7 +198,7 @@
   (when (or (eq type1 type2)
             (null type1)
             (eq type2 t)
-            (eq type2 #.(find-class t)))
+            (eq type2 (find-class t)))
     (return-from %subtypep (values t t)))
   (when (and (atom type1) (atom type2))
     (let* ((classp-1 (classp type1))
@@ -280,12 +280,12 @@
           ((classp t2)
            (cond ((eq t2 (find-class t1 nil))
                   (values t t))
-                 ((and (eq t2 #.(find-class 'array))
+                 ((and (eq t2 (find-class 'array))
                        (memq t1 '(array simple-array vector simple-vector string
                                   simple-string simple-base-string bit-vector
                                   simple-bit-vector)))
                   (values t t))
-                 ((eq t2 #.(find-class 'vector))
+                 ((eq t2 (find-class 'vector))
                   (cond ((memq t1 '(string simple-string))
                          (values t t))
                         ((eq t1 'array)
@@ -296,10 +296,17 @@
                                (values nil t))))
                         (t
                          (values nil t))))
-                 ((and (eq t2 #.(find-class 'bit-vector))
+                 ((and (eq t2 (find-class 'simple-vector))
+                       (eq t1 'simple-array))
+                  (let ((dim (cadr i1)))
+                    (if (or (eql dim 1)
+                            (and (consp dim) (= (length dim) 1)))
+                        (values t t)
+                        (values nil t))))
+                 ((and (eq t2 (find-class 'bit-vector))
                        (eq t1 'simple-bit-vector))
                   (values t t))
-                 ((and (eq t2 #.(find-class 'string))
+                 ((and (eq t2 (find-class 'string))
                        (memq t1 '(string simple-string)))
                   (values t t))
                  (t
@@ -334,7 +341,7 @@
            (if (memq t2 '(real number))
                (values (sub-interval-p i1 i2) t)
                (values nil (known-type-p t2))))
-          ((and (eq t1 #.(find-class 'array)) (eq t2 'array))
+          ((and (eq t1 (find-class 'array)) (eq t2 'array))
            (values (equal i2 '(* *)) t))
           ((and (memq t1 '(array simple-array)) (eq t2 'array))
            (let ((e1 (car i1))
