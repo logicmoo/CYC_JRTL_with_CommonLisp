@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: debug.lisp,v 1.30 2005-01-24 19:17:41 piso Exp $
+;;; $Id: debug.lisp,v 1.31 2005-03-07 19:08:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@
       (with-standard-io-syntax
         (when (and *load-truename* (streamp *load-stream*))
           (sys:simple-format *debug-io*
-                             "Error loading ~A at line ~D (offset ~D).~%"
+                             "Error loading ~A at line ~D (offset ~D)~%"
                              *load-truename*
                              (stream-line-number *load-stream*)
                              (stream-offset *load-stream*)))
