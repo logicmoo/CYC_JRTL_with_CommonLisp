@@ -1,7 +1,7 @@
 ;;; complete.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: complete.lisp,v 1.1 2004-04-13 15:22:08 piso Exp $
+;;; $Id: complete.lisp,v 1.2 2004-09-05 00:12:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@
 
 (defun completion-prefix ()
   (let* ((string (line-chars (current-line)))
-         (end (marker-charpos (point))))
+         (end (mark-charpos (current-point))))
     (do ((start (1- end) (1- start)))
         ((< start 0) (subseq string 0 end))
       (let ((ch (schar string start)))
@@ -74,10 +74,10 @@
            (setf *completions* (completion-set *prefix*)))))
   (when *completions*
     (let ((completion (string-downcase (nth *completion-index* *completions*)))
-          (point (point)))
+          (point (current-point)))
       (with-single-undo
-        (goto-char (make-marker (marker-line point)
-                                (- (marker-charpos point) (length *prefix*))))
+        (goto-char (make-mark (mark-line point)
+                              (- (mark-charpos point) (length *prefix*))))
         (set-mark point)
         (delete-region)
         (insert completion)))
