@@ -2,7 +2,7 @@
  * Session.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Session.java,v 1.7 2003-02-03 01:39:53 piso Exp $
+ * $Id: Session.java,v 1.8 2003-03-20 00:30:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,12 +163,8 @@ public final class Session extends HandlerBase implements Constants
             if (Editor.preferences().getBooleanProperty(Property.AUTOSAVE_NAMED_SESSIONS))
                 saveCurrentSession();
 
-        // Make sure line numbers are right for bookmarks.
-        for (int i = 0; i < Editor.bookmarks.length; i++) {
-            Marker m = Editor.bookmarks[i];
-            if (m != null)
-                m.invalidate();
-        }
+        Marker.invalidateAllMarkers();
+
         editor.setWaitCursor();
         // Close all the existing buffers.
         for (BufferIterator iter = new BufferIterator(); iter.hasNext();) {
