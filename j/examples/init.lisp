@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.25 2004-09-11 12:08:46 piso Exp $
+;;; $Id: init.lisp,v 1.26 2004-10-25 01:45:30 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -121,3 +121,5 @@
 (maybe-load "/home/peter/.j/update-check-enabled.lisp")
 
 (maybe-load "/home/peter/depot/j/build-abcl.lisp")
+
+(map-key-for-mode ")" "electricCloseParen" "Lisp Shell")
