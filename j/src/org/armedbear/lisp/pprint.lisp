@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: pprint.lisp,v 1.48 2005-03-24 01:17:44 piso Exp $
+;;; $Id: pprint.lisp,v 1.49 2005-03-24 15:03:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -973,6 +973,9 @@
   (cond ((vectorp array)
          (pretty-vector xp array))
 	((zerop (array-rank array))
+         (when *print-readably*
+           (unless (eq (array-element-type array) t)
+             (error 'print-not-readable :object array)))
 	 (write-string++ "#0A" xp 0 3)
 	 (sys:output-object (aref array) xp))
 	(t
