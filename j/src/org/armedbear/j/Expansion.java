@@ -2,7 +2,7 @@
  * Expansion.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Expansion.java,v 1.3 2003-06-07 11:03:12 piso Exp $
+ * $Id: Expansion.java,v 1.4 2003-10-13 12:13:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,7 @@ public class Expansion implements Constants
     private final Mode mode;
 
     private String current;
+    private boolean forceLowerCase;
 
     // For MailAddressExpansion.
     protected Expansion()
@@ -70,6 +71,10 @@ public class Expansion implements Constants
         prefixOffset = begin;
         Position pos = new Position(dotLine, begin);
         current = pos.getIdentifier(mode);
+        int modeId = mode.getId();
+        if (modeId == LISP_MODE || modeId == LISP_SHELL_MODE)
+            if (Utilities.isLowerCase(prefix))
+                forceLowerCase = true;
         candidates = list(pos);
     }
 
@@ -147,7 +152,9 @@ public class Expansion implements Constants
         // We don't want what we started with.
         if (candidate.equals(current))
             return;
-        for (int i = list.size()-1; i >= 0; i--) {
+        if (forceLowerCase)
+            candidate = candidate.toLowerCase();
+        for (int i = list.size(); i-- > 0;) {
             if (candidate.equals(list.get(i))) {
                 // It's already in the list.
                 return;
