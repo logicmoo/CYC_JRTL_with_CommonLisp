@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.36 2003-07-07 19:38:59 piso Exp $
+ * $Id: Package.java,v 1.37 2003-07-08 14:35:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,11 +32,10 @@ public final class Package extends LispObject
 
     private final HashMap internalSymbols;
     private final HashMap externalSymbols;
-
+    private HashMap shadowingSymbols;
     private ArrayList nicknames;
     private final ArrayList useList = new ArrayList();
     private ArrayList usedByList = null;
-    private final ArrayList shadowingSymbols = new ArrayList();
 
     public Package(String name)
     {
@@ -285,7 +284,11 @@ public final class Package extends LispObject
     public synchronized LispObject unintern(Symbol symbol) throws PackageError
     {
         final String symbolName = symbol.getName();
-        final boolean shadow = shadowingSymbols.contains(symbol);
+        final boolean shadow;
+        if (shadowingSymbols != null && shadowingSymbols.get(symbolName) == symbol)
+            shadow = true;
+        else
+            shadow = false;
         if (shadow) {
             // Check for conflicts that might be exposed in used package list
             // if we remove the shadowing symbol.
@@ -318,8 +321,10 @@ public final class Package extends LispObject
             // Not found.
             return NIL;
         }
-        if (shadow)
-            shadowingSymbols.remove(symbol);
+        if (shadow) {
+            Debug.assertTrue(shadowingSymbols != null);
+            shadowingSymbols.remove(symbolName);
+        }
         if (symbol.getPackage() == this)
             symbol.setPackage(NIL);
         return T;
@@ -370,7 +375,7 @@ public final class Package extends LispObject
                     Symbol sym = pkg.findAccessibleSymbol(symbolName);
                     if (sym != null && sym != symbol) {
                         if (pkg.shadowingSymbols != null &&
-                            pkg.shadowingSymbols.contains(sym)) {
+                            pkg.shadowingSymbols.get(symbolName) == sym) {
                             ; // OK.
                         } else {
                             StringBuffer sb = new StringBuffer("the symbol ");
@@ -424,32 +429,38 @@ public final class Package extends LispObject
     public synchronized void shadow(String symbolName) throws LispError
     {
         Symbol symbol = (Symbol) externalSymbols.get(symbolName);
-        if (symbol == null)
-            symbol = (Symbol) internalSymbols.get(symbolName);
-        if (symbol == null) {
-            symbol = new Symbol(symbolName, this);
-            internalSymbols.put(symbolName, symbol);
-        }
-        if (!shadowingSymbols.contains(symbol))
-            shadowingSymbols.add(symbol);
+        if (symbol != null)
+            return;
+        symbol = (Symbol) internalSymbols.get(symbolName);
+        if (symbol != null)
+            return;
+        if (shadowingSymbols != null) {
+            if (shadowingSymbols.get(symbolName) != null)
+                return;
+        } else
+            shadowingSymbols = new HashMap();
+
+        symbol = new Symbol(symbolName, this);
+        internalSymbols.put(symbolName, symbol);
+        shadowingSymbols.put(symbolName, symbol);
     }
 
     public synchronized void shadowingImport(Symbol symbol) throws LispError
     {
         LispObject where = NIL;
-        final String name = symbol.getName();
-        Symbol sym = (Symbol) externalSymbols.get(name);
+        final String symbolName = symbol.getName();
+        Symbol sym = (Symbol) externalSymbols.get(symbolName);
         if (sym != null) {
             where = Keyword.EXTERNAL;
         } else {
-            sym = (Symbol) internalSymbols.get(name);
+            sym = (Symbol) internalSymbols.get(symbolName);
             if (sym != null) {
                 where = Keyword.INTERNAL;
             } else {
-                // Look in external syms of used packages.
+                // Look in external symbols of used packages.
                 for (Iterator it = useList.iterator(); it.hasNext();) {
                     Package pkg = (Package) it.next();
-                    sym = pkg.findExternalSymbol(name);
+                    sym = pkg.findExternalSymbol(symbolName);
                     if (sym != null) {
                         where = Keyword.INHERITED;
                         break;
@@ -460,14 +471,17 @@ public final class Package extends LispObject
         if (sym != null) {
             if (where == Keyword.INTERNAL || where == Keyword.EXTERNAL) {
                 if (sym != symbol) {
-                    shadowingSymbols.remove(sym);
+                    if (shadowingSymbols != null)
+                        shadowingSymbols.remove(symbolName);
                     unintern(sym);
                 }
             }
         }
-        internalSymbols.put(name, symbol);
-        Debug.assertTrue(!shadowingSymbols.contains(symbol));
-        shadowingSymbols.add(symbol);
+        internalSymbols.put(symbolName, symbol);
+        if (shadowingSymbols == null)
+            shadowingSymbols = new HashMap();
+        Debug.assertTrue(shadowingSymbols.get(symbolName) == null);
+        shadowingSymbols.put(symbolName, symbol);
     }
 
     // Adds pkg to the use list of this package.
@@ -557,9 +571,11 @@ public final class Package extends LispObject
     public LispObject getShadowingSymbols()
     {
         LispObject list = NIL;
-        for (Iterator it = shadowingSymbols.iterator(); it.hasNext();) {
-            Symbol symbol = (Symbol) it.next();
-            list = new Cons(symbol, list);
+        if (shadowingSymbols != null) {
+            for (Iterator it = shadowingSymbols.values().iterator(); it.hasNext();) {
+                Symbol symbol = (Symbol) it.next();
+                list = new Cons(symbol, list);
+            }
         }
         return list;
     }
