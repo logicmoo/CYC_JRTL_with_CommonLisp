@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.5 2003-06-06 14:52:46 piso Exp $
+ * $Id: XmlMode.java,v 1.6 2003-06-12 01:21:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,8 @@ import org.xml.sax.SAXParseException;
 
 public final class XmlMode extends AbstractMode implements Constants, Mode
 {
+    private static final String MENU_NAME = "XmlMode";
+
     private static final String COMMENT_START = "<!--";
     private static final String COMMENT_END   = "-->";
 
@@ -119,16 +121,45 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_PERIOD, CTRL_MASK | SHIFT_MASK,
             "xmlInsertEmptyElementTag");
 
-        // The "normal" mappings don't work for Blackdown 1.2.2, but these do.
-        km.mapKey(0x7c, CTRL_MASK | SHIFT_MASK, "xmlInsertTag");
-        km.mapKey(0x7e, CTRL_MASK | SHIFT_MASK, "xmlInsertEmptyElementTag");
-
         km.mapKey(KeyEvent.VK_P, CTRL_MASK, "xmlParseBuffer");
+        km.mapKey(KeyEvent.VK_P, CTRL_MASK | SHIFT_MASK, "xmlValidateBuffer");
         km.mapKey(KeyEvent.VK_EQUALS, CTRL_MASK, "xmlFindCurrentNode");
 
         // build.xml
         km.mapKey(KeyEvent.VK_F9, 0, "compile");
         km.mapKey(KeyEvent.VK_F9, CTRL_MASK, "recompile");
+    }
+
+    public String getMenuName()
+    {
+        return MENU_NAME;
+    }
+
+    public MenuBar createMenuBar(Frame frame)
+    {
+        MenuBar menuBar = new MenuBar(MENU_NAME);
+        menuBar.add(new Menu("File", 'F'));
+        menuBar.add(new Menu("Edit", 'E'));
+        menuBar.add(new Menu("View", 'V'));
+        menuBar.add(new Menu("Search", 'S'));
+        menuBar.add(new Menu("Go", 'G'));
+        menuBar.add(new Menu("XML", 'X'));
+        menuBar.add(new Menu("Help", 'H'));
+        return menuBar;
+    }
+
+    public void populateMenu(Editor editor, Menu menu)
+    {
+        final String text = menu.getText();
+        if (menu.getText().equals("XML")) {
+            menu.add(editor, "Insert Element", 'I', "xmlInsertTag");
+            menu.add(editor, "End Current Element", 'E', "xmlInsertMatchingEndTag");
+            menu.addSeparator();
+            menu.add(editor, "Parse Buffer", 'P', "xmlParseBuffer");
+            menu.add(editor, "Validate Buffer", 'V', "xmlValidateBuffer");
+        }
+        else
+            super.populateMenu(editor, menu);
     }
 
     public void loadFile(Buffer buffer, File file)
