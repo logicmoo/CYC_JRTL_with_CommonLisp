@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.43 2003-11-03 16:07:54 piso Exp $
+ * $Id: Interpreter.java,v 1.44 2003-11-14 17:49:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,6 +96,9 @@ public final class Interpreter extends Lisp
                     Class.forName("org.armedbear.j.LispAPI");
                     Load._load("j.lisp");
                 }
+            }
+            catch (ConditionThrowable c) {
+                reportError(c, LispThread.currentThread());
             }
             catch (Throwable t) {
                 t.printStackTrace();
@@ -241,14 +244,7 @@ public final class Interpreter extends Lisp
                     out.writeLine("Stack overflow");
                 }
                 catch (ConditionThrowable c) {
-                    getStandardInput().clearInput();
-                    getStandardOutput().freshLine();
-                    String message = c.getCondition().getMessage();
-                    if (message != null)
-                        out.writeLine("Error: " + message + ".");
-                    else
-                        out.writeLine("Error: unhandled condition: " + c.getCondition());
-                    thread.backtrace();
+                    reportError(c, thread);
                 }
                 catch (Throwable t) {
                     getStandardInput().clearInput();
@@ -259,6 +255,24 @@ public final class Interpreter extends Lisp
         }
         catch (Throwable t) {
             t.printStackTrace();
+        }
+    }
+
+    private static void reportError(ConditionThrowable c, LispThread thread)
+    {
+        try {
+            getStandardInput().clearInput();
+            CharacterOutputStream out = getStandardOutput();
+            out.freshLine();
+            String message = c.getCondition().getMessage();
+            if (message != null)
+                out.writeLine("Error: " + message + ".");
+            else
+                out.writeLine("Error: unhandled condition: " + c.getCondition());
+            thread.backtrace();
+        }
+        catch (Throwable t) {
+            ;
         }
     }
 
