@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Ratio.java,v 1.40 2004-01-15 02:15:46 piso Exp $
+ * $Id: Ratio.java,v 1.41 2004-05-27 17:00:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -440,22 +440,15 @@ public final class Ratio extends LispObject
         return numerator.hashCode() ^ denominator.hashCode();
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        int base;
-        try {
-            base = Fixnum.getValue(_PRINT_BASE_.symbolValueNoThrow(thread));
-        }
-        catch (Throwable t) {
-            Debug.trace(t);
-            base = 10;
-        }
+        int base = Fixnum.getValue(_PRINT_BASE_.symbolValue(thread));
         StringBuffer sb = new StringBuffer(numerator.toString(base));
         sb.append('/');
         sb.append(denominator.toString(base));
         String s = sb.toString().toUpperCase();
-        if (_PRINT_RADIX_.symbolValueNoThrow(thread) != NIL) {
+        if (_PRINT_RADIX_.symbolValue(thread) != NIL) {
             sb.setLength(0);
             switch (base) {
                 case 2:
