@@ -94,6 +94,7 @@ characterp
 check-type
 class-name
 class-of
+clear-input
 clear-output
 close
 code-char
