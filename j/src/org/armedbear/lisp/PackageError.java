@@ -1,8 +1,8 @@
 /*
  * PackageError.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: PackageError.java,v 1.10 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: PackageError.java,v 1.11 2004-03-05 15:24:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,15 +70,18 @@ public class PackageError extends LispError
         return super.typep(type);
     }
 
+    // ### package-error-package
     private static final Primitive1 PACKAGE_ERROR_PACKAGE =
         new Primitive1("package-error-package", "condition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof PackageError)
+            try {
                 return ((PackageError)arg).pkg;
-            else
+            }
+            catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.PACKAGE_ERROR));
+            }
         }
     };
 }
