@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Display.java,v 1.2 2002-10-12 00:06:39 piso Exp $
+ * $Id: Display.java,v 1.3 2002-10-12 00:39:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1296,13 +1296,8 @@ public final class Display extends JComponent implements Constants
                 if (isLineBlock)
                     return;
             }
-            else {
-                if (editor.getLastCommand() != COMMAND_DOWN) {
-                    Log.debug("down calling addUndo(MOVE)");
-                    editor.addUndo(SimpleEdit.MOVE);
-                } else
-                    Log.debug("down lastCommand was DOWN");
-            }
+            else if (editor.getLastCommand() != COMMAND_DOWN)
+                editor.addUndo(SimpleEdit.MOVE);
         }
         final Line dotLine = editor.getDotLine();
         final Line nextLine = dotLine.nextVisible();
