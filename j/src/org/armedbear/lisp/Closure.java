@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.12 2003-03-10 19:33:57 piso Exp $
+ * $Id: Closure.java,v 1.13 2003-03-12 21:12:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@ public class Closure extends Function
                     } else if (obj == Symbol.AND_OPTIONAL) {
                         optional = true;
                         arity = -1;
-                    } else if (obj == Symbol.AND_REST) {
+                    } else if (obj == Symbol.AND_REST || obj == Symbol.AND_BODY) {
                         rest = true;
                         optional = false;
                         key = false;
@@ -97,7 +97,7 @@ public class Closure extends Function
                         remaining = remaining.cdr();
                         if (remaining == NIL)
                             throw new LispError(
-                                "&REST must be followed by a variable");
+                                "&REST/&BODY must be followed by a variable");
                         obj = remaining.car();
                         arrayList.add(new Parameter((Symbol)obj, NIL, REST));
                     } else if (obj == Symbol.AND_KEY) {
