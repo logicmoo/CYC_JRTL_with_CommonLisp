@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.13 2004-05-27 17:10:36 piso Exp $
+ * $Id: ComplexVector.java,v 1.14 2004-09-27 18:55:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -228,14 +228,29 @@ public final class ComplexVector extends AbstractVector
 
     public LispObject nreverse() throws ConditionThrowable
     {
-        int i = 0;
-        int j = length() - 1;
-        while (i < j) {
-            LispObject temp = elements[i];
-            elements[i] = elements[j];
-            elements[j] = temp;
-            ++i;
-            --j;
+        if (elements != null) {
+            int i = 0;
+            int j = length() - 1;
+            while (i < j) {
+                LispObject temp = elements[i];
+                elements[i] = elements[j];
+                elements[j] = temp;
+                ++i;
+                --j;
+            }
+        } else {
+            // Displaced array.
+            int length = length();
+            LispObject[] data = new LispObject[length];
+            int i, j;
+            for (i = 0, j = length - 1; i < length; i++, j--)
+                data[i] = getRowMajor(j);
+            elements = data;
+            capacity = length;
+            array = null;
+            displacement = 0;
+            isDisplaced = false;
+            fillPointer = -1;
         }
         return this;
     }
