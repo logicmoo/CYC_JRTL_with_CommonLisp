@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2005 Peter Graves
-# $Id: Makefile.in,v 1.201 2005-03-22 20:00:25 piso Exp $
+# $Id: Makefile.in,v 1.202 2005-03-23 18:19:25 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ CLASSFILES =	AbstractArray.class \
 		Autoload.class \
 		AutoloadMacro.class \
 		BasicVector_UnsignedByte8.class \
+		BasicVector_UnsignedByte32.class \
 		Bignum.class \
 		Binding.class \
 		BroadcastStream.class \
@@ -52,10 +53,12 @@ CLASSFILES =	AbstractArray.class \
 		Complex.class \
 		ComplexArray.class \
 		ComplexArray_UnsignedByte8.class \
+		ComplexArray_UnsignedByte32.class \
 		ComplexBitVector.class \
 		ComplexString.class \
 		ComplexVector.class \
 		ComplexVector_UnsignedByte8.class \
+		ComplexVector_UnsignedByte32.class \
 		ConcatenatedStream.class \
 		Condition.class \
 		ConditionThrowable.class \
@@ -141,6 +144,7 @@ CLASSFILES =	AbstractArray.class \
 		ShellCommand.class \
 		SimpleArray_T.class \
 		SimpleArray_UnsignedByte8.class \
+		SimpleArray_UnsignedByte32.class \
 		SimpleBitVector.class \
 		SimpleCondition.class \
 		SimpleError.class \
