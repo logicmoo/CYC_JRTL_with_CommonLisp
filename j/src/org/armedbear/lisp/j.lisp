@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: j.lisp,v 1.38 2004-09-16 17:20:05 piso Exp $
+;;; $Id: j.lisp,v 1.39 2004-09-23 14:35:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -236,11 +236,9 @@
         (goto-char ,old-point)))))
 
 (defun search-forward (pattern &key buffer start ignore-case whole-words-only)
-;;   (%search-forward pattern buffer start ignore-case whole-words-only))
   (%search pattern :forward nil buffer start ignore-case whole-words-only))
 
 (defun search-backward (pattern &key buffer start ignore-case whole-words-only)
-;;   (%search-backward pattern buffer start ignore-case whole-words-only))
   (%search pattern :backward nil buffer start ignore-case whole-words-only))
 
 (defun re-search-forward (pattern &key buffer start ignore-case whole-words-only)
