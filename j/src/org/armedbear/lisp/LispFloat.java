@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.71 2004-06-21 14:20:35 piso Exp $
+ * $Id: LispFloat.java,v 1.72 2004-06-21 16:40:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -369,11 +369,11 @@ public final class LispFloat extends LispObject
     {
         final LispThread thread = LispThread.currentThread();
         if (obj instanceof Fixnum) {
-            long divisor = ((Fixnum)obj).value;
-            double quotient = value / divisor;
-            double remainder = value % divisor;
-            return thread.setValues(number((long)quotient),
-                                    new LispFloat(remainder));
+            LispObject rational = rational();
+            LispObject quotient = rational.truncate(obj);
+            LispObject remainder = thread._values[1];
+            thread._values[1] = coerceToFloat(remainder);
+            return quotient;
         }
         if (obj instanceof LispFloat) {
             double divisor = ((LispFloat)obj).value;
