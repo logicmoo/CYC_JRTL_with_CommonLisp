@@ -1,8 +1,8 @@
 /*
  * Shell.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Shell.java,v 1.28 2003-09-16 00:44:00 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Shell.java,v 1.29 2004-04-13 15:11:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -518,9 +518,10 @@ public class Shell extends CommandInterpreter implements Constants
     protected void updateLineFlags()
     {
         Debug.assertTrue(SwingUtilities.isEventDispatchThread());
-        if (posEndOfOutput == null)
+        Position endOfOutput = getEndOfOutput();
+        if (endOfOutput == null)
             return;
-        final Line last = posEndOfOutput.getLine();
+        final Line last = endOfOutput.getLine();
         if (isPasswordPrompt(last)) {
             last.setFlags(STATE_PASSWORD_PROMPT);
             return;
@@ -552,15 +553,16 @@ public class Shell extends CommandInterpreter implements Constants
 
     protected void checkPasswordPrompt()
     {
-        if (posEndOfOutput != null && isPasswordPrompt(posEndOfOutput.getLine())) {
+        Position endOfOutput = getEndOfOutput();
+        if (endOfOutput != null && isPasswordPrompt(endOfOutput.getLine())) {
             String password =
                 PasswordDialog.showPasswordDialog(Editor.currentEditor(),
-                    "Password:", "Password");
+                                                  "Password:", "Password");
             if (password != null) {
                 try {
                     stdin.write(password + "\n");
                     stdin.flush();
-                    posEndOfOutput = new Position(getEnd());
+                    setEndOfOutput(new Position(getEnd()));
                 }
                 catch (IOException e) {
                     Log.error(e);

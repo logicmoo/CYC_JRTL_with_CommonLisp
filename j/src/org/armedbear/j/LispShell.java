@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.54 2004-04-13 00:58:51 piso Exp $
+ * $Id: LispShell.java,v 1.55 2004-04-13 15:13:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,34 +127,6 @@ public class LispShell extends Shell
         history = new History("lisp.history", 30);
     }
 
-    private final Position findEndOfOutput()
-    {
-        if (posEndOfOutput == null)
-            return null;
-        // The original end-of-output line may no longer be in the buffer,
-        // since undo doesn't update posEndOfOutput.
-        if (contains(posEndOfOutput.getLine()))
-            return posEndOfOutput;
-        RE promptRE = getPromptRE();
-        if (promptRE != null) {
-            Position eob = getEnd();
-            if (eob == null)
-                return null;
-            Line line = eob.getLine();
-            while (line != null) {
-                int flags = line.flags();
-                if (flags == STATE_PROMPT || flags == STATE_INPUT) {
-                    final REMatch match = promptRE.getMatch(line.getText());
-                    if (match != null && match.getStartIndex() == 0) {
-                        return new Position(line, match.getEndIndex());
-                    }
-                }
-                line = line.previous();
-            }
-        }
-        return null;
-    }
-
     public void enter()
     {
         if (!checkProcess())
@@ -166,7 +138,7 @@ public class LispShell extends Shell
         if (needsRenumbering)
             renumber();
         final Line dotLine = dot.getLine();
-        final Position endOfOutput = findEndOfOutput();
+        final Position endOfOutput = getEndOfOutput();
         if (endOfOutput == null) {
             // Ignore input before first prompt is displayed.
             dotLine.setText("");
@@ -311,6 +283,8 @@ public class LispShell extends Shell
         send(input);
     }
 
+    // This overrides Shell.updateLineFlags(), which does stuff we don't need
+    // to do in a Lisp shell.
     protected void updateLineFlags()
     {
         // Nothing to do.

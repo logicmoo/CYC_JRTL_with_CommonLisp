@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandInterpreter.java,v 1.23 2004-04-13 00:58:10 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.24 2004-04-13 15:12:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,10 +39,11 @@ public class CommandInterpreter extends Buffer
     protected ReaderThread stdoutThread;
     protected ReaderThread stderrThread;
     protected History history;
-    protected Position posEndOfOutput;
     protected String input;
     protected boolean stripEcho;
     protected String shellCommand;
+
+    private Position posEndOfOutput;
 
     protected CommandInterpreter()
     {
@@ -86,18 +87,37 @@ public class CommandInterpreter extends Buffer
         }
     }
 
-    public final synchronized Position getEndOfOutput()
+    protected final synchronized Position getEndOfOutput()
     {
-        if (posEndOfOutput != null) {
-            if (posEndOfOutput.getOffset() > posEndOfOutput.getLineLength()) {
-                Log.debug("posEndOfOutput adjusting offset");
+        if (posEndOfOutput == null)
+            return null;
+        if (contains(posEndOfOutput.getLine())) {
+            if (posEndOfOutput.getOffset() > posEndOfOutput.getLineLength())
                 posEndOfOutput.setOffset(posEndOfOutput.getLineLength());
+            return posEndOfOutput;
+        }
+        // The original end-of-output line has been removed from the buffer.
+        RE promptRE = getPromptRE();
+        if (promptRE != null) {
+            Position eob = getEnd();
+            if (eob == null)
+                return null;
+            Line line = eob.getLine();
+            while (line != null) {
+                int flags = line.flags();
+                if (flags == STATE_PROMPT || flags == STATE_INPUT) {
+                    final REMatch match = promptRE.getMatch(line.getText());
+                    if (match != null && match.getStartIndex() == 0) {
+                        return new Position(line, match.getEndIndex());
+                    }
+                }
+                line = line.previous();
             }
         }
-        return posEndOfOutput;
+        return null;
     }
 
-    public final synchronized void setEndOfOutput(Position pos)
+    protected final synchronized void setEndOfOutput(Position pos)
     {
         posEndOfOutput = pos;
     }
@@ -138,14 +158,15 @@ public class CommandInterpreter extends Buffer
             return;
         final Editor editor = Editor.currentEditor();
         final Line dotLine = editor.getDotLine();
-        if (getEndOfOutput() == null) {
+        Position endOfOutput = getEndOfOutput();
+        if (endOfOutput == null) {
             // Ignore input before first prompt is displayed.
             dotLine.setText("");
             return;
         }
-        if (posEndOfOutput.getLine() == dotLine) {
-            if (posEndOfOutput.getOffset() < dotLine.length())
-                input = dotLine.getText().substring(posEndOfOutput.getOffset());
+        if (endOfOutput.getLine() == dotLine) {
+            if (endOfOutput.getOffset() < dotLine.length())
+                input = dotLine.getText().substring(endOfOutput.getOffset());
             else
                 input = "";
         } else {
@@ -222,8 +243,10 @@ public class CommandInterpreter extends Buffer
     protected void escape()
     {
         Editor editor = Editor.currentEditor();
-        if (editor.getMark() != null || getEndOfOutput() == null ||
-            editor.getDot().isBefore(posEndOfOutput)) {
+        Position endOfOutput = getEndOfOutput();
+        if (editor.getMark() != null || endOfOutput == null ||
+            editor.getDot().isBefore(endOfOutput))
+        {
             // There's a marked block, or we're not at the command line.
             editor.escape();
             return;
@@ -237,13 +260,12 @@ public class CommandInterpreter extends Buffer
         }
         CompoundEdit compoundEdit = beginCompoundEdit();
         editor.addUndo(SimpleEdit.MOVE);
-        editor.moveDotTo(posEndOfOutput);
+        editor.moveDotTo(endOfOutput);
         editor.moveCaretToDotCol();
         editor.setMark(getEnd());
         editor.deleteRegion();
         endCompoundEdit(compoundEdit);
         // BUG! Undo/redo delete region doesn't preserve markers correctly!
-        // (posEndOfOutput!)
         resetUndo();
     }
 
@@ -272,12 +294,13 @@ public class CommandInterpreter extends Buffer
 
     protected void backspace()
     {
-        if (getEndOfOutput() == null)
+        Position endOfOutput = getEndOfOutput();
+        if (endOfOutput == null)
             return;
         boolean ok = true;
         final Editor editor = Editor.currentEditor();
-        if (editor.getDotLine() == posEndOfOutput.getLine()) {
-            if (editor.getDotOffset() <= posEndOfOutput.getOffset())
+        if (editor.getDotLine() == endOfOutput.getLine()) {
+            if (editor.getDotOffset() <= endOfOutput.getOffset())
                 ok = false;
         } else{
             String text = editor.getDotLine().getText();
@@ -346,7 +369,6 @@ public class CommandInterpreter extends Buffer
             editor.moveCaretToDotCol();
             endCompoundEdit(compoundEdit);
             // BUG! Undo/redo delete region doesn't preserve markers correctly!
-            // (posEndOfOutput!)
             resetUndo();
         }
         for (Line line = getEndOfOutput().getLine(); line != null; line = line.next())
