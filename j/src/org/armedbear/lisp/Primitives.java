@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.541 2003-12-27 04:57:00 piso Exp $
+ * $Id: Primitives.java,v 1.542 2003-12-27 05:18:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1218,6 +1218,8 @@ public final class Primitives extends Lisp
                     condition = new ControlError(initArgs);
                 else if (datum == Symbol.TYPE_ERROR)
                     condition = new TypeError(initArgs);
+                else if (datum == Symbol.UNDEFINED_FUNCTION)
+                    condition = new UndefinedFunction(initArgs);
                 else
                     // Default.
                     condition = new  SimpleError(initArgs);
