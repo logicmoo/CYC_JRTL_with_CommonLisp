@@ -1,8 +1,8 @@
 /*
  * MessageDialog.java
  *
- * Copyright (C) 1999-2003 Peter Graves
- * $Id: MessageDialog.java,v 1.3 2003-07-23 16:11:47 piso Exp $
+ * Copyright (C) 1999-2005 Peter Graves
+ * $Id: MessageDialog.java,v 1.4 2005-03-06 16:28:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,15 +81,19 @@ public class MessageDialog extends AbstractDialog
 
     public void keyPressed(KeyEvent e)
     {
+        if (editor.checkKeyboardQuit(e)) {
+            escape();
+            return;
+        }
         if (e.getModifiers() == 0) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ENTER:
                 case KeyEvent.VK_SPACE:
                     enter();
-                    break;
+                    return;
                 case KeyEvent.VK_ESCAPE:
                     escape();
-                    break;
+                    return;
             }
         }
     }
