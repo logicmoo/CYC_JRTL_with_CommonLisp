@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.61 2003-03-01 02:55:49 piso Exp $
+ * $Id: Primitives.java,v 1.62 2003-03-01 03:05:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,25 +96,26 @@ public final class Primitives extends Module
     private static final int RPLACD                     = 65;
     private static final int SECOND                     = 66;
     private static final int SET                        = 67;
-    private static final int SIMPLE_VECTOR_P            = 68;
-    private static final int SPECIAL_OPERATOR_P         = 69;
-    private static final int STRINGP                    = 70;
-    private static final int STRING_EQUAL               = 71;
-    private static final int STRING_EQUAL_IGNORE_CASE   = 72;
-    private static final int SUBSEQ                     = 73;
-    private static final int SUBTRACT                   = 74;
-    private static final int SUCCESSOR                  = 75;
-    private static final int SYMBOLP                    = 76;
-    private static final int SYMBOL_FUNCTION            = 77;
-    private static final int SYMBOL_NAME                = 78;
-    private static final int SYMBOL_PACKAGE             = 79;
-    private static final int SYMBOL_PLIST               = 80;
-    private static final int SYMBOL_VALUE               = 81;
-    private static final int THIRD                      = 82;
-    private static final int VALUES                     = 83;
-    private static final int VALUES_LIST                = 84;
-    private static final int VECTORP                    = 85;
-    private static final int ZEROP                      = 86;
+    private static final int SIMPLE_BIT_VECTOR_P        = 68;
+    private static final int SIMPLE_VECTOR_P            = 69;
+    private static final int SPECIAL_OPERATOR_P         = 70;
+    private static final int STRINGP                    = 71;
+    private static final int STRING_EQUAL               = 72;
+    private static final int STRING_EQUAL_IGNORE_CASE   = 73;
+    private static final int SUBSEQ                     = 74;
+    private static final int SUBTRACT                   = 75;
+    private static final int SUCCESSOR                  = 76;
+    private static final int SYMBOLP                    = 77;
+    private static final int SYMBOL_FUNCTION            = 78;
+    private static final int SYMBOL_NAME                = 79;
+    private static final int SYMBOL_PACKAGE             = 80;
+    private static final int SYMBOL_PLIST               = 81;
+    private static final int SYMBOL_VALUE               = 82;
+    private static final int THIRD                      = 83;
+    private static final int VALUES                     = 84;
+    private static final int VALUES_LIST                = 85;
+    private static final int VECTORP                    = 86;
+    private static final int ZEROP                      = 87;
 
     private Primitives()
     {
@@ -179,6 +180,7 @@ public final class Primitives extends Module
         definePrimitive1("oddp", ODDP);
         definePrimitive1("rest", REST);
         definePrimitive1("second", SECOND);
+        definePrimitive1("simple-bit-vector-p", SIMPLE_BIT_VECTOR_P);
         definePrimitive1("simple-vector-p", SIMPLE_VECTOR_P);
         definePrimitive1("special-operator-p", SPECIAL_OPERATOR_P);
         definePrimitive1("stringp", STRINGP);
@@ -473,6 +475,8 @@ public final class Primitives extends Module
                 return arg.typep(Symbol.SIMPLE_VECTOR);
             case BIT_VECTOR_P:                  // ### bit-vector-p
                 return arg instanceof BitVector ? T : NIL;
+            case SIMPLE_BIT_VECTOR_P:           // ### simple-bit-vector-p
+                return arg.typep(Symbol.SIMPLE_BIT_VECTOR);
             case STRINGP:                       // ### stringp
                 return arg instanceof LispString ? T : NIL;
             case ZEROP:                         // ### zerop
