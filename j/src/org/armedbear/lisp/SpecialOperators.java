@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.12 2003-10-30 18:38:00 piso Exp $
+ * $Id: SpecialOperators.java,v 1.13 2003-10-31 18:30:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,11 +288,57 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### progv
-    private static final SpecialOperator PROGV = new SpecialOperator("progv") {
+    private static final SpecialOperator PROGV = new SpecialOperator("progv")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
-            throw new ConditionThrowable(new LispError("PROGV is not implemented"));
+            if (args.length() < 2)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            final LispThread thread = LispThread.currentThread();
+            final LispObject symbols = checkList(eval(args.car(), env, thread));
+            LispObject values = checkList(eval(args.cadr(), env, thread));
+            // Save current values of symbols.
+            final LispObject[] oldValues = new LispObject[symbols.length()];
+            int i = 0;
+            for (LispObject list = symbols; list != NIL; list = list.cdr()) {
+                LispObject symbol = list.car();
+                oldValues[i++] = symbol.getSymbolValue();
+            }
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            try {
+                // Set up the new bindings.
+                for (LispObject list = symbols; list != NIL; list = list.cdr()) {
+                    Symbol symbol = checkSymbol(list.car());
+                    LispObject value;
+                    if (values != NIL) {
+                        value = values.car();
+                        values = values.cdr();
+                    } else
+                        value = null;
+                    if (symbol.isSpecialVariable())
+                        thread.bindSpecial(symbol, value);
+                    else
+                        symbol.setSymbolValue(value);
+                }
+                // Implicit PROGN.
+                LispObject result = NIL;
+                LispObject body = args.cdr().cdr();
+                while (body != NIL) {
+                    result = eval(body.car(), env, thread);
+                    body = body.cdr();
+                }
+                return result;
+            }
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+                // Undo bindings.
+                i = 0;
+                for (LispObject list = symbols; list != NIL; list = list.cdr()) {
+                    Symbol symbol = (Symbol) list.car();
+                    symbol.setSymbolValue(oldValues[i]);
+                }
+            }
         }
     };
 
