@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.11 2003-07-12 22:42:59 piso Exp $
+;;; $Id: defstruct.lisp,v 1.12 2003-07-12 23:09:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,21 +28,22 @@
 (defvar *ds-print-function*)
 
 (defun define-constructor (slots)
-  (let ((constructor (intern (concatenate 'string "MAKE-" (symbol-name *ds-name*))))
-        (keys (cons '&key slots)))
+  (let* ((constructor (intern (concatenate 'string "MAKE-" (symbol-name *ds-name*))))
+         (slot-names (mapcar #'(lambda (x) (if (atom x) x (car x))) slots))
+         (keys (cons '&key slot-names)))
     `((defun ,constructor ,keys
-        (%make-structure ',*ds-name* (list ,@slots))))))
+        (%make-structure ',*ds-name* (list ,@slot-names))))))
 
 (defun define-predicate ()
   (let ((pred (intern (concatenate 'string (symbol-name *ds-name*) "-P"))))
     `((defun ,pred (object)
         (typep object ',*ds-name*)))))
 
-(defun define-access-function (slot index)
+(defun define-access-function (slot-name index)
   (let ((accessor
          (if *ds-conc-name*
-             (intern (concatenate 'string (symbol-name *ds-conc-name*) (symbol-name slot)))
-             slot))
+             (intern (concatenate 'string (symbol-name *ds-conc-name*) (symbol-name slot-name)))
+             slot-name))
         (setf-expander (gensym)))
     `((defun ,accessor (instance)
         (%structure-ref instance ,index))
@@ -54,7 +55,8 @@
   (let ((index 0)
         (result ()))
     (dolist (slot slots)
-      (setq result (append result (define-access-function slot index)))
+      (let ((slot-name (if (atom slot) slot (car slot))))
+        (setq result (append result (define-access-function slot-name index))))
       (incf index))
     result))
 
