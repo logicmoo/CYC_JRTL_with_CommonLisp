@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshSession.java,v 1.8 2003-01-07 18:05:03 piso Exp $
+ * $Id: SshSession.java,v 1.9 2003-02-11 17:37:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -272,7 +272,7 @@ public final class SshSession implements Constants
         try {
             Log.warn("isDirectory() retrying after exception ...");
             // Send an empty command to flush the channel.
-            String response = command("");
+            command("");
             return changeDirectory(canonicalPath);
         }
         catch (Exception e) {
@@ -290,7 +290,7 @@ public final class SshSession implements Constants
         String cmd = sb.toString();
         String response = command(cmd);
         Log.debug(cmd + " " + response);
-        if (response.startsWith(canonicalPath))
+        if (response != null && response.startsWith(canonicalPath))
             return response.substring(canonicalPath.length()).trim();
         return null;
     }
@@ -330,11 +330,15 @@ public final class SshSession implements Constants
         Log.debug("changeDirectory cmd = |" + cmd + "|");
         String response = command(cmd);
         Log.debug("changeDirectory response = |" + response + "|");
+        if (response == null)
+            throw new Exception(); // Lost connection.
         if (response.indexOf("Command not found") >= 0) {
             if (cd.equals("\\cd")) {
                 // tcsh doesn't like "\cd". Try again with "cd".
                 cd = "cd";
                 response = command(cd + " \"" + canonicalPath + '"');
+                if (response == null)
+                    throw new Exception(); // Lost connection.
             } else
                 return false;
         }
@@ -378,7 +382,7 @@ public final class SshSession implements Constants
     {
         if (connect()) {
             String response = lsld(canonicalPath);
-            if (response.length() > 0) {
+            if (response != null && response.length() > 0) {
                 char c = response.charAt(0);
                 if (c == 'd' || c == '-')
                     return true;
@@ -439,7 +443,7 @@ public final class SshSession implements Constants
             sb.append(file.canonicalPath());
             final String response = command(sb.toString());
             // Look for error message in response.
-            if (response.indexOf("chmod:") < 0) {
+            if (response != null && response.indexOf("chmod:") < 0) {
                 // Success! Remove old entry (if any) from directory cache.
                 DirectoryCache.getDirectoryCache().purge(file);
                 return true;
@@ -455,10 +459,8 @@ public final class SshSession implements Constants
 
     public synchronized boolean connect()
     {
-        if (connected) {
-            Log.debug("SshSession.connect already connected");
+        if (connected)
             return true;
-        }
         FastStringBuffer sb = new FastStringBuffer("jpty ssh ");
         if (userName != null && userName.length() != 0) {
             sb.append("-l ");
@@ -479,7 +481,7 @@ public final class SshSession implements Constants
             return false;
         }
         try {
-            stdin  = new OutputStreamWriter(process.getOutputStream());
+            stdin = new OutputStreamWriter(process.getOutputStream());
             int timeout =
                 Editor.preferences().getIntegerProperty(Property.SSH_TIMEOUT);
             Log.debug("ssh timeout is " + timeout + " ms");
@@ -494,10 +496,22 @@ public final class SshSession implements Constants
             Log.error(t);
             return false;
         }
-        return authenticate();
+        if (!authenticate()) {
+            killProcess();
+            String message = output.toString().trim();
+            if (message.length() == 0)
+                message = "Authentication failed";
+            MessageDialog.showMessageDialog(message, "Error");
+            return false;
+        }
+        if (!connected) {
+            killProcess();
+            MessageDialog.showMessageDialog("Lost connection", "Error");
+        }
+        return connected;
     }
 
-    private void connected()
+    private void initializeConnection()
     {
         boolean oldEcho = echo;
         echo = true;
@@ -509,16 +523,18 @@ public final class SshSession implements Constants
         response = command(sb.toString());
         Log.debug("response = |" + response + "|");
         Log.debug("PROMPT   = |" + PROMPT + "|");
-        response = command("unset MAILCHECK");
+        command("unset MAILCHECK");
         loginDirectory = getCurrentDirectory();
-        connected = true;
+        connected = (loginDirectory != null);
         echo = oldEcho;
     }
 
     private boolean authenticate()
     {
+        output.setLength(0);
         int response;
         while ((response = checkInitialResponse()) == TRY_AGAIN) {
+            Log.debug("authenticate() TRY_AGAIN");
             try {
                 final long TIMEOUT = 30000; // 30 seconds
                 long start = System.currentTimeMillis();
@@ -532,9 +548,8 @@ public final class SshSession implements Constants
             }
         }
         if (response == AUTHENTICATED) {
-            Log.debug("pre-authenticated");
-            connected();
-            return true;
+            initializeConnection();
+            return connected;
         }
         if (response == PASSWORD)
             return authenticateWithPassword();
@@ -559,16 +574,7 @@ public final class SshSession implements Constants
                     }
                 }
                 if (password == null) {
-                    try {
-                        Log.debug("calling process.destroy()");
-                        process.destroy();
-                        Log.debug("calling process.waitFor()");
-                        process.waitFor();
-                    }
-                    catch (InterruptedException e) {
-                        Log.error(e);
-                    }
-                    connected = false;
+                    killProcess();
                     return false;
                 }
             }
@@ -590,16 +596,7 @@ public final class SshSession implements Constants
                 }
             }
             if (passphrase == null) {
-                try {
-                    Log.debug("calling process.destroy()");
-                    process.destroy();
-                    Log.debug("calling process.waitFor()");
-                    process.waitFor();
-                }
-                catch (InterruptedException e) {
-                    Log.error(e);
-                }
-                connected = false;
+                killProcess();
                 return false;
             }
         }
@@ -614,9 +611,9 @@ public final class SshSession implements Constants
         sendPass(pass);
         if (checkAuthenticationResponse()) {
             Log.debug("authenticate SUCCEEDED!");
-            connected();
+            initializeConnection();
             echo = oldEcho;
-            return true;
+            return connected;
         } else {
             Log.debug("authenticate FAILED!");
             echo = oldEcho;
@@ -640,6 +637,8 @@ public final class SshSession implements Constants
         }
         Log.debug("check = |" + check + "|");
         String lower = check.toLowerCase();
+        if (lower.indexOf("connection refused") >= 0)
+            return NO;
         if (lower.endsWith("password:")) {
             passwordTitle = "Password";
             passwordPrompt = check;
@@ -748,6 +747,8 @@ public final class SshSession implements Constants
     private String getCurrentDirectory()
     {
         final String s = command("pwd");
+        if (s == null)
+            return null; // Lost connection.
         int index = s.indexOf("\r\n");
         if (index < 0)
             index = s.indexOf('\n');
@@ -756,19 +757,54 @@ public final class SshSession implements Constants
         return dir;
     }
 
-    private synchronized void disconnect()
+    private void disconnect()
     {
         if (connected) {
             try {
                 stdin.write("exit\n");
-                process.destroy();
-                process.waitFor();
             }
             catch (Exception e) {
                 Log.error(e);
             }
-            connected = false;
+            killProcess();
         }
+    }
+
+    private void killProcess()
+    {
+        Process p = process; // Avoid races.
+        if (p != null) {
+            try {
+                Log.debug("calling Process.destroy()");
+                p.destroy();
+                Log.debug("calling Process.waitFor()");
+                p.waitFor();
+            }
+            catch (InterruptedException e) {
+                Log.error(e);
+            }
+            process = null;
+            synchronized (this) {
+                if (stdin != null) {
+                    try {
+                        stdin.close();
+                    }
+                    catch (IOException e) {
+                        Log.error(e);
+                    }
+                    stdin = null;
+                }
+                if (stdoutThread != null) {
+                    stdoutThread.cancel();
+                    stdoutThread = null;
+                }
+                if (stderrThread != null) {
+                    stderrThread.cancel();
+                    stderrThread = null;
+                }
+            }
+        }
+        connected = false;
     }
 
     public synchronized final void dispose()
@@ -781,7 +817,8 @@ public final class SshSession implements Constants
 
     private synchronized String command(String cmd)
     {
-        write(cmd.concat("\n"));
+        if (!write(cmd.concat("\n")))
+            return null;
         output.setLength(0);
         while (output.length() == 0) {
             try {
@@ -820,7 +857,8 @@ public final class SshSession implements Constants
     private synchronized String lsla()
     {
         boolean valid = false;
-        write("\\ls -la\n");
+        if (!write("\\ls -la\n"))
+            return null;
         output.setLength(0);
         String s = null;
         for (int i = 0; i < 2; i++) {
@@ -878,7 +916,8 @@ public final class SshSession implements Constants
         sb.append(path);
         sb.append('"');
         sb.append('\n');
-        write(sb.toString());
+        if (!write(sb.toString()))
+            return null;
         output.setLength(0);
         while (output.length() == 0){
             try {
@@ -941,7 +980,7 @@ public final class SshSession implements Constants
         }
     }
 
-    private void write(String s)
+    private boolean write(String s)
     {
         try {
             if (echo || Editor.preferences().getBooleanProperty(Property.SSH_ECHO))
@@ -950,9 +989,12 @@ public final class SshSession implements Constants
                 writeToOutputBuffer("==> " + s);
             stdin.write(s);
             stdin.flush();
+            return true;
         }
         catch (IOException e) {
             Log.error(e);
+            killProcess();
+            return false;
         }
     }
 
