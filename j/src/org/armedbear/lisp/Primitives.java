@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.487 2003-10-27 19:19:15 piso Exp $
+ * $Id: Primitives.java,v 1.488 2003-10-28 02:41:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3206,67 +3206,6 @@ public final class Primitives extends Module
                 body = body.cdr();
             }
             thread.setDynamicEnvironment(oldDynEnv);
-            return result;
-        }
-    };
-
-    // ### multiple-value-setq
-    // multiple-value-setq vars form => result
-    // Result is the primary value returned by the form.
-    // Should be a macro.
-    private static final SpecialOperator MULTIPLE_VALUE_SETQ =
-        new SpecialOperator("multiple-value-setq")
-    {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            if (args.length() != 2)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            LispObject vars = args.car();
-            LispObject form = args.cadr();
-            final LispThread thread = LispThread.currentThread();
-            LispObject result = eval(form, env, thread);
-            LispObject[] values = thread.getValues();
-            if (values == null) {
-                // eval() did not return multiple values.
-                values = new LispObject[1];
-                values[0] = result;
-            }
-            final Environment dynEnv = thread.getDynamicEnvironment();
-            final int limit = values.length;
-            int i = 0;
-            while (vars != NIL) {
-                Symbol symbol = checkSymbol(vars.car());
-                LispObject value = i < limit ? values[i] : NIL;
-                ++i;
-                Binding binding = null;
-                if (symbol.isSpecialVariable()) {
-                    if (dynEnv != null)
-                        binding = dynEnv.getBinding(symbol);
-                } else {
-                    // Not special.
-                    binding = env.getBinding(symbol);
-                }
-                if (binding != null) {
-                    if (binding.value instanceof SymbolMacro) {
-                        LispObject expansion =
-                            ((SymbolMacro)binding.value).getExpansion();
-                        LispObject obj = list3(Symbol.SETF, expansion, value);
-                        eval(obj, env, thread);
-                    } else
-                        binding.value = value;
-                } else {
-                    if (symbol.getSymbolValue() instanceof SymbolMacro) {
-                        LispObject expansion =
-                            ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
-                        LispObject obj = list3(Symbol.SETF, expansion, value);
-                        eval(obj, env, thread);
-                    } else
-                        symbol.setSymbolValue(value);
-                }
-                vars = vars.cdr();
-            }
-            thread.clearValues();
             return result;
         }
     };
