@@ -2,7 +2,7 @@
  * SimpleTypeError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleTypeError.java,v 1.5 2004-10-13 00:22:19 piso Exp $
+ * $Id: SimpleTypeError.java,v 1.6 2004-10-13 17:54:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ public final class SimpleTypeError extends TypeError
                         Primitives.APPLY.execute(Symbol.FORMAT,
                                                  Primitives.APPEND.execute(list2(NIL,
                                                                                  formatControl),
-                                                                   formatArguments));
+                                                                           formatArguments));
                     return result.getStringValue();
                 }
             }
@@ -71,7 +71,7 @@ public final class SimpleTypeError extends TypeError
                 StringBuffer sb = new StringBuffer("The value ");
                 sb.append(String.valueOf(datum));
                 sb.append(" is not of type ");
-                sb.append(String.valueOf(expectedType));
+                sb.append(expectedType.writeToString());
                 sb.append('.');
                 return sb.toString();
             }
