@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.6 2002-11-22 23:35:00 piso Exp $
+ * $Id: Utilities.java,v 1.7 2002-12-05 17:01:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1100,15 +1100,30 @@ public final class Utilities implements Constants
         return haveLs == 1;
     }
 
-    public static boolean have(String s)
+    public static boolean have(final String s)
     {
         try {
-            Runtime.getRuntime().exec(s);
-            return true;
+            final Process p = Runtime.getRuntime().exec(s);
+            if (p != null) {
+                Thread t = new Thread() {
+                    public void run()
+                    {
+                        p.destroy();
+                        try {
+                            p.waitFor();
+                        }
+                        catch (InterruptedException e) {
+                            Log.error(e);
+                        }
+                    }
+                };
+                t.setPriority(Thread.MIN_PRIORITY);
+                t.start();
+                return true;
+            }
         }
-        catch (Throwable t) {
-            return false;
-        }
+        catch (Throwable t) {}
+        return false;
     }
 
     private static String userHome;
