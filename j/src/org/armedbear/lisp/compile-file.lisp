@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.47 2004-10-25 15:59:18 piso Exp $
+;;; $Id: compile-file.lisp,v 1.48 2004-11-21 05:36:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,9 +30,9 @@
 (defvar *source-position*)
 
 (defun next-classfile-name ()
-  (let ((name (format nil "~A-~D"
-                      (pathname-name *compile-file-pathname*)
-                      (incf *class-number*))))
+  (let ((name (%format nil "~A-~D"
+                       (pathname-name *compile-file-pathname*)
+                       (incf *class-number*))))
     (namestring (merge-pathnames (make-pathname :name name :type "cls")
                                  *output-file-pathname*))))
 
