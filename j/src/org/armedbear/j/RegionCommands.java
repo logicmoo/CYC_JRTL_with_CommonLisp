@@ -2,7 +2,7 @@
  * RegionCommands.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: RegionCommands.java,v 1.1.1.1 2002-09-24 16:09:27 piso Exp $
+ * $Id: RegionCommands.java,v 1.2 2002-11-20 18:35:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,9 @@
 
 package org.armedbear.j;
 
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 import java.io.IOException;
 import java.io.OutputStream;
 import javax.swing.undo.CompoundEdit;
@@ -307,5 +310,135 @@ public final class RegionCommands
     private static final byte[] decodeLine(Line line)
     {
         return Base64Decoder.decode(line.trim());
+    }
+
+    public static void renumberRegion()
+    {
+        renumberRegion(null);
+    }
+
+    public static void renumberRegion(String arg)
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMark() == null)
+            return;
+        final Region region = new Region(editor);
+        if (region.getEndLineNumber() - region.getBeginLineNumber() < 2)
+            return;
+        if (!editor.checkReadOnly())
+            return;
+        int start = -1;
+        if (arg != null) {
+            try {
+                start = Integer.parseInt(arg);
+            }
+            catch (NumberFormatException e) {
+                MessageDialog.showMessageDialog(
+                    "Invalid number \"" + arg + '"',
+                    "Error");
+                return;
+            }
+        }
+        final Buffer buffer = editor.getBuffer();
+        try {
+            buffer.lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+            return;
+        }
+        try {
+            _renumberRegion(editor, buffer, region, start);
+        }
+        finally {
+            buffer.unlockWrite();
+        }
+    }
+
+    private static void _renumberRegion(Editor editor, Buffer buffer,
+        Region region, int start)
+    {
+        CompoundEdit compoundEdit = null;
+        if (start < 0) {
+            for (Line line = region.getBeginLine(); line != region.getEndLine(); line = line.next()) {
+                final String text = line.getText();
+                int index = findNumber(text, buffer.getMode());
+                if (index >= 0) {
+                    FastStringBuffer sb = new FastStringBuffer();
+                    while (index < text.length()) {
+                        char c = text.charAt(index++);
+                        if (c >= '0' && c <= '9')
+                            sb.append(c);
+                        else
+                            break;
+                    }
+                    try {
+                        int n = Integer.parseInt(sb.toString());
+                        if (start < 0)
+                            start = n;
+                        else if (n < start)
+                            start = n;
+                    }
+                    catch (NumberFormatException e) {
+                        Log.error(e);
+                    }
+                }
+            }
+        }
+        for (Line line = region.getBeginLine(); line != region.getEndLine(); line = line.next()) {
+            final String text = line.getText();
+            int index = findNumber(text, buffer.getMode());
+            if (index < 0)
+                continue;
+            FastStringBuffer sb = new FastStringBuffer(text.substring(0, index));
+            while (index < text.length() && Character.isDigit(text.charAt(index)))
+                ++index;
+            sb.append(start++);
+            sb.append(text.substring(index));
+            String newText = sb.toString();
+            if (!newText.equals(text)) {
+                if (compoundEdit == null) {
+                    compoundEdit = new CompoundEdit();
+                    compoundEdit.addEdit(new UndoMove(editor));
+                }
+                compoundEdit.addEdit(new UndoLineEdit(buffer, line));
+                line.setText(newText);
+            }
+        }
+        if (compoundEdit != null) {
+            compoundEdit.end();
+            buffer.addEdit(compoundEdit);
+            buffer.modified();
+        }
+        buffer.setNeedsParsing(true);
+        buffer.getFormatter().parseBuffer();
+        buffer.repaint();
+    }
+
+    private static int findNumber(String text, Mode mode)
+    {
+        RE re = new UncheckedRE("[0-9]+");
+        int index = 0;
+        int limit = text.length();
+        while (index <= limit) {
+            REMatch match = re.getMatch(text, index);
+            if (match == null)
+                return -1;
+            if (isDelimited(text, match.getStartIndex(), match.toString().length(), mode))
+                return match.getStartIndex();
+            index = match.getStartIndex() + 1;
+        }
+        return -1;
+    }
+
+    private static boolean isDelimited(String text, int index, int length, Mode mode)
+    {
+        final int before = index - 1;
+        if (before >= 0 && mode.isIdentifierPart(text.charAt(before)))
+            return false;
+        final int after = index + length;
+        if (after < text.length() && mode.isIdentifierPart(text.charAt(after)))
+            return false;
+        return true;
     }
 }
