@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2004 Peter Graves
-# $Id: Makefile.in,v 1.20 2004-08-03 00:33:31 piso Exp $
+# $Id: Makefile.in,v 1.21 2004-09-09 00:29:49 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ j.jar: classes.stamp
 	  $(JAR) uf ../j.jar org/armedbear/j/mail/*.keywords && \
 	  $(JAR) uf ../j.jar org/armedbear/lisp/*.class && \
 	  $(JAR) uf ../j.jar org/armedbear/lisp/java/awt/*.class && \
-	  $(JAR) uf ../j.jar org/armedbear/lisp/*.lisp org/armedbear/lisp/build
+	  $(JAR) uf ../j.jar org/armedbear/lisp/*.lisp org/armedbear/lisp/LICENSE org/armedbear/lisp/build
 
 classes.stamp: classes
 	test -f classes.stamp || touch classes.stamp
@@ -114,7 +114,7 @@ distdir:
 	mkdir $(distdir)/src/org/armedbear/j/images
 	-cp -p  src/org/armedbear/j/images/*.png $(distdir)/src/org/armedbear/j/images
 	mkdir $(distdir)/src/org/armedbear/lisp
-	-cp -p  src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml src/org/armedbear/lisp/*.java src/org/armedbear/lisp/Site.java.in src/org/armedbear/lisp/*.c src/org/armedbear/lisp/*.lisp $(distdir)/src/org/armedbear/lisp
+	-cp -p  src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml src/org/armedbear/lisp/*.java src/org/armedbear/lisp/Site.java.in src/org/armedbear/lisp/*.c src/org/armedbear/lisp/*.lisp src/org/armedbear/lisp/LICENSE $(distdir)/src/org/armedbear/lisp
 	rm -f $(distdir)/src/org/armedbear/lisp/Site.java
 	mkdir $(distdir)/src/org/armedbear/lisp/java
 	mkdir $(distdir)/src/org/armedbear/lisp/java/awt
@@ -257,6 +257,7 @@ j.zip:
 		src/org/armedbear/lisp/Site.java.in \
 		src/org/armedbear/lisp/*.c \
 		src/org/armedbear/lisp/*.lisp \
+		src/org/armedbear/lisp/LICENSE \
 		src/org/armedbear/lisp/java/awt/Makefile.in \
 		src/org/armedbear/lisp/java/awt/*.java \
 		src/bsh/reflect/Makefile.in src/bsh/reflect/*.java \
