@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.219 2003-06-01 20:08:47 piso Exp $
+ * $Id: Primitives.java,v 1.220 2003-06-01 20:58:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2412,19 +2412,20 @@ public final class Primitives extends Module
 
     // ### apply
     private static final Primitive APPLY = new Primitive("apply") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(final LispObject[] args) throws Condition
         {
-            if (args.length < 2)
+            final int numArgs = args.length;
+            if (numArgs < 2)
                 throw new WrongNumberOfArgumentsException(this);
-            LispObject spread = checkList(args[args.length-1]);
+            LispObject spread = checkList(args[numArgs - 1]);
             LispObject fun = args[0];
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
             if (fun instanceof Function) {
-                final int length = args.length - 2 + spread.length();
-                final LispObject[] funArgs = new LispObject[length];
+                final int numFunArgs = numArgs - 2 + spread.length();
+                final LispObject[] funArgs = new LispObject[numFunArgs];
                 int j = 0;
-                for (int i = 1; i < args.length - 1; i++)
+                for (int i = 1; i < numArgs - 1; i++)
                     funArgs[j++] = args[i];
                 while (spread != NIL) {
                     funArgs[j++] = spread.car();
