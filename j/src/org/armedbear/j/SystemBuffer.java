@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SystemBuffer.java,v 1.11 2002-11-04 16:34:28 piso Exp $
+ * $Id: SystemBuffer.java,v 1.12 2002-12-08 01:27:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,11 +145,6 @@ public class SystemBuffer implements Constants
     public String getLineSeparator()
     {
         return lineSeparator;
-    }
-
-    public final String canonicalPath()
-    {
-        return file == null ? null : file.canonicalPath();
     }
 
     public final boolean contains(Line line)
