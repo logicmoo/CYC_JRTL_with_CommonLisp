@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.109 2003-12-07 17:02:50 piso Exp $
+ * $Id: Autoload.java,v 1.110 2003-12-11 19:10:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -299,6 +299,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-arglist", "arglist");
         autoload(PACKAGE_SYS, "%set-class-direct-methods", "LispClass");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass");
+        autoload(PACKAGE_SYS, "%set-class-layout", "LispClass");
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
@@ -328,12 +329,16 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObject");
         autoload(PACKAGE_SYS, "class-direct-methods", "LispClass");
         autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
+        autoload(PACKAGE_SYS, "class-layout", "LispClass");
         autoload(PACKAGE_SYS, "class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
         autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTable");
+        autoload(PACKAGE_SYS, "layout-class", "Layout");
+        autoload(PACKAGE_SYS, "layout-length", "Layout");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
         autoload(PACKAGE_SYS, "make-instance-standard-class", "StandardClass");
+        autoload(PACKAGE_SYS, "make-layout", "Layout");
         autoload(PACKAGE_SYS, "make-structure-class", "StructureClass");
         autoload(PACKAGE_SYS, "make-symbol-macro", "SymbolMacro");
         autoload(PACKAGE_SYS, "puthash", "HashTable");
