@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.260 2004-06-24 14:49:43 piso Exp $
+ * $Id: Lisp.java,v 1.261 2004-06-25 23:03:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -815,6 +815,30 @@ public abstract class Lisp
         catch (Throwable t) {
             return null;
         }
+    }
+
+    public static final LispObject loadCompiledFunction(String namestring)
+    {
+        File file = new File(namestring);
+        if (file != null && file.isFile()) {
+            try {
+                JavaClassLoader loader = new JavaClassLoader();
+                Class c = loader.loadClassFromFile(file);
+                if (c != null) {
+                    Class[] parameterTypes = new Class[0];
+                    java.lang.reflect.Constructor constructor =
+                        c.getConstructor(parameterTypes);
+                    Object[] initargs = new Object[0];
+                    LispObject obj =
+                        (LispObject) constructor.newInstance(initargs);
+                    return obj;
+                }
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+            }
+        }
+        return null;
     }
 
     public static final String safeWriteToString(LispObject obj)
