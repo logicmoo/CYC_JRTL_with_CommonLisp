@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.426 2003-09-23 13:02:02 piso Exp $
+ * $Id: Primitives.java,v 1.427 2003-09-23 13:38:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1578,32 +1578,62 @@ public final class Primitives extends Module
             Symbol var = checkSymbol(args.car());
             LispObject countForm = args.cadr();
             final LispThread thread = LispThread.currentThread();
-            int count = Fixnum.getInt(eval(countForm, env, thread));
             LispObject resultForm = args.cdr().cdr().car();
             Environment oldDynEnv = thread.getDynamicEnvironment();
-            int i;
-            for (i = 0; i < count; i++) {
+            LispObject limit = eval(countForm, env, thread);
+            LispObject result;
+            if (limit instanceof Fixnum) {
+                int count = ((Fixnum)limit).getValue();
+                int i;
+                for (i = 0; i < count; i++) {
+                    Environment ext = new Environment(env);
+                    bind(var, new Fixnum(i), ext);
+                    LispObject body = bodyForm;
+                    int depth = thread.getStackDepth();
+                    try {
+                        while (body != NIL) {
+                            eval(body.car(), ext, thread);
+                            body = body.cdr();
+                        }
+                    }
+                    catch (Return ret) {
+                        if (ret.getTag() == NIL) {
+                            thread.setStackDepth(depth);
+                            return ret.getResult();
+                        }
+                        throw ret;
+                    }
+                }
                 Environment ext = new Environment(env);
                 bind(var, new Fixnum(i), ext);
-                LispObject body = bodyForm;
-                int depth = thread.getStackDepth();
-                try {
-                    while (body != NIL) {
-                        LispObject result = eval(body.car(), ext, thread);
-                        body = body.cdr();
+                result = eval(resultForm, ext, thread);
+            } else if (limit instanceof Bignum) {
+                LispObject i = Fixnum.ZERO;
+                while (i.isLessThan(limit)) {
+                    Environment ext = new Environment(env);
+                    bind(var, i, ext);
+                    LispObject body = bodyForm;
+                    int depth = thread.getStackDepth();
+                    try {
+                        while (body != NIL) {
+                            eval(body.car(), ext, thread);
+                            body = body.cdr();
+                        }
                     }
-                }
-                catch (Return ret) {
-                    if (ret.getTag() == NIL) {
-                        thread.setStackDepth(depth);
-                        return ret.getResult();
+                    catch (Return ret) {
+                        if (ret.getTag() == NIL) {
+                            thread.setStackDepth(depth);
+                            return ret.getResult();
+                        }
+                        throw ret;
                     }
-                    throw ret;
+                    i = i.incr();
                 }
-            }
-            Environment ext = new Environment(env);
-            bind(var, new Fixnum(i), ext);
-            LispObject result = eval(resultForm, ext, thread);
+                Environment ext = new Environment(env);
+                bind(var, i, ext);
+                result = eval(resultForm, ext, thread);
+            } else
+                throw new ConditionThrowable(new TypeError(limit, "integer"));
             thread.setDynamicEnvironment(oldDynEnv);
             return result;
         }
