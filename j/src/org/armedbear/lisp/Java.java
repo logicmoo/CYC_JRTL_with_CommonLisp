@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.20 2003-11-09 20:53:48 piso Exp $
+ * $Id: Java.java,v 1.21 2003-11-10 09:40:19 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -203,7 +203,7 @@ public final class Java extends Module
             String methodName = LispString.getValue(args[1]);
             try {
                 final Class c = Class.forName(className);
-                int argCount = -1;
+                int argCount = 0;
                 if (args.length == 3 && args[2] instanceof Fixnum) {
                     argCount = Fixnum.getValue(args[2]);
                 } else if (args.length > 2) {
@@ -216,19 +216,12 @@ public final class Java extends Module
                         parameterTypes));
                 }
                 // Parameter types not explicitly specified.
-                if (argCount < 0)
-                    argCount = 0;
                 Method[] methods = c.getMethods();
                 for (int i = 0; i < methods.length; i++) {
                     Method method = methods[i];
-                    if (method.getName().equals(methodName)) {
-                        if (argCount >= 0) {
-                            Class[] parameterTypes = method.getParameterTypes();
-                            if (parameterTypes.length == argCount)
-                                return new JavaObject(method);
-                        } else
-                            return new JavaObject(method);
-                    }
+                    if (method.getName().equals(methodName) 
+                        && method.getParameterTypes().length == argCount)
+                        return new JavaObject(method);
                 }
                 throw new ConditionThrowable(new LispError("no such method"));
             }
