@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.16 2003-03-06 03:14:40 piso Exp $
+;;; $Id: sequences.lisp,v 1.17 2003-03-06 03:57:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(some every notany notevery copy-seq reverse nreverse
+(export '(some every notany notevery subseq copy-seq reverse nreverse
           reduce
           remove-duplicates delete-duplicates
           position position-if position-if-not
@@ -89,6 +89,41 @@
     (vector (make-array length))
     (t
      (error 'type-error))))
+
+(defmacro make-sequence-like (sequence length)
+  `(make-sequence-of-type (type-of ,sequence) ,length))
+
+
+;; SUBSEQ (from CMUCL)
+
+(defun vector-subseq* (sequence start &optional end)
+  (when (null end) (setf end (length sequence)))
+  (do ((old-index start (1+ old-index))
+       (new-index 0 (1+ new-index))
+       (copy (make-sequence-like sequence (- end start))))
+    ((= old-index end) copy)
+    (setf (aref copy new-index) (aref sequence old-index))))
+
+(defun list-subseq* (sequence start &optional end)
+  (if (and end (>= start (the fixnum end)))
+      ()
+      (let* ((groveled (nthcdr start sequence))
+	     (result (list (car groveled))))
+	(if groveled
+	    (do ((list (cdr groveled) (cdr list))
+		 (splice result (cdr (rplacd splice (list (car list)))))
+		 (index (1+ start) (1+ index)))
+              ((or (atom list) (and end (= index (the fixnum end))))
+               result))
+	    ()))))
+
+(defun subseq (sequence start &optional end)
+  (seq-dispatch sequence
+		(list-subseq* sequence start end)
+		(vector-subseq* sequence start end)))
+
+
+;; COPY-SEQ (from CMUCL)
 
 (defmacro vector-copy-seq (sequence type)
   `(let ((length (length (the vector ,sequence))))
