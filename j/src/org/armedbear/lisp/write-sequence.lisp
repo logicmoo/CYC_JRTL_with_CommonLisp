@@ -1,7 +1,7 @@
 ;;; write-sequence.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: write-sequence.lisp,v 1.1 2004-01-21 16:56:23 piso Exp $
+;;; $Id: write-sequence.lisp,v 1.2 2004-03-10 01:23:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,14 +20,22 @@
 (in-package "SYSTEM")
 
 (defun write-sequence (sequence stream &key (start 0) end)
-  (require-type start '(integer 0))
+  (unless (and (integerp start) (>= start 0))
+    (error 'simple-type-error
+           :datum start
+           :expected-type '(integer 0)))
   (if end
-      (require-type end '(integer 0))
+      (unless (and (integerp end) (>= end 0))
+        (error 'simple-type-error
+               :datum start
+               :expected-type '(integer 0)))
       (setf end (length sequence)))
-  (let* ((element-type (stream-element-type stream))
-         (write-function (if (eq element-type 'character)
-                             #'write-char
-                             #'write-byte)))
-    (do ((i start (1+ i)))
-        ((>= i end) sequence)
-      (funcall write-function (elt sequence i) stream))))
+  (if (eq (stream-element-type stream) 'character)
+      (if (stringp sequence)
+          (%write-string sequence stream start end)
+          (do ((i start (1+ i)))
+              ((>= i end) sequence)
+            (write-char (elt sequence i) stream)))
+      (do ((i start (1+ i)))
+          ((>= i end) sequence)
+        (write-byte (elt sequence i) stream))))
