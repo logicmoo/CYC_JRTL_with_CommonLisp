@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.672 2004-08-19 16:21:15 piso Exp $
+ * $Id: Primitives.java,v 1.673 2004-08-21 16:22:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1288,18 +1288,20 @@ public final class Primitives extends Lisp
     // %defun name arglist body &optional environment => name
     private static final Primitive _DEFUN = new Primitive("%defun", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
         {
-            if (args.length < 3 || args.length > 4) {
-                signal(new WrongNumberOfArgumentsException(this));
-                return NIL;
-            }
-            LispObject first = args[0];
-            LispObject second = args[1];
-            LispObject third = args[2];
+            return execute(first, second, third, new Environment());
+        }
+
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
+        {
             Environment env;
-            if (args.length == 4 && args[3] != NIL)
-                env = checkEnvironment(args[3]);
+            if (fourth != NIL)
+                env = checkEnvironment(fourth);
             else
                 env = new Environment();
             final Symbol symbol;
@@ -1313,7 +1315,8 @@ public final class Primitives extends Lisp
             } else if (first instanceof Cons && first.car() == Symbol.SETF) {
                 symbol = checkSymbol(first.cadr());
             } else
-                return signal(new TypeError(first, "valid function name"));
+                return signal(new TypeError(first.writeToString() +
+                                            " is not a valid function name."));
             LispObject arglist = checkList(second);
             LispObject body = checkList(third);
             if (body.car() instanceof AbstractString && body.cdr() != NIL) {
@@ -1339,11 +1342,16 @@ public final class Primitives extends Lisp
             Closure closure = new Closure(first instanceof Symbol ? symbol : null,
                                           arglist, body, env);
             closure.setArglist(arglist);
-            if (first instanceof Symbol)
+            if (first instanceof Symbol) {
                 symbol.setSymbolFunction(closure);
-            else
+            } else {
                 // SETF function
                 put(symbol, Symbol._SETF_FUNCTION, closure);
+            }
+            // Clear function table entry (if any).
+            if (FUNCTION_TABLE != null) {
+                FUNCTION_TABLE.remhash(first);
+            }
             return first;
         }
     };
