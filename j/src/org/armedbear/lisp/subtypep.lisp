@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.17 2003-10-06 02:25:00 piso Exp $
+;;; $Id: subtypep.lisp,v 1.18 2003-10-08 19:12:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -189,14 +189,15 @@
     (return-from sub-interval-p t)))
 
 (defun simple-subtypep (type1 type2)
-  (when (and (symbolp type1) (symbolp type2) (known-type-p type1))
-    ;; type1 is a known type. type1 can only be a subtype of type2 if type2 is
-    ;; also a known type.
-    (return-from simple-subtypep (if (memq type2 (supertypes type1))
-                                     t
-                                     (dolist (supertype (supertypes type1))
-                                       (when (simple-subtypep supertype type2)
-                                         (return (values t)))))))
+  (when (and (symbolp type1) (symbolp type2))
+    (multiple-value-bind (type1-supertypes type1-known-p)
+        (gethash type1 *known-types*)
+      (when type1-known-p
+        (return-from simple-subtypep (if (memq type2 type1-supertypes)
+                                         t
+                                         (dolist (supertype type1-supertypes)
+                                           (when (simple-subtypep supertype type2)
+                                             (return (values t)))))))))
   (let ((c1 (if (classp type1) type1 (find-class type1 nil)))
         (c2 (if (classp type2) type2 (find-class type2 nil))))
     (when (and c1 c2)
