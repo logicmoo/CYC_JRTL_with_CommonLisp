@@ -1,8 +1,8 @@
 /*
  * WebBuffer.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: WebBuffer.java,v 1.4 2002-12-11 20:04:02 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: WebBuffer.java,v 1.5 2003-05-18 15:39:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,8 +121,7 @@ public final class WebBuffer extends Buffer implements WebConstants
         editor.switchToBuffer(buf);
     }
 
-    public static WebBuffer createWebBuffer(File file, File cache,
-        String ref)
+    public static WebBuffer createWebBuffer(File file, File cache, String ref)
     {
         return new WebBuffer(file, cache, ref);
     }
@@ -231,7 +230,8 @@ public final class WebBuffer extends Buffer implements WebConstants
     public Cursor getDefaultCursor(Position pos)
     {
         if (pos != null && pos.getLine() instanceof WebLine) {
-            HtmlLineSegment segment = ((WebLine)pos.getLine()).findSegment(pos.getOffset());
+            HtmlLineSegment segment =
+                ((WebLine)pos.getLine()).findSegment(pos.getOffset());
             if (segment != null && segment.getLink() != null)
                 return Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
         }
@@ -291,7 +291,8 @@ public final class WebBuffer extends Buffer implements WebConstants
             int offset = 0;
             final int size = segmentList.size();
             for (int i = 0; i < size; i++) {
-                HtmlLineSegment seg = (HtmlLineSegment) segmentList.getSegment(i);
+                HtmlLineSegment seg =
+                    (HtmlLineSegment) segmentList.getSegment(i);
                 if (seg.getLink() != null) {
                     if (link == null || offset < dotOffset) {
                         segment = seg;
