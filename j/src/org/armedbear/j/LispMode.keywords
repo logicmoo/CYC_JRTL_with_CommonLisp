@@ -260,6 +260,7 @@ keywordp
 labels
 lambda
 last
+lcm
 ldb
 ldb-test
 length
