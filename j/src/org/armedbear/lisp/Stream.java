@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.101 2005-01-11 17:47:10 piso Exp $
+ * $Id: Stream.java,v 1.102 2005-01-11 18:03:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -634,7 +634,8 @@ public class Stream extends LispObject
                 }
             }
             if (firstChar == ':')
-                return PACKAGE_KEYWORD.intern(token.substring(1));
+                if (flags == null || !flags.get(0))
+                    return PACKAGE_KEYWORD.intern(token.substring(1));
             int index = findUnescapedDoubleColon(token, flags);
             if (index > 0) {
                 String packageName = token.substring(0, index);
