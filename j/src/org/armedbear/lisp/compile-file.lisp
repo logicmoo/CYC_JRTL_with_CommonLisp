@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.19 2004-05-27 00:35:19 piso Exp $
+;;; $Id: compile-file.lisp,v 1.20 2004-05-27 16:43:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -147,7 +147,8 @@
             (when compile-time-too
               (eval form))))))
   (when (and (consp form) (neq (car form) 'QUOTE))
-    (let ((*print-level* nil)
+    (let ((*print-fasl* t)
+          (*print-level* nil)
           (*print-length* nil))
       (if (eq (car form) 'IMPORT)
           ;; Make sure package prefix is printed when symbols are imported.
