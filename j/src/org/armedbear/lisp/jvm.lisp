@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.121 2004-04-24 18:54:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.122 2004-04-24 21:20:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2126,8 +2126,8 @@
                     (emit 'aastore))
                    (t
                     (emit 'dup)
-                    (emit 'aastore)
-                    (emit-store-value))))
+                    (emit-store-value)
+                    (emit 'aastore))))
             (t
              (compile-form (cadr rest))
              (unless (remove-store-value)
