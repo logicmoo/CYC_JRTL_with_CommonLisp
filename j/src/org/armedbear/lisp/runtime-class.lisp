@@ -1,7 +1,7 @@
 ;;; runtime-class.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;;
+;;; $Id: runtime-class.lisp,v 1.6 2004-01-20 00:13:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -295,7 +295,7 @@
   (make-instance '|java.lang.Object|
                  :java-instance (jnew (jconstructor "java.lang.String" "[C") (jnew-array-from-array "char" string))))
 
-(defparameter *primitive-types* 
+(defparameter *primitive-types*
   (acons "void" (list "V" "" -1 constants.return -1)
          (acons "byte"
                 (list "B" "org/armedbear/lisp/Fixnum"
@@ -308,7 +308,7 @@
                                     constants.iload constants.ireturn constants.iconst_0)
                               (acons "long"
                                      (list "J" "org/armedbear/lisp/Bignum"
-                                           constants.lload constants.lreturn constants.lconst_0) 
+                                           constants.lload constants.lreturn constants.lconst_0)
                                      (acons "float"
                                             (list "F" "org/armedbear/lisp/LispFloat"
                                                   constants.fload constants.freturn constants.fconst_0)
@@ -340,7 +340,7 @@
 (defun decorate-type-name (type)
   (if (char= (char type 0) #\[) type
       (format nil "L~a;" type)))
-  
+
 (defun decorated-type-name (type)
   (let ((name (type-name type)))
     (if (primitive-type-p type) name (decorate-type-name name))))
@@ -362,15 +362,15 @@
 (defun load-instruction (type)
   (let ((name (assoc type *primitive-types* :test #'string=)))
     (if name (cadddr name) constants.aload)))
-  
+
 (defun return-instruction (type)
   (let ((name (assoc type *primitive-types* :test #'string=)))
     (if name (car (cddddr name)) constants.areturn)))
-  
+
 (defun error-constant (type)
   (let ((name (assoc type *primitive-types* :test #'string=)))
     (if name (cadr (cddddr name)) constants.aconst-null)))
-  
+
 
 (defun size (type)
   (if (or (string= type "long") (string= type "double")) 2 1))
@@ -393,8 +393,8 @@
          (args-size (reduce #'+ arg-types :key #'size))
          (index (+ 2 args-size))
          (cv (visit-method-3
-	      class-writer
-	      constants.acc-public
+              class-writer
+              constants.acc-public
               method-name
               (format nil "(~{~a~})~a"
                       (mapcar #'decorated-type-name arg-types) (decorated-type-name result-type)))))
@@ -402,14 +402,14 @@
     (when super-invocation
       (visit-var-insn-2 cv constants.aload 0)
       (loop for arg-number in (cdr super-invocation)
-	with super-arg-types = (make-string-output-stream)
-	do
-	(visit-var-insn-2 cv
+        with super-arg-types = (make-string-output-stream)
+        do
+        (visit-var-insn-2 cv
                           (load-instruction (nth (1- arg-number) arg-types))
                           (reduce #'+ arg-types :end (1- arg-number) :key #'size :initial-value 1))
-	(write-string (decorated-type-name (nth (1- arg-number) arg-types)) super-arg-types)
-	finally
-	(visit-method-insn-4 cv constants.invokespecial
+        (write-string (decorated-type-name (nth (1- arg-number) arg-types)) super-arg-types)
+        finally
+        (visit-method-insn-4 cv constants.invokespecial
                              (type-name (car super-invocation)) "<init>"
                              (format nil "(~a)~a"
                                      (get-output-stream-string super-arg-types) "V"))))
@@ -423,7 +423,7 @@
     (visit-field-insn-4 cv constants.getstatic
                         class-name "rc" "Lorg/armedbear/lisp/RuntimeClass;")
     (visit-ldc-insn-1 cv (make-java-string unique-method-name))
-    (visit-method-insn-4 cv constants.invokevirtual 
+    (visit-method-insn-4 cv constants.invokevirtual
                          "org/armedbear/lisp/RuntimeClass"
                          "getLispMethod"
                          "(Ljava/lang/String;)Lorg/armedbear/lisp/Function;")
@@ -437,16 +437,16 @@
       (visit-label-1 cv l0)
 
       (loop for arg-type in arg-types and i from 0 and j = 1 then (+ j (size arg-type))
-	do
-	(visit-var-insn-2 cv constants.aload index)
-	(visit-int-insn-2 cv constants.bipush i)
-	(visit-var-insn-2 cv (load-instruction arg-type) j)
-	(visit-method-insn-4 cv constants.invokestatic
+        do
+        (visit-var-insn-2 cv constants.aload index)
+        (visit-int-insn-2 cv constants.bipush i)
+        (visit-var-insn-2 cv (load-instruction arg-type) j)
+        (visit-method-insn-4 cv constants.invokestatic
                              "org/armedbear/lisp/RuntimeClass" "makeLispObject"
                              (format nil "(~a)~a"
                                      (arg-type-for-make-lisp-object arg-type)
                                      (decorate-type-name (return-type-for-make-lisp-object arg-type))))
-	(visit-insn-1 cv constants.aastore))
+        (visit-insn-1 cv constants.aastore))
 
       (visit-var-insn-2 cv constants.aload index)
       (visit-int-insn-2 cv constants.bipush arg-count)
@@ -483,7 +483,7 @@
                              "org/armedbear/lisp/LispObject" "javaInstance" "()Ljava/lang/Object;")
         (visit-type-insn-2 cv constants.checkcast (cast-type result-type))))
 
-	
+
       (visit-label-1 cv l1)
       (if (string= "void" result-type)
           (visit-jump-insn-2 cv constants.goto l3)
@@ -497,20 +497,20 @@
       (if (string= "void" result-type)
           (visit-label-1 cv l3)
           (visit-insn-1 cv (error-constant result-type)))
-      
+
       (visit-insn-1 cv (return-instruction result-type))
       (visit-try-catch-block-4 cv l0 l1 l2 "org/armedbear/lisp/ConditionThrowable")
 
       (visit-maxs-2 cv 0 0))))
-  
+
 
 
 (defun jnew-runtime-class (class-name super-name constructors methods fields &optional filename)
   "Creates and loads a Java class with methods calling Lisp closures as given in METHODS.
    CLASS-NAME and SUPER-NAME are strings, CONSTRUCTORS,  METHODS and FIELDS are lists of
-   constructor, method and field definitions. 
+   constructor, method and field definitions.
 
-   Constructor definitions are lists of the form 
+   Constructor definitions are lists of the form
    (argument-types function &optional super-invocation-arguments)
    where argument-types is a list of strings and function is a lisp function of
    (1+ (length argument-types)) arguments; the instance (`this') is passed in as
@@ -522,7 +522,7 @@
    then the constructor of the superclass with argument types (int, java.lang.String) will
    be called with the second and first arguments.
 
-   Method definitions are lists of the form 
+   Method definitions are lists of the form
    (method-name return-type argument-types function)
    where method-name and return-type are strings, argument-types is a list of strings and function
    is a lisp function of (1+ (length argument-types)) arguments; the instance (`this') is
@@ -530,13 +530,13 @@
 
    Field definitions are lists of the form
    (field-name type modifier*)
-   
+
    If FILE-NAME is given, a .class file will be written; this is useful for debugging only."
 
   (let ((cw (make-class-writer-1 (make-instance 'jboolean :java-instance t)))
         (class-type-name (type-name class-name))
         (super-type-name (type-name super-name))
-	(args-for-%jnew))
+        (args-for-%jnew))
     (visit-3 cw (+ constants.acc-public constants.acc-super)
              class-type-name super-type-name)
     (visit-field-3 cw (+ constants.acc-private constants.acc-static)
@@ -547,8 +547,8 @@
                      (reduce #'+ (cddr field-def) :key #'field-modifier)
                      (car field-def)
                      (decorated-type-name (cadr field-def))))
-	  
-	
+
+
     (if constructors
         (loop for (arg-types constr-def super-invocation-args) in constructors
           for unique-method-name = (apply #'concatenate 'string "<init>|" arg-types)
@@ -575,13 +575,13 @@
       (write-method cw class-type-name method-name unique-method-name ret-type arg-types)
       finally
       (apply #'java::%jnew-runtime-class class-name (append args-for-%jnew args)))
-  
+
     (visit-end-0 cw)
 
     (when filename
       (let ((os (make-file-output-stream-1 filename)))
-	(write-1 os (to-byte-array-0 cw))
-	(close-0 os)))
+        (write-1 os (to-byte-array-0 cw))
+        (close-0 os)))
 
     (java::%load-java-class-from-byte-array class-name (java-instance (to-byte-array-0 cw)))))
 
@@ -597,7 +597,7 @@
 (defun jruntime-class-exists-p (class-name)
   "Returns true if a class named CLASS-NAME has been created and loaded by JNEW-RUNTIME-CLASS.
    Needed because Java classes cannot be reloaded."
-  (when 
+  (when
     (jstatic (jmethod "org.armedbear.lisp.RuntimeClass" "getRuntimeClass" "java.lang.String")
              "org.armedbear.lisp.RuntimeClass"
              class-name)
