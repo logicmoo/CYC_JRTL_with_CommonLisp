@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.92 2003-03-07 18:31:14 piso Exp $
+ * $Id: Primitives.java,v 1.93 2003-03-07 19:01:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2675,6 +2675,24 @@ public final class Primitives extends Module
             } else
                 pkg.export(checkSymbol(args[0]));
             return T;
+        }
+    };
+
+    // ### find-symbol
+    // find-symbol string &optional package => symbol, status
+    private static final Primitive FIND_SYMBOL =
+        new Primitive("find-symbol") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length == 0 || args.length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            String name = LispString.getValue(args[0]);
+            Package pkg;
+            if (args.length == 2)
+                pkg = coerceToPackage(args[1]);
+            else
+                pkg = getCurrentPackage();
+            return pkg.findSymbol(name);
         }
     };
 
