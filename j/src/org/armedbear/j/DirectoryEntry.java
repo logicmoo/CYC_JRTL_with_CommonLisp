@@ -2,7 +2,7 @@
  * DirectoryEntry.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: DirectoryEntry.java,v 1.2 2002-11-17 02:16:27 piso Exp $
+ * $Id: DirectoryEntry.java,v 1.3 2002-12-07 11:21:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,14 +29,14 @@ public final class DirectoryEntry
 {
     private String name;
     private long date;
-    private final long size;
+    private long size;
     private boolean isDirectory;
     private boolean isLink;
     private String linkedTo;
     private boolean isMarked;
 
     // For native format, this is all we store.
-    private String string = null;
+    private final String string;
 
     private static final String DIR = "     <DIR>";
     private static final int DIRLENGTH = DIR.length();
@@ -52,7 +52,7 @@ public final class DirectoryEntry
             isDirectory = true;
         else if (firstChar == 'l')
             isLink = true;
-        size = getFileSize(string);
+        size = -1;
     }
 
     // Constructor for internal format.
@@ -61,6 +61,7 @@ public final class DirectoryEntry
         this.name = name;
         this.date = date;
         this.size = size;
+        string = null;
     }
 
     // Constructor for internal format.
@@ -71,6 +72,7 @@ public final class DirectoryEntry
         this.date = date;
         this.size = size;
         this.isDirectory = isDirectory;
+        string = null;
     }
 
     // Wrapper for constructor for native "ls -l" format.
@@ -133,6 +135,8 @@ public final class DirectoryEntry
 
     public final long getSize()
     {
+        if (size < 0 && string != null)
+            size = getFileSize(string);
         return size;
     }
 
