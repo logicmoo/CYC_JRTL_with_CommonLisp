@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.14 2003-07-19 14:35:45 piso Exp $
+ * $Id: LispAPI.java,v 1.15 2003-07-19 15:11:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.util.Iterator;
+import javax.swing.undo.CompoundEdit;
 import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.Keyword;
@@ -540,35 +541,32 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### insert-character
-    private static final Primitive1 INSERT_CHARACTER =
-        new Primitive1("insert-character", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg)
-	    throws LispError
+    // ### insert
+    private static final Primitive INSERT =
+        new Primitive("insert", PACKAGE_J, true) {
+        public LispObject execute(LispObject[] args) throws LispError
         {
-            char c = LispCharacter.getValue(arg);
+            if (args.length == 0)
+                return NIL;
             final Editor editor = Editor.currentEditor();
-            if (editor.checkReadOnly()) {
-                editor.insertChar(c);
-                return T;
+            if (!editor.checkReadOnly())
+                return NIL;
+            CompoundEdit compoundEdit = editor.beginCompoundEdit();
+            try {
+                for (int i = 0; i < args.length; i++) {
+                    LispObject obj = args[i];
+                    if (obj instanceof LispCharacter) {
+                        editor.insertChar(((LispCharacter)obj).getValue());
+                    } else if (obj instanceof LispString) {
+                        editor.insertString(((LispString)obj).getValue());
+                    } else
+                        throw new TypeError(obj, "character or string");
+                }
+                return NIL;
             }
-            return NIL;
-        }
-    };
-
-    // ### insert-string
-    private static final Primitive1 INSERT_STRING =
-        new Primitive1("insert-string", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg)
-	    throws LispError
-        {
-            String s = LispString.getValue(arg);
-            final Editor editor = Editor.currentEditor();
-            if (editor.checkReadOnly()) {
-                editor.insertString(s);
-                return T;
+            finally {
+                editor.endCompoundEdit(compoundEdit);
             }
-            return NIL;
         }
     };
 
