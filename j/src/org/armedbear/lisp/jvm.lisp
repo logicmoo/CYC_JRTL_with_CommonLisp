@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.349 2005-01-14 03:25:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.350 2005-01-14 22:02:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -244,8 +244,9 @@
   non-local-go-p
   ;; If non-nil, register containing saved dynamic environment for this block.
   environment-register
-  ;; Only used in LET/LET* nodes.
+  ;; Only used in LET/LET*/M-V-B nodes.
   vars
+  free-specials
   )
 
 (defvar *blocks* ())
@@ -310,7 +311,8 @@
             (constantp (cadr varspec))
             (eq (car varspec) (cadr varspec))
             (return nil))))
-    (let ((vars (if (eq op 'LET) (p1-let-vars varlist) (p1-let*-vars varlist))))
+    (let ((vars (if (eq op 'LET) (p1-let-vars varlist) (p1-let*-vars varlist)))
+          (free-specials '()))
       (dformat t "p1-let/let* vars = ~S~%" (mapcar #'variable-name vars))
       ;; Check for globally declared specials.
       (dolist (variable vars)
@@ -325,15 +327,23 @@
             (case (car decl)
               (SPECIAL
                (dolist (sym (cdr decl))
-                 (dolist (variable vars)
-                   (when (eq sym (variable-name variable))
-                     (setf (variable-special-p variable) t)))))
+;;                  (dolist (variable vars)
+;;                    (when (eq sym (variable-name variable))
+;;                      (setf (variable-special-p variable) t)))
+                 (let ((variable (find sym vars :key #'variable-name)))
+                   (cond (variable
+                          (setf (variable-special-p variable) t))
+                         (t
+                          (dformat t "adding free special ~S~%" sym)
+                          (push (make-variable :name sym :special-p t) free-specials))))
+                 ))
               (TYPE
                (dolist (sym (cddr decl))
                  (dolist (variable vars)
                    (when (eq sym (variable-name variable))
                      (setf (variable-declared-type variable) (cadr decl))))))))))
-      (setf (block-vars block) vars))
+      (setf (block-vars block) vars)
+      (setf (block-free-specials block) free-specials))
     (setf body (mapcar #'p1 body))
     (setf (block-form block) (list* op varlist body))
     block))
@@ -405,18 +415,25 @@
          (*blocks* (cons block *blocks*))
          (*visible-tags* *visible-tags*)
          (body (cdr form)))
+    ;; Make all the tags visible before processing the body forms.
     (dolist (subform body)
       (when (or (symbolp subform) (integerp subform))
         (let* ((tag (make-tag :name subform :label (gensym) :block block)))
           (push tag *visible-tags*))))
-    (setf (block-form block) (list* 'TAGBODY (mapcar #'p1 (cdr form))))
+    (let ((new-body '()))
+      (dolist (subform body)
+        (push (if (or (symbolp subform) (integerp subform))
+                  subform
+                  (p1 subform))
+              new-body))
+      (setf (block-form block) (list* 'TAGBODY (nreverse new-body))))
     block))
 
 (defun p1-go (form)
   (let* ((name (cadr form))
          (tag (find-tag name)))
     (unless tag
-      (error "COMPILE-GO: tag not found: ~S" name))
+      (error "p1-go: tag not found: ~S" name))
     (unless (eq (tag-compiland tag) *current-compiland*)
       (setf (block-non-local-go-p (tag-block tag)) t)))
   form)
@@ -3365,7 +3382,6 @@
          (*register* *register*)
          (form (block-form block))
          (*visible-variables* *visible-variables*)
-         (varlist (cadr form))
          (specialp nil))
     ;; Are we going to bind any special variables?
     (dolist (variable (block-vars block))
@@ -3384,6 +3400,9 @@
        (p2-let-bindings block))
       (LET*
        (p2-let*-bindings block)))
+    ;; Make declarations of free specials visible.
+    (dolist (variable (block-free-specials block))
+      (push variable *visible-variables*))
     ;; Body of LET/LET*.
     (compile-progn-body (cddr form) target)
     (when specialp
