@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.352 2005-01-16 00:36:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.353 2005-01-17 03:34:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3840,24 +3840,31 @@
      (t
       ;; Non-local RETURN.
       (setf (block-non-local-return-p block) t)
-      (emit 'new +lisp-return-class+)
-      (emit 'dup)
-      (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
+      (let* ((*register* *register*)
+             (temp-register (allocate-register)))
 
-      ;; Added Dec 9 2004 7:28 AM
-      (emit-clear-values)
+        (emit-clear-values)
+        (compile-form (third form) :target temp-register) ; Result.
 
-      (compile-form (third form) :target :stack) ; Result.
-      (emit-invokespecial +lisp-return-class+
-                          "<init>"
-                          "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
-                          -3)
-      (emit 'athrow)
-      ;; Following code will not be reached, but is needed for JVM stack
-      ;; consistency.
-      (when target
-        (emit-push-nil)
-        (emit-move-from-stack target))))))
+        (emit 'new +lisp-return-class+)
+        (emit 'dup)
+        (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
+
+;        (emit-clear-values)
+
+;;         (compile-form (third form) :target :stack) ; Result.
+        (emit 'aload temp-register)
+
+        (emit-invokespecial +lisp-return-class+
+                            "<init>"
+                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
+                            -3)
+        (emit 'athrow)
+        ;; Following code will not be reached, but is needed for JVM stack
+        ;; consistency.
+        (when target
+          (emit-push-nil)
+          (emit-move-from-stack target)))))))
 
 (defun compile-cons (form &key (target *val*) representation)
   (unless (check-args form 2)
@@ -3982,8 +3989,12 @@
           (*safety* *safety*)
           (*debug* *debug*))
       (p2-compiland compiland))
-    (when (null *compile-file-truename*)
-      (setf function (sys:load-compiled-function classfile)))
+    (cond (*compile-file-truename*
+           ;; Verify that the class file is loadable.
+           (unless (ignore-errors (sys:load-compiled-function classfile))
+             (error "P2-LOCAL-FUNCTION: unable to load ~S." classfile)))
+          (t
+           (setf function (sys:load-compiled-function classfile))))
     (cond (local-function
            (setf (local-function-classfile local-function) classfile)
            (let ((g (if *compile-file-truename*
