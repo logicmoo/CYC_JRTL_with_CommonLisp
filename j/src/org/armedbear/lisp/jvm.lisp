@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.404 2005-02-28 02:50:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.405 2005-03-19 00:47:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5956,7 +5956,7 @@
     (dolist (form forms)
       (unless (and (consp form) (eq (car form) 'declare))
         (return))
-      (let ((decl (cadr form)))
+      (dolist (decl (cdr form))
         (when (eq (car decl) 'OPTIMIZE)
           (dolist (spec (cdr decl))
             (let ((val 3)
