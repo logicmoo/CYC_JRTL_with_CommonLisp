@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.158 2004-05-08 01:02:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.159 2004-05-08 11:02:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1864,6 +1864,9 @@
 (defun compile-cons (form for-effect)
   (unless (= (length form) 3)
     (error "Wrong number of arguments for CONS."))
+  (let ((new-form (rewrite-function-call form)))
+    (when (neq new-form form)
+      (return-from compile-cons (compile-form new-form))))
   (emit 'new +lisp-cons-class+)
   (emit 'dup)
   (compile-form (second form))
