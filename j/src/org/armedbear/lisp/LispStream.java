@@ -1,8 +1,8 @@
 /*
  * LispStream.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispStream.java,v 1.5 2003-09-19 12:32:13 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: LispStream.java,v 1.6 2004-01-02 19:04:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,18 @@ package org.armedbear.lisp;
 
 public abstract class LispStream extends LispObject
 {
+    private LispObject pathname;
+
+    public LispObject getPathname()
+    {
+        return pathname;
+    }
+
+    protected void setPathname(LispObject pathname)
+    {
+        this.pathname = pathname;
+    }
+
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.STREAM)
