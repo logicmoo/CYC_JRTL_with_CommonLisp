@@ -2,7 +2,7 @@
  * ToolBar.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ToolBar.java,v 1.1.1.1 2002-09-24 16:08:17 piso Exp $
+ * $Id: ToolBar.java,v 1.2 2002-10-02 18:27:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,8 +24,13 @@ package org.armedbear.j;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
 import javax.swing.JToolBar;
+import org.xml.sax.AttributeList;
+import org.xml.sax.DocumentHandler;
+import org.xml.sax.HandlerBase;
+import org.xml.sax.InputSource;
+import org.xml.sax.Parser;
+import org.xml.sax.SAXException;
 
 public class ToolBar extends JToolBar implements ActionListener, ToolBarConstants
 {
@@ -61,8 +66,8 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
                     button.setToolTipText(text);
                 if (iconsEnabled())
                     button.setIconFromFile(iconFile);
-                button.setHorizontalTextPosition(JButton.CENTER);
-                button.setVerticalTextPosition(JButton.BOTTOM);
+                button.setHorizontalTextPosition(ToolBarButton.CENTER);
+                button.setVerticalTextPosition(ToolBarButton.BOTTOM);
                 break;
             case STYLE_ICON_ONLY:
                 button.setIconFromFile(iconFile);
@@ -118,7 +123,7 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
     {
         // Defaults to true for j's default look and feel.
         return preferences.getBooleanProperty(Property.TOOL_BAR_IS_ROLLOVER,
-                                              Editor.lookAndFeel == null);
+            Editor.lookAndFeel == null);
     }
 
     public void actionPerformed(ActionEvent e)
@@ -126,5 +131,49 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
         final Editor editor = frame.getCurrentEditor();
         editor.setFocusToDisplay();
         editor.getDispatcher().actionPerformed(e);
+    }
+
+    public static ToolBar createToolBar(Frame frame, File file)
+    {
+        if (file == null)
+            return null;
+        if (!file.isFile())
+            return null;
+        try {
+            Parser parser = (Parser) Class.forName(
+                "org.armedbear.j.aelfred.SAXDriver").newInstance();
+            ToolBar toolBar = new ToolBar(frame);
+            Handler handler = new Handler(toolBar);
+            parser.setDocumentHandler(handler);
+            InputSource inputSource = new InputSource(file.getInputStream());
+            parser.parse(inputSource);
+            return toolBar;
+        }
+        catch (Exception e) {
+            Log.error(e);
+            return null;
+        }
+    }
+
+    private static class Handler extends HandlerBase implements DocumentHandler
+    {
+        private final ToolBar toolBar;
+
+        public Handler(ToolBar toolBar)
+        {
+            this.toolBar = toolBar;
+        }
+
+        public void startElement(String name, AttributeList attributes)
+            throws SAXException
+        {
+            if (name.equals("button")) {
+                String label = attributes.getValue("label");
+                String icon = attributes.getValue("icon");
+                String command = attributes.getValue("command");
+                toolBar.addButton(label, icon, command);
+            } else if (name.equals("separator"))
+                toolBar.addSeparator();
+        }
     }
 }
