@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.60 2004-09-02 00:53:18 piso Exp $
+ * $Id: LispShell.java,v 1.61 2004-09-03 19:30:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.SwingUtilities;
+import org.armedbear.lisp.Site;
 
 public class LispShell extends Shell
 {
@@ -80,7 +81,8 @@ public class LispShell extends Shell
         exitCommand = s;
     }
 
-    private static Shell createLispShell(String shellCommand, String title)
+    private static Shell createLispShell(String shellCommand, String title,
+                                         boolean startSlime)
     {
         LispShell shell = new LispShell(shellCommand, title);
         shell.startProcess();
@@ -120,6 +122,20 @@ public class LispShell extends Shell
                 shell.setExitCommand(",quit");
         }
         shell.needsRenumbering(true);
+        if (startSlime) {
+            Log.debug("starting slime...");
+            try {
+                JLisp.runLispCommand("(sys:load-system-file \"slime-loader.lisp\")");
+            }
+            catch (Throwable t) {
+                Log.debug(t);
+            }
+            FastStringBuffer sb =
+                new FastStringBuffer("(load (merge-pathnames \"swank-loader.lisp\" \"");
+            sb.append(Site.getLispHome());
+            sb.append("\"))");
+            shell.send(sb.toString());
+        }
         if (Editor.isLispInitialized())
             LispAPI.invokeLispShellStartupHook(shell, shellCommand);
         return shell;
@@ -338,75 +354,30 @@ public class LispShell extends Shell
         return title;
     }
 
+    public static void slime()
+    {
+        lisp(getDefaultLispShellCommand(), "abcl", false, true);
+    }
+
+    public static void slime(String shellCommand)
+    {
+        // Require jpty on Unix platforms.
+        lisp(shellCommand, shellCommand, Platform.isPlatformUnix(), true);
+    }
+
     public static void lisp()
     {
-        String shellCommand =
-            Editor.preferences().getStringProperty(Property.LISP);
-        if (shellCommand == null) {
-            File java = null;
-            File javaHome = File.getInstance(System.getProperty("java.home"));
-            if (javaHome != null && javaHome.isDirectory()) {
-                java = File.getInstance(javaHome,
-                    Platform.isPlatformWindows() ? "bin\\java.exe" : "bin/java");
-                if (java != null && !java.isFile())
-                    java = null;
-            }
-            // If j was invoked via "java -jar j.jar", use the canonical path
-            // of j.jar.
-            String classPath = System.getProperty("java.class.path");
-            if (classPath.equals("j.jar:.")) // IBM 1.4.0 on Linux
-                classPath = "j.jar";
-            if (classPath.indexOf(LocalFile.getPathSeparatorChar()) < 0) {
-                // Only one component in classpath.
-                String path = classPath;
-                if (Platform.isPlatformWindows())
-                    path = path.toLowerCase();
-                if (path.equals("j.jar") || path.endsWith("/j.jar") ||
-                    path.endsWith("\\j.jar")) {
-                    File dir = File.getInstance(System.getProperty("user.dir"));
-                    File file = File.getInstance(dir, path);
-                    if (file != null && file.isFile())
-                        classPath = file.canonicalPath();
-                }
-            }
-            FastStringBuffer sb = new FastStringBuffer();
-            if (java != null) {
-                sb.append(java.canonicalPath());
-                String vendor = System.getProperty("java.vendor");
-                if (vendor != null) {
-                    if (vendor.indexOf("Sun") >= 0 ||
-                        vendor.indexOf("Blackdown") >= 0) {
-                        sb.append(" -server");
-                        sb.append(" -Xmx128M");
-                        String lispHome = org.armedbear.lisp.Site.getLispHome();
-                        if (lispHome != null) {
-                            sb.append(" -Xrs -Djava.library.path=");
-                            sb.append(lispHome);
-                            sb.append(":/usr/local/lib/abcl");
-                        }
-                    } else if (vendor.indexOf("IBM") >= 0) {
-                        sb.append(" -Xss512K");
-                        sb.append(" -Xmx128M");
-                    }
-                }
-            } else
-                sb.append("java");
-            sb.append(" -cp ");
-            sb.append(classPath);
-            sb.append(" org.armedbear.lisp.Main");
-            shellCommand = sb.toString();
-        }
-        lisp(shellCommand, "abcl", false);
+        lisp(getDefaultLispShellCommand(), "abcl", false, false);
     }
 
     public static void lisp(String shellCommand)
     {
         // Require jpty on Unix platforms.
-        lisp(shellCommand, shellCommand, Platform.isPlatformUnix());
+        lisp(shellCommand, shellCommand, Platform.isPlatformUnix(), false);
     }
 
     private static void lisp(String shellCommand, String title,
-                             boolean requireJpty)
+                             boolean requireJpty, boolean startSlime)
     {
         if (requireJpty && !Utilities.haveJpty()) {
             MessageDialog.showMessageDialog(JPTY_NOT_FOUND, "Error");
@@ -418,7 +389,7 @@ public class LispShell extends Shell
         // Look for an existing LispShell buffer with the same shell command.
         Buffer buf = findLisp(shellCommand);
         if (buf == null)
-            buf = createLispShell(shellCommand, title);
+            buf = createLispShell(shellCommand, title, startSlime);
         if (buf != null) {
             final Editor editor = Editor.currentEditor();
             editor.makeNext(buf);
@@ -428,6 +399,62 @@ public class LispShell extends Shell
             else
                 editor.activateInOtherWindow(buf);
         }
+    }
+
+    private static String getDefaultLispShellCommand()
+    {
+        File java = null;
+        File javaHome = File.getInstance(System.getProperty("java.home"));
+        if (javaHome != null && javaHome.isDirectory()) {
+            java = File.getInstance(javaHome,
+                                    Platform.isPlatformWindows() ? "bin\\java.exe" : "bin/java");
+            if (java != null && !java.isFile())
+                java = null;
+        }
+        // If j was invoked via "java -jar j.jar", use the canonical path
+        // of j.jar.
+        String classPath = System.getProperty("java.class.path");
+        if (classPath.equals("j.jar:.")) // IBM 1.4.0 on Linux
+            classPath = "j.jar";
+        if (classPath.indexOf(LocalFile.getPathSeparatorChar()) < 0) {
+            // Only one component in classpath.
+            String path = classPath;
+            if (Platform.isPlatformWindows())
+                path = path.toLowerCase();
+            if (path.equals("j.jar") || path.endsWith("/j.jar") ||
+                path.endsWith("\\j.jar")) {
+                File dir = File.getInstance(System.getProperty("user.dir"));
+                File file = File.getInstance(dir, path);
+                if (file != null && file.isFile())
+                    classPath = file.canonicalPath();
+            }
+        }
+        FastStringBuffer sb = new FastStringBuffer();
+        if (java != null) {
+            sb.append(java.canonicalPath());
+            String vendor = System.getProperty("java.vendor");
+            if (vendor != null) {
+                if (vendor.indexOf("Sun") >= 0 ||
+                    vendor.indexOf("Blackdown") >= 0) {
+                    sb.append(" -server");
+                    sb.append(" -Xmx128M");
+                    String lispHome = org.armedbear.lisp.Site.getLispHome();
+                    if (lispHome != null) {
+                        sb.append(" -Xrs -Djava.library.path=");
+                        sb.append(lispHome);
+                        sb.append(":/usr/local/lib/abcl");
+                    }
+                } else if (vendor.indexOf("IBM") >= 0) {
+                    sb.append(" -Xss512K");
+                    sb.append(" -Xmx128M");
+                }
+            }
+        } else
+            sb.append("java");
+        sb.append(" -cp ");
+        sb.append(classPath);
+        sb.append(" org.armedbear.lisp.Main");
+        return sb.toString();
     }
 
     public static CommandInterpreter findLisp(String shellCommand)
