@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.126 2004-01-04 16:02:19 piso Exp $
+ * $Id: Autoload.java,v 1.127 2004-01-04 21:09:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,6 +262,7 @@ public class Autoload extends Function
         autoload("make-pathname", "Pathname");
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-string-output-stream", "StringOutputStream");
+        autoload("merge-pathnames", "Pathname");
         autoload("namestring", "Pathname");
         autoload("output-stream-p", "output_stream_p");
         autoload("package-name", "PackageFunctions");
