@@ -1,7 +1,7 @@
 ;;; gray-streams.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: gray-streams.lisp,v 1.5 2004-06-13 18:45:29 asimon Exp $
+;;; $Id: gray-streams.lisp,v 1.6 2004-06-29 12:49:05 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -164,6 +164,7 @@
 (defvar *old-force-output* #'sys::%force-output)
 (defvar *old-finish-output* #'sys::%finish-output)
 (defvar *old-clear-output* #'sys::%clear-output)
+(defvar *old-clear-input* #'clear-input)
 (defvar *old-read-byte* #'read-byte)
 (defvar *old-write-byte* #'write-byte)
 (defvar *old-stream-element-type* #'cl::stream-element-type)
@@ -653,12 +654,12 @@
 (defun gray-two-way-stream-input-stream (stream)
   (if (old-streamp stream)
       (funcall *old-two-way-stream-input-stream* stream)
-      (two-way-g-stream-input-stream)))
+      (two-way-stream-g-input-stream stream)))
 
 (defun gray-two-way-stream-output-stream (stream)
   (if (old-streamp stream)
       (funcall *old-two-way-stream-output-stream* stream)
-      (two-way-stream-g-output-stream)))
+      (two-way-stream-g-output-stream stream)))
 
 (setf (symbol-function 'common-lisp::read-char) #'gray-read-char)
 (setf (symbol-function 'common-lisp::peek-char) #'gray-peek-char)
