@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.31 2003-12-24 15:00:59 asimon Exp $
+ * $Id: Java.java,v 1.32 2004-01-02 11:40:41 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,11 +35,12 @@ public final class Java extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
+            String className = LispString.getValue(arg);
             try {
-                return new JavaObject(Class.forName(LispString.getValue(arg)));
+                return new JavaObject(classForName(className));
             }
             catch (ClassNotFoundException e) {
-                signal(new LispError("class not found: " + arg));
+                signal(new LispError("class not found: " + className));
             }
             catch (Throwable t) {
                 signal(new LispError(getMessage(t)));
@@ -493,6 +494,15 @@ public final class Java extends Lisp
         }
     };
 
+    private static Class classForName(String className) throws ClassNotFoundException
+    {
+        try {
+            return Class.forName(className);
+        }
+        catch (ClassNotFoundException e) {
+            return Class.forName(className, true, JavaClassLoader.getPersistentInstance());
+        }
+    }
 
     // Supports Java primitive types too.
     private static Class forClassRef(LispObject classRef) throws ClassNotFoundException, ConditionThrowable
@@ -516,7 +526,7 @@ public final class Java extends Lisp
             if (className.equals("double"))
                 return Double.TYPE;
             // Not a primitive Java type.
-            return Class.forName(className);
+            return classForName(className);
         } else
             try {
                 return (Class)JavaObject.getObject(classRef);
