@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.48 2003-07-29 22:43:37 piso Exp $
+ * $Id: Closure.java,v 1.49 2003-07-29 23:57:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -274,7 +274,7 @@ public class Closure extends Function
             }
             return result;
         } else
-            return execute(new LispObject[0], environment);
+            return execute(new LispObject[0]);
     }
 
     public LispObject execute(LispObject arg) throws Condition
@@ -305,7 +305,7 @@ public class Closure extends Function
         } else {
             LispObject[] args = new LispObject[1];
             args[0] = arg;
-            return execute(args, environment);
+            return execute(args);
         }
     }
 
@@ -340,12 +340,13 @@ public class Closure extends Function
             LispObject[] args = new LispObject[2];
             args[0] = first;
             args[1] = second;
-            return execute(args, environment);
+            return execute(args);
         }
     }
 
     public LispObject execute(LispObject first, LispObject second,
-        LispObject third) throws Condition
+                              LispObject third)
+        throws Condition
     {
         if (minArgs == 3) {
             final LispThread thread = LispThread.currentThread();
@@ -377,13 +378,8 @@ public class Closure extends Function
             args[0] = first;
             args[1] = second;
             args[2] = third;
-            return execute(args, environment);
+            return execute(args);
         }
-    }
-
-    public final LispObject execute(LispObject[] args) throws Condition
-    {
-        return execute(args, environment);
     }
 
     public LispObject execute(LispObject args, Environment env)
@@ -392,11 +388,10 @@ public class Closure extends Function
         LispObject array[] = new LispObject[2];
         array[0] = args;
         array[1] = env;
-        return execute(array, environment);
+        return execute(array);
     }
 
-    private LispObject execute(LispObject[] args, Environment env)
-        throws Condition
+    public LispObject execute(LispObject[] args) throws Condition
     {
         final LispThread thread = LispThread.currentThread();
         if (arity >= 0) {
@@ -404,7 +399,7 @@ public class Closure extends Function
             if (args.length != arity)
                 throw new WrongNumberOfArgumentsException(this);
             Environment oldDynEnv = thread.getDynamicEnvironment();
-            Environment ext = new Environment(env);
+            Environment ext = new Environment(environment);
             if (requiredParameters != null) {
                 for (int i = 0; i < arity; i++)
                     bind(requiredParameters[i].var, args[i], ext);
@@ -424,7 +419,7 @@ public class Closure extends Function
         if (args.length < minArgs)
             throw new WrongNumberOfArgumentsException(this);
         Environment oldDynEnv = thread.getDynamicEnvironment();
-        Environment ext = new Environment(env);
+        Environment ext = new Environment(environment);
         // Required parameters.
         if (requiredParameters != null) {
             for (int i = 0; i < minArgs; i++)
@@ -445,8 +440,8 @@ public class Closure extends Function
                     // We've run out of arguments.
                     LispObject initForm = parameter.initForm;
                     bind(parameter.var,
-                        initForm != null ? eval(initForm, ext, thread) : NIL,
-                        ext);
+                         initForm != null ? eval(initForm, ext, thread) : NIL,
+                         ext);
                     if (parameter.svar != NIL)
                         bind((Symbol)parameter.svar, NIL, ext);
                 }
