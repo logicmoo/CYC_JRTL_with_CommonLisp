@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.26 2004-03-17 16:21:20 piso Exp $
+ * $Id: Readtable.java,v 1.27 2004-03-24 02:48:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,13 @@ import java.util.ArrayList;
 
 public final class Readtable extends LispObject
 {
-    private static final byte ATTR_CONSTITUENT           = 0;
-    private static final byte ATTR_WHITESPACE            = 1;
-    private static final byte ATTR_TERMINATING_MACRO     = 2;
-    private static final byte ATTR_NON_TERMINATING_MACRO = 3;
-    private static final byte ATTR_SINGLE_ESCAPE         = 4;
-    private static final byte ATTR_MULTIPLE_ESCAPE       = 5;
-    private static final byte ATTR_INVALID               = 6;
+    public static final byte ATTR_CONSTITUENT           = 0;
+    public static final byte ATTR_WHITESPACE            = 1;
+    public static final byte ATTR_TERMINATING_MACRO     = 2;
+    public static final byte ATTR_NON_TERMINATING_MACRO = 3;
+    public static final byte ATTR_SINGLE_ESCAPE         = 4;
+    public static final byte ATTR_MULTIPLE_ESCAPE       = 5;
+    public static final byte ATTR_INVALID               = 6;
 
     private final byte[]          attributes           = new byte[CHAR_MAX];
     private final Function[]      readerMacroFunctions = new Function[CHAR_MAX];
@@ -158,6 +158,13 @@ public final class Readtable extends LispObject
         if (c < CHAR_MAX)
             return attributes[c] == ATTR_WHITESPACE;
         return false;
+    }
+
+    public byte getAttribute(char c)
+    {
+        if (c < CHAR_MAX)
+            return attributes[c];
+        return ATTR_CONSTITUENT;
     }
 
     public LispObject getReaderMacroFunction(char c)
