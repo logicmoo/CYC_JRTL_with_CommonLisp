@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.184 2004-08-15 11:16:36 piso Exp $
+# $Id: Makefile.in,v 1.185 2004-08-21 03:17:06 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -191,6 +191,7 @@ CLASSFILES =	AbstractArray.class \
 		float_sign.class \
 		floor.class \
 		ftruncate.class \
+		function_info.class \
 		gc.class \
 		get_properties.class \
 		input_stream_p.class \
