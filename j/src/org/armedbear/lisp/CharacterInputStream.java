@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.42 2003-08-02 20:32:59 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.43 2003-08-12 01:36:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -336,6 +336,9 @@ public class CharacterInputStream extends LispStream
                 case 'a':
                 case 'A':
                     return readArray(numArg);
+                case 'c':
+                case 'C':
+                    return readComplex();
                 case 'x':
                 case 'X':
                     return readHex();
@@ -504,6 +507,14 @@ public class CharacterInputStream extends LispStream
         if (rank == 1)
             return new Vector(obj);
         return new Array(rank, obj);
+    }
+
+    private LispObject readComplex() throws Condition
+    {
+        LispObject obj = read(true, NIL, true);
+        if (obj instanceof Cons && obj.length() == 2)
+            return Complex.getInstance(obj.car(), obj.cadr());
+        throw new LispError("invalid complex number format #C" + obj);
     }
 
     private String readMultipleEscape() throws Condition
