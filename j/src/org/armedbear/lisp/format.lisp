@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: format.lisp,v 1.2 2003-10-08 17:50:58 piso Exp $
+;;; $Id: format.lisp,v 1.3 2003-11-03 03:04:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,6 +79,7 @@
   atsignp
   params)
 
+#+cmu
 (defun %print-format-directive (struct stream depth)
   (declare (ignore depth))
   (print-unreadable-object (struct stream)
