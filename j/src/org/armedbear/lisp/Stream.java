@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.5 2004-01-26 14:32:45 piso Exp $
+ * $Id: Stream.java,v 1.6 2004-01-27 01:30:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1189,14 +1189,7 @@ public class Stream extends LispObject
 
     public LispObject terpri() throws ConditionThrowable
     {
-        try {
-            writer.write(lineSeparator);
-            writer.flush();
-            charPos = 0;
-        }
-        catch (IOException e) {
-            signal(new StreamError(e));
-        }
+        writeString(lineSeparator);
         return NIL;
     }
 
@@ -1204,40 +1197,18 @@ public class Stream extends LispObject
     {
         if (charPos == 0)
             return NIL;
-        try {
-            writer.write(lineSeparator);
-            writer.flush();
-            charPos = 0;
-        }
-        catch (IOException e) {
-            signal(new StreamError(e));
-        }
+        writeString(lineSeparator);
         return T;
     }
 
     public void print(LispObject obj) throws ConditionThrowable
     {
-        try {
-            writer.write(String.valueOf(obj));
-        }
-        catch (IOException e) {
-            signal(new StreamError(e));
-        }
+        writeString(String.valueOf(obj));
     }
 
     public void print(char c) throws ConditionThrowable
     {
-        try {
-            writer.write(c);
-            if (c == '\n') {
-                writer.flush();
-                charPos = 0;
-            } else
-                ++charPos;
-        }
-        catch (IOException e) {
-            signal(new StreamError(e));
-        }
+        writeChar(c);
     }
 
     // PRINC is just like PRIN1 except that the output has no escape
@@ -1274,17 +1245,7 @@ public class Stream extends LispObject
         thread.bindSpecial(_PRINT_ESCAPE_, T);
         String s = String.valueOf(obj);
         thread.setDynamicEnvironment(oldDynEnv);
-        try {
-            writer.write(s);
-            int index = s.lastIndexOf('\n');
-            if (index < 0)
-                charPos += s.length();
-            else
-                charPos = s.length() - (index + 1);
-        }
-        catch (IOException e) {
-            signal(new StreamError(e));
-        }
+        writeString(s);
     }
 
     public void writeChar(char c) throws ConditionThrowable
