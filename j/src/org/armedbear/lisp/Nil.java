@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Nil.java,v 1.34 2004-05-06 11:16:02 piso Exp $
+ * $Id: Nil.java,v 1.35 2004-05-10 13:15:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,9 +70,9 @@ public final class Nil extends Symbol
         return super.typep(typeSpecifier);
     }
 
-    public LispObject CONSTANTP()
+    public boolean constantp()
     {
-        return T;
+        return true;
     }
 
     public final LispObject getSymbolValue()

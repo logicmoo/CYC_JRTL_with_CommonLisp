@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.127 2004-04-30 01:52:54 piso Exp $
+ * $Id: Symbol.java,v 1.128 2004-05-10 13:13:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -241,9 +241,9 @@ public class Symbol extends LispObject
         return T;
     }
 
-    public LispObject CONSTANTP()
+    public boolean constantp()
     {
-        return (flags & FLAG_CONSTANT) != 0 ? T : NIL;
+        return (flags & FLAG_CONSTANT) != 0;
     }
 
     public final LispObject getPackage()
