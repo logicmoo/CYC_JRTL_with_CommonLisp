@@ -2,7 +2,7 @@
  * BreakpointPanel.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: BreakpointPanel.java,v 1.2 2003-05-12 17:10:06 piso Exp $
+ * $Id: BreakpointPanel.java,v 1.3 2003-05-23 17:43:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,6 +73,7 @@ public final class BreakpointPanel implements BreakpointListener, KeyListener
                 Object obj = jdb.getBreakpoints().get(index);
                 if (obj instanceof ResolvableBreakpoint) {
                     ResolvableBreakpoint bp = (ResolvableBreakpoint) obj;
+                    jdb.log("clear " + bp.getLocationString());
                     jdb.deleteBreakpoint(bp);
                     File file = bp.getFile();
                     if (file != null) {
