@@ -2,7 +2,7 @@
  * CompilationErrorBuffer.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompilationErrorBuffer.java,v 1.2 2003-06-09 17:10:47 piso Exp $
+ * $Id: CompilationErrorBuffer.java,v 1.3 2003-06-12 13:47:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
  */
 
 package org.armedbear.j;
+
+import javax.swing.Icon;
 
 public abstract class CompilationErrorBuffer extends Buffer
 {
@@ -133,5 +135,11 @@ public abstract class CompilationErrorBuffer extends Buffer
     public boolean isModified()
     {
         return false;
+    }
+
+    // For the buffer list.
+    public Icon getIcon()
+    {
+        return Utilities.getIconFromFile("jpty.png");
     }
 }
