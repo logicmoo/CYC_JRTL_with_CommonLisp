@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.27 2003-02-05 03:50:18 piso Exp $
+ * $Id: Buffer.java,v 1.28 2003-02-05 04:00:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -442,28 +442,30 @@ public class Buffer extends SystemBuffer
             BufferedReader reader =
                 new BufferedReader(new InputStreamReader(file.getInputStream()));
             String s = reader.readLine();
-            int begin = s.indexOf("-*-");
-            if (begin >= 0) {
-                s = s.substring(begin + 3);
-                int end = s.indexOf("-*-");
-                if (end >= 0) {
-                    s = s.substring(0, end).trim().toLowerCase();
-                    int index = s.indexOf("mode:");
-                    String modeName;
-                    if (index < 0) {
-                        // "-*- Lisp -*-"
-                        modeName = s;
-                    } else {
-                        // "-*- Mode: LISP; Syntax: ANSI-Common-Lisp; Base: 10 -*-"
-                        s = s.substring(5).trim();
-                        for (end = 0; end < s.length(); end++) {
-                            char c = s.charAt(end);
-                            if (c == ' ' || c == '\t' || c == ';')
-                                break;
+            if (s != null) {
+                int begin = s.indexOf("-*-");
+                if (begin >= 0) {
+                    s = s.substring(begin + 3);
+                    int end = s.indexOf("-*-");
+                    if (end >= 0) {
+                        s = s.substring(0, end).trim().toLowerCase();
+                        int index = s.indexOf("mode:");
+                        String modeName;
+                        if (index < 0) {
+                            // "-*- Lisp -*-"
+                            modeName = s;
+                        } else {
+                            // "-*- Mode: LISP; Syntax: ANSI-Common-Lisp; Base: 10 -*-"
+                            s = s.substring(5).trim();
+                            for (end = 0; end < s.length(); end++) {
+                                char c = s.charAt(end);
+                                if (c == ' ' || c == '\t' || c == ';')
+                                    break;
+                            }
+                            modeName = s.substring(0, end);
                         }
-                        modeName = s.substring(0, end);
+                        mode = Editor.getModeList().getModeFromModeName(modeName);
                     }
-                    mode = Editor.getModeList().getModeFromModeName(modeName);
                 }
             }
         }
