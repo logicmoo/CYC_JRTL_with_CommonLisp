@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.1 2004-09-01 19:58:27 piso Exp $
+;;; $Id: swank.lisp,v 1.2 2004-09-02 16:16:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -90,13 +90,34 @@
              (return nil))))))
 
 (defun completion-set (prefix default-package-name)
-  (let ((package (find-package default-package-name))
-        (string (string prefix))
-        (result ()))
-    (when package
-      (do-symbols (symbol package)
-        (when (compound-prefix-match string (symbol-name symbol))
-          (push symbol result))))
+  (let ((pos (position #\: prefix))
+        internal-p
+        package
+        result)
+    (cond (pos
+           ;; Qualified.
+           (setf package (find-package (string-upcase (subseq prefix 0 pos))))
+           (when package
+             (setf internal-p (search "::" prefix))
+             (setf prefix (subseq prefix (1+ (position #\: prefix :from-end t))))
+             (do-symbols (symbol package)
+               (when (eq (symbol-package symbol) package)
+                 (when (compound-prefix-match prefix (symbol-name symbol))
+                   (when (or internal-p
+                             (eq (nth-value 1 (find-symbol (symbol-name symbol) package))
+                                 :external))
+                     (push (concatenate 'string
+                                        (package-name package)
+                                        (if internal-p "::" ":")
+                                        (symbol-name symbol))
+                           result)))))))
+          (t
+           ;; Not qualified.
+           (setf package (find-package default-package-name))
+           (when package
+             (do-symbols (symbol package)
+               (when (compound-prefix-match prefix (symbol-name symbol))
+                 (push (symbol-name symbol) result))))))
     result))
 
 ;;; FIXME! FOO::BAR will intern FOO in BAR.
