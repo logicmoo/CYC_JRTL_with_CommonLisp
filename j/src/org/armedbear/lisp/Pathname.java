@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.52 2004-03-05 17:27:46 piso Exp $
+ * $Id: Pathname.java,v 1.53 2004-03-05 18:28:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -933,6 +933,16 @@ public class Pathname extends LispObject
             } else if (p.type == Keyword.WILD)
                 sb.append(".*");
             return new SimpleString(sb);
+        }
+    };
+
+    // ### host-namestring pathname => namestring
+    private static final Primitive1 HOST_NAMESTRING =
+        new Primitive1("host-namestring", "pathname")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return NIL;
         }
     };
 
