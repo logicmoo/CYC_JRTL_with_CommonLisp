@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.24 2004-09-18 18:33:26 piso Exp $
+;;; $Id: slime.lisp,v 1.25 2004-09-20 02:14:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -136,13 +136,14 @@
       (handler-case
           (setf message (swank-protocol:decode-message *stream*))
         (stream-error () (disconnect) (status "Slime not connected")))
-      (sys::%format t "message = ~S~%" message)
+;;       (sys::%format t "message = ~S~%" message)
       (when (eq (first message) :return)
         (dispatch-return message)))
     (with-mutex (*continuations-lock*)
       (unless *continuations*
         (return))))
-  (sys::%format t "leaving dispatch-loop~%"))
+;;   (sys::%format t "leaving dispatch-loop~%")
+  )
 
 (defun slime-eval (form)
   (if (slime-local-p)
