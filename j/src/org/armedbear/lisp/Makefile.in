@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.75 2003-09-19 16:05:11 piso Exp $
+# $Id: Makefile.in,v 1.76 2003-09-20 17:01:15 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ CLASSFILES =	AbstractArray.class \
 		Binding.class \
 		BitVector.class \
 		Block.class \
+		BuiltInClass.class \
 		CharacterFunctions.class \
 		CharacterInputStream.class \
 		CharacterOutputStream.class \
@@ -95,6 +96,8 @@ CLASSFILES =	AbstractArray.class \
 		SimpleCondition.class \
 		SimpleError.class \
 		SpecialOperator.class \
+		StandardClass.class \
+		StandardObject.class \
 		StreamError.class \
 		StringFunctions.class \
 		StringInputStream.class \
@@ -115,6 +118,7 @@ CLASSFILES =	AbstractArray.class \
 		atan.class \
 		coerce.class \
 		cxr.class \
+		define_condition.class \
 		describe.class \
 		last.class \
 		logand.class \
@@ -130,6 +134,7 @@ CLASSFILES =	AbstractArray.class \
 		logorc2.class \
 		logxor.class \
 		make_array.class \
+		make_condition.class \
 		open.class \
 		probe_file.class \
 		room.class
