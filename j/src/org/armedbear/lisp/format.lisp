@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: format.lisp,v 1.9 2004-06-08 00:54:16 piso Exp $
+;;; $Id: format.lisp,v 1.10 2004-06-08 11:28:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1765,12 +1765,7 @@
 	  (setf args (%format stream (next-arg) orig-args args))
 	  (%format stream (next-arg) (next-arg))))))
 
-
 ;;;; Capitalization.
-
-;; FIXME
-(defun make-case-frob-stream (target kind)
-  target)
 
 (def-complex-format-directive #\( (colonp atsignp params directives)
   (let ((close (find-directive directives #\) nil)))
@@ -1782,14 +1777,14 @@
 	   (after (nthcdr (1+ posn) directives)))
       (values
        (expand-bind-defaults () params
-	 `(let ((stream (make-case-frob-stream stream
-					       ,(if colonp
-						    (if atsignp
-							:upcase
-							:capitalize)
-						    (if atsignp
-							:capitalize-first
-							:downcase)))))
+	 `(let ((stream (sys::make-case-frob-stream stream
+                                                    ,(if colonp
+                                                         (if atsignp
+                                                             :upcase
+                                                             :capitalize)
+                                                         (if atsignp
+                                                             :capitalize-first
+                                                             :downcase)))))
 	    ,@(expand-directive-list before)))
        after))))
 
@@ -1802,14 +1797,14 @@
       (let* ((posn (position close directives))
 	     (before (subseq directives 0 posn))
 	     (after (nthcdr (1+ posn) directives))
-	     (stream (make-case-frob-stream stream
-					    (if colonp
-						(if atsignp
-						    :upcase
-						    :capitalize)
-						(if atsignp
-						    :capitalize-first
-						    :downcase)))))
+	     (stream (sys::make-case-frob-stream stream
+                                                 (if colonp
+                                                     (if atsignp
+                                                         :upcase
+                                                         :capitalize)
+                                                     (if atsignp
+                                                         :capitalize-first
+                                                         :downcase)))))
 	(setf args (interpret-directive-list stream before orig-args args))
 	after))))
 
@@ -1821,7 +1816,6 @@
   (error 'format-error
 	 :complaint "No corresponding open paren."))
 
-
 ;;;; Conditionals
 
 (defun parse-conditional-directive (directives)
