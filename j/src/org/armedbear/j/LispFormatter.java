@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.12 2002-12-27 23:37:10 piso Exp $
+ * $Id: LispFormatter.java,v 1.13 2002-12-30 16:06:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -520,6 +520,11 @@ public final class LispFormatter extends Formatter
             }
             if (Character.isWhitespace(c)) {
                 pos.skip();
+                continue;
+            }
+            if (c == '"') {
+                pos.skip();
+                changed = skipString(pos) || changed;
                 continue;
             }
             if (c == '(') {
