@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.58 2003-03-13 03:07:29 piso Exp $
+;;; $Id: rt.lisp,v 1.59 2003-03-13 03:15:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -706,6 +706,7 @@
                               "some"
                               "sort"
                               "string"
+                              "string-comparisons"
                               "string-downcase"
                               "string-upcase"
                               "substitute"
