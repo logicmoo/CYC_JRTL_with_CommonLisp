@@ -113,6 +113,7 @@
       (progn
         (setf (current-editor) ,editor)
         ,@forms)
+      (update-display ,editor)
       (setf (current-editor) ,old-editor)))))
 
 (defmacro with-other-editor (&rest forms)
@@ -127,6 +128,7 @@
         (progn
           (setf (current-editor) ,other-editor)
           ,@forms)
+        (update-display ,other-editor)
         (setf (current-editor) ,old-editor)))))
 
 (in-package "COMMON-LISP-USER")
