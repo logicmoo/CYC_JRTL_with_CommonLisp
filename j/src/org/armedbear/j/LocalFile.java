@@ -2,7 +2,7 @@
  * LocalFile.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LocalFile.java,v 1.1.1.1 2002-09-24 16:07:54 piso Exp $
+ * $Id: LocalFile.java,v 1.2 2002-12-08 02:18:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,9 @@
 
 package org.armedbear.j;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * As it stands, LocalFile is a convenience class for accessing <code>
  * java.io.File</code>'s separator variables.
@@ -34,6 +37,25 @@ package org.armedbear.j;
  */
 public final class LocalFile
 {
+    private static final String localHostName;
+
+    static {
+        String name = null;
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            name = addr.getHostName();
+        }
+        catch (UnknownHostException e) {
+            Log.error(e);
+        }
+        localHostName = name != null ? name : "local";
+    }
+
+    public static final String getLocalHostName()
+    {
+        return localHostName;
+    }
+
     /**
      * Returns the path separator character for the current platform (as a
      * String).
