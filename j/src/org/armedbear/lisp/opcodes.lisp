@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: opcodes.lisp,v 1.2 2004-05-30 19:08:09 piso Exp $
+;;; $Id: opcodes.lisp,v 1.3 2004-05-31 16:55:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@
 (define-opcode bipush 16 2 1)
 (define-opcode sipush 17 3 1)
 (define-opcode ldc 18 2 1)
-(define-opcode ldc_w 19 3 nil)
+(define-opcode ldc_w 19 3 1)
 (define-opcode ldc2_w 20 3 nil)
 (define-opcode iload 21 2 nil)
 (define-opcode lload 22 2 nil)
@@ -239,6 +239,8 @@
 (define-opcode push-value 203 nil 1)
 (define-opcode store-value 204 nil -1)
 (define-opcode clear-values 205 nil 0)
+
+(defparameter *last-opcode* 205)
 
 (defun opcode-name (opcode-number)
   (let ((opcode (gethash opcode-number *opcodes*)))
