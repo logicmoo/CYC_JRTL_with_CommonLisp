@@ -1,7 +1,7 @@
 ;;; tree-equal.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: tree-equal.lisp,v 1.1 2003-06-20 03:02:19 piso Exp $
+;;; $Id: tree-equal.lisp,v 1.2 2003-07-06 02:51:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
-
-(export 'tree-equal)
+(in-package "SYSTEM")
 
 ;;; From SBCL.
 
