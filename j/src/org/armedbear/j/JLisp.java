@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.8 2003-02-20 19:06:27 piso Exp $
+ * $Id: JLisp.java,v 1.9 2003-02-23 01:24:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,6 +135,9 @@ public final class JLisp extends CommandInterpreter
             public void run()
             {
                 Log.debug("JLisp.dispose");
+                if (interpreter != null)
+                    interpreter.kill();
+                send("(exit)");
                 if (socket != null) {
                     try {
                         Log.debug("closing socket");
