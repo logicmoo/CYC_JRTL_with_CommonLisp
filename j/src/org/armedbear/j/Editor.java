@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.98 2003-07-19 17:14:32 piso Exp $
+ * $Id: Editor.java,v 1.99 2003-07-20 11:23:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -761,6 +761,11 @@ public final class Editor extends JPanel implements Constants,
             if (oldCurrentEditor != null)
                 oldCurrentEditor.getLocationBar().repaint();
         }
+    }
+
+    public static synchronized final Buffer currentBuffer()
+    {
+        return currentEditor.buffer;
     }
 
     public static synchronized final Frame getCurrentFrame()
