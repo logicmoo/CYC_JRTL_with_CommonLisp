@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: inspect.lisp,v 1.5 2004-05-22 19:34:26 piso Exp $
+;;; $Id: inspect.lisp,v 1.6 2004-05-23 02:49:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@
     (when (and (eq fast slow) (> n 0))
       (return (values nil :circular)))))
 
-(defun inspect (obj)
+(defun display-object (obj display-parts-p)
   (cond ((typep obj 'standard-object)
          (format t "~A at #x~X~%" (inspected-description obj) (identity-hash-code obj))
          (do ((slots (class-slots (class-of obj)) (cdr slots))
@@ -104,6 +104,53 @@
                (format t "~4D ~A ~A ~A~%" i
                        name
                        (leader name)
-                       (inspected-description value))
+                       (inspected-description value)
+                       )
                (incf i))))))
   (values))
+
+(defun display-current ()
+  (if *inspect-break*
+      (display-object *inspected-object* t)
+      (format t "No object is being inspected.")))
+
+(defun inspect (obj)
+  (when *inspected-object*
+    (push *inspected-object* *inspected-object-stack*))
+  (setf *inspected-object* obj)
+  (let ((*inspect-break* t)
+        (*debug-level* (1+ *debug-level*)))
+    (display-current)
+    (catch 'inspect-exit
+      (tpl::repl)))
+  (values))
+
+(defun istep (args)
+  (if (null args)
+      (display-current)
+      (let* ((pos (position #\space args))
+             (option-string (if pos (subseq args 0 pos) args))
+             (option (read-from-string option-string)))
+        (cond ((string= option-string "-")
+               (if *inspected-object-stack*
+                   (progn
+                     (setf *inspected-object* (pop *inspected-object-stack*))
+                     (display-current))
+                   (format t "Object has no parent.")))
+              ((string= option-string "q")
+               (setf *inspected-object* nil
+                     *inspected-object-stack* nil
+                     *inspect-break* nil)
+               (throw 'inspect-exit nil))
+              ((fixnump option)
+               (let* ((index option)
+                      (parts (inspected-parts *inspected-object*)))
+                 (cond ((null parts)
+                        (format t "Object has no selectable components."))
+                       ((or (minusp index)
+                            (>= index (length parts)))
+                        (format t "Invalid index (~D)." index))
+                       (t
+                        (push *inspected-object* *inspected-object-stack*)
+                        (setf *inspected-object* (cdr (elt parts index)))
+                        (display-current)))))))))

@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.31 2004-05-11 18:23:32 piso Exp $
+;;; $Id: top-level.lisp,v 1.32 2004-05-23 02:49:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,14 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; Adapted from SB-ACLREPL (originally written by Kevin Rosenberg).
+
+(in-package "SYSTEM")
+
+(defvar *inspect-break* nil)
+
+(defvar *inspected-object-stack* nil)
+
+(defvar *inspected-object* nil)
 
 (in-package "TOP-LEVEL")
 
@@ -40,7 +48,9 @@
 (defun repl-prompt-fun (stream)
   (fresh-line stream)
   (when (> *debug-level* 0)
-    (%format stream "[~D] " *debug-level*))
+    (%format stream "[~D~A] "
+             *debug-level*
+             (if sys::*inspect-break* "i" "")))
   (%format stream "~A(~D): " (prompt-package-name) *cmd-number*))
 
 (defparameter *repl-prompt-fun* #'repl-prompt-fun)
@@ -91,6 +101,9 @@
 (defun inspect-command (args)
   (let ((obj (eval (read-from-string args))))
     (inspect obj)))
+
+(defun istep-command (args)
+  (sys::istep args))
 
 (defun macroexpand-command (args)
   (let ((s (with-output-to-string (stream)
@@ -199,59 +212,63 @@
                (eql (schar prefix 0) *command-char*))
       (setf prefix (subseq prefix 1))
       (decf prefix-len))
-    (format t "~%  COMMAND         DESCRIPTION~%")
+    (format t "~%  COMMAND     ABBR DESCRIPTION~%")
     (dolist (entry *command-table*)
       (when (or (null prefix)
                 (and (<= prefix-len (length (entry-name entry)))
                      (string-equal prefix (subseq (entry-name entry) 0 prefix-len))))
         (format t "  ~A~A~A~%"
-                (pad (entry-name entry) 16)
+                (pad (entry-name entry) 12)
+                (pad (entry-abbreviation entry) 5)
                 (entry-help entry))))
-    (format t "~%Commands may be unambiguously abbreviated and must be prefixed by the command")
-    (format t "~%character, which is '~A'~A.~%~%"
+    (format t "~%Commands must be prefixed by the command character, which is '~A'~A.~%~%"
             *command-char* (if (eql *command-char* #\:) " by default" ""))))
 
 (defun help-command (&optional ignored)
   (%help-command nil))
 
 (defparameter *command-table*
-  '(("apropos" apropos-command "show apropos")
-    ("bt" backtrace-command "backtrace n stack frames (default all)")
-    ("cd" cd-command "change default directory")
-    ("cf" cf-command "compile file(s)")
-    ("continue" continue-command "invoke restart n")
-    ("describe" describe-command "describe an object")
-    ("error" error-command "print the current error message")
-    ("exit" exit-command "exit lisp")
-    ("help" help-command "print this help")
-    ("inspect" inspect-command "inspect an object")
-    ("ld" ld-command "load a file")
-    ("ls" ls-command "list directory")
-    ("macroexpand" macroexpand-command "macroexpand an expression")
-    ("package" package-command "change *PACKAGE*")
-    ("pwd" pwd-command "print current directory")
-    ("reset" reset-command "return to top level")
-    ("rq" rq-command "require a module")))
+  '(("apropos" "ap" apropos-command "apropos")
+    ("bt" nil backtrace-command "backtrace n stack frames (default all)")
+    ("cd" nil cd-command "change default directory")
+    ("cf" nil cf-command "compile file(s)")
+    ("continue" "cont" continue-command "invoke restart n")
+    ("describe" "de" describe-command "describe an object")
+    ("error" "err" error-command "print the current error message")
+    ("exit" "ex" exit-command "exit lisp")
+    ("help" "he" help-command "print this help")
+    ("inspect" "in" inspect-command "inspect an object")
+    ("istep" "i" istep-command "navigate within inspection of an object")
+    ("ld" nil ld-command "load a file")
+    ("ls" nil ls-command "list directory")
+    ("macroexpand" "ma" macroexpand-command "macroexpand an expression")
+    ("package" "pa" package-command "change *PACKAGE*")
+    ("pwd" "pw" pwd-command "print current directory")
+    ("reset" "res" reset-command "return to top level")
+    ("rq" nil rq-command "require a module")))
 
 (defun entry-name (entry)
   (first entry))
 
-(defun entry-command (entry)
+(defun entry-abbreviation (entry)
   (second entry))
 
-(defun entry-help (entry)
+(defun entry-command (entry)
   (third entry))
 
-(defun find-matching-commands (string)
-  (when (and (> (length string) 0)
-             (eql (schar string 0) *command-char*))
-    (setf string (subseq string 1)))
-  (let ((len (length string))
-        (commands ()))
-    (dolist (entry *command-table* commands)
-      (when (and (<= len (length (entry-name entry)))
-                 (string-equal string (subseq (entry-name entry) 0 len)))
-        (push (entry-command entry) commands)))))
+(defun entry-help (entry)
+  (fourth entry))
+
+(defun find-command (string)
+  (let ((len (length string)))
+    (when (and (> len 0)
+               (eql (schar string 0) *command-char*))
+      (setf string (subseq string 1)
+            len (1- len)))
+    (dolist (entry *command-table*)
+      (when (or (string= string (entry-abbreviation entry))
+                (string= string (entry-name entry)))
+        (return (entry-command entry))))))
 
 (defun process-cmd (form)
   (when (eq form *null-cmd*)
@@ -261,22 +278,19 @@
              (eql (char form 0) *command-char*))
     (let* ((pos (or (position #\space form)
                     (position #\return form)))
-           (abbrev (subseq form 0 pos))
+           (command-string (subseq form 0 pos))
            (args (if pos (subseq form (1+ pos)) nil)))
-      (let ((commands (find-matching-commands abbrev)))
-        (cond ((null commands)
-               (%format t "Unknown command ~A.~%" (string-upcase abbrev))
-               (%help-command abbrev))
-              ((null (cdr commands))
+      (let ((command (find-command command-string)))
+        (cond ((null command)
+               (%format t "Unknown command ~A.~%" (string-upcase command-string))
+               (%help-command command-string))
+              (t
                (when args
                  (setf args (string-trim (list #\space #\return) args))
                  (when (zerop (length args))
                    (setf args nil)))
-               (funcall (car commands) args))
-              (t
-               (%format t "The abbreviation ~A is ambiguous.~%" (string-upcase abbrev))
-               (%help-command abbrev))))
-      t)))
+               (funcall command args)))))
+      t))
 
 (defun read-cmd (stream)
   (let ((c (peek-char-non-whitespace stream)))
@@ -324,10 +338,13 @@
   (fresh-line)
   (%format t "Type ~AHELP for a list of available commands.~%" *command-char*)
   (loop
-      (with-simple-restart (top-level
-                            "Return to top level.")
-        (if (sys::featurep :j)
-            (handler-case
-                (repl)
-              (stream-error (c) (return-from top-level-loop)))
-            (repl)))))
+    (setf *inspected-object* nil
+          *inspected-object-stack* nil
+          *inspect-break* nil)
+    (with-simple-restart (top-level
+                          "Return to top level.")
+      (if (sys::featurep :j)
+          (handler-case
+              (repl)
+            (stream-error (c) (return-from top-level-loop)))
+          (repl)))))
