@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.11 2003-07-07 00:41:14 piso Exp $
+ * $Id: PackageFunctions.java,v 1.12 2003-07-07 13:46:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -285,6 +285,24 @@ public final class PackageFunctions extends Lisp
                     pkg.usePackage(p);
                 }
                 use = use.cdr();
+            }
+
+            while (imports != NIL) {
+                LispObject si = imports.car();
+                Package otherPkg = coerceToPackage(si.car());
+                LispObject symbolNames = si.cdr();
+                while (symbolNames != NIL) {
+                    String symbolName = LispString.getValue(symbolNames.car());
+                    Symbol sym = otherPkg.findAccessibleSymbol(symbolName);
+                    if (sym != null)
+                        pkg.importSymbol(sym);
+                    else
+                        throw new LispError(symbolName +
+                                            " not found in package " +
+                                            otherPkg.getName());
+                    symbolNames = symbolNames.cdr();
+                }
+                imports = imports.cdr();
             }
 
             while (interns != NIL) {
