@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.70 2003-07-06 16:27:47 piso Exp $
+;;; $Id: boot.lisp,v 1.71 2003-07-07 00:32:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -184,6 +184,27 @@
 
 (defmacro case (keyform &body clauses)
   (case-expand 'case 'eql keyform clauses))
+
+
+;;; PROG, PROG* (from GCL)
+
+(defmacro prog (vl &rest body &aux (decl nil))
+  (do ()
+      ((or (endp body)
+           (not (consp (car body)))
+           (not (eq (caar body) 'declare)))
+       `(block nil (let ,vl ,@decl (tagbody ,@body))))
+      (push (car body) decl)
+      (pop body)))
+
+(defmacro prog* (vl &rest body &aux (decl nil))
+  (do ()
+      ((or (endp body)
+           (not (consp (car body)))
+           (not (eq (caar body) 'declare)))
+       `(block nil (let* ,vl ,@decl (tagbody ,@body))))
+      (push (car body) decl)
+      (pop body)))
 
 
 (sys::%debug)
