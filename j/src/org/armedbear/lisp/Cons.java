@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.45 2004-08-21 18:09:06 piso Exp $
+ * $Id: Cons.java,v 1.46 2004-09-28 17:33:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -301,12 +301,19 @@ public final class Cons extends LispObject
 
     public String writeToString() throws ConditionThrowable
     {
-        final LispObject printLength = _PRINT_LENGTH_.symbolValue();
-        final int limit;
+        final LispThread thread = LispThread.currentThread();
+        final LispObject printLength = _PRINT_LENGTH_.symbolValue(thread);
+        final int maxLength;
         if (printLength instanceof Fixnum)
-            limit = ((Fixnum)printLength).value;
+            maxLength = ((Fixnum)printLength).value;
         else
-            limit = Integer.MAX_VALUE;
+            maxLength = Integer.MAX_VALUE;
+        final LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+        final int maxLevel;
+        if (printLevel instanceof Fixnum)
+            maxLevel = ((Fixnum)printLevel).value;
+        else
+            maxLevel = Integer.MAX_VALUE;
         StringBuffer sb = new StringBuffer();
         if (car == Symbol.QUOTE) {
             if (cdr instanceof Cons) {
@@ -328,32 +335,45 @@ public final class Cons extends LispObject
                 }
             }
         }
-        int count = 0;
-        boolean truncated = false;
-        sb.append('(');
-        if (count < limit) {
-            LispObject p = this;
-            sb.append(p.car().writeToString());
-            ++count;
-            while ((p = p.cdr()) instanceof Cons) {
-                if (count < limit) {
-                    sb.append(' ');
+        LispObject currentPrintLevel =
+            _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+        int currentLevel = Fixnum.getValue(currentPrintLevel);
+        if (currentLevel < maxLevel) {
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
+            try {
+                int count = 0;
+                boolean truncated = false;
+                sb.append('(');
+                if (count < maxLength) {
+                    LispObject p = this;
                     sb.append(p.car().writeToString());
                     ++count;
-                } else {
+                    while ((p = p.cdr()) instanceof Cons) {
+                        sb.append(' ');
+                        if (count < maxLength) {
+                            sb.append(p.car().writeToString());
+                            ++count;
+                        } else {
+                            truncated = true;
+                            break;
+                        }
+                    }
+                    if (!truncated && p != NIL) {
+                        sb.append(" . ");
+                        sb.append(p.writeToString());
+                    }
+                } else
                     truncated = true;
-                    break;
-                }
+                if (truncated)
+                    sb.append("...");
+                sb.append(')');
             }
-            if (!truncated && p != NIL) {
-                sb.append(" . ");
-                sb.append(p.writeToString());
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
             }
         } else
-            truncated = true;
-        if (truncated)
-            sb.append(" ...");
-        sb.append(')');
+            sb.append('#');
         return sb.toString();
     }
 
