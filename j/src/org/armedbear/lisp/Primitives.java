@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.702 2004-11-04 01:55:45 piso Exp $
+ * $Id: Primitives.java,v 1.703 2004-11-12 13:59:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4373,7 +4373,7 @@ public final class Primitives extends Lisp
 
     // ### inspected-parts
     private static final Primitive INSPECTED_PARTS =
-        new Primitive("inspected-parts", PACKAGE_SYS, false)
+        new Primitive("inspected-parts", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
