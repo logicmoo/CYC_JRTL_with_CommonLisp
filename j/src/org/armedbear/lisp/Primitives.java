@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.296 2003-07-15 13:36:58 piso Exp $
+ * $Id: Primitives.java,v 1.297 2003-07-15 15:34:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2232,9 +2232,9 @@ public final class Primitives extends Module
                 return T;
             if (second == NIL)
                 return NIL;
-            Type type1 = Type.getInstance(first);
-            Type type2 = Type.getInstance(second);
-            return type1.subtypep(type2);
+            TypeSpecifier ts1 = TypeSpecifier.getInstance(first);
+            TypeSpecifier ts2 = TypeSpecifier.getInstance(second);
+            return ts1.isSubtypeOf(ts2);
         }
     };
 
