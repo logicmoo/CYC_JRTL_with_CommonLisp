@@ -1,8 +1,8 @@
 /*
  * PackageFunctions.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: PackageFunctions.java,v 1.28 2004-11-03 15:39:01 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: PackageFunctions.java,v 1.29 2005-01-22 11:42:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -313,7 +313,7 @@ public final class PackageFunctions extends Lisp
                     LispObject string = obj.STRING();
                     Package p = Packages.findPackage(string.getStringValue());
                     if (p == null)
-                        return signal(new LispError(String.valueOf(obj) +
+                        return signal(new LispError(obj.writeToString() +
                                                     " is not the name of a package."));
                     pkg.usePackage(p);
                 }
