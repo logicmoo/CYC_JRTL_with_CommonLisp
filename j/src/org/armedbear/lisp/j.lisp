@@ -69,10 +69,6 @@
       (dolist (function hooks)
         (apply function args)))))
 
-;; (defun current-editor ()
-;;   (let ((method (jmethod "org.armedbear.j.Editor" "currentEditor")))
-;;     (jstatic method nil)))
-
 (defun update-display (&optional ed)
   (let ((method (jmethod "org.armedbear.j.Editor" "updateDisplay"))
         (ed (or ed (current-editor))))
@@ -85,10 +81,6 @@
 
 (defun location-bar-cancel-input ()
   (jstatic "cancelInput" "org.armedbear.j.LocationBar"))
-
-(defun restore-focus ()
-  (let ((method (jmethod "org.armedbear.j.Editor" "restoreFocus")))
-    (jstatic method nil)))
 
 (defun status (string &optional ed)
   (let ((method (jmethod "org.armedbear.j.Editor" "status" "java.lang.String"))
