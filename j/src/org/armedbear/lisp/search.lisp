@@ -1,7 +1,7 @@
 ;;; search.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: search.lisp,v 1.6 2003-07-02 16:06:21 piso Exp $
+;;; $Id: search.lisp,v 1.7 2003-07-28 20:29:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,13 +94,27 @@
              (setq last-match index2)
              (return index2)))))
 
+(defun %search (sequence1 sequence2 from-end test test-not start1 end1 start2 end2 key)
+  (if (listp sequence2)
+      (list-search sequence2 sequence1)
+      (vector-search sequence2 sequence1)))
 
+;; (defun search (sequence1 sequence2 &key from-end (test #'eql) test-not
+;;                          (start1 0) end1 (start2 0) end2 key)
+;;   (let ((end1 (or end1 (length sequence1)))
+;; 	(end2 (or end2 (length sequence2))))
+;;     (when key
+;;       (setq key (coerce-to-function key)))
+;;     (if (listp sequence2)
+;;         (list-search sequence2 sequence1)
+;;         (vector-search sequence2 sequence1))))
 (defun search (sequence1 sequence2 &key from-end (test #'eql) test-not
                          (start1 0) end1 (start2 0) end2 key)
   (let ((end1 (or end1 (length sequence1)))
 	(end2 (or end2 (length sequence2))))
     (when key
       (setq key (coerce-to-function key)))
-    (if (listp sequence2)
-        (list-search sequence2 sequence1)
-        (vector-search sequence2 sequence1))))
+;;     (if (listp sequence2)
+;;         (list-search sequence2 sequence1)
+;;         (vector-search sequence2 sequence1))))
+    (%search sequence1 sequence2 from-end test test-not start1 end1 start2 end2 key)))
