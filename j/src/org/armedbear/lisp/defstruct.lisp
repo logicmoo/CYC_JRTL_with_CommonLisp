@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.60 2005-02-01 15:22:06 piso Exp $
+;;; $Id: defstruct.lisp,v 1.61 2005-02-20 18:23:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,27 +19,28 @@
 
 (in-package "SYSTEM")
 
-(export 'structure-print-function)
-
 (require :source-transform)
 
 ;;; DEFSTRUCT-DESCRIPTION
 
-(defmacro dd-name (x)           `(aref ,x  0))
-(defmacro dd-conc-name (x)      `(aref ,x  1))
-(defmacro dd-constructors (x)   `(aref ,x  2))
-(defmacro dd-copier (x)         `(aref ,x  3))
-(defmacro dd-include (x)        `(aref ,x  4))
-(defmacro dd-type (x)           `(aref ,x  5))
-(defmacro dd-named (x)          `(aref ,x  6))
-(defmacro dd-initial-offset (x) `(aref ,x  7))
-(defmacro dd-predicate (x)      `(aref ,x  8))
-(defmacro dd-print-function (x) `(aref ,x  9))
-(defmacro dd-direct-slots (x)   `(aref ,x 10))
-(defmacro dd-slots (x)          `(aref ,x 11))
+(defmacro dd-name (x)                `(aref ,x  0))
+(defmacro dd-conc-name (x)           `(aref ,x  1))
+(defmacro dd-default-constructor (x) `(aref ,x  2))
+(defmacro dd-constructors (x)        `(aref ,x  3))
+(defmacro dd-copier (x)              `(aref ,x  4))
+(defmacro dd-include (x)             `(aref ,x  5))
+(defmacro dd-type (x)                `(aref ,x  6))
+(defmacro dd-named (x)               `(aref ,x  7))
+(defmacro dd-initial-offset (x)      `(aref ,x  8))
+(defmacro dd-predicate (x)           `(aref ,x  9))
+(defmacro dd-print-function (x)      `(aref ,x 10))
+(defmacro dd-print-object (x)        `(aref ,x 11))
+(defmacro dd-direct-slots (x)        `(aref ,x 12))
+(defmacro dd-slots (x)               `(aref ,x 13))
 
 (defun make-defstruct-description (&key name
                                         conc-name
+                                        default-constructor
                                         constructors
                                         copier
                                         include
@@ -48,11 +49,13 @@
                                         initial-offset
                                         predicate
                                         print-function
+                                        print-object
                                         direct-slots
                                         slots)
-  (let ((dd (make-array 13)))
+  (let ((dd (make-array 14)))
     (setf (dd-name dd) name
           (dd-conc-name dd) conc-name
+          (dd-default-constructor dd) default-constructor
           (dd-constructors dd) constructors
           (dd-copier dd) copier
           (dd-include dd) include
@@ -61,6 +64,7 @@
           (dd-initial-offset dd) initial-offset
           (dd-predicate dd) predicate
           (dd-print-function dd) print-function
+          (dd-print-object dd) print-object
           (dd-direct-slots dd) direct-slots
           (dd-slots dd) slots)
     dd))
@@ -92,6 +96,7 @@
 
 (defvar *dd-name*)
 (defvar *dd-conc-name*)
+(defvar *dd-default-constructor*)
 (defvar *dd-constructors*)
 (defvar *dd-copier*)
 (defvar *dd-include*)
@@ -100,6 +105,7 @@
 (defvar *dd-initial-offset*)
 (defvar *dd-predicate*)
 (defvar *dd-print-function*)
+(defvar *dd-print-object*)
 (defvar *dd-direct-slots*)
 (defvar *dd-slots*)
 
@@ -113,10 +119,10 @@
     (dolist (slot *dd-slots*)
       (let ((name (dsd-name slot))
             (initform (dsd-initform slot)))
-        (if name
-            (progn
-              (push (list (list (keywordify name) name) initform) keys)
-              (push name values))
+        (if (or name (dsd-reader slot))
+            (let ((dummy (gensym)))
+              (push (list (list (keywordify name) dummy) initform) keys)
+              (push dummy values))
             (push initform values))))
     (setf keys (cons '&key (nreverse keys))
           values (nreverse values))
@@ -351,6 +357,24 @@
           (t
            `((setf (fdefinition ',*dd-copier*) #'copy-structure))))))
 
+(defun define-print-function ()
+  (cond (*dd-print-function*
+         (if (cadr *dd-print-function*)
+             `((defmethod print-object ((instance ,*dd-name*) stream)
+                 (funcall (function ,(cadr *dd-print-function*))
+                          instance stream *current-print-level*)))
+             `((defmethod print-object ((instance ,*dd-name*) stream)
+                 (write-string (%write-to-string instance) stream)))))
+        (*dd-print-object*
+         (if (cadr *dd-print-object*)
+             `((defmethod print-object ((instance ,*dd-name*) stream)
+                 (funcall (function ,(cadr *dd-print-object*))
+                          instance stream)))
+             `((defmethod print-object ((instance ,*dd-name*) stream)
+                 (write-string (%write-to-string instance) stream)))))
+        (t
+         nil)))
+
 (defun parse-1-option (option)
   (case (car option)
     (:conc-name
@@ -365,7 +389,8 @@
          (0 ; Use default name.
           (setf name (default-constructor-name)
                 arglist nil)
-          (push (list name arglist) *dd-constructors*))
+          (push (list name arglist) *dd-constructors*)
+          )
          (1
           (if (null (car args))
               (setf name nil) ; No constructor.
@@ -391,8 +416,9 @@
            (setf *dd-predicate* nil)
            (setf *dd-predicate* (symbol-name (cadr option))))))
     (:print-function
-     (when (= (length option) 2)
-       (setf *dd-print-function* (cadr option))))
+     (setf *dd-print-function* option))
+    (:print-object
+     (setf *dd-print-object* option))
     (:type
      (setf *dd-type* (cadr option)))))
 
@@ -416,6 +442,7 @@
 (defmacro defstruct (name-and-options &rest slots)
   (let ((*dd-name* nil)
         (*dd-conc-name* nil)
+        (*dd-default-constructor* nil)
         (*dd-constructors* nil)
         (*dd-copier* nil)
         (*dd-include* nil)
@@ -424,6 +451,7 @@
         (*dd-initial-offset* nil)
         (*dd-predicate* nil)
         (*dd-print-function* nil)
+        (*dd-print-object* nil)
         (*dd-direct-slots* ())
         (*dd-slots* ()))
     (parse-name-and-options (if (atom name-and-options)
@@ -494,6 +522,7 @@
              (setf (get ',*dd-name* 'structure-definition)
                    (make-defstruct-description :name ',*dd-name*
                                                :conc-name ',*dd-conc-name*
+                                               :default-constructor ',*dd-default-constructor*
                                                :constructors ',*dd-constructors*
                                                :copier ',*dd-copier*
                                                :include ',*dd-include*
@@ -502,6 +531,7 @@
                                                :initial-offset ,*dd-initial-offset*
                                                :predicate ,*dd-predicate*
                                                :print-function ',*dd-print-function*
+                                               :print-object ',*dd-print-object*
                                                :direct-slots ',*dd-direct-slots*
                                                :slots ',*dd-slots*))
              (make-structure-class ',*dd-name* ',*dd-direct-slots* ',*dd-slots*
@@ -510,12 +540,14 @@
            ,@(define-predicate)
            ,@(define-access-functions)
            ,@(define-copier)
+           ,@(define-print-function)
            ',*dd-name*)
         `(progn
            (eval-when (:compile-toplevel :load-toplevel :execute)
              (setf (get ',*dd-name* 'structure-definition)
                    (make-defstruct-description :name ',*dd-name*
                                                :conc-name ',*dd-conc-name*
+                                               :default-constructor ',*dd-default-constructor*
                                                :constructors ',*dd-constructors*
                                                :copier ',*dd-copier*
                                                :include ',*dd-include*
@@ -524,21 +556,12 @@
                                                :initial-offset ,*dd-initial-offset*
                                                :predicate ,*dd-predicate*
                                                :print-function ',*dd-print-function*
+                                               :print-object ',*dd-print-object*
                                                :direct-slots ',*dd-direct-slots*
                                                :slots ',*dd-slots*)))
            ,@(define-constructors)
            ,@(define-predicate)
            ,@(define-access-functions)
            ,@(define-copier)
+           ,@(define-print-function)
            ',*dd-name*))))
-
-(defun structure-print-function (arg)
-  (let ((type (cond ((symbolp arg)
-                     arg)
-                    ((classp arg)
-                     (class-name arg))
-                    (t
-                     (type-of arg)))))
-    (when type
-      (let ((dd (get type 'structure-definition)))
-        (and dd (dd-print-function dd))))))

@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.45 2005-02-20 14:13:55 piso Exp $
+ * $Id: StructureObject.java,v 1.46 2005-02-20 18:24:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,17 +149,6 @@ public final class StructureObject extends LispObject
             int currentLevel = Fixnum.getValue(currentPrintLevel);
             if (currentLevel >= maxLevel && slots.length > 0)
                 return "#";
-            Symbol STRUCTURE_PRINT_FUNCTION =
-                PACKAGE_SYS.intern("STRUCTURE-PRINT-FUNCTION");
-            LispObject fun = STRUCTURE_PRINT_FUNCTION.getSymbolFunction();
-            if (fun != null) {
-                LispObject printFunction = thread.execute(fun, this);
-                if (printFunction != NIL) {
-                    StringOutputStream stream = new StringOutputStream();
-                    thread.execute(printFunction, this, stream, currentPrintLevel);
-                    return stream.getString().getStringValue();
-                }
-            }
             StringBuffer sb = new StringBuffer("#S(");
             sb.append(structureClass.getSymbol().writeToString());
             if (currentLevel < maxLevel) {
