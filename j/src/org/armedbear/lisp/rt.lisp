@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.148 2004-01-09 18:21:49 piso Exp $
+;;; $Id: rt.lisp,v 1.149 2004-01-31 19:14:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -135,7 +135,9 @@
 (load (concatenate 'string regression-test::*prefix* "ansi-aux-macros.lsp"))
 
 (defun do-tests (&rest args)
-  (let ((regression-test::*passed* 0) (regression-test::*failed* 0)
+  (let ((regression-test::*passed* 0)
+        (regression-test::*failed* 0)
+        (*default-pathname-defaults* (pathname regression-test::*prefix*))
         (suffix ".lsp")
         (tests (or args '("abs"
                           "acons"
