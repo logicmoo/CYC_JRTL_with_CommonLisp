@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.1.1.1 2002-09-24 16:09:06 piso Exp $
+ * $Id: Directory.java,v 1.2 2002-10-10 22:29:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -266,15 +266,23 @@ public final class Directory extends Buffer
             topLineNumbers.add(new Integer(topLineNumber));
         }
 
-        empty();
-
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+            return; // Shouldn't happen.
+        }
+        try {
+            empty();
+        }
+        finally {
+            unlockWrite();
+        }
         entries.clear();
-
         numMarked = 0;
-
         Debug.assertTrue(isLoaded == false);
         isLoaded = false;
-
         setListing(null);
 
         load();
@@ -533,9 +541,21 @@ public final class Directory extends Buffer
             reload();
         } else {
             sort();
-            empty();
-            addEntriesToBuffer();
-            renumber();
+            try {
+                lockWrite();
+            }
+            catch (InterruptedException e) {
+                Log.error(e);
+                return; // Shouldn't happen.
+            }
+            try {
+                empty();
+                addEntriesToBuffer();
+                renumber();
+            }
+            finally {
+                unlockWrite();
+            }
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                 Editor ed = it.nextEditor();
                 if (ed.getBuffer() == this) {
@@ -654,27 +674,36 @@ public final class Directory extends Buffer
                 }
                 sort();
             }
-            addEntriesToBuffer();
-
-            // We may have changed formats.
-            setNameOffset();
-
-            if (totalSize != 0) {
-                String s = String.valueOf(totalSize);
-                int end = usingNativeFormat ? nameOffset - 14 : nameOffset - 19;
-                int begin = end - s.length();
-                FastStringBuffer sb =  new FastStringBuffer(80);
-                sb.append(Utilities.spaces(begin));
-                for (int i = s.length(); i > 0; i--)
-                    sb.append('-');
-                appendLine(sb.toString());
-                sb.setLength(0);
-                sb.append(Utilities.spaces(begin));
-                sb.append(s);
-                appendLine(sb.toString());
+            try {
+                lockWrite();
             }
-
-            renumber();
+            catch (InterruptedException e) {
+                Log.error(e);
+                return; // Shouldn't happen.
+            }
+            try {
+                addEntriesToBuffer();
+                setNameOffset(); // We may have changed formats.
+                if (totalSize != 0) {
+                    String s = String.valueOf(totalSize);
+                    int end =
+                        usingNativeFormat ? nameOffset - 14 : nameOffset - 19;
+                    int begin = end - s.length();
+                    FastStringBuffer sb =  new FastStringBuffer(80);
+                    sb.append(Utilities.spaces(begin));
+                    for (int i = s.length(); i > 0; i--)
+                        sb.append('-');
+                    appendLine(sb.toString());
+                    sb.setLength(0);
+                    sb.append(Utilities.spaces(begin));
+                    sb.append(s);
+                    appendLine(sb.toString());
+                }
+                renumber();
+            }
+            finally {
+                unlockWrite();
+            }
         }
         catch (Exception e) {
             Log.error(e);
@@ -924,7 +953,19 @@ public final class Directory extends Buffer
             history.truncate();
             history.append(getFile(), name, offset);
             history.reset();
-            empty();
+            try {
+                lockWrite();
+            }
+            catch (InterruptedException e) {
+                Log.error(e);
+                return; // Shouldn't happen.
+            }
+            try {
+                empty();
+            }
+            finally {
+                unlockWrite();
+            }
             entries.clear();
             numMarked = 0;
             setListing(null);
