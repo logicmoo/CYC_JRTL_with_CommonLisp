@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.25 2003-10-25 17:17:18 piso Exp $
+ * $Id: Function.java,v 1.26 2003-12-08 05:06:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@ package org.armedbear.lisp;
 
 public abstract class Function extends Functional
 {
-    private final Module module;
     private final String name;
     protected final int index;
 
@@ -33,14 +32,12 @@ public abstract class Function extends Functional
 
     protected Function()
     {
-        module = null;
         name = null;
         index = 0;
     }
 
     public Function(String name)
     {
-        module = null;
         this.name = name != null ? name.toUpperCase() : null;
         index = 0;
         if (name != null)
@@ -60,7 +57,6 @@ public abstract class Function extends Functional
     public Function(String name, Package pkg, boolean exported,
                     String arglist, String docstring)
     {
-        module = null;
         this.name = name != null ? name.toUpperCase() : null;
         index = 0;
         if (arglist instanceof String)
@@ -86,14 +82,6 @@ public abstract class Function extends Functional
                 }
             }
         }
-    }
-
-    public Function(Module module, String name, int index)
-    {
-        this.module = module;
-        this.name = name.toUpperCase();
-        this.index = index;
-        setLambdaName(Symbol.addFunction(this.name, this));
     }
 
     public LispObject typeOf()
@@ -135,16 +123,12 @@ public abstract class Function extends Functional
     // Primitive
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        if (module != null)
-            return module.dispatch(args, index);
         throw new ConditionThrowable(new WrongNumberOfArgumentsException(name));
     }
 
     // Primitive1
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        if (module != null)
-            return module.dispatch(arg, index);
         LispObject[] args = new LispObject[1];
         args[0] = arg;
         return execute(args);
@@ -154,8 +138,6 @@ public abstract class Function extends Functional
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        if (module != null)
-            return module.dispatch(first, second, index);
         LispObject[] args = new LispObject[2];
         args[0] = first;
         args[1] = second;

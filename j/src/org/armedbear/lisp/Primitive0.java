@@ -2,7 +2,7 @@
  * Primitive0.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive0.java,v 1.8 2003-09-19 01:46:42 piso Exp $
+ * $Id: Primitive0.java,v 1.9 2003-12-08 05:06:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,11 +46,6 @@ public class Primitive0 extends Function
                       String arglist, String docstring)
     {
         super(name, pkg, exported, arglist, docstring);
-    }
-
-    public Primitive0(Module module, String name, int index)
-    {
-        super(module, name, index);
     }
 
     public LispObject execute(LispObject first) throws ConditionThrowable
