@@ -1,8 +1,8 @@
 /*
  * OpenFileTextFieldHandler.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.55 2004-10-07 00:35:11 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: OpenFileTextFieldHandler.java,v 1.56 2005-01-11 04:17:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -697,8 +697,13 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     textField.getCaret().setVisible(false);
                 } else {
                     char c = originalText.charAt(0);
-                    if (c == '/' || c == '\\') {
-                        int index;
+                    if (c == '/' || c == '\\' ||
+                        (Platform.isPlatformWindows() &&
+                         originalText.length() >= 3 &&
+                         originalText.charAt(1) == ':' &&
+                         originalText.charAt(2) == '\\'))
+                    {
+                        final int index;
                         if (ignoreCase) {
                             index = completion.toLowerCase().lastIndexOf(
                                 originalText.toLowerCase());
