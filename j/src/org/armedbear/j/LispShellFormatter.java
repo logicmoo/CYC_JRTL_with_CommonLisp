@@ -2,7 +2,7 @@
  * LispShellFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispShellFormatter.java,v 1.1 2002-10-19 14:06:57 piso Exp $
+ * $Id: LispShellFormatter.java,v 1.2 2002-10-24 17:32:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,9 @@ public final class LispShellFormatter extends Formatter
     private static final byte FORMAT_TEXT   = 0;
     private static final byte FORMAT_PROMPT = 1;
     private static final byte FORMAT_INPUT  = 2;
+
+    private final RE defaultPromptRE =
+        new UncheckedRE("^[^>\\*\\]]*[>\\*\\]] *");
 
     public LispShellFormatter(Buffer buffer)
     {
@@ -75,8 +78,6 @@ public final class LispShellFormatter extends Formatter
         return segmentList;
     }
 
-    private final RE promptRE = new UncheckedRE("^[^>\\*\\]]*[>\\*\\]] *");
-
     private int getPromptEndIndex(String text)
     {
         if (text.length() == 0)
@@ -90,6 +91,11 @@ public final class LispShellFormatter extends Formatter
             return 2;
         if (text.startsWith("* "))
             return 2;
+        final RE promptRE;
+        if (buffer instanceof CommandInterpreter)
+            promptRE = ((CommandInterpreter)buffer).getPromptRE();
+        else
+            promptRE = defaultPromptRE;
         REMatch match = promptRE.getMatch(text);
         if (match != null)
             return match.getEndIndex();
