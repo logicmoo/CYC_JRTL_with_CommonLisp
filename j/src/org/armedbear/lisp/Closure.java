@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.61 2003-12-12 19:41:42 piso Exp $
+ * $Id: Closure.java,v 1.62 2003-12-25 17:19:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,7 @@ public class Closure extends Function
     private int maxArgs;
 
     private final Symbol[] variables;
+    private final Symbol[] specials;
 
     public Closure(LispObject lambdaList, LispObject body, Environment env)
         throws ConditionThrowable
@@ -233,6 +234,7 @@ public class Closure extends Function
         if (arity >= 0)
             Debug.assertTrue(arity == minArgs);
         variables = processVariables();
+        specials = processDeclarations();
     }
 
     private final Symbol[] processVariables()
@@ -261,6 +263,39 @@ public class Closure extends Function
         }
         Symbol[] array = new Symbol[vars.size()];
         vars.toArray(array);
+        return array;
+    }
+
+    private final Symbol[] processDeclarations() throws ConditionThrowable
+    {
+        ArrayList specials = null;
+        LispObject forms = body;
+        while (forms != NIL) {
+            LispObject obj = forms.car();
+            if (obj instanceof Cons && obj.car() == Symbol.DECLARE) {
+                LispObject decls = obj.cdr();
+                while (decls != NIL) {
+                    LispObject decl = decls.car();
+                    if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
+                        LispObject vars = decl.cdr();
+                        while (vars != NIL) {
+                            Symbol var = checkSymbol(vars.car());
+                            if (specials == null)
+                                specials = new ArrayList();
+                            specials.add(var);
+                            vars = vars.cdr();
+                        }
+                    }
+                    decls = decls.cdr();
+                }
+                forms = forms.cdr();
+            } else
+                break;
+        }
+        if (specials == null)
+            return null;
+        Symbol[] array = new Symbol[specials.size()];
+        specials.toArray(array);
         return array;
     }
 
@@ -325,6 +360,10 @@ public class Closure extends Function
             final LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(environment);
+            if (specials != null) {
+                for (int i = 0; i < specials.length; i++)
+                    ext.declareSpecial(specials[i]);
+            }
             bind(requiredParameters[0].var, arg, ext);
             if (arity != 1) {
                 if (optionalParameters != null)
@@ -358,6 +397,10 @@ public class Closure extends Function
             final LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(environment);
+            if (specials != null) {
+                for (int i = 0; i < specials.length; i++)
+                    ext.declareSpecial(specials[i]);
+            }
             bind(requiredParameters[0].var, first, ext);
             bind(requiredParameters[1].var, second, ext);
             if (arity != 2) {
@@ -394,6 +437,10 @@ public class Closure extends Function
             final LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(environment);
+            if (specials != null) {
+                for (int i = 0; i < specials.length; i++)
+                    ext.declareSpecial(specials[i]);
+            }
             bind(requiredParameters[0].var, first, ext);
             bind(requiredParameters[1].var, second, ext);
             bind(requiredParameters[2].var, third, ext);
@@ -438,6 +485,10 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
         Environment ext = new Environment(environment);
+        if (specials != null) {
+            for (int i = 0; i < specials.length; i++)
+                ext.declareSpecial(specials[i]);
+        }
         args = processArgs(args);
         Debug.assertTrue(args.length == variables.length);
         for (int i = 0; i < variables.length; i++)
