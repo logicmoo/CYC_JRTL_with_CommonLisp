@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SpecialOperators.java,v 1.27 2004-05-19 17:30:31 piso Exp $
+ * $Id: SpecialOperators.java,v 1.28 2004-06-15 19:04:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -428,7 +428,7 @@ public final class SpecialOperators extends Lisp
                     if (f != null)
                         return f;
                     Symbol symbol = checkSymbol(arg.cadr());
-                    f = get(symbol, PACKAGE_SYS.intern("SETF-FUNCTION"));
+                    f = get(symbol, Symbol._SETF_FUNCTION);
                     if (f != null)
                         return f;
                     f = get(symbol, PACKAGE_SYS.intern("SETF-INVERSE"));
@@ -451,7 +451,7 @@ public final class SpecialOperators extends Lisp
             while (args != NIL) {
                 Symbol symbol = checkSymbol(args.car());
                 if (symbol.isConstant()) {
-                    return signal(new ProgramError(String.valueOf(symbol) +
+                    return signal(new ProgramError(symbol.writeToString() +
                         " is a constant and thus cannot be set."));
                 }
                 args = args.cdr();
