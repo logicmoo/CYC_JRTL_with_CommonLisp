@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.427 2003-09-23 13:38:54 piso Exp $
+ * $Id: Primitives.java,v 1.428 2003-09-23 14:29:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1580,62 +1580,54 @@ public final class Primitives extends Module
             final LispThread thread = LispThread.currentThread();
             LispObject resultForm = args.cdr().cdr().car();
             Environment oldDynEnv = thread.getDynamicEnvironment();
-            LispObject limit = eval(countForm, env, thread);
-            LispObject result;
-            if (limit instanceof Fixnum) {
-                int count = ((Fixnum)limit).getValue();
-                int i;
-                for (i = 0; i < count; i++) {
+            int depth = thread.getStackDepth();
+            try {
+                LispObject limit = eval(countForm, env, thread);
+                LispObject result;
+                if (limit instanceof Fixnum) {
+                    int count = ((Fixnum)limit).getValue();
+                    int i;
+                    for (i = 0; i < count; i++) {
+                        Environment ext = new Environment(env);
+                        bind(var, new Fixnum(i), ext);
+                        LispObject body = bodyForm;
+                        while (body != NIL) {
+                            eval(body.car(), ext, thread);
+                            body = body.cdr();
+                        }
+                    }
                     Environment ext = new Environment(env);
                     bind(var, new Fixnum(i), ext);
-                    LispObject body = bodyForm;
-                    int depth = thread.getStackDepth();
-                    try {
+                    result = eval(resultForm, ext, thread);
+                } else if (limit instanceof Bignum) {
+                    LispObject i = Fixnum.ZERO;
+                    while (i.isLessThan(limit)) {
+                        Environment ext = new Environment(env);
+                        bind(var, i, ext);
+                        LispObject body = bodyForm;
                         while (body != NIL) {
                             eval(body.car(), ext, thread);
                             body = body.cdr();
                         }
+                        i = i.incr();
                     }
-                    catch (Return ret) {
-                        if (ret.getTag() == NIL) {
-                            thread.setStackDepth(depth);
-                            return ret.getResult();
-                        }
-                        throw ret;
-                    }
-                }
-                Environment ext = new Environment(env);
-                bind(var, new Fixnum(i), ext);
-                result = eval(resultForm, ext, thread);
-            } else if (limit instanceof Bignum) {
-                LispObject i = Fixnum.ZERO;
-                while (i.isLessThan(limit)) {
                     Environment ext = new Environment(env);
                     bind(var, i, ext);
-                    LispObject body = bodyForm;
-                    int depth = thread.getStackDepth();
-                    try {
-                        while (body != NIL) {
-                            eval(body.car(), ext, thread);
-                            body = body.cdr();
-                        }
-                    }
-                    catch (Return ret) {
-                        if (ret.getTag() == NIL) {
-                            thread.setStackDepth(depth);
-                            return ret.getResult();
-                        }
-                        throw ret;
-                    }
-                    i = i.incr();
+                    result = eval(resultForm, ext, thread);
+                } else
+                    throw new ConditionThrowable(new TypeError(limit, "integer"));
+                return result;
+            }
+            catch (Return ret) {
+                if (ret.getTag() == NIL) {
+                    thread.setStackDepth(depth);
+                    return ret.getResult();
                 }
-                Environment ext = new Environment(env);
-                bind(var, i, ext);
-                result = eval(resultForm, ext, thread);
-            } else
-                throw new ConditionThrowable(new TypeError(limit, "integer"));
-            thread.setDynamicEnvironment(oldDynEnv);
-            return result;
+                throw ret;
+            }
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
         }
     };
 
