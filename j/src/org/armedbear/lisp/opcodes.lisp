@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: opcodes.lisp,v 1.18 2005-01-28 02:20:28 piso Exp $
+;;; $Id: opcodes.lisp,v 1.19 2005-02-03 02:29:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,8 +45,8 @@
 (define-opcode iconst_3 6 1 1)
 (define-opcode iconst_4 7 1 1)
 (define-opcode iconst_5 8 1 1)
-(define-opcode lconst_0 9 1 nil)
-(define-opcode lconst_1 10 1 nil)
+(define-opcode lconst_0 9 1 2)
+(define-opcode lconst_1 10 1 2)
 (define-opcode fconst_0 11 1 nil)
 (define-opcode fconst_1 12 1 nil)
 (define-opcode fconst_2 13 1 nil)
