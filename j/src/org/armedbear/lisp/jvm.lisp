@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.3 2003-10-25 16:36:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.4 2003-11-02 19:10:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 (in-package "JVM")
 
 (export '(jvm-compile jvm-compile-package))
+
+(shadow 'method)
 
 (defvar *instructions*
   '(nop             aconst_null  iconst_m1       iconst_0      iconst_1     ;   0
