@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.87 2004-10-01 18:19:28 piso Exp $
+ * $Id: Stream.java,v 1.88 2004-10-04 00:29:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1149,13 +1149,30 @@ public class Stream extends LispObject
 
     public LispObject fileStringLength(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof LispCharacter)
+        if (arg instanceof LispCharacter) {
+            if (Utilities.isPlatformWindows) {
+                if (((LispCharacter)arg).value == '\n')
+                    return Fixnum.TWO;
+            }
             return Fixnum.ONE;
-        else if (arg instanceof AbstractString)
+        }
+        if (arg instanceof AbstractString) {
+            if (Utilities.isPlatformWindows) {
+                int fileStringLength = 0;
+                char[] chars = ((AbstractString)arg).getStringChars();
+                for (int i = chars.length; i-- > 0;) {
+                    if (chars[i] == '\n')
+                        fileStringLength += 2;
+                    else
+                        ++fileStringLength;
+                }
+                return number(fileStringLength);
+
+            }
             return number(arg.length());
-        else
-            return signal(new TypeError(String.valueOf(arg) +
-                                        " is neither a string nor a character."));
+        }
+        return signal(new TypeError(arg.writeToString() +
+                                    " is neither a string nor a character."));
     }
 
     // Returns -1 at end of file.
