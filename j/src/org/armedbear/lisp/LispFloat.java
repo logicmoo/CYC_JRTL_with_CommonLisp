@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.5 2003-03-26 21:51:39 piso Exp $
+ * $Id: LispFloat.java,v 1.6 2003-03-27 03:53:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,12 +121,15 @@ public final class LispFloat extends LispObject
 
     public LispObject divideBy(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof LispFloat)
             return new LispFloat(value / ((LispFloat)obj).value);
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof Fixnum)
+            return new LispFloat(value / ((Fixnum)obj).getValue());
+        if (obj instanceof Bignum)
+            return new LispFloat(value / ((Bignum)obj).getValue().floatValue());
+        if (obj instanceof Ratio)
+            return new LispFloat(value / ((Ratio)obj).floatValue());
+        throw new TypeError(obj, "number");
     }
 
     public boolean isEqualTo(LispObject obj) throws LispError
@@ -203,4 +206,25 @@ public final class LispFloat extends LispObject
     {
         return String.valueOf(value);
     }
+
+    // integer-decode-float float => significand, exponent, integer-sign
+    private static final Primitive1 INTEGER_DECODE_FLOAT =
+        new Primitive1("integer-decode-float") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof LispFloat) {
+                int bits = Float.floatToRawIntBits(((LispFloat)arg).getValue());
+                Fixnum significand = new Fixnum((bits & 0x007fffff) | 0x800000);
+                Fixnum exponent = new Fixnum(((bits >> 23) & 0xff) - 150);
+                Fixnum sign = ((bits & 0x80000000) != 0) ? new Fixnum(-1) : Fixnum.ONE;
+                LispObject[] values = new LispObject[3];
+                values[0] = significand;
+                values[1] = exponent;
+                values[2] = sign;
+                setValues(values);
+                return values[0];
+            }
+            throw new TypeError(arg, "float");
+        }
+    };
 }
