@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.1 2003-09-20 16:54:55 piso Exp $
+ * $Id: StandardObject.java,v 1.2 2003-10-10 14:16:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,20 @@ package org.armedbear.lisp;
 
 public class StandardObject extends LispObject
 {
+    // Slots.
+    private LispObject cls;
+    private LispObject slots; // A simple vector.
+
+    protected StandardObject()
+    {
+    }
+
+    private StandardObject(LispObject cls, LispObject slots)
+    {
+        this.cls = cls;
+        this.slots = slots;
+    }
+
     public LispObject typeOf()
     {
         return Symbol.STANDARD_OBJECT;
@@ -37,6 +51,21 @@ public class StandardObject extends LispObject
     {
         if (type == Symbol.STANDARD_OBJECT)
             return T;
+        if (type == BuiltInClass.STANDARD_OBJECT)
+            return T;
         return super.typep(type);
     }
+
+    // ### allocate-std-instance
+    // allocate-std-instance class slots => instance
+    private static final Primitive2 ALLOCATE_STD_INSTANCE =
+        new Primitive2("allocate-std-instance", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+        {
+            if (first == BuiltInClass.STANDARD_CLASS)
+                return new StandardClass();
+            return new StandardObject(first, second);
+        }
+    };
 }
