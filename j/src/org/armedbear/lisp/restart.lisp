@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.6 2003-12-17 16:50:23 piso Exp $
+;;; $Id: restart.lisp,v 1.7 2003-12-17 16:53:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,8 +73,8 @@
       (nreverse res))))
 
 (defun find-restart (name &optional condition)
-  (dolist (restart-cluster *restart-clusters*)
-    (dolist (restart restart-cluster)
+  (let ((restarts (compute-restarts condition)))
+    (dolist (restart restarts)
       (when (or (eq restart name) (eq (restart-name restart) name))
         (return-from find-restart restart)))))
 
