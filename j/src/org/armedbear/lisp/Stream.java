@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.118 2005-03-22 20:00:05 piso Exp $
+ * $Id: Stream.java,v 1.119 2005-03-24 01:14:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -744,7 +744,6 @@ public class Stream extends LispObject
                 sb.setCharAt(0, Utilities.toLowerCase(c));
             }
         }
-//       loop:
         while (true) {
             int n = _readChar();
             if (n < 0)
@@ -1486,6 +1485,30 @@ public class Stream extends LispObject
         {
             Stream stream = checkStream(arg);
             return number(stream.getOffset());
+        }
+    };
+
+    // ### stream-charpos stream => position
+    private static final Primitive STREAM_CHARPOS =
+        new Primitive("stream-charpos", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Stream stream = checkCharacterOutputStream(arg);
+            return new Fixnum(stream.getCharPos());
+        }
+    };
+
+    // ### stream-%set-charpos stream newval => newval
+    private static final Primitive STREAM_SET_CHARPOS =
+        new Primitive("stream-%set-charpos", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Stream stream = checkCharacterOutputStream(first);
+            stream.setCharPos(Fixnum.getValue(second));
+            return second;
         }
     };
 }
