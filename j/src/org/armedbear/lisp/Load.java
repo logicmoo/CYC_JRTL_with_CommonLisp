@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.94 2005-01-19 15:59:46 piso Exp $
+ * $Id: Load.java,v 1.95 2005-02-10 12:56:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,6 +207,9 @@ public final class Load extends Lisp
                 }
             }
             if (in != null) {
+                final LispThread thread = LispThread.currentThread();
+                final Binding lastSpecialBinding = thread.lastSpecialBinding;
+                thread.bindSpecial(_WARN_ON_REDEFINITION_, NIL);
                 try {
                     return loadFileFromStream(pathname, truename, in, verbose, print, auto);
                 }
@@ -217,6 +220,7 @@ public final class Load extends Lisp
                     System.err.println(sb.toString());
                 }
                 finally {
+                    thread.lastSpecialBinding = lastSpecialBinding;
                     try {
                         in.close();
                     }
