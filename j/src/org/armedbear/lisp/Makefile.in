@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.128 2004-01-20 00:57:16 piso Exp $
+# $Id: Makefile.in,v 1.129 2004-01-20 02:23:09 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ CLASSFILES =	AbstractArray.class \
 		DisplacedArray.class \
 		DivisionByZero.class \
 		Do.class \
+		EchoStream.class \
 		EndOfFile.class \
 		Environment.class \
 		Exports.class \
