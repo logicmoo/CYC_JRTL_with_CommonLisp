@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.98 2003-11-03 02:58:23 piso Exp $
+ * $Id: Autoload.java,v 1.99 2003-11-04 19:40:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -194,8 +194,11 @@ public class Autoload extends Function
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Symbol symbol = checkSymbol(arg);
-            return (symbol.getSymbolFunction() instanceof Autoload) ? T : NIL;
+            if (arg instanceof Symbol) {
+                if (arg.getSymbolFunction() instanceof Autoload)
+                    return T;
+            }
+            return NIL;
         }
     };
 
