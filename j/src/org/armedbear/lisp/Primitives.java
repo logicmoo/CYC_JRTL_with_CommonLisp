@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.313 2003-08-03 20:31:59 piso Exp $
+ * $Id: Primitives.java,v 1.314 2003-08-05 01:16:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -728,23 +728,32 @@ public final class Primitives extends Module
     };
 
     // ### prin1
+    // prin1 object &optional output-stream => object
     private static final Primitive PRIN1 = new Primitive("prin1") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject arg) throws LispError
         {
-            if (args.length < 1 || args.length > 2)
-                throw new WrongNumberOfArgumentsException(this);
-            CharacterOutputStream out = null;
-            if (args.length == 2) {
-                if (args[1] instanceof CharacterOutputStream)
-                    out = (CharacterOutputStream) args[1];
-                else
-                    throw new TypeError(args[0], "output stream");
-            }
-            if (out == null)
-                out = getStandardOutput();
+            CharacterOutputStream out = getStandardOutput();
             if (out != null)
-                out.prin1(args[0]);
-            return args[0];
+                out.prin1(arg);
+            return arg;
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            CharacterOutputStream out;
+            try {
+                out = (CharacterOutputStream) second;
+            }
+            catch (ClassCastException e) {
+                if (second == T)
+                    out = getTerminalIO().getOutputStream();
+                else if (second == NIL)
+                    out = getStandardOutput();
+                else
+                    throw new TypeError(second, "output stream");
+            }
+            out.prin1(first);
+            return first;
         }
     };
 
@@ -763,8 +772,7 @@ public final class Primitives extends Module
     private static final Primitive1 PRINT = new Primitive1("print") {
         public LispObject execute(LispObject arg) throws LispError
         {
-            CharacterOutputStream out =
-                getStandardOutput();
+            CharacterOutputStream out = getStandardOutput();
             if (out != null) {
                 out.terpri();
                 out.prin1(arg);
@@ -3702,8 +3710,7 @@ public final class Primitives extends Module
                 else if (streamArg == T || streamArg == NIL)
                     out = getStandardOutput();
                 else
-                    throw new TypeError(args[1],
-                        "character output stream");
+                    throw new TypeError(args[1], "character output stream");
             }
             out.finishOutput();
             return NIL;
