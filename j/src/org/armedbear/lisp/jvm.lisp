@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.249 2004-07-28 13:31:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.250 2004-07-28 14:44:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2638,47 +2638,34 @@
          (tag (find-tag name)))
     (unless tag
       (error "COMPILE-GO: tag not found: ~S" name))
-    (unless (eq (tag-compiland tag) *current-compiland*)
-;;       (error "COMPILE-GO: tag not local: ~S" name)
-;;       (format t "----- COMPILE-GO: non-local case -----~%")
-
-      ;; FIXME How is the dynamic environment unwound in the non-local case? ***************
-
-      (emit 'new +lisp-go-class+)
-      (emit 'dup)
-      (compile-form `',(tag-label tag) :target :stack) ; Tag.
-      (emit-invokespecial +lisp-go-class+
-                          "<init>"
-                          "(Lorg/armedbear/lisp/LispObject;)V"
-                          -2)
-      (emit 'athrow)
-      ;; Following code will not be reached, but is needed for JVM stack
-      ;; consistency.
-      (when target
-        (emit-push-nil)
-        (emit-move-from-stack target))
-      (return-from compile-go))
-    (progn
-;;       (%format t "COMPILE-GO tag-block = ~S~%" (block-name (tag-block tag)))
-      (let ((tag-block (tag-block tag))
-            (register nil))
-        (dolist (block *blocks*)
-;;           (%format t "block = ~S reg = ~S~%"
-;;                    (block-name block)
-;;                    (block-environment-register block))
-          (if (eq block tag-block)
-              (return)
-              (setf register (or (block-environment-register block) register)))
-          )
-;;         (%format t "register = ~S~%" register)
-        (when register
-          ;; Restore dynamic environment.
-          (emit 'aload *thread*)
-          (emit 'aload register)
-          (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
-          )
-        ))
-    (emit 'goto (tag-label tag))))
+    (cond ((eq (tag-compiland tag) *current-compiland*)
+           (let ((tag-block (tag-block tag))
+                 (register nil))
+             (dolist (block *blocks*)
+               (if (eq block tag-block)
+                   (return)
+                   (setf register (or (block-environment-register block) register))))
+             (when register
+               ;; Restore dynamic environment.
+               (emit 'aload *thread*)
+               (emit 'aload register)
+               (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)))
+           (emit 'goto (tag-label tag)))
+          (t
+           ;; Non-local GO.
+           (emit 'new +lisp-go-class+)
+           (emit 'dup)
+           (compile-form `',(tag-label tag) :target :stack) ; Tag.
+           (emit-invokespecial +lisp-go-class+
+                               "<init>"
+                               "(Lorg/armedbear/lisp/LispObject;)V"
+                               -2)
+           (emit 'athrow)
+           ;; Following code will not be reached, but is needed for JVM stack
+           ;; consistency.
+           (when target
+             (emit-push-nil)
+             (emit-move-from-stack target))))))
 
 (defun compile-atom (form &key (target *val*))
   (unless (= (length form) 2)
