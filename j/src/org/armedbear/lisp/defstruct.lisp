@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.40 2003-11-21 18:29:28 piso Exp $
+;;; $Id: defstruct.lisp,v 1.41 2003-11-22 02:49:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,18 +35,18 @@
 (defmacro dd-slots (x)          `(aref ,x 11))
 
 (defun make-defstruct-description (&key name
-                                       conc-name
-                                       constructors
-                                       copier
-                                       include
-                                       type
-                                       named
-                                       initial-offset
-                                       predicate
-                                       print-function
-                                       direct-slots
-                                       slots)
-  (let ((dd (make-array 12)))
+                                        conc-name
+                                        constructors
+                                        copier
+                                        include
+                                        type
+                                        named
+                                        initial-offset
+                                        predicate
+                                        print-function
+                                        direct-slots
+                                        slots)
+  (let ((dd (make-array 13)))
     (setf (dd-name dd) name
           (dd-conc-name dd) conc-name
           (dd-constructors dd) constructors
@@ -63,17 +63,27 @@
 
 ;;; DEFSTRUCT-SLOT-DESCRIPTION
 
-(defmacro dsd-name (x)     `(aref ,x 0))
-(defmacro dsd-initform (x) `(aref ,x 1))
-(defmacro dsd-index (x)    `(aref ,x 2))
+(defmacro dsd-name (x)      `(aref ,x 1))
+(defmacro dsd-index (x)     `(aref ,x 2))
+(defmacro dsd-reader (x)    `(aref ,x 3))
+(defmacro dsd-initform (x)  `(aref ,x 4))
+(defmacro dsd-type (x)      `(aref ,x 5))
+(defmacro dsd-read-only (x) `(aref ,x 6))
 
 (defun make-defstruct-slot-description (&key name
+                                             index
+                                             reader
                                              initform
-                                             index)
-  (let ((dsd (make-array 3)))
-    (setf (dsd-name dsd) name
+                                             (type t)
+                                             read-only)
+  (let ((dsd (make-array 7)))
+    (setf (aref dsd 0) 'defstruct-slot-description
+          (dsd-name dsd) name
+          (dsd-index dsd) index
+          (dsd-reader dsd) reader
           (dsd-initform dsd) initform
-          (dsd-index dsd) index)
+          (dsd-type dsd) type
+          (dsd-read-only dsd) read-only)
     dsd))
 
 (defvar *dd-name*)
@@ -96,30 +106,16 @@
     (dolist (slot *dd-slots*)
       (let ((name (dsd-name slot))
             (initform (dsd-initform slot)))
-        (push (list name initform) keys)
-        (push name elements)))
+        (when name
+          (push (list name initform) keys))))
     (setf keys (cons '&key (nreverse keys)))
+    (dolist (dsd *dd-slots*)
+      (let ((name (dsd-name dsd))
+            (initform (dsd-initform dsd)))
+        (if name
+            (push name elements)
+            (push initform elements))))
     (setf elements (nreverse elements))
-    (when *dd-named*
-      (push (list 'quote *dd-name*) elements))
-;;     (when *dd-initial-offset*
-;;       (dotimes (i *dd-initial-offset*)
-;;         (push nil elements)))
-    (setf elements ())
-    (let ((index 0))
-      (dolist (slot *dd-slots*)
-        (loop
-          (when (= index (dsd-index slot))
-            (return))
-;;           (format t "index = ~S slot = ~S dsd-index = ~S~%" index (dsd-name slot) (dsd-index slot))
-          (push nil elements)
-          (incf index))
-        (push (dsd-name slot) elements)
-        (incf index)))
-    (setf elements (nreverse elements))
-    (when *dd-named*
-      (push (list 'quote *dd-name*) elements))
-
     (cond ((eq *dd-type* 'list)
            `((defun ,constructor-name ,keys
                (list ,@elements))))
@@ -146,21 +142,29 @@
         results)
       (define-constructor (cons (default-constructor-name) nil))))
 
+(defun name-index ()
+  (dolist (dsd *dd-slots*)
+    (let ((name (dsd-name dsd))
+          (initform (dsd-initform dsd)))
+      (when (and (null name)
+                 (equal initform (list 'quote *dd-name*)))
+        (return-from name-index (dsd-index dsd)))))
+  ;; We shouldn't get here.
+  nil)
+
 (defun define-predicate ()
   (when (and *dd-predicate*
              (or *dd-named* (null *dd-type*)))
     (let ((pred (intern *dd-predicate*)))
       (cond ((eq *dd-type* 'list)
-             (if *dd-initial-offset*
-                 `((defun ,pred (object)
-                     (and (consp object)
-                          (> (length object) ,*dd-initial-offset*)
-                          (eq (elt object ,*dd-initial-offset*) ',*dd-name*))))
-                 `((defun ,pred (object)
-                     (and (consp object) (eq (car object) ',*dd-name*))))))
+             (let ((index (name-index)))
+               `((defun ,pred (object)
+                   (and (consp object)
+                        (> (length object) ,index)
+                        (eq (nth ,index object) ',*dd-name*))))))
             ((or (eq *dd-type* 'vector)
                  (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
-             (let ((index (or *dd-initial-offset* 0)))
+             (let ((index (name-index)))
                `((defun ,pred (object)
                    (and (vectorp object)
                         (> (length object) ,index)
@@ -170,10 +174,6 @@
                  (typep object ',*dd-name*))))))))
 
 (defun get-slot-accessor (index)
-;;   (when *dd-initial-offset*
-;;     (incf index *dd-initial-offset*))
-  (when *dd-named*
-    (incf index))
   (cond ((eq *dd-type* 'list)
          `(lambda (instance) (elt instance ,index)))
         ((or (eq *dd-type* 'vector)
@@ -188,10 +188,6 @@
             `(lambda (instance) (%structure-ref instance ,index)))))))
 
 (defun get-slot-mutator (index)
-;;   (when *dd-initial-offset*
-;;     (incf index *dd-initial-offset*))
-  (when *dd-named*
-    (incf index))
   (cond ((eq *dd-type* 'list)
          `(lambda (instance value) (%set-elt instance ,index value)))
         ((or (eq *dd-type* 'vector)
@@ -219,9 +215,6 @@
     (dolist (slot *dd-slots*)
       (let ((slot-name (dsd-name slot))
             (expected (dsd-index slot)))
-        (unless (eql index expected)
-          (format t "index = ~S expected = ~S~%" index expected))
-;;         (setf result (nconc result (define-access-function slot-name index))))
         (setf result (nconc result (define-access-function slot-name expected))))
       (incf index))
     result))
@@ -313,32 +306,50 @@
     (when (stringp (car slots))
       (setf (documentation *dd-name* 'structure) (pop slots)))
     (dolist (slot slots)
-      (let ((slot-description (if (atom slot)
-                                  (make-defstruct-slot-description :name slot
-                                                                   :initform nil
-                                                                   :index 0)
-                                  (make-defstruct-slot-description :name (car slot)
-                                                                   :initform (cadr slot)
-                                                                   :index 0))))
-        (push slot-description *dd-direct-slots*)))
+      (let* ((name (if (atom slot) slot (car slot)))
+             (reader (if *dd-conc-name*
+                         (intern (concatenate 'string
+                                              (symbol-name *dd-conc-name*)
+                                              (symbol-name name)))
+                         name))
+             (initform (if (atom slot) nil (cadr slot)))
+             (dsd (make-defstruct-slot-description :name name
+                                                   :reader reader
+                                                   :initform initform)))
+        (push dsd *dd-direct-slots*)))
     (setf *dd-direct-slots* (nreverse *dd-direct-slots*))
-
     (let ((index 0))
-      (if *dd-include*
-          (let* ((dd (get (car *dd-include*) 'structure-definition))
-                 (initial-offset (dd-initial-offset dd))
-                 (included-slots (dd-slots dd)))
-            (when initial-offset
-              (incf index initial-offset))
-            (setf *dd-slots* (append included-slots *dd-direct-slots*))
-            (incf index (length included-slots)))
-          (setf *dd-slots* *dd-direct-slots*))
+      (when *dd-include*
+        (let* ((dd (get (car *dd-include*) 'structure-definition))
+               (included-slots (dd-slots dd)))
+          (dolist (dsd included-slots)
+            (setf (dsd-index dsd) index)
+            (push dsd *dd-slots*)
+            (incf index))))
       (when *dd-initial-offset*
-        (incf index *dd-initial-offset*))
-      (dolist (slot *dd-direct-slots*)
-        (setf (dsd-index slot) index)
+        (dotimes (i *dd-initial-offset*)
+          (push (make-defstruct-slot-description :name nil
+                                                 :index index
+                                                 :reader nil
+                                                 :initform nil
+                                                 :type t
+                                                 :read-only t)
+                *dd-slots*)
+          (incf index)))
+      (when *dd-named*
+        (push (make-defstruct-slot-description :name nil
+                                               :index index
+                                               :reader nil
+                                               :initform (list 'quote *dd-name*)
+                                               :type t
+                                               :read-only t)
+              *dd-slots*)
+        (incf index))
+      (dolist (dsd *dd-direct-slots*)
+        (setf (dsd-index dsd) index)
+        (push dsd *dd-slots*)
         (incf index)))
-
+    (setf *dd-slots* (nreverse *dd-slots*))
     `(progn
        (setf (get ',*dd-name* 'structure-definition)
              (make-defstruct-description :name ',*dd-name*
