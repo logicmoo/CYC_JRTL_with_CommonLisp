@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: DisplacedArray.java,v 1.29 2004-02-25 01:43:02 piso Exp $
+ * $Id: DisplacedArray.java,v 1.30 2004-02-26 00:24:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -203,6 +203,11 @@ public final class DisplacedArray extends AbstractArray
             array.setRowMajor(index + offset, newValue);
         else
             signal(new TypeError("Bad row major index " + index + "."));
+    }
+
+    public void fill(LispObject obj)
+    {
+        // FIXME
     }
 
     public int getFillPointer()
