@@ -1,7 +1,7 @@
 ;;; runtime-class.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: runtime-class.lisp,v 1.13 2004-08-27 20:34:35 asimon Exp $
+;;; $Id: runtime-class.lisp,v 1.14 2004-09-29 21:37:43 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -269,6 +269,7 @@
 (defconstant constants.acc-protected (jfield "org.objectweb.asm.Constants" "ACC_PROTECTED"))
 (defconstant constants.acc-private (jfield "org.objectweb.asm.Constants" "ACC_PRIVATE"))
 (defconstant constants.acc-public (jfield "org.objectweb.asm.Constants" "ACC_PUBLIC"))
+(defconstant constants.v1-1 (jfield "org.objectweb.asm.Constants" "V1_1"))
 (defmethod make-label-0 nil
   (make-instance 'label :java-instance (jnew (jconstructor "org.objectweb.asm.Label"))))
 
@@ -277,8 +278,8 @@
 
 (defmethod visit-4 ((instance class-writer) (v1 fixnum) (v2 string) (v3 string) v4)
   (jcall
-   (jmethod "org.objectweb.asm.ClassWriter" "visit" "int" "java.lang.String" "java.lang.String" "[Ljava.lang.String;" "java.lang.String")
-   (java-instance instance) v1 v2 v3 v4 nil))
+   (jmethod "org.objectweb.asm.ClassWriter" "visit" "int" "int" "java.lang.String" "java.lang.String" "[Ljava.lang.String;" "java.lang.String")
+   (java-instance instance) constants.v1-1 v1 v2 v3 v4 nil))
 
 (defmethod visit-field-3 ((instance class-writer) (v1 fixnum) (v2 string) (v3 string))
   (jcall
@@ -563,7 +564,7 @@
           for unique-method-name = (apply #'concatenate 'string "<init>|" arg-types)
           then (apply #'concatenate 'string "<init>|" arg-types)
           collect unique-method-name into args
-          collect  (coerce constr-def 'function) into args
+          collect (coerce constr-def 'function) into args
           do
           (write-method cw class-name class-type-name "<init>" unique-method-name '("public") "void" arg-types
                         (cons super-type-name super-invocation-args))
