@@ -2,7 +2,7 @@
  * ListOccurrencesInFiles.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: ListOccurrencesInFiles.java,v 1.5 2003-06-29 00:19:34 piso Exp $
+ * $Id: ListOccurrencesInFiles.java,v 1.6 2003-07-26 17:45:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,8 @@ public final class ListOccurrencesInFiles extends ListOccurrences
         super(search);
         if (search instanceof FindInFiles) {
             appendLine("Files: " + ((FindInFiles)search).getFiles());
+            if (search.wholeWordsOnly())
+                appendLine("Mode: " + ((FindInFiles)search).getMode().getDisplayName());
             renumber();
         }
         title = "\"" + search.getPattern() + "\"";
