@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Readtable.java,v 1.3 2003-12-16 02:22:47 piso Exp $
+ * $Id: Readtable.java,v 1.4 2003-12-16 03:13:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,10 +25,18 @@ import java.util.ArrayList;
 
 public final class Readtable extends LispObject
 {
-    private ArrayList table = new ArrayList();
+    private ArrayList table;
 
     public Readtable()
     {
+        table = new ArrayList();
+    }
+
+    private Readtable(Readtable rt)
+    {
+        synchronized (rt.table) {
+            table = new ArrayList(rt.table);
+        }
     }
 
     public LispObject typeOf()
@@ -55,8 +63,7 @@ public final class Readtable extends LispObject
         return unreadableString("READTABLE");
     }
 
-    public LispObject getDispatchMacroCharacter(char dispChar,
-        char subChar)
+    public LispObject getDispatchMacroCharacter(char dispChar, char subChar)
     {
         synchronized (table) {
             for (int i = 0; i < table.size(); i++) {
@@ -68,8 +75,8 @@ public final class Readtable extends LispObject
         return NIL;
     }
 
-    public LispObject setDispatchMacroCharacter(char dispChar,
-        char subChar, LispObject function)
+    public LispObject setDispatchMacroCharacter(char dispChar, char subChar,
+                                                LispObject function)
     {
         synchronized (table) {
             for (int i = 0; i < table.size(); i++) {
@@ -99,6 +106,50 @@ public final class Readtable extends LispObject
         }
     }
 
+    // ### readtablep
+    private static final Primitive1 READTABLEP = new Primitive1("readtablep", "object")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return arg instanceof Readtable ? T : NIL;
+        }
+    };
+
+    // ### copy-readtable
+    private static final Primitive COPY_READTABLE =
+        new Primitive("copy-readtable", "&optional from-readtable to-readtable")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            final Readtable from, to;
+            switch (args.length) {
+                case 0:
+                    from = getCurrentReadtable();
+                    to = null;
+                    break;
+                case 1:
+                    from = checkReadtable(args[0]);
+                    to = null;
+                    break;
+                case 2:
+                    from = checkReadtable(args[0]);
+                    if (args[1] == NIL)
+                        to = null;
+                    else
+                        to = checkReadtable(args[1]);
+                    break;
+                default:
+                    return signal(new WrongNumberOfArgumentsException(this));
+            }
+            if (to == null)
+                return new Readtable(from);
+            synchronized (Readtable.class) {
+                to.table = new ArrayList(from.table);
+            }
+            return to;
+        }
+    };
+
     // ### get-dispatch-macro-character
     // get-dispatch-macro-character disp-char sub-char &optional readtable
     // => function
@@ -108,7 +159,7 @@ public final class Readtable extends LispObject
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2 || args.length > 3)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char dispChar = LispCharacter.getValue(args[0]);
             char subChar = LispCharacter.getValue(args[1]);
             Readtable readtable;
@@ -129,7 +180,7 @@ public final class Readtable extends LispObject
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 3 || args.length > 4)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char dispChar = LispCharacter.getValue(args[0]);
             char subChar = LispCharacter.getValue(args[1]);
             LispObject function = coerceToFunction(args[2]);
