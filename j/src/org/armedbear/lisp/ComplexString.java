@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.20 2004-10-13 00:22:17 piso Exp $
+ * $Id: ComplexString.java,v 1.21 2004-11-23 14:57:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -483,18 +483,36 @@ public final class ComplexString extends AbstractString
         }
     }
 
-    public int hashCode()
+    public int sxhash() throws ConditionThrowable
     {
         int hashCode = 0;
-        try {
-            final int limit = length();
-            for (int i = 0; i < limit; i++)
-                hashCode = hashCode * 31 + getChar(i);
+        //         for (int i = 0; i < capacity; i++)
+        //             hashCode = hashCode * 31 + chars[i];
+        final int limit = length();
+        for (int i = 0; i < limit; i++) {
+            hashCode += getChar(i);
+            hashCode += (hashCode << 10);
+            hashCode ^= (hashCode >> 6);
         }
-        catch (ConditionThrowable t) {
-            // Shouldn't happen.
-            Debug.trace(t);
+        hashCode += (hashCode << 3);
+        hashCode ^= (hashCode >> 11);
+        hashCode += (hashCode << 15);
+        return (hashCode & 0x7fffffff);
+    }
+
+    // For EQUALP hash tables.
+    public int psxhash() throws ConditionThrowable
+    {
+        int hashCode = 0;
+        final int limit = length();
+        for (int i = 0; i < capacity; i++) {
+            hashCode += Character.toUpperCase(getChar(i));
+            hashCode += (hashCode << 10);
+            hashCode ^= (hashCode >> 6);
         }
-        return hashCode;
+        hashCode += (hashCode << 3);
+        hashCode ^= (hashCode >> 11);
+        hashCode += (hashCode << 15);
+        return (hashCode & 0x7fffffff);
     }
 }

@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.23 2004-11-03 15:27:23 piso Exp $
+ * $Id: SimpleString.java,v 1.24 2004-11-23 14:55:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -346,8 +346,14 @@ public final class SimpleString extends AbstractString
     public int sxhash()
     {
         int hashCode = 0;
-        for (int i = 0; i < capacity; i++)
-            hashCode = hashCode * 31 + chars[i];
+        for (int i = 0; i < capacity; i++) {
+            hashCode += chars[i];
+            hashCode += (hashCode << 10);
+            hashCode ^= (hashCode >> 6);
+        }
+        hashCode += (hashCode << 3);
+        hashCode ^= (hashCode >> 11);
+        hashCode += (hashCode << 15);
         return (hashCode & 0x7fffffff);
     }
 
@@ -355,8 +361,14 @@ public final class SimpleString extends AbstractString
     public int psxhash()
     {
         int hashCode = 0;
-        for (int i = 0; i < capacity; i++)
-            hashCode = hashCode * 31 + Character.toUpperCase(chars[i]);
+        for (int i = 0; i < capacity; i++) {
+            hashCode += Character.toUpperCase(chars[i]);
+            hashCode += (hashCode << 10);
+            hashCode ^= (hashCode >> 6);
+        }
+        hashCode += (hashCode << 3);
+        hashCode ^= (hashCode >> 11);
+        hashCode += (hashCode << 15);
         return (hashCode & 0x7fffffff);
     }
 
