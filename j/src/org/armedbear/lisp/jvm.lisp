@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.364 2005-01-23 03:23:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.365 2005-01-23 16:50:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -887,48 +887,52 @@
       (emit 'sipush n)
       (emit 'ldc (pool-int n))))
 
+(defun make-descriptor-info (arg-types return-type)
+  (let ((descriptor (with-output-to-string (s)
+                      (princ #\( s)
+                      (dolist (type arg-types)
+                        (princ type s))
+                      (princ #\) s)
+                      (princ (or return-type "V") s)))
+        (stack-effect (let ((result (cond ((null return-type) 0)
+                                          ((equal return-type "J") 2)
+                                          (t 1))))
+                        (dolist (type arg-types result)
+                          (decf result (if (equal type "J") 2 1))))))
+    (cons descriptor stack-effect)))
+
 (defparameter *descriptors* (make-hash-table :test #'equal))
 
-(defun make-descriptor (arg-types return-type)
+(defun get-descriptor-info (arg-types return-type)
   (let* ((key (list arg-types return-type))
-         (descriptor (gethash key *descriptors*)))
-    (or descriptor
+         (descriptor-info (gethash key *descriptors*)))
+    (or descriptor-info
         (setf (gethash key *descriptors*)
-              (with-output-to-string (s)
-                (princ #\( s)
-                (dolist (type arg-types)
-                  (princ type s))
-                (princ #\) s)
-                (princ (or return-type "V") s))))))
+              (make-descriptor-info arg-types return-type)))))
 
-(defun %emit-invokestatic (class-name method-name descriptor stack)
-  (let ((instruction (emit 'invokestatic class-name method-name descriptor)))
-    (setf (instruction-stack instruction) stack)))
+(defsubst get-descriptor (arg-types return-type)
+  (car (get-descriptor-info arg-types return-type)))
 
-;; FIXME
-;; The way we calculate the stack effect here assumes that each argument
-;; occupies one slot. This is NOT CORRECT for Java longs ("J")!
 (defun emit-invokestatic (class-name method-name arg-types return-type)
-  (let* ((descriptor (make-descriptor arg-types return-type))
-         (stack (- (if return-type 1 0) (length arg-types)))
-         (instruction (emit 'invokestatic
-                           class-name method-name descriptor)))
-    (setf (instruction-stack instruction) stack)))
+  (let* ((info (get-descriptor-info arg-types return-type))
+         (descriptor (car info))
+         (stack-effect (cdr info))
+         (instruction (emit 'invokestatic class-name method-name descriptor)))
+    (setf (instruction-stack instruction) stack-effect)))
 
-;; FIXME
-;; The way we calculate the stack effect here assumes that each argument
-;; occupies one slot. This is NOT CORRECT for Java longs ("J")!
 (defun emit-invokevirtual (class-name method-name arg-types return-type)
-  (let* ((descriptor (make-descriptor arg-types return-type))
-         (stack (- (if return-type 1 0) 1 (length arg-types)))
+  (let* ((info (get-descriptor-info arg-types return-type))
+         (descriptor (car info))
+         (stack-effect (cdr info))
          (instruction (emit 'invokevirtual class-name method-name descriptor)))
-    (setf (instruction-stack instruction) stack)))
+    (setf (instruction-stack instruction) (1- stack-effect))))
 
 (defun emit-invokespecial-init (class-name arg-types)
-  (let* ((descriptor (make-descriptor arg-types nil))
-         (stack (- (1+ (length arg-types))))
+  (let* ((info (get-descriptor-info arg-types nil))
+         (descriptor (car info))
+         (stack-effect (cdr info))
          (instruction (emit 'invokespecial class-name "<init>" descriptor)))
-    (setf (instruction-stack instruction) stack)))
+    (setf (instruction-stack instruction) (1- stack-effect))))
 
 ;; Index of local variable used to hold the current thread.
 (defvar *thread* nil)
@@ -1127,10 +1131,7 @@
 
 (defun emit-box-long ()
   (declare (optimize speed))
-;;   (emit-invokestatic +lisp-class+ "number" (list "J") +lisp-object+)
-  (%emit-invokestatic +lisp-class+ "number"
-                      (make-descriptor (list "J") +lisp-object+)
-                      -1))
+  (emit-invokestatic +lisp-class+ "number" (list "J") +lisp-object+))
 
 ;; Expects value on stack.
 (defun emit-invoke-method (method-name target representation)
@@ -1166,8 +1167,7 @@
 (defparameter *resolvers* (make-hash-table :test #'eql))
 
 (defun unsupported-opcode (instruction)
-  (error "Unsupported opcode ~D."
-         (instruction-opcode instruction)))
+  (error "Unsupported opcode ~D." (instruction-opcode instruction)))
 
 (dotimes (n (1+ *last-opcode*))
   (setf (gethash n *resolvers*) #'unsupported-opcode))
@@ -4804,29 +4804,29 @@
         (setf *hairy-arglist-p* t)
         (return-from analyze-args
                      (if *closure-variables*
-                         (make-descriptor (list +lisp-object-array+ +lisp-object-array+)
+                         (get-descriptor (list +lisp-object-array+ +lisp-object-array+)
                                           +lisp-object+)
-                         (make-descriptor (list +lisp-object-array+)
+                         (get-descriptor (list +lisp-object-array+)
                                           +lisp-object+))))
       (cond
        (*closure-variables*
         (return-from analyze-args
                      (cond ((<= arg-count 4)
-                            (make-descriptor (list* +lisp-object-array+
+                            (get-descriptor (list* +lisp-object-array+
                                                     (make-list arg-count :initial-element +lisp-object+))
                                              +lisp-object+))
                            (t (setf *using-arg-array* t)
                               (setf *arity* arg-count)
-                              (make-descriptor (list +lisp-object-array+ +lisp-object-array+)
+                              (get-descriptor (list +lisp-object-array+ +lisp-object-array+)
                                                +lisp-object+)))))
        (t
         (return-from analyze-args
                      (cond ((<= arg-count 4)
-                            (make-descriptor (make-list arg-count :initial-element +lisp-object+)
+                            (get-descriptor (make-list arg-count :initial-element +lisp-object+)
                                              +lisp-object+))
                            (t (setf *using-arg-array* t)
                               (setf *arity* arg-count)
-                              (make-descriptor (list +lisp-object-array+)
+                              (get-descriptor (list +lisp-object-array+)
                                                +lisp-object+)))))))
     (when (or (memq '&KEY args)
               (memq '&OPTIONAL args)
@@ -4834,14 +4834,14 @@
       (setf *using-arg-array* t)
       (setf *hairy-arglist-p* t)
       (return-from analyze-args
-                   (make-descriptor (list +lisp-object-array+) +lisp-object+)))
+                   (get-descriptor (list +lisp-object-array+) +lisp-object+)))
     (cond ((<= arg-count 4)
-           (make-descriptor (make-list (length args) :initial-element +lisp-object+)
+           (get-descriptor (make-list (length args) :initial-element +lisp-object+)
                             +lisp-object+))
           (t
            (setf *using-arg-array* t)
            (setf *arity* arg-count)
-           (make-descriptor (list +lisp-object-array+) +lisp-object+)))))
+           (get-descriptor (list +lisp-object-array+) +lisp-object+)))))
 
 (defun write-class-file (args execute-method classfile)
   (dformat t "write-class-file ~S~%" classfile)
