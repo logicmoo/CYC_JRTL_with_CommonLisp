@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: typep.lisp,v 1.22 2005-03-12 18:34:59 piso Exp $
+;;; $Id: typep.lisp,v 1.23 2005-03-12 18:36:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -99,6 +99,7 @@
       (SIMPLE-STRING
        (and (simple-string-p object)
             (or (null i)
+                (eq (car i) '*)
                 (eql (car i) (length object)))))
       (STRING
        (and (stringp object)
