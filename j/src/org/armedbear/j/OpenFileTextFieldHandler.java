@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.17 2002-12-11 03:30:38 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.18 2002-12-11 15:04:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,8 +47,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     private boolean checkBuffers = true;
     private boolean checkSourcePath = true;
 
-    private boolean completionsIgnoreCase;
-    private boolean filenamesIgnoreCase;
+    private final boolean completionsIgnoreCase;
+    private final boolean filenamesIgnoreCase;
 
     private Object returned;
     private String encoding;
@@ -427,12 +427,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     String completion = (String) completions.get(0);
                     textField.setText(completion);
                     textField.setCaretPosition(completion.length());
-                } else if (completions.size() > 1) {
+                } else if (completions.size() > 1)
                     showCompletionsPopup();
-                    originalText = textField.getText();
-                    String completion = (String) completions.get(0);
-                    textField.setText(completion);
-                }
             } else
                 tabPopup(+1, true);
         } else {
@@ -632,6 +628,15 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         popup = new JPopupMenu();
         popup.add(new CompletionsList(array));
         popup.show(textField, 0, textField.getHeight());
+        originalText = textField.getText();
+        final String completion = (String) completions.get(0);
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                updateTextField(completion);
+            }
+        };
+        SwingUtilities.invokeLater(r);
     }
 
     private void tabPopup(int n, boolean wrap)
@@ -655,8 +660,25 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         if (i != index) {
             listbox.setSelectedIndex(i);
             listbox.ensureIndexIsVisible(i);
-            String s = (String) listbox.getSelectedValue();
-            textField.setText(s);
+            String completion = (String) listbox.getSelectedValue();
+            updateTextField(completion);
+        }
+    }
+
+    private void updateTextField(String completion)
+    {
+        textField.setText(completion);
+        if (Editor.preferences().getBooleanProperty(Property.SELECT_COMPLETION)) {
+            boolean select = false;
+            if (completion.startsWith(originalText))
+                select = true;
+            else if (Utilities.isLowerCase(originalText) &&
+                     completion.toLowerCase().startsWith(originalText))
+                select = true;
+            if (select) {
+                textField.setCaretPosition(completion.length());
+                textField.moveCaretPosition(originalText.length());
+            }
         }
     }
 
@@ -772,6 +794,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     popup.setVisible(false);
                     popup = null;
                     String text = textField.getText();
+                    if (textField.getSelectionStart() != textField.getSelectionEnd())
+                        text = text.substring(0, textField.getSelectionStart());
                     text += e.getKeyChar();
                     textField.setText(text);
                     textField.requestFocus();
