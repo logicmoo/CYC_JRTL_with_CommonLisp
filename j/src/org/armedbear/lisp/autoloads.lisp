@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.117 2004-03-05 19:12:22 piso Exp $
+;;; $Id: autoloads.lisp,v 1.118 2004-03-07 01:09:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@
             pathname-type wild-pathname-p)
           "pathnames.lisp")
 (autoload 'directory "directory.lisp")
-(autoload '(signum floor ceiling round rem mod ftruncate ffloor fceiling fround
+(autoload '(signum floor ceiling round rem mod ffloor fceiling fround
             rational rationalize gcd isqrt float-precision float-sign
             decode-float conjugate phase cis)
           "numbers.lisp")
