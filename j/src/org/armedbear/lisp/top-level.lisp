@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.23 2004-01-09 18:20:56 piso Exp $
+;;; $Id: top-level.lisp,v 1.24 2004-01-18 18:51:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 (in-package "TOP-LEVEL")
 
 (import 'sys::%format)
+
+(defvar *null-cmd* (gensym))
 
 (defparameter *command-char* #\:)
 
@@ -166,8 +168,7 @@
     (format t "  ~A~A~A~%"
             (pad (entry-name entry) 12)
             (pad (entry-abbr entry) 5)
-            (entry-help entry)
-            ))
+            (entry-help entry)))
   (format t "~%Commands must be prefixed by the command character, which is '~A' by default.~%~%"
           *command-char*))
 
@@ -185,8 +186,7 @@
     ("macroexpand" 2 macroexpand-command "macroexpand an expression")
     ("package" 2 package-command "change current package")
     ("pwd" 3 pwd-command "print current directory")
-    ("reset" 3 reset-command "return to top level")
-    ))
+    ("reset" 3 reset-command "return to top level")))
 
 (defun entry-name (entry)
   (first entry))
@@ -214,6 +214,8 @@
           (return (entry-command entry)))))))
 
 (defun process-cmd (form)
+  (when (eq form *null-cmd*)
+    (return-from process-cmd t))
   (when (and (stringp form)
              (> (length form) 1)
              (eql (char form 0) *command-char*))
@@ -233,18 +235,23 @@
 
 (defun read-cmd (stream)
   (let ((c (peek-char-non-whitespace stream)))
-    (if (eql c *command-char*)
-        (read-line stream)
-        (read stream nil))))
+    (cond ((eql c *command-char*)
+           (read-line stream))
+          ((eql c #\newline)
+           (read-line stream)
+           *null-cmd*)
+          (t
+           (read stream nil)))))
 
 (defun repl-read-form-fun (in out)
   (loop
+    (funcall *repl-prompt-fun* out)
+    (finish-output out)
     (let ((form (read-cmd in)))
       (setf (charpos out) 0)
-      (incf *cmd-number*)
-      (cond ((process-cmd form)
-             (funcall *repl-prompt-fun* *standard-output*)
-             (finish-output *standard-output*))
+      (unless (eq form *null-cmd*)
+        (incf *cmd-number*))
+      (cond ((process-cmd form))
             ((and (> *debug-level* 0)
                   (fixnump form))
              (let ((n form)
@@ -259,8 +266,6 @@
 
 (defun repl ()
   (loop
-    (funcall *repl-prompt-fun* *standard-output*)
-    (finish-output *standard-output*)
     (let* ((form (funcall *repl-read-form-fun*
                           *standard-input*
                           *standard-output*))
