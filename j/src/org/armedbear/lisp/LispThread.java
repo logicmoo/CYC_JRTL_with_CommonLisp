@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.57 2004-09-01 14:12:21 piso Exp $
+ * $Id: LispThread.java,v 1.58 2004-09-09 12:43:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -644,7 +644,7 @@ public final class LispThread extends LispObject
             sb.append("\" ");
         }
         sb.append("@ #x");
-        sb.append(Integer.toHexString(hashCode()));
+        sb.append(Integer.toHexString(System.identityHashCode(this)));
         sb.append(">");
         return sb.toString();
     }
