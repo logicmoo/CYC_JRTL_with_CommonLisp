@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.54 2004-05-03 18:01:39 piso Exp $
+;;; $Id: precompiler.lisp,v 1.55 2004-05-03 18:39:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -157,9 +157,12 @@
 
 (defvar *local-variables* ())
 
+(defun find-varspec (sym)
+  (find sym *local-variables* :key #'car))
+
 (defun precompile1 (form)
   (cond ((symbolp form)
-         (let ((varspec (find form *local-variables* :key #'car)))
+         (let ((varspec (find-varspec form)))
            (if (and varspec (eq (second varspec) :symbol-macro))
                (third varspec)
                form)))
@@ -180,15 +183,6 @@
                       ;; Fall through if no change...
                       (unless (equal result form)
                         (return-from precompile1 (precompile1 result)))))
-                   ((eq op 'setf)
-                    (let ((place (second form)))
-                      (when (and (consp place)
-                                 (local-macro-function (car place)))
-                        (let ((expansion (expand-local-macro place)))
-                          (return-from precompile1
-                                       (precompile1 (list* op expansion
-                                                           (cddr form))))))
-                      (return-from precompile1 (precompile1 (expand-macro form)))))
                    ((setf handler (get op 'precompile-handler))
                     (return-from precompile1 (funcall handler form)))
                    ((macro-function op)
@@ -278,18 +272,38 @@
 (defun precompile-progv (form)
   (list* 'PROGV (cadr form) (caddr form) (mapcar #'precompile1 (cdddr form))))
 
+(defun precompile-setf (form)
+  (let ((place (second form)))
+    (cond ((and (consp place)
+                (local-macro-function (car place)))
+           (let ((expansion (expand-local-macro place)))
+             (precompile1 (list* 'SETF expansion (cddr form)))))
+          ((symbolp place)
+           (let ((varspec (find-varspec place)))
+             (if (and varspec (eq (second varspec) :symbol-macro))
+                 (precompile1 (list* 'SETF (third varspec) (cddr form)))
+                 (precompile1 (expand-macro form)))))
+          (t
+           (precompile1 (expand-macro form))))))
+
 (defun precompile-setq (form)
   (let* ((args (cdr form))
          (len (length args)))
     (when (oddp len)
-      (error "Odd number of arguments to SETQ."))
+      (error 'simple-program-error
+             :format-control "Odd number of arguments to SETQ."))
     (if (= len 2)
-        (list 'SETQ (car args) (precompile1 (cadr args)))
+        (let* ((sym (car args))
+               (val (cadr args))
+               (varspec (find-varspec sym)))
+          (if (and varspec (eq (second varspec) :symbol-macro))
+              (precompile1 (list 'SETF (third varspec) val))
+              (list 'SETQ sym (precompile1 val))))
         (let ((result ()))
           (loop
             (when (null args)
               (return))
-            (push (list 'SETQ (car args) (precompile1 (cadr args))) result)
+            (push (precompile-setq (list 'SETQ (car args) (cadr args))) result)
             (setq args (cddr args)))
           (setq result (nreverse result))
           (push 'PROGN result)
@@ -660,6 +674,7 @@
                             progv
                             return
                             return-from
+                            setf
                             setq
                             symbol-macrolet
                             tagbody
