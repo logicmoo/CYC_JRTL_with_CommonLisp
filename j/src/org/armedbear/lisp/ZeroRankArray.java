@@ -2,7 +2,7 @@
  * ZeroRankArray.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ZeroRankArray.java,v 1.1 2004-02-25 18:33:59 piso Exp $
+ * $Id: ZeroRankArray.java,v 1.2 2004-02-26 01:15:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,5 +99,19 @@ public final class ZeroRankArray extends AbstractArray
             data = newValue;
         else
             signal(new TypeError("Bad row major index " + index + "."));
+    }
+
+    public void fill(LispObject obj) throws ConditionThrowable
+    {
+        if (obj.typep(elementType) == NIL)
+            signal(new TypeError(obj, elementType));
+        data = obj;
+    }
+
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer("#0A");
+        sb.append(data);
+        return sb.toString();
     }
 }
