@@ -1,8 +1,8 @@
 /*
  * ListTagsMode.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: ListTagsMode.java,v 1.1.1.1 2002-09-24 16:08:39 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: ListTagsMode.java,v 1.2 2005-03-04 15:43:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,7 @@ public final class ListTagsMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "jumpToTag");
         km.mapKey(VK_DOUBLE_MOUSE_1, 0, "mouseJumpToTag");
         km.mapKey(VK_MOUSE_2, 0, "mouseJumpToTag");
+        km.mapKey('q', "tempBufferQuit");
     }
 
     public static void jumpToTag()
