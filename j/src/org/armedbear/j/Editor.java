@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.49 2003-05-11 17:30:11 piso Exp $
+ * $Id: Editor.java,v 1.50 2003-05-12 03:26:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,6 +184,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     }
 
     static boolean isMenuSelected = false;
+
+    DirectoryTree localDirectoryTree;
 
     private JPopupMenu popup;
 
