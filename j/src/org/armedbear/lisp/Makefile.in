@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.180 2004-06-09 12:17:37 piso Exp $
+# $Id: Makefile.in,v 1.181 2004-06-26 14:59:33 asimon Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -96,6 +96,7 @@ CLASSFILES =	AbstractArray.class \
 		Load.class \
 		LogicalPathname.class \
 		MacroObject.class \
+		Mailbox.class \
 		Main.class \
 		MathFunctions.class \
 		Nil.class \
