@@ -1,8 +1,8 @@
 /*
  * LispFormatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.29 2003-05-31 15:19:15 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: LispFormatter.java,v 1.30 2003-06-16 13:46:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -669,6 +669,11 @@ public final class LispFormatter extends Formatter
             if (c == '"') {
                 pos.skip();
                 changed = skipString(pos) || changed;
+                continue;
+            }
+            if (c == '#' && pos.lookingAt("#(")) {
+                ++count;
+                pos.skip(2);
                 continue;
             }
             if (c == '(') {
