@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.719 2004-12-07 17:35:07 piso Exp $
+ * $Id: Primitives.java,v 1.720 2004-12-07 18:12:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -309,28 +309,29 @@ public final class Primitives extends Lisp
     private static final Primitive VALUES = new Primitive("values", "&rest object")
     {
         public LispObject execute()
-            throws ConditionThrowable
         {
             return LispThread.currentThread().setValues();
         }
         public LispObject execute(LispObject arg)
-            throws ConditionThrowable
         {
             return LispThread.currentThread().setValues(arg);
         }
         public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
         {
             return LispThread.currentThread().setValues(first, second);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
-            throws ConditionThrowable
         {
             return LispThread.currentThread().setValues(first, second, third);
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+        {
+            return LispThread.currentThread().setValues(first, second, third,
+                                                        fourth);
+        }
         public LispObject execute(LispObject[] args)
-            throws ConditionThrowable
         {
             return LispThread.currentThread().setValues(args);
         }
@@ -564,6 +565,16 @@ public final class Primitives extends Lisp
     // ### +
     private static final Primitive ADD = new Primitive("+", "&rest numbers")
     {
+        public LispObject execute()
+        {
+            return Fixnum.ZERO;
+        }
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg.numberp())
+                return arg;
+            return signal(new TypeError(arg, Symbol.NUMBER));
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -3840,6 +3851,15 @@ public final class Primitives extends Lisp
         new Primitive("read",
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Stream stream = checkCharacterInputStream(first);
+            boolean eofError = (second != NIL);
+            LispObject eofValue = NIL;
+            boolean recursive = false;
+            return stream.read(eofError, eofValue, recursive);
+        }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -4057,24 +4077,25 @@ public final class Primitives extends Lisp
     // ### list
     private static final Primitive LIST = new Primitive("list", "&rest objects")
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
+        public LispObject execute()
+        {
+            return NIL;
+        }
+        public LispObject execute(LispObject arg)
         {
             return new Cons(arg);
         }
         public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
         {
             return new Cons(first, new Cons(second));
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
-            throws ConditionThrowable
         {
             return new Cons(first, new Cons(second, new Cons(third)));
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
-            throws ConditionThrowable
         {
             return new Cons(first,
                             new Cons(second,
@@ -4096,7 +4117,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            signal(new WrongNumberOfArgumentsException("LIST*"));
+            signal(new WrongNumberOfArgumentsException(this));
             return NIL;
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
