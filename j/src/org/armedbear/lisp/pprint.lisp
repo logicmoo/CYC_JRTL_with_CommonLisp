@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.18 2004-06-11 16:51:39 piso Exp $
+;;; $Id: pprint.lisp,v 1.19 2004-06-11 18:12:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@
 (provide "XP")
 
 (shadow '(#-armedbear write
-          print
+          #-armedbear print
           #-armedbear prin1
           #-armedbear princ
           #-armedbear pprint
