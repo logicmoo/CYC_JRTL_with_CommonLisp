@@ -2,7 +2,7 @@
  * XmlTree.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: XmlTree.java,v 1.6 2003-06-06 14:55:18 piso Exp $
+ * $Id: XmlTree.java,v 1.7 2003-07-16 00:59:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,7 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
     private boolean aelfred;
     private boolean xp;
     private int modificationCount = -1;
+    private boolean disabled;
 
     public XmlTree(Editor editor, TreeModel model)
     {
@@ -90,20 +91,34 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
     {
         if (!SwingUtilities.isEventDispatchThread())
             Debug.bug("XmlTree.refresh() called from background thread!");
+        if (disabled)
+            return;
         if (modificationCount == buffer.getModCount())
             return;
         final XmlParserImpl parser = new XmlParserImpl(buffer);
         if (!parser.initialize())
             return;
         modificationCount = buffer.getModCount();
-        final String text = buffer.getText();
-        if (text.length() < 7) // "<a></a>"
+        try {
+            final String text = buffer.getText();
+            if (text.length() < 7) // "<a></a>"
+                return;
+            parser.setReader(new StringReader(text));
+        }
+        catch (OutOfMemoryError e) {
+            outOfMemory();
             return;
+        }
         Runnable parseBufferRunnable = new Runnable() {
             public void run()
             {
-                parser.setReader(new StringReader(text));
-                parser.run();
+                try {
+                    parser.run();
+                }
+                catch (OutOfMemoryError e) {
+                    outOfMemory();
+                    return;
+                }
                 if (parser.getException() == null) {
                     final TreeModel treeModel = parser.getTreeModel();
                     if (treeModel != null) {
@@ -129,8 +144,13 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
     // the edit buffer.
     public void updatePosition()
     {
-        final Line dotLine = editor.getDotLine();
-        final int dotOffset = editor.getDotOffset();
+        if (disabled)
+            return;
+        Position dot = editor.getDot();
+        if (dot == null)
+            return;
+        final Line dotLine = dot.getLine();
+        final int dotOffset = dot.getOffset();
 
         // Our line numbers are zero-based.
         final int dotLineNumber = editor.getDotLineNumber();
@@ -208,6 +228,15 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
             clearSelection();
 
         repaint();
+    }
+
+    private void outOfMemory()
+    {
+        disabled = true;
+        treeModel = null;
+        MessageDialog.showMessageDialog(
+            "Insufficient memory to display tree",
+            "Warning");
     }
 
     public void valueChanged(TreeSelectionEvent e)
