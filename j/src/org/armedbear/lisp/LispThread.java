@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.39 2004-05-28 01:09:14 piso Exp $
+ * $Id: LispThread.java,v 1.40 2004-05-29 15:22:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,9 @@ import java.util.Stack;
 
 public final class LispThread extends LispObject
 {
+    private static final Object lock = new Object();
+
     private static HashMap map = new HashMap();
-    private static Object lock = new Object();
 
     public static final LispThread currentThread() throws ConditionThrowable
     {
@@ -68,7 +69,7 @@ public final class LispThread extends LispObject
     private boolean destroyed;
     public Environment dynEnv;
     public LispObject[] _values;
-    private boolean interrupted;
+    private boolean threadInterrupted;
     private LispObject pending = NIL;
 
     private LispThread(Thread javaThread)
@@ -90,7 +91,7 @@ public final class LispThread extends LispObject
                 catch (Throwable t) {
                     if (isInterrupted()) {
                         try {
-                            processInterrupts();
+                            processThreadInterrupts();
                         }
                         catch (ConditionThrowable c) {
                             Debug.trace(c);
@@ -114,7 +115,7 @@ public final class LispThread extends LispObject
 
     private final synchronized boolean isInterrupted()
     {
-        return interrupted;
+        return threadInterrupted;
     }
 
     private final synchronized void setDestroyed(boolean b)
@@ -126,11 +127,12 @@ public final class LispThread extends LispObject
     {
         pending = new Cons(args, pending);
         pending = new Cons(function, pending);
-        interrupted = true;
+        threadInterrupted = true;
         javaThread.interrupt();
     }
 
-    private final synchronized void processInterrupts() throws ConditionThrowable
+    private final synchronized void processThreadInterrupts()
+        throws ConditionThrowable
     {
         while (pending != NIL) {
             LispObject function = pending.car();
@@ -138,7 +140,7 @@ public final class LispThread extends LispObject
             pending = pending.cddr();
             Primitives.APPLY.execute(function, args);
         }
-        interrupted = false;
+        threadInterrupted = false;
     }
 
     public final LispObject[] getValues()
@@ -536,7 +538,7 @@ public final class LispThread extends LispObject
                 Thread.currentThread().sleep(millis);
             }
             catch (InterruptedException e) {
-                currentThread().processInterrupts();
+                currentThread().processThreadInterrupts();
             }
             return NIL;
         }
