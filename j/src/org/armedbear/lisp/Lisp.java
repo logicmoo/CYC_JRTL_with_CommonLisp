@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.76 2003-06-01 02:54:02 piso Exp $
+ * $Id: Lisp.java,v 1.77 2003-06-01 15:10:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,6 +71,7 @@ public abstract class Lisp
     static final int FTYPE_SPECIAL_OPERATOR = 1;
     static final int FTYPE_MACRO            = 2;
 
+    // argv must not be null!
     public static final LispObject funcall(LispObject fun, LispObject[] argv,
         LispThread thread) throws Condition
     {
@@ -80,26 +81,22 @@ public abstract class Lisp
         LispObject result;
         if (profiling)
             fun.incrementCallCount();
-        if (argv == null)
-            result = fun.execute();
-        else {
-            switch (argv.length) {
-                case 0:
-                    result = fun.execute();
-                    break;
-                case 1:
-                    result = fun.execute(argv[0]);
-                    break;
-                case 2:
-                    result = fun.execute(argv[0], argv[1]);
-                    break;
-                case 3:
-                    result = fun.execute(argv[0], argv[1], argv[2]);
-                    break;
-                default:
-                    result = fun.execute(argv);
-                    break;
-            }
+        switch (argv.length) {
+            case 0:
+                result = fun.execute();
+                break;
+            case 1:
+                result = fun.execute(argv[0]);
+                break;
+            case 2:
+                result = fun.execute(argv[0], argv[1]);
+                break;
+            case 3:
+                result = fun.execute(argv[0], argv[1], argv[2]);
+                break;
+            default:
+                result = fun.execute(argv);
+                break;
         }
         if (debug)
             thread.popStackFrame();
