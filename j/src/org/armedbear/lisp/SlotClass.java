@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SlotClass.java,v 1.2 2003-11-20 18:41:31 piso Exp $
+ * $Id: SlotClass.java,v 1.3 2003-11-21 01:06:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,11 @@ public class SlotClass extends LispClass
     public void setDirectSlots(LispObject directSlots)
     {
         this.directSlots = directSlots;
+    }
+
+    public void setSlots(LispObject slots)
+    {
+        this.effectiveSlots = slots;
     }
 
     // ### class-direct-slots
