@@ -2,7 +2,7 @@
  * DefaultTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: DefaultTextFieldHandler.java,v 1.1.1.1 2002-09-24 16:09:31 piso Exp $
+ * $Id: DefaultTextFieldHandler.java,v 1.2 2002-12-01 16:51:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,9 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
     protected final Editor editor;
     protected final HistoryTextField textField;
 
-    private List completions;
-    private int index;
+    protected List completions;
+    protected int index;
+    
     private Expansion expansion;
     private String savedText;
     private String head;
@@ -183,7 +184,7 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         return new Expansion(editor.getBuffer(), prefix, prefix);
     }
 
-    private void reset()
+    protected void reset()
     {
         textField.resetHistory();
         textField.getHandler().resetCompletions();
@@ -312,7 +313,7 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
             popup.show(textField, 0, textField.getHeight());
     }
 
-    ActionListener popupActionListener = new ActionListener() {
+    private ActionListener popupActionListener = new ActionListener() {
         public void actionPerformed(ActionEvent e)
         {
             textField.setText(e.getActionCommand());
