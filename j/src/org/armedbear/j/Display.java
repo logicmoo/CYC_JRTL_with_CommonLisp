@@ -1,8 +1,8 @@
 /*
  * Display.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Display.java,v 1.8 2003-04-03 18:33:51 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Display.java,v 1.9 2003-05-09 11:20:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1705,6 +1705,10 @@ public final class Display extends JComponent implements Constants,
                 Debug.assertTrue(col == getMaxCols());
             }
             Graphics2D g2d = (Graphics2D) getGraphics();
+            if (g2d == null) {
+                Log.error("ensureColumnVisible g2d is null");
+                return;
+            }
             formatLine(line, shift, col);
             int x = measureLine(g2d, textArray, col, formatArray);
             final int maxWidth = getWidth() - gutterWidth - charWidth;
