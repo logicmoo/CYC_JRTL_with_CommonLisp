@@ -199,6 +199,7 @@ find-symbol
 finish-output
 first
 flet
+float
 floor
 fmakunbound
 force-output
