@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.409 2005-03-25 16:10:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.410 2005-03-25 19:32:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4249,6 +4249,16 @@
            (when (eq representation :unboxed-fixnum)
              (emit-unbox-fixnum))
            (emit-move-from-stack target representation))
+          ((eq (derive-type arg2) 'FIXNUM)
+           (compile-form arg1 :target :stack)
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+           (unless (and (single-valued-p arg1)
+                        (single-valued-p arg2))
+             (emit-clear-values))
+           (emit-invokevirtual +lisp-object-class+ "ash" '("I") +lisp-object+)
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
+           (emit-move-from-stack target representation))
           (t (dformat t "p2-ash case 6~%")
              (compile-function-call form target representation)))))
 
@@ -4356,9 +4366,9 @@
 
 (defun derive-type (form)
   (cond ((fixnump form)
-         (return-from derive-type 'fixnum))
+         (return-from derive-type 'FIXNUM))
         ((unboxed-fixnum-variable form)
-         (return-from derive-type 'fixnum))
+         (return-from derive-type 'FIXNUM))
         ((consp form)
          (let ((op (first form)))
            (case op
@@ -4370,6 +4380,11 @@
                 (dformat t "derive-type ASH case var1 = ~S~%" var1)
                 (when (and var1 (fixnump arg2) (minusp arg2))
                   (return-from derive-type 'FIXNUM))))
+             (-
+              (when (and (= (length form) 2)
+                         (or (fixnump (cadr form))
+                             (unboxed-fixnum-variable (cadr form))))
+                (return-from derive-type 'FIXNUM)))
              (THE
               (dformat t "derive-type THE case form = ~S~%" form)
               (when (subtypep (second form) 'FIXNUM)
@@ -4575,6 +4590,20 @@
 
 (defun p2-minus (form &key (target :stack) representation)
   (case (length form)
+    (2
+     (let* ((arg (cadr form))
+            (var (unboxed-fixnum-variable arg)))
+       (cond (var
+              (unless (eq representation :unboxed-fixnum)
+                (emit 'new +lisp-fixnum-class+)
+                (emit 'dup))
+              (emit 'iload (variable-register var))
+              (emit 'ineg)
+              (unless (eq representation :unboxed-fixnum)
+                (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+              (emit-move-from-stack target representation))
+             (t
+              (compile-function-call form target representation)))))
     (3
      (let* ((args (cdr form))
             (arg1 (first args))
