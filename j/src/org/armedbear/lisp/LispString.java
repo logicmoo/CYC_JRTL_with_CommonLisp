@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.46 2003-08-02 19:38:21 piso Exp $
+ * $Id: LispString.java,v 1.47 2003-08-02 19:59:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,7 +189,7 @@ public final class LispString extends AbstractVector
     public LispObject getRowMajor(int index) throws LispError
     {
         try {
-            return new LispCharacter(array[index]);
+            return LispCharacter.getInstance(array[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, array.length);
@@ -210,7 +210,7 @@ public final class LispString extends AbstractVector
     public LispObject get(int index) throws LispError
     {
         try {
-            return new LispCharacter(array[index]);
+            return LispCharacter.getInstance(array[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, array.length);
@@ -258,14 +258,14 @@ public final class LispString extends AbstractVector
         int limit = fillPointer >= 0 ? fillPointer : array.length;
         if (index < 0 || index >= limit)
             badIndex(index, limit);
-        return new LispCharacter(array[index]);
+        return LispCharacter.getInstance(array[index]);
     }
 
     // Ignores fill pointer.
     public LispObject AREF(LispObject index) throws LispError
     {
         try {
-            return new LispCharacter(array[Fixnum.getValue(index)]);
+            return LispCharacter.getInstance(array[Fixnum.getValue(index)]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(Fixnum.getValue(index), array.length);
