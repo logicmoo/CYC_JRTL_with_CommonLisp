@@ -2,7 +2,7 @@
  * DirectoryCacheEntry.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: DirectoryCacheEntry.java,v 1.1.1.1 2002-09-24 16:08:37 piso Exp $
+ * $Id: DirectoryCacheEntry.java,v 1.2 2002-11-30 17:07:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,5 +47,10 @@ public final class DirectoryCacheEntry
     public final long getWhen()
     {
         return when;
+    }
+    
+    public final String toString()
+    {
+        return "DirectoryCacheEntry for " + file;
     }
 }
