@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.96 2004-11-25 15:45:46 piso Exp $
+ * $Id: Stream.java,v 1.97 2004-11-26 14:52:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -312,7 +312,9 @@ public class Stream extends LispObject
     public LispObject readSymbol() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
-        _readToken(sb, LispThread.currentThread());
+        final Readtable rt =
+            (Readtable) _READTABLE_.symbolValue(LispThread.currentThread());
+        _readToken(sb, rt);
         return new Symbol(sb.toString());
     }
 
@@ -583,10 +585,10 @@ public class Stream extends LispObject
         StringBuffer sb = new StringBuffer();
         sb.append(c);
         final LispThread thread = LispThread.currentThread();
-        BitSet flags = _readToken(sb, thread);
+        final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+        BitSet flags = _readToken(sb, rt);
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
-        final Readtable rt = currentReadtable(thread);
         final LispObject readtableCase = rt.getReadtableCase();
         final String token;
         if (readtableCase == Keyword.INVERT) {
@@ -672,11 +674,10 @@ public class Stream extends LispObject
         return ((Package)_PACKAGE_.symbolValue(thread)).intern(token);
     }
 
-    private final BitSet _readToken(StringBuffer sb, LispThread thread)
+    private final BitSet _readToken(StringBuffer sb, Readtable rt)
         throws ConditionThrowable
     {
         BitSet flags = null;
-        final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
         final LispObject readtableCase = rt.getReadtableCase();
         if (sb.length() > 0) {
             Debug.assertTrue(sb.length() == 1);
@@ -885,7 +886,9 @@ public class Stream extends LispObject
     public LispObject readRadix(int radix) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
-        boolean escaped = (_readToken(sb, LispThread.currentThread()) != null);
+        final Readtable rt =
+            (Readtable) _READTABLE_.symbolValue(LispThread.currentThread());
+        boolean escaped = (_readToken(sb, rt) != null);
         if (escaped)
             return signal(new ReaderError("Illegal syntax for number."));
         String s = sb.toString();
