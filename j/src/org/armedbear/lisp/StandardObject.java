@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.5 2003-10-11 19:44:29 piso Exp $
+ * $Id: StandardObject.java,v 1.6 2003-10-11 20:40:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,14 @@ public class StandardObject extends LispObject
                 return T;
             if (type == cls.getSymbol())
                 return T;
+            LispObject cpl = cls.getCPL();
+            while (cpl != NIL) {
+                if (type == cpl.car())
+                    return T;
+                if (type == ((LispClass)cpl.car()).getSymbol())
+                    return T;
+                cpl = cpl.cdr();
+            }
         }
         return super.typep(type);
     }
