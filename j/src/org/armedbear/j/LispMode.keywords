@@ -547,6 +547,7 @@ unless
 unread-char
 unuse-package
 unwind-protect
+upgraded-array-element-type
 upper-case-p
 use-package
 values
