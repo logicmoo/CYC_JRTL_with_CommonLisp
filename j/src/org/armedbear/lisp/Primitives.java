@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.689 2004-10-05 14:20:07 piso Exp $
+ * $Id: Primitives.java,v 1.690 2004-10-10 17:12:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,7 +149,7 @@ public final class Primitives extends Lisp
 
     // ### compiled-function-p
     private static final Primitive1 COMPILED_FUNCTION_P =
-        new Primitive1("compiled-function-p","object")
+        new Primitive1("compiled-function-p", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -158,7 +158,7 @@ public final class Primitives extends Lisp
     };
 
     // ### consp
-    private static final Primitive1 CONSP = new Primitive1("consp","object")
+    private static final Primitive1 CONSP = new Primitive1("consp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -167,7 +167,7 @@ public final class Primitives extends Lisp
     };
 
     // ### listp
-    private static final Primitive1 LISTP = new Primitive1("listp","object")
+    private static final Primitive1 LISTP = new Primitive1("listp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -176,7 +176,7 @@ public final class Primitives extends Lisp
     };
 
     // ### abs
-    private static final Primitive1 ABS = new Primitive1("abs","number")
+    private static final Primitive1 ABS = new Primitive1("abs", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -185,7 +185,7 @@ public final class Primitives extends Lisp
     };
 
     // ### arrayp
-    private static final Primitive1 ARRAYP = new Primitive1("arrayp","object")
+    private static final Primitive1 ARRAYP = new Primitive1("arrayp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2621,7 +2621,7 @@ public final class Primitives extends Lisp
 
     // ### package-symbols
     private static final Primitive1 PACKAGE_SYMBOLS =
-        new Primitive1("package-symbols", PACKAGE_SYS, false)
+        new Primitive1("package-symbols", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2631,7 +2631,7 @@ public final class Primitives extends Lisp
 
     // ### package-internal-symbols
     private static final Primitive1 PACKAGE_INTERNAL_SYMBOLS =
-        new Primitive1("package-internal-symbols", PACKAGE_SYS, false)
+        new Primitive1("package-internal-symbols", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2641,7 +2641,7 @@ public final class Primitives extends Lisp
 
     // ### package-external-symbols
     private static final Primitive1 PACKAGE_EXTERNAL_SYMBOLS =
-        new Primitive1("package-external-symbols", PACKAGE_SYS, false)
+        new Primitive1("package-external-symbols", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2651,7 +2651,7 @@ public final class Primitives extends Lisp
 
     // ### package-inherited-symbols
     private static final Primitive1 PACKAGE_INHERITED_SYMBOLS =
-        new Primitive1("package-inherited-symbols", PACKAGE_SYS, false)
+        new Primitive1("package-inherited-symbols", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -3617,8 +3617,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    private static final Primitive1 _CALL_COUNT =
-        new Primitive1("%call-count", PACKAGE_SYS, false)
+    // ### call-count
+    private static final Primitive1 CALL_COUNT =
+        new Primitive1("call-count", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -3626,8 +3627,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    private static final Primitive2 _SET_CALL_COUNT =
-        new Primitive2("%set-call-count", PACKAGE_SYS, false)
+    // ### set-call-count
+    private static final Primitive2 SET_CALL_COUNT =
+        new Primitive2("set-call-count", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

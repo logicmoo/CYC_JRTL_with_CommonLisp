@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.291 2004-09-19 01:37:07 piso Exp $
+;;; $Id: jvm.lisp,v 1.292 2004-10-10 17:15:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4223,7 +4223,7 @@
              (compiled-definition (sys:load-compiled-function classfile)))
         (when (and name (functionp compiled-definition))
           (sys::%set-lambda-name compiled-definition name)
-          (sys::%set-call-count compiled-definition (sys::%call-count definition))
+          (sys:set-call-count compiled-definition (sys:call-count definition))
           (sys::%set-arglist compiled-definition (sys::arglist definition))
           (if (macro-function name)
               (setf (fdefinition name) (sys::make-macro compiled-definition))

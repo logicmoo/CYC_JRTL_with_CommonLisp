@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.76 2004-08-15 11:26:20 piso Exp $
+;;; $Id: precompiler.lisp,v 1.77 2004-10-10 17:17:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -793,7 +793,7 @@
     (setf result (coerce-to-function (precompile-form expr nil)))
     (when (and name (functionp result))
       (%set-lambda-name result name)
-      (%set-call-count result (%call-count definition))
+      (set-call-count result (call-count definition))
       (if (and (symbolp name) (macro-function name))
           (let ((mac (make-macro result)))
             (%set-arglist mac (arglist (symbol-function name)))
