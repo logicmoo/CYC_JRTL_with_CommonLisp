@@ -2,7 +2,7 @@
  * StreamError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: StreamError.java,v 1.4 2003-09-19 12:32:14 piso Exp $
+ * $Id: StreamError.java,v 1.5 2003-09-19 12:43:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@ package org.armedbear.lisp;
 
 public class StreamError extends Condition
 {
-    private String message;
     private Throwable cause;
 
     public StreamError()
@@ -32,7 +31,7 @@ public class StreamError extends Condition
 
     public StreamError(String message)
     {
-        this.message = message;
+        super(message);
     }
 
     public StreamError(Throwable cause)

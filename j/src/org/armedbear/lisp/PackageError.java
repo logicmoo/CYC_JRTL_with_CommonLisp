@@ -2,7 +2,7 @@
  * PackageError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageError.java,v 1.2 2003-09-19 12:20:34 piso Exp $
+ * $Id: PackageError.java,v 1.3 2003-09-19 12:43:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,15 +23,13 @@ package org.armedbear.lisp;
 
 public class PackageError extends Condition
 {
-    private String message;
-
     public PackageError()
     {
     }
 
     public PackageError(String message)
     {
-        this.message = message;
+        super(message);
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable

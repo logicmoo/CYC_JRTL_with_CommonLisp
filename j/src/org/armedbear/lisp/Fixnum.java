@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.71 2003-09-19 11:50:18 piso Exp $
+ * $Id: Fixnum.java,v 1.72 2003-09-19 12:43:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -343,8 +343,8 @@ public final class Fixnum extends LispObject
         }
         catch (ArithmeticException e) {
             if (obj.zerop())
-                throw new DivisionByZero();
-            throw new ArithmeticError(e.getMessage());
+                throw new ConditionThrowable(new DivisionByZero());
+            throw new ConditionThrowable(new ArithmeticError(e.getMessage()));
         }
     }
 

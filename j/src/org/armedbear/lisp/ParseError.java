@@ -2,7 +2,7 @@
  * ParseError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ParseError.java,v 1.3 2003-09-19 12:10:27 piso Exp $
+ * $Id: ParseError.java,v 1.4 2003-09-19 12:43:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,9 @@ package org.armedbear.lisp;
 
 public class ParseError extends Condition
 {
-    private String message;
-
     public ParseError(String message)
     {
-        this.message = message;
+        super(message);
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable

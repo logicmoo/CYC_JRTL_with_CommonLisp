@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.137 2003-09-19 12:20:34 piso Exp $
+ * $Id: Lisp.java,v 1.138 2003-09-19 12:43:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -563,7 +563,7 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         if (denominator.signum() == 0)
-            throw new DivisionByZero();
+            throw new ConditionThrowable(new DivisionByZero());
         if (denominator.signum() < 0) {
             numerator = numerator.negate();
             denominator = denominator.negate();

@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.46 2003-09-19 11:50:18 piso Exp $
+ * $Id: LispFloat.java,v 1.47 2003-09-19 12:43:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -222,7 +222,7 @@ public final class LispFloat extends LispObject
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
     {
         if (obj.zerop())
-            throw new DivisionByZero();
+            throw new ConditionThrowable(new DivisionByZero());
         if (obj instanceof LispFloat)
             return new LispFloat(value / ((LispFloat)obj).value);
         if (obj instanceof Fixnum)

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.409 2003-09-19 12:32:13 piso Exp $
+ * $Id: Primitives.java,v 1.410 2003-09-19 12:43:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1157,9 +1157,9 @@ public final class Primitives extends Module
                 if (datum == Symbol.TYPE_ERROR)
                     throw new ConditionThrowable(new TypeError(_format(args, 1)));
                 // Default.
-                throw new SimpleError(((Symbol)datum).getName());
+                throw new ConditionThrowable(new SimpleError(((Symbol)datum).getName()));
             }
-            throw new SimpleError(_format(args));
+            throw new ConditionThrowable(new SimpleError(_format(args)));
         }
     };
 
@@ -1805,7 +1805,7 @@ public final class Primitives extends Module
         if (type == Symbol.CONTROL_ERROR)
             return c instanceof ControlError;
         if (type == Symbol.SIMPLE_ERROR)
-            return c instanceof SimpleError;
+            return c.getCondition() instanceof SimpleError;
         if (type == Symbol.ERROR) {
             if (c instanceof LispError)
                 return true;
@@ -1817,9 +1817,9 @@ public final class Primitives extends Module
         if (type == Symbol.SIMPLE_CONDITION)
             return c instanceof SimpleCondition;
         if (type == Symbol.DIVISION_BY_ZERO)
-            return c instanceof DivisionByZero;
+            return c.getCondition() instanceof DivisionByZero;
         if (type == Symbol.ARITHMETIC_ERROR)
-            return c instanceof ArithmeticError;
+            return c.getCondition() instanceof ArithmeticError;
 
         return false;
     }
