@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.548 2004-01-01 19:39:24 piso Exp $
+ * $Id: Primitives.java,v 1.549 2004-01-02 01:24:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1221,6 +1221,8 @@ public final class Primitives extends Lisp
                     condition = new SimpleCondition(initArgs);
                 else if (datum == Symbol.SIMPLE_WARNING)
                     condition = new SimpleWarning(initArgs);
+                else if (datum == Symbol.UNBOUND_SLOT)
+                    condition = new UnboundSlot(initArgs);
                 else if (datum == Symbol.WARNING)
                     condition = new Warning(initArgs);
                 else if (datum == Symbol.SIMPLE_ERROR)
