@@ -1,7 +1,7 @@
 ;;; find.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: find.lisp,v 1.8 2005-02-09 15:45:56 piso Exp $
+;;; $Id: find.lisp,v 1.9 2005-02-09 18:35:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -135,12 +135,16 @@
 
 
 (defun list-position* (item sequence from-end test test-not start end key)
-  (when (null end) (setf end (length sequence)))
-  (list-position item sequence))
+  (declare (type fixnum start))
+  (let ((end (or end (length sequence))))
+    (declare (type fixnum end))
+    (list-position item sequence)))
 
 (defun vector-position* (item sequence from-end test test-not start end key)
-  (when (null end) (setf end (length sequence)))
-  (vector-position item sequence))
+  (declare (type fixnum start))
+  (let ((end (or end (length sequence))))
+    (declare (type fixnum end))
+    (vector-position item sequence)))
 
 (defmacro vector-position-if (test sequence)
   `(vector-locater-if ,test ,sequence :position))
@@ -149,7 +153,9 @@
   `(list-locater-if ,test ,sequence :position))
 
 (defun position-if (test sequence &key from-end (start 0) key end)
+  (declare (type fixnum start))
   (let ((end (or end (length sequence))))
+    (declare (type fixnum end))
     (if (listp sequence)
         (list-position-if test sequence)
         (vector-position-if test sequence))))
@@ -161,7 +167,9 @@
   `(list-locater-if-not ,test ,sequence :position))
 
 (defun position-if-not (test sequence &key from-end (start 0) key end)
+  (declare (type fixnum start))
   (let ((end (or end (length sequence))))
+    (declare (type fixnum end))
     (if (listp sequence)
         (list-position-if-not test sequence)
         (vector-position-if-not test sequence))))
@@ -179,12 +187,14 @@
       (vector-find* item sequence from-end test test-not start end key)))
 
 (defun list-find* (item sequence from-end test test-not start end key)
-  (when (null end) (setf end (length sequence)))
-  (list-find item sequence))
+  (let ((end (or end (length sequence))))
+    (declare (type fixnum end))
+    (list-find item sequence)))
 
 (defun vector-find* (item sequence from-end test test-not start end key)
-  (when (null end) (setf end (length sequence)))
-  (vector-find item sequence))
+  (let ((end (or end (length sequence))))
+    (declare (type fixnum end))
+    (vector-find item sequence)))
 
 (defmacro vector-find-if (test sequence)
   `(vector-locater-if ,test ,sequence :element))
@@ -194,6 +204,7 @@
 
 (defun find-if (test sequence &key from-end (start 0) end key)
   (let ((end (or end (length sequence))))
+    (declare (type fixnum end))
     (if (listp sequence)
         (list-find-if test sequence)
         (vector-find-if test sequence))))
@@ -206,19 +217,7 @@
 
 (defun find-if-not (test sequence &key from-end (start 0) end key)
   (let ((end (or end (length sequence))))
+    (declare (type fixnum end))
     (if (listp sequence)
         (list-find-if-not test sequence)
         (vector-find-if-not test sequence))))
-
-(eval-when (:execute)
-  (when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
-    (mapcar #'jvm::jvm-compile '(position
-                                 list-position*
-                                 vector-position*
-                                 position-if
-                                 position-if-not
-                                 find
-                                 list-find*
-                                 vector-find*
-                                 find-if
-                                 find-if-not))))
