@@ -1,8 +1,8 @@
 /*
  * BufferList.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: BufferList.java,v 1.3 2003-04-23 00:45:29 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves, Mike Rutter
+ * $Id: BufferList.java,v 1.4 2004-06-27 14:37:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,24 @@ public final class BufferList implements Constants, PreferencesChangeListener
     public synchronized boolean remove(Buffer buf)
     {
         return list.remove(buf);
+    }
+
+    public synchronized boolean move(Buffer buf, int index)
+    {
+        // If we're given an invalid index, return false.
+        if (index < 0 || index >= size())
+            return false;
+
+        // If the given index is not a change, or we're given an invalid
+        // Buffer, return false.
+        int previousIndex = list.indexOf(buf);
+        if (index == previousIndex || previousIndex < 0)
+            return false;
+
+        list.remove(previousIndex);
+        list.add(index, buf);
+        modified();
+        return true;
     }
 
     public synchronized int size()
@@ -272,7 +290,7 @@ public final class BufferList implements Constants, PreferencesChangeListener
         return name;
     }
 
-    private int indexOf(Buffer buf)
+    public int indexOf(Buffer buf)
     {
         for (int i = list.size(); i-- > 0;) {
             if (list.get(i) == buf)

@@ -2,7 +2,7 @@
  * SidebarBufferTree.java
  *
  * Copyright (C) 2003-2004 Mike Rutter, Peter Graves
- * $Id: SidebarBufferTree.java,v 1.8 2004-03-19 01:35:28 piso Exp $
+ * $Id: SidebarBufferTree.java,v 1.9 2004-06-27 14:34:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +22,27 @@
 package org.armedbear.j;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragGestureRecognizer;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DragSourceContext;
+import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -33,39 +51,59 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JTree;
+import java.util.Iterator;
+import java.util.List;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTree;
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 // Consider an option to make the folders either the first things or last
 // things in the buffer list. That way all of the folders will be listed
 // together, and all of the buffers will be listed together.
 public final class SidebarBufferTree extends SidebarTree implements Constants,
     NavigationComponent, ActionListener, KeyListener, MouseListener,
-    MouseMotionListener
+    MouseMotionListener, PreferencesChangeListener, DragGestureListener,
+    DragSourceListener, DropTargetListener
 {
     private JPopupMenu popup;
     private int updateFlag;
     private DefaultMutableTreeNode rootNode;
     private Sidebar sidebar;
+
+    // DnD
+    private DragSource dragSource;
+    private static DragSourceContext dragSourceContext;
+    private Buffer draggedBuffer = null;
+    private int draggedBufferRow = -1;
+    // Metric used for determining the WAIT_TIME between scroll increments.
+    private int scrollY = 0;
+    private Runnable scroller = null;
+    // Variable times used to speed up scrolling the further the mouse is
+    // from the tree.
+    private static final long[] WAIT_TIMES = new long[] {
+        200, 175, 150, 125, 100, 75, 50, 37, 25, 15, 10, 5
+    };
+
+    // Is the buffer list sorted alphabetically?
+    private boolean alpha = false;
+    // Are we reordering the buffers when one is opened?
+    private boolean reorder = false;
 
     public SidebarBufferTree(Sidebar sidebar)
     {
@@ -78,6 +116,21 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         addMouseMotionListener(this);
         setToolTipText("");
         setRootVisible(false);
+
+        dragSource = DragSource.getDefaultDragSource() ;
+        DragGestureRecognizer dgr =
+            dragSource.createDefaultDragGestureRecognizer(this,
+                                                          DnDConstants.ACTION_COPY_OR_MOVE,
+                                                          this);
+        dgr.setSourceActions(dgr.getSourceActions() & ~InputEvent.BUTTON3_MASK);
+        new DropTarget(this, this);
+
+        Preferences p = Editor.preferences();
+        if (p != null) {
+            updatePreferences(p);
+            p.addPreferencesChangeListener(this);
+        } else
+            Debug.bug();
     }
 
     // Grabs the rough tree structure from the current session and builds the
@@ -102,6 +155,15 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         rootNode = new DefaultMutableTreeNode("");
         buildTreeFromList(rootNode, arrayList);
         setModel(new DefaultTreeModel(rootNode));
+    }
+
+    private void updatePreferences(Preferences p)
+    {
+        alpha = p.getBooleanProperty(Property.SORT_BUFFER_LIST);
+        if (alpha)
+            reorder = false;
+        else
+            reorder = p.getIntegerProperty(Property.REORDER_BUFFERS) > 1;
     }
 
     private void buildTreeFromList(DefaultMutableTreeNode node, List buffers)
@@ -171,12 +233,23 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         return buffers;
     }
 
+    // Overrides the version from JTree to ensure that null is never returned.
     public int[] getSelectionRows()
     {
         int[] rows = super.getSelectionRows();
         if (rows == null)
             rows = new int[0];
         return rows;
+    }
+
+    // Returns the first row from getSelectionRows() if there are any rows
+    // selected, -1 otherwise.
+    public int getSelectionRow()
+    {
+        int rows[] = getSelectionRows();
+        if (rows.length > 0)
+            return rows[0];
+        return -1;
     }
 
     private Buffer getBufferFromPath(TreePath path)
@@ -375,6 +448,17 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         return text;
     }
 
+    public synchronized void preferencesChanged()
+    {
+        Preferences p = Editor.preferences();
+        if (p != null) {
+            updatePreferences(p);
+        }
+        else {
+            Debug.bug();
+        }
+    }
+
     private DefaultMutableTreeNode findNodeForObject(Object userObj)
     {
         Enumeration enumeration = rootNode.breadthFirstEnumeration();
@@ -502,6 +586,9 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
 
     public void mouseEntered(MouseEvent e)
     {
+        // This does not overide our mouse dragging cursor while doing drag
+        // and drop because we don't get a mouseEntered event while dragging.
+        setCursor(Cursor.getDefaultCursor());
     }
 
     public void mouseExited(MouseEvent e)
@@ -528,6 +615,271 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
     {
     }
 
+    // From interface DragTargetListener.
+    public void dragEnter(DropTargetDragEvent event)
+    {
+        if (alpha || reorder)
+            return;
+        stopScroll();
+        if (Platform.isPlatformUnix() && dragSourceContext != null) {
+            Cursor c = Dispatcher.getCursorForAction(event.getDropAction());
+            dragSourceContext.setCursor(c);
+        }
+    }
+
+    // From interface DragTargetListener.
+    public void dragExit(DropTargetEvent e)
+    {
+        if (alpha || reorder)
+            return;
+        setSelectionRow(draggedBufferRow);
+        if (Platform.isPlatformUnix() && dragSourceContext != null)
+            dragSourceContext.setCursor(Dispatcher.getCursorForAction(-1));
+    }
+
+    // From interface DragTargetListener.
+    public void dragOver(DropTargetDragEvent event)
+    {
+        if (alpha || reorder)
+            return;
+        if (event.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+            Point pt = event.getLocation();
+            int row = getRowForLocation(pt.x, pt.y);
+            if (row == -1)
+                setSelectionRow(draggedBufferRow);
+            else
+                setSelectionRow(row);
+        }
+    }
+
+    // From interface DragTargetListener.
+    public void drop(DropTargetDropEvent event)
+    {
+        if (alpha || reorder)
+            return;
+        Transferable t = event.getTransferable();
+        if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor) &&
+            draggedBuffer != null)
+        {
+            BufferList bufList = Editor.getBufferList();
+            Buffer movedTo = getSelectedBuffer();
+            // No dropping onto secondary buffers.
+            if (movedTo.isSecondary()) {
+                setSelectionRow(draggedBufferRow);
+                event.rejectDrop();
+                return;
+            }
+            int index = bufList.indexOf(movedTo);
+            if (index >= 0) {
+                bufList.move(draggedBuffer, index);
+                refresh();
+                // Make it so that the dragged buffer is selected in the tree.
+                setSelectionRow(index);
+            }
+        } else
+            event.rejectDrop();
+    }
+
+
+    // From interface DragTargetListener.
+    public void dropActionChanged(DropTargetDragEvent event) {}
+
+    // From interface DragGestureListener.
+    public void dragGestureRecognized(DragGestureEvent event)
+    {
+        if (alpha || reorder)
+            return;
+        Buffer buf = getSelectedBuffer();
+        if (buf != null && !buf.isSecondary()) {
+            String name = buf.getFileNameForDisplay();
+            Transferable transferable =
+                new BufferSelection(new java.io.File(name));
+            draggedBuffer = buf;
+            draggedBufferRow = getSelectionRow();
+
+            int action = event.getDragAction();
+            Cursor cursor = null;
+            if (Platform.isPlatformUnix()) {
+                cursor = Dispatcher.getCursorForAction(action);
+            }
+            dragSource.startDrag(event, cursor, transferable, this);
+            dragSourceContext = null;
+        }
+    }
+
+    // From interface DragSourceListener.
+    public void dragDropEnd(DragSourceDropEvent event)
+    {
+        draggedBuffer = null;
+        draggedBufferRow = -1;
+        stopScroll();
+        if (alpha || reorder)
+            return;
+        // Make sure that the currently selected row is visible.
+        int selectionRow = getSelectionRow();
+        if (selectionRow >= 0)
+            scrollRowToVisible(selectionRow);
+    }
+
+    // From interface DragSourceListener.
+    public void dragEnter(DragSourceDragEvent event)
+    {
+        if (alpha || reorder)
+            return;
+        stopScroll();
+        if (Platform.isPlatformUnix()) {
+            DragSourceContext dsc = event.getDragSourceContext();
+            dsc.setCursor(Dispatcher.getCursorForAction(event.getDropAction()));
+        }
+    }
+
+    // From interface DragSourceListener.
+    public void dragOver(DragSourceDragEvent event)
+    {
+        if (alpha || reorder)
+            return;
+        // OS X doesn't seem to like to pass along dragExit events, but it
+        // does pass along dragOver events even when the cursor is blissfully
+        // off somewhere completely different.
+        if (Platform.isPlatformMacOSX()) {
+            Component parent = getParent();
+            if (!(parent instanceof JViewport)) {
+                stopScroll();
+                return;
+            }
+            JViewport viewport = (JViewport)parent;
+            Rectangle rect = viewport.getViewRect();
+
+            Point frameLoc = Editor.getCurrentFrame().getLocationOnScreen();
+            Point loc = viewport.getLocationOnScreen();
+            int x = event.getX() - frameLoc.x + loc.x;
+            int y = event.getY() + frameLoc.y - loc.y;
+            if ((y < 0 || y > rect.height) && (x >= 0 && x <= rect.width)) {
+                // Now that we've checked to make sure that the cursor is
+                // out of our bounds, we need to take x and y back to values
+                // that dragExit will like.
+                x += loc.x;
+                y += loc.y;
+                DragSourceEvent dse =
+                    new DragSourceEvent(event.getDragSourceContext(), x, y);
+                dragExit(dse);
+            } else
+                stopScroll();
+        }
+    }
+
+    // From interface DragSourceListener.
+    public void dropActionChanged(DragSourceDragEvent event) {}
+
+    // From interface DragSourceListener.
+    public void dragExit(DragSourceEvent event)
+    {
+        if (alpha || reorder)
+            return;
+        DragSourceContext dsc = event.getDragSourceContext();
+        if (Platform.isPlatformUnix())
+            dsc.setCursor(Dispatcher.getCursorForAction(-1));
+        dragSourceContext = dsc;
+        Component parent = getParent();
+        if (!(parent instanceof JViewport)) {
+            stopScroll();
+            return;
+        }
+        JViewport viewport = (JViewport)parent;
+        Rectangle rect = viewport.getViewRect();
+        int x = event.getX();
+        int y = event.getY();
+        Point p = getLocationOnScreen();
+        x -= p.x + rect.x;
+        y -= p.y + rect.y;
+        // We don't have to scroll if roughly half of the top or bottom element
+        // is visible, so we use a little fudge factor.
+        int rowFudge = (getRowBounds(0).height + 1) / 2;
+        int yDiff = getSize().height - rect.height - rect.y;
+        // All the cases where scrolling will not be necessary.
+        if (x < 0 || x >= rect.width || (y < 0 && rect.y < rowFudge) ||
+            (y > 0 && yDiff < rowFudge))
+        {
+            stopScroll();
+            return;
+        }
+        // Increasing the WAIT_TIMES index for every pixel is a little extreme,
+        // so do it for every two pixels.
+        if (y < 0) {
+            scrollY = (y - 1) / 2;
+        } else {
+            y -= rect.height;
+            scrollY = (y + 2) / 2;
+        }
+        startScroll();
+    }
+
+    // Initialize and start the scroller thread if it is not currently running.
+    private synchronized void startScroll() {
+        if (scroller == null) {
+            scroller = new TreeScroller();
+            Thread scroll = new Thread(scroller, "SidebarBufferTree scroller");
+            scroll.setDaemon(true);
+            scroll.setPriority(Thread.MIN_PRIORITY);
+            scroll.start();
+        }
+    }
+
+    // Set conditions so that any tree scrolling taking place will stop.
+    private synchronized void stopScroll() {
+        scrollY = 0;
+        scroller = null;
+    }
+
+    private class TreeScroller implements Runnable {
+        public void run()
+        {
+            Component parent = getParent();
+            if (!(parent instanceof JViewport)) {
+                return;
+            }
+            final JViewport viewport = (JViewport)parent;
+            while (scrollY != 0) {
+                if (viewport == null)
+                    break;
+                Rectangle bounds = getRowBounds(0);
+                if (bounds == null)
+                    break;
+                int scrollInc = bounds.height;
+                int diffY;
+                final Rectangle rect = viewport.getViewRect();
+                final Point pos = viewport.getViewPosition();
+                if (scrollY < 0) {
+                    pos.y = Math.max(pos.y - scrollInc, 0);
+                    if (pos.y == 0)
+                        scrollY = 0;
+                } else {
+                    int h = getSize().height;
+                    int yMax = h - rect.height;
+                    pos.y = Math.min(pos.y + scrollInc, yMax);
+                    if (pos.y == yMax)
+                        scrollY = 0;
+                }
+                Runnable r = new Runnable() {
+                    public void run()
+                    {
+                        if (viewport != null && pos != null) {
+                            viewport.setViewPosition(pos);
+                            repaint();
+                        }
+                    }
+                };
+                SwingUtilities.invokeLater(r);
+                int absY = Math.abs(scrollY);
+                int waitIndex = Math.min(absY, WAIT_TIMES.length-1);
+                try {
+                    Thread.sleep(WAIT_TIMES[waitIndex]);
+                }
+                catch (InterruptedException ex) {}
+            }
+        }
+    }
+
     private static class SidebarTreeCellRenderer extends JLabel
         implements TreeCellRenderer
     {
@@ -544,7 +896,7 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         private static final Border noFocusBorder =
             new EmptyBorder(1, 1, 1, 1);
 
-        private Sidebar sidebar;
+        private final Sidebar sidebar;
 
         public SidebarTreeCellRenderer(Sidebar sidebar)
         {
@@ -591,6 +943,42 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
                 outerBorder = noFocusBorder;
             setBorder(new CompoundBorder(outerBorder, innerBorder));
             return this;
+        }
+    }
+
+    private class BufferSelection implements Transferable
+    {
+        private List fileList = null;
+        private final DataFlavor[] flavors = new DataFlavor[] {
+            DataFlavor.javaFileListFlavor
+        };
+
+        public BufferSelection(java.io.File file)
+        {
+            fileList = new ArrayList(1);
+            fileList.add(file);
+        }
+
+        public Object getTransferData(DataFlavor flavor)
+        {
+            List retList = new ArrayList(1);
+            if (flavor == DataFlavor.javaFileListFlavor)
+                retList.add(fileList.get(0));
+            return retList;
+        }
+
+        public DataFlavor[] getTransferDataFlavors()
+        {
+            return flavors;
+        }
+
+        public boolean isDataFlavorSupported(DataFlavor flavor)
+        {
+            for (int i = 0; i < flavors.length; i++) {
+                if (flavor == flavors[i])
+                    return true;
+            }
+            return false;
         }
     }
 }
