@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.459 2003-10-02 00:02:56 piso Exp $
+ * $Id: Primitives.java,v 1.460 2003-10-02 00:20:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3077,76 +3077,6 @@ public final class Primitives extends Module
             throws ConditionThrowable
         {
             return progn(args.cdr(), env, LispThread.currentThread());
-        }
-    };
-
-    // ### function
-    private static final SpecialOperator FUNCTION =
-        new SpecialOperator("function")
-    {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            final LispObject arg = args.car();
-            if (arg instanceof Symbol) {
-                LispObject functional = env.lookupFunctional(arg);
-                if (functional instanceof Autoload) {
-                    Autoload autoload = (Autoload) functional;
-                    autoload.load();
-                    functional = autoload.getSymbol().getSymbolFunction();
-                }
-                if (functional instanceof Function)
-                    return functional;
-                throw new ConditionThrowable(new UndefinedFunction(arg));
-            }
-            if (arg instanceof Cons) {
-                if (arg.car() == Symbol.LAMBDA)
-                    return new Closure(arg.cadr(), arg.cddr(), env);
-                if (arg.car() == Symbol.SETF) {
-                    LispObject f = get(checkSymbol(arg.cadr()),
-                                       PACKAGE_SYS.intern("SETF-FUNCTION"));
-                    if (f instanceof Function)
-                        return f;
-                }
-            }
-            throw new ConditionThrowable(new UndefinedFunction(arg));
-        }
-    };
-
-    // ### setq
-    private static final SpecialOperator SETQ = new SpecialOperator("setq") {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            LispObject value = Symbol.NIL;
-            final LispThread thread = LispThread.currentThread();
-            while (args != NIL) {
-                Symbol symbol = checkSymbol(args.car());
-                args = args.cdr();
-                value = eval(args.car(), env, thread);
-                if (symbol.isSpecialVariable()) {
-                    Environment dynEnv = thread.getDynamicEnvironment();
-                    if (dynEnv != null) {
-                        Binding binding = dynEnv.getBinding(symbol);
-                        if (binding != null) {
-                            binding.value = value;
-                            args = args.cdr();
-                            continue;
-                        }
-                    }
-                    symbol.setSymbolValue(value);
-                    args = args.cdr();
-                    continue;
-                }
-                // Not special.
-                Binding binding = env.getBinding(symbol);
-                if (binding != null)
-                    binding.value = value;
-                else
-                    symbol.setSymbolValue(value);
-                args = args.cdr();
-            }
-            return value;
         }
     };
 
