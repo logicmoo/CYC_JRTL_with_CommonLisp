@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.5 2002-10-11 01:42:36 piso Exp $
+ * $Id: Buffer.java,v 1.6 2002-10-11 12:35:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -596,7 +596,7 @@ public class Buffer extends SystemBuffer
         return modificationCount;
     }
 
-    public final void setModificationCount(int count)
+    public final synchronized void setModificationCount(int count)
     {
         if (count != modificationCount) {
             modificationCount = count;
@@ -604,7 +604,7 @@ public class Buffer extends SystemBuffer
         }
     }
 
-    public final void incrementModificationCount()
+    public final synchronized void incrementModificationCount()
     {
         ++modificationCount;
         srText = null;
@@ -1744,7 +1744,7 @@ public class Buffer extends SystemBuffer
         }
     }
 
-    public boolean needsAutosave()
+    public synchronized boolean needsAutosave()
     {
         if (!Autosave.isAutosaveEnabled() || !autosaveEnabled)
             return false;
@@ -2523,7 +2523,7 @@ public class Buffer extends SystemBuffer
     private SoftReference srText;
 
     // Never returns null.
-    public String getText()
+    public synchronized String getText()
     {
         if (srText != null) {
             final String text = (String) srText.get();
