@@ -365,6 +365,7 @@ position
 position-if
 position-if-not
 pprint
+pprint-logical-block
 prin1
 prin1-to-string
 princ
