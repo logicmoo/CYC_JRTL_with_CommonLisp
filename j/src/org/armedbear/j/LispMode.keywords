@@ -237,6 +237,7 @@ macrolet
 make-array
 make-broadcast-stream
 make-condition
+make-dispatch-macro-character
 make-hash-table
 make-list
 make-package
