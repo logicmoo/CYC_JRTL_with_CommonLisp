@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.6 2003-02-25 16:46:59 piso Exp $
+ * $Id: Vector.java,v 1.7 2003-02-27 18:01:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,9 +64,9 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
     public LispObject elt(long index) throws LispError
     {
         long limit = fillPointer >= 0 ? fillPointer : length;
-        if (index >= 0 && index < limit)
-            return elements[(int)index];
-        throw new LispError("ELT: invalid index " + index + " for " + this);
+        if (index < 0 || index >= limit)
+            badIndex(index);
+        return elements[(int)index];
     }
 
     public LispObject remove(LispObject item) throws LispError

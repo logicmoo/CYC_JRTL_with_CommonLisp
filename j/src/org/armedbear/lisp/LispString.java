@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.7 2003-02-27 03:11:36 piso Exp $
+ * $Id: LispString.java,v 1.8 2003-02-27 18:01:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,13 +148,9 @@ public final class LispString extends AbstractVector implements SequenceType,
     public LispObject elt(long index) throws LispError
     {
         long limit = fillPointer >= 0 ? fillPointer : array.length;
-        if (index >= 0 && index < limit)
-            return new LispCharacter(array[(int)index]);
-        StringBuffer sb = new StringBuffer("ELT: invalid index ");
-        sb.append(index);
-        sb.append(" for ");
-        sb.append(this);
-        throw new LispError(sb.toString());
+        if (index < 0 || index >= limit)
+            badIndex(index);
+        return new LispCharacter(array[(int)index]);
     }
 
     public LispObject remove(LispObject item) throws LispError
