@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: GenericFunction.java,v 1.1 2003-10-12 16:11:51 piso Exp $
+ * $Id: GenericFunction.java,v 1.2 2003-10-12 18:21:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,43 @@ public final class GenericFunction extends StandardObject
     public void setDiscriminatingFunction(LispObject function)
     {
         discriminatingFunction = function;
+    }
+
+    public LispObject execute() throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[0];
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject arg) throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[1];
+        args[0] = arg;
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[2];
+        args[0] = first;
+        args[1] = second;
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third) throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[3];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        return funcall(getDiscriminatingFunction(), args, LispThread.currentThread());
     }
 
     private static final Primitive1 GENERIC_FUNCTION_DISCRIMINATING_FUNCTION =
