@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.507 2003-11-28 06:08:06 piso Exp $
+ * $Id: Primitives.java,v 1.508 2003-11-29 19:23:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,30 +50,27 @@ public final class Primitives extends Module
     private static final int COMPILED_FUNCTION_P        = 16;
     private static final int CONSP                      = 17;
     private static final int EVAL                       = 18;
-    private static final int EVENP                      = 19;
-    private static final int FOURTH                     = 20;
-    private static final int IDENTITY                   = 21;
-    private static final int KEYWORDP                   = 22;
-    private static final int LISTP                      = 23;
-    private static final int LOWER_CASE_P               = 24;
-    private static final int MAKE_SYMBOL                = 25;
-    private static final int MAKUNBOUND                 = 26;
-    private static final int NUMBERP                    = 27;
-    private static final int ODDP                       = 28;
-    private static final int PREDECESSOR                = 29;
-    private static final int SECOND                     = 30;
-    private static final int SIMPLE_BIT_VECTOR_P        = 31;
-    private static final int SIMPLE_STRING_P            = 32;
-    private static final int SIMPLE_VECTOR_P            = 33;
-    private static final int STRINGP                    = 34;
-    private static final int SUCCESSOR                  = 35;
-    private static final int SYMBOL_FUNCTION            = 36;
-    private static final int SYMBOL_NAME                = 37;
-    private static final int SYMBOL_PACKAGE             = 38;
-    private static final int SYMBOL_PLIST               = 39;
-    private static final int THIRD                      = 40;
-    private static final int UPPER_CASE_P               = 41;
-    private static final int VECTORP                    = 42;
+    private static final int FOURTH                     = 19;
+    private static final int IDENTITY                   = 20;
+    private static final int KEYWORDP                   = 21;
+    private static final int LISTP                      = 22;
+    private static final int LOWER_CASE_P               = 23;
+    private static final int MAKE_SYMBOL                = 24;
+    private static final int MAKUNBOUND                 = 25;
+    private static final int PREDECESSOR                = 26;
+    private static final int SECOND                     = 27;
+    private static final int SIMPLE_BIT_VECTOR_P        = 28;
+    private static final int SIMPLE_STRING_P            = 29;
+    private static final int SIMPLE_VECTOR_P            = 30;
+    private static final int STRINGP                    = 31;
+    private static final int SUCCESSOR                  = 32;
+    private static final int SYMBOL_FUNCTION            = 33;
+    private static final int SYMBOL_NAME                = 34;
+    private static final int SYMBOL_PACKAGE             = 35;
+    private static final int SYMBOL_PLIST               = 36;
+    private static final int THIRD                      = 37;
+    private static final int UPPER_CASE_P               = 38;
+    private static final int VECTORP                    = 39;
 
     private Primitives()
     {
@@ -98,7 +95,6 @@ public final class Primitives extends Module
         definePrimitive1("compiled-function-p", COMPILED_FUNCTION_P);
         definePrimitive1("consp", CONSP);
         definePrimitive1("eval", EVAL);
-        definePrimitive1("evenp", EVENP);
         definePrimitive1("fourth", FOURTH);
         definePrimitive1("identity", IDENTITY);
         definePrimitive1("keywordp", KEYWORDP);
@@ -106,8 +102,6 @@ public final class Primitives extends Module
         definePrimitive1("lower-case-p", LOWER_CASE_P);
         definePrimitive1("make-symbol", MAKE_SYMBOL);
         definePrimitive1("makunbound", MAKUNBOUND);
-        definePrimitive1("numberp", NUMBERP);
-        definePrimitive1("oddp", ODDP);
         definePrimitive1("second", SECOND);
         definePrimitive1("simple-bit-vector-p", SIMPLE_BIT_VECTOR_P);
         definePrimitive1("simple-string-p", SIMPLE_STRING_P);
@@ -194,12 +188,6 @@ public final class Primitives extends Module
                         return T;
                 }
                 return NIL;
-            case EVENP:                         // ### evenp
-                return arg.EVENP();
-            case ODDP:                          // ### oddp
-                return arg.ODDP();
-            case NUMBERP:                       // ### numberp
-                return arg.NUMBERP();
             case CONSP:                         // ### consp
                 return arg instanceof Cons ? T : NIL;
             case LISTP:                         // ### listp
@@ -4357,6 +4345,33 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg)
         {
             return arg.INTEGERP();
+        }
+    };
+
+    // ### evenp
+    private static final Primitive1 EVENP = new Primitive1("evenp")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.EVENP();
+        }
+    };
+
+    // ### oddp
+    private static final Primitive1 ODDP = new Primitive1("oddp")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.ODDP();
+        }
+    };
+
+    // ### numberp
+    private static final Primitive1 NUMBERP = new Primitive1("numberp")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return arg.NUMBERP();
         }
     };
 
