@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.9 2003-03-13 18:26:40 piso Exp $
+;;; $Id: compiler.lisp,v 1.10 2003-03-13 19:30:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -174,38 +174,37 @@
 ;;        (format t "    skipping ~S~%" first)
        form))))
 
-(defun compile-list (form)
-  (let ((first (car form)))
-    (unless (and first (symbolp first) (fboundp first))
-      (return-from compile-list form))
-    (cond ((eq first 'LAMBDA)
-           (append (list 'LAMBDA (second form))
-                   (mapcar #'compile-sexp (cddr form))))
-          ((macro-function first)
-           (compile-sexp (macroexpand form)))
-          ((special-operator-p first)
-           (compile-special form))
-          (t
-           (let* ((args (mapcar #'compile-sexp (cdr form)))
-                  (n-args (length args)))
-             (if (= n-args 2)
-                 (cond ((eq first 'cl:+)
-                        (cond ((eql (car args) 1)
-                               (list '1+ (cadr args)))
-                              ((eql (cadr args) 1)
-                               (list '1+ (car args)))
-                              (t
-                               (append '(cl::sum) args))))
-                       ((eq first 'cl:-)
-                        (if (eql (cadr args) 1)
-                            (list '1- (car args))
-                            (append '(cl::difference) args)))
-                       (t
-                        (append (list first) args)))
-                 (append (list first) args)))))))
 
 (defun compile-sexp (form)
-  (if (atom form) form (compile-list form)))
+  (if (atom form) form
+      (let ((first (car form)))
+        (unless (and first (symbolp first) (fboundp first))
+          (return-from compile-sexp form))
+        (cond ((eq first 'LAMBDA)
+               (append (list 'LAMBDA (second form))
+                       (mapcar #'compile-sexp (cddr form))))
+              ((macro-function first)
+               (compile-sexp (macroexpand form)))
+              ((special-operator-p first)
+               (compile-special form))
+              (t
+               (let* ((args (mapcar #'compile-sexp (cdr form)))
+                      (n-args (length args)))
+                 (if (= n-args 2)
+                     (cond ((eq first 'cl:+)
+                            (cond ((eql (car args) 1)
+                                   (list '1+ (cadr args)))
+                                  ((eql (cadr args) 1)
+                                   (list '1+ (car args)))
+                                  (t
+                                   (append '(cl::sum) args))))
+                           ((eq first 'cl:-)
+                            (if (eql (cadr args) 1)
+                                (list '1- (car args))
+                                (append '(cl::difference) args)))
+                           (t
+                            (append (list first) args)))
+                     (append (list first) args))))))))
 
 
 (defun compile-package (pkg &key verbose)
