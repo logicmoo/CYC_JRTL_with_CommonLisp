@@ -2,7 +2,7 @@
  * LocationBar.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LocationBar.java,v 1.1.1.1 2002-09-24 16:08:30 piso Exp $
+ * $Id: LocationBar.java,v 1.2 2002-11-15 02:03:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,6 +163,19 @@ public final class LocationBar extends JPanel implements Constants,
 
     public void actionPerformed(ActionEvent e)
     {
+        // Before we close the editor, if either the editor being closed or the
+        // other editor in the same frame is looking at a secondary buffer,
+        // promote it.
+        Buffer buffer = editor.getBuffer();
+        if (buffer.isSecondary())
+            buffer.promote();
+        Editor ed = editor.getOtherEditor();
+        if (ed != null) {
+            buffer = editor.getBuffer();
+            if (buffer.isSecondary())
+                buffer.promote();
+        }
+
         final Frame frame = editor.getFrame();
         frame.closeEditor(editor);
         frame.getCurrentEditor().setFocusToDisplay();
