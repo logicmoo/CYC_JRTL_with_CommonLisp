@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.306 2004-11-30 05:28:22 piso Exp $
+ * $Id: Lisp.java,v 1.307 2004-12-21 14:52:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ public abstract class Lisp
     }
     public static final Package PACKAGE_KEYWORD =
         Packages.createPackage("KEYWORD", 1024);
-    
+
     // ### nil
     public static final LispObject NIL = new Nil(PACKAGE_CL);
 
@@ -1868,6 +1868,10 @@ public abstract class Lisp
     // ### *speed* compiler policy
     public static final Symbol _SPEED_ =
         exportSpecial("*SPEED*", PACKAGE_JVM, Fixnum.ONE);
+
+    // ### *space* compiler policy
+    public static final Symbol _SPACE_ =
+        exportSpecial("*SPACE*", PACKAGE_JVM, Fixnum.ONE);
 
     // ### *safety* compiler policy
     public static final Symbol _SAFETY_ =
