@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.25 2003-09-19 14:44:10 piso Exp $
+ * $Id: BitVector.java,v 1.26 2003-11-02 20:54:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,29 +60,22 @@ public final class BitVector extends AbstractVector
         return list2(Symbol.BIT_VECTOR, new Fixnum(length()));
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
+    public LispClass classOf()
     {
-        if (typeSpecifier == Symbol.BIT_VECTOR)
+        return BuiltInClass.BIT_VECTOR;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.BIT_VECTOR)
             return T;
-        if (typeSpecifier == Symbol.SIMPLE_BIT_VECTOR)
+        if (type == Symbol.SIMPLE_BIT_VECTOR)
             return isSimpleVector() ? T : NIL;
-        if (typeSpecifier == Symbol.SIMPLE_VECTOR)
+        if (type == Symbol.SIMPLE_VECTOR)
             return NIL; // Can't hold elements of any type, only bits.
-        if (typeSpecifier instanceof LispClass) {
-            if (typeSpecifier.getName().equals("BIT-VECTOR"))
-                return T;
-        } else if (typeSpecifier instanceof Cons && typeSpecifier.length() == 2) {
-            LispObject first = typeSpecifier.car();
-            if (first == Symbol.BIT_VECTOR ||
-                (first == Symbol.SIMPLE_BIT_VECTOR && isSimpleVector())) {
-                LispObject second = typeSpecifier.cadr();
-                if (second instanceof Fixnum)
-                    return ((Fixnum)second).getValue() == length() ? T : NIL;
-                if (second == Symbol.UNSPECIFIED)
-                    return T;
-            }
-        }
-        return super.typep(typeSpecifier);
+        if (type == BuiltInClass.BIT_VECTOR)
+            return T;
+        return super.typep(type);
     }
 
     public LispObject BIT_VECTOR_P()
