@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.1.1.1 2002-09-24 16:08:22 piso Exp $
+ * $Id: Utilities.java,v 1.2 2002-10-10 16:26:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1051,8 +1051,8 @@ public final class Utilities implements Constants
         }
         catch (IllegalThreadStateException e) {
             // If this exception is thrown, the process is still alive.
+            return true;
         }
-        return true;
     }
 
     public static void kill(int pid)
