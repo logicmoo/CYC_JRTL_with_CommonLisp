@@ -2,7 +2,7 @@
  * FindInFiles.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindInFiles.java,v 1.11 2003-07-26 17:56:43 piso Exp $
+ * $Id: FindInFiles.java,v 1.12 2003-07-26 18:36:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,6 +255,7 @@ public class FindInFiles extends Replacement implements Constants,
                         if (cancelled)
                             sb.append(" (search cancelled by user)");
                         outputBuffer.appendStatusLine(sb.toString());
+                        outputBuffer.invalidate();
                         outputBuffer.renumber();
                         outputBuffer.setBusy(false);
                         EditorIterator iter = new EditorIterator();
