@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.18 2003-12-03 02:28:25 piso Exp $
+;;; $Id: precompiler.lisp,v 1.19 2003-12-07 01:16:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,6 +43,11 @@
         ((= (length args) 2)
          `(memql ,(first args) ,(second args)))
         (t form)))
+
+(define-compiler-macro search (&whole form &rest args)
+  (if (= (length args) 2)
+      `(simple-search ,@args)
+      form))
 
 (define-compiler-macro %aset (&whole form &rest args)
   (if (= (length args) 3)
