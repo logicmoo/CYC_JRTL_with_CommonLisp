@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.21 2003-12-13 00:58:51 piso Exp $
+ * $Id: Pathname.java,v 1.22 2003-12-31 19:40:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,46 @@ package org.armedbear.lisp;
 
 import java.io.File;
 
-// FIXME Not much of an implementation...
 public final class Pathname extends LispObject
 {
+    private LispObject host = NIL;
+    private LispObject device = NIL;
+    private LispObject directory = NIL;
+    private LispObject name = NIL;
+
+    // A string, NIL, :wild or :unspecific.
+    private LispObject type = NIL;
+
+    // A positive integer, or NIL, :wild, :unspecific, or :newest.
+    private LispObject version = NIL;
+
     private String namestring;
+
+    private Pathname()
+    {
+    }
 
     private Pathname(String namestring)
     {
         this.namestring = namestring;
+        if (namestring != null) {
+            for (int i = namestring.length(); i-- > 0;) {
+                char c = namestring.charAt(i);
+                if (c == '/' || c == '\\') {
+                    directory = new LispString(namestring.substring(0, i + 1));
+                    String s = namestring.substring(i + 1);
+                    int index = s.lastIndexOf('.');
+                    if (index >= 0) {
+                        name = new LispString(s.substring(0, index));
+                        type = new LispString(s.substring(index + 1));
+                    } else
+                        name = new LispString(s);
+                    break;
+                }
+            }
+            if (name == NIL)
+                name = new LispString(namestring);
+        }
     }
 
     private Pathname(String directory, String name)
@@ -68,17 +100,56 @@ public final class Pathname extends LispObject
 
     public String getNamestring()
     {
-        return namestring;
+        if (namestring != null)
+            return namestring;
+        StringBuffer sb = new StringBuffer();
+        if (directory instanceof LispString)
+            sb.append(((LispString)directory).getValue());
+        if (sb.length() > 0 && sb.charAt(sb.length() - 1) != File.separatorChar)
+            sb.append(File.separatorChar);
+        if (name instanceof LispString)
+            sb.append(((LispString)name).getValue());
+        if (type instanceof LispString) {
+            sb.append('.');
+            sb.append(((LispString)type).getValue());
+        }
+        return namestring = sb.toString();
     }
 
-    public boolean equal(LispObject obj)
+    public boolean equal(LispObject obj) throws ConditionThrowable
     {
         if (this == obj)
             return true;
         if (obj instanceof Pathname) {
-            if (Utilities.isPlatformWindows())
-                return namestring.equalsIgnoreCase(((Pathname)obj).getNamestring());
-            return namestring.equals(((Pathname)obj).getNamestring());
+            Pathname p = (Pathname) obj;
+            if (Utilities.isPlatformWindows()) {
+                if (!host.equalp(p.host))
+                    return false;
+                if (!device.equalp(p.device))
+                    return false;
+                if (!directory.equalp(p.directory))
+                    return false;
+                if (!name.equalp(p.name))
+                    return false;
+                if (!type.equalp(p.type))
+                    return false;
+                if (!version.equalp(p.version))
+                    return false;
+            } else {
+                if (!host.equal(p.host))
+                    return false;
+                if (!device.equal(p.device))
+                    return false;
+                if (!directory.equal(p.directory))
+                    return false;
+                if (!name.equal(p.name))
+                    return false;
+                if (!type.equal(p.type))
+                    return false;
+                if (!version.equal(p.version))
+                    return false;
+            }
+            return true;
         }
         return false;
     }
@@ -93,7 +164,6 @@ public final class Pathname extends LispObject
     }
 
     public static Pathname parseNamestring(String namestring)
-        throws ConditionThrowable
     {
         return new Pathname(namestring);
     }
@@ -101,7 +171,7 @@ public final class Pathname extends LispObject
     // ### namestring
     // namestring pathname => namestring
     // FIXME arg can be a stream, too...
-    private static final Primitive1 NAMESTRING = new Primitive1("namestring","pathname")
+    private static final Primitive1 NAMESTRING = new Primitive1("namestring", "pathname")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -157,7 +227,7 @@ public final class Pathname extends LispObject
     // ### %make-pathname
     // %make-pathname host device directory name type version defaults case =>
     // pathname
-    // FIXME Very incomplete.
+    // FIXME Incomplete.
     private static final Primitive _MAKE_PATHNAME =
         new Primitive("%make-pathname", PACKAGE_SYS, false)
     {
@@ -165,51 +235,22 @@ public final class Pathname extends LispObject
         {
             if (args.length != 8)
                 return signal(new WrongNumberOfArgumentsException(this));
-            LispObject host = args[0];
-            LispObject device = args[1];
-            LispObject directory = args[2];
-            LispObject name = args[3];
-            LispObject type = args[4];
-            LispObject version = args[5]; // Ignored.
+            Pathname p = new Pathname();
+            p.host = args[0];
+            p.device = args[1];
+            p.directory = args[2];
+            p.name = args[3];
+            p.type = args[4];
+            p.version = args[5]; // Ignored.
             LispObject defaults = args[6];
             LispObject _case = args[7]; // Ignored.
-            // FIXME
-            if (host != NIL || device != NIL || directory != NIL)
-                return signal(new LispError("MAKE-PATHNAME: not implemented"));
-            String d = ""; // directory
-            String n = ""; // name
-            String t = ""; // type
-            String defaultNamestring = null;
-            if (defaults instanceof Pathname)
-                defaultNamestring = ((Pathname)defaults).getNamestring();
-            else if (defaults instanceof LispString)
-                defaultNamestring = ((LispString)defaults).getValue();
-            if (defaultNamestring != null) {
-                File file = new File(defaultNamestring);
-                d = file.getParent();
-                n = file.getName();
-                int index = n.lastIndexOf('.');
-                if (index >= 0) {
-                    t = n.substring(index + 1);
-                    n = n.substring(0, index);
-                }
-            }
-            if (name == Keyword.WILD)
-                n = "*";
-            else if (name instanceof LispString)
-                n = ((LispString)name).getValue();
-            if (type == Keyword.WILD)
-                t = "*";
-            else if (type instanceof LispString)
-                t = ((LispString)type).getValue();
-            if (t.length() > 0)
-                n = n + "." + t;
-            return new Pathname(d, n);
+            return p;
         }
     };
 
     // ### pathnamep
-    private static final Primitive1 PATHNAMEP = new Primitive1("pathnamep","object")
+    private static final Primitive1 PATHNAMEP =
+        new Primitive1("pathnamep", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -218,7 +259,8 @@ public final class Pathname extends LispObject
     };
 
     // ### pathname-type
-    private static final Primitive1 PATHNAME_TYPE = new Primitive1("pathname-type","pathname &key case")
+    private static final Primitive1 PATHNAME_TYPE =
+        new Primitive1("pathname-type", "pathname &key case")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -243,7 +285,7 @@ public final class Pathname extends LispObject
     // ### user-homedir-pathname
     // user-homedir-pathname &optional host => pathname
     private static final Primitive USER_HOMEDIR_PATHNAME =
-        new Primitive("user-homedir-pathname","&optional host")
+        new Primitive("user-homedir-pathname", "&optional host")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
