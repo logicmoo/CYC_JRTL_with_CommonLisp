@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.196 2004-07-03 17:57:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.197 2004-07-03 18:25:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -109,7 +109,6 @@
 
 (defstruct local-function
   name
-  args-to-add
   function
   classfile)
 
@@ -1578,11 +1577,6 @@
        ((setf local-function
               (find fun *local-functions* :key #'local-function-name))
         (format t "compiling call to local function ~S~%" local-function)
-;;         (when (local-function-args-to-add local-function)
-;;           (format t "args-to-add = ~S~%" (local-function-args-to-add local-function))
-;;           (setf args (append (local-function-args-to-add local-function) args))
-;;           (setf numargs (length args))
-;;           (format t "args = ~S~%" args))
         ;; Compile call to LispThread.pushContext().
         (ensure-thread-var-initialized)
         (emit 'aload *thread*)
@@ -2329,19 +2323,9 @@
   (let* ((name (car def))
          (arglist (cadr def))
          (body (cddr def))
-;;          (form (list* 'lambda arglist body))
-         (args-to-add (remove-duplicates (union (remove nil (coerce *locals* 'list))
-                                                (remove nil (coerce *args* 'list)))))
          form
          function
          classfile)
-;;     (format t "form = ~S~%" form)
-;;     (format t "args-to-add = ~S~%" args-to-add)
-;;     (format t "new arglist = ~S~%" (append args-to-add arglist))
-;;     (when args-to-add
-;;       (error "COMPILE-LOCAL-FUNCTION-DEF: unsupported case")
-;;       ;; Not reached.
-;;       (setf arglist (append args-to-add arglist)))
     (setf form (list 'LAMBDA arglist (list* 'BLOCK name body)))
     (format t "form = ~S~%" form)
     (if *compile-file-truename*
@@ -2350,7 +2334,6 @@
               (sys::load-compiled-function (compile-defun name form nil "flet.out"))))
     (format t "function = ~S~%" function)
     (push (make-local-function :name name
-                               :args-to-add args-to-add
                                :function function
                                :classfile classfile)
           *local-functions*)))
