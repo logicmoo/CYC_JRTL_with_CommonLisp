@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.376 2003-09-08 13:34:38 piso Exp $
+ * $Id: Primitives.java,v 1.377 2003-09-08 17:16:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1899,17 +1899,14 @@ public final class Primitives extends Module
                     throw new LispError(sb.toString());
                 }
                 AbstractVector v;
-                if (elementType == Symbol.CHARACTER ||
-                    elementType == Symbol.BASE_CHAR ||
-                    elementType == Symbol.STANDARD_CHAR ||
-                    elementType == Symbol.NIL) {
+                LispObject upgradedType =
+                    getUpgradedArrayElementType(elementType);
+                if (upgradedType == Symbol.CHARACTER)
                     v = new LispString(size);
-                } else if (elementType == Symbol.BIT) {
+                else if (elementType == Symbol.BIT)
                     v = new BitVector(size);
-                } else {
-                    // FIXME If elementType != null it should be a known type.
+                else
                     v = new Vector(size);
-                }
                 if (initialElementProvided != NIL) {
                     // Initial element was specified.
                     v.fill(initialElement);
@@ -1949,6 +1946,34 @@ public final class Primitives extends Module
             return array;
         }
     };
+
+    // ### upgraded-array-element-type
+    // upgraded-array-element-type typespec &optional environment
+    // => upgraded-typespec
+    private static final Primitive UPGRADED_ARRAY_ELEMENT_TYPE =
+        new Primitive("upgraded-array-element-type") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return getUpgradedArrayElementType(arg);
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            // Ignore environment.
+            return getUpgradedArrayElementType(first);
+        }
+    };
+
+    private static final LispObject getUpgradedArrayElementType(LispObject type)
+    {
+        if (type == Symbol.CHARACTER || type == Symbol.BASE_CHAR || type == Symbol.STANDARD_CHAR)
+            return Symbol.CHARACTER;
+        if (type == Symbol.BIT)
+            return Symbol.BIT;
+        if (type == NIL)
+            return Symbol.CHARACTER;
+        return T;
+    }
 
     // ### array-rank
     // array-rank array => rank
