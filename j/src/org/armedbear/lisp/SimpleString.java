@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.16 2004-06-04 16:16:34 piso Exp $
+ * $Id: SimpleString.java,v 1.17 2004-09-05 18:37:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -195,7 +195,7 @@ public final class SimpleString extends AbstractString
             return s;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Array index out of bounds: " + i + "."));
+            return signal(new TypeError("Array index out of bounds: " + i));
         }
     }
 
@@ -414,6 +414,10 @@ public final class SimpleString extends AbstractString
                 else
                     return signal(new TypeError(first, Symbol.SIMPLE_STRING));
             }
+            catch (ArrayIndexOutOfBoundsException e) {
+                return signal(new TypeError("Array index out of bounds: " +
+                                            ((Fixnum)second).value));
+            }
         }
     };
 
@@ -436,6 +440,10 @@ public final class SimpleString extends AbstractString
                 if (!(second instanceof Fixnum))
                     return signal(new TypeError(second, Symbol.FIXNUM));
                 return signal(new TypeError(third, Symbol.CHARACTER));
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                return signal(new TypeError("Array index out of bounds: " +
+                                            ((Fixnum)second).value));
             }
         }
     };
