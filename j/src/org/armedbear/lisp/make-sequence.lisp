@@ -1,7 +1,7 @@
 ;;; make-sequence.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: make-sequence.lisp,v 1.10 2004-02-13 02:14:37 piso Exp $
+;;; $Id: make-sequence.lisp,v 1.11 2004-11-22 04:00:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 ;;; Adapted from ECL.
 
@@ -29,8 +29,10 @@
 (defun make-sequence (type size	&key (initial-element nil iesp))
   (let (element-type sequence)
     (setf type (normalize-type type))
-    (if (atom type)
-        (cond ((memq type '(LIST CONS))
+    (cond ((atom type)
+           (when (classp type)
+             (setf type (%class-name type)))
+           (cond ((memq type '(LIST CONS))
                (when (zerop size)
                  (if (eq type 'CONS)
                      (size-mismatch-error type size)
@@ -49,51 +51,50 @@
                    (return-from make-sequence nil)
                    (size-mismatch-error type size)))
               (t
-               (when (classp type)
-                 (setf type (%class-name type)))
                (setq element-type
                      (cond ((memq type '(BIT-VECTOR SIMPLE-BIT-VECTOR)) 'BIT)
                            ((memq type '(VECTOR SIMPLE-VECTOR)) t)
                            (t
                             (error 'simple-type-error
                                    :format-control "~S is not a sequence type."
-                                   :format-arguments (list type)))))))
-        (let ((name (car type))
-              (args (cdr type)))
-          (when (eq name 'LIST)
-            (return-from make-sequence
-                         (if iesp
-                             (make-list size :initial-element initial-element)
-                             (make-list size))))
-          (when (eq name 'CONS)
-            (unless (plusp size)
-              (size-mismatch-error name size))
-            (return-from make-sequence
-                         (if iesp
-                             (make-list size :initial-element initial-element)
-                             (make-list size))))
-          (unless (memq name '(ARRAY SIMPLE-ARRAY VECTOR SIMPLE-VECTOR
-                               BIT-VECTOR SIMPLE-BIT-VECTOR STRING SIMPLE-STRING
-                               BASE-STRING SIMPLE-BASE-STRING))
-            (error 'simple-type-error
-                   :format-control "~S is not a sequence type."
-                   :format-arguments (list type)))
-          (let ((len nil))
-            (cond ((memq name '(STRING SIMPLE-STRING BASE-STRING SIMPLE-BASE-STRING))
-                   (setf element-type 'character
-                         len (car args)))
-                  ((memq name '(ARRAY SIMPLE-ARRAY))
-                   (setf element-type (or (car args) t)
-                         len (if (consp (cadr args)) (caadr args) '*)))
-                  ((memq name '(BIT-VECTOR SIMPLE-BIT-VECTOR))
-                   (setf element-type 'bit
-                         len (car args)))
-                  (t
-                   (setf element-type (or (car args) t)
-                         len (cadr args))))
-            (unless (or (null len) (eq len '*) (equal len '(*)))
-              (when (/= size len)
-                (size-mismatch-error type size))))))
+                                   :format-arguments (list type))))))))
+          (t
+           (let ((name (car type))
+                 (args (cdr type)))
+             (when (eq name 'LIST)
+               (return-from make-sequence
+                            (if iesp
+                                (make-list size :initial-element initial-element)
+                                (make-list size))))
+             (when (eq name 'CONS)
+               (unless (plusp size)
+                 (size-mismatch-error name size))
+               (return-from make-sequence
+                            (if iesp
+                                (make-list size :initial-element initial-element)
+                                (make-list size))))
+             (unless (memq name '(ARRAY SIMPLE-ARRAY VECTOR SIMPLE-VECTOR
+                                  BIT-VECTOR SIMPLE-BIT-VECTOR STRING SIMPLE-STRING
+                                  BASE-STRING SIMPLE-BASE-STRING))
+               (error 'simple-type-error
+                      :format-control "~S is not a sequence type."
+                      :format-arguments (list type)))
+             (let ((len nil))
+               (cond ((memq name '(STRING SIMPLE-STRING BASE-STRING SIMPLE-BASE-STRING))
+                      (setf element-type 'character
+                            len (car args)))
+                     ((memq name '(ARRAY SIMPLE-ARRAY))
+                      (setf element-type (or (car args) t)
+                            len (if (consp (cadr args)) (caadr args) '*)))
+                     ((memq name '(BIT-VECTOR SIMPLE-BIT-VECTOR))
+                      (setf element-type 'bit
+                            len (car args)))
+                     (t
+                      (setf element-type (or (car args) t)
+                            len (cadr args))))
+               (unless (or (null len) (eq len '*) (equal len '(*)))
+                 (when (/= size len)
+                   (size-mismatch-error type size)))))))
     (setq sequence
           (if iesp
               (make-array size :element-type element-type :initial-element initial-element)
