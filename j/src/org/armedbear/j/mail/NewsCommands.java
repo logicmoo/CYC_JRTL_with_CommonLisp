@@ -2,7 +2,7 @@
  * NewsCommands.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: NewsCommands.java,v 1.1.1.1 2002-09-24 16:09:59 piso Exp $
+ * $Id: NewsCommands.java,v 1.2 2002-11-15 20:20:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,9 +85,20 @@ public final class NewsCommands
 
     public static void readArticle()
     {
+        readArticle(false);
+    }
+
+    public static void readArticleOtherWindow()
+    {
+        readArticle(true);
+    }
+
+    private static void readArticle(boolean useOtherWindow)
+    {
         final Editor editor = Editor.currentEditor();
         final Buffer buffer = editor.getBuffer();
         if (buffer instanceof NewsGroupSummary && editor.getDot() != null)
-            ((NewsGroupSummary)buffer).readArticle(editor, editor.getDotLine());
+            ((NewsGroupSummary)buffer).readArticle(editor,
+                editor.getDotLine(), useOtherWindow);
     }
 }
