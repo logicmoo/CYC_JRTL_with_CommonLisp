@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.12 2003-01-10 01:50:08 piso Exp $
+ * $Id: Utilities.java,v 1.13 2003-01-13 07:20:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1104,6 +1104,20 @@ public final class Utilities implements Constants
                 Thread t = new Thread("Utilities.have(\"" + s + "\") destroy") {
                     public void run()
                     {
+                        Log.debug("Utilities.have(\"" + s + "\") destroy thread run()");
+                        try {
+                            final BufferedReader reader =
+                                new BufferedReader(new InputStreamReader(p.getInputStream()));
+                            String s;
+                            while ((s = reader.readLine()) != null)
+                                ;
+                            p.getInputStream().close();
+                            p.getOutputStream().close();
+                            p.getErrorStream().close();
+                        }
+                        catch (IOException e) {
+                            Log.error(e);
+                        }
                         p.destroy();
                         try {
                             p.waitFor();
@@ -1111,6 +1125,7 @@ public final class Utilities implements Constants
                         catch (InterruptedException e) {
                             Log.error(e);
                         }
+                        Log.debug("Utilities.have(\"" + s + "\") destroy thread exiting");
                     }
                 };
                 t.setDaemon(true);
@@ -1174,28 +1189,29 @@ public final class Utilities implements Constants
 
     public static String exec(String[] cmdarray)
     {
-        FastStringBuffer sb = new FastStringBuffer();
         try {
             Process process = Runtime.getRuntime().exec(cmdarray);
             BufferedReader reader =
                 new BufferedReader(new InputStreamReader(process.getInputStream()));
-            if (reader != null){
-                String s;
-                while ((s = reader.readLine()) != null) {
-                    if (s.length() > 0) {
-                        if (sb.length() > 0)
-                            sb.append('\n');
-                        sb.append(s);
-                    }
+            FastStringBuffer sb = new FastStringBuffer();
+            String s;
+            while ((s = reader.readLine()) != null) {
+                if (s.length() > 0) {
+                    if (sb.length() > 0)
+                        sb.append('\n');
+                    sb.append(s);
                 }
             }
+            process.getInputStream().close();
+            process.getOutputStream().close();
+            process.getErrorStream().close();
             process.waitFor();
+            return sb.toString();
         }
         catch (Throwable t) {
             Log.error(t);
             return null;
         }
-        return sb.toString();
     }
 
     public static ImageIcon getIconFromFile(String iconFile)
