@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.29 2004-09-29 18:57:59 piso Exp $
+ * $Id: AbstractArray.java,v 1.30 2004-09-29 22:54:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,12 @@ public abstract class AbstractArray extends LispObject
     {
         noFillPointer();
         return -1; // Not reached.
+    }
+
+
+    public final LispObject noFillPointer() throws ConditionThrowable
+    {
+        return signal(new TypeError("Array does not have a fill pointer."));
     }
 
     public boolean isAdjustable()
@@ -167,6 +173,39 @@ public abstract class AbstractArray extends LispObject
 
     public abstract void fill(LispObject obj) throws ConditionThrowable;
 
+    public String writeToString(int[] dimv) throws ConditionThrowable
+    {
+        StringBuffer sb = new StringBuffer();
+        LispThread thread = LispThread.currentThread();
+        LispObject printReadably = _PRINT_READABLY_.symbolValue(thread);
+        if (printReadably != NIL || _PRINT_ARRAY_.symbolValue(thread) != NIL) {
+            int maxLevel = Integer.MAX_VALUE;
+            if (printReadably == NIL) {
+                LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+                if (printLevel instanceof Fixnum)
+                    maxLevel = ((Fixnum)printLevel).value;
+            }
+            LispObject currentPrintLevel =
+                _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+            int currentLevel = Fixnum.getValue(currentPrintLevel);
+            if (currentLevel >= maxLevel)
+                return "#";
+            sb.append('#');
+            sb.append(dimv.length);
+            sb.append('A');
+            appendContents(dimv, 0, sb);
+            return sb.toString();
+        }
+        sb.append("(SIMPLE-ARRAY T (");
+        for (int i = 0; i < dimv.length; i++) {
+            sb.append(dimv[i]);
+            if (i < dimv.length - 1)
+                sb.append(' ');
+        }
+        sb.append("))");
+        return unreadableString(sb.toString());
+    }
+
     // Helper for writeToString().
     protected void appendContents(int[] dimensions, int index, StringBuffer sb)
         throws ConditionThrowable
@@ -226,10 +265,5 @@ public abstract class AbstractArray extends LispObject
         catch (ConditionThrowable t) {
             Debug.trace(t);
         }
-    }
-
-    public final LispObject noFillPointer() throws ConditionThrowable
-    {
-        return signal(new TypeError("Array does not have a fill pointer."));
     }
 }
