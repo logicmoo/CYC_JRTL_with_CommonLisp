@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.38 2003-06-24 20:30:56 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.39 2003-07-06 20:09:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,7 +128,9 @@ public class CharacterInputStream extends LispStream
             case '#':
                 return readSharp();
             case '|':
-                return readMultipleEscape();
+                return getCurrentPackage().intern(readMultipleEscape());
+            case ':':
+                return readKeyword();
             default:
                 return readToken(c);
         }
@@ -500,7 +502,7 @@ public class CharacterInputStream extends LispStream
         return new Array(rank, obj);
     }
 
-    private LispObject readMultipleEscape() throws Condition
+    private String readMultipleEscape() throws Condition
     {
         try {
             StringBuffer sb = new StringBuffer();
@@ -513,7 +515,35 @@ public class CharacterInputStream extends LispStream
                     break;
                 sb.append(c);
             }
-            return intern(sb.toString(), getCurrentPackage());
+            return sb.toString();
+        }
+        catch (IOException e) {
+            throw new StreamError(e);
+        }
+    }
+
+    private LispObject readKeyword() throws Condition
+    {
+        try {
+            StringBuffer sb = new StringBuffer();
+            while (true) {
+                int n = read();
+                if (n < 0)
+                    break;
+                char c = (char) n;
+                if (Character.isWhitespace(c))
+                    break;
+                if (c == '(' || c == ')') {
+                    unread(c);
+                    break;
+                }
+                if (c == '|') {
+                    sb.append(readMultipleEscape());
+                    continue;
+                }
+                sb.append(Character.toUpperCase(c));
+            }
+            return PACKAGE_KEYWORD.intern(sb.toString());
         }
         catch (IOException e) {
             throw new StreamError(e);
