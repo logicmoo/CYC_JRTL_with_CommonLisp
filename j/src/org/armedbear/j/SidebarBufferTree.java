@@ -2,7 +2,7 @@
  * SidebarBufferTree.java
  *
  * Copyright (C) 2003 Mike Rutter, Peter Graves
- * $Id: SidebarBufferTree.java,v 1.4 2003-08-13 17:43:46 piso Exp $
+ * $Id: SidebarBufferTree.java,v 1.5 2003-08-13 18:37:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,16 +71,12 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         super(new DefaultTreeModel(new DefaultMutableTreeNode("")));
         this.sidebar = sidebar;
         setCellRenderer(new SidebarTreeCellRenderer(sidebar));
+        setFocusTraversalKeysEnabled(false);
         addKeyListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
-        // We support tooltip text.
         setToolTipText("");
-        // There is only one root, so this will be a dummy that holds all of
-        // the real nodes.
         setRootVisible(false);
-        // There is a row height preference for the JList. Maybe either use it
-        // for the tree, or create a new property specifically for the tree...
     }
 
     // Grabs the rough tree structure from the current session and builds the
@@ -191,18 +187,6 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         return rows;
     }
 
-    /**
-     * Convenience method for grabbing the last element of the given path,
-     * getting the user object if it's a <code>DefaultMutableTreeNode</code>,
-     * and returning it if it is a <code>Buffer</code>.  If the last element
-     * is not a <code>DefaultMutableTreeNode</code>, or the user object is not
-     * a <code>Buffer</code>, <code>null</code> will be returned.
-     *
-     * @param path      The tree path to extract the last element from.
-     * @return          The <code>Buffer</code> that is the user object for the
-     *                  last <code>DefaultMutableTreeNode</code> in the given
-     *                  path.
-     */
     private Buffer getBufferFromPath(TreePath path)
     {
         TreeNode endNode = (TreeNode)path.getLastPathComponent();
@@ -216,7 +200,7 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
 
     public void setSelectedBuffer(Buffer buffer)
     {
-        DefaultMutableTreeNode node = getNodeForObject(buffer);
+        DefaultMutableTreeNode node = findNodeForObject(buffer);
         if (node != null) {
             TreePath path = new TreePath(node.getPath());
             setSelectionPath(path);
@@ -386,15 +370,7 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         return text;
     }
 
-    /**
-     * Searches all of the nodes in the tree for the given user object.
-     *
-     * @param userObj   The <code>Buffer</code> or <code>BufferFolder</code>
-     *                  to search for.
-     * @return          The node with the specified object as its user object,
-     *                  or <code>null</code>.
-     */
-    private DefaultMutableTreeNode getNodeForObject(Object userObj)
+    private DefaultMutableTreeNode findNodeForObject(Object userObj)
     {
         Enumeration enum = rootNode.breadthFirstEnumeration();
         while (enum.hasMoreElements()) {
@@ -402,9 +378,8 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
             if (next instanceof DefaultMutableTreeNode) {
                 Object obj =
                     ((DefaultMutableTreeNode)next).getUserObject();
-                if (userObj.equals(obj)) {
+                if (userObj.equals(obj))
                     return (DefaultMutableTreeNode)next;
-                }
             }
         }
         return null;
