@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.89 2005-02-17 15:47:07 piso Exp $
+ * $Id: LispMode.java,v 1.90 2005-02-17 18:41:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,12 +155,23 @@ public class LispMode extends AbstractMode implements Constants, Mode
         final int limit = line.length();
         if (offset < limit) {
             char c = line.charAt(offset);
-
-            if (c == ':') {
-                if (offset == 0 || !isIdentifierPart(line.charAt(offset - 1)))
-                    ; // OK, we're looking at the first character of a keyword.
+            if (c == '#') {
+                if (offset < limit && line.charAt(offset + 1) == ':')
+                    ; // Uninterned symbol.
                 else
-                    return null; // We're looking at an embedded ':'.
+                    return null;
+            } else if (c == ':') {
+                if (offset == 0)
+                    ; // OK, we're looking at the first character of a keyword.
+                else {
+                    c = line.charAt(offset - 1);
+                    if (c == '#')
+                        --offset; // Uninterned symbol (e.g. "#:FOO").
+                    else if (!isIdentifierPart(c))
+                        ; // Keyword.
+                    else
+                        return null; // Embedded ':'.
+                }
             } else if (isIdentifierPart(c)) {
                 // Backtrack to find the start of the identifier.
                 while (offset > 0) {
@@ -177,6 +188,11 @@ public class LispMode extends AbstractMode implements Constants, Mode
                                 ++offset;
                                 break;
                             }
+                            if (c == '#') {
+                                // Uninterned symbol.
+                                --offset;
+                                break;
+                            }
                             if (!isIdentifierPart(line.charAt(offset - 1)))
                                 break; // It's a keyword.
                         }
@@ -189,10 +205,16 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 }
             } else
                 return null;
-
             // Now we're looking at the first character of the identifier.
             c = line.charAt(offset);
             FastStringBuffer sb = new FastStringBuffer(c);
+            if (c == '#') {
+                if (++offset < limit) {
+                    c = line.charAt(offset);
+                    Debug.assertTrue(c == ':');
+                    sb.append(c);
+                }
+            }
             while (++offset < limit) {
                 c = line.charAt(offset);
                 if (isIdentifierPart(c))
