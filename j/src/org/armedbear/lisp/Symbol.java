@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.41 2003-06-03 01:55:55 piso Exp $
+ * $Id: Symbol.java,v 1.42 2003-06-11 02:04:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,14 +135,13 @@ public class Symbol extends LispObject
     private LispObject pkg;
     private LispObject value;
     private LispObject function;
-    private LispObject propertyList = NIL;
+    private LispObject propertyList;
     private int flags;
 
     // Construct an uninterned symbol.
     public Symbol(String name)
     {
         this.name = name;
-        pkg = NIL;
     }
 
     public Symbol(String name, Package pkg)
@@ -170,7 +169,7 @@ public class Symbol extends LispObject
 
     public LispObject getPackage()
     {
-        return pkg;
+        return pkg != null ? pkg : NIL;
     }
 
     public void setPackage(LispObject obj)
@@ -178,7 +177,7 @@ public class Symbol extends LispObject
         pkg = obj;
     }
 
-    public final int getType()
+    public int getType()
     {
         return TYPE_SYMBOL;
     }
@@ -227,17 +226,7 @@ public class Symbol extends LispObject
             flags &= ~CONSTANT;
     }
 
-    public static LispObject getPropertyList(LispObject obj) throws LispError
-    {
-        try {
-            return ((Symbol)obj).propertyList;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "symbol");
-        }
-    }
-
-    public final String getName()
+    public String getName()
     {
         return name;
     }
@@ -258,7 +247,7 @@ public class Symbol extends LispObject
     }
 
     // Raw accessor.
-    public final LispObject getSymbolValue()
+    public LispObject getSymbolValue()
     {
         return value;
     }
@@ -301,7 +290,7 @@ public class Symbol extends LispObject
         return value;
     }
 
-    public final LispObject getSymbolFunction()
+    public LispObject getSymbolFunction()
     {
         return function;
     }
@@ -313,11 +302,13 @@ public class Symbol extends LispObject
 
     public final LispObject getPropertyList()
     {
-        return propertyList;
+        return propertyList != null ? propertyList : NIL;
     }
 
     public final void setPropertyList(LispObject obj)
     {
+        if (obj == null)
+            throw new NullPointerException();
         propertyList = obj;
     }
 
