@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.5 2002-10-30 19:15:25 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.6 2002-11-23 19:21:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +35,10 @@ import javax.swing.undo.CompoundEdit;
 public class CommandInterpreter extends Buffer
 {
     protected RE promptRE = new UncheckedRE(DEFAULT_SHELL_PROMPT_PATTERN);
-
     protected OutputStreamWriter stdin;
     protected ReaderThread stdoutThread;
     protected ReaderThread stderrThread;
     protected History history;
-    protected Position posEndOfBuffer;
     protected Position posEndOfOutput;
     protected String input;
     protected boolean stripEcho;
@@ -94,7 +92,6 @@ public class CommandInterpreter extends Buffer
         try {
             appendLine("");
             setLoaded(true);
-            posEndOfBuffer = new Position(getFirstLine(), 0);
         }
         finally {
             unlockWrite();
@@ -162,7 +159,6 @@ public class CommandInterpreter extends Buffer
             renumber();
         editor.moveCaretToDotCol();
         editor.getDisplay().setReframe(-2);
-        posEndOfBuffer = editor.getDotCopy();
         resetUndo();
         stripEcho = true;
         send(s);
@@ -179,7 +175,7 @@ public class CommandInterpreter extends Buffer
         }
     }
 
-    private String stripPrompt(String s)
+    protected String stripPrompt(String s)
     {
         if (promptRE != null) {
             REMatch match = promptRE.getMatch(s);
@@ -197,7 +193,7 @@ public class CommandInterpreter extends Buffer
     protected void escape()
     {
         Editor editor = Editor.currentEditor();
-        if (editor.getMark() != null || editor.getDotLine().next() != null) {
+        if (editor.getMark() != null || editor.getDot().isBefore(posEndOfOutput)) {
             // There's a marked block, or we're not at the command line.
             editor.escape();
             return;
@@ -209,28 +205,16 @@ public class CommandInterpreter extends Buffer
             editor.maybeKillBuffer(ed.getBuffer());
             return;
         }
-        String text = editor.getDotLine().getText();
-        REMatch match = promptRE.getMatch(text);
-        if (match == null)
-            return;
-        String prompt = match.toString();
-        if (text.equals(prompt) && editor.getDotOffset() == prompt.length()) {
-            if (isTransient())
-                editor.escape();
-            return; // Nothing to do.
-        }
         CompoundEdit compoundEdit = beginCompoundEdit();
-        if (!text.equals(prompt)) {
-            editor.addUndo(SimpleEdit.LINE_EDIT);
-            editor.getDotLine().setText(prompt);
-            Editor.updateInAllEditors(editor.getDotLine());
-        }
-        if (editor.getDotOffset() != prompt.length()) {
-            editor.addUndo(SimpleEdit.MOVE);
-            editor.getDot().setOffset(prompt.length());
-            editor.moveCaretToDotCol();
-        }
+        editor.addUndo(SimpleEdit.MOVE);
+        editor.moveDotTo(posEndOfOutput);
+        editor.moveCaretToDotCol();
+        editor.setMark(getEnd());
+        editor.deleteRegion();
         endCompoundEdit(compoundEdit);
+        // BUG! Undo/redo delete region doesn't preserve markers correctly!
+        // (posEndOfOutput!)
+        resetUndo();
     }
 
     protected void home()
@@ -297,11 +281,11 @@ public class CommandInterpreter extends Buffer
         }
         if (editor.getLastCommand() != COMMAND_HISTORY)
             history.reset();
-        String currentInput = dotLine.getText();
-        REMatch prompt = promptRE.getMatch(currentInput);
-        // Actual input does not include prompt.
-        if (prompt != null)
-            currentInput = currentInput.substring(prompt.getEndIndex());
+
+        Position begin = posEndOfOutput.copy();
+        Position end = getEnd();
+        Region r = new Region(editor.getBuffer(), begin, end);
+        String currentInput = r.toString();
         String s;
         while (true) {
             s = direction < 0 ? history.getPrevious() : history.getNext();
@@ -313,19 +297,17 @@ public class CommandInterpreter extends Buffer
         }
         if (s != null) {
             CompoundEdit compoundEdit = beginCompoundEdit();
-            editor.addUndo(SimpleEdit.LINE_EDIT);
-
-            // Keep the prompt, if any, but replace whatever is after it.
-            if (prompt != null)
-                dotLine.setText(prompt.toString() + s);
-            else
-                dotLine.setText(s);
-
-            editor.updateDotLine();
             editor.addUndo(SimpleEdit.MOVE);
-            editor.getDot().setOffset(dotLine.length());
+            editor.setDot(posEndOfOutput.copy());
+            editor.setMark(getEnd());
+            editor.deleteRegion();
+            editor.addUndo(SimpleEdit.INSERT_STRING);
+            editor.insertStringInternal(s);
             editor.moveCaretToDotCol();
             endCompoundEdit(compoundEdit);
+            // BUG! Undo/redo delete region doesn't preserve markers correctly!
+            // (posEndOfOutput!)
+            resetUndo();
         }
         editor.setCurrentCommand(COMMAND_HISTORY);
     }
@@ -352,10 +334,8 @@ public class CommandInterpreter extends Buffer
             insertString(pos, s);
             if (needsRenumbering())
                 renumber();
-            if (pos != posEndOfBuffer)
-                posEndOfBuffer.moveTo(pos);
             enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
-            posEndOfOutput = new Position(posEndOfBuffer);
+            posEndOfOutput = pos.copy();
         }
         finally {
             unlockWrite();
