@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.147 2004-05-05 01:45:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.148 2004-05-05 19:04:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1117,7 +1117,7 @@
            (emit 'aconst_null) ;; environment
            (emit-invokespecial super
                                "<init>"
-                               "(Ljava/lang/String;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/Environment;)V"
+                               "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/Environment;)V"
                                -4))
           (t
            (emit 'aload_0)
