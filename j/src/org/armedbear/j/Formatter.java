@@ -1,8 +1,8 @@
 /*
  * Formatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Formatter.java,v 1.1.1.1 2002-09-24 16:07:58 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Formatter.java,v 1.2 2004-04-02 03:30:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,17 +144,17 @@ public abstract class Formatter implements Constants
 
     protected final void addSegment(String text, int begin, int end, int format)
     {
-        segmentList.addSegment(LineSegment.getLineSegment(text, begin, end, format));
+        segmentList.addSegment(new LineSegment(text, begin, end, format));
     }
 
     protected final void addSegment(String text, int begin, int format)
     {
-        segmentList.addSegment(LineSegment.getLineSegment(text, begin, text.length(), format));
+        segmentList.addSegment(new LineSegment(text, begin, text.length(), format));
     }
 
     protected final void addSegment(String text, int format)
     {
-        segmentList.addSegment(LineSegment.getLineSegment(text, format));
+        segmentList.addSegment(new LineSegment(text, format));
     }
 
     protected final LineSegment getLastSegment()
