@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.11 2003-11-23 19:16:31 piso Exp $
+;;; $Id: precompiler.lisp,v 1.12 2003-11-23 20:28:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -96,8 +96,35 @@
 (defun precompile-dotimes (form)
   (cons 'DOTIMES (cons (cadr form) (mapcar #'precompile1 (cddr form)))))
 
+(defun precompile-do/do*-vars (varlist)
+  (let ((result nil))
+    (dolist (varspec varlist)
+      (if (atom varspec)
+          (push varspec result)
+          (case (length varspec)
+            (1
+             (push (car varspec) result))
+            (2
+             (let* ((var (car varspec))
+                    (init-form (cadr varspec)))
+               (unless (symbolp var)
+                 (error 'type-error))
+               (push (list var (precompile1 init-form))
+                     result)))
+            (3
+             (let* ((var (car varspec))
+                    (init-form (cadr varspec))
+                    (step-form (caddr varspec)))
+               (unless (symbolp var)
+                 (error 'type-error))
+               (push (list var (precompile1 init-form) (precompile1 step-form))
+                     result))))))
+    (nreverse result)))
+
 (defun precompile-do/do* (form)
-  (list* (car form) (cadr form) (caddr form)
+  (list* (car form)
+         (precompile-do/do*-vars (cadr form))
+         (caddr form)
          (mapcar #'precompile1 (cdddr form))))
 
 (defun precompile-do-symbols (form)
