@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.658 2004-06-12 16:06:53 piso Exp $
+ * $Id: Primitives.java,v 1.659 2004-06-15 01:56:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2718,7 +2718,11 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (first instanceof Symbol) {
-                ((Symbol)first).setSymbolFunction(second);
+                Symbol symbol = (Symbol) first;
+                symbol.setSymbolFunction(second);
+                LispObject source = Load._FASL_SOURCE_.symbolValue();
+                if (source != NIL)
+                    put(symbol, PACKAGE_SYS.intern("SOURCE"), source);
             } else if (first instanceof Cons && first.car() == Symbol.SETF) {
                 // SETF function
                 Symbol symbol = checkSymbol(first.cadr());
