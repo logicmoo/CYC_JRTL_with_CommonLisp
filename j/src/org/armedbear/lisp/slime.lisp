@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.27 2005-02-01 03:38:22 piso Exp $
+;;; $Id: slime.lisp,v 1.28 2005-02-04 04:28:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -230,68 +230,66 @@
     (setf *current-command* 'complete))
   (values))
 
-(defun symbol-name-at-point ()
-  (let ((string (line-chars (current-line)))
-        (point-charpos (mark-charpos (current-point)))
-        (begin 0)
-        end)
-    (when (= point-charpos (length string))
-      (decf point-charpos))
+(defun symbol-name-at-mark (mark)
+  (let* ((string (line-chars (mark-line mark)))
+         (length (length string))
+         (charpos (mark-charpos mark))
+         (begin 0)
+         end)
+    (when (= charpos length)
+      (decf charpos))
     (loop
-      (aver (< point-charpos (length string)))
-      (cond ((not (delimiter-p (schar string point-charpos)))
+      (aver (< charpos length))
+      (cond ((not (delimiter-p (schar string charpos)))
              (return))
-            ((zerop point-charpos)
-             (return-from symbol-name-at-point nil))
+            ((zerop charpos)
+             (return-from symbol-name-at-mark nil))
             (t
-             (decf point-charpos))))
-    (dotimes (i point-charpos)
+             (decf charpos))))
+    (dotimes (i charpos)
       (let ((c (schar string i)))
         (when (delimiter-p c)
           (setf begin (1+ i)))))
-    (do ((i point-charpos (1+ i)))
-        ((= i (length string)) (setf end i))
+    (do ((i charpos (1+ i)))
+        ((= i length) (setf end i))
       (when (delimiter-p (schar string i))
         (setf end i)
         (return)))
     (subseq string begin end)))
 
-(defun enclosing-operator-names ()
+(defun enclosing-operator-names (mark)
   "Return the list of operator names of the forms containing point."
   (let ((result ()))
-    (save-excursion
-      (loop
-        (let ((point1 (current-point))
-              (point2 (progn (backward-up-list) (current-point))))
-          (when (and (equal (mark-line point1) (mark-line point2))
-                     (eql (mark-charpos point1) (mark-charpos point2)))
-            (return)))
-        (unless (looking-at "(")
-          (return))
-        (when (looking-at "(")
-          (forward-char)
-          (let ((name (symbol-name-at-point)))
-            (cond ((string-equal name "defun")
-                   (return))
-                  ((null name)
-                   (return))
-                  (t
-                   (push name result))))
-          (backward-up-list))))
+    (loop
+      (let* ((mark1 (copy-mark mark))
+             (mark2 (progn (backward-up-list mark) (copy-mark mark))))
+        (when (mark= mark1 mark2) ; Can't go back any further.
+          (return)))
+      (unless (looking-at mark "(")
+        (return))
+      (forward-char mark)
+      (let ((name (symbol-name-at-mark mark)))
+        (cond ((string-equal name "defun")
+               (return))
+              ((null name)
+               (return))
+              (t
+               (push name result))))
+      (backward-up-list mark))
     (nreverse result)))
 
 (defun slime-space ()
   (unwind-protect
-   (when (and (slime-connected-p)
-              (not (slime-busy-p)))
-     (let ((names (enclosing-operator-names)))
-       (when names
-         (slime-eval-async
-          `(swank:arglist-for-echo-area (quote ,names))
-          #'(lambda (message)
-             (when (stringp message)
-               (status (string-trim '(#\") message))))))))
-   (insert #\space)))
+      (when (and (slime-connected-p)
+                 (not (slime-busy-p)))
+        (let ((names (enclosing-operator-names (current-point))))
+          (when names
+            (slime-eval-async
+             `(swank:arglist-for-echo-area (quote ,names))
+             #'(lambda (message)
+                (when (stringp message)
+                  (status (string-trim '(#\") message))))))))
+    (insert #\space)))
 
 (defun find-buffer-package ()
 ;;   (save-excursion
@@ -375,7 +373,7 @@
       (find-tag-at-point)
       (return-from slime-edit-definition)))
   (unless function-name
-    (setf function-name (string-upcase (symbol-name-at-point))))
+    (setf function-name (string-upcase (symbol-name-at-mark (current-point)))))
   (when function-name
     (setf function-name (string function-name))
     (let ((pos (position #\: function-name)))
@@ -447,7 +445,7 @@
 (map-key-for-mode "Tab" "(slime:slime-complete-symbol)" "Lisp Shell")
 (map-key-for-mode "Ctrl Alt I" "(slime:slime-complete-symbol)" "Lisp")
 (map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
-;; (map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
+(map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
 (map-key-for-mode "Alt ." "(slime:slime-edit-definition)" "Lisp Shell")
 (map-key-for-mode "Alt ." "(slime:slime-edit-definition)" "Lisp")
 (map-key-for-mode "Ctrl Alt R" "(slime:slime-eval-region)" "Lisp")

@@ -1,8 +1,8 @@
 /*
  * LispAPI.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.58 2004-11-28 15:44:25 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: LispAPI.java,v 1.59 2005-02-04 04:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -423,7 +423,7 @@ public final class LispAPI extends Lisp
 
     // ### make-mark
     private static final Primitive MAKE_MARK =
-        new Primitive("make-mark", PACKAGE_J, true)
+        new Primitive("make-mark", PACKAGE_J, true, "line offset")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -436,7 +436,7 @@ public final class LispAPI extends Lisp
 
     // ### mark-line
     private static final Primitive MARK_LINE =
-        new Primitive("mark-line", PACKAGE_J, true)
+        new Primitive("mark-line", PACKAGE_J, true, "mark")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -446,7 +446,7 @@ public final class LispAPI extends Lisp
 
     // ### mark-charpos
     private static final Primitive MARK_CHARPOS =
-        new Primitive("mark-charpos", PACKAGE_J, true)
+        new Primitive("mark-charpos", PACKAGE_J, true, "mark")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -561,53 +561,55 @@ public final class LispAPI extends Lisp
     // ### forward-char
     // Move point right N characters (left if N is negative).
     private static final Primitive FORWARD_CHAR =
-        new Primitive("forward-char", PACKAGE_J, true)
+        new Primitive("forward-char", PACKAGE_J, true, "mark &optional count")
     {
-        public LispObject execute() throws ConditionThrowable
-        {
-            return forwardChar(1);
-        }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return forwardChar(Fixnum.getValue(arg));
+            Position pos = checkMark(arg);
+            return forwardChar(pos, 1);
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Position pos = checkMark(first);
+            return forwardChar(pos, Fixnum.getValue(second));
         }
     };
 
     // ### backward-char
-    // Move point left N characters (right if N is negative).
+    // Move MARK left COUNT characters (right if COUNT is negative).
     private static final Primitive BACKWARD_CHAR =
-        new Primitive("backward-char", PACKAGE_J, true)
+        new Primitive("backward-char", PACKAGE_J, true, "mark &optional count")
     {
-        public LispObject execute() throws ConditionThrowable
-        {
-            return forwardChar(-1);
-        }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return forwardChar(-Fixnum.getValue(arg));
+            Position pos = checkMark(arg);
+            return forwardChar(pos, -1);
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Position pos = checkMark(first);
+            return forwardChar(pos, -Fixnum.getValue(second));
         }
     };
 
-    private static final LispObject forwardChar(int n) throws ConditionThrowable
+    private static final LispObject forwardChar(Position pos, int n)
+        throws ConditionThrowable
     {
         if (n != 0) {
-            final Editor editor = Editor.currentEditor();
-            Position pos = editor.getDot();
             if (pos != null) {
-                editor.addUndo(SimpleEdit.MOVE);
                 if (n > 0) {
                     while (n-- > 0) {
                         if (!pos.next())
-                            return signal(new LispError("reached end of buffer"));
+                            return signal(new LispError("Reached end of buffer."));
                     }
                 } else {
-                    Debug.assertTrue(n < 0);
                     while (n++ < 0) {
                         if (!pos.prev())
-                            return signal(new LispError("reached beginning of buffer"));
+                            return signal(new LispError("Reached beginning of buffer."));
                     }
                 }
-                editor.moveCaretToDotCol();
             }
         }
         return NIL;
@@ -673,34 +675,35 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### backward-up-list
+    // ### backward-up-list mark
     private static final Primitive BACKWARD_UP_LIST =
-        new Primitive("backward-up-list", PACKAGE_J, true)
-    {
-        public LispObject execute() throws ConditionThrowable
-        {
-            LispMode.backwardUpList();
-            return NIL;
-        }
-    };
-
-    // ### looking-at pattern => generalized-boolean
-    private static final Primitive LOOKING_AT =
-        new Primitive("looking-at", PACKAGE_J, true)
+        new Primitive("backward-up-list", PACKAGE_J, true, "mark")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof AbstractString) {
-                String pattern = arg.getStringValue();
-                Editor editor = Editor.currentEditor();
-                Position dot = editor.getDot();
-                if (dot != null) {
-                    if (dot.getLine().substring(dot.getOffset()).startsWith(pattern))
-                        return T;
-                }
+            Position pos = checkMark(arg);
+            Position newPos = LispMode.findContainingSexp(pos);
+            if (newPos != null)
+                pos.moveTo(newPos);
+            return arg;
+        }
+    };
+
+    // ### looking-at mark pattern => generalized-boolean
+    private static final Primitive LOOKING_AT =
+        new Primitive("looking-at", PACKAGE_J, true, "mark string")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Position pos = checkMark(first);
+            if (second instanceof AbstractString) {
+                String pattern = second.getStringValue();
+                if (pos.getLine().substring(pos.getOffset()).startsWith(pattern))
+                    return T;
                 return NIL;
             }
-            return signal(new TypeError(arg, Symbol.STRING));
+            return signal(new TypeError(second, Symbol.STRING));
         }
     };
 
@@ -1019,6 +1022,33 @@ public final class LispAPI extends Lisp
             else
                 editor.unmark();
             return arg;
+        }
+    };
+
+    // ### copy-mark mark => copy
+    private static final Primitive COPY_MARK =
+        new Primitive("copy-mark", PACKAGE_J, true, "mark")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Position pos = checkMark(arg);
+            return new JavaObject(new Position(pos.getLine(), pos.getOffset()));
+        }
+    };
+
+    // ### mark= mark1 mark2 => generalized-boolean
+    private static final Primitive MARK_EQUAL =
+        new Primitive("mark=", PACKAGE_J, true, "mark1 mark2")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Position pos1 = checkMark(first);
+            Position pos2 = checkMark(second);
+            if (pos1.getLine() == pos2.getLine())
+                if (pos1.getOffset() == pos2.getOffset())
+                    return T;
+            return NIL;
         }
     };
 
