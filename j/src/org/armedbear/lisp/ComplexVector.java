@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.1 2004-02-24 11:20:09 piso Exp $
+ * $Id: ComplexVector.java,v 1.2 2004-02-24 12:29:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,16 @@ package org.armedbear.lisp;
 // expressly adjustable. It can hold elements of any type.
 public class ComplexVector extends AbstractVector
 {
-    private LispObject[] elements;
     private int capacity;
+    private int fillPointer = -1; // -1 indicates no fill pointer.
+    private boolean isDisplaced;
+
+    // For non-displaced arrays.
+    private LispObject[] elements;
+
+    // For displaced arrays.
+    private AbstractArray array;
+    private int displacement;
 
     public ComplexVector(int capacity)
     {
@@ -58,6 +66,49 @@ public class ComplexVector extends AbstractVector
         return BuiltInClass.VECTOR;
     }
 
+    public boolean hasFillPointer()
+    {
+        return fillPointer >= 0;
+    }
+
+    public int getFillPointer()
+    {
+        return fillPointer;
+    }
+
+    public void setFillPointer(int n)
+    {
+        fillPointer = n;
+    }
+
+    public void setFillPointer(LispObject obj) throws ConditionThrowable
+    {
+        if (obj == T)
+            fillPointer = capacity();
+        else {
+            int n = Fixnum.getValue(obj);
+            if (n > capacity()) {
+                StringBuffer sb = new StringBuffer("The new fill pointer (");
+                sb.append(n);
+                sb.append(") exceeds the capacity of the vector (");
+                sb.append(capacity());
+                sb.append(").");
+                signal(new LispError(sb.toString()));
+            } else if (n < 0) {
+                StringBuffer sb = new StringBuffer("The new fill pointer (");
+                sb.append(n);
+                sb.append(") is negative.");
+                signal(new LispError(sb.toString()));
+            } else
+                fillPointer = n;
+        }
+    }
+
+    public boolean isDisplaced()
+    {
+        return isDisplaced;
+    }
+
     public LispObject getElementType()
     {
         return T;
@@ -65,7 +116,7 @@ public class ComplexVector extends AbstractVector
 
     public boolean isSimpleVector()
     {
-        return fillPointer < 0;
+        return false;
     }
 
     public int capacity()
@@ -238,6 +289,34 @@ public class ComplexVector extends AbstractVector
             --j;
         }
         return this;
+    }
+
+    public LispObject vectorPushExtend(LispObject element)
+        throws ConditionThrowable
+    {
+        if (fillPointer < 0)
+            noFillPointer();
+        if (fillPointer >= capacity) {
+            // Need to extend vector.
+            ensureCapacity(capacity * 2 + 1);
+        }
+        set(fillPointer, element);
+        return new Fixnum(fillPointer++);
+    }
+
+    public LispObject vectorPushExtend(LispObject element, LispObject extension)
+        throws ConditionThrowable
+    {
+        int ext = Fixnum.getValue(extension);
+        if (fillPointer < 0)
+            noFillPointer();
+        if (fillPointer >= capacity) {
+            // Need to extend vector.
+            ext = Math.max(ext, capacity + 1);
+            ensureCapacity(capacity + ext);
+        }
+        set(fillPointer, element);
+        return new Fixnum(fillPointer++);
     }
 
     public String toString()

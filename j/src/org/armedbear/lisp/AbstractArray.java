@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.16 2004-02-24 00:42:01 piso Exp $
+ * $Id: AbstractArray.java,v 1.17 2004-02-24 12:30:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,6 @@ package org.armedbear.lisp;
 
 public abstract class AbstractArray extends LispObject
 {
-    protected boolean isDisplaced;
-
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.ARRAY)
@@ -53,9 +51,9 @@ public abstract class AbstractArray extends LispObject
         return false;
     }
 
-    public final boolean isDisplaced()
+    public boolean isDisplaced()
     {
-        return isDisplaced;
+        return false;
     }
 
     public LispObject arrayDisplacement()
