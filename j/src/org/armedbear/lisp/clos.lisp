@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.117 2004-10-22 15:55:04 piso Exp $
+;;; $Id: clos.lisp,v 1.118 2004-10-23 19:24:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1504,6 +1504,7 @@
                                   (method-environment method))))
 
           (when *compile-method-functions*
+            (fresh-line)
             (sys:simple-format t "STD-COMPUTE-METHOD-FUNCTION ~S ~S "
                                (if gf (generic-function-name gf) nil)
                                (method-specializers method))
