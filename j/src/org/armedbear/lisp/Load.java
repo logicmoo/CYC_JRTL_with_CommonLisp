@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.38 2004-03-24 15:09:20 piso Exp $
+ * $Id: Load.java,v 1.39 2004-03-24 15:21:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,16 +100,16 @@ public final class Load extends Lisp
         return result;
     }
 
-    public static final LispObject _load(String filename)
+    public static final LispObject loadSystemFile(String filename)
         throws ConditionThrowable
     {
-        return _load(filename,
-                     _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
-                     _LOAD_PRINT_.symbolValueNoThrow() != NIL,
-                     false);
+        return loadSystemFile(filename,
+                              _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
+                              _LOAD_PRINT_.symbolValueNoThrow() != NIL,
+                              false);
     }
 
-    public static final LispObject _load(String filename, boolean auto)
+    public static final LispObject loadSystemFile(String filename, boolean auto)
         throws ConditionThrowable
     {
         boolean verbose;
@@ -117,15 +117,16 @@ public final class Load extends Lisp
             verbose = _AUTOLOAD_VERBOSE_.symbolValueNoThrow() != NIL;
         else
             verbose = _LOAD_VERBOSE_.symbolValueNoThrow() != NIL;
-        return _load(filename,
-                     verbose,
-                     _LOAD_PRINT_.symbolValueNoThrow() != NIL,
-                     auto);
+        return loadSystemFile(filename,
+                              verbose,
+                              _LOAD_PRINT_.symbolValueNoThrow() != NIL,
+                              auto);
     }
 
-    public static final LispObject _load(final String filename,
-                                         boolean verbose, boolean print,
-                                         boolean auto)
+    public static final LispObject loadSystemFile(final String filename,
+                                                  boolean verbose,
+                                                  boolean print,
+                                                  boolean auto)
         throws ConditionThrowable
     {
         ArrayList candidates = new ArrayList();
@@ -319,10 +320,10 @@ public final class Load extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return _load(arg.getStringValue(),
-                         _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
-                         _LOAD_PRINT_.symbolValueNoThrow() != NIL,
-                         false);
+            return loadSystemFile(arg.getStringValue(),
+                                  _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
+                                  _LOAD_PRINT_.symbolValueNoThrow() != NIL,
+                                  false);
         }
     };
 }

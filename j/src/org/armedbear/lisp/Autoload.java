@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.180 2004-03-24 01:06:52 piso Exp $
+ * $Id: Autoload.java,v 1.181 2004-03-24 15:24:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,7 @@ public class Autoload extends Function
                 thread.setDynamicEnvironment(oldDynEnv);
             }
         } else
-            Load._load(getFileName(), true);
+            Load.loadSystemFile(getFileName(), true);
     }
 
     public final Symbol getSymbol()
