@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2004 Peter Graves
-dnl  $Id: configure.ac,v 1.31 2004-04-30 01:51:10 piso Exp $
+dnl  $Id: configure.ac,v 1.32 2004-05-02 00:24:02 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.31 $)
+AC_REVISION($Revision: 1.32 $)
 
 BOOTFILE=./configure-options
 
@@ -139,24 +139,26 @@ test -z "$JAR" && JAR=$JDK/bin/jar
 AC_SUBST(JAR)
 
 
+dnl  Location of Lisp source files.
+LISP_HOME=$srcdir/src/org/armedbear/lisp
+AC_SUBST(LISP_HOME)
+
+
 dnl  Java runtime classes and options
 if test -f $JDK/jre/lib/rt.jar ; then
     # SUN
     JAVA_RUNTIME=$JDK/jre/lib/rt.jar
-    ABL_JAVA_RUNTIME=$JAVA_RUNTIME
-    ABL_JAVA_OPTIONS="-server -Xmx128M"
+    ABCL_JAVA_OPTIONS="-server -Xmx128M -Xrs -Djava.library.path=$LISP_HOME"
 elif test -f $JDK/jre/lib/core.jar ; then
     # IBM
     JAVA_RUNTIME=""
     for i in $JDK/jre/lib/*.jar ; do JAVA_RUNTIME=$JAVA_RUNTIME:$i ; done
-    ABL_JAVA_RUNTIME=$JAVA_RUNTIME
-    ABL_JAVA_OPTIONS="-Xss512K -Xmx128M"
+    ABCL_JAVA_OPTIONS="-Xss512K -Xmx128M"
 elif test -d $JDK/Classes ; then
     # Mac OS X
     JAVA_RUNTIME=""
     for i in $JDK/Classes/*.jar ; do JAVA_RUNTIME=$JAVA_RUNTIME:$i ; done
-    ABL_JAVA_RUNTIME=$JAVA_RUNTIME
-    ABL_JAVA_OPTIONS="-server"
+    ABCL_JAVA_OPTIONS="-server"
 else
     AC_MSG_ERROR(unable to find Java runtime)
 fi
@@ -164,8 +166,7 @@ if test -f $JDK/lib/tools.jar ; then
     JAVA_RUNTIME=$JAVA_RUNTIME:$JDK/lib/tools.jar
 fi
 AC_SUBST(JAVA_RUNTIME)
-AC_SUBST(ABL_JAVA_RUNTIME)
-AC_SUBST(ABL_JAVA_OPTIONS)
+AC_SUBST(ABCL_JAVA_OPTIONS)
 
 
 dnl  Make prefix explicit.
@@ -181,16 +182,12 @@ dnl  Construct command line for shell script.
 dnl  Places to look for j.
 JPATH=$srcdir/src:$datadir/j/j.jar
 
-dnl  Location of Lisp source files.
-LISP_HOME=$srcdir/src/org/armedbear/lisp
-AC_SUBST(LISP_HOME)
-
 CP="-cp"
 CLASSPATH="$JPATH:$JDK/lib/tools.jar"
-ABL_CLASSPATH=$JPATH
+ABCL_CLASSPATH=$JPATH
 AC_SUBST(CP)
 AC_SUBST(CLASSPATH)
-AC_SUBST(ABL_CLASSPATH)
+AC_SUBST(ABCL_CLASSPATH)
 
 COMPILER_CLASSPATH="$srcdir/src:$JAVA_RUNTIME"
 AC_SUBST(COMPILER_CLASSPATH)
@@ -263,9 +260,9 @@ src/org/armedbear/lisp/Makefile
 src/org/armedbear/lisp/java/awt/Makefile
 src/org/armedbear/lisp/Site.java
 j
-abl
+abcl
 ])
 
-AC_CONFIG_COMMANDS([chmod], [chmod 755 j; chmod 755 abl])
+AC_CONFIG_COMMANDS([chmod], [chmod 755 j; chmod 755 abcl])
 
 AC_OUTPUT
