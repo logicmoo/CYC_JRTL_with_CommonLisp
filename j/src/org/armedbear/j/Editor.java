@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.5 2002-10-10 16:34:10 piso Exp $
+ * $Id: Editor.java,v 1.6 2002-10-11 01:04:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,9 +121,9 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     private Buffer buffer;
 
-    private Display display;
-
-    private Dispatcher dispatcher;
+    private final Display display;
+    private final Dispatcher dispatcher;
+    private final Frame frame;
 
     private Search lastSearch;
 
@@ -168,8 +168,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     DirectoryTree localDirectoryTree;
 
     private JPopupMenu popup;
-
-    private Frame frame;
 
     private static SystemSelection systemSelection;
 
@@ -361,7 +359,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
         tagFileManager = new TagFileManager();
 
-        setCurrentEditor(new Editor());
+        setCurrentEditor(new Editor(null));
 
         currentEditor.getFrame().updateControls();
 
@@ -474,16 +472,12 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         return Directories.getUserHomeDirectory();
     }
 
-    public Editor()
+    public Editor(Frame f)
     {
+        display = new Display(this);
+        dispatcher = new Dispatcher(this);
         init();
-        frame = new Frame(this);
-    }
-
-    public Editor(Frame frame)
-    {
-        init();
-        this.frame = frame;
+        frame = f != null ? f : new Frame(this);
     }
 
     private void init()
@@ -494,11 +488,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         setBorder(BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         setLayout(new BorderLayout());
-        display = new Display(this);
         display.setDoubleBuffered(true);
         add(display, BorderLayout.CENTER);
-
-        dispatcher = new Dispatcher(this);
 
         new DropTarget(display, dispatcher);
 
@@ -781,7 +772,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public static Editor createNewFrame()
     {
-        Editor ed = new Editor();
+        Editor ed = new Editor(null);
         ed.getFrame().updateControls();
         ed.getFrame().placeWindow();
         return ed;
