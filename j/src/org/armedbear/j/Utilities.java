@@ -1,8 +1,8 @@
 /*
  * Utilities.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.34 2003-10-07 13:58:09 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Utilities.java,v 1.35 2004-04-22 00:44:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -450,6 +450,19 @@ public final class Utilities implements Constants
                 ++detabbedLength;
         }
         return detabbedLength;
+    }
+
+    // Trims leading space characters only, not all whitespace.
+    public static String trimLeading(String s)
+    {
+        final int length = s.length();
+        int i = 0;
+        while (i < length) {
+            if (s.charAt(i) != ' ')
+                break;
+            ++i;
+        }
+        return s.substring(i);
     }
 
     // Trims trailing space characters only, not all whitespace.
