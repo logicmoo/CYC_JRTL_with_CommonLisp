@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.39 2003-11-16 21:33:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.40 2003-11-16 21:59:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1906,6 +1906,25 @@
            (t
             (error "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
+(defun compile-rplacd (form for-effect)
+  (let ((args (cdr form)))
+    (unless (= (length args) 2)
+      (error "wrong number of arguments for RPLACD"))
+    (compile-form (first args))
+    (unless (remove-store-value)
+      (emit-push-value))
+    (unless for-effect
+      (emit 'dup))
+    (compile-form (second args))
+    (unless (remove-store-value)
+      (emit-push-value))
+    (emit-invokevirtual +lisp-object-class+
+                        "setCdr"
+                        "(Lorg/armedbear/lisp/LispObject;)V"
+                        -2)
+    (unless for-effect
+      (emit-store-value))))
+
 (defun compile-declare (form for-effect)
   ;; Nothing to do.
   )
@@ -2311,6 +2330,7 @@
                           progn
                           quote
                           return-from
+                          rplacd
                           setq
                           tagbody
                           values))
