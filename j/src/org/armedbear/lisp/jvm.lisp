@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.161 2004-05-09 00:06:13 piso Exp $
+;;; $Id: jvm.lisp,v 1.162 2004-05-09 14:13:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -599,7 +599,7 @@
   (dotimes (i (length *code*))
     (let ((instruction (svref *code* i)))
       (format t "~A ~S~%"
-              (instr (instruction-opcode instruction))
+              (opcode-name (instruction-opcode instruction))
               (instruction-args instruction)))))
 
 (defun validate-labels ()
@@ -1611,6 +1611,84 @@
                      0)
   (emit-store-value))
 
+(defun compile-multiple-value-bind (form for-effect)
+  (let* ((*locals* *locals*)
+         (*variables* *variables*)
+         (specials ())
+         (vars (second form))
+         (specialp nil)
+         env-var)
+    ;; Process declarations.
+    (dolist (f (cdddr form))
+      (unless (and (consp f) (eq (car f) 'declare))
+        (return))
+      (let ((decls (cdr f)))
+        (dolist (decl decls)
+          (when (eq (car decl) 'special)
+            (setf specials (append (cdr decl) specials))))))
+    ;; Are we going to bind any special variables?
+    (dolist (var vars)
+      (when (or (memq var specials) (special-variable-p var))
+        (setf specialp t)
+        (return)))
+    ;; If so...
+    (when specialp
+      ;; Save current dynamic environment.
+      (setf env-var (allocate-local nil))
+      (ensure-thread-var-initialized)
+      (emit 'aload *thread*)
+      (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+      (emit 'astore env-var))
+    (compile-form (third form)) ;; Values form.
+    (unless (remove-store-value)
+      (emit-push-value))
+    (ensure-thread-var-initialized)
+    (emit 'aload *thread*)
+    (emit 'swap)
+    (emit 'bipush (length vars))
+    (emit-invokevirtual +lisp-thread-class+
+                        "getValues"
+                        "(Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
+                        0)
+    ;; Values array is now on the stack (at runtime).
+    (let ((index 0))
+      (dolist (var vars)
+        (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
+        (push-variable var specialp)
+        (when (< index (1- (length vars)))
+          (emit 'dup))
+        (emit 'bipush index)
+        (incf index)
+        (emit 'aaload)
+        ;; Value is on the runtime stack at this point.
+        (cond (specialp
+               (let ((g (declare-symbol var)))
+                 (emit 'aload *thread*)
+                 (emit 'swap)
+                 (emit 'getstatic
+                       *this-class*
+                       g
+                       +lisp-symbol+)
+                 (emit 'swap)
+                 (emit-invokevirtual +lisp-thread-class+
+                                     "bindSpecial"
+                                     "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                     -2)))
+              (t
+               (emit 'astore (allocate-local var))))))
+    (emit-clear-values)
+    ;; Body.
+    (do ((body (cdddr form) (cdr body)))
+        ((null (cdr body))
+         (compile-form (car body) for-effect))
+      (compile-form (car body) t)
+      (maybe-emit-clear-values (car body)))
+    (when specialp
+      ;; Restore dynamic environment.
+      (emit 'aload *thread*)
+      (emit 'aload env-var)
+      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
+
 (defun compile-let/let* (form for-effect)
   (let* ((*locals* *locals*)
          (*variables* *variables*)
@@ -1653,7 +1731,6 @@
       (maybe-emit-clear-values (car body)))
     (when specialp
       ;; Restore dynamic environment.
-      ;; FIXME This code also needs to run when we RETURN-FROM an enclosing block!
       (emit 'aload *thread*)
       (emit 'aload env-var)
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
@@ -2609,7 +2686,7 @@
   (let ((handler (or handler
                      (find-symbol (concatenate 'string "COMPILE-" (symbol-name fun)) 'jvm))))
     (unless (and handler (fboundp handler))
-      (error "no handler for ~S" fun))
+      (error "Handler not found: ~S" handler))
     (setf (get fun 'jvm-compile-handler) handler)))
 
 (mapc #'install-handler '(atom
@@ -2622,6 +2699,7 @@
                           go
                           if
                           locally
+                          multiple-value-bind
                           multiple-value-list
                           progn
                           quote
