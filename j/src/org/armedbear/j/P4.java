@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: P4.java,v 1.1.1.1 2002-09-24 16:08:28 piso Exp $
+ * $Id: P4.java,v 1.2 2002-10-14 16:29:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public class P4 implements Constants
             return;
         }
         if (command.equals("change")) {
-            MessageDialog.showMessageDialog("\"p4 change\" is not supported.",
+            MessageDialog.showMessageDialog("Use \"p4Change\".",
                 "Error");
             return;
         }
@@ -262,7 +262,8 @@ public class P4 implements Constants
         final String title = baseCmd + name;
         boolean save = false;
         if (parentBuffer.isModified()) {
-            int response =  ConfirmDialog.showConfirmDialogWithCancelButton(editor, VC_CHECK_SAVE_PROMPT, "P4 diff");
+            int response =  ConfirmDialog.showConfirmDialogWithCancelButton(
+                editor, VC_CHECK_SAVE_PROMPT, "P4 diff");
             switch (response) {
                 case RESPONSE_YES:
                     save = true;
@@ -325,7 +326,28 @@ public class P4 implements Constants
         editor.setDefaultCursor();
     }
 
-    public static void submit()
+    public static void change(String arg)
+    {
+        arg = arg.trim();
+        try {
+            // Make sure arg is a number.
+            Integer.parseInt(arg);
+            _change(arg);
+        }
+        catch (NumberFormatException e) {
+            MessageDialog.showMessageDialog(
+                "Argument must be a changelist number.",
+                "Error");
+        }
+    }
+
+    public static void change()
+    {
+        _change(null);
+    }
+
+    // arg must be a changelist number or null.
+    private static void _change(String arg)
     {
         if (!checkP4Installed())
             return;
@@ -340,7 +362,106 @@ public class P4 implements Constants
             return;
         if (parentBuffer.getFile() == null)
             return;
-        final String title = "p4 submit";
+        FastStringBuffer sb = new FastStringBuffer("p4 change");
+        if (arg != null) {
+            sb.append(' ');
+            sb.append(arg);
+        }
+        final String title = sb.toString();
+        CheckinBuffer checkinBuffer = null;
+        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+            Buffer buf = it.nextBuffer();
+            if (buf instanceof CheckinBuffer) {
+                if (title.equals(buf.getTitle())) {
+                    checkinBuffer = (CheckinBuffer) buf;
+                    break;
+                }
+            }
+        }
+        if (checkinBuffer == null) {
+            checkinBuffer = new CheckinBuffer(parentBuffer, VC_P4, true);
+            checkinBuffer.setProperty(Property.USE_TABS, true);
+            checkinBuffer.setFormatter(new P4ChangelistFormatter(checkinBuffer));
+            checkinBuffer.setTitle(title);
+            sb.setText("p4 change -o");
+            if (arg != null) {
+                sb.append(' ');
+                sb.append(arg);
+            }
+            ShellCommand shellCommand = new ShellCommand(sb.toString());
+            shellCommand.run();
+            checkinBuffer.setText(shellCommand.getOutput());
+            Position dot = findStartOfComment(checkinBuffer);
+            if (dot != null) {
+                Position mark = findEndOfComment(checkinBuffer, dot);
+                View view = new View();
+                view.setDot(dot);
+                view.setCaretCol(checkinBuffer.getCol(dot));
+                if (mark != null)
+                    view.setMark(mark);
+                checkinBuffer.setLastView(view);
+            }
+        }
+        editor.makeNext(checkinBuffer);
+        editor.activateInOtherWindow(checkinBuffer);
+    }
+
+    public static void submit(String args)
+    {
+        String message = null;
+        List list = Utilities.tokenize(args);
+        if (list.size() == 2) {
+            String arg = (String) list.get(0);
+            if (arg.equals("-c")) {
+                arg = (String) list.get(1);
+                try {
+                    Integer.parseInt(arg);
+                    // Success!
+                    _submit(arg);
+                    return;
+                }
+                catch (NumberFormatException e) {
+                    message = "Invalid changelist number";
+                }
+            }
+        }
+        if (message == null) {
+            FastStringBuffer sb =
+                new FastStringBuffer("Unrecognized argument \"");
+            sb.append(args.trim());
+            sb.append('"');
+            message = sb.toString();
+        }
+        MessageDialog.showMessageDialog(message, "Error");
+    }
+
+    public static void submit()
+    {
+        _submit(null);
+    }
+
+    // arg must be a changelist number or null.
+    private static void _submit(String arg)
+    {
+        if (!checkP4Installed())
+            return;
+        final Editor editor = Editor.currentEditor();
+        Buffer parentBuffer = editor.getBuffer();
+        if (parentBuffer instanceof DiffOutputBuffer) {
+            Log.debug("parentBuffer is DiffOutputBuffer");
+            parentBuffer = parentBuffer.getParentBuffer();
+            Log.debug("==> parentBuffer is " + parentBuffer);
+        }
+        if (parentBuffer == null)
+            return;
+        if (parentBuffer.getFile() == null)
+            return;
+        FastStringBuffer sb = new FastStringBuffer("p4 submit");
+        if (arg != null) {
+            sb.append(" -c ");
+            sb.append(arg);
+        }
+        final String title = sb.toString();
         boolean save = false;
         if (parentBuffer.isModified()) {
             int response =
@@ -374,8 +495,12 @@ public class P4 implements Constants
                 checkinBuffer.setProperty(Property.USE_TABS, true);
                 checkinBuffer.setFormatter(new P4ChangelistFormatter(checkinBuffer));
                 checkinBuffer.setTitle(title);
-                // Default changelist.
-                ShellCommand shellCommand = new ShellCommand("p4 change -o");
+                sb.setText("p4 change -o");
+                if (arg != null) {
+                    sb.append(' ');
+                    sb.append(arg);
+                }
+                ShellCommand shellCommand = new ShellCommand(sb.toString());
                 shellCommand.run();
                 checkinBuffer.setText(shellCommand.getOutput());
                 Position dot = findStartOfComment(checkinBuffer);
@@ -495,39 +620,49 @@ public class P4 implements Constants
 
     public static void finish(Editor editor, CheckinBuffer checkinBuffer)
     {
-        Buffer parentBuffer = checkinBuffer.getParentBuffer();
-        if (parentBuffer.getFile() != null) {
-            final String P4_OUTPUT_BUFFER_TITLE = "Output from p4 submit";
-            editor.getFrame().setWaitCursor();
-            final String cmd = "p4 submit -i";
-            final String input = checkinBuffer.getText();
-            ShellCommand shellCommand = new ShellCommand(cmd, input);
-            shellCommand.run();
-            if (shellCommand.exitValue() != 0) {
-                // Error.
-                Log.error("P4.finish input = |" + input + "|");
-                Log.error("P4.finish exit value = " + shellCommand.exitValue());
-                OutputBuffer buf = null;
-                // Re-use existing output buffer if possible.
-                for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-                    Buffer b = it.nextBuffer();
-                    if (b instanceof OutputBuffer) {
-                        if (P4_OUTPUT_BUFFER_TITLE.equals(b.getTitle())) {
-                            buf = (OutputBuffer) b;
-                            break; // There should be one at most.
-                        }
+        final Buffer parentBuffer = checkinBuffer.getParentBuffer();
+        if (parentBuffer.getFile() == null)
+            return;
+        editor.getFrame().setWaitCursor();
+        final boolean editOnly = checkinBuffer.isEditOnly();
+        final String cmd;
+        final String title;
+        if (editOnly) {
+            cmd = "p4 change -i";
+            title = "Output from p4 change";
+        } else {
+            cmd = "p4 submit -i";
+            title = "Output from p4 submit";
+        }
+        final String input = checkinBuffer.getText();
+        ShellCommand shellCommand = new ShellCommand(cmd, input);
+        shellCommand.run();
+        if (shellCommand.exitValue() != 0) {
+            // Error.
+            Log.error("P4.finish input = |" + input + "|");
+            Log.error("P4.finish exit value = " + shellCommand.exitValue());
+            OutputBuffer buf = null;
+            // Re-use existing output buffer if possible.
+            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+                Buffer b = it.nextBuffer();
+                if (b instanceof OutputBuffer) {
+                    if (title.equals(b.getTitle())) {
+                        buf = (OutputBuffer) b;
+                        break; // There should be one at most.
                     }
                 }
-                if (buf != null)
-                    buf.setText(shellCommand.getOutput());
-                else
-                    buf = OutputBuffer.getOutputBuffer(shellCommand.getOutput());
-                buf.setTitle(P4_OUTPUT_BUFFER_TITLE);
-                editor.makeNext(buf);
-                editor.displayInOtherWindow(buf);
-            } else {
-                // Success. Kill old diff and output buffers, if any: their
-                // contents are no longer correct.
+            }
+            if (buf != null)
+                buf.setText(shellCommand.getOutput());
+            else
+                buf = OutputBuffer.getOutputBuffer(shellCommand.getOutput());
+            buf.setTitle(title);
+            editor.makeNext(buf);
+            editor.displayInOtherWindow(buf);
+        } else {
+            // Success. Kill old diff and output buffers, if any: their
+            // contents are no longer correct.
+            if (!editOnly) {
                 for (BufferIterator it = new BufferIterator(); it.hasNext();) {
                     Buffer b = it.nextBuffer();
                     if (b instanceof DiffOutputBuffer) {
@@ -544,23 +679,24 @@ public class P4 implements Constants
                         }
                     }
                 }
-                for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-                    Buffer b = it.nextBuffer();
-                    if (b instanceof OutputBuffer) {
-                        if (P4_OUTPUT_BUFFER_TITLE.equals(b.getTitle())) {
-                            editor.maybeKillBuffer(b);
-                            break; // One at most.
-                        }
+            }
+            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+                Buffer b = it.nextBuffer();
+                if (b instanceof OutputBuffer) {
+                    if (title.equals(b.getTitle())) {
+                        editor.maybeKillBuffer(b);
+                        break; // One at most.
                     }
                 }
+            }
+            if (!editOnly)
                 // Read-only status of some buffers may have changed.
                 editor.getFrame().reactivate();
-                editor.otherWindow();
-                editor.unsplitWindow();
-                checkinBuffer.kill();
-            }
-            editor.getFrame().setDefaultCursor();
+            editor.otherWindow();
+            editor.unsplitWindow();
+            checkinBuffer.kill();
         }
+        editor.getFrame().setDefaultCursor();
     }
 
     public static String getStatusString(File file)
