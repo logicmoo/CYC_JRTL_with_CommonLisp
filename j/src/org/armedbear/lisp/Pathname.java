@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.59 2004-05-13 17:22:15 piso Exp $
+ * $Id: Pathname.java,v 1.60 2004-05-15 17:58:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -885,7 +885,11 @@ public class Pathname extends LispObject
         final Pathname pathname = Pathname.coerceToPathname(arg);
         if (pathname.isWild())
             signal(new FileError("Bad place for a wild pathname.", pathname));
-        File file = Utilities.getFile(pathname);
+        Pathname defaultedPathname =
+            mergePathnames(pathname,
+                           Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue()),
+                           NIL);
+        File file = Utilities.getFile(defaultedPathname);
         if (file.isDirectory())
             return Utilities.getDirectoryPathname(file);
         if (file.exists()) {
@@ -898,12 +902,30 @@ public class Pathname extends LispObject
         }
         if (errorIfDoesNotExist) {
             StringBuffer sb = new StringBuffer("The file ");
-            sb.append(pathname.writeToString());
+            sb.append(defaultedPathname.writeToString());
             sb.append(" does not exist.");
-            return signal(new FileError(sb.toString(), pathname));
+            return signal(new FileError(sb.toString(), defaultedPathname));
         }
         return NIL;
     }
+
+    // ### mkdir
+    private static final Primitive1 MKDIR =
+        new Primitive1("mkdir", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            final Pathname pathname = Pathname.coerceToPathname(arg);
+            if (pathname.isWild())
+                signal(new FileError("Bad place for a wild pathname.", pathname));
+            Pathname defaultedPathname =
+                mergePathnames(pathname,
+                               Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue()),
+                               NIL);
+            File file = Utilities.getFile(defaultedPathname);
+            return file.mkdir() ? T : NIL;
+        }
+    };
 
     // ### rename-file filespec new-name => defaulted-new-name, old-truename, new-truename
     public static final Primitive2 RENAME_FILE =
