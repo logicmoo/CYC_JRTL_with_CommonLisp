@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.394 2003-09-14 16:46:58 piso Exp $
+ * $Id: Primitives.java,v 1.395 2003-09-14 17:14:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4611,7 +4611,7 @@ public final class Primitives extends Module
     private static final Primitive1 REALP = new Primitive1("realp") {
         public LispObject execute(LispObject arg)
         {
-            return (arg.getType() & TYPE_REAL) != 0 ? T : NIL;
+            return arg.REALP();
         }
     };
 
@@ -4619,7 +4619,7 @@ public final class Primitives extends Module
     private static final Primitive1 RATIONALP = new Primitive1("rationalp") {
         public LispObject execute(LispObject arg)
         {
-            return (arg.getType() & TYPE_RATIONAL) != 0 ? T : NIL;
+            return arg.RATIONALP();
         }
     };
 
