@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.66 2003-12-03 05:44:35 piso Exp $
+ * $Id: LispString.java,v 1.67 2003-12-07 01:15:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -257,7 +257,10 @@ public final class LispString extends AbstractVector
 
     public final String getValue()
     {
-        return new String(array);
+        if (fillPointer >= 0)
+            return new String(array, 0, fillPointer);
+        else
+            return new String(array);
     }
 
     public Object javaInstance()
@@ -412,7 +415,8 @@ public final class LispString extends AbstractVector
     };
 
     private static final Primitive3 STRING_POSITION =
-        new Primitive3("string-position", PACKAGE_EXT, true) {
+        new Primitive3("string-position", PACKAGE_EXT, true)
+    {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -426,6 +430,19 @@ public final class LispString extends AbstractVector
                     return number(i);
             }
             return NIL;
+        }
+    };
+
+    // ### simple-string-search pattern string => position
+    // Searches string for a substring that matches pattern.
+    private static final Primitive2 SIMPLE_STRING_SEARCH =
+        new Primitive2("simple-string-search", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            int index = getValue(second).indexOf(getValue(first));
+            return index >= 0 ? new Fixnum(index) : NIL;
         }
     };
 }
