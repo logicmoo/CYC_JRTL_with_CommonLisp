@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.13 2003-01-13 07:20:14 piso Exp $
+ * $Id: Utilities.java,v 1.14 2003-01-13 18:45:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1108,8 +1108,7 @@ public final class Utilities implements Constants
                         try {
                             final BufferedReader reader =
                                 new BufferedReader(new InputStreamReader(p.getInputStream()));
-                            String s;
-                            while ((s = reader.readLine()) != null)
+                            while (reader.readLine() != null)
                                 ;
                             p.getInputStream().close();
                             p.getOutputStream().close();
