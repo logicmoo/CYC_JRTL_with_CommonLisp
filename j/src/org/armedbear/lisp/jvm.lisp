@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.49 2003-12-03 18:03:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.50 2003-12-04 03:19:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1291,6 +1291,8 @@
   (compile-form (second args))
   (unless (remove-store-value)
     (emit-push-value))
+  (unless (every 'constantp args)
+    (emit-clear-values))
   (emit-invokevirtual +lisp-object-class+
                       op
                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1334,7 +1336,6 @@
 (setf (gethash 'SYMBOLP         unary-operators) "SYMBOLP")
 (setf (gethash 'VECTORP         unary-operators) "VECTORP")
 (setf (gethash 'ZEROP           unary-operators) "ZEROP")
-
 
 (defun compile-function-call-1 (fun args)
   (let ((s (gethash fun unary-operators)))
@@ -1429,6 +1430,8 @@
      (compile-form (third args))
      (unless (remove-store-value)
        (emit-push-value))
+     (unless (every 'constantp args)
+       (emit-clear-values))
      (emit-invokestatic +lisp-class+
                         "list3"
                         "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
@@ -1490,6 +1493,8 @@
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
+       (unless (constantp (first args))
+         (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1501,6 +1506,8 @@
        (compile-form (second args))
        (unless (remove-store-value)
          (emit-push-value))
+       (unless (every 'constantp args)
+         (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1515,6 +1522,8 @@
        (compile-form (third args))
        (unless (remove-store-value)
          (emit-push-value))
+       (unless (every 'constantp args)
+         (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1532,6 +1541,8 @@
            (emit 'aastore) ; store value in array
            (incf i))) ; array left on stack here
        ;; Stack: function array-ref
+       (unless (every 'constantp args)
+         (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
