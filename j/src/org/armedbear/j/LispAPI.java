@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.53 2004-09-12 15:01:14 piso Exp $
+ * $Id: LispAPI.java,v 1.54 2004-09-16 17:20:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -240,6 +240,22 @@ public final class LispAPI extends Lisp
             if (arg instanceof JavaObject) {
                 if (((JavaObject)arg).getObject() instanceof Buffer)
                     return arg;
+            }
+            return NIL;
+        }
+    };
+
+    // ### buffer-live-p object => generalized-boolean
+    private static final Primitive1 BUFFER_LIVE_P =
+        new Primitive1("buffer-live-p", PACKAGE_J, true, "object")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof JavaObject) {
+                if (((JavaObject)arg).getObject() instanceof Buffer) {
+                    if (Editor.getBufferList().contains((Buffer)((JavaObject)arg).getObject()))
+                        return T;
+                }
             }
             return NIL;
         }
