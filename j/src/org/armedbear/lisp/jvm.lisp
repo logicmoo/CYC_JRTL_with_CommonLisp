@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.58 2003-12-13 20:45:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.59 2003-12-19 18:30:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1047,7 +1047,7 @@
     (write-u4 code-length)
     (dotimes (i code-length)
       (write-u1 (svref code i)))
-    (write-u2 0) ; exception table length
+    (write-u2 0) ; handler table length
     (write-u2 0) ; attributes count
     ))
 
