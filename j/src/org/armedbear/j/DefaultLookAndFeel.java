@@ -2,7 +2,7 @@
  * DefaultLookAndFeel.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: DefaultLookAndFeel.java,v 1.2 2003-03-11 14:00:28 piso Exp $
+ * $Id: DefaultLookAndFeel.java,v 1.3 2003-07-23 04:54:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,9 +44,11 @@ public final class DefaultLookAndFeel extends DefaultMetalTheme
     public static void setLookAndFeel()
     {
         // This is the default.
-        String lookAndFeelClassName = "javax.swing.plaf.metal.MetalLookAndFeel";
+        String lookAndFeelClassName =
+            "javax.swing.plaf.metal.MetalLookAndFeel";
 
-        Editor.lookAndFeel = preferences.getStringProperty(Property.LOOK_AND_FEEL);
+        Editor.lookAndFeel =
+            preferences.getStringProperty(Property.LOOK_AND_FEEL);
 
         if (Editor.lookAndFeel == null) {
             if (Platform.isPlatformMacOSX())
@@ -85,6 +87,7 @@ public final class DefaultLookAndFeel extends DefaultMetalTheme
         catch (Exception e) {}
         // We want to do this in any case.
         UIManager.put("ToolBarUI", "org.armedbear.j.ToolBarUI");
+        UIManager.put("ButtonUI", "org.armedbear.j.ButtonUI");
     }
 
     private DefaultLookAndFeel()
