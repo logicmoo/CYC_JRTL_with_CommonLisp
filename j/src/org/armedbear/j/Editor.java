@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.115 2003-09-16 01:38:04 piso Exp $
+ * $Id: Editor.java,v 1.116 2003-10-06 15:01:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5537,7 +5537,7 @@ public final class Editor extends JPanel implements Constants,
         final Mode mode = buffer.getMode();
         CompoundEdit compoundEdit = beginCompoundEdit();
         if (mark == null && Utilities.isLinePaste(toBeInserted) &&
-            mode.acceptsLinePaste(this))
+            mode.acceptsLinePaste(this) && buffer.getBooleanProperty(Property.AUTO_PASTE_LINES))
         {
             // We want to the caret to be in the same column when we're done.
             final int absCaretCol = display.getAbsoluteCaretCol();
