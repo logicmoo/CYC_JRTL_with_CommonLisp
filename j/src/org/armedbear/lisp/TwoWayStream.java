@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.18 2004-02-13 17:05:27 piso Exp $
+ * $Id: TwoWayStream.java,v 1.19 2004-03-11 12:12:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,9 +44,9 @@ public final class TwoWayStream extends Stream
     {
         LispObject itype = in.getElementType();
         LispObject otype = out.getElementType();
-        if (itype == otype)
+        if (itype.equal(otype))
             return itype;
-        return Symbol.NULL; // FIXME
+        return list3(Symbol.AND, itype, otype);
     }
 
     public Stream getInputStream()
