@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.568 2004-02-14 19:53:01 piso Exp $
+ * $Id: Primitives.java,v 1.569 2004-02-15 17:54:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3508,7 +3508,9 @@ public final class Primitives extends Lisp
     // ### read-line
     // read-line &optional input-stream eof-error-p eof-value recursive-p
     // => line, missing-newline-p
-    private static final Primitive READ_LINE = new Primitive("read-line","&optional input-stream eof-error-p eof-value recursive-p")
+    private static final Primitive READ_LINE =
+        new Primitive("read-line",
+                      "&optional input-stream eof-error-p eof-value recursive-p")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -3702,7 +3704,10 @@ public final class Primitives extends Lisp
 
     // ### read-char
     // read-char &optional input-stream eof-error-p eof-value recursive-p => char
-    private static final Primitive READ_CHAR = new Primitive("read-char","&optional input-stream eof-error-p eof-value recursive-p") {
+    private static final Primitive READ_CHAR =
+        new Primitive("read-char",
+                      "&optional input-stream eof-error-p eof-value recursive-p")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
@@ -3735,7 +3740,8 @@ public final class Primitives extends Lisp
     };
 
     private static final Primitive2 _SET_LAMBDA_NAME =
-        new Primitive2("%set-lambda-name", PACKAGE_SYS, false) {
+        new Primitive2("%set-lambda-name", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -3754,7 +3760,8 @@ public final class Primitives extends Lisp
     // must be less than or equal to its current length.
     // shrink-vector vector new-size => vector
     private static final Primitive2 SHRINK_VECTOR =
-        new Primitive2("shrink-vector", PACKAGE_SYS, false) {
+        new Primitive2("shrink-vector", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
