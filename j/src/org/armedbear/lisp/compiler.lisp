@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.24 2003-06-20 14:15:28 piso Exp $
+;;; $Id: compiler.lisp,v 1.25 2003-06-22 20:59:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -103,8 +103,7 @@
          (error "wrong number of arguments for BLOCK"))
        (unless (symbolp (cadr form))
          (error 'type-error))
-       (nconc (list 'block (cadr form))
-              (mapcar #'compile-sexp (cddr form))))
+       (list* 'block (cadr form) (mapcar #'compile-sexp (cddr form))))
       (COND
        (cons 'cond (compile-cond (cdr form))))
       (QUOTE
@@ -117,18 +116,15 @@
       (WHEN
        (cons 'when (mapcar #'compile-sexp (cdr form))))
       ((LET LET*)
-       (let ((vars (cadr form))
-             (body (cddr form)))
-         (cons first (cons (compile-let-vars vars) (compile-progn body)))))
+       (list* first (compile-let-vars (cadr form)) (mapcar #'compile-sexp (cddr form))))
       (SETQ
        (compile-setq (cdr form)))
       (PROGN
        (cons 'progn (mapcar #'compile-sexp (cdr form))))
       (IF
-       (let ((len (length (cdr form))))
-         (unless (<= 2 len 3)
-           (error "wrong number of arguments for IF"))
-         (cons 'if (mapcar #'compile-sexp (cdr form)))))
+       (unless (<= 2 (length (cdr form)) 3)
+         (error "wrong number of arguments for IF"))
+       (cons 'if (mapcar #'compile-sexp (cdr form))))
       ('CASE
        (cons 'case (compile-case (cadr form) (cddr form))))
       (DOLIST
@@ -139,7 +135,7 @@
        (let ((second (second form))
              (third (third form))
              (body (cdddr form)))
-         (list* first second third (compile-progn body))))
+         (list* first second third (mapcar #'compile-sexp body))))
       (DOTIMES
        (let ((args (cadr form))
              (body (cddr form)))
