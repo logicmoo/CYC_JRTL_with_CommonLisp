@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.152 2004-02-04 15:13:55 piso Exp $
+ * $Id: Autoload.java,v 1.153 2004-02-10 15:54:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -218,7 +218,6 @@ public class Autoload extends Function
         autoload("char-not-greaterp", "CharacterFunctions");
         autoload("char-not-lessp", "CharacterFunctions");
         autoload("char=", "CharacterFunctions");
-        autoload("class-name", "LispClass");
         autoload("clrhash", "HashTable");
         autoload("copy-structure", "StructureObject");
         autoload("delete-file", "delete_file");
@@ -231,7 +230,6 @@ public class Autoload extends Function
         autoload("file-length", "file_length");
         autoload("file-string-length", "file_string_length");
         autoload("file-write-date", "file_write_date");
-        autoload("find-class", "LispClass");
         autoload("get-internal-real-time", "Time");
         autoload("get-internal-run-time", "Time");
         autoload("get-output-stream-string", "StringOutputStream");
@@ -298,11 +296,9 @@ public class Autoload extends Function
         autoload("unbound-slot-instance", "unbound_slot_instance");
         autoload("unexport", "PackageFunctions");
         autoload("unuse-package", "PackageFunctions");
-        autoload(PACKAGE_EXT, "add-class", "LispClass", true);
         autoload(PACKAGE_EXT, "arglist", "arglist", true);
         autoload(PACKAGE_EXT, "assq", "assq", true);
         autoload(PACKAGE_EXT, "assql", "assql", true);
-        autoload(PACKAGE_EXT, "classp", "LispClass", true);
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file", true);
         autoload(PACKAGE_EXT, "gc", "gc", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
@@ -325,9 +321,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%run-shell-command", "ShellCommand");
         autoload(PACKAGE_SYS, "%set-arglist", "arglist");
-        autoload(PACKAGE_SYS, "%set-class-direct-methods", "LispClass");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass");
-        autoload(PACKAGE_SYS, "%set-class-layout", "LispClass");
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObject");
@@ -358,9 +352,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%time", "Time");
         autoload(PACKAGE_SYS, "allocate-slot-storage", "StandardObject");
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObject");
-        autoload(PACKAGE_SYS, "class-direct-methods", "LispClass");
         autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
-        autoload(PACKAGE_SYS, "class-layout", "LispClass");
         autoload(PACKAGE_SYS, "class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "create-new-file", "create_new_file");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
