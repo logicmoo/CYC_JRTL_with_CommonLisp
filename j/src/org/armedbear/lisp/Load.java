@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.12 2003-06-03 00:32:42 piso Exp $
+ * $Id: Load.java,v 1.13 2003-07-16 18:16:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -265,23 +265,6 @@ public final class Load extends Lisp
         return null;
     }
 
-
-    // (member string list :test #'string=)
-    private static final boolean containsString(LispString string,
-        LispObject list) throws LispError
-    {
-        LispObject rest = checkList(list);
-        String s = string.getValue();
-        while (rest != NIL) {
-            LispObject car = rest.car();
-            if (car instanceof LispString)
-                if (s.equalsIgnoreCase(((LispString)car).getValue()))
-                    return true;
-            rest = rest.cdr();
-        }
-        return false;
-    }
-
     // ### load
     // Need to support keyword args.
     // load filespec &key verbose print if-does-not-exist external-format
@@ -293,8 +276,9 @@ public final class Load extends Lisp
             // For now we require a string, but we should also support streams
             // and pathnames.
             String filename = LispString.getValue(args[0]);
-            return load(filename, _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
-                _LOAD_PRINT_.symbolValueNoThrow() != NIL);
+            return load(filename,
+                        _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
+                        _LOAD_PRINT_.symbolValueNoThrow() != NIL);
         }
     };
 
@@ -303,38 +287,9 @@ public final class Load extends Lisp
     public static final Primitive1 _LOAD = new Primitive1("%load") {
         public LispObject execute(LispObject arg) throws Condition
         {
-            String filename = LispString.getValue(arg);
-            return _load(filename, _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
-                _LOAD_PRINT_.symbolValueNoThrow() != NIL);
-        }
-    };
-
-    // ### provide
-    public static final Primitive1 PROVIDE = new Primitive1("provide") {
-        public final LispObject execute(LispObject arg) throws LispError
-        {
-            LispString string = string(arg);
-            LispObject list = _MODULES_.getSymbolValue();
-            if (!containsString(string, list)) {
-                list = new Cons(string, list);
-                _MODULES_.setSymbolValue(list);
-            }
-            return NIL;
-        }
-    };
-
-    // ### require
-    // require module-name &optional pathname-list => implementation-dependent
-    public static final Primitive REQUIRE = new Primitive("require") {
-        public final LispObject execute(LispObject[] args) throws Condition
-        {
-            if (args.length < 1)
-                throw new WrongNumberOfArgumentsException(this);
-            LispString string = string(args[0]);
-            LispObject list = _MODULES_.getSymbolValue();
-            if (containsString(string, list))
-                return T;
-            return load(string.getValue());
+            return _load(LispString.getValue(arg),
+                         _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
+                         _LOAD_PRINT_.symbolValueNoThrow() != NIL);
         }
     };
 }
