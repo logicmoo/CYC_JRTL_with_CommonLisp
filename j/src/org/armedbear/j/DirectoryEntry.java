@@ -2,7 +2,7 @@
  * DirectoryEntry.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: DirectoryEntry.java,v 1.1.1.1 2002-09-24 16:08:04 piso Exp $
+ * $Id: DirectoryEntry.java,v 1.2 2002-11-17 02:16:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,8 @@ public final class DirectoryEntry
     private static final String DIR = "     <DIR>";
     private static final int DIRLENGTH = DIR.length();
     private static final String DATEFORMAT = "MMM dd yyyy HH:mm";
-    private static SimpleDateFormat dateFormatter = new SimpleDateFormat(DATEFORMAT);
+    private static SimpleDateFormat dateFormatter =
+        new SimpleDateFormat(DATEFORMAT);
 
     // Constructor for native "ls -l" format.
     private DirectoryEntry(String string, char firstChar)
@@ -63,7 +64,8 @@ public final class DirectoryEntry
     }
 
     // Constructor for internal format.
-    public DirectoryEntry(String name, long date, long size, boolean isDirectory)
+    public DirectoryEntry(String name, long date, long size,
+        boolean isDirectory)
     {
         this.name = name;
         this.date = date;
@@ -74,7 +76,8 @@ public final class DirectoryEntry
     // Wrapper for constructor for native "ls -l" format.
     // Ignore strings that aren't really directory entries.
     // Apply filter (if any).
-    public static DirectoryEntry getDirectoryEntry(String s, DirectoryFilenameFilter filter)
+    public static DirectoryEntry getDirectoryEntry(String s,
+        DirectoryFilenameFilter filter)
     {
         if (s.length() == 0)
             return null;
