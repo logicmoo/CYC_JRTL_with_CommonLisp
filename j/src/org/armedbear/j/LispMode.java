@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.34 2003-03-29 18:33:26 piso Exp $
+ * $Id: LispMode.java,v 1.35 2003-03-31 00:35:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,6 +72,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(')', "closeParen");
         km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
         km.mapKey(KeyEvent.VK_F, CTRL_MASK | ALT_MASK, "forwardSexp");
+        km.mapKey(KeyEvent.VK_B, CTRL_MASK | ALT_MASK, "backwardSexp");
         km.mapKey(KeyEvent.VK_D, CTRL_MASK | ALT_MASK, "downList");
         km.mapKey(KeyEvent.VK_U, CTRL_MASK | ALT_MASK, "upList");
         km.mapKey(KeyEvent.VK_E, CTRL_MASK | ALT_MASK, "evalDefunLisp");
