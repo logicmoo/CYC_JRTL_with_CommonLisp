@@ -228,6 +228,7 @@ inspect
 integerp
 intern
 intersection
+invoke-restart
 keywordp
 labels
 lambda
