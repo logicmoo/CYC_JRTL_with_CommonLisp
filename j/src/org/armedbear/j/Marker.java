@@ -1,8 +1,8 @@
 /*
  * Marker.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Marker.java,v 1.3 2003-03-20 15:38:48 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Marker.java,v 1.4 2003-07-17 13:45:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,6 +123,66 @@ public final class Marker implements Constants
         }
         pos = new Position(editor.getDot());
         buffer = editor.getBuffer();
+    }
+
+    public static void selectToMarker()
+    {
+        selectToMarker(InputDialog.showInputDialog(Editor.currentEditor(),
+                                                   "Marker:",
+                                                   "Select To Marker"));
+    }
+
+    public static void selectToMarker(String s)
+    {
+        if (s == null)
+            return;
+        s = s.trim();
+        if (s.length() == 0)
+            return;
+        final Editor editor = Editor.currentEditor();
+        Marker m = null;
+        try {
+            final int index = Integer.parseInt(s);
+            final Marker[] bookmarks = Editor.getBookmarks();
+            if (index >= 0 && index < bookmarks.length)
+                m = bookmarks[index];
+        }
+        catch (NumberFormatException e) {}
+        if (m == null) {
+            MessageDialog.showMessageDialog(editor, "No such marker",
+                                            "Select To Marker");
+            return;
+        }
+        m.selectToMarker(editor);
+    }
+
+    private void selectToMarker(Editor editor)
+    {
+        if (file == null)
+            return;
+        if (file.equals(editor.getBuffer().getFile())) {
+            // Marker is in current buffer.
+            editor.addUndo(SimpleEdit.MOVE);
+            editor.unmark();
+            editor.setMarkAtDot();
+            editor.updateDotLine();
+            if (pos != null && editor.getBuffer().contains(pos.getLine())) {
+                editor.getDot().moveTo(pos);
+            } else {
+                editor.gotoline(lineNumber);
+                editor.getDot().setOffset(offset);
+            }
+            if (editor.getDotOffset() > editor.getDotLine().length())
+                editor.getDot().setOffset(editor.getDotLine().length());
+            editor.moveCaretToDotCol();
+            editor.updateDotLine();
+            editor.setUpdateFlag(REFRAME | REPAINT);
+        } else {
+            // Marker is not in current buffer.
+            MessageDialog.showMessageDialog(editor,
+                                            "Marker is not in this buffer",
+                                            "Select To Marker");
+        }
     }
 
     public boolean equals(Object object)
