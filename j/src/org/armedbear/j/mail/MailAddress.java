@@ -2,7 +2,7 @@
  * MailAddress.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MailAddress.java,v 1.1.1.1 2002-09-24 16:10:08 piso Exp $
+ * $Id: MailAddress.java,v 1.2 2003-03-09 13:58:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,6 +108,20 @@ public final class MailAddress implements Serializable
             }
         } else if (address != null && address.length() > 0)
             sb.append(address);
+        return sb.toString();
+    }
+
+    public String toEncodedString()
+    {
+        if (encodedPersonal == null || encodedPersonal.length() == 0)
+            return toString();
+        FastStringBuffer sb = new FastStringBuffer();
+        sb.append(encodedPersonal);
+        if(address != null && address.length() > 0) {
+            sb.append(" <");
+            sb.append(address);
+            sb.append('>');
+        }
         return sb.toString();
     }
 
