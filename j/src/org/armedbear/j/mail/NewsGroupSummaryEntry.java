@@ -2,7 +2,7 @@
  * NewsGroupSummaryEntry.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummaryEntry.java,v 1.2 2002-12-27 01:52:11 piso Exp $
+ * $Id: NewsGroupSummaryEntry.java,v 1.3 2003-01-10 16:18:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,12 +96,14 @@ public final class NewsGroupSummaryEntry extends MailboxEntry
             end = s.indexOf('\t', begin);
             if (end < 0)
                 end = s.length(); // This might be the last token.
-            token = s.substring(begin, end); // Line count.
-            try {
-                entry.lineCount = Integer.parseInt(token);
-            }
-            catch (NumberFormatException e) {
-                Log.error(e);
+            if (end > begin) {
+                token = s.substring(begin, end); // Line count.
+                try {
+                    entry.lineCount = Integer.parseInt(token);
+                }
+                catch (NumberFormatException e) {
+                    Log.error(e);
+                }
             }
             // Done with this entry.
             break;
