@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.73 2004-09-15 17:52:50 piso Exp $
+ * $Id: Interpreter.java,v 1.74 2004-10-18 19:19:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,6 +164,7 @@ public final class Interpreter extends Lisp
     }
 
     private void processCommandLineArguments(String[] args)
+        throws ConditionThrowable
     {
         if (args.length > 0) {
             for (int i = 0; i < args.length; ++i) {
@@ -176,7 +177,7 @@ public final class Interpreter extends Lisp
                         }
                         catch (ConditionThrowable c) {
                             System.err.println("Caught condition: " +
-                                               c.getCondition().toString() +
+                                               c.getCondition().writeToString() +
                                                " while evaluating: " +
                                                args[i+1]);
                             System.exit(2);
@@ -197,7 +198,7 @@ public final class Interpreter extends Lisp
                         }
                         catch (ConditionThrowable c) {
                             System.err.println("Caught condition: " +
-                                               c.getCondition().toString() +
+                                               c.getCondition().writeToString() +
                                                " while loading: " +
                                                args[i+1]);
                             System.exit(2);
