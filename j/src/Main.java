@@ -2,7 +2,7 @@
  * Main.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Main.java,v 1.2 2003-06-03 16:49:24 piso Exp $
+ * $Id: Main.java,v 1.3 2003-07-04 14:25:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class Main
             version.startsWith("1.2") || version.startsWith("1.3")) {
             System.err.println("");
             System.err.print("J requires Java 1.4 or later.");
-            System.err.println(" (Java 1.4.1_03 is recommended.)");
+            System.err.println(" (Java 1.4.2 is recommended.)");
             System.err.println("");
             System.exit(1);
         }
