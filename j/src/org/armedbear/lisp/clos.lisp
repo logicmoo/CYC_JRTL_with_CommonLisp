@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.14 2003-12-08 20:06:08 piso Exp $
+;;; $Id: clos.lisp,v 1.15 2003-12-08 20:54:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -976,7 +976,7 @@
     (setf (method-lambda-list method) lambda-list)
     (setf (method-qualifiers method) qualifiers)
     (setf (method-specializers method) specializers)
-    (setf (method-body method) body)
+    (setf (method-body method) (precompile-form body nil))
     (setf (method-environment method) environment)
     (setf (method-generic-function method) nil)
     (setf (method-function method)
@@ -1284,7 +1284,7 @@
      `(lambda (args next-emfun)
         (flet ((call-next-method (&rest cnm-args)
                                  (if (null next-emfun)
-                                     (error "no next method for the generic function ~S"
+                                     (error "no next method for generic function ~S"
                                             (method-generic-function ',method))
                                      (funcall next-emfun (or cnm-args args))))
                (next-method-p ()
