@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandTable.java,v 1.46 2004-05-12 18:01:33 piso Exp $
+ * $Id: CommandTable.java,v 1.47 2004-08-03 21:36:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -246,6 +246,7 @@ public class CommandTable
             addCommand("editRegister", "Registers");
             addCommand("entabRegion", "RegionCommands");
             addCommand("evalDefunLisp", "LispMode");
+            addCommand("compileDefunLisp", "LispMode");
             addCommand("evalRegionLisp", "LispMode");
             addCommand("expand", "Expansion");
             addCommand("find", "FindDialog");
