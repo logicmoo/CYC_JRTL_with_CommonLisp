@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.38 2003-08-05 00:53:58 piso Exp $
+ * $Id: Autoload.java,v 1.39 2003-08-09 23:44:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +175,6 @@ public final class Autoload extends Function
         autoload("import", "PackageFunctions");
         autoload("list-all-packages", "PackageFunctions");
         autoload("make-string-output-stream", "StringOutputStream");
-//         autoload("make-two-way-stream", "TwoWayStream");
         autoload("package-name", "PackageFunctions");
         autoload("package-nicknames", "PackageFunctions");
         autoload("package-shadowing-symbols", "PackageFunctions");
@@ -189,8 +188,6 @@ public final class Autoload extends Function
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
         autoload("sxhash", "HashTable");
-//         autoload("two-way-stream-input-stream", "TwoWayStream");
-//         autoload("two-way-stream-output-stream", "TwoWayStream");
         autoload("unexport", "PackageFunctions");
         autoload("unuse-package", "PackageFunctions");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
@@ -199,6 +196,8 @@ public final class Autoload extends Function
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
+        autoload(PACKAGE_SYS, "%open-input-file", "open");
+        autoload(PACKAGE_SYS, "%open-output-file", "open");
         autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-equal", "StringFunctions");
