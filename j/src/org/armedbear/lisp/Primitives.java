@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.614 2004-03-16 20:30:45 piso Exp $
+ * $Id: Primitives.java,v 1.615 2004-03-17 12:40:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2754,21 +2754,19 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### find-symbol
-    // find-symbol string &optional package => symbol, status
+    // ### find-symbol string &optional package => symbol, status
     private static final Primitive FIND_SYMBOL =
-        new Primitive("find-symbol","string &optional package") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        new Primitive("find-symbol", "string &optional package")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (args.length == 0 || args.length > 2)
-                signal(new WrongNumberOfArgumentsException(this));
-            String name = args[0].getStringValue();
-            Package pkg;
-            if (args.length == 2)
-                pkg = coerceToPackage(args[1]);
-            else
-                pkg = getCurrentPackage();
-            return pkg.findSymbol(name);
+            return getCurrentPackage().findSymbol(arg.getStringValue());
+        }
+
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return coerceToPackage(second).findSymbol(first.getStringValue());
         }
     };
 
@@ -2805,6 +2803,7 @@ public final class Primitives extends Lisp
         {
             return getf(plist, indicator, NIL);
         }
+
         public LispObject execute(LispObject plist, LispObject indicator,
                                   LispObject defaultValue)
             throws ConditionThrowable
@@ -2828,6 +2827,7 @@ public final class Primitives extends Lisp
                 return signal(new TypeError(symbol, Symbol.SYMBOL));
             }
         }
+
         public LispObject execute(LispObject symbol, LispObject indicator,
                                   LispObject defaultValue)
             throws ConditionThrowable
