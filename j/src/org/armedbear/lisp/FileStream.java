@@ -1,8 +1,8 @@
 /*
  * FileStream.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.22 2004-10-19 00:14:30 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: FileStream.java,v 1.23 2005-04-04 18:47:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,12 +167,14 @@ public final class FileStream extends Stream
     protected int _readChar() throws ConditionThrowable
     {
         try {
+            int c = _readByte();
             if (Utilities.isPlatformWindows) {
-                int c = _readByte();
                 if (c == '\r') {
                     int c2 = _readByte();
-                    if (c2 == '\n')
+                    if (c2 == '\n') {
+                        ++lineNumber;
                         return c2;
+                    }
                     // '\r' was not followed by '\n'
                     if (inputBuffer != null && inputBufferOffset > 0) {
                         --inputBufferOffset;
@@ -184,8 +186,12 @@ public final class FileStream extends Stream
                     }
                 }
                 return c;
-            } else
-                return _readByte();
+            }
+            if (c == '\n') {
+                ++lineNumber;
+                return c;
+            }
+            return c;
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -200,6 +206,7 @@ public final class FileStream extends Stream
             --inputBufferOffset;
             if (n != '\n')
                 return;
+            --lineNumber;
             if (!Utilities.isPlatformWindows)
                 return;
             // Check for preceding '\r'.
