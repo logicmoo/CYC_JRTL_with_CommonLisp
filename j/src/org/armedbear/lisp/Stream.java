@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.46 2004-03-12 00:37:53 piso Exp $
+ * $Id: Stream.java,v 1.47 2004-03-12 01:13:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -269,8 +269,8 @@ public class Stream extends LispObject
                 return readComma();
             case '`':
                 return readBackquote();
-            case '#':
-                return readSharp();
+//             case '#':
+//                 return readSharp();
             case '|':
                 // Let readToken() process the multiple escape.
                 _unreadChar(c);
@@ -404,7 +404,7 @@ public class Stream extends LispObject
         return new Cons(Symbol.BACKQUOTE, new Cons(read(true, NIL, true)));
     }
 
-    private LispObject readSharp() throws ConditionThrowable
+    public LispObject readSharp() throws ConditionThrowable
     {
         int numArg = -1;
         char c;
