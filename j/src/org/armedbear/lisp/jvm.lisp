@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.297 2004-10-23 15:01:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.298 2004-10-23 19:25:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1598,7 +1598,6 @@
   (let ((g (gethash n *declared-fixnums*)))
     (unless g
       (let ((*code* *static-code*))
-;;         (setf g (symbol-name (gensym)))
         (setf g (%format nil "FIXNUM_~A~D"
                          (if (minusp n) "MINUS_" "")
                          (abs n)))
@@ -1893,13 +1892,23 @@
 
 (defun compile-function-call-1 (fun args &key (target *val*))
   (let ((s (gethash fun unary-operators)))
-    (if s
-        (progn
-          (compile-form (first args) :target :stack)
-          (maybe-emit-clear-values (first args))
-          (emit-invoke-method s :target target)
-          t)
-        nil)))
+    (cond (s
+           (progn
+             (compile-form (first args) :target :stack)
+             (maybe-emit-clear-values (first args))
+             (emit-invoke-method s :target target)
+             t))
+          ((eq fun 'LIST)
+           (emit 'new +lisp-cons-class+)
+           (emit 'dup)
+           (compile-form (first args) :target :stack)
+           (emit-invokespecial +lisp-cons-class+
+                               "<init>"
+                               "(Lorg/armedbear/lisp/LispObject;)V"
+                               -2)
+           t)
+          (t
+           nil))))
 
 (defparameter binary-operators (make-hash-table :test 'eq))
 
