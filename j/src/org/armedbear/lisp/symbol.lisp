@@ -1,7 +1,7 @@
 ;;; symbol.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: symbol.lisp,v 1.5 2003-08-15 14:31:41 piso Exp $
+;;; $Id: symbol.lisp,v 1.6 2003-09-14 18:01:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,9 +37,9 @@
   (do ((plist place (cddr plist)))
       ((null plist) default)
     (cond ((atom (cdr plist))
-	   (error 'type-error "malformed property list: ~S" place)
+	   (error 'type-error "malformed property list: ~S" place))
 	  ((eq (car plist) indicator)
-	   (return (cadr plist)))))))
+	   (return (cadr plist))))))
 
 (defun %putf (place property new-value)
   (do ((plist place (cddr plist)))
