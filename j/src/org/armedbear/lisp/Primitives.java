@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.22 2003-02-15 16:57:37 piso Exp $
+ * $Id: Primitives.java,v 1.23 2003-02-15 17:35:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1511,6 +1511,8 @@ public final class Primitives extends Module
 
     private static boolean isConditionOfType(LispError e, LispObject type)
     {
+        if (type == Symbol.UNDEFINED_FUNCTION)
+            return e instanceof UndefinedFunctionError;
         return type == Symbol.ERROR;
     }
 
