@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.326 2004-12-28 12:29:21 piso Exp $
+;;; $Id: jvm.lisp,v 1.327 2004-12-29 01:26:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -598,6 +598,7 @@
 
 (defun u2 (n)
   (declare (optimize speed))
+  (declare (type fixnum n))
   (list (logand (ash n -8) #xff)
         (logand n #xff)))
 
@@ -968,8 +969,11 @@
              97 ; LADD
              101 ; LSUB
              116 ; INEG
+             120 ; ISHL
              121 ; LSHL
+             122 ; ISHR
              123 ; LSHR
+             126 ; IAND
              132 ; IINC
              133 ; I2L
              136 ; L2I
@@ -2483,9 +2487,6 @@
     (emit-invokevirtual +lisp-thread-class+ "execute" descriptor stack-effect)))
 
 (defun compile-function-call (form target representation)
-;;   (let ((new-form (rewrite-function-call form)))
-;;     (when (neq new-form form)
-;;       (return-from compile-function-call (compile-form new-form :target target))))
   (let ((op (car form))
         (args (cdr form)))
     (unless (symbolp op)
@@ -3962,72 +3963,94 @@
 
 (defun p2-ash (form &key (target *val*) representation)
   (dformat t "p2-ash form = ~S~%" form)
-;;   (let ((new-form (rewrite-function-call form)))
-;;     (when (neq new-form form)
-;;       (return-from compile-ash (compile-form new-form :target target))))
   (require-args form 2)
   (let* ((args (cdr form))
          (len (length args))
-         (first (first args))
-         (var (unboxed-fixnum-variable first))
-         (second (second args)))
+         (arg1 (first args))
+         (arg2 (second args))
+         (var1 (unboxed-fixnum-variable arg1))
+         (var2 (unboxed-fixnum-variable arg2))
+         )
     (cond
-     ((and var (fixnump second) (< 0 second 32))
+     ((and (numberp arg1) (numberp arg2))
       (dformat t "p2-ash case 1~%")
-      (emit-push-int var)
+      (compile-constant (ash arg1 arg2)
+                        :target target
+                        :representation representation))
+     ((and var1 (fixnump arg2) (< 0 arg2 32))
+      (dformat t "p2-ash case 2~%")
+      (emit-push-int var1)
       (emit 'i2l)
-      (emit-push-constant-int second)
+      (emit-push-constant-int arg2)
       (emit 'lshl)
       (emit-box-long)
       (emit-move-from-stack target))
-     ((and var (fixnump second) (< -32 second 0))
-      (dformat t "p2-ash case 2~%")
-      (emit-push-int var)
-      (emit 'i2l)
-      (emit-push-constant-int second)
-      (emit 'ineg)
-      (emit 'lshr)
-      (emit-box-long)
-      (emit-move-from-stack target))
-     ((fixnump second)
+     ((and var1 (fixnump arg2) (< -32 arg2 0))
       (dformat t "p2-ash case 3~%")
-      (compile-form first :target :stack)
-      (maybe-emit-clear-values first)
-      (emit-push-constant-int second)
+      (emit 'new +lisp-fixnum-class+)
+      (emit 'dup)
+      (emit-push-int var1)
+      (emit-push-constant-int (- arg2))
+      (emit 'ishr)
+      (emit-invokespecial +lisp-fixnum-class+ "<init>" "(I)V" -2)
+      (emit-move-from-stack target))
+     (var2
+      (dformat t "p2-ash case 4~%")
+      (compile-form arg1 :target :stack)
+      (maybe-emit-clear-values arg1)
+      (emit 'iload (variable-register var2))
+      (emit-invokevirtual +lisp-object-class+
+                          "ash"
+                          "(I)Lorg/armedbear/lisp/LispObject;"
+                          -1)
+      (emit-move-from-stack target))
+     ((fixnump arg2)
+      (dformat t "p2-ash case 5~%")
+      (compile-form arg1 :target :stack)
+      (maybe-emit-clear-values arg1)
+      (emit-push-constant-int arg2)
       (emit-invokevirtual +lisp-object-class+
                           "ash"
                           "(I)Lorg/armedbear/lisp/LispObject;"
                           -1)
       (emit-move-from-stack target))
      (t
-      (dformat t "p2-ash case 4~%")
+      (dformat t "p2-ash case 6~%")
       (compile-function-call form target representation)))))
 
-(defun compile-logand (form &key (target *val*) representation)
-;;   (let ((new-form (rewrite-function-call form)))
-;;     (when (neq new-form form)
-;;       (return-from compile-logand (compile-form new-form :target target))))
+(defun p2-logand (form &key (target *val*) representation)
   (let* ((args (cdr form))
          (len (length args)))
     (when (= len 2)
-      (let ((first (first args))
-            (second (second args)))
-        (when (fixnump second)
-          (compile-form first :target :stack)
-          (maybe-emit-clear-values first)
-          (emit-push-constant-int second)
+      (let* ((arg1 (first args))
+             (arg2 (second args))
+             (var1 (unboxed-fixnum-variable arg1)))
+        (cond
+         ((and var1 (fixnump arg2))
+          (unless (eq representation :unboxed-fixnum)
+            (emit 'new +lisp-fixnum-class+)
+            (emit 'dup))
+          (emit 'iload (variable-register var1))
+          (emit-push-constant-int arg2)
+          (emit 'iand)
+          (unless (eq representation :unboxed-fixnum)
+            (emit-invokespecial +lisp-fixnum-class+ "<init>" "(I)V" -2))
+          (emit-move-from-stack target representation)
+          (return-from p2-logand t))
+         ((fixnump arg2)
+          (compile-form arg1 :target :stack)
+          (maybe-emit-clear-values arg1)
+          (emit-push-constant-int arg2)
           (emit-invokevirtual +lisp-object-class+
                               "logand"
                               "(I)Lorg/armedbear/lisp/LispObject;"
                               -1)
           (emit-move-from-stack target)
-          (return-from compile-logand t)))))
+          (return-from p2-logand t))))))
   (compile-function-call form target representation))
 
 (defun compile-length (form &key (target *val*) representation)
-  (unless (= (length form) 2)
-    (error 'simple-program-error
-           :format-control "Wrong number of arguments for LENGTH."))
+  (require-args form 1)
   (let ((arg (cadr form)))
     (compile-form arg :target :stack)
     (maybe-emit-clear-values arg)
@@ -4045,9 +4068,7 @@
     (emit-move-from-stack target representation)))
 
 (defun compile-nth (form &key (target *val*) representation)
-  (unless (= (length form) 3)
-    (error 'program-error
-           :format-control "Wrong number of arguments for NTH."))
+  (require-args form 2)
   (let ((index-form (second form))
         (list-form (third form)))
     (compile-form index-form :target :stack :representation :unboxed-fixnum)
@@ -4065,9 +4086,6 @@
     (emit-move-from-stack target representation)))
 
 (defun compile-plus (form &key (target *val*) representation)
-;;   (let ((new-form (rewrite-function-call form)))
-;;     (when (neq new-form form)
-;;       (return-from compile-plus (compile-form new-form :target target))))
   (case (length form)
     (3
      (let* ((args (cdr form))
@@ -4181,9 +4199,6 @@
      (compile-function-call form target representation))))
 
 (defun compile-minus (form &key (target *val*) representation)
-;;   (let ((new-form (rewrite-function-call form)))
-;;     (when (neq new-form form)
-;;       (return-from compile-minus (compile-form new-form :target target))))
   (case (length form)
     (3
      (let* ((args (cdr form))
@@ -4348,9 +4363,6 @@
   (emit-move-from-stack target))
 
 (defun compile-values (form &key (target *val*) representation)
-;;   (let ((new-form (rewrite-function-call form)))
-;;     (when (neq new-form form)
-;;       (return-from compile-values (compile-form new-form :target target))))
   (let ((args (cdr form)))
     (case (length args)
       (1
@@ -5207,7 +5219,6 @@
                              labels
                              length
                              locally
-                             logand
                              multiple-value-bind
                              multiple-value-call
                              multiple-value-list
@@ -5233,6 +5244,7 @@
 (install-p2-handler '-      'compile-minus)
 (install-p2-handler 'ash    'p2-ash)
 (install-p2-handler 'eql    'p2-eql)
+(install-p2-handler 'logand 'p2-logand)
 (install-p2-handler 'not    'compile-not/null)
 (install-p2-handler 'null   'compile-not/null)
 (install-p2-handler 'the    'p2-the)
