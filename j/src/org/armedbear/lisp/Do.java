@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Do.java,v 1.4 2003-11-19 16:16:48 piso Exp $
+ * $Id: Do.java,v 1.5 2003-12-14 17:11:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@ public final class Do extends Lisp
             } else
                 break;
         }
-        Environment ext = new Environment(env);
+        final Environment ext = new Environment(env);
         for (int i = 0; i < length; i++) {
             Symbol symbol = variables[i];
             LispObject value =
@@ -110,7 +110,6 @@ public final class Do extends Lisp
         }
         final int depth = thread.getStackDepth();
         // Look for tags.
-        Binding tags = null;
         LispObject remaining = body;
         while (remaining != NIL) {
             LispObject current = remaining.car();
@@ -118,7 +117,7 @@ public final class Do extends Lisp
             if (current instanceof Cons)
                 continue;
             // It's a tag.
-            tags = new Binding(current, remaining, tags);
+            ext.addTagBinding(current, remaining);
         }
         try {
             // Implicit block.
@@ -134,16 +133,10 @@ public final class Do extends Lisp
                         try {
                             // Handle GO inline if possible.
                             if (current.car() == Symbol.GO) {
-                                LispObject code = null;
                                 LispObject tag = current.cadr();
-                                for (Binding binding = tags; binding != null; binding = binding.next) {
-                                    if (binding.symbol.eql(tag)) {
-                                        code = binding.value;
-                                        break;
-                                    }
-                                }
-                                if (code != null) {
-                                    remaining = code;
+                                Binding binding = ext.getTagBinding(tag);
+                                if (binding != null && binding.value != null) {
+                                    remaining = binding.value;
                                     continue;
                                 }
                                 throw new Go(tag);
@@ -151,16 +144,10 @@ public final class Do extends Lisp
                             eval(current, ext, thread);
                         }
                         catch (Go go) {
-                            LispObject code = null;
                             LispObject tag = go.getTag();
-                            for (Binding binding = tags; binding != null; binding = binding.next) {
-                                if (binding.symbol.eql(tag)) {
-                                    code = binding.value;
-                                    break;
-                                }
-                            }
-                            if (code != null) {
-                                remaining = code;
+                            Binding binding = ext.getTagBinding(tag);
+                            if (binding != null && binding.value != null) {
+                                remaining = binding.value;
                                 thread.setStackDepth(depth);
                                 continue;
                             }
