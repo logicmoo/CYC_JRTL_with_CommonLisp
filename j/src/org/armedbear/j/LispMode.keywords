@@ -10,6 +10,7 @@
 >
 >=
 abort
+acons
 adjoin
 and
 append
@@ -326,6 +327,7 @@ package-shadowing-symbols
 package-use-list
 package-used-by-list
 packagep
+pairlis
 parse-integer
 parse-namestring
 pathname
