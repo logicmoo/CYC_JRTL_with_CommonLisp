@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.196 2004-01-09 16:45:37 piso Exp $
+ * $Id: Lisp.java,v 1.197 2004-01-09 18:02:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -309,12 +309,11 @@ public abstract class Lisp
             try {
                 result = eval(object, environment, thread);
             }
+            catch (OutOfMemoryError e) {
+                return signal(new LispError("Out of memory."));
+            }
             catch (StackOverflowError e) {
-                if (debug)
-                    thread.saveBacktrace();
-                signal(new LispError("stack overflow"));
-                // Not reached.
-                return NIL;
+                return signal(new LispError("Stack overflow."));
             }
             catch (ConditionThrowable t) {
                 if (debug)
