@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.22 2003-06-16 15:26:52 piso Exp $
+ * $Id: Utilities.java,v 1.23 2003-06-25 18:10:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 public final class Utilities implements Constants
 {
@@ -1691,6 +1693,35 @@ public final class Utilities implements Constants
             catch (InvocationTargetException e) {
                 Log.error(e);
             }
+        }
+    }
+
+    // Sun/Blackdown 1.4.x.
+    private static String defaultXMLReaderImpl =
+        "org.apache.crimson.parser.XMLReaderImpl";
+
+    public static synchronized XMLReader getDefaultXMLReader()
+    {
+        if (defaultXMLReaderImpl != null) {
+            try {
+                return XMLReaderFactory.createXMLReader(defaultXMLReaderImpl);
+            }
+            catch (Exception e) {
+                // Not available (IBM 1.4.0/1.4.1).
+                Log.debug(defaultXMLReaderImpl + " is not available");
+                // Don't use this code path again!
+                defaultXMLReaderImpl = null;
+                // Fall through...
+            }
+        }
+        try {
+            // This should work with IBM 1.4.0/1.4.1.
+            return XMLReaderFactory.createXMLReader();
+        }
+        catch (Throwable t) {
+            // We've got a real problem...
+            Log.error(t);
+            return null;
         }
     }
 }
