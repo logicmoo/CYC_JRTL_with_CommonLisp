@@ -2,7 +2,7 @@
  * ModeList.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: ModeList.java,v 1.18 2004-04-12 23:03:37 piso Exp $
+ * $Id: ModeList.java,v 1.19 2004-06-08 19:20:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public final class ModeList implements Constants
         addEntry(JAVASCRIPT_MODE, JAVASCRIPT_MODE_NAME, "JavaScriptMode", true, ".+\\.js");
         addEntry(JAVA_MODE, JAVA_MODE_NAME, "JavaMode", true, ".+\\.java|.+\\.jad");
         addEntry(JDB_MODE, JDB_MODE_NAME, "JdbMode", false, null);
-        addEntry(LISP_MODE, LISP_MODE_NAME, "LispMode", true, ".+\\.[ej]l|.*\\.li?sp|.*\\.cl|.*\\.emacs");
+        addEntry(LISP_MODE, LISP_MODE_NAME, "LispMode", true, ".+\\.[ej]l|.*\\.li?sp|.*\\.cl|.*\\.emacs|.*\\.asd");
         addEntry(LISP_SHELL_MODE, LISP_SHELL_MODE_NAME, "LispShellMode", false, null);
         addEntry(LIST_OCCURRENCES_MODE, LIST_OCCURRENCES_MODE_NAME, "ListOccurrencesMode", false, null);
         addEntry(LIST_REGISTERS_MODE, LIST_REGISTERS_MODE_NAME, "ListRegistersMode", false, null);
