@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.17 2004-01-31 19:24:59 piso Exp $
+ * $Id: Stream.java,v 1.18 2004-01-31 20:13:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,12 +112,12 @@ public class Stream extends LispObject
         setInteractive(interactive);
     }
 
-    public boolean isInputStream()
+    public boolean isInputStream() throws ConditionThrowable
     {
         return isInputStream;
     }
 
-    public boolean isOutputStream()
+    public boolean isOutputStream() throws ConditionThrowable
     {
         return isOutputStream;
     }
