@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.757 2005-04-07 14:41:54 piso Exp $
+ * $Id: Primitives.java,v 1.758 2005-04-07 23:36:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2290,7 +2290,7 @@ public final class Primitives extends Lisp
             } else if (function instanceof Closure && !(function instanceof CompiledFunction)) {
                 Closure closure = (Closure) function;
                 LispObject expr = closure.getBody();
-                expr = new Cons(closure.getParameterList(), expr);
+                expr = new Cons(closure.getLambdaList(), expr);
                 expr = new Cons(Symbol.LAMBDA, expr);
                 value1 = expr;
                 Environment env = closure.getEnvironment();
