@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.756 2005-04-05 15:32:25 piso Exp $
+ * $Id: Primitives.java,v 1.757 2005-04-07 14:41:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4038,6 +4038,22 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### lambda-name
+    private static final Primitive LAMBDA_NAME =
+        new Primitive("lambda-name", PACKAGE_SYS, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof Operator) {
+                return ((Operator)arg).getLambdaName();
+            }
+            if (arg instanceof GenericFunction) {
+                return ((GenericFunction)arg).getGenericFunctionName();
+            }
+            return signal(new TypeError(arg, Symbol.FUNCTION));
+        }
+    };
+
     // ### %set-lambda-name
     private static final Primitive _SET_LAMBDA_NAME =
         new Primitive("%set-lambda-name", PACKAGE_SYS, false)
@@ -4045,8 +4061,8 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            if (first instanceof Function) {
-                ((Function)first).setLambdaName(second);
+            if (first instanceof Operator) {
+                ((Operator)first).setLambdaName(second);
                 return second;
             }
             if (first instanceof GenericFunction) {
