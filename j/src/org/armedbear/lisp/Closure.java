@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.95 2005-04-05 22:58:20 piso Exp $
+ * $Id: Closure.java,v 1.96 2005-04-07 23:34:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -322,7 +322,7 @@ public class Closure extends Function
         return super.typep(typeSpecifier);
     }
 
-    public final LispObject getParameterList()
+    public final LispObject getLambdaList()
     {
         return lambdaList;
     }
@@ -1040,6 +1040,35 @@ public class Closure extends Function
                 value = eval(parameter.initForm, env, thread);
             bind(sym, value, env);
         }
+    }
+
+    public String writeToString() throws ConditionThrowable
+    {
+        LispObject name = getLambdaName();
+        StringBuffer sb = new StringBuffer("#<FUNCTION ");
+        if (name != null && name != NIL) {
+            sb.append(name.writeToString());
+        } else {
+            sb.append("(LAMBDA ");
+            if (lambdaList == NIL) {
+                sb.append("()");
+            } else {
+                final LispThread thread = LispThread.currentThread();
+                SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+                thread.bindSpecial(_PRINT_LENGTH_, Fixnum.THREE);
+                try {
+                    sb.append(lambdaList.writeToString());
+                }
+                finally {
+                    thread.lastSpecialBinding = lastSpecialBinding;
+                }
+            }
+            sb.append(")");
+        }
+        sb.append(" {");
+        sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
+        sb.append("}>");
+        return sb.toString();
     }
 
     // ### closure-environment closure => environment
