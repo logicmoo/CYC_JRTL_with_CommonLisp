@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.48 2005-04-06 01:10:36 piso Exp $
+ * $Id: Function.java,v 1.49 2005-04-07 23:35:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,8 +165,7 @@ public abstract class Function extends Operator
     {
         LispObject name = getLambdaName();
         if (name != null && name != NIL) {
-            StringBuffer sb = new StringBuffer("#<FUNCTION");
-            sb.append(' ');
+            StringBuffer sb = new StringBuffer("#<FUNCTION ");
             sb.append(name.writeToString());
             sb.append(" {");
             sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
