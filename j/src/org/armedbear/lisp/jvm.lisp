@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.419 2005-04-05 22:59:37 piso Exp $
+;;; $Id: jvm.lisp,v 1.420 2005-04-07 23:32:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2020,7 +2020,16 @@
     (setf (method-max-locals constructor) 1)
     (cond ((equal super +lisp-compiled-function-class+)
            (emit 'aload_0) ;; this
-           (emit 'aconst_null) ;; name
+;;            (emit 'aconst_null) ;; name
+
+           (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
+                  (emit 'ldc (pool-string (symbol-name lambda-name)))
+                  (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
+                  (emit-invokestatic +lisp-class+ "internInPackage"
+                                     (list +java-string+ +java-string+) +lisp-symbol+))
+                 (t
+                  (emit 'aconst_null)))
+
            (let* ((*print-level* nil)
                   (*print-length* nil)
                   (s (sys::%format nil "~S" args)))
@@ -2034,7 +2043,7 @@
                                           +lisp-object+ +lisp-environment+)))
           ((equal super +lisp-primitive-class+)
            (emit 'aload_0) ; this
-           (cond ((and (symbolp lambda-name) (symbol-package lambda-name))
+           (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
                   (emit 'ldc (pool-string (symbol-name lambda-name)))
                   (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
                   (emit-invokestatic +lisp-class+ "internInPackage"
