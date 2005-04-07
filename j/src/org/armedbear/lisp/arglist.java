@@ -1,8 +1,8 @@
 /*
  * arglist.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: arglist.java,v 1.15 2005-04-04 19:32:24 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: arglist.java,v 1.16 2005-04-07 23:33:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 public final class arglist extends Lisp
 {
-    private static final Operator getFunctional(LispObject obj)
+    private static final Operator getOperator(LispObject obj)
         throws ConditionThrowable
     {
         if (obj instanceof Operator)
@@ -42,7 +42,7 @@ public final class arglist extends Lisp
                 LispObject other =
                     get(checkSymbol(obj), Symbol.MACROEXPAND_MACRO, NIL);
                 if (other != null)
-                    return getFunctional(other);
+                    return getOperator(other);
                 else
                     return null;
             }
@@ -58,10 +58,10 @@ public final class arglist extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispThread thread = LispThread.currentThread();
-            Operator functional = getFunctional(arg);
+            Operator operator = getOperator(arg);
             LispObject arglist = null;
-            if (functional != null)
-                arglist = functional.getArglist();
+            if (operator != null)
+                arglist = operator.getArglist();
             final LispObject value1, value2;
             if (arglist instanceof AbstractString) {
                 String s = arglist.getStringValue();
@@ -77,7 +77,7 @@ public final class arglist extends Lisp
                 finally {
                     thread.lastSpecialBinding = lastSpecialBinding;
                 }
-                functional.setArglist(arglist);
+                operator.setArglist(arglist);
             }
             if (arglist != null) {
                 value1 = arglist;
