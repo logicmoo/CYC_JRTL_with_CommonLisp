@@ -1,8 +1,8 @@
 /*
  * Package.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Package.java,v 1.63 2005-04-08 17:27:28 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: Package.java,v 1.64 2005-04-08 21:03:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class Package extends LispObject
 
     private HashMap shadowingSymbols;
     private ArrayList nicknames;
-    private final ArrayList useList = new ArrayList();
+    private LispObject useList = null;
     private ArrayList usedByList = null;
 
     // Anonymous package.
@@ -174,11 +174,15 @@ public final class Package extends LispObject
         if (symbol != null)
             return symbol;
         // Look in external symbols of used packages.
-        for (Iterator it = useList.iterator(); it.hasNext();) {
-            Package pkg = (Package) it.next();
-            symbol = pkg.findExternalSymbol(name);
-            if (symbol != null)
-                return symbol;
+        if (useList instanceof Cons) {
+            LispObject usedPackages = useList;
+            while (usedPackages != NIL) {
+                Package pkg = (Package) usedPackages.car();
+                symbol = pkg.findExternalSymbol(name);
+                if (symbol != null)
+                    return symbol;
+                usedPackages = usedPackages.cdr();
+            }
         }
         // Not found.
         return null;
@@ -196,11 +200,15 @@ public final class Package extends LispObject
         if (symbol != null)
             return thread.setValues(symbol, Keyword.INTERNAL);
         // Look in external symbols of used packages.
-        for (Iterator it = useList.iterator(); it.hasNext();) {
-            Package pkg = (Package) it.next();
-            symbol = pkg.findExternalSymbol(name);
-            if (symbol != null)
-                return thread.setValues(symbol, Keyword.INHERITED);
+        if (useList instanceof Cons) {
+            LispObject usedPackages = useList;
+            while (usedPackages != NIL) {
+                Package pkg = (Package) usedPackages.car();
+                symbol = pkg.findExternalSymbol(name);
+                if (symbol != null)
+                    return thread.setValues(symbol, Keyword.INHERITED);
+                usedPackages = usedPackages.cdr();
+            }
         }
         // Not found.
         return thread.setValues(NIL, NIL);
@@ -327,11 +335,20 @@ public final class Package extends LispObject
         if (symbol != null)
             return symbol;
         // Look in external symbols of used packages.
-        for (Iterator it = useList.iterator(); it.hasNext();) {
-            Package pkg = (Package) it.next();
-            symbol = pkg.findExternalSymbol(symbolName, hash);
-            if (symbol != null)
-                return symbol;
+        if (useList instanceof Cons) {
+            try {
+                LispObject usedPackages = useList;
+                while (usedPackages != NIL) {
+                    Package pkg = (Package) usedPackages.car();
+                    symbol = pkg.findExternalSymbol(symbolName, hash);
+                    if (symbol != null)
+                        return symbol;
+                    usedPackages = usedPackages.cdr();
+                }
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+            }
         }
         // Not found.
         return addSymbol(symbolName, hash);
@@ -347,11 +364,20 @@ public final class Package extends LispObject
         if (symbol != null)
             return (Symbol) thread.setValues(symbol, Keyword.INTERNAL);
         // Look in external symbols of used packages.
-        for (Iterator it = useList.iterator(); it.hasNext();) {
-            Package pkg = (Package) it.next();
-            symbol = pkg.findExternalSymbol(name);
-            if (symbol != null)
-                return (Symbol) thread.setValues(symbol, Keyword.INHERITED);
+        if (useList instanceof Cons) {
+            try {
+                LispObject usedPackages = useList;
+                while (usedPackages != NIL) {
+                    Package pkg = (Package) usedPackages.car();
+                    symbol = pkg.findExternalSymbol(name);
+                    if (symbol != null)
+                        return (Symbol) thread.setValues(symbol, Keyword.INHERITED);
+                    usedPackages = usedPackages.cdr();
+                }
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+            }
         }
         // Not found.
         return (Symbol) thread.setValues(addSymbol(name), NIL);
@@ -371,15 +397,17 @@ public final class Package extends LispObject
             export(symbol);
             return symbol;
         }
-        if (useList.size() > 0) {
+        if (useList instanceof Cons) {
             // Look in external symbols of used packages.
-            for (Iterator it = useList.iterator(); it.hasNext();) {
-                Package pkg = (Package) it.next();
+            LispObject usedPackages = useList;
+            while (usedPackages != NIL) {
+                Package pkg = (Package) usedPackages.car();
                 symbol = pkg.findExternalSymbol(name, hash);
                 if (symbol != null) {
                     export(symbol);
                     return symbol;
                 }
+                usedPackages = usedPackages.cdr();
             }
         }
         // Not found.
@@ -404,22 +432,26 @@ public final class Package extends LispObject
             // Check for conflicts that might be exposed in used package list
             // if we remove the shadowing symbol.
             Symbol sym = null;
-            for (Iterator it = useList.iterator(); it.hasNext();) {
-                Package pkg = (Package) it.next();
-                Symbol s = pkg.findExternalSymbol(symbolName);
-                if (s != null) {
-                    if (sym == null)
-                        sym = s;
-                    else if (sym != s) {
-                        StringBuffer sb =
-                            new StringBuffer("uninterning the symbol ");
-                        sb.append(symbol.getQualifiedName());
-                        sb.append(" causes a name conflict between ");
-                        sb.append(sym.getQualifiedName());
-                        sb.append(" and ");
-                        sb.append(s.getQualifiedName());
-                        return signal(new PackageError(sb.toString()));
+            if (useList instanceof Cons) {
+                LispObject usedPackages = useList;
+                while (usedPackages != NIL) {
+                    Package pkg = (Package) usedPackages.car();
+                    Symbol s = pkg.findExternalSymbol(symbol.name);
+                    if (s != null) {
+                        if (sym == null)
+                            sym = s;
+                        else if (sym != s) {
+                            StringBuffer sb =
+                                new StringBuffer("Uninterning the symbol ");
+                            sb.append(symbol.getQualifiedName());
+                            sb.append(" causes a name conflict between ");
+                            sb.append(sym.getQualifiedName());
+                            sb.append(" and ");
+                            sb.append(s.getQualifiedName());
+                            return signal(new PackageError(sb.toString()));
+                        }
                     }
+                    usedPackages = usedPackages.cdr();
                 }
             }
         }
@@ -534,12 +566,16 @@ public final class Package extends LispObject
             }
         } else {
             // Signal an error if symbol is not accessible.
-            for (Iterator it = useList.iterator(); it.hasNext();) {
-                Package pkg = (Package) it.next();
-                if (pkg.findExternalSymbol(symbolName) == symbol)
-                    return; // OK.
+            if (useList instanceof Cons) {
+                LispObject usedPackages = useList;
+                while (usedPackages != NIL) {
+                    Package pkg = (Package) usedPackages.car();
+                    if (pkg.findExternalSymbol(symbolName) == symbol)
+                        return; // OK.
+                    usedPackages = usedPackages.cdr();
+                }
             }
-            StringBuffer sb = new StringBuffer("the symbol ");
+            StringBuffer sb = new StringBuffer("The symbol ");
             sb.append(symbol.getQualifiedName());
             sb.append(" is not accessible in package ");
             sb.append(name);
@@ -586,12 +622,16 @@ public final class Package extends LispObject
                 where = Keyword.INTERNAL;
             } else {
                 // Look in external symbols of used packages.
-                for (Iterator it = useList.iterator(); it.hasNext();) {
-                    Package pkg = (Package) it.next();
-                    sym = pkg.findExternalSymbol(symbolName);
-                    if (sym != null) {
-                        where = Keyword.INHERITED;
-                        break;
+                if (useList instanceof Cons) {
+                    LispObject usedPackages = useList;
+                    while (usedPackages != NIL) {
+                        Package pkg = (Package) usedPackages.car();
+                        sym = pkg.findExternalSymbol(symbol.name);
+                        if (sym != null) {
+                            where = Keyword.INHERITED;
+                            break;
+                        }
+                        usedPackages = usedPackages.cdr();
                     }
                 }
             }
@@ -617,7 +657,9 @@ public final class Package extends LispObject
     // symbols of PACKAGE."
     public void usePackage(Package pkg) throws ConditionThrowable
     {
-        if (!useList.contains(pkg)) {
+        if (useList == null)
+            useList = NIL;
+        if (!memq(pkg, useList)) {
             // "USE-PACKAGE checks for name conflicts between the newly
             // imported symbols and those already accessible in package."
             List symbols = pkg.getExternalSymbols();
@@ -635,15 +677,7 @@ public final class Package extends LispObject
                     }
                 }
             }
-            _usePackage(pkg);
-        }
-    }
-
-    // Adds pkg to the use list of this package.
-    public void _usePackage(Package pkg)
-    {
-        if (!useList.contains(pkg)) {
-            useList.add(pkg);
+            useList = useList.push(pkg);
             // Add this package to the used-by list of pkg.
             if (pkg.usedByList != null)
                 Debug.assertTrue(!pkg.usedByList.contains(this));
@@ -653,13 +687,23 @@ public final class Package extends LispObject
         }
     }
 
-    public void unusePackage(Package pkg)
+    public void unusePackage(Package pkg) throws ConditionThrowable
     {
-        if (useList.contains(pkg)) {
-            useList.remove(pkg);
-            Debug.assertTrue(pkg.usedByList != null);
-            Debug.assertTrue(pkg.usedByList.contains(this));
-            pkg.usedByList.remove(this);
+        if (useList instanceof Cons) {
+            if (memq(pkg, useList)) {
+                // FIXME Modify the original list instead of copying it!
+                LispObject newList = NIL;
+                while (useList != NIL) {
+                    if (useList.car() != pkg)
+                        newList = newList.push(useList.car());
+                    useList = useList.cdr();
+                }
+                useList = newList.nreverse();
+                Debug.assertTrue(!memq(pkg, useList));
+                Debug.assertTrue(pkg.usedByList != null);
+                Debug.assertTrue(pkg.usedByList.contains(this));
+                pkg.usedByList.remove(this);
+            }
         }
     }
 
@@ -698,17 +742,14 @@ public final class Package extends LispObject
 
     public LispObject getUseList()
     {
-        LispObject list = NIL;
-        for (Iterator it = useList.iterator(); it.hasNext();) {
-            Package pkg = (Package) it.next();
-            list = new Cons(pkg, list);
-        }
-        return list;
+        if (useList == null)
+            useList = NIL;
+        return useList;
     }
 
-    public boolean uses(LispObject pkg)
+    public boolean uses(LispObject pkg) throws ConditionThrowable
     {
-        return useList.contains(pkg);
+        return (useList instanceof Cons) && memq(pkg, useList);
     }
 
     public LispObject getUsedByList()
@@ -745,13 +786,22 @@ public final class Package extends LispObject
         ArrayList list = new ArrayList();
         list.addAll(internalSymbols.getSymbols());
         list.addAll(externalSymbols.getSymbols());
-        for (Iterator packageIter = useList.iterator(); packageIter.hasNext();) {
-            Package pkg = (Package) packageIter.next();
-            List symbols = pkg.externalSymbols.getSymbols();
-            for (int i = 0; i < symbols.size(); i++) {
-                Symbol symbol = (Symbol) symbols.get(i);
-                if (shadowingSymbols == null || shadowingSymbols.get(symbol.getName()) == null)
-                    list.add(symbol);
+        if (useList instanceof Cons) {
+            try {
+                LispObject usedPackages = useList;
+                while (usedPackages != NIL) {
+                    Package pkg = (Package) usedPackages.car();
+                    List symbols = pkg.externalSymbols.getSymbols();
+                    for (int i = 0; i < symbols.size(); i++) {
+                        Symbol symbol = (Symbol) symbols.get(i);
+                        if (shadowingSymbols == null || shadowingSymbols.get(symbol.getName()) == null)
+                            list.add(symbol);
+                    }
+                    usedPackages = usedPackages.cdr();
+                }
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
             }
         }
         return list;
@@ -778,16 +828,25 @@ public final class Package extends LispObject
     public synchronized LispObject PACKAGE_INHERITED_SYMBOLS()
     {
         LispObject list = NIL;
-        for (Iterator packageIter = useList.iterator(); packageIter.hasNext();) {
-            Package pkg = (Package) packageIter.next();
-            List externals = pkg.getExternalSymbols();
-            for (int i = externals.size(); i-- > 0;) {
-                Symbol symbol = (Symbol) externals.get(i);
-                if (shadowingSymbols != null && shadowingSymbols.get(symbol.getName()) != null)
-                    continue;
-                if (externalSymbols.get(symbol.name) == symbol)
-                    continue;
-                list = new Cons(symbol, list);
+        if (useList instanceof Cons) {
+            try {
+                LispObject usedPackages = useList;
+                while (usedPackages != NIL) {
+                    Package pkg = (Package) usedPackages.car();
+                    List externals = pkg.getExternalSymbols();
+                    for (int i = externals.size(); i-- > 0;) {
+                        Symbol symbol = (Symbol) externals.get(i);
+                        if (shadowingSymbols != null && shadowingSymbols.get(symbol.getName()) != null)
+                            continue;
+                        if (externalSymbols.get(symbol.name) == symbol)
+                            continue;
+                        list = new Cons(symbol, list);
+                    }
+                    usedPackages = usedPackages.cdr();
+                }
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
             }
         }
         return list;

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.338 2005-04-08 17:06:55 piso Exp $
+ * $Id: Lisp.java,v 1.339 2005-04-08 21:03:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,8 @@ public abstract class Lisp
         Packages.createPackage("COMMON-LISP", 1024);
     public static final Package PACKAGE_CL_USER =
         Packages.createPackage("COMMON-LISP-USER", 1024);
+    public static final Package PACKAGE_KEYWORD =
+        Packages.createPackage("KEYWORD", 1024);
     public static final Package PACKAGE_SYS =
         Packages.createPackage("SYSTEM");
     public static final Package PACKAGE_TPL =
@@ -56,6 +58,11 @@ public abstract class Lisp
         Packages.createPackage("PROFILER");
     public static final Package PACKAGE_JAVA =
         Packages.createPackage("JAVA");
+
+    // ### nil
+    public static final LispObject NIL = new Nil(PACKAGE_CL);
+
+    // We need NIL before we can call usePackage().
     static {
         try {
             PACKAGE_CL.addNickname("CL");
@@ -83,11 +90,6 @@ public abstract class Lisp
             t.printStackTrace();
         }
     }
-    public static final Package PACKAGE_KEYWORD =
-        Packages.createPackage("KEYWORD", 1024);
-
-    // ### nil
-    public static final LispObject NIL = new Nil(PACKAGE_CL);
 
     // Constructing NIL forces the Symbol class to be loaded (since Nil extends
     // Symbol). The Symbol class defines a number of named Symbol objects so
