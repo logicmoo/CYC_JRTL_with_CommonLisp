@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.97 2005-04-08 10:45:34 piso Exp $
+ * $Id: Closure.java,v 1.98 2005-04-08 12:44:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ public class Closure extends Function
                    Environment env)
         throws ConditionThrowable
     {
-        super(name);
+        super(name, lambdaList);
         setLambdaList(lambdaList);
         Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
         boolean andKey = false;
