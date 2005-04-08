@@ -2,7 +2,7 @@
  * Primitive.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitive.java,v 1.16 2005-04-08 10:47:57 piso Exp $
+ * $Id: Primitive.java,v 1.17 2005-04-08 12:32:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,6 @@ package org.armedbear.lisp;
 
 public class Primitive extends Function
 {
-    public Primitive()
-    {
-    }
-
     public Primitive(LispObject name)
     {
         super(name);
