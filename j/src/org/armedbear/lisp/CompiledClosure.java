@@ -2,7 +2,7 @@
  * CompiledClosure.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: CompiledClosure.java,v 1.4 2005-03-19 20:00:23 piso Exp $
+ * $Id: CompiledClosure.java,v 1.5 2005-04-08 12:32:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@ public class CompiledClosure extends Function
 
     public CompiledClosure(ClosureTemplateFunction ctf, LispObject[] context)
     {
+        super(ctf.getLambdaName(), ctf.getLambdaList());
         this.ctf = ctf;
         this.context = context;
     }
