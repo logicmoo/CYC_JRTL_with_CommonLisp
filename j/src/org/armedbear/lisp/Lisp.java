@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.336 2005-04-05 15:30:27 piso Exp $
+ * $Id: Lisp.java,v 1.337 2005-04-08 11:54:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2030,6 +2030,14 @@ public abstract class Lisp
         public String writeToString()
         {
             return "#<UNBOUND>";
+        }
+    };
+
+    public static final LispObject NULL_VALUE = new LispObject()
+    {
+        public String writeToString()
+        {
+            return "null";
         }
     };
 
