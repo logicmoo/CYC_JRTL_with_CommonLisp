@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Package.java,v 1.61 2005-02-28 17:17:05 piso Exp $
+ * $Id: Package.java,v 1.62 2005-04-08 16:57:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -294,26 +294,30 @@ public final class Package extends LispObject
         }
     }
 
-    public synchronized Symbol intern(String symbolName)
+    public synchronized Symbol intern(AbstractString symbolName)
     {
-        final SimpleString name = new SimpleString(symbolName);
-        final int hash = name.sxhash();
+        final int hash = symbolName.sxhash();
         // Look in external and internal symbols of this package.
-        Symbol symbol = (Symbol) externalSymbols.get(name, hash);
+        Symbol symbol = (Symbol) externalSymbols.get(symbolName, hash);
         if (symbol != null)
             return symbol;
-        symbol = (Symbol) internalSymbols.get(name, hash);
+        symbol = (Symbol) internalSymbols.get(symbolName, hash);
         if (symbol != null)
             return symbol;
         // Look in external symbols of used packages.
         for (Iterator it = useList.iterator(); it.hasNext();) {
             Package pkg = (Package) it.next();
-            symbol = pkg.findExternalSymbol(name, hash);
+            symbol = pkg.findExternalSymbol(symbolName, hash);
             if (symbol != null)
                 return symbol;
         }
         // Not found.
-        return addSymbol(name);
+        return addSymbol(symbolName);
+    }
+
+    public synchronized Symbol intern(String symbolName)
+    {
+        return intern(new SimpleString(symbolName));
     }
 
     public synchronized Symbol intern(String name, LispThread thread)
