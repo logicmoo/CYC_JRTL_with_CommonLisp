@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.98 2005-04-08 12:44:00 piso Exp $
+ * $Id: Closure.java,v 1.99 2005-04-08 17:11:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +175,7 @@ public class Closure extends Function
                         } else {
                             var = checkSymbol(first);
                             keyword =
-                                PACKAGE_KEYWORD.intern(var.getName());
+                                PACKAGE_KEYWORD.intern(var.name);
                         }
                         obj = obj.cdr();
                         if (obj != NIL) {
@@ -1080,7 +1080,7 @@ public class Closure extends Function
             this.svar = NIL;
             this.type = type;
             keyword =
-                type == KEYWORD ? PACKAGE_KEYWORD.intern(var.getName()) : null;
+                type == KEYWORD ? PACKAGE_KEYWORD.intern(var.name) : null;
         }
 
         public Parameter(Symbol var, LispObject initForm, LispObject svar,
@@ -1093,7 +1093,7 @@ public class Closure extends Function
             this.svar = (svar != NIL) ? checkSymbol(svar) : NIL;
             this.type = type;
             keyword =
-                type == KEYWORD ? PACKAGE_KEYWORD.intern(var.getName()) : null;
+                type == KEYWORD ? PACKAGE_KEYWORD.intern(var.name) : null;
         }
 
         public Parameter(Symbol keyword, Symbol var, LispObject initForm,
