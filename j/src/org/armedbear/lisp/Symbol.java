@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.180 2005-04-08 12:33:41 piso Exp $
+ * $Id: Symbol.java,v 1.181 2005-04-08 16:58:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -408,17 +408,17 @@ public class Symbol extends LispObject
     public final String getQualifiedName()
     {
         try {
-            String s = name.getStringValue();
+            final String n = name.getStringValue();
             if (pkg == NIL)
-                return("#:".concat(s));
+                return("#:".concat(n));
             if (pkg == PACKAGE_KEYWORD)
-                return ":".concat(s);
+                return ":".concat(n);
             StringBuffer sb = new StringBuffer(((Package)pkg).getName());
-            if (((Package)pkg).findExternalSymbol(s) != null)
+            if (((Package)pkg).findExternalSymbol(name) != null)
                 sb.append(':');
             else
                 sb.append("::");
-            sb.append(s);
+            sb.append(n);
             return sb.toString();
         }
         catch (Throwable t) {
