@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.125 2005-04-05 15:33:37 piso Exp $
+ * $Id: LispObject.java,v 1.126 2005-04-08 12:34:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,8 @@ public class LispObject extends Lisp
     {
         StringBuffer sb = new StringBuffer("An object of type ");
         sb.append(typeOf().writeToString());
+        sb.append(" at #x");
+        sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
         return new SimpleString(sb);
     }
 
