@@ -2,7 +2,7 @@
  * Operator.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Operator.java,v 1.2 2005-04-05 15:34:16 piso Exp $
+ * $Id: Operator.java,v 1.3 2005-04-08 10:46:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +21,11 @@
 
 package org.armedbear.lisp;
 
-// Common superclass of Function and SpecialOperator.
 public abstract class Operator extends LispObject
 {
     protected LispObject lambdaName;
 
-    private LispObject arglist;
+    private LispObject lambdaList;
 
     public final LispObject getLambdaName()
     {
@@ -38,13 +37,21 @@ public abstract class Operator extends LispObject
         lambdaName = obj;
     }
 
-    public final LispObject getArglist()
+    public final LispObject getLambdaList()
     {
-        return arglist;
+        return lambdaList;
     }
 
-    public final void setArglist(LispObject obj)
+    public final void setLambdaList(LispObject obj)
     {
-        arglist = obj;
+        lambdaList = obj;
+    }
+
+    public LispObject getParts() throws ConditionThrowable
+    {
+        LispObject result = NIL;
+        result = result.push(new Cons("lambda-name", lambdaName));
+        result = result.push(new Cons("lambda-list", lambdaList));
+        return result.nreverse();
     }
 }

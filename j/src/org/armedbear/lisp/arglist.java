@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: arglist.java,v 1.16 2005-04-07 23:33:45 piso Exp $
+ * $Id: arglist.java,v 1.17 2005-04-08 10:49:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,16 +29,16 @@ public final class arglist extends Lisp
         if (obj instanceof Operator)
             return (Operator) obj;
         if (obj instanceof Symbol) {
-            LispObject fun = obj.getSymbolFunction();
-            if (fun instanceof Autoload) {
-                Autoload autoload = (Autoload) fun;
+            LispObject function = obj.getSymbolFunction();
+            if (function instanceof Autoload) {
+                Autoload autoload = (Autoload) function;
                 autoload.load();
-                fun = (Operator)autoload.getSymbol().getSymbolFunction();
+                function = autoload.getSymbol().getSymbolFunction();
             }
-            if (fun instanceof Operator) {
-                Operator func = (Operator) fun;
-                if (func.getArglist() != null)
-                    return func;
+            if (function instanceof Operator) {
+                Operator operator = (Operator) function;
+                if (operator.getLambdaList() != null)
+                    return operator;
                 LispObject other =
                     get(checkSymbol(obj), Symbol.MACROEXPAND_MACRO, NIL);
                 if (other != null)
@@ -61,7 +61,7 @@ public final class arglist extends Lisp
             Operator operator = getOperator(arg);
             LispObject arglist = null;
             if (operator != null)
-                arglist = operator.getArglist();
+                arglist = operator.getLambdaList();
             final LispObject value1, value2;
             if (arglist instanceof AbstractString) {
                 String s = arglist.getStringValue();
@@ -77,7 +77,7 @@ public final class arglist extends Lisp
                 finally {
                     thread.lastSpecialBinding = lastSpecialBinding;
                 }
-                operator.setArglist(arglist);
+                operator.setLambdaList(arglist);
             }
             if (arglist != null) {
                 value1 = arglist;
@@ -97,7 +97,7 @@ public final class arglist extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            coerceToFunctional(first).setArglist(second);
+            coerceToFunctional(first).setLambdaList(second);
             return second;
         }
     };

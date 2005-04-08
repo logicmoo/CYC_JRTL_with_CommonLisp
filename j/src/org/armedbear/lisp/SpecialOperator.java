@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SpecialOperator.java,v 1.16 2005-04-04 19:32:24 piso Exp $
+ * $Id: SpecialOperator.java,v 1.17 2005-04-08 10:47:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public class SpecialOperator extends Operator
     public SpecialOperator(String name, String arglist)
     {
         this(name);
-        setArglist(new SimpleString(arglist));
+        setLambdaList(new SimpleString(arglist));
     }
 
     public final String getName()

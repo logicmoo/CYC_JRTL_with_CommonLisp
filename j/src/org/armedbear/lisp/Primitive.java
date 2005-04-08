@@ -2,7 +2,7 @@
  * Primitive.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitive.java,v 1.15 2005-04-05 18:52:51 piso Exp $
+ * $Id: Primitive.java,v 1.16 2005-04-08 10:47:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,11 @@ public class Primitive extends Function
     public Primitive(String name, String arglist)
     {
         super(name, arglist);
+    }
+
+    public Primitive(LispObject name, LispObject lambdaList)
+    {
+        super(name, lambdaList);
     }
 
     public Primitive(String name, Package pkg)

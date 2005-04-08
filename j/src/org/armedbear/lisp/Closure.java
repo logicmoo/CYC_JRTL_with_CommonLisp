@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.96 2005-04-07 23:34:38 piso Exp $
+ * $Id: Closure.java,v 1.97 2005-04-08 10:45:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,6 @@ public class Closure extends Function
     private static final int STATE_REST     = 3;
     private static final int STATE_AUX      = 4;
 
-    private final LispObject lambdaList;
     private final Parameter[] requiredParameters;
     private final Parameter[] optionalParameters;
     private final Parameter[] keywordParameters;
@@ -71,7 +70,7 @@ public class Closure extends Function
         throws ConditionThrowable
     {
         super(name);
-        this.lambdaList = lambdaList;
+        setLambdaList(lambdaList);
         Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
         boolean andKey = false;
         boolean allowOtherKeys = false;
@@ -320,11 +319,6 @@ public class Closure extends Function
         if (typeSpecifier == Symbol.COMPILED_FUNCTION)
             return NIL;
         return super.typep(typeSpecifier);
-    }
-
-    public final LispObject getLambdaList()
-    {
-        return lambdaList;
     }
 
     public final LispObject getVariableList()
@@ -1040,35 +1034,6 @@ public class Closure extends Function
                 value = eval(parameter.initForm, env, thread);
             bind(sym, value, env);
         }
-    }
-
-    public String writeToString() throws ConditionThrowable
-    {
-        LispObject name = getLambdaName();
-        StringBuffer sb = new StringBuffer("#<FUNCTION ");
-        if (name != null && name != NIL) {
-            sb.append(name.writeToString());
-        } else {
-            sb.append("(LAMBDA ");
-            if (lambdaList == NIL) {
-                sb.append("()");
-            } else {
-                final LispThread thread = LispThread.currentThread();
-                SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-                thread.bindSpecial(_PRINT_LENGTH_, Fixnum.THREE);
-                try {
-                    sb.append(lambdaList.writeToString());
-                }
-                finally {
-                    thread.lastSpecialBinding = lastSpecialBinding;
-                }
-            }
-            sb.append(")");
-        }
-        sb.append(" {");
-        sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
-        sb.append("}>");
-        return sb.toString();
     }
 
     // ### closure-environment closure => environment

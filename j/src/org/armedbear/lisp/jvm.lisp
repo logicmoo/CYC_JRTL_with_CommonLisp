@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.420 2005-04-07 23:32:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.421 2005-04-08 10:50:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2047,11 +2047,16 @@
                   (emit 'ldc (pool-string (symbol-name lambda-name)))
                   (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
                   (emit-invokestatic +lisp-class+ "internInPackage"
-                                     (list +java-string+ +java-string+) +lisp-symbol+)
-                  (emit-invokespecial-init super (list +lisp-object+)))
+                                     (list +java-string+ +java-string+) +lisp-symbol+))
                  (t
-                  (emit-invokespecial-init super nil)))
-           )
+                  (emit-push-nil))) ; no name
+           (let* ((*print-level* nil)
+                  (*print-length* nil)
+                  (s (sys::%format nil "~S" args)))
+             (emit 'ldc (pool-string s))
+             (emit-invokestatic +lisp-class+ "readObjectFromString"
+                                (list +java-string+) +lisp-object+))
+           (emit-invokespecial-init super (list +lisp-object+ +lisp-object+)))
           ((equal super +lisp-ctf-class+)
            (emit 'aload_0) ;; this
            (let* ((*print-level* nil)

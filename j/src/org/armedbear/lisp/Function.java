@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.49 2005-04-07 23:35:34 piso Exp $
+ * $Id: Function.java,v 1.50 2005-04-08 10:44:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public abstract class Function extends Operator
     public Function(String name, String arglist)
     {
         this(name);
-        setArglist(new SimpleString(arglist));
+        setLambdaList(new SimpleString(arglist));
     }
 
     public Function(String name, Package pkg)
@@ -63,7 +63,7 @@ public abstract class Function extends Operator
                     String arglist, String docstring)
     {
         if (arglist instanceof String)
-            setArglist(new SimpleString(arglist));
+            setLambdaList(new SimpleString(arglist));
         if (name != null) {
             try {
                 Symbol symbol;
@@ -87,6 +87,12 @@ public abstract class Function extends Operator
     public Function(LispObject name)
     {
         setLambdaName(name);
+    }
+
+    public Function(LispObject name, LispObject lambdaList)
+    {
+        setLambdaName(name);
+        setLambdaList(lambdaList);
     }
 
     public LispObject typeOf()
@@ -171,8 +177,32 @@ public abstract class Function extends Operator
             sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
             sb.append("}>");
             return sb.toString();
-        } else
-            return unreadableString("FUNCTION");
+        }
+        // No name.
+        LispObject lambdaList = getLambdaList();
+        if (lambdaList != null) {
+            StringBuffer sb = new StringBuffer("#<FUNCTION ");
+            sb.append("(LAMBDA ");
+            if (lambdaList == NIL) {
+                sb.append("()");
+            } else {
+                final LispThread thread = LispThread.currentThread();
+                SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+                thread.bindSpecial(_PRINT_LENGTH_, Fixnum.THREE);
+                try {
+                    sb.append(lambdaList.writeToString());
+                }
+                finally {
+                    thread.lastSpecialBinding = lastSpecialBinding;
+                }
+            }
+            sb.append(")");
+            sb.append(" {");
+            sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
+            sb.append("}>");
+            return sb.toString();
+        }
+        return unreadableString("FUNCTION");
     }
 
     // Used by the JVM compiler.
