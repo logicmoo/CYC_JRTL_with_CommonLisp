@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.179 2005-04-05 15:37:37 piso Exp $
+ * $Id: Symbol.java,v 1.180 2005-04-08 12:33:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -274,6 +274,16 @@ public class Symbol extends LispObject
         try {
             StringBuffer sb = new StringBuffer("The symbol ");
             sb.append(name.writeToString());
+            sb.append(" at #x");
+            sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
+            if (pkg instanceof Package) {
+                sb.append(", an ");
+                Symbol sym = ((Package)pkg).findExternalSymbol(name);
+                sb.append(sym == this ? "external" : "internal");
+                sb.append(" symbol in the ");
+                sb.append(((Package)pkg).getName());
+                sb.append(" package");
+            }
             return new SimpleString(sb);
         }
         finally {
@@ -288,7 +298,9 @@ public class Symbol extends LispObject
         parts = parts.push(new Cons("package", pkg));
         parts = parts.push(new Cons("value", value));
         parts = parts.push(new Cons("function", function));
-        parts = parts.push(new Cons("plist", getPropertyList()));
+        parts = parts.push(new Cons("plist", propertyList));
+        parts = parts.push(new Cons("flags", new Fixnum(flags)));
+        parts = parts.push(new Cons("hash", new Fixnum(hash)));
         return parts.nreverse();
     }
 
