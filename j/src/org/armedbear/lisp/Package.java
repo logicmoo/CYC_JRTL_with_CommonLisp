@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Package.java,v 1.62 2005-04-08 16:57:01 piso Exp $
+ * $Id: Package.java,v 1.63 2005-04-08 17:27:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -254,6 +254,23 @@ public final class Package extends LispObject
         return symbol;
     }
 
+    private synchronized Symbol addSymbol(AbstractString name, int hash)
+    {
+        Symbol symbol = new Symbol(name, hash, this);
+        try {
+            if (this == PACKAGE_KEYWORD) {
+                symbol.setSymbolValue(symbol);
+                symbol.setConstant(true);
+                externalSymbols.put(name, symbol);
+            } else
+                internalSymbols.put(name, symbol);
+        }
+        catch (Throwable t) {
+            Debug.trace(t); // FIXME
+        }
+        return symbol;
+    }
+
     public synchronized Symbol addInternalSymbol(String symbolName)
     {
         Symbol symbol = new Symbol(symbolName, this);
@@ -294,6 +311,11 @@ public final class Package extends LispObject
         }
     }
 
+    public synchronized Symbol intern(String symbolName)
+    {
+        return intern(new SimpleString(symbolName));
+    }
+
     public synchronized Symbol intern(AbstractString symbolName)
     {
         final int hash = symbolName.sxhash();
@@ -312,12 +334,7 @@ public final class Package extends LispObject
                 return symbol;
         }
         // Not found.
-        return addSymbol(symbolName);
-    }
-
-    public synchronized Symbol intern(String symbolName)
-    {
-        return intern(new SimpleString(symbolName));
+        return addSymbol(symbolName, hash);
     }
 
     public synchronized Symbol intern(String name, LispThread thread)
