@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: inspect.lisp,v 1.11 2005-02-26 17:45:58 piso Exp $
+;;; $Id: inspect.lisp,v 1.12 2005-04-08 12:44:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,8 +44,8 @@
       (return (values nil :circular)))))
 
 (defun display-object (obj display-parts-p)
-  (let ((*print-length* 1)
-        (*print-level* 1))
+  (let ((*print-length* 2)
+        (*print-level* 2))
     (cond ((typep obj 'standard-object)
            (let ((parts (inspected-parts obj))
                  (i 0))
@@ -58,11 +58,16 @@
                          (leader name)
                          value)
                  (incf i)))))
-          ((vectorp obj)
+          ((simple-vector-p obj)
            (format t "~A at #x~X~%" (inspected-description obj) (identity-hash-code obj))
            (let ((limit (min (length obj) 25)))
              (dotimes (i limit)
-               (format t "~4D-> ~A~%" i (inspected-description (aref obj i))))))
+               (format t "~4D-> ~A~%" i (aref obj i)))))
+          ((vectorp obj)
+           (format t "~A~%" (inspected-description obj))
+           (let ((limit (min (length obj) 25)))
+             (dotimes (i limit)
+               (format t "~4D-> ~A~%" i (aref obj i)))))
           ((consp obj)
            (multiple-value-bind (len kind) (safe-length obj)
              (case kind
@@ -73,11 +78,11 @@
                 (let ((i 0))
                   (dolist (item obj)
                     (cond ((< i 25)
-                           (format t "~4D-> ~A~%" i item))
+                           (format t "~4D-> ~S~%" i item))
                           ((= i 25)
                            (format t "    ...~%"))
                           ((= i (1- len))
-                           (format t "~4D-> ~A~%" i item)))
+                           (format t "~4D-> ~S~%" i item)))
                     (incf i))))
                (:dotted
                 (format t "A dotted list with ~D elements at #x~X~%"
@@ -88,7 +93,7 @@
                        (i 0))
                   (loop
                     (cond ((< i 25)
-                           (format t "~4D-> ~A~%" i (inspected-description item)))
+                           (format t "~4D-> ~S~%" i item))
                           ((= i 25)
                            (format t "    ...~%")))
                     (incf i)
@@ -96,11 +101,11 @@
                     (when (atom rest)
                       (return))
                     (setf item (car rest)))
-                  (format t "tail-> ~A~%" (inspected-description rest))))
+                  (format t "tail-> ~S~%" rest)))
                (:circular
                 (format t "A circular list at #x~X~%" (identity-hash-code obj))))))
           (t
-           (format t "~A at #x~X~%" (inspected-description obj) (identity-hash-code obj))
+           (format t "~A~%" (inspected-description obj))
            (let ((parts (inspected-parts obj))
                  (i 0)
                  (limit 25))
