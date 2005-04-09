@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.421 2005-04-08 10:50:25 piso Exp $
+;;; $Id: jvm.lisp,v 1.422 2005-04-09 04:41:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2111,7 +2111,8 @@
   (let* ((name-index (pool-name "Code"))
          (code (method-code method))
          (code-length (length code))
-         (line-number-available-p (fixnump *source-line-number*))
+         (line-number-available-p (and (fixnump *source-line-number*)
+                                       (plusp *source-line-number*)))
          (length (+ code-length 12
                     (* (length (method-handlers method)) 8)
                     (if line-number-available-p 12 0)))
