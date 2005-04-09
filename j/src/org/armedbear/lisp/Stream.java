@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.119 2005-03-24 01:14:28 piso Exp $
+ * $Id: Stream.java,v 1.120 2005-04-09 04:41:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -209,7 +209,7 @@ public class Stream extends LispObject
     }
 
     // Character input.
-    public int getLineNumber()
+    public final int getLineNumber()
     {
         return lineNumber;
     }
@@ -1473,7 +1473,7 @@ public class Stream extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Stream stream = checkStream(arg);
-            return number(stream.getLineNumber() + 1);
+            return new Fixnum(stream.getLineNumber() + 1);
         }
     };
 
