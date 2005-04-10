@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.32 2005-04-10 17:00:48 piso Exp $
+;;; $Id: slime.lisp,v 1.33 2005-04-10 20:07:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -346,12 +346,15 @@
                 (goto-char (or position 0))
                 (let (pattern pos)
                   (cond ((string-equal (pathname-type file) "java")
-                         (setf pattern (format nil "^\\s*// ###\\s+~A" short-name)))
+                         (setf pattern (format nil "// ### ~A" short-name))
+                         (setf pos (search-forward pattern
+                                                   :ignore-case t
+                                                   :whole-words-only t)))
                         (t
-                         (setf pattern (format nil "^\\s*\\(def\\S*\\s+~A" short-name))))
-                  (setf pos (re-search-forward pattern
-                                               :ignore-case t
-                                               :whole-words-only t))
+                         (setf pattern (format nil "^\\s*\\(def\\S*\\s+~A" short-name))
+                         (setf pos (re-search-forward pattern
+                                                      :ignore-case t
+                                                      :whole-words-only t))))
                   (when pos
                     (goto-char pos))
                   (setf pos (search-forward short-name :ignore-case t))
