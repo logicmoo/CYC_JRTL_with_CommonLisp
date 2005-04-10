@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.97 2005-03-19 20:00:27 piso Exp $
+ * $Id: Load.java,v 1.98 2005-04-10 20:10:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -360,9 +360,14 @@ public final class Load extends Lisp
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_LOAD_STREAM_, in);
+        SpecialBinding sourcePositionBinding =
+            new SpecialBinding(_SOURCE_POSITION_, Fixnum.ZERO,
+                               thread.lastSpecialBinding);
+        thread.lastSpecialBinding = sourcePositionBinding;
         try {
             final Environment env = new Environment();
             while (true) {
+                sourcePositionBinding.value = new Fixnum(in.getOffset());
                 LispObject obj = in.read(false, EOF, true);
                 if (obj == EOF)
                     break;
