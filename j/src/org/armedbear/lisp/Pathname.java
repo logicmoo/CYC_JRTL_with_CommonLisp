@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.73 2005-03-15 16:08:45 piso Exp $
+ * $Id: Pathname.java,v 1.74 2005-04-10 18:12:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -206,6 +206,18 @@ public class Pathname extends LispObject
             result = new Cons(obj, result);
         }
         return result.nreverse();
+    }
+
+    public LispObject getParts() throws ConditionThrowable
+    {
+        LispObject parts = NIL;
+        parts = parts.push(new Cons("HOST", host));
+        parts = parts.push(new Cons("DEVICE", device));
+        parts = parts.push(new Cons("DIRECTORY", directory));
+        parts = parts.push(new Cons("NAME", name));
+        parts = parts.push(new Cons("TYPE", type));
+        parts = parts.push(new Cons("VERSION", version));
+        return parts.nreverse();
     }
 
     public LispObject typeOf()
