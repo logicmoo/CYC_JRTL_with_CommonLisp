@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.31 2005-03-29 17:31:55 piso Exp $
+;;; $Id: slime.lisp,v 1.32 2005-04-10 17:00:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -344,10 +344,14 @@
               (switch-to-buffer buffer)
               (with-single-undo
                 (goto-char (or position 0))
-                (let* ((pattern (format nil "^\\s*\\(def\\S*\\s+~A" short-name))
-                       (pos (re-search-forward pattern
+                (let (pattern pos)
+                  (cond ((string-equal (pathname-type file) "java")
+                         (setf pattern (format nil "^\\s*// ###\\s+~A" short-name)))
+                        (t
+                         (setf pattern (format nil "^\\s*\\(def\\S*\\s+~A" short-name))))
+                  (setf pos (re-search-forward pattern
                                                :ignore-case t
-                                               :whole-words-only t)))
+                                               :whole-words-only t))
                   (when pos
                     (goto-char pos))
                   (setf pos (search-forward short-name :ignore-case t))
@@ -380,9 +384,12 @@
       (when pos
         (setf package-name (subseq function-name 0 pos))
         (setf function-name (subseq function-name (1+ (position #\: function-name :from-end t))))))
+    (unless package-name
+      (setf package-name (find-buffer-package)))
     (let ((definitions
             (slime-eval `(swank:find-definitions-for-function-name ,function-name
                                                                    ,package-name))))
+      (sys::%format t "definitions = ~S~%" definitions)
       (cond (definitions
               (push-position)
               (goto-source-location function-name

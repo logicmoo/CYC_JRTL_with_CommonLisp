@@ -1,7 +1,7 @@
 ;;; swank-abcl.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-abcl.lisp,v 1.6 2004-09-21 13:52:18 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: swank-abcl.lisp,v 1.7 2005-04-10 17:01:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -51,9 +51,27 @@
           (*load-print* nil)
           (ext:*autoload-verbose* nil))
       (ext:resolve name)))
-  (when (ext:source name)
-    `((,(princ-to-string name)
-       (:location
-        (:file ,(namestring (ext:source-pathname name)))
-        (:position ,(or (ext:source-file-position name) 0) t)
-        (:function-name ,(symbol-name name)))))))
+  (cond ((ext:source name)
+         `((,(princ-to-string name)
+            (:location
+             (:file ,(namestring (ext:source-pathname name)))
+             (:position ,(or (ext:source-file-position name) 0) t)
+             (:function-name ,(symbol-name name))))))
+        ((not (null ext:*lisp-home*))
+         (let ((tagfile (merge-pathnames "tags" ext:*lisp-home*)))
+           (when (and tagfile (probe-file tagfile))
+             (with-open-file (s tagfile)
+               (loop
+                 (let ((text (read-line s nil s)))
+                   (cond ((eq text s)
+                          (return))
+                         ((string-equal name (string (read-from-string text nil nil)))
+                          ;; Found it!
+                          (with-input-from-string (string-stream text)
+                            (let* ((symbol (read string-stream text nil nil)) ; Ignored.
+                                   (file (read string-stream text nil nil)))
+                              (return `((,(princ-to-string name)
+                                         (:location
+                                          (:file ,(namestring file))))))))))))))))
+        (t
+         nil)))
