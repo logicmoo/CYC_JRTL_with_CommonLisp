@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.69 2005-04-05 16:18:25 piso Exp $
+;;; $Id: compile-file.lisp,v 1.70 2005-04-10 20:13:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,8 +26,6 @@
 (defvar *class-number*)
 
 (defvar *output-file-pathname*)
-
-(defvar *source-position*)
 
 (defun next-classfile-name ()
   (let ((name (%format nil "~A-~D"
