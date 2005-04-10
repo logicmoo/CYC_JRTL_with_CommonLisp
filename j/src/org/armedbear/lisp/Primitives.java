@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.760 2005-04-10 16:58:42 piso Exp $
+ * $Id: Primitives.java,v 1.761 2005-04-10 20:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2941,15 +2941,19 @@ public final class Primitives extends Lisp
                 Symbol symbol = (Symbol) first;
                 symbol.setSymbolFunction(second);
                 final LispThread thread = LispThread.currentThread();
-                LispObject source = Load._FASL_SOURCE_.symbolValue(thread);
-                if (source == NIL)
-                    source = _LOAD_TRUENAME_.symbolValue(thread);
-                if (source == NIL)
-                    source = Keyword.TOP_LEVEL;
-                if (source != Keyword.TOP_LEVEL && third != NIL)
-                    put(symbol, Symbol._SOURCE, new Cons(source, third));
+                LispObject sourcePathname = Load._FASL_SOURCE_.symbolValue(thread);
+                LispObject sourcePosition = third;
+                if (sourcePathname == NIL) {
+                    sourcePathname = _LOAD_TRUENAME_.symbolValue(thread);
+                    if (sourcePathname != NIL)
+                        sourcePosition = _SOURCE_POSITION_.symbolValue(thread);
+                }
+                if (sourcePathname == NIL)
+                    sourcePathname = Keyword.TOP_LEVEL;
+                if (sourcePathname != Keyword.TOP_LEVEL && sourcePosition != NIL)
+                    put(symbol, Symbol._SOURCE, new Cons(sourcePathname, third));
                 else
-                    put(symbol, Symbol._SOURCE, source);
+                    put(symbol, Symbol._SOURCE, sourcePathname);
             } else if (first instanceof Cons && first.car() == Symbol.SETF) {
                 // SETF function
                 checkRedefinition(first);
