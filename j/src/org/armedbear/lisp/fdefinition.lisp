@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.4 2005-02-20 14:43:09 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.5 2005-04-10 20:12:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,6 +39,8 @@
                               *load-truename*
                               *compile-file-truename*
                               :top-level)))
+  (unless source-position
+    (setf source-position *source-position*))
   (let ((source (if source-position
                     (cons source-pathname source-position)
                     source-pathname)))
