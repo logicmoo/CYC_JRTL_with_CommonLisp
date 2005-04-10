@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.759 2005-04-08 10:48:21 piso Exp $
+ * $Id: Primitives.java,v 1.760 2005-04-10 16:58:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3860,6 +3860,12 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return inSynonymOf(arg).readLine(true, NIL);
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return inSynonymOf(first).readLine(second != NIL, third);
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
