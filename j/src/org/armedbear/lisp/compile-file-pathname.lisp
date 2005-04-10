@@ -1,7 +1,7 @@
 ;;; compile-file-pathname.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file-pathname.lisp,v 1.1 2004-09-01 18:01:26 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: compile-file-pathname.lisp,v 1.2 2005-04-10 18:12:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,4 +30,4 @@
                               (output-file (cfp-output-file-default
                                             input-file))
                               &allow-other-keys)
-  (merge-pathnames output-file (merge-pathnames input-file)))
+  (merge-pathnames output-file (merge-pathnames input-file) nil))
