@@ -1,8 +1,8 @@
 /*
  * SlimeOutputStream.java
  *
- * Copyright (C) 2004 András Simon, Peter Graves
- * $Id: SlimeOutputStream.java,v 1.7 2004-11-04 11:13:15 piso Exp $
+ * Copyright (C) 2004-2005 András Simon, Peter Graves
+ * $Id: SlimeOutputStream.java,v 1.8 2005-04-11 15:23:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,8 +117,8 @@ public final class SlimeOutputStream extends Stream
         return unreadableString("SLIME-OUTPUT-STREAM");
     }
 
-    // ### %make-string-output-stream
-    // %make-string-output-stream element-type => string-stream
+    // ### %make-slime-output-stream
+    // %make-slime-output-stream function => stream
     private static final Primitive MAKE_SLIME_OUTPUT_STREAM =
         new Primitive("make-slime-output-stream", PACKAGE_EXT, true, "function")
     {
