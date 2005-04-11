@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.70 2005-04-10 20:13:34 piso Exp $
+;;; $Id: compile-file.lisp,v 1.71 2005-04-11 14:06:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 
 (defun next-classfile-name ()
   (let ((name (%format nil "~A-~D"
-                       (pathname-name *compile-file-pathname*)
+                       (pathname-name *output-file-pathname*)
                        (incf *class-number*))))
     (namestring (merge-pathnames (make-pathname :name name :type "cls")
                                  *output-file-pathname*))))
@@ -184,7 +184,8 @@
                                         (cadr name))
                                        (t
                                         (error "Invalid function name: ~S~%" name)))))
-                (%format t "; Processing function ~A~%" name)
+                (when *compile-print*
+                  (format t "; Processing function ~A~%" name))
                 (let* ((lambda-list (third form))
                        (body (nthcdr 3 form))
                        (jvm::*speed* jvm::*speed*)
@@ -199,8 +200,9 @@
                                        (jvm:compile-defun name expr nil classfile-name)))
                            (compiled-function (verify-load classfile)))
                       (cond (compiled-function
-                             (%format t ";  ~A => ~A.cls~%" name
-                                      (pathname-name (pathname classfile-name)))
+                             (when *compile-print*
+                               (format t ";  ~A => ~A.cls~%" name
+                                       (pathname-name (pathname classfile-name))))
                              (setf form
                                    `(fset ',name
                                           (load-compiled-function ,(file-namestring classfile))
@@ -209,7 +211,8 @@
                              (when compile-time-too
                                (fset name compiled-function)))
                             (t
-                             (%format t ";  Unable to compile function ~A~%" name)
+                             ;; FIXME This should be a warning or error of some sort...
+                             (format *error-output* "; Unable to compile function ~A~%" name)
                              (let ((precompiled-function (precompile-form expr nil)))
                                (setf form
                                      `(fset ',name
@@ -227,16 +230,18 @@
                     (setf (fdefinition name) #'dummy)
                     (push name *fbound-names*)))))
              ((DEFGENERIC DEFMETHOD)
-              (let ((*print-length* 2)
-                    (*print-level* 2))
-                (format t "; Processing ~S~%" form))
+              (when *compile-print*
+                (let ((*print-length* 2)
+                      (*print-level* 2))
+                  (format t "; Processing ~S~%" form)))
               (jvm::note-name-defined (second form))
               (process-toplevel-form (macroexpand-1 form *compile-file-environment*)
                                      stream compile-time-too)
               (return-from process-toplevel-form))
              (DEFMACRO
               (let ((name (second form)))
-                (%format t "; Processing macro ~A~%" name)
+                (when *compile-print*
+                  (format t "; Processing macro ~A~%" name))
                 (eval form)
                 (let* ((expr (function-lambda-expression (macro-function name)))
                        (classfile-name (next-classfile-name))
@@ -245,8 +250,9 @@
                          (jvm:compile-defun nil expr nil classfile-name))))
                   (if (verify-load classfile)
                       (progn
-                        (%format t ";  Macro ~A => ~A.cls~%" name
-                                 (pathname-name (pathname classfile-name)))
+                        (when *compile-print*
+                          (format t ";  Macro ~A => ~A.cls~%" name
+                                  (pathname-name (pathname classfile-name))))
                         (setf form
                               (if (special-operator-p name)
                                   `(%put ',name 'macroexpand-macro
@@ -259,7 +265,8 @@
                                                       ,(file-namestring classfile)))
                                          ,*source-position*
                                          ',(third form)))))
-                      (%format t ";  Unable to compile macro ~A~%" name)))))
+                      ;; FIXME error or warning
+                      (format *error-output* "; Unable to compile macro ~A~%" name)))))
              (DEFTYPE
               (eval form))
              (EVAL-WHEN
@@ -313,9 +320,10 @@
                           (symbolp (cadr (third form))))
                      (setf form (precompile-form form nil)))
                     (t
-                     (let ((*print-length* 2)
-                           (*print-level* 2))
-                       (format t "; Converting ~S~%" form))
+                     (when *compile-print*
+                       (let ((*print-length* 2)
+                             (*print-level* 2))
+                         (format t "; Converting ~S~%" form)))
                      (let* ((expr `(lambda () ,form))
                             (classfile-name (next-classfile-name))
                             (classfile (report-error
@@ -359,14 +367,20 @@
 	  (intersection '(:load-toplevel load) situations)
 	  (intersection '(:execute eval) situations)))
 
-(defun compile-file (input-file &key output-file verbose print external-format)
+(defun compile-file (input-file
+                     &key
+                     output-file
+                     ((:verbose *compile-verbose*) *compile-verbose*)
+                     ((:print *compile-print*) *compile-print*)
+                     external-format)
   (unless (or (and (probe-file input-file) (not (file-directory-p input-file)))
               (pathname-type input-file))
     (let ((pathname (merge-pathnames (make-pathname :type "lisp") input-file)))
       (when (probe-file pathname)
         (setf input-file pathname))))
-  (unless output-file
-    (setf output-file (compile-file-pathname input-file)))
+  (setf output-file (if output-file
+                        (merge-pathnames output-file *default-pathname-defaults*)
+                        (compile-file-pathname input-file)))
   (let* ((*output-file-pathname* output-file)
          (type (pathname-type output-file))
          (temp-file (merge-pathnames (make-pathname :type (concatenate 'string type "-tmp"))
@@ -380,7 +394,8 @@
              (namestring (namestring *compile-file-truename*))
              (start (get-internal-real-time))
              elapsed)
-        (%format t "; Compiling ~A ...~%" namestring)
+        (when *compile-verbose*
+          (format t "; Compiling ~A ...~%" namestring))
         (with-compilation-unit ()
           (with-open-file (out temp-file :direction :output :if-exists :supersede)
             (let ((*readtable* *readtable*)
@@ -412,7 +427,8 @@
                  (setf failure-p nil))))
         (setf elapsed (/ (- (get-internal-real-time) start) 1000.0))
         (rename-file temp-file output-file)
-        (format t "~&; Compiled ~A (~A seconds)~%" namestring elapsed)))
+        (when *compile-verbose*
+          (format t "~&; Compiled ~A (~A seconds)~%" namestring elapsed))))
     (values (truename output-file) warnings-p failure-p)))
 
 (defmacro defun (name lambda-list &body body &environment env)
