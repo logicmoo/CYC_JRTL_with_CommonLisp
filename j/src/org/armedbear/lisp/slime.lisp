@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.33 2005-04-10 20:07:51 piso Exp $
+;;; $Id: slime.lisp,v 1.34 2005-04-11 14:07:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -392,7 +392,6 @@
     (let ((definitions
             (slime-eval `(swank:find-definitions-for-function-name ,function-name
                                                                    ,package-name))))
-      (sys::%format t "definitions = ~S~%" definitions)
       (cond (definitions
               (push-position)
               (goto-source-location function-name
