@@ -1,8 +1,8 @@
 /*
  * FillPointerOutputStream.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: FillPointerOutputStream.java,v 1.12 2004-11-28 15:43:49 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: FillPointerOutputStream.java,v 1.13 2005-04-11 14:07:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,9 +58,15 @@ public final class FillPointerOutputStream extends Stream
         {
             int fp = string.getFillPointer();
             if (fp >= 0) {
-                final int capacity = string.capacity();
                 final int limit = Math.min(cbuf.length, off + len);
-                for (int i = off; i < limit && fp < capacity; i++) {
+                try {
+                    string.ensureCapacity(fp + limit);
+                }
+                catch (ConditionThrowable t) {
+                    // Shouldn't happen.
+                    Debug.trace(t);
+                }
+                for (int i = off; i < limit; i++) {
                     try {
                         string.setCharAt(fp, cbuf[i]);
                     }
