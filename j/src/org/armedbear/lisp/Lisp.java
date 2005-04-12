@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.340 2005-04-10 20:08:49 piso Exp $
+ * $Id: Lisp.java,v 1.341 2005-04-12 11:29:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1679,11 +1679,11 @@ public abstract class Lisp
 
     // ### *compile-verbose*
     public static final Symbol _COMPILE_VERBOSE_ =
-        exportSpecial("*COMPILE-VERBOSE*", PACKAGE_CL, NIL);
+        exportSpecial("*COMPILE-VERBOSE*", PACKAGE_CL, T);
 
     // ### *compile-print*
     public static final Symbol _COMPILE_PRINT_ =
-        exportSpecial("*COMPILE-PRINT*", PACKAGE_CL, NIL);
+        exportSpecial("*COMPILE-PRINT*", PACKAGE_CL, T);
 
     // ### *compile-file-pathname*
     public static final Symbol _COMPILE_FILE_PATHNAME_ =
