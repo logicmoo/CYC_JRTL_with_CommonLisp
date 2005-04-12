@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.422 2005-04-09 04:41:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.423 2005-04-12 12:20:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6206,7 +6206,9 @@
             (unless (symbolp name)
               (sys::%format t "~A Unable to compile ~S~%" prefix name)
               (return-from %jvm-compile (values name nil t))))
-          (sys::%format t "~A Compiling top-level form ...~%" prefix)))
+          (let ((*print-length* 2)
+                (*print-level* 2))
+            (format t "; Compiling ~S~%" definition))))
     (unless definition
       (resolve name)
       (setf definition (fdefinition name)))
