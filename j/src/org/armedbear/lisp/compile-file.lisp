@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.72 2005-04-12 11:30:39 piso Exp $
+;;; $Id: compile-file.lisp,v 1.73 2005-04-12 12:27:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -320,10 +320,12 @@
                           (symbolp (cadr (third form))))
                      (setf form (precompile-form form nil)))
                     ((memq first '(LET LET*))
-                     (if (and (consp (third form))
-                              (eq (car (third form)) 'DEFUN)) ;; (let (...) (defun ...
-                         (setf form (convert-toplevel-form form))
-                         (setf form (precompile-form form nil))))
+                     (let ((body (cddr form)))
+                       (if (dolist (subform body nil)
+                             (when (and (consp subform) (eq (car subform) 'DEFUN))
+                               (return t)))
+                           (setf form (convert-toplevel-form form))
+                           (setf form (precompile-form form nil)))))
                     (t
                      (setf form (precompile-form form nil)))))))))
   (dump-form form stream))
