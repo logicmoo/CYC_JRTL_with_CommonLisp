@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.71 2005-04-11 14:06:22 piso Exp $
+;;; $Id: compile-file.lisp,v 1.72 2005-04-12 11:30:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -319,21 +319,30 @@
                           (eq (car (third form)) 'FUNCTION)
                           (symbolp (cadr (third form))))
                      (setf form (precompile-form form nil)))
+                    ((memq first '(LET LET*))
+                     (if (and (consp (third form))
+                              (eq (car (third form)) 'DEFUN)) ;; (let (...) (defun ...
+                         (setf form (convert-toplevel-form form))
+                         (setf form (precompile-form form nil))))
                     (t
-                     (when *compile-print*
-                       (let ((*print-length* 2)
-                             (*print-level* 2))
-                         (format t "; Converting ~S~%" form)))
-                     (let* ((expr `(lambda () ,form))
-                            (classfile-name (next-classfile-name))
-                            (classfile (report-error
-                                        (jvm:compile-defun nil expr nil classfile-name)))
-                            (compiled-function (verify-load classfile)))
-                       (setf form
-                             (if compiled-function
-                                 `(funcall (load-compiled-function ,(file-namestring classfile)))
-                                 (precompile-form form nil)))))))))))
+                     (setf form (precompile-form form nil)))))))))
   (dump-form form stream))
+
+(defun convert-toplevel-form (form)
+  (when *compile-print*
+    (let ((*print-length* 2)
+          (*print-level* 2))
+      (format t "; Converting ~S~%" form)))
+  (let* ((expr `(lambda () ,form))
+         (classfile-name (next-classfile-name))
+         (classfile (report-error
+                     (jvm:compile-defun nil expr nil classfile-name)))
+         (compiled-function (verify-load classfile)))
+    (setf form
+          (if compiled-function
+              `(funcall (load-compiled-function ,(file-namestring classfile)))
+              (precompile-form form nil)))))
+
 
 (defun process-toplevel-macrolet (form stream compile-time-too)
   (let ((*compile-file-environment* (make-environment *compile-file-environment*)))
