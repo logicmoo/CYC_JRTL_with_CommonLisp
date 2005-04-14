@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.423 2005-04-12 12:20:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.424 2005-04-14 14:44:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3668,21 +3668,9 @@
     (when must-clear-values
       (emit-clear-values))))
 
-;; Returns list of declared specials.
-(defun process-special-declarations (forms)
-  (let ((specials ()))
-    (dolist (form forms)
-      (unless (and (consp form) (eq (car form) 'declare))
-        (return))
-      (let ((decls (cdr form)))
-        (dolist (decl decls)
-          (when (eq (car decl) 'special)
-            (setf specials (append (cdr decl) specials))))))
-    specials))
-
 (defun compile-locally (form &key (target :stack) representation)
   (let ((*visible-variables* *visible-variables*)
-        (specials (process-special-declarations (cdr form))))
+        (specials (precompiler::process-special-declarations (cdr form))))
     (dolist (var specials)
       (push (make-variable :name var :special-p t) *visible-variables*))
     (cond ((null (cdr form))
@@ -5837,7 +5825,7 @@
                  (incf register)
                  (incf index))))))
 
-    (let ((specials (process-special-declarations body)))
+    (let ((specials (precompiler::process-special-declarations body)))
       (dolist (name specials)
         (dformat t "recognizing ~S as special~%" name)
         (let ((variable (find-visible-variable name)))
