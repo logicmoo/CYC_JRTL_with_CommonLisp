@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: signal.lisp,v 1.10 2004-05-29 19:01:41 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: signal.lisp,v 1.11 2005-04-14 14:53:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defvar *maximum-error-depth* 10)
 
@@ -31,20 +31,17 @@
 
 (defun signal (datum &rest arguments)
   (let ((condition (coerce-to-condition datum arguments 'simple-condition 'signal))
-	(*handler-clusters* *handler-clusters*))
-    (let ((old-bos *break-on-signals*)
-	  (*break-on-signals* nil))
-      (when (typep condition old-bos)
-        (let ((*saved-backtrace* (backtrace-as-list)))
-          (break "~A~%BREAK called because of *BREAK-ON-SIGNALS* (now rebound to NIL)."
-                 condition))))
+        (*handler-clusters* *handler-clusters*))
+    (when (typep condition *break-on-signals*)
+      (let ((*saved-backtrace* (backtrace-as-list)))
+        (break "~A~%BREAK called because of *BREAK-ON-SIGNALS*" condition)))
     (loop
       (unless *handler-clusters*
-	(return))
+        (return))
       (let ((cluster (pop *handler-clusters*)))
-	(dolist (handler cluster)
-	  (when (typep condition (car handler))
-	    (funcall (cdr handler) condition)))))
+        (dolist (handler cluster)
+          (when (typep condition (car handler))
+            (funcall (cdr handler) condition)))))
     (when (typep condition 'serious-condition)
       (let ((*current-error-depth* (1+ *current-error-depth*)))
         (cond ((> *current-error-depth* *maximum-error-depth*)
@@ -64,57 +61,57 @@
 ;; reliably if our compiler understood that kind of talk.
 (defun coerce-to-condition (datum arguments default-type fun-name)
   (cond ((typep datum 'condition)
-	 (when arguments
+         (when arguments
            (error 'simple-type-error
                   :datum arguments
                   :expected-type 'null
                   :format-control "You may not supply additional arguments when giving ~S to ~S."
                   :format-arguments (list datum fun-name)))
-	 datum)
-	((symbolp datum)
-	 (%make-condition datum arguments))
-	((or (stringp datum) (functionp datum))
-	 (%make-condition default-type
+         datum)
+        ((symbolp datum)
+         (%make-condition datum arguments))
+        ((or (stringp datum) (functionp datum))
+         (%make-condition default-type
                           (list :format-control datum
                                 :format-arguments arguments)))
-	(t
-	 (error 'simple-type-error
-		:datum datum
-		:expected-type '(or symbol string)
-		:format-control "Bad argument to ~S: ~S."
-		:format-arguments (list fun-name datum)))))
+        (t
+         (error 'simple-type-error
+                :datum datum
+                :expected-type '(or symbol string)
+                :format-control "Bad argument to ~S: ~S."
+                :format-arguments (list fun-name datum)))))
 
 (defmacro handler-bind (bindings &body forms)
   (dolist (binding bindings)
     (unless (and (consp binding) (= (length binding) 2))
       (error "ill-formed handler binding ~S" binding)))
   `(let ((*handler-clusters*
-	  (cons (list ,@(mapcar (lambda (x) `(cons ',(car x) ,(cadr x)))
-				bindings))
-		*handler-clusters*)))
+          (cons (list ,@(mapcar (lambda (x) `(cons ',(car x) ,(cadr x)))
+                                bindings))
+                *handler-clusters*)))
      (progn
        ,@forms)))
 
 (defmacro handler-case (form &rest cases)
   (let ((no-error-clause (assoc ':no-error cases)))
     (if no-error-clause
-	(let ((normal-return (make-symbol "normal-return"))
-	      (error-return  (make-symbol "error-return")))
-	  `(block ,error-return
-	     (multiple-value-call (lambda ,@(cdr no-error-clause))
+        (let ((normal-return (make-symbol "normal-return"))
+              (error-return  (make-symbol "error-return")))
+          `(block ,error-return
+             (multiple-value-call (lambda ,@(cdr no-error-clause))
                                   (block ,normal-return
                                     (return-from ,error-return
                                                  (handler-case (return-from ,normal-return ,form)
                                                    ,@(remove no-error-clause cases)))))))
-	(let ((tag (gensym))
-	      (var (gensym))
-	      (annotated-cases (mapcar (lambda (case) (cons (gensym) case))
-				       cases)))
-	  `(block ,tag
-	     (let ((,var nil))
-	       (declare (ignorable ,var))
-	       (tagbody
-		(handler-bind
+        (let ((tag (gensym))
+              (var (gensym))
+              (annotated-cases (mapcar (lambda (case) (cons (gensym) case))
+                                       cases)))
+          `(block ,tag
+             (let ((,var nil))
+               (declare (ignorable ,var))
+               (tagbody
+                (handler-bind
                   ,(mapcar (lambda (annotated-case)
                              (list (cadr annotated-case)
                                    `(lambda (temp)
@@ -123,18 +120,18 @@
                                            '(declare (ignore temp)))
                                       (go ,(car annotated-case)))))
                            annotated-cases)
-		  (return-from ,tag
+                  (return-from ,tag
                                ,form))
-		,@(mapcan
-		   (lambda (annotated-case)
-		     (list (car annotated-case)
-			   (let ((body (cdddr annotated-case)))
-			     `(return-from
+                ,@(mapcan
+                   (lambda (annotated-case)
+                     (list (car annotated-case)
+                           (let ((body (cdddr annotated-case)))
+                             `(return-from
                                ,tag
                                ,(cond ((caddr annotated-case)
                                        `(let ((,(caaddr annotated-case)
-						,var))
+                                                ,var))
                                           ,@body))
                                       (t
                                        `(locally ,@body)))))))
-		   annotated-cases))))))))
+                   annotated-cases))))))))
