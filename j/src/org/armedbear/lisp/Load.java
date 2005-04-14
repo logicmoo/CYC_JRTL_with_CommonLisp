@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.98 2005-04-10 20:10:26 piso Exp $
+ * $Id: Load.java,v 1.99 2005-04-14 14:55:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,7 +304,8 @@ public final class Load extends Lisp
                 out._writeString(truename);
                 out._writeLine(" ...");
                 out._finishOutput();
-                LispObject result = loadStream(in, print);
+                LispObject result =
+                    loadStream(new Stream(in, Symbol.CHARACTER), print);
                 long elapsed = System.currentTimeMillis() - start;
                 out.freshLine();
                 out._writeString(prefix);
@@ -316,7 +317,7 @@ public final class Load extends Lisp
                 out._finishOutput();
                 return result;
             } else
-                return loadStream(in, print);
+                return loadStream(new Stream(in, Symbol.CHARACTER), print);
         }
         finally {
             thread.lastSpecialBinding = lastSpecialBinding;
@@ -352,11 +353,9 @@ public final class Load extends Lisp
         }
     };
 
-    private static final LispObject loadStream(InputStream inputStream,
-                                               boolean print)
+    private static final LispObject loadStream(Stream in, boolean print)
         throws ConditionThrowable
     {
-        Stream in = new Stream(inputStream, Symbol.CHARACTER);
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_LOAD_STREAM_, in);
@@ -420,6 +419,9 @@ public final class Load extends Lisp
                                   LispObject print, LispObject ifDoesNotExist)
             throws ConditionThrowable
         {
+            if (filespec instanceof Stream)
+                return loadStream((Stream)filespec, print != NIL);
+
             return load(Pathname.coerceToPathname(filespec).getNamestring(),
                         verbose != NIL,
                         print != NIL,
