@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.161 2005-02-06 19:59:29 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: rt.lisp,v 1.162 2005-04-14 14:54:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -143,7 +143,8 @@
   (:export #:random-from-seq #:random-case #:coin #:random-permute))
 
 (defun do-tests (&rest args)
-  (let ((regression-test::*passed* 0)
+  (let ((*compile-print* nil)
+        (regression-test::*passed* 0)
         (regression-test::*failed* 0)
         (*default-pathname-defaults* (pathname regression-test::*prefix*))
         (suffix ".lsp")
