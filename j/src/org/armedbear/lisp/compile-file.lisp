@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.73 2005-04-12 12:27:15 piso Exp $
+;;; $Id: compile-file.lisp,v 1.74 2005-04-14 22:47:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -177,13 +177,7 @@
               (setf form (precompile-form form nil)))
              (DEFUN
               (let* ((name (second form))
-                     (block-name (cond ((symbolp name)
-                                        name)
-                                       ((and (consp name)
-                                             (eq (car name) 'SETF))
-                                        (cadr name))
-                                       (t
-                                        (error "Invalid function name: ~S~%" name)))))
+                     (block-name (block-name name)))
                 (when *compile-print*
                   (format t "; Processing function ~A~%" name))
                 (let* ((lambda-list (third form))
@@ -443,15 +437,16 @@
     (values (truename output-file) warnings-p failure-p)))
 
 (defmacro defun (name lambda-list &body body &environment env)
-  (cond (*compile-file-truename*
-         (multiple-value-bind (body decls doc)
-             (sys::parse-body body)
-           `(sys::fset ',name
-                       (lambda ,lambda-list ,@decls (block ,name ,@body)))))
-        (t
-         (when (and env (sys::empty-environment-p env))
-           (setf env nil))
-         `(progn
-            (%defun ',name ',lambda-list ',body ,env)
-            (precompile ',name)
-            ',name))))
+  (let ((block-name (block-name name)))
+    (cond (*compile-file-truename*
+           (multiple-value-bind (body decls doc)
+               (sys::parse-body body)
+             `(sys::fset ',name
+                         (lambda ,lambda-list ,@decls (block ,block-name ,@body)))))
+          (t
+           (when (and env (sys::empty-environment-p env))
+             (setf env nil))
+           `(progn
+              (%defun ',name ',lambda-list '(BLOCK ,block-name ,@body) ,env)
+              (precompile ',name)
+              ',name)))))
