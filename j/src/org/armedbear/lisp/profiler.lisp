@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: profiler.lisp,v 1.11 2004-10-10 17:18:14 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: profiler.lisp,v 1.12 2005-04-14 22:52:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@
 
 (defun object-name (object)
   (cond ((symbolp object)
-         (symbol-name object))
+         object)
         ((typep object 'generic-function)
          (sys::generic-function-name object))
         ((typep object 'method)
@@ -73,7 +73,7 @@
          (count (profile-info-count info))
          (function (if (symbolp object) (fdefinition object) object)))
     (if max-count
-        (format t "~5,1F ~8D ~A~A~%"
+        (format t "~5,1F ~8D ~S~A~%"
                 (/ (* count 100.0) max-count)
                 count
                 (object-name object)
@@ -81,7 +81,7 @@
                         (and (symbolp object) (special-operator-p object)))
                     ""
                     " [interpreted function]"))
-        (format t "~8D ~A~A~%"
+        (format t "~8D ~S~A~%"
                 count
                 (object-name object)
                 (if (or (compiled-function-p function)
