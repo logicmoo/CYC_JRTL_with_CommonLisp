@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.95 2005-03-29 17:27:33 piso Exp $
+;;; $Id: precompiler.lisp,v 1.96 2005-04-14 14:42:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -349,45 +349,74 @@
   ;; Delegate to PRECOMPILE-PSETF so symbol macros are handled correctly.
   (precompile-psetf form))
 
+;; Returns list of declared specials.
+(defun process-special-declarations (forms)
+  (let ((specials ()))
+    (dolist (form forms)
+      (unless (and (consp form) (eq (car form) 'declare))
+        (return))
+      (let ((decls (cdr form)))
+        (dolist (decl decls)
+          (when (eq (car decl) 'special)
+            (setf specials (append (cdr decl) specials))))))
+    specials))
+
 (defun maybe-rewrite-lambda (form)
   (let* ((args (cdr form))
          (lambda-list (car args))
          (body (cdr args))
+         (declared-specials (process-special-declarations body))
          (auxvars (memq '&AUX lambda-list))
          (specials '()))
     (when auxvars
       (setf lambda-list (subseq lambda-list 0 (position '&AUX lambda-list)))
       (setf body (list (append (list 'LET* (cdr auxvars)) body))))
-    (dolist (var lambda-list)
-      (when (consp var)
-        (if (consp (first var))
-            (setf var (second (first var)))   ;; e.g. "&key ((:x *x*) 42)"
-            (setf var (first var))))          ;; e.g. "&optional (*x* 42)"
-      (when (special-variable-p var)
-        (push var specials)))
+    ;; Scan for specials.
+    (let ((keyp nil))
+      (dolist (var lambda-list)
+        (cond ((eq var '&KEY)
+               (setf keyp t))
+              ((atom var)
+               (when (or (special-variable-p var) (memq var declared-specials))
+                 (push var specials)))
+              ((not keyp) ;; e.g. "&optional (*x* 42)"
+               (setf var (first var))
+               (when (or (special-variable-p var) (memq var declared-specials))
+                 (push var specials)))
+              ;; Keyword parameters.
+              ((atom (first var)) ;; e.g. "&key (a 42)"
+               ;; Not special.
+               )
+              (t
+               ;; e.g. "&key ((:x *x*) 42)"
+               (setf var (second (first var))) ;; *x*
+               (when (or (special-variable-p var) (memq var declared-specials))
+                 (push var specials))))))
     (when specials
+      ;; For each special...
       (dolist (special specials)
         (let ((sym (gensym)))
           (let ((res ())
                 (keyp nil))
+            ;; Walk through the lambda list and replace each occurrence.
             (dolist (var lambda-list)
               (cond ((eq var '&KEY)
                      (setf keyp t)
                      (push var res))
-                    ((and (consp var) (consp (first var))
-                          (eq special (second (first var))))
-                     (push (list (list (first (first var)) sym) (second var)) res))
-                    ((and (consp var) (eq special (first var)))
-                     (push (cons sym (cdr var)) res))
-                    ((eq var special)
-                     (if keyp
-                         ;; "&key x" => "&key ((:x x) nil)"
-                         (push (list (list (intern (symbol-name var) sys:+keyword-package+)
-                                           sym)
-                                     nil)
-                               res)
-                         (push sym res)))
+                    ((atom var)
+                     (when (eq var special)
+                       (setf var sym))
+                     (push var res))
+                    ((not keyp) ;; e.g. "&optional (*x* 42)"
+                     (when (eq (first var) special)
+                       (setf (first var) sym))
+                     (push var res))
+                    ((atom (first var)) ;; e.g. "&key (a 42)"
+                     (push var res))
                     (t
+                     ;; e.g. "&key ((:x *x*) 42)"
+                     (when (eq (second (first var)) special)
+                       (setf (second (first var)) sym))
                      (push var res))))
             (setf lambda-list (nreverse res)))
           (setf body (list (append (list 'LET* (list (list special sym))) body))))))
