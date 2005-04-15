@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.425 2005-04-14 22:49:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.426 2005-04-15 00:26:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,15 +53,16 @@
   (sys:set-function-info-value name :inline-expansion expansion))
 
 ;; Just an experiment...
-#+nil
 (defmacro defsubst (name lambda-list &rest body)
-  `(progn
-     (sys::%defun ',name ',lambda-list ',body)
-     (precompile ',name)
-     (setf (inline-expansion ',name)
-           (precompile-form (list* 'LAMBDA ',lambda-list ',body) t))
-     ',name))
+  (let ((block-name (sys:block-name name)))
+    `(progn
+       (sys::%defun ',name ',lambda-list '(BLOCK ,block-name ,@body))
+       (precompile ',name)
+       (setf (inline-expansion ',name)
+             (precompile-form (list* 'LAMBDA ',lambda-list ',body) t))
+       ',name)))
 
+#+nil
 (defmacro defsubst (&rest args)
   `(defun ,@args))
 
