@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.17 2005-03-17 14:54:33 piso Exp $
+ * $Id: MathFunctions.java,v 1.18 2005-04-16 14:58:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -241,7 +241,7 @@ public final class MathFunctions extends Lisp
                     if (sinhMethod != null) {
                         Object[] args;
                         args = new Object[1];
-                        args[0] = new Double(((DoubleFloat)arg).value);
+                        args[0] = new Double(((SingleFloat)arg).value);
                         Double d = (Double) sinhMethod.invoke(null, args);
                         return new SingleFloat((float)d.doubleValue());
                     }
@@ -316,7 +316,7 @@ public final class MathFunctions extends Lisp
                     if (coshMethod != null) {
                         Object[] args;
                         args = new Object[1];
-                        args[0] = new Double(((DoubleFloat)arg).value);
+                        args[0] = new Double(((SingleFloat)arg).value);
                         Double d = (Double) coshMethod.invoke(null, args);
                         return new SingleFloat((float)d.doubleValue());
                     }
@@ -379,7 +379,7 @@ public final class MathFunctions extends Lisp
                         if (tanhMethod != null) {
                             Object[] args;
                             args = new Object[1];
-                            args[0] = new Double(((DoubleFloat)arg).value);
+                            args[0] = new Double(((SingleFloat)arg).value);
                             Double d = (Double) tanhMethod.invoke(null, args);
                             return new SingleFloat((float)d.doubleValue());
                         }
