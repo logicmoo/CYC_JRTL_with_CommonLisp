@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.428 2005-04-18 02:48:41 piso Exp $
+;;; $Id: jvm.lisp,v 1.429 2005-04-18 03:55:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,9 +42,13 @@
 
 (defvar *enable-dformat* nil)
 
+#+nil
 (defun dformat (destination control-string &rest args)
   (when *enable-dformat*
     (apply #'sys::%format destination control-string args)))
+
+(defmacro dformat (&rest ignored)
+  )
 
 (defun inline-expansion (name)
   (sys:get-function-info-value name :inline-expansion))
@@ -751,9 +755,7 @@
              (unless (single-valued-p op)
                (sys::%format t "not single-valued op = ~S~%" op)
                (setf (compiland-single-valued-p *current-compiland*) nil)))))
-;;     (list* op (mapcar #'p1 (cdr form)))
-    (p1-default form)
-    ))
+    (p1-default form)))
 
 (defun p1 (form)
   (cond ((symbolp form)
