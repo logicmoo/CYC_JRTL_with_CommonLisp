@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.426 2005-04-15 00:26:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.427 2005-04-18 02:07:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -419,7 +419,7 @@
           (setf (variable-special-p variable) t)))
       (setf (block-free-specials block) (process-declarations-for-vars body vars))
       (setf (block-vars block) vars))
-    (setf body (mapcar #'p1 body))
+    (setf body (p1-body body))
     (setf (block-form block) (list* op varlist body))
     block))
 
@@ -451,20 +451,21 @@
           (setf (variable-special-p variable) t)))
       (setf (block-free-specials block) (process-declarations-for-vars body vars))
       (setf (block-vars block) (nreverse vars)))
-    (setf body (mapcar #'p1 body))
+    (setf body (p1-body body))
     (setf (block-form block) (list* 'MULTIPLE-VALUE-BIND varlist values-form body))
     block))
 
 (defun p1-block (form)
   (let* ((block (make-block-node :name (cadr form)))
          (*blocks* (cons block *blocks*)))
-    (setf (block-form block) (list* 'BLOCK (cadr form) (mapcar #'p1 (cddr form))))
+    (setf (cddr form) (p1-body (cddr form)))
+    (setf (block-form block) form)
     block))
 
 (defun p1-unwind-protect (form)
   (let* ((block (make-block-node :name '(UNWIND-PROTECT)))
          (*blocks* (cons block *blocks*)))
-    (setf (block-form block) (list* 'UNWIND-PROTECT (mapcar #'p1 (cdr form))))
+    (setf (block-form block) (p1-default form))
     block))
 
 (defun p1-return-from (form)
@@ -682,8 +683,19 @@
                (list 'THE type (p1 expr))
                (p1 expr))))))
 
+(defun p1-body (body)
+  (declare (optimize speed))
+  (let ((tail body))
+    (loop
+      (when (null tail)
+        (return))
+      (setf (car tail) (p1 (car tail)))
+      (setf tail (cdr tail))))
+  body)
+
 (defun p1-default (form)
-  (list* (car form) (mapcar #'p1 (cdr form))))
+  (setf (cdr form) (p1-body (cdr form)))
+  form)
 
 (defun p1-throw (form)
   (let ((new-form (rewrite-throw form)))
@@ -739,7 +751,9 @@
              (unless (single-valued-p op)
                (sys::%format t "not single-valued op = ~S~%" op)
                (setf (compiland-single-valued-p *current-compiland*) nil)))))
-    (list* op (mapcar #'p1 (cdr form)))))
+;;     (list* op (mapcar #'p1 (cdr form)))
+    (p1-default form)
+    ))
 
 (defun p1 (form)
   (cond ((symbolp form)
@@ -1096,7 +1110,7 @@
                 reverse nreverse
                 last
                 cons rplaca rplacd
-                sys::%rplaca sys::%rplacd
+                sys::set-car sys::set-cdr
                 copy-list copy-tree
                 make-sequence make-list make-array make-package make-hash-table
                 make-string
@@ -2571,8 +2585,9 @@
                   (SYS::SIMPLE-TYPEP   "typep")
                   (RPLACA              "RPLACA")
                   (RPLACD              "RPLACD")
-                  (SYS::%RPLACA        "_RPLACA")
-                  (SYS::%RPLACD        "_RPLACD")))
+;;                   (SYS::SET-CAR        "_RPLACA")
+;;                   (SYS::%RPLACD        "_RPLACD")
+                  ))
     (define-binary-operator (first pair) (second pair))))
 
 (initialize-binary-operators)
@@ -3807,7 +3822,7 @@
             (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))
 
           ;; FIXME Not exactly the right place for this, but better than nothing.
-          (maybe-generate-interrupt-check)
+;;           (maybe-generate-interrupt-check)
 
           (emit 'goto (tag-label tag))
           (return-from p2-go))))
@@ -4042,6 +4057,22 @@
     (compile-form (second args) :target :stack)
     (emit-invokevirtual +lisp-object-class+
                         "setCdr"
+                        (list +lisp-object+)
+                        nil)
+    (when target
+      (emit-move-from-stack target))))
+
+(defun p2-set-car (form &key (target :stack) representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-set-car))
+  (let ((args (cdr form)))
+    (compile-form (first args) :target :stack)
+    (compile-form (second args) :target :stack)
+    (when target
+      (emit 'dup_x1))
+    (emit-invokevirtual +lisp-object-class+
+                        "setCar"
                         (list +lisp-object+)
                         nil)
     (when target
@@ -5725,7 +5756,7 @@
           (dformat t "p1-compiland *visible-variables* ==> ~S~%"
                    (mapcar #'variable-name *visible-variables*))
           (setf (compiland-p1-result compiland)
-                (list* 'LAMBDA lambda-list (mapcar #'p1 body))))))))
+                (list* 'LAMBDA lambda-list (p1-body body))))))))
 
 (defun p2-%call-internal (form &key (target :stack) representation)
   (dformat t "p2-%call-internal~%")
@@ -6325,6 +6356,7 @@
   (install-p2-handler 'return-from     'p2-return-from)
   (install-p2-handler 'rplacd          'p2-rplacd)
   (install-p2-handler 'schar           'p2-schar)
+  (install-p2-handler 'sys:set-car     'p2-set-car)
   (install-p2-handler 'svref           'p2-svref)
   (install-p2-handler 'setq            'p2-setq)
   (install-p2-handler 'the             'p2-the)
