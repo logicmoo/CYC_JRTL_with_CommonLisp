@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.126 2005-04-08 12:34:06 piso Exp $
+ * $Id: LispObject.java,v 1.127 2005-04-18 02:03:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,11 +108,6 @@ public class LispObject extends Lisp
     }
 
     public LispObject RPLACA(LispObject obj) throws ConditionThrowable
-    {
-        return signal(new TypeError(this, Symbol.CONS));
-    }
-
-    public LispObject _RPLACA(LispObject obj) throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.CONS));
     }

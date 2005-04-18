@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.56 2005-04-08 11:56:11 piso Exp $
+ * $Id: Cons.java,v 1.57 2005-04-18 02:06:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,12 +115,6 @@ public final class Cons extends LispObject
     {
         car = obj;
         return this;
-    }
-
-    public LispObject _RPLACA(LispObject obj) throws ConditionThrowable
-    {
-        car = obj;
-        return obj;
     }
 
     public final void setCdr(LispObject obj)
