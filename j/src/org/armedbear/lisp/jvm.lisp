@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.427 2005-04-18 02:07:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.428 2005-04-18 02:48:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2584,10 +2584,7 @@
                   (AREF                "AREF")
                   (SYS::SIMPLE-TYPEP   "typep")
                   (RPLACA              "RPLACA")
-                  (RPLACD              "RPLACD")
-;;                   (SYS::SET-CAR        "_RPLACA")
-;;                   (SYS::%RPLACD        "_RPLACD")
-                  ))
+                  (RPLACD              "RPLACD")))
     (define-binary-operator (first pair) (second pair))))
 
 (initialize-binary-operators)
@@ -4062,17 +4059,18 @@
     (when target
       (emit-move-from-stack target))))
 
-(defun p2-set-car (form &key (target :stack) representation)
+(defun p2-set-car/cdr (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
-    (return-from p2-set-car))
-  (let ((args (cdr form)))
+    (return-from p2-set-car/cdr))
+  (let ((op (car form))
+        (args (cdr form)))
     (compile-form (first args) :target :stack)
     (compile-form (second args) :target :stack)
     (when target
       (emit 'dup_x1))
     (emit-invokevirtual +lisp-object-class+
-                        "setCar"
+                        (if (eq op 'sys:set-car) "setCar" "setCdr")
                         (list +lisp-object+)
                         nil)
     (when target
@@ -6356,7 +6354,8 @@
   (install-p2-handler 'return-from     'p2-return-from)
   (install-p2-handler 'rplacd          'p2-rplacd)
   (install-p2-handler 'schar           'p2-schar)
-  (install-p2-handler 'sys:set-car     'p2-set-car)
+  (install-p2-handler 'sys:set-car     'p2-set-car/cdr)
+  (install-p2-handler 'sys:set-cdr     'p2-set-car/cdr)
   (install-p2-handler 'svref           'p2-svref)
   (install-p2-handler 'setq            'p2-setq)
   (install-p2-handler 'the             'p2-the)
