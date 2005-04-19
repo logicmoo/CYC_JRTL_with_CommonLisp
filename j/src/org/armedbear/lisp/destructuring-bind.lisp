@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.14 2005-03-14 17:46:08 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.15 2005-04-19 00:53:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@
 		   (let* ,(nreverse *user-lets*)
 		     ,@declarations
                      ,@(if wrap-block
-                           `((block ,name ,@forms))
+                           `((block ,(block-name name) ,@forms))
                            forms)))
 		`(,@(when (and env-arg-name (not env-arg-used))
                       `((declare (ignore ,env-arg-name)))))
