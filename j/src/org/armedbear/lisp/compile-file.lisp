@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.74 2005-04-14 22:47:59 piso Exp $
+;;; $Id: compile-file.lisp,v 1.75 2005-04-20 14:46:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -173,8 +173,6 @@
              (DEFCONSTANT
               (process-defconstant form stream)
               (return-from process-toplevel-form))
-             ((DEFINE-SOURCE-TRANSFORM DEFSUBST)
-              (setf form (precompile-form form nil)))
              (DEFUN
               (let* ((name (second form))
                      (block-name (block-name name)))
