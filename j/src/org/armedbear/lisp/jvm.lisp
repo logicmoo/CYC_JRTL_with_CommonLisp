@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.429 2005-04-18 03:55:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.430 2005-04-20 14:45:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,8 +62,9 @@
     `(progn
        (sys::%defun ',name ',lambda-list '(BLOCK ,block-name ,@body))
        (precompile ',name)
-       (setf (inline-expansion ',name)
-             (precompile-form (list* 'LAMBDA ',lambda-list ',body) t))
+       (eval-when (:compile-toplevel :load-toplevel :execute)
+         (setf (inline-expansion ',name)
+               (precompile-form (list* 'LAMBDA ',lambda-list ',body) t)))
        ',name)))
 
 #+nil
