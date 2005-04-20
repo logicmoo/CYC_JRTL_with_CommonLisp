@@ -1,7 +1,7 @@
 ;;; source-transform.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: source-transform.lisp,v 1.2 2005-02-09 18:38:38 piso Exp $
+;;; $Id: source-transform.lisp,v 1.3 2005-04-20 14:44:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
           (if (symbolp name)
               `(lambda (,form) (block ,name ,body))
               `(lambda (,form) (block ,(cadr name) ,body)))))
-    `(progn
+    `(eval-when (:compile-toplevel :load-toplevel :execute)
        (setf (source-transform ',name) ,expander)
        ',name)))
 
