@@ -1,8 +1,8 @@
 /*
  * SimpleTypeError.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleTypeError.java,v 1.6 2004-10-13 17:54:56 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: SimpleTypeError.java,v 1.7 2005-04-20 14:42:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,15 +57,13 @@ public final class SimpleTypeError extends TypeError
             LispObject formatControl = getFormatControl();
             if (formatControl != NIL) {
                 LispObject formatArguments = getFormatArguments();
-                if (formatArguments != NIL) {
-                    // (apply 'format (append '(nil format-control) format-arguments))
-                    LispObject result =
-                        Primitives.APPLY.execute(Symbol.FORMAT,
-                                                 Primitives.APPEND.execute(list2(NIL,
-                                                                                 formatControl),
-                                                                           formatArguments));
-                    return result.getStringValue();
-                }
+                // (apply 'format (append '(nil format-control) format-arguments))
+                LispObject result =
+                    Primitives.APPLY.execute(Symbol.FORMAT,
+                                             Primitives.APPEND.execute(list2(NIL,
+                                                                             formatControl),
+                                                                       formatArguments));
+                return result.getStringValue();
             }
             if (datum != null && expectedType != null) {
                 StringBuffer sb = new StringBuffer("The value ");
