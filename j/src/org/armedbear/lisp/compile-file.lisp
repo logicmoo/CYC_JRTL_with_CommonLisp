@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.75 2005-04-20 14:46:33 piso Exp $
+;;; $Id: compile-file.lisp,v 1.76 2005-04-20 16:03:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,21 +58,25 @@
           (load-compiled-function classfile)))))
 
 (defun dump-list (object stream)
-  (write-char #\( stream)
-  (loop
-    (dump-object (car object) stream)
-    (setf object (cdr object))
-    (when (null object)
-      (return))
-    (when (> (charpos stream) 80)
-      (terpri stream))
-    (write-char #\space stream)
-    (when (atom object)
-      (write-char #\. stream)
-      (write-char #\space stream)
-      (dump-object object stream)
-      (return)))
-  (write-char #\) stream))
+  (cond ((and (eq (car object) 'QUOTE) (= (length object) 2))
+         (write-char #\' stream)
+         (dump-object (cadr object) stream))
+        (t
+         (write-char #\( stream)
+         (loop
+           (dump-object (car object) stream)
+           (setf object (cdr object))
+           (when (null object)
+             (return))
+           (when (> (charpos stream) 80)
+             (terpri stream))
+           (write-char #\space stream)
+           (when (atom object)
+             (write-char #\. stream)
+             (write-char #\space stream)
+             (dump-object object stream)
+             (return)))
+         (write-char #\) stream))))
 
 (defun dump-vector (object stream)
   (write-string "#(" stream)
