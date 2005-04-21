@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.433 2005-04-21 17:06:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.434 2005-04-21 23:23:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1484,7 +1484,7 @@
 
 (defun resolve-instructions (code)
   (let ((vector (make-array 512 :fill-pointer 0 :adjustable t)))
-    (dotimes (index (the fixnum (length code)) vector)
+    (dotimes (index (length code) vector)
       (declare (type fixnum index))
       (let ((instruction (svref code index)))
         (case (instruction-opcode instruction)
@@ -1895,10 +1895,10 @@
         (if (= opcode 202) ; LABEL
             (let ((label (car (instruction-args instruction))))
               (set label length))
-            (incf length (opcode-size opcode)))))
+            (incf length (the fixnum (opcode-size opcode))))))
     ;; Pass 2: replace labels with calculated offsets.
     (let ((index 0))
-;;       (declare (type fixnum index))
+      (declare (type fixnum index))
       (dotimes (i (length code))
         (declare (type fixnum i))
         (let ((instruction (aref code i)))
@@ -1911,7 +1911,7 @@
     ;; Expand instructions into bytes, skipping LABEL pseudo-instructions.
     (let ((bytes (make-array length))
           (index 0))
-;;       (declare (type fixnum index))
+      (declare (type fixnum index))
       (dotimes (i (length code))
         (declare (type fixnum i))
         (let ((instruction (aref code i)))
@@ -1945,8 +1945,10 @@
          (write-u4 n stream))))
 
 (defun write-ascii (string length stream)
+  (declare (type fixnum length))
   (write-u2 length stream)
   (dotimes (i length)
+    (declare (type fixnum i))
     (sys:write-8-bits (char-code (schar string i)) stream)))
 
 (defun write-utf8 (string stream)
@@ -1979,6 +1981,7 @@
                          (vector-push-extend (svref char-octets j) octets)))))))
           (write-u2 (length octets) stream)
           (dotimes (i (length octets))
+            (declare (type fixnum i))
             (sys:write-8-bits (aref octets i) stream)))
         (write-ascii string length stream))))
 
