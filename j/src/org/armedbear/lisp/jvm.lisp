@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.430 2005-04-20 14:45:13 piso Exp $
+;;; $Id: jvm.lisp,v 1.431 2005-04-21 02:43:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1179,6 +1179,7 @@
                 sys:read-8-bits
                 sys:write-8-bits
                 sys::require-type
+                sys::do-arg-count-error
                 ))
     (setf (sys:single-valued-p op) t)))
 
@@ -2503,7 +2504,6 @@
                   (ATOM            "ATOM")
                   (BIT-VECTOR-P    "BIT_VECTOR_P")
                   (CADR            "cadr")
-                  (CAR             "car")
                   (CDDR            "cddr")
                   (CDR             "cdr")
                   (CHARACTERP      "CHARACTERP")
@@ -3867,7 +3867,7 @@
       (dformat t "p2-block-node lastSpecialBinding~%")
       (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
       (cond ((some #'variable-special-p *all-variables*)
-;;              Save current dynamic environment.
+             ;; Save the current dynamic environment.
              (setf (block-environment-register block) (allocate-register))
              (emit-push-current-thread)
              (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+)
@@ -3964,6 +3964,20 @@
     (when target
       (emit-push-nil)
       (emit-move-from-stack target))))
+
+(defun p2-car (form &key (target :stack) representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-car))
+  (let ((arg (cadr form)))
+    (cond ((and (consp arg) (eq (first arg) 'cdr) (= (length arg) 2))
+           (compile-form (second arg) :target :stack)
+           (maybe-emit-clear-values (second arg))
+           (emit-invoke-method "cadr" target representation))
+          (t
+           (compile-form arg :target :stack)
+           (maybe-emit-clear-values arg)
+           (emit-invoke-method "car" target representation)))))
 
 (defun p2-cons (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
@@ -6339,6 +6353,7 @@
   (install-p2-handler 'sys::aset       'p2-aset)
   (install-p2-handler 'ash             'p2-ash)
   (install-p2-handler 'atom            'p2-atom)
+  (install-p2-handler 'car             'p2-car)
   (install-p2-handler 'cons            'p2-cons)
   (install-p2-handler 'eql             'p2-eql)
   (install-p2-handler 'eval-when       'p2-eval-when)
