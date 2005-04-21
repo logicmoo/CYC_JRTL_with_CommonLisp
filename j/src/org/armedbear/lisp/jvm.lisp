@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.432 2005-04-21 15:54:01 piso Exp $
+;;; $Id: jvm.lisp,v 1.433 2005-04-21 17:06:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1179,7 +1179,7 @@
                 sys:read-8-bits
                 sys:write-8-bits
                 sys::require-type
-                sys::do-arg-count-error
+                sys::arg-count-error
                 ))
     (setf (sys:single-valued-p op) t)))
 
@@ -3232,17 +3232,12 @@
            (var1 (unboxed-fixnum-variable arg1))
            (var2 (unboxed-fixnum-variable arg2)))
       (when (memq op '(< <= > >= = /=))
-        (when
-          (and (arg-is-fixnum-p arg1)
-               (arg-is-fixnum-p arg2))
-;;           (and (subtypep (derive-type arg1) 'fixnum)
-;;                (subtypep (derive-type arg2) 'fixnum))
-          (emit-push-int arg1)
-          (emit-push-int arg2)
-;;           (compile-form arg1 :target :stack :representation :unboxed-fixnum)
-;;           (maybe-emit-clear-values arg1)
-;;           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-;;           (maybe-emit-clear-values arg2)
+        (when (and (subtypep (derive-type arg1) 'fixnum)
+                   (subtypep (derive-type arg2) 'fixnum))
+          (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+          (maybe-emit-clear-values arg1)
+          (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+          (maybe-emit-clear-values arg2)
           (case op
             (<
              (return-from compile-test-3 (if negatep 'if_icmplt 'if_icmpge)))
@@ -4575,7 +4570,11 @@
         ((symbolp form)
          (let ((variable (find-visible-variable form)))
            (if variable
-               (variable-declared-type variable)
+               (let ((type (variable-declared-type variable)))
+                 (if (and (eq type t)
+                          (eq (variable-representation variable) :unboxed-fixnum))
+                     'FIXNUM
+                     type))
                t)))
         ((consp form)
          (let ((op (first form)))
