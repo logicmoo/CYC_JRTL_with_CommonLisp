@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.15 2005-04-19 00:53:53 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.16 2005-04-21 15:52:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@
   (%defvar '*ignorable-vars* ())
   (%defvar '*env-var* nil))
 
-(defun do-arg-count-error (error-kind name arg lambda-list minimum maximum)
+(defun arg-count-error (error-kind name arg lambda-list minimum maximum)
   (error 'program-error
          :format-control "Wrong number of arguments for ~S."
          :format-arguments (list name)))
@@ -131,12 +131,13 @@
        (lambda-list arg-list-name name error-kind error-fun
 		    &optional top-level env-illegal ;;env-arg-name
                     )
-  (let ((path (if top-level `(cdr ,arg-list-name) arg-list-name))
-	(now-processing :required)
-	(maximum 0)
-	(minimum 0)
-	(keys ())
-	rest-name restp allow-other-keys-p env-arg-used)
+  (let* ((path-0 (if top-level `(cdr ,arg-list-name) arg-list-name))
+         (path path-0)
+         (now-processing :required)
+         (maximum 0)
+         (minimum 0)
+         (keys ())
+         rest-name restp allow-other-keys-p env-arg-used)
     ;; This really strange way to test for '&whole is neccessary because member
     ;; does not have to work on dotted lists, and dotted lists are legal
     ;; in lambda-lists.
@@ -266,36 +267,30 @@
     ;; Generate code to check the number of arguments, unless dotted
     ;; in which case length will not work.
     (unless restp
-       (push `(unless (<= ,minimum
-			  (length (the list ,(if top-level
-						 `(cdr ,arg-list-name)
-					       arg-list-name)))
-			  ,@(unless restp
-				    (list maximum)))
-		      ,(let ((arg (if top-level
-				      `(cdr ,arg-list-name)
-				    arg-list-name)))
-			 (if (eq error-fun 'error)
-			     `(do-arg-count-error ',error-kind ',name ,arg
-						  ',lambda-list ,minimum
-						  ,(unless restp maximum))
-                             `(,error-fun 'defmacro-ll-arg-count-error
-				 :kind ',error-kind
-				 ,@(when name `(:name ',name))
-				 :argument ,arg
-				 :lambda-list ',lambda-list
-				 :minimum ,minimum
-				 ,@(unless restp `(:maximum ,maximum))))))
-	     *arg-tests*))
+      (push `(unless (<= ,minimum
+                         (length ,path-0)
+                         ,@(unless restp
+                             (list maximum)))
+               ,(if (eq error-fun 'error)
+                    `(arg-count-error ',error-kind ',name ,path-0
+                                      ',lambda-list ,minimum
+                                      ,(unless restp maximum))
+                    `(,error-fun 'arg-count-error
+                      :kind ',error-kind
+                      ,@(when name `(:name ',name))
+                      :argument ,path-0
+                      :lambda-list ',lambda-list
+                      :minimum ,minimum
+                      ,@(unless restp `(:maximum ,maximum)))))
+            *arg-tests*))
     (if keys
 	(let ((problem (gensym "KEY-PROBLEM-"))
 	      (info (gensym "INFO-")))
-	  (push `(multiple-value-bind
-		     (,problem ,info)
+	  (push `(multiple-value-bind (,problem ,info)
 		     (verify-keywords ,rest-name ',keys ',allow-other-keys-p)
 		   (when ,problem
 		     (,error-fun
-		      'defmacro-ll-broken-key-list-error
+		      'defmacro-lambda-list-broken-key-list-error
 		      :kind ',error-kind
 		      ,@(when name `(:name ',name))
 		      :problem ,problem
