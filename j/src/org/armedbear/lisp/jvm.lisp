@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.434 2005-04-21 23:23:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.435 2005-04-22 04:37:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1212,7 +1212,13 @@
          (dformat t "single-valued-p recursive call ~S~%" (first form))
          (compiland-single-valued-p *current-compiland*))
         (t
-         (sys:single-valued-p (car form)))))
+         (when (sys:single-valued-p (car form))
+           (return-from single-valued-p t))
+         (let ((ftype (sys:proclaimed-ftype (car form))))
+           (if (and ftype (third ftype) (atom (third ftype)))
+               t
+               nil))
+         )))
 
 (defun emit-clear-values ()
 ;;   (break "EMIT-CLEAR-VALUES called~%")
@@ -1927,16 +1933,19 @@
   (declare (optimize speed))
   (sys::write-8-bits n stream))
 
+(declaim (ftype (function (t t) t) write-u2))
 (defun write-u2 (n stream)
   (declare (optimize speed))
   (sys::write-8-bits (ash n -8) stream)
   (sys::write-8-bits (logand n #xFF) stream))
 
+(declaim (ftype (function (t t) t) write-u4))
 (defun write-u4 (n stream)
   (declare (optimize speed))
   (write-u2 (ash n -16) stream)
   (write-u2 (logand n #xFFFF) stream))
 
+(declaim (ftype (function (t t) t) write-s4))
 (defun write-s4 (n stream)
   (declare (optimize speed))
   (cond ((minusp n)
@@ -1944,6 +1953,7 @@
         (t
          (write-u4 n stream))))
 
+(declaim (ftype (function (t t t) t) write-ascii))
 (defun write-ascii (string length stream)
   (declare (type fixnum length))
   (write-u2 length stream)
@@ -1951,6 +1961,7 @@
     (declare (type fixnum i))
     (sys:write-8-bits (char-code (schar string i)) stream)))
 
+(declaim (ftype (function (t t) t) write-utf8))
 (defun write-utf8 (string stream)
   (declare (optimize speed))
   (let ((length (length string))
@@ -4601,7 +4612,10 @@
              (THE
               (second form))
              (t
-              t))))
+              (let ((ftype (sys:proclaimed-ftype op)))
+                (if ftype
+                    (or (third ftype) t)
+                    t))))))
         (t
          t)))
 
