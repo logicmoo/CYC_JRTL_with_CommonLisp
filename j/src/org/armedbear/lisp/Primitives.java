@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.762 2005-04-14 22:44:25 piso Exp $
+ * $Id: Primitives.java,v 1.763 2005-04-22 21:28:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1530,22 +1530,9 @@ public final class Primitives extends Lisp
                     ; // FIXME Support documentation for SETF functions!
                 body = body.cdr();
             }
-//             LispObject decls = NIL;
-//             while (body.car() instanceof Cons && body.car().car() == Symbol.DECLARE) {
-//                 decls = new Cons(body.car(), decls);
-//                 body = body.cdr();
-//             }
-//             body = new Cons(symbol, body);
-//             body = new Cons(Symbol.BLOCK, body);
-//             body = new Cons(body, NIL);
-//             while (decls != NIL) {
-//                 body = new Cons(decls.car(), body);
-//                 decls = decls.cdr();
-//             }
-//             Debug.trace("defun body = " + body.writeToString());
             Closure closure = new Closure(first instanceof Symbol ? symbol : null,
                                           arglist,
-                                          new Cons(body, NIL),
+                                          body,
                                           env);
             FSET.execute(first, closure, NIL, arglist);
             return first;
