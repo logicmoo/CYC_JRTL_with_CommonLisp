@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: opcodes.lisp,v 1.20 2005-03-31 02:15:06 piso Exp $
+;;; $Id: opcodes.lisp,v 1.21 2005-04-22 21:27:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -247,21 +247,25 @@
 
 (defparameter *last-opcode* 207)
 
+(declaim (ftype (function (t) t) opcode-name))
 (defun opcode-name (opcode-number)
   (let ((opcode (gethash opcode-number *opcodes*)))
     (and opcode (jvm-opcode-name opcode))))
 
+(declaim (ftype (function (t) t) opcode-number))
 (defun opcode-number (opcode-name)
-  (declare (optimize (speed 3) (safety 0)))
+  (declare (optimize speed))
   (let ((opcode (gethash (string opcode-name) *opcodes*)))
     (and opcode (jvm-opcode-number opcode))))
 
+(declaim (ftype (function (t) t) opcode-size))
 (defun opcode-size (opcode-number)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (jvm-opcode-size (svref *opcode-table* opcode-number)))
 
+(declaim (ftype (function (t) t) opcode-stack-effect))
 (defun opcode-stack-effect (opcode-number)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (jvm-opcode-stack-effect (svref *opcode-table* opcode-number)))
 
 (provide '#:opcodes)
