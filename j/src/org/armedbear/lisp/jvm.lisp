@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.436 2005-04-22 16:54:13 piso Exp $
+;;; $Id: jvm.lisp,v 1.437 2005-04-22 21:33:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@
 (defmacro defsubst (name lambda-list &rest body)
   (let ((block-name (sys:block-name name)))
     `(progn
-       (sys::%defun ',name ',lambda-list '(BLOCK ,block-name ,@body))
+       (sys::%defun ',name ',lambda-list '((BLOCK ,block-name ,@body)))
        (precompile ',name)
        (eval-when (:compile-toplevel :load-toplevel :execute)
          (setf (inline-expansion ',name)
@@ -2571,14 +2571,6 @@
              (maybe-emit-clear-values arg)
              (emit-invoke-method s target representation)
              t)
-            ((eq op 'LIST)
-             (emit 'new +lisp-cons-class+)
-             (emit 'dup)
-             (compile-form arg :target :stack)
-             (maybe-emit-clear-values arg)
-             (emit-invokespecial-init +lisp-cons-class+ (list +lisp-object+))
-             (emit-move-from-stack target)
-             t)
             (t
              nil)))))
 
@@ -2642,16 +2634,6 @@
              (emit 'label `,label1)
              (emit-push-t)
              (emit 'label `,label2))
-           (emit-move-from-stack target)
-           t)
-          (LIST
-           (compile-form first :target :stack)
-           (compile-form second :target :stack)
-           (unless (and (single-valued-p first)
-                        (single-valued-p second))
-             (emit-clear-values))
-           (emit-invokestatic +lisp-class+ "list2"
-                              (list +lisp-object+ +lisp-object+) +lisp-cons+)
            (emit-move-from-stack target)
            t)
           (SYS::%STRUCTURE-REF
@@ -2755,17 +2737,6 @@
 
 (defun compile-function-call-3 (op args target)
   (case op
-    (LIST
-     (compile-form (first args) :target :stack)
-     (compile-form (second args) :target :stack)
-     (compile-form (third args) :target :stack)
-     (unless (every 'single-valued-p args)
-       (emit-clear-values))
-     (emit-invokestatic +lisp-class+ "list3"
-                        (list +lisp-object+ +lisp-object+ +lisp-object+)
-                        +lisp-cons+)
-     (emit-move-from-stack target)
-     t)
     (SYS::%STRUCTURE-SET
      (when (fixnump (second args))
        (compile-form (first args) :target :stack)
@@ -4707,6 +4678,68 @@
            (emit-invokevirtual +lisp-object-class+ "LENGTH" nil +lisp-object+)))
     (emit-move-from-stack target representation)))
 
+(defun p2-list (form &key (target :stack) representation)
+  (let ((args (cdr form)))
+    (case (length args)
+      (1
+       (emit 'new +lisp-cons-class+)
+       (emit 'dup)
+       (let ((arg (first args)))
+         (compile-form arg :target :stack)
+         (maybe-emit-clear-values arg))
+       (emit-invokespecial-init +lisp-cons-class+ (list +lisp-object+))
+       (emit-move-from-stack target))
+      (2
+       (let ((first (first args))
+             (second (second args)))
+         (cond ((>= *speed* *space*)
+                (emit 'new +lisp-cons-class+)
+                (emit 'dup)
+                (compile-form first :target :stack)
+                (emit 'new +lisp-cons-class+)
+                (emit 'dup)
+                (compile-form second :target :stack)
+                (emit-invokespecial-init +lisp-cons-class+ (list +lisp-object+))
+                (emit-invokespecial-init +lisp-cons-class+ (list +lisp-object+ +lisp-object+)))
+               (t
+                (compile-form first :target :stack)
+                (compile-form second :target :stack)
+                (emit-invokestatic +lisp-class+ "list2"
+                                   (list +lisp-object+ +lisp-object+) +lisp-cons+)))
+         (unless (and (single-valued-p first)
+                      (single-valued-p second))
+           (emit-clear-values))
+         (emit-move-from-stack target)))
+      (3
+       (let ((first (first args))
+             (second (second args))
+             (third (third args)))
+         (cond ((>= *speed* *space*)
+                (emit 'new +lisp-cons-class+)
+                (emit 'dup)
+                (compile-form first :target :stack)
+                (emit 'new +lisp-cons-class+)
+                (emit 'dup)
+                (compile-form second :target :stack)
+                (emit 'new +lisp-cons-class+)
+                (emit 'dup)
+                (compile-form third :target :stack)
+                (emit-invokespecial-init +lisp-cons-class+ (list +lisp-object+))
+                (emit-invokespecial-init +lisp-cons-class+ (list +lisp-object+ +lisp-object+))
+                (emit-invokespecial-init +lisp-cons-class+ (list +lisp-object+ +lisp-object+)))
+               (t
+                (compile-form first :target :stack)
+                (compile-form second :target :stack)
+                (compile-form third :target :stack)
+                (emit-invokestatic +lisp-class+ "list3"
+                                   (list +lisp-object+ +lisp-object+ +lisp-object+)
+                                   +lisp-cons+)))
+         (unless (every 'single-valued-p args)
+           (emit-clear-values))
+         (emit-move-from-stack target)))
+      (t
+       (compile-function-call form target representation)))))
+
 (defun compile-nth (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
@@ -6410,6 +6443,7 @@
   (install-p2-handler 'function        'p2-function)
   (install-p2-handler 'labels          'p2-labels)
   (install-p2-handler 'length          'p2-length)
+  (install-p2-handler 'list            'p2-list)
   (install-p2-handler 'logand          'p2-logand)
   (install-p2-handler 'logior          'p2-logior)
   (install-p2-handler 'logxor          'p2-logxor)
