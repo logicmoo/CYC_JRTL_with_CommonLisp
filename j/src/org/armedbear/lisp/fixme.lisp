@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: fixme.lisp,v 1.27 2005-01-31 17:21:27 piso Exp $
+;;; $Id: fixme.lisp,v 1.28 2005-04-22 04:36:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
+
+(export 'proclaimed-ftype)
 
 (defmacro declaim (&rest decls)
 `(eval-when (:compile-toplevel :load-toplevel :execute)
@@ -45,10 +47,21 @@
               (setf jvm::*safety* val))
              (DEBUG
               (setf jvm::*debug* val)))))))
+    (FTYPE
+     (apply 'proclaim-ftype (cdr declaration-specifier)))
     ((INLINE NOTINLINE)
      (dolist (name (cdr declaration-specifier))
        (when (symbolp name) ; FIXME Need to support non-symbol function names.
          (setf (get name 'jvm::%inline) (car declaration-specifier)))))))
+
+(defvar *proclaimed-ftypes* (make-hash-table :test 'equal))
+
+(defun proclaim-ftype (ftype &rest names)
+  (dolist (name names)
+    (setf (gethash name *proclaimed-ftypes*) ftype)))
+
+(defun proclaimed-ftype (name)
+  (values (gethash name *proclaimed-ftypes*)))
 
 (defun disassemble (fn)
   (%format t "; DISASSEMBLE is not implemented.")
