@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.437 2005-04-22 21:33:26 piso Exp $
+;;; $Id: jvm.lisp,v 1.438 2005-04-22 23:24:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -858,6 +858,7 @@
       (setq pool (cdr pool))))
   t)
 
+(declaim (ftype (function (t) fixnum) pool-get))
 (defun pool-get (entry)
   (declare (optimize speed))
   (let ((index (gethash entry *pool-entries*)))
@@ -868,10 +869,12 @@
       (setf *pool-count* (1+ index)))
     index))
 
+(declaim (ftype (function (string) fixnum) pool-name))
 (defun pool-name (name)
   (declare (optimize speed))
   (pool-get (list 1 (length name) name)))
 
+(declaim (ftype (function (string string) fixnum) pool-name-and-type))
 (defun pool-name-and-type (name type)
   (declare (optimize speed))
   (pool-get (list 12
@@ -880,11 +883,13 @@
 
 ;; Assumes CLASS-NAME is already in the correct form ("org/armedbear/lisp/Lisp"
 ;; as opposed to "org.armedbear.lisp.Lisp").
+(declaim (ftype (function (string) fixnum) pool-class))
 (defun pool-class (class-name)
   (declare (optimize speed))
   (pool-get (list 7 (pool-name class-name))))
 
 ;; (tag class-index name-and-type-index)
+(declaim (ftype (function (string string string) fixnum) pool-field))
 (defun pool-field (class-name field-name type-name)
   (declare (optimize speed))
   (pool-get (list 9
@@ -892,20 +897,24 @@
                   (pool-name-and-type field-name type-name))))
 
 ;; (tag class-index name-and-type-index)
+(declaim (ftype (function (string string string) fixnum) pool-method))
 (defun pool-method (class-name method-name type-name)
   (declare (optimize speed))
   (pool-get (list 10
                   (pool-class class-name)
                   (pool-name-and-type method-name type-name))))
 
+(declaim (ftype (function (string) fixnum) pool-field))
 (defun pool-string (string)
   (declare (optimize speed))
   (pool-get (list 8 (pool-name string))))
 
+(declaim (ftype (function (fixnum) fixnum) pool-field))
 (defun pool-int (n)
   (declare (optimize speed))
   (pool-get (list 3 n)))
 
+(declaim (ftype (function (fixnum) cons) pool-field))
 (defun u2 (n)
   (declare (optimize speed))
   (declare (type fixnum n))
@@ -1936,6 +1945,7 @@
 (declaim (ftype (function (t t) t) write-u2))
 (defun write-u2 (n stream)
   (declare (optimize speed))
+  (declare (type (unsigned-byte 16) n))
   (sys::write-8-bits (ash n -8) stream)
   (sys::write-8-bits (logand n #xFF) stream))
 
@@ -1998,6 +2008,7 @@
             (sys:write-8-bits (aref octets i) stream)))
         (write-ascii string length stream))))
 
+(declaim (ftype (function (t t) t) write-constant-pool-entry))
 (defun write-constant-pool-entry (entry stream)
   (declare (optimize speed))
   (let ((tag (first entry)))
