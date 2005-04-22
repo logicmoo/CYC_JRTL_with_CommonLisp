@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.435 2005-04-22 04:37:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.436 2005-04-22 16:54:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,8 +33,6 @@
   (require '#:opcodes))
 
 (shadow '(method variable))
-
-(defparameter *trust-user-type-declarations* t)
 
 (defconstant +arg-count-max+ 6)
 
@@ -214,7 +212,8 @@
   initform
   temp-register
   special-p
-  (declared-type t)
+  (declared-type :none)
+  (derived-type :none)
   representation ; NIL (i.e. a LispObject reference) or :UNBOXED-FIXNUM
   register ; register number or NIL
   index
@@ -962,6 +961,7 @@
 (defconstant +lisp-cons+ "Lorg/armedbear/lisp/Cons;")
 (defconstant +lisp-fixnum-class+ "org/armedbear/lisp/Fixnum")
 (defconstant +lisp-fixnum+ "Lorg/armedbear/lisp/Fixnum;")
+(defconstant +lisp-character-class+ "org/armedbear/lisp/LispCharacter")
 (defconstant +lisp-simple-string-class+ "org/armedbear/lisp/SimpleString")
 (defconstant +lisp-simple-string+ "Lorg/armedbear/lisp/SimpleString;")
 (defconstant +lisp-environment+ "Lorg/armedbear/lisp/Environment;")
@@ -1953,6 +1953,8 @@
         (t
          (write-u4 n stream))))
 
+(declaim (ftype (function (simple-string fixnum) character) schar))
+
 (declaim (ftype (function (t t t) t) write-ascii))
 (defun write-ascii (string length stream)
   (declare (type fixnum length))
@@ -2189,6 +2191,8 @@
     (setf (field-name-index field) (pool-name (field-name field)))
     (setf (field-descriptor-index field) (pool-name (field-descriptor field)))
     (push field *fields*)))
+
+(declaim (ftype (function (character) character) char-downcase char-upcase))
 
 (defun sanitize (symbol)
   (declare (optimize speed))
@@ -3601,26 +3605,21 @@
     ;; because we'll lose JVM stack consistency if there is a non-local
     ;; transfer of control from one of the initforms.
     (dolist (variable (block-vars block))
-      (dformat t "variable = ~S writes = ~S~%" (variable-name variable) (variable-writes variable))
       (let ((initform (variable-initform variable)))
         (cond (initform
-               (cond ((and *trust-user-type-declarations*
-                           (variable-register variable)
-                           (variable-declared-type variable)
+               (cond ((and (variable-register variable)
+                           (neq (variable-declared-type variable) :none)
                            (subtypep (variable-declared-type variable) 'FIXNUM))
-                      (dformat t "p2-let-bindings declared fixnum case: ~S~%"
-                               (variable-name variable))
-                      (setf (variable-representation variable) :unboxed-fixnum)
-                      (compile-form initform :target :stack :representation :unboxed-fixnum))
+                      (setf (variable-representation variable) :unboxed-fixnum))
                      ((and (variable-register variable)
-                           (eql (variable-writes variable) 0)
-                           (subtypep (derive-type initform) 'FIXNUM))
-                      (dformat t "p2-let-bindings read-only fixnum case: ~S~%"
-                               (variable-name variable))
-                      (setf (variable-representation variable) :unboxed-fixnum)
-                      (compile-form initform :target :stack :representation :unboxed-fixnum))
-                     (t
-                      (compile-form initform :target :stack)))
+                           (eql (variable-writes variable) 0))
+                      (let ((type (derive-type initform)))
+                        (setf (variable-derived-type variable) type)
+                        (when (subtypep type 'FIXNUM)
+                          (setf (variable-representation variable) :unboxed-fixnum)))))
+               (compile-form initform
+                             :target :stack
+                             :representation (variable-representation variable))
                (unless must-clear-values
                  (unless (single-valued-p initform)
                    (setf must-clear-values t))))
@@ -3662,12 +3661,10 @@
                                    nil)
                (setf boundp t))
               (initform
-               (cond ((and *trust-user-type-declarations*
-                           (null (variable-closure-index variable))
+               (cond ((and (null (variable-closure-index variable))
                            (not (variable-special-p variable))
-                           (variable-declared-type variable)
+                           (neq (variable-declared-type variable) :none)
                            (subtypep (variable-declared-type variable) 'FIXNUM))
-                      (dformat t "p2-let*-bindings declared fixnum case~%")
                       (setf (variable-representation variable) :unboxed-fixnum)
                       (compile-form initform :target :stack :representation :unboxed-fixnum)
                       (setf (variable-register variable) (allocate-register))
@@ -3675,15 +3672,20 @@
                       (setf boundp t))
                      ((and (null (variable-closure-index variable))
                            (not (variable-special-p variable))
-                           (eql (variable-writes variable) 0)
-                           (subtypep (derive-type initform) 'FIXNUM))
-                      (dformat t "p2-let*-bindings read-only fixnum case: ~S~%"
-                               (variable-name variable))
-                      (setf (variable-representation variable) :unboxed-fixnum)
-                      (compile-form initform :target :stack :representation :unboxed-fixnum)
-                      (setf (variable-register variable) (allocate-register))
-                      (emit 'istore (variable-register variable))
-                      (setf boundp t))
+                           (eql (variable-writes variable) 0))
+                      (let ((type (derive-type initform)))
+                        (setf (variable-derived-type variable) type)
+                        (cond ((subtypep type 'FIXNUM)
+                               (setf (variable-representation variable) :unboxed-fixnum)
+                               (compile-form initform
+                                             :target :stack
+                                             :representation
+                                             (variable-representation variable))
+                               (setf (variable-register variable) (allocate-register))
+                               (emit 'istore (variable-register variable))
+                               (setf boundp t))
+                              (t
+                               (compile-form initform :target :stack)))))
                      (t
                       (compile-form initform :target :stack)))
                (unless must-clear-values
@@ -4581,14 +4583,17 @@
 (defun derive-type (form)
   (cond ((fixnump form)
          (list 'INTEGER form form))
+        ((variable-p form)
+         (cond ((neq (variable-declared-type form) :none)
+                (variable-declared-type form))
+               ((neq (variable-derived-type form) :none)
+                (variable-derived-type form))
+               (t
+                t)))
         ((symbolp form)
          (let ((variable (find-visible-variable form)))
            (if variable
-               (let ((type (variable-declared-type variable)))
-                 (if (and (eq type t)
-                          (eq (variable-representation variable) :unboxed-fixnum))
-                     'FIXNUM
-                     type))
+               (derive-type variable)
                t)))
         ((consp form)
          (let ((op (first form)))
@@ -4766,7 +4771,7 @@
               (let ((variable (find-visible-variable arg1)))
                 (when variable
                   (dformat t "found variable for ~S~%" arg1)
-                  (setf type1 (variable-declared-type variable)))))
+                  (setf type1 (derive-type variable)))))
              (t
               (setf type1 (derive-type arg1))))
        (dformat t "p2-plus type1 = ~S~%" type1)
@@ -5028,12 +5033,12 @@
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
     (return-from p2-svref))
-  (let ((vector-declared-type t))
+  (let ((vector-derived-type t))
     (when (symbolp (second form))
       (let ((variable (find-visible-variable (second form))))
         (when variable
-          (setf vector-declared-type (variable-declared-type variable)))))
-    (unless (subtypep vector-declared-type 'simple-vector)
+          (setf vector-derived-type (derive-type variable)))))
+    (unless (subtypep vector-derived-type 'simple-vector)
       (compile-function-call form target representation)
       (return-from p2-svref))
     (compile-form (second form) :target :stack)
@@ -5049,17 +5054,17 @@
 (defun p2-aref (form &key (target :stack) representation)
   ;; We only optimize the 2-arg case.
   (cond ((= (length form) 3)
-         (let ((array-declared-type t))
+         (let ((array-derived-type t))
            (when (symbolp (second form))
              (let ((variable (find-visible-variable (second form))))
                (when variable
-                 (setf array-declared-type (variable-declared-type variable)))))
+                 (setf array-derived-type (derive-type variable)))))
            (compile-form (second form) :target :stack)
            (compile-form (third form) :target :stack :representation :unboxed-fixnum)
            (unless (and (single-valued-p (second form))
                         (single-valued-p (third form)))
              (emit-clear-values))
-           (cond ((subtypep array-declared-type '(array (unsigned-byte 8)))
+           (cond ((subtypep array-derived-type '(array (unsigned-byte 8)))
                   (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I")
                   (unless (eq representation :unboxed-fixnum)
                     (emit 'i2l)
@@ -5077,17 +5082,17 @@
   (cond ((= (length form) 4)
          (let* ((*register* *register*)
                 (value-register (unless (null target) (allocate-register)))
-                (array-declared-type t))
+                (array-derived-type t))
            (when (symbolp (second form))
              (let ((variable (find-visible-variable (second form))))
                (when variable
-                 (setf array-declared-type (variable-declared-type variable)))))
+                 (setf array-derived-type (derive-type variable)))))
            ;; array
            (compile-form (second form) :target :stack)
            ;; index
            (compile-form (third form) :target :stack :representation :unboxed-fixnum)
            ;; value
-           (cond ((subtypep array-declared-type '(array (unsigned-byte 8)))
+           (cond ((subtypep array-derived-type '(array (unsigned-byte 8)))
                   (compile-form (fourth form) :target :stack
                                 :representation :unboxed-fixnum)
                   (when value-register
@@ -5103,12 +5108,12 @@
                         (single-valued-p (third form))
                         (single-valued-p (fourth form)))
              (emit-clear-values))
-           (cond ((subtypep array-declared-type '(array (unsigned-byte 8)))
+           (cond ((subtypep array-derived-type '(array (unsigned-byte 8)))
                   (emit-invokevirtual +lisp-object-class+ "aset" '("I" "I") nil))
                  (t
                   (emit-invokevirtual +lisp-object-class+ "aset" (list "I" +lisp-object+) nil)))
            (when value-register
-             (cond ((subtypep array-declared-type '(array (unsigned-byte 8)))
+             (cond ((subtypep array-derived-type '(array (unsigned-byte 8)))
                     (emit 'iload value-register)
                     (emit-move-from-stack target :unboxed-fixnum))
                    (t
@@ -5339,6 +5344,25 @@
 ;;          (emit-move-from-stack target representation))
         (t
          (compile-form (third form) :target target :representation representation))))
+
+(defun p2-char-code (form &key (target :stack) representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-char-code))
+  (let* ((arg (second form))
+         (type (derive-type arg)))
+    (cond ((and (eq type 'character) (< *safety* 3))
+           (unless (eq representation :unboxed-fixnum)
+             (emit 'new +lisp-fixnum-class+)
+             (emit 'dup))
+           (compile-form arg :target :stack)
+           (emit 'checkcast +lisp-character-class+)
+           (emit 'getfield +lisp-character-class+ "value" "C")
+           (unless (eq representation :unboxed-fixnum)
+             (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+           (emit-move-from-stack target representation))
+          (t
+           (compile-function-call form target representation)))))
 
 (defun compile-catch (form &key (target :stack) representation)
   (when (= (length form) 2) ; (catch 'foo)
@@ -5909,41 +5933,39 @@
                  (setf (variable-special-p variable) t))))))
 
     ;; Process type declarations.
-    (when *trust-user-type-declarations*
-      (dolist (subform body)
-        (unless (and (consp subform) (eq (car subform) 'DECLARE))
-          (return))
-        (let ((decls (cdr subform)))
-          (dolist (decl decls)
-            (case (car decl)
-              (TYPE
-               (dolist (name (cddr decl))
-                 (let ((variable (find-visible-variable name)))
-                   (when variable
-                     (setf (variable-declared-type variable) (cadr decl))
-                     (unless (or ;;*child-p*
-                                 (plusp (compiland-children *current-compiland*)))
-                       (when (and (variable-register variable)
-                                  (not (variable-special-p variable))
-                                  (not (variable-used-non-locally-p variable))
-                                  (subtypep (variable-declared-type variable) 'FIXNUM))
-                         (setf (variable-representation variable) :unboxed-fixnum)))))))
-              ((DYNAMIC-EXTENT FTYPE IGNORE IGNORABLE INLINE NOTINLINE OPTIMIZE SPECIAL)
-               ;; Nothing to do here.
-               )
-              (t
-               (dolist (name (cdr decl))
-                 (let ((variable (find-visible-variable name)))
-                   (when variable
-                     (setf (variable-declared-type variable) (car decl))
-                     (unless (or ;;*child-p*
-                                 (plusp (compiland-children *current-compiland*)))
-                       (when (and (variable-register variable)
-                                  (not (variable-special-p variable))
-                                  (not (variable-used-non-locally-p variable))
-                                  (subtypep (variable-declared-type variable) 'FIXNUM))
-                         (setf (variable-representation variable) :unboxed-fixnum)))))))))))
-      )
+    (dolist (subform body)
+      (unless (and (consp subform) (eq (car subform) 'DECLARE))
+        (return))
+      (let ((decls (cdr subform)))
+        (dolist (decl decls)
+          (case (car decl)
+            (TYPE
+             (dolist (name (cddr decl))
+               (let ((variable (find-visible-variable name)))
+                 (when variable
+                   (setf (variable-declared-type variable) (cadr decl))
+                   (unless (or ;;*child-p*
+                            (plusp (compiland-children *current-compiland*)))
+                     (when (and (variable-register variable)
+                                (not (variable-special-p variable))
+                                (not (variable-used-non-locally-p variable))
+                                (subtypep (variable-declared-type variable) 'FIXNUM))
+                       (setf (variable-representation variable) :unboxed-fixnum)))))))
+            ((DYNAMIC-EXTENT FTYPE IGNORE IGNORABLE INLINE NOTINLINE OPTIMIZE SPECIAL)
+             ;; Nothing to do here.
+             )
+            (t
+             (dolist (name (cdr decl))
+               (let ((variable (find-visible-variable name)))
+                 (when variable
+                   (setf (variable-declared-type variable) (car decl))
+                   (unless (or ;;*child-p*
+                            (plusp (compiland-children *current-compiland*)))
+                     (when (and (variable-register variable)
+                                (not (variable-special-p variable))
+                                (not (variable-used-non-locally-p variable))
+                                (subtypep (variable-declared-type variable) 'FIXNUM))
+                       (setf (variable-representation variable) :unboxed-fixnum)))))))))))
 
     (dump-variables (reverse parameters)
                     (sys::%format nil "Arguments to ~A:~%" (compiland-name *current-compiland*))
@@ -6379,6 +6401,7 @@
   (install-p2-handler 'ash             'p2-ash)
   (install-p2-handler 'atom            'p2-atom)
   (install-p2-handler 'car             'p2-car)
+  (install-p2-handler 'char-code       'p2-char-code)
   (install-p2-handler 'cons            'p2-cons)
   (install-p2-handler 'eql             'p2-eql)
   (install-p2-handler 'eval-when       'p2-eval-when)
