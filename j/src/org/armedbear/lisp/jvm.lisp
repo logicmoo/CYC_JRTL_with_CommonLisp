@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.438 2005-04-22 23:24:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.439 2005-04-23 16:18:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -340,7 +340,7 @@
 (defun process-declarations-for-vars (body vars)
   (let ((free-specials '()))
     (dolist (subform body)
-      (unless (and (consp subform) (eq (car subform) 'DECLARE))
+      (unless (and (consp subform) (eq (%car subform) 'DECLARE))
         (return))
       (let ((decls (cdr subform)))
         (dolist (decl decls)
@@ -372,7 +372,7 @@
   (let ((vars ()))
     (dolist (varspec varlist)
       (cond ((consp varspec)
-             (let ((name (car varspec))
+             (let ((name (%car varspec))
                    (initform (p1 (cadr varspec))))
                (push (make-variable :name name :initform initform) vars)))
             (t
@@ -387,7 +387,7 @@
   (let ((vars ()))
     (dolist (varspec varlist)
       (cond ((consp varspec)
-             (let* ((name (car varspec))
+             (let* ((name (%car varspec))
                     (initform (p1 (cadr varspec)))
                     (var (make-variable :name name :initform initform)))
                (push var vars)
@@ -547,7 +547,7 @@
     (dolist (definition (cadr form))
       (let ((name (car definition)))
         ;; FIXME
-        (when (and (consp name) (eq (car name) 'SETF))
+        (when (and (consp name) (eq (%car name) 'SETF))
           (compiler-unsupported "P1-FLET: can't handle ~S." name))
         (let* ((lambda-list (cadr definition))
                (body (cddr definition))
@@ -572,7 +572,7 @@
     (dolist (definition (cadr form))
       (let ((name (car definition)))
         ;; FIXME
-        (when (and (consp name) (eq (car name) 'SETF))
+        (when (and (consp name) (eq (%car name) 'SETF))
           (compiler-unsupported "P1-LABELS: can't handle ~S." name))
         (let* ((lambda-list (cadr definition))
                (body (cddr definition))
@@ -682,19 +682,16 @@
              (dformat t "p1-the new-expr = ~S~%" new-expr)
              (p1 new-expr)))
           (t
-           (dformat t "p1-the t case expr = ~S~%" expr)
-           (if (subtypep type 'FIXNUM)
-               (list 'THE type (p1 expr))
-               (p1 expr))))))
+               (list 'THE type (p1 expr))))))
 
 (defun p1-body (body)
   (declare (optimize speed))
   (let ((tail body))
     (loop
-      (when (null tail)
+      (when (endp tail)
         (return))
-      (setf (car tail) (p1 (car tail)))
-      (setf tail (cdr tail))))
+      (setf (car tail) (p1 (%car tail)))
+      (setf tail (%cdr tail))))
   body)
 
 (defun p1-default (form)
@@ -796,7 +793,7 @@
                          (compiler-unsupported "P1: unsupported special operator ~S" op))
                         (t
                          (p1-function-call form))))
-                 ((and (consp op) (eq (car op) 'LAMBDA))
+                 ((and (consp op) (eq (%car op) 'LAMBDA))
                   (p1 (list* 'FUNCALL form)))
                  (t
                   form))))))
@@ -2205,6 +2202,7 @@
 
 (declaim (ftype (function (character) character) char-downcase char-upcase))
 
+(declaim (ftype (function (symbol) string) sanitize))
 (defun sanitize (symbol)
   (declare (optimize speed))
   (let* ((input (symbol-name symbol))
@@ -2925,11 +2923,11 @@
   (cond ((> *debug* *speed*)
          form)
         ((and (consp fun)
-              (eq (car fun) 'FUNCTION)
+              (eq (%car fun) 'FUNCTION)
               (symbolp (cadr fun)))
          `(,(cadr fun) ,@args))
         ((and (consp fun)
-              (eq (car fun) 'QUOTE))
+              (eq (%car fun) 'QUOTE))
          (let ((sym (cadr fun)))
            (if (and (symbolp sym)
                     (eq (symbol-package sym) (find-package "CL"))
@@ -3322,7 +3320,7 @@
 (defun compile-test (form negatep)
   ;; Use a Java boolean if possible.
   (when (and (consp form)
-             (not (special-operator-p (car form))))
+             (not (special-operator-p (%car form))))
     (case (length form)
       (2
        (return-from compile-test (compile-test-2 form negatep)))
@@ -3739,7 +3737,7 @@
             (t
              (when (and (null (cdr rest)) ;; Last subform.
                         (consp subform)
-                        (eq (car subform) 'GO))
+                        (eq (%car subform) 'GO))
                (maybe-generate-interrupt-check))
              (compile-form subform :target nil)
              (unless must-clear-values
@@ -3970,14 +3968,34 @@
     (compile-function-call form target representation)
     (return-from p2-car))
   (let ((arg (cadr form)))
-    (cond ((and (consp arg) (eq (first arg) 'cdr) (= (length arg) 2))
+    (cond ((and (consp arg) (eq (%car arg) 'cdr) (= (length arg) 2))
            (compile-form (second arg) :target :stack)
            (maybe-emit-clear-values (second arg))
            (emit-invoke-method "cadr" target representation))
+          ((eq (derive-type arg) 'CONS)
+           (compile-form arg :target :stack)
+           (emit 'checkcast +lisp-cons-class+)
+           (emit 'getfield +lisp-cons-class+ "car" +lisp-object+)
+           (emit-move-from-stack target representation))
           (t
            (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
            (emit-invoke-method "car" target representation)))))
+
+(defun p2-cdr (form &key (target :stack) representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-cdr))
+  (let ((arg (cadr form)))
+    (cond ((eq (derive-type arg) 'CONS)
+           (compile-form arg :target :stack)
+           (emit 'checkcast +lisp-cons-class+)
+           (emit 'getfield +lisp-cons-class+ "cdr" +lisp-object+)
+           (emit-move-from-stack target representation))
+          (t
+           (compile-form arg :target :stack)
+           (maybe-emit-clear-values arg)
+           (emit-invoke-method "cdr" target representation)))))
 
 (defun p2-cons (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
@@ -4267,7 +4285,7 @@
                   (emit-invokevirtual +lisp-object-class+ "getSymbolFunctionOrDie"
                                       nil +lisp-object+)
                   (emit-move-from-stack target))))
-          ((and (consp name) (eq (car name) 'SETF))
+          ((and (consp name) (eq (%car name) 'SETF))
            ; FIXME Need to check for NOTINLINE declaration!
            (cond ((member name *functions-defined-in-current-file* :test #'equal)
                   (emit 'getstatic *this-class*
@@ -4578,12 +4596,12 @@
                (derive-type variable)
                t)))
         ((consp form)
-         (let ((op (first form)))
+         (let ((op (%car form)))
            (case op
              (ASH
               (ash-derive-type (second form) (third form)))
              (AREF
-              (aref-derive-type (cdr form)))
+              (aref-derive-type (%cdr form)))
              (-
               (if (and (= (length form) 2)
                        (or (fixnump (cadr form))
@@ -4593,9 +4611,9 @@
              (LENGTH
               '(INTEGER 0 #.most-positive-fixnum))
              (LOGAND
-              (logand-derive-type (cdr form)))
+              (logand-derive-type (%cdr form)))
              (LOGXOR
-              (logxor-derive-type (cdr form)))
+              (logxor-derive-type (%cdr form)))
              (THE
               (second form))
              (t
@@ -4612,7 +4630,7 @@
          (result-type t))
     (dformat t "aref-derive-type array type = ~S~%" array-type)
     (when (and (consp array-type)
-               (memq (first array-type) '(ARRAY SIMPLE-ARRAY VECTOR)))
+               (memq (%car array-type) '(ARRAY SIMPLE-ARRAY VECTOR)))
       (let ((element-type (second array-type)))
         (dformat t "element-type = ~S~%" element-type)
         (unless (eq element-type '*)
@@ -4657,7 +4675,7 @@
     (when (subtypep type1 'fixnum)
       (let ((low most-negative-fixnum)
             (high most-positive-fixnum))
-        (when (and (consp type1) (eq (car type1) 'INTEGER))
+        (when (and (consp type1) (eq (%car type1) 'INTEGER))
           (let ((second (second type1))
                 (third (third type1)))
             (when second
@@ -4915,10 +4933,10 @@
                 (emit-unbox-fixnum))
               (emit-move-from-stack target representation))
              ((and (consp arg1)
-                   (eq (car arg1) 'THE)
+                   (eq (%car arg1) 'THE)
                    (subtypep (cadr arg1) 'FIXNUM)
                    (consp arg2)
-                   (eq (car arg2) 'THE)
+                   (eq (%car arg2) 'THE)
                    (subtypep (cadr arg2) 'FIXNUM))
               (dformat t "p2-plus case 7b representation = ~S~%" representation)
               (let ((must-clear-values nil))
@@ -5176,7 +5194,7 @@
           ((and (constantp arg) (not (block-node-p arg)))
            (emit-push-nil))
           ((and (consp arg)
-                (memq (car arg) '(NOT NULL)))
+                (memq (%car arg) '(NOT NULL)))
            (compile-form (second arg) :target :stack)
            (maybe-emit-clear-values (second arg))
            (emit-push-nil)
@@ -5565,7 +5583,7 @@
 
 (defun compile-form (form &key (target :stack) representation)
   (cond ((consp form)
-         (let ((op (car form))
+         (let ((op (%car form))
                handler)
            (cond ((symbolp op)
                   (cond ((setf handler (get op 'p2-handler))
@@ -5582,7 +5600,7 @@
                           "COMPILE-FORM: unsupported special operator ~S" op))
                         (t
                          (compile-function-call form target representation))))
-                 ((and (consp op) (eq (car op) 'LAMBDA))
+                 ((and (consp op) (eq (%car op) 'LAMBDA))
                   (aver (progn 'unexpected-lambda nil))
                   (let ((new-form (list* 'FUNCALL form)))
                     (compile-form new-form
@@ -5797,7 +5815,7 @@
             (when (= (length optional-args) 1)
 ;;               (sys::%format t "~%magic case~%")
               (let* ((optional-arg (car optional-args))
-                     (name (if (consp optional-arg) (car optional-arg) optional-arg))
+                     (name (if (consp optional-arg) (%car optional-arg) optional-arg))
                      (initform (if (consp optional-arg) (cadr optional-arg) nil))
                      (supplied-p-var (and (consp optional-arg)
                                           (= (length optional-arg) 3)
@@ -5978,7 +5996,7 @@
 
     ;; Process type declarations.
     (dolist (subform body)
-      (unless (and (consp subform) (eq (car subform) 'DECLARE))
+      (unless (and (consp subform) (eq (%car subform) 'DECLARE))
         (return))
       (let ((decls (cdr subform)))
         (dolist (decl decls)
@@ -6267,7 +6285,7 @@
 
 (defun get-lambda-to-compile (definition-designator)
   (if (and (consp definition-designator)
-           (eq (car definition-designator) 'LAMBDA))
+           (eq (%car definition-designator) 'LAMBDA))
       definition-designator
       (multiple-value-bind (lambda-expression environment)
         (function-lambda-expression definition-designator)
@@ -6445,6 +6463,7 @@
   (install-p2-handler 'ash             'p2-ash)
   (install-p2-handler 'atom            'p2-atom)
   (install-p2-handler 'car             'p2-car)
+  (install-p2-handler 'cdr             'p2-cdr)
   (install-p2-handler 'char-code       'p2-char-code)
   (install-p2-handler 'cons            'p2-cons)
   (install-p2-handler 'eql             'p2-eql)
@@ -6479,7 +6498,7 @@
 (defun process-optimization-declarations (forms)
   (let (alist ())
     (dolist (form forms)
-      (unless (and (consp form) (eq (car form) 'declare))
+      (unless (and (consp form) (eq (%car form) 'declare))
         (return))
       (dolist (decl (cdr form))
         (when (eq (car decl) 'OPTIMIZE)
@@ -6487,15 +6506,15 @@
             (let ((val 3)
                   (quantity spec))
               (when (consp spec)
-                (setf quantity (car spec) val (cadr spec)))
+                (setf quantity (%car spec) val (cadr spec)))
               (when (and (fixnump val)
                          (<= 0 val 3)
                          (memq quantity '(debug speed space safety compilation-speed)))
                 (push (cons quantity val) alist)))))))
     (when alist
       (dolist (cons alist)
-        (let ((symbol (car cons))
-              (value (cdr cons)))
+        (let ((symbol (%car cons))
+              (value (%cdr cons)))
           (case symbol
             (SPEED
              (setf *speed* value))
