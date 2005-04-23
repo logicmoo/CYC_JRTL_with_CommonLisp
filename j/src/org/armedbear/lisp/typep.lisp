@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: typep.lisp,v 1.25 2005-03-17 15:05:09 piso Exp $
+;;; $Id: typep.lisp,v 1.26 2005-04-23 16:11:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,11 +36,11 @@
             (setq low (car interval) high (cadr interval))))
     (cond ((eq low '*))
           ((consp low)
-           (when (<= x (car low)) (return-from in-interval-p nil)))
+           (when (<= x (%car low)) (return-from in-interval-p nil)))
           ((when (< x low) (return-from in-interval-p nil))))
     (cond ((eq high '*))
           ((consp high)
-           (when (>= x (car high)) (return-from in-interval-p nil)))
+           (when (>= x (%car high)) (return-from in-interval-p nil)))
           ((when (> x high) (return-from in-interval-p nil))))
     (return-from in-interval-p t)))
 
@@ -75,8 +75,8 @@
       (MEMBER (member object i))
       (CONS
        (and (consp object)
-            (or (null (car i)) (eq (car i) '*) (%typep (car object) (car i)))
-            (or (null (cadr i)) (eq (cadr i) '*) (%typep (cdr object) (cadr i)))))
+            (or (null (car i)) (eq (car i) '*) (%typep (%car object) (car i)))
+            (or (null (cadr i)) (eq (cadr i) '*) (%typep (%cdr object) (cadr i)))))
       ((FLOAT SINGLE-FLOAT DOUBLE-FLOAT SHORT-FLOAT LONG-FLOAT)
        (and (floatp object) (in-interval-p object i)))
       (INTEGER

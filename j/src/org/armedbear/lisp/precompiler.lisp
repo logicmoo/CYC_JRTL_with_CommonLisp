@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.99 2005-04-22 21:31:52 piso Exp $
+;;; $Id: precompiler.lisp,v 1.100 2005-04-23 16:11:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@
       form))
 
 (defun quoted-form-p (form)
-  (and (consp form) (eq (car form) 'quote) (= (length form) 2)))
+  (and (consp form) (eq (%car form) 'quote) (= (length form) 2)))
 
 (define-compiler-macro eql (&whole form &rest args)
   (let ((first (car args))
@@ -92,7 +92,7 @@
   (let ((callee (car args)))
     (if (and (>= jvm:*speed* jvm:*debug*)
              (consp callee)
-             (eq (car callee) 'function)
+             (eq (%car callee) 'function)
              (symbolp (cadr callee))
              (not (special-operator-p (cadr callee)))
              (not (macro-function (cadr callee) sys:*compile-file-environment*))
@@ -112,7 +112,7 @@
 
 (define-compiler-macro ldb (&whole form bytespec integer)
   (if (and (consp bytespec)
-           (eq (car bytespec) 'byte)
+           (eq (%car bytespec) 'byte)
            (= (length bytespec) 3))
       (let ((size (second bytespec))
             (position (third bytespec)))
@@ -157,7 +157,7 @@
   (let ((expander nil)
         (newdef nil))
     (if (and (consp form)
-             (symbolp (car form))
+             (symbolp (%car form))
              (setq expander (compiler-macro-function (car form) env)))
         (values (setq newdef (funcall expander form env))
                 (not (eq newdef form)))
@@ -298,11 +298,11 @@
 (defun precompile-setf (form)
   (let ((place (second form)))
     (cond ((and (consp place)
-                (local-macro-function (car place)))
+                (local-macro-function (%car place)))
            (let ((expansion (expand-local-macro place)))
              (precompile1 (list* 'SETF expansion (cddr form)))))
           ((and (consp place)
-                (eq (car place) 'VALUES))
+                (eq (%car place) 'VALUES))
            (setf form
                  (list* 'SETF
                         (list* 'VALUES
@@ -362,7 +362,7 @@
 (defun process-special-declarations (forms)
   (let ((specials ()))
     (dolist (form forms)
-      (unless (and (consp form) (eq (car form) 'declare))
+      (unless (and (consp form) (eq (%car form) 'declare))
         (return))
       (let ((decls (cdr form)))
         (dolist (decl decls)
@@ -521,7 +521,7 @@
   (let ((result nil))
     (dolist (var vars)
       (cond ((consp var)
-             (let ((v (car var))
+             (let ((v (%car var))
                    (expr (cadr var)))
                (unless (symbolp v)
                  (error 'simple-type-error
@@ -545,7 +545,7 @@
 (defun maybe-fold-let* (form)
   (if (and (= (length form) 3)
            (consp (third form))
-           (eq (car (third form)) 'let*))
+           (eq (%car (third form)) 'let*))
       (let ((third (maybe-fold-let* (third form))))
         (list* 'LET* (append (second form) (second third)) (cddr third)))
       form))
@@ -747,7 +747,7 @@
   (loop
     (unless *in-jvm-compile*
       (when (and (consp form)
-                 (symbolp (car form))
+                 (symbolp (%car form))
                  (special-operator-p (car form)))
         (return-from expand-macro form)))
     (multiple-value-bind (result expanded)
@@ -847,7 +847,7 @@
                (finish-output)
                (return-from precompile (values nil t t)))
              (setq expr form)))
-          ((and (consp definition) (eq (car definition) 'lambda))
+          ((and (consp definition) (eq (%car definition) 'lambda))
            (setq expr definition))
           (t
 ;;            (error 'type-error)))
