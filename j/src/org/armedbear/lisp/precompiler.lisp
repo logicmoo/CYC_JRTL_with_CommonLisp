@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.100 2005-04-23 16:11:40 piso Exp $
+;;; $Id: precompiler.lisp,v 1.101 2005-04-23 17:17:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -158,9 +158,9 @@
         (newdef nil))
     (if (and (consp form)
              (symbolp (%car form))
-             (setq expander (compiler-macro-function (car form) env)))
+             (setq expander (compiler-macro-function (%car form) env)))
         (values (setq newdef (funcall expander form env))
-                (not (eq newdef form)))
+                (neq newdef form))
         (values form
                 nil))))
 
@@ -189,7 +189,7 @@
         ((atom form)
          form)
         (t
-         (let ((op (car form))
+         (let ((op (%car form))
                handler)
            (when (symbolp op)
              (cond ((compiler-macro-function op)
@@ -212,7 +212,7 @@
            (precompile-cons form)))))
 
 (defun precompile-identity (form)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   form)
 
 (defun precompile-cons (form)
@@ -243,18 +243,18 @@
           (push varspec result)
           (case (length varspec)
             (1
-             (push (car varspec) result))
+             (push (%car varspec) result))
             (2
-             (let* ((var (car varspec))
-                    (init-form (cadr varspec)))
+             (let* ((var (%car varspec))
+                    (init-form (%cadr varspec)))
                (unless (symbolp var)
                  (error 'type-error))
                (push (list var (precompile1 init-form))
                      result)))
             (3
-             (let* ((var (car varspec))
-                    (init-form (cadr varspec))
-                    (step-form (caddr varspec)))
+             (let* ((var (%car varspec))
+                    (init-form (%cadr varspec))
+                    (step-form (%caddr varspec)))
                (unless (symbolp var)
                  (error 'type-error))
                (push (list var (precompile1 init-form) (precompile1 step-form))
@@ -283,7 +283,7 @@
 (defun precompile-progn (form)
   (let ((body (cdr form)))
     (if (= (length body) 1)
-        (let ((res (precompile1 (car body))))
+        (let ((res (precompile1 (%car body))))
           ;; If the result turns out to be a bare symbol, leave it wrapped
           ;; with PROGN so it won't be mistaken for a tag in an enclosing
           ;; TAGBODY.
@@ -306,7 +306,7 @@
            (setf form
                  (list* 'SETF
                         (list* 'VALUES
-                               (mapcar #'precompile1 (cdr place)))
+                               (mapcar #'precompile1 (%cdr place)))
                         (cddr form)))
            (precompile1 (expand-macro form)))
           ((symbolp place)
@@ -324,8 +324,8 @@
       (error 'simple-program-error
              :format-control "Odd number of arguments to SETQ."))
     (if (= len 2)
-        (let* ((sym (car args))
-               (val (cadr args))
+        (let* ((sym (%car args))
+               (val (%cadr args))
                (varspec (find-varspec sym)))
           (if (and varspec (eq (second varspec) :symbol-macro))
               (precompile1 (list 'SETF (third varspec) val))
@@ -364,7 +364,7 @@
     (dolist (form forms)
       (unless (and (consp form) (eq (%car form) 'declare))
         (return))
-      (let ((decls (cdr form)))
+      (let ((decls (%cdr form)))
         (dolist (decl decls)
           (when (eq (car decl) 'special)
             (setf specials (append (cdr decl) specials))))))
@@ -389,16 +389,16 @@
                (when (or (special-variable-p var) (memq var declared-specials))
                  (push var specials)))
               ((not keyp) ;; e.g. "&optional (*x* 42)"
-               (setf var (first var))
+               (setf var (%car var))
                (when (or (special-variable-p var) (memq var declared-specials))
                  (push var specials)))
               ;; Keyword parameters.
-              ((atom (first var)) ;; e.g. "&key (a 42)"
+              ((atom (%car var)) ;; e.g. "&key (a 42)"
                ;; Not special.
                )
               (t
                ;; e.g. "&key ((:x *x*) 42)"
-               (setf var (second (first var))) ;; *x*
+               (setf var (second (%car var))) ;; *x*
                (when (or (special-variable-p var) (memq var declared-specials))
                  (push var specials))))))
     (when specials
@@ -417,15 +417,15 @@
                        (setf var sym))
                      (push var res))
                     ((not keyp) ;; e.g. "&optional (*x* 42)"
-                     (when (eq (first var) special)
+                     (when (eq (%car var) special)
                        (setf (first var) sym))
                      (push var res))
-                    ((atom (first var)) ;; e.g. "&key (a 42)"
+                    ((atom (%car var)) ;; e.g. "&key (a 42)"
                      (push var res))
                     (t
                      ;; e.g. "&key ((:x *x*) 42)"
-                     (when (eq (second (first var)) special)
-                       (setf (second (first var)) sym))
+                     (when (eq (second (%car var)) special)
+                       (setf (second (%car var)) sym))
                      (push var res))))
             (setf lambda-list (nreverse res)))
           (setf body (list (append (list 'LET* (list (list special sym))) body))))))
@@ -544,10 +544,10 @@
 ;; (LET* ((X 1) (Y 2) (Z 3)) (+ X Y Z))
 (defun maybe-fold-let* (form)
   (if (and (= (length form) 3)
-           (consp (third form))
-           (eq (%car (third form)) 'let*))
-      (let ((third (maybe-fold-let* (third form))))
-        (list* 'LET* (append (second form) (second third)) (cddr third)))
+           (consp (%caddr form))
+           (eq (%car (%caddr form)) 'let*))
+      (let ((third (maybe-fold-let* (%caddr form))))
+        (list* 'LET* (append (%cadr form) (cadr third)) (cddr third)))
       form))
 
 (defun precompile-let* (form)
@@ -603,13 +603,13 @@
 (defun find-use (name expression)
   (cond ((atom expression)
          nil)
-        ((eq (car expression) name)
+        ((eq (%car expression) name)
          t)
         ((consp name)
          t) ;; FIXME Recognize use of SETF functions!
         (t
-         (or (find-use name (car expression))
-             (find-use name (cdr expression))))))
+         (or (find-use name (%car expression))
+             (find-use name (%cdr expression))))))
 
 (defun precompile-flet/labels (form)
   (let ((*local-functions-and-macros* *local-functions-and-macros*)
@@ -645,35 +645,35 @@
 
 (defun precompile-function (form)
   (if (and (consp (cadr form)) (eq (caadr form) 'LAMBDA))
-      (list 'FUNCTION (precompile-lambda (cadr form)))
+      (list 'FUNCTION (precompile-lambda (%cadr form)))
       form))
 
 (defun precompile-if (form)
   (let ((args (cdr form)))
     (case (length args)
       (2
-       (let ((test (precompile1 (car args))))
+       (let ((test (precompile1 (%car args))))
          (cond ((null test)
                 nil)
                (;;(constantp test)
                 (eq test t)
-                (precompile1 (cadr args)))
+                (precompile1 (%cadr args)))
                (t
                 (list 'IF
                       test
-                      (precompile1 (cadr args)))))))
+                      (precompile1 (%cadr args)))))))
       (3
-       (let ((test (precompile1 (car args))))
+       (let ((test (precompile1 (%car args))))
          (cond ((null test)
-                (precompile1 (caddr args)))
+                (precompile1 (%caddr args)))
                (;;(constantp test)
                 (eq test t)
-                (precompile1 (cadr args)))
+                (precompile1 (%cadr args)))
                (t
                 (list 'IF
                       test
-                      (precompile1 (cadr args))
-                      (precompile1 (caddr args)))))))
+                      (precompile1 (%cadr args))
+                      (precompile1 (%caddr args)))))))
       (t
        (error "wrong number of arguments for IF")))))
 
@@ -748,7 +748,7 @@
     (unless *in-jvm-compile*
       (when (and (consp form)
                  (symbolp (%car form))
-                 (special-operator-p (car form)))
+                 (special-operator-p (%car form)))
         (return-from expand-macro form)))
     (multiple-value-bind (result expanded)
         (macroexpand-1 form sys:*compile-file-environment*)
