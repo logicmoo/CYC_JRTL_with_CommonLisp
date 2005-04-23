@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.5 2005-04-10 20:12:54 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.6 2005-04-23 16:02:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@
          (when arglist
            (%set-arglist function arglist))
          (%set-symbol-function name function))
-        ((and (consp name) (eq (car name) 'SETF))
+        ((and (consp name) (eq (%car name) 'SETF))
          (check-redefinition name)
          (record-source-information name nil source-position)
          ;; FIXME arglist
@@ -67,7 +67,7 @@
 (defun fdefinition (name)
   (cond ((symbolp name)
          (symbol-function name))
-        ((and (consp name) (eq (car name) 'SETF))
+        ((and (consp name) (eq (%car name) 'SETF))
          (or (get (cadr name) '%setf-function)
              (error 'undefined-function :name name)))
         (t

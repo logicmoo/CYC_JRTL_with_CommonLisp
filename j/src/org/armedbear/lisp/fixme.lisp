@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: fixme.lisp,v 1.28 2005-04-22 04:36:44 piso Exp $
+;;; $Id: fixme.lisp,v 1.29 2005-04-23 16:00:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@
        (let ((val 3)
              (quantity spec))
          (when (consp spec)
-           (setf quantity (car spec)
+           (setf quantity (%car spec)
                  val (cadr spec)))
          (when (and (fixnump val)
                     (<= 0 val 3))
