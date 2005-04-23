@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.23 2005-03-24 13:09:58 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.24 2005-04-23 16:01:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -75,13 +75,13 @@
            (return-from normalize-type
                         '(integer #.most-negative-fixnum #.most-positive-fixnum))))
         ((and (consp type)
-              (memq (car type) '(and or not eql member satisfies mod values)))
+              (memq (%car type) '(and or not eql member satisfies mod values)))
          (return-from normalize-type type)))
   ;; Fall through...
   (let (tp i)
     (loop
       (if (consp type)
-          (setf tp (car type) i (cdr type))
+          (setf tp (%car type) i (%cdr type))
           (setf tp type i nil))
       (if (and (symbolp tp) (get tp 'deftype-definition))
           (setf type (apply (get tp 'deftype-definition) i))

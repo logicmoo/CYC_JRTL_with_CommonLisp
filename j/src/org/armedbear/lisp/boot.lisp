@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.213 2005-04-22 21:29:35 piso Exp $
+;;; $Id: boot.lisp,v 1.214 2005-04-23 15:59:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -47,10 +47,22 @@
           (list 'QUOTE (list (list* 'BLOCK block-name body))))))
 
 (defmacro defconstant (name initial-value &optional docstring)
-  (list 'sys::%defconstant (list 'QUOTE name) initial-value docstring))
+  (list '%defconstant (list 'QUOTE name) initial-value docstring))
 
 (defmacro defparameter (name initial-value &optional docstring)
-  (list 'sys::%defparameter (list 'QUOTE name) initial-value docstring))
+  (list '%defparameter (list 'QUOTE name) initial-value docstring))
+
+(in-package #:extensions)
+
+(export '(%car %cdr))
+
+(defmacro %car (x)
+  (list 'CAR (list 'THE 'CONS x)))
+
+(defmacro %cdr (x)
+  (list 'CDR (list 'THE 'CONS x)))
+
+(in-package #:system)
 
 ;; EVAL is redefined in precompiler.lisp.
 (defun eval (form)
