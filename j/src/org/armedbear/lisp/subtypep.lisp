@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.64 2005-04-23 16:12:34 piso Exp $
+;;; $Id: subtypep.lisp,v 1.65 2005-04-23 18:58:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -499,10 +499,10 @@
   (let (t1 t2 i1 i2)
     (if (atom type1)
         (setf t1 type1 i1 nil)
-        (setf t1 (car type1) i1 (cdr type1)))
+        (setf t1 (%car type1) i1 (%cdr type1)))
     (if (atom type2)
         (setf t2 type2 i2 nil)
-        (setf t2 (car type2) i2 (cdr type2)))
+        (setf t2 (%car type2) i2 (%cdr type2)))
     (cond ((null t1)
            (return-from %subtypep (values t t)))
           ((eq t1 'atom)
@@ -570,18 +570,6 @@
                         (t
                          (values nil t))))
                  (t (values nil (known-type-p t1)))))
-          ((eq t1 'float)
-           (if (memq t2 '(float real number))
-               (values (sub-interval-p i1 i2) t)
-               (values nil (known-type-p t2))))
-          ((memq t1 '(single-float short-float))
-           (if (memq t2 '(single-float short-float float real number))
-               (values (sub-interval-p i1 i2) t)
-               (values nil (known-type-p t2))))
-          ((memq t1 '(double-float long-float))
-           (if (memq t2 '(double-float long-float float real number))
-               (values (sub-interval-p i1 i2) t)
-               (values nil (known-type-p t2))))
           ((eq t1 'integer)
            (cond ((memq t2 '(integer rational real number))
                   (values (sub-interval-p i1 i2) t))
@@ -592,9 +580,21 @@
                        (sub-interval-p i1 (list (list most-positive-fixnum) '*)))
                    t))
                  (t
-                   (values nil (known-type-p t2)))))
+                  (values nil (known-type-p t2)))))
           ((eq t1 'rational)
            (if (memq t2 '(rational real number))
+               (values (sub-interval-p i1 i2) t)
+               (values nil (known-type-p t2))))
+          ((eq t1 'float)
+           (if (memq t2 '(float real number))
+               (values (sub-interval-p i1 i2) t)
+               (values nil (known-type-p t2))))
+          ((memq t1 '(single-float short-float))
+           (if (memq t2 '(single-float short-float float real number))
+               (values (sub-interval-p i1 i2) t)
+               (values nil (known-type-p t2))))
+          ((memq t1 '(double-float long-float))
+           (if (memq t2 '(double-float long-float float real number))
                (values (sub-interval-p i1 i2) t)
                (values nil (known-type-p t2))))
           ((eq t1 'real)

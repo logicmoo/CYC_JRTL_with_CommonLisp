@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.341 2005-04-12 11:29:08 piso Exp $
+ * $Id: Lisp.java,v 1.342 2005-04-23 18:55:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,7 +180,7 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         if (form instanceof Cons) {
-            LispObject car = form.car();
+            LispObject car = ((Cons)form).car;
             if (car instanceof Symbol) {
                 LispObject obj = env.lookupFunction(car);
                 if (obj instanceof Autoload) {
@@ -329,7 +329,7 @@ public abstract class Lisp
             throw new ThreadDestroyed();
         if (obj instanceof Symbol) {
             LispObject result;
-            if (env.isDeclaredSpecial(obj) || obj.isSpecialVariable())
+            if (obj.isSpecialVariable() || env.isDeclaredSpecial(obj))
                 result = thread.lookupSpecial(obj);
             else
                 result = env.lookup(obj);
@@ -342,7 +342,7 @@ public abstract class Lisp
                 return eval(((SymbolMacro)result).getExpansion(), env, thread);
             return result;
         } else if (obj instanceof Cons) {
-            LispObject first = obj.car();
+            LispObject first = ((Cons)obj).car;
             if (first instanceof Symbol) {
                 LispObject fun = env.lookupFunction(first);
                 if (fun instanceof SpecialOperator) {
@@ -361,12 +361,12 @@ public abstract class Lisp
                 }
                 if (fun == null)
                     return signal(new UndefinedFunction(first));
-                return evalCall(fun, obj.cdr(), env, thread);
+                return evalCall(fun, ((Cons)obj).cdr, env, thread);
             } else {
                 if (first.car() == Symbol.LAMBDA) {
                     LispObject rest = first.cdr();
                     Closure closure = new Closure(rest.car(), rest.cdr(), env);
-                    return evalCall(closure, obj.cdr(), env, thread);
+                    return evalCall(closure, ((Cons)obj).cdr, env, thread);
                 } else
                     return signal(new ProgramError("Illegal function object: " +
                                                    first.writeToString()));
@@ -1198,9 +1198,9 @@ public abstract class Lisp
     {
         LispObject list = listArg;
         while (list instanceof Cons) {
-            if (item == list.car())
+            if (item == ((Cons)list).car)
                 return true;
-            list = list.cdr();
+            list = ((Cons)list).cdr;
         }
         if (list != NIL)
             signal(new TypeError("The value " + listArg.writeToString() +
@@ -1213,9 +1213,9 @@ public abstract class Lisp
     {
         LispObject list = listArg;
         while (list instanceof Cons) {
-            if (item.eql(list.car()))
+            if (item.eql(((Cons)list).car))
                 return true;
-            list = list.cdr();
+            list = ((Cons)list).cdr;
         }
         if (list != NIL)
             signal(new TypeError("The value " + listArg.writeToString() +

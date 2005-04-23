@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.439 2005-04-23 16:18:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.440 2005-04-23 18:58:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -342,14 +342,14 @@
     (dolist (subform body)
       (unless (and (consp subform) (eq (%car subform) 'DECLARE))
         (return))
-      (let ((decls (cdr subform)))
+      (let ((decls (%cdr subform)))
         (dolist (decl decls)
           (case (car decl)
             ((DYNAMIC-EXTENT FTYPE IGNORE IGNORABLE INLINE NOTINLINE OPTIMIZE)
              ;; Nothing to do here.
              )
             (SPECIAL
-             (dolist (sym (cdr decl))
+             (dolist (sym (%cdr decl))
                (let ((variable (find sym vars :key #'variable-name)))
                  (cond (variable
                         (setf (variable-special-p variable) t))
@@ -401,6 +401,7 @@
     (nreverse vars)))
 
 (defun p1-let/let* (form)
+  (declare (type cons form))
   (let* ((*visible-variables* *visible-variables*)
          (block (make-block-node :name '(LET)))
          (*blocks* (cons block *blocks*))
@@ -416,7 +417,6 @@
             (eq (car varspec) (cadr varspec))
             (return nil))))
     (let ((vars (if (eq op 'LET) (p1-let-vars varlist) (p1-let*-vars varlist))))
-      (dformat t "p1-let/let* vars = ~S~%" (mapcar #'variable-name vars))
       ;; Check for globally declared specials.
       (dolist (variable vars)
         (when (special-variable-p (variable-name variable))
@@ -782,7 +782,7 @@
         ((atom form)
          form)
         (t
-         (let ((op (car form))
+         (let ((op (%car form))
                handler)
            (cond ((symbolp op)
                   (cond ((setf handler (get op 'p1-handler))

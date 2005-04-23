@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.763 2005-04-22 21:28:50 piso Exp $
+ * $Id: Primitives.java,v 1.764 2005-04-23 18:57:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -916,7 +916,7 @@ public final class Primitives extends Lisp
                 LispObject splice = null;
                 while (first instanceof Cons) {
                     splice = first;
-                    first = first.cdr();
+                    first = ((Cons)first).cdr;
                 }
                 splice.setCdr(second);
                 return result;
@@ -953,7 +953,7 @@ public final class Primitives extends Lisp
                                 } else {
                                     splice = list;
                                 }
-                                list = list.cdr();
+                                list = ((Cons)list).cdr;
                             }
                         } else
                             signal(new TypeError(list, Symbol.LIST));
