@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.440 2005-04-23 18:58:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.441 2005-04-23 21:18:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1199,32 +1199,30 @@
              (single-valued-p (node-form form))))
         ((atom form)
          t)
-        ((eq (first form) 'IF)
-         (and ;;(single-valued-p (second form))
-              (single-valued-p (third form))
+        ((eq (%car form) 'IF)
+         (and (single-valued-p (third form))
               (single-valued-p (fourth form))))
-        ((eq (first form) 'PROGN)
+        ((eq (%car form) 'PROGN)
          (single-valued-p (car (last form))))
-        ((memq (first form) '(LET LET*))
+        ((memq (%car form) '(LET LET*))
          (single-valued-p (car (last (cddr form)))))
-        ((memq (car form) '(AND OR))
+        ((memq (%car form) '(AND OR))
          (every #'single-valued-p (cdr form)))
-        ((eq (first form) 'RETURN-FROM)
+        ((eq (%car form) 'RETURN-FROM)
          (single-valued-p (third form)))
-        ((eq (first form) 'THE)
+        ((eq (%car form) 'THE)
          (dformat t "single-valued-p THE ~S~%" form)
          (single-valued-p (third form)))
-        ((eq (first form) (compiland-name *current-compiland*))
+        ((eq (%car form) (compiland-name *current-compiland*))
          (dformat t "single-valued-p recursive call ~S~%" (first form))
          (compiland-single-valued-p *current-compiland*))
         (t
-         (when (sys:single-valued-p (car form))
+         (when (sys:single-valued-p (%car form))
            (return-from single-valued-p t))
-         (let ((ftype (sys:proclaimed-ftype (car form))))
+         (let ((ftype (sys:proclaimed-ftype (%car form))))
            (if (and ftype (third ftype) (atom (third ftype)))
                t
-               nil))
-         )))
+               nil)))))
 
 (defun emit-clear-values ()
 ;;   (break "EMIT-CLEAR-VALUES called~%")
@@ -1609,6 +1607,7 @@
         (print-code))
       max-stack)))
 
+(declaim (ftype (function (t &optional t) emit-move-from-stack)))
 (defun emit-move-from-stack (target &optional representation)
   (declare (optimize speed))
   (cond ((null target)
@@ -2217,6 +2216,7 @@
     (when (plusp (length output))
       output)))
 
+(declaim (ftype (function (symbol) string) declare-symbol))
 (defun declare-symbol (symbol)
   (let ((g (gethash symbol *declared-symbols*)))
     (unless g
@@ -2232,7 +2232,6 @@
                            (list +java-string+ +java-string+) +lisp-symbol+)
         (emit 'putstatic *this-class* g +lisp-symbol+)
         (setf *static-code* *code*)
-;;         (sys::%format t "declare-symbol (length *static-code* = ~S~%" (length *static-code*))
         (setf (gethash symbol *declared-symbols*) g)))
     g))
 
@@ -3967,7 +3966,7 @@
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
     (return-from p2-car))
-  (let ((arg (cadr form)))
+  (let ((arg (%cadr form)))
     (cond ((and (consp arg) (eq (%car arg) 'cdr) (= (length arg) 2))
            (compile-form (second arg) :target :stack)
            (maybe-emit-clear-values (second arg))
@@ -3986,7 +3985,7 @@
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
     (return-from p2-cdr))
-  (let ((arg (cadr form)))
+  (let ((arg (%cadr form)))
     (cond ((eq (derive-type arg) 'CONS)
            (compile-form arg :target :stack)
            (emit 'checkcast +lisp-cons-class+)
