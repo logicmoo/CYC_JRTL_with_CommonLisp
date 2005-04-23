@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.58 2005-04-18 02:47:30 piso Exp $
+ * $Id: Cons.java,v 1.59 2005-04-23 15:56:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ package org.armedbear.lisp;
 
 public final class Cons extends LispObject
 {
-    private LispObject car;
-    private LispObject cdr;
+    public LispObject car;
+    public LispObject cdr;
 
     public Cons(LispObject car, LispObject cdr)
     {
