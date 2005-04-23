@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: profiler.lisp,v 1.12 2005-04-14 22:52:08 piso Exp $
+;;; $Id: profiler.lisp,v 1.13 2005-04-23 16:14:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -66,7 +66,10 @@
         ((typep object 'method)
          (format nil "~A ~A"
                  (sys::generic-function-name (sys::method-generic-function object))
-                 (mapcar #'class-name (sys::method-specializers object))))))
+;;                  (mapcar #'class-name (sys::method-specializers object))
+                 ; FIXME CLASS-NAME doesn't work with EQL specializers
+                 (sys::method-specializers object)
+                 ))))
 
 (defun show-call-count (info max-count)
   (let* ((object (profile-info-object info))
