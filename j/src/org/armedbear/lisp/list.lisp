@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.42 2003-07-02 17:51:15 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: list.lisp,v 1.43 2005-04-23 16:17:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
 
 (defun copy-tree (object)
   (if (consp object)
-      (cons (copy-tree (car object)) (copy-tree (cdr object)))
+      (cons (copy-tree (%car object)) (copy-tree (%cdr object)))
       object))
 
 (defmacro apply-key (key element)
