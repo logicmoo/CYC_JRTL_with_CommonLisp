@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Bignum.java,v 1.65 2005-03-23 18:30:37 piso Exp $
+ * $Id: Bignum.java,v 1.66 2005-04-23 18:56:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,6 +97,11 @@ public final class Bignum extends LispObject
     public boolean numberp()
     {
         return true;
+    }
+
+    public LispObject INTEGERP()
+    {
+        return T;
     }
 
     public boolean integerp()
