@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.77 2005-04-22 21:31:26 piso Exp $
+;;; $Id: compile-file.lisp,v 1.78 2005-04-23 16:19:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -124,7 +124,7 @@
          (write object :stream stream))))
 
 (defun dump-form (form stream)
-  (when (and (consp form) (neq (car form) 'QUOTE))
+  (when (and (consp form) (neq (%car form) 'QUOTE))
     (let ((*print-fasl* t)
           (*print-level* nil)
           (*print-length* nil)
@@ -312,13 +312,13 @@
                     ((and (eq first '%SET-FDEFINITION)
                           (eq (car (second form)) 'QUOTE)
                           (consp (third form))
-                          (eq (car (third form)) 'FUNCTION)
+                          (eq (%car (third form)) 'FUNCTION)
                           (symbolp (cadr (third form))))
                      (setf form (precompile-form form nil)))
                     ((memq first '(LET LET*))
                      (let ((body (cddr form)))
                        (if (dolist (subform body nil)
-                             (when (and (consp subform) (eq (car subform) 'DEFUN))
+                             (when (and (consp subform) (eq (%car subform) 'DEFUN))
                                (return t)))
                            (setf form (convert-toplevel-form form))
                            (setf form (precompile-form form nil)))))

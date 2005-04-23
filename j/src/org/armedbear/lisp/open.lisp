@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: open.lisp,v 1.18 2005-03-18 18:39:37 piso Exp $
+;;; $Id: open.lisp,v 1.19 2005-04-23 16:15:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -67,9 +67,9 @@
                   (let ((low (cadr element-type))
                         (high (caddr element-type)))
                     (when (consp low)
-                      (setf low (1+ (car low))))
+                      (setf low (1+ (%car low))))
                     (when (consp high)
-                      (setf high (1- (car high))))
+                      (setf high (1- (%car high))))
                     (setf element-type
                           (cond ((eq high '*)
                                  (if (minusp low) '(signed-byte 8) '(unsigned-byte 8)))

@@ -1,7 +1,7 @@
 ;;; backquote.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: backquote.lisp,v 1.7 2005-02-06 02:01:38 piso Exp $
+;;; $Id: backquote.lisp,v 1.8 2005-04-23 16:20:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@
 ;;;
 (defun expandable-backq-expression-p (object)
   (and (consp object)
-       (let ((flag (car object)))
+       (let ((flag (%car object)))
          (or (eq flag *bq-at-flag*)
              (eq flag *bq-dot-flag*)))))
 
