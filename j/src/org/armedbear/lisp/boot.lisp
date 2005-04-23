@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.214 2005-04-23 15:59:26 piso Exp $
+;;; $Id: boot.lisp,v 1.215 2005-04-23 17:18:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,24 +43,30 @@
 
 (defmacro defun (name lambda-list &rest body)
   (let ((block-name (block-name name)))
-    (list '%defun (list 'QUOTE name) (list 'QUOTE lambda-list)
-          (list 'QUOTE (list (list* 'BLOCK block-name body))))))
+    (list '%defun (list 'quote name) (list 'quote lambda-list)
+          (list 'quote (list (list* 'block block-name body))))))
 
 (defmacro defconstant (name initial-value &optional docstring)
-  (list '%defconstant (list 'QUOTE name) initial-value docstring))
+  (list '%defconstant (list 'quote name) initial-value docstring))
 
 (defmacro defparameter (name initial-value &optional docstring)
-  (list '%defparameter (list 'QUOTE name) initial-value docstring))
+  (list '%defparameter (list 'quote name) initial-value docstring))
 
 (in-package #:extensions)
 
-(export '(%car %cdr))
+(export '(%car %cdr %cadr %caddr))
 
 (defmacro %car (x)
-  (list 'CAR (list 'THE 'CONS x)))
+  (list 'car (list 'the 'cons x)))
 
 (defmacro %cdr (x)
-  (list 'CDR (list 'THE 'CONS x)))
+  (list 'cdr (list 'the 'cons x)))
+
+(defmacro %cadr (x)
+  (list '%car (list '%cdr x)))
+
+(defmacro %caddr (x)
+  (list '%car (list '%cdr (list '%cdr x))))
 
 (in-package #:system)
 
