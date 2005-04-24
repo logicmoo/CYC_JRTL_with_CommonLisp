@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: CompiledFunction.java,v 1.33 2005-04-05 22:58:40 piso Exp $
+ * $Id: CompiledFunction.java,v 1.34 2005-04-24 23:40:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,10 @@ public class CompiledFunction extends Closure
                             LispObject body, Environment env)
         throws ConditionThrowable
     {
-        super(name, lambdaList, body, env);
+        super(name,
+              new Cons(Symbol.LAMBDA,
+                       new Cons(lambdaList, body)),
+              env);
     }
 
     public LispObject typeOf()

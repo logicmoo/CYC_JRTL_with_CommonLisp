@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.100 2005-04-14 14:09:16 piso Exp $
+ * $Id: Closure.java,v 1.101 2005-04-24 23:40:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,14 +59,20 @@ public class Closure extends Function
 
     private boolean bindInitForms;
 
-    public Closure(LispObject lambdaList, LispObject body, Environment env)
+    public Closure(LispObject lambdaExpression, Environment env)
         throws ConditionThrowable
     {
-        this(null, lambdaList, body, env);
+        this(null, lambdaExpression.cadr(), lambdaExpression.cddr(), env);
     }
 
-    public Closure(LispObject name, LispObject lambdaList, LispObject body,
-                   Environment env)
+    public Closure(LispObject name, LispObject lambdaExpression, Environment env)
+        throws ConditionThrowable
+    {
+        this(name, lambdaExpression.cadr(), lambdaExpression.cddr(), env);
+    }
+
+    private Closure(LispObject name, LispObject lambdaList, LispObject body,
+                    Environment env)
         throws ConditionThrowable
     {
         super(name, lambdaList);

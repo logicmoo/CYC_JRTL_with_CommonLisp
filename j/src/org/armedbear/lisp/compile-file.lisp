@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.78 2005-04-23 16:19:21 piso Exp $
+;;; $Id: compile-file.lisp,v 1.79 2005-04-24 23:40:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -449,8 +449,6 @@
              (when (and env (sys::empty-environment-p env))
                (setf env nil))
              `(progn
-                (%defun ',name ',lambda-list
-                        '(,@decls (BLOCK ,block-name ,@body))
-                        ,env)
+                (%defun ',name '(lambda ,lambda-list ,@decls (block ,block-name ,@body)))
                 (precompile ',name)
                 ',name))))))

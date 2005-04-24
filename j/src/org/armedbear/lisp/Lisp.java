@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.342 2005-04-23 18:55:40 piso Exp $
+ * $Id: Lisp.java,v 1.343 2005-04-24 23:40:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -365,7 +365,7 @@ public abstract class Lisp
             } else {
                 if (first.car() == Symbol.LAMBDA) {
                     LispObject rest = first.cdr();
-                    Closure closure = new Closure(rest.car(), rest.cdr(), env);
+                    Closure closure = new Closure(first, env);
                     return evalCall(closure, ((Cons)obj).cdr, env, thread);
                 } else
                     return signal(new ProgramError("Illegal function object: " +
@@ -1157,7 +1157,7 @@ public abstract class Lisp
             if (fun instanceof Function)
                 return (Function) fun;
         } else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
-            return new Closure(obj.cadr(), obj.cddr(), new Environment());
+            return new Closure(obj, new Environment());
         signal(new UndefinedFunction(obj));
         // Not reached.
         return null;
@@ -1173,7 +1173,7 @@ public abstract class Lisp
             if (fun instanceof Operator)
                 return (Operator) fun;
         } else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
-            return new Closure(obj.cadr(), obj.cddr(), new Environment());
+            return new Closure(obj, new Environment());
         signal(new UndefinedFunction(obj));
         // Not reached.
         return null;

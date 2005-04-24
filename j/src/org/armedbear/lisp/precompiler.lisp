@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.101 2005-04-23 17:17:36 piso Exp $
+;;; $Id: precompiler.lisp,v 1.102 2005-04-24 23:40:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (define-compiler-macro assoc (&whole form &rest args)
   (cond ((and (= (length args) 4)
@@ -915,6 +915,6 @@
     (when (and env (empty-environment-p env))
       (setf env nil))
     `(progn
-       (%defun ',name ',lambda-list '((BLOCK ,block-name ,@body)) ,env)
+       (%defun ',name '(lambda ,lambda-list (block ,block-name ,@body)))
        (precompile ',name)
        ',name)))

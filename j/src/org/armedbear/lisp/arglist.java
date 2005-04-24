@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: arglist.java,v 1.17 2005-04-08 10:49:05 piso Exp $
+ * $Id: arglist.java,v 1.18 2005-04-24 23:40:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class arglist extends Lisp
                     return null;
             }
         } else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
-            return new Closure(obj.cadr(), obj.cddr(), new Environment());
+            return new Closure(obj, new Environment());
         return null;
     }
 

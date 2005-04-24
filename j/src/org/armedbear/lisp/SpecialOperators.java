@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.37 2005-04-05 15:41:18 piso Exp $
+ * $Id: SpecialOperators.java,v 1.38 2005-04-24 23:40:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -351,11 +351,14 @@ public final class SpecialOperators extends Lisp
                     body = new Cons(decls.car(), body);
                     decls = decls.cdr();
                 }
+                LispObject lambdaExpression =
+                    new Cons(Symbol.LAMBDA,
+                             new Cons(parameters, body));
                 Closure closure;
                 if (recursive)
-                    closure = new Closure(parameters, body, ext);
+                    closure = new Closure(lambdaExpression, ext);
                 else
-                    closure = new Closure(parameters, body, env);
+                    closure = new Closure(lambdaExpression, env);
                 closure.setLambdaName(list2(Symbol.FLET, name));
                 ext.addFunctionBinding(name, closure);
                 defs = defs.cdr();
@@ -467,7 +470,7 @@ public final class SpecialOperators extends Lisp
             }
             if (arg instanceof Cons) {
                 if (arg.car() == Symbol.LAMBDA)
-                    return new Closure(arg.cadr(), arg.cddr(), env);
+                    return new Closure(arg, env);
                 if (arg.car() == Symbol.SETF) {
                     LispObject f = env.lookupFunction(arg);
                     if (f != null)

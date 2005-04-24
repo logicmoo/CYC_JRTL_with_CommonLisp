@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.764 2005-04-23 18:57:36 piso Exp $
+ * $Id: Primitives.java,v 1.765 2005-04-24 23:40:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1484,26 +1484,24 @@ public final class Primitives extends Lisp
         }
     }
 
-    // ### %defun
-    // %defun name arglist body &optional environment => name
+    // ### %defun name lambda-expression &optional environment => name
     private static final Primitive _DEFUN =
         new Primitive("%defun", PACKAGE_SYS, false,
-                      "function-name lambda-list body &optional environment")
+                      "function-name lambda-expression &optional environment")
     {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return execute(first, second, new Environment());
+        }
+
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            return execute(first, second, third, new Environment());
-        }
-
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third, LispObject fourth)
-            throws ConditionThrowable
-        {
             Environment env;
-            if (fourth != NIL)
-                env = checkEnvironment(fourth);
+            if (third != NIL)
+                env = checkEnvironment(third);
             else
                 env = new Environment();
             final Symbol symbol;
@@ -1520,21 +1518,11 @@ public final class Primitives extends Lisp
                 return signal(new TypeError("The value " +
                                             first.writeToString() +
                                             " is not a valid function name."));
-            LispObject arglist = checkList(second);
-            LispObject body = checkList(third);
-            if (body.car() instanceof AbstractString && body.cdr() != NIL) {
-                // Documentation.
-                if (first instanceof Symbol)
-                    symbol.setFunctionDocumentation(body.car());
-                else
-                    ; // FIXME Support documentation for SETF functions!
-                body = body.cdr();
-            }
-            Closure closure = new Closure(first instanceof Symbol ? symbol : null,
-                                          arglist,
-                                          body,
-                                          env);
-            FSET.execute(first, closure, NIL, arglist);
+            LispObject lambdaExpression = second;
+            Closure closure =
+                new Closure(first instanceof Symbol ? symbol : null,
+                            lambdaExpression, env);
+            FSET.execute(first, closure, NIL, lambdaExpression.cadr());
             return first;
         }
     };
@@ -1627,8 +1615,7 @@ public final class Primitives extends Lisp
                 list3(Symbol.LAMBDA, list2(formArg, envArg),
                       list3(Symbol.APPLY, toBeApplied,
                             list2(Symbol.CDR, formArg)));
-            Closure expansionFunction =
-                new Closure(expander.cadr(), expander.cddr(), env);
+            Closure expansionFunction = new Closure(expander, env);
             MacroObject macroObject =
                 new MacroObject(symbol, expansionFunction);
             if (symbol.getSymbolFunction() instanceof SpecialOperator)
@@ -3088,8 +3075,7 @@ public final class Primitives extends Lisp
                         PACKAGE_SYS.intern("MAKE-EXPANDER-FOR-MACROLET");
                     LispObject expander =
                         make_expander_for_macrolet.execute(def);
-                    Closure expansionFunction =
-                        new Closure(expander.cadr(), expander.cddr(), env);
+                    Closure expansionFunction = new Closure(expander, env);
                     MacroObject macroObject =
                         new MacroObject(symbol, expansionFunction);
                     ext.addFunctionBinding(symbol, macroObject);
@@ -4508,7 +4494,7 @@ public final class Primitives extends Lisp
                     env = new Environment();
                 else
                     env = checkEnvironment(second);
-                return new Closure(first.cadr(), first.cddr(), env);
+                return new Closure(first, env);
             }
             return signal(new TypeError("The argument to MAKE-CLOSURE is not a lambda form."));
         }
