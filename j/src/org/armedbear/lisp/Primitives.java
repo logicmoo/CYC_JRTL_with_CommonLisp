@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.766 2005-04-25 12:20:01 piso Exp $
+ * $Id: Primitives.java,v 1.767 2005-04-25 13:28:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1522,13 +1522,8 @@ public final class Primitives extends Lisp
                 FSET.execute(first, second, NIL,
                              ((Function)second).getLambdaList());
 
-            } else {
-                LispObject lambdaExpression = second;
-                Closure closure =
-                    new Closure(first instanceof Symbol ? symbol : null,
-                                lambdaExpression, env);
-                FSET.execute(first, closure, NIL, lambdaExpression.cadr());
-            }
+            } else
+                return signal(new TypeError(second, Symbol.FUNCTION));
             return first;
         }
     };
