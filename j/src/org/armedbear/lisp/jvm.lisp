@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.442 2005-04-24 23:40:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.443 2005-04-25 13:26:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@
 (defmacro defsubst (name lambda-list &rest body)
   (let ((block-name (sys:block-name name)))
     `(progn
-       (sys::%defun ',name '(lambda ,lambda-list (block ,block-name ,@body)))
+       (sys::%defun ',name (lambda ,lambda-list (block ,block-name ,@body)))
        (precompile ',name)
        (eval-when (:compile-toplevel :load-toplevel :execute)
          (setf (inline-expansion ',name)
