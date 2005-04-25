@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.765 2005-04-24 23:40:47 piso Exp $
+ * $Id: Primitives.java,v 1.766 2005-04-25 12:20:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1484,10 +1484,10 @@ public final class Primitives extends Lisp
         }
     }
 
-    // ### %defun name lambda-expression &optional environment => name
+    // ### %defun name definition &optional environment => name
     private static final Primitive _DEFUN =
         new Primitive("%defun", PACKAGE_SYS, false,
-                      "function-name lambda-expression &optional environment")
+                      "name definition &optional environment")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -1518,11 +1518,17 @@ public final class Primitives extends Lisp
                 return signal(new TypeError("The value " +
                                             first.writeToString() +
                                             " is not a valid function name."));
-            LispObject lambdaExpression = second;
-            Closure closure =
-                new Closure(first instanceof Symbol ? symbol : null,
-                            lambdaExpression, env);
-            FSET.execute(first, closure, NIL, lambdaExpression.cadr());
+            if (second instanceof Function) {
+                FSET.execute(first, second, NIL,
+                             ((Function)second).getLambdaList());
+
+            } else {
+                LispObject lambdaExpression = second;
+                Closure closure =
+                    new Closure(first instanceof Symbol ? symbol : null,
+                                lambdaExpression, env);
+                FSET.execute(first, closure, NIL, lambdaExpression.cadr());
+            }
             return first;
         }
     };
