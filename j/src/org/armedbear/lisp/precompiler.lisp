@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.102 2005-04-24 23:40:49 piso Exp $
+;;; $Id: precompiler.lisp,v 1.103 2005-04-25 00:43:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -915,6 +915,6 @@
     (when (and env (empty-environment-p env))
       (setf env nil))
     `(progn
-       (%defun ',name '(lambda ,lambda-list (block ,block-name ,@body)))
+       (%defun ',name '(lambda ,lambda-list (block ,block-name ,@body)) ,env)
        (precompile ',name)
        ',name)))
