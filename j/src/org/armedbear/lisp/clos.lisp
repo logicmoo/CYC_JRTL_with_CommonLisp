@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.138 2005-02-28 21:28:43 piso Exp $
+;;; $Id: clos.lisp,v 1.139 2005-04-25 15:21:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -946,8 +946,8 @@
   (when (and env (empty-environment-p env))
     (setf env nil))
   (multiple-value-bind
-    (function-name qualifiers lambda-list specializers documentation declarations body)
-    (parse-defmethod args)
+      (function-name qualifiers lambda-list specializers documentation declarations body)
+      (parse-defmethod args)
     (let ((specializers-form ()))
       (dolist (specializer specializers)
         (cond ((and (consp specializer) (eq (car specializer) 'eql))
@@ -1005,18 +1005,18 @@
                (setf parse-state :body))))
         (:body (push-on-end arg body))))
     (multiple-value-bind (real-body declarations documentation)
-      (parse-body body)
-        (values function-name
-                qualifiers
-                (extract-lambda-list specialized-lambda-list)
-                (extract-specializers specialized-lambda-list)
-                documentation
-                declarations
-                (list* 'block
-                         (if (consp function-name)
-                             (cadr function-name)
-                             function-name)
-                         real-body)))))
+        (parse-body body)
+      (values function-name
+              qualifiers
+              (extract-lambda-list specialized-lambda-list)
+              (extract-specializers specialized-lambda-list)
+              documentation
+              declarations
+              (list* 'block
+                     (if (consp function-name)
+                         (cadr function-name)
+                         function-name)
+                     real-body)))))
 
 (defun required-portion (gf args)
   (let ((number-required (length (gf-required-args gf))))
@@ -1107,9 +1107,9 @@
 #+nil
 (defun check-method-arg-info (gf arg-info method)
   (multiple-value-bind (nreq nopt keysp restp allow-other-keys-p keywords)
-    (analyze-lambda-list (if (consp method)
-                             (early-method-lambda-list method)
-                             (method-lambda-list method)))
+      (analyze-lambda-list (if (consp method)
+                               (early-method-lambda-list method)
+                               (method-lambda-list method)))
     (flet ((lose (string &rest args)
                  (error 'simple-program-error
                         :format-control "~@<attempt to add the method~2I~_~S~I~_~
@@ -1252,9 +1252,9 @@
 
 ;;; Reader and writer methods
 
-(defun add-reader-method (class fn-name slot-name)
+(defun add-reader-method (class function-name slot-name)
   (ensure-method
-   (ensure-generic-function fn-name :lambda-list '(object))
+   (ensure-generic-function function-name :lambda-list '(object))
    :lambda-list '(object)
    :qualifiers ()
    :specializers (list class)
@@ -1262,15 +1262,13 @@
    :environment nil)
   (values))
 
-(defun add-writer-method (class fn-name slot-name)
+(defun add-writer-method (class function-name slot-name)
   (ensure-method
-   (ensure-generic-function
-    fn-name :lambda-list '(new-value object))
+   (ensure-generic-function function-name :lambda-list '(new-value object))
    :lambda-list '(new-value object)
    :qualifiers ()
    :specializers (list (find-class 't) class)
-   :body `(setf (slot-value object ',slot-name)
-                new-value)
+   :body `(setf (slot-value object ',slot-name) new-value)
    :environment nil)
   (values))
 
@@ -1750,7 +1748,7 @@
   (dolist (slot (class-slots (class-of instance)))
     (let ((slot-name (slot-definition-name slot)))
       (multiple-value-bind (init-key init-value foundp)
-        (get-properties all-keys (slot-definition-initargs slot))
+          (get-properties all-keys (slot-definition-initargs slot))
         (if foundp
             (setf (std-slot-value instance slot-name) init-value)
             (when (and (not (std-slot-boundp instance slot-name))
