@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.81 2005-04-25 12:22:27 piso Exp $
+;;; $Id: compile-file.lisp,v 1.82 2005-04-25 13:27:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -439,7 +439,8 @@
     (values (truename output-file) warnings-p failure-p)))
 
 (defmacro defun (name lambda-list &body body &environment env)
-  (let ((block-name (block-name name)))
+  (let* ((block-name (block-name name))
+         (lambda-expression `(lambda ,lambda-list (block ,block-name ,@body))))
     (multiple-value-bind (body decls doc)
         (sys::parse-body body)
       (cond (*compile-file-truename*
@@ -448,7 +449,6 @@
             (t
              (when (and env (sys::empty-environment-p env))
                (setf env nil))
-             `(progn
-                (%defun ',name (lambda ,lambda-list ,@decls (block ,block-name ,@body)) ,env)
-                (precompile ',name)
-                ',name))))))
+             (when (null env)
+               (setf lambda-expression (precompile-form lambda-expression nil)))
+             `(%defun ',name ,lambda-expression))))))

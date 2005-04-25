@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.104 2005-04-25 12:22:27 piso Exp $
+;;; $Id: precompiler.lisp,v 1.105 2005-04-25 13:25:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -911,10 +911,10 @@
 
 ;; Redefine DEFUN to precompile the definition on the fly.
 (defmacro defun (name lambda-list &rest body &environment env)
-  (let ((block-name (sys:block-name name)))
+  (let* ((block-name (sys:block-name name))
+         (lambda-expression `(lambda ,lambda-list (block ,block-name ,@body))))
     (when (and env (empty-environment-p env))
       (setf env nil))
-    `(progn
-       (%defun ',name (lambda ,lambda-list (block ,block-name ,@body)) ,env)
-       (precompile ',name)
-       ',name)))
+    (when (null env)
+      (setf lambda-expression (precompile-form lambda-expression nil)))
+    `(%defun ',name ,lambda-expression)))
