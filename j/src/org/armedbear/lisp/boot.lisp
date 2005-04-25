@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.216 2005-04-24 23:40:48 piso Exp $
+;;; $Id: boot.lisp,v 1.217 2005-04-25 12:22:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@
   (let ((block-name (block-name name)))
     (list '%defun
           (list 'quote name)
-          (list 'quote (list 'lambda lambda-list (list* 'block block-name body))))))
+          (list 'lambda lambda-list (list* 'block block-name body)))))
 
 (defmacro defconstant (name initial-value &optional docstring)
   (list '%defconstant (list 'quote name) initial-value docstring))
