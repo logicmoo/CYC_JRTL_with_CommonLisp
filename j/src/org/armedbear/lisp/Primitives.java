@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.767 2005-04-25 13:28:22 piso Exp $
+ * $Id: Primitives.java,v 1.768 2005-04-25 14:24:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1489,42 +1489,30 @@ public final class Primitives extends Lisp
         new Primitive("%defun", PACKAGE_SYS, false,
                       "name definition &optional environment")
     {
-        public LispObject execute(LispObject first, LispObject second)
+        public LispObject execute(LispObject name, LispObject definition)
             throws ConditionThrowable
         {
-            return execute(first, second, new Environment());
-        }
-
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            Environment env;
-            if (third != NIL)
-                env = checkEnvironment(third);
-            else
-                env = new Environment();
-            final Symbol symbol;
-            if (first instanceof Symbol) {
-                symbol = (Symbol) first;
+            if (name instanceof Symbol) {
+                Symbol symbol = (Symbol) name;
                 if (symbol.getSymbolFunction() instanceof SpecialOperator) {
                     String message =
                         symbol.getName() + " is a special operator and may not be redefined.";
                     return signal(new ProgramError(message));
                 }
-            } else if (first instanceof Cons && first.car() == Symbol.SETF) {
-                symbol = checkSymbol(first.cadr());
+            } else if (name instanceof Cons && ((Cons)name).car == Symbol.SETF &&
+                       name.cadr() instanceof Symbol)
+            {
+                // OK.
             } else
                 return signal(new TypeError("The value " +
-                                            first.writeToString() +
+                                            name.writeToString() +
                                             " is not a valid function name."));
-            if (second instanceof Function) {
-                FSET.execute(first, second, NIL,
-                             ((Function)second).getLambdaList());
-
+            if (definition instanceof Function) {
+                FSET.execute(name, definition, NIL,
+                             ((Function)definition).getLambdaList());
+                return name;
             } else
-                return signal(new TypeError(second, Symbol.FUNCTION));
-            return first;
+                return signal(new TypeError(definition, Symbol.FUNCTION));
         }
     };
 
