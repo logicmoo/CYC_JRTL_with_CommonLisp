@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.101 2005-04-24 23:40:46 piso Exp $
+ * $Id: Closure.java,v 1.102 2005-04-25 03:40:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,20 +62,15 @@ public class Closure extends Function
     public Closure(LispObject lambdaExpression, Environment env)
         throws ConditionThrowable
     {
-        this(null, lambdaExpression.cadr(), lambdaExpression.cddr(), env);
+        this(null, lambdaExpression, env);
     }
 
-    public Closure(LispObject name, LispObject lambdaExpression, Environment env)
+    public Closure(final LispObject name, final LispObject lambdaExpression,
+                   final Environment env)
         throws ConditionThrowable
     {
-        this(name, lambdaExpression.cadr(), lambdaExpression.cddr(), env);
-    }
-
-    private Closure(LispObject name, LispObject lambdaList, LispObject body,
-                    Environment env)
-        throws ConditionThrowable
-    {
-        super(name, lambdaList);
+        super(name, lambdaExpression.cadr());
+        final LispObject lambdaList = lambdaExpression.cadr();
         setLambdaList(lambdaList);
         Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
         boolean andKey = false;
@@ -233,7 +228,7 @@ public class Closure extends Function
             arity = 0;
             minArgs = maxArgs = 0;
         }
-        this.body = body;
+        this.body = lambdaExpression.cddr();
         this.environment = env;
         this.andKey = andKey;
         this.allowOtherKeys = allowOtherKeys;
