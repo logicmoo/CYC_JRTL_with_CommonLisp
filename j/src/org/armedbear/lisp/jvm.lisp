@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.443 2005-04-25 13:26:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.444 2005-04-25 17:22:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6337,27 +6337,27 @@
 
 (defun %jvm-compile (name definition)
   (let ((prefix (load-verbose-prefix)))
-    (when *compile-print*
-      (fresh-line)
-      (if name
-          (progn
-            (sys::%format t "~A Compiling ~S ...~%" prefix name)
-            (when (and (fboundp name)
-                       (sys::%typep (fdefinition name) 'generic-function))
-              (sys::%format t "~A Unable to compile generic function ~S~%" prefix name)
-              (return-from %jvm-compile (values name nil t)))
-            (unless (symbolp name)
-              (sys::%format t "~A Unable to compile ~S~%" prefix name)
-              (return-from %jvm-compile (values name nil t))))
-          (let ((*print-length* 2)
-                (*print-level* 2))
-            (format t "; Compiling ~S~%" definition))))
+;;     (when *compile-print*
+;;       (fresh-line)
+;;       (if name
+;;           (progn
+;;             (sys::%format t "~A Compiling ~S ...~%" prefix name)
+;;             (when (and (fboundp name)
+;;                        (sys::%typep (fdefinition name) 'generic-function))
+;;               (sys::%format t "~A Unable to compile generic function ~S~%" prefix name)
+;;               (return-from %jvm-compile (values name nil t)))
+;;             (unless (symbolp name)
+;;               (sys::%format t "~A Unable to compile ~S~%" prefix name)
+;;               (return-from %jvm-compile (values name nil t))))
+;;           (let ((*print-length* 2)
+;;                 (*print-level* 2))
+;;             (format t "; Compiling ~S~%" definition))))
     (unless definition
       (resolve name)
       (setf definition (fdefinition name)))
     (when (compiled-function-p definition)
-      (when (and *compile-print* name)
-        (sys::%format t "~A Already compiled ~S~%" prefix name))
+;;       (when (and *compile-print* name)
+;;         (sys::%format t "~A Already compiled ~S~%" prefix name))
       (return-from %jvm-compile (values name nil nil)))
     (multiple-value-bind (expr env) (get-lambda-to-compile definition)
       (let* ((*package* (if (and name (symbol-package name))
@@ -6382,10 +6382,11 @@
                    (setf warnings-p nil failure-p nil))
                   ((zerop (+ jvm::*errors* jvm::*warnings*))
                    (setf failure-p nil)))
-            (when *compile-print*
-              (if name
-                  (sys::%format t "~A Compiled ~S~%" prefix name)
-                  (sys::%format t "~A Compiled top-level form~%" prefix)))))
+;;             (when *compile-print*
+;;               (if name
+;;                   (sys::%format t "~A Compiled ~S~%" prefix name)
+;;                   (sys::%format t "~A Compiled top-level form~%" prefix)))
+            ))
         (values (or name compiled-definition) warnings-p failure-p)))))
 
 (defun jvm-compile (name &optional definition)
