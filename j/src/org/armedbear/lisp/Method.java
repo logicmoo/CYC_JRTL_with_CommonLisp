@@ -2,7 +2,7 @@
  * Method.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: Method.java,v 1.6 2005-04-05 23:23:05 piso Exp $
+ * $Id: Method.java,v 1.7 2005-04-26 16:33:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,6 +92,7 @@ public final class Method extends StandardObject
         return super.writeToString();
     }
 
+    // ### %method-generic-function
     private static final Primitive _METHOD_GENERIC_FUNCTION =
         new Primitive("%method-generic-function", PACKAGE_SYS, false)
     {
@@ -106,6 +107,7 @@ public final class Method extends StandardObject
         }
     };
 
+    // ### %set-method-generic-function
     private static final Primitive _SET_METHOD_GENERICFUNCTION =
         new Primitive("%set-method-generic-function", PACKAGE_SYS, false)
     {
@@ -122,6 +124,7 @@ public final class Method extends StandardObject
         }
     };
 
+    // ### method-function
     private static final Primitive METHOD_FUNCTION =
         new Primitive("method-function", PACKAGE_SYS, false)
     {
@@ -136,6 +139,7 @@ public final class Method extends StandardObject
         }
     };
 
+    // ### %set-method-function
     private static final Primitive _SET_METHOD_FUNCTION =
         new Primitive("%set-method-function", PACKAGE_SYS, false)
     {
@@ -152,6 +156,7 @@ public final class Method extends StandardObject
         }
     };
 
+    // ### %method-specializers
     private static final Primitive _METHOD_SPECIALIZERS =
         new Primitive("%method-specializers", PACKAGE_SYS, false)
     {
@@ -166,6 +171,7 @@ public final class Method extends StandardObject
         }
     };
 
+    // ### %set-method-specializers
     private static final Primitive _SET_METHOD_SPECIALIZERS =
         new Primitive("%set-method-specializers", PACKAGE_SYS, false)
     {
