@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.30 2005-03-07 19:09:37 piso Exp $
+;;; $Id: init.lisp,v 1.31 2005-04-26 14:51:33 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -75,6 +75,8 @@
                               "/home/peter/gcl/ansi-tests:/home/peter/depot/j/src/org/armedbear/lisp")
                              ((sub-p namestring "/home/peter/phemlock")
                               "/home/peter/phemlock/src/core:/home/peter/phemlock/src/user")
+                             ((sub-p namestring "/home/peter/sbcl")
+                              "/home/peter/sbcl/src/code:/home/peter/sbcl/src/compiler")
                              (t ; default case: no change
                               nil))))
                  ;; If we end up here with a non-NIL TAGPATH, use it to set the
