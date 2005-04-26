@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.139 2005-04-25 15:21:14 piso Exp $
+;;; $Id: clos.lisp,v 1.140 2005-04-26 02:37:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -731,6 +731,7 @@
    (qualifiers :initarg :qualifiers)       ; :accessor method-qualifiers
    (declarations :initarg :declarations)   ; :accessir method-declarations
    (body :initarg :body)                   ; :accessor method-body
+   (code :initarg :code)                   ; :accessor method-code
    (environment :initarg :environment)     ; :accessor method-environment
    (documentation)))                       ; :accessor method-documentation
 
@@ -755,6 +756,10 @@
 (defun method-body (method) (slot-value method 'body))
 (defun (setf method-body) (new-value method)
   (setf (slot-value method 'body) new-value))
+
+(defun method-code (method) (slot-value method 'code))
+(defun (setf method-code) (new-value method)
+  (setf (slot-value method 'code) new-value))
 
 (defun method-environment (method) (slot-value method 'environment))
 (defun (setf method-environment) (new-value method)
@@ -948,7 +953,9 @@
   (multiple-value-bind
       (function-name qualifiers lambda-list specializers documentation declarations body)
       (parse-defmethod args)
-    (let ((specializers-form ()))
+    (let ((specializers-form ())
+          (lambda-expression
+           `(lambda ,lambda-list ,@declarations ,body)))
       (dolist (specializer specializers)
         (cond ((and (consp specializer) (eq (car specializer) 'eql))
                (push `(list 'eql ,(cadr specializer)) specializers-form))
@@ -967,6 +974,7 @@
                         :documentation ,documentation
                         :declarations ',declarations
                         :body ',body
+                        :code (function ,lambda-expression)
                         :environment ,env)))))
 
 (defun canonicalize-specializers (specializers)
@@ -1180,7 +1188,7 @@
 (defun make-instance-standard-method (gf
                                       &key
                                       lambda-list qualifiers specializers
-                                      documentation declarations body
+                                      documentation declarations body code
                                       environment)
   (let ((method (std-allocate-instance the-class-standard-method)))
     (setf (method-lambda-list method) lambda-list)
@@ -1189,6 +1197,7 @@
     (setf (method-documentation method) documentation)
     (setf (method-declarations method) declarations)
     (setf (method-body method) (precompile-form body nil))
+    (setf (method-code method) code)
     (setf (method-environment method) environment)
     (setf (method-generic-function method) nil)
     (setf (method-function method) (std-compute-method-function method gf))
@@ -1259,6 +1268,7 @@
    :qualifiers ()
    :specializers (list class)
    :body `(slot-value object ',slot-name)
+   :code `(lambda (object) (slot-value object ',slot-name))
    :environment nil)
   (values))
 
@@ -1269,6 +1279,7 @@
    :qualifiers ()
    :specializers (list (find-class 't) class)
    :body `(setf (slot-value object ',slot-name) new-value)
+   :code `(lambda (new-value object) (setf (slot-value object ',slot-name) new-value))
    :environment nil)
   (values))
 
@@ -1527,8 +1538,9 @@
                      (not (null next-emfun))))
               (apply #'(lambda ,lambda-list ,@declarations ,body) args)))
          (method-environment method))
-        (let ((code (make-closure `(lambda ,lambda-list ,@declarations ,body)
-                                  (method-environment method))))
+;;         (let ((code (make-closure `(lambda ,lambda-list ,@declarations ,body)
+;;                                   (method-environment method))))
+        (let ((code (method-code method)))
 
           (when *compile-method-functions*
             (fresh-line)

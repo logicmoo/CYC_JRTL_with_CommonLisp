@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.105 2005-04-25 13:25:37 piso Exp $
+;;; $Id: precompiler.lisp,v 1.106 2005-04-26 02:36:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -819,7 +819,7 @@
                   (LOAD-TIME-VALUE      precompile-load-time-value)
 
                   (DECLARE              precompile-identity)
-                  (DEFMETHOD            precompile-identity)
+;;                   (DEFMETHOD            precompile-identity)
                   (DEFUN                precompile-defun)
                   (GO                   precompile-identity)
                   (QUOTE                precompile-identity)
