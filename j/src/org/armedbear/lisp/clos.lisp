@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.140 2005-04-26 02:37:15 piso Exp $
+;;; $Id: clos.lisp,v 1.141 2005-04-26 18:55:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -947,35 +947,36 @@
     (finalize-generic-function gf)
     gf))
 
-(defmacro defmethod (&rest args &environment env)
-  (when (and env (empty-environment-p env))
-    (setf env nil))
-  (multiple-value-bind
-      (function-name qualifiers lambda-list specializers documentation declarations body)
-      (parse-defmethod args)
-    (let ((specializers-form ())
-          (lambda-expression
-           `(lambda ,lambda-list ,@declarations ,body)))
-      (dolist (specializer specializers)
-        (cond ((and (consp specializer) (eq (car specializer) 'eql))
-               (push `(list 'eql ,(cadr specializer)) specializers-form))
-              (t
-               (push `',specializer specializers-form))))
-      (setf specializers-form `(list ,@(nreverse specializers-form)))
-      `(progn
-         (unless (find-generic-function ',function-name nil)
-           (ensure-generic-function
-            ',function-name
-            :lambda-list ',lambda-list))
-         (ensure-method (find-generic-function ',function-name)
-                        :lambda-list ',lambda-list
-                        :qualifiers ',qualifiers
-                        :specializers ,specializers-form
-                        :documentation ,documentation
-                        :declarations ',declarations
-                        :body ',body
-                        :code (function ,lambda-expression)
-                        :environment ,env)))))
+;; (defmacro defmethod (&rest args &environment env)
+;;   (when (and env (empty-environment-p env))
+;;     (setf env nil))
+;;   (multiple-value-bind
+;;       (function-name qualifiers lambda-list specializers documentation declarations body)
+;;       (parse-defmethod args)
+;;     (let* ((specializers-form '())
+;;            (lambda-expression `(lambda ,lambda-list ,@declarations ,body))
+;;            (method-function (compute-method-function lambda-expression)))
+;;       (dolist (specializer specializers)
+;;         (cond ((and (consp specializer) (eq (car specializer) 'eql))
+;;                (push `(list 'eql ,(cadr specializer)) specializers-form))
+;;               (t
+;;                (push `',specializer specializers-form))))
+;;       (setf specializers-form `(list ,@(nreverse specializers-form)))
+;;       `(progn
+;;          (unless (find-generic-function ',function-name nil)
+;;            (ensure-generic-function
+;;             ',function-name
+;;             :lambda-list ',lambda-list))
+;;          (ensure-method (find-generic-function ',function-name)
+;;                         :lambda-list ',lambda-list
+;;                         :qualifiers ',qualifiers
+;;                         :specializers ,specializers-form
+;;                         :documentation ,documentation
+;;                         :declarations ',declarations
+;;                         :body ',body
+;;                         :code (function ,lambda-expression)
+;;                         :function (function ,method-function)
+;;                         :environment ,env)))))
 
 (defun canonicalize-specializers (specializers)
   (mapcar #'canonicalize-specializer specializers))
@@ -1189,6 +1190,7 @@
                                       &key
                                       lambda-list qualifiers specializers
                                       documentation declarations body code
+                                      function
                                       environment)
   (let ((method (std-allocate-instance the-class-standard-method)))
     (setf (method-lambda-list method) lambda-list)
@@ -1200,7 +1202,8 @@
     (setf (method-code method) code)
     (setf (method-environment method) environment)
     (setf (method-generic-function method) nil)
-    (setf (method-function method) (std-compute-method-function method gf))
+;;     (setf (method-function method) (std-compute-method-function method gf))
+    (setf (method-function method) function)
     method))
 
 (defun add-method (gf method)
@@ -1259,29 +1262,39 @@
         (error "No such method for ~S." (generic-function-name gf))
         method)))
 
-;;; Reader and writer methods
+;; ;;; Reader and writer methods
 
-(defun add-reader-method (class function-name slot-name)
-  (ensure-method
-   (ensure-generic-function function-name :lambda-list '(object))
-   :lambda-list '(object)
-   :qualifiers ()
-   :specializers (list class)
-   :body `(slot-value object ',slot-name)
-   :code `(lambda (object) (slot-value object ',slot-name))
-   :environment nil)
-  (values))
+;; (defun add-reader-method (class function-name slot-name)
+;;   (let* ((lambda-expression `(lambda (object) (slot-value object ',slot-name)))
+;;          (method-function (compute-method-function lambda-expression)))
+;;     (ensure-method
+;;      (ensure-generic-function function-name :lambda-list '(object))
+;;      :lambda-list '(object)
+;;      :qualifiers ()
+;;      :specializers (list class)
+;;      :body `(slot-value object ',slot-name)
+;; ;;    :code `(lambda (object) (slot-value object ',slot-name))
+;;      :code `(function ,lambda-expression)
+;;      :function `(function ,method-function)
+;;      :environment nil)
+;;     (values)))
 
-(defun add-writer-method (class function-name slot-name)
-  (ensure-method
-   (ensure-generic-function function-name :lambda-list '(new-value object))
-   :lambda-list '(new-value object)
-   :qualifiers ()
-   :specializers (list (find-class 't) class)
-   :body `(setf (slot-value object ',slot-name) new-value)
-   :code `(lambda (new-value object) (setf (slot-value object ',slot-name) new-value))
-   :environment nil)
-  (values))
+;; (defun add-writer-method (class function-name slot-name)
+;;   (let* ((lambda-expression
+;;           `(lambda (new-value object)
+;;              (setf (slot-value object ',slot-name) new-value)))
+;;          (method-function (compute-method-function lambda-expression)))
+;;     (ensure-method
+;;      (ensure-generic-function function-name :lambda-list '(new-value object))
+;;      :lambda-list '(new-value object)
+;;      :qualifiers ()
+;;      :specializers (list (find-class 't) class)
+;;      :body `(setf (slot-value object ',slot-name) new-value)
+;; ;;      :code `(lambda (new-value object) (setf (slot-value object ',slot-name) new-value))
+;;      :code `(function ,lambda-expression)
+;;      :function `(function ,method-function)
+;;      :environment nil)
+;;     (values)))
 
 (defun subclassp (c1 c2)
   (not (null (find c2 (class-precedence-list c1)))))
@@ -1560,6 +1573,26 @@
 
           (make-closure `(lambda (args next-emfun) (apply ,code args)) nil)))))
 
+(defun compute-method-function (lambda-expression)
+  (let ((lambda-list (kludge-arglist (cadr lambda-expression)))
+        (body (cddr lambda-expression))
+        (*call-next-method-p* nil)
+        (*next-method-p-p* nil))
+    (multiple-value-bind (body declarations) (parse-body body)
+      (walk-form body)
+      (cond ((or *call-next-method-p* *next-method-p-p*)
+             `(lambda (args next-emfun)
+                (flet ((call-next-method (&rest cnm-args)
+                                         (if (null next-emfun)
+                                             (error "No next method for generic function.")
+                                             (funcall next-emfun (or cnm-args args))))
+                       (next-method-p ()
+                                      (not (null next-emfun))))
+                  (apply #'(lambda ,lambda-list ,@declarations ,@body) args))))
+            (t
+             `(lambda (args next-emfun)
+                (apply #'(lambda ,lambda-list ,@declarations ,@body) args)))))))
+
 ;;; N.B. The function kludge-arglist is used to pave over the differences
 ;;; between argument keyword compatibility for regular functions versus
 ;;; generic functions.
@@ -1581,6 +1614,71 @@
                (not (member '&key lambda-list)))
           (append lambda-list '(&key &allow-other-keys))
           lambda-list)))
+
+(defmacro defmethod (&rest args &environment env)
+  (when (and env (empty-environment-p env))
+    (setf env nil))
+  (multiple-value-bind
+      (function-name qualifiers lambda-list specializers documentation declarations body)
+      (parse-defmethod args)
+    (let* ((specializers-form '())
+           (lambda-expression `(lambda ,lambda-list ,@declarations ,body))
+           (method-function (compute-method-function lambda-expression)))
+      (dolist (specializer specializers)
+        (cond ((and (consp specializer) (eq (car specializer) 'eql))
+               (push `(list 'eql ,(cadr specializer)) specializers-form))
+              (t
+               (push `',specializer specializers-form))))
+      (setf specializers-form `(list ,@(nreverse specializers-form)))
+      `(progn
+         (unless (find-generic-function ',function-name nil)
+           (ensure-generic-function
+            ',function-name
+            :lambda-list ',lambda-list))
+         (ensure-method (find-generic-function ',function-name)
+                        :lambda-list ',lambda-list
+                        :qualifiers ',qualifiers
+                        :specializers ,specializers-form
+                        :documentation ,documentation
+                        :declarations ',declarations
+                        :body ',body
+                        :code (function ,lambda-expression)
+                        :function (function ,method-function)
+                        :environment ,env)))))
+
+;;; Reader and writer methods
+
+(defun add-reader-method (class function-name slot-name)
+  (let* ((lambda-expression `(lambda (object) (slot-value object ',slot-name)))
+         (method-function (compute-method-function lambda-expression)))
+    (ensure-method
+     (ensure-generic-function function-name :lambda-list '(object))
+     :lambda-list '(object)
+     :qualifiers ()
+     :specializers (list class)
+     :body `(slot-value object ',slot-name)
+     ;;    :code `(lambda (object) (slot-value object ',slot-name))
+     :code `(function ,lambda-expression)
+     :function `(function ,method-function)
+     :environment nil)
+    (values)))
+
+(defun add-writer-method (class function-name slot-name)
+  (let* ((lambda-expression
+          `(lambda (new-value object)
+             (setf (slot-value object ',slot-name) new-value)))
+         (method-function (compute-method-function lambda-expression)))
+    (ensure-method
+     (ensure-generic-function function-name :lambda-list '(new-value object))
+     :lambda-list '(new-value object)
+     :qualifiers ()
+     :specializers (list (find-class 't) class)
+     :body `(setf (slot-value object ',slot-name) new-value)
+     ;;      :code `(lambda (new-value object) (setf (slot-value object ',slot-name) new-value))
+     :code `(function ,lambda-expression)
+     :function `(function ,method-function)
+     :environment nil)
+    (values)))
 
 (fmakunbound 'class-name)
 
