@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.99 2005-04-14 14:55:44 piso Exp $
+ * $Id: Load.java,v 1.100 2005-04-26 14:50:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,7 +101,9 @@ public final class Load extends Lisp
             return signal(new LispError(e.getMessage()));
         }
         try {
-            return loadFileFromStream(null, truename, in, verbose, print, false);
+            return loadFileFromStream(null, truename,
+                                      new Stream(in, Symbol.CHARACTER),
+                                      verbose, print, false);
         }
         catch (FaslVersionMismatch e) {
             StringBuffer sb = new StringBuffer("Incorrect fasl version: ");
@@ -211,7 +213,9 @@ public final class Load extends Lisp
                 final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                 thread.bindSpecial(_WARN_ON_REDEFINITION_, NIL);
                 try {
-                    return loadFileFromStream(pathname, truename, in, verbose, print, auto);
+                    return loadFileFromStream(pathname, truename,
+                                              new Stream(in, Symbol.CHARACTER),
+                                              verbose, print, auto);
                 }
                 catch (FaslVersionMismatch e) {
                     StringBuffer sb =
@@ -273,51 +277,57 @@ public final class Load extends Lisp
         }
     };
 
-    private static final LispObject loadFileFromStream(Pathname pathname,
+    private static final LispObject loadFileFromStream(LispObject pathname,
                                                        String truename,
-                                                       InputStream in,
+                                                       Stream in,
                                                        boolean verbose,
                                                        boolean print,
                                                        boolean auto)
         throws ConditionThrowable
     {
         long start = System.currentTimeMillis();
-        LispThread thread = LispThread.currentThread();
-        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-        thread.bindSpecial(_PACKAGE_, _PACKAGE_.symbolValue(thread));
+        final LispThread thread = LispThread.currentThread();
+        final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+        // "LOAD binds *READTABLE* and *PACKAGE* to the values they held before
+        // loading the file."
+        thread.bindSpecialToCurrentValue(_READTABLE_);
+        thread.bindSpecialToCurrentValue(_PACKAGE_);
         int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue(thread));
         thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
         // Compiler policy.
-        thread.bindSpecial(_SPEED_, _SPEED_.symbolValue(thread));
-        thread.bindSpecial(_SAFETY_, _SAFETY_.symbolValue(thread));
+        thread.bindSpecialToCurrentValue(_SPEED_);
+        thread.bindSpecialToCurrentValue(_SPACE_);
+        thread.bindSpecialToCurrentValue(_SAFETY_);
+        thread.bindSpecialToCurrentValue(_DEBUG_);
         final String prefix = getLoadVerbosePrefix(loadDepth);
         try {
-            if (pathname == null)
+            if (pathname == null && truename != null)
                 pathname = Pathname.parseNamestring(truename);
-            thread.bindSpecial(_LOAD_PATHNAME_, pathname);
-            thread.bindSpecial(_LOAD_TRUENAME_, pathname);
+            thread.bindSpecial(_LOAD_PATHNAME_,
+                               pathname != null ? pathname : NIL);
+            thread.bindSpecial(_LOAD_TRUENAME_,
+                               pathname != null ? pathname : NIL);
             if (verbose) {
                 Stream out = getStandardOutput();
                 out.freshLine();
                 out._writeString(prefix);
                 out._writeString(auto ? " Autoloading " : " Loading ");
-                out._writeString(truename);
+                out._writeString(truename != null ? truename : "stream");
                 out._writeLine(" ...");
                 out._finishOutput();
-                LispObject result =
-                    loadStream(new Stream(in, Symbol.CHARACTER), print);
+                LispObject result = loadStream(in, print);
                 long elapsed = System.currentTimeMillis() - start;
                 out.freshLine();
                 out._writeString(prefix);
                 out._writeString(auto ? " Autoloaded " : " Loaded ");
-                out._writeString(truename);
+                out._writeString(truename != null ? truename : "stream");
                 out._writeString(" (");
                 out._writeString(String.valueOf(((float)elapsed)/1000));
                 out._writeLine(" seconds)");
                 out._finishOutput();
                 return result;
             } else
-                return loadStream(new Stream(in, Symbol.CHARACTER), print);
+                return loadStream(in, print);
         }
         finally {
             thread.lastSpecialBinding = lastSpecialBinding;
@@ -419,8 +429,24 @@ public final class Load extends Lisp
                                   LispObject print, LispObject ifDoesNotExist)
             throws ConditionThrowable
         {
-            if (filespec instanceof Stream)
-                return loadStream((Stream)filespec, print != NIL);
+            if (filespec instanceof Stream) {
+                LispObject pathname;
+                if (filespec instanceof FileStream)
+                    pathname = ((FileStream)filespec).getPathname();
+                else
+                    pathname = NIL;
+                String truename;
+                if (pathname instanceof Pathname)
+                    truename = ((Pathname)pathname).getNamestring();
+                else
+                    truename = null;
+                return loadFileFromStream(pathname,
+                                          truename,
+                                          (Stream) filespec,
+                                          verbose != NIL,
+                                          print != NIL,
+                                          false);
+            }
 
             return load(Pathname.coerceToPathname(filespec).getNamestring(),
                         verbose != NIL,
