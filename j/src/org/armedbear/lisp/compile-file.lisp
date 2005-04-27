@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.82 2005-04-25 13:27:04 piso Exp $
+;;; $Id: compile-file.lisp,v 1.83 2005-04-27 19:34:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -322,9 +322,35 @@
                                (return t)))
                            (setf form (convert-toplevel-form form))
                            (setf form (precompile-form form nil)))))
+                    ((eq first 'ensure-method)
+                     (setf form (convert-ensure-method form)))
                     (t
                      (setf form (precompile-form form nil)))))))))
   (dump-form form stream))
+
+(defun convert-ensure-method (form)
+  (let* ((tail (cddr form))
+         (function-form (getf tail :function)))
+    (when (and function-form (consp function-form)
+               (eq (%car function-form) 'FUNCTION))
+      (let ((lambda-expression (cadr function-form)))
+        (let* ((jvm::*speed* jvm::*speed*)
+               (jvm::*safety* jvm::*safety*)
+               (jvm::*debug* jvm::*debug*))
+          (let* ((classfile-name (next-classfile-name))
+                 (classfile (report-error
+                             (jvm:compile-defun nil lambda-expression nil classfile-name)))
+                 (compiled-function (verify-load classfile)))
+            (cond (compiled-function
+                   (when *compile-print*
+                     (format t ";  method => ~A.cls~%"
+                             (pathname-name (pathname classfile-name))))
+                 (setf (getf tail :function)
+                         `(load-compiled-function ,(file-namestring classfile))))
+                  (t
+                   ;; FIXME This should be a warning or error of some sort...
+                   (format *error-output* "; Unable to compile method~%"))))))))
+  (precompile-form form nil))
 
 (defun convert-toplevel-form (form)
   (when *compile-print*
