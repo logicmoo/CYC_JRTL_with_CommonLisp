@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: profiler.lisp,v 1.13 2005-04-23 16:14:32 piso Exp $
+;;; $Id: profiler.lisp,v 1.14 2005-04-27 19:35:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,12 +64,17 @@
         ((typep object 'generic-function)
          (sys::generic-function-name object))
         ((typep object 'method)
-         (format nil "~A ~A"
-                 (sys::generic-function-name (sys::method-generic-function object))
-;;                  (mapcar #'class-name (sys::method-specializers object))
-                 ; FIXME CLASS-NAME doesn't work with EQL specializers
-                 (sys::method-specializers object)
-                 ))))
+         (list 'METHOD
+               (sys::generic-function-name (sys::method-generic-function object))
+               (sys::method-specializers object)))))
+
+(defun object-compiled-function-p (object)
+  (cond ((symbolp object)
+         (compiled-function-p (fdefinition object)))
+        ((typep object 'method)
+         (compiled-function-p (sys::method-function object)))
+        (t
+         (compiled-function-p object))))
 
 (defun show-call-count (info max-count)
   (let* ((object (profile-info-object info))
@@ -80,15 +85,13 @@
                 (/ (* count 100.0) max-count)
                 count
                 (object-name object)
-                (if (or (compiled-function-p function)
-                        (and (symbolp object) (special-operator-p object)))
+                (if (object-compiled-function-p object)
                     ""
                     " [interpreted function]"))
         (format t "~8D ~S~A~%"
                 count
                 (object-name object)
-                (if (or (compiled-function-p function)
-                        (and (symbolp object) (special-operator-p object)))
+                (if (object-compiled-function-p object)
                     ""
                     " [interpreted function]")))))
 
