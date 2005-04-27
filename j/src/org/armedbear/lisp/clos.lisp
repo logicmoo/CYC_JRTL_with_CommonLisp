@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.144 2005-04-27 16:48:10 piso Exp $
+;;; $Id: clos.lisp,v 1.145 2005-04-27 19:31:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1120,6 +1120,7 @@
                   (every (lambda (k) (memq k method-keywords)) gf-keywords))
         (error "The method does not accept all of the keyword arguments defined for the generic function.")))))
 
+(declaim (ftype (function * method) ensure-method))
 (defun ensure-method (gf &rest all-keys)
   (let ((method-lambda-list (getf all-keys :lambda-list))
         (gf-lambda-list (generic-function-lambda-list gf)))
