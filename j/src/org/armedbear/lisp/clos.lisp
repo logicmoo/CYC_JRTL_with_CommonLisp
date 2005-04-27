@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.142 2005-04-27 15:16:22 piso Exp $
+;;; $Id: clos.lisp,v 1.143 2005-04-27 16:05:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1442,7 +1442,7 @@
          (walk-form (%cdr form)))))
 
 (defun compute-method-function (lambda-expression)
-  (let ((lambda-list (kludge-arglist (cadr lambda-expression)))
+  (let ((lambda-list (allow-other-keys (cadr lambda-expression)))
         (body (cddr lambda-expression))
         (*call-next-method-p* nil)
         (*next-method-p-p* nil))
@@ -1461,11 +1461,6 @@
              `(lambda (args next-emfun)
                 (apply #'(lambda ,lambda-list ,@declarations ,@body) args)))))))
 
-;;; N.B. The function kludge-arglist is used to pave over the differences
-;;; between argument keyword compatibility for regular functions versus
-;;; generic functions.
-
-;; FIXME
 ;; From CLHS section 7.6.5:
 ;; "When a generic function or any of its methods mentions &key in a lambda
 ;; list, the specific set of keyword arguments accepted by the generic function
@@ -1473,15 +1468,14 @@
 ;; accepted by the generic function for a particular call is the union of the
 ;; keyword arguments accepted by all applicable methods and the keyword
 ;; arguments mentioned after &key in the generic function definition, if any."
-
-(defun kludge-arglist (lambda-list)
+;; Adapted from Sacla.
+(defun allow-other-keys (lambda-list)
   (if (and (member '&key lambda-list)
            (not (member '&allow-other-keys lambda-list)))
-      (append lambda-list '(&allow-other-keys))
-      (if (and (not (member '&rest lambda-list))
-               (not (member '&key lambda-list)))
-          (append lambda-list '(&key &allow-other-keys))
-          lambda-list)))
+      (let* ((key-end (or (position '&aux lambda-list) (length lambda-list)))
+             (aux-part (subseq lambda-list key-end)))
+        `(,@(subseq lambda-list 0 key-end) &allow-other-keys ,@aux-part))
+      lambda-list))
 
 (defun safe-compile-defun (name lambda-expression environment classfile)
   (ignore-errors (jvm::compile-defun name lambda-expression environment classfile)))
@@ -1518,7 +1512,7 @@
                         :lambda-list ',lambda-list
                         :qualifiers ',qualifiers
                         :specializers ,specializers-form
-                        :documentation ,documentation
+                        ,@(if documentation `(:documentation ,documentation))
                         :function (function ,method-function)
 ;;                         :function (or (and ,classfile
 ;;                                            (safe-load-compiled-function (file-namestring ,classfile)))
