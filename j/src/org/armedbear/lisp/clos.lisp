@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.143 2005-04-27 16:05:53 piso Exp $
+;;; $Id: clos.lisp,v 1.144 2005-04-27 16:48:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -822,16 +822,13 @@
                             :format-arguments (list apo)))
                  (push index res)))))))
 
-(defvar generic-function-table (make-hash-table :test #'equal))
-
 (defun find-generic-function (name &optional (errorp t))
-  (let ((gf (gethash name generic-function-table nil)))
-    (if (and (null gf) errorp)
-        (error "There is no generic function named ~S." name)
-        gf)))
-
-(defun (setf find-generic-function) (new-value name)
-  (setf (gethash name generic-function-table) new-value))
+  (let ((function (and (fboundp name) (fdefinition name))))
+    (if (and function (typep function 'generic-function))
+        function
+        (if errorp
+            (error "There is no generic function named ~S." name)
+            nil))))
 
 (defun lambda-lists-congruent-p (lambda-list1 lambda-list2)
   (let* ((plist1 (analyze-lambda-list lambda-list1))
@@ -885,7 +882,6 @@
                           :method-class method-class
                           :method-combination method-combination
                           all-keys))
-          (setf (find-generic-function function-name) gf)
           gf))))
 
 (defun finalize-generic-function (gf)
