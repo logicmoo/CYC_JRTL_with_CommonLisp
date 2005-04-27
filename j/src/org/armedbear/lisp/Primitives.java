@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.768 2005-04-25 14:24:07 piso Exp $
+ * $Id: Primitives.java,v 1.769 2005-04-27 19:32:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2372,9 +2372,11 @@ public final class Primitives extends Lisp
                 case 0:
                     return thread.execute(fun);
                 case 1:
-                    return thread.execute(fun, args.car());
-                case 2:
-                    return thread.execute(fun, args.car(), args.cadr());
+                    return thread.execute(fun, ((Cons)args).car);
+                case 2: {
+                    Cons cons = (Cons) args;
+                    return thread.execute(fun, cons.car, cons.cdr.car());
+                }
                 case 3:
                     return thread.execute(fun, args.car(), args.cadr(),
                                           args.cdr().cdr().car());
