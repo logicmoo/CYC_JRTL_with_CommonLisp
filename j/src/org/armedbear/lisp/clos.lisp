@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.148 2005-04-28 17:54:12 piso Exp $
+;;; $Id: clos.lisp,v 1.149 2005-04-28 19:12:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1228,12 +1228,16 @@
              (make-closure `(lambda (&rest args)
                               (slow-method-lookup ,gf args nil))
                            nil)
-             (let ((emf-table (classes-to-emf-table gf))
-                   (number-required (length (gf-required-args gf))))
+             (let* ((emf-table (classes-to-emf-table gf))
+                    (number-required (length (gf-required-args gf)))
+                    (lambda-list (%generic-function-lambda-list gf))
+                    (exact (null (intersection lambda-list
+                                               '(&rest &optional &key
+                                                 &allow-other-keys &aux)))))
                (make-closure
                 (cond ((= number-required 1)
                        `(lambda (&rest args)
-                          (when (null args)
+                          (when ,(if exact '(/= (length args) 1) '(null args))
                             (error 'program-error
                                    :format-control "Not enough arguments for generic function ~S."
                                    :format-arguments (list (generic-function-name ,gf))))
@@ -1244,7 +1248,7 @@
                                 (slow-method-lookup ,gf args classes)))))
                       (t
                        `(lambda (&rest args)
-                          (when (< (length args) ,number-required)
+                          (unless (,(if exact '= '>=) (length args) ,number-required)
                             (error 'program-error
                                    :format-control "Not enough arguments for generic function ~S."
                                    :format-arguments (list (generic-function-name ,gf))))
