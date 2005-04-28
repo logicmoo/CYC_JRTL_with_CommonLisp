@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.147 2005-04-28 11:33:18 piso Exp $
+;;; $Id: clos.lisp,v 1.148 2005-04-28 17:54:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -651,9 +651,7 @@
             (make-eql-specializer :object object))))
 
 (defclass standard-generic-function (generic-function)
-  ((lambda-list               ; :accessor generic-function-lambda-list
-    :initarg :lambda-list)
-   (documentation
+  ((documentation
     :initarg :documentation)  ; :accessor generic-function-documentation
    (initial-methods :initform ())
    (methods :initform ())     ; :accessor generic-function-methods
@@ -679,9 +677,8 @@
 (defsetf generic-function-name %set-generic-function-name)
 
 (defun generic-function-lambda-list (gf)
-  (slot-value gf 'lambda-list))
-(defun (setf generic-function-lambda-list) (new-value gf)
-  (setf (slot-value gf 'lambda-list) new-value))
+  (%generic-function-lambda-list gf))
+(defsetf generic-function-lambda-list %set-generic-function-lambda-list)
 
 (defun generic-function-documentation (gf)
   (slot-value gf 'documentation))
@@ -978,9 +975,6 @@
               documentation
               declarations
               (list* 'block
-;;                      (if (consp function-name)
-;;                          (cadr function-name)
-;;                          function-name)
                      (block-name function-name)
                      real-body)))))
 
@@ -1243,7 +1237,7 @@
                             (error 'program-error
                                    :format-control "Not enough arguments for generic function ~S."
                                    :format-arguments (list (generic-function-name ,gf))))
-                          (let* ((classes (list (class-of (car args))))
+                          (let* ((classes (list (class-of (%car args))))
                                  (emfun (gethash classes ,emf-table)))
                             (if emfun
                                 (funcall emfun args)
@@ -1469,6 +1463,27 @@
                        (next-method-p ()
                                       (not (null next-emfun))))
                   (apply #'(lambda ,lambda-list ,@declarations ,@body) args))))
+            ((null (intersection lambda-list '(&rest &optional &key &allow-other-keys &aux)))
+             ;; Required parameters only.
+             (case (length lambda-list)
+               (1
+                `(lambda (args next-emfun)
+                   (let ((,(%car lambda-list) (%car args)))
+                     ,@declarations ,@body)))
+               (2
+                `(lambda (args next-emfun)
+                   (let ((,(%car lambda-list) (%car args))
+                         (,(%cadr lambda-list) (%cadr args)))
+                     ,@declarations ,@body)))
+               (3
+                `(lambda (args next-emfun)
+                   (let ((,(%car lambda-list) (%car args))
+                         (,(%cadr lambda-list) (%cadr args))
+                         (,(%caddr lambda-list) (%caddr args)))
+                     ,@declarations ,@body)))
+               (t
+                `(lambda (args next-emfun)
+                   (apply #'(lambda ,lambda-list ,@declarations ,@body) args)))))
             (t
              `(lambda (args next-emfun)
                 (apply #'(lambda ,lambda-list ,@declarations ,@body) args)))))))
