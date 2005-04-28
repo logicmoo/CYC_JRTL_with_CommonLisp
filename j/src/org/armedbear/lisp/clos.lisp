@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.149 2005-04-28 19:12:58 piso Exp $
+;;; $Id: clos.lisp,v 1.150 2005-04-28 22:18:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1236,16 +1236,43 @@
                                                  &allow-other-keys &aux)))))
                (make-closure
                 (cond ((= number-required 1)
-                       `(lambda (&rest args)
-                          (when ,(if exact '(/= (length args) 1) '(null args))
-                            (error 'program-error
-                                   :format-control "Not enough arguments for generic function ~S."
-                                   :format-arguments (list (generic-function-name ,gf))))
-                          (let* ((classes (list (class-of (%car args))))
-                                 (emfun (gethash classes ,emf-table)))
-                            (if emfun
-                                (funcall emfun args)
-                                (slow-method-lookup ,gf args classes)))))
+                       (if exact
+                           `(lambda (arg)
+                              (let* ((classes (list (class-of arg)))
+                                     (emfun (gethash classes ,emf-table)))
+                                (if emfun
+                                    (funcall emfun (list arg))
+                                    (slow-method-lookup ,gf (list arg) classes))))
+                           `(lambda (&rest args)
+                              (unless (>= (length args) 1)
+                                (error 'program-error
+                                       :format-control "Not enough arguments for generic function ~S."
+                                       :format-arguments (list (generic-function-name ,gf))))
+                              (let* ((classes (list (class-of (%car args))))
+                                     (emfun (gethash classes ,emf-table)))
+                                (if emfun
+                                    (funcall emfun args)
+                                    (slow-method-lookup ,gf args classes)))))
+                       )
+                      ((= number-required 2)
+                       (if exact
+                           `(lambda (arg1 arg2)
+                              (let* ((classes (list (class-of arg1) (class-of arg2)))
+                                     (emfun (gethash classes ,emf-table)))
+                                (if emfun
+                                    (funcall emfun (list arg1 arg2))
+                                    (slow-method-lookup ,gf (list arg1 arg2) classes))))
+                           `(lambda (&rest args)
+                              (unless (>= (length args) 2)
+                                (error 'program-error
+                                       :format-control "Not enough arguments for generic function ~S."
+                                       :format-arguments (list (generic-function-name ,gf))))
+                              (let* ((classes (list (class-of (%car args)) (class-of (%cadr args))))
+                                     (emfun (gethash classes ,emf-table)))
+                                (if emfun
+                                    (funcall emfun args)
+                                    (slow-method-lookup ,gf args classes)))))
+                       )
                       (t
                        `(lambda (&rest args)
                           (unless (,(if exact '= '>=) (length args) ,number-required)
@@ -1532,7 +1559,10 @@
 ;;; Reader and writer methods
 
 (defun add-reader-method (class function-name slot-name)
-  (let* ((lambda-expression `(lambda (object) (slot-value object ',slot-name)))
+  (let* ((lambda-expression
+          (if (eq (class-of class) the-class-standard-class)
+              `(lambda (object) (std-slot-value object ',slot-name)))
+              `(lambda (object) (slot-value object ',slot-name)))
          (method-function (compute-method-function lambda-expression)))
     (ensure-method function-name
                    :lambda-list '(object)
@@ -1542,8 +1572,11 @@
 
 (defun add-writer-method (class function-name slot-name)
   (let* ((lambda-expression
-          `(lambda (new-value object)
-             (setf (slot-value object ',slot-name) new-value)))
+          (if (eq (class-of class) the-class-standard-class)
+              `(lambda (new-value object)
+                 (setf (std-slot-value object ',slot-name) new-value))
+              `(lambda (new-value object)
+                 (setf (slot-value object ',slot-name) new-value))))
          (method-function (compute-method-function lambda-expression)))
     (ensure-method function-name
                    :lambda-list '(new-value object)
