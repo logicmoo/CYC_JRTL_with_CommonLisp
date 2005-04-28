@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.182 2005-04-20 23:28:41 piso Exp $
+;;; $Id: autoloads.lisp,v 1.183 2005-04-28 01:32:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -93,6 +93,7 @@
 (autoload 'mask-field)
 (autoload '(ensure-class ensure-generic-function subclassp make-condition
             define-method-combination
+            %defgeneric
             canonicalize-direct-superclasses)
           "clos")
 (autoload '(inspect istep) "inspect")
