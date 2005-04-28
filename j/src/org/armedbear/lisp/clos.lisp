@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.145 2005-04-27 19:31:36 piso Exp $
+;;; $Id: clos.lisp,v 1.146 2005-04-28 01:29:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -784,7 +784,7 @@
     (setf options (nreverse options)
           methods (nreverse methods))
     `(prog1
-       (ensure-generic-function
+       (%defgeneric
         ',function-name
         :lambda-list ',lambda-list
         ,@(canonicalize-defgeneric-options options))
@@ -837,6 +837,16 @@
          (args2 (getf plist2 :required-args)))
     (= (length args1) (length args2))))
 
+(defun %defgeneric (function-name &rest all-keys)
+  (when (fboundp function-name)
+    (let ((gf (fdefinition function-name)))
+      (when (typep gf 'generic-function)
+        ;; Remove methods defined by previous DEFGENERIC forms.
+        (dolist (method (generic-function-initial-methods gf))
+          (remove-method gf method))
+        (setf (generic-function-initial-methods gf) '()))))
+  (apply 'ensure-generic-function function-name all-keys))
+
 (defun ensure-generic-function (function-name
                                 &rest all-keys
                                 &key
@@ -858,16 +868,6 @@
                    :format-arguments (list lambda-list gf)))
           (setf (generic-function-lambda-list gf) lambda-list)
           (setf (generic-function-documentation gf) documentation)
-          ;; Remove methods defined by previous DEFGENERIC form.
-          ;; FIXME This should be done before the call to ENSURE-GENERIC-FUNCTION!
-          ;; "The effect of the DEFGENERIC macro is as if the following three
-          ;; steps were performed: first, methods defined by previous
-          ;; DEFGENERIC forms are removed; second, ENSURE-GENERIC-FUNCTION is
-          ;; called; and finally, methods specified by the current DEFGENERIC
-          ;; form are added to the generic function."
-          (dolist (method (generic-function-initial-methods gf))
-            (remove-method gf method)
-            (setf (generic-function-initial-methods gf) ()))
           gf)
         (progn
           (when (fboundp function-name)
@@ -967,9 +967,10 @@
               documentation
               declarations
               (list* 'block
-                     (if (consp function-name)
-                         (cadr function-name)
-                         function-name)
+;;                      (if (consp function-name)
+;;                          (cadr function-name)
+;;                          function-name)
+                     (block-name function-name)
                      real-body)))))
 
 (defun required-portion (gf args)
@@ -1121,6 +1122,7 @@
         (error "The method does not accept all of the keyword arguments defined for the generic function.")))))
 
 (declaim (ftype (function * method) ensure-method))
+#+nil
 (defun ensure-method (gf &rest all-keys)
   (let ((method-lambda-list (getf all-keys :lambda-list))
         (gf-lambda-list (generic-function-lambda-list gf)))
@@ -1131,6 +1133,23 @@
              (apply #'make-instance (generic-function-method-class gf) all-keys))))
     (%add-method gf method)
     method))
+
+(defun ensure-method (name &rest all-keys)
+;;   (unless (find-generic-function ',function-name nil)
+;;     (ensure-generic-function ',function-name :lambda-list ',lambda-list))
+  (let ((method-lambda-list (getf all-keys :lambda-list))
+        (gf (find-generic-function name nil)))
+    (unless gf
+      (setf gf (ensure-generic-function name :lambda-list method-lambda-list)))
+    (let ((gf-lambda-list (generic-function-lambda-list gf)))
+      (check-method-lambda-list method-lambda-list gf-lambda-list))
+    (let ((method
+           (if (eq (generic-function-method-class gf) the-class-standard-method)
+               (apply #'make-instance-standard-method gf all-keys)
+               (apply #'make-instance (generic-function-method-class gf) all-keys))))
+      (%add-method gf method)
+      method)))
+
 
 (defun make-instance-standard-method (gf
                                       &key
@@ -1474,12 +1493,6 @@
         `(,@(subseq lambda-list 0 key-end) &allow-other-keys ,@aux-part))
       lambda-list))
 
-(defun safe-compile-defun (name lambda-expression environment classfile)
-  (ignore-errors (jvm::compile-defun name lambda-expression environment classfile)))
-
-(defun safe-load-compiled-function (pathname)
-  (ignore-errors (load-compiled-function pathname)))
-
 (defmacro defmethod (&rest args)
   (multiple-value-bind
       (function-name qualifiers lambda-list specializers documentation declarations body)
@@ -1497,23 +1510,12 @@
                (push `',specializer specializers-form))))
       (setf specializers-form `(list ,@(nreverse specializers-form)))
       `(progn
-         #+nil
-         (eval-when (:compile-toplevel)
-;;            (setf classfile (jvm::compile-defun ,function-name ,lambda-expression nil ,(next-classfile-name)))
-;;            (jvm::compile-defun ',function-name ',method-function nil ,classfile)
-           (safe-compile-defun ',function-name ',method-function nil ,classfile)
-           )
-         (unless (find-generic-function ',function-name nil)
-           (ensure-generic-function ',function-name :lambda-list ',lambda-list))
-         (ensure-method (find-generic-function ',function-name)
+         (ensure-method ',function-name
                         :lambda-list ',lambda-list
                         :qualifiers ',qualifiers
                         :specializers ,specializers-form
                         ,@(if documentation `(:documentation ,documentation))
                         :function (function ,method-function)
-;;                         :function (or (and ,classfile
-;;                                            (safe-load-compiled-function (file-namestring ,classfile)))
-;;                                       (function ,method-function))
                         )))))
 
 ;;; Reader and writer methods
@@ -1521,12 +1523,11 @@
 (defun add-reader-method (class function-name slot-name)
   (let* ((lambda-expression `(lambda (object) (slot-value object ',slot-name)))
          (method-function (compute-method-function lambda-expression)))
-    (ensure-method
-     (ensure-generic-function function-name :lambda-list '(object))
-     :lambda-list '(object)
-     :qualifiers ()
-     :specializers (list class)
-     :function `(function ,method-function))
+    (ensure-method function-name
+                   :lambda-list '(object)
+                   :qualifiers ()
+                   :specializers (list class)
+                   :function `(function ,method-function))
     (values)))
 
 (defun add-writer-method (class function-name slot-name)
@@ -1534,12 +1535,11 @@
           `(lambda (new-value object)
              (setf (slot-value object ',slot-name) new-value)))
          (method-function (compute-method-function lambda-expression)))
-    (ensure-method
-     (ensure-generic-function function-name :lambda-list '(new-value object))
-     :lambda-list '(new-value object)
-     :qualifiers ()
-     :specializers (list (find-class 't) class)
-     :function `(function ,method-function))
+    (ensure-method function-name
+                   :lambda-list '(new-value object)
+                   :qualifiers ()
+                   :specializers (list (find-class 't) class)
+                   :function `(function ,method-function))
     (values)))
 
 (fmakunbound 'class-name)
