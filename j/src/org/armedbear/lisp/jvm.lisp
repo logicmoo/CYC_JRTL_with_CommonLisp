@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.445 2005-04-27 19:33:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.446 2005-04-28 11:32:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4291,6 +4291,7 @@
                         (declare-setf-function name) +lisp-object+)
                   (emit-move-from-stack target))
                  ((and (null *compile-file-truename*)
+                       (fboundp name)
                        (fdefinition name))
                   (emit 'getstatic *this-class*
                         (declare-object (fdefinition name)) +lisp-object+)
