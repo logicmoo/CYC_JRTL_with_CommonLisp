@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.150 2005-04-28 22:18:53 piso Exp $
+;;; $Id: clos.lisp,v 1.151 2005-04-29 02:50:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1238,12 +1238,14 @@
                 (cond ((= number-required 1)
                        (if exact
                            `(lambda (arg)
+                              (declare (optimize speed))
                               (let* ((classes (list (class-of arg)))
                                      (emfun (gethash classes ,emf-table)))
                                 (if emfun
                                     (funcall emfun (list arg))
                                     (slow-method-lookup ,gf (list arg) classes))))
                            `(lambda (&rest args)
+                              (declare (optimize speed))
                               (unless (>= (length args) 1)
                                 (error 'program-error
                                        :format-control "Not enough arguments for generic function ~S."
@@ -1257,12 +1259,15 @@
                       ((= number-required 2)
                        (if exact
                            `(lambda (arg1 arg2)
-                              (let* ((classes (list (class-of arg1) (class-of arg2)))
+                              (declare (optimize speed))
+                              (let* ((classes (list (class-of arg1)
+                                                    (class-of arg2)))
                                      (emfun (gethash classes ,emf-table)))
                                 (if emfun
                                     (funcall emfun (list arg1 arg2))
                                     (slow-method-lookup ,gf (list arg1 arg2) classes))))
                            `(lambda (&rest args)
+                              (declare (optimize speed))
                               (unless (>= (length args) 2)
                                 (error 'program-error
                                        :format-control "Not enough arguments for generic function ~S."
@@ -1273,8 +1278,34 @@
                                     (funcall emfun args)
                                     (slow-method-lookup ,gf args classes)))))
                        )
+                      ((= number-required 3)
+                       (if exact
+                           `(lambda (arg1 arg2 arg3)
+                              (declare (optimize speed))
+                              (let* ((classes (list (class-of arg1)
+                                                    (class-of arg2)
+                                                    (class-of arg3)))
+                                     (emfun (gethash classes ,emf-table)))
+                                (if emfun
+                                    (funcall emfun (list arg1 arg2 arg3))
+                                    (slow-method-lookup ,gf (list arg1 arg2 arg3) classes))))
+                           `(lambda (&rest args)
+                              (declare (optimize speed))
+                              (unless (>= (length args) 3)
+                                (error 'program-error
+                                       :format-control "Not enough arguments for generic function ~S."
+                                       :format-arguments (list (generic-function-name ,gf))))
+                              (let* ((classes (list (class-of (%car args))
+                                                    (class-of (%cadr args))
+                                                    (class-of (%caddr args))))
+                                     (emfun (gethash classes ,emf-table)))
+                                (if emfun
+                                    (funcall emfun args)
+                                    (slow-method-lookup ,gf args classes)))))
+                       )
                       (t
                        `(lambda (&rest args)
+                          (declare (optimize speed))
                           (unless (,(if exact '= '>=) (length args) ,number-required)
                             (error 'program-error
                                    :format-control "Not enough arguments for generic function ~S."
@@ -1312,17 +1343,19 @@
 
 (defun %compute-applicable-methods (gf args)
   (let ((required-classes (mapcar #'class-of (required-portion gf args)))
-        (methods ()))
+        (methods '()))
     (dolist (method (generic-function-methods gf))
       (when (method-applicable-p method args)
         (push method methods)))
-    (sort methods
-          (if (eq (class-of gf) the-class-standard-gf)
-              #'(lambda (m1 m2)
-                 (std-method-more-specific-p m1 m2 required-classes
-                                             (generic-function-argument-precedence-order gf)))
-              #'(lambda (m1 m2)
-                 (method-more-specific-p gf m1 m2 required-classes))))))
+    (if (or (null methods) (null (%cdr methods)))
+        methods
+        (sort methods
+              (if (eq (class-of gf) the-class-standard-gf)
+                  #'(lambda (m1 m2)
+                     (std-method-more-specific-p m1 m2 required-classes
+                                                 (generic-function-argument-precedence-order gf)))
+                  #'(lambda (m1 m2)
+                     (method-more-specific-p gf m1 m2 required-classes)))))))
 
 (defun slow-method-lookup (gf args classes)
   (let ((applicable-methods (%compute-applicable-methods gf args)))
@@ -1730,7 +1763,7 @@
     (std-finalize-inheritance class))
   (let ((class-default-initargs (class-default-initargs class)))
     (when class-default-initargs
-      (let ((default-initargs ()))
+      (let ((default-initargs '()))
         (do* ((list class-default-initargs (cddr list))
               (key (car list) (car list))
               (fn (cadr list) (cadr list)))

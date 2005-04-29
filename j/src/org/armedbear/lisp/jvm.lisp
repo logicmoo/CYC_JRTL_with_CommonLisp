@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.446 2005-04-28 11:32:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.447 2005-04-29 02:50:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2939,8 +2939,9 @@
 
 (defun compile-funcall (form &key (target :stack) representation)
   (unless (> (length form) 1)
-    (compiler-style-warn "Wrong number of arguments for ~A." (car form))
-    (compile-function-call form target representation))
+    (compiler-warn "Wrong number of arguments for ~A." (car form))
+    (compile-function-call form target representation)
+    (return-from compile-funcall))
   (when (> *debug* *speed*)
     (return-from compile-funcall (compile-function-call form target representation)))
   (compile-form (cadr form) :target :stack)
@@ -5224,14 +5225,14 @@
   (let ((args (cdr form)))
     (case (length args)
       (1
-       (let ((arg (first args)))
+       (let ((arg (%car args)))
          (compile-form arg :target target :representation representation)
          (unless (single-valued-p arg)
            (emit-clear-values))))
       (2
        (emit-push-current-thread)
-       (let ((arg1 (first args))
-             (arg2 (second args)))
+       (let ((arg1 (%car args))
+             (arg2 (%cadr args)))
          (cond ((and (eq arg1 t)
                      (eq arg2 t))
                 (emit-push-t)
@@ -5418,6 +5419,7 @@
              (emit 'new +lisp-fixnum-class+)
              (emit 'dup))
            (compile-form arg :target :stack)
+           (maybe-emit-clear-values arg)
            (emit 'checkcast +lisp-character-class+)
            (emit 'getfield +lisp-character-class+ "value" "C")
            (unless (eq representation :unboxed-fixnum)
@@ -5425,6 +5427,40 @@
            (emit-move-from-stack target representation))
           (t
            (compile-function-call form target representation)))))
+
+(defun p2-char= (form &key (target :stack) representation)
+  (let* ((args (cdr form))
+         (numargs (length args)))
+    (cond ((< numargs 1)
+           (compiler-warn "Wrong number of arguments for ~A." (car form))
+           (compile-function-call form target representation)
+           (return-from p2-char=))
+          ((= numargs 2)
+           (let* ((arg1 (%car args))
+                  (arg2 (%cadr args))
+                  (type1 (derive-type arg1))
+                  (type2 (derive-type arg2)))
+             (when (and (eq type1 'character) (eq type2 'character))
+               (compile-form arg1 :target :stack)
+               (emit 'checkcast +lisp-character-class+)
+               (emit 'getfield +lisp-character-class+ "value" "C")
+               (compile-form arg2 :target :stack)
+               (emit 'checkcast +lisp-character-class+)
+               (emit 'getfield +lisp-character-class+ "value" "C")
+               (unless (and (single-valued-p arg1) (single-valued-p arg2))
+                 (emit-clear-values))
+               (let ((LABEL1 (gensym))
+                     (LABEL2 (gensym)))
+                 (emit 'if_icmpeq LABEL1)
+                 (emit-push-nil)
+                 (emit 'goto LABEL2)
+                 (label LABEL1)
+                 (emit-push-t)
+                 (label LABEL2)
+                 (emit-move-from-stack target))
+               (return-from p2-char=)))))
+    (compile-function-call form target representation)))
+
 
 (defun compile-catch (form &key (target :stack) representation)
   (when (= (length form) 2) ; (catch 'foo)
@@ -6466,6 +6502,7 @@
   (install-p2-handler 'car             'p2-car)
   (install-p2-handler 'cdr             'p2-cdr)
   (install-p2-handler 'char-code       'p2-char-code)
+  (install-p2-handler 'char=           'p2-char=)
   (install-p2-handler 'cons            'p2-cons)
   (install-p2-handler 'eql             'p2-eql)
   (install-p2-handler 'eval-when       'p2-eval-when)
