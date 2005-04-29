@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: GenericFunction.java,v 1.19 2005-04-28 17:54:03 piso Exp $
+ * $Id: GenericFunction.java,v 1.20 2005-04-29 23:30:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,36 +76,41 @@ public final class GenericFunction extends StandardObject
 
     public LispObject execute() throws ConditionThrowable
     {
-        return LispThread.currentThread().execute(discriminatingFunction);
+//         return LispThread.currentThread().execute(discriminatingFunction);
+        return discriminatingFunction.execute();
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        return LispThread.currentThread().execute(discriminatingFunction,
-                                                  arg);
+//         return LispThread.currentThread().execute(discriminatingFunction,
+//                                                   arg);
+        return discriminatingFunction.execute(arg);
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        return LispThread.currentThread().execute(discriminatingFunction,
-                                                  first, second);
+//         return LispThread.currentThread().execute(discriminatingFunction,
+//                                                   first, second);
+        return discriminatingFunction.execute(first, second);
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
         throws ConditionThrowable
     {
-        return LispThread.currentThread().execute(discriminatingFunction,
-                                                  first, second, third);
+//         return LispThread.currentThread().execute(discriminatingFunction,
+//                                                   first, second, third);
+        return discriminatingFunction.execute(first, second, third);
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
         throws ConditionThrowable
     {
-        return LispThread.currentThread().execute(discriminatingFunction,
-                                                  first, second, third, fourth);
+//         return LispThread.currentThread().execute(discriminatingFunction,
+//                                                   first, second, third, fourth);
+        return discriminatingFunction.execute(first, second, third, fourth);
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -113,9 +118,11 @@ public final class GenericFunction extends StandardObject
                               LispObject fifth)
         throws ConditionThrowable
     {
-        return LispThread.currentThread().execute(discriminatingFunction,
-                                                  first, second, third, fourth,
-                                                  fifth);
+//         return LispThread.currentThread().execute(discriminatingFunction,
+//                                                   first, second, third, fourth,
+//                                                   fifth);
+        return discriminatingFunction.execute(first, second, third, fourth,
+                                              fifth);
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -123,15 +130,18 @@ public final class GenericFunction extends StandardObject
                               LispObject fifth, LispObject sixth)
         throws ConditionThrowable
     {
-        return LispThread.currentThread().execute(discriminatingFunction,
-                                                  first, second, third, fourth,
-                                                  fifth, sixth);
+//         return LispThread.currentThread().execute(discriminatingFunction,
+//                                                   first, second, third, fourth,
+//                                                   fifth, sixth);
+        return discriminatingFunction.execute(first, second, third, fourth,
+                                              fifth, sixth);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        return LispThread.currentThread().execute(discriminatingFunction,
-                                                  args);
+//         return LispThread.currentThread().execute(discriminatingFunction,
+//                                                   args);
+        return discriminatingFunction.execute(args);
     }
 
     public String writeToString() throws ConditionThrowable
