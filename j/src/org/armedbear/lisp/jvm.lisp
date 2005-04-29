@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.447 2005-04-29 02:50:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.448 2005-04-29 10:12:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3564,7 +3564,12 @@
     (dolist (variable (block-free-specials block))
       (push variable *visible-variables*))
     ;; Body of LET/LET*.
-    (compile-progn-body (cddr form) target)
+    (let ((*speed*  *speed*)
+          (*space*  *space*)
+          (*safety* *safety*)
+          (*debug*  *debug*))
+      (process-optimization-declarations (cddr form))
+      (compile-progn-body (cddr form) target))
     (when specialp
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
@@ -4582,21 +4587,7 @@
            (emit-invoke-method "ZEROP" target representation)))))
 
 (defun derive-type (form)
-  (cond ((fixnump form)
-         (list 'INTEGER form form))
-        ((variable-p form)
-         (cond ((neq (variable-declared-type form) :none)
-                (variable-declared-type form))
-               ((neq (variable-derived-type form) :none)
-                (variable-derived-type form))
-               (t
-                t)))
-        ((symbolp form)
-         (let ((variable (find-visible-variable form)))
-           (if variable
-               (derive-type variable)
-               t)))
-        ((consp form)
+  (cond ((consp form)
          (let ((op (%car form)))
            (case op
              (ASH
@@ -4622,6 +4613,22 @@
                 (if ftype
                     (or (third ftype) t)
                     t))))))
+        ((fixnump form)
+         (list 'INTEGER form form))
+        ((characterp form)
+         'character)
+        ((variable-p form)
+         (cond ((neq (variable-declared-type form) :none)
+                (variable-declared-type form))
+               ((neq (variable-derived-type form) :none)
+                (variable-derived-type form))
+               (t
+                t)))
+        ((symbolp form)
+         (let ((variable (find-visible-variable form)))
+           (if variable
+               (derive-type variable)
+               t)))
         (t
          t)))
 
@@ -5431,36 +5438,35 @@
 (defun p2-char= (form &key (target :stack) representation)
   (let* ((args (cdr form))
          (numargs (length args)))
-    (cond ((< numargs 1)
-           (compiler-warn "Wrong number of arguments for ~A." (car form))
-           (compile-function-call form target representation)
-           (return-from p2-char=))
-          ((= numargs 2)
-           (let* ((arg1 (%car args))
-                  (arg2 (%cadr args))
-                  (type1 (derive-type arg1))
-                  (type2 (derive-type arg2)))
-             (when (and (eq type1 'character) (eq type2 'character))
-               (compile-form arg1 :target :stack)
-               (emit 'checkcast +lisp-character-class+)
-               (emit 'getfield +lisp-character-class+ "value" "C")
-               (compile-form arg2 :target :stack)
-               (emit 'checkcast +lisp-character-class+)
-               (emit 'getfield +lisp-character-class+ "value" "C")
-               (unless (and (single-valued-p arg1) (single-valued-p arg2))
-                 (emit-clear-values))
-               (let ((LABEL1 (gensym))
-                     (LABEL2 (gensym)))
-                 (emit 'if_icmpeq LABEL1)
-                 (emit-push-nil)
-                 (emit 'goto LABEL2)
-                 (label LABEL1)
-                 (emit-push-t)
-                 (label LABEL2)
-                 (emit-move-from-stack target))
-               (return-from p2-char=)))))
-    (compile-function-call form target representation)))
-
+    (when (= numargs 0)
+      (compiler-warn "Wrong number of arguments for ~A." (car form))
+      (compile-function-call form target representation)
+      (return-from p2-char=))
+    (when (= numargs 2)
+      (let* ((arg1 (%car args))
+             (arg2 (%cadr args))
+             (type1 (derive-type arg1))
+             (type2 (derive-type arg2)))
+        (when (and (eq type1 'character) (eq type2 'character))
+          (compile-form arg1 :target :stack)
+          (emit 'checkcast +lisp-character-class+)
+          (emit 'getfield +lisp-character-class+ "value" "C")
+          (compile-form arg2 :target :stack)
+          (emit 'checkcast +lisp-character-class+)
+          (emit 'getfield +lisp-character-class+ "value" "C")
+          (unless (and (single-valued-p arg1) (single-valued-p arg2))
+            (emit-clear-values))
+          (let ((LABEL1 (gensym))
+                (LABEL2 (gensym)))
+            (emit 'if_icmpeq LABEL1)
+            (emit-push-nil)
+            (emit 'goto LABEL2)
+            (label LABEL1)
+            (emit-push-t)
+            (label LABEL2)
+            (emit-move-from-stack target))
+          (return-from p2-char=)))))
+  (compile-function-call form target representation))
 
 (defun compile-catch (form &key (target :stack) representation)
   (when (= (length form) 2) ; (catch 'foo)
@@ -6538,9 +6544,9 @@
     (dolist (form forms)
       (unless (and (consp form) (eq (%car form) 'declare))
         (return))
-      (dolist (decl (cdr form))
+      (dolist (decl (%cdr form))
         (when (eq (car decl) 'OPTIMIZE)
-          (dolist (spec (cdr decl))
+          (dolist (spec (%cdr decl))
             (let ((val 3)
                   (quantity spec))
               (when (consp spec)
