@@ -1,7 +1,7 @@
 ;;; swank-abcl.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: swank-abcl.lisp,v 1.7 2005-04-10 17:01:42 piso Exp $
+;;; $Id: swank-abcl.lisp,v 1.8 2005-04-30 20:04:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -70,6 +70,7 @@
                           (with-input-from-string (string-stream text)
                             (let* ((symbol (read string-stream text nil nil)) ; Ignored.
                                    (file (read string-stream text nil nil)))
+                              (declare (ignore symbol))
                               (return `((,(princ-to-string name)
                                          (:location
                                           (:file ,(namestring file))))))))))))))))
