@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: pprint.lisp,v 1.49 2005-03-24 15:03:10 piso Exp $
+;;; $Id: pprint.lisp,v 1.50 2005-04-30 20:01:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -866,6 +866,7 @@
 				 &body body)
 ;;    (when (and circle-check? atsign?)
 ;;      (setf circle-check? 'not-first-p))
+  (declare (ignore atsign?))
   `(let ((*current-level* (1+ *current-level*))
 	 (sys:*current-print-length* -1)
 ;; 	 ,@(if (and circle-check? atsign?)
