@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: open.lisp,v 1.19 2005-04-23 16:15:34 piso Exp $
+;;; $Id: open.lisp,v 1.20 2005-04-30 20:02:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,8 +42,8 @@
           (integer
            (setf element-type '(signed-byte 8)
                  ok t)))
-        (cond ((eq (car element-type) 'or)
-               (let ((types (mapcar #'upgraded-element-type (cdr element-type)))
+        (cond ((eq (%car element-type) 'or)
+               (let ((types (mapcar #'upgraded-element-type (%cdr element-type)))
                      (result '(unsigned-byte 8)))
                  (dolist (type types)
                    (when (eq (car type) 'signed-byte)
@@ -52,10 +52,10 @@
                  (setf element-type result
                        ok t)))
               ((and (= (length element-type) 2)
-                    (memq (car element-type) '(unsigned-byte signed-byte)))
+                    (memq (%car element-type) '(unsigned-byte signed-byte)))
                (let ((type (car element-type))
                      (width (cadr element-type)))
-                 (setf element-type (list (car element-type)
+                 (setf element-type (list type
                                           (upgraded-element-type-bits width))
                        ok t)))
               ((eq (car element-type) 'integer)
