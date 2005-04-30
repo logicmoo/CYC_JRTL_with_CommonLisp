@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.449 2005-04-30 19:59:21 piso Exp $
+;;; $Id: jvm.lisp,v 1.450 2005-04-30 21:57:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -682,6 +682,10 @@
     (let ((variable (find-visible-variable arg1)))
       (if variable
           (progn
+            (when (variable-ignore-p variable)
+              (compiler-style-warn
+               "Variable ~S is assigned even though it was declared to be ignored."
+               (variable-name variable)))
             (incf (variable-writes variable))
             (cond ((eq (variable-compiland variable) *current-compiland*)
                    (dformat t "p1-setq: write ~S~%" arg1))
@@ -793,6 +797,10 @@
                 (let ((variable (find-visible-variable form)))
                   (if variable
                       (progn
+                        (when (variable-ignore-p variable)
+                          (compiler-style-warn
+                           "Variable ~S is read even though it was declared to be ignored."
+                           (variable-name variable)))
                         (incf (variable-reads variable))
                         (cond
                          ((eq (variable-compiland variable) *current-compiland*)
@@ -884,7 +892,7 @@
 (declaim (ftype (function (t) fixnum) pool-get))
 (defun pool-get (entry)
   (declare (optimize speed))
-  (let ((index (gethash entry *pool-entries*)))
+  (let ((index (sys:gethash-2op-1ret entry *pool-entries*)))
     (unless index
       (setf index *pool-count*)
       (push entry *pool*)
@@ -1035,7 +1043,7 @@
 
 (defun get-descriptor-info (arg-types return-type)
   (let* ((key (list arg-types return-type))
-         (descriptor-info (gethash key *descriptors*)))
+         (descriptor-info (sys:gethash-2op-1ret key *descriptors*)))
     (or descriptor-info
         (setf (gethash key *descriptors*)
               (make-descriptor-info arg-types return-type)))))
@@ -1513,7 +1521,7 @@
 
 (defun resolve-instruction (instruction)
   (declare (optimize speed))
-  (let ((resolver (gethash (instruction-opcode instruction) *resolvers*)))
+  (let ((resolver (sys:gethash-2op-1ret (instruction-opcode instruction) *resolvers*)))
     (if resolver
         (funcall resolver instruction)
         instruction)))
@@ -1825,7 +1833,7 @@
     (dolist (instruction code)
       (when (and instruction (= (instruction-opcode instruction) 167)) ; GOTO
         (let* ((target-label (car (instruction-args instruction)))
-               (next-instruction (gethash target-label ht)))
+               (next-instruction (sys:gethash-2op-1ret target-label ht)))
           (when next-instruction
             (case (instruction-opcode next-instruction)
               (167 ; GOTO
@@ -2244,7 +2252,7 @@
 
 (declaim (ftype (function (symbol) string) declare-symbol))
 (defun declare-symbol (symbol)
-  (let ((g (gethash symbol *declared-symbols*)))
+  (let ((g (sys:gethash-2op-1ret symbol *declared-symbols*)))
     (unless g
       (let ((*code* *static-code*)
             (s (sanitize symbol)))
@@ -2262,7 +2270,7 @@
     g))
 
 (defun declare-keyword (symbol)
-  (let ((g (gethash symbol *declared-symbols*)))
+  (let ((g (sys:gethash-2op-1ret symbol *declared-symbols*)))
     (unless g
       (let ((*code* *static-code*))
         (setf g (symbol-name (gensym)))
@@ -2276,14 +2284,14 @@
     g))
 
 (defun declare-function (symbol)
-  (let ((f (gethash symbol *declared-functions*)))
+  (let ((f (sys:gethash-2op-1ret symbol *declared-functions*)))
     (unless f
       (setf f (symbol-name (gensym)))
       (let ((s (sanitize symbol)))
         (when s
           (setf f (concatenate 'string f "_" s))))
       (let ((*code* *static-code*)
-            (g (gethash symbol *declared-symbols*)))
+            (g (sys:gethash-2op-1ret symbol *declared-symbols*)))
         (cond (g
                (emit 'getstatic *this-class* g +lisp-symbol+))
               (t
@@ -2301,7 +2309,7 @@
     f))
 
 (defun declare-setf-function (name)
-  (let ((f (gethash name *declared-functions*)))
+  (let ((f (sys:gethash-2op-1ret name *declared-functions*)))
     (unless f
       (let ((symbol (cadr name)))
         (setf f (symbol-name (gensym)))
@@ -2309,7 +2317,7 @@
           (when s
             (setf f (concatenate 'string f "_SETF_" s))))
         (let ((*code* *static-code*)
-              (g (gethash symbol *declared-symbols*)))
+              (g (sys:gethash-2op-1ret symbol *declared-symbols*)))
           (cond (g
                  (emit 'getstatic *this-class* g +lisp-symbol+))
                 (t
@@ -2328,7 +2336,7 @@
 
 (defun declare-fixnum (n)
   (declare (type fixnum n))
-  (let ((g (gethash n *declared-fixnums*)))
+  (let ((g (sys:gethash-2op-1ret n *declared-fixnums*)))
     (unless g
       (let ((*code* *static-code*))
         (setf g (sys::%format nil "FIXNUM_~A~D"
@@ -2468,7 +2476,7 @@
     g))
 
 (defun declare-string (string)
-  (let ((g (gethash string *declared-strings*)))
+  (let ((g (sys:gethash-2op-1ret string *declared-strings*)))
     (unless g
       (let ((*code* *static-code*))
         (setf g (symbol-name (gensym)))
@@ -2599,7 +2607,7 @@
       (return-from compile-function-call-1 (p2-minus (list '- arg 1)
                                                      :target target
                                                      :representation representation)))
-    (let ((s (gethash op unary-operators)))
+    (let ((s (sys:gethash-2op-1ret op unary-operators)))
       (cond (s
              (compile-form arg :target :stack)
              (maybe-emit-clear-values arg)
@@ -2648,7 +2656,7 @@
   (emit-move-from-stack target))
 
 (defun compile-function-call-2 (op args target representation)
-  (let ((translation (gethash op binary-operators))
+  (let ((translation (sys:gethash-2op-1ret op binary-operators))
         (first (first args))
         (second (second args)))
     (if translation
@@ -3145,7 +3153,7 @@
       (process-args args)
       (emit 'instanceof +lisp-cons-class+)
       (return-from compile-test-2 (if negatep 'ifeq 'ifne)))
-    (let ((s (gethash op java-predicates)))
+    (let ((s (sys:gethash-2op-1ret op java-predicates)))
       (when s
         (process-args args)
         (emit-invokevirtual +lisp-object-class+ s nil "Z")
