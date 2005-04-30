@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.152 2005-04-30 18:34:12 piso Exp $
+;;; $Id: clos.lisp,v 1.153 2005-04-30 20:06:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1535,17 +1535,23 @@
                (1
                 `(lambda (args next-emfun)
                    (let ((,(%car lambda-list) (%car args)))
+                     (declare (ignorable ,(%car lambda-list)))
                      ,@declarations ,@body)))
                (2
                 `(lambda (args next-emfun)
                    (let ((,(%car lambda-list) (%car args))
                          (,(%cadr lambda-list) (%cadr args)))
+                     (declare (ignorable ,(%car lambda-list)
+                                         ,(%cadr lambda-list)))
                      ,@declarations ,@body)))
                (3
                 `(lambda (args next-emfun)
                    (let ((,(%car lambda-list) (%car args))
                          (,(%cadr lambda-list) (%cadr args))
                          (,(%caddr lambda-list) (%caddr args)))
+                     (declare (ignorable ,(%car lambda-list)
+                                         ,(%cadr lambda-list)
+                                         ,(%caddr lambda-list)))
                      ,@declarations ,@body)))
                (t
                 `(lambda (args next-emfun)
