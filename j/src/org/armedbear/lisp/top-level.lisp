@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.44 2005-03-15 16:07:55 piso Exp $
+;;; $Id: top-level.lisp,v 1.45 2005-04-30 20:05:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -401,5 +401,5 @@
       (if (featurep :j)
           (handler-case
               (repl)
-            (stream-error (c) (return-from top-level-loop)))
+            (stream-error (c) (declare (ignore c)) (return-from top-level-loop)))
           (repl)))))
