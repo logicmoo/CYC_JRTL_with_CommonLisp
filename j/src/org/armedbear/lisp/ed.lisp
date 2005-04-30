@@ -1,7 +1,7 @@
 ;;; ed.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: ed.lisp,v 1.5 2004-10-17 19:36:05 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: ed.lisp,v 1.6 2005-04-30 20:00:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -98,6 +98,7 @@ the file system."
                                       (let* ((symbol (read string-stream text nil nil)) ; Ignored.
                                              (file (read string-stream text nil nil))
                                              (line-number (read string-stream text nil nil)))
+                                        (declare (ignore symbol))
                                         (when (pathnamep file)
                                           (setf file (namestring file)))
                                         (if stream
