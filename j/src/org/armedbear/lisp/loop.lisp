@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: loop.lisp,v 1.11 2004-10-20 04:25:35 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: loop.lisp,v 1.12 2005-04-30 20:01:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1798,6 +1798,7 @@ code to be loaded.
 				  :key #'type-declaration-of
 				  :from-end t)))
 		 #+sbcl (aver (eq decl %decl))
+                 #-sbcl (declare (ignore %decl))
 		 (setf (cadr decl)
 		       `(and real ,(cadr decl))))))
 	   ;; default start
