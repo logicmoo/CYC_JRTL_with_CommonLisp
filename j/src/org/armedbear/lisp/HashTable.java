@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.47 2004-11-28 15:43:49 piso Exp $
+ * $Id: HashTable.java,v 1.48 2005-04-30 18:31:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,17 +46,17 @@ public abstract class HashTable extends LispObject
         buckets = new HashEntry[size];
         threshold = (int) (size * loadFactor);
     }
-    
+
     public final LispObject getRehashSize()
     {
         return rehashSize;
     }
-    
+
     public final LispObject getRehashThreshold()
     {
         return rehashThreshold;
     }
-    
+
     public int getSize()
     {
         return buckets.length;
@@ -135,7 +135,7 @@ public abstract class HashTable extends LispObject
     public synchronized LispObject gethash(LispObject key)
         throws ConditionThrowable
     {
-        LispObject value = (LispObject) get(key);
+        LispObject value = get(key);
         final LispObject presentp;
         if (value == null)
             value = presentp = NIL;
@@ -149,7 +149,7 @@ public abstract class HashTable extends LispObject
                                            LispObject defaultValue)
         throws ConditionThrowable
     {
-        LispObject value = (LispObject) get(key);
+        LispObject value = get(key);
         final LispObject presentp;
         if (value == null) {
             value = defaultValue;
@@ -157,6 +157,13 @@ public abstract class HashTable extends LispObject
         } else
             presentp = T;
         return LispThread.currentThread().setValues(value, presentp);
+    }
+
+    public synchronized LispObject gethash_2op_1ret(LispObject key)
+        throws ConditionThrowable
+    {
+        LispObject value = get(key);
+        return value != null ? value : NIL;
     }
 
     public synchronized LispObject puthash(LispObject key, LispObject newValue)
