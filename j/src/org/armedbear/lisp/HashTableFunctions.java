@@ -1,8 +1,8 @@
 /*
  * HashTableFunctions.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTableFunctions.java,v 1.1 2004-11-28 15:41:04 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: HashTableFunctions.java,v 1.2 2005-04-30 18:33:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ public final class HashTableFunctions extends Lisp
         Symbol.EQUAL.getSymbolFunction();
     private static final LispObject FUNCTION_EQUALP =
         Symbol.EQUALP.getSymbolFunction();
-            
+
     // ### %make-hash-table
     private static final Primitive _MAKE_HASH_TABLE =
         new Primitive("%make-hash-table", PACKAGE_SYS, false)
@@ -63,7 +63,7 @@ public final class HashTableFunctions extends Lisp
     // ### gethash
     // gethash key hash-table &optional default => value, present-p
     private static final Primitive GETHASH =
-        new Primitive("gethash","key hash-table &optional default")
+        new Primitive("gethash", "key hash-table &optional default")
     {
         public LispObject execute(LispObject key, LispObject ht)
             throws ConditionThrowable
@@ -81,6 +81,22 @@ public final class HashTableFunctions extends Lisp
         {
             try {
                 return ((HashTable)ht).gethash(key, defaultValue);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(ht, Symbol.HASH_TABLE));
+            }
+        }
+    };
+
+    // ### gethash-2op-1ret key hash-table => value
+    private static final Primitive GETHASH_2OP_1RET =
+        new Primitive("gethash-2op-1ret", PACKAGE_SYS, true, "key hash-table")
+    {
+        public LispObject execute(LispObject key, LispObject ht)
+            throws ConditionThrowable
+        {
+            try {
+                return ((HashTable)ht).gethash_2op_1ret(key);
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(ht, Symbol.HASH_TABLE));
@@ -211,7 +227,7 @@ public final class HashTableFunctions extends Lisp
             }
         }
     };
-    
+
     // ### hash-table-test
     private static final Primitive HASH_TABLE_TEST =
         new Primitive("hash-table-test", "hash-table")
