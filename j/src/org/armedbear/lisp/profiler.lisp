@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: profiler.lisp,v 1.14 2005-04-27 19:35:16 piso Exp $
+;;; $Id: profiler.lisp,v 1.15 2005-04-30 20:04:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -78,8 +78,7 @@
 
 (defun show-call-count (info max-count)
   (let* ((object (profile-info-object info))
-         (count (profile-info-count info))
-         (function (if (symbolp object) (fdefinition object) object)))
+         (count (profile-info-count info)))
     (if max-count
         (format t "~5,1F ~8D ~S~A~%"
                 (/ (* count 100.0) max-count)
