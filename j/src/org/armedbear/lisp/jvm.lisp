@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.448 2005-04-29 10:12:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.449 2005-04-30 19:59:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,7 +30,8 @@
   (require '#:clos)
   (require '#:print-object)
   (require '#:source-transform)
-  (require '#:opcodes))
+  (require '#:opcodes)
+  (require '#:known-functions))
 
 (shadow '(method variable))
 
@@ -46,6 +47,7 @@
     (apply #'sys::%format destination control-string args)))
 
 (defmacro dformat (&rest ignored)
+  (declare (ignore ignored))
   )
 
 (defun inline-expansion (name)
@@ -214,6 +216,8 @@
   special-p
   (declared-type :none)
   (derived-type :none)
+  ignore-p
+  ignorable-p
   representation ; NIL (i.e. a LispObject reference) or :UNBOXED-FIXNUM
   register ; register number or NIL
   index
@@ -345,9 +349,31 @@
       (let ((decls (%cdr subform)))
         (dolist (decl decls)
           (case (car decl)
-            ((DYNAMIC-EXTENT FTYPE IGNORE IGNORABLE INLINE NOTINLINE OPTIMIZE)
+            ((DYNAMIC-EXTENT FTYPE INLINE NOTINLINE OPTIMIZE)
              ;; Nothing to do here.
              )
+            (IGNORE
+             (dolist (sym (%cdr decl))
+               (let ((variable (find sym vars :key #'variable-name)))
+                 (cond ((null variable)
+                        (compiler-style-warn "Declaring unknown variable ~S to be ignored."
+                                             sym))
+                       ((variable-special-p variable)
+                        (compiler-style-warn "Declaring special variable ~S to be ignored."
+                                             sym))
+                       (t
+                        (setf (variable-ignore-p variable) t))))))
+            (IGNORABLE
+             (dolist (sym (%cdr decl))
+               (let ((variable (find sym vars :key #'variable-name)))
+                 (cond ((null variable)
+                        (compiler-style-warn "Declaring unknown variable ~S to be ignorable."
+                                             sym))
+                       ((variable-special-p variable)
+                        (compiler-style-warn "Declaring special variable ~S to be ignorable."
+                                             sym))
+                       (t
+                        (setf (variable-ignorable-p variable) t))))))
             (SPECIAL
              (dolist (sym (%cdr decl))
                (let ((variable (find sym vars :key #'variable-name)))
@@ -3227,8 +3253,7 @@
       (return-from compile-test-3 (if negatep 'if_acmpeq 'if_acmpne)))
     (let* ((arg1 (first args))
            (arg2 (second args))
-           (var1 (unboxed-fixnum-variable arg1))
-           (var2 (unboxed-fixnum-variable arg2)))
+           (var1 (unboxed-fixnum-variable arg1)))
       (when (memq op '(< <= > >= = /=))
         (when (and (subtypep (derive-type arg1) 'fixnum)
                    (subtypep (derive-type arg2) 'fixnum))
@@ -3590,9 +3615,15 @@
     ;; because we'll lose JVM stack consistency if there is a non-local
     ;; transfer of control from one of the initforms.
     (dolist (variable (block-vars block))
-      (let ((initform (variable-initform variable)))
+      (let ((initform (variable-initform variable))
+            (target :stack))
         (cond (initform
-               (cond ((and (variable-register variable)
+               (cond ((and (not (variable-special-p variable))
+                           (zerop (variable-reads variable))
+                           (zerop (variable-writes variable)))
+                      (unused-variable variable)
+                      (setf target nil))
+                     ((and (variable-register variable)
                            (neq (variable-declared-type variable) :none)
                            (subtypep (variable-declared-type variable) 'FIXNUM))
                       (setf (variable-representation variable) :unboxed-fixnum))
@@ -3603,7 +3634,7 @@
                         (when (subtypep type 'FIXNUM)
                           (setf (variable-representation variable) :unboxed-fixnum)))))
                (compile-form initform
-                             :target :stack
+                             :target target
                              :representation (variable-representation variable))
                (unless must-clear-values
                  (unless (single-valued-p initform)
@@ -3612,6 +3643,9 @@
                (emit-push-nil)))
         (cond ((variable-special-p variable)
                (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register))))
+              ((null target)
+               ;; Nothing to do.
+               )
               ((eq (variable-representation variable) :unboxed-fixnum)
                (emit 'istore (variable-register variable)))
               (t
@@ -3646,7 +3680,13 @@
                                    nil)
                (setf boundp t))
               (initform
-               (cond ((and (null (variable-closure-index variable))
+               (cond ((and (not (variable-special-p variable))
+                          (zerop (variable-reads variable))
+                          (zerop (variable-writes variable)))
+                      (unused-variable variable)
+                      (compile-form initform :target nil)
+                      (setf boundp t))
+                     ((and (null (variable-closure-index variable))
                            (not (variable-special-p variable))
                            (neq (variable-declared-type variable) :none)
                            (subtypep (variable-declared-type variable) 'FIXNUM))
@@ -3687,19 +3727,30 @@
     (when must-clear-values
       (emit-clear-values))))
 
+(defun unused-variable (variable)
+  (unless (or (variable-ignore-p variable)
+              (variable-ignorable-p variable))
+    (compiler-style-warn "The variable ~S is defined but never used."
+                         (variable-name variable))))
+
 (defun compile-locally (form &key (target :stack) representation)
-  (let ((*visible-variables* *visible-variables*)
-        (specials (precompiler::process-special-declarations (cdr form))))
-    (dolist (var specials)
-      (push (make-variable :name var :special-p t) *visible-variables*))
-    (cond ((null (cdr form))
-           (when target
-             (emit-push-nil)
-             (emit-move-from-stack target)))
-          (t
-           (do ((forms (cdr form) (cdr forms)))
-               ((null forms))
-             (compile-form (car forms) :target (if (cdr forms) nil target)))))))
+  (let ((*speed*  *speed*)
+        (*space*  *space*)
+        (*safety* *safety*)
+        (*debug*  *debug*))
+    (process-optimization-declarations (cdr form))
+    (let ((*visible-variables* *visible-variables*)
+          (specials (precompiler::process-special-declarations (cdr form))))
+      (dolist (var specials)
+        (push (make-variable :name var :special-p t) *visible-variables*))
+      (cond ((null (cdr form))
+             (when target
+               (emit-push-nil)
+               (emit-move-from-stack target)))
+            (t
+             (do ((forms (cdr form) (cdr forms)))
+                 ((null forms))
+               (compile-form (car forms) :target (if (cdr forms) nil target))))))))
 
 (defun find-tag (name)
   (dolist (tag *visible-tags*)
@@ -3973,7 +4024,9 @@
     (compile-function-call form target representation)
     (return-from p2-car))
   (let ((arg (%cadr form)))
-    (cond ((and (consp arg) (eq (%car arg) 'cdr) (= (length arg) 2))
+    (cond ((and (null target) (< *safety* 3))
+           (compile-form arg :target nil))
+          ((and (consp arg) (eq (%car arg) 'cdr) (= (length arg) 2))
            (compile-form (second arg) :target :stack)
            (maybe-emit-clear-values (second arg))
            (emit-invoke-method "cadr" target representation))
@@ -4319,10 +4372,9 @@
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
     (return-from p2-ash))
-  (let* ((args (cdr form))
-         (len (length args))
-         (arg1 (first args))
-         (arg2 (second args))
+  (let* ((args (%cdr form))
+         (arg1 (%car args))
+         (arg2 (%cadr args))
          (var1 (unboxed-fixnum-variable arg1))
          (var2 (unboxed-fixnum-variable arg2))
          (type1 t))
@@ -4568,10 +4620,10 @@
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
     (return-from p2-zerop))
-  (let* ((arg (cadr form))
-         (var (unboxed-fixnum-variable arg)))
+  (let ((arg (cadr form)))
     (cond ((subtypep (derive-type arg) 'FIXNUM)
            (compile-form arg :target :stack :representation :unboxed-fixnum)
+           (maybe-emit-clear-values arg)
            (let ((LABEL1 (gensym))
                  (LABEL2 (gensym)))
              (emit 'ifne LABEL1)
@@ -5284,42 +5336,42 @@
   (emit-move-from-stack target representation))
 
 (defun compile-variable-reference (name target representation)
-  (dformat t "compile-variable-reference ~S~%" name)
-  (let ((variable (find-visible-variable name)))
-    (cond ((null variable)
-           (when (and (special-variable-p name)
-                      (constantp name))
-             (let ((value (symbol-value name)))
-               (when (or (null *compile-file-truename*)
-                         ;; FIXME File compilation doesn't support all constant
-                         ;; types yet.
-                         (stringp value)
-                         (numberp value)
-                         (packagep value))
-                 (compile-constant value :target target :representation representation)
-                 (return-from compile-variable-reference))))
-           (unless (special-variable-p name)
-             (unless (memq name *undefined-variables*)
-               (compiler-warn "Undefined variable ~S" name)
-               (push name *undefined-variables*)))
-           (compile-special-reference name target representation))
-          ((eq (variable-representation variable) :unboxed-fixnum)
-           (dformat t "compile-variable-reference unboxed-fixnum case~%")
-           (cond ((eq representation :unboxed-fixnum)
-                  (aver (variable-register variable))
-                  (emit 'iload (variable-register variable)))
-                 (t (dformat t "compile-variable-reference constructing boxed fixnum for ~S~%"
-                             name)
-                    (emit 'new +lisp-fixnum-class+)
-                    (emit 'dup)
+  (unless (null target)
+    (let ((variable (find-visible-variable name)))
+      (cond ((null variable)
+             (when (and (special-variable-p name)
+                        (constantp name))
+               (let ((value (symbol-value name)))
+                 (when (or (null *compile-file-truename*)
+                           ;; FIXME File compilation doesn't support all constant
+                           ;; types yet.
+                           (stringp value)
+                           (numberp value)
+                           (packagep value))
+                   (compile-constant value :target target :representation representation)
+                   (return-from compile-variable-reference))))
+             (unless (special-variable-p name)
+               (unless (memq name *undefined-variables*)
+                 (compiler-warn "Undefined variable ~S" name)
+                 (push name *undefined-variables*)))
+             (compile-special-reference name target representation))
+            ((eq (variable-representation variable) :unboxed-fixnum)
+             (dformat t "compile-variable-reference unboxed-fixnum case~%")
+             (cond ((eq representation :unboxed-fixnum)
                     (aver (variable-register variable))
-                    (emit 'iload (variable-register variable))
-                    (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
-           (emit-move-from-stack target representation))
-          (t
-           (dformat t "compile-variable-reference ~S closure index = ~S~%"
-                    name (variable-closure-index variable))
-           (emit 'var-ref variable target representation)))))
+                    (emit 'iload (variable-register variable)))
+                   (t (dformat t "compile-variable-reference constructing boxed fixnum for ~S~%"
+                               name)
+                      (emit 'new +lisp-fixnum-class+)
+                      (emit 'dup)
+                      (aver (variable-register variable))
+                      (emit 'iload (variable-register variable))
+                      (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+             (emit-move-from-stack target representation))
+            (t
+             (dformat t "compile-variable-reference ~S closure index = ~S~%"
+                      name (variable-closure-index variable))
+             (emit 'var-ref variable target representation))))))
 
 (defun rewrite-setq (form)
   (let ((expr (third form)))
@@ -6379,58 +6431,35 @@
             (terpri))))))
 
 (defun %jvm-compile (name definition)
-  (let ((prefix (load-verbose-prefix)))
-;;     (when *compile-print*
-;;       (fresh-line)
-;;       (if name
-;;           (progn
-;;             (sys::%format t "~A Compiling ~S ...~%" prefix name)
-;;             (when (and (fboundp name)
-;;                        (sys::%typep (fdefinition name) 'generic-function))
-;;               (sys::%format t "~A Unable to compile generic function ~S~%" prefix name)
-;;               (return-from %jvm-compile (values name nil t)))
-;;             (unless (symbolp name)
-;;               (sys::%format t "~A Unable to compile ~S~%" prefix name)
-;;               (return-from %jvm-compile (values name nil t))))
-;;           (let ((*print-length* 2)
-;;                 (*print-level* 2))
-;;             (format t "; Compiling ~S~%" definition))))
-    (unless definition
-      (resolve name)
-      (setf definition (fdefinition name)))
-    (when (compiled-function-p definition)
-;;       (when (and *compile-print* name)
-;;         (sys::%format t "~A Already compiled ~S~%" prefix name))
-      (return-from %jvm-compile (values name nil nil)))
-    (multiple-value-bind (expr env) (get-lambda-to-compile definition)
-      (let* ((*package* (if (and name (symbol-package name))
-                            (symbol-package name)
-                            *package*))
-             compiled-definition
-             (warnings-p t)
-             (failure-p t))
-        (with-compilation-unit ()
-          (let ((filespec (compile-defun name expr env)))
-            (setf compiled-definition (sys:load-compiled-function filespec))
-            (when (and name (functionp compiled-definition))
-              (sys::%set-lambda-name compiled-definition name)
-              (sys:set-call-count compiled-definition (sys:call-count definition))
-              (sys::%set-arglist compiled-definition (sys::arglist definition))
-              (let ((*warn-on-redefinition* nil))
-                (setf (fdefinition name)
-                      (if (macro-function name)
-                          (sys::make-macro name compiled-definition)
-                          compiled-definition))))
-            (cond ((zerop (+ jvm::*errors* jvm::*warnings* jvm::*style-warnings*))
-                   (setf warnings-p nil failure-p nil))
-                  ((zerop (+ jvm::*errors* jvm::*warnings*))
-                   (setf failure-p nil)))
-;;             (when *compile-print*
-;;               (if name
-;;                   (sys::%format t "~A Compiled ~S~%" prefix name)
-;;                   (sys::%format t "~A Compiled top-level form~%" prefix)))
-            ))
-        (values (or name compiled-definition) warnings-p failure-p)))))
+  (unless definition
+    (resolve name)
+    (setf definition (fdefinition name)))
+  (when (compiled-function-p definition)
+    (return-from %jvm-compile (values name nil nil)))
+  (multiple-value-bind (expr env) (get-lambda-to-compile definition)
+    (let* ((*package* (if (and name (symbol-package name))
+                          (symbol-package name)
+                          *package*))
+           compiled-definition
+           (warnings-p t)
+           (failure-p t))
+      (with-compilation-unit ()
+        (let ((filespec (compile-defun name expr env)))
+          (setf compiled-definition (sys:load-compiled-function filespec))
+          (when (and name (functionp compiled-definition))
+            (sys::%set-lambda-name compiled-definition name)
+            (sys:set-call-count compiled-definition (sys:call-count definition))
+            (sys::%set-arglist compiled-definition (sys::arglist definition))
+            (let ((*warn-on-redefinition* nil))
+              (setf (fdefinition name)
+                    (if (macro-function name)
+                        (sys::make-macro name compiled-definition)
+                        compiled-definition))))
+          (cond ((zerop (+ jvm::*errors* jvm::*warnings* jvm::*style-warnings*))
+                 (setf warnings-p nil failure-p nil))
+                ((zerop (+ jvm::*errors* jvm::*warnings*))
+                 (setf failure-p nil)))))
+      (values (or name compiled-definition) warnings-p failure-p))))
 
 (defun jvm-compile (name &optional definition)
   (if *catch-errors*
