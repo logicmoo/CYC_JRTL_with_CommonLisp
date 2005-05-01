@@ -1,7 +1,7 @@
 ;;; write-sequence.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: write-sequence.lisp,v 1.4 2005-03-29 19:29:58 piso Exp $
+;;; $Id: write-sequence.lisp,v 1.5 2005-05-01 16:50:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@
   (if end
       (unless (and (integerp end) (>= end 0))
         (error 'simple-type-error
-               :datum start
+               :datum end
                :expected-type '(integer 0)))
       (setf end (length sequence)))
   (let ((stream-element-type (stream-element-type stream)))
