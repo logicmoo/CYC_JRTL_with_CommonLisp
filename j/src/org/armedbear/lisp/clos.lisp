@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.154 2005-05-01 11:44:38 piso Exp $
+;;; $Id: clos.lisp,v 1.155 2005-05-01 23:43:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -579,7 +579,10 @@
                          (substitute new-class old-class
                                      (class-direct-superclasses subclass))))
                  new-class)
-               old-class))
+;;                (apply #'reinitialize-instance old-class all-keys)
+               (progn
+                 (apply #'std-after-initialization-for-classes old-class all-keys)
+                 old-class)))
           (t
            (let ((class (apply #'make-instance-standard-class
                                (find-class 'standard-class)
@@ -1523,11 +1526,11 @@
       (cond ((or *call-next-method-p* *next-method-p-p*)
              `(lambda (args next-emfun)
                 (flet ((call-next-method (&rest cnm-args)
-                                         (if (null next-emfun)
-                                             (error "No next method for generic function.")
-                                             (funcall next-emfun (or cnm-args args))))
+                         (if (null next-emfun)
+                             (error "No next method for generic function.")
+                             (funcall next-emfun (or cnm-args args))))
                        (next-method-p ()
-                                      (not (null next-emfun))))
+                         (not (null next-emfun))))
                   (apply #'(lambda ,lambda-list ,@declarations ,@body) args))))
             ((null (intersection lambda-list '(&rest &optional &key &allow-other-keys &aux)))
              ;; Required parameters only.
@@ -1793,8 +1796,7 @@
 
 (defgeneric reinitialize-instance (instance &key))
 
-(defmethod reinitialize-instance
-  ((instance standard-object) &rest initargs)
+(defmethod reinitialize-instance ((instance standard-object) &rest initargs)
   (apply #'shared-initialize instance () initargs))
 
 (defun std-shared-initialize (instance slot-names all-keys)

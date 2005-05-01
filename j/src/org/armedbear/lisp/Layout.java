@@ -1,8 +1,8 @@
 /*
  * Layout.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Layout.java,v 1.11 2004-11-12 13:57:42 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Layout.java,v 1.12 2005-05-01 23:45:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,17 @@ public final class Layout extends LispObject
         }
         Debug.assertTrue(i == length);
         this.classSlots = classSlots;
+    }
+
+    public LispObject getParts() throws ConditionThrowable
+    {
+        LispObject result = NIL;
+        result = result.push(new Cons("class", cls));
+        for (int i = 0; i < slotNames.length; i++) {
+            result = result.push(new Cons("slot " + i, slotNames[i]));
+        }
+        result = result.push(new Cons("class slots", classSlots));
+        return result.nreverse();
     }
 
     public LispClass getLispClass()
@@ -122,8 +133,14 @@ public final class Layout extends LispObject
 
     public int getSlotIndex(LispObject slotName)
     {
-        final int limit = slotNames.length;
-        for (int i = 0; i < limit; i++) {
+//         final int limit = slotNames.length;
+//         for (int i = 0; i < limit; i++) {
+//             if (slotNames[i] == slotName)
+//                 return i;
+//         }
+//         return -1;
+
+        for (int i = slotNames.length; i-- > 0;) {
             if (slotNames[i] == slotName)
                 return i;
         }
