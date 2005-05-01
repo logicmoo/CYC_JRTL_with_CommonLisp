@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.153 2005-04-30 20:06:01 piso Exp $
+;;; $Id: clos.lisp,v 1.154 2005-05-01 11:44:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -866,16 +866,16 @@
                    :format-arguments (list lambda-list gf)))
           (setf (generic-function-lambda-list gf) lambda-list)
           (setf (generic-function-documentation gf) documentation)
-          (when apo-p
-            (let* ((plist (analyze-lambda-list lambda-list))
-                   (required-args (getf plist ':required-args)))
-              (%set-gf-required-args gf required-args)
+          (let* ((plist (analyze-lambda-list lambda-list))
+                 (required-args (getf plist ':required-args)))
+            (%set-gf-required-args gf required-args)
+            (when apo-p
               (setf (slot-value gf 'argument-precedence-order)
                     (if argument-precedence-order
                         (canonicalize-argument-precedence-order argument-precedence-order
                                                                 required-args)
-                        nil))
-              (finalize-generic-function gf)))
+                        nil)))
+            (finalize-generic-function gf))
           gf)
         (progn
           (when (fboundp function-name)
