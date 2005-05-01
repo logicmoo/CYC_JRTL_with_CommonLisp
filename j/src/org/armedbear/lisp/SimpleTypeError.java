@@ -2,7 +2,7 @@
  * SimpleTypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SimpleTypeError.java,v 1.7 2005-04-20 14:42:07 piso Exp $
+ * $Id: SimpleTypeError.java,v 1.8 2005-05-01 16:48:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ public final class SimpleTypeError extends TypeError
             }
             if (datum != null && expectedType != null) {
                 StringBuffer sb = new StringBuffer("The value ");
-                sb.append(String.valueOf(datum));
+                sb.append(datum.writeToString());
                 sb.append(" is not of type ");
                 sb.append(expectedType.writeToString());
                 sb.append('.');
