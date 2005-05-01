@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.769 2005-04-27 19:32:14 piso Exp $
+ * $Id: Primitives.java,v 1.770 2005-05-01 11:43:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2264,15 +2264,14 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            final LispObject value1, value2;
-            Function function = checkFunction(arg);
-            LispObject name = function.getLambdaName();
-            final LispObject value3 = name != null ? name : NIL;
-            if (function instanceof CompiledClosure) {
+            final LispObject value1, value2, value3;
+            if (arg instanceof CompiledClosure) {
                 value1 = NIL;
                 value2 = T;
-            } else if (function instanceof Closure && !(function instanceof CompiledFunction)) {
-                Closure closure = (Closure) function;
+                LispObject name = ((CompiledClosure)arg).getLambdaName();
+                value3 = name != null ? name : NIL;
+            } else if (arg instanceof Closure && !(arg instanceof CompiledFunction)) {
+                Closure closure = (Closure) arg;
                 LispObject expr = closure.getBody();
                 expr = new Cons(closure.getLambdaList(), expr);
                 expr = new Cons(Symbol.LAMBDA, expr);
@@ -2282,8 +2281,18 @@ public final class Primitives extends Lisp
                     value2 = NIL;
                 else
                     value2 = env; // Return environment as closure-p.
+                LispObject name = ((Closure)arg).getLambdaName();
+                value3 = name != null ? name : NIL;
+            } else if (arg instanceof Function) {
+                value1 = NIL;
+                value2 = T;
+                value3 = ((Function)arg).getLambdaName();
+            } else if (arg instanceof GenericFunction) {
+                value1 = NIL;
+                value2 = T;
+                value3 = ((GenericFunction)arg).getGenericFunctionName();
             } else
-                value1 = value2 = NIL;
+                return signal(new TypeError(arg, Symbol.FUNCTION));
             return LispThread.currentThread().setValues(value1, value2, value3);
         }
     };
