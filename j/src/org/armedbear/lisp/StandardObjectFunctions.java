@@ -2,7 +2,7 @@
  * StandardObjectFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObjectFunctions.java,v 1.2 2005-03-25 03:19:22 piso Exp $
+ * $Id: StandardObjectFunctions.java,v 1.3 2005-05-01 00:42:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,9 +207,11 @@ public class StandardObjectFunctions extends Lisp
                                                        Symbol.SLOT_VALUE);
                 value = location.cdr();
             }
-            if (value == UNBOUND_VALUE)
-                return Symbol.SLOT_UNBOUND.execute(instance.getLispClass(),
-                                                   instance, second);
+            if (value == UNBOUND_VALUE) {
+                value = Symbol.SLOT_UNBOUND.execute(instance.getLispClass(),
+                                                    instance, second);
+                LispThread.currentThread()._values = null;
+            }
             return value;
         }
     };
