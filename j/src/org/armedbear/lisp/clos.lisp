@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.155 2005-05-01 23:43:59 piso Exp $
+;;; $Id: clos.lisp,v 1.156 2005-05-02 00:49:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1764,6 +1764,24 @@
                    (make-list (length (class-slots class))
                               :initial-element +slot-unbound+)))
 
+(defun check-initargs (class initargs)
+  (unless (getf initargs :allow-other-keys)
+    (let ((slots (class-slots class)))
+      (do* ((tail initargs (cddr tail))
+            (initarg (car tail) (car tail)))
+           ((null tail))
+        (unless (or (valid-initarg-p initarg slots)
+                    (eq initarg :allow-other-keys))
+          (error 'program-error
+                 :format-control "Invalid initarg ~S."
+                 :format-arguments (list initarg)))))))
+
+(defun valid-initarg-p (initarg slots)
+  (dolist (slot slots nil)
+    (let ((valid-initargs (slot-definition-initargs slot)))
+      (when (memq initarg valid-initargs)
+        (return t)))))
+
 (defgeneric make-instance (class &key))
 
 (defmethod make-instance ((class standard-class) &rest initargs)
@@ -1782,6 +1800,7 @@
           (when (eq (getf initargs key 'not-found) 'not-found)
             (setf default-initargs (append default-initargs (list key (funcall fn))))))
         (setf initargs (append initargs default-initargs)))))
+  (check-initargs class initargs)
   (let ((instance (std-allocate-instance class)))
     (apply #'initialize-instance instance initargs)
     instance))
@@ -1818,9 +1837,8 @@
 
 (defgeneric shared-initialize (instance slot-names &key))
 
-(defmethod shared-initialize ((instance standard-object)
-                              slot-names &rest all-keys)
-  (std-shared-initialize instance slot-names all-keys))
+(defmethod shared-initialize ((instance standard-object) slot-names &rest initargs)
+  (std-shared-initialize instance slot-names initargs))
 
 ;;; change-class
 
