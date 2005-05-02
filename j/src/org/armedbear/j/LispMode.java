@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.94 2005-03-25 16:20:29 piso Exp $
+ * $Id: LispMode.java,v 1.95 2005-05-02 01:08:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -488,6 +488,20 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 Utilities.isOneOf(token, elispSpecials) ||
                 token.startsWith("with-"))
                 return buffer.getCol(pos) + indentSize;
+            // Check for enclosing FLET/LABELS.
+            Position up = findContainingSexp(pos);
+            if (up != null) {
+                up = findContainingSexp(up);
+                if (up != null) {
+                    up = downList(up);
+                    if (up != null) {
+                        String s = gatherToken(up);
+                        if (s.equals("flet") || s.equals("labels")) {
+                            return buffer.getCol(pos) + indentSize;
+                        }
+                    }
+                }
+            }
             // Not special. Indent under the second element of the containing
             // list, if the second element is on the same line as the first.
             Position posSecond = forwardSexp(posFirst);
