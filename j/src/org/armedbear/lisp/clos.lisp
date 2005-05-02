@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.156 2005-05-02 00:49:36 piso Exp $
+;;; $Id: clos.lisp,v 1.157 2005-05-02 17:16:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -749,8 +749,6 @@
   (%method-generic-function method))
 (defsetf method-generic-function %set-method-generic-function)
 
-(defsetf method-function %set-method-function)
-
 (defun method-documentation (method)
   (slot-value method 'documentation))
 
@@ -1143,7 +1141,6 @@
       (%add-method gf method)
       method)))
 
-
 (defun make-instance-standard-method (gf
                                       &key
                                       lambda-list
@@ -1157,7 +1154,7 @@
     (setf (method-specializers method) (canonicalize-specializers specializers))
     (setf (method-documentation method) documentation)
     (setf (method-generic-function method) nil)
-    (setf (method-function method) function)
+    (%set-method-function method function)
     method))
 
 (defun add-method (gf method)
@@ -1172,7 +1169,7 @@
            :format-control "ADD-METHOD: ~S is a method of ~S."
            :format-arguments (list method (method-generic-function method))))
   ;; Remove existing method with same qualifiers and specializers (if any).
-  (let ((old-method (find-method gf (method-qualifiers method)
+  (let ((old-method (%find-method gf (method-qualifiers method)
                                  (method-specializers method) nil)))
     (when old-method
       (remove-method gf old-method)))
@@ -1195,12 +1192,12 @@
   (finalize-generic-function gf)
   gf)
 
-(defun find-method (gf qualifiers specializers &optional (errorp t))
+(defun %find-method (gf qualifiers specializers &optional (errorp t))
   ;; "If the specializers argument does not correspond in length to the number
   ;; of required arguments of the generic-function, an an error of type ERROR
   ;; is signaled."
   (unless (= (length specializers) (length (gf-required-args gf)))
-    (error "FIND-METHOD: the specializers argument has length ~S, but ~S has ~S required parameters."
+    (error "The specializers argument has length ~S, but ~S has ~S required parameters."
            (length specializers)
            gf
            (length (gf-required-args gf))))
@@ -1453,7 +1450,7 @@
                        #'compute-effective-method-function)
                    gf (remove around methods))))
              #'(lambda (args)
-                (funcall (method-function around) args next-emfun))))
+                (funcall (%method-function around) args next-emfun))))
           ((eq mc-name 'standard)
            (let* ((next-emfun (compute-primary-emfun (cdr primaries)))
                   (befores (remove-if-not #'before-method-p methods))
@@ -1464,15 +1461,15 @@
                     (if (and (null befores) (null reverse-afters))
                         `(lambda (args)
                            (declare (optimize speed))
-                           (funcall ,(method-function (car primaries)) args ,next-emfun))
+                           (funcall ,(%method-function (car primaries)) args ,next-emfun))
                         `(lambda (args)
                            (declare (optimize speed))
                            (dolist (before ',befores)
-                             (funcall (method-function before) args nil))
+                             (funcall (%method-function before) args nil))
                            (multiple-value-prog1
-                            (funcall (method-function ,(car primaries)) args ,next-emfun)
+                            (funcall (%method-function ,(car primaries)) args ,next-emfun)
                             (dolist (after ',reverse-afters)
-                              (funcall (method-function after) args nil)))))
+                              (funcall (%method-function after) args nil)))))
                     nil)))
              (setf code (or (ignore-errors (compile nil code)) code))
              code))
@@ -1486,11 +1483,11 @@
                      (if (and (null (cdr primaries))
                               (not (null ioa)))
                          `(lambda (args)
-                            (funcall ,(method-function (car primaries)) args nil))
+                            (funcall ,(%method-function (car primaries)) args nil))
                          `(lambda (args)
                             (,operator ,@(mapcar
                                           (lambda (primary)
-                                            `(funcall ,(method-function primary) args nil))
+                                            `(funcall ,(%method-function primary) args nil))
                                           primaries))))))
                (coerce-to-function form)))))))
 
@@ -1501,7 +1498,7 @@
       nil
       (let ((next-emfun (compute-primary-emfun (cdr methods))))
         #'(lambda (args)
-           (funcall (method-function (car methods)) args next-emfun)))))
+           (funcall (%method-function (car methods)) args next-emfun)))))
 
 (defvar *call-next-method-p*)
 (defvar *next-method-p-p*)
@@ -2021,5 +2018,14 @@
   (error "No applicable method for the generic function ~S when called with arguments ~S."
          generic-function
          args))
+
+(defgeneric find-method (generic-function
+                         qualifiers
+                         specializers
+                         &optional errorp))
+
+(defmethod find-method ((generic-function standard-generic-function)
+			qualifiers specializers &optional (errorp t))
+  (%find-method generic-function qualifiers specializers errorp))
 
 (provide 'clos)
