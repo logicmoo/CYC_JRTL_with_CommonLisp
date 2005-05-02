@@ -2,7 +2,7 @@
  * Method.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: Method.java,v 1.7 2005-04-26 16:33:30 piso Exp $
+ * $Id: Method.java,v 1.8 2005-05-02 17:14:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,9 +124,9 @@ public final class Method extends StandardObject
         }
     };
 
-    // ### method-function
+    // ### %method-function
     private static final Primitive METHOD_FUNCTION =
-        new Primitive("method-function", PACKAGE_SYS, false)
+        new Primitive("%method-function", PACKAGE_SYS, true, "method")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -141,7 +141,8 @@ public final class Method extends StandardObject
 
     // ### %set-method-function
     private static final Primitive _SET_METHOD_FUNCTION =
-        new Primitive("%set-method-function", PACKAGE_SYS, false)
+        new Primitive("%set-method-function", PACKAGE_SYS, true,
+                      "method function")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
