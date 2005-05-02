@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.46 2005-04-30 18:35:38 piso Exp $
+;;; $Id: compile-system.lisp,v 1.47 2005-05-02 16:02:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -123,6 +123,7 @@
                                   ;;"coerce.lisp"
                                   ;;"compile-file.lisp"
                                   "compile-file-pathname.lisp"
+                                  "compile-system.lisp"
                                   "compiler-macro.lisp"
                                   ;;"concatenate.lisp"
                                   "cond.lisp"
