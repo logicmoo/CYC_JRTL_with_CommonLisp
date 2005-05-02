@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: fixme.lisp,v 1.29 2005-04-23 16:00:08 piso Exp $
+;;; $Id: fixme.lisp,v 1.30 2005-05-02 16:04:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,10 +58,14 @@
 
 (defun proclaim-ftype (ftype &rest names)
   (dolist (name names)
-    (setf (gethash name *proclaimed-ftypes*) ftype)))
+    (if (symbolp name)
+        (setf (get name 'proclaimed-ftype) ftype)
+        (setf (gethash name *proclaimed-ftypes*) ftype))))
 
 (defun proclaimed-ftype (name)
-  (values (gethash name *proclaimed-ftypes*)))
+  (if (symbolp name)
+      (get name 'proclaimed-ftype)
+      (gethash-2op-1ret name *proclaimed-ftypes*)))
 
 (defun disassemble (fn)
   (%format t "; DISASSEMBLE is not implemented.")
