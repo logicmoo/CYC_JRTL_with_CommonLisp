@@ -1,7 +1,7 @@
 ;;; documentation.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: documentation.lisp,v 1.8 2004-04-15 00:05:45 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: documentation.lisp,v 1.9 2005-05-03 04:29:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,24 +17,29 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
-(defun documentation (symbol type)
-  (case type
-    (FUNCTION
-     (get symbol '%function-documentation))
-    (VARIABLE
-     (get symbol '%variable-documentation))
-    (STRUCTURE
-     (get symbol '%structure-documentation))))
+(export '(function-documentation
+          set-function-documentation
+          variable-documentation
+          set-variable-documentation
+          structure-documentation
+          set-structure-documentation))
 
-(defun %set-documentation (symbol type docstring)
-  (case type
-    (FUNCTION
-     (setf (get symbol '%function-documentation) docstring))
-    (VARIABLE
-     (setf (get symbol '%variable-documentation) docstring))
-    (STRUCTURE
-     (setf (get symbol '%structure-documentation) docstring))))
+(defun function-documentation (symbol)
+  (get symbol 'function-documentation))
 
-(defsetf documentation %set-documentation)
+(defun set-function-documentation (symbol docstring)
+  (setf (get symbol 'function-documentation) docstring))
+
+(defun variable-documentation (symbol)
+  (get symbol 'variable-documentation))
+
+(defun set-variable-documentation (symbol docstring)
+  (setf (get symbol 'variable-documentation) docstring))
+
+(defun structure-documentation (symbol)
+  (get symbol 'structure-documentation))
+
+(defun set-structure-documentation (symbol docstring)
+  (setf (get symbol 'structure-documentation) docstring))

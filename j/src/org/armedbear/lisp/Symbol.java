@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.181 2005-04-08 16:58:36 piso Exp $
+ * $Id: Symbol.java,v 1.182 2005-05-03 04:27:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -522,34 +522,34 @@ public class Symbol extends LispObject
         propertyList = obj;
     }
 
-    private static final Symbol _FUNCTION_DOCUMENTATION =
-        PACKAGE_SYS.intern("%FUNCTION-DOCUMENTATION");
+    private static final Symbol FUNCTION_DOCUMENTATION =
+        PACKAGE_SYS.addExternalSymbol("FUNCTION-DOCUMENTATION");
 
-    private static final Symbol _VARIABLE_DOCUMENTATION =
-        PACKAGE_SYS.intern("%VARIABLE-DOCUMENTATION");
+    private static final Symbol VARIABLE_DOCUMENTATION =
+        PACKAGE_SYS.addExternalSymbol("VARIABLE-DOCUMENTATION");
 
     // Returns null if there is no function documentation.
     public final LispObject getFunctionDocumentation() throws ConditionThrowable
     {
-        return get(this, _FUNCTION_DOCUMENTATION);
+        return get(this, FUNCTION_DOCUMENTATION);
     }
 
     public final void setFunctionDocumentation(String docstring)
         throws ConditionThrowable
     {
-        put(this, _FUNCTION_DOCUMENTATION, new SimpleString(docstring));
+        put(this, FUNCTION_DOCUMENTATION, new SimpleString(docstring));
     }
 
     public final void setFunctionDocumentation(LispObject documentation)
         throws ConditionThrowable
     {
-        put(this, _FUNCTION_DOCUMENTATION, documentation);
+        put(this, FUNCTION_DOCUMENTATION, documentation);
     }
 
     public final void setVariableDocumentation(LispObject documentation)
         throws ConditionThrowable
     {
-        put(this, _VARIABLE_DOCUMENTATION, documentation);
+        put(this, VARIABLE_DOCUMENTATION, documentation);
     }
 
     public String writeToString() throws ConditionThrowable
