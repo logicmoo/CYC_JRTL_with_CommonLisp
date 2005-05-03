@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.83 2005-04-27 19:34:37 piso Exp $
+;;; $Id: compile-file.lisp,v 1.84 2005-05-03 05:40:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -322,7 +322,7 @@
                                (return t)))
                            (setf form (convert-toplevel-form form))
                            (setf form (precompile-form form nil)))))
-                    ((eq first 'ensure-method)
+                    ((eq first 'mop::ensure-method)
                      (setf form (convert-ensure-method form)))
                     (t
                      (setf form (precompile-form form nil)))))))))
