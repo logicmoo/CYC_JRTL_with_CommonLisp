@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.217 2005-04-25 12:22:27 piso Exp $
+;;; $Id: boot.lisp,v 1.218 2005-05-03 01:46:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -131,6 +131,8 @@
 
 (defun make-keyword (symbol)
   (intern (symbol-name symbol) +keyword-package+))
+
+(export 'make-keyword '#:system)
 
 (in-package #:extensions)
 

@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.157 2005-05-02 17:16:37 piso Exp $
+;;; $Id: clos.lisp,v 1.158 2005-05-03 01:45:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
 ;;; protocol as described in "The Art of The Metaobject Protocol",
 ;;; MIT Press, 1991.
 
-(in-package #:system)
+(in-package #:mop)
 
 (defmacro push-on-end (value location)
   `(setf ,location (nconc ,location (list ,value))))
@@ -675,10 +675,6 @@
 (defvar *sgf-classes-to-emf-table-index*
   (slot-location the-class-standard-gf 'classes-to-emf-table))
 
-(defun generic-function-name (gf)
-  (%generic-function-name gf))
-(defsetf generic-function-name %set-generic-function-name)
-
 (defun generic-function-lambda-list (gf)
   (%generic-function-lambda-list gf))
 (defsetf generic-function-lambda-list %set-generic-function-lambda-list)
@@ -697,9 +693,6 @@
   (slot-value gf 'methods))
 (defun (setf generic-function-methods) (new-value gf)
   (setf (slot-value gf 'methods) new-value))
-
-(defsetf generic-function-discriminating-function
-  %set-generic-function-discriminating-function)
 
 (defun generic-function-method-class (gf)
   (slot-value gf 'method-class))
@@ -740,14 +733,6 @@
 (defun method-qualifiers (method) (slot-value method 'qualifiers))
 (defun (setf method-qualifiers) (new-value method)
   (setf (slot-value method 'qualifiers) new-value))
-
-(defun method-specializers (method)
-  (%method-specializers method))
-(defsetf method-specializers %set-method-specializers)
-
-(defun method-generic-function (method)
-  (%method-generic-function method))
-(defsetf method-generic-function %set-method-generic-function)
 
 (defun method-documentation (method)
   (slot-value method 'documentation))
@@ -894,14 +879,15 @@
           gf))))
 
 (defun finalize-generic-function (gf)
-  (setf (generic-function-discriminating-function gf)
-        (funcall (if (eq (class-of gf) the-class-standard-gf)
-                     #'std-compute-discriminating-function
-                     #'compute-discriminating-function)
-                 gf))
+  (%set-generic-function-discriminating-function
+   gf
+   (funcall (if (eq (class-of gf) the-class-standard-gf)
+                #'std-compute-discriminating-function
+                #'compute-discriminating-function)
+            gf))
   ;; FIXME Do we need to warn on redefinition somewhere else?
   (let ((*warn-on-redefinition* nil))
-    (setf (fdefinition (generic-function-name gf)) gf))
+    (setf (fdefinition (%generic-function-name gf)) gf))
   (clrhash (classes-to-emf-table gf))
   (values))
 
@@ -913,7 +899,7 @@
                                                 documentation)
   (declare (ignore generic-function-class))
   (let ((gf (std-allocate-instance the-class-standard-gf)))
-    (setf (generic-function-name gf) name)
+    (%set-generic-function-name gf name)
     (setf (generic-function-lambda-list gf) lambda-list)
     (setf (generic-function-initial-methods gf) ())
     (setf (generic-function-methods gf) ())
@@ -984,7 +970,7 @@
     (when (< (length args) number-required)
       (error 'program-error
              :format-control "Not enough arguments for generic function ~S."
-             :format-arguments (list (generic-function-name gf))))
+             :format-arguments (list (%generic-function-name gf))))
     (subseq args 0 number-required)))
 
 (defun extract-lambda-list (specialized-lambda-list)
@@ -1151,9 +1137,9 @@
   (let ((method (std-allocate-instance the-class-standard-method)))
     (setf (method-lambda-list method) lambda-list)
     (setf (method-qualifiers method) qualifiers)
-    (setf (method-specializers method) (canonicalize-specializers specializers))
+    (%set-method-specializers method (canonicalize-specializers specializers))
     (setf (method-documentation method) documentation)
-    (setf (method-generic-function method) nil)
+    (%set-method-generic-function method nil)
     (%set-method-function method function)
     method))
 
@@ -1164,18 +1150,18 @@
   (%add-method gf method))
 
 (defun %add-method (gf method)
-  (when (method-generic-function method)
+  (when (%method-generic-function method)
     (error 'simple-error
            :format-control "ADD-METHOD: ~S is a method of ~S."
-           :format-arguments (list method (method-generic-function method))))
+           :format-arguments (list method (%method-generic-function method))))
   ;; Remove existing method with same qualifiers and specializers (if any).
   (let ((old-method (%find-method gf (method-qualifiers method)
-                                 (method-specializers method) nil)))
+                                 (%method-specializers method) nil)))
     (when old-method
       (remove-method gf old-method)))
-  (setf (method-generic-function method) gf)
+  (%set-method-generic-function method gf)
   (push method (generic-function-methods gf))
-  (dolist (specializer (method-specializers method))
+  (dolist (specializer (%method-specializers method))
     (when (typep specializer 'class) ;; FIXME What about EQL specializer objects?
       (pushnew method (class-direct-methods specializer))))
   (finalize-generic-function gf)
@@ -1184,8 +1170,8 @@
 (defun remove-method (gf method)
   (setf (generic-function-methods gf)
         (remove method (generic-function-methods gf)))
-  (setf (method-generic-function method) nil)
-  (dolist (specializer (method-specializers method))
+  (%set-method-generic-function method nil)
+  (dolist (specializer (%method-specializers method))
     (when (typep specializer 'class) ;; FIXME What about EQL specializer objects?
       (setf (class-direct-methods specializer)
             (remove method (class-direct-methods specializer)))))
@@ -1207,10 +1193,10 @@
                       (and (equal qualifiers
                                   (method-qualifiers method))
                            (equal canonical-specializers
-                                  (method-specializers method))))
+                                  (%method-specializers method))))
                    (generic-function-methods gf))))
     (if (and (null method) errorp)
-        (error "No such method for ~S." (generic-function-name gf))
+        (error "No such method for ~S." (%generic-function-name gf))
         method)))
 
 (defun subclassp (c1 c2)
@@ -1218,7 +1204,7 @@
 
 (defun methods-contain-eql-specializer-p (methods)
   (dolist (method methods nil)
-    (when (dolist (spec (method-specializers method) nil)
+    (when (dolist (spec (%method-specializers method) nil)
             (when (eql-specializer-p spec) (return t)))
       (return t))))
 
@@ -1249,7 +1235,7 @@
                               (unless (>= (length args) 1)
                                 (error 'program-error
                                        :format-control "Not enough arguments for generic function ~S."
-                                       :format-arguments (list (generic-function-name ,gf))))
+                                       :format-arguments (list (%generic-function-name ,gf))))
                               (let* ((classes (list (class-of (%car args))))
                                      (emfun (gethash-2op-1ret classes ,emf-table)))
                                 (if emfun
@@ -1271,7 +1257,7 @@
                               (unless (>= (length args) 2)
                                 (error 'program-error
                                        :format-control "Not enough arguments for generic function ~S."
-                                       :format-arguments (list (generic-function-name ,gf))))
+                                       :format-arguments (list (%generic-function-name ,gf))))
                               (let* ((classes (list (class-of (%car args)) (class-of (%cadr args))))
                                      (emfun (gethash-2op-1ret classes ,emf-table)))
                                 (if emfun
@@ -1294,7 +1280,7 @@
                               (unless (>= (length args) 3)
                                 (error 'program-error
                                        :format-control "Not enough arguments for generic function ~S."
-                                       :format-arguments (list (generic-function-name ,gf))))
+                                       :format-arguments (list (%generic-function-name ,gf))))
                               (let* ((classes (list (class-of (%car args))
                                                     (class-of (%cadr args))
                                                     (class-of (%caddr args))))
@@ -1309,7 +1295,7 @@
                           (unless (,(if exact '= '>=) (length args) ,number-required)
                             (error 'program-error
                                    :format-control "Not enough arguments for generic function ~S."
-                                   :format-arguments (list (generic-function-name ,gf))))
+                                   :format-arguments (list (%generic-function-name ,gf))))
                           (let ((classes ())
                                 (i 0)
                                 emfun)
@@ -1331,7 +1317,7 @@
     code))
 
 (defun method-applicable-p (method args)
-  (do* ((specializers (method-specializers method) (cdr specializers))
+  (do* ((specializers (%method-specializers method) (cdr specializers))
         (args args (cdr args)))
        ((null specializers) t)
     (let ((specializer (car specializers)))
@@ -1374,8 +1360,8 @@
 
 (defun std-method-more-specific-p (method1 method2 required-classes argument-precedence-order)
   (if argument-precedence-order
-      (let ((specializers-1 (method-specializers method1))
-            (specializers-2 (method-specializers method2)))
+      (let ((specializers-1 (%method-specializers method1))
+            (specializers-2 (%method-specializers method2)))
         (dolist (index argument-precedence-order)
           (let ((spec1 (nth index specializers-1))
                 (spec2 (nth index specializers-2)))
@@ -1387,8 +1373,8 @@
                     (t
                      (return (sub-specializer-p spec1 spec2
                                                 (nth index required-classes)))))))))
-      (do ((specializers-1 (method-specializers method1) (cdr specializers-1))
-           (specializers-2 (method-specializers method2) (cdr specializers-2))
+      (do ((specializers-1 (%method-specializers method1) (cdr specializers-1))
+           (specializers-2 (%method-specializers method2) (cdr specializers-2))
            (classes required-classes (cdr classes)))
           ((null specializers-1) nil)
         (let ((spec1 (car specializers-1))
@@ -1638,7 +1624,7 @@
   (%set-class-name class new-value))
 
 (fmakunbound 'documentation)
-(remf (symbol-plist 'documentation) 'setf-inverse)
+(remf (symbol-plist 'documentation) 'sys::setf-inverse)
 
 (defgeneric documentation (x doc-type))
 
@@ -1647,20 +1633,20 @@
 (defmethod documentation ((x symbol) doc-type)
   (case doc-type
     (FUNCTION
-     (get x '%function-documentation))
+     (get x 'sys::%function-documentation))
     (VARIABLE
-     (get x '%variable-documentation))
+     (get x 'sys::%variable-documentation))
     (STRUCTURE
-     (get x '%structure-documentation))))
+     (get x 'sys::%structure-documentation))))
 
 (defmethod (setf documentation) (new-value (x symbol) doc-type)
   (case doc-type
     (FUNCTION
-     (setf (get x '%function-documentation) new-value))
+     (setf (get x 'sys::%function-documentation) new-value))
     (VARIABLE
-     (setf (get x '%variable-documentation) new-value))
+     (setf (get x 'sys::%variable-documentation) new-value))
     (STRUCTURE
-     (setf (get x '%structure-documentation) new-value))))
+     (setf (get x 'sys::%structure-documentation) new-value))))
 
 (defmethod documentation ((x standard-class) (doc-type (eql 't)))
   (class-documentation x))
@@ -1725,7 +1711,7 @@
 
 (defmethod slot-exists-p-using-class ((class structure-class) instance slot-name)
   (dolist (dsd (class-slots class))
-    (when (eq (dsd-name dsd) slot-name)
+    (when (eq (sys::dsd-name dsd) slot-name)
       (return-from slot-exists-p-using-class t)))
   nil)
 

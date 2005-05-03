@@ -1,8 +1,8 @@
 /*
  * ForwardReferencedClass.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: ForwardReferencedClass.java,v 1.1 2004-11-08 18:20:17 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: ForwardReferencedClass.java,v 1.2 2005-05-03 01:41:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public class ForwardReferencedClass extends LispClass
 
     // ### make-forward-referenced-class
     private static final Primitive MAKE_FORWARD_REFERENCED_CLASS =
-        new Primitive("make-forward-referenced-class", PACKAGE_SYS, false)
+        new Primitive("make-forward-referenced-class", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable

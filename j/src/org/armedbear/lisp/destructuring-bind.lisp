@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.16 2005-04-21 15:52:29 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.17 2005-05-03 01:49:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 ;;;; Adapted from CMUCL/SBCL.
 
 (in-package #:system)
+
+(export '(parse-body))
 
 (defun parse-body (body &optional (doc-string-allowed t))
   (let ((decls ())

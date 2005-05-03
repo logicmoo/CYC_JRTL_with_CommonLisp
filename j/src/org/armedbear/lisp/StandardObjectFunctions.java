@@ -1,8 +1,8 @@
 /*
  * StandardObjectFunctions.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObjectFunctions.java,v 1.3 2005-05-01 00:42:12 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: StandardObjectFunctions.java,v 1.4 2005-05-03 01:48:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public class StandardObjectFunctions extends Lisp
 {
     // ### std-instance-layout
     private static final Primitive STD_INSTANCE_LAYOUT =
-        new Primitive("std-instance-layout", PACKAGE_SYS, false)
+        new Primitive("std-instance-layout", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -40,7 +40,7 @@ public class StandardObjectFunctions extends Lisp
 
     // ### %set-std-instance-layout
     private static final Primitive _SET_STD_INSTANCE_LAYOUT =
-        new Primitive("%set-std-instance-layout", PACKAGE_SYS, false)
+        new Primitive("%set-std-instance-layout", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -62,7 +62,7 @@ public class StandardObjectFunctions extends Lisp
 
     // ### std-instance-class
     private static final Primitive STD_INSTANCE_CLASS =
-        new Primitive("std-instance-class", PACKAGE_SYS, false)
+        new Primitive("std-instance-class", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -74,7 +74,7 @@ public class StandardObjectFunctions extends Lisp
 
     // ### std-instance-slots
     private static final Primitive STD_INSTANCE_SLOTS =
-        new Primitive("std-instance-slots", PACKAGE_SYS, false)
+        new Primitive("std-instance-slots", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -86,7 +86,7 @@ public class StandardObjectFunctions extends Lisp
 
     // ### %set-std-instance-slots
     private static final Primitive _SET_STD_INSTANCE_SLOTS =
-        new Primitive("%set-std-instance-slots", PACKAGE_SYS, false)
+        new Primitive("%set-std-instance-slots", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -121,7 +121,7 @@ public class StandardObjectFunctions extends Lisp
 
     // ### %set-standard-instance-access instance location new-value => new-value
     private static final Primitive _SET_STANDARD_INSTANCE_ACCESS =
-        new Primitive("%set-standard-instance-access", PACKAGE_SYS, false)
+        new Primitive("%set-standard-instance-access", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -140,7 +140,7 @@ public class StandardObjectFunctions extends Lisp
 
     // ### std-slot-boundp
     private static final Primitive STD_SLOT_BOUNDP =
-        new Primitive("std-slot-boundp", PACKAGE_SYS, false,
+        new Primitive("std-slot-boundp", PACKAGE_SYS, true,
                       "instance slot-name")
     {
         public LispObject execute(LispObject first, LispObject second)
@@ -179,7 +179,7 @@ public class StandardObjectFunctions extends Lisp
 
     // ### std-slot-value
     private static final Primitive STD_SLOT_VALUE =
-        new Primitive("std-slot-value", PACKAGE_SYS, false,
+        new Primitive("std-slot-value", PACKAGE_SYS, true,
                       "instance slot-name")
     {
         public LispObject execute(LispObject first, LispObject second)
@@ -218,7 +218,7 @@ public class StandardObjectFunctions extends Lisp
 
     // ### %set-std-slot-value
     private static final Primitive _SET_STD_SLOT_VALUE =
-        new Primitive("%set-std-slot-value", PACKAGE_SYS, false,
+        new Primitive("%set-std-slot-value", PACKAGE_SYS, true,
                       "instance slot-name new-value")
     {
         public LispObject execute(LispObject first, LispObject second,
@@ -258,7 +258,8 @@ public class StandardObjectFunctions extends Lisp
 
     // ### allocate-slot-storage size initial-value
     private static final Primitive ALLOCATE_SLOT_STORAGE =
-        new Primitive("allocate-slot-storage", PACKAGE_SYS, false)
+        new Primitive("allocate-slot-storage", PACKAGE_SYS, true,
+                      "size initial-value")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -276,7 +277,8 @@ public class StandardObjectFunctions extends Lisp
 
     // ### allocate-std-instance class slots => instance
     private static final Primitive ALLOCATE_STD_INSTANCE =
-        new Primitive("allocate-std-instance", PACKAGE_SYS, false)
+        new Primitive("allocate-std-instance", PACKAGE_SYS, true,
+                      "class slots")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.12 2005-05-01 23:45:04 piso Exp $
+ * $Id: Layout.java,v 1.13 2005-05-03 01:50:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,7 +83,7 @@ public final class Layout extends LispObject
 
     // ### make-layout
     private static final Primitive MAKE_LAYOUT =
-        new Primitive("make-layout", PACKAGE_SYS, false,
+        new Primitive("make-layout", PACKAGE_SYS, true,
                       "class instance-slots class-slots")
     {
         public LispObject execute(LispObject first, LispObject second,
@@ -103,7 +103,7 @@ public final class Layout extends LispObject
 
     // ### layout-class
     private static final Primitive LAYOUT_CLASS =
-        new Primitive("layout-class", PACKAGE_SYS, false)
+        new Primitive("layout-class", PACKAGE_SYS, true, "layout")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -118,7 +118,7 @@ public final class Layout extends LispObject
 
     // ### layout-length
     private static final Primitive LAYOUT_LENGTH =
-        new Primitive("layout-length", PACKAGE_SYS, false)
+        new Primitive("layout-length", PACKAGE_SYS, true, "layout")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -163,7 +163,7 @@ public final class Layout extends LispObject
     // ### layout-slot-index
     // layout-slot-index layout slot-name => index
     private static final Primitive LAYOUT_SLOT_INDEX =
-        new Primitive("layout-slot-index", PACKAGE_SYS, false)
+        new Primitive("layout-slot-index", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -186,7 +186,7 @@ public final class Layout extends LispObject
     // ### layout-slot-location
     // layout-slot-location layout slot-name => location
     private static final Primitive LAYOUT_SLOT_LOCATION =
-        new Primitive("layout-slot-location", PACKAGE_SYS, false)
+        new Primitive("layout-slot-location", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

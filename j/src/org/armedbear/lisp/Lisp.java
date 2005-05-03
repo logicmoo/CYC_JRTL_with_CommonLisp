@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.343 2005-04-24 23:40:46 piso Exp $
+ * $Id: Lisp.java,v 1.344 2005-05-03 01:42:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,8 @@ public abstract class Lisp
         Packages.createPackage("KEYWORD", 1024);
     public static final Package PACKAGE_SYS =
         Packages.createPackage("SYSTEM");
+    public static final Package PACKAGE_MOP =
+        Packages.createPackage("MOP");
     public static final Package PACKAGE_TPL =
         Packages.createPackage("TOP-LEVEL");
     public static final Package PACKAGE_EXT =
@@ -73,6 +75,9 @@ public abstract class Lisp
             PACKAGE_SYS.addNickname("SYS");
             PACKAGE_SYS.usePackage(PACKAGE_CL);
             PACKAGE_SYS.usePackage(PACKAGE_EXT);
+            PACKAGE_MOP.usePackage(PACKAGE_CL);
+            PACKAGE_MOP.usePackage(PACKAGE_EXT);
+            PACKAGE_MOP.usePackage(PACKAGE_SYS);
             PACKAGE_TPL.addNickname("TPL");
             PACKAGE_TPL.usePackage(PACKAGE_CL);
             PACKAGE_TPL.usePackage(PACKAGE_EXT);
@@ -2037,7 +2042,7 @@ public abstract class Lisp
     };
 
     public static final Symbol _SLOT_UNBOUND_ =
-        internConstant("+SLOT-UNBOUND+", PACKAGE_SYS, UNBOUND_VALUE);
+        exportConstant("+SLOT-UNBOUND+", PACKAGE_SYS, UNBOUND_VALUE);
 
     public static final Symbol _CL_PACKAGE_ =
         exportConstant("+CL-PACKAGE+", PACKAGE_SYS, PACKAGE_CL);

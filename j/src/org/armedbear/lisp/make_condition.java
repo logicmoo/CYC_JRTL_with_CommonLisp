@@ -2,7 +2,7 @@
  * make_condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: make_condition.java,v 1.18 2005-01-31 12:37:06 piso Exp $
+ * $Id: make_condition.java,v 1.19 2005-05-03 01:49:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public final class make_condition extends Primitive
 {
     private make_condition()
     {
-        super("%make-condition", PACKAGE_SYS, false);
+        super("%make-condition", PACKAGE_SYS, true);
     }
 
     // ### %make-condition

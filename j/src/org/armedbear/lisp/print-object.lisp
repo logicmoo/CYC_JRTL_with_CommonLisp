@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: print-object.lisp,v 1.8 2005-02-21 16:38:05 piso Exp $
+;;; $Id: print-object.lisp,v 1.9 2005-05-03 01:43:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -48,18 +48,18 @@
   (print-unreadable-object (gf stream :identity t)
     (format stream "~S ~S"
             (class-name (class-of gf))
-            (generic-function-name gf)))
+            (%generic-function-name gf)))
   gf)
 
 (defmethod print-object ((method standard-method) stream)
   (print-unreadable-object (method stream :identity t)
     (format stream "~S ~S~{ ~S~} ~S"
             (class-name (class-of method))
-            (generic-function-name
-             (method-generic-function method))
+            (%generic-function-name
+             (%method-generic-function method))
             (method-qualifiers method)
             (mapcar #'class-name
-                    (method-specializers method))))
+                    (%method-specializers method))))
   method)
 
 (defmethod print-object ((restart restart) stream)

@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.450 2005-04-30 21:57:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.451 2005-05-03 01:46:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1204,7 +1204,7 @@
                 ext:classp
                 ext:fixnump
                 ext:memql
-                sys::generic-function-name
+                sys:%generic-function-name
                 sys::puthash
                 precompiler::precompile1
                 declare
@@ -6614,7 +6614,7 @@
     (let ((gf (and (fboundp sym) (fdefinition sym))))
       (when (typep gf 'generic-function)
         (unless (compiled-function-p gf)
-          (sys::finalize-generic-function gf))))))
+          (mop::finalize-generic-function gf))))))
 
 (finalize-generic-functions)
 

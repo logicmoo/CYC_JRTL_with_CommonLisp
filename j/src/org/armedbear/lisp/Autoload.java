@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.223 2005-04-05 15:27:22 piso Exp $
+ * $Id: Autoload.java,v 1.224 2005-05-03 01:44:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -466,14 +466,19 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%%string=", "StringFunctions");
         autoload(PACKAGE_SYS, "%adjust-array", "adjust_array");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
+        autoload(PACKAGE_SYS, "%generic-function-lambda-list", "GenericFunction", true);
+        autoload(PACKAGE_SYS, "%generic-function-name", "GenericFunction", true);
         autoload(PACKAGE_SYS, "%make-array", "make_array");
-        autoload(PACKAGE_SYS, "%make-condition", "make_condition");
+        autoload(PACKAGE_SYS, "%make-condition", "make_condition", true);
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTableFunctions");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTableFunctions");
         autoload(PACKAGE_SYS, "%make-server-socket", "make_server_socket");
         autoload(PACKAGE_SYS, "%make-socket", "make_socket");
         autoload(PACKAGE_SYS, "%make-string", "StringFunctions");
         autoload(PACKAGE_SYS, "%make-string-output-stream", "StringOutputStream");
+        autoload(PACKAGE_SYS, "%method-function", "Method", true);
+        autoload(PACKAGE_SYS, "%method-generic-function", "Method", true);
+        autoload(PACKAGE_SYS, "%method-specializers", "Method", true);
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
@@ -481,13 +486,22 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%server-socket-close", "server_socket_close");
         autoload(PACKAGE_SYS, "%set-arglist", "arglist");
         autoload(PACKAGE_SYS, "%set-char", "StringFunctions");
-        autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass");
-        autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
+        autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass", true);
+        autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass", true);
         autoload(PACKAGE_SYS, "%set-function-info", "function_info");
-        autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
+        autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction", true);
+        autoload(PACKAGE_SYS, "%set-generic-function-lambda-list", "GenericFunction", true);
+        autoload(PACKAGE_SYS, "%set-generic-function-name", "GenericFunction", true);
+        autoload(PACKAGE_SYS, "%set-gf-required-args", "GenericFunction", true);
         autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
+        autoload(PACKAGE_SYS, "%set-method-function", "Method", true);
+        autoload(PACKAGE_SYS, "%set-method-generic-function", "Method", true);
+        autoload(PACKAGE_SYS, "%set-method-specializers", "Method", true);
         autoload(PACKAGE_SYS, "%set-schar", "StringFunctions");
-        autoload(PACKAGE_SYS, "%set-std-slot-value", "StandardObjectFunctions");
+        autoload(PACKAGE_SYS, "%set-standard-instance-access", "StandardObjectFunctions", true);
+        autoload(PACKAGE_SYS, "%set-std-instance-layout", "StandardObjectFunctions", true);
+        autoload(PACKAGE_SYS, "%set-std-instance-slots", "StandardObjectFunctions", true);
+        autoload(PACKAGE_SYS, "%set-std-slot-value", "StandardObjectFunctions", true);
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-and", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-andc1", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-andc2", "SimpleBitVector");
@@ -533,21 +547,22 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "float-nan-p", "FloatFunctions");
         autoload(PACKAGE_SYS, "float-string", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "function-info", "function_info");
-        autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction");
+        autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction", true);
         autoload(PACKAGE_SYS, "get-function-info-value", "function_info");
+        autoload(PACKAGE_SYS, "gf-required-args", "GenericFunction", true);
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
-        autoload(PACKAGE_SYS, "layout-class", "Layout");
-        autoload(PACKAGE_SYS, "layout-length", "Layout");
-        autoload(PACKAGE_SYS, "layout-slot-index", "Layout");
-        autoload(PACKAGE_SYS, "layout-slot-location", "Layout");
+        autoload(PACKAGE_SYS, "layout-class", "Layout", true);
+        autoload(PACKAGE_SYS, "layout-length", "Layout", true);
+        autoload(PACKAGE_SYS, "layout-slot-index", "Layout", true);
+        autoload(PACKAGE_SYS, "layout-slot-location", "Layout", true);
         autoload(PACKAGE_SYS, "make-case-frob-stream", "CaseFrobStream");
         autoload(PACKAGE_SYS, "make-double-float", "FloatFunctions");
         autoload(PACKAGE_SYS, "make-file-stream", "FileStream");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
-        autoload(PACKAGE_SYS, "make-forward-referenced-class", "ForwardReferencedClass");
+        autoload(PACKAGE_SYS, "make-forward-referenced-class", "ForwardReferencedClass", true);
         autoload(PACKAGE_SYS, "make-instance-standard-class", "StandardClass");
-        autoload(PACKAGE_SYS, "make-layout", "Layout");
+        autoload(PACKAGE_SYS, "make-layout", "Layout", true);
         autoload(PACKAGE_SYS, "make-structure-class", "StructureClass");
         autoload(PACKAGE_SYS, "make-symbol-macro", "SymbolMacro");
         autoload(PACKAGE_SYS, "psxhash", "HashTableFunctions");
@@ -556,8 +571,9 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "set-function-info-value", "function_info");
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
         autoload(PACKAGE_SYS, "standard-instance-access", "StandardObjectFunctions", true);
-        autoload(PACKAGE_SYS, "std-instance-slots", "StandardObjectFunctions");
-        autoload(PACKAGE_SYS, "std-slot-boundp", "StandardObjectFunctions");
-        autoload(PACKAGE_SYS, "std-slot-value", "StandardObjectFunctions");
+        autoload(PACKAGE_SYS, "std-instance-layout", "StandardObjectFunctions", true);
+        autoload(PACKAGE_SYS, "std-instance-slots", "StandardObjectFunctions", true);
+        autoload(PACKAGE_SYS, "std-slot-boundp", "StandardObjectFunctions", true);
+        autoload(PACKAGE_SYS, "std-slot-value", "StandardObjectFunctions", true);
     }
 }

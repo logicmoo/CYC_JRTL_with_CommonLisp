@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: GenericFunction.java,v 1.20 2005-04-29 23:30:49 piso Exp $
+ * $Id: GenericFunction.java,v 1.21 2005-05-03 01:41:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,7 +178,7 @@ public final class GenericFunction extends StandardObject
 
     // ### %generic-function-lambda-list
     private static final Primitive _GENERIC_FUNCTION_LAMBDA_LIST =
-        new Primitive("%generic-function-lambda-list", PACKAGE_SYS, false)
+        new Primitive("%generic-function-lambda-list", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -193,7 +193,7 @@ public final class GenericFunction extends StandardObject
 
     // ### %set-generic-function-lambdaList
     private static final Primitive _SET_GENERIC_FUNCTION_LAMBDA_LIST =
-        new Primitive("%set-generic-function-lambda-list", PACKAGE_SYS, false)
+        new Primitive("%set-generic-function-lambda-list", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -210,7 +210,7 @@ public final class GenericFunction extends StandardObject
 
     // ### %generic-function-name
     private static final Primitive _GENERIC_FUNCTION_NAME =
-        new Primitive("%generic-function-name", PACKAGE_SYS, false)
+        new Primitive("%generic-function-name", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -225,7 +225,7 @@ public final class GenericFunction extends StandardObject
 
     // ### %set-generic-function-name
     private static final Primitive _SET_GENERIC_FUNCTION_NAME =
-        new Primitive("%set-generic-function-name", PACKAGE_SYS, false)
+        new Primitive("%set-generic-function-name", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -242,7 +242,7 @@ public final class GenericFunction extends StandardObject
 
     // ### generic-function-discriminating-function
     private static final Primitive GENERIC_FUNCTION_DISCRIMINATING_FUNCTION =
-        new Primitive("generic-function-discriminating-function", PACKAGE_SYS, false)
+        new Primitive("generic-function-discriminating-function", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -257,7 +257,7 @@ public final class GenericFunction extends StandardObject
 
     // ### %set-generic-function-discriminating-function
     private static final Primitive _SET_GENERIC_FUNCTION_DISCRIMINATING_FUNCTION =
-        new Primitive("%set-generic-function-discriminating-function", PACKAGE_SYS, false)
+        new Primitive("%set-generic-function-discriminating-function", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -274,7 +274,7 @@ public final class GenericFunction extends StandardObject
 
     // ### gf-required-args
     private static final Primitive GF_REQUIRED_ARGS =
-        new Primitive("gf-required-args", PACKAGE_SYS, false)
+        new Primitive("gf-required-args", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -289,7 +289,7 @@ public final class GenericFunction extends StandardObject
 
     // ### %set-gf-required-args
     private static final Primitive _SET_GF_REQUIRED_ARGS =
-        new Primitive("%set-gf-required-args", PACKAGE_SYS, false)
+        new Primitive("%set-gf-required-args", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

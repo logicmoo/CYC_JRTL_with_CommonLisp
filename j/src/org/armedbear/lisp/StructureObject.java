@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.47 2005-03-25 03:19:39 piso Exp $
+ * $Id: StructureObject.java,v 1.48 2005-05-03 01:48:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -269,7 +269,7 @@ public final class StructureObject extends LispObject
     // ### %make-structure
     // %make-structure name slot-values => object
     private static final Primitive _MAKE_STRUCTURE =
-        new Primitive("%make-structure", PACKAGE_SYS, false)
+        new Primitive("%make-structure", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

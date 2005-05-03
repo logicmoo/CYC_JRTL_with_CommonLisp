@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: profiler.lisp,v 1.16 2005-05-02 17:15:34 piso Exp $
+;;; $Id: profiler.lisp,v 1.17 2005-05-03 01:43:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@
               (unless (zerop count)
                 (cond ((typep definition 'generic-function)
                        (push (make-profile-info definition count) result)
-                       (dolist (method (sys::generic-function-methods definition))
+                       (dolist (method (mop::generic-function-methods definition))
                          (setf count (sys:call-count (sys:%method-function method)))
                          (unless (zerop count)
                            (push (make-profile-info method count) result))))
@@ -62,11 +62,11 @@
   (cond ((symbolp object)
          object)
         ((typep object 'generic-function)
-         (sys::generic-function-name object))
+         (sys:%generic-function-name object))
         ((typep object 'method)
          (list 'METHOD
-               (sys::generic-function-name (sys::method-generic-function object))
-               (sys::method-specializers object)))))
+               (sys:%generic-function-name (sys:%method-generic-function object))
+               (sys:%method-specializers object)))))
 
 (defun object-compiled-function-p (object)
   (cond ((symbolp object)
