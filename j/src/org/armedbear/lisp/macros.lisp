@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: macros.lisp,v 1.29 2005-02-10 01:50:46 piso Exp $
+;;; $Id: macros.lisp,v 1.30 2005-05-03 23:20:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -83,7 +83,7 @@
       (push (list 'setq (car l) sym) forms))))
 
 (defmacro time (form)
-  `(sys::%time #'(lambda () ,form)))
+  `(%time #'(lambda () ,form)))
 
 (defmacro with-open-stream (&rest args)
   (let ((var (caar args))
