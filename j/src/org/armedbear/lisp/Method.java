@@ -2,7 +2,7 @@
  * Method.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: Method.java,v 1.9 2005-05-03 01:51:05 piso Exp $
+ * $Id: Method.java,v 1.10 2005-05-04 04:08:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ public final class Method extends StandardObject
 {
     private LispObject genericFunction;
     private LispObject function;
+    private LispObject fastFunction;
     private LispObject specializers;
 
     public Method(LispClass cls, SimpleVector slots)
@@ -50,6 +51,16 @@ public final class Method extends StandardObject
     public void setFunction(LispObject function)
     {
         this.function = function;
+    }
+
+    public LispObject getFastFunction()
+    {
+        return fastFunction;
+    }
+
+    public void setFastFunction(LispObject fastFunction)
+    {
+        this.fastFunction = fastFunction;
     }
 
     public LispObject getSpecializers()
@@ -125,7 +136,7 @@ public final class Method extends StandardObject
     };
 
     // ### %method-function
-    private static final Primitive METHOD_FUNCTION =
+    private static final Primitive _METHOD_FUNCTION =
         new Primitive("%method-function", PACKAGE_SYS, true, "method")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -149,6 +160,39 @@ public final class Method extends StandardObject
         {
             try {
                 ((Method)first).setFunction(second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.METHOD));
+            }
+        }
+    };
+
+    // ### %method-fast-function
+    private static final Primitive _METHOD_FAST_FUNCTION =
+        new Primitive("%method-fast-function", PACKAGE_SYS, true, "method")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((Method)arg).getFastFunction();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.METHOD));
+            }
+        }
+    };
+
+    // ### %set-method-fast-function
+    private static final Primitive _SET_METHOD_FAST_FUNCTION =
+        new Primitive("%set-method-fast-function", PACKAGE_SYS, true,
+                      "method fast-function")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((Method)first).setFastFunction(second);
                 return second;
             }
             catch (ClassCastException e) {
