@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.159 2005-05-03 04:28:49 piso Exp $
+;;; $Id: clos.lisp,v 1.160 2005-05-04 12:36:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -948,11 +948,13 @@
       (ecase parse-state
         (:qualifiers
          (if (and (atom arg) (not (null arg)))
-             (push-on-end arg qualifiers)
+             (push arg qualifiers)
              (progn
                (setf specialized-lambda-list arg)
                (setf parse-state :body))))
-        (:body (push-on-end arg body))))
+        (:body (push arg body))))
+    (setf qualifiers (nreverse qualifiers)
+          body (nreverse body))
     (multiple-value-bind (real-body declarations documentation)
         (parse-body body)
       (values function-name
@@ -1401,8 +1403,8 @@
 
 (defun std-compute-effective-method-function (gf methods)
   (let* ((mc (generic-function-method-combination gf))
-         (mc-name (if (atom mc) mc (car mc)))
-         (options (if (atom mc) '() (cdr mc)))
+         (mc-name (if (atom mc) mc (%car mc)))
+         (options (if (atom mc) '() (%cdr mc)))
          (order (car options))
          (primaries '())
          (arounds '())
