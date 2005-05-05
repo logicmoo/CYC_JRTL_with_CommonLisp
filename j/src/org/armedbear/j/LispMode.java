@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.95 2005-05-02 01:08:39 piso Exp $
+ * $Id: LispMode.java,v 1.96 2005-05-05 11:33:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -469,7 +469,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 }
                 return buffer.getCol(pos) + indentSize;
             }
-            if (token.equals("handler-case") || token.equals("unwind-protect")) {
+            if (token.equals("handler-case") || token.equals("restart-case") ||
+                token.equals("unwind-protect")) {
                 Position p1 = forwardSexp(posFirst);
                 if (p1 != null) {
                     // Skip whitespace to get to opening '(' of form to be
@@ -488,17 +489,22 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 Utilities.isOneOf(token, elispSpecials) ||
                 token.startsWith("with-"))
                 return buffer.getCol(pos) + indentSize;
-            // Check for enclosing FLET/LABELS.
+            // Check enclosing sexp.
             Position up = findContainingSexp(pos);
             if (up != null) {
+                Position p1 = downList(up);
+                if (p1 != null) {
+                    String s = gatherToken(p1);
+                    if (s.equals("restart-case"))
+                        return buffer.getCol(up) + indentSize * 2;
+                }
                 up = findContainingSexp(up);
                 if (up != null) {
                     up = downList(up);
                     if (up != null) {
                         String s = gatherToken(up);
-                        if (s.equals("flet") || s.equals("labels")) {
+                        if (s.equals("flet") || s.equals("labels"))
                             return buffer.getCol(pos) + indentSize;
-                        }
                     }
                 }
             }
