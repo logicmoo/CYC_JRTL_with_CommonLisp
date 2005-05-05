@@ -1,8 +1,8 @@
 /*
  * probe_file.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: probe_file.java,v 1.14 2004-11-03 15:39:02 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: probe_file.java,v 1.15 2005-05-05 14:36:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@
 package org.armedbear.lisp;
 
 import java.io.File;
-import java.io.IOException;
 
 public final class probe_file extends Lisp
 {
@@ -57,7 +56,7 @@ public final class probe_file extends Lisp
         {
             Pathname pathname = Pathname.coerceToPathname(arg);
             if (pathname.isWild())
-                signal(new FileError("Bad place for a wild pathname."));
+                signal(new FileError("Bad place for a wild pathname.", pathname));
             File file = Utilities.getFile(pathname);
             return file.isDirectory() ? Utilities.getDirectoryPathname(file) : NIL;
         }
@@ -72,7 +71,7 @@ public final class probe_file extends Lisp
         {
             Pathname pathname = Pathname.coerceToPathname(arg);
             if (pathname.isWild())
-                signal(new FileError("Bad place for a wild pathname."));
+                signal(new FileError("Bad place for a wild pathname.", pathname));
             File file = Utilities.getFile(pathname);
             return file.isDirectory() ? T : NIL;
         }

@@ -1,8 +1,8 @@
 /*
  * file_write_date.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: file_write_date.java,v 1.3 2004-11-03 15:39:02 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: file_write_date.java,v 1.4 2005-05-05 14:34:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class file_write_date extends Primitive
     {
         Pathname pathname = Pathname.coerceToPathname(arg);
         if (pathname.isWild())
-            signal(new FileError("Bad place for a wild pathname."));
+            signal(new FileError("Bad place for a wild pathname.", pathname));
         File file = Utilities.getFile(pathname);
         long lastModified = file.lastModified();
         if (lastModified == 0)
