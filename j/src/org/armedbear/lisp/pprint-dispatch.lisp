@@ -1,7 +1,7 @@
 ;;; pprint-dispatch.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint-dispatch.lisp,v 1.2 2004-10-04 16:33:50 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: pprint-dispatch.lisp,v 1.3 2005-05-05 15:49:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,6 +65,7 @@
 (defun copy-pprint-dispatch (&optional (table *print-pprint-dispatch*))
   (unless table
     (setf table *ipd*))
+  (sys::require-type table 'pprint-dispatch-table)
   (let* ((new-conses-with-cars
           (make-hash-table :test #'eq
                            :size (max (hash-table-count (conses-with-cars table)) 32)))
