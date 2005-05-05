@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.345 2005-05-05 14:36:38 piso Exp $
+ * $Id: Lisp.java,v 1.346 2005-05-05 16:16:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1023,43 +1023,64 @@ public abstract class Lisp
     public static final Stream checkCharacterInputStream(LispObject obj)
         throws ConditionThrowable
     {
-        if (obj instanceof Stream)
-            if (((Stream)obj).isCharacterInputStream())
-                return (Stream) obj;
         if (obj == null)
             throw new NullPointerException();
-        signal(new TypeError("The value " + obj.writeToString() +
-                             " is not a character input stream."));
-        // Not reached.
-        return null;
+        try {
+            final Stream stream = (Stream) obj;
+            if (stream.isCharacterInputStream())
+                return stream;
+            signal(new TypeError("The value " + obj.writeToString() +
+                                 " is not a character input stream."));
+            // Not reached.
+            return null;
+        }
+        catch (ClassCastException e) {
+            signal(new TypeError(obj, Symbol.STREAM));
+            // Not reached.
+            return null;
+        }
     }
 
     public static final Stream checkCharacterOutputStream(LispObject obj)
         throws ConditionThrowable
     {
-        if (obj instanceof Stream)
-            if (((Stream)obj).isCharacterOutputStream())
-                return (Stream) obj;
         if (obj == null)
             throw new NullPointerException();
-        signal(new TypeError("The value " + obj.writeToString() +
-                             " is not a character output stream."));
-        // Not reached.
-        return null;
+        try {
+            final Stream stream = (Stream) obj;
+            if (stream.isCharacterOutputStream())
+                return stream;
+            signal(new TypeError("The value " + obj.writeToString() +
+                                 " is not a character output stream."));
+            // Not reached.
+            return null;
+        }
+        catch (ClassCastException e) {
+            signal(new TypeError(obj, Symbol.STREAM));
+            // Not reached.
+            return null;
+        }
     }
 
     public static final Stream checkBinaryInputStream(LispObject obj)
         throws ConditionThrowable
     {
-        if (obj instanceof Stream)
-            if (((Stream)obj).isBinaryInputStream())
-                return (Stream) obj;
         if (obj == null)
             throw new NullPointerException();
-        signal(new TypeError("The value " + obj.writeToString() +
-                             " is not a binary input stream."));
-        // Not reached.
-        return null;
+        try {
+            final Stream stream = (Stream) obj;
+            if (stream.isBinaryInputStream())
+                return stream;
+            signal(new TypeError("The value " + obj.writeToString() +
+                                 " is not a binary input stream."));
+            // Not reached.
+            return null;
+        }
+        catch (ClassCastException e) {
+            signal(new TypeError(obj, Symbol.STREAM));
+            // Not reached.
+            return null;
+        }
     }
 
     public static final Stream inSynonymOf(LispObject obj)
@@ -1077,7 +1098,8 @@ public abstract class Lisp
             }
             if (stream.isCharacterInputStream())
                 return stream;
-        }
+        } else
+            signal(new TypeError(obj, Symbol.STREAM));
         signal(new TypeError("The value " + obj.writeToString() +
                              " is not a character input stream."));
         // Not reached.
@@ -1099,7 +1121,8 @@ public abstract class Lisp
             }
             if (stream.isCharacterOutputStream())
                 return stream;
-        }
+        } else
+            signal(new TypeError(obj, Symbol.STREAM));
         signal(new TypeError("The value " + obj.writeToString() +
                              " is not a character output stream."));
         // Not reached.
