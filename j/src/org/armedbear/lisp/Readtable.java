@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Readtable.java,v 1.41 2005-02-06 19:36:54 piso Exp $
+ * $Id: Readtable.java,v 1.42 2005-05-05 15:14:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,7 +197,7 @@ public final class Readtable extends LispObject
         }
     }
 
-    public void checkInvalid(char c) throws ConditionThrowable
+    public void checkInvalid(char c, Stream stream) throws ConditionThrowable
     {
         // "... no mechanism is provided for changing the constituent trait of
         // a character." (2.1.4.2)
@@ -208,7 +208,7 @@ public final class Readtable extends LispObject
                 sb.append(" #\\");
                 sb.append(name);
             }
-            signal(new ReaderError(sb.toString()));
+            signal(new ReaderError(sb.toString(), stream));
         }
     }
 

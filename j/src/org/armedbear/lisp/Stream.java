@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.120 2005-04-09 04:41:38 piso Exp $
+ * $Id: Stream.java,v 1.121 2005-05-05 15:15:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -329,7 +329,8 @@ public class Stream extends LispObject
             LispClass c = LispClass.findClass(structure);
             if (!(c instanceof StructureClass))
                 return signal(new ReaderError(structure.getName() +
-                                              " is not a defined structure type."));
+                                              " is not a defined structure type.",
+                                              this));
             LispObject args = obj.cdr();
             Symbol DEFSTRUCT_DEFAULT_CONSTRUCTOR =
                 PACKAGE_SYS.intern("DEFSTRUCT-DEFAULT-CONSTRUCTOR");
@@ -338,7 +339,8 @@ public class Stream extends LispObject
             final int length = args.length();
             if ((length % 2) != 0)
                 return signal(new ReaderError("Odd number of keyword arguments following #S: " +
-                                              obj.writeToString()));
+                                              obj.writeToString(),
+                                              this));
             LispObject[] array = new LispObject[length];
             LispObject rest = args;
             for (int i = 0; i < length; i += 2) {
@@ -355,7 +357,8 @@ public class Stream extends LispObject
                            thread);
         }
         return signal(new ReaderError("Non-list following #S: " +
-                                      obj.writeToString()));
+                                      obj.writeToString(),
+                                      this));
     }
 
     public LispObject readList(boolean requireProper) throws ConditionThrowable
@@ -377,7 +380,8 @@ public class Stream extends LispObject
                         if (_READ_SUPPRESS_.symbolValue() != NIL)
                             return NIL;
                         else
-                            return signal(new ReaderError("Nothing appears before . in list."));
+                            return signal(new ReaderError("Nothing appears before . in list.",
+                                                          this));
                     }
                     _unreadChar(nextChar);
                     LispObject obj = read(true, NIL, true);
@@ -385,7 +389,8 @@ public class Stream extends LispObject
                         if (!obj.listp())
                             signal(new ReaderError("The value " +
                                                    obj.writeToString() +
-                                                   " is not of type LIST."));
+                                                   " is not of type LIST.",
+                                                   this));
                     }
                     last.setCdr(obj);
                     continue;
@@ -456,8 +461,8 @@ public class Stream extends LispObject
             thread.clearValues();
             return result;
         }
-        return signal(new ReaderError("No dispatch function defined for #\\" +
-                                      c));
+        return signal(new ReaderError("No dispatch function defined for #\\" + c,
+                                      this));
     }
 
     public LispObject readCharacterLiteral() throws ConditionThrowable
@@ -522,13 +527,14 @@ public class Stream extends LispObject
             return NIL;
         switch (rank) {
             case -1:
-                return signal(new ReaderError("No dimensions argument to #A."));
+                return signal(new ReaderError("No dimensions argument to #A.", this));
             case 0:
                 return new ZeroRankArray(T, obj, false);
             case 1: {
                 if (obj.listp() || obj instanceof AbstractVector)
                     return new SimpleVector(obj);
-                return signal(new ReaderError(obj.writeToString() + " is not a sequence."));
+                return signal(new ReaderError(obj.writeToString() + " is not a sequence.",
+                                              this));
             }
             default:
                 return new SimpleArray_T(rank, obj);
@@ -559,7 +565,7 @@ public class Stream extends LispObject
         }
         sb.append(": #C");
         sb.append(obj.writeToString());
-        return signal(new ReaderError(sb.toString()));
+        return signal(new ReaderError(sb.toString(), this));
     }
 
     private String readMultipleEscape(Readtable rt) throws ConditionThrowable
@@ -658,7 +664,7 @@ public class Stream extends LispObject
                             message = "Too many dots.";
                         else
                             message = "Dot context error.";
-                        return signal(new ReaderError(message));
+                        return signal(new ReaderError(message, this));
                     }
                 }
                 final int radix = getReadBase(thread);
@@ -700,11 +706,13 @@ public class Stream extends LispObject
                 if (pkg.findInternalSymbol(symbolName) != null)
                     return signal(new ReaderError("The symbol \"" + symbolName +
                                                   "\" is not external in package " +
-                                                  packageName + '.'));
+                                                  packageName + '.',
+                                                  this));
                 else
                     return signal(new ReaderError("The symbol \"" + symbolName +
                                                   "\" was not found in package " +
-                                                  packageName + '.'));
+                                                  packageName + '.',
+                                                  this));
             }
         }
         // Intern token in current package.
@@ -737,7 +745,7 @@ public class Stream extends LispObject
                 for (int i = sb.length(); i-- > 0;)
                     flags.set(i);
             } else if (rt.isInvalid(c)) {
-                rt.checkInvalid(c); // Signals a reader-error.
+                rt.checkInvalid(c, this); // Signals a reader-error.
             } else if (readtableCase == Keyword.UPCASE) {
                 sb.setCharAt(0, Utilities.toUpperCase(c));
             } else if (readtableCase == Keyword.DOWNCASE) {
@@ -758,7 +766,7 @@ public class Stream extends LispObject
                 _unreadChar(c);
                 break;
             }
-            rt.checkInvalid(c);
+            rt.checkInvalid(c, this);
             if (syntaxType == Readtable.SYNTAX_TYPE_SINGLE_ESCAPE) {
                 n = _readChar();
                 if (n < 0)
@@ -849,9 +857,7 @@ public class Stream extends LispObject
         return readBase;
     }
 
-    private static final LispObject makeNumber(String token,
-                                               int length,
-                                               int radix)
+    private final LispObject makeNumber(String token, int length, int radix)
         throws ConditionThrowable
     {
         if (length == 0)
@@ -901,7 +907,7 @@ public class Stream extends LispObject
         return null;
     }
 
-    private static final LispObject makeRatio(String token, int radix)
+    private final LispObject makeRatio(String token, int radix)
         throws ConditionThrowable
     {
         final int index = token.indexOf('/');
@@ -916,7 +922,7 @@ public class Stream extends LispObject
             // signal a READER-ERROR, as required by ANSI, instead of DIVISION-
             // BY-ZERO.
             if (denominator.signum() == 0)
-                signal(new ReaderError("Division by zero."));
+                signal(new ReaderError("Division by zero.", this));
             return number(numerator, denominator);
         }
         catch (NumberFormatException e) {
@@ -1002,7 +1008,7 @@ public class Stream extends LispObject
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         if (escaped)
-            return signal(new ReaderError("Illegal syntax for number."));
+            return signal(new ReaderError("Illegal syntax for number.", this));
         String s = sb.toString();
         if (s.indexOf('/') >= 0)
             return makeRatio(s, radix);

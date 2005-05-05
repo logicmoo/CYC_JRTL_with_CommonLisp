@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.36 2005-02-07 15:48:50 piso Exp $
+ * $Id: LispReader.java,v 1.37 2005-05-05 15:15:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,7 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char ignored)
             throws ConditionThrowable
         {
-            return signal(new ReaderError("Unmatched right parenthesis."));
+            return signal(new ReaderError("Unmatched right parenthesis.", stream));
         }
     };
 
@@ -198,7 +198,8 @@ public final class LispReader extends Lisp
                         String name = LispCharacter.charToName(c);
                         if (name == null)
                             name = "#\\" + c;
-                        signal(new ReaderError("Illegal element for bit-vector: " + name));
+                        signal(new ReaderError("Illegal element for bit-vector: " + name,
+                                               stream));
                     }
                 }
             }
@@ -209,8 +210,9 @@ public final class LispReader extends Lisp
                 final int length = sb.length();
                 if (length == 0) {
                     if (n > 0)
-                        return signal(new ReaderError("No element specified for bit vector of length "
-                                                      + n + '.'));
+                        return signal(new ReaderError("No element specified for bit vector of length " +
+                                                      n + '.',
+                                                      stream));
                 }
                 if (n > length) {
                     final char c = sb.charAt(length - 1);
@@ -218,7 +220,8 @@ public final class LispReader extends Lisp
                         sb.append(c);
                 } else if (n < length) {
                     return signal(new ReaderError("Bit vector is longer than specified length: #" +
-                                                  n + '*' + sb.toString()));
+                                                  n + '*' + sb.toString(),
+                                                  stream));
                 }
             }
             return new SimpleBitVector(sb.toString());
@@ -234,7 +237,8 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             if (_READ_EVAL_.symbolValueNoThrow() == NIL)
-                return signal(new ReaderError("Can't read #. when *READ-EVAL* is NIL."));
+                return signal(new ReaderError("Can't read #. when *READ-EVAL* is NIL.",
+                                              stream));
             else
                 return eval(stream.read(true, NIL, true),
                             new Environment(),
@@ -402,7 +406,7 @@ public final class LispReader extends Lisp
                 sb.append(s);
             else
                 sb.append(c);
-            return signal(new ReaderError(sb.toString()));
+            return signal(new ReaderError(sb.toString(), stream));
         }
     };
 }
