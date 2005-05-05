@@ -1,8 +1,8 @@
 /*
  * create_new_file.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: create_new_file.java,v 1.3 2004-11-03 15:39:02 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: create_new_file.java,v 1.4 2005-05-05 14:25:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,8 @@ public final class create_new_file extends Primitive
         Pathname pathname = Pathname.coerceToPathname(arg);
         String namestring = pathname.getNamestring();
         if (namestring == null)
-            signal(new SimpleError("Pathname has no namestring: " + pathname));
+            signal(new FileError("Pathname has no namestring: " + pathname.writeToString(),
+                                 pathname));
         try {
             return new File(namestring).createNewFile() ? T : NIL;
         }

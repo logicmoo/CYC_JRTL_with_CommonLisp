@@ -1,8 +1,8 @@
 /*
  * ShellCommand.java
  *
- * Copyright (C) 2000-2004 Peter Graves
- * $Id: ShellCommand.java,v 1.2 2004-02-23 00:09:55 piso Exp $
+ * Copyright (C) 2000-2005 Peter Graves
+ * $Id: ShellCommand.java,v 1.3 2005-05-05 14:22:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -233,8 +233,8 @@ public final class ShellCommand extends Lisp implements Runnable
                 Pathname pathname = Pathname.coerceToPathname(directory);
                 namestring = pathname.getNamestring();
                 if (namestring == null) {
-                    return signal(new SimpleError("Pathname has no namestring: " +
-                                                  pathname));
+                    return signal(new FileError("Pathname has no namestring: " + pathname.writeToString(),
+                                                pathname));
                 }
             }
             if (output != NIL)

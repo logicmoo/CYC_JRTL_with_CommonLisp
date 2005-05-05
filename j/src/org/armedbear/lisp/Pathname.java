@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.75 2005-04-13 16:27:33 piso Exp $
+ * $Id: Pathname.java,v 1.76 2005-05-05 14:20:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -254,6 +254,8 @@ public class Pathname extends LispObject
         }
         if (directory instanceof AbstractString)
             Debug.assertTrue(false);
+        if (!validateDirectory(directory, false))
+            return null;
         StringBuffer sb = new StringBuffer(getDirectoryNamestring());
         if (name instanceof AbstractString)
             sb.append(name.getStringValue());
@@ -303,8 +305,8 @@ public class Pathname extends LispObject
             else if (part == Keyword.RELATIVE)
                 ;
             else
-                signal(new LispError("Unsupported directory component " +
-                                     part.writeToString() + "."));
+                signal(new FileError("Unsupported directory component " + part.writeToString() + ".",
+                                     this));
             temp = temp.cdr();
             while (temp != NIL) {
                 part = temp.car();
@@ -315,8 +317,8 @@ public class Pathname extends LispObject
                 else if (part == Keyword.UP)
                     sb.append("..");
                 else
-                    signal(new LispError("Unsupported directory component " +
-                                         part.writeToString() + "."));
+                    signal(new FileError("Unsupported directory component " + part.writeToString() + ".",
+                                         this));
                 sb.append(separatorChar);
                 temp = temp.cdr();
             }
@@ -423,7 +425,11 @@ public class Pathname extends LispObject
             StringBuffer sb = new StringBuffer("#P");
             boolean printReadably = (_PRINT_READABLY_.symbolValue() != NIL);
             boolean useNamestring;
-            String s = getNamestring();
+            String s = null;
+            try {
+                s = getNamestring();
+            }
+            catch (Throwable t) {}
             if (s != null) {
                 useNamestring = true;
                 if (printReadably) {
@@ -671,7 +677,7 @@ public class Pathname extends LispObject
                 else if (value == Keyword.WILD)
                     p.directory = list2(Keyword.ABSOLUTE, Keyword.WILD);
                 else
-                    p.directory = validateDirectory(value);
+                    p.directory = value;
             } else if (key == Keyword.NAME) {
                 p.name = value;
                 nameSupplied = true;
@@ -699,7 +705,8 @@ public class Pathname extends LispObject
         return p;
     }
 
-    private static final LispObject validateDirectory(LispObject obj)
+    private static final boolean validateDirectory(LispObject obj,
+                                                   boolean signalError)
         throws ConditionThrowable
     {
         LispObject temp = obj;
@@ -709,16 +716,19 @@ public class Pathname extends LispObject
             if (first == Keyword.ABSOLUTE || first == Keyword.WILD_INFERIORS) {
                 LispObject second = temp.car();
                 if (second == Keyword.UP || second == Keyword.BACK) {
-                    StringBuffer sb = new StringBuffer();
-                    sb.append(first.writeToString());
-                    sb.append(" may not be followed immediately by ");
-                    sb.append(second.writeToString());
-                    sb.append('.');
-                    return signal(new FileError(sb.toString()));
+                    if (signalError) {
+                        StringBuffer sb = new StringBuffer();
+                        sb.append(first.writeToString());
+                        sb.append(" may not be followed immediately by ");
+                        sb.append(second.writeToString());
+                        sb.append('.');
+                        signal(new FileError(sb.toString()));
+                    }
+                    return false;
                 }
             }
         }
-        return obj;
+        return true;
     }
 
     // ### pathnamep
@@ -794,8 +804,8 @@ public class Pathname extends LispObject
                         }
                     }
                     catch (IOException e) {
-                        return signal(new FileError("Unable to list directory " +
-                                                    pathname.writeToString() + "."));
+                        return signal(new FileError("Unable to list directory " + pathname.writeToString() + ".",
+                                                    pathname));
                     }
                 }
             }
@@ -1028,7 +1038,7 @@ public class Pathname extends LispObject
             final Pathname filespec = (Pathname) truename(first, true);
             Pathname newName = coerceToPathname(second);
             if (newName.isWild())
-                signal(new FileError("Bad place for a wild pathname."));
+                signal(new FileError("Bad place for a wild pathname.", newName));
             newName = mergePathnames(newName, filespec, NIL);
             File source = new File(filespec.getNamestring());
             File destination = new File(newName.getNamestring());
