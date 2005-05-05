@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: open.lisp,v 1.20 2005-04-30 20:02:36 piso Exp $
+;;; $Id: open.lisp,v 1.21 2005-05-05 13:38:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -118,6 +118,7 @@
          (:error
           (unless (probe-file pathname)
             (error 'file-error
+                   :pathname pathname
                    :format-control "The file ~S does not exist."
                    :format-arguments (list (truename pathname))))))
        (make-file-stream pathname element-type :input nil))
@@ -126,6 +127,7 @@
          (:error
           (unless (probe-file pathname)
             (error 'file-error
+                   :pathname pathname
                    :format-control "The file ~S does not exist."
                    :format-arguments (list (truename pathname)))))
          (:create
@@ -140,6 +142,7 @@
          (:error
           (unless (probe-file pathname)
             (error 'file-error
+                   :pathname pathname
                    :format-control "The file ~S does not exist."
                    :format-arguments (list (truename pathname)))))
          ((nil)
@@ -149,6 +152,7 @@
          (:error
           (when (probe-file pathname)
             (error 'file-error
+                   :pathname pathname
                    :format-control "The file ~S already exists."
                    :format-arguments (list (truename pathname)))))
          ((nil)
@@ -159,12 +163,14 @@
             ;; Make sure the original file is not a directory.
             (when (probe-directory pathname)
               (error 'file-error
+                     :pathname pathname
                      :format-control "The file ~S is a directory."
                      :format-arguments (list (truename pathname))))
             (let ((backup-name (concatenate 'string (namestring pathname) ".bak")))
               (when (probe-file backup-name)
                 (when (probe-directory backup-name)
                   (error 'file-error
+                         :pathname pathname
                          :format-control "Unable to rename ~S."
                          :format-arguments (list (truename pathname))))
                 (delete-file backup-name))
@@ -177,6 +183,7 @@
        (let ((stream (make-file-stream pathname element-type direction if-exists)))
          (unless stream
            (error 'file-error
+                  :pathname pathname
                   :format-control "Unable to open ~S."
                   :format-arguments (list (truename pathname))))
          stream))
