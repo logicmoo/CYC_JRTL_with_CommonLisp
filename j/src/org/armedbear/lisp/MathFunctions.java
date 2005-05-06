@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.18 2005-04-16 14:58:41 piso Exp $
+ * $Id: MathFunctions.java,v 1.19 2005-05-06 12:41:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,12 +176,18 @@ public final class MathFunctions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return atan(arg);
+            if (arg.numberp())
+                return atan(arg);
+            return signal(new TypeError(arg, Symbol.NUMBER));
         }
 
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
+            if (!first.realp())
+                return signal(new TypeError(first, Symbol.REAL));
+            if (!second.realp())
+                return signal(new TypeError(second, Symbol.REAL));
             return atan(first.divideBy(second));
         }
     };
