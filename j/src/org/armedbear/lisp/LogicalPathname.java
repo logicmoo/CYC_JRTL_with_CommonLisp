@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LogicalPathname.java,v 1.6 2004-11-03 15:39:01 piso Exp $
+ * $Id: LogicalPathname.java,v 1.7 2005-05-06 20:13:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,8 +112,9 @@ public final class LogicalPathname extends Pathname
             }
             if (arg instanceof Stream)
                 return NIL;
-            return signal(new TypeError(String.valueOf(arg) +
-                                        " is not a string, stream, or logical pathname."));
+            return signal(new TypeError(arg,
+                                        list4(Symbol.OR, Symbol.LOGICAL_PATHNAME,
+                                              Symbol.STRING, Symbol.STREAM)));
         }
     };
 }
