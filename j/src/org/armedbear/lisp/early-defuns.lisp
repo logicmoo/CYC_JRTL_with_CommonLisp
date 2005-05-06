@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.25 2005-05-05 15:47:50 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.26 2005-05-06 13:24:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,12 +20,13 @@
 (in-package #:system)
 
 (defun require-type (arg type)
-  (unless (typep arg type)
-    (error 'simple-type-error
-           :datum arg
-           :expected-type type
-           :format-control "The value ~S is not of type ~A."
-           :format-arguments (list arg type))))
+  (if (typep arg type)
+      arg
+      (error 'simple-type-error
+             :datum arg
+             :expected-type type
+             :format-control "The value ~S is not of type ~A."
+             :format-arguments (list arg type))))
 
 (defun normalize-type (type)
   (cond ((symbolp type)
