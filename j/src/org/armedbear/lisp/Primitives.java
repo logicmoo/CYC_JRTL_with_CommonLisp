@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.771 2005-05-03 01:42:22 piso Exp $
+ * $Id: Primitives.java,v 1.772 2005-05-06 12:22:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -765,13 +765,22 @@ public final class Primitives extends Lisp
         {
             if (arg instanceof Symbol)
                 return arg.getSymbolFunction() != null ? T : NIL;
-            if (arg instanceof Cons && arg.car() == Symbol.SETF) {
-                LispObject f =
-                    get(checkSymbol(arg.cadr()), Symbol._SETF_FUNCTION);
-                return f != null ? T : NIL;
+            if (arg instanceof Cons) {
+                if (arg.car() == Symbol.SETF &&
+                    arg.cdr() instanceof Cons &&
+                    arg.cadr() != NIL &&
+                    arg.cddr() == NIL)
+                {
+                    LispObject f =
+                        get(checkSymbol(arg.cadr()), Symbol._SETF_FUNCTION);
+                    return f != null ? T : NIL;
+                }
             }
-            signal(new TypeError("The value " + arg.writeToString() +
-                                 " is not a valid function name."));
+            signal(new TypeError(arg, list3(Symbol.OR,
+                                            Symbol.SYMBOL,
+                                            list3(Symbol.CONS,
+                                                  list2(Symbol.EQL, Symbol.SETF),
+                                                  list3(Symbol.CONS, Symbol.SYMBOL, Symbol.NULL)))));
             return NIL;
         }
     };
