@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.121 2005-05-05 15:15:56 piso Exp $
+ * $Id: Stream.java,v 1.122 2005-05-06 12:53:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1213,7 +1213,7 @@ public class Stream extends LispObject
 
     public LispObject fileLength() throws ConditionThrowable
     {
-        return signal(new TypeError("Stream is not associated with a file."));
+        return signal(new TypeError(this, Symbol.FILE_STREAM));
     }
 
     public LispObject fileStringLength(LispObject arg) throws ConditionThrowable
