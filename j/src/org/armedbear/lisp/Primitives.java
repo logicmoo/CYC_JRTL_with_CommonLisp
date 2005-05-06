@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.774 2005-05-06 12:57:00 piso Exp $
+ * $Id: Primitives.java,v 1.775 2005-05-06 13:50:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -776,16 +776,15 @@ public final class Primitives extends Lisp
                     return f != null ? T : NIL;
                 }
             }
-            signal(new TypeError(arg, list3(Symbol.OR,
-                                            Symbol.SYMBOL,
-                                            list3(Symbol.CONS,
-                                                  list2(Symbol.EQL, Symbol.SETF),
-                                                  list3(Symbol.CONS, Symbol.SYMBOL, Symbol.NULL)))));
-            return NIL;
+            return signal(new TypeError(arg, list3(Symbol.OR,
+                                                   Symbol.SYMBOL,
+                                                   list3(Symbol.CONS,
+                                                         list2(Symbol.EQL, Symbol.SETF),
+                                                         list3(Symbol.CONS, Symbol.SYMBOL, Symbol.NULL)))));
         }
     };
 
-    // ### fmakunbound
+    // ### fmakunbound name => name
     private static final Primitive FMAKUNBOUND =
         new Primitive("fmakunbound", "name")
     {
@@ -793,12 +792,23 @@ public final class Primitives extends Lisp
         {
             if (arg instanceof Symbol) {
                 ((Symbol)arg).setSymbolFunction(null);
-            } else if (arg instanceof Cons && arg.car() == Symbol.SETF) {
-                remprop(checkSymbol(arg.cadr()), Symbol._SETF_FUNCTION);
-            } else
-                signal(new TypeError("The value " + arg.writeToString() +
-                                     " is not a valid function name."));
-            return arg;
+                return arg;
+            }
+            if (arg instanceof Cons) {
+                if (arg.car() == Symbol.SETF &&
+                    arg.cdr() instanceof Cons &&
+                    arg.cadr() != NIL &&
+                    arg.cddr() == NIL)
+                {
+                    remprop(checkSymbol(arg.cadr()), Symbol._SETF_FUNCTION);
+                    return arg;
+                }
+            }
+            return signal(new TypeError(arg, list3(Symbol.OR,
+                                                   Symbol.SYMBOL,
+                                                   list3(Symbol.CONS,
+                                                         list2(Symbol.EQL, Symbol.SETF),
+                                                         list3(Symbol.CONS, Symbol.SYMBOL, Symbol.NULL)))));
         }
     };
 
@@ -3644,7 +3654,8 @@ public final class Primitives extends Lisp
                 out = ((TwoWayStream)arg).getOutputStream();
             else if (stream.isOutputStream())
                 out = stream;
-        }
+        } else
+            return signal(new TypeError(arg, Symbol.STREAM));
         if (out == null)
             signal(new TypeError("The value " + arg.writeToString() +
                                  " is not an output stream."));
@@ -3795,7 +3806,7 @@ public final class Primitives extends Lisp
                 return _TERMINAL_IO_.symbolValue();
             if (arg == NIL)
                 return _STANDARD_OUTPUT_.symbolValue();
-            return signal(new TypeError(arg, Symbol.STREAM));
+            return arg;
         }
     };
 
