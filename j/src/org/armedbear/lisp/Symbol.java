@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.182 2005-05-03 04:27:36 piso Exp $
+ * $Id: Symbol.java,v 1.183 2005-05-06 23:40:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,7 @@ public class Symbol extends LispObject
     public static final Symbol LET                                = PACKAGE_CL.addExternalSymbol("LET");
     public static final Symbol LOAD                               = PACKAGE_CL.addExternalSymbol("LOAD");
     public static final Symbol OTHERWISE                          = PACKAGE_CL.addExternalSymbol("OTHERWISE");
+    public static final Symbol OUTPUT_STREAM_P                    = PACKAGE_CL.addExternalSymbol("OUTPUT-STREAM-P");
     public static final Symbol QUOTE                              = PACKAGE_CL.addExternalSymbol("QUOTE");
     public static final Symbol SETF                               = PACKAGE_CL.addExternalSymbol("SETF");
     public static final Symbol SIGNAL                             = PACKAGE_CL.addExternalSymbol("SIGNAL");
@@ -107,6 +108,7 @@ public class Symbol extends LispObject
     public static final Symbol REAL                               = PACKAGE_CL.addExternalSymbol("REAL");
     public static final Symbol READTABLE                          = PACKAGE_CL.addExternalSymbol("READTABLE");
     public static final Symbol RESTART                            = PACKAGE_CL.addExternalSymbol("RESTART");
+    public static final Symbol SATISFIES                          = PACKAGE_CL.addExternalSymbol("SATISFIES");
     public static final Symbol SEQUENCE                           = PACKAGE_CL.addExternalSymbol("SEQUENCE");
     public static final Symbol SHORT_FLOAT                        = PACKAGE_CL.addExternalSymbol("SHORT-FLOAT");
     public static final Symbol SIGNED_BYTE                        = PACKAGE_CL.addExternalSymbol("SIGNED-BYTE");
