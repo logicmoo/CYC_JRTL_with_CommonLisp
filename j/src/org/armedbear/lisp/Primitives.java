@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.773 2005-05-06 12:42:04 piso Exp $
+ * $Id: Primitives.java,v 1.774 2005-05-06 12:57:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3795,7 +3795,7 @@ public final class Primitives extends Lisp
                 return _TERMINAL_IO_.symbolValue();
             if (arg == NIL)
                 return _STANDARD_OUTPUT_.symbolValue();
-            return arg;
+            return signal(new TypeError(arg, Symbol.STREAM));
         }
     };
 
