@@ -1,7 +1,7 @@
 ;;; ldiff.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: ldiff.lisp,v 1.2 2004-03-31 00:21:58 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: ldiff.lisp,v 1.3 2005-05-06 12:36:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,13 +17,12 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+;;; Adapted from SBCL.
 
-;;; LDIFF (from SBCL)
+(in-package #:system)
 
 (defun ldiff (list object)
-  (unless (listp list)
-    (error 'type-error))
+  (require-type list 'list)
   (do* ((list list (cdr list))
 	(result (list ()))
 	(splice result))
