@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.76 2005-05-05 14:20:57 piso Exp $
+ * $Id: Pathname.java,v 1.77 2005-05-06 17:13:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -533,6 +533,7 @@ public class Pathname extends LispObject
                                             Keyword.LOCAL)));
     }
 
+    // ### %pathname-host
     private static final Primitive _PATHNAME_HOST =
         new Primitive("%pathname-host", PACKAGE_SYS, false)
     {
@@ -544,6 +545,7 @@ public class Pathname extends LispObject
         }
     };
 
+    // ### %pathname-device
     private static final Primitive _PATHNAME_DEVICE =
         new Primitive("%pathname-device", PACKAGE_SYS, false)
     {
@@ -555,6 +557,7 @@ public class Pathname extends LispObject
         }
     };
 
+    // ### %pathname-directory
     private static final Primitive _PATHNAME_DIRECTORY =
         new Primitive("%pathname-directory", PACKAGE_SYS, false)
     {
@@ -566,6 +569,7 @@ public class Pathname extends LispObject
         }
     };
 
+    // ### %pathname-name
     private static final Primitive _PATHNAME_NAME =
         new Primitive("%pathname-name", PACKAGE_SYS, false)
     {
@@ -577,6 +581,7 @@ public class Pathname extends LispObject
         }
     };
 
+    // ### %pathname-type
     private static final Primitive _PATHNAME_TYPE =
         new Primitive("%pathname-type", PACKAGE_SYS, false)
     {
@@ -588,6 +593,7 @@ public class Pathname extends LispObject
         }
     };
 
+    // ### pathname-version
     private static final Primitive PATHNAME_VERSION =
         new Primitive("pathname-version", "pathname")
     {
