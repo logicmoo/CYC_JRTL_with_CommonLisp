@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.772 2005-05-06 12:22:10 piso Exp $
+ * $Id: Primitives.java,v 1.773 2005-05-06 12:42:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2596,11 +2596,12 @@ public final class Primitives extends Lisp
                     sb.append(n.toString()); // Decimal representation.
                     return new Symbol(new SimpleString(sb));
                 }
-            } else if (arg instanceof AbstractString) {
+            } else if (arg instanceof AbstractString)
                 return gensym(arg.getStringValue());
-            }
-            return signal(new TypeError("The value " + arg.writeToString() +
-                                        " is not a string or non-negative integer."));
+            return signal(new TypeError(arg,
+                                        list3(Symbol.OR,
+                                              Symbol.STRING,
+                                              Symbol.UNSIGNED_BYTE)));
         }
     };
 
