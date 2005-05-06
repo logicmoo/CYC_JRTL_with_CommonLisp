@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.77 2005-05-06 17:13:00 piso Exp $
+ * $Id: Pathname.java,v 1.78 2005-05-06 20:12:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -382,43 +382,6 @@ public class Pathname extends LispObject
                  version.sxhash()) & 0x7fffffff);
     }
 
-    private boolean matches(Pathname wildcard) throws ConditionThrowable
-    {
-        if (Utilities.isPlatformWindows()) {
-            if (wildcard.device != Keyword.WILD) {
-                if (!device.equalp(wildcard.device))
-                    return false;
-            }
-            if (wildcard.name != Keyword.WILD) {
-                if (!name.equalp(wildcard.name))
-                    return false;
-            }
-            if (wildcard.directory != Keyword.WILD) {
-                if (!directory.equalp(wildcard.directory))
-                    return false;
-            }
-            if (wildcard.type != Keyword.WILD) {
-                if (!type.equalp(wildcard.type))
-                    return false;
-            }
-        } else {
-            // Unix.
-            if (wildcard.name != Keyword.WILD) {
-                if (!name.equal(wildcard.name))
-                    return false;
-            }
-            if (wildcard.directory != Keyword.WILD) {
-                if (!directory.equal(wildcard.directory))
-                    return false;
-            }
-            if (wildcard.type != Keyword.WILD) {
-                if (!type.equal(wildcard.type))
-                    return false;
-            }
-        }
-        return true;
-    }
-
     public String writeToString() throws ConditionThrowable
     {
         try {
@@ -513,14 +476,16 @@ public class Pathname extends LispObject
     public static Pathname coerceToPathname(LispObject arg)
         throws ConditionThrowable
     {
+        if (arg instanceof LogicalPathname)
+            signal(new LispError("Bad place for a logical pathname."));
         if (arg instanceof Pathname)
             return (Pathname) arg;
         if (arg instanceof AbstractString)
             return new Pathname(arg.getStringValue());
         if (arg instanceof FileStream)
             return ((FileStream)arg).getPathname();
-        signal(new TypeError(arg.writeToString() +
-                             " cannot be converted to a pathname."));
+        signal(new TypeError(arg, list4(Symbol.OR, Symbol.PATHNAME,
+                                        Symbol.STRING, Symbol.FILE_STREAM)));
         // Not reached.
         return null;
     }
@@ -781,9 +746,49 @@ public class Pathname extends LispObject
         {
             Pathname pathname = coerceToPathname(first);
             Pathname wildcard = coerceToPathname(second);
+            if (pathname instanceof LogicalPathname || wildcard instanceof LogicalPathname)
+                signal(new LispError("Bad place for a logical pathname."));
             return pathname.matches(wildcard) ? T : NIL;
         }
     };
+
+    // ""Missing components of wildcard default to :WILD."
+    private boolean matches(Pathname wildcard) throws ConditionThrowable
+    {
+        if (Utilities.isPlatformWindows()) {
+            if (wildcard.device != Keyword.WILD && wildcard.device != NIL) {
+                if (!device.equalp(wildcard.device))
+                    return false;
+            }
+            if (wildcard.name != Keyword.WILD && wildcard.name != NIL) {
+                if (!name.equalp(wildcard.name))
+                    return false;
+            }
+            if (wildcard.directory != Keyword.WILD && wildcard.directory != NIL) {
+                if (!directory.equalp(wildcard.directory))
+                    return false;
+            }
+            if (wildcard.type != Keyword.WILD && wildcard.type != NIL) {
+                if (!type.equalp(wildcard.type))
+                    return false;
+            }
+        } else {
+            // Unix.
+            if (wildcard.name != Keyword.WILD && wildcard.name != NIL) {
+                if (!name.equal(wildcard.name))
+                    return false;
+            }
+            if (wildcard.directory != Keyword.WILD && wildcard.directory != NIL) {
+                if (!directory.equal(wildcard.directory))
+                    return false;
+            }
+            if (wildcard.type != Keyword.WILD && wildcard.type != NIL) {
+                if (!type.equal(wildcard.type))
+                    return false;
+            }
+        }
+        return true;
+    }
 
     // ### list-directory
     private static final Primitive LIST_DIRECTORY =
@@ -879,6 +884,7 @@ public class Pathname extends LispObject
         }
     };
 
+    // ### merge-pathnames
     private static final Primitive MERGE_PATHNAMES =
         new Primitive("merge-pathnames",
                       "pathname &optional default-pathname default-version")
@@ -917,7 +923,7 @@ public class Pathname extends LispObject
                                                 LispObject defaultVersion)
         throws ConditionThrowable
     {
-        if (pathname instanceof LogicalPathname)
+        if (pathname instanceof LogicalPathname || defaultPathname instanceof LogicalPathname)
             signal(new LispError("Bad place for a logical pathname."));
         Pathname p = new Pathname();
         if (pathname.host != NIL)
