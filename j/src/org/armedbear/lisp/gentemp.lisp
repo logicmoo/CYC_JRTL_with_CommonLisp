@@ -1,7 +1,7 @@
 ;;; gentemp.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: gentemp.lisp,v 1.1 2003-10-07 17:21:07 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: gentemp.lisp,v 1.2 2005-05-06 12:33:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,12 +19,13 @@
 
 ;;; Adapted from CMUCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defvar *gentemp-counter* 0)
 
 (defun gentemp (&optional (prefix "T") (package *package*))
   (require-type prefix 'string)
+  (require-type package '(or package string symbol character))
   (loop
     (let ((name (format nil "~A~D" prefix (incf *gentemp-counter*))))
       (multiple-value-bind (symbol exists-p) (find-symbol name package)
