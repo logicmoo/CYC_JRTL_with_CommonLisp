@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: typep.lisp,v 1.27 2005-04-23 18:58:26 piso Exp $
+;;; $Id: typep.lisp,v 1.28 2005-05-06 23:29:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,6 +152,12 @@
       (EQL
        (eql object (car i)))
       (SATISFIES
+       (unless (symbolp (car i))
+         (error 'simple-type-error
+                :datum (car i)
+                :expected-type 'symbol
+                :format-control "The SATISFIES predicate name is not a symbol: ~S"
+                :format-arguments (list (car i))))
        (funcall (car i) object))
       (NIL-VECTOR
        (and (simple-typep object 'nil-vector)
