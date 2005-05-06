@@ -1,8 +1,8 @@
 /*
  * BroadcastStream.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: BroadcastStream.java,v 1.11 2004-12-07 19:27:37 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: BroadcastStream.java,v 1.12 2005-05-06 23:39:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,10 +204,11 @@ public final class BroadcastStream extends Stream
                     if (((Stream)args[i]).isOutputStream()) {
                         streams[i] = (Stream) args[i];
                         continue;
-                    }
-                }
-                signal(new TypeError(String.valueOf(args[i]) +
-                                     " is not an output stream."));
+                    } else
+                        return signal(new TypeError(args[i], list2(Symbol.SATISFIES,
+                                                                   Symbol.OUTPUT_STREAM_P)));
+                } else
+                    return signal(new TypeError(args[i], Symbol.STREAM));
             }
             // All is well.
             return new BroadcastStream(streams);
