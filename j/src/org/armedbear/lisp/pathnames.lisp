@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.6 2005-05-06 17:21:35 piso Exp $
+;;; $Id: pathnames.lisp,v 1.7 2005-05-06 20:14:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,28 +20,19 @@
 (in-package #:system)
 
 (defun pathname-host (pathname &key (case :local))
-  (require-type-pathname-designator pathname)
   (%pathname-host pathname case))
 
 (defun pathname-device (pathname &key (case :local))
-  (require-type-pathname-designator pathname)
   (%pathname-device pathname case))
 
 (defun pathname-directory (pathname &key (case :local))
-  (require-type-pathname-designator pathname)
   (%pathname-directory pathname case))
 
 (defun pathname-name (pathname &key (case :local))
-  (require-type-pathname-designator pathname)
   (%pathname-name pathname case))
 
 (defun pathname-type (pathname &key (case :local))
-  (require-type-pathname-designator pathname)
   (%pathname-type pathname case))
 
 (defun wild-pathname-p (pathname &optional field-key)
-  (require-type-pathname-designator pathname)
   (%wild-pathname-p pathname field-key))
-
-(defun require-type-pathname-designator (pathname)
-  (require-type pathname '(or pathname string file-stream)))
