@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.6 2005-04-23 16:02:37 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.7 2005-05-06 13:24:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -67,11 +67,16 @@
 (defun fdefinition (name)
   (cond ((symbolp name)
          (symbol-function name))
-        ((and (consp name) (eq (%car name) 'SETF))
+        ((and (consp name)
+              (eq (%car name) 'SETF)
+              (consp (%cdr name))
+              (cadr name)
+              (null (cddr name))
+              (require-type (cadr name) 'symbol))
          (or (get (cadr name) '%setf-function)
              (error 'undefined-function :name name)))
         (t
-         (error 'type-error "~S is not a valid function name." name))))
+         (require-type name '(or symbol (cons (eql setf) (cons symbol null)))))))
 
 (defun %set-fdefinition (name function)
   (fset name function))
