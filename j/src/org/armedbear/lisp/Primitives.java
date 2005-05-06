@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.775 2005-05-06 13:50:06 piso Exp $
+ * $Id: Primitives.java,v 1.776 2005-05-06 23:51:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4278,7 +4278,6 @@ public final class Primitives extends Lisp
     };
 
     // ### nreconc
-    // Adapted from CLISP.
     private static final Primitive NRECONC =
         new Primitive("nreconc", "list tail")
     {
@@ -4309,8 +4308,10 @@ public final class Primitives extends Lisp
                 } else
                     signal(new TypeError(list3, Symbol.LIST));
                 return list;
-            } else
+            } else if (list == NIL)
                 return obj;
+            else
+                return signal(new TypeError(list, Symbol.LIST));
         }
     };
 
