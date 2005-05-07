@@ -2,7 +2,7 @@
  * StandardObjectFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObjectFunctions.java,v 1.5 2005-05-07 15:24:41 piso Exp $
+ * $Id: StandardObjectFunctions.java,v 1.6 2005-05-07 18:54:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,293 +23,36 @@ package org.armedbear.lisp;
 
 public class StandardObjectFunctions extends Lisp
 {
-    // ### std-instance-layout
-    private static final Primitive STD_INSTANCE_LAYOUT =
-        new Primitive("std-instance-layout", PACKAGE_SYS, true)
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return ((StandardObject)arg).getInstanceLayout();
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_OBJECT));
-            }
-        }
-    };
-
-    // ### %set-std-instance-layout
-    private static final Primitive _SET_STD_INSTANCE_LAYOUT =
-        new Primitive("%set-std-instance-layout", PACKAGE_SYS, true)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            try {
-                ((StandardObject)first).layout = (Layout) second;
-                return second;
-            }
-            catch (ClassCastException e) {
-                if (!(first instanceof StandardObject))
-                    return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
-                if (!(second instanceof Layout))
-                    return signal(new TypeError(second, "layout"));
-                // Not reached.
-                return NIL;
-            }
-        }
-    };
-
-    // ### std-instance-class
-    private static final Primitive STD_INSTANCE_CLASS =
-        new Primitive("std-instance-class", PACKAGE_SYS, true)
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            if (arg instanceof StandardObject)
-                return ((StandardObject)arg).layout.getLispClass();
-            return signal(new TypeError(arg, Symbol.STANDARD_OBJECT));
-        }
-    };
-
-    // ### std-instance-slots
-    private static final Primitive STD_INSTANCE_SLOTS =
-        new Primitive("std-instance-slots", PACKAGE_SYS, true)
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            if (arg instanceof StandardObject)
-                return ((StandardObject)arg).slots;
-            return signal(new TypeError(arg, Symbol.STANDARD_OBJECT));
-        }
-    };
-
-    // ### %set-std-instance-slots
-    private static final Primitive _SET_STD_INSTANCE_SLOTS =
-        new Primitive("%set-std-instance-slots", PACKAGE_SYS, true)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            if (first instanceof StandardObject) {
-                if (second instanceof SimpleVector) {
-                    ((StandardObject)first).slots = (SimpleVector) second;
-                    return second;
-                }
-                return signal(new TypeError(second, Symbol.SIMPLE_VECTOR));
-            }
-            return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
-        }
-    };
-
-    // ### standard-instance-access instance location => value
-    private static final Primitive STANDARD_INSTANCE_ACCESS =
-        new Primitive("standard-instance-access", PACKAGE_SYS, true,
-                      "instance location")
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            try {
-                return ((StandardObject)first).slots.AREF(second);
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
-            }
-        }
-    };
-
-    // ### %set-standard-instance-access instance location new-value => new-value
-    private static final Primitive _SET_STANDARD_INSTANCE_ACCESS =
-        new Primitive("%set-standard-instance-access", PACKAGE_SYS, true)
-    {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            try {
-                ((StandardObject)first).slots.aset(Fixnum.getValue(second),
-                                                          third);
-                return third;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
-            }
-        }
-    };
-
-    // ### std-slot-boundp
-    private static final Primitive STD_SLOT_BOUNDP =
-        new Primitive("std-slot-boundp", PACKAGE_SYS, true,
-                      "instance slot-name")
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            StandardObject instance;
-            try {
-                instance = (StandardObject) first;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
-            }
-            Layout layout = instance.getInstanceLayout();
-            int index = layout.getSlotIndex(second);
-            if (index >= 0) {
-                // Found instance slot.
-                LispObject value = instance.slots.AREF(index);
-                return value != UNBOUND_VALUE ? T : NIL;
-            }
-            // Check for class slot.
-            LispObject location = layout.getClassSlotLocation(second);
-            if (location != null) {
-                LispObject value = location.cdr();
-                return value != UNBOUND_VALUE ? T : NIL;
-            }
-            final LispThread thread = LispThread.currentThread();
-            LispObject value =
-                thread.execute(Symbol.SLOT_MISSING, instance.getLispClass(),
-                               instance, second, Symbol.SLOT_BOUNDP);
-            // "If slot-missing is invoked and returns a value, a boolean
-            // equivalent to its primary value is returned by slot-boundp."
-            thread._values = null;
-            return value != NIL ? T : NIL;
-        }
-    };
-
-    // ### std-slot-value
-    private static final Primitive STD_SLOT_VALUE =
-        new Primitive("std-slot-value", PACKAGE_SYS, true,
-                      "instance slot-name")
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            LispObject value = null;
-            StandardObject instance;
-            try {
-                instance = (StandardObject) first;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
-            }
-            Layout layout = instance.getInstanceLayout();
-
-            if (layout.isInvalid()) {
-                ; // Update instance here!
-            }
-
-            int index = layout.getSlotIndex(second);
-            if (index >= 0) {
-                // Found instance slot.
-                value = instance.slots.AREF(index);
-            } else {
-                // Check for class slot.
-                LispObject location = layout.getClassSlotLocation(second);
-                if (location == null)
-                    return Symbol.SLOT_MISSING.execute(instance.getLispClass(),
-                                                       instance, second,
-                                                       Symbol.SLOT_VALUE);
-                value = location.cdr();
-            }
-            if (value == UNBOUND_VALUE) {
-                value = Symbol.SLOT_UNBOUND.execute(instance.getLispClass(),
-                                                    instance, second);
-                LispThread.currentThread()._values = null;
-            }
-            return value;
-        }
-    };
-
-    // ### %set-std-slot-value
-    private static final Primitive _SET_STD_SLOT_VALUE =
-        new Primitive("%set-std-slot-value", PACKAGE_SYS, true,
-                      "instance slot-name new-value")
-    {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            StandardObject instance;
-            try {
-                instance = (StandardObject) first;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
-            }
-            Layout layout = instance.getInstanceLayout();
-            int index = layout.getSlotIndex(second);
-            if (index >= 0) {
-                // Found instance slot.
-                instance.slots.aset(index, third);
-                return third;
-            }
-            // Check for class slot.
-            LispObject location = layout.getClassSlotLocation(second);
-            if (location != null) {
-                location.setCdr(third);
-                return third;
-            }
-            LispObject[] args = new LispObject[5];
-            args[0] = instance.getLispClass();
-            args[1] = instance;
-            args[2] = second;
-            args[3] = Symbol.SETF;
-            args[4] = third;
-            Symbol.SLOT_MISSING.execute(args);
-            return third;
-        }
-    };
-
-    // ### allocate-slot-storage size initial-value
-    private static final Primitive ALLOCATE_SLOT_STORAGE =
-        new Primitive("allocate-slot-storage", PACKAGE_SYS, true,
-                      "size initial-value")
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            try {
-                SimpleVector v = new SimpleVector(((Fixnum)first).value);
-                v.fill(second);
-                return v;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.FIXNUM));
-            }
-        }
-    };
-
-    // ### allocate-std-instance class slots => instance
+    // ### allocate-std-instance class => instance
     private static final Primitive ALLOCATE_STD_INSTANCE =
-        new Primitive("allocate-std-instance", PACKAGE_SYS, true,
-                      "class slots")
+        new Primitive("allocate-std-instance", PACKAGE_SYS, true, "class")
     {
-        public LispObject execute(LispObject first, LispObject second)
+        public LispObject execute(LispObject arg)
             throws ConditionThrowable
         {
-            if (first == BuiltInClass.STANDARD_CLASS)
+            if (arg == BuiltInClass.STANDARD_CLASS)
                 return new StandardClass();
-            if (first instanceof LispClass) {
-                if (second instanceof SimpleVector) {
-                    Symbol symbol = ((LispClass)first).getSymbol();
-                    SimpleVector slots = (SimpleVector) second;
-                    if (symbol == Symbol.STANDARD_GENERIC_FUNCTION)
-                        return new GenericFunction((LispClass)first, slots);
-                    if (symbol == Symbol.STANDARD_METHOD)
-                        return new Method((LispClass)first, slots);
-                    LispObject cpl = ((LispClass)first).getCPL();
-                    while (cpl != NIL) {
-                        LispObject obj = cpl.car();
-                        if (obj == BuiltInClass.CONDITION)
-                            return new Condition((LispClass)first, slots);
-                        cpl = cpl.cdr();
-                    }
-                    return new StandardObject((LispClass)first, slots);
+            if (arg instanceof LispClass) {
+                LispClass cls = (LispClass) arg;
+                Layout layout = cls.getClassLayout();
+                if (layout == null)
+                    return signal(new LispError("No layout for " + arg.writeToString()));
+                int length = layout.getLength();
+                Symbol symbol = cls.getSymbol();
+                if (symbol == Symbol.STANDARD_GENERIC_FUNCTION)
+                    return new GenericFunction(cls, length);
+                if (symbol == Symbol.STANDARD_METHOD)
+                    return new Method(cls, length);
+                LispObject cpl = cls.getCPL();
+                while (cpl != NIL) {
+                    LispObject obj = cpl.car();
+                    if (obj == BuiltInClass.CONDITION)
+                        return new Condition(cls, length);
+                    cpl = cpl.cdr();
                 }
-                return signal(new TypeError(second, Symbol.SIMPLE_VECTOR));
+                return new StandardObject(cls, length);
             }
-            return signal(new TypeError(first, Symbol.CLASS));
+            return signal(new TypeError(arg, Symbol.CLASS));
         }
     };
 }

@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.225 2005-05-04 04:10:49 piso Exp $
+ * $Id: Autoload.java,v 1.226 2005-05-07 18:52:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -500,10 +500,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-method-generic-function", "Method", true);
         autoload(PACKAGE_SYS, "%set-method-specializers", "Method", true);
         autoload(PACKAGE_SYS, "%set-schar", "StringFunctions");
-        autoload(PACKAGE_SYS, "%set-standard-instance-access", "StandardObjectFunctions", true);
-        autoload(PACKAGE_SYS, "%set-std-instance-layout", "StandardObjectFunctions", true);
-        autoload(PACKAGE_SYS, "%set-std-instance-slots", "StandardObjectFunctions", true);
-        autoload(PACKAGE_SYS, "%set-std-slot-value", "StandardObjectFunctions", true);
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-and", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-andc1", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-andc2", "SimpleBitVector");
@@ -534,8 +530,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%string>", "StringFunctions");
         autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
         autoload(PACKAGE_SYS, "%time", "Time");
-        autoload(PACKAGE_SYS, "allocate-slot-storage", "StandardObjectFunctions");
-        autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObjectFunctions");
+        autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObjectFunctions", true);
         autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
         autoload(PACKAGE_SYS, "class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "coerce-to-double-float", "FloatFunctions");
@@ -572,10 +567,5 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "set-function-info-value", "function_info");
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
-        autoload(PACKAGE_SYS, "standard-instance-access", "StandardObjectFunctions", true);
-        autoload(PACKAGE_SYS, "std-instance-layout", "StandardObjectFunctions", true);
-        autoload(PACKAGE_SYS, "std-instance-slots", "StandardObjectFunctions", true);
-        autoload(PACKAGE_SYS, "std-slot-boundp", "StandardObjectFunctions", true);
-        autoload(PACKAGE_SYS, "std-slot-value", "StandardObjectFunctions", true);
     }
 }

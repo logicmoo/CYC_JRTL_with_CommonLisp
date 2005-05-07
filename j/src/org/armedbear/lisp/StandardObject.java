@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.39 2005-03-25 03:19:22 piso Exp $
+ * $Id: StandardObject.java,v 1.40 2005-05-07 18:54:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,26 +23,28 @@ package org.armedbear.lisp;
 
 public class StandardObject extends LispObject
 {
-//     private Layout layout;
-//     private SimpleVector slots;
-    public Layout layout; // FIXME! Should be private!
-    public SimpleVector slots; // FIXME! Should be private!
+    private Layout layout;
+    private LispObject[] slots;
 
     protected StandardObject()
     {
         layout = new Layout(BuiltInClass.STANDARD_OBJECT, NIL, NIL);
     }
 
-    protected StandardObject(LispClass cls, SimpleVector slots)
+    protected StandardObject(LispClass cls, int length)
     {
         layout = cls.getClassLayout();
-        Debug.assertTrue(layout != null);
-        this.slots = slots;
+        slots = new LispObject[length];
+        for (int i = slots.length; i-- > 0;)
+            slots[i] = UNBOUND_VALUE;
     }
 
-    public final Layout getInstanceLayout()
+    private StandardObject(LispClass cls)
     {
-        return layout;
+        layout = cls.getClassLayout();
+        slots = new LispObject[layout.getLength()];
+        for (int i = slots.length; i-- > 0;)
+            slots[i] = UNBOUND_VALUE;
     }
 
     public LispObject getParts() throws ConditionThrowable
@@ -53,8 +55,7 @@ public class StandardObject extends LispObject
             LispObject[] slotNames = layout.getSlotNames();
             if (slotNames != null) {
                 for (int i = 0; i < slotNames.length; i++) {
-                    parts = parts.push(new Cons(slotNames[i],
-                                                slots.AREF(i)));
+                    parts = parts.push(new Cons(slotNames[i], slots[i]));
                 }
             }
         }
@@ -128,4 +129,271 @@ public class StandardObject extends LispObject
             return "#";
         return unreadableString(typeOf().writeToString());
     }
+
+//     public void updateLayout()
+//     {
+//         Debug.assertTrue(layout.isInvalid());
+//         Layout oldLayout = layout;
+//         LispClass cls = oldLayout.getLispClass();
+//         Layout newLayout = cls.getClassLayout();
+//         Debug.assertTrue(!layout.isInvalid());
+//         StandardObject newInstance = new StandardObject(cls);
+//         Debug.assertTrue(newInstance.layout == newLayout);
+//         LispObject added = NIL;
+//         LispObject discarded = NIL;
+//         LispObject plist = NIL;
+//         // Local slots.
+//         LispObject[] oldSlotNames = oldLayout.getSlotNames();
+//         for (int i = 0; i < oldSlotNames.length; i++) {
+//             LispObject slotName = oldSlotNames[i];
+//             int j = newLayout.getSlotIndex(slotName);
+//             if (j >= 0)
+//                 newInstance.slots[j] = slots[i];
+//             else {
+//                 discarded = discarded.push(slotName);
+//                 if (slots[i] != UNBOUND_VALUE) {
+//                     plist = plist.push(slotName);
+//                     plist = plist.push(slots[i]);
+//                 }
+//             }
+//         }
+//     }
+
+
+    private static final Primitive SWAP_SLOTS =
+        new Primitive("swap-slots", PACKAGE_SYS, true, "instance-1 instance-2")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            StandardObject obj1, obj2;
+            try {
+                obj1 = (StandardObject) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
+            try {
+                obj2 = (StandardObject) second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(second, Symbol.STANDARD_OBJECT));
+            }
+            LispObject[] v = obj1.slots;
+            obj1.slots = obj2.slots;
+            obj2.slots = v;
+            return NIL;
+        }
+    };
+
+    // ### std-instance-layout
+    private static final Primitive STD_INSTANCE_LAYOUT =
+        new Primitive("std-instance-layout", PACKAGE_SYS, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((StandardObject)arg).layout;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.STANDARD_OBJECT));
+            }
+        }
+    };
+
+    // ### %set-std-instance-layout
+    private static final Primitive _SET_STD_INSTANCE_LAYOUT =
+        new Primitive("%set-std-instance-layout", PACKAGE_SYS, true)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((StandardObject)first).layout = (Layout) second;
+                return second;
+            }
+            catch (ClassCastException e) {
+                if (!(first instanceof StandardObject))
+                    return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+                if (!(second instanceof Layout))
+                    return signal(new TypeError(second, "layout"));
+                // Not reached.
+                return NIL;
+            }
+        }
+    };
+
+    // ### std-instance-class
+    private static final Primitive STD_INSTANCE_CLASS =
+        new Primitive("std-instance-class", PACKAGE_SYS, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((StandardObject)arg).layout.getLispClass();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.STANDARD_OBJECT));
+            }
+        }
+    };
+
+    // ### standard-instance-access instance location => value
+    private static final Primitive STANDARD_INSTANCE_ACCESS =
+        new Primitive("standard-instance-access", PACKAGE_SYS, true,
+                      "instance location")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                return ((StandardObject)first).slots[Fixnum.getValue(second)]; // FIXME
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
+        }
+    };
+
+    // ### %set-standard-instance-access instance location new-value => new-value
+    private static final Primitive _SET_STANDARD_INSTANCE_ACCESS =
+        new Primitive("%set-standard-instance-access", PACKAGE_SYS, true)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            try {
+                ((StandardObject)first).slots[Fixnum.getValue(second)] = third; // FIXME
+                return third;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
+        }
+    };
+
+    // ### std-slot-boundp
+    private static final Primitive STD_SLOT_BOUNDP =
+        new Primitive("std-slot-boundp", PACKAGE_SYS, true,
+                      "instance slot-name")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            StandardObject instance;
+            try {
+                instance = (StandardObject) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
+            Layout layout = instance.layout;
+            int index = layout.getSlotIndex(second);
+            if (index >= 0) {
+                // Found instance slot.
+                LispObject value = instance.slots[index];
+                return value != UNBOUND_VALUE ? T : NIL;
+            }
+            // Check for class slot.
+            LispObject location = layout.getClassSlotLocation(second);
+            if (location != null) {
+                LispObject value = location.cdr();
+                return value != UNBOUND_VALUE ? T : NIL;
+            }
+            final LispThread thread = LispThread.currentThread();
+            LispObject value =
+                thread.execute(Symbol.SLOT_MISSING, instance.getLispClass(),
+                               instance, second, Symbol.SLOT_BOUNDP);
+            // "If slot-missing is invoked and returns a value, a boolean
+            // equivalent to its primary value is returned by slot-boundp."
+            thread._values = null;
+            return value != NIL ? T : NIL;
+        }
+    };
+
+    // ### std-slot-value
+    private static final Primitive STD_SLOT_VALUE =
+        new Primitive("std-slot-value", PACKAGE_SYS, true,
+                      "instance slot-name")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            LispObject value = null;
+            StandardObject instance;
+            try {
+                instance = (StandardObject) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
+            Layout layout = instance.layout;
+
+            if (layout.isInvalid()) {
+                // Update instance.
+//                 layout = instance.updateLayout();
+            }
+
+            int index = layout.getSlotIndex(second);
+            if (index >= 0) {
+                // Found instance slot.
+                value = instance.slots[index];
+            } else {
+                // Check for class slot.
+                LispObject location = layout.getClassSlotLocation(second);
+                if (location == null)
+                    return Symbol.SLOT_MISSING.execute(instance.getLispClass(),
+                                                       instance, second,
+                                                       Symbol.SLOT_VALUE);
+                value = location.cdr();
+            }
+            if (value == UNBOUND_VALUE) {
+                value = Symbol.SLOT_UNBOUND.execute(instance.getLispClass(),
+                                                    instance, second);
+                LispThread.currentThread()._values = null;
+            }
+            return value;
+        }
+    };
+
+    // ### %set-std-slot-value
+    private static final Primitive _SET_STD_SLOT_VALUE =
+        new Primitive("%set-std-slot-value", PACKAGE_SYS, true,
+                      "instance slot-name new-value")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            StandardObject instance;
+            try {
+                instance = (StandardObject) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
+            Layout layout = instance.layout;
+            int index = layout.getSlotIndex(second);
+            if (index >= 0) {
+                // Found instance slot.
+                instance.slots[index] = third;
+                return third;
+            }
+            // Check for class slot.
+            LispObject location = layout.getClassSlotLocation(second);
+            if (location != null) {
+                location.setCdr(third);
+                return third;
+            }
+            LispObject[] args = new LispObject[5];
+            args[0] = instance.getLispClass();
+            args[1] = instance;
+            args[2] = second;
+            args[3] = Symbol.SETF;
+            args[4] = third;
+            Symbol.SLOT_MISSING.execute(args);
+            return third;
+        }
+    };
 }

@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.14 2005-05-07 15:29:44 piso Exp $
+ * $Id: Layout.java,v 1.15 2005-05-07 18:52:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,14 @@ public final class Layout extends LispObject
         this.classSlots = classSlots;
     }
 
+    // Copy constructor.
+    private Layout(Layout oldLayout)
+    {
+        cls = oldLayout.cls;
+        slotNames = oldLayout.slotNames;
+        classSlots = oldLayout.classSlots;
+    }
+
     public LispObject getParts() throws ConditionThrowable
     {
         LispObject result = NIL;
@@ -86,6 +94,16 @@ public final class Layout extends LispObject
     public LispObject[] getSlotNames()
     {
         return slotNames;
+    }
+
+    public int getLength()
+    {
+        return slotNames.length;
+    }
+
+    public LispObject getClassSlots()
+    {
+        return classSlots;
     }
 
     public String writeToString()
@@ -145,13 +163,6 @@ public final class Layout extends LispObject
 
     public int getSlotIndex(LispObject slotName)
     {
-//         final int limit = slotNames.length;
-//         for (int i = 0; i < limit; i++) {
-//             if (slotNames[i] == slotName)
-//                 return i;
-//         }
-//         return -1;
-
         for (int i = slotNames.length; i-- > 0;) {
             if (slotNames[i] == slotName)
                 return i;
@@ -172,8 +183,7 @@ public final class Layout extends LispObject
         return null;
     }
 
-    // ### layout-slot-index
-    // layout-slot-index layout slot-name => index
+    // ### layout-slot-index layout slot-name => index
     private static final Primitive LAYOUT_SLOT_INDEX =
         new Primitive("layout-slot-index", PACKAGE_SYS, true)
     {
@@ -182,8 +192,7 @@ public final class Layout extends LispObject
         {
             try {
                 final LispObject slotNames[] = ((Layout)first).slotNames;
-                final int limit = slotNames.length;
-                for (int i = 0; i < limit; i++) {
+                for (int i = slotNames.length; i-- > 0;) {
                     if (slotNames[i] == second)
                         return new Fixnum(i);
                 }
@@ -195,8 +204,7 @@ public final class Layout extends LispObject
         }
     };
 
-    // ### layout-slot-location
-    // layout-slot-location layout slot-name => location
+    // ### layout-slot-location layout slot-name => location
     private static final Primitive LAYOUT_SLOT_LOCATION =
         new Primitive("layout-slot-location", PACKAGE_SYS, true)
     {
@@ -223,6 +231,27 @@ public final class Layout extends LispObject
             catch (ClassCastException e) {
                 return signal(new TypeError(first, "layout"));
             }
+        }
+    };
+
+    // ### %make-instances-obsolete class => class
+    private static final Primitive _MAKE_INSTANCES_OBSOLETE =
+        new Primitive("%make-instances-obsolete", PACKAGE_SYS, true, "class")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            final LispClass cls;
+            try {
+                cls = (LispClass) arg;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CLASS));
+            }
+            Layout oldLayout = cls.getClassLayout();
+            Layout newLayout = new Layout(oldLayout);
+            cls.setClassLayout(newLayout);
+            oldLayout.invalidate();
+            return arg;
         }
     };
 }

@@ -2,7 +2,7 @@
  * Method.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: Method.java,v 1.10 2005-05-04 04:08:05 piso Exp $
+ * $Id: Method.java,v 1.11 2005-05-07 18:56:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@ public final class Method extends StandardObject
     private LispObject fastFunction;
     private LispObject specializers;
 
-    public Method(LispClass cls, SimpleVector slots)
+    public Method(LispClass cls, int length)
     {
-        super(cls, slots);
+        super(cls, length);
     }
 
     public LispObject getGenericFunction()

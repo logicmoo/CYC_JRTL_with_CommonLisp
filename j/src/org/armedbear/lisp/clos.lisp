@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.161 2005-05-07 15:24:13 piso Exp $
+;;; $Id: clos.lisp,v 1.162 2005-05-07 18:57:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -496,8 +496,7 @@
     (unless length
       (format t "No layout length for class ~S~%." class)
       (setf length (count-if #'instance-slot-p (class-slots class))))
-    (allocate-std-instance class
-                           (allocate-slot-storage length +slot-unbound+))))
+    (allocate-std-instance class)))
 
 (defun make-instance-standard-class (metaclass
                                      &key name direct-superclasses direct-slots
@@ -1975,8 +1974,7 @@
                  (slot-boundp old-instance slot-name))
         (setf (slot-value new-instance slot-name)
               (slot-value old-instance slot-name))))
-    (rotatef (std-instance-slots new-instance)
-             (std-instance-slots old-instance))
+    (swap-slots old-instance new-instance)
     (rotatef (std-instance-layout new-instance)
              (std-instance-layout old-instance))
     (apply #'update-instance-for-different-class
