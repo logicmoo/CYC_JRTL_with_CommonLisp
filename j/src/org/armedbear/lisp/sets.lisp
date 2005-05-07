@@ -1,7 +1,7 @@
 ;;; sets.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: sets.lisp,v 1.4 2004-05-03 01:33:33 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: sets.lisp,v 1.5 2005-05-07 14:38:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 ;;; From CMUCL.
 
@@ -26,6 +26,7 @@
 	 (t ,(append funcall '(:key key :test test)))))
 
 (defun union (list1 list2 &key key (test #'eql testp) (test-not nil notp))
+  (require-type list2 'list)
   (when (and testp notp)
     (error "Both :TEST and :TEST-NOT were supplied."))
   (when key
@@ -190,6 +191,7 @@
 
 ;;; Adapted from SBCL.
 (defun subsetp (list1 list2 &key key (test #'eql testp) (test-not nil notp))
+  (require-type list2 'list)
   (when (and testp notp)
     (error "Both :TEST and :TEST-NOT were supplied."))
   (let ((key (and key (coerce-to-function key))))
