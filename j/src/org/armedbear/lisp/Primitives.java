@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.776 2005-05-06 23:51:55 piso Exp $
+ * $Id: Primitives.java,v 1.777 2005-05-07 14:35:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2154,14 +2154,17 @@ public final class Primitives extends Lisp
                 return new Fixnum(((AbstractArray)arg).getFillPointer());
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.ARRAY));
+                return signal(new TypeError(arg, list3(Symbol.AND, Symbol.VECTOR,
+                                                       list2(Symbol.SATISFIES,
+                                                             Symbol.ARRAY_HAS_FILL_POINTER_P))));
             }
         }
     };
 
     // ### %set-fill-pointer vector new-fill-pointer
     private static final Primitive _SET_FILL_POINTER =
-        new Primitive("%set-fill-pointer", PACKAGE_SYS, false) {
+        new Primitive("%set-fill-pointer", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -2174,7 +2177,9 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.VECTOR));
+                return signal(new TypeError(first, list3(Symbol.AND, Symbol.VECTOR,
+                                                         list2(Symbol.SATISFIES,
+                                                               Symbol.ARRAY_HAS_FILL_POINTER_P))));
             }
         }
     };
