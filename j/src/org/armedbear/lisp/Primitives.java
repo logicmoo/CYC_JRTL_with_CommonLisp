@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.778 2005-05-07 14:36:12 piso Exp $
+ * $Id: Primitives.java,v 1.779 2005-05-07 14:45:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4338,8 +4338,7 @@ public final class Primitives extends Lisp
             }
             if (arg == NIL)
                 return NIL;
-            return signal(new TypeError(arg.writeToString() +
-                                        " is not a proper sequence."));
+            return signal(new TypeError(arg, Symbol.SEQUENCE));
         }
     };
 
