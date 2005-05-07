@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.162 2005-05-07 18:57:36 piso Exp $
+;;; $Id: clos.lisp,v 1.163 2005-05-07 23:58:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1886,6 +1886,9 @@
                               :initial-element +slot-unbound+)))
 
 (defun check-initargs (class initargs)
+  (when (oddp (length initargs))
+    (error 'program-error
+           :format-control "Odd number of keyword arguments."))
   (unless (getf initargs :allow-other-keys)
     (let ((slots (class-slots class)))
       (do* ((tail initargs (cddr tail))
@@ -1993,6 +1996,7 @@
                        (slot-exists-p old slot-name))
                     (mapcar #'slot-definition-name
                             (class-slots (class-of new))))))
+    (check-initargs (class-of new) initargs)
     (apply #'shared-initialize new added-slots initargs)))
 
 ;;;  Methods having to do with class metaobjects.
