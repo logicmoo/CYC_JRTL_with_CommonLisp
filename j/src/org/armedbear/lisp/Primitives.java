@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.779 2005-05-07 14:45:42 piso Exp $
+ * $Id: Primitives.java,v 1.780 2005-05-07 15:23:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4376,38 +4376,10 @@ public final class Primitives extends Lisp
         }
     };
 
-//     (defun maptree (fun x)
-//       (if (atom x)
-//           (funcall fun x)
-//           (let ((a (funcall fun (car x)))
-//                 (d (maptree fun (cdr x))))
-//             (if (and (eql a (car x)) (eql d (cdr x)))
-//                 x
-//                 (cons a d)))))
-
-    // ### maptree
-    private static final Primitive MAPTREE =
-        new Primitive("maptree", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject fun, LispObject x)
-            throws ConditionThrowable
-        {
-            if (x instanceof Cons) {
-                LispObject a = fun.execute(x.car());
-                // Recurse!
-                LispObject d = execute(fun, x.cdr());
-                if (a.eql(x.car()) && d.eql(x.cdr()))
-                    return x;
-                else
-                    return new Cons(a, d);
-            } else
-                return fun.execute(x);
-        }
-    };
-
     // ### %make-list
     private static final Primitive _MAKE_LIST =
-        new Primitive("%make-list", PACKAGE_SYS, false) {
+        new Primitive("%make-list", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
