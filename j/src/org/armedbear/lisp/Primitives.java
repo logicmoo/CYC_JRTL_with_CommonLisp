@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.777 2005-05-07 14:35:17 piso Exp $
+ * $Id: Primitives.java,v 1.778 2005-05-07 14:36:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2163,7 +2163,7 @@ public final class Primitives extends Lisp
 
     // ### %set-fill-pointer vector new-fill-pointer
     private static final Primitive _SET_FILL_POINTER =
-        new Primitive("%set-fill-pointer", PACKAGE_SYS, false)
+        new Primitive("%set-fill-pointer", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
