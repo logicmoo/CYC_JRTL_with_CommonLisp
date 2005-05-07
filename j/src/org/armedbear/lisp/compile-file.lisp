@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.84 2005-05-03 05:40:38 piso Exp $
+;;; $Id: compile-file.lisp,v 1.85 2005-05-07 15:26:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -329,8 +329,13 @@
   (dump-form form stream))
 
 (defun convert-ensure-method (form)
+  (c-e-m-1 form :function)
+  (c-e-m-1 form :fast-function)
+  (precompile-form form nil))
+
+(defun c-e-m-1 (form key)
   (let* ((tail (cddr form))
-         (function-form (getf tail :function)))
+         (function-form (getf tail key)))
     (when (and function-form (consp function-form)
                (eq (%car function-form) 'FUNCTION))
       (let ((lambda-expression (cadr function-form)))
@@ -345,12 +350,11 @@
                    (when *compile-print*
                      (format t ";  method => ~A.cls~%"
                              (pathname-name (pathname classfile-name))))
-                 (setf (getf tail :function)
+                   (setf (getf tail key)
                          `(load-compiled-function ,(file-namestring classfile))))
                   (t
                    ;; FIXME This should be a warning or error of some sort...
-                   (format *error-output* "; Unable to compile method~%"))))))))
-  (precompile-form form nil))
+                   (format *error-output* "; Unable to compile method~%")))))))))
 
 (defun convert-toplevel-form (form)
   (when *compile-print*

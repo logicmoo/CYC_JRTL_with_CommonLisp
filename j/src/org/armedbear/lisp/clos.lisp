@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.160 2005-05-04 12:36:21 piso Exp $
+;;; $Id: clos.lisp,v 1.161 2005-05-07 15:24:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1135,7 +1135,8 @@
                                       qualifiers
                                       specializers
                                       documentation
-                                      function)
+                                      function
+                                      fast-function)
   (let ((method (std-allocate-instance the-class-standard-method)))
     (setf (method-lambda-list method) lambda-list)
     (setf (method-qualifiers method) qualifiers)
@@ -1143,6 +1144,7 @@
     (setf (method-documentation method) documentation)
     (%set-method-generic-function method nil)
     (%set-method-function method function)
+    (%set-method-fast-function method fast-function)
     method))
 
 (defun add-method (gf method)
@@ -1210,107 +1212,125 @@
             (when (eql-specializer-p spec) (return t)))
       (return t))))
 
+(defun fast-callable-p (gf)
+  (and (eq (generic-function-method-combination gf) 'standard)
+       (null (intersection (%generic-function-lambda-list gf)
+                           '(&rest &optional &key &allow-other-keys &aux)))))
+
+(declaim (ftype (function * t) slow-method-lookup-1))
+
 (defun std-compute-discriminating-function (gf)
   (let ((code
-         (if (methods-contain-eql-specializer-p (generic-function-methods gf))
-             (make-closure `(lambda (&rest args)
-                              (slow-method-lookup ,gf args nil))
-                           nil)
-             (let* ((emf-table (classes-to-emf-table gf))
-                    (number-required (length (gf-required-args gf)))
-                    (lambda-list (%generic-function-lambda-list gf))
-                    (exact (null (intersection lambda-list
-                                               '(&rest &optional &key
-                                                 &allow-other-keys &aux)))))
-               (make-closure
-                (cond ((= number-required 1)
-                       (if exact
-                           `(lambda (arg)
-                              (declare (optimize speed))
-                              (let* ((classes (list (class-of arg)))
-                                     (emfun (gethash-2op-1ret classes ,emf-table)))
-                                (if emfun
-                                    (funcall emfun (list arg))
-                                    (slow-method-lookup ,gf (list arg) classes))))
-                           `(lambda (&rest args)
-                              (declare (optimize speed))
-                              (unless (>= (length args) 1)
-                                (error 'program-error
-                                       :format-control "Not enough arguments for generic function ~S."
-                                       :format-arguments (list (%generic-function-name ,gf))))
-                              (let* ((classes (list (class-of (%car args))))
-                                     (emfun (gethash-2op-1ret classes ,emf-table)))
-                                (if emfun
-                                    (funcall emfun args)
-                                    (slow-method-lookup ,gf args classes)))))
-                       )
-                      ((= number-required 2)
-                       (if exact
-                           `(lambda (arg1 arg2)
-                              (declare (optimize speed))
-                              (let* ((classes (list (class-of arg1)
-                                                    (class-of arg2)))
-                                     (emfun (gethash-2op-1ret classes ,emf-table)))
-                                (if emfun
-                                    (funcall emfun (list arg1 arg2))
-                                    (slow-method-lookup ,gf (list arg1 arg2) classes))))
-                           `(lambda (&rest args)
-                              (declare (optimize speed))
-                              (unless (>= (length args) 2)
-                                (error 'program-error
-                                       :format-control "Not enough arguments for generic function ~S."
-                                       :format-arguments (list (%generic-function-name ,gf))))
-                              (let* ((classes (list (class-of (%car args)) (class-of (%cadr args))))
-                                     (emfun (gethash-2op-1ret classes ,emf-table)))
-                                (if emfun
-                                    (funcall emfun args)
-                                    (slow-method-lookup ,gf args classes)))))
-                       )
-                      ((= number-required 3)
-                       (if exact
-                           `(lambda (arg1 arg2 arg3)
-                              (declare (optimize speed))
-                              (let* ((classes (list (class-of arg1)
-                                                    (class-of arg2)
-                                                    (class-of arg3)))
-                                     (emfun (gethash-2op-1ret classes ,emf-table)))
-                                (if emfun
-                                    (funcall emfun (list arg1 arg2 arg3))
-                                    (slow-method-lookup ,gf (list arg1 arg2 arg3) classes))))
-                           `(lambda (&rest args)
-                              (declare (optimize speed))
-                              (unless (>= (length args) 3)
-                                (error 'program-error
-                                       :format-control "Not enough arguments for generic function ~S."
-                                       :format-arguments (list (%generic-function-name ,gf))))
-                              (let* ((classes (list (class-of (%car args))
-                                                    (class-of (%cadr args))
-                                                    (class-of (%caddr args))))
-                                     (emfun (gethash-2op-1ret classes ,emf-table)))
-                                (if emfun
-                                    (funcall emfun args)
-                                    (slow-method-lookup ,gf args classes)))))
-                       )
-                      (t
-                       `(lambda (&rest args)
-                          (declare (optimize speed))
-                          (unless (,(if exact '= '>=) (length args) ,number-required)
-                            (error 'program-error
-                                   :format-control "Not enough arguments for generic function ~S."
-                                   :format-arguments (list (%generic-function-name ,gf))))
-                          (let ((classes ())
-                                (i 0)
-                                emfun)
-                            (dolist (arg args)
-                              (push (class-of arg) classes)
-                              (when (= (incf i) ,number-required)
-                                (return)))
-                            (setf classes (nreverse classes))
-                            (setf emfun (gethash-2op-1ret classes ,emf-table))
-                            (if emfun
-                                (funcall emfun args)
-                                (slow-method-lookup ,gf args classes))))))
-                nil)))))
+         (cond ((methods-contain-eql-specializer-p (generic-function-methods gf))
+                (make-closure `(lambda (&rest args)
+                                 (slow-method-lookup ,gf args nil))
+                              nil))
+;;                ((and (eq (generic-function-method-combination gf) 'standard)
+;;                      (= (length (generic-function-methods gf)) 1))
+;;                 (let* ((method (%car (generic-function-methods gf)))
+;;                        (fast-function (%method-fast-function method)))
+;;                   (if fast-function
+;;                       (return-from std-compute-discriminating-function fast-function)
+;;                       (make-closure `(lambda (&rest args)
+;;                                        (funcall ,(%method-function method) args nil))
+;;                                     nil))))
+               (t
+                (let* ((emf-table (classes-to-emf-table gf))
+                       (number-required (length (gf-required-args gf)))
+                       (lambda-list (%generic-function-lambda-list gf))
+                       (exact (null (intersection lambda-list
+                                                  '(&rest &optional &key
+                                                    &allow-other-keys &aux)))))
+                  (make-closure
+                   (cond ((= number-required 1)
+                          (if exact
+                              `(lambda (arg)
+                                 (declare (optimize speed))
+                                 (let* ((class (class-of arg))
+                                        (emfun (or (gethash-2op-1ret class ,emf-table)
+                                                   (slow-method-lookup-1 ,gf class))))
+                                   (if emfun
+                                       (funcall emfun (list arg))
+                                       (apply #'no-applicable-method ,gf (list arg)))))
+                              `(lambda (&rest args)
+                                 (declare (optimize speed))
+                                 (unless (>= (length args) 1)
+                                   (error 'program-error
+                                          :format-control "Not enough arguments for generic function ~S."
+                                          :format-arguments (list (%generic-function-name ,gf))))
+                                 (let* ((classes (list (class-of (%car args))))
+                                        (emfun (gethash-2op-1ret classes ,emf-table)))
+                                   (if emfun
+                                       (funcall emfun args)
+                                       (slow-method-lookup ,gf args classes)))))
+                          )
+                         ((= number-required 2)
+                          (if exact
+                              `(lambda (arg1 arg2)
+                                 (declare (optimize speed))
+                                 (let* ((classes (list (class-of arg1)
+                                                       (class-of arg2)))
+                                        (emfun (gethash-2op-1ret classes ,emf-table)))
+                                   (if emfun
+                                       (funcall emfun (list arg1 arg2))
+                                       (slow-method-lookup ,gf (list arg1 arg2) classes))))
+                              `(lambda (&rest args)
+                                 (declare (optimize speed))
+                                 (unless (>= (length args) 2)
+                                   (error 'program-error
+                                          :format-control "Not enough arguments for generic function ~S."
+                                          :format-arguments (list (%generic-function-name ,gf))))
+                                 (let* ((classes (list (class-of (%car args)) (class-of (%cadr args))))
+                                        (emfun (gethash-2op-1ret classes ,emf-table)))
+                                   (if emfun
+                                       (funcall emfun args)
+                                       (slow-method-lookup ,gf args classes)))))
+                          )
+                         ((= number-required 3)
+                          (if exact
+                              `(lambda (arg1 arg2 arg3)
+                                 (declare (optimize speed))
+                                 (let* ((classes (list (class-of arg1)
+                                                       (class-of arg2)
+                                                       (class-of arg3)))
+                                        (emfun (gethash-2op-1ret classes ,emf-table)))
+                                   (if emfun
+                                       (funcall emfun (list arg1 arg2 arg3))
+                                       (slow-method-lookup ,gf (list arg1 arg2 arg3) classes))))
+                              `(lambda (&rest args)
+                                 (declare (optimize speed))
+                                 (unless (>= (length args) 3)
+                                   (error 'program-error
+                                          :format-control "Not enough arguments for generic function ~S."
+                                          :format-arguments (list (%generic-function-name ,gf))))
+                                 (let* ((classes (list (class-of (%car args))
+                                                       (class-of (%cadr args))
+                                                       (class-of (%caddr args))))
+                                        (emfun (gethash-2op-1ret classes ,emf-table)))
+                                   (if emfun
+                                       (funcall emfun args)
+                                       (slow-method-lookup ,gf args classes)))))
+                          )
+                         (t
+                          `(lambda (&rest args)
+                             (declare (optimize speed))
+                             (unless (,(if exact '= '>=) (length args) ,number-required)
+                               (error 'program-error
+                                      :format-control "Not enough arguments for generic function ~S."
+                                      :format-arguments (list (%generic-function-name ,gf))))
+                             (let ((classes ())
+                                   (i 0)
+                                   emfun)
+                               (dolist (arg args)
+                                 (push (class-of arg) classes)
+                                 (when (= (incf i) ,number-required)
+                                   (return)))
+                               (setf classes (nreverse classes))
+                               (setf emfun (gethash-2op-1ret classes ,emf-table))
+                               (if emfun
+                                   (funcall emfun args)
+                                   (slow-method-lookup ,gf args classes))))))
+                   nil))))))
 
     (when (and (fboundp 'compile)
                (not (autoloadp 'compile)))
@@ -1345,6 +1365,29 @@
                   #'(lambda (m1 m2)
                      (method-more-specific-p gf m1 m2 required-classes)))))))
 
+(defun method-applicable-p-using-classes (method classes)
+  (do* ((specializers (%method-specializers method) (cdr specializers))
+        (classes classes (cdr classes)))
+       ((null specializers) t)
+    (let ((specializer (car specializers)))
+      (unless (subclassp (car classes) specializer)
+        (return nil)))))
+
+(defun %compute-applicable-methods-using-classes (gf required-classes)
+  (let ((methods '()))
+    (dolist (method (generic-function-methods gf))
+      (when (method-applicable-p-using-classes method required-classes)
+        (push method methods)))
+    (if (or (null methods) (null (%cdr methods)))
+        methods
+        (sort methods
+              (if (eq (class-of gf) the-class-standard-gf)
+                  #'(lambda (m1 m2)
+                     (std-method-more-specific-p m1 m2 required-classes
+                                                 (generic-function-argument-precedence-order gf)))
+                  #'(lambda (m1 m2)
+                     (method-more-specific-p gf m1 m2 required-classes)))))))
+
 (defun slow-method-lookup (gf args classes)
   (let ((applicable-methods (%compute-applicable-methods gf args)))
     (if applicable-methods
@@ -1356,6 +1399,17 @@
             (setf (gethash classes (classes-to-emf-table gf)) emfun))
           (funcall emfun args))
         (apply #'no-applicable-method gf args))))
+
+(defun slow-method-lookup-1 (gf class)
+  (let ((applicable-methods (%compute-applicable-methods-using-classes gf (list class))))
+    (if applicable-methods
+        (let ((emfun (funcall (if (eq (class-of gf) the-class-standard-gf)
+                                  #'std-compute-effective-method-function
+                                  #'compute-effective-method-function)
+                              gf applicable-methods)))
+          (when emfun
+            (setf (gethash class (classes-to-emf-table gf)) emfun))
+          emfun))))
 
 (defun sub-specializer-p (c1 c2 c-arg)
   (find c2 (cdr (memq c1 (class-precedence-list c-arg)))))
@@ -1408,7 +1462,8 @@
          (order (car options))
          (primaries '())
          (arounds '())
-         around)
+         around
+         emf-form)
     (dolist (m methods)
       (let ((qualifiers (method-qualifiers m)))
         (cond ((null qualifiers)
@@ -1437,47 +1492,69 @@
                        #'std-compute-effective-method-function
                        #'compute-effective-method-function)
                    gf (remove around methods))))
-             #'(lambda (args)
-                (funcall (%method-function around) args next-emfun))))
+             (setf emf-form
+;;                    `(lambda (args)
+;;                       (funcall ,(%method-function around) args ,next-emfun))
+                   (generate-emf-lambda (%method-function around) next-emfun)
+                   )))
           ((eq mc-name 'standard)
            (let* ((next-emfun (compute-primary-emfun (cdr primaries)))
                   (befores (remove-if-not #'before-method-p methods))
                   (reverse-afters
-                   (reverse (remove-if-not #'after-method-p methods)))
-                  (code
-                   (make-closure
-                    (if (and (null befores) (null reverse-afters))
-                        `(lambda (args)
-                           (declare (optimize speed))
-                           (funcall ,(%method-function (car primaries)) args ,next-emfun))
-                        `(lambda (args)
-                           (declare (optimize speed))
-                           (dolist (before ',befores)
-                             (funcall (%method-function before) args nil))
-                           (multiple-value-prog1
-                            (funcall (%method-function ,(car primaries)) args ,next-emfun)
-                            (dolist (after ',reverse-afters)
-                              (funcall (%method-function after) args nil)))))
-                    nil)))
-             (setf code (or (ignore-errors (compile nil code)) code))
-             code))
+                   (reverse (remove-if-not #'after-method-p methods))))
+             (setf emf-form
+                   (cond ((and (null befores) (null reverse-afters))
+                          (if (%method-fast-function (car primaries))
+                              (ecase (length (gf-required-args gf))
+                                (1
+                                 `(lambda (args)
+                                    (declare (optimize speed))
+                                    (funcall ,(%method-fast-function (car primaries)) (car args))))
+                                (2
+                                 `(lambda (args)
+                                    (declare (optimize speed))
+                                    (funcall ,(%method-fast-function (car primaries))
+                                             (car args)
+                                             (cadr args)))))
+;;                               `(lambda (args)
+;;                                  (declare (optimize speed))
+;;                                  (funcall ,(%method-function (car primaries)) args ,next-emfun))
+                              (generate-emf-lambda (%method-function (car primaries))
+                                                   next-emfun)
+                              ))
+                         (t
+                          `(lambda (args)
+                             (declare (optimize speed))
+                             (dolist (before ',befores)
+                               (funcall (%method-function before) args nil))
+                             (multiple-value-prog1
+                              (funcall (%method-function ,(car primaries)) args ,next-emfun)
+                              (dolist (after ',reverse-afters)
+                                (funcall (%method-function after) args nil)))))))))
           (t
            (let ((mc-obj (get mc-name 'method-combination-object)))
              (unless mc-obj
                (error "Unsupported method combination type ~A." mc-name))
              (let* ((operator (method-combination-operator mc-obj))
-                    (ioa (method-combination-identity-with-one-argument mc-obj))
-                    (form
+                    (ioa (method-combination-identity-with-one-argument mc-obj)))
+               (setf emf-form
                      (if (and (null (cdr primaries))
                               (not (null ioa)))
-                         `(lambda (args)
-                            (funcall ,(%method-function (car primaries)) args nil))
+;;                          `(lambda (args)
+;;                             (funcall ,(%method-function (car primaries)) args nil))
+                         (generate-emf-lambda (%method-function (car primaries)) nil)
                          `(lambda (args)
                             (,operator ,@(mapcar
                                           (lambda (primary)
                                             `(funcall ,(%method-function primary) args nil))
-                                          primaries))))))
-               (coerce-to-function form)))))))
+                                          primaries)))))))))
+    (or (ignore-errors (compile nil emf-form))
+        (coerce-to-function emf-form))))
+
+(defun generate-emf-lambda (method-function next-emfun)
+  `(lambda (args)
+     (declare (optimize speed))
+     (funcall ,method-function args ,next-emfun)))
 
 ;;; compute an effective method function from a list of primary methods:
 
@@ -1548,6 +1625,44 @@
              `(lambda (args next-emfun)
                 (apply #'(lambda ,lambda-list ,@declarations ,@body) args)))))))
 
+(defun compute-method-fast-function (lambda-expression)
+  (let ((lambda-list (allow-other-keys (cadr lambda-expression))))
+    (when (intersection lambda-list '(&rest &optional &key &allow-other-keys &aux))
+      (return-from compute-method-fast-function nil))
+    (let ((body (cddr lambda-expression))
+          (*call-next-method-p* nil)
+          (*next-method-p-p* nil))
+      (multiple-value-bind (body declarations) (parse-body body)
+        (walk-form body)
+        (when (or *call-next-method-p* *next-method-p-p*)
+          (return-from compute-method-fast-function nil))
+        (case (length lambda-list)
+          (1
+;;            `(lambda (args next-emfun)
+;;               (let ((,(%car lambda-list) (%car args)))
+;;                 (declare (ignorable ,(%car lambda-list)))
+;;                 ,@declarations ,@body)))
+           lambda-expression)
+          (2
+;;            `(lambda (args next-emfun)
+;;               (let ((,(%car lambda-list) (%car args))
+;;                     (,(%cadr lambda-list) (%cadr args)))
+;;                 (declare (ignorable ,(%car lambda-list)
+;;                                     ,(%cadr lambda-list)))
+;;                 ,@declarations ,@body)))
+           lambda-expression)
+;;           (3
+;;            `(lambda (args next-emfun)
+;;               (let ((,(%car lambda-list) (%car args))
+;;                     (,(%cadr lambda-list) (%cadr args))
+;;                     (,(%caddr lambda-list) (%caddr args)))
+;;                 (declare (ignorable ,(%car lambda-list)
+;;                                     ,(%cadr lambda-list)
+;;                                     ,(%caddr lambda-list)))
+;;                 ,@declarations ,@body)))
+          (t
+           nil))))))
+
 ;; From CLHS section 7.6.5:
 ;; "When a generic function or any of its methods mentions &key in a lambda
 ;; list, the specific set of keyword arguments accepted by the generic function
@@ -1570,7 +1685,9 @@
       (parse-defmethod args)
     (let* ((specializers-form '())
            (lambda-expression `(lambda ,lambda-list ,@declarations ,body))
-           (method-function (compute-method-function lambda-expression)))
+           (method-function (compute-method-function lambda-expression))
+           (fast-function (compute-method-fast-function lambda-expression))
+           )
       (dolist (specializer specializers)
         (cond ((and (consp specializer) (eq (car specializer) 'eql))
                (push `(list 'eql ,(cadr specializer)) specializers-form))
@@ -1583,7 +1700,9 @@
                         :qualifiers ',qualifiers
                         :specializers ,specializers-form
                         ,@(if documentation `(:documentation ,documentation))
-                        :function (function ,method-function))))))
+                        :function (function ,method-function)
+                        ,@(if fast-function `(:fast-function (function ,fast-function)))
+                        )))))
 
 ;;; Reader and writer methods
 
@@ -1592,12 +1711,21 @@
           (if (eq (class-of class) the-class-standard-class)
               `(lambda (object) (std-slot-value object ',slot-name)))
               `(lambda (object) (slot-value object ',slot-name)))
-         (method-function (compute-method-function lambda-expression)))
+         (method-function (compute-method-function lambda-expression))
+         (fast-function (compute-method-fast-function lambda-expression))
+         )
     (ensure-method function-name
                    :lambda-list '(object)
                    :qualifiers ()
                    :specializers (list class)
-                   :function `(function ,method-function))))
+;;                    :function `(function ,method-function)
+                   :function (if (autoloadp 'compile)
+                                 method-function
+                                 (compile nil method-function))
+                   :fast-function (if (autoloadp 'compile)
+                                      fast-function
+                                      (compile nil fast-function))
+                   )))
 
 (defun add-writer-method (class function-name slot-name)
   (let* ((lambda-expression
@@ -1606,12 +1734,21 @@
                  (setf (std-slot-value object ',slot-name) new-value))
               `(lambda (new-value object)
                  (setf (slot-value object ',slot-name) new-value))))
-         (method-function (compute-method-function lambda-expression)))
+         (method-function (compute-method-function lambda-expression))
+         (fast-function (compute-method-fast-function lambda-expression))
+         )
     (ensure-method function-name
                    :lambda-list '(new-value object)
                    :qualifiers ()
                    :specializers (list (find-class 't) class)
-                   :function `(function ,method-function))))
+;;                    :function `(function ,method-function)
+                   :function (if (autoloadp 'compile)
+                                 method-function
+                                 (compile nil method-function))
+                   :fast-function (if (autoloadp 'compile)
+                                      fast-function
+                                      (compile nil fast-function))
+                   )))
 
 (fmakunbound 'class-name)
 

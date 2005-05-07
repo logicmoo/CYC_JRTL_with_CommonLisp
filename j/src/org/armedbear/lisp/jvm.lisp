@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.451 2005-05-03 01:46:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.452 2005-05-07 15:31:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6144,6 +6144,7 @@
         (setf (compiland-argument-register compiland) (allocate-register))
         ;; Otherwise, one register for each argument.
         (dolist (arg args)
+          (declare (ignore arg))
           (allocate-register)))
     (when (and *closure-variables* (not *child-p*))
        (setf (compiland-closure-register compiland) (allocate-register))

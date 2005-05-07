@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.13 2005-05-03 01:50:38 piso Exp $
+ * $Id: Layout.java,v 1.14 2005-05-07 15:29:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@ package org.armedbear.lisp;
 
 public final class Layout extends LispObject
 {
+    private boolean invalid;
+
     private final LispClass cls;
     private final LispObject[] slotNames;
     private final LispObject classSlots;
@@ -64,6 +66,16 @@ public final class Layout extends LispObject
         }
         result = result.push(new Cons("class slots", classSlots));
         return result.nreverse();
+    }
+
+    public boolean isInvalid()
+    {
+        return invalid;
+    }
+
+    public void invalidate()
+    {
+        invalid = true;
     }
 
     public LispClass getLispClass()

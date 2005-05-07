@@ -2,7 +2,7 @@
  * StandardObjectFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObjectFunctions.java,v 1.4 2005-05-03 01:48:05 piso Exp $
+ * $Id: StandardObjectFunctions.java,v 1.5 2005-05-07 15:24:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -194,6 +194,11 @@ public class StandardObjectFunctions extends Lisp
                 return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
             }
             Layout layout = instance.getInstanceLayout();
+
+            if (layout.isInvalid()) {
+                ; // Update instance here!
+            }
+
             int index = layout.getSlotIndex(second);
             if (index >= 0) {
                 // Found instance slot.
