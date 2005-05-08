@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.41 2005-05-08 03:44:19 piso Exp $
+ * $Id: StandardObject.java,v 1.42 2005-05-08 12:09:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,12 @@ public class StandardObject extends LispObject
     public LispObject getParts() throws ConditionThrowable
     {
         LispObject parts = NIL;
+        if (layout != null) {
+            if (layout.isInvalid()) {
+                // Update instance.
+                layout = updateLayout();
+            }
+        }
         parts = parts.push(new Cons("LAYOUT", layout));
         if (layout != null) {
             LispObject[] slotNames = layout.getSlotNames();
@@ -130,14 +136,13 @@ public class StandardObject extends LispObject
         return unreadableString(typeOf().writeToString());
     }
 
-    // Not hooked up yet!
-    public Layout updateLayout() throws ConditionThrowable
+    private Layout updateLayout() throws ConditionThrowable
     {
         Debug.assertTrue(layout.isInvalid());
         Layout oldLayout = layout;
         LispClass cls = oldLayout.getLispClass();
         Layout newLayout = cls.getClassLayout();
-        Debug.assertTrue(!layout.isInvalid());
+        Debug.assertTrue(!newLayout.isInvalid());
         StandardObject newInstance = new StandardObject(cls);
         Debug.assertTrue(newInstance.layout == newLayout);
         LispObject added = NIL;
@@ -167,6 +172,7 @@ public class StandardObject extends LispObject
                 int i = newLayout.getSlotIndex(slotName);
                 if (i >= 0)
                     newInstance.slots[i] = location.cdr();
+                rest = rest.cdr();
             }
         }
         // Go through all the new local slots to compute the added slots.
@@ -190,6 +196,7 @@ public class StandardObject extends LispObject
         Layout tempLayout = layout;
         layout = newInstance.layout;
         newInstance.layout = tempLayout;
+        Debug.assertTrue(!layout.isInvalid());
         // Call UPDATE-INSTANCE-FOR-REDEFINED-CLASS.
         Symbol.UPDATE_INSTANCE_FOR_REDEFINED_CLASS.execute(this, added,
                                                            discarded, plist);
@@ -326,6 +333,10 @@ public class StandardObject extends LispObject
                 return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
             }
             Layout layout = instance.layout;
+            if (layout.isInvalid()) {
+                // Update instance.
+                layout = instance.updateLayout();
+            }
             int index = layout.getSlotIndex(second);
             if (index >= 0) {
                 // Found instance slot.
@@ -366,12 +377,10 @@ public class StandardObject extends LispObject
                 return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
             }
             Layout layout = instance.layout;
-
             if (layout.isInvalid()) {
                 // Update instance.
-//                 layout = instance.updateLayout();
+                layout = instance.updateLayout();
             }
-
             int index = layout.getSlotIndex(second);
             if (index >= 0) {
                 // Found instance slot.
@@ -411,6 +420,10 @@ public class StandardObject extends LispObject
                 return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
             }
             Layout layout = instance.layout;
+            if (layout.isInvalid()) {
+                // Update instance.
+                layout = instance.updateLayout();
+            }
             int index = layout.getSlotIndex(second);
             if (index >= 0) {
                 // Found instance slot.

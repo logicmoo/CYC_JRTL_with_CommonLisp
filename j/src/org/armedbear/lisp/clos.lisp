@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.164 2005-05-08 01:09:19 piso Exp $
+;;; $Id: clos.lisp,v 1.165 2005-05-08 12:10:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -568,20 +568,21 @@
                :format-arguments (list name)))))
   (let ((old-class (find-class name nil)))
     (cond ((and old-class (eq name (%class-name old-class)))
-           (if (typep old-class 'forward-referenced-class)
-               (let ((new-class (apply #'make-instance-standard-class
-                                     (find-class 'standard-class)
-                                     :name name all-keys)))
-                 (%set-find-class name new-class)
-                 (dolist (subclass (class-direct-subclasses old-class))
-                   (setf (class-direct-superclasses subclass)
-                         (substitute new-class old-class
-                                     (class-direct-superclasses subclass))))
-                 new-class)
-;;                (apply #'reinitialize-instance old-class all-keys)
-               (progn
-                 (apply #'std-after-initialization-for-classes old-class all-keys)
-                 old-class)))
+           (cond ((typep old-class 'forward-referenced-class)
+                  (let ((new-class (apply #'make-instance-standard-class
+                                          (find-class 'standard-class)
+                                          :name name all-keys)))
+                    (%set-find-class name new-class)
+                    (dolist (subclass (class-direct-subclasses old-class))
+                      (setf (class-direct-superclasses subclass)
+                            (substitute new-class old-class
+                                        (class-direct-superclasses subclass))))
+                    new-class))
+                 (t
+                  ;; We're redefining the class.
+                  (%make-instances-obsolete old-class)
+                  (apply #'std-after-initialization-for-classes old-class all-keys)
+                  old-class)))
           (t
            (let ((class (apply #'make-instance-standard-class
                                (find-class 'standard-class)
@@ -2006,6 +2007,35 @@
                             (class-slots (class-of new))))))
     (check-initargs (class-of new) initargs)
     (apply #'shared-initialize new added-slots initargs)))
+
+;;; make-instances-obsolete
+
+(defgeneric make-instances-obsolete (class))
+
+(defmethod make-instances-obsolete ((class standard-class))
+  (%make-instances-obsolete class))
+
+(defmethod make-instances-obsolete ((class symbol))
+  (make-instances-obsolete (find-class class))
+  class)
+
+;;; update-instance-for-redefined-class
+
+(defgeneric update-instance-for-redefined-class (instance
+                                                 added-slots
+                                                 discarded-slots
+                                                 property-list
+                                                 &rest initargs
+                                                 &key
+                                                 &allow-other-keys))
+
+(defmethod update-instance-for-redefined-class ((instance standard-object)
+						added-slots
+						discarded-slots
+						property-list
+						&rest initargs)
+  (check-initargs (class-of instance) initargs)
+  (apply #'shared-initialize instance added-slots initargs))
 
 ;;;  Methods having to do with class metaobjects.
 
