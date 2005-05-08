@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.40 2005-05-07 18:54:05 piso Exp $
+ * $Id: StandardObject.java,v 1.41 2005-05-08 03:44:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,36 +130,73 @@ public class StandardObject extends LispObject
         return unreadableString(typeOf().writeToString());
     }
 
-//     public void updateLayout()
-//     {
-//         Debug.assertTrue(layout.isInvalid());
-//         Layout oldLayout = layout;
-//         LispClass cls = oldLayout.getLispClass();
-//         Layout newLayout = cls.getClassLayout();
-//         Debug.assertTrue(!layout.isInvalid());
-//         StandardObject newInstance = new StandardObject(cls);
-//         Debug.assertTrue(newInstance.layout == newLayout);
-//         LispObject added = NIL;
-//         LispObject discarded = NIL;
-//         LispObject plist = NIL;
-//         // Local slots.
-//         LispObject[] oldSlotNames = oldLayout.getSlotNames();
-//         for (int i = 0; i < oldSlotNames.length; i++) {
-//             LispObject slotName = oldSlotNames[i];
-//             int j = newLayout.getSlotIndex(slotName);
-//             if (j >= 0)
-//                 newInstance.slots[j] = slots[i];
-//             else {
-//                 discarded = discarded.push(slotName);
-//                 if (slots[i] != UNBOUND_VALUE) {
-//                     plist = plist.push(slotName);
-//                     plist = plist.push(slots[i]);
-//                 }
-//             }
-//         }
-//     }
+    // Not hooked up yet!
+    public Layout updateLayout() throws ConditionThrowable
+    {
+        Debug.assertTrue(layout.isInvalid());
+        Layout oldLayout = layout;
+        LispClass cls = oldLayout.getLispClass();
+        Layout newLayout = cls.getClassLayout();
+        Debug.assertTrue(!layout.isInvalid());
+        StandardObject newInstance = new StandardObject(cls);
+        Debug.assertTrue(newInstance.layout == newLayout);
+        LispObject added = NIL;
+        LispObject discarded = NIL;
+        LispObject plist = NIL;
+        // Old local slots.
+        LispObject[] oldSlotNames = oldLayout.getSlotNames();
+        for (int i = 0; i < oldSlotNames.length; i++) {
+            LispObject slotName = oldSlotNames[i];
+            int j = newLayout.getSlotIndex(slotName);
+            if (j >= 0)
+                newInstance.slots[j] = slots[i];
+            else {
+                discarded = discarded.push(slotName);
+                if (slots[i] != UNBOUND_VALUE) {
+                    plist = plist.push(slotName);
+                    plist = plist.push(slots[i]);
+                }
+            }
+        }
+        // Old shared slots.
+        LispObject rest = oldLayout.getClassSlots(); // A list.
+        if (rest != null) {
+            while (rest != NIL) {
+                LispObject location = rest.car();
+                LispObject slotName = location.car();
+                int i = newLayout.getSlotIndex(slotName);
+                if (i >= 0)
+                    newInstance.slots[i] = location.cdr();
+            }
+        }
+        // Go through all the new local slots to compute the added slots.
+        LispObject[] newSlotNames = newLayout.getSlotNames();
+        for (int i = 0; i < newSlotNames.length; i++) {
+            LispObject slotName = newSlotNames[i];
+            int j = oldLayout.getSlotIndex(slotName);
+            if (j >= 0)
+                continue;
+            LispObject location = oldLayout.getClassSlotLocation(slotName);
+            if (location != null)
+                continue;
+            // Not found.
+            added = added.push(slotName);
+        }
+        // Swap slots.
+        LispObject[] tempSlots = slots;
+        slots = newInstance.slots;
+        newInstance.slots = tempSlots;
+        // Swap layouts.
+        Layout tempLayout = layout;
+        layout = newInstance.layout;
+        newInstance.layout = tempLayout;
+        // Call UPDATE-INSTANCE-FOR-REDEFINED-CLASS.
+        Symbol.UPDATE_INSTANCE_FOR_REDEFINED_CLASS.execute(this, added,
+                                                           discarded, plist);
+        return newLayout;
+    }
 
-
+    // ### swap-slots instance-1 instance-2 => nil
     private static final Primitive SWAP_SLOTS =
         new Primitive("swap-slots", PACKAGE_SYS, true, "instance-1 instance-2")
     {
@@ -179,9 +216,9 @@ public class StandardObject extends LispObject
             catch (ClassCastException e) {
                 return signal(new TypeError(second, Symbol.STANDARD_OBJECT));
             }
-            LispObject[] v = obj1.slots;
+            LispObject[] temp = obj1.slots;
             obj1.slots = obj2.slots;
-            obj2.slots = v;
+            obj2.slots = temp;
             return NIL;
         }
     };
