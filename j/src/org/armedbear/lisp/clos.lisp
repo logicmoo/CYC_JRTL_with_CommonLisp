@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.163 2005-05-07 23:58:38 piso Exp $
+;;; $Id: clos.lisp,v 1.164 2005-05-08 01:09:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1970,13 +1970,21 @@
 
 (defmethod change-class ((old-instance standard-object) (new-class standard-class)
                          &rest initargs)
-  (let ((new-instance (allocate-instance new-class)))
-    (dolist (slot-name (mapcar #'slot-definition-name
-                               (class-slots new-class)))
-      (when (and (slot-exists-p old-instance slot-name)
-                 (slot-boundp old-instance slot-name))
-        (setf (slot-value new-instance slot-name)
-              (slot-value old-instance slot-name))))
+  (let ((old-slots (class-slots (class-of old-instance)))
+        (new-slots (class-slots new-class))
+        (new-instance (allocate-instance new-class)))
+    ;; "The values of local slots specified by both the class CTO and the class
+    ;; CFROM are retained. If such a local slot was unbound, it remains
+    ;; unbound."
+    (dolist (new-slot new-slots)
+      (when (instance-slot-p new-slot)
+        (let* ((slot-name (slot-definition-name new-slot))
+               (old-slot (find slot-name old-slots :key #'slot-definition-name)))
+          ;; "The values of slots specified as shared in the class CFROM and as
+          ;; local in the class CTO are retained."
+          (when (and old-slot (slot-boundp old-instance slot-name))
+            (setf (slot-value new-instance slot-name)
+                  (slot-value old-instance slot-name))))))
     (swap-slots old-instance new-instance)
     (rotatef (std-instance-layout new-instance)
              (std-instance-layout old-instance))
