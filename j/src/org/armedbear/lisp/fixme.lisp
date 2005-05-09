@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: fixme.lisp,v 1.30 2005-05-02 16:04:01 piso Exp $
+;;; $Id: fixme.lisp,v 1.31 2005-05-09 17:01:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -68,7 +68,10 @@
       (gethash-2op-1ret name *proclaimed-ftypes*)))
 
 (defun disassemble (fn)
-  (%format t "; DISASSEMBLE is not implemented.")
+  (require-type fn '(OR FUNCTION SYMBOL
+                     (CONS (EQL SETF) (CONS SYMBOL NULL))
+                     (CONS (EQL LAMBDA) LIST)))
+  (%format t "; DISASSEMBLE is not implemented.~%")
   (values))
 
 (defun translate-pathname (&rest args)
