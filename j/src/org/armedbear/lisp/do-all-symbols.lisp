@@ -1,7 +1,7 @@
 ;;; do-all-symbols.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: do-all-symbols.lisp,v 1.1 2003-09-30 11:11:36 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: do-all-symbols.lisp,v 1.2 2005-05-09 23:06:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,20 +17,24 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from CMUCL.
+;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defmacro do-all-symbols ((var &optional result-form) &body body)
-  (let ((flet-name (gensym "DO-SYMBOLS-")))
-    `(block nil
-       (flet ((,flet-name (,var)
-                          (tagbody ,@body)))
-         (dolist (package (list-all-packages))
-           (flet ((iterate-over-symbols (symbols)
-                                        (dolist (symbol symbols)
-                                          (,flet-name symbol))))
-             (iterate-over-symbols (package-internal-symbols package))
-             (iterate-over-symbols (package-external-symbols package)))))
-       (let ((,var nil))
-         ,result-form))))
+  (multiple-value-bind (forms decls) (parse-body body nil)
+    (let ((flet-name (gensym "DO-SYMBOLS-")))
+      `(block nil
+         (flet ((,flet-name (,var)
+                 ,@decls
+                 (tagbody ,@forms)))
+           (dolist (package (list-all-packages))
+             (flet ((iterate-over-symbols (symbols)
+                      (dolist (symbol symbols)
+                        (,flet-name symbol))))
+               (iterate-over-symbols (package-internal-symbols package))
+               (iterate-over-symbols (package-external-symbols package)))))
+         (let ((,var nil))
+           (declare (ignorable ,var))
+           ,@decls
+           ,result-form)))))
