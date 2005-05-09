@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.347 2005-05-09 15:09:38 piso Exp $
+ * $Id: Lisp.java,v 1.348 2005-05-09 17:38:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -663,8 +663,8 @@ public abstract class Lisp
             return ((Symbol)arg).getName();
         if (arg instanceof LispCharacter)
             return String.valueOf(new char[] {((LispCharacter)arg).value});
-        signal(new TypeError("The value " + arg.writeToString() +
-                             " cannot be coerced to a string."));
+        signal(new TypeError(arg, list4(Symbol.OR, Symbol.STRING, Symbol.SYMBOL,
+                                        Symbol.CHARACTER)));
         // Not reached.
         return null;
     }
