@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.100 2005-04-26 14:50:46 piso Exp $
+ * $Id: Load.java,v 1.101 2005-05-09 15:54:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 
 public final class Load extends Lisp
 {
@@ -35,13 +34,15 @@ public final class Load extends Lisp
         throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        return load(filename,
+        return load(new Pathname(filename),
+                    filename,
                     _LOAD_VERBOSE_.symbolValue(thread) != NIL,
                     _LOAD_PRINT_.symbolValue(thread) != NIL,
                     true);
     }
 
-    public static final LispObject load(final String filename,
+    public static final LispObject load(Pathname pathname,
+                                        final String filename,
                                         boolean verbose,
                                         boolean print,
                                         boolean ifDoesNotExist)
@@ -81,7 +82,8 @@ public final class Load extends Lisp
         }
         if (!isFile) {
             if (ifDoesNotExist)
-                return signal(new FileError("File not found: " + filename));
+                return signal(new FileError("File not found: " + filename,
+                                            pathname));
             else
                 return NIL;
         }
@@ -93,7 +95,8 @@ public final class Load extends Lisp
         }
         catch (FileNotFoundException e) {
             if (ifDoesNotExist)
-                return signal(new FileError("File not found: " + filename));
+                return signal(new FileError("File not found: " + filename,
+                                            pathname));
             else
                 return NIL;
         }
@@ -447,8 +450,9 @@ public final class Load extends Lisp
                                           print != NIL,
                                           false);
             }
-
-            return load(Pathname.coerceToPathname(filespec).getNamestring(),
+            Pathname pathname = Pathname.coerceToPathname(filespec);
+            return load(pathname,
+                        pathname.getNamestring(),
                         verbose != NIL,
                         print != NIL,
                         ifDoesNotExist != NIL);
