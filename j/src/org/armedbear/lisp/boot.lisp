@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.219 2005-05-03 04:28:05 piso Exp $
+;;; $Id: boot.lisp,v 1.220 2005-05-09 15:14:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -118,16 +118,16 @@
 
 (defmacro defvar (var &optional (val nil valp) (doc nil docp))
   `(progn
-     (sys::%defvar ',var)
+     (%defvar ',var)
      ,@(when valp
          `((unless (boundp ',var)
              (setq ,var ,val))))
      ,@(when docp
-         `((set-variable-documentation ',var ',doc)))
+         `((set-symbol-documentation ',var 'variable ',doc)))
      ',var))
 
 (defun make-package (package-name &key nicknames use)
-  (sys::%make-package package-name nicknames use))
+  (%make-package package-name nicknames use))
 
 (defun make-keyword (symbol)
   (intern (symbol-name symbol) +keyword-package+))
