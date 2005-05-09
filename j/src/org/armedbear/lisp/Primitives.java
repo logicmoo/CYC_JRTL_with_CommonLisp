@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.780 2005-05-07 15:23:40 piso Exp $
+ * $Id: Primitives.java,v 1.781 2005-05-09 15:12:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1657,7 +1657,7 @@ public final class Primitives extends Lisp
         {
             Symbol symbol = checkSymbol(first);
             if (third instanceof AbstractString)
-                symbol.setVariableDocumentation(third);
+                symbol.setDocumentation(Symbol.VARIABLE, third);
             else if (third != NIL)
                 signal(new TypeError(third, Symbol.STRING));
             symbol.setSymbolValue(second);
@@ -1697,7 +1697,7 @@ public final class Primitives extends Lisp
             Symbol symbol = checkSymbol(first);
             if (third != NIL) {
                 if (third instanceof AbstractString)
-                    symbol.setVariableDocumentation(third);
+                    symbol.setDocumentation(Symbol.VARIABLE, third);
                 else
                     signal(new TypeError(third, Symbol.STRING));
             }
@@ -5360,6 +5360,34 @@ public final class Primitives extends Lisp
                 v.aset(i, n);
             }
             return fourth;
+        }
+    };
+
+    private static final Primitive SYMBOL_DOCUMENTATION =
+      new Primitive("symbol-documentation", PACKAGE_SYS, true,
+                    "symbol doc-type")
+    {
+        public LispObject execute(LispObject arg, LispObject docType)
+            throws ConditionThrowable
+        {
+            Symbol symbol = checkSymbol(arg);
+            checkSymbol(docType);
+            return symbol.getDocumentation(docType);
+        }
+    };
+
+    private static final Primitive SET_SYMBOL_DOCUMENTATION =
+      new Primitive("set-symbol-documentation", PACKAGE_SYS, true,
+                    "symbol doc-type documentation")
+    {
+        public LispObject execute(LispObject arg, LispObject docType,
+                                  LispObject documentation)
+            throws ConditionThrowable
+        {
+            Symbol symbol = checkSymbol(arg);
+            checkSymbol(docType);
+            symbol.setDocumentation(docType, documentation);
+            return documentation;
         }
     };
 
