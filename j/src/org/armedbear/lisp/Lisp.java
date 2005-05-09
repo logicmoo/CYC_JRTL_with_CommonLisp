@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.346 2005-05-05 16:16:00 piso Exp $
+ * $Id: Lisp.java,v 1.347 2005-05-09 15:09:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1220,6 +1220,23 @@ public abstract class Lisp
         signal(new PackageError(obj.writeToString() + " is not the name of a package."));
         // Not reached.
         return null;
+    }
+
+    public LispObject assq(LispObject item, LispObject alist)
+        throws ConditionThrowable
+    {
+        while (alist instanceof Cons) {
+            LispObject entry = ((Cons)alist).car;
+            if (entry instanceof Cons) {
+                if (((Cons)entry).car == item)
+                    return entry;
+            } else if (entry != NIL)
+                return signal(new TypeError(entry, Symbol.CONS));
+            alist = ((Cons)alist).cdr;
+        }
+        if (alist != NIL)
+            return signal(new TypeError(alist, Symbol.LIST));
+        return NIL;
     }
 
     public static final boolean memq(LispObject item, LispObject listArg)
