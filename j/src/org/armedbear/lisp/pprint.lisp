@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: pprint.lisp,v 1.50 2005-04-30 20:01:44 piso Exp $
+;;; $Id: pprint.lisp,v 1.51 2005-05-09 17:00:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -886,6 +886,7 @@
 ;; true, a line break is inserted in the output when the appropriate condition
 ;; below is satisfied; otherwise, PPRINT-NEWLINE has no effect."
 (defun pprint-newline (kind &optional (stream *standard-output*))
+  (sys:require-type kind '(MEMBER :LINEAR :MISER :FILL :MANDATORY))
   (setq stream (sys:out-synonym-of stream))
   (when (not (member kind '(:linear :miser :fill :mandatory)))
     (error 'simple-type-error
