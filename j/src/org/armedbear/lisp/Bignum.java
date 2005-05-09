@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Bignum.java,v 1.66 2005-04-23 18:56:53 piso Exp $
+ * $Id: Bignum.java,v 1.67 2005-05-09 17:27:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,28 +55,29 @@ public final class Bignum extends LispObject
         if (type instanceof Symbol) {
             if (type == Symbol.BIGNUM)
                 return T;
-            if (type == BuiltInClass.BIGNUM)
-                return T;
             if (type == Symbol.INTEGER)
-                return T;
-            if (type == BuiltInClass.INTEGER)
                 return T;
             if (type == Symbol.RATIONAL)
                 return T;
-            if (type == BuiltInClass.RATIONAL)
-                return T;
             if (type == Symbol.REAL)
                 return T;
-            if (type == BuiltInClass.REAL)
-                return T;
             if (type == Symbol.NUMBER)
-                return T;
-            if (type == BuiltInClass.NUMBER)
                 return T;
             if (type == Symbol.SIGNED_BYTE)
                 return T;
             if (type == Symbol.UNSIGNED_BYTE)
                 return value.signum() >= 0 ? T : NIL;
+        } else if (type instanceof LispClass) {
+            if (type == BuiltInClass.BIGNUM)
+                return T;
+            if (type == BuiltInClass.INTEGER)
+                return T;
+            if (type == BuiltInClass.RATIONAL)
+                return T;
+            if (type == BuiltInClass.REAL)
+                return T;
+            if (type == BuiltInClass.NUMBER)
+                return T;
         } else if (type instanceof Cons) {
             if (type.equal(UNSIGNED_BYTE_8))
                 return NIL;
