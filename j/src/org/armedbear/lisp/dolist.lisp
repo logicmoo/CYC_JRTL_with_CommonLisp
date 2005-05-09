@@ -1,7 +1,7 @@
 ;;; dolist.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dolist.lisp,v 1.4 2005-05-04 16:05:42 piso Exp $
+;;; $Id: dolist.lisp,v 1.5 2005-05-09 18:14:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,5 +46,6 @@
          ,(if (constantp result-form)
               `,result-form
               `(let ((,var nil))
+                 ,@decls
                  ,var
                  ,result-form))))))
