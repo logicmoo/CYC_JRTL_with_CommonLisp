@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.47 2005-05-02 16:02:36 piso Exp $
+;;; $Id: compile-system.lisp,v 1.48 2005-05-09 16:01:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -148,7 +148,6 @@
                                   "do-external-symbols.lisp"
                                   "do-symbols.lisp"
                                   "do.lisp"
-                                  "documentation.lisp"
                                   "dolist.lisp"
                                   "dotimes.lisp"
                                   "dribble.lisp"
