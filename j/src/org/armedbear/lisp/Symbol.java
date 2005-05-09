@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.185 2005-05-08 02:01:21 piso Exp $
+ * $Id: Symbol.java,v 1.186 2005-05-09 15:08:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +61,7 @@ public class Symbol extends LispObject
     public static final Symbol SLOT_VALUE                          = PACKAGE_CL.addExternalSymbol("SLOT-VALUE");
     public static final Symbol SPECIAL                             = PACKAGE_CL.addExternalSymbol("SPECIAL");
     public static final Symbol UPDATE_INSTANCE_FOR_REDEFINED_CLASS = PACKAGE_CL.addExternalSymbol("UPDATE-INSTANCE-FOR-REDEFINED-CLASS");
+    public static final Symbol VARIABLE                            = PACKAGE_CL.addExternalSymbol("VARIABLE");
 
     // Type specifiers.
     public static final Symbol AND                                 = PACKAGE_CL.addExternalSymbol("AND");
@@ -526,34 +527,34 @@ public class Symbol extends LispObject
         propertyList = obj;
     }
 
-    private static final Symbol FUNCTION_DOCUMENTATION =
-        PACKAGE_SYS.addExternalSymbol("FUNCTION-DOCUMENTATION");
+    private static final Symbol SYMBOL_DOCUMENTATION_KEY =
+        PACKAGE_SYS.addExternalSymbol("SYMBOL-DOCUMENTATION");
 
-    private static final Symbol VARIABLE_DOCUMENTATION =
-        PACKAGE_SYS.addExternalSymbol("VARIABLE-DOCUMENTATION");
-
-    // Returns null if there is no function documentation.
-    public final LispObject getFunctionDocumentation() throws ConditionThrowable
-    {
-        return get(this, FUNCTION_DOCUMENTATION);
-    }
-
-    public final void setFunctionDocumentation(String docstring)
+    public LispObject getDocumentation(LispObject docType)
         throws ConditionThrowable
     {
-        put(this, FUNCTION_DOCUMENTATION, new SimpleString(docstring));
+        LispObject alist = get(this, SYMBOL_DOCUMENTATION_KEY);
+        if (alist != null) {
+            LispObject entry = assq(docType, alist);
+            if (entry instanceof Cons)
+                return ((Cons)entry).cdr;
+        }
+        return NIL;
     }
 
-    public final void setFunctionDocumentation(LispObject documentation)
+    public void setDocumentation(LispObject docType,
+                                 LispObject documentation)
         throws ConditionThrowable
     {
-        put(this, FUNCTION_DOCUMENTATION, documentation);
-    }
-
-    public final void setVariableDocumentation(LispObject documentation)
-        throws ConditionThrowable
-    {
-        put(this, VARIABLE_DOCUMENTATION, documentation);
+        LispObject alist = get(this, SYMBOL_DOCUMENTATION_KEY);
+        if (alist == null)
+            alist = NIL;
+        LispObject entry = assq(docType, alist);
+        if (entry instanceof Cons)
+            ((Cons)entry).cdr = documentation;
+        else
+            alist = alist.push(new Cons(docType, documentation));
+        put(this, SYMBOL_DOCUMENTATION_KEY, alist);
     }
 
     public String writeToString() throws ConditionThrowable
