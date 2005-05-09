@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.166 2005-05-09 15:16:05 piso Exp $
+;;; $Id: clos.lisp,v 1.167 2005-05-09 15:37:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,7 +79,6 @@
 (defsetf class-precedence-list %set-class-precedence-list)
 (defsetf class-finalized-p %set-class-finalized-p)
 (defsetf std-instance-layout %set-std-instance-layout)
-(defsetf std-instance-slots %set-std-instance-slots)
 (defsetf standard-instance-access %set-standard-instance-access)
 
 (defun (setf find-class) (new-value symbol &optional errorp environment)
