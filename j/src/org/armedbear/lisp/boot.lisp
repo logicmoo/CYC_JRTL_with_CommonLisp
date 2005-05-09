@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.220 2005-05-09 15:14:40 piso Exp $
+;;; $Id: boot.lisp,v 1.221 2005-05-09 15:27:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -114,7 +114,6 @@
 (load-system-file "destructuring-bind")
 (load-system-file "setf")
 (load-system-file "fdefinition")
-(load-system-file "documentation")
 
 (defmacro defvar (var &optional (val nil valp) (doc nil docp))
   `(progn
