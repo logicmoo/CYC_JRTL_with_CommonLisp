@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Extensions.java,v 1.37 2005-04-04 18:45:38 piso Exp $
+ * $Id: Extensions.java,v 1.38 2005-05-10 18:11:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,8 @@
 
 package org.armedbear.lisp;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.Socket;
 
 public final class Extensions extends Lisp
@@ -171,6 +173,24 @@ public final class Extensions extends Lisp
         {
             Thread.dumpStack();
             return LispThread.currentThread().nothing();
+        }
+    };
+
+    // ### make-temp-file => namestring
+    private static final Primitive MAKE_TEMP_FILE =
+        new Primitive("make-temp-file", PACKAGE_EXT, true, "")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            try {
+                File file = File.createTempFile("abcl", null, null);
+                if (file != null)
+                    return new Pathname(file.getPath());
+            }
+            catch (IOException e) {
+                Debug.trace(e);
+            }
+            return NIL;
         }
     };
 }
