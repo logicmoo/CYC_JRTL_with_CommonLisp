@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.348 2005-05-09 17:38:33 piso Exp $
+ * $Id: Lisp.java,v 1.349 2005-05-10 18:13:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -729,10 +729,21 @@ public abstract class Lisp
     public static final LispObject loadCompiledFunction(String namestring)
         throws ConditionThrowable
     {
-        // INIT-FASL binds *DEFAULT-PATHNAME-DEFAULTS* to *LOAD-TRUENAME*.
-        Pathname defaultPathname =
-            Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
-        if (defaultPathname.getDevice() instanceof Pathname) {
+        boolean absolute = Utilities.isFilenameAbsolute(namestring);
+        LispObject device = NIL;
+        final Pathname defaultPathname;
+        if (absolute) {
+            defaultPathname = Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
+        } else {
+            LispObject loadTruename = _LOAD_TRUENAME_.symbolValue();
+            if (loadTruename instanceof Pathname) {
+                defaultPathname = (Pathname) loadTruename;
+                // We're loading a file.
+                device = ((Pathname)loadTruename).getDevice();
+            } else
+                defaultPathname = Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
+        }
+        if (device instanceof Pathname) {
             // We're loading a fasl from j.jar.
             URL url = Lisp.class.getResource(namestring);
             if (url != null) {
@@ -819,7 +830,7 @@ public abstract class Lisp
             }
         } else {
             Pathname pathname = new Pathname(namestring);
-            File file = Utilities.getFile(pathname);
+            File file = Utilities.getFile(pathname, defaultPathname);
             if (file != null && file.isFile()) {
                 try {
                     JavaClassLoader loader = new JavaClassLoader();
