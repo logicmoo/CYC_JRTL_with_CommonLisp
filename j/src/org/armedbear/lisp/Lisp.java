@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.349 2005-05-10 18:13:35 piso Exp $
+ * $Id: Lisp.java,v 1.350 2005-05-10 18:44:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -729,19 +729,20 @@ public abstract class Lisp
     public static final LispObject loadCompiledFunction(String namestring)
         throws ConditionThrowable
     {
+        final LispThread thread = LispThread.currentThread();
         boolean absolute = Utilities.isFilenameAbsolute(namestring);
         LispObject device = NIL;
         final Pathname defaultPathname;
         if (absolute) {
-            defaultPathname = Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
+            defaultPathname = Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue(thread));
         } else {
-            LispObject loadTruename = _LOAD_TRUENAME_.symbolValue();
+            LispObject loadTruename = _LOAD_TRUENAME_.symbolValue(thread);
             if (loadTruename instanceof Pathname) {
                 defaultPathname = (Pathname) loadTruename;
                 // We're loading a file.
                 device = ((Pathname)loadTruename).getDevice();
             } else
-                defaultPathname = Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
+                defaultPathname = Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue(thread));
         }
         if (device instanceof Pathname) {
             // We're loading a fasl from j.jar.
