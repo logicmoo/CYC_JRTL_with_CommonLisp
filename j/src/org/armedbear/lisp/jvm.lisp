@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.452 2005-05-07 15:31:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.453 2005-05-10 18:18:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6357,10 +6357,12 @@
   `(lambda ,(cadr form)
      (error 'program-error :format-control "Execution of a form compiled with errors.")))
 
-(defun compile-defun (name form environment &optional (filespec "out.class"))
+(defun compile-defun (name form environment &optional filespec)
   (aver (eq (car form) 'LAMBDA))
   (unless (or (null environment) (sys::empty-environment-p environment))
     (compiler-unsupported "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
+  (unless filespec
+    (setf filespec (make-temp-file)))
   (catch 'compile-defun-abort
     (let* ((class-file (make-class-file :pathname filespec
                                         :lambda-name name
