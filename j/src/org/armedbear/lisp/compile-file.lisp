@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.86 2005-05-10 18:16:35 piso Exp $
+;;; $Id: compile-file.lisp,v 1.87 2005-05-11 19:24:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -469,16 +469,15 @@
     (values (truename output-file) warnings-p failure-p)))
 
 (defmacro defun (name lambda-list &body body &environment env)
-  (let* ((block-name (block-name name))
-         (lambda-expression `(lambda ,lambda-list (block ,block-name ,@body))))
     (multiple-value-bind (body decls doc)
         (sys::parse-body body)
-      (cond (*compile-file-truename*
-             `(sys::fset ',name
-                         (lambda ,lambda-list ,@decls (block ,block-name ,@body))))
-            (t
-             (when (and env (sys::empty-environment-p env))
-               (setf env nil))
-             (when (null env)
-               (setf lambda-expression (precompile-form lambda-expression nil)))
-             `(%defun ',name ,lambda-expression))))))
+      (let* ((block-name (block-name name))
+             (lambda-expression `(lambda ,lambda-list ,@decls (block ,block-name ,@body))))
+        (cond (*compile-file-truename*
+               `(sys::fset ',name ,lambda-expression))
+              (t
+               (when (and env (sys::empty-environment-p env))
+                 (setf env nil))
+               (when (null env)
+                 (setf lambda-expression (precompile-form lambda-expression nil)))
+               `(%defun ',name ,lambda-expression))))))
