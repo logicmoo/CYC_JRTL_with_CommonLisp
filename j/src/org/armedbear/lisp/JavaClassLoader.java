@@ -2,7 +2,7 @@
  * JavaClassLoader.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: JavaClassLoader.java,v 1.11 2005-01-08 02:11:50 piso Exp $
+ * $Id: JavaClassLoader.java,v 1.12 2005-05-11 19:20:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,7 @@
 
 package org.armedbear.lisp;
 
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,7 +46,7 @@ public class JavaClassLoader extends ClassLoader
     {
         super(JavaClassLoader.class.getClassLoader());
     }
-    
+
     public static JavaClassLoader getPersistentInstance()
     {
         return getPersistentInstance(null);
@@ -68,40 +66,6 @@ public class JavaClassLoader extends ClassLoader
             persistentInstance.definePackage(packageName,"","1.0","","","1.0","",null);
             packages.add(packageName);
         }
-    }
-
-
-    protected Class loadClassFromFile(File file)
-    {
-        try {
-            long length = file.length();
-            if (length < Integer.MAX_VALUE) {
-                byte[] classbytes = new byte[(int)length];
-                DataInputStream in =
-                    new DataInputStream(new FileInputStream(file));
-                in.readFully(classbytes);
-                in.close();
-                final String name;
-                // SableVM requires a non-null name.
-                if (isSableVM) {
-                    String s = file.getName();
-                    int index = s.lastIndexOf('.');
-                    if (index >= 0)
-                        s = s.substring(0, index);
-                    name = "org.armedbear.lisp.".concat(s.replace('-', '_'));
-                } else
-                    name = null;
-                Class c = defineClass(name, classbytes, 0, (int) length);
-                if (c != null) {
-                    resolveClass(c);
-                    return c;
-                }
-            }
-        }
-        catch (Throwable t) {
-            Debug.trace(t);
-        }
-        return null;
     }
 
     public Class loadClassFromByteArray(String className, byte[] classbytes)
