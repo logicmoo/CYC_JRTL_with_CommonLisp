@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.51 2005-05-09 15:13:12 piso Exp $
+ * $Id: Function.java,v 1.52 2005-05-11 19:18:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.lisp;
 
 public abstract class Function extends Operator
 {
+    private LispObject propertyList = NIL;
     private int callCount;
 
     protected Function() {}
@@ -115,6 +116,16 @@ public abstract class Function extends Operator
         if (typeSpecifier == BuiltInClass.FUNCTION)
             return T;
         return super.typep(typeSpecifier);
+    }
+
+    public final LispObject getPropertyList()
+    {
+        return propertyList;
+    }
+
+    public final void setPropertyList(LispObject obj)
+    {
+        propertyList = obj;
     }
 
     public LispObject execute() throws ConditionThrowable
