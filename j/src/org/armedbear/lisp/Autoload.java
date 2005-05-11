@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.226 2005-05-07 18:52:24 piso Exp $
+ * $Id: Autoload.java,v 1.227 2005-05-11 19:22:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -538,6 +538,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "condition-report", "Condition");
         autoload(PACKAGE_SYS, "create-new-file", "create_new_file");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
+        autoload(PACKAGE_SYS, "disassemble-class-bytes", "disassemble_class_bytes", true);
         autoload(PACKAGE_SYS, "double-float-high-bits", "FloatFunctions");
         autoload(PACKAGE_SYS, "double-float-low-bits", "FloatFunctions");
         autoload(PACKAGE_SYS, "float-infinity-p", "FloatFunctions");
