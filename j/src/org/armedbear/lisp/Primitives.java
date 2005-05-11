@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.781 2005-05-09 15:12:08 piso Exp $
+ * $Id: Primitives.java,v 1.782 2005-05-11 19:17:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5388,6 +5388,32 @@ public final class Primitives extends Lisp
             checkSymbol(docType);
             symbol.setDocumentation(docType, documentation);
             return documentation;
+        }
+    };
+
+    private static final Primitive _PUTF =
+        new Primitive("%putf", PACKAGE_SYS, true,
+                      "plist indicator new-value")
+    {
+        public LispObject execute(LispObject plist, LispObject indicator,
+                                  LispObject newValue)
+            throws ConditionThrowable
+        {
+            return putf(plist, indicator, newValue);
+        }
+    };
+
+    private static final Primitive FUNCTION_PLIST =
+        new Primitive("function-plist", PACKAGE_SYS, true, "function")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((Function)arg).getPropertyList();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.FUNCTION));
+            }
         }
     };
 
