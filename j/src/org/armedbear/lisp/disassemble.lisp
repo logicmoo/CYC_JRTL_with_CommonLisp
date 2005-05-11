@@ -1,7 +1,7 @@
 ;;; disassemble.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: disassemble.lisp,v 1.1 2005-05-11 19:23:10 piso Exp $
+;;; $Id: disassemble.lisp,v 1.2 2005-05-11 19:57:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,12 +26,12 @@
                      SYMBOL
                      (CONS (EQL SETF) (CONS SYMBOL NULL))
                      (CONS (EQL LAMBDA) LIST)))
+  (when (symbolp fn)
+    (setf fn (symbol-function fn)))
   (let ((function (cond ((typep fn 'generic-function)
                          (generic-function-discriminating-function fn))
                         ((functionp fn)
-                         fn)
-                        ((symbolp fn)
-                         (symbol-function fn)))))
+                         fn))))
     (when (functionp function)
       (unless (compiled-function-p function)
         (setf function (compile nil function)))
