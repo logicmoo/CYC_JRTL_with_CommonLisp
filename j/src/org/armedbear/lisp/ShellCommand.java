@@ -2,7 +2,7 @@
  * ShellCommand.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: ShellCommand.java,v 1.3 2005-05-05 14:22:48 piso Exp $
+ * $Id: ShellCommand.java,v 1.4 2005-05-11 19:27:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,14 +36,14 @@ public final class ShellCommand extends Lisp implements Runnable
 
     private int exitValue = -1;
 
-    private ShellCommand(String command, String directory)
+    public ShellCommand(String command, String directory)
         throws ConditionThrowable
     {
         this.command = command;
         this.directory = directory;
     }
 
-    private final String getOutput()
+    public final String getOutput()
     {
         return output.toString();
     }
