@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.186 2005-05-09 15:08:49 piso Exp $
+ * $Id: Symbol.java,v 1.187 2005-05-11 19:27:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,6 +185,7 @@ public class Symbol extends LispObject
 
     // Internal symbols.
     public static final Symbol BACKQUOTE_MACRO                     = PACKAGE_SYS.addInternalSymbol("BACKQUOTE-MACRO");
+    public static final Symbol CLASS_BYTES                         = PACKAGE_SYS.addExternalSymbol("CLASS-BYTES");
     public static final Symbol COMMA_MACRO                         = PACKAGE_SYS.addInternalSymbol("COMMA-MACRO");
     public static final Symbol MACROEXPAND_MACRO                   = PACKAGE_SYS.addInternalSymbol("MACROEXPAND-MACRO");
     public static final Symbol OUTPUT_OBJECT                       = PACKAGE_SYS.addExternalSymbol("OUTPUT-OBJECT");
