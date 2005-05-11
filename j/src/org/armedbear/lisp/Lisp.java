@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.350 2005-05-10 18:44:29 piso Exp $
+ * $Id: Lisp.java,v 1.351 2005-05-11 19:21:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,9 @@
 
 package org.armedbear.lisp;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -834,8 +836,14 @@ public abstract class Lisp
             File file = Utilities.getFile(pathname, defaultPathname);
             if (file != null && file.isFile()) {
                 try {
+                    byte[] bytes = new byte[(int)file.length()];
+                    DataInputStream in =
+                        new DataInputStream(new FileInputStream(file));
+                    in.readFully(bytes);
+                    in.close();
                     JavaClassLoader loader = new JavaClassLoader();
-                    Class c = loader.loadClassFromFile(file);
+                    Class c =
+                        loader.loadClassFromByteArray(null, bytes, 0, bytes.length);
                     if (c != null) {
                         Class[] parameterTypes = new Class[0];
                         Constructor constructor =
@@ -843,6 +851,12 @@ public abstract class Lisp
                         Object[] initargs = new Object[0];
                         LispObject obj =
                             (LispObject) constructor.newInstance(initargs);
+                        if (obj instanceof Function) {
+                            Function function = (Function) obj;
+                            LispObject plist = function.getPropertyList();
+                            function.setPropertyList(putf(plist, Symbol.CLASS_BYTES,
+                                                          new JavaObject(bytes)));
+                        }
                         return obj != null ? obj : NIL;
                     }
                 }
@@ -1344,6 +1358,24 @@ public abstract class Lisp
                                         new Cons(value,
                                                  symbol.getPropertyList())));
         return value;
+    }
+
+    public static final LispObject putf(LispObject plist, LispObject indicator,
+                                        LispObject value)
+        throws ConditionThrowable
+    {
+        LispObject list = plist;
+        while (list != NIL) {
+            if (list.car() == indicator) {
+                // Found it!
+                LispObject rest = list.cdr();
+                rest.setCar(value);
+                return plist;
+            }
+            list = list.cddr();
+        }
+        // Not found.
+        return new Cons(indicator, new Cons(value, plist));
     }
 
     public static final LispObject remprop(Symbol symbol, LispObject indicator)
@@ -2058,6 +2090,11 @@ public abstract class Lisp
     // ### *preload*
     public static final Symbol _PRELOAD_ =
         internSpecial("*PRELOAD*", PACKAGE_SYS, NIL);
+
+    // ### *disassembler*
+    public static final Symbol _DISASSEMBLER_ =
+        exportSpecial("*DISASSEMBLER*", PACKAGE_EXT,
+                      new SimpleString("jad -dis -p"));
 
     // ### *speed* compiler policy
     public static final Symbol _SPEED_ =
