@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.454 2005-05-10 18:45:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.455 2005-05-11 00:38:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6453,23 +6453,24 @@
            (warnings-p t)
            (failure-p t))
       (with-compilation-unit ()
-        (let* ((tempfile (make-temp-file))
-               (filespec (compile-defun name expr env tempfile)))
-          (setf compiled-definition (sys:load-compiled-function filespec))
-          (delete-file tempfile)
-          (when (and name (functionp compiled-definition))
-            (sys::%set-lambda-name compiled-definition name)
-            (sys:set-call-count compiled-definition (sys:call-count definition))
-            (sys::%set-arglist compiled-definition (sys::arglist definition))
-            (let ((*warn-on-redefinition* nil))
-              (setf (fdefinition name)
-                    (if (macro-function name)
-                        (sys::make-macro name compiled-definition)
-                        compiled-definition))))
-          (cond ((zerop (+ jvm::*errors* jvm::*warnings* jvm::*style-warnings*))
-                 (setf warnings-p nil failure-p nil))
-                ((zerop (+ jvm::*errors* jvm::*warnings*))
-                 (setf failure-p nil)))))
+        (let* ((tempfile (make-temp-file)))
+          (unwind-protect
+              (setf compiled-definition
+                    (sys:load-compiled-function (compile-defun name expr env tempfile)))
+            (delete-file tempfile)))
+        (when (and name (functionp compiled-definition))
+          (sys::%set-lambda-name compiled-definition name)
+          (sys:set-call-count compiled-definition (sys:call-count definition))
+          (sys::%set-arglist compiled-definition (sys::arglist definition))
+          (let ((*warn-on-redefinition* nil))
+            (setf (fdefinition name)
+                  (if (macro-function name)
+                      (sys::make-macro name compiled-definition)
+                      compiled-definition))))
+        (cond ((zerop (+ jvm::*errors* jvm::*warnings* jvm::*style-warnings*))
+               (setf warnings-p nil failure-p nil))
+              ((zerop (+ jvm::*errors* jvm::*warnings*))
+               (setf failure-p nil))))
       (values (or name compiled-definition) warnings-p failure-p))))
 
 (defun jvm-compile (name &optional definition)
