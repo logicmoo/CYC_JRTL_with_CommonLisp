@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.48 2005-05-03 01:48:31 piso Exp $
+ * $Id: StructureObject.java,v 1.49 2005-05-12 19:15:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,9 +170,8 @@ public final class StructureObject extends LispObject
                     // FIXME AREF(1)
                     LispObject slotName = slotDefinition.AREF(1);
                     Debug.assertTrue(slotName instanceof Symbol);
-                    Symbol keyword =
-                        PACKAGE_KEYWORD.intern(((Symbol)slotName).getName());
-                    sb.append(keyword.writeToString());
+                    sb.append(':');
+                    sb.append(((Symbol)slotName).name.getStringValue());
                     sb.append(' ');
                     if (printCircle) {
                         StringOutputStream stream = new StringOutputStream();
