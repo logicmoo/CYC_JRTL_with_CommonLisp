@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.782 2005-05-11 19:17:23 piso Exp $
+ * $Id: Primitives.java,v 1.783 2005-05-12 08:35:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3531,7 +3531,9 @@ public final class Primitives extends Lisp
 
     // ### and
     // Should be a macro.
-    private static final SpecialOperator AND = new SpecialOperator("and", "&rest forms") {
+    private static final SpecialOperator AND =
+        new SpecialOperator("and", "&rest forms")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3554,7 +3556,9 @@ public final class Primitives extends Lisp
 
     // ### or
     // Should be a macro.
-    private static final SpecialOperator OR = new SpecialOperator("or", "&rest forms") {
+    private static final SpecialOperator OR =
+        new SpecialOperator("or", "&rest forms")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -5413,6 +5417,20 @@ public final class Primitives extends Lisp
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.FUNCTION));
+            }
+        }
+    };
+
+    private static final Primitive MAKE_KEYWORD =
+        new Primitive("make-keyword", PACKAGE_SYS, true, "symbol")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return PACKAGE_KEYWORD.intern(((Symbol)arg).name);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.SYMBOL));
             }
         }
     };
