@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: format.lisp,v 1.25 2005-03-17 15:03:06 piso Exp $
+;;; $Id: format.lisp,v 1.26 2005-05-12 18:09:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -701,10 +701,10 @@
                     (car directives)
                     (find-directive
                      (cdr (flet ((after (char)
-                                        (member (find-directive (cdr directives)
-                                                                char
-                                                                nil)
-                                                directives)))
+                                   (member (find-directive (cdr directives)
+                                                           char
+                                                           nil)
+                                           directives)))
                             (case char
                               (#\( (after #\)))
                               (#\< (after #\>))
@@ -1086,9 +1086,10 @@
 		 (error 'format-error
 			:complaint
 			"must specify exactly two sections"))
-	     (expand-bind-defaults ((index (expand-next-arg))) params
+	     (expand-bind-defaults ((index nil)) params
                (setf *only-simple-args* nil)
-               (let ((clauses nil))
+               (let ((clauses nil)
+                     (case `(or ,index ,(expand-next-arg))))
                  (when last-semi-with-colon-p
                    (push `(t ,@(expand-directive-list (pop sublists)))
                          clauses))
@@ -1097,7 +1098,7 @@
                      (push `(,(decf count)
                              ,@(expand-directive-list sublist))
                            clauses)))
-                 `(case ,index ,@clauses)))))
+                 `(case ,case ,@clauses)))))
      remaining)))
 
 (defun parse-conditional-directive (directives)
@@ -1142,11 +1143,11 @@
 (defun expand-true-false-conditional (true false)
   (let ((arg (expand-next-arg)))
     (flet ((hairy ()
-                  `(if ,arg
-                       (progn
-                         ,@(expand-directive-list true))
-                       (progn
-                         ,@(expand-directive-list false)))))
+             `(if ,arg
+                  (progn
+                    ,@(expand-directive-list true))
+                  (progn
+                    ,@(expand-directive-list false)))))
       (if *only-simple-args*
 	  (multiple-value-bind (true-guts true-args true-simple)
             (let ((*simple-args* *simple-args*)
