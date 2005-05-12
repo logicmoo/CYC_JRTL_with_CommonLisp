@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.108 2005-05-11 19:16:08 piso Exp $
+;;; $Id: precompiler.lisp,v 1.109 2005-05-12 18:29:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -510,7 +510,7 @@
                   (error 'program-error
                          :format-control "~S is a symbol-macro and may not be declared special."
                          :format-arguments (list special))))))))
-      (list* 'PROGN (mapcar #'precompile1 body)))))
+      `(locally ,@decls ,@(mapcar #'precompile1 body)))))
 
 (defun precompile-the (form)
   (list 'THE
