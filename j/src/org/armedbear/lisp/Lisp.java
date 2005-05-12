@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.351 2005-05-11 19:21:53 piso Exp $
+ * $Id: Lisp.java,v 1.352 2005-05-12 00:40:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -814,6 +814,8 @@ public abstract class Lisp
                                     Object[] initargs = new Object[0];
                                     LispObject obj =
                                         (LispObject) constructor.newInstance(initargs);
+                                    if (obj instanceof Function)
+                                        ((Function)obj).setClassBytes(bytes);
                                     return obj != null ? obj : NIL;
                                 }
                             }
@@ -851,12 +853,8 @@ public abstract class Lisp
                         Object[] initargs = new Object[0];
                         LispObject obj =
                             (LispObject) constructor.newInstance(initargs);
-                        if (obj instanceof Function) {
-                            Function function = (Function) obj;
-                            LispObject plist = function.getPropertyList();
-                            function.setPropertyList(putf(plist, Symbol.CLASS_BYTES,
-                                                          new JavaObject(bytes)));
-                        }
+                        if (obj instanceof Function)
+                            ((Function)obj).setClassBytes(bytes);
                         return obj != null ? obj : NIL;
                     }
                 }
@@ -874,7 +872,7 @@ public abstract class Lisp
                                             pathname));
         }
         return signal(new LispError("Unable to load " + namestring));
-     }
+    }
 
     public static final LispObject makeCompiledClosure(LispObject ctf,
                                                        LispObject[] context)
