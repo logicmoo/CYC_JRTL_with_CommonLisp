@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.1 2005-04-30 18:34:43 piso Exp $
+;;; $Id: known-functions.lisp,v 1.2 2005-05-12 09:11:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,5 +20,11 @@
 (in-package #:system)
 
 (declaim (ftype (function (t t) t) gethash-2op-1ret))
+(declaim (ftype (function (t) symbol) make-keyword))
+
+(declaim (ftype (function * list)
+                backq-list backq-list* backq-append backq-nconc))
+
+(declaim (ftype (function * cons) backq-cons))
 
 (provide '#:known-functions)
