@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.52 2005-05-11 19:18:21 piso Exp $
+ * $Id: Function.java,v 1.53 2005-05-12 00:39:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,6 +126,12 @@ public abstract class Function extends Operator
     public final void setPropertyList(LispObject obj)
     {
         propertyList = obj;
+    }
+
+    public final void setClassBytes(byte[] bytes) throws ConditionThrowable
+    {
+        propertyList = putf(propertyList, Symbol.CLASS_BYTES,
+                            new JavaObject(bytes));
     }
 
     public LispObject execute() throws ConditionThrowable
