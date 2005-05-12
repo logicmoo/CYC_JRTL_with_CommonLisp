@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.455 2005-05-11 00:38:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.456 2005-05-12 09:21:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4195,11 +4195,9 @@
                             (not (constantp (second arg))))
                    (compiler-unsupported "P2-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
     (let* ((name (compiland-name compiland))
-           form
            function
            pathname
            class-file)
-      (setf form (compiland-lambda-expression compiland))
       (setf pathname (if *compile-file-truename*
                          (sys::next-classfile-name)
                          (prog1
