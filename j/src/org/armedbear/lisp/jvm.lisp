@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.456 2005-05-12 09:21:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.457 2005-05-12 16:00:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -253,8 +253,6 @@
 
 ;; True for local functions defined with FLET or LABELS.
 (defvar *child-p* nil)
-
-(defvar *child-count* 0)
 
 (defun find-visible-variable (name)
   (dolist (variable *visible-variables*)
@@ -4182,7 +4180,7 @@
     (emit-push-nil)
     (emit-move-from-stack target)))
 
-(defun p2-local-function (compiland local-function)
+(defun p2-flet-process-compiland (compiland)
   (let ((lambda-list (cadr (compiland-lambda-expression compiland))))
     (when (or (memq '&optional lambda-list)
               (memq '&key lambda-list))
@@ -4193,58 +4191,107 @@
                 ((memq state '(&optional &key))
                  (when (and (consp arg)
                             (not (constantp (second arg))))
-                   (compiler-unsupported "P2-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
-    (let* ((name (compiland-name compiland))
-           function
-           pathname
-           class-file)
-      (setf pathname (if *compile-file-truename*
-                         (sys::next-classfile-name)
-                         (prog1
-                           (sys::%format nil "local-~D.class" *child-count*)
-                           (incf *child-count*))))
-
-      (setf class-file (make-class-file :pathname pathname
-                                        :lambda-list lambda-list))
-
-      (setf (compiland-class-file compiland) class-file)
-
-      (with-class-file class-file
-        (let ((*current-compiland* compiland)
-              (*speed* *speed*)
-              (*safety* *safety*)
-              (*debug* *debug*))
-          (p2-compiland compiland)
-          (write-class-file (compiland-class-file compiland))
-          ))
-      (cond (*compile-file-truename*
+                   (compiler-unsupported "P2-FLET-PROCESS-COMPILAND: can't handle optional argument with non-constant initform.")))))))
+    (cond (*compile-file-truename*
+           (let* ((pathname (sys::next-classfile-name))
+                  (class-file (make-class-file :pathname pathname
+                                               :lambda-list lambda-list)))
+             (setf (compiland-class-file compiland) class-file)
+             (with-class-file class-file
+               (let ((*current-compiland* compiland)
+                     (*speed* *speed*)
+                     (*safety* *safety*)
+                     (*debug* *debug*))
+                 (p2-compiland compiland)
+                 (write-class-file (compiland-class-file compiland))))
              ;; Verify that the class file is loadable.
              (let ((*default-pathname-defaults* pathname))
                (unless (ignore-errors (sys:load-compiled-function pathname))
-                 (error "P2-LOCAL-FUNCTION: unable to load ~S." pathname))))
-            (t (setf function (sys:load-compiled-function pathname))))
-      (cond (local-function
-             (setf (local-function-class-file local-function) class-file)
-             (let ((g (if *compile-file-truename*
-                          (declare-local-function local-function)
-                          (declare-object function))))
-               (emit 'getstatic *this-class* g +lisp-object+)
-               (emit 'var-set (local-function-variable local-function))))
-            (t
-             (push (make-local-function :name name
-                                        :function function
+                 (error "Unable to load ~S." pathname)))
+             (push (make-local-function :name (compiland-name compiland)
                                         :class-file class-file)
-                   *local-functions*))))))
+                   *local-functions*)))
+          (t
+           (let* ((pathname (make-temp-file))
+                  (class-file (make-class-file :pathname pathname
+                                               :lambda-list lambda-list)))
+             (setf (compiland-class-file compiland) class-file)
+             (unwind-protect
+                 (progn
+                   (with-class-file class-file
+                     (let ((*current-compiland* compiland)
+                           (*speed* *speed*)
+                           (*safety* *safety*)
+                           (*debug* *debug*))
+                       (p2-compiland compiland)
+                       (write-class-file (compiland-class-file compiland))))
+                   (push (make-local-function :name (compiland-name compiland)
+                                              :function (sys:load-compiled-function pathname)
+                                              :class-file class-file)
+                         *local-functions*))
+               (delete-file pathname)))))))
 
 (defun p2-flet (form &key (target :stack) representation)
   (let ((*local-functions* *local-functions*)
         (compilands (cadr form))
         (body (cddr form)))
     (dolist (compiland compilands)
-      (p2-local-function compiland nil))
+      (p2-flet-process-compiland compiland))
     (do ((forms body (cdr forms)))
         ((null forms))
       (compile-form (car forms) :target (if (cdr forms) nil target)))))
+
+(defun p2-labels-process-compiland (compiland local-function)
+  (let ((lambda-list (cadr (compiland-lambda-expression compiland))))
+    (when (or (memq '&optional lambda-list)
+              (memq '&key lambda-list))
+      (let ((state nil))
+        (dolist (arg lambda-list)
+          (cond ((memq arg lambda-list-keywords)
+                 (setf state arg))
+                ((memq state '(&optional &key))
+                 (when (and (consp arg)
+                            (not (constantp (second arg))))
+                   (compiler-unsupported "P2-LABELS-PROCESS-COMPILAND: can't handle optional argument with non-constant initform.")))))))
+    (cond (*compile-file-truename*
+           (let* ((pathname (sys::next-classfile-name))
+                  (class-file (make-class-file :pathname pathname
+                                               :lambda-list lambda-list)))
+             (setf (compiland-class-file compiland) class-file)
+             (with-class-file class-file
+               (let ((*current-compiland* compiland)
+                     (*speed* *speed*)
+                     (*safety* *safety*)
+                     (*debug* *debug*))
+                 (p2-compiland compiland)
+                 (write-class-file (compiland-class-file compiland))))
+             ;; Verify that the class file is loadable.
+             (let ((*default-pathname-defaults* pathname))
+               (unless (ignore-errors (sys:load-compiled-function pathname))
+                 (error "Unable to load ~S." pathname)))
+             (setf (local-function-class-file local-function) class-file)
+             (let ((g (declare-local-function local-function)))
+               (emit 'getstatic *this-class* g +lisp-object+)
+               (emit 'var-set (local-function-variable local-function)))))
+          (t
+           (let* ((pathname (make-temp-file))
+                  (class-file (make-class-file :pathname pathname
+                                               :lambda-list lambda-list)))
+             (setf (compiland-class-file compiland) class-file)
+             (unwind-protect
+                 (progn
+                   (with-class-file class-file
+                     (let ((*current-compiland* compiland)
+                           (*speed* *speed*)
+                           (*safety* *safety*)
+                           (*debug* *debug*))
+                       (p2-compiland compiland)
+                       (write-class-file (compiland-class-file compiland))))
+                   (setf (local-function-class-file local-function) class-file)
+                   (let ((g (declare-object (sys:load-compiled-function pathname))))
+                     (emit 'getstatic *this-class* g +lisp-object+)
+                     (emit 'var-set (local-function-variable local-function))))
+               (delete-file pathname)))))))
 
 (defun p2-labels (form &key target representation)
   (let ((*local-functions* *local-functions*)
@@ -4259,7 +4306,8 @@
         (unless (variable-closure-index variable)
           (setf (variable-register variable) (allocate-register)))))
     (dolist (local-function local-functions)
-      (p2-local-function (local-function-compiland local-function) local-function))
+      (p2-labels-process-compiland (local-function-compiland local-function)
+                                   local-function))
     (do ((forms body (cdr forms)))
         ((null forms))
       (compile-form (car forms) :target (if (cdr forms) nil target)))))
@@ -4278,37 +4326,49 @@
                    (compiler-unsupported
                     "P2-LAMBDA: can't handle optional argument with non-constant initform.")))))))
     (aver (null (compiland-class-file compiland)))
-    (setf (compiland-class-file compiland)
-          (make-class-file :pathname (if *compile-file-truename*
-                                         (sys::next-classfile-name)
-                                         (prog1
-                                           (sys::%format nil "local-~D.class" *child-count*)
-                                           (incf *child-count*)))
-                           :lambda-list lambda-list)))
-  (with-class-file (compiland-class-file compiland)
-    (let ((*current-compiland* compiland)
-          (*speed* *speed*)
-          (*safety* *safety*)
-          (*debug* *debug*))
-      (p2-compiland compiland)
-      (write-class-file (compiland-class-file compiland))
-      ))
-  (let ((class-file (compiland-class-file compiland)))
-    (emit 'getstatic *this-class*
-          (if *compile-file-truename*
-              (declare-local-function (make-local-function :class-file class-file))
-              (declare-object (sys:load-compiled-function (class-file-pathname class-file))))
-          +lisp-object+))
-  (cond ((null *closure-variables*)) ; Nothing to do.
-        ((compiland-closure-register *current-compiland*)
-         (emit 'aload (compiland-closure-register *current-compiland*))
-         (emit-invokestatic +lisp-class+ "makeCompiledClosure"
-                            (list +lisp-object+ +lisp-object-array+)
-                            +lisp-object+)
-         (emit 'checkcast +lisp-compiled-closure-class+)) ; Stack: compiled-closure
-        (t
-         (aver nil))) ;; Shouldn't happen.
-  (emit-move-from-stack target))
+    (cond (*compile-file-truename*
+           (setf (compiland-class-file compiland)
+                 (make-class-file :pathname (sys::next-classfile-name)
+                                  :lambda-list lambda-list))
+           (with-class-file (compiland-class-file compiland)
+             (let ((*current-compiland* compiland)
+                   (*speed* *speed*)
+                   (*safety* *safety*)
+                   (*debug* *debug*))
+               (p2-compiland compiland)
+               (write-class-file (compiland-class-file compiland))))
+           (let ((class-file (compiland-class-file compiland)))
+             (emit 'getstatic *this-class*
+                   (declare-local-function (make-local-function :class-file class-file))
+                   +lisp-object+)))
+          (t
+           (let ((pathname (make-temp-file)))
+             (setf (compiland-class-file compiland)
+                   (make-class-file :pathname pathname
+                                    :lambda-list lambda-list))
+             (unwind-protect
+                 (progn
+                   (with-class-file (compiland-class-file compiland)
+                     (let ((*current-compiland* compiland)
+                           (*speed* *speed*)
+                           (*safety* *safety*)
+                           (*debug* *debug*))
+                       (p2-compiland compiland)
+                       (write-class-file (compiland-class-file compiland))))
+                   (emit 'getstatic *this-class*
+                         (declare-object (sys:load-compiled-function pathname))
+                         +lisp-object+))
+               (delete-file pathname)))))
+    (cond ((null *closure-variables*)) ; Nothing to do.
+          ((compiland-closure-register *current-compiland*)
+           (emit 'aload (compiland-closure-register *current-compiland*))
+           (emit-invokestatic +lisp-class+ "makeCompiledClosure"
+                              (list +lisp-object+ +lisp-object-array+)
+                              +lisp-object+)
+           (emit 'checkcast +lisp-compiled-closure-class+)) ; Stack: compiled-closure
+          (t
+           (aver nil))) ;; Shouldn't happen.
+    (emit-move-from-stack target)))
 
 (defun p2-function (form &key (target :stack) representation)
   (let ((name (second form))
@@ -5860,7 +5920,6 @@
   (let ((*all-variables* ())
         (*closure-variables* ())
         (*current-compiland* xep)
-        (*child-count* 0)
         (*speed* 3)
         (*safety* 0)
         (*debug* 0))
@@ -6320,7 +6379,6 @@
   (let ((*all-variables* ())
         (*closure-variables* ())
         (*current-compiland* compiland)
-        (*child-count* 0)
         (*speed* *speed*)
         (*safety* *safety*)
         (*debug* *debug*))
