@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.40 2005-05-13 12:29:51 piso Exp $
+ * $Id: SpecialOperators.java,v 1.41 2005-05-13 12:45:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -478,7 +478,7 @@ public final class SpecialOperators extends Lisp
                     f = get(symbol, Symbol.SETF_FUNCTION);
                     if (f != null)
                         return f;
-                    f = get(symbol, PACKAGE_SYS.intern("SETF-INVERSE"));
+                    f = get(symbol, Symbol.SETF_INVERSE);
                     if (f != null)
                         return f;
                 }
