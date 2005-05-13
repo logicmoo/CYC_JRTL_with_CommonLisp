@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.185 2005-05-11 19:24:20 piso Exp $
+;;; $Id: autoloads.lisp,v 1.186 2005-05-13 12:45:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,7 +94,8 @@
 (autoload '(ensure-class ensure-generic-function subclassp make-condition
             define-method-combination
             %defgeneric
-            canonicalize-direct-superclasses)
+            canonicalize-direct-superclasses
+            documentation)
           "clos")
 (export '(ensure-class subclassp make-condition %defgeneric
           canonicalize-direct-superclasses)
