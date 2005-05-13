@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.7 2005-05-06 13:24:59 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.8 2005-05-13 12:31:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@
          (check-redefinition name)
          (record-source-information name nil source-position)
          ;; FIXME arglist
-         (setf (get (cadr name) '%SETF-FUNCTION) function))
+         (setf (get (cadr name) 'setf-function) function))
         (t
          (error 'type-error "~S is not a valid function name." name)))
   (when (functionp function) ; FIXME Is this test needed?
@@ -73,7 +73,7 @@
               (cadr name)
               (null (cddr name))
               (require-type (cadr name) 'symbol))
-         (or (get (cadr name) '%setf-function)
+         (or (get (cadr name) 'setf-function)
              (error 'undefined-function :name name)))
         (t
          (require-type name '(or symbol (cons (eql setf) (cons symbol null)))))))
