@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.457 2005-05-12 16:00:25 piso Exp $
+;;; $Id: jvm.lisp,v 1.458 2005-05-13 16:44:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2922,8 +2922,8 @@
              (if (notinline-p op)
                  (emit 'getstatic *this-class* (declare-symbol op) +lisp-symbol+)
                  (emit 'aload 0)))
-            ((inline-ok op)
-             (emit 'getstatic *this-class* (declare-function op) +lisp-object+))
+;;             ((inline-ok op)
+;;              (emit 'getstatic *this-class* (declare-function op) +lisp-object+))
             ((null (symbol-package op))
              (let ((g (if *compile-file-truename*
                           (declare-object-as-string op)
