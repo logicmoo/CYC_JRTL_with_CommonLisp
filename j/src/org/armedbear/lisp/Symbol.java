@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.188 2005-05-13 12:14:53 piso Exp $
+ * $Id: Symbol.java,v 1.189 2005-05-13 12:29:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,7 +189,7 @@ public class Symbol extends LispObject
     public static final Symbol COMMA_MACRO                         = PACKAGE_SYS.addInternalSymbol("COMMA-MACRO");
     public static final Symbol MACROEXPAND_MACRO                   = PACKAGE_SYS.addInternalSymbol("MACROEXPAND-MACRO");
     public static final Symbol OUTPUT_OBJECT                       = PACKAGE_SYS.addExternalSymbol("OUTPUT-OBJECT");
-    public static final Symbol _SETF_FUNCTION                      = PACKAGE_SYS.addInternalSymbol("%SETF-FUNCTION");
+    public static final Symbol SETF_FUNCTION                       = PACKAGE_SYS.addInternalSymbol("SETF-FUNCTION");
     public static final Symbol _SOURCE                             = PACKAGE_SYS.addInternalSymbol("%SOURCE");
 
     public static final Symbol SINGLE_FLOAT_POSITIVE_INFINITY      = PACKAGE_EXT.addExternalSymbol("SINGLE-FLOAT-POSITIVE-INFINITY");
@@ -503,7 +503,7 @@ public class Symbol extends LispObject
     public final LispObject getSymbolSetfFunctionOrDie()
         throws ConditionThrowable
     {
-        LispObject obj = get(this, Symbol._SETF_FUNCTION);
+        LispObject obj = get(this, Symbol.SETF_FUNCTION);
         if (obj == null)
             signal(new UndefinedFunction(list2(Keyword.NAME,
                                                list2(Symbol.SETF,

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.783 2005-05-12 08:35:43 piso Exp $
+ * $Id: Primitives.java,v 1.784 2005-05-13 12:30:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -772,7 +772,7 @@ public final class Primitives extends Lisp
                     arg.cddr() == NIL)
                 {
                     LispObject f =
-                        get(checkSymbol(arg.cadr()), Symbol._SETF_FUNCTION);
+                        get(checkSymbol(arg.cadr()), Symbol.SETF_FUNCTION);
                     return f != null ? T : NIL;
                 }
             }
@@ -800,7 +800,7 @@ public final class Primitives extends Lisp
                     arg.cadr() != NIL &&
                     arg.cddr() == NIL)
                 {
-                    remprop(checkSymbol(arg.cadr()), Symbol._SETF_FUNCTION);
+                    remprop(checkSymbol(arg.cadr()), Symbol.SETF_FUNCTION);
                     return arg;
                 }
             }
@@ -2978,7 +2978,7 @@ public final class Primitives extends Lisp
                 // SETF function
                 checkRedefinition(first);
                 Symbol symbol = checkSymbol(first.cadr());
-                put(symbol, Symbol._SETF_FUNCTION, second);
+                put(symbol, Symbol.SETF_FUNCTION, second);
             } else
                 return signal(new TypeError("The value " +
                                             first.writeToString() +
