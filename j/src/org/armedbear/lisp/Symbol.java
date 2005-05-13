@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.187 2005-05-11 19:27:26 piso Exp $
+ * $Id: Symbol.java,v 1.188 2005-05-13 12:14:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -505,9 +505,9 @@ public class Symbol extends LispObject
     {
         LispObject obj = get(this, Symbol._SETF_FUNCTION);
         if (obj == null)
-            return signal(new LispError("The function (SETF " +
-                                        name.writeToString() +
-                                        ") is undefined."));
+            signal(new UndefinedFunction(list2(Keyword.NAME,
+                                               list2(Symbol.SETF,
+                                                     this))));
         return obj;
     }
 
