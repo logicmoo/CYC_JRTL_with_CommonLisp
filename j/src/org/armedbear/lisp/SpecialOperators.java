@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.38 2005-04-24 23:40:47 piso Exp $
+ * $Id: SpecialOperators.java,v 1.39 2005-05-13 12:20:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -469,9 +469,8 @@ public final class SpecialOperators extends Lisp
                 return signal(new UndefinedFunction(arg));
             }
             if (arg instanceof Cons) {
-                if (arg.car() == Symbol.LAMBDA)
-                    return new Closure(arg, env);
-                if (arg.car() == Symbol.SETF) {
+                LispObject car = ((Cons)arg).car;
+                if (car == Symbol.SETF) {
                     LispObject f = env.lookupFunction(arg);
                     if (f != null)
                         return f;
@@ -483,6 +482,8 @@ public final class SpecialOperators extends Lisp
                     if (f != null)
                         return f;
                 }
+                if (car == Symbol.LAMBDA)
+                    return new Closure(arg, env);
             }
             return signal(new UndefinedFunction(list2(Keyword.NAME, arg)));
         }
