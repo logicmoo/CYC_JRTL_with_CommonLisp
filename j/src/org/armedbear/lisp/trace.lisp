@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: trace.lisp,v 1.13 2005-02-26 17:46:40 piso Exp $
+;;; $Id: trace.lisp,v 1.14 2005-05-14 15:35:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,20 +21,24 @@
 
 (require 'format)
 
-(defconstant *untraced-function* (make-symbol "untraced-function"))
+;; (defconstant *untraced-function* (make-symbol "untraced-function"))
 
-(defvar *traced-functions* nil)
+;; (defvar *traced-functions* nil)
+(defvar *trace-info-hashtable* (make-hash-table :test #'equal))
+
+(defstruct trace-info name untraced-function breakp)
 
 (defvar *trace-depth* 0)
 
 (defun list-traced-functions ()
-  *traced-functions*)
+  (copy-list *traced-names*))
 
 (defmacro trace (&rest args)
   (if args
-      `(progn
-        (setf *trace-depth* 0)
-        (expand-trace ',args))
+;;       `(progn
+;;         (setf *trace-depth* 0)
+;;         (expand-trace ',args))
+      (expand-trace args)
       `(list-traced-functions)))
 
 (defun expand-trace (args)
@@ -45,17 +49,21 @@
         (setf breakp (nth (1+ index) args))
         (setf args (append (subseq args 0 index) (subseq args (+ index 2))))))
     (dolist (arg args)
-      (if (trace-1 arg breakp)
-          (push arg results)))
-    results))
+;;       (if (trace-1 arg breakp)
+;;           (push arg results))
+      (push `(trace-1 ',arg ,breakp) results)
+      )
+;;     results
+    `(list ,@(nreverse results))
+    ))
 
 (defun trace-1 (name breakp)
   (unless (fboundp name)
     (error "~S is not the name of a function." name))
-  (if (member name *traced-functions*)
+  (if (member name *traced-names* :test #'equal)
       (format t "~S is already being traced." name)
       (let* ((untraced-function (fdefinition name))
-             (trace-function
+             (traced-function
               (lambda (&rest args)
                 (with-standard-io-syntax
                   (let ((*print-readably* nil)
@@ -76,10 +84,18 @@
                       (terpri *trace-output*)))
                   (values-list r)))))
         (let ((*warn-on-redefinition* nil))
-          (setf (symbol-function name) trace-function))
-        (setf (get name *untraced-function*) untraced-function)
-        (push name *traced-functions*)
+;;           (setf (symbol-function name) traced-function))
+          (setf (fdefinition name) traced-function))
+;;         (setf (get name *untraced-function*) untraced-function)
+        (setf (gethash name *trace-info-hashtable*)
+              (make-trace-info :name name
+                               :untraced-function untraced-function))
+        (push name *traced-names*)
         name)))
+
+(defun trace-redefined-update (name)
+;;   (format t "traced function ~S was redefined~%" name)
+  )
 
 (defun indent (string)
   (concatenate 'string
@@ -99,18 +115,41 @@
             t))))
 
 (defun untrace-all ()
-  (dolist (arg *traced-functions*)
+  (dolist (arg *traced-names*)
     (untrace-1 arg)))
 
 (defun untrace-n (args)
   (dolist (arg args)
-    (if (member arg *traced-functions*)
+    (if (member arg *traced-names* :test #'equal)
         (untrace-1 arg)
         (format t "~S is not being traced.~%" arg))))
 
-(defun untrace-1 (symbol)
-  (let ((untraced-function (get symbol *untraced-function*))
-        (*warn-on-redefinition* nil))
-    (setf (symbol-function symbol) untraced-function)
-    (remprop symbol *untraced-function*)
-    (setf *traced-functions* (remove symbol *traced-functions*))))
+(defun untrace-1 (name)
+;;   (let ((untraced-function (get name *untraced-function*))
+  (let* ((trace-info (gethash name *trace-info-hashtable*))
+         (untraced-function (trace-info-untraced-function trace-info))
+         (*warn-on-redefinition* nil))
+;;     (setf (symbol-function symbol) untraced-function)
+    (setf (fdefinition name) untraced-function)
+;;     (remprop symbol *untraced-function*)
+    (remhash name *trace-info-hashtable*)
+    (setf *traced-names* (remove name *traced-names*))))
+
+#+nil
+(defun fset (name function &optional source-position arglist)
+  (let ((trace-p (find name *traced-names* :test #'equal)))
+    (cond ((symbolp name)
+           (check-redefinition name)
+           (record-source-information name nil source-position)
+           (when arglist
+             (%set-arglist function arglist))
+           (%set-symbol-function name function))
+          ((and (consp name) (eq (%car name) 'SETF))
+           (check-redefinition name)
+           (record-source-information name nil source-position)
+           ;; FIXME arglist
+           (setf (get (cadr name) 'setf-function) function))
+          (t
+           (error 'type-error "~S is not a valid function name." name)))
+    (when (functionp function) ; FIXME Is this test needed?
+      (%set-lambda-name function name))))
