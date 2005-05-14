@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.8 2005-05-13 12:31:54 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.9 2005-05-14 18:59:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package #:system)
+
+(export 'untraced-function)
 
 (defun check-redefinition (name)
   (when (and *warn-on-redefinition* (fboundp name) (not (autoloadp name)))
@@ -47,6 +49,14 @@
     (cond ((symbolp name)
            (%put name '%source source)))))
 
+;; Redefined in trace.lisp.
+(defun trace-redefined-update (&rest args)
+  )
+
+;; Redefined in trace.lisp.
+(defun untraced-function (name)
+  nil)
+
 (defun fset (name function &optional source-position arglist)
   (cond ((symbolp name)
          (check-redefinition name)
@@ -62,7 +72,8 @@
         (t
          (error 'type-error "~S is not a valid function name." name)))
   (when (functionp function) ; FIXME Is this test needed?
-    (%set-lambda-name function name)))
+    (%set-lambda-name function name))
+  (trace-redefined-update name function))
 
 (defun fdefinition (name)
   (cond ((symbolp name)
