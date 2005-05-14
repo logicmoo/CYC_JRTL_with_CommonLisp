@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.352 2005-05-12 00:40:21 piso Exp $
+ * $Id: Lisp.java,v 1.353 2005-05-14 15:35:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -732,7 +732,7 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        boolean absolute = Utilities.isFilenameAbsolute(namestring);
+        final boolean absolute = Utilities.isFilenameAbsolute(namestring);
         LispObject device = NIL;
         final Pathname defaultPathname;
         if (absolute) {
@@ -835,7 +835,7 @@ public abstract class Lisp
             }
         } else {
             Pathname pathname = new Pathname(namestring);
-            File file = Utilities.getFile(pathname, defaultPathname);
+            final File file = Utilities.getFile(pathname, defaultPathname);
             if (file != null && file.isFile()) {
                 try {
                     byte[] bytes = new byte[(int)file.length()];
@@ -2145,6 +2145,10 @@ public abstract class Lisp
     // ### *bq-vector-flag*
     public static final Symbol _BQ_VECTOR_FLAG_ =
         internSpecial("*BQ-VECTOR-FLAG*", PACKAGE_SYS, list1(new Symbol("bqv")));
+
+    // ### *traced-names*
+    public static final Symbol _TRACED_NAMES_ =
+        exportSpecial("*TRACED-NAMES*", PACKAGE_SYS, NIL);
 
     private static final void loadClass(String className)
     {

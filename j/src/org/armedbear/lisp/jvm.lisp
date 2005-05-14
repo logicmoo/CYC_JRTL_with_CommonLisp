@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.458 2005-05-13 16:44:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.459 2005-05-14 15:34:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4205,7 +4205,7 @@
                  (p2-compiland compiland)
                  (write-class-file (compiland-class-file compiland))))
              ;; Verify that the class file is loadable.
-             (let ((*default-pathname-defaults* pathname))
+             (let ((*load-truename* (pathname pathname)))
                (unless (ignore-errors (sys:load-compiled-function pathname))
                  (error "Unable to load ~S." pathname)))
              (push (make-local-function :name (compiland-name compiland)
@@ -4266,7 +4266,7 @@
                  (p2-compiland compiland)
                  (write-class-file (compiland-class-file compiland))))
              ;; Verify that the class file is loadable.
-             (let ((*default-pathname-defaults* pathname))
+             (let ((*load-truename* (pathname pathname)))
                (unless (ignore-errors (sys:load-compiled-function pathname))
                  (error "Unable to load ~S." pathname)))
              (setf (local-function-class-file local-function) class-file)
