@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.784 2005-05-13 12:30:20 piso Exp $
+ * $Id: Primitives.java,v 1.785 2005-05-14 19:00:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1527,8 +1527,8 @@ public final class Primitives extends Lisp
                                             name.writeToString() +
                                             " is not a valid function name."));
             if (definition instanceof Function) {
-                FSET.execute(name, definition, NIL,
-                             ((Function)definition).getLambdaList());
+                Symbol.FSET.execute(name, definition, NIL,
+                                    ((Function)definition).getLambdaList());
                 return name;
             } else
                 return signal(new TypeError(definition, Symbol.FUNCTION));
