@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.353 2005-05-14 15:35:32 piso Exp $
+ * $Id: Lisp.java,v 1.354 2005-05-15 19:24:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1151,6 +1151,17 @@ public abstract class Lisp
                              " is not a character output stream."));
         // Not reached.
         return null;
+    }
+
+    public static final void writeByte(int n, LispObject obj)
+        throws ConditionThrowable
+    {
+            try {
+                ((Stream)obj).writeByte(n);
+            }
+            catch (ClassCastException e) {
+                signal(new TypeError(obj, Symbol.STREAM));
+            }
     }
 
     public static final Readtable checkReadtable(LispObject obj)

@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.122 2005-05-06 12:53:06 piso Exp $
+ * $Id: Stream.java,v 1.123 2005-05-15 19:22:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1371,6 +1371,18 @@ public class Stream extends LispObject
             // Not reached.
             return -1;
         }
+    }
+
+    // Writes an 8-bit byte.
+    public void writeByte(int n) throws ConditionThrowable
+    {
+        if (n < 0 || n > 255)
+            signal(new TypeError(new Fixnum(n), UNSIGNED_BYTE_8));
+        if (isBinaryOutputStream())
+            _writeByte(n);
+        else
+            signal(new LispError(this.writeToString() +
+                                 " is not a binary output stream."));
     }
 
     // Writes an 8-bit byte.
