@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.169 2005-05-14 19:01:08 piso Exp $
+;;; $Id: clos.lisp,v 1.170 2005-05-15 21:44:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1208,7 +1208,9 @@
         method)))
 
 (defun subclassp (c1 c2)
-  (not (null (find c2 (class-precedence-list c1)))))
+  (dolist (class (class-precedence-list c1) nil)
+    (when (eq class c2)
+      (return t))))
 
 (defun methods-contain-eql-specializer-p (methods)
   (dolist (method methods nil)

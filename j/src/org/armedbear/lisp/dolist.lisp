@@ -1,7 +1,7 @@
 ;;; dolist.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dolist.lisp,v 1.5 2005-05-09 18:14:44 piso Exp $
+;;; $Id: dolist.lisp,v 1.6 2005-05-15 21:43:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,9 +38,9 @@
            (tagbody
             ,top
             (unless (endp ,list)
-              (let ((,var (car ,list)))
+              (let ((,var (%car ,list)))
                 ,@decls
-                (setq ,list (cdr ,list))
+                (setq ,list (%cdr ,list))
                 (tagbody ,@forms))
               (go ,top))))
          ,(if (constantp result-form)
