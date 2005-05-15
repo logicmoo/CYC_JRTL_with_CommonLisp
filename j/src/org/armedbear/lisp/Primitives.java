@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.785 2005-05-14 19:00:38 piso Exp $
+ * $Id: Primitives.java,v 1.786 2005-05-15 19:22:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3820,7 +3820,7 @@ public final class Primitives extends Lisp
     };
 
     // ### write-8-bits
-    // write-8-bits byte stream => byte
+    // write-8-bits byte stream => nil
     private static final Primitive WRITE_8_BITS =
         new Primitive("write-8-bits", PACKAGE_SYS, true, "byte stream")
     {
@@ -3835,20 +3835,18 @@ public final class Primitives extends Lisp
                 return signal(new TypeError(first, Symbol.FIXNUM));
             }
             if (n < 0 || n > 255)
-                return signal(new TypeError(first,
-                                            list2(Symbol.UNSIGNED_BYTE,
-                                                  new Fixnum(8))));
+                return signal(new TypeError(first, UNSIGNED_BYTE_8));
             try {
                 Stream stream = (Stream) second;
                 if (stream.isBinaryOutputStream()) {
                     stream._writeByte(n);
-                    return first;
+                    return NIL;
                 }
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(second, Symbol.STREAM));
             }
-            return signal(new TypeError(second.writeToString() +
+            return signal(new LispError(second.writeToString() +
                                         " is not a binary output stream."));
         }
     };
