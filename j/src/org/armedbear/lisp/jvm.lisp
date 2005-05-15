@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.459 2005-05-14 15:34:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.460 2005-05-15 16:16:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -668,8 +668,8 @@
   (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
 
 (defun p1-quote (form)
-  (if (numberp (second form))
-      (second form)
+  (if (numberp (cadr form))
+      (%cadr form)
       form))
 
 (defun p1-setq (form)
@@ -4712,18 +4712,16 @@
               (ash-derive-type (second form) (third form)))
              (AREF
               (aref-derive-type (%cdr form)))
-             (-
-              (if (and (= (length form) 2)
-                       (or (fixnump (cadr form))
-                           (unboxed-fixnum-variable (cadr form))))
-                  'FIXNUM
-                  t))
              (LENGTH
               '(INTEGER 0 #.most-positive-fixnum))
              (LOGAND
               (logand-derive-type (%cdr form)))
              (LOGXOR
               (logxor-derive-type (%cdr form)))
+             (-
+              (derive-type-minus (%cdr form)))
+             (MIN
+              (derive-type-min (%cdr form)))
              (THE
               (second form))
              (t
@@ -4793,11 +4791,32 @@
     (dformat t "logand-derive-type returning ~S~%" result-type)
     result-type))
 
+(defun derive-type-minus (args)
+  (case (length args)
+    (1
+     (if (subtypep (derive-type (%car args)) 'fixnum)
+         'fixnum
+         t))
+    (2
+     (let ((type1 (derive-type (%car args)))
+           (type2 (derive-type (%cadr args))))
+       (cond ((and (subtypep type1 '(integer 0 #.most-positive-fixnum))
+                   (subtypep type2 '(integer 0 #.most-positive-fixnum)))
+              'fixnum)
+             (t
+              t))))
+    (t
+     t)))
+
+(defun derive-type-min (args)
+  (dolist (arg args)
+    (unless (subtypep (derive-type arg) 'fixnum)
+      (return-from derive-type-min t)))
+  'fixnum)
+
 (defun ash-derive-type (arg1 arg2)
-  (dformat t "ash-derive-type ~S ~S~%" arg1 arg2)
   (let* ((type1 (sys::normalize-type (derive-type arg1)))
          (result-type 'INTEGER))
-    (dformat t "ash-derive-type type1 = ~S~%" type1)
     (when (subtypep type1 'fixnum)
       (let ((low most-negative-fixnum)
             (high most-positive-fixnum))
@@ -4805,19 +4824,17 @@
           (let ((second (second type1))
                 (third (third type1)))
             (when second
-              (setf low (if (atom second) second (1+ (car second)))))
+              (setf low (if (atom second) second (1+ (%car second)))))
             (when third
-              (setf high (if (atom third) third (1- (car third)))))))
-        (dformat t "low = ~S high = ~S~%" low high)
+              (setf high (if (atom third) third (1- (%car third)))))))
         (when (fixnump arg2)
           (cond ((= arg2 0)
                  (setf result-type type1))
                 ((<= 1 arg2 32)
-                 (setf result-type (list 'INTEGER (ash low 1) (ash high 1))))
+                 (setf result-type (list 'INTEGER (ash low arg2) (ash high arg2))))
                 ((minusp arg2)
                  ;; Shift right.
                  (setf result-type 'FIXNUM))))))
-    (dformat t "ash-derive-type returning ~S~%" result-type)
     result-type))
 
 (defun p2-length (form &key (target :stack) representation)
@@ -4939,12 +4956,40 @@
     (t
      (compile-function-call form target representation))))
 
+(defun p2-min/max (form &key (target :stack) representation)
+  (finish-output)
+  (cond ((= (length form) 3)
+         (let* ((args (%cdr form))
+                (arg1 (%car args))
+                (arg2 (%cadr args))
+                (type1 (derive-type arg1))
+                (type2 (derive-type arg2)))
+           (cond ((and (subtypep type1 'fixnum) (subtypep type2 'fixnum))
+                  (when target
+                    (unless (eq representation :unboxed-fixnum)
+                      (emit 'new +lisp-fixnum-class+)
+                      (emit 'dup))
+                    (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+                    (maybe-emit-clear-values arg1)
+                    (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+                    (maybe-emit-clear-values arg2)
+                    (emit-invokestatic "java/lang/Math"
+                                       (if (eq (%car form) 'min) "min" "max")
+                                       '("I" "I") "I")
+                    (unless (eq representation :unboxed-fixnum)
+                      (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+                    (emit-move-from-stack target representation)))
+                 (t
+                  (compile-function-call form target representation)))))
+        (t
+         (compile-function-call form target representation))))
+
 (defun p2-plus (form &key (target :stack) representation)
   (case (length form)
     (3
      (let* ((args (cdr form))
-            (arg1 (first args))
-            (arg2 (second args))
+            (arg1 (car args))
+            (arg2 (cadr args))
             (var1 (unboxed-fixnum-variable arg1))
             (var2 (unboxed-fixnum-variable arg2))
             (type1 t))
@@ -6619,6 +6664,8 @@
   (install-p2-handler 'logior          'p2-logior)
   (install-p2-handler 'logxor          'p2-logxor)
   (install-p2-handler 'load-time-value 'p2-load-time-value)
+  (install-p2-handler 'max             'p2-min/max)
+  (install-p2-handler 'min             'p2-min/max)
   (install-p2-handler 'mod             'p2-mod)
   (install-p2-handler 'not             'p2-not/null)
   (install-p2-handler 'null            'p2-not/null)
