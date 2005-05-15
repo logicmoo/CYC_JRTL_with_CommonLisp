@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispThread.java,v 1.81 2005-04-06 01:10:12 piso Exp $
+ * $Id: LispThread.java,v 1.82 2005-05-15 17:53:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -345,6 +345,27 @@ public final class LispThread extends LispObject
         }
         name.setSymbolValue(value);
         return value;
+    }
+
+    public final LispObject pushSpecial(Symbol name, LispObject thing)
+        throws ConditionThrowable
+    {
+        SpecialBinding binding = lastSpecialBinding;
+        while (binding != null) {
+            if (binding.name == name) {
+                LispObject newValue = new Cons(thing, binding.value);
+                binding.value = newValue;
+                return newValue;
+            }
+            binding = binding.next;
+        }
+        LispObject value = name.getSymbolValue();
+        if (value != null) {
+            LispObject newValue = new Cons(thing, value);
+            name.setSymbolValue(newValue);
+            return newValue;
+        } else
+            return signal(new UnboundVariable(name));
     }
 
     // Returns symbol value or NIL if unbound.
