@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.460 2005-05-15 16:16:07 piso Exp $
+;;; $Id: jvm.lisp,v 1.461 2005-05-15 17:54:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5485,24 +5485,22 @@
              (emit 'var-ref variable target representation))))))
 
 (defun rewrite-setq (form)
-  (let ((expr (third form)))
+  (let ((expr (%caddr form)))
     (if (unsafe-p expr)
         (let ((sym (gensym)))
-          (list 'LET (list (list sym expr)) (list 'SETQ (second form) sym)))
+          (list 'LET (list (list sym expr)) (list 'SETQ (%cadr form) sym)))
         form)))
 
 (defun p2-setq (form &key (target :stack) representation)
-;;   (dformat t "p2-setq form = ~S target = ~S representation = ~S~%"
-;;            form target representation)
   (unless (= (length form) 3)
     (return-from p2-setq (compile-form (precompiler::precompile-setq form)
                                        :target target)))
-  (let ((expansion (macroexpand (second form) sys:*compile-file-environment*)))
-    (unless (eq expansion (second form))
-      (compile-form (list 'SETF expansion (third form)))
+  (let ((expansion (macroexpand (%cadr form) sys:*compile-file-environment*)))
+    (unless (eq expansion (%cadr form))
+      (compile-form (list 'SETF expansion (%caddr form)))
       (return-from p2-setq)))
-  (let* ((name (second form))
-         (value-form (third form))
+  (let* ((name (%cadr form))
+         (value-form (%caddr form))
          (variable (find-visible-variable name)))
     (cond ((or (null variable)
                (variable-special-p variable))
@@ -5510,12 +5508,23 @@
              (when (neq new-form form)
                (return-from p2-setq
                             (compile-form (p1 new-form) :target target))))
+           ;; We're setting a special variable.
            (emit-push-current-thread)
            (emit 'getstatic *this-class* (declare-symbol name) +lisp-symbol+)
-           (compile-form value-form :target :stack)
-           (maybe-emit-clear-values value-form)
-           (emit-invokevirtual +lisp-thread-class+ "setSpecialVariable"
-                               (list +lisp-symbol+ +lisp-object+) +lisp-object+)
+           (cond ((and (consp value-form)
+                       (eq (%car value-form) 'cons)
+                       (= (length value-form) 3)
+                       (eq (%caddr value-form) name))
+                  ;; (push thing *special*) => (setq *special* (cons thing *special*))
+                  (compile-form (%cadr value-form) :target :stack)
+                  (maybe-emit-clear-values (%cadr value-form))
+                  (emit-invokevirtual +lisp-thread-class+ "pushSpecial"
+                                      (list +lisp-symbol+ +lisp-object+) +lisp-object+))
+                 (t
+                  (compile-form value-form :target :stack)
+                  (maybe-emit-clear-values value-form)
+                  (emit-invokevirtual +lisp-thread-class+ "setSpecialVariable"
+                                      (list +lisp-symbol+ +lisp-object+) +lisp-object+)))
            (emit-move-from-stack target))
           ((and (eq (variable-representation variable) :unboxed-fixnum)
                 (or (equal value-form (list '1+ (variable-name variable)))
