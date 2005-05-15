@@ -1,7 +1,7 @@
 ;;; replace.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: replace.lisp,v 1.3 2003-08-25 18:22:58 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: replace.lisp,v 1.4 2005-05-15 14:32:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,60 +17,141 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
+;;; Adapted from CMUCL.
 
-(export 'replace)
+(in-package #:system)
 
-;;; REPLACE (from ECL)
+(eval-when (:compile-toplevel)
+  (defmacro seq-dispatch (sequence list-form array-form)
+    `(if (listp ,sequence)
+         ,list-form
+         ,array-form)))
 
-(defun bad-seq-limit (x &optional y)
-  (error "bad sequence limit ~a" (if y (list x y) x)))
+(eval-when (:compile-toplevel :execute)
 
-(defun the-end (x y)
-  (cond ((sys::fixnump x)
-	 (unless (<= x (length y))
-	   (bad-seq-limit x))
-	 x)
-	((null x)
-	 (length y))
-	(t (bad-seq-limit x))))
+  ;;; If we are copying around in the same vector, be careful not to copy the
+  ;;; same elements over repeatedly.  We do this by copying backwards.
+  (defmacro mumble-replace-from-mumble ()
+    `(if (and (eq target-sequence source-sequence) (> target-start source-start))
+         (let ((nelts (min (- target-end target-start) (- source-end source-start))))
+           (do ((target-index (+ (the fixnum target-start) (the fixnum nelts) -1)
+                              (1- target-index))
+                (source-index (+ (the fixnum source-start) (the fixnum nelts) -1)
+                              (1- source-index)))
+               ((= target-index (the fixnum (1- target-start))) target-sequence)
+             (declare (fixnum target-index source-index))
+             (setf (aref target-sequence target-index)
+                   (aref source-sequence source-index))))
+         (do ((target-index target-start (1+ target-index))
+              (source-index source-start (1+ source-index)))
+             ((or (= target-index (the fixnum target-end))
+                  (= source-index (the fixnum source-end)))
+              target-sequence)
+           (declare (fixnum target-index source-index))
+           (setf (aref target-sequence target-index)
+                 (aref source-sequence source-index)))))
 
-(defun the-start (x)
-  (cond ((sys::fixnump x)
-	 (unless (>= x 0)
-           (bad-seq-limit x))
-	 x)
-	((null x) 0)
-	(t (bad-seq-limit x))))
+  (defmacro list-replace-from-list ()
+    `(if (and (eq target-sequence source-sequence) (> target-start source-start))
+         (let ((new-elts (subseq source-sequence source-start
+                                 (+ (the fixnum source-start)
+                                    (the fixnum
+                                         (min (- (the fixnum target-end)
+                                                 (the fixnum target-start))
+                                              (- (the fixnum source-end)
+                                                 (the fixnum source-start))))))))
+           (do ((n new-elts (cdr n))
+                (o (nthcdr target-start target-sequence) (cdr o)))
+               ((null n) target-sequence)
+             (rplaca o (car n))))
+         (do ((target-index target-start (1+ target-index))
+              (source-index source-start (1+ source-index))
+              (target-sequence-ref (nthcdr target-start target-sequence)
+                                   (cdr target-sequence-ref))
+              (source-sequence-ref (nthcdr source-start source-sequence)
+                                   (cdr source-sequence-ref)))
+             ((or (= target-index (the fixnum target-end))
+                  (= source-index (the fixnum source-end))
+                  (null target-sequence-ref) (null source-sequence-ref))
+              target-sequence)
+           (declare (fixnum target-index source-index))
+           (rplaca target-sequence-ref (car source-sequence-ref)))))
+
+  (defmacro list-replace-from-mumble ()
+    `(do ((target-index target-start (1+ target-index))
+          (source-index source-start (1+ source-index))
+          (target-sequence-ref (nthcdr target-start target-sequence)
+                               (cdr target-sequence-ref)))
+         ((or (= target-index (the fixnum target-end))
+              (= source-index (the fixnum source-end))
+              (null target-sequence-ref))
+          target-sequence)
+       (declare (fixnum source-index target-index))
+       (rplaca target-sequence-ref (aref source-sequence source-index))))
 
-(defmacro with-start-end (start end seq &body body)
-  `(let* ((,start (if ,start (the-start ,start) 0))
-          (,end (the-end ,end ,seq)))
-     (unless (<= ,start ,end) (bad-seq-limit ,start ,end))
-     ,@ body))
+  (defmacro mumble-replace-from-list ()
+    `(do ((target-index target-start (1+ target-index))
+          (source-index source-start (1+ source-index))
+          (source-sequence (nthcdr source-start source-sequence)
+                           (cdr source-sequence)))
+         ((or (= target-index (the fixnum target-end))
+              (= source-index (the fixnum source-end))
+              (null source-sequence))
+          target-sequence)
+       (declare (fixnum target-index source-index))
+       (setf (aref target-sequence target-index) (car source-sequence))))
 
-(defun replace (sequence1 sequence2
-                          &key start1  end1
-                          start2 end2 )
-  (with-start-end start1 end1 sequence1
-    (with-start-end start2 end2 sequence2
-      (if (and (eq sequence1 sequence2)
-               (> start1 start2))
-          (do* ((i 0 (1+ i))
-                (l (if (< (- end1 start1)
-                          (- end2 start2))
-                       (- end1 start1)
-                       (- end2 start2)))
-                (s1 (+ start1 (1- l)) (1- s1))
-                (s2 (+ start2 (1- l)) (1- s2)))
-               ((>= i l) sequence1)
-            (setf (elt sequence1 s1) (elt sequence2 s2)))
-          (do ((i 0 (1+ i))
-               (l (if (< (- end1 start1)
-                         (- end2 start2))
-                      (- end1 start1)
-                      (- end2 start2)))
-               (s1 start1 (1+ s1))
-               (s2 start2 (1+ s2)))
-              ((>= i l) sequence1)
-            (setf (elt sequence1 s1) (elt sequence2 s2)))))))
+  ) ; eval-when
+
+;;; The support routines for REPLACE are used by compiler transforms, so we
+;;; worry about dealing with end being supplied as or defaulting to nil
+;;; at this level.
+
+(defun list-replace-from-list* (target-sequence source-sequence target-start
+                                                target-end source-start source-end)
+  (when (null target-end) (setq target-end (length target-sequence)))
+  (when (null source-end) (setq source-end (length source-sequence)))
+  (list-replace-from-list))
+
+(defun list-replace-from-vector* (target-sequence source-sequence target-start
+                                                  target-end source-start source-end)
+  (when (null target-end) (setq target-end (length target-sequence)))
+  (when (null source-end) (setq source-end (length source-sequence)))
+  (list-replace-from-mumble))
+
+(defun vector-replace-from-list* (target-sequence source-sequence target-start
+                                                  target-end source-start source-end)
+  (when (null target-end) (setq target-end (length target-sequence)))
+  (when (null source-end) (setq source-end (length source-sequence)))
+  (mumble-replace-from-list))
+
+(defun vector-replace-from-vector* (target-sequence source-sequence
+                                                    target-start target-end source-start
+                                                    source-end)
+  (when (null target-end) (setq target-end (length target-sequence)))
+  (when (null source-end) (setq source-end (length source-sequence)))
+  (mumble-replace-from-mumble))
+
+(defun %replace (target-sequence source-sequence target-start target-end source-start source-end)
+  (declare (type (integer 0 #.most-positive-fixnum) target-start target-end source-start source-end))
+  (seq-dispatch target-sequence
+                (seq-dispatch source-sequence
+                              (list-replace-from-list)
+                              (list-replace-from-mumble))
+                (seq-dispatch source-sequence
+                              (mumble-replace-from-list)
+                              (mumble-replace-from-mumble))))
+
+;;; REPLACE cannot default end arguments to the length of sequence since it
+;;; is not an error to supply nil for their values.  We must test for ends
+;;; being nil in the body of the function.
+(defun replace (target-sequence source-sequence &key
+                                ((:start1 target-start) 0)
+                                ((:end1 target-end))
+                                ((:start2 source-start) 0)
+                                ((:end2 source-end)))
+  "The target sequence is destructively modified by copying successive
+elements into it from the source sequence."
+  (let ((target-end (or target-end (length target-sequence)))
+	(source-end (or source-end (length source-sequence))))
+    (%replace target-sequence source-sequence target-start target-end source-start source-end)))
