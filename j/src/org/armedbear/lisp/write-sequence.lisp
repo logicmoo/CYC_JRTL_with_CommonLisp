@@ -1,7 +1,7 @@
 ;;; write-sequence.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: write-sequence.lisp,v 1.5 2005-05-01 16:50:35 piso Exp $
+;;; $Id: write-sequence.lisp,v 1.6 2005-05-15 19:21:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,4 +53,5 @@
           (t
            (do ((i start (1+ i)))
                ((>= i end) sequence)
-             (write-byte (elt sequence i) stream))))))
+             (write-byte (elt sequence i) stream)))))
+  sequence)

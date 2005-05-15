@@ -1,7 +1,7 @@
 ;;; byte-io.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: byte-io.lisp,v 1.5 2004-03-11 12:13:57 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: byte-io.lisp,v 1.6 2005-05-15 19:23:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun write-byte (byte stream)
   (let ((element-type (stream-element-type stream)))
@@ -30,7 +30,8 @@
               (push (logand byte #xff) bytes)
               (setf byte (ash byte -8)))
             (dolist (b bytes)
-              (write-8-bits b stream)))))))
+              (write-8-bits b stream)))))
+    byte))
 
 (defun read-byte (stream &optional (eof-error-p t) eof-value)
   (let* ((element-type (stream-element-type stream)))
