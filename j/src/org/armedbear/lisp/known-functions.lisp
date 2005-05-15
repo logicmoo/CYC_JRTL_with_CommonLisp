@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.2 2005-05-12 09:11:46 piso Exp $
+;;; $Id: known-functions.lisp,v 1.3 2005-05-15 14:33:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,5 +26,7 @@
                 backq-list backq-list* backq-append backq-nconc))
 
 (declaim (ftype (function * cons) backq-cons))
+
+(declaim (ftype (function * t) replace simple-search fill nstring-upcase))
 
 (provide '#:known-functions)
