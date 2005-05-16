@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.129 2005-04-23 18:57:07 piso Exp $
+ * $Id: LispObject.java,v 1.130 2005-05-16 15:58:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -479,6 +479,48 @@ public class LispObject extends Lisp
     public boolean isSpecialVariable()
     {
         return false;
+    }
+
+    public LispObject getDocumentation(LispObject docType)
+        throws ConditionThrowable
+    {
+        LispObject propertyList = getPropertyList();
+        if (propertyList != null) {
+            LispObject alist = getf(propertyList, Symbol._DOCUMENTATION, NIL);
+            if (alist != null) {
+                LispObject entry = assq(docType, alist);
+                if (entry instanceof Cons)
+                    return ((Cons)entry).cdr;
+            }
+        }
+        return NIL;
+    }
+
+    public void setDocumentation(LispObject docType, LispObject documentation)
+        throws ConditionThrowable
+    {
+        LispObject propertyList = getPropertyList();
+        if (propertyList != null) {
+            LispObject alist = getf(propertyList, Symbol._DOCUMENTATION, NIL);
+            if (alist == null)
+                alist = NIL;
+            LispObject entry = assq(docType, alist);
+            if (entry instanceof Cons) {
+                ((Cons)entry).cdr = documentation;
+            } else {
+                alist = alist.push(new Cons(docType, documentation));
+                setPropertyList(putf(propertyList, Symbol._DOCUMENTATION, alist));
+            }
+        }
+    }
+
+    public LispObject getPropertyList()
+    {
+        return null;
+    }
+
+    public void setPropertyList(LispObject obj)
+    {
     }
 
     public LispObject getSymbolValue() throws ConditionThrowable
