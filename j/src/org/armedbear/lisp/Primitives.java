@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.787 2005-05-16 10:20:57 piso Exp $
+ * $Id: Primitives.java,v 1.788 2005-05-16 16:08:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5365,32 +5365,28 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### symbol-documentation
-    private static final Primitive SYMBOL_DOCUMENTATION =
-      new Primitive("symbol-documentation", PACKAGE_SYS, true,
-                    "symbol doc-type")
+    // ### %documentation
+    private static final Primitive _DOCUMENTATION =
+        new Primitive("%documentation", PACKAGE_SYS, true,
+                      "object doc-type")
     {
-        public LispObject execute(LispObject arg, LispObject docType)
+        public LispObject execute(LispObject object, LispObject docType)
             throws ConditionThrowable
         {
-            Symbol symbol = checkSymbol(arg);
-            checkSymbol(docType);
-            return symbol.getDocumentation(docType);
+            return object.getDocumentation(docType);
         }
     };
 
-    // ### set-symbol-documentation
-    private static final Primitive SET_SYMBOL_DOCUMENTATION =
-      new Primitive("set-symbol-documentation", PACKAGE_SYS, true,
-                    "symbol doc-type documentation")
+    // ### %set-documentation
+    private static final Primitive _SET_DOCUMENTATION =
+        new Primitive("%set-documentation", PACKAGE_SYS, true,
+                      "object doc-type documentation")
     {
-        public LispObject execute(LispObject arg, LispObject docType,
+        public LispObject execute(LispObject object, LispObject docType,
                                   LispObject documentation)
             throws ConditionThrowable
         {
-            Symbol symbol = checkSymbol(arg);
-            checkSymbol(docType);
-            symbol.setDocumentation(docType, documentation);
+            object.setDocumentation(docType, documentation);
             return documentation;
         }
     };
