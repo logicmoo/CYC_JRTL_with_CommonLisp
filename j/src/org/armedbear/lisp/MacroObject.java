@@ -2,7 +2,7 @@
  * MacroObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: MacroObject.java,v 1.10 2005-04-04 19:32:17 piso Exp $
+ * $Id: MacroObject.java,v 1.11 2005-05-16 15:59:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class MacroObject extends Operator
+public final class MacroObject extends Function
 {
     private final LispObject name;
     private final LispObject expander;
