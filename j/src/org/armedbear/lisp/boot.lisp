@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.222 2005-05-12 08:35:02 piso Exp $
+;;; $Id: boot.lisp,v 1.223 2005-05-16 16:03:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -122,7 +122,7 @@
          `((unless (boundp ',var)
              (setq ,var ,val))))
      ,@(when docp
-         `((set-symbol-documentation ',var 'variable ',doc)))
+         `((%set-documentation ',var 'variable ',doc)))
      ',var))
 
 (defun make-package (package-name &key nicknames use)
