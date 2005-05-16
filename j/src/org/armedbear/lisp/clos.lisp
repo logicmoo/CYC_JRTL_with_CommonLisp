@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.170 2005-05-15 21:44:58 piso Exp $
+;;; $Id: clos.lisp,v 1.171 2005-05-16 16:10:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1773,10 +1773,47 @@
 (defgeneric (setf documentation) (new-value x doc-type))
 
 (defmethod documentation ((x symbol) doc-type)
-  (symbol-documentation x doc-type))
+  (%documentation x doc-type))
 
 (defmethod (setf documentation) (new-value (x symbol) doc-type)
-  (set-symbol-documentation x doc-type new-value))
+  (%set-documentation x doc-type new-value))
+
+(defmethod documentation ((x function) doc-type)
+  (%documentation x doc-type))
+
+(defmethod (setf documentation) (new-value (x function) doc-type)
+  (%set-documentation x doc-type new-value))
+
+;; FIXME This should be a weak hashtable!
+(defvar *list-documentation-hashtable* (make-hash-table :test #'equal))
+
+(defmethod documentation ((x list) (doc-type (eql 'function)))
+  (let ((alist (gethash x *list-documentation-hashtable*)))
+    (and alist (cdr (assoc doc-type alist)))))
+
+(defmethod documentation ((x list) (doc-type (eql 'compiler-macro)))
+  (let ((alist (gethash x *list-documentation-hashtable*)))
+    (and alist (cdr (assoc doc-type alist)))))
+
+(defmethod (setf documentation) (new-value (x list) (doc-type (eql 'function)))
+  (let* ((alist (gethash x *list-documentation-hashtable*))
+         (entry (and alist (assoc doc-type alist))))
+    (cond (entry
+           (setf (cdr entry) new-value))
+          (t
+           (setf (gethash x *list-documentation-hashtable*)
+                 (push (cons doc-type new-value) alist)))))
+  new-value)
+
+(defmethod (setf documentation) (new-value (x list) (doc-type (eql 'compiler-macro)))
+  (let* ((alist (gethash x *list-documentation-hashtable*))
+         (entry (and alist (assoc doc-type alist))))
+    (cond (entry
+           (setf (cdr entry) new-value))
+          (t
+           (setf (gethash x *list-documentation-hashtable*)
+                 (push (cons doc-type new-value) alist)))))
+  new-value)
 
 (defmethod documentation ((x standard-class) (doc-type (eql 't)))
   (class-documentation x))
@@ -1789,6 +1826,18 @@
 
 (defmethod (setf documentation) (new-value (x standard-class) (doc-type (eql 'type)))
   (%set-class-documentation x new-value))
+
+(defmethod documentation ((x structure-class) (doc-type (eql 't)))
+  (%documentation x doc-type))
+
+(defmethod documentation ((x structure-class) (doc-type (eql 'type)))
+  (%documentation x doc-type))
+
+(defmethod (setf documentation) (new-value (x structure-class) (doc-type (eql 't)))
+  (%set-documentation x doc-type new-value))
+
+(defmethod (setf documentation) (new-value (x structure-class) (doc-type (eql 'type)))
+  (%set-documentation x doc-type new-value))
 
 (defmethod documentation ((x standard-generic-function) (doc-type (eql 't)))
   (generic-function-documentation x))
@@ -1808,13 +1857,11 @@
 (defmethod (setf documentation) (new-value (x standard-method) (doc-type (eql 't)))
   (setf (method-documentation x) new-value))
 
-;; FIXME
 (defmethod documentation ((x package) (doc-type (eql 't)))
-  nil)
+  (%documentation x doc-type))
 
-;; FIXME
 (defmethod (setf documentation) (new-value (x package) (doc-type (eql 't)))
-  new-value)
+  (%set-documentation x doc-type new-value))
 
 ;;; Slot access
 
