@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.5 2005-05-15 21:44:18 piso Exp $
+;;; $Id: known-functions.lisp,v 1.6 2005-05-16 01:51:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,6 +30,38 @@
 
 (declaim
  (ftype (function * t)
-        replace simple-search fill nstring-upcase random))
+        replace simple-search fill nstring-upcase random
+        ldb-test
+        complex conjugate
+        reduce
+        vector
+        aset
+        oddp
+        bit-and bit-andc1 bit-andc2 bit-eqv bit-ior bit-nand bit-nor
+        bit-not bit-orc1 bit-orc2 bit-xor
+        array-has-fill-pointer-p
+        phase
+        scale-float
+        char-equal
+        string<=
+        ))
+
+(declaim
+ (ftype (function * integer)
+        deposit-field dpb logand logcount lognor
+        mask-field
+        numerator denominator
+        boole
+        array-dimension
+        %dpb
+        ))
+
+(declaim
+ (ftype (function (real real) real)
+        mod rem))
+
+(declaim (ftype (function number rational) rational rationalize))
+
+(declaim (ftype (function * bit) bit sbit))
 
 (provide '#:known-functions)

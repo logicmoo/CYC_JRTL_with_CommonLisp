@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.462 2005-05-15 19:23:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.463 2005-05-16 01:51:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -777,8 +777,8 @@
                      (setf (variable-used-non-locally-p variable) t))))))
             (t
              ;; Not a local function call.
-             (unless (single-valued-p op)
-               (sys::%format t "not single-valued op = ~S~%" op)
+             (unless (single-valued-p form)
+;;                (sys::%format t "not single-valued op = ~S~%" op)
                (setf (compiland-single-valued-p *current-compiland*) nil)))))
     (p1-default form)))
 
@@ -3995,7 +3995,8 @@
                  (return t)))))
         (dformat t "p2-return-from protected = ~S~%" protected)
         (unless protected
-          (emit-clear-values)
+          (unless (compiland-single-valued-p *current-compiland*)
+            (emit-clear-values))
           (compile-form result-form :target (block-target block))
           (emit 'goto (block-exit block))
           (return-from p2-return-from))))
