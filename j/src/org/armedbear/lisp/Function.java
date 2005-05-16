@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.53 2005-05-12 00:39:38 piso Exp $
+ * $Id: Function.java,v 1.54 2005-05-16 16:05:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,11 +120,15 @@ public abstract class Function extends Operator
 
     public final LispObject getPropertyList()
     {
+        if (propertyList == null)
+            propertyList = NIL;
         return propertyList;
     }
 
     public final void setPropertyList(LispObject obj)
     {
+        if (obj == null)
+            throw new NullPointerException();
         propertyList = obj;
     }
 

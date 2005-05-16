@@ -1,8 +1,8 @@
 /*
  * LispClass.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.55 2004-11-28 15:43:49 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: LispClass.java,v 1.56 2005-05-16 16:05:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,15 +40,16 @@ public class LispClass extends StandardObject
             return (LispClass) map.get(symbol);
         }
     }
-    
+
     public static void removeClass(Symbol symbol)
     {
         synchronized (map) {
             map.remove(symbol);
-        }        
+        }
     }
 
     protected Symbol symbol;
+    private LispObject propertyList;
     private Layout layout;
     private LispObject directSuperclasses = NIL;
     private LispObject directSubclasses = NIL;
@@ -89,6 +90,20 @@ public class LispClass extends StandardObject
     public final Symbol getSymbol()
     {
         return symbol;
+    }
+
+    public final LispObject getPropertyList()
+    {
+        if (propertyList == null)
+            propertyList = NIL;
+        return propertyList;
+    }
+
+    public final void setPropertyList(LispObject obj)
+    {
+        if (obj == null)
+            throw new NullPointerException();
+        propertyList = obj;
     }
 
     public final Layout getClassLayout()

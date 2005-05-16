@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Package.java,v 1.64 2005-04-08 21:03:22 piso Exp $
+ * $Id: Package.java,v 1.65 2005-05-16 16:06:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,8 @@ import java.util.List;
 public final class Package extends LispObject
 {
     private String name;
+
+    private LispObject propertyList;
 
     private final SymbolHashTable internalSymbols = new SymbolHashTable(16);
     private final SymbolHashTable externalSymbols = new SymbolHashTable(16);
@@ -86,6 +88,20 @@ public final class Package extends LispObject
     public final String getName()
     {
         return name;
+    }
+
+    public final LispObject getPropertyList()
+    {
+        if (propertyList == null)
+            propertyList = NIL;
+        return propertyList;
+    }
+
+    public final void setPropertyList(LispObject obj)
+    {
+        if (obj == null)
+            throw new NullPointerException();
+        propertyList = obj;
     }
 
     public final List getNicknames()
