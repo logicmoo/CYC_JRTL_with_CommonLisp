@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.786 2005-05-15 19:22:05 piso Exp $
+ * $Id: Primitives.java,v 1.787 2005-05-16 10:20:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5365,6 +5365,7 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### symbol-documentation
     private static final Primitive SYMBOL_DOCUMENTATION =
       new Primitive("symbol-documentation", PACKAGE_SYS, true,
                     "symbol doc-type")
@@ -5378,6 +5379,7 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### set-symbol-documentation
     private static final Primitive SET_SYMBOL_DOCUMENTATION =
       new Primitive("set-symbol-documentation", PACKAGE_SYS, true,
                     "symbol doc-type documentation")
@@ -5393,6 +5395,7 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### %putf
     private static final Primitive _PUTF =
         new Primitive("%putf", PACKAGE_SYS, true,
                       "plist indicator new-value")
@@ -5405,6 +5408,7 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### function-plist
     private static final Primitive FUNCTION_PLIST =
         new Primitive("function-plist", PACKAGE_SYS, true, "function")
     {
@@ -5419,6 +5423,7 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### make-keyword
     private static final Primitive MAKE_KEYWORD =
         new Primitive("make-keyword", PACKAGE_SYS, true, "symbol")
     {
