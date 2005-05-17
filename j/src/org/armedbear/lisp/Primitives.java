@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.789 2005-05-17 23:14:58 piso Exp $
+ * $Id: Primitives.java,v 1.790 2005-05-17 23:30:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -789,6 +789,15 @@ public final class Primitives extends Lisp
                 return arg;
             }
             return signal(new TypeError(arg, FUNCTION_NAME));
+        }
+    };
+
+    private static final Primitive SETF_FUNCTION_NAME_P =
+        new Primitive("setf-function-name-p", PACKAGE_SYS, true, "thing")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return isValidSetfFunctionName(arg) ? T : NIL;
         }
     };
 
