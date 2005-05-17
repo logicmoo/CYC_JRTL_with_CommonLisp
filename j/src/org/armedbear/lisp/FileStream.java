@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FileStream.java,v 1.23 2005-04-04 18:47:10 piso Exp $
+ * $Id: FileStream.java,v 1.24 2005-05-17 16:10:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ public final class FileStream extends Stream
                       LispObject ifExists)
         throws IOException
     {
-        File file = new File(namestring);
+        final File file = new File(namestring);
         String mode = null;
         if (direction == Keyword.INPUT) {
             mode = "r";
@@ -63,12 +63,15 @@ public final class FileStream extends Stream
         raf = new RandomAccessFile(file, mode);
         // ifExists is ignored unless we have an output stream.
         if (isOutputStream) {
-            if (ifExists == Keyword.OVERWRITE)
-                raf.seek(0);
-            else if (ifExists == Keyword.APPEND)
-                raf.seek(raf.length());
-            else
-                raf.setLength(0);
+            final long length = file.isFile() ? file.length() : 0;
+            if (length > 0) {
+                if (ifExists == Keyword.OVERWRITE)
+                    raf.seek(0);
+                else if (ifExists == Keyword.APPEND)
+                    raf.seek(raf.length());
+                else
+                    raf.setLength(0);
+            }
         }
         this.pathname = pathname;
         this.elementType = elementType;
