@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.9 2005-05-14 18:59:41 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.10 2005-05-17 23:33:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,13 +64,13 @@
          (when arglist
            (%set-arglist function arglist))
          (%set-symbol-function name function))
-        ((and (consp name) (eq (%car name) 'SETF))
+        ((setf-function-name-p name)
          (check-redefinition name)
          (record-source-information name nil source-position)
          ;; FIXME arglist
-         (setf (get (cadr name) 'setf-function) function))
+         (setf (get (%cadr name) 'setf-function) function))
         (t
-         (error 'type-error "~S is not a valid function name." name)))
+         (require-type name '(or symbol (cons (eql setf) (cons symbol null))))))
   (when (functionp function) ; FIXME Is this test needed?
     (%set-lambda-name function name))
   (trace-redefined-update name function))
@@ -78,13 +78,8 @@
 (defun fdefinition (name)
   (cond ((symbolp name)
          (symbol-function name))
-        ((and (consp name)
-              (eq (%car name) 'SETF)
-              (consp (%cdr name))
-              (cadr name)
-              (null (cddr name))
-              (require-type (cadr name) 'symbol))
-         (or (get (cadr name) 'setf-function)
+        ((setf-function-name-p name)
+         (or (get (%cadr name) 'setf-function)
              (error 'undefined-function :name name)))
         (t
          (require-type name '(or symbol (cons (eql setf) (cons symbol null)))))))
