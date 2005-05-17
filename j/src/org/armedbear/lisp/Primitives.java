@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.788 2005-05-16 16:08:20 piso Exp $
+ * $Id: Primitives.java,v 1.789 2005-05-17 23:14:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -765,22 +765,12 @@ public final class Primitives extends Lisp
         {
             if (arg instanceof Symbol)
                 return arg.getSymbolFunction() != null ? T : NIL;
-            if (arg instanceof Cons) {
-                if (arg.car() == Symbol.SETF &&
-                    arg.cdr() instanceof Cons &&
-                    arg.cadr() != NIL &&
-                    arg.cddr() == NIL)
-                {
-                    LispObject f =
-                        get(checkSymbol(arg.cadr()), Symbol.SETF_FUNCTION);
-                    return f != null ? T : NIL;
-                }
+            if (isValidSetfFunctionName(arg)) {
+                LispObject f =
+                    get((Symbol)arg.cadr(), Symbol.SETF_FUNCTION);
+                return f != null ? T : NIL;
             }
-            return signal(new TypeError(arg, list3(Symbol.OR,
-                                                   Symbol.SYMBOL,
-                                                   list3(Symbol.CONS,
-                                                         list2(Symbol.EQL, Symbol.SETF),
-                                                         list3(Symbol.CONS, Symbol.SYMBOL, Symbol.NULL)))));
+            return signal(new TypeError(arg, FUNCTION_NAME));
         }
     };
 
@@ -794,21 +784,11 @@ public final class Primitives extends Lisp
                 ((Symbol)arg).setSymbolFunction(null);
                 return arg;
             }
-            if (arg instanceof Cons) {
-                if (arg.car() == Symbol.SETF &&
-                    arg.cdr() instanceof Cons &&
-                    arg.cadr() != NIL &&
-                    arg.cddr() == NIL)
-                {
-                    remprop(checkSymbol(arg.cadr()), Symbol.SETF_FUNCTION);
-                    return arg;
-                }
+            if (isValidSetfFunctionName(arg)) {
+                remprop((Symbol)arg.cadr(), Symbol.SETF_FUNCTION);
+                return arg;
             }
-            return signal(new TypeError(arg, list3(Symbol.OR,
-                                                   Symbol.SYMBOL,
-                                                   list3(Symbol.CONS,
-                                                         list2(Symbol.EQL, Symbol.SETF),
-                                                         list3(Symbol.CONS, Symbol.SYMBOL, Symbol.NULL)))));
+            return signal(new TypeError(arg, FUNCTION_NAME));
         }
     };
 
@@ -2974,15 +2954,13 @@ public final class Primitives extends Lisp
                     put(symbol, Symbol._SOURCE, new Cons(sourcePathname, third));
                 else
                     put(symbol, Symbol._SOURCE, sourcePathname);
-            } else if (first instanceof Cons && first.car() == Symbol.SETF) {
+            } else if (isValidSetfFunctionName(first)) {
                 // SETF function
                 checkRedefinition(first);
                 Symbol symbol = checkSymbol(first.cadr());
                 put(symbol, Symbol.SETF_FUNCTION, second);
             } else
-                return signal(new TypeError("The value " +
-                                            first.writeToString() +
-                                            " is not a valid function name."));
+                return signal(new TypeError(first, FUNCTION_NAME));
             if (second instanceof Operator) {
                 ((Operator)second).setLambdaName(first);
                 if (fourth != NIL)
