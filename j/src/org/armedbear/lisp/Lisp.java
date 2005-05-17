@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.354 2005-05-15 19:24:14 piso Exp $
+ * $Id: Lisp.java,v 1.355 2005-05-17 23:10:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -893,6 +893,26 @@ public abstract class Lisp
             return "null";
         }
     }
+
+    public static final boolean isValidSetfFunctionName(LispObject obj)
+    {
+        if (obj instanceof Cons) {
+            Cons cons = (Cons) obj;
+            if (cons.car == Symbol.SETF && cons.cdr instanceof Cons) {
+                Cons cdr = (Cons) cons.cdr;
+                if (cdr.car != NIL && cdr.cdr == NIL)
+                    return (cdr.car instanceof Symbol);
+            }
+        }
+        return false;
+    }
+
+    public static final LispObject FUNCTION_NAME =
+        list3(Symbol.OR,
+              Symbol.SYMBOL,
+              list3(Symbol.CONS,
+                    list2(Symbol.EQL, Symbol.SETF),
+                    list3(Symbol.CONS, Symbol.SYMBOL, Symbol.NULL)));
 
     public static final LispObject UNSIGNED_BYTE_8 =
         list2(Symbol.UNSIGNED_BYTE, new Fixnum(8));
