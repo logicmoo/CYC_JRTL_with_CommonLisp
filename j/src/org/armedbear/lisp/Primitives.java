@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.790 2005-05-17 23:30:06 piso Exp $
+ * $Id: Primitives.java,v 1.791 2005-05-19 14:51:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1512,6 +1512,7 @@ public final class Primitives extends Lisp
             {
                 // OK.
             } else
+                // FIXME FUNCTION_NAME
                 return signal(new TypeError("The value " +
                                             name.writeToString() +
                                             " is not a valid function name."));
@@ -1524,14 +1525,15 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### block-name
-    private static final Primitive BLOCK_NAME =
-        new Primitive("block-name", PACKAGE_SYS, true, "function-name")
+    // ### fdefinition-block-name
+    private static final Primitive FDEFINITION_BLOCK_NAME =
+        new Primitive("fdefinition-block-name", PACKAGE_SYS, true, "function-name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof Symbol)
                 return arg;
+            // FIXME isValidSetfFunctionName
             if (arg instanceof Cons && arg.car() == Symbol.SETF) {
                 LispObject blockName = arg.cadr();
                 if (blockName instanceof Symbol)
@@ -4774,9 +4776,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### single-valued-p
-    private static final Primitive SINGLE_VALUED_P =
-        new Primitive("single-valued-p", PACKAGE_SYS, true, "symbol")
+    // ### symbol-single-valued-p
+    private static final Primitive SYMBOL_SINGLE_VALUED_P =
+        new Primitive("symbol-single-valued-p", PACKAGE_SYS, true, "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4789,9 +4791,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %set-single-valued-p
-    private static final Primitive _SET_SINGLE_VALUED_P =
-        new Primitive("%set-single-valued-p", PACKAGE_SYS, false)
+    // ### %set-symbol-single-valued-p
+    private static final Primitive _SET_SYMBOL_SINGLE_VALUED_P =
+        new Primitive("%set-symbol-single-valued-p", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
