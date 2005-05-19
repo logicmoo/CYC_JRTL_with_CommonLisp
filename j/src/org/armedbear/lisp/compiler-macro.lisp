@@ -1,7 +1,7 @@
 ;;; compiler-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: compiler-macro.lisp,v 1.4 2005-05-16 17:35:47 piso Exp $
+;;; $Id: compiler-macro.lisp,v 1.5 2005-05-19 15:09:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
          (env (gensym)))
     (multiple-value-bind (body decls)
         (parse-defmacro lambda-list form body name 'defmacro :environment env)
-      (let ((expander `(lambda (,form ,env) (block ,(block-name name) ,body))))
+      (let ((expander `(lambda (,form ,env) (block ,(fdefinition-block-name name) ,body))))
         `(progn
            (setf (compiler-macro-function ',name) (function ,expander))
            ',name)))))

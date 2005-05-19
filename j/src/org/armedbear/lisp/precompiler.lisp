@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.109 2005-05-12 18:29:40 piso Exp $
+;;; $Id: precompiler.lisp,v 1.110 2005-05-19 15:07:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -913,7 +913,7 @@
 (defmacro defun (name lambda-list &rest body &environment env)
   (multiple-value-bind (body decls doc)
       (sys::parse-body body)
-    (let* ((block-name (block-name name))
+    (let* ((block-name (fdefinition-block-name name))
            (lambda-expression `(lambda ,lambda-list ,@decls (block ,block-name ,@body))))
     (when (and env (empty-environment-p env))
       (setf env nil))

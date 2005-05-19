@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.87 2005-05-11 19:24:59 piso Exp $
+;;; $Id: compile-file.lisp,v 1.88 2005-05-19 15:09:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -179,7 +179,7 @@
               (return-from process-toplevel-form))
              (DEFUN
               (let* ((name (second form))
-                     (block-name (block-name name)))
+                     (block-name (fdefinition-block-name name)))
                 (when *compile-print*
                   (format t "; Processing function ~A~%" name))
                 (let* ((lambda-list (third form))
@@ -471,7 +471,7 @@
 (defmacro defun (name lambda-list &body body &environment env)
     (multiple-value-bind (body decls doc)
         (sys::parse-body body)
-      (let* ((block-name (block-name name))
+      (let* ((block-name (fdefinition-block-name name))
              (lambda-expression `(lambda ,lambda-list ,@decls (block ,block-name ,@body))))
         (cond (*compile-file-truename*
                `(sys::fset ',name ,lambda-expression))
