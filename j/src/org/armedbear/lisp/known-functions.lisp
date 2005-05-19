@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.7 2005-05-18 15:34:42 piso Exp $
+;;; $Id: known-functions.lisp,v 1.8 2005-05-19 15:10:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,5 +65,9 @@
 (declaim (ftype (function number rational) rational rationalize))
 
 (declaim (ftype (function * bit) bit sbit))
+
+(declaim (ftype (function * function) make-macro))
+
+(declaim (ftype (function * t) %set-arglist))
 
 (provide '#:known-functions)

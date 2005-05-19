@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.464 2005-05-18 21:26:08 piso Exp $
+;;; $Id: jvm.lisp,v 1.465 2005-05-19 15:08:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,8 +33,6 @@
   (require '#:opcodes)
   (require '#:known-functions))
 
-(shadow '(method variable))
-
 (defconstant +arg-count-max+ 6)
 
 (defvar *closure-variables* nil)
@@ -58,7 +56,7 @@
 
 ;; Just an experiment...
 (defmacro defsubst (name lambda-list &rest body)
-  (let ((block-name (sys:block-name name)))
+  (let ((block-name (sys:fdefinition-block-name name)))
     `(progn
        (sys::%defun ',name (lambda ,lambda-list (block ,block-name ,@body)))
        (precompile ',name)
@@ -209,7 +207,9 @@
           (dump-1-variable variable))
         (sys::%format t "  None.~%"))))
 
-(defstruct variable
+(defstruct (variable-info (:conc-name variable-)
+                          (:constructor make-variable)
+                          (:predicate variable-p))
   name
   initform
   temp-register
@@ -1213,13 +1213,13 @@
                 label
                 maybe-emit-clear-values
                 single-valued-p
-                sys:single-valued-p
+                sys:symbol-single-valued-p
                 sys:read-8-bits
                 sys:write-8-bits
                 sys::require-type
                 sys::arg-count-error
                 ))
-    (setf (sys:single-valued-p op) t)))
+    (setf (sys:symbol-single-valued-p op) t)))
 
 (eval-when (:load-toplevel :execute)
   (single-valued-p-init))
@@ -1249,7 +1249,7 @@
          (dformat t "single-valued-p recursive call ~S~%" (first form))
          (compiland-single-valued-p *current-compiland*))
         (t
-         (when (sys:single-valued-p (%car form))
+         (when (sys:symbol-single-valued-p (%car form))
            (return-from single-valued-p t))
          (let ((ftype (sys:proclaimed-ftype (%car form))))
            (if (and ftype (third ftype) (atom (third ftype)))
