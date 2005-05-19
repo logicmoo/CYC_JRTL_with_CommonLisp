@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.171 2005-05-16 16:10:22 piso Exp $
+;;; $Id: clos.lisp,v 1.172 2005-05-19 14:53:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -968,7 +968,7 @@
               documentation
               declarations
               (list* 'block
-                     (block-name function-name)
+                     (fdefinition-block-name function-name)
                      real-body)))))
 
 (defun required-portion (gf args)
