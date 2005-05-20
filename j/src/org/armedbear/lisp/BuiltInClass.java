@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.37 2005-03-17 14:48:11 piso Exp $
+ * $Id: BuiltInClass.java,v 1.38 2005-05-20 18:26:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -281,6 +281,12 @@ public class BuiltInClass extends LispClass
         addClass(Symbol.METHOD, METHOD);
     }
 
+    public static final StandardClass STANDARD_METHOD =
+        new StandardMethodClass();
+    static {
+        addClass(Symbol.STANDARD_METHOD, STANDARD_METHOD);
+    }
+
     static {
         ARITHMETIC_ERROR.setCPL(ARITHMETIC_ERROR, ERROR, SERIOUS_CONDITION,
                                 CONDITION, STANDARD_OBJECT, CLASS_T);
@@ -450,6 +456,8 @@ public class BuiltInClass extends LispClass
         SOCKET_STREAM.setCPL(SOCKET_STREAM, TWO_WAY_STREAM, STREAM, CLASS_T);
         STANDARD_CLASS.setDirectSuperclass(CLASS);
         STANDARD_CLASS.setCPL(STANDARD_CLASS, CLASS, STANDARD_OBJECT, CLASS_T);
+        STANDARD_METHOD.setDirectSuperclass(METHOD);
+        STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT, CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
         STORAGE_CONDITION.setDirectSuperclass(SERIOUS_CONDITION);
         STORAGE_CONDITION.setCPL(STORAGE_CONDITION, SERIOUS_CONDITION, CONDITION,
