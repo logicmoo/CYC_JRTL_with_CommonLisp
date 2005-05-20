@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.227 2005-05-11 19:22:25 piso Exp $
+ * $Id: Autoload.java,v 1.228 2005-05-20 18:28:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -476,10 +476,10 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%make-socket", "make_socket");
         autoload(PACKAGE_SYS, "%make-string", "StringFunctions");
         autoload(PACKAGE_SYS, "%make-string-output-stream", "StringOutputStream");
-        autoload(PACKAGE_SYS, "%method-fast-function", "Method", true);
-        autoload(PACKAGE_SYS, "%method-function", "Method", true);
-        autoload(PACKAGE_SYS, "%method-generic-function", "Method", true);
-        autoload(PACKAGE_SYS, "%method-specializers", "Method", true);
+        autoload(PACKAGE_SYS, "%method-fast-function", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "%method-function", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "%method-generic-function", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "%method-specializers", "StandardMethod", true);
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
@@ -495,10 +495,10 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-generic-function-name", "GenericFunction", true);
         autoload(PACKAGE_SYS, "%set-gf-required-args", "GenericFunction", true);
         autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
-        autoload(PACKAGE_SYS, "%set-method-fast-function", "Method", true);
-        autoload(PACKAGE_SYS, "%set-method-function", "Method", true);
-        autoload(PACKAGE_SYS, "%set-method-generic-function", "Method", true);
-        autoload(PACKAGE_SYS, "%set-method-specializers", "Method", true);
+        autoload(PACKAGE_SYS, "%set-method-fast-function", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "%set-method-function", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "%set-method-generic-function", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "%set-method-specializers", "StandardMethod", true);
         autoload(PACKAGE_SYS, "%set-schar", "StringFunctions");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-and", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-andc1", "SimpleBitVector");
@@ -563,10 +563,16 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "make-layout", "Layout", true);
         autoload(PACKAGE_SYS, "make-structure-class", "StructureClass");
         autoload(PACKAGE_SYS, "make-symbol-macro", "SymbolMacro");
+        autoload(PACKAGE_SYS, "method-documentation", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "method-lambda-list", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "method-qualifiers", "StandardMethod", true);
         autoload(PACKAGE_SYS, "psxhash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "set-function-info-value", "function_info");
+        autoload(PACKAGE_SYS, "set-method-documentation", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "set-method-lambda-list", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "set-method-qualifiers", "StandardMethod", true);
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
     }
 }
