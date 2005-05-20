@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.42 2005-05-08 12:09:58 piso Exp $
+ * $Id: StandardObject.java,v 1.43 2005-05-20 18:31:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ package org.armedbear.lisp;
 
 public class StandardObject extends LispObject
 {
-    private Layout layout;
-    private LispObject[] slots;
+    protected Layout layout;
+    protected LispObject[] slots;
 
     protected StandardObject()
     {
