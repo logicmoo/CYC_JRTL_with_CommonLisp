@@ -2,7 +2,7 @@
  * Profiler.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Profiler.java,v 1.11 2005-05-03 23:20:28 piso Exp $
+ * $Id: Profiler.java,v 1.12 2005-05-20 18:30:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ public class Profiler extends Lisp
                                 LispObject methods =
                                     PACKAGE_MOP.intern("GENERIC-FUNCTION-METHODS").execute(object);
                                 while (methods != NIL) {
-                                    Method method = (Method) methods.car();
+                                    StandardMethod method = (StandardMethod) methods.car();
                                     method.getFunction().setCallCount(0);
                                     methods = methods.cdr();
                                 }

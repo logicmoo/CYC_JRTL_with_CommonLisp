@@ -2,7 +2,7 @@
  * StandardObjectFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObjectFunctions.java,v 1.6 2005-05-07 18:54:21 piso Exp $
+ * $Id: StandardObjectFunctions.java,v 1.7 2005-05-20 18:32:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public class StandardObjectFunctions extends Lisp
                 if (symbol == Symbol.STANDARD_GENERIC_FUNCTION)
                     return new GenericFunction(cls, length);
                 if (symbol == Symbol.STANDARD_METHOD)
-                    return new Method(cls, length);
+                    return new StandardMethod();
                 LispObject cpl = cls.getCPL();
                 while (cpl != NIL) {
                     LispObject obj = cpl.car();
