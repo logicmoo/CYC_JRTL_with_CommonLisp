@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.172 2005-05-19 14:53:52 piso Exp $
+;;; $Id: clos.lisp,v 1.173 2005-05-20 18:34:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -708,36 +708,22 @@
 (defun (setf generic-function-argument-precedence-order) (new-value gf)
   (setf (slot-value gf 'argument-precedence-order) new-value))
 
-;;; Internal accessor for effective method function table
-
 (defun classes-to-emf-table (gf)
   (standard-instance-access gf *sgf-classes-to-emf-table-index*))
 
 (defun (setf classes-to-emf-table) (new-value gf)
   (setf (slot-value gf 'classes-to-emf-table) new-value))
 
-;;; Method metaobjects and standard-method
-
-(defclass standard-method (method)
-  ((lambda-list :initarg :lambda-list)     ; :accessor method-lambda-list
-   (qualifiers :initarg :qualifiers)       ; :accessor method-qualifiers
-   (documentation)))                       ; :accessor method-documentation
-
 (defvar the-class-standard-method (find-class 'standard-method))
 
-(defun method-lambda-list (method) (slot-value method 'lambda-list))
 (defun (setf method-lambda-list) (new-value method)
-  (setf (slot-value method 'lambda-list) new-value))
+  (set-method-lambda-list method new-value))
 
-(defun method-qualifiers (method) (slot-value method 'qualifiers))
 (defun (setf method-qualifiers) (new-value method)
-  (setf (slot-value method 'qualifiers) new-value))
-
-(defun method-documentation (method)
-  (slot-value method 'documentation))
+  (set-method-qualifiers method new-value))
 
 (defun (setf method-documentation) (new-value method)
-  (setf (slot-value method 'documentation) new-value))
+  (set-method-documentation method new-value))
 
 ;;; defgeneric
 
