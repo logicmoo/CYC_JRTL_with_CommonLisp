@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.38 2005-05-20 18:26:19 piso Exp $
+ * $Id: BuiltInClass.java,v 1.39 2005-05-21 15:45:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -275,6 +275,12 @@ public class BuiltInClass extends LispClass
         addClass(Symbol.GENERIC_FUNCTION, GENERIC_FUNCTION);
     }
 
+    public static final StandardClass STANDARD_GENERIC_FUNCTION =
+        new StandardGenericFunctionClass();
+    static {
+        addClass(Symbol.STANDARD_GENERIC_FUNCTION, STANDARD_GENERIC_FUNCTION);
+    }
+
     public static final StandardClass METHOD =
         new StandardClass(Symbol.METHOD, list1(STANDARD_OBJECT));
     static {
@@ -456,6 +462,9 @@ public class BuiltInClass extends LispClass
         SOCKET_STREAM.setCPL(SOCKET_STREAM, TWO_WAY_STREAM, STREAM, CLASS_T);
         STANDARD_CLASS.setDirectSuperclass(CLASS);
         STANDARD_CLASS.setCPL(STANDARD_CLASS, CLASS, STANDARD_OBJECT, CLASS_T);
+        STANDARD_GENERIC_FUNCTION.setCPL(STANDARD_GENERIC_FUNCTION,
+                                         GENERIC_FUNCTION, STANDARD_OBJECT,
+                                         FUNCTION, CLASS_T);
         STANDARD_METHOD.setDirectSuperclass(METHOD);
         STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT, CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
