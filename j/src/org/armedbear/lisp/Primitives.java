@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.791 2005-05-19 14:51:16 piso Exp $
+ * $Id: Primitives.java,v 1.792 2005-05-21 15:51:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -419,7 +419,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return (arg instanceof Function || arg instanceof GenericFunction) ? T : NIL;
+            return (arg instanceof Function || arg instanceof StandardGenericFunction) ? T : NIL;
         }
     };
 
@@ -2302,10 +2302,10 @@ public final class Primitives extends Lisp
                 value1 = NIL;
                 value2 = T;
                 value3 = ((Function)arg).getLambdaName();
-            } else if (arg instanceof GenericFunction) {
+            } else if (arg instanceof StandardGenericFunction) {
                 value1 = NIL;
                 value2 = T;
-                value3 = ((GenericFunction)arg).getGenericFunctionName();
+                value3 = ((StandardGenericFunction)arg).getGenericFunctionName();
             } else
                 return signal(new TypeError(arg, Symbol.FUNCTION));
             return LispThread.currentThread().setValues(value1, value2, value3);
@@ -4068,8 +4068,8 @@ public final class Primitives extends Lisp
             if (arg instanceof Operator) {
                 return ((Operator)arg).getLambdaName();
             }
-            if (arg instanceof GenericFunction) {
-                return ((GenericFunction)arg).getGenericFunctionName();
+            if (arg instanceof StandardGenericFunction) {
+                return ((StandardGenericFunction)arg).getGenericFunctionName();
             }
             return signal(new TypeError(arg, Symbol.FUNCTION));
         }
@@ -4086,8 +4086,8 @@ public final class Primitives extends Lisp
                 ((Operator)first).setLambdaName(second);
                 return second;
             }
-            if (first instanceof GenericFunction) {
-                ((GenericFunction)first).setGenericFunctionName(second);
+            if (first instanceof StandardGenericFunction) {
+                ((StandardGenericFunction)first).setGenericFunctionName(second);
                 return second;
             }
             return signal(new TypeError(first, Symbol.FUNCTION));
@@ -4401,7 +4401,7 @@ public final class Primitives extends Lisp
             if (key != NIL) {
                 if (key instanceof Symbol)
                     key = key.getSymbolFunction();
-                if (!(key instanceof Function || key instanceof GenericFunction))
+                if (!(key instanceof Function || key instanceof StandardGenericFunction))
                     signal(new UndefinedFunction(third));
             }
             LispObject test = fourth;
@@ -4413,12 +4413,12 @@ public final class Primitives extends Lisp
             } else if (test != NIL) {
                 if (test instanceof Symbol)
                     test = test.getSymbolFunction();
-                if (!(test instanceof Function || test instanceof GenericFunction))
+                if (!(test instanceof Function || test instanceof StandardGenericFunction))
                     signal(new UndefinedFunction(fourth));
             } else if (testNot != NIL) {
                 if (testNot instanceof Symbol)
                     testNot = testNot.getSymbolFunction();
-                if (!(testNot instanceof Function || testNot instanceof GenericFunction))
+                if (!(testNot instanceof Function || testNot instanceof StandardGenericFunction))
                     signal(new UndefinedFunction(fifth));
             }
             if (key == NIL && test == EQL) {

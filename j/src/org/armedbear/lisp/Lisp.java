@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.356 2005-05-19 14:52:57 piso Exp $
+ * $Id: Lisp.java,v 1.357 2005-05-21 15:50:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1235,7 +1235,7 @@ public abstract class Lisp
     {
         if (obj instanceof Function)
             return obj;
-        if (obj instanceof GenericFunction)
+        if (obj instanceof StandardGenericFunction)
             return obj;
         if (obj instanceof Symbol) {
             LispObject fun = obj.getSymbolFunction();

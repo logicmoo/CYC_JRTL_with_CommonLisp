@@ -2,7 +2,7 @@
  * StandardMethod.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardMethod.java,v 1.1 2005-05-20 18:24:48 piso Exp $
+ * $Id: StandardMethod.java,v 1.2 2005-05-21 15:53:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,9 +138,9 @@ public final class StandardMethod extends StandardObject
     {
         LispObject genericFunction =
             slots[StandardMethodClass.SLOT_INDEX_GENERIC_FUNCTION];
-        if (genericFunction instanceof GenericFunction) {
+        if (genericFunction instanceof StandardGenericFunction) {
             LispObject name =
-                ((GenericFunction)genericFunction).getGenericFunctionName();
+                ((StandardGenericFunction)genericFunction).getGenericFunctionName();
             if (name != null) {
                 StringBuffer sb = new StringBuffer();
                 sb.append(getLispClass().getSymbol().writeToString());

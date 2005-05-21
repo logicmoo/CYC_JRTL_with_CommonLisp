@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.41 2005-05-13 12:45:11 piso Exp $
+ * $Id: SpecialOperators.java,v 1.42 2005-05-21 15:52:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -456,16 +456,16 @@ public final class SpecialOperators extends Lisp
         {
             final LispObject arg = args.car();
             if (arg instanceof Symbol) {
-                LispObject functional = env.lookupFunction(arg);
-                if (functional instanceof Autoload) {
-                    Autoload autoload = (Autoload) functional;
+                LispObject operator = env.lookupFunction(arg);
+                if (operator instanceof Autoload) {
+                    Autoload autoload = (Autoload) operator;
                     autoload.load();
-                    functional = autoload.getSymbol().getSymbolFunction();
+                    operator = autoload.getSymbol().getSymbolFunction();
                 }
-                if (functional instanceof Function)
-                    return functional;
-                if (functional instanceof GenericFunction)
-                    return functional;
+                if (operator instanceof Function)
+                    return operator;
+                if (operator instanceof StandardGenericFunction)
+                    return operator;
                 return signal(new UndefinedFunction(arg));
             }
             if (arg instanceof Cons) {
@@ -505,9 +505,7 @@ public final class SpecialOperators extends Lisp
                         " is a constant and thus cannot be set."));
                 }
                 args = args.cdr();
-//                 Binding binding = null;
                 if (symbol.isSpecialVariable() || env.isDeclaredSpecial(symbol)) {
-//                     binding = thread.getSpecialBinding(symbol);
                     SpecialBinding binding = thread.getSpecialBinding(symbol);
                     if (binding != null) {
                         if (binding.value instanceof SymbolMacro) {
@@ -555,27 +553,6 @@ public final class SpecialOperators extends Lisp
                         }
                     }
                 }
-//                 if (binding != null) {
-//                     if (binding.value instanceof SymbolMacro) {
-//                         LispObject expansion =
-//                             ((SymbolMacro)binding.value).getExpansion();
-//                         LispObject form = list3(Symbol.SETF, expansion, args.car());
-//                         value = eval(form, env, thread);
-//                     } else {
-//                         value = eval(args.car(), env, thread);
-//                         binding.value = value;
-//                     }
-//                 } else {
-//                     if (symbol.getSymbolValue() instanceof SymbolMacro) {
-//                         LispObject expansion =
-//                             ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
-//                         LispObject form = list3(Symbol.SETF, expansion, args.car());
-//                         value = eval(form, env, thread);
-//                     } else {
-//                         value = eval(args.car(), env, thread);
-//                         symbol.setSymbolValue(value);
-//                     }
-//                 }
                 args = args.cdr();
             }
             // Return primary value only!
