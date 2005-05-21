@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2005 Peter Graves
-# $Id: Makefile.in,v 1.206 2005-05-20 20:13:38 piso Exp $
+# $Id: Makefile.in,v 1.207 2005-05-21 15:27:46 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -162,6 +162,7 @@ CLASSFILES =	AbstractArray.class \
 		SpecialOperator.class \
 		SpecialOperators.class \
 		StandardClass.class \
+		StandardGenericFunction.class \
 		StandardMethod.class \
 		StandardMethodClass.class \
 		StandardObject.class \
