@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.228 2005-05-20 18:28:23 piso Exp $
+ * $Id: Autoload.java,v 1.229 2005-05-21 15:43:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -466,8 +466,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%%string=", "StringFunctions");
         autoload(PACKAGE_SYS, "%adjust-array", "adjust_array");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
-        autoload(PACKAGE_SYS, "%generic-function-lambda-list", "GenericFunction", true);
-        autoload(PACKAGE_SYS, "%generic-function-name", "GenericFunction", true);
+        autoload(PACKAGE_SYS, "%generic-function-lambda-list", "StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "%generic-function-name", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%make-array", "make_array");
         autoload(PACKAGE_SYS, "%make-condition", "make_condition", true);
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTableFunctions");
@@ -490,10 +490,10 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass", true);
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass", true);
         autoload(PACKAGE_SYS, "%set-function-info", "function_info");
-        autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction", true);
-        autoload(PACKAGE_SYS, "%set-generic-function-lambda-list", "GenericFunction", true);
-        autoload(PACKAGE_SYS, "%set-generic-function-name", "GenericFunction", true);
-        autoload(PACKAGE_SYS, "%set-gf-required-args", "GenericFunction", true);
+        autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "%set-generic-function-lambda-list", "StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "%set-generic-function-name", "StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "%set-gf-required-args", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
         autoload(PACKAGE_SYS, "%set-method-fast-function", "StandardMethod", true);
         autoload(PACKAGE_SYS, "%set-method-function", "StandardMethod", true);
@@ -545,9 +545,16 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "float-nan-p", "FloatFunctions");
         autoload(PACKAGE_SYS, "float-string", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "function-info", "function_info");
-        autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction", true);
+        autoload(PACKAGE_SYS, "generic-function-argument-precedence-order","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "generic-function-classes-to-emf-table","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "generic-function-discriminating-function", "StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "generic-function-documentation","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "generic-function-initial-methods","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "generic-function-method-class","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "generic-function-method-combination","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "generic-function-methods","StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "get-function-info-value", "function_info");
-        autoload(PACKAGE_SYS, "gf-required-args", "GenericFunction", true);
+        autoload(PACKAGE_SYS, "gf-required-args", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
         autoload(PACKAGE_SYS, "layout-class", "Layout", true);
@@ -570,6 +577,13 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "set-function-info-value", "function_info");
+        autoload(PACKAGE_SYS, "set-generic-function-argument-precedence-order","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "set-generic-function-classes-to-emf-table","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "set-generic-function-documentation","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "set-generic-function-initial-methods","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "set-generic-function-method-class","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "set-generic-function-method-combination","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "set-generic-function-methods","StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "set-method-documentation", "StandardMethod", true);
         autoload(PACKAGE_SYS, "set-method-lambda-list", "StandardMethod", true);
         autoload(PACKAGE_SYS, "set-method-qualifiers", "StandardMethod", true);
