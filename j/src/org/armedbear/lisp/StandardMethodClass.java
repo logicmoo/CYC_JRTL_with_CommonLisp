@@ -2,7 +2,7 @@
  * StandardMethodClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardMethodClass.java,v 1.1 2005-05-20 18:25:24 piso Exp $
+ * $Id: StandardMethodClass.java,v 1.2 2005-05-21 15:49:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,13 +34,16 @@ public final class StandardMethodClass extends StandardClass
     public StandardMethodClass()
     {
         super(Symbol.STANDARD_METHOD, list1(BuiltInClass.METHOD));
-        LispObject slotNames = list7(Symbol.GENERIC_FUNCTION,
-                                     PACKAGE_SYS.addInternalSymbol("LAMBDA-LIST"),
-                                     PACKAGE_SYS.addInternalSymbol("SPECIALIZERS"),
-                                     PACKAGE_SYS.addInternalSymbol("QUALIFIERS"),
-                                     Symbol.FUNCTION,
-                                     PACKAGE_SYS.addInternalSymbol("FAST-FUNCTION"),
-                                     Symbol.DOCUMENTATION);
-        setClassLayout(new Layout(this, slotNames, NIL));
+        Package pkg = PACKAGE_SYS;
+        LispObject[] instanceSlotNames = {
+            Symbol.GENERIC_FUNCTION,
+            pkg.intern("LAMBDA-LIST"),
+            pkg.intern("SPECIALIZERS"),
+            pkg.intern("QUALIFIERS"),
+            Symbol.FUNCTION,
+            pkg.intern("FAST-FUNCTION"),
+            Symbol.DOCUMENTATION
+        };
+        setClassLayout(new Layout(this, instanceSlotNames, NIL));
     }
 }
