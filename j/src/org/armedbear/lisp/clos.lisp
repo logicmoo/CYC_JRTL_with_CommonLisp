@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.173 2005-05-20 18:34:43 piso Exp $
+;;; $Id: clos.lisp,v 1.174 2005-05-21 15:50:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -652,67 +652,44 @@
       (setf (gethash object *eql-specializer-table*)
             (make-eql-specializer :object object))))
 
-(defclass standard-generic-function (generic-function)
-  ((documentation
-    :initarg :documentation)  ; :accessor generic-function-documentation
-   (initial-methods :initform ())
-   (methods :initform ())     ; :accessor generic-function-methods
-   (method-class              ; :accessor generic-function-method-class
-    :initarg :method-class)
-   ;; The method-combination slot contains either the name of the method
-   ;; combination type or a list whose car is the name of the method
-   ;; combination type and whose cdr is a list of options.
-   (method-combination
-    :initarg :method-combination)
-   (argument-precedence-order
-    :initarg :argument-precedence-order)
-   (classes-to-emf-table      ; :accessor classes-to-emf-table
-    :initform (make-hash-table :test #'equal))))
-
 (defvar the-class-standard-gf (find-class 'standard-generic-function))
 
-(defvar *sgf-classes-to-emf-table-index*
-  (slot-location the-class-standard-gf 'classes-to-emf-table))
+;; MOP (p. 216) specifies the following reader generic functions:
+;;   generic-function-argument-precedence-order
+;;   generic-function-declarations
+;;   generic-function-lambda-list
+;;   generic-function-method-class
+;;   generic-function-method-combination
+;;   generic-function-methods
+;;   generic-function-name
 
 (defun generic-function-lambda-list (gf)
   (%generic-function-lambda-list gf))
 (defsetf generic-function-lambda-list %set-generic-function-lambda-list)
 
-(defun generic-function-documentation (gf)
-  (slot-value gf 'documentation))
 (defun (setf generic-function-documentation) (new-value gf)
-  (setf (slot-value gf 'documentation) new-value))
+  (set-generic-function-documentation gf new-value))
 
-(defun generic-function-initial-methods (gf)
-  (slot-value gf 'initial-methods))
 (defun (setf generic-function-initial-methods) (new-value gf)
-  (setf (slot-value gf 'initial-methods) new-value))
+  (set-generic-function-initial-methods gf new-value))
 
-(defun generic-function-methods (gf)
-  (slot-value gf 'methods))
 (defun (setf generic-function-methods) (new-value gf)
-  (setf (slot-value gf 'methods) new-value))
+  (set-generic-function-methods gf new-value))
 
-(defun generic-function-method-class (gf)
-  (slot-value gf 'method-class))
 (defun (setf generic-function-method-class) (new-value gf)
-  (setf (slot-value gf 'method-class) new-value))
+  (set-generic-function-method-class gf new-value))
 
-(defun generic-function-method-combination (gf)
-  (slot-value gf 'method-combination))
 (defun (setf generic-function-method-combination) (new-value gf)
-  (setf (slot-value gf 'method-combination) new-value))
+  (set-generic-function-method-combination gf new-value))
 
-(defun generic-function-argument-precedence-order (gf)
-  (slot-value gf 'argument-precedence-order))
 (defun (setf generic-function-argument-precedence-order) (new-value gf)
-  (setf (slot-value gf 'argument-precedence-order) new-value))
+  (set-generic-function-argument-precedence-order gf new-value))
 
 (defun classes-to-emf-table (gf)
-  (standard-instance-access gf *sgf-classes-to-emf-table-index*))
+  (generic-function-classes-to-emf-table gf))
 
 (defun (setf classes-to-emf-table) (new-value gf)
-  (setf (slot-value gf 'classes-to-emf-table) new-value))
+  (set-generic-function-classes-to-emf-table gf new-value))
 
 (defvar the-class-standard-method (find-class 'standard-method))
 
@@ -846,7 +823,8 @@
                  (required-args (getf plist ':required-args)))
             (%set-gf-required-args gf required-args)
             (when apo-p
-              (setf (slot-value gf 'argument-precedence-order)
+;;               (setf (slot-value gf 'argument-precedence-order)
+              (setf (generic-function-argument-precedence-order gf)
                     (if argument-precedence-order
                         (canonicalize-argument-precedence-order argument-precedence-order
                                                                 required-args)
@@ -900,7 +878,8 @@
     (let* ((plist (analyze-lambda-list (generic-function-lambda-list gf)))
            (required-args (getf plist ':required-args)))
       (%set-gf-required-args gf required-args)
-      (setf (slot-value gf 'argument-precedence-order)
+;;       (setf (slot-value gf 'argument-precedence-order)
+      (setf (generic-function-argument-precedence-order gf)
             (if argument-precedence-order
                 (canonicalize-argument-precedence-order argument-precedence-order
                                                         required-args)
