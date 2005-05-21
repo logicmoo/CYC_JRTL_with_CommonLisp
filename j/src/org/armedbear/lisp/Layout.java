@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.15 2005-05-07 18:52:00 piso Exp $
+ * $Id: Layout.java,v 1.16 2005-05-21 15:46:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,14 @@ public final class Layout extends LispObject
             Debug.trace(t);
         }
         Debug.assertTrue(i == length);
+        this.classSlots = classSlots;
+    }
+
+    public Layout(LispClass cls, LispObject[] instanceSlotNames,
+                  LispObject classSlots)
+    {
+        this.cls = cls;
+        this.slotNames = instanceSlotNames;
         this.classSlots = classSlots;
     }
 
