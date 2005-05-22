@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.177 2005-05-22 20:20:09 piso Exp $
+;;; $Id: clos.lisp,v 1.178 2005-05-22 20:36:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2201,7 +2201,7 @@
 (defmethod remove-method ((generic-function standard-generic-function) method)
   (%remove-method generic-function method))
 
-;; FIXME
+;; See describe.lisp.
 (defgeneric describe-object (object stream))
 
 ;; FIXME
