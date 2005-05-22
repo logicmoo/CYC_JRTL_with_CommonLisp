@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.193 2005-05-16 16:02:04 piso Exp $
+ * $Id: Symbol.java,v 1.194 2005-05-22 00:16:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,6 +121,7 @@ public class Symbol extends LispObject
     public static final Symbol SIMPLE_STRING                       = PACKAGE_CL.addExternalSymbol("SIMPLE-STRING");
     public static final Symbol SIMPLE_VECTOR                       = PACKAGE_CL.addExternalSymbol("SIMPLE-VECTOR");
     public static final Symbol SINGLE_FLOAT                        = PACKAGE_CL.addExternalSymbol("SINGLE-FLOAT");
+    public static final Symbol STANDARD                            = PACKAGE_CL.addExternalSymbol("STANDARD");
     public static final Symbol STANDARD_CHAR                       = PACKAGE_CL.addExternalSymbol("STANDARD-CHAR");
     public static final Symbol STANDARD_CLASS                      = PACKAGE_CL.addExternalSymbol("STANDARD-CLASS");
     public static final Symbol STANDARD_GENERIC_FUNCTION           = PACKAGE_CL.addExternalSymbol("STANDARD-GENERIC-FUNCTION");
