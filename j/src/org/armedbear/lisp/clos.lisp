@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.175 2005-05-22 17:28:03 piso Exp $
+;;; $Id: clos.lisp,v 1.176 2005-05-22 19:04:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -846,6 +846,7 @@
           gf))))
 
 (defun finalize-generic-function (gf)
+  (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
   (set-funcallable-instance-function
    gf
    (funcall (if (eq (class-of gf) the-class-standard-gf)
@@ -855,7 +856,6 @@
   ;; FIXME Do we need to warn on redefinition somewhere else?
   (let ((*warn-on-redefinition* nil))
     (setf (fdefinition (%generic-function-name gf)) gf))
-  (clrhash (classes-to-emf-table gf))
   (values))
 
 (defun make-instance-standard-generic-function (generic-function-class
@@ -873,7 +873,7 @@
     (setf (generic-function-method-class gf) method-class)
     (setf (generic-function-method-combination gf) method-combination)
     (setf (generic-function-documentation gf) documentation)
-    (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
+    (setf (classes-to-emf-table gf) nil)
     (let* ((plist (analyze-lambda-list (generic-function-lambda-list gf)))
            (required-args (getf plist ':required-args)))
       (%set-gf-required-args gf required-args)

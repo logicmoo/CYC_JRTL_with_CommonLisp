@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.3 2005-05-22 17:27:53 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.4 2005-05-22 19:03:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ public final class StandardGenericFunction extends StandardObject
             slots[StandardGenericFunctionClass.SLOT_INDEX_ARGUMENT_PRECEDENCE_ORDER] =
                 NIL;
             slots[StandardGenericFunctionClass.SLOT_INDEX_CLASSES_TO_EMF_TABLE] =
-                new EqualHashTable(11, NIL, NIL);
+                NIL;
             slots[StandardGenericFunctionClass.SLOT_INDEX_DOCUMENTATION] = NIL;
         }
         catch (ConditionThrowable t) {
