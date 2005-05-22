@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.48 2005-05-09 16:01:28 piso Exp $
+;;; $Id: compile-system.lisp,v 1.49 2005-05-22 17:28:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -144,6 +144,7 @@
                                   "describe.lisp"
                                   "destructuring-bind.lisp"
                                   "directory.lisp"
+                                  "disassemble.lisp"
                                   "do-all-symbols.lisp"
                                   "do-external-symbols.lisp"
                                   "do-symbols.lisp"
