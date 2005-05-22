@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.176 2005-05-22 19:04:46 piso Exp $
+;;; $Id: clos.lisp,v 1.177 2005-05-22 20:20:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -793,7 +793,7 @@
       (when (typep gf 'generic-function)
         ;; Remove methods defined by previous DEFGENERIC forms.
         (dolist (method (generic-function-initial-methods gf))
-          (remove-method gf method))
+          (%remove-method gf method))
         (setf (generic-function-initial-methods gf) '()))))
   (apply 'ensure-generic-function function-name all-keys))
 
@@ -1114,12 +1114,6 @@
     (%set-method-fast-function method fast-function)
     method))
 
-(defun add-method (gf method)
-  (let ((method-lambda-list (method-lambda-list method))
-        (gf-lambda-list (generic-function-lambda-list gf)))
-    (check-method-lambda-list method-lambda-list gf-lambda-list))
-  (%add-method gf method))
-
 (defun %add-method (gf method)
   (when (%method-generic-function method)
     (error 'simple-error
@@ -1129,7 +1123,7 @@
   (let ((old-method (%find-method gf (method-qualifiers method)
                                  (%method-specializers method) nil)))
     (when old-method
-      (remove-method gf old-method)))
+      (%remove-method gf old-method)))
   (%set-method-generic-function method gf)
   (push method (generic-function-methods gf))
   (dolist (specializer (%method-specializers method))
@@ -1138,7 +1132,7 @@
   (finalize-generic-function gf)
   gf)
 
-(defun remove-method (gf method)
+(defun %remove-method (gf method)
   (setf (generic-function-methods gf)
         (remove method (generic-function-methods gf)))
   (%set-method-generic-function method nil)
@@ -2181,7 +2175,7 @@
 (defgeneric no-applicable-method (generic-function &rest args))
 
 (defmethod no-applicable-method (generic-function &rest args)
-  (error "No applicable method for the generic function ~S when called with arguments ~S."
+  (error "There is no applicable method for the generic function ~S when called with arguments ~S."
          generic-function
          args))
 
@@ -2193,5 +2187,27 @@
 (defmethod find-method ((generic-function standard-generic-function)
 			qualifiers specializers &optional (errorp t))
   (%find-method generic-function qualifiers specializers errorp))
+
+(defgeneric add-method (generic-function method))
+
+(defmethod add-method ((generic-function standard-generic-function) (method method))
+  (let ((method-lambda-list (method-lambda-list method))
+        (gf-lambda-list (generic-function-lambda-list generic-function)))
+    (check-method-lambda-list method-lambda-list gf-lambda-list))
+  (%add-method generic-function method))
+
+(defgeneric remove-method (generic-function method))
+
+(defmethod remove-method ((generic-function standard-generic-function) method)
+  (%remove-method generic-function method))
+
+;; FIXME
+(defgeneric describe-object (object stream))
+
+;; FIXME
+(defgeneric no-next-method (generic-function method &rest args))
+
+;; FIXME
+(defgeneric function-keywords (method))
 
 (provide 'clos)
