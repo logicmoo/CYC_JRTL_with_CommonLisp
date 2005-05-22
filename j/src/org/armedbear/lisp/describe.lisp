@@ -1,7 +1,7 @@
 ;;; describe.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: describe.lisp,v 1.2 2005-02-12 03:23:46 piso Exp $
+;;; $Id: describe.lisp,v 1.3 2005-05-22 20:38:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,8 @@
 
 (in-package #:system)
 
-(require 'format)
+(require '#:clos)
+(require '#:format)
 
 (defun describe-arglist (object stream)
   (multiple-value-bind
@@ -28,12 +29,15 @@
     (when known-p
       (format stream "~&The function's lambda list is:~%  ~A~%" arglist))))
 
-(defun %describe (object stream)
+(defun %describe-object (object stream)
   (format stream "~S is an object of type ~S.~%" object (type-of object)))
 
 (defun describe (object &optional stream)
-  (let ((stream (out-synonym-of stream))
-        (*print-pretty* t))
+  (describe-object object (out-synonym-of stream))
+  (values))
+
+(defmethod describe-object ((object t) stream)
+  (let ((*print-pretty* t))
     (typecase object
       (SYMBOL
        (let ((package (symbol-package object)))
@@ -72,15 +76,19 @@
              (format stream "  ~S ~S~%" (car plist) (cadr plist))
              (setf plist (cddr plist))))))
       (FUNCTION
-       (%describe object stream)
+       (%describe-object object stream)
        (describe-arglist object stream))
       (INTEGER
-       (%describe object stream)
+       (%describe-object object stream)
        (format stream "~D.~%~
                        #x~X~%~
                        #o~O~%~
                        #b~B~%"
                object object object object))
       (t
-       (%describe object stream))))
+       (%describe-object object stream))))
+  (values))
+
+(defmethod describe-object ((object standard-object) stream)
+  (%describe-object object stream)
   (values))
