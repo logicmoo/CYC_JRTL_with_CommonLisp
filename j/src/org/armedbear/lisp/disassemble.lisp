@@ -1,7 +1,7 @@
 ;;; disassemble.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: disassemble.lisp,v 1.2 2005-05-11 19:57:34 piso Exp $
+;;; $Id: disassemble.lisp,v 1.3 2005-05-22 17:30:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
   (when (symbolp fn)
     (setf fn (symbol-function fn)))
   (let ((function (cond ((typep fn 'generic-function)
-                         (generic-function-discriminating-function fn))
+                         (mop::funcallable-instance-function fn))
                         ((functionp fn)
                          fn))))
     (when (functionp function)
