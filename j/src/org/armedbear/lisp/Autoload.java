@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.229 2005-05-21 15:43:50 piso Exp $
+ * $Id: Autoload.java,v 1.230 2005-05-22 13:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -461,6 +461,9 @@ public class Autoload extends Function
         autoload(PACKAGE_JAVA, "%jredefine-method", "RuntimeClass");
         autoload(PACKAGE_JAVA, "%jregister-handler", "JHandler");
         autoload(PACKAGE_JAVA, "%load-java-class-from-byte-array", "RuntimeClass");
+        autoload(PACKAGE_MOP, "generic-function-name", "StandardGenericFunction", true);
+        autoload(PACKAGE_MOP, "method-qualifiers", "StandardMethod", true);
+        autoload(PACKAGE_MOP, "method-specializers", "StandardMethod", true);
         autoload(PACKAGE_PROF, "%start-profiler", "Profiler", true);
         autoload(PACKAGE_PROF, "stop-profiler", "Profiler", true);
         autoload(PACKAGE_SYS, "%%string=", "StringFunctions");
@@ -572,7 +575,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "make-symbol-macro", "SymbolMacro");
         autoload(PACKAGE_SYS, "method-documentation", "StandardMethod", true);
         autoload(PACKAGE_SYS, "method-lambda-list", "StandardMethod", true);
-        autoload(PACKAGE_SYS, "method-qualifiers", "StandardMethod", true);
         autoload(PACKAGE_SYS, "psxhash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");

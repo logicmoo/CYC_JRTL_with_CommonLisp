@@ -2,7 +2,7 @@
  * StandardMethod.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardMethod.java,v 1.2 2005-05-21 15:53:31 piso Exp $
+ * $Id: StandardMethod.java,v 1.3 2005-05-22 13:20:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,21 @@ public final class StandardMethod extends StandardObject
     {
         super(BuiltInClass.STANDARD_METHOD,
               BuiltInClass.STANDARD_METHOD.getClassLayout().getLength());
+    }
+
+    public StandardMethod(StandardGenericFunction gf,
+                          Function fastFunction,
+                          LispObject lambdaList,
+                          LispObject specializers)
+    {
+        this();
+        slots[StandardMethodClass.SLOT_INDEX_GENERIC_FUNCTION] = gf;
+        slots[StandardMethodClass.SLOT_INDEX_LAMBDA_LIST] = lambdaList;
+        slots[StandardMethodClass.SLOT_INDEX_SPECIALIZERS] = specializers;
+        slots[StandardMethodClass.SLOT_INDEX_QUALIFIERS] = NIL;
+        slots[StandardMethodClass.SLOT_INDEX_FUNCTION] = NIL;
+        slots[StandardMethodClass.SLOT_INDEX_FAST_FUNCTION] = fastFunction;
+        slots[StandardMethodClass.SLOT_INDEX_DOCUMENTATION] = NIL;
     }
 
     // ### method-lambda-list
@@ -64,8 +79,8 @@ public final class StandardMethod extends StandardObject
     };
 
     // ### method-qualifiers
-    private static final Primitive METHOD_QUALIFIERS =
-        new Primitive("method-qualifiers", PACKAGE_SYS, true, "method")
+    private static final Primitive _METHOD_QUALIFIERS =
+        new Primitive("%method-qualifiers", PACKAGE_SYS, true, "method")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -298,4 +313,21 @@ public final class StandardMethod extends StandardObject
             }
         }
     };
+
+    private static final StandardGenericFunction METHOD_SPECIALIZERS =
+        new StandardGenericFunction("method-specializers",
+                                    PACKAGE_MOP,
+                                    true,
+                                    _METHOD_SPECIALIZERS,
+                                    list1(Symbol.METHOD),
+                                    list1(BuiltInClass.STANDARD_METHOD));
+
+    private static final StandardGenericFunction METHOD_QUALIFIERS =
+        new StandardGenericFunction("method-qualifiers",
+                                    PACKAGE_MOP,
+                                    true,
+                                    _METHOD_QUALIFIERS,
+                                    list1(Symbol.METHOD),
+                                    list1(BuiltInClass.STANDARD_METHOD));
+
 }

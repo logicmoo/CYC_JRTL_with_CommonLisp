@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.1 2005-05-21 15:38:41 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.2 2005-05-22 13:22:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,45 @@ public final class StandardGenericFunction extends StandardObject
               BuiltInClass.STANDARD_GENERIC_FUNCTION.getClassLayout().getLength());
     }
 
+    public StandardGenericFunction(String name, Package pkg, boolean exported,
+                                   Function function, LispObject lambdaList,
+                                   LispObject specializers)
+    {
+        this();
+        try {
+            Symbol symbol;
+            if (exported)
+                symbol = pkg.internAndExport(name.toUpperCase());
+            else
+                symbol = pkg.intern(name.toUpperCase());
+            symbol.setSymbolFunction(this);
+            slots[StandardGenericFunctionClass.SLOT_INDEX_NAME] = symbol;
+            slots[StandardGenericFunctionClass.SLOT_INDEX_LAMBDA_LIST] =
+                lambdaList;
+            slots[StandardGenericFunctionClass.SLOT_INDEX_DISCRIMINATING_FUNCTION] =
+                function;
+            slots[StandardGenericFunctionClass.SLOT_INDEX_REQUIRED_ARGS] =
+                lambdaList;
+            slots[StandardGenericFunctionClass.SLOT_INDEX_INITIAL_METHODS] =
+                NIL;
+            StandardMethod method =
+                new StandardMethod(this, function, lambdaList, specializers);
+            slots[StandardGenericFunctionClass.SLOT_INDEX_METHODS] = list1(method);
+            slots[StandardGenericFunctionClass.SLOT_INDEX_METHOD_CLASS] =
+                BuiltInClass.STANDARD_METHOD;
+            slots[StandardGenericFunctionClass.SLOT_INDEX_METHOD_COMBINATION] =
+                Symbol.STANDARD;
+            slots[StandardGenericFunctionClass.SLOT_INDEX_ARGUMENT_PRECEDENCE_ORDER] =
+                NIL;
+            slots[StandardGenericFunctionClass.SLOT_INDEX_CLASSES_TO_EMF_TABLE] =
+                new EqualHashTable(11, NIL, NIL);
+            slots[StandardGenericFunctionClass.SLOT_INDEX_DOCUMENTATION] = NIL;
+        }
+        catch (ConditionThrowable t) {
+            Debug.assertTrue(false);
+        }
+    }
+
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.COMPILED_FUNCTION) {
@@ -50,6 +89,11 @@ public final class StandardGenericFunction extends StandardObject
     public void setGenericFunctionName(LispObject name)
     {
         slots[StandardGenericFunctionClass.SLOT_INDEX_NAME] = name;
+    }
+
+    public void setDiscriminatingFunction(LispObject function)
+    {
+        slots[StandardGenericFunctionClass.SLOT_INDEX_DISCRIMINATING_FUNCTION] = function;
     }
 
     public LispObject execute() throws ConditionThrowable
@@ -125,12 +169,11 @@ public final class StandardGenericFunction extends StandardObject
     {
         LispObject name = getGenericFunctionName();
         if (name != null) {
-            StringBuffer sb = new StringBuffer("#<");
+            StringBuffer sb = new StringBuffer();
             sb.append(getLispClass().getSymbol().writeToString());
             sb.append(' ');
             sb.append(name.writeToString());
-            sb.append('>');
-            return sb.toString();
+            return unreadableString(sb.toString());
         }
         return super.writeToString();
     }
@@ -153,7 +196,7 @@ public final class StandardGenericFunction extends StandardObject
         ++callCount;
     }
 
-    // MOP (p. 216) specifies the following reader generic functions:
+    // MOP (p. 216) specifies the following readers as generic functions:
     //   generic-function-argument-precedence-order
     //   generic-function-declarations
     //   generic-function-lambda-list
@@ -163,7 +206,7 @@ public final class StandardGenericFunction extends StandardObject
     //   generic-function-name
 
     // ### %generic-function-name
-    private static final Primitive _GENERIC_FUNCTION_NAME =
+    public static final Primitive _GENERIC_FUNCTION_NAME =
         new Primitive("%generic-function-name", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -513,4 +556,12 @@ public final class StandardGenericFunction extends StandardObject
             }
         }
     };
+
+    private static final StandardGenericFunction GENERIC_FUNCTION_NAME =
+        new StandardGenericFunction("generic-function-name",
+                                    PACKAGE_MOP,
+                                    true,
+                                    _GENERIC_FUNCTION_NAME,
+                                    list1(Symbol.GENERIC_FUNCTION),
+                                    list1(BuiltInClass.STANDARD_GENERIC_FUNCTION));
 }
