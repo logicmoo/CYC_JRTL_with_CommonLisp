@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.174 2005-05-21 15:50:53 piso Exp $
+;;; $Id: clos.lisp,v 1.175 2005-05-22 17:28:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -823,7 +823,6 @@
                  (required-args (getf plist ':required-args)))
             (%set-gf-required-args gf required-args)
             (when apo-p
-;;               (setf (slot-value gf 'argument-precedence-order)
               (setf (generic-function-argument-precedence-order gf)
                     (if argument-precedence-order
                         (canonicalize-argument-precedence-order argument-precedence-order
@@ -847,7 +846,7 @@
           gf))))
 
 (defun finalize-generic-function (gf)
-  (%set-generic-function-discriminating-function
+  (set-funcallable-instance-function
    gf
    (funcall (if (eq (class-of gf) the-class-standard-gf)
                 #'std-compute-discriminating-function
@@ -878,7 +877,6 @@
     (let* ((plist (analyze-lambda-list (generic-function-lambda-list gf)))
            (required-args (getf plist ':required-args)))
       (%set-gf-required-args gf required-args)
-;;       (setf (slot-value gf 'argument-precedence-order)
       (setf (generic-function-argument-precedence-order gf)
             (if argument-precedence-order
                 (canonicalize-argument-precedence-order argument-precedence-order

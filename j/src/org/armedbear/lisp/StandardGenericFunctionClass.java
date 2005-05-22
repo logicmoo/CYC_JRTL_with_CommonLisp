@@ -2,7 +2,7 @@
  * StandardGenericFunctionClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardGenericFunctionClass.java,v 1.1 2005-05-21 15:29:19 piso Exp $
+ * $Id: StandardGenericFunctionClass.java,v 1.2 2005-05-22 17:25:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,17 +23,16 @@ package org.armedbear.lisp;
 
 public final class StandardGenericFunctionClass extends StandardClass
 {
-    public static final int SLOT_INDEX_NAME                      =  0;
-    public static final int SLOT_INDEX_LAMBDA_LIST               =  1;
-    public static final int SLOT_INDEX_DISCRIMINATING_FUNCTION   =  2;
-    public static final int SLOT_INDEX_REQUIRED_ARGS             =  3;
-    public static final int SLOT_INDEX_INITIAL_METHODS           =  4;
-    public static final int SLOT_INDEX_METHODS                   =  5;
-    public static final int SLOT_INDEX_METHOD_CLASS              =  6;
-    public static final int SLOT_INDEX_METHOD_COMBINATION        =  7;
-    public static final int SLOT_INDEX_ARGUMENT_PRECEDENCE_ORDER =  8;
-    public static final int SLOT_INDEX_CLASSES_TO_EMF_TABLE      =  9;
-    public static final int SLOT_INDEX_DOCUMENTATION             = 10;
+    public static final int SLOT_INDEX_NAME                      = 0;
+    public static final int SLOT_INDEX_LAMBDA_LIST               = 1;
+    public static final int SLOT_INDEX_REQUIRED_ARGS             = 2;
+    public static final int SLOT_INDEX_INITIAL_METHODS           = 3;
+    public static final int SLOT_INDEX_METHODS                   = 4;
+    public static final int SLOT_INDEX_METHOD_CLASS              = 5;
+    public static final int SLOT_INDEX_METHOD_COMBINATION        = 6;
+    public static final int SLOT_INDEX_ARGUMENT_PRECEDENCE_ORDER = 7;
+    public static final int SLOT_INDEX_CLASSES_TO_EMF_TABLE      = 8;
+    public static final int SLOT_INDEX_DOCUMENTATION             = 9;
 
     public StandardGenericFunctionClass()
     {
@@ -42,7 +41,6 @@ public final class StandardGenericFunctionClass extends StandardClass
         LispObject[] instanceSlotNames = {
             pkg.intern("NAME"),
             pkg.intern("LAMBDA-LIST"),
-            pkg.intern("DISCRIMINATING-FUNCTION"),
             pkg.intern("REQUIRED-ARGS"),
             pkg.intern("INITIAL-METHODS"),
             pkg.intern("METHODS"),
