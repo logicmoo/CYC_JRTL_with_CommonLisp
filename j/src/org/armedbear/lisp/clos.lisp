@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.178 2005-05-22 20:36:02 piso Exp $
+;;; $Id: clos.lisp,v 1.179 2005-05-23 16:27:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -265,9 +265,10 @@
                      #'std-compute-slots
                      #'compute-slots)
                  class))
-  (let ((length 0)
+  (let ((old-layout (class-layout class))
+        (length 0)
         (instance-slots '())
-        (class-slots '()))
+        (shared-slots '()))
     (dolist (slot (class-slots class))
       (case (slot-definition-allocation slot)
         (:instance
@@ -281,9 +282,19 @@
                    (if (eq allocation-class class)
                        (cons (slot-definition-name slot) +slot-unbound+)
                        (slot-location allocation-class (slot-definition-name slot))))))
-         (push (slot-definition-location slot) class-slots))))
+         (push (slot-definition-location slot) shared-slots))))
+    (when old-layout
+      ;; Redefined class: initialize added shared slots.
+      (dolist (location shared-slots)
+        (let* ((slot-name (car location))
+               (old-location (layout-slot-location old-layout slot-name)))
+          (unless old-location
+            (let* ((slot-definition (find slot-name (class-slots class) :key #'slot-definition-name))
+                   (initfunction (slot-definition-initfunction slot-definition)))
+              (when initfunction
+                (setf (cdr location) (funcall initfunction))))))))
     (setf (class-layout class)
-          (make-layout class (nreverse instance-slots) (nreverse class-slots))))
+          (make-layout class (nreverse instance-slots) (nreverse shared-slots))))
   (setf (class-default-initargs class) (compute-class-default-initargs class))
   (setf (class-finalized-p class) t))
 
@@ -1935,6 +1946,12 @@
 
 (defgeneric reinitialize-instance (instance &key))
 
+;; "The system-supplied primary method for REINITIALIZE-INSTANCE checks the
+;; validity of initargs and signals an error if an initarg is supplied that is
+;; not declared as valid. The method then calls the generic function SHARED-
+;; INITIALIZE with the following arguments: the instance, nil (which means no
+;; slots should be initialized according to their initforms), and the initargs
+;; it received."
 (defmethod reinitialize-instance ((instance standard-object) &rest initargs)
   (apply #'shared-initialize instance () initargs))
 

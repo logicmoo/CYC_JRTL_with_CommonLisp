@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.43 2005-05-20 18:31:13 piso Exp $
+ * $Id: StandardObject.java,v 1.44 2005-05-23 16:28:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,7 +164,7 @@ public class StandardObject extends LispObject
             }
         }
         // Old shared slots.
-        LispObject rest = oldLayout.getClassSlots(); // A list.
+        LispObject rest = oldLayout.getSharedSlots(); // A list.
         if (rest != null) {
             while (rest != NIL) {
                 LispObject location = rest.car();
@@ -182,7 +182,7 @@ public class StandardObject extends LispObject
             int j = oldLayout.getSlotIndex(slotName);
             if (j >= 0)
                 continue;
-            LispObject location = oldLayout.getClassSlotLocation(slotName);
+            LispObject location = oldLayout.getSharedSlotLocation(slotName);
             if (location != null)
                 continue;
             // Not found.
@@ -343,8 +343,8 @@ public class StandardObject extends LispObject
                 LispObject value = instance.slots[index];
                 return value != UNBOUND_VALUE ? T : NIL;
             }
-            // Check for class slot.
-            LispObject location = layout.getClassSlotLocation(second);
+            // Check for shared slot.
+            LispObject location = layout.getSharedSlotLocation(second);
             if (location != null) {
                 LispObject value = location.cdr();
                 return value != UNBOUND_VALUE ? T : NIL;
@@ -386,8 +386,8 @@ public class StandardObject extends LispObject
                 // Found instance slot.
                 value = instance.slots[index];
             } else {
-                // Check for class slot.
-                LispObject location = layout.getClassSlotLocation(second);
+                // Check for shared slot.
+                LispObject location = layout.getSharedSlotLocation(second);
                 if (location == null)
                     return Symbol.SLOT_MISSING.execute(instance.getLispClass(),
                                                        instance, second,
@@ -430,8 +430,8 @@ public class StandardObject extends LispObject
                 instance.slots[index] = third;
                 return third;
             }
-            // Check for class slot.
-            LispObject location = layout.getClassSlotLocation(second);
+            // Check for shared slot.
+            LispObject location = layout.getSharedSlotLocation(second);
             if (location != null) {
                 location.setCdr(third);
                 return third;

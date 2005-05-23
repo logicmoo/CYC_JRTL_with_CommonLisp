@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.16 2005-05-21 15:46:31 piso Exp $
+ * $Id: Layout.java,v 1.17 2005-05-23 16:28:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,9 +27,9 @@ public final class Layout extends LispObject
 
     private final LispClass cls;
     private final LispObject[] slotNames;
-    private final LispObject classSlots;
+    private final LispObject sharedSlots;
 
-    public Layout(LispClass cls, LispObject instanceSlots, LispObject classSlots)
+    public Layout(LispClass cls, LispObject instanceSlots, LispObject sharedSlots)
     {
         this.cls = cls;
         Debug.assertTrue(instanceSlots.listp());
@@ -54,15 +54,15 @@ public final class Layout extends LispObject
             Debug.trace(t);
         }
         Debug.assertTrue(i == length);
-        this.classSlots = classSlots;
+        this.sharedSlots = sharedSlots;
     }
 
     public Layout(LispClass cls, LispObject[] instanceSlotNames,
-                  LispObject classSlots)
+                  LispObject sharedSlots)
     {
         this.cls = cls;
         this.slotNames = instanceSlotNames;
-        this.classSlots = classSlots;
+        this.sharedSlots = sharedSlots;
     }
 
     // Copy constructor.
@@ -70,7 +70,7 @@ public final class Layout extends LispObject
     {
         cls = oldLayout.cls;
         slotNames = oldLayout.slotNames;
-        classSlots = oldLayout.classSlots;
+        sharedSlots = oldLayout.sharedSlots;
     }
 
     public LispObject getParts() throws ConditionThrowable
@@ -80,7 +80,7 @@ public final class Layout extends LispObject
         for (int i = 0; i < slotNames.length; i++) {
             result = result.push(new Cons("slot " + i, slotNames[i]));
         }
-        result = result.push(new Cons("class slots", classSlots));
+        result = result.push(new Cons("shared slots", sharedSlots));
         return result.nreverse();
     }
 
@@ -109,9 +109,9 @@ public final class Layout extends LispObject
         return slotNames.length;
     }
 
-    public LispObject getClassSlots()
+    public LispObject getSharedSlots()
     {
-        return classSlots;
+        return sharedSlots;
     }
 
     public String writeToString()
@@ -178,10 +178,10 @@ public final class Layout extends LispObject
         return -1;
     }
 
-    public LispObject getClassSlotLocation(LispObject slotName)
+    public LispObject getSharedSlotLocation(LispObject slotName)
         throws ConditionThrowable
     {
-        LispObject rest = classSlots;
+        LispObject rest = sharedSlots;
         while (rest != NIL) {
             LispObject location = rest.car();
             if (location.car() == slotName)
@@ -227,7 +227,7 @@ public final class Layout extends LispObject
                         return new Fixnum(i);
                 }
                 // Reaching here, it's not an instance slot.
-                LispObject rest = ((Layout)first).classSlots;
+                LispObject rest = ((Layout)first).sharedSlots;
                 while (rest != NIL) {
                     LispObject location = rest.car();
                     if (location.car() == second)
