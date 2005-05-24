@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: typep.lisp,v 1.28 2005-05-06 23:29:34 piso Exp $
+;;; $Id: typep.lisp,v 1.29 2005-05-24 13:59:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -55,6 +55,10 @@
 
 (defun %typep (object type)
   (when (atom type)
+    (when (eq type 'values)
+      (error 'simple-error
+             :format-control "The symbol ~S is not valid as a type specifier."
+             :format-arguments (list type)))
     (unless (and (symbolp type) (get type 'deftype-definition))
       (return-from %typep (simple-typep object type))))
   (setf type (normalize-type type))
@@ -163,6 +167,10 @@
        (and (simple-typep object 'nil-vector)
             (or (endp i)
                 (eql (%car i) (length object)))))
+      ((FUNCTION VALUES)
+       (error 'simple-error
+              :format-control "~S types are not a legal argument to TYPEP: ~S"
+              :format-arguments (list tp type)))
       (t
        nil))))
 
