@@ -1,7 +1,7 @@
 ;;; apropos.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: apropos.lisp,v 1.2 2003-10-06 13:26:50 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: apropos.lisp,v 1.3 2005-05-24 18:45:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (resolve 'write-string)
 
@@ -29,9 +29,11 @@
             (string (string string-designator))
             (result nil))
         (dolist (symbol (package-external-symbols package))
+          (declare (type symbol symbol))
           (when (search string (symbol-name symbol) :test #'char-equal)
             (push symbol result)))
         (dolist (symbol (package-internal-symbols package))
+          (declare (type symbol symbol))
           (when (search string (symbol-name symbol) :test #'char-equal)
             (push symbol result)))
         result)
