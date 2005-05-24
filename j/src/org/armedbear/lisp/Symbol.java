@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.194 2005-05-22 00:16:44 piso Exp $
+ * $Id: Symbol.java,v 1.195 2005-05-24 18:44:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -222,7 +222,7 @@ public class Symbol extends LispObject
         }
     }
 
-    public final AbstractString name;
+    public final SimpleString name;
     private int hash = -1;
     private LispObject pkg; // Either a package object or NIL.
     private LispObject value;
@@ -237,7 +237,7 @@ public class Symbol extends LispObject
         pkg = NIL;
     }
 
-    public Symbol(AbstractString string)
+    public Symbol(SimpleString string)
     {
         name = string;
         pkg = NIL;
@@ -249,13 +249,13 @@ public class Symbol extends LispObject
         this.pkg = pkg;
     }
 
-    public Symbol(AbstractString string, Package pkg)
+    public Symbol(SimpleString string, Package pkg)
     {
         name = string;
         this.pkg = pkg;
     }
 
-    public Symbol(AbstractString string, int hash, Package pkg)
+    public Symbol(SimpleString string, int hash, Package pkg)
     {
         name = string;
         this.hash = hash;
