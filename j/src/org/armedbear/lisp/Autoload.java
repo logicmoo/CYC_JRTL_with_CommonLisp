@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.231 2005-05-22 17:28:28 piso Exp $
+ * $Id: Autoload.java,v 1.232 2005-05-24 19:32:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -495,7 +495,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass", true);
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass", true);
         autoload(PACKAGE_SYS, "%set-function-info", "function_info");
-        autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%set-generic-function-lambda-list", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%set-generic-function-name", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%set-gf-required-args", "StandardGenericFunction", true);
