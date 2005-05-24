@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.8 2005-05-19 15:10:39 piso Exp $
+;;; $Id: known-functions.lisp,v 1.9 2005-05-24 19:15:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package #:system)
+
+(declaim (ftype (function * symbol) gensym))
 
 (declaim (ftype (function (t t) t) gethash-2op-1ret))
 (declaim (ftype (function (t) symbol) make-keyword))
