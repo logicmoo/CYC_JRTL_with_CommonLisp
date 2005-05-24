@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: rt.lisp,v 1.164 2005-05-04 16:04:54 piso Exp $
+;;; $Id: rt.lisp,v 1.165 2005-05-24 19:16:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -89,6 +89,7 @@
             append (list (pop p) (pop p))))
 	 (form (pop p))
 	 (values p))
+    (declare (ignore properties))
     (let* ((aborted nil)
            (r (handler-case (multiple-value-list
                              (cond (*compile-tests*
@@ -114,7 +115,8 @@
 
 (in-package :cl-user)
 
-(intern "==>" "CL-USER")
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (intern "==>" "CL-USER"))
 
 (defvar *compiled-and-loaded-files* nil)
 
