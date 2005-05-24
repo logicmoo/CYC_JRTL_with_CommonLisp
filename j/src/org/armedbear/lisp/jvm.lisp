@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.465 2005-05-19 15:08:24 piso Exp $
+;;; $Id: jvm.lisp,v 1.466 2005-05-24 19:14:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2109,7 +2109,7 @@
 ;;            (emit 'aconst_null) ;; name
 
            (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
-                  (emit 'ldc (pool-string (symbol-name lambda-name)))
+                  (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
                   (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
                   (emit-invokestatic +lisp-class+ "internInPackage"
                                      (list +java-string+ +java-string+) +lisp-symbol+))
@@ -2130,7 +2130,7 @@
           ((equal super +lisp-primitive-class+)
            (emit 'aload_0) ; this
            (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
-                  (emit 'ldc (pool-string (symbol-name lambda-name)))
+                  (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
                   (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
                   (emit-invokestatic +lisp-class+ "internInPackage"
                                      (list +java-string+ +java-string+) +lisp-symbol+))
@@ -2247,6 +2247,7 @@
 
 (declaim (ftype (function (symbol) string) sanitize))
 (defun sanitize (symbol)
+  (declare (type symbol symbol))
   (declare (optimize speed))
   (let* ((input (symbol-name symbol))
          (output (make-array (length input) :fill-pointer 0 :element-type 'character)))
@@ -2262,6 +2263,7 @@
 
 (declaim (ftype (function (symbol) string) declare-symbol))
 (defun declare-symbol (symbol)
+  (declare (type symbol symbol))
   (let ((g (sys:gethash-2op-1ret symbol *declared-symbols*)))
     (unless g
       (let ((*code* *static-code*)
@@ -2280,6 +2282,7 @@
     g))
 
 (defun declare-keyword (symbol)
+  (declare (type symbol symbol))
   (let ((g (sys:gethash-2op-1ret symbol *declared-symbols*)))
     (unless g
       (let ((*code* *static-code*))
@@ -2294,6 +2297,7 @@
     g))
 
 (defun declare-function (symbol)
+  (declare (type symbol symbol))
   (let ((f (sys:gethash-2op-1ret symbol *declared-functions*)))
     (unless f
       (setf f (symbol-name (gensym)))
@@ -5571,6 +5575,20 @@
                (emit-unbox-fixnum))
              (emit-move-from-stack target representation))))))
 
+(defun p2-symbol-name (form &key (target :stack) representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-symbol-name))
+  (let ((arg (%cadr form)))
+    (cond ((and (eq (derive-type arg) 'symbol) (< *safety* 3))
+           (compile-form arg)
+           (maybe-emit-clear-values arg)
+           (emit 'checkcast +lisp-symbol-class+)
+           (emit 'getfield  +lisp-symbol-class+ "name" +lisp-simple-string+)
+           (emit-move-from-stack target representation))
+          (t
+           (compile-function-call form target representation)))))
+
 (defun p2-the (form &key (target :stack) representation)
 ;;   (compile-form (third form) :target target :representation representation)
   (dformat t "p2-the ~S ~S ~S~%" form target representation)
@@ -6624,6 +6642,7 @@
   t)
 
 (defun install-p2-handler (symbol &optional handler)
+  (declare (type symbol symbol))
   (let ((handler (or handler
                      (find-symbol (concatenate 'string "COMPILE-" (symbol-name symbol)) 'jvm))))
     (unless (and handler (fboundp handler))
@@ -6687,6 +6706,7 @@
   (install-p2-handler 'sys:set-cdr      'p2-set-car/cdr)
   (install-p2-handler 'svref            'p2-svref)
   (install-p2-handler 'setq             'p2-setq)
+  (install-p2-handler 'symbol-name      'p2-symbol-name)
   (install-p2-handler 'the              'p2-the)
   (install-p2-handler 'zerop            'p2-zerop)
 
