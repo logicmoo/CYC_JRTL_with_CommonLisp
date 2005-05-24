@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: open.lisp,v 1.22 2005-05-10 18:17:30 piso Exp $
+;;; $Id: open.lisp,v 1.23 2005-05-24 13:58:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,7 +94,11 @@
 	     (if-exists nil if-exists-given)
 	     (if-does-not-exist nil if-does-not-exist-given)
 	     (external-format :default))
-  (setf element-type (upgraded-element-type element-type))
+  (setf element-type (case element-type
+                       (:default
+                        '(unsigned-byte 8))
+                       (t
+                        (upgraded-element-type element-type))))
   (let ((pathname (merge-pathnames filename)))
     (when (memq direction '(:output :io))
       (unless if-exists-given
