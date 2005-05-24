@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Package.java,v 1.65 2005-05-16 16:06:52 piso Exp $
+ * $Id: Package.java,v 1.66 2005-05-24 18:55:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@ import java.util.List;
 public final class Package extends LispObject
 {
     private String name;
+    private SimpleString lispName;
 
     private LispObject propertyList;
 
@@ -48,11 +49,13 @@ public final class Package extends LispObject
     public Package(String name)
     {
         this.name = name;
+        lispName = new SimpleString(name);
     }
 
     public Package(String name, int size)
     {
         this.name = name;
+        lispName = new SimpleString(name);
     }
 
     public LispObject typeOf()
@@ -88,6 +91,11 @@ public final class Package extends LispObject
     public final String getName()
     {
         return name;
+    }
+
+    public final LispObject NAME()
+    {
+        return lispName != null ? lispName : NIL;
     }
 
     public final LispObject getPropertyList()
@@ -128,6 +136,7 @@ public final class Package extends LispObject
                 externalSymbols.remove(symbol);
             }
             name = null;
+            lispName = null;
             nicknames = null;
             return true;
         }
@@ -148,6 +157,7 @@ public final class Package extends LispObject
         Packages.deletePackage(this);
         // Now change the names...
         name = newName;
+        lispName = new SimpleString(newName);
         nicknames = arrayList;
         // And add the package back.
         Packages.addPackage(this);
@@ -261,7 +271,7 @@ public final class Package extends LispObject
         return symbol;
     }
 
-    private synchronized Symbol addSymbol(AbstractString name)
+    private synchronized Symbol addSymbol(SimpleString name)
     {
         Symbol symbol = new Symbol(name, this);
         try {
@@ -278,7 +288,7 @@ public final class Package extends LispObject
         return symbol;
     }
 
-    private synchronized Symbol addSymbol(AbstractString name, int hash)
+    private synchronized Symbol addSymbol(SimpleString name, int hash)
     {
         Symbol symbol = new Symbol(name, hash, this);
         try {
@@ -340,7 +350,7 @@ public final class Package extends LispObject
         return intern(new SimpleString(symbolName));
     }
 
-    public synchronized Symbol intern(AbstractString symbolName)
+    public synchronized Symbol intern(SimpleString symbolName)
     {
         final int hash = symbolName.sxhash();
         // Look in external and internal symbols of this package.

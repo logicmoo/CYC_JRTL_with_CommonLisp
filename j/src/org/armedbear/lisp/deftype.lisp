@@ -1,7 +1,7 @@
 ;;; deftype.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: deftype.lisp,v 1.4 2005-02-26 17:36:19 piso Exp $
+;;; $Id: deftype.lisp,v 1.5 2005-05-24 18:58:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,8 +43,9 @@
   (let (tp i)
     (loop
       (if (consp type)
-          (setf tp (car type) i (cdr type))
-          (setf tp type i nil))
+          (setf tp (%car type) i (%cdr type))
+          (setf tp type
+                i nil))
       (if (and (symbolp tp) (get tp 'deftype-definition))
           (setf type (apply (get tp 'deftype-definition) i))
           (return))))
