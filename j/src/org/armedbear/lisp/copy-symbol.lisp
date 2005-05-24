@@ -1,7 +1,7 @@
 ;;; copy-symbol.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: copy-symbol.lisp,v 1.1 2003-12-20 15:20:09 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: copy-symbol.lisp,v 1.2 2005-05-24 18:57:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,11 +17,12 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 ;;; From CMUCL.
 
 (defun copy-symbol (symbol &optional (copy-props nil) &aux new-symbol)
+  (declare (type symbol symbol))
   (setq new-symbol (make-symbol (symbol-name symbol)))
   (when copy-props
     (when (boundp symbol)
