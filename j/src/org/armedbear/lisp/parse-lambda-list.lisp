@@ -1,7 +1,7 @@
 ;;; parse-lambda-list.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: parse-lambda-list.lisp,v 1.2 2004-12-03 18:27:01 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: parse-lambda-list.lisp,v 1.3 2005-05-24 19:15:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@
                      state))
       (dolist (arg list)
         (if (and (symbolp arg)
-                 (let ((name (symbol-name arg)))
+                 (let ((name (symbol-name (the symbol arg))))
                    (and (plusp (length name))
                         (char= (char name 0) #\&))))
             (case arg

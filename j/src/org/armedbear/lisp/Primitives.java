@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.792 2005-05-21 15:51:33 piso Exp $
+ * $Id: Primitives.java,v 1.793 2005-05-24 19:14:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@
 
 package org.armedbear.lisp;
 
-import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
@@ -3876,6 +3875,11 @@ public final class Primitives extends Lisp
         {
             return inSynonymOf(arg).readLine(true, NIL);
         }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return inSynonymOf(first).readLine(second != NIL, NIL);
+        }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -4927,12 +4931,12 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            try {
-                return new Symbol((AbstractString)arg);
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STRING));
-            }
+            if (arg instanceof SimpleString)
+                return new Symbol((SimpleString)arg);
+            // Not a simple string.
+            if (arg instanceof AbstractString)
+                return new Symbol(arg.getStringValue());
+            return signal(new TypeError(arg, Symbol.STRING));
         }
     };
 

@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: loop.lisp,v 1.12 2005-04-30 20:01:07 piso Exp $
+;;; $Id: loop.lisp,v 1.13 2005-05-24 19:10:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -292,7 +292,7 @@ code to be loaded.
 
 (defun loop-lookup-keyword (loop-token table)
   (and (symbolp loop-token)
-       (values (gethash (symbol-name loop-token) table))))
+       (values (gethash (symbol-name (the symbol loop-token)) table))))
 
 (defmacro loop-store-table-data (symbol table datum)
   `(setf (gethash (symbol-name ,symbol) ,table) ,datum))

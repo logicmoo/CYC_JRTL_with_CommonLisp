@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.49 2005-05-22 17:28:58 piso Exp $
+;;; $Id: compile-system.lisp,v 1.50 2005-05-24 19:10:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,20 +37,25 @@
     (let ((system-package (find-package "SYSTEM"))
           (line-number 1))
       (loop
-        (let ((text (read-line in nil in))
-              position)
-          (cond ((eq text in)
-                 (return))
-                ((setf position (search "###" text))
+        (let ((text (read-line in nil)))
+          (when (null text)
+            (return))
+          (let ((position (search "###" text)))
+            (when position
                  ;; The following code is based on the assumption that all the
                  ;; Java builtins are accessible in the SYSTEM package (which
                  ;; uses CL and EXT).
                  (let* ((name (string (read-from-string (subseq text (+ position 3)))))
                         (symbol (find-symbol name system-package)))
                    (when symbol
-                     ;; Force the symbol's package prefix to be written out.
-                     (let ((*package* +keyword-package+))
-                       (format out "~S ~S ~S~%" symbol file line-number))))))
+                     ;; Force the symbol's package prefix to be written out
+                     ;; with "::" instead of ":" so there won't be a reader
+                     ;; error if a symbol that's external now is no longer
+                     ;; external when we read the tags file.
+                     (%format out "~A::~A ~S ~S~%"
+                              (package-name (symbol-package symbol))
+                              name
+                              file line-number)))))
           (incf line-number))))))
 
 (defun grovel-java-definitions ()
@@ -217,7 +222,7 @@
                                   "restart.lisp"
                                   "revappend.lisp"
                                   "rotatef.lisp"
-                                  ;;"rt.lisp"
+                                  "rt.lisp"
                                   ;;"run-benchmarks.lisp"
                                   "run-shell-command.lisp"
                                   ;;"runtime-class.lisp"
