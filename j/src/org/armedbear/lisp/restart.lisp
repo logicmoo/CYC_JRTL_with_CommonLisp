@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: restart.lisp,v 1.19 2005-02-08 02:41:45 piso Exp $
+;;; $Id: restart.lisp,v 1.20 2005-05-25 15:53:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -263,9 +263,9 @@
   (let ((condition (coerce-to-condition datum arguments 'simple-warning 'warn)))
     (require-type condition 'warning)
     (restart-case (signal condition)
-                  (muffle-warning ()
-                                  :report "Skip warning."
-                                  (return-from warn nil)))
+      (muffle-warning ()
+        :report "Skip warning."
+        (return-from warn nil)))
     (let ((badness (etypecase condition
                      (style-warning 'style-warning)
                      (warning 'warning))))
