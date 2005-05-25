@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.111 2005-05-24 19:16:34 piso Exp $
+;;; $Id: precompiler.lisp,v 1.112 2005-05-25 01:36:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,27 +152,6 @@
 
 (defvar *in-jvm-compile* nil)
 
-;;; From OpenMCL.
-(defun compiler-macroexpand-1 (form &optional env)
-  (let ((expander nil)
-        (newdef nil))
-    (if (and (consp form)
-             (symbolp (%car form))
-             (setq expander (compiler-macro-function (%car form) env)))
-        (values (setq newdef (funcall expander form env))
-                (neq newdef form))
-        (values form
-                nil))))
-
-(defun compiler-macroexpand (form &optional env)
-  (let ((expanded-p nil))
-    (loop
-      (multiple-value-bind (expansion exp-p) (compiler-macroexpand-1 form env)
-        (if exp-p
-            (setf form expansion expanded-p t)
-            (return))))
-    (values form expanded-p)))
-
 (defvar *local-variables* ())
 
 (defun find-varspec (sym)
@@ -192,12 +171,7 @@
          (let ((op (%car form))
                handler)
            (when (symbolp op)
-             (cond ((compiler-macro-function op)
-                    (let ((result (compiler-macroexpand form)))
-                      ;; Fall through if no change...
-                      (unless (equal result form)
-                        (return-from precompile1 (precompile1 result)))))
-                   ((setf handler (get op 'precompile-handler))
+             (cond ((setf handler (get op 'precompile-handler))
                     (return-from precompile1 (funcall handler form)))
                    ((local-macro-function op)
                     (let ((result (expand-local-macro (precompile-cons form))))

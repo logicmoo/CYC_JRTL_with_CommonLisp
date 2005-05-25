@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.466 2005-05-24 19:14:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.467 2005-05-25 01:37:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -782,6 +782,10 @@
                (setf (compiland-single-valued-p *current-compiland*) nil)))))
     (p1-default form)))
 
+(defsubst notinline-p (name)
+  (declare (optimize speed))
+  (eq (get name '%inline) 'NOTINLINE))
+
 (defun p1 (form)
   (cond ((symbolp form)
          (cond ((constantp form) ; a DEFCONSTANT
@@ -817,6 +821,13 @@
          (let ((op (%car form))
                handler)
            (cond ((symbolp op)
+                  (when (compiler-macro-function op)
+                    (unless (notinline-p op)
+                      (multiple-value-bind (expansion expanded-p)
+                          (sys:compiler-macroexpand form)
+                        ;; Fall through if no change...
+                        (when expanded-p
+                          (return-from p1 (p1 expansion))))))
                   (cond ((setf handler (get op 'p1-handler))
                          (funcall handler form))
                         ((macro-function op sys:*compile-file-environment*)
@@ -2818,10 +2829,6 @@
     (setf *undefined-functions* (remove name *undefined-functions*))))
 
 (defvar *functions-defined-in-current-file* nil)
-
-(defsubst notinline-p (name)
-  (declare (optimize speed))
-  (eq (get name '%inline) 'NOTINLINE))
 
 (defun inline-ok (name)
   (declare (optimize speed))

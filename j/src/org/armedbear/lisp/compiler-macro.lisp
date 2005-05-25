@@ -1,7 +1,7 @@
 ;;; compiler-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: compiler-macro.lisp,v 1.5 2005-05-19 15:09:34 piso Exp $
+;;; $Id: compiler-macro.lisp,v 1.6 2005-05-25 01:38:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package #:system)
+
+(export 'compiler-macroexpand)
 
 (defvar *compiler-macros* (make-hash-table :test #'equal))
 
@@ -36,3 +38,27 @@
         `(progn
            (setf (compiler-macro-function ',name) (function ,expander))
            ',name)))))
+
+;;; Adapted from OpenMCL.
+(defun compiler-macroexpand-1 (form &optional env)
+  (let ((expander nil)
+        (new-form nil))
+    (if (and (consp form)
+             (symbolp (%car form))
+             (setq expander (compiler-macro-function (%car form) env)))
+        (values (setq new-form (funcall expander form env))
+                (neq new-form form))
+        (values form
+                nil))))
+
+(defun compiler-macroexpand (form &optional env)
+  (let ((expanded-p nil))
+    (loop
+      (multiple-value-bind (expansion exp-p)
+          (compiler-macroexpand-1 form env)
+        (if exp-p
+            (setf form expansion
+                  expanded-p t)
+            (return))))
+    (values form expanded-p)))
+
