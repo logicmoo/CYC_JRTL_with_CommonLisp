@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.468 2005-05-25 12:26:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.469 2005-05-25 15:19:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3150,17 +3150,9 @@
 (defun compile-test-2 (form negatep)
   (let* ((op (car form))
          (args (cdr form))
-         (arg (car args))
-         variable)
+         (arg (car args)))
     (when (memq op '(NOT NULL))
       (return-from compile-test-2 (compile-test arg (not negatep))))
-;;     (when (setf variable (unboxed-fixnum-variable arg))
-;;       (case op
-;;         (MINUSP
-;;          (dformat t "compile-test-2 minusp case~%")
-;;          (aver (variable-register variable))
-;;          (emit 'iload (variable-register variable))
-;;          (return-from compile-test-2 (if negatep 'iflt 'ifge)))))
     (when (subtypep (derive-type arg) 'FIXNUM)
       (case op
         (MINUSP
@@ -3554,7 +3546,6 @@
          (*register* *register*)
          (form (block-form block))
          (*visible-variables* *visible-variables*)
-         (specials ())
          (vars (second form))
          (bind-special-p nil)
          (variables (block-vars block)))
@@ -3689,14 +3680,16 @@
     ;; because we'll lose JVM stack consistency if there is a non-local
     ;; transfer of control from one of the initforms.
     (dolist (variable (block-vars block))
-      (let ((initform (variable-initform variable))
-            (target :stack))
+      (let* ((initform (variable-initform variable))
+             (unused-p (and (not (variable-special-p variable))
+                            (zerop (variable-reads variable))
+                            (zerop (variable-writes variable))))
+             (target (if unused-p nil :stack)))
+        (when unused-p
+          (unused-variable variable))
         (cond (initform
-               (cond ((and (not (variable-special-p variable))
-                           (zerop (variable-reads variable))
-                           (zerop (variable-writes variable)))
-                      (unused-variable variable)
-                      (setf target nil))
+               (cond (unused-p ; Nothing to do.
+                      )
                      ((and (variable-register variable)
                            (neq (variable-declared-type variable) :none)
                            (subtypep (variable-declared-type variable) 'FIXNUM))
@@ -3714,7 +3707,8 @@
                  (unless (single-valued-p initform)
                    (setf must-clear-values t))))
               (t
-               (emit-push-nil)))
+               (when target
+                 (emit-push-nil))))
         (cond ((variable-special-p variable)
                (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register))))
               ((null target)
@@ -3742,7 +3736,12 @@
     ;; Generate code to evaluate initforms and bind variables.
     (dolist (variable (block-vars block))
       (let* ((initform (variable-initform variable))
+             (unused-p (and (not (variable-special-p variable))
+                          (zerop (variable-reads variable))
+                          (zerop (variable-writes variable))))
              (boundp nil))
+        (when unused-p
+          (unused-variable variable))
         (cond ((and (variable-special-p variable)
                     (eq initform (variable-name variable)))
                (emit-push-current-thread)
@@ -3754,10 +3753,7 @@
                                    nil)
                (setf boundp t))
               (initform
-               (cond ((and (not (variable-special-p variable))
-                          (zerop (variable-reads variable))
-                          (zerop (variable-writes variable)))
-                      (unused-variable variable)
+               (cond (unused-p
                       (compile-form initform :target nil)
                       (setf boundp t))
                      ((and (null (variable-closure-index variable))
@@ -5743,8 +5739,7 @@
   (let ((args (cdr form)))
     (if (unsafe-p args)
         (let ((syms ())
-              (lets ())
-              (wrap-result-form nil))
+              (lets ()))
           ;; Tag.
           (let ((arg (first args)))
             (if (constantp arg)
@@ -6738,33 +6733,36 @@
 (initialize-p2-handlers)
 
 (defun process-optimization-declarations (forms)
-  (let (alist ())
-    (dolist (form forms)
-      (unless (and (consp form) (eq (%car form) 'declare))
-        (return))
-      (dolist (decl (%cdr form))
-        (when (eq (car decl) 'OPTIMIZE)
-          (dolist (spec (%cdr decl))
-            (let ((val 3)
-                  (quantity spec))
-              (when (consp spec)
-                (setf quantity (%car spec) val (cadr spec)))
-              (when (and (fixnump val)
-                         (<= 0 val 3)
-                         (memq quantity '(debug speed space safety compilation-speed)))
-                (push (cons quantity val) alist)))))))
-    (when alist
-      (dolist (cons alist)
-        (let ((symbol (%car cons))
-              (value (%cdr cons)))
-          (case symbol
-            (SPEED
-             (setf *speed* value))
-            (SAFETY
-             (setf *safety* value))
-            (DEBUG
-             (setf *debug* value))))))
-    alist))
+  (dolist (form forms)
+    (unless (and (consp form) (eq (%car form) 'declare))
+      (return))
+    (dolist (decl (%cdr form))
+      (when (eq (car decl) 'OPTIMIZE)
+        (dolist (spec (%cdr decl))
+          (let ((val 3)
+                (quality spec))
+            (when (consp spec)
+              (setf quality (%car spec)
+                    val (cadr spec)))
+            (when (and (fixnump val)
+                       (<= 0 val 3))
+              (case quality
+                (speed
+                 (setf *speed* val)
+                 )
+                (safety
+                 (setf *safety* val)
+                 )
+                (debug
+                 (setf *debug* val)
+                 )
+                (space
+                 (setf *space* val)
+                 )
+                (compilation-speed ;; Ignored.
+                 )
+                (t
+                 (compiler-warn "Ignoring unknown optimization quality ~S in ~S." quality decl))))))))))
 
 (defun compile (name &optional definition)
   (jvm-compile name definition))

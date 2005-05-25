@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.88 2005-05-19 15:09:00 piso Exp $
+;;; $Id: compile-file.lisp,v 1.89 2005-05-25 15:19:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -287,6 +287,8 @@
              (PROGN
               (process-toplevel-progn (cdr form) stream compile-time-too)
               (return-from process-toplevel-form))
+             (DECLARE
+              (jvm::compiler-style-warn "Misplaced declaration: ~S" form))
              (t
               (when (and (symbolp (car form))
                          (macro-function (car form) *compile-file-environment*))
