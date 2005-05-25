@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.89 2005-05-25 15:19:50 piso Exp $
+;;; $Id: compile-file.lisp,v 1.90 2005-05-25 18:22:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -187,7 +187,6 @@
                        (jvm::*speed* jvm::*speed*)
                        (jvm::*safety* jvm::*safety*)
                        (jvm::*debug* jvm::*debug*))
-                  (jvm::process-optimization-declarations body)
                   (multiple-value-bind (body decls)
                       (parse-body body)
                     (let* ((expr `(lambda ,lambda-list ,@decls (block ,block-name ,@body)))

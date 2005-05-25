@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.469 2005-05-25 15:19:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.470 2005-05-25 18:21:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1331,20 +1331,38 @@
 (defvar *warnings* nil)
 (defvar *errors* nil)
 
-(defun compiler-style-warn (format-control &rest format-arguments)
+(defun handle-style-warning (condition)
+  (fresh-line *error-output*)
+  (format *error-output* "~%; Caught ~A:~%;   ~A~2%" (type-of condition) condition)
   (incf *style-warnings*)
+  (muffle-warning))
+
+(defun handle-warning (condition)
+  (fresh-line *error-output*)
+  (format *error-output* "~%; Caught ~A:~%;   ~A~2%" (type-of condition) condition)
+  (incf *warnings*)
+  (muffle-warning))
+
+(defun handle-compiler-error (condition)
+  (fresh-line *error-output*)
+  (format *error-output* "~%; Caught ERROR:~%;   ~A~2%" condition)
+  (incf *errors*)
+  (throw 'compile-defun-abort (funcall *compiler-error-bailout*)))
+
+(defun compiler-style-warn (format-control &rest format-arguments)
+;;   (incf *style-warnings*)
   (warn 'style-warning
         :format-control format-control
         :format-arguments format-arguments))
 
 (defun compiler-warn (format-control &rest format-arguments)
-  (incf *warnings*)
+;;   (incf *warnings*)
   (warn 'warning
         :format-control format-control
         :format-arguments format-arguments))
 
 (defun compiler-error (format-control &rest format-arguments)
-  (incf *errors*)
+;;   (incf *errors*)
   (error 'compiler-error
          :format-control format-control
          :format-arguments format-arguments))
@@ -6515,21 +6533,13 @@
               (compile-1 (make-compiland :name name
                                          :lambda-expression (make-compiler-error-form form)
                                          :class-file class-file)))))
-      (handler-bind ((warning #'handle-warning)
-                     (compiler-error #'handle-compiler-error))
+;;       (handler-bind ((warning #'handle-warning)
+;;                      (compiler-error #'handle-compiler-error))
         (compile-1 (make-compiland :name name
                                    :lambda-expression (precompile-form form t)
-                                   :class-file class-file))))))
-
-(defun handle-warning (condition)
-  (fresh-line)
-  (format t "~%; Caught ~A:~%;   ~A~2%" (type-of condition) condition)
-  (muffle-warning))
-
-(defun handle-compiler-error (condition)
-  (fresh-line)
-  (format t "~%; Caught ERROR:~%;   ~A~2%" condition)
-  (throw 'compile-defun-abort (funcall *compiler-error-bailout*)))
+                                   :class-file class-file))
+;;         )
+      )))
 
 (defun get-lambda-to-compile (definition-designator)
   (if (and (consp definition-designator)
@@ -6556,33 +6566,36 @@
   `(%with-compilation-unit (lambda () ,@body) ,@options))
 
 (defun %with-compilation-unit (fn &key override)
-  (if (and *in-compilation-unit* (not override))
-      (funcall fn)
-      (let ((*style-warnings* 0)
-            (*warnings* 0)
-            (*errors* 0)
-            (*defined-functions* '())
-            (*undefined-functions* '())
-            (*in-compilation-unit* t))
-        (unwind-protect
-            (funcall fn)
-          (unless (and (zerop (+ *errors* *warnings* *style-warnings*))
-                       (null *undefined-functions*))
-            (format t "~%; Compilation unit finished~%")
-            (unless (zerop *errors*)
-              (format t ";   Caught ~D ERROR condition~P~%"
-                      *errors* *errors*))
-            (unless (zerop *warnings*)
-              (format t ";   Caught ~D WARNING condition~P~%"
-                      *warnings* *warnings*))
-            (unless (zerop *style-warnings*)
-              (format t ";   Caught ~D STYLE-WARNING condition~P~%"
-                      *style-warnings* *style-warnings*))
-            (when *undefined-functions*
-              (format t ";   The following functions were used but not defined:~%")
-              (dolist (name *undefined-functions*)
-                (format t ";     ~S~%" name)))
-            (terpri))))))
+  (handler-bind ((style-warning #'handle-style-warning)
+                 (warning #'handle-warning)
+                 (compiler-error #'handle-compiler-error))
+    (if (and *in-compilation-unit* (not override))
+        (funcall fn)
+        (let ((*style-warnings* 0)
+              (*warnings* 0)
+              (*errors* 0)
+              (*defined-functions* '())
+              (*undefined-functions* '())
+              (*in-compilation-unit* t))
+          (unwind-protect
+              (funcall fn)
+            (unless (and (zerop (+ *errors* *warnings* *style-warnings*))
+                         (null *undefined-functions*))
+              (format *error-output* "~%; Compilation unit finished~%")
+              (unless (zerop *errors*)
+                (format *error-output* ";   Caught ~D ERROR condition~P~%"
+                        *errors* *errors*))
+              (unless (zerop *warnings*)
+                (format *error-output* ";   Caught ~D WARNING condition~P~%"
+                        *warnings* *warnings*))
+              (unless (zerop *style-warnings*)
+                (format *error-output* ";   Caught ~D STYLE-WARNING condition~P~%"
+                        *style-warnings* *style-warnings*))
+              (when *undefined-functions*
+                (format *error-output* ";   The following functions were used but not defined:~%")
+                (dolist (name *undefined-functions*)
+                  (format *error-output* ";     ~S~%" name)))
+              (terpri *error-output*)))))))
 
 (defun %jvm-compile (name definition)
   (unless definition
