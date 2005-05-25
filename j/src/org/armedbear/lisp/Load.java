@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.102 2005-05-10 17:56:46 piso Exp $
+ * $Id: Load.java,v 1.103 2005-05-25 16:59:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -431,22 +431,25 @@ public final class Load extends Lisp
             throws ConditionThrowable
         {
             if (filespec instanceof Stream) {
-                LispObject pathname;
-                if (filespec instanceof FileStream)
-                    pathname = ((FileStream)filespec).getPathname();
-                else
-                    pathname = NIL;
-                String truename;
-                if (pathname instanceof Pathname)
-                    truename = ((Pathname)pathname).getNamestring();
-                else
-                    truename = null;
-                return loadFileFromStream(pathname,
-                                          truename,
-                                          (Stream) filespec,
-                                          verbose != NIL,
-                                          print != NIL,
-                                          false);
+                if (((Stream)filespec).isOpen()) {
+                    LispObject pathname;
+                    if (filespec instanceof FileStream)
+                        pathname = ((FileStream)filespec).getPathname();
+                    else
+                        pathname = NIL;
+                    String truename;
+                    if (pathname instanceof Pathname)
+                        truename = ((Pathname)pathname).getNamestring();
+                    else
+                        truename = null;
+                    return loadFileFromStream(pathname,
+                                              truename,
+                                              (Stream) filespec,
+                                              verbose != NIL,
+                                              print != NIL,
+                                              false);
+                }
+                // If stream is closed, fall through...
             }
             Pathname pathname = Pathname.coerceToPathname(filespec);
             return load(pathname,
