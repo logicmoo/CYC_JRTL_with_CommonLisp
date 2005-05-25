@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.467 2005-05-25 01:37:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.468 2005-05-25 12:26:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -266,6 +266,7 @@
 ;;          (eq (variable-representation variable) :unboxed-fixnum))))
   (unboxed-fixnum-variable obj))
 
+(declaim (ftype (function () t) allocate-register))
 (defun allocate-register ()
   (let* ((register *register*)
          (next-register (1+ register)))
@@ -944,17 +945,17 @@
                   (pool-class class-name)
                   (pool-name-and-type method-name type-name))))
 
-(declaim (ftype (function (string) fixnum) pool-field))
+(declaim (ftype (function (string) fixnum) pool-string))
 (defun pool-string (string)
   (declare (optimize speed))
   (pool-get (list 8 (pool-name string))))
 
-(declaim (ftype (function (fixnum) fixnum) pool-field))
+(declaim (ftype (function (fixnum) fixnum) pool-int))
 (defun pool-int (n)
   (declare (optimize speed))
   (pool-get (list 3 n)))
 
-(declaim (ftype (function (fixnum) cons) pool-field))
+(declaim (ftype (function (fixnum) cons) u2))
 (defun u2 (n)
   (declare (optimize speed))
   (declare (type fixnum n))
@@ -1029,6 +1030,7 @@
 (defsubst emit-push-t ()
   (emit 'getstatic +lisp-class+ "T" +lisp-symbol+))
 
+(declaim (ftype (function * t) emit-push-constant-int))
 (defun emit-push-constant-int (n)
   (if (<= -32768 n 32767)
       (emit 'sipush n)
@@ -1060,6 +1062,7 @@
 (defsubst get-descriptor (arg-types return-type)
   (car (get-descriptor-info arg-types return-type)))
 
+(declaim (ftype (function * t) emit-invokestatic))
 (defun emit-invokestatic (class-name method-name arg-types return-type)
   (let* ((info (get-descriptor-info arg-types return-type))
          (descriptor (car info))
@@ -1067,6 +1070,7 @@
          (instruction (emit 'invokestatic class-name method-name descriptor)))
     (setf (instruction-stack instruction) stack-effect)))
 
+(declaim (ftype (function * t) emit-invokevirtual))
 (defun emit-invokevirtual (class-name method-name arg-types return-type)
   (let* ((info (get-descriptor-info arg-types return-type))
          (descriptor (car info))
@@ -1074,6 +1078,7 @@
          (instruction (emit 'invokevirtual class-name method-name descriptor)))
     (setf (instruction-stack instruction) (1- stack-effect))))
 
+(declaim (ftype (function * t) emit-invokespecial-init))
 (defun emit-invokespecial-init (class-name arg-types)
   (let* ((info (get-descriptor-info arg-types nil))
          (descriptor (car info))
@@ -1235,6 +1240,7 @@
 (eval-when (:load-toplevel :execute)
   (single-valued-p-init))
 
+(declaim (ftype (function t t) single-valued-p))
 (defun single-valued-p (form)
   (cond ((block-node-p form)
          (if (equal (block-name form) '(TAGBODY))
@@ -1267,11 +1273,13 @@
                t
                nil)))))
 
+(declaim (ftype (function * t) emit-clear-values))
 (defun emit-clear-values ()
 ;;   (break "EMIT-CLEAR-VALUES called~%")
   (ensure-thread-var-initialized)
   (emit 'clear-values))
 
+(declaim (ftype (function * t) maybe-emit-clear-values))
 (defun maybe-emit-clear-values (form)
   (declare (optimize speed))
   (unless (single-valued-p form)
@@ -1279,6 +1287,7 @@
     (ensure-thread-var-initialized)
     (emit 'clear-values)))
 
+(declaim (ftype (function () t) emit-unbox-fixnum))
 (defun emit-unbox-fixnum ()
   (declare (optimize speed))
   (cond ((= *safety* 3)
@@ -1288,11 +1297,30 @@
          (emit 'checkcast +lisp-fixnum-class+)
          (emit 'getfield +lisp-fixnum-class+ "value" "I"))))
 
+(declaim (ftype (function () t) emit-box-long))
 (defun emit-box-long ()
   (declare (optimize speed))
   (emit-invokestatic +lisp-class+ "number" (list "J") +lisp-object+))
 
+(declaim (ftype (function (t &optional t) t) emit-move-from-stack))
+(defun emit-move-from-stack (target &optional representation)
+  (declare (optimize speed))
+  (cond ((null target)
+         (emit 'pop))
+        ((eq target :stack))
+        ((fixnump target)
+         (emit
+          (case representation
+            ((:unboxed-fixnum :java-boolean)
+             'istore)
+            (t
+             'astore))
+          target))
+        (t
+         (aver nil))))
+
 ;; Expects value on stack.
+(declaim (ftype (function () t) emit-invoke-method))
 (defun emit-invoke-method (method-name target representation)
   (emit-invokevirtual +lisp-object-class+ method-name nil +lisp-object+)
   (when (eq representation :unboxed-fixnum)
@@ -1655,23 +1683,6 @@
         (sys::%format t "----- after stack analysis -----~%")
         (print-code))
       max-stack)))
-
-(declaim (ftype (function (t &optional t) emit-move-from-stack)))
-(defun emit-move-from-stack (target &optional representation)
-  (declare (optimize speed))
-  (cond ((null target)
-         (emit 'pop))
-        ((eq target :stack))
-        ((fixnump target)
-         (emit
-          (case representation
-            ((:unboxed-fixnum :java-boolean)
-             'istore)
-            (t
-             'astore))
-          target))
-        (t
-         (aver nil))))
 
 (defun resolve-variables ()
   (let ((code (nreverse *code*)))
@@ -2721,6 +2732,7 @@
   (or (fixnump arg)
       (unboxed-fixnum-variable arg)))
 
+(declaim (ftype (function t t) emit-push-int))
 (defun emit-push-int (arg)
   (if (fixnump arg)
       (emit-push-constant-int arg)
@@ -2729,6 +2741,7 @@
             (emit 'iload (variable-register variable))
             (aver nil)))))
 
+(declaim (ftype (function t t) emit-push-long))
 (defun emit-push-long (arg)
   (cond ((eql arg 0)
          (emit 'lconst_0))
@@ -6648,6 +6661,7 @@
                 (jvm-compile sym)))))))
   t)
 
+(declaim (ftype (function * t) install-p2-handler))
 (defun install-p2-handler (symbol &optional handler)
   (declare (type symbol symbol))
   (let ((handler (or handler
