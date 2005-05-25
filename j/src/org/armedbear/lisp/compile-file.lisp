@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.90 2005-05-25 18:22:16 piso Exp $
+;;; $Id: compile-file.lisp,v 1.91 2005-05-25 23:55:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -280,9 +280,11 @@
               (let ((jvm:*speed*  jvm:*speed*)
                     (jvm:*safety* jvm:*safety*)
                     (jvm:*debug*  jvm:*debug*))
-                (jvm::process-optimization-declarations (cdr form))
-                (process-toplevel-progn (cdr form) stream compile-time-too)
-                (return-from process-toplevel-form)))
+                (multiple-value-bind (forms decls)
+                    (parse-body (cdr form) nil)
+                  (jvm::process-optimization-declarations decls)
+                  (process-toplevel-progn forms stream compile-time-too)
+                  (return-from process-toplevel-form))))
              (PROGN
               (process-toplevel-progn (cdr form) stream compile-time-too)
               (return-from process-toplevel-form))
