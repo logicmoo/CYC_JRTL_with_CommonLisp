@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.224 2005-05-19 14:53:31 piso Exp $
+;;; $Id: boot.lisp,v 1.225 2005-05-25 01:34:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -52,6 +52,8 @@
 
 (defmacro defparameter (name initial-value &optional docstring)
   (list '%defparameter (list 'quote name) initial-value docstring))
+
+(defmacro declare (&rest ignored) nil)
 
 (in-package #:extensions)
 
