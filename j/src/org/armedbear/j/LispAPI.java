@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.64 2005-04-08 21:04:23 piso Exp $
+ * $Id: LispAPI.java,v 1.65 2005-05-26 19:04:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1141,7 +1141,12 @@ public final class LispAPI extends Lisp
                 for (int i = 0; i < args.length; i++) {
                     LispObject obj = args[i];
                     if (obj instanceof LispCharacter) {
-                        editor.insertChar(((LispCharacter)obj).getValue());
+                        char c = ((LispCharacter)obj).value;
+                        if (c == '\n') {
+                            editor.insertLineSeparator();
+                            editor.moveCaretToDotCol();
+                        } else
+                            editor.insertChar(c);
                     } else if (obj instanceof AbstractString) {
                         editor.insertString(obj.getStringValue());
                     } else
