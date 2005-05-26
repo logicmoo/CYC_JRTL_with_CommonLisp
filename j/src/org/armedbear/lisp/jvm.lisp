@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.470 2005-05-25 18:21:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.471 2005-05-26 01:27:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,6 +34,8 @@
   (require '#:known-functions))
 
 (defconstant +arg-count-max+ 6)
+
+(defvar *inline-declarations* nil)
 
 (defvar *closure-variables* nil)
 
@@ -783,9 +785,12 @@
                (setf (compiland-single-valued-p *current-compiland*) nil)))))
     (p1-default form)))
 
-(defsubst notinline-p (name)
+(defun notinline-p (name)
   (declare (optimize speed))
-  (eq (get name '%inline) 'NOTINLINE))
+  (let ((entry (assoc name *inline-declarations*)))
+    (if entry
+        (eq (cdr entry) 'NOTINLINE)
+        (eq (get name '%inline) 'NOTINLINE))))
 
 (defun p1 (form)
   (cond ((symbolp form)
@@ -3675,7 +3680,8 @@
     (let ((*speed*  *speed*)
           (*space*  *space*)
           (*safety* *safety*)
-          (*debug*  *debug*))
+          (*debug*  *debug*)
+          (*inline-declarations* *inline-declarations*))
       (process-optimization-declarations (cddr form))
       (compile-progn-body (cddr form) target))
     (when specialp
@@ -3825,7 +3831,8 @@
   (let ((*speed*  *speed*)
         (*space*  *space*)
         (*safety* *safety*)
-        (*debug*  *debug*))
+        (*debug*  *debug*)
+        (*inline-declarations* *inline-declarations*))
     (process-optimization-declarations (cdr form))
     (let ((*visible-variables* *visible-variables*)
           (specials (precompiler::process-special-declarations (cdr form))))
@@ -6488,7 +6495,8 @@
         (*current-compiland* compiland)
         (*speed* *speed*)
         (*safety* *safety*)
-        (*debug* *debug*))
+        (*debug* *debug*)
+        (*inline-declarations* *inline-declarations*))
     ;; Pass 1.
     (p1-compiland compiland)
     (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
@@ -6750,32 +6758,37 @@
     (unless (and (consp form) (eq (%car form) 'declare))
       (return))
     (dolist (decl (%cdr form))
-      (when (eq (car decl) 'OPTIMIZE)
-        (dolist (spec (%cdr decl))
-          (let ((val 3)
-                (quality spec))
-            (when (consp spec)
-              (setf quality (%car spec)
-                    val (cadr spec)))
-            (when (and (fixnump val)
-                       (<= 0 val 3))
-              (case quality
-                (speed
-                 (setf *speed* val)
-                 )
-                (safety
-                 (setf *safety* val)
-                 )
-                (debug
-                 (setf *debug* val)
-                 )
-                (space
-                 (setf *space* val)
-                 )
-                (compilation-speed ;; Ignored.
-                 )
-                (t
-                 (compiler-warn "Ignoring unknown optimization quality ~S in ~S." quality decl))))))))))
+      (case (car decl)
+        (OPTIMIZE
+         (dolist (spec (%cdr decl))
+           (let ((val 3)
+                 (quality spec))
+             (when (consp spec)
+               (setf quality (%car spec)
+                     val (cadr spec)))
+             (when (and (fixnump val)
+                        (<= 0 val 3))
+               (case quality
+                 (speed
+                  (setf *speed* val)
+                  )
+                 (safety
+                  (setf *safety* val)
+                  )
+                 (debug
+                  (setf *debug* val)
+                  )
+                 (space
+                  (setf *space* val)
+                  )
+                 (compilation-speed ;; Ignored.
+                  )
+                 (t
+                  (compiler-warn "Ignoring unknown optimization quality ~S in ~S." quality decl)))))))
+        ((INLINE NOTINLINE)
+         (dolist (symbol (%cdr decl))
+           (push (cons symbol (%car decl)) *inline-declarations*)))
+        ))))
 
 (defun compile (name &optional definition)
   (jvm-compile name definition))
