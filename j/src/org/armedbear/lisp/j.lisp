@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: j.lisp,v 1.43 2005-03-07 03:34:05 piso Exp $
+;;; $Id: j.lisp,v 1.44 2005-05-27 11:32:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -146,15 +146,16 @@
     (unless (boundp hook) (set hook nil))
     (let ((hook-functions (symbol-value hook)))
       (unless (memq function hook-functions)
-        (setq hook-functions (cons function hook-functions))
+        (push function hook-functions)
         (set hook hook-functions)))))
 
 (defun invoke-hook (hook &rest args)
-  (when (symbolp hook)
-    (unless (boundp hook) (set hook nil))
+  (when (and (symbolp hook) (boundp hook))
     (let ((hooks (symbol-value hook)))
-      (dolist (function hooks)
-        (apply function args)))))
+      (when hooks
+        (dolist (function hooks)
+          (apply function args))
+        t))))
 
 (defvar open-file-hook nil)
 
