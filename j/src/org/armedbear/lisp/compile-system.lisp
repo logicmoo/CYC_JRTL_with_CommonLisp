@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.50 2005-05-24 19:10:29 piso Exp $
+;;; $Id: compile-system.lisp,v 1.51 2005-05-27 17:33:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,11 +42,9 @@
             (return))
           (let ((position (search "###" text)))
             (when position
-                 ;; The following code is based on the assumption that all the
-                 ;; Java builtins are accessible in the SYSTEM package (which
-                 ;; uses CL and EXT).
                  (let* ((name (string (read-from-string (subseq text (+ position 3)))))
-                        (symbol (find-symbol name system-package)))
+                        (symbol (or (find-symbol name system-package) ; uses CL and EXT
+                                    (find-symbol name (find-package "MOP")))))
                    (when symbol
                      ;; Force the symbol's package prefix to be written out
                      ;; with "::" instead of ":" so there won't be a reader
