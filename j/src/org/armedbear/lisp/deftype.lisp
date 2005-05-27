@@ -1,7 +1,7 @@
 ;;; deftype.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: deftype.lisp,v 1.5 2005-05-24 18:58:02 piso Exp $
+;;; $Id: deftype.lisp,v 1.6 2005-05-27 11:43:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,7 +36,8 @@
         (push thing new-lambda-list))
       (setf lambda-list (nreverse new-lambda-list))))
   `(progn
-     (setf (get ',name 'deftype-definition) #'(lambda ,lambda-list ,@body))
+     (setf (get ',name 'deftype-definition)
+           #'(lambda ,lambda-list (block ,name ,@body)))
      ',name))
 
 (defun expand-deftype (type)
