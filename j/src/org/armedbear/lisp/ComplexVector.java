@@ -1,8 +1,8 @@
 /*
  * ComplexVector.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.18 2005-03-25 03:19:20 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: ComplexVector.java,v 1.19 2005-05-27 12:44:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,8 +157,14 @@ public final class ComplexVector extends AbstractVector
                 badIndex(index, elements.length);
                 return NIL; // Not reached.
             }
-        } else
+        } else {
+            // Displaced array.
+            if (index < 0 || index >= capacity) {
+                badIndex(index, capacity);
+                return NIL; // Not reached.
+            }
             return array.AREF(index + displacement);
+        }
     }
 
     // Ignores fill pointer.
@@ -177,8 +183,13 @@ public final class ComplexVector extends AbstractVector
             catch (ArrayIndexOutOfBoundsException e) {
                 badIndex(index, elements.length);
             }
-        } else
-            array.aset(index + displacement, newValue);
+        } else {
+            // Displaced array.
+            if (index < 0 || index >= capacity)
+                badIndex(index, capacity);
+            else
+                array.aset(index + displacement, newValue);
+        }
     }
 
     public LispObject subseq(int start, int end) throws ConditionThrowable
