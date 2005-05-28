@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.471 2005-05-26 01:27:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.472 2005-05-28 04:04:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6549,16 +6549,6 @@
 ;;         )
       )))
 
-(defun get-lambda-to-compile (definition-designator)
-  (if (and (consp definition-designator)
-           (eq (%car definition-designator) 'LAMBDA))
-      definition-designator
-      (multiple-value-bind (lambda-expression environment)
-        (function-lambda-expression definition-designator)
-	(unless lambda-expression
-          (error "Can't find a definition for ~S." definition-designator))
-        (values lambda-expression environment))))
-
 (defun load-verbose-prefix ()
   (let ((s (make-array (max sys::*load-depth* 1)
                        :element-type 'character
@@ -6605,6 +6595,16 @@
                   (format *error-output* ";     ~S~%" name)))
               (terpri *error-output*)))))))
 
+(defun get-lambda-to-compile (definition-designator)
+  (if (and (consp definition-designator)
+           (eq (%car definition-designator) 'LAMBDA))
+      definition-designator
+      (multiple-value-bind (lambda-expression environment)
+          (function-lambda-expression definition-designator)
+	(unless lambda-expression
+          (error "Can't find a definition for ~S." definition-designator))
+        (values lambda-expression environment))))
+
 (defun %jvm-compile (name definition)
   (unless definition
     (resolve name)
@@ -6622,7 +6622,7 @@
         (let* ((tempfile (make-temp-file)))
           (unwind-protect
               (setf compiled-definition
-                    (sys:load-compiled-function (compile-defun name expr env tempfile)))
+                    (load-compiled-function (compile-defun name expr env tempfile)))
             (delete-file tempfile)))
         (when (and name (functionp compiled-definition))
           (sys::%set-lambda-name compiled-definition name)
@@ -6631,11 +6631,11 @@
           (let ((*warn-on-redefinition* nil))
             (setf (fdefinition name)
                   (if (macro-function name)
-                      (sys::make-macro name compiled-definition)
+                      (make-macro name compiled-definition)
                       compiled-definition))))
-        (cond ((zerop (+ jvm::*errors* jvm::*warnings* jvm::*style-warnings*))
+        (cond ((zerop (+ *errors* *warnings* *style-warnings*))
                (setf warnings-p nil failure-p nil))
-              ((zerop (+ jvm::*errors* jvm::*warnings*))
+              ((zerop (+ *errors* *warnings*))
                (setf failure-p nil))))
       (values (or name compiled-definition) warnings-p failure-p))))
 

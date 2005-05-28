@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: CompiledFunction.java,v 1.34 2005-04-24 23:40:46 piso Exp $
+ * $Id: CompiledFunction.java,v 1.35 2005-05-28 04:03:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,17 +126,15 @@ public class CompiledFunction extends Closure
 
     // ### load-compiled-function
     private static final Primitive LOAD_COMPILED_FUNCTION =
-        new Primitive("load-compiled-function", PACKAGE_SYS, true,
-                      "pathname")
+        new Primitive("load-compiled-function", PACKAGE_SYS, true, "pathname")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String namestring = null;
-            if (arg instanceof Pathname) {
+            if (arg instanceof Pathname)
                 namestring = ((Pathname)arg).getNamestring();
-            } else if (arg instanceof AbstractString) {
+            else if (arg instanceof AbstractString)
                 namestring = arg.getStringValue();
-            }
             if (namestring != null)
                 return loadCompiledFunction(namestring);
             return signal(new LispError("Unable to load " + arg.writeToString()));
@@ -147,7 +145,8 @@ public class CompiledFunction extends Closure
     private static final Primitive VARLIST =
         new Primitive("varlist", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
             if (arg instanceof Closure)
                 return ((Closure)arg).getVariableList();
             return signal(new TypeError(arg, "compiled function"));
