@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.11 2005-03-25 03:19:20 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.12 2005-05-28 04:02:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ public final class ComplexBitVector extends AbstractBitVector
     private int fillPointer = -1; // -1 indicates no fill pointer.
     private boolean isDisplaced;
 
-    // For displaced bit-vectors.
+    // For displaced bit vectors.
     private AbstractArray array;
     private int displacement;
 
@@ -110,7 +110,6 @@ public final class ComplexBitVector extends AbstractBitVector
 
     public LispObject elt(int index) throws ConditionThrowable
     {
-        // The index < 0 case is checked in get().
         if (index >= length())
             badIndex(index, length());
         return AREF(index);
@@ -118,13 +117,15 @@ public final class ComplexBitVector extends AbstractBitVector
 
     public LispObject AREF(int index) throws ConditionThrowable
     {
+        if (index < 0 || index >= capacity)
+            badIndex(index, capacity);
         if (bits != null) {
-            if (index < 0 || index >= capacity)
-                badIndex(index, capacity);
             int offset = index >> 6;
             return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
-        } else
+        } else {
+            // Displaced bit vector.
             return array.AREF(index + displacement);
+        }
     }
 
     protected int getBit(int index) throws ConditionThrowable
