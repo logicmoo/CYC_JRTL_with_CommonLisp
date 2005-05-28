@@ -116,7 +116,12 @@ public abstract class AbstractVector extends AbstractArray
             sb.append(limit);
             sb.append(").");
         }
-        signal(new TypeError(sb.toString()));
+        signal(new TypeError(sb.toString(),
+                             new Fixnum(index),
+                             list3(Symbol.INTEGER,
+                                   Fixnum.ZERO,
+                                   new Fixnum(limit - 1))));
+
     }
 
     public void setFillPointer(int n) throws ConditionThrowable
