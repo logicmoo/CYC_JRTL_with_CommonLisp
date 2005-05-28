@@ -2,7 +2,7 @@
  * ComplexVector_UnsignedByte8.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexVector_UnsignedByte8.java,v 1.4 2005-03-25 16:09:09 piso Exp $
+ * $Id: ComplexVector_UnsignedByte8.java,v 1.5 2005-05-28 03:59:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,8 +156,12 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
                 badIndex(index, elements.length);
                 return NIL; // Not reached.
             }
-        } else
+        } else {
+            // Displaced array.
+            if (index < 0 || index >= capacity)
+                badIndex(index, capacity);
             return array.AREF(index + displacement);
+        }
     }
 
     // Ignores fill pointer.
@@ -176,8 +180,13 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
             catch (ArrayIndexOutOfBoundsException e) {
                 badIndex(index, elements.length);
             }
-        } else
-            array.aset(index + displacement, n);
+        } else {
+            // Displaced array.
+            if (index < 0 || index >= capacity)
+                badIndex(index, capacity);
+            else
+                array.aset(index + displacement, n);
+        }
     }
 
     public void aset(int index, LispObject newValue) throws ConditionThrowable
