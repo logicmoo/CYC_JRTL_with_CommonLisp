@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexVector.java,v 1.19 2005-05-27 12:44:47 piso Exp $
+ * $Id: ComplexVector.java,v 1.20 2005-05-28 04:00:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,10 +159,8 @@ public final class ComplexVector extends AbstractVector
             }
         } else {
             // Displaced array.
-            if (index < 0 || index >= capacity) {
+            if (index < 0 || index >= capacity)
                 badIndex(index, capacity);
-                return NIL; // Not reached.
-            }
             return array.AREF(index + displacement);
         }
     }
