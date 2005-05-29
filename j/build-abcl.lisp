@@ -1,12 +1,18 @@
 ;;; build-abcl.lisp
 
-(defconstant file-separator-char
-  #+windows #\\
-  #-windows #\/)
+(defparameter *platform-is-windows*
+  (let ((software-type (software-type)))
+    (if (and (stringp software-type)
+             (>= (length software-type) 7)
+             (string-equal (subseq software-type 0 7) "Windows"))
+        t
+        nil)))
 
-(defconstant path-separator-char
-  #+windows #\;
-  #-windows #\:)
+(defparameter *file-separator-char*
+  (if *platform-is-windows* #\\ #\/))
+
+(defparameter *path-separator-char*
+  (if *platform-is-windows* #\; #\:))
 
 #+armedbear
 (require 'format)
@@ -31,7 +37,7 @@
          (namestring (and truename (namestring truename))))
     (and namestring
          (> (length namestring) 0)
-         (eql (char namestring (1- (length namestring))) file-separator-char)
+         (eql (char namestring (1- (length namestring))) *file-separator-char*)
          truename)))
 
 (defparameter *jdk* nil)
@@ -43,6 +49,9 @@
   (make-pathname :device (pathname-device *load-truename*)
                  :directory (pathname-directory *load-truename*)))
 
+;; (defparameter *source-root*
+;;   (probe-directory (merge-pathnames "src/" *build-root*)))
+
 (defparameter *customizations-file*
   (merge-pathnames "customizations.lisp" *build-root*))
 
@@ -51,25 +60,30 @@
 
 (defparameter *substitutions-alist*
   (acons "@LISP_HOME@"
-         (let ((s (format nil "~S" (directory-namestring *abcl-dir*))))
-           ;; Strip enclosing quotes.
-           (subseq s 1 (1- (length s))))
+;;          (let ((s (format nil "~S" (directory-namestring *abcl-dir*))))
+;;            ;; Strip enclosing quotes.
+;;            (subseq s 1 (1- (length s))))
+         (directory-namestring *abcl-dir*)
          nil))
 
 (defvar *classpath*)
+(defvar *java*)
 (defvar *java-compiler-options*)
 (defvar *java-compiler-command-line-prefix*)
 
 (defun initialize-build ()
   (load *customizations-file*)
-  (unless (probe-file (merge-pathnames #+windows "bin/java.exe"
-                                       #-windows "bin/java"
-                                       *jdk*))
+  (setf *java* (probe-file (merge-pathnames (if *platform-is-windows*
+                                                "bin/java.exe"
+                                                "bin/java")
+                                            *jdk*)))
+  (unless *java*
     (error "Can't find Java executable."))
   (unless *java-compiler*
-    (setf *java-compiler* (merge-pathnames #+windows "bin/javac.exe"
-                                   #-windows "bin/javac"
-                                   *jdk*)))
+    (setf *java-compiler* (merge-pathnames (if *platform-is-windows*
+                                               "bin/javac.exe"
+                                               "bin/javac")
+                                           *jdk*)))
   (let ((classpath-components (list (merge-pathnames "src" *build-root*)
                                     (merge-pathnames "jre/lib/rt.jar" *jdk*))))
     (setf *classpath*
@@ -79,7 +93,7 @@
                  ((null components))
               (princ (namestring (truename component)) s)
               (unless (null (cdr components))
-                (write-char path-separator-char s))))))
+                (write-char *path-separator-char* s))))))
   (let ((prefix (concatenate 'string
                              (namestring *java-compiler*)
                              " -classpath " *classpath*)))
@@ -133,7 +147,9 @@
   (let ((cmdline (build-javac-command-line source-file)))
     (zerop (run-shell-command cmdline :directory *abcl-dir*))))
 
-(defun build-abcl (&key force (batch #+windows nil #-windows t))
+(defun build-abcl (&key force
+                        (batch (if *platform-is-windows* nil t))
+                        compile-system)
   (let ((start (get-internal-real-time))
         (*default-pathname-defaults* *abcl-dir*)
         end)
@@ -150,32 +166,57 @@
                         (>= (file-write-date source-file)
                             (file-write-date class-file)))
                 (push source-file to-do)))))
-      (when (null to-do)
-        (format t "Nothing to do!~%")
-        (return-from build-abcl t))
-      (format t "JDK: ~A~%" *jdk*)
-      (format t "Java compiler: ~A~%" *java-compiler*)
-      (format t "Options: ~A~%" (if *java-compiler-options* *java-compiler-options* ""))
-      (cond (batch
-             (let* ((dir (pathname-directory *abcl-dir*))
-                    (cmdline (with-output-to-string (s)
-                               (princ *java-compiler-command-line-prefix* s)
-                               (dolist (source-file to-do)
-                                 (princ
-                                  (if (equal (pathname-directory source-file) dir)
-                                      (file-namestring source-file)
-                                      (namestring source-file))
-                                  s)
-                                 (princ #\space s))))
-                    (result (run-shell-command cmdline :directory *abcl-dir*)))
-               (unless (zerop result)
-                 (format t "Build failed.~%")
-                 (return-from build-abcl nil))))
+      (cond ((null to-do)
+;;              (format t "Nothing to do!~%")
+;;              (return-from build-abcl t)
+             (format t "Classes are up-to-date.~%")
+             )
             (t
-             (dolist (source-file to-do)
-               (unless (java-compile-file source-file)
-                 (format t "Build failed.~%")
-                 (return-from build-abcl nil)))))
+             (format t "JDK: ~A~%" *jdk*)
+             (format t "Java compiler: ~A~%" *java-compiler*)
+             (format t "Options: ~A~%" (if *java-compiler-options* *java-compiler-options* ""))
+             (cond (batch
+                    (let* ((dir (pathname-directory *abcl-dir*))
+                           (cmdline (with-output-to-string (s)
+                                      (princ *java-compiler-command-line-prefix* s)
+                                      (dolist (source-file to-do)
+                                        (princ
+                                         (if (equal (pathname-directory source-file) dir)
+                                             (file-namestring source-file)
+                                             (namestring source-file))
+                                         s)
+                                        (princ #\space s))))
+                           (result (run-shell-command cmdline :directory *abcl-dir*)))
+                      (unless (zerop result)
+                        (format t "Build failed.~%")
+                        (return-from build-abcl nil))))
+                   (t
+                    (dolist (source-file to-do)
+                      (unless (java-compile-file source-file)
+                        (format t "Build failed.~%")
+                        (return-from build-abcl nil)))))))
+      (when compile-system
+        (let* ((java-namestring (namestring *java*))
+               (java-namestring-contains-space-p (position #\space java-namestring))
+               (cmdline (with-output-to-string (s)
+                          (when java-namestring-contains-space-p
+                            (write-char #\" s))
+                          (princ java-namestring s)
+                          (when java-namestring-contains-space-p
+                            (write-char #\" s))
+                          (write-string " -cp " s)
+                          (princ "src" s)
+                          (write-char #\space s)
+                          (write-string "org.armedbear.lisp.Main --eval \"(progn (compile-system) (quit))\"" s))))
+          (cond (*platform-is-windows*
+                 (with-open-file (stream
+                                  "compile-system.bat"
+                                  :direction :output
+                                  :if-exists :supersede)
+                   (write cmdline :stream stream))
+                 (run-shell-command "compile-system.bat"))
+                (t ; Linux
+                 (run-shell-command cmdline)))))
       ;; Success!
       (with-open-file (s
                        (merge-pathnames (make-pathname :name "build"
@@ -201,5 +242,10 @@
                     (princ "--main=org.armedbear.lisp.Main -o lisp" s)))
          (result (run-shell-command cmdline :directory *abcl-dir*))
          )
-    (zerop result)
-    ))
+    (zerop result)))
+
+(defun clean ()
+  (let ((*default-pathname-defaults* *abcl-dir*))
+    (map nil #'delete-file (append (directory "*.class")
+                                   (directory "*.abcl")
+                                   (directory "*.cls")))))
