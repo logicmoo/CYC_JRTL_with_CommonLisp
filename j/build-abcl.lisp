@@ -242,6 +242,12 @@
         (%clean)
       (ext:cd old-directory))))
 
+(defun safe-namestring (pathname)
+  (let ((string (namestring pathname)))
+    (when (position #\space string)
+      (setf string (concatenate 'string "\"" string "\"")))
+    string))
+
 (defun build-abcl (&key force
                         (batch (if *platform-is-windows* nil t))
                         compile-system
@@ -295,19 +301,14 @@
                         (format t "Build failed.~%")
                         (return-from build-abcl nil)))))))
       (when (or compile-system full)
-        (let* ((java-namestring (namestring *java*))
-               (java-namestring-contains-space-p (position #\space java-namestring))
+        (let* ((java-namestring (safe-namestring *java*))
                status)
           (cond (*platform-is-windows*
                  (with-open-file (stream
                                   "compile-system.bat"
                                   :direction :output
                                   :if-exists :supersede)
-                   (when java-namestring-contains-space-p
-                     (write-char #\" stream))
                    (princ java-namestring stream)
-                   (when java-namestring-contains-space-p
-                     (write-char #\" stream))
                    (write-string " -cp " stream)
                    (princ "src" stream)
                    (write-char #\space stream)
@@ -318,11 +319,7 @@
                 (t ; Linux
                  (let ((cmdline
                         (with-output-to-string (s)
-                          (when java-namestring-contains-space-p
-                            (write-char #\" s))
                           (princ java-namestring s)
-                          (when java-namestring-contains-space-p
-                            (write-char #\" s))
                           (write-string " -cp " s)
                           (princ "src" s)
                           (write-char #\space s)
@@ -364,6 +361,18 @@
                  (format t "~A returned ~S~%" command status))
                (zerop status))))
       ;; Success!
+
+      ;; FIXME Windows
+      (with-open-file (s
+                       (merge-pathnames "abcl" *build-root*)
+                       :direction :output
+                       :if-exists :supersede)
+        (format s "exec ~A -Xrs -Djava.library-path=~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
+                (safe-namestring *java*)
+                (safe-namestring *abcl-dir*)
+                (safe-namestring (merge-pathnames "src" *build-root*))
+                (safe-namestring (merge-pathnames "abcl.jar" *build-root*))))
+
       (with-open-file (s
                        (merge-pathnames (make-pathname :name "build"
                                                        :defaults *abcl-dir*))
