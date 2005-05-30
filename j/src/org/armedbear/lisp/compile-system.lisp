@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.51 2005-05-27 17:33:52 piso Exp $
+;;; $Id: compile-system.lisp,v 1.52 2005-05-30 01:55:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -262,8 +262,13 @@
                                   "swank.lisp"))
      t))
 
-(defun compile-system ()
-  (check-lisp-home)
-  (time
-   (with-compilation-unit ()
-     (%compile-system))))
+(defun compile-system (&key quit)
+  (let ((status -1))
+    (check-lisp-home)
+    (time
+     (with-compilation-unit ()
+       (%compile-system)
+       (when (zerop (+ jvm::*errors* jvm::*warnings*))
+         (setf status 0))))
+    (when quit
+      (quit :status status))))
