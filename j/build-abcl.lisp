@@ -208,7 +208,12 @@
     (map nil #'delete-file (append (directory "*.class")
                                    (directory "*.abcl")
                                    (directory "*.cls")
-                                   (list "native.h" "libabcl.so" "build")))))
+                                   (when (probe-file "native.h")
+                                     (list "native.h"))
+                                   (when (probe-file "libabcl.so")
+                                     (list "libabcl.so"))
+                                   (when (probe-file "build")
+                                     (list "build"))))))
 
 (defun build-abcl (&key force
                         (batch (if *platform-is-windows* nil t))
