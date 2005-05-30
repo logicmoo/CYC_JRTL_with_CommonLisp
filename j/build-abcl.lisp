@@ -5,6 +5,7 @@
   (:export #:build-abcl)
   #+abcl (:import-from #:extensions #:run-shell-command #:probe-directory)
   #+clisp (:import-from #:ext #:probe-directory)
+  #+allegro (:import-from #:excl #:probe-directory)
   )
 
 (in-package #:build-abcl)
@@ -75,6 +76,17 @@
           (t
            0))))
 
+#+lispworks
+(defun run-shell-command (command &key directory (output *standard-output*))
+  (system:call-system-showing-output
+   command
+   :shell-type "/bin/sh"
+   :output-stream output))
+
+#+allegro
+(defun run-shell-command (command &key directory (output *standard-output*))
+  (excl:run-shell-command command :directory directory :input nil :output output))
+
 #+(or sbcl cmu)
 (defun probe-directory (pathspec)
   (let* ((truename (probe-file pathspec))
@@ -132,7 +144,9 @@
             (do* ((components classpath-components (cdr components))
                   (component (car components) (car components)))
                  ((null components))
+              (princ #\" s)
               (princ (namestring component) s)
+              (princ #\" s)
               (unless (null (cdr components))
                 (write-char *path-separator-char* s))))))
   (let ((prefix (concatenate 'string
@@ -191,6 +205,7 @@
 (defun make-jar ()
   (let ((*default-pathname-defaults* *build-root*)
         (jar-namestring (namestring *jar*)))
+    #+clisp (ext:cd *build-root*)
     (when (position #\space jar-namestring)
       (setf jar-namestring (concatenate 'string "\"" jar-namestring "\"")))
     (let ((substitutions-alist (acons "@JAR@" jar-namestring nil))
@@ -203,17 +218,29 @@
           (format t "~A returned ~S~%" command status))
         status))))
 
+(defun %clean ()
+  (map nil #'delete-file (append (directory "*.class")
+                                 (directory "*.abcl")
+                                 (directory "*.cls")
+                                 (when (probe-file "native.h")
+                                   (list "native.h"))
+                                 (when (probe-file "libabcl.so")
+                                   (list "libabcl.so"))
+                                 (when (probe-file "build")
+                                   (list "build")))))
+
+#-clisp
 (defun clean ()
   (let ((*default-pathname-defaults* *abcl-dir*))
-    (map nil #'delete-file (append (directory "*.class")
-                                   (directory "*.abcl")
-                                   (directory "*.cls")
-                                   (when (probe-file "native.h")
-                                     (list "native.h"))
-                                   (when (probe-file "libabcl.so")
-                                     (list "libabcl.so"))
-                                   (when (probe-file "build")
-                                     (list "build"))))))
+    (%clean)))
+
+#+clisp
+(defun clean ()
+  (let ((old-directory (ext:cd)))
+    (ext:cd *abcl-dir*)
+    (unwind-protect
+        (%clean)
+      (ext:cd old-directory))))
 
 (defun build-abcl (&key force
                         (batch (if *platform-is-windows* nil t))
@@ -225,6 +252,7 @@
   (let ((start (get-internal-real-time))
         (*default-pathname-defaults* *abcl-dir*)
         end)
+    #+clisp (ext:cd *abcl-dir*)
     (initialize-build)
     (when clean
       (clean))
@@ -241,9 +269,9 @@
                             (file-write-date class-file)))
                 (push source-file to-do)))))
       (cond ((null to-do)
-             (format t "Classes are up to date.~%"))
+             (format t "~&Classes are up to date.~%"))
             (t
-             (format t "JDK: ~A~%" *jdk*)
+             (format t "~&JDK: ~A~%" *jdk*)
              (format t "Java compiler: ~A~%" *java-compiler*)
              (format t "Options: ~A~%" (if *java-compiler-options* *java-compiler-options* ""))
              (cond (batch
