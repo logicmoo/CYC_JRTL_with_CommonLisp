@@ -207,13 +207,15 @@
   (let ((*default-pathname-defaults* *abcl-dir*))
     (map nil #'delete-file (append (directory "*.class")
                                    (directory "*.abcl")
-                                   (directory "*.cls")))))
+                                   (directory "*.cls")
+                                   (list "native.h" "libabcl.so" "build")))))
 
 (defun build-abcl (&key force
                         (batch (if *platform-is-windows* nil t))
                         compile-system
                         jar
                         clean
+                        libabcl
                         full)
   (let ((start (get-internal-real-time))
         (*default-pathname-defaults* *abcl-dir*)
@@ -303,6 +305,31 @@
           (unless (zerop status)
             (format t "Build failed.~%")
             (return-from build-abcl nil))))
+      (when (and (or full libabcl)
+                 (or (string= (software-type) "Linux")
+                     (string= (software-type)"SunOS")))
+        (and (let* ((javah-namestring (namestring (probe-file (merge-pathnames "bin/javah" *jdk*))))
+                    (command
+                     (format nil "~A -o org/armedbear/lisp/native.h org.armedbear.lisp.Native"
+                             javah-namestring))
+                    (status
+                     (run-shell-command command :directory (merge-pathnames "src/" *build-root*))))
+               (unless (zerop status)
+                 (format t "~A returned ~S~%" command status))
+               (zerop status))
+             (let* ((jdk-namestring (namestring *jdk*))
+                    (command
+                     (format nil "gcc -shared -o libabcl.so -O -D_REENTRANT -fpic -I~Ainclude -I~Ainclude/~A native.c"
+                             jdk-namestring jdk-namestring
+                             (cond ((string= (software-type) "Linux")
+                                    "linux")
+                                   ((string= (software-type) "SunOS")
+                                    "solaris"))))
+                    (status
+                     (run-shell-command command :directory *abcl-dir*)))
+               (unless (zerop status)
+                 (format t "~A returned ~S~%" command status))
+               (zerop status))))
       ;; Success!
       (with-open-file (s
                        (merge-pathnames (make-pathname :name "build"
