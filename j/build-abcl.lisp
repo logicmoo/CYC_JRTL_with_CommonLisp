@@ -2,11 +2,16 @@
 
 (defpackage build-abcl
   (:use "COMMON-LISP")
-  (:export #:build-abcl))
+  (:export #:build-abcl)
+  #+abcl (:import-from #:extensions #:run-shell-command #:probe-directory)
+  )
 
 (in-package #:build-abcl)
 
 (defparameter *platform-is-windows*
+  #+clisp
+  (progn #+win32 t #-win32 nil)
+  #-clisp
   (let ((software-type (software-type)))
     (if (and (stringp software-type)
              (>= (length software-type) 7)
@@ -53,13 +58,20 @@
 
 #+clisp
 (defun run-shell-command (command &key directory (output *standard-output*))
-  (if directory
-      (let ((old-directory (ext:cd)))
-        (ext:cd directory)
-        (unwind-protect
-            (ext:run-shell-command command)
-          (ext:cd old-directory)))
-      (ext:run-shell-command command)))
+  (let (status)
+    (if directory
+        (let ((old-directory (ext:cd)))
+          (ext:cd directory)
+          (unwind-protect
+              (setf status (ext:run-shell-command command))
+            (ext:cd old-directory)))
+        (setf status (ext:run-shell-command command)))
+    (cond ((numberp status)
+           status)
+          ((null status)
+           -1)
+          (t
+           0))))
 
 #+(or sbcl cmu)
 (defun probe-directory (pathspec)
@@ -180,12 +192,22 @@
         (jar-namestring (namestring *jar*)))
     (when (position #\space jar-namestring)
       (setf jar-namestring (concatenate 'string "\"" jar-namestring "\"")))
-    (let ((*substitutions-alist* (acons "@JAR@" jar-namestring *substitutions-alist*)))
-      (copy-with-substitutions "make-jar.in" "make-jar"))
-    (let ((status (run-shell-command "sh make-jar" :directory *build-root*)))
-      (unless (zerop status)
-        (format t "sh make-jar returned ~S~%" status))
-      status)))
+    (cond (*platform-is-windows*
+           (let ((*substitutions-alist* (acons "@JAR@" jar-namestring *substitutions-alist*)))
+             (copy-with-substitutions "make-jar.bat.in" "make-jar.bat"))
+           (let ((status (run-shell-command "make-jar.bat" :directory *build-root*)))
+             (unless (zerop status)
+               (format t "make-jar.bat returned ~S~%" status))
+             status)
+           )
+          (t
+           (let ((*substitutions-alist* (acons "@JAR@" jar-namestring *substitutions-alist*)))
+             (copy-with-substitutions "make-jar.in" "make-jar"))
+           (let ((status (run-shell-command "sh make-jar" :directory *build-root*)))
+             (unless (zerop status)
+               (format t "sh make-jar returned ~S~%" status))
+             status)
+           ))))
 
 (defun clean ()
   (let ((*default-pathname-defaults* *abcl-dir*))
@@ -246,7 +268,27 @@
       (when (or compile-system full)
         (let* ((java-namestring (namestring *java*))
                (java-namestring-contains-space-p (position #\space java-namestring))
-               (cmdline (with-output-to-string (s)
+               status)
+          (cond (*platform-is-windows*
+                 (with-open-file (stream
+                                  "compile-system.bat"
+                                  :direction :output
+                                  :if-exists :supersede)
+                   (when java-namestring-contains-space-p
+                     (write-char #\" stream))
+                   (princ java-namestring stream)
+                   (when java-namestring-contains-space-p
+                     (write-char #\" stream))
+                   (write-string " -cp " stream)
+                   (princ "src" stream)
+                   (write-char #\space stream)
+                   (write-string "org.armedbear.lisp.Main --eval \"(compile-system :quit t)\"" stream))
+                 (setf status
+                       (run-shell-command "compile-system.bat"
+                                          :directory *build-root*)))
+                (t ; Linux
+                 (let ((cmdline
+                        (with-output-to-string (s)
                           (when java-namestring-contains-space-p
                             (write-char #\" s))
                           (princ java-namestring s)
@@ -255,16 +297,10 @@
                           (write-string " -cp " s)
                           (princ "src" s)
                           (write-char #\space s)
-                          (write-string "org.armedbear.lisp.Main --eval \"(compile-system :quit t)\"" s)))
-               (status (cond (*platform-is-windows*
-                              (with-open-file (stream
-                                               "compile-system.bat"
-                                               :direction :output
-                                               :if-exists :supersede)
-                                (write cmdline :stream stream))
-                              (run-shell-command "compile-system.bat" :directory *build-root*))
-                             (t ; Linux
-                              (run-shell-command cmdline :directory *build-root*)))))
+                          (write-string "org.armedbear.lisp.Main --eval \"(compile-system :quit t)\"" s))))
+                   (setf status
+                         (run-shell-command cmdline
+                                            :directory *build-root*)))))
           (unless (zerop status)
             (format t "Build failed.~%")
             (return-from build-abcl nil))))
