@@ -2,6 +2,8 @@
 
 ;;; User customizations.
 
+(in-package #:build-abcl)
+
 (setf *javac-options* "-g")
 (setf *jikes-options*
       (if *platform-is-windows*
@@ -16,4 +18,4 @@
        (setf *jdk* "/home/peter/blackdown/j2sdk1.4.2/")
        (setf *java-compiler* "jikes")
 ;;        (setf *java-compiler* "/home/peter/blackdown/j2sdk1.4.2/bin/javac")
-       ))
+       (setf *jar* "fastjar")))
