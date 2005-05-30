@@ -4,6 +4,7 @@
   (:use "COMMON-LISP")
   (:export #:build-abcl)
   #+abcl (:import-from #:extensions #:run-shell-command #:probe-directory)
+  #+clisp (:import-from #:ext #:probe-directory)
   )
 
 (in-package #:build-abcl)
@@ -58,6 +59,7 @@
 
 #+clisp
 (defun run-shell-command (command &key directory (output *standard-output*))
+  (declare (ignore output))
   (let (status)
     (if directory
         (let ((old-directory (ext:cd)))
@@ -130,7 +132,6 @@
             (do* ((components classpath-components (cdr components))
                   (component (car components) (car components)))
                  ((null components))
-;;               (princ (namestring (truename component)) s)
               (princ (namestring component) s)
               (unless (null (cdr components))
                 (write-char *path-separator-char* s))))))
@@ -147,24 +148,24 @@
               (concatenate 'string prefix " ")))
     (setf *java-compiler-command-line-prefix* prefix)))
 
-(defun substitute-in-string (string)
-  (dolist (pair *substitutions-alist*)
-    (let ((index (search (car pair) string :test #'string=)))
+(defun substitute-in-string (string substitutions-alist)
+  (dolist (entry substitutions-alist)
+    (let ((index (search (car entry) string :test #'string=)))
       (when index
         (setf string (concatenate 'string
                                   (subseq string 0 index)
-                                  (cdr pair)
-                                  (subseq string (+ index (length (car pair)))))))))
+                                  (cdr entry)
+                                  (subseq string (+ index (length (car entry)))))))))
   string)
 
-(defun copy-with-substitutions (source-file target-file)
+(defun copy-with-substitutions (source-file target-file substitutions-alist)
   (with-open-file (in source-file :direction :input)
     (with-open-file (out target-file :direction :output :if-exists :supersede)
       (loop
-        (let ((string (read-line in nil in)))
-          (when (eq string in)
+        (let ((string (read-line in nil)))
+          (when (null string)
             (return))
-          (write-line (substitute-in-string string) out))))))
+          (write-line (substitute-in-string string substitutions-alist) out))))))
 
 (defun build-stamp ()
   (multiple-value-bind
@@ -192,22 +193,15 @@
         (jar-namestring (namestring *jar*)))
     (when (position #\space jar-namestring)
       (setf jar-namestring (concatenate 'string "\"" jar-namestring "\"")))
-    (cond (*platform-is-windows*
-           (let ((*substitutions-alist* (acons "@JAR@" jar-namestring *substitutions-alist*)))
-             (copy-with-substitutions "make-jar.bat.in" "make-jar.bat"))
-           (let ((status (run-shell-command "make-jar.bat" :directory *build-root*)))
-             (unless (zerop status)
-               (format t "make-jar.bat returned ~S~%" status))
-             status)
-           )
-          (t
-           (let ((*substitutions-alist* (acons "@JAR@" jar-namestring *substitutions-alist*)))
-             (copy-with-substitutions "make-jar.in" "make-jar"))
-           (let ((status (run-shell-command "sh make-jar" :directory *build-root*)))
-             (unless (zerop status)
-               (format t "sh make-jar returned ~S~%" status))
-             status)
-           ))))
+    (let ((substitutions-alist (acons "@JAR@" jar-namestring nil))
+          (source-file (if *platform-is-windows* "make-jar.bat.in" "make-jar.in"))
+          (target-file (if *platform-is-windows* "make-jar.bat" "make-jar"))
+          (command (if *platform-is-windows* "make-jar.bat" "sh make-jar")))
+      (copy-with-substitutions source-file target-file substitutions-alist)
+      (let ((status (run-shell-command command :directory *build-root*)))
+        (unless (zerop status)
+          (format t "~A returned ~S~%" command status))
+        status))))
 
 (defun clean ()
   (let ((*default-pathname-defaults* *abcl-dir*))
@@ -305,9 +299,10 @@
             (format t "Build failed.~%")
             (return-from build-abcl nil))))
       (when (or jar full)
-        (unless (make-jar)
-          (format t "Build failed.~%")
-          (return-from build-abcl nil)))
+        (let ((status (make-jar)))
+          (unless (zerop status)
+            (format t "Build failed.~%")
+            (return-from build-abcl nil))))
       ;; Success!
       (with-open-file (s
                        (merge-pathnames (make-pathname :name "build"
@@ -334,3 +329,69 @@
          (result (run-shell-command cmdline :directory *abcl-dir*))
          )
     (zerop result)))
+
+(defvar *copy-verbose* nil)
+
+(defun copy-file (source target)
+  (when *copy-verbose*
+    (format t "~A -> ~A~%" source target))
+  (let ((buffer (make-array 4096 :element-type '(unsigned-byte 8))))
+    (with-open-file (in source :direction :input :element-type '(unsigned-byte 8))
+      (with-open-file (out target :direction :output :element-type '(unsigned-byte 8)
+                           :if-exists :supersede)
+        (loop
+          (let ((end (read-sequence buffer in)))
+            (when (zerop end)
+              (return))
+            (write-sequence buffer out :end end)))))))
+
+(defun copy-files (files source-dir target-dir)
+  (dolist (file files)
+    (copy-file (merge-pathnames file source-dir)
+               (merge-pathnames file target-dir))))
+
+(defun make-dist-dir (version-string)
+  (unless (string= (software-type) "Linux")
+    (error "MAKE-DIST is only supported on Linux."))
+  (let ((target-root (pathname (concatenate 'string "/var/tmp/" version-string "/"))))
+    (when (probe-directory target-root)
+      (error "Target directory ~S already exists." target-root))
+    (ensure-directories-exist
+     (merge-pathnames "src/org/armedbear/lisp/java/awt/" target-root))
+    (let* ((source-dir *build-root*)
+           (target-dir target-root)
+           (files (list "COPYING"
+                        "abcl.bat.in"
+                        "abcl.in"
+                        "build-abcl.lisp"
+                        "customizations.lisp"
+                        "make-jar.bat.in"
+                        "make-jar.in")))
+      (copy-files files source-dir target-dir))
+    (let* ((source-dir (merge-pathnames "src/" *build-root*))
+           (target-dir (merge-pathnames "src/" target-root))
+           (files (list "manifest-abcl")))
+      (copy-files files source-dir target-dir))
+    (let* ((source-dir *abcl-dir*)
+           (target-dir (merge-pathnames "src/org/armedbear/lisp/" target-root))
+           (*default-pathname-defaults* source-dir)
+           (files (mapcar #'file-namestring
+                          (append (directory "*.java") (directory "*.lisp") (list "LICENSE")))))
+      (copy-files files source-dir target-dir))
+    (let* ((source-dir (merge-pathnames "java/awt/" *abcl-dir*))
+           (target-dir (merge-pathnames "src/org/armedbear/lisp/java/awt/" target-root))
+           (*default-pathname-defaults* source-dir)
+           (files (mapcar #'file-namestring (directory "*.java"))))
+      (copy-files files source-dir target-dir))
+    target-root
+    ))
+
+(defun make-dist (version-string)
+  (let* ((dist-dir (make-dist-dir version-string))
+         (parent-dir (merge-pathnames (make-pathname :directory '(:relative :back))
+                                      dist-dir))
+         (command (format nil "tar czf ~A~A.tar.gz ~A"
+                          (namestring parent-dir)
+                          version-string version-string))
+         (status (run-shell-command command :directory parent-dir)))
+    (zerop status)))
