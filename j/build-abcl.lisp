@@ -4,16 +4,12 @@
   (:use "COMMON-LISP")
   (:export #:build-abcl)
   #+abcl (:import-from #:extensions #:run-shell-command #:probe-directory)
-  #+clisp (:import-from #:ext #:probe-directory)
   #+allegro (:import-from #:excl #:probe-directory)
   )
 
 (in-package #:build-abcl)
 
 (defparameter *platform-is-windows*
-  #+clisp
-  (progn #+win32 t #-win32 nil)
-  #-clisp
   (let ((software-type (software-type)))
     (if (and (stringp software-type)
              (>= (length software-type) 7)
@@ -57,24 +53,6 @@
     "/bin/sh"
     (list  "-c" command)
     :input nil :output output)))
-
-#+clisp
-(defun run-shell-command (command &key directory (output *standard-output*))
-  (declare (ignore output))
-  (let (status)
-    (if directory
-        (let ((old-directory (ext:cd)))
-          (ext:cd directory)
-          (unwind-protect
-              (setf status (ext:run-shell-command command))
-            (ext:cd old-directory)))
-        (setf status (ext:run-shell-command command)))
-    (cond ((numberp status)
-           status)
-          ((null status)
-           -1)
-          (t
-           0))))
 
 #+lispworks
 (defun run-shell-command (command &key directory (output *standard-output*))
@@ -205,7 +183,6 @@
 (defun make-jar ()
   (let ((*default-pathname-defaults* *build-root*)
         (jar-namestring (namestring *jar*)))
-    #+clisp (ext:cd *build-root*)
     (when (position #\space jar-namestring)
       (setf jar-namestring (concatenate 'string "\"" jar-namestring "\"")))
     (let ((substitutions-alist (acons "@JAR@" jar-namestring nil))
@@ -218,29 +195,20 @@
           (format t "~A returned ~S~%" command status))
         status))))
 
-(defun %clean ()
-  (map nil #'delete-file (append (directory "*.class")
-                                 (directory "*.abcl")
-                                 (directory "*.cls")
-                                 (when (probe-file "native.h")
-                                   (list "native.h"))
-                                 (when (probe-file "libabcl.so")
-                                   (list "libabcl.so"))
-                                 (when (probe-file "build")
-                                   (list "build")))))
+(defun delete-files (pathnames)
+  (dolist (pathname pathnames)
+    ;; SBCL signals an error if the file doesn't exist.
+    (when (probe-file pathname)
+      (delete-file pathname))))
 
-#-clisp
 (defun clean ()
   (let ((*default-pathname-defaults* *abcl-dir*))
-    (%clean)))
-
-#+clisp
-(defun clean ()
-  (let ((old-directory (ext:cd)))
-    (ext:cd *abcl-dir*)
-    (unwind-protect
-        (%clean)
-      (ext:cd old-directory))))
+    (delete-files (directory "*.class"))
+    (delete-files (directory "*.abcl"))
+    (delete-files (directory "*.cls"))
+    (delete-files '("native.h" "libabcl.so" "build")))
+  (let ((*default-pathname-defaults* (merge-pathnames "java/awt/" *abcl-dir*)))
+    (delete-files (directory "*.class"))))
 
 (defun safe-namestring (pathname)
   (let ((string (namestring pathname)))
@@ -256,14 +224,16 @@
                         libabcl
                         full)
   (let ((start (get-internal-real-time))
-        (*default-pathname-defaults* *abcl-dir*)
+;;         (*default-pathname-defaults* *abcl-dir*)
         end)
-    #+clisp (ext:cd *abcl-dir*)
     (initialize-build)
     (when clean
       (clean))
-    (let* ((source-files (append (directory "*.java")
-                                 (directory "java/awt/*.java")))
+    (let* ((source-files (append (let ((*default-pathname-defaults* *abcl-dir*))
+                                   (directory "*.java"))
+                                 (let ((*default-pathname-defaults*
+                                        (merge-pathnames "java/awt/" *abcl-dir*)))
+                                   (directory "*.java"))))
            (to-do ()))
       (if force
           (setf to-do source-files)
@@ -337,7 +307,7 @@
             (return-from build-abcl nil))))
       (when (and (or full libabcl)
                  (or (string= (software-type) "Linux")
-                     (string= (software-type)"SunOS")))
+                     (string= (software-type) "SunOS")))
         (and (let* ((javah-namestring (namestring (probe-file (merge-pathnames "bin/javah" *jdk*))))
                     (command
                      (format nil "~A -o org/armedbear/lisp/native.h org.armedbear.lisp.Native"
@@ -460,7 +430,7 @@
            (target-dir (merge-pathnames "src/org/armedbear/lisp/" target-root))
            (*default-pathname-defaults* source-dir)
            (files (mapcar #'file-namestring
-                          (append (directory "*.java") (directory "*.lisp") (list "LICENSE")))))
+                          (append (directory "*.java") (directory "*.lisp") (list "LICENSE" "native.c")))))
       (copy-files files source-dir target-dir))
     (let* ((source-dir (merge-pathnames "java/awt/" *abcl-dir*))
            (target-dir (merge-pathnames "src/org/armedbear/lisp/java/awt/" target-root))
