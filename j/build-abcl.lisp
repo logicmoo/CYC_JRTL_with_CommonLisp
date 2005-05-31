@@ -305,7 +305,7 @@
                status)
           (cond (*platform-is-windows*
                  (with-open-file (stream
-                                  "compile-system.bat"
+                                  (merge-pathnames "compile-system.bat" *build-root*)
                                   :direction :output
                                   :if-exists :supersede)
                    (princ java-namestring stream)
