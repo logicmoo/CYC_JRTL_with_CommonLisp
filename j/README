@@ -1,0 +1,77 @@
+LICENSE
+-------
+
+Armed Bear Common Lisp is distributed under the GNU General Public License
+(with a special exception described below).
+
+A copy of GNU General Public License (GPL) is included in this distribution, in
+the file COPYING.
+
+Linking this software statically or dynamically with other modules is making a
+combined work based on this software. Thus, the terms and conditions of the GNU
+General Public License cover the whole combination.
+
+As a special exception, the copyright holders of this software give you
+permission to link this software with independent modules to produce an
+executable, regardless of the license terms of these independent modules, and
+to copy and distribute the resulting executable under terms of your choice,
+provided that you also meet, for each linked independent module, the terms and
+conditions of the license of that module. An independent module is a module
+which is not derived from or based on this software. If you modify this
+software, you may extend this exception to your version of the software, but
+you are not obligated to do so. If you do not wish to do so, delete this
+exception statement from your version.
+
+
+INSTALLATION
+------------
+
+You'll need a 1.4 or 1.5 JDK and a supported Common Lisp implementation (SBCL,
+CMUCL, Allegro, LispWorks, or CLISP). The free trial versions of the commercial
+Lisps should be fine.
+
+Edit the file customizations.lisp, in this directory, to suit your situation.
+
+Start up one of the supported Common Lisp implementations in the directory
+containing this README file.
+
+Load build-abcl.lisp:
+
+    (load "build-abcl.lisp")
+
+Then do:
+
+    (build-abcl:build-abcl :clean t :full t)
+
+Wait for the build to finish and exit the host Lisp.
+
+Use abcl.bat on Windows or ./abcl on Unix to start ABCL.
+
+
+BUGS
+----
+
+ABCL is a very young implementation. The current version, 0.0.5, is the first
+public release. You are certain to encounter bugs.
+
+ABCL 0.0.5 fails 79 out of 20817 test in the GCL ANSI test suite.
+
+ABCL's CLOS does not handle on-the-fly redefinition of classes correctly, and
+in any event is intolerably slow. There is no support for the long form of
+DEFINE-METHOD-COMBINATION, and certain other required CLOS features are also
+missing. Enough CLOS is there to run ASDF and CL-PPCRE, if you're in no hurry.
+
+There's no MOP worth mentioning.
+
+Since this is the first public release, there are likely to be build problems
+as well as runtime bugs. I don't have a Mac, so I've done no testing at all on
+OS X.
+
+Please report problems to the j-devel mailing list:
+
+    armedbear-j-devel@lists.sourceforge.net
+
+Have fun!
+
+Peter Graves
+May 30 2005
