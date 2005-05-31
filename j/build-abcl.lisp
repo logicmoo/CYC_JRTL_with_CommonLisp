@@ -223,8 +223,8 @@
                         clean
                         libabcl
                         full)
+  #+lispworks (setf batch nil)
   (let ((start (get-internal-real-time))
-;;         (*default-pathname-defaults* *abcl-dir*)
         end)
     (initialize-build)
     (when clean
