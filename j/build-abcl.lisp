@@ -60,7 +60,7 @@
          (if directory
              (system:call-system-showing-output
               command
-              :directory (namestring (pathname directory))
+              :current-directory (namestring (pathname directory))
               :output-stream output)
              (system:call-system-showing-output
               command
