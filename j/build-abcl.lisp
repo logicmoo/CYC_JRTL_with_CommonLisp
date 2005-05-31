@@ -57,11 +57,12 @@
 #+lispworks
 (defun run-shell-command (command &key directory (output *standard-output*))
   (when directory
-    (setf command (concatenate 'string
-                               "\\cd \""
-                               (namestring (pathname directory))
-                               "\" && "
-                               command)))
+    (unless *platform-is-windows*
+      (setf command (concatenate 'string
+                                 "\\cd \""
+                                 (namestring (pathname directory))
+                                 "\" && "
+                                 command))))
   (system:call-system-showing-output
    command
    :shell-type "/bin/sh"
