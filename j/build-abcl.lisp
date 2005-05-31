@@ -300,11 +300,13 @@
           (unless (zerop status)
             (format t "Build failed.~%")
             (return-from build-abcl nil))))
+
       (when (or jar full)
         (let ((status (make-jar)))
           (unless (zerop status)
             (format t "Build failed.~%")
             (return-from build-abcl nil))))
+
       (when (and (or full libabcl)
                  (or (string= (software-type) "Linux")
                      (string= (software-type) "SunOS")))
@@ -442,9 +444,16 @@
 (defun make-dist (version-string)
   (let* ((dist-dir (make-dist-dir version-string))
          (parent-dir (merge-pathnames (make-pathname :directory '(:relative :back))
-                                      dist-dir))
-         (command (format nil "tar czf ~A~A.tar.gz ~A"
-                          (namestring parent-dir)
-                          version-string version-string))
-         (status (run-shell-command command :directory parent-dir)))
-    (zerop status)))
+                                      dist-dir)))
+    (let* ((command (format nil "tar czf ~A~A.tar.gz ~A"
+                            (namestring parent-dir)
+                            version-string version-string))
+           (status (run-shell-command command :directory parent-dir)))
+      (unless (zerop status)
+        (format t "~A returned ~S~%" command status)))
+    (let* ((command (format nil "zip -q -r ~A~A.zip ~A"
+                            (namestring parent-dir)
+                            version-string version-string))
+           (status (run-shell-command command :directory parent-dir)))
+      (unless (zerop status)
+        (format t "~A returned ~S~%" command status)))))
