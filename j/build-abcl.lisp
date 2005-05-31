@@ -56,27 +56,16 @@
 
 #+lispworks
 (defun run-shell-command (command &key directory (output *standard-output*))
-  (cond (*platform-is-windows*
-         (if directory
-             (system:call-system-showing-output
-              command
-              :current-directory (namestring (pathname directory))
-              :output-stream output)
-             (system:call-system-showing-output
-              command
-              :output-stream output)))
-        (t
-         (when directory
-           (setf command (concatenate 'string
-                                      "\\cd \""
-                                      (namestring (pathname directory))
-                                      "\" && "
-                                      command)))
-         (system:call-system-showing-output
-          command
-          :shell-type "/bin/sh"
-          :output-stream output))))
-
+  (when directory
+    (setf command (concatenate 'string
+                               "\\cd \""
+                               (namestring (pathname directory))
+                               "\" && "
+                               command)))
+  (system:call-system-showing-output
+   command
+   :shell-type "/bin/sh"
+   :output-stream output))
 
 #+allegro
 (defun run-shell-command (command &key directory (output *standard-output*))
