@@ -1,3 +1,10 @@
+GENERAL INFORMATION
+-------------------
+
+Armed Bear Common Lisp is an implementation of ANSI Common Lisp that runs in a
+Java virtual machine.
+
+
 LICENSE
 -------
 
@@ -26,9 +33,9 @@ exception statement from your version.
 INSTALLATION
 ------------
 
-You'll need a 1.4 or 1.5 JDK and a supported Common Lisp implementation (SBCL,
-CMUCL, Allegro, LispWorks, or CLISP). The free trial versions of the commercial
-Lisps should be fine.
+To build ABCL, you'll need a 1.4 or 1.5 JDK and a supported Common Lisp
+implementation (SBCL, CMUCL, Allegro, LispWorks, or CLISP). The free trial
+versions of the commercial Lisps should be fine.
 
 Edit the file customizations.lisp, in this directory, to suit your situation.
 

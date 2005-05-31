@@ -362,16 +362,32 @@
                (zerop status))))
       ;; Success!
 
-      ;; FIXME Windows
-      (with-open-file (s
-                       (merge-pathnames "abcl" *build-root*)
-                       :direction :output
-                       :if-exists :supersede)
-        (format s "exec ~A -Xrs -Djava.library-path=~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
-                (safe-namestring *java*)
-                (safe-namestring *abcl-dir*)
-                (safe-namestring (merge-pathnames "src" *build-root*))
-                (safe-namestring (merge-pathnames "abcl.jar" *build-root*))))
+      ;; abcl/abcl.bat
+      (cond (*platform-is-windows*
+             (with-open-file (s
+                              (merge-pathnames "abcl.bat" *build-root*)
+                              :direction :output
+                              :if-exists :supersede)
+               (format s "~A -cp ~A;~A org.armedbear.lisp.Main %1 %2 %3 %4 %5 %6 %7 %8 %9~%"
+                       (safe-namestring *java*)
+                       (safe-namestring (merge-pathnames "src" *build-root*))
+                       (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
+            (t
+             (let ((pathname (merge-pathnames "abcl" *build-root*)))
+               (with-open-file (s pathname :direction :output :if-exists :supersede)
+                 (if (string= (software-type) "Linux")
+                     (format s "#!/bin/sh~%exec ~A -Xrs -Djava.library.path=~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
+                             (safe-namestring *java*)
+                             (safe-namestring *abcl-dir*)
+                             (safe-namestring (merge-pathnames "src" *build-root*))
+                             (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))
+                     ;; Not Linux.
+                     (format s "#!/bin/sh~%exec ~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
+                             (safe-namestring *java*)
+                             (safe-namestring (merge-pathnames "src" *build-root*))
+                             (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
+               (run-shell-command (format nil "chmod +x ~A" (safe-namestring pathname))
+                                  :directory *build-root*))))
 
       (with-open-file (s
                        (merge-pathnames (make-pathname :name "build"
@@ -429,9 +445,8 @@
      (merge-pathnames "src/org/armedbear/lisp/java/awt/" target-root))
     (let* ((source-dir *build-root*)
            (target-dir target-root)
-           (files (list "COPYING"
-                        "abcl.bat.in"
-                        "abcl.in"
+           (files (list "README"
+                        "COPYING"
                         "build-abcl.lisp"
                         "customizations.lisp"
                         "make-jar.bat.in"
@@ -452,8 +467,7 @@
            (*default-pathname-defaults* source-dir)
            (files (mapcar #'file-namestring (directory "*.java"))))
       (copy-files files source-dir target-dir))
-    target-root
-    ))
+    target-root))
 
 (defun make-dist (version-string)
   (let* ((dist-dir (make-dist-dir version-string))
