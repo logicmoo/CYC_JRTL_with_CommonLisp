@@ -1,4 +1,4 @@
-;;; This is asdf: Another System Definition Facility.  $Revision: 1.1 $
+;;; This is asdf: Another System Definition Facility.  $Revision: 1.2 $
 ;;;
 ;;; Feedback, bug reports, and patches are all welcome: please mail to
 ;;; <cclan-list@lists.sf.net>.  But note first that the canonical
@@ -90,11 +90,13 @@
 	   #:*asdf-revision*
 	   
 	   #:operation-error #:compile-failed #:compile-warned #:compile-error
+	   #:error-component #:error-operation
 	   #:system-definition-error 
 	   #:missing-component
 	   #:missing-dependency
 	   #:circular-dependency	; errors
-
+	   #:duplicate-names
+	   
 	   #:retry
 	   #:accept                     ; restarts
 	   
@@ -107,7 +109,7 @@
 
 (in-package #:asdf)
 
-(defvar *asdf-revision* (let* ((v "$Revision: 1.1 $")
+(defvar *asdf-revision* (let* ((v "$Revision: 1.2 $")
 			       (colon (or (position #\: v) -1))
 			       (dot (position #\. v)))
 			  (and v colon dot 
@@ -156,6 +158,9 @@ and NIL NAME and TYPE components"
 (define-condition circular-dependency (system-definition-error)
   ((components :initarg :components :reader circular-dependency-components)))
 
+(define-condition duplicate-names (system-definition-error)
+  ((name :initarg :name :reader duplicate-names-name)))
+
 (define-condition missing-component (system-definition-error)
   ((requires :initform "(unnamed)" :reader missing-requires :initarg :requires)
    (version :initform nil :reader missing-version :initarg :version)
@@ -168,7 +173,7 @@ and NIL NAME and TYPE components"
   ((component :reader error-component :initarg :component)
    (operation :reader error-operation :initarg :operation))
   (:report (lambda (c s)
-	     (format s (formatter "~@<erred while invoking ~A on ~A~@:>")
+	     (format s "~@<erred while invoking ~A on ~A~@:>"
 		     (error-operation c) (error-component c)))))
 (define-condition compile-error (operation-error) ())
 (define-condition compile-failed (compile-error) ())
@@ -199,9 +204,8 @@ and NIL NAME and TYPE components"
 ;;;; methods: conditions
 
 (defmethod print-object ((c missing-dependency) s)
-  (format s (formatter "~@<~A, required by ~A~@:>")
-	  (call-next-method c nil)
-	  (missing-required-by c)))
+  (format s "~@<~A, required by ~A~@:>"
+	  (call-next-method c nil) (missing-required-by c)))
 
 (defun sysdef-error (format &rest arguments)
   (error 'formatted-system-definition-error :format-control format :format-arguments arguments))
@@ -209,9 +213,9 @@ and NIL NAME and TYPE components"
 ;;;; methods: components
 
 (defmethod print-object ((c missing-component) s)
-  (format s (formatter "~@<component ~S not found~
-                        ~@[ or does not match version ~A~]~
-                        ~@[ in ~A~]~@:>")
+  (format s "~@<component ~S not found~
+             ~@[ or does not match version ~A~]~
+             ~@[ in ~A~]~@:>"
 	  (missing-requires c)
 	  (missing-version c)
 	  (when (missing-parent c)
@@ -326,8 +330,7 @@ and NIL NAME and TYPE components"
      (component (component-name name))
      (symbol (string-downcase (symbol-name name)))
      (string name)
-     (t (sysdef-error (formatter "~@<invalid component designator ~A~@:>")
-		      name))))
+     (t (sysdef-error "~@<invalid component designator ~A~@:>" name))))
 
 ;;; for the sake of keeping things reasonably neat, we adopt a
 ;;; convention that functions in this list are prefixed SYSDEF-
@@ -364,10 +367,10 @@ and NIL NAME and TYPE components"
     (when (and on-disk
 	       (or (not in-memory)
 		   (< (car in-memory) (file-write-date on-disk))))
-      (let ((*package* (make-package (gensym (package-name #.*package*))
+      (let ((*package* (make-package (gensym #.(package-name *package*))
 				     :use '(:cl :asdf))))
 	(format *verbose-out*
-		(formatter "~&~@<; ~@;loading system definition from ~A into ~A~@:>~%")
+		"~&~@<; ~@;loading system definition from ~A into ~A~@:>~%"
 		;; FIXME: This wants to be (ENOUGH-NAMESTRING
 		;; ON-DISK), but CMUCL barfs on that.
 		on-disk
@@ -380,8 +383,7 @@ and NIL NAME and TYPE components"
 	  (if error-p (error 'missing-component :requires name))))))
 
 (defun register-system (name system)
-  (format *verbose-out*
-	  (formatter "~&~@<; ~@;registering ~A as ~A~@:>~%") system name)
+  (format *verbose-out* "~&~@<; ~@;registering ~A as ~A~@:>~%" system name)
   (setf (gethash (coerce-name  name) *defined-systems*)
 	(cons (get-universal-time) system)))
 
@@ -676,16 +678,15 @@ system."))
 
 (defmethod perform ((operation operation) (c source-file))
   (sysdef-error
-   (formatter "~@<required method PERFORM not implemented~
-               for operation ~A, component ~A~@:>")
+   "~@<required method PERFORM not implemented ~
+    for operation ~A, component ~A~@:>"
    (class-of operation) (class-of c)))
 
 (defmethod perform ((operation operation) (c module))
   nil)
 
 (defmethod explain ((operation operation) (component component))
-  (format *verbose-out* "~&;;; ~A on ~A~%"
-	  operation component))
+  (format *verbose-out* "~&;;; ~A on ~A~%" operation component))
 
 ;;; compile-op
 
@@ -706,6 +707,7 @@ system."))
 ;;; perform is required to check output-files to find out where to put
 ;;; its answers, in case it has been overridden for site policy
 (defmethod perform ((operation compile-op) (c cl-source-file))
+  #-:broken-fasl-loader
   (let ((source-file (component-pathname c))
 	(output-file (car (output-files operation c))))
     (multiple-value-bind (output warnings-p failure-p)
@@ -715,16 +717,14 @@ system."))
       (when warnings-p
 	(case (operation-on-warnings operation)
 	  (:warn (warn
-		  (formatter "~@<COMPILE-FILE warned while ~
-                              performing ~A on ~A.~@:>")
+		  "~@<COMPILE-FILE warned while performing ~A on ~A.~@:>"
 		  operation c))
 	  (:error (error 'compile-warned :component c :operation operation))
 	  (:ignore nil)))
       (when failure-p
 	(case (operation-on-failure operation)
 	  (:warn (warn
-		  (formatter "~@<COMPILE-FILE failed while ~
-                              performing ~A on ~A.~@:>")
+		  "~@<COMPILE-FILE failed while performing ~A on ~A.~@:>"
 		  operation c))
 	  (:error (error 'compile-failed :component c :operation operation))
 	  (:ignore nil)))
@@ -732,7 +732,8 @@ system."))
 	(error 'compile-error :component c :operation operation)))))
 
 (defmethod output-files ((operation compile-op) (c cl-source-file))
-  (list (compile-file-pathname (component-pathname c))))
+  #-:broken-fasl-loader (list (compile-file-pathname (component-pathname c)))
+  #+:broken-fasl-loader (list (component-pathname c)))
 
 (defmethod perform ((operation compile-op) (c static-file))
   nil)
@@ -817,15 +818,14 @@ system."))
 	       (retry ()
 		 :report
 		 (lambda (s)
-		   (format s
-			   (formatter "~@<Retry performing ~S on ~S.~@:>")
+		   (format s "~@<Retry performing ~S on ~S.~@:>"
 			   op component)))
 	       (accept ()
 		 :report
 		 (lambda (s)
 		   (format s
-			   (formatter "~@<Continue, treating ~S on ~S as ~
-                                       having been successful.~@:>")
+			   "~@<Continue, treating ~S on ~S as ~
+                            having been successful.~@:>"
 			   op component))
 		 (setf (gethash (type-of op)
 				(component-operation-times component))
@@ -878,15 +878,16 @@ system."))
   
 
 (defun class-for-type (parent type)
-  (let ((class (find-class
-		(or (find-symbol (symbol-name type) *package*)
-		    (find-symbol (symbol-name type) #.*package*)) nil)))
+  (let ((class 
+	 (find-class
+	  (or (find-symbol (symbol-name type) *package*)
+	      (find-symbol (symbol-name type) #.(package-name *package*)))
+	  nil)))
     (or class
 	(and (eq type :file)
 	     (or (module-default-component-class parent)
 		 (find-class 'cl-source-file)))
-	(sysdef-error (formatter "~@<don't recognize component type ~A~@:>")
-		      type))))
+	(sysdef-error "~@<don't recognize component type ~A~@:>" type))))
 
 (defun maybe-add-tree (tree op1 op2 c)
   "Add the node C at /OP1/OP2 in TREE, unless it's there already.
@@ -933,6 +934,15 @@ Returns the new tree (which probably shares structure with the old one)"
 	      ;; list ends
 	      &allow-other-keys) options
     (check-component-input type name depends-on components in-order-to)
+
+    (when (and parent
+	     (find-component parent name)
+	     ;; ignore the same object when rereading the defsystem
+	     (not 
+	      (typep (find-component parent name)
+		     (class-for-type parent type))))	     
+      (error 'duplicate-names :name name))
+    
     (let* ((other-args (remove-keys
 			'(components pathname default-component-class
 			  perform explain output-files operation-done-p
@@ -961,7 +971,19 @@ Returns the new tree (which probably shares structure with the old one)"
 		      for c = (parse-component-form ret c-form)
 		      collect c
 		      if serial
-		      do (push (component-name c) *serial-depends-on*)))))
+		      do (push (component-name c) *serial-depends-on*))))
+
+	;; check for duplicate names
+	(let ((name-hash (make-hash-table :test #'equalp)))
+	  (loop for c in (module-components ret)
+		do
+		(if (gethash (component-name c)
+			     name-hash)
+		    (error 'duplicate-names
+			   :name (component-name c))
+		  (setf (gethash (component-name c)
+				 name-hash)
+			t)))))
       
       (setf (slot-value ret 'in-order-to)
 	    (union-of-dependencies
@@ -1053,8 +1075,9 @@ output to *verbose-out*.  Returns the shell's exit code."
 		(ccl:run-program "/bin/sh" (list "-c" command)
 				 :input nil :output *verbose-out*
 				 :wait t)))
-
-    #-(or openmcl clisp lispworks allegro scl cmu sbcl)
+    #+ecl ;; courtesy of Juan Jose Garcia Ripoll
+    (si:system command)
+    #-(or openmcl clisp lispworks allegro scl cmu sbcl ecl)
     (error "RUN-SHELL-PROGRAM not implemented for this Lisp")
     ))
 
