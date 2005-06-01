@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.472 2005-05-28 04:04:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.473 2005-06-01 00:15:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5572,7 +5572,9 @@
                   (maybe-emit-clear-values value-form)
                   (emit-invokevirtual +lisp-thread-class+ "setSpecialVariable"
                                       (list +lisp-symbol+ +lisp-object+) +lisp-object+)))
-           (emit-move-from-stack target))
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
+           (emit-move-from-stack target representation))
           ((and (eq (variable-representation variable) :unboxed-fixnum)
                 (or (equal value-form (list '1+ (variable-name variable)))
                     (equal value-form (list '+ (variable-name variable) 1))
@@ -5580,14 +5582,17 @@
            (dformat t "p2-setq incf unboxed-fixnum case~%")
            (emit 'iinc (variable-register variable) 1)
            (when target
-             (dformat t "p2-setq constructing boxed fixnum for ~S~%"
-                      (variable-name variable))
-             (emit 'new +lisp-fixnum-class+)
-             (emit 'dup)
-             (aver (variable-register variable))
-             (emit 'iload (variable-register variable))
-             (emit-invokespecial-init +lisp-fixnum-class+ '("I"))
-             (emit-move-from-stack target)))
+             (cond ((eq representation :unboxed-fixnum)
+                    (emit 'iload (variable-register variable)))
+                   (t
+                    (dformat t "p2-setq constructing boxed fixnum for ~S~%"
+                             (variable-name variable))
+                    (emit 'new +lisp-fixnum-class+)
+                    (emit 'dup)
+                    (aver (variable-register variable))
+                    (emit 'iload (variable-register variable))
+                    (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+             (emit-move-from-stack target representation)))
           ((eq (variable-representation variable) :unboxed-fixnum)
            (dformat t "p2-setq unboxed-fixnum case value-form = ~S~%"
                     value-form)
