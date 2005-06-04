@@ -129,9 +129,7 @@
             (do* ((components classpath-components (cdr components))
                   (component (car components) (car components)))
                  ((null components))
-              (princ #\" s)
-              (princ (namestring component) s)
-              (princ #\" s)
+              (princ (safe-namestring component) s)
               (unless (null (cdr components))
                 (write-char *path-separator-char* s))))))
   (let ((prefix (concatenate 'string
