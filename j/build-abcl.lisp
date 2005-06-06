@@ -217,7 +217,6 @@
 
 (defun java-compile-file (source-file)
   (let ((cmdline (build-javac-command-line source-file)))
-    (format t "cmdline = ~A~%" cmdline)
     (zerop (run-shell-command cmdline :directory *abcl-dir*))))
 
 (defun make-jar ()
