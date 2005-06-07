@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.474 2005-06-06 13:56:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.475 2005-06-07 21:34:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2190,6 +2190,24 @@
            (emit-invokespecial-init super (list +lisp-object+ +lisp-object+)))
           ((equal super "org/armedbear/lisp/Primitive0R")
            (push '&REST args)
+           (emit 'aload_0) ; this
+           (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
+                  (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
+                  (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
+                  (emit-invokestatic +lisp-class+ "internInPackage"
+                                     (list +java-string+ +java-string+) +lisp-symbol+))
+                 (t
+                  (emit-push-nil))) ; no name
+           (let* ((*print-level* nil)
+                  (*print-length* nil)
+                  (s (sys::%format nil "~S" args)))
+             (emit 'ldc (pool-string s))
+             (emit-invokestatic +lisp-class+ "readObjectFromString"
+                                (list +java-string+) +lisp-object+))
+           (emit-invokespecial-init super (list +lisp-object+ +lisp-object+)))
+          ((equal super "org/armedbear/lisp/Primitive1R")
+;;            (push '&REST args)
+           (setf args (list (first args) '&REST (third args)))
            (emit 'aload_0) ; this
            (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
                   (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
@@ -6233,17 +6251,28 @@
       (when (memq '&REST args)
         (unless (or (memq '&OPTIONAL args) (memq '&KEY args))
           (let ((arg-count (length args)))
-            (when (and (= arg-count 2) (eq (%car args) '&REST))
-              (setf *using-arg-array* nil)
-              (setf *hairy-arglist-p* nil)
-              (setf descriptor (get-descriptor (list +lisp-object+)
-                                               +lisp-object+))
-              (setf (compiland-kind compiland) :internal)
-              (setf super "org/armedbear/lisp/Primitive0R")
-              (setf args (cdr args))
-              (setf execute-method-name "_execute")
-              (setf execute-method (make-method :name execute-method-name
-                                                :descriptor descriptor))
+            (cond ((and (= arg-count 2) (eq (%car args) '&REST))
+                   (setf *using-arg-array* nil)
+                   (setf *hairy-arglist-p* nil)
+                   (setf descriptor (get-descriptor (list +lisp-object+)
+                                                    +lisp-object+))
+                   (setf (compiland-kind compiland) :internal)
+                   (setf super "org/armedbear/lisp/Primitive0R")
+                   (setf args (cdr args))
+                   (setf execute-method-name "_execute")
+                   (setf execute-method (make-method :name execute-method-name
+                                                     :descriptor descriptor)))
+                  ((and (= arg-count 3) (eq (%cadr args) '&REST))
+                   (setf *using-arg-array* nil)
+                   (setf *hairy-arglist-p* nil)
+                   (setf descriptor (get-descriptor (list +lisp-object+ +lisp-object+)
+                                                    +lisp-object+))
+                   (setf (compiland-kind compiland) :internal)
+                   (setf super "org/armedbear/lisp/Primitive1R")
+                   (setf args (list (first args) (third args)))
+                   (setf execute-method-name "_execute")
+                   (setf execute-method (make-method :name execute-method-name
+                                                     :descriptor descriptor)))
               )))))
         
 ;;     (dformat t "pass2 *visible-variables* = ~S~%"
