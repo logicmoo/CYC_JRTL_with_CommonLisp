@@ -2,7 +2,7 @@
  * disassemble_class_bytes.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: disassemble_class_bytes.java,v 1.1 2005-05-11 19:57:12 piso Exp $
+ * $Id: disassemble_class_bytes.java,v 1.2 2005-06-07 21:33:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class disassemble_class_bytes extends Primitive
                     StringBuffer sb = new StringBuffer(disassembler.getStringValue());
                     sb.append(' ');
                     sb.append(file.getPath());
-                    ShellCommand sc = new ShellCommand(sb.toString(), null);
+                    ShellCommand sc = new ShellCommand(sb.toString(), null, null);
                     sc.run();
                     file.delete();
                     return new SimpleString(sc.getOutput());
