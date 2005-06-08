@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.225 2005-05-25 01:34:44 piso Exp $
+;;; $Id: boot.lisp,v 1.226 2005-06-08 13:16:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -338,14 +338,6 @@
 
 (defconstant lambda-list-keywords
   '(&optional &rest &key &aux &body &whole &allow-other-keys &environment))
-
-(defconstant call-arguments-limit 50)
-
-(defconstant lambda-parameters-limit 50)
-
-(defconstant multiple-values-limit 20)
-
-(defconstant internal-time-units-per-second 1000)
 
 (load-system-file "restart")
 (load-system-file "late-setf")
