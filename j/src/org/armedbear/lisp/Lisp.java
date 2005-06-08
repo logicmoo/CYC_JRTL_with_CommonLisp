@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.358 2005-05-24 19:52:45 piso Exp $
+ * $Id: Lisp.java,v 1.359 2005-06-08 02:11:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -361,7 +361,7 @@ public abstract class Lisp
                         if (!sampling)
                             fun.incrementCallCount();
                     // Don't eval args!
-                    return fun.execute(obj.cdr(), env);
+                    return fun.execute(((Cons)obj).cdr, env);
                 }
                 if (fun instanceof MacroObject)
                     return eval(macroexpand(obj, env, thread), env, thread);
@@ -392,61 +392,66 @@ public abstract class Lisp
                                              LispThread thread)
         throws ConditionThrowable
     {
-        if (args == NIL)
-            return thread.execute(function);
-        LispObject first = eval(args.car(), env, thread);
-        args = args.cdr();
-        if (args == NIL) {
+        try {
+            if (args == NIL)
+                return thread.execute(function);
+            LispObject first = eval(((Cons)args).car, env, thread);
+            args = ((Cons)args).cdr;
+            if (args == NIL) {
+                thread._values = null;
+                return thread.execute(function, first);
+            }
+            LispObject second = eval(((Cons)args).car, env, thread);
+            args = ((Cons)args).cdr;
+            if (args == NIL) {
+                thread._values = null;
+                return thread.execute(function, first, second);
+            }
+            LispObject third = eval(((Cons)args).car, env, thread);
+            args = ((Cons)args).cdr;
+            if (args == NIL) {
+                thread._values = null;
+                return thread.execute(function, first, second, third);
+            }
+            LispObject fourth = eval(((Cons)args).car, env, thread);
+            args = ((Cons)args).cdr;
+            if (args == NIL) {
+                thread._values = null;
+                return thread.execute(function, first, second, third, fourth);
+            }
+            LispObject fifth = eval(((Cons)args).car, env, thread);
+            args = ((Cons)args).cdr;
+            if (args == NIL) {
+                thread._values = null;
+                return thread.execute(function, first, second, third, fourth,
+                                      fifth);
+            }
+            LispObject sixth = eval(((Cons)args).car, env, thread);
+            args = ((Cons)args).cdr;
+            if (args == NIL) {
+                thread._values = null;
+                return thread.execute(function, first, second, third, fourth,
+                                      fifth, sixth);
+            }
+            // More than 6 arguments.
+            final int length = args.length() + 6;
+            LispObject[] array = new LispObject[length];
+            array[0] = first;
+            array[1] = second;
+            array[2] = third;
+            array[3] = fourth;
+            array[4] = fifth;
+            array[5] = sixth;
+            for (int i = 6; i < length; i++) {
+                array[i] = eval(((Cons)args).car, env, thread);
+                args = ((Cons)args).cdr;
+            }
             thread._values = null;
-            return thread.execute(function, first);
+            return thread.execute(function, array);
         }
-        LispObject second = eval(args.car(), env, thread);
-        args = args.cdr();
-        if (args == NIL) {
-            thread._values = null;
-            return thread.execute(function, first, second);
+        catch (ClassCastException e) {
+            return signal(new TypeError(args, Symbol.LIST));
         }
-        LispObject third = eval(args.car(), env, thread);
-        args = args.cdr();
-        if (args == NIL) {
-            thread._values = null;
-            return thread.execute(function, first, second, third);
-        }
-        LispObject fourth = eval(args.car(), env, thread);
-        args = args.cdr();
-        if (args == NIL) {
-            thread._values = null;
-            return thread.execute(function, first, second, third, fourth);
-        }
-        LispObject fifth = eval(args.car(), env, thread);
-        args = args.cdr();
-        if (args == NIL) {
-            thread._values = null;
-            return thread.execute(function, first, second, third, fourth,
-                                  fifth);
-        }
-        LispObject sixth = eval(args.car(), env, thread);
-        args = args.cdr();
-        if (args == NIL) {
-            thread._values = null;
-            return thread.execute(function, first, second, third, fourth,
-                                  fifth, sixth);
-        }
-        // More than 6 arguments.
-        final int length = args.length() + 6;
-        LispObject[] array = new LispObject[length];
-        array[0] = first;
-        array[1] = second;
-        array[2] = third;
-        array[3] = fourth;
-        array[4] = fifth;
-        array[5] = sixth;
-        for (int i = 6; i < length; i++) {
-            array[i] = eval(args.car(), env, thread);
-            args = args.cdr();
-        }
-        thread._values = null;
-        return thread.execute(function, array);
     }
 
     public static final LispObject progn(LispObject body, Environment env,
