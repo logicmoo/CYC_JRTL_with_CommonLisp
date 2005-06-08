@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.793 2005-05-24 19:14:14 piso Exp $
+ * $Id: Primitives.java,v 1.794 2005-06-08 02:07:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2460,20 +2460,25 @@ public final class Primitives extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             LispObject result = NIL;
-            LispObject splice = null;
-            while (list != NIL) {
-                LispObject obj = thread.execute(fun, list.car());
-                if (splice == null) {
-                    result = new Cons(obj, result);
-                    splice = result;
-                } else {
-                    Cons cons = new Cons(obj);
-                    splice.setCdr(cons);
-                    splice = cons;
+            Cons splice = null;
+            try {
+                while (list != NIL) {
+                    LispObject obj = thread.execute(fun, ((Cons)list).car);
+                    if (splice == null) {
+                        splice = new Cons(obj, result);
+                        result = splice;
+                    } else {
+                        Cons cons = new Cons(obj);
+                        splice.cdr = cons;
+                        splice = cons;
+                    }
+                    list = ((Cons)list).cdr;
                 }
-                list = list.cdr();
             }
-            thread.clearValues();
+            catch (ClassCastException e) {
+                return signal(new TypeError(list, Symbol.LIST));
+            }
+            thread._values = null;
             return result;
         }
         public LispObject execute(LispObject fun, LispObject list1,
@@ -2482,22 +2487,22 @@ public final class Primitives extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             LispObject result = NIL;
-            LispObject splice = null;
+            Cons splice = null;
             while (list1 != NIL && list2 != NIL) {
                 LispObject obj =
                     thread.execute(fun, list1.car(), list2.car());
                 if (splice == null) {
-                    result = new Cons(obj, result);
-                    splice = result;
+                    splice = new Cons(obj, result);
+                    result = splice;
                 } else {
                     Cons cons = new Cons(obj);
-                    splice.setCdr(cons);
+                    splice.cdr = cons;
                     splice = cons;
                 }
                 list1 = list1.cdr();
                 list2 = list2.cdr();
             }
-            thread.clearValues();
+            thread._values = null;
             return result;
         }
         public LispObject execute(final LispObject[] args)
