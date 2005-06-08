@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.359 2005-06-08 02:11:41 piso Exp $
+ * $Id: Lisp.java,v 1.360 2005-06-08 13:15:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -386,6 +386,8 @@ public abstract class Lisp
             return obj;
     }
 
+    public static final int CALL_REGISTERS_MAX = 6;
+
     private static final LispObject evalCall(LispObject function,
                                              LispObject args,
                                              Environment env,
@@ -433,8 +435,9 @@ public abstract class Lisp
                 return thread.execute(function, first, second, third, fourth,
                                       fifth, sixth);
             }
-            // More than 6 arguments.
-            final int length = args.length() + 6;
+            // More than CALL_REGISTERS_MAX arguments.
+            Debug.assertTrue(CALL_REGISTERS_MAX == 6);
+            final int length = args.length() + CALL_REGISTERS_MAX;
             LispObject[] array = new LispObject[length];
             array[0] = first;
             array[1] = second;
@@ -442,7 +445,7 @@ public abstract class Lisp
             array[3] = fourth;
             array[4] = fifth;
             array[5] = sixth;
-            for (int i = 6; i < length; i++) {
+            for (int i = CALL_REGISTERS_MAX; i < length; i++) {
                 array[i] = eval(((Cons)args).car, env, thread);
                 args = ((Cons)args).cdr;
             }
@@ -2112,6 +2115,28 @@ public abstract class Lisp
 
     public static final Symbol BOOLE_ORC2 =
         exportConstant("BOOLE-ORC2", PACKAGE_CL, new Fixnum(15));
+
+    // ### call-arguments-limit
+    public static final Symbol CALL_ARGUMENTS_LIMIT =
+        exportConstant("CALL-ARGUMENTS-LIMIT", PACKAGE_CL, new Fixnum(50));
+
+    // ### lambda-parameters-limit
+    public static final Symbol LAMBDA_PARAMETERS_LIMIT =
+        exportConstant("LAMBDA-PARAMETERS-LIMIT", PACKAGE_CL, new Fixnum(50));
+
+    // ### multiple-values-limit
+    public static final Symbol MULTIPLE_VALUES_LIMIT =
+        exportConstant("MULTIPLE-VALUES-LIMIT", PACKAGE_CL, new Fixnum(20));
+
+    // ### internal-time-units-per-second
+    public static final Symbol INTERNAL_TIME_UNITS_PER_SECOND =
+        exportConstant("INTERNAL-TIME-UNITS-PER-SECOND", PACKAGE_CL,
+                       new Fixnum(1000));
+
+    // ### call-registers-limit
+    public static final Symbol CALL_REGISTERS_LIMIT =
+        exportConstant("CALL-REGISTERS-LIMIT", PACKAGE_SYS,
+                       new Fixnum(CALL_REGISTERS_MAX));
 
     // ### *warn-on-redefinition*
     public static final Symbol _WARN_ON_REDEFINITION_ =

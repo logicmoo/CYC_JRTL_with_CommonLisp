@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.475 2005-06-07 21:34:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.476 2005-06-08 13:19:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,11 +17,11 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "EXT")
+(in-package #:extensions)
 
 (export 'defsubst)
 
-(in-package "JVM")
+(in-package #:jvm)
 
 (export '(compile-defun *catch-errors* jvm-compile jvm-compile-package))
 
@@ -32,8 +32,6 @@
   (require '#:source-transform)
   (require '#:opcodes)
   (require '#:known-functions))
-
-(defconstant +arg-count-max+ 6)
 
 (defvar *inline-declarations* nil)
 
@@ -2949,7 +2947,7 @@
   (let ((numargs (length args)))
     (when (plusp numargs)
       (let ((must-clear-values nil))
-        (cond ((<= numargs +arg-count-max+)
+        (cond ((<= numargs call-registers-limit)
                (dolist (arg args)
                  (compile-form arg :target :stack)
                  (unless must-clear-values
@@ -2972,14 +2970,14 @@
           (emit-clear-values))))))
 
 (defun emit-call-execute (numargs)
-  (let ((arg-types (if (<= numargs +arg-count-max+)
+  (let ((arg-types (if (<= numargs call-registers-limit)
                        (make-list numargs :initial-element +lisp-object+)
                        (list +lisp-object-array+)))
         (return-type +lisp-object+))
     (emit-invokevirtual +lisp-object-class+ "execute" arg-types return-type)))
 
 (defun emit-call-thread-execute (numargs)
-  (let ((arg-types (if (<= numargs +arg-count-max+)
+  (let ((arg-types (if (<= numargs call-registers-limit)
                        (make-list (1+ numargs) :initial-element +lisp-object+)
                        (list +lisp-object+ +lisp-object-array+)))
         (return-type +lisp-object+))
@@ -3134,7 +3132,7 @@
       (aver (not (null (compiland-closure-register compiland))))
       (emit 'aload (compiland-closure-register compiland)))
     (let ((must-clear-values nil))
-      (cond ((> (length args) +arg-count-max+)
+      (cond ((> (length args) call-registers-limit)
              (emit-push-constant-int (length args))
              (emit 'anewarray "org/armedbear/lisp/LispObject")
              (let ((i 0))
@@ -3158,7 +3156,7 @@
 
     (if *closure-variables*
         (let* ((arg-count (length args))
-               (arg-types (if (<= arg-count +arg-count-max+)
+               (arg-types (if (<= arg-count call-registers-limit)
                               (list* +lisp-object-array+
                                      (make-list arg-count :initial-element +lisp-object+))
                               (list +lisp-object-array+ +lisp-object-array+)))
@@ -3166,7 +3164,7 @@
           (emit-invokevirtual +lisp-ctf-class+ "execute" arg-types result-type))
         ;; No closure variables.
         (let* ((arg-count (length args))
-               (arg-types (if (<= arg-count +arg-count-max+)
+               (arg-types (if (<= arg-count call-registers-limit)
                               (make-list arg-count :initial-element +lisp-object+)
                               (list +lisp-object-array+)))
                (result-type +lisp-object+))
@@ -5979,7 +5977,7 @@
                                           +lisp-object+))))
       (cond (*closure-variables*
              (return-from analyze-args
-                          (cond ((<= arg-count +arg-count-max+)
+                          (cond ((<= arg-count call-registers-limit)
                                  (get-descriptor (list* +lisp-object-array+
                                                         (make-list arg-count :initial-element +lisp-object+))
                                                  +lisp-object+))
@@ -5989,7 +5987,7 @@
                                                    +lisp-object+)))))
             (t
              (return-from analyze-args
-                          (cond ((<= arg-count +arg-count-max+)
+                          (cond ((<= arg-count call-registers-limit)
                                  (get-descriptor (make-list arg-count :initial-element +lisp-object+)
                                                  +lisp-object+))
                                 (t (setf *using-arg-array* t)
@@ -6003,7 +6001,7 @@
       (setf *hairy-arglist-p* t)
       (return-from analyze-args
                    (get-descriptor (list +lisp-object-array+) +lisp-object+)))
-    (cond ((<= arg-count +arg-count-max+)
+    (cond ((<= arg-count call-registers-limit)
            (get-descriptor (make-list (length args) :initial-element +lisp-object+)
                             +lisp-object+))
           (t
@@ -6136,7 +6134,7 @@
                      (all-args
                       (append required-args (list name)
                               (when supplied-p-var (list supplied-p-var)))))
-                (when (<= (length all-args) +arg-count-max+)
+                (when (<= (length all-args) call-registers-limit)
                   (dformat t "optional-arg = ~S~%" optional-arg)
                   (dformat t "supplied-p-var = ~S~%" supplied-p-var)
                   (dformat t "required-args = ~S~%" required-args)
@@ -6274,7 +6272,7 @@
                    (setf execute-method (make-method :name execute-method-name
                                                      :descriptor descriptor)))
               )))))
-        
+
 ;;     (dformat t "pass2 *visible-variables* = ~S~%"
 ;;              (mapcar #'variable-name *visible-variables*))
 
