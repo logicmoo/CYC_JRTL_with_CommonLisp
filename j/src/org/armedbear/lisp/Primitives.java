@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.794 2005-06-08 02:07:41 piso Exp $
+ * $Id: Primitives.java,v 1.795 2005-06-09 16:25:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2389,8 +2389,8 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject fun, LispObject args)
             throws ConditionThrowable
         {
-            final int length = args.length();
             final LispThread thread = LispThread.currentThread();
+            final int length = args.length();
             switch (length) {
                 case 0:
                     return thread.execute(fun);
@@ -2398,7 +2398,7 @@ public final class Primitives extends Lisp
                     return thread.execute(fun, ((Cons)args).car);
                 case 2: {
                     Cons cons = (Cons) args;
-                    return thread.execute(fun, cons.car, cons.cdr.car());
+                    return thread.execute(fun, cons.car, ((Cons)cons.cdr).car);
                 }
                 case 3:
                     return thread.execute(fun, args.car(), args.cadr(),
