@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.233 2005-05-24 19:34:58 piso Exp $
+ * $Id: Autoload.java,v 1.234 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,6 +184,28 @@ public class Autoload extends Function
     {
         load();
         return symbol.execute(first, second, third, fourth, fifth, sixth);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
+        throws ConditionThrowable
+    {
+        load();
+        return symbol.execute(first, second, third, fourth, fifth, sixth,
+                              seventh);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh, LispObject eighth)
+        throws ConditionThrowable
+    {
+        load();
+        return symbol.execute(first, second, third, fourth, fifth, sixth,
+                              seventh, eighth);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable

@@ -2,7 +2,7 @@
  * ClosureTemplateFunction.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ClosureTemplateFunction.java,v 1.8 2005-04-24 23:40:46 piso Exp $
+ * $Id: ClosureTemplateFunction.java,v 1.9 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,9 +75,27 @@ public abstract class ClosureTemplateFunction extends Closure
         return notImplemented();
     }
 
+    public final LispObject execute(LispObject first, LispObject second,
+                                    LispObject third, LispObject fourth,
+                                    LispObject fifth, LispObject sixth,
+                                    LispObject seventh)
+        throws ConditionThrowable
+    {
+        return notImplemented();
+    }
+
+    public final LispObject execute(LispObject first, LispObject second,
+                                    LispObject third, LispObject fourth,
+                                    LispObject fifth, LispObject sixth,
+                                    LispObject seventh, LispObject eighth)
+        throws ConditionThrowable
+    {
+        return notImplemented();
+    }
+
     private static final LispObject notImplemented() throws ConditionThrowable
     {
-        return signal(new LispError("ClosureTemplateFunction.execute(): not implemented"));
+        return signal(new LispError("Not implemented."));
     }
 
     // Zero args.
@@ -162,6 +180,44 @@ public abstract class ClosureTemplateFunction extends Closure
         args[3] = fourth;
         args[4] = fifth;
         args[5] = sixth;
+        return execute(context, args);
+    }
+
+    // Seven args.
+    public LispObject execute(LispObject[] context, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth, LispObject fifth,
+                              LispObject sixth, LispObject seventh)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[7];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
+        args[4] = fifth;
+        args[5] = sixth;
+        args[6] = seventh;
+        return execute(context, args);
+    }
+
+    // Eight args.
+    public LispObject execute(LispObject[] context, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth, LispObject fifth,
+                              LispObject sixth, LispObject seventh,
+                              LispObject eighth)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[8];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
+        args[4] = fifth;
+        args[5] = sixth;
+        args[6] = seventh;
+        args[7] = eighth;
         return execute(context, args);
     }
 

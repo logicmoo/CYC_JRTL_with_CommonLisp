@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.130 2005-05-16 15:58:12 piso Exp $
+ * $Id: LispObject.java,v 1.131 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -616,6 +616,24 @@ public class LispObject extends Lisp
         return signal(new TypeError(this, Symbol.FUNCTION));
     }
 
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
+        throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.FUNCTION));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh, LispObject eighth)
+        throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.FUNCTION));
+    }
+
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.FUNCTION));
@@ -640,6 +658,12 @@ public class LispObject extends Lisp
             case 6:
                 return execute(args[0], args[1], args[2], args[3], args[4],
                                args[5]);
+            case 7:
+                return execute(args[0], args[1], args[2], args[3], args[4],
+                               args[5], args[6]);
+            case 8:
+                return execute(args[0], args[1], args[2], args[3], args[4],
+                               args[5], args[6], args[7]);
             default:
                 return signal(new TypeError(this, Symbol.FUNCTION));
         }

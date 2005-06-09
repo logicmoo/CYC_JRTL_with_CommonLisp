@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.60 2005-04-24 23:40:46 piso Exp $
+ * $Id: Cons.java,v 1.61 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -420,6 +420,34 @@ public final class Cons extends LispObject
         if (car == Symbol.LAMBDA) {
             Closure closure = new Closure(this, new Environment());
             return closure.execute(first, second, third, fourth, fifth, sixth);
+        }
+        return signalExecutionError();
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
+        throws ConditionThrowable
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new Closure(this, new Environment());
+            return closure.execute(first, second, third, fourth, fifth, sixth,
+                                   seventh);
+        }
+        return signalExecutionError();
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh, LispObject eighth)
+        throws ConditionThrowable
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new Closure(this, new Environment());
+            return closure.execute(first, second, third, fourth, fifth, sixth,
+                                   seventh, eighth);
         }
         return signalExecutionError();
     }

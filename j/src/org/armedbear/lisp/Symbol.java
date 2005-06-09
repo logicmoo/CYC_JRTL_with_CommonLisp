@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.195 2005-05-24 18:44:25 piso Exp $
+ * $Id: Symbol.java,v 1.196 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -887,6 +887,36 @@ public class Symbol extends LispObject
     {
         try {
             return function.execute(first, second, third, fourth, fifth, sixth);
+        }
+        catch (NullPointerException e) {
+            return signalNPE(e);
+        }
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
+        throws ConditionThrowable
+    {
+        try {
+            return function.execute(first, second, third, fourth, fifth, sixth,
+                                    seventh);
+        }
+        catch (NullPointerException e) {
+            return signalNPE(e);
+        }
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh, LispObject eighth)
+        throws ConditionThrowable
+    {
+        try {
+            return function.execute(first, second, third, fourth, fifth, sixth,
+                                    seventh, eighth);
         }
         catch (NullPointerException e) {
             return signalNPE(e);

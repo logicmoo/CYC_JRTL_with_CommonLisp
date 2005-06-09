@@ -2,7 +2,7 @@
  * Primitive1R.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: Primitive1R.java,v 1.1 2005-06-07 21:35:44 piso Exp $
+ * $Id: Primitive1R.java,v 1.2 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,7 +110,27 @@ public class Primitive1R extends Function
     {
         return _execute(first, list5(second, third, fourth, fifth, sixth));
     }
-    
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
+        throws ConditionThrowable
+    {
+        return _execute(first, list6(second, third, fourth, fifth, sixth,
+                                     seventh));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh, LispObject eighth)
+        throws ConditionThrowable
+    {
+        return _execute(first, list7(second, third, fourth, fifth, sixth,
+                                     seventh, eighth));
+    }
+
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         LispObject list = NIL;
@@ -118,7 +138,7 @@ public class Primitive1R extends Function
             list = new Cons(args[i], list);
         return _execute(args[0], list);
     }
-    
+
     protected LispObject _execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {

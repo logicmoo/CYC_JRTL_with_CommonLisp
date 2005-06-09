@@ -2,7 +2,7 @@
  * Primitive.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitive.java,v 1.17 2005-04-08 12:32:55 piso Exp $
+ * $Id: Primitive.java,v 1.18 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,6 +141,41 @@ public class Primitive extends Function
         args[3] = fourth;
         args[4] = fifth;
         args[5] = sixth;
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[7];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
+        args[4] = fifth;
+        args[5] = sixth;
+        args[6] = seventh;
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh, LispObject eighth)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[8];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
+        args[4] = fifth;
+        args[5] = sixth;
+        args[6] = seventh;
+        args[7] = eighth;
         return execute(args);
     }
 }

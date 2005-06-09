@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: CompiledFunction.java,v 1.35 2005-05-28 04:03:03 piso Exp $
+ * $Id: CompiledFunction.java,v 1.36 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,9 +119,44 @@ public class CompiledFunction extends Closure
         return execute(args);
     }
 
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[7];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
+        args[4] = fifth;
+        args[5] = sixth;
+        args[6] = seventh;
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh, LispObject eighth)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[8];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
+        args[4] = fifth;
+        args[5] = sixth;
+        args[6] = seventh;
+        args[7] = eighth;
+        return execute(args);
+    }
+
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        return signal(new LispError("CompiledFunction.execute(): not implemented"));
+        return signal(new LispError("Not implemented."));
     }
 
     // ### load-compiled-function

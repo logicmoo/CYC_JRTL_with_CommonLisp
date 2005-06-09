@@ -2,7 +2,7 @@
  * CompiledClosure.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: CompiledClosure.java,v 1.5 2005-04-08 12:32:07 piso Exp $
+ * $Id: CompiledClosure.java,v 1.6 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,26 @@ public class CompiledClosure extends Function
         throws ConditionThrowable
     {
         return ctf.execute(context, first, second, third, fourth, fifth, sixth);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
+        throws ConditionThrowable
+    {
+        return ctf.execute(context, first, second, third, fourth, fifth, sixth,
+                           seventh);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh, LispObject eighth)
+        throws ConditionThrowable
+    {
+        return ctf.execute(context, first, second, third, fourth, fifth, sixth,
+                           seventh, eighth);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable

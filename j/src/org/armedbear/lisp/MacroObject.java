@@ -2,7 +2,7 @@
  * MacroObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: MacroObject.java,v 1.11 2005-05-16 15:59:09 piso Exp $
+ * $Id: MacroObject.java,v 1.12 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,6 +78,24 @@ public final class MacroObject extends Function
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth,
                               LispObject fifth, LispObject sixth)
+        throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(name));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
+        throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(name));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh, LispObject eighth)
         throws ConditionThrowable
     {
         return signal(new UndefinedFunction(name));

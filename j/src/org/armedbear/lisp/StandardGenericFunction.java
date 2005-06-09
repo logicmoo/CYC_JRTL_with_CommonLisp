@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.4 2005-05-22 19:03:51 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.5 2005-06-09 11:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,6 +137,26 @@ public final class StandardGenericFunction extends StandardObject
     {
         return function.execute(first, second, third, fourth,
                                               fifth, sixth);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
+        throws ConditionThrowable
+    {
+        return function.execute(first, second, third, fourth,
+                                fifth, sixth, seventh);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh, LispObject eighth)
+        throws ConditionThrowable
+    {
+        return function.execute(first, second, third, fourth,
+                                fifth, sixth, seventh, eighth);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
