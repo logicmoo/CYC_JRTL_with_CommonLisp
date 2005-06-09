@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexString.java,v 1.26 2005-06-09 19:38:35 piso Exp $
+ * $Id: ComplexString.java,v 1.27 2005-06-09 19:39:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,9 +120,9 @@ public final class ComplexString extends AbstractString
         if (chars != null)
             return chars;
         Debug.assertTrue(array != null);
-        char[] _chars = new char[capacity];
-        System.arraycopy(array.chars(), displacement, _chars, 0, capacity);
-        return _chars;
+        char[] copy = new char[capacity];
+        System.arraycopy(array.chars(), displacement, copy, 0, capacity);
+        return copy;
     }
 
     public char[] getStringChars() throws ConditionThrowable
