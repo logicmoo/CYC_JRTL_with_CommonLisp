@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.19 2005-05-06 12:41:04 piso Exp $
+ * $Id: MathFunctions.java,v 1.20 2005-06-09 21:37:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,7 +156,7 @@ public final class MathFunctions extends Lisp
             if (Math.abs(f) <= 1)
                 return new SingleFloat((float)Math.acos(f));
         }
-        LispObject result = DoubleFloat.PI.divideBy(Fixnum.TWO);
+        LispObject result = new DoubleFloat(Math.PI/2);
         if (!(arg instanceof DoubleFloat))
             result = new SingleFloat((float)((DoubleFloat)result).value);
         result = result.subtract(asin(arg));
