@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.361 2005-06-09 11:49:06 piso Exp $
+ * $Id: Lisp.java,v 1.362 2005-06-09 19:17:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1956,7 +1956,7 @@ public abstract class Lisp
         exportSpecial("///", PACKAGE_CL, NIL);
 
     public static final Symbol PI =
-        exportConstant("PI", PACKAGE_CL, DoubleFloat.PI);
+        exportConstant("PI", PACKAGE_CL, new DoubleFloat(Math.PI));
 
     public static final Symbol SHORT_FLOAT_EPSILON =
         exportConstant("SHORT-FLOAT-EPSILON", PACKAGE_CL,
