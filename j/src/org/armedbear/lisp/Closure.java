@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.103 2005-06-09 11:49:06 piso Exp $
+ * $Id: Closure.java,v 1.104 2005-06-09 19:05:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,8 +73,8 @@ public class Closure extends Function
         final LispObject lambdaList = lambdaExpression.cadr();
         setLambdaList(lambdaList);
         Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
-        boolean andKey = false;
-        boolean allowOtherKeys = false;
+        boolean _andKey = false;
+        boolean _allowOtherKeys = false;
         if (lambdaList instanceof Cons) {
             final int length = lambdaList.length();
             ArrayList required = null;
@@ -116,10 +116,10 @@ public class Closure extends Function
                         arity = -1; // FIXME
                     } else if (obj == Symbol.AND_KEY) {
                         state = STATE_KEYWORD;
-                        andKey = true;
+                        _andKey = true;
                         arity = -1;
                     } else if (obj == Symbol.AND_ALLOW_OTHER_KEYS) {
-                        allowOtherKeys = true;
+                        _allowOtherKeys = true;
                         maxArgs = -1;
                     } else if (obj == Symbol.AND_AUX) {
                         // All remaining specifiers are aux variable specifiers.
@@ -230,8 +230,8 @@ public class Closure extends Function
         }
         this.body = lambdaExpression.cddr();
         this.environment = env;
-        this.andKey = andKey;
-        this.allowOtherKeys = allowOtherKeys;
+        this.andKey = _andKey;
+        this.allowOtherKeys = _allowOtherKeys;
         minArgs = requiredParameters != null ? requiredParameters.length : 0;
         if (arity >= 0)
             Debug.assertTrue(arity == minArgs);
@@ -277,7 +277,7 @@ public class Closure extends Function
 
     private final Symbol[] processDeclarations() throws ConditionThrowable
     {
-        ArrayList specials = null;
+        ArrayList arrayList = null;
         LispObject forms = body;
         while (forms != NIL) {
             LispObject obj = forms.car();
@@ -289,9 +289,9 @@ public class Closure extends Function
                         LispObject vars = decl.cdr();
                         while (vars != NIL) {
                             Symbol var = checkSymbol(vars.car());
-                            if (specials == null)
-                                specials = new ArrayList();
-                            specials.add(var);
+                            if (arrayList == null)
+                                arrayList = new ArrayList();
+                            arrayList.add(var);
                             vars = vars.cdr();
                         }
                     }
@@ -301,10 +301,10 @@ public class Closure extends Function
             } else
                 break;
         }
-        if (specials == null)
+        if (arrayList == null)
             return null;
-        Symbol[] array = new Symbol[specials.size()];
-        specials.toArray(array);
+        Symbol[] array = new Symbol[arrayList.size()];
+        arrayList.toArray(array);
         return array;
     }
 
