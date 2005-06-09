@@ -1,8 +1,8 @@
 /*
  * room.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: room.java,v 1.8 2004-12-12 16:50:56 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: room.java,v 1.9 2005-06-09 18:39:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,11 +40,11 @@ public final class room extends Primitive
         while (true) {
             try {
                 runtime.gc();
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
                 runtime.runFinalization();
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
                 runtime.gc();
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
             }
             catch (InterruptedException e) {}
             total = runtime.totalMemory();
