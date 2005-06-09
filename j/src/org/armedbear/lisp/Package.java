@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Package.java,v 1.66 2005-05-24 18:55:54 piso Exp $
+ * $Id: Package.java,v 1.67 2005-06-09 19:36:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,8 +244,7 @@ public final class Package extends LispObject
     public synchronized void addSymbol(Symbol symbol)
     {
         Debug.assertTrue(symbol.getPackage() == this);
-        final String name = symbol.getName();
-        Debug.assertTrue(name.equals("NIL"));
+        Debug.assertTrue(symbol.getName().equals("NIL"));
         try {
             externalSymbols.put(symbol.name, symbol);
         }
@@ -332,16 +331,16 @@ public final class Package extends LispObject
     public synchronized void addInitialExports(String[] names)
     {
         for (int i = names.length; i-- > 0;) {
-            final SimpleString name = new SimpleString(names[i]);
-            final int hash = name.sxhash();
+            final SimpleString s = new SimpleString(names[i]);
+            final int hash = s.sxhash();
             // There shouldn't be any internal symbols in the COMMON-LISP
             // package.
-            Debug.assertTrue(internalSymbols.get(name, hash) == null);
+            Debug.assertTrue(internalSymbols.get(s, hash) == null);
             // The symbol in question may have been exported already. If we
             // replace an existing symbol, we'll lose any information that
             // might be associated with it. So we check first...
-            if (externalSymbols.get(name, hash) == null)
-                externalSymbols.put(new Symbol(name, hash, this));
+            if (externalSymbols.get(s, hash) == null)
+                externalSymbols.put(new Symbol(s, hash, this));
         }
     }
 
@@ -412,13 +411,13 @@ public final class Package extends LispObject
     public synchronized Symbol internAndExport(String symbolName)
         throws ConditionThrowable
     {
-        final SimpleString name = new SimpleString(symbolName);
-        final int hash = name.sxhash();
+        final SimpleString s = new SimpleString(symbolName);
+        final int hash = s.sxhash();
         // Look in external and internal symbols of this package.
-        Symbol symbol = (Symbol) externalSymbols.get(name, hash);
+        Symbol symbol = (Symbol) externalSymbols.get(s, hash);
         if (symbol != null)
             return symbol;
-        symbol = (Symbol) internalSymbols.get(name, hash);
+        symbol = (Symbol) internalSymbols.get(s, hash);
         if (symbol != null) {
             export(symbol);
             return symbol;
@@ -428,7 +427,7 @@ public final class Package extends LispObject
             LispObject usedPackages = useList;
             while (usedPackages != NIL) {
                 Package pkg = (Package) usedPackages.car();
-                symbol = pkg.findExternalSymbol(name, hash);
+                symbol = pkg.findExternalSymbol(s, hash);
                 if (symbol != null) {
                     export(symbol);
                     return symbol;
@@ -437,12 +436,12 @@ public final class Package extends LispObject
             }
         }
         // Not found.
-        symbol = new Symbol(name, hash, this);
+        symbol = new Symbol(s, hash, this);
         if (this == PACKAGE_KEYWORD) {
             symbol.setSymbolValue(symbol);
             symbol.setConstant(true);
         }
-        externalSymbols.put(name, symbol);
+        externalSymbols.put(s, symbol);
         return symbol;
     }
 
