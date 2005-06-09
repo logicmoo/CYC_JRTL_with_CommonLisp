@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.31 2005-05-07 18:53:34 piso Exp $
+ * $Id: Condition.java,v 1.32 2005-06-09 18:56:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,8 +42,8 @@ public class Condition extends StandardObject
     public Condition(LispObject initArgs) throws ConditionThrowable
     {
         super(BuiltInClass.CONDITION, 0);
-        LispObject formatControl = NIL;
-        LispObject formatArguments = NIL;
+        LispObject control = NIL;
+        LispObject arguments = NIL;
         LispObject first, second;
         while (initArgs instanceof Cons) {
             first = initArgs.car();
@@ -51,12 +51,12 @@ public class Condition extends StandardObject
             second = initArgs.car();
             initArgs = initArgs.cdr();
             if (first == Keyword.FORMAT_CONTROL)
-                formatControl = second;
+                control = second;
             else if (first == Keyword.FORMAT_ARGUMENTS)
-                formatArguments = second;
+                arguments = second;
         }
-        setFormatControl(formatControl);
-        setFormatArguments(formatArguments);
+        setFormatControl(control);
+        setFormatArguments(arguments);
     }
 
     public Condition(String message)
