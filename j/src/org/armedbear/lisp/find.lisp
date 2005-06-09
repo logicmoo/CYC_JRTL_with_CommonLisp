@@ -1,7 +1,7 @@
 ;;; find.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: find.lisp,v 1.10 2005-02-10 01:49:56 piso Exp $
+;;; $Id: find.lisp,v 1.11 2005-06-09 11:45:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,13 +23,13 @@
 
 (defmacro vector-locater-macro (sequence body-form return-type)
   `(let ((incrementer (if from-end -1 1))
-	 (start (if from-end (1- end) start))
-	 (end (if from-end (1- start) end)))
-     (declare (type fixnum incrementer start end))
-     (do ((index start (the fixnum (+ index incrementer)))
+	 (start (if from-end (1- (the fixnum end)) start))
+	 (end (if from-end (1- (the fixnum start)) end)))
+     (declare (fixnum start end incrementer))
+     (do ((index start (+ index incrementer))
 	  ,@(case return-type (:position nil) (:element '(current))))
-         ((= index end) ())
-       (declare (type fixnum index))
+	 ((= index end) ())
+       (declare (fixnum index))
        ,@(case return-type
 	   (:position nil)
 	   (:element `((setf current (aref ,sequence index)))))
@@ -85,12 +85,14 @@
 
 (defmacro list-locater-macro (sequence body-form return-type)
   `(if from-end
-       (do ((sequence (nthcdr (- (length sequence) end)
-			      (reverse ,sequence)))
-	    (index (1- end) (1- index))
-	    (terminus (1- start))
+       (do ((sequence (nthcdr (- (the fixnum (length sequence))
+				 (the fixnum end))
+			      (reverse (the list ,sequence))))
+	    (index (1- (the fixnum end)) (1- index))
+	    (terminus (1- (the fixnum start)))
 	    ,@(case return-type (:position nil) (:element '(current))))
-           ((or (= index terminus) (null sequence)) ())
+	   ((or (= index terminus) (null sequence)) ())
+	 (declare (fixnum index terminus))
 	 ,@(case return-type
 	     (:position nil)
 	     (:element `((setf current (pop ,sequence)))))
@@ -98,7 +100,8 @@
        (do ((sequence (nthcdr start ,sequence))
 	    (index start (1+ index))
 	    ,@(case return-type (:position nil) (:element '(current))))
-           ((or (= index end) (null sequence)) ())
+	   ((or (= index (the fixnum end)) (null sequence)) ())
+	 (declare (fixnum index))
 	 ,@(case return-type
 	     (:position nil)
 	     (:element `((setf current (pop ,sequence)))))
