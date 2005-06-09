@@ -2,7 +2,7 @@
  * DoubleFloat.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: DoubleFloat.java,v 1.1 2005-03-17 15:19:55 piso Exp $
+ * $Id: DoubleFloat.java,v 1.2 2005-06-09 19:17:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,6 @@ public final class DoubleFloat extends LispObject
     public static final DoubleFloat ZERO      = new DoubleFloat(0);
     public static final DoubleFloat ONE       = new DoubleFloat(1);
     public static final DoubleFloat MINUS_ONE = new DoubleFloat(-1);
-
-    public static final DoubleFloat PI = new DoubleFloat(Math.PI);
 
     public static final DoubleFloat DOUBLE_FLOAT_POSITIVE_INFINITY =
         new DoubleFloat(Double.POSITIVE_INFINITY);
