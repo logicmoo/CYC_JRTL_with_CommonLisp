@@ -1,8 +1,8 @@
 /*
  * SessionProperties.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: SessionProperties.java,v 1.3 2003-06-29 00:19:34 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: SessionProperties.java,v 1.4 2005-06-09 00:54:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,11 +72,13 @@ public final class SessionProperties
             setBooleanProperty(prefix + "toolbar.show", frame.getShowToolbar());
             Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
             Rectangle r = frame.getRect();
-            if (r.x >= 0 && r.y >= 0 && r.width < screen.width && r.height < screen.height) {
-                setIntegerProperty(prefix + "x", r.x);
-                setIntegerProperty(prefix + "y", r.y);
-                setIntegerProperty(prefix + "width", r.width);
-                setIntegerProperty(prefix + "height", r.height);
+            if (screen != null && r != null) {
+                if (r.x >= 0 && r.y >= 0 && r.width < screen.width && r.height < screen.height) {
+                    setIntegerProperty(prefix + "x", r.x);
+                    setIntegerProperty(prefix + "y", r.y);
+                    setIntegerProperty(prefix + "width", r.width);
+                    setIntegerProperty(prefix + "height", r.height);
+                }
             }
             setIntegerProperty(prefix + "extendedState", frame.retrieveExtendedState());
         }
