@@ -1,8 +1,8 @@
 /*
  * gc.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: gc.java,v 1.2 2004-11-03 15:39:02 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: gc.java,v 1.3 2005-06-09 18:34:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,11 +37,11 @@ public final class gc extends Primitive
         while (true) {
             try {
                 runtime.gc();
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
                 runtime.runFinalization();
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
                 runtime.gc();
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
             }
             catch (InterruptedException e) {}
             free = runtime.freeMemory();
@@ -53,5 +53,5 @@ public final class gc extends Primitive
         return number(free);
     }
 
-    private static final gc GC = new gc();
+    private static final Primitive GC = new gc();
 }
