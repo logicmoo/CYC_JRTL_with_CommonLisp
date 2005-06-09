@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.477 2005-06-09 11:44:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.478 2005-06-09 12:41:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3248,6 +3248,7 @@
   (emit-push-nil)
   (if negatep 'if_acmpne 'if_acmpeq))
 
+;; Note that /= is not transitive, so we don't handle it here.
 (defun p2-numeric-comparison (form &key (target :stack) representation)
   (let ((op (car form))
         (args (cdr form)))
@@ -3274,8 +3275,7 @@
                           (<= 'if_icmpgt)
                           (>  'if_icmple)
                           (>= 'if_icmplt)
-                          (=  'if_icmpne)
-                          (/= 'if_icmpeq))
+                          (=  'if_icmpne))
                         LABEL1)
                   (emit-push-t)
                   (emit 'goto LABEL2)
@@ -3294,8 +3294,7 @@
                                       (<= "isLessThanOrEqualTo")
                                       (>  "isGreaterThan")
                                       (>= "isGreaterThanOrEqualTo")
-                                      (=  "isEqualTo")
-                                      (/= "isNotEqualTo"))
+                                      (=  "isEqualTo"))
                                     '("I")
                                     "Z")
                 ;; Java boolean on stack here
@@ -3323,8 +3322,7 @@
                          (<= 'if_icmpgt)
                          (>  'if_icmple)
                          (>= 'if_icmplt)
-                         (=  'if_icmpne)
-                         (/= 'if_icmpeq)))
+                         (=  'if_icmpne)))
                  (LABEL1 (gensym))
                  (LABEL2 (gensym)))
              ;; First test.
@@ -3449,7 +3447,7 @@
 (defun compile-test-4 (form negatep)
   (let ((op (%car form))
         (args (%cdr form)))
-    (cond ((and (memq op '(< <= > >= = /=))
+    (cond ((and (memq op '(< <= > >= =))
                 (every #'atom args)
                 (dolist (arg args t)
                  (unless (subtypep (derive-type arg) 'fixnum)
@@ -6795,7 +6793,6 @@
   (install-p2-handler '*                'p2-times)
   (install-p2-handler '+                'p2-plus)
   (install-p2-handler '-                'p2-minus)
-  (install-p2-handler '/=               'p2-numeric-comparison)
   (install-p2-handler '<                'p2-numeric-comparison)
   (install-p2-handler '<=               'p2-numeric-comparison)
   (install-p2-handler '=                'p2-numeric-comparison)
