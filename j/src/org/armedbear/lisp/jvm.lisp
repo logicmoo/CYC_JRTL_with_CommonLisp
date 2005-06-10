@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.479 2005-06-10 15:25:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.480 2005-06-10 16:38:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2204,8 +2204,24 @@
                                 (list +java-string+) +lisp-object+))
            (emit-invokespecial-init super (list +lisp-object+ +lisp-object+)))
           ((equal super "org/armedbear/lisp/Primitive1R")
-;;            (push '&REST args)
-           (setf args (list (first args) '&REST (third args)))
+           (setf args (list (first args) '&REST (second args)))
+           (emit 'aload_0) ; this
+           (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
+                  (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
+                  (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
+                  (emit-invokestatic +lisp-class+ "internInPackage"
+                                     (list +java-string+ +java-string+) +lisp-symbol+))
+                 (t
+                  (emit-push-nil))) ; no name
+           (let* ((*print-level* nil)
+                  (*print-length* nil)
+                  (s (sys::%format nil "~S" args)))
+             (emit 'ldc (pool-string s))
+             (emit-invokestatic +lisp-class+ "readObjectFromString"
+                                (list +java-string+) +lisp-object+))
+           (emit-invokespecial-init super (list +lisp-object+ +lisp-object+)))
+          ((equal super "org/armedbear/lisp/Primitive2R")
+           (setf args (list (first args) (second args) '&REST (third args)))
            (emit 'aload_0) ; this
            (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
                   (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
@@ -6244,12 +6260,7 @@
     (emit-move-from-stack target representation)))
 
 (defun p2-compiland (compiland)
-  (dformat t "p2-compiland ~S~%" (compiland-name compiland))
   (let* ((p1-result (compiland-p1-result compiland))
-;;          (*declared-symbols* (make-hash-table :test 'eq))
-;;          (*declared-functions* (make-hash-table :test 'equal))
-;;          (*declared-strings* (make-hash-table :test 'eq))
-;;          (*declared-fixnums* (make-hash-table :test 'eql))
          (class-file (compiland-class-file compiland))
          (*this-class* (class-file-class class-file))
          (args (cadr p1-result))
@@ -6300,6 +6311,17 @@
                    (setf (compiland-kind compiland) :internal)
                    (setf super "org/armedbear/lisp/Primitive1R")
                    (setf args (list (first args) (third args)))
+                   (setf execute-method-name "_execute")
+                   (setf execute-method (make-method :name execute-method-name
+                                                     :descriptor descriptor)))
+                  ((and (= arg-count 4) (eq (%caddr args) '&REST))
+                   (setf *using-arg-array* nil)
+                   (setf *hairy-arglist-p* nil)
+                   (setf descriptor (get-descriptor (list +lisp-object+ +lisp-object+ +lisp-object+)
+                                                    +lisp-object+))
+                   (setf (compiland-kind compiland) :internal)
+                   (setf super "org/armedbear/lisp/Primitive2R")
+                   (setf args (list (first args) (second args) (fourth args)))
                    (setf execute-method-name "_execute")
                    (setf execute-method (make-method :name execute-method-name
                                                      :descriptor descriptor)))
