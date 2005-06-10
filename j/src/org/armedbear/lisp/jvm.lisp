@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.478 2005-06-09 12:41:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.479 2005-06-10 15:25:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5384,6 +5384,18 @@
       (emit-unbox-fixnum))
     (emit-move-from-stack target representation)))
 
+(defun p2-elt (form &key (target :stack) representation)
+  (cond ((and (check-arg-count form 2)
+              (subtypep (derive-type (third form)) 'fixnum))
+         (compile-form (second form) :target :stack)
+         (compile-form (third form) :target :stack :representation :unboxed-fixnum)
+         (emit-invokevirtual +lisp-object-class+ "elt" '("I") +lisp-object+)
+         (when (eq representation :unboxed-fixnum)
+           (emit-unbox-fixnum))
+         (emit-move-from-stack target representation))
+        (t
+         (compile-function-call form target representation))))
+
 (defun p2-aref (form &key (target :stack) representation)
   ;; We only optimize the 2-arg case.
   (cond ((= (length form) 3)
@@ -6807,6 +6819,7 @@
   (install-p2-handler 'char-code        'p2-char-code)
   (install-p2-handler 'char=            'p2-char=)
   (install-p2-handler 'cons             'p2-cons)
+  (install-p2-handler 'elt              'p2-elt)
   (install-p2-handler 'eql              'p2-eql)
   (install-p2-handler 'eval-when        'p2-eval-when)
   (install-p2-handler 'flet             'p2-flet)
