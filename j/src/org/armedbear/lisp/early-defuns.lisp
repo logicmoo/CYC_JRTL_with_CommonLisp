@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.28 2005-05-12 08:14:43 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.29 2005-06-10 15:24:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -193,7 +193,7 @@
 (defun cdaddr (list) (cdr (car (cdr (cdr list)))))
 (defun cddadr (list) (cdr (cdr (car (cdr list)))))
 
-;;; SOME, EVERY, NOTANY, NOTEVERY (from ECL)
+;;; SOME, EVERY, NOTANY, NOTEVERY (adapted from ECL)
 
 (defun some (predicate sequence &rest more-sequences)
   (setq more-sequences (cons sequence more-sequences))
@@ -206,12 +206,24 @@
       (when that-value (return that-value)))))
 
 (defun every (predicate sequence &rest more-sequences)
-  (setq more-sequences (cons sequence more-sequences))
-  (do ((i 0 (1+ i))
-       (l (apply #'min (mapcar #'length more-sequences))))
-      ((>= i l) t)
-    (unless (apply predicate (mapcar #'(lambda (z) (elt z i)) more-sequences))
-      (return nil))))
+  (declare (optimize speed))
+  (cond ((null more-sequences)
+         (cond ((listp sequence)
+                (dolist (x sequence t)
+                  (unless (funcall predicate x)
+                    (return nil))))
+               (t
+                (dotimes (i (length sequence) t)
+                  (declare (type fixnum i))
+                  (unless (funcall predicate (elt sequence i))
+                    (return nil))))))
+        (t
+         (setq more-sequences (cons sequence more-sequences))
+         (do ((i 0 (1+ i))
+              (l (apply #'min (mapcar #'length more-sequences))))
+             ((>= i l) t)
+           (unless (apply predicate (mapcar #'(lambda (z) (elt z i)) more-sequences))
+             (return nil))))))
 
 (defun notany (predicate sequence &rest more-sequences)
   (not (apply #'some predicate sequence more-sequences)))
