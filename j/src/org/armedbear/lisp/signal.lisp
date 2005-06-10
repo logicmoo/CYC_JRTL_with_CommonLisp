@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: signal.lisp,v 1.11 2005-04-14 14:53:42 piso Exp $
+;;; $Id: signal.lisp,v 1.12 2005-06-10 03:11:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,9 +32,12 @@
 (defun signal (datum &rest arguments)
   (let ((condition (coerce-to-condition datum arguments 'simple-condition 'signal))
         (*handler-clusters* *handler-clusters*))
-    (when (typep condition *break-on-signals*)
-      (let ((*saved-backtrace* (backtrace-as-list)))
-        (break "~A~%BREAK called because of *BREAK-ON-SIGNALS*" condition)))
+    (let* ((old-bos *break-on-signals*)
+           (*break-on-signals* nil))
+      (when (typep condition old-bos)
+        (let ((*saved-backtrace* (backtrace-as-list)))
+          (break "~A~%BREAK called because of *BREAK-ON-SIGNALS* (now rebound to NIL)."
+                 condition))))
     (loop
       (unless *handler-clusters*
         (return))
