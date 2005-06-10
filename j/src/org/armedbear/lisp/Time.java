@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Time.java,v 1.26 2005-02-14 19:05:33 piso Exp $
+ * $Id: Time.java,v 1.27 2005-06-10 15:26:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,13 +68,11 @@ public final class Time extends Lisp
                     sb.append(" seconds system run time");
                     sb.append(System.getProperty("line.separator"));
                 }
-                if (count > 0) {
-                    sb.append(count);
-                    sb.append(" cons cell");
-                    if (count > 1)
-                        sb.append('s');
-                    sb.append(System.getProperty("line.separator"));
-                }
+                sb.append(count);
+                sb.append(" cons cell");
+                if (count != 1)
+                    sb.append('s');
+                sb.append(System.getProperty("line.separator"));
                 out._writeString(sb.toString());
                 out._finishOutput();
             }
