@@ -1,7 +1,7 @@
 ;;; dump-class.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: dump-class.lisp,v 1.2 2004-08-05 00:20:56 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: dump-class.lisp,v 1.3 2005-06-10 18:52:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -137,8 +137,7 @@
          (*indent* (+ *indent* 2))
          (type (case type
                  ('field "Field")
-                 ('method "Method")))
-         name)
+                 ('method "Method"))))
     (out "~A ~D: Access flags: #x~X~%" type index access-flags)
     (out "~A ~D: Name index: ~D (~S)~%" type index name-index (lookup-utf8 name-index))
     (out "~A ~D: Descriptor index: ~D~%" type index descriptor-index)
