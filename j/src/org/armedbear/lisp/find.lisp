@@ -1,7 +1,7 @@
 ;;; find.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: find.lisp,v 1.11 2005-06-09 11:45:21 piso Exp $
+;;; $Id: find.lisp,v 1.12 2005-06-10 19:28:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -183,21 +183,22 @@
 (defmacro list-find (item sequence)
   `(list-locater ,item ,sequence :element))
 
-(defun find (item sequence &key from-end (test #'eql) test-not (start 0)
-                  end key)
-  (if (listp sequence)
-      (list-find* item sequence from-end test test-not start end key)
-      (vector-find* item sequence from-end test test-not start end key)))
-
 (defun list-find* (item sequence from-end test test-not start end key)
-  (let ((end (or end (length sequence))))
-    (declare (type fixnum end))
-    (list-find item sequence)))
+  (declare (type fixnum start end))
+  (list-find item sequence))
 
 (defun vector-find* (item sequence from-end test test-not start end key)
+  (declare (type fixnum start end))
+  (vector-find item sequence))
+
+(defun find (item sequence &key from-end (test #'eql) test-not (start 0)
+                  end key)
   (let ((end (or end (length sequence))))
-    (declare (type fixnum end))
-    (vector-find item sequence)))
+    (require-type start '(integer 0 #.most-positive-fixnum))
+    (require-type end '(integer 0 #.most-positive-fixnum))
+    (if (listp sequence)
+        (list-find* item sequence from-end test test-not start end key)
+        (vector-find* item sequence from-end test test-not start end key))))
 
 (defmacro vector-find-if (test sequence)
   `(vector-locater-if ,test ,sequence :element))

@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: typep.lisp,v 1.29 2005-05-24 13:59:11 piso Exp $
+;;; $Id: typep.lisp,v 1.30 2005-06-10 19:27:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,25 +26,23 @@
          (and (null displaced-to) (zerop offset)))))
 
 (defun in-interval-p (x interval)
-  (let (low high)
-    (if (endp interval)
-        (setq low '* high '*)
-        (if (endp (%cdr interval))
-            (setq low (%car interval) high '*)
-            (setq low (%car interval) high (%cadr interval))))
-    (cond ((eq low '*))
-          ((consp low)
-           (when (<= x (%car low))
-             (return-from in-interval-p nil)))
-          ((when (< x low)
-             (return-from in-interval-p nil))))
-    (cond ((eq high '*))
-          ((consp high)
-           (when (>= x (%car high))
-             (return-from in-interval-p nil)))
-          ((when (> x high)
-             (return-from in-interval-p nil))))
-    t))
+  (if (endp interval)
+      t
+      (let ((low (%car interval))
+            (high (if (endp (%cdr interval)) '* (%cadr interval))))
+        (cond ((eq low '*))
+              ((consp low)
+               (when (<= x (%car low))
+                 (return-from in-interval-p nil)))
+              ((when (< x low)
+                 (return-from in-interval-p nil))))
+        (cond ((eq high '*))
+              ((consp high)
+               (when (>= x (%car high))
+                 (return-from in-interval-p nil)))
+              ((when (> x high)
+                 (return-from in-interval-p nil))))
+        t)))
 
 (defun match-dimensions (dim pat)
   (if (null dim)
@@ -67,24 +65,6 @@
   (let ((tp (%car type))
         (i (%cdr type)))
     (case tp
-      (AND
-       (dolist (type i)
-         (unless (%typep object type)
-           (return-from %typep nil)))
-       t)
-      (OR
-       (dolist (type i)
-         (when (%typep object type)
-           (return-from %typep t)))
-       nil)
-      (NOT
-       (not (%typep object (car i))))
-      (MEMBER
-       (member object i))
-      (CONS
-       (and (consp object)
-            (or (null (car i)) (eq (car i) '*) (%typep (%car object) (car i)))
-            (or (null (cadr i)) (eq (cadr i) '*) (%typep (%cdr object) (cadr i)))))
       (INTEGER
        (and (integerp object) (in-interval-p object i)))
       (RATIONAL
@@ -98,6 +78,10 @@
             (or (null i)
                 (and (typep (realpart object) i)
                      (typep (imagpart object) i)))))
+      (CONS
+       (and (consp object)
+            (or (null (car i)) (eq (car i) '*) (%typep (%car object) (car i)))
+            (or (null (cadr i)) (eq (cadr i) '*) (%typep (%cdr object) (cadr i)))))
       (SIMPLE-BIT-VECTOR
        (and (simple-bit-vector-p object)
             (or (endp i)
@@ -153,6 +137,20 @@
                 (if (listp (%cadr i))
                     (match-dimensions (array-dimensions object) (%cadr i))
                     (eql (array-rank object) (%cadr i))))))
+      (AND
+       (dolist (type i)
+         (unless (%typep object type)
+           (return-from %typep nil)))
+       t)
+      (OR
+       (dolist (type i)
+         (when (%typep object type)
+           (return-from %typep t)))
+       nil)
+      (NOT
+       (not (%typep object (car i))))
+      (MEMBER
+       (member object i))
       (EQL
        (eql object (car i)))
       (SATISFIES

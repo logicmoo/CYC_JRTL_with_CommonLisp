@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.480 2005-06-10 16:38:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.481 2005-06-10 19:26:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3267,7 +3267,7 @@
 ;; Note that /= is not transitive, so we don't handle it here.
 (defun p2-numeric-comparison (form &key (target :stack) representation)
   (let ((op (car form))
-        (args (cdr form)))
+        (args (%cdr form)))
     (case (length args)
       (2
        (let ((first (%car args))
@@ -3323,42 +3323,51 @@
                   (emit-push-nil)
                   (label LABEL2)
                   (emit-move-from-stack target))
-                (return-from p2-numeric-comparison))
-               )))
+                (return-from p2-numeric-comparison)))))
       (3
-       (when (every #'atom args)
-         (when (dolist (arg args t)
-                 (unless (subtypep (derive-type arg) 'fixnum)
-                   (return nil)))
-           (let ((first (%car args))
-                 (second (%cadr args))
-                 (third (%caddr args))
-                 (test (case op
-                         (<  'if_icmpge)
-                         (<= 'if_icmpgt)
-                         (>  'if_icmple)
-                         (>= 'if_icmplt)
-                         (=  'if_icmpne)))
-                 (LABEL1 (gensym))
-                 (LABEL2 (gensym)))
-             ;; First test.
-             (compile-form first :target :stack :representation :unboxed-fixnum)
-             (compile-form second :target :stack :representation :unboxed-fixnum)
-             (emit test LABEL1)
-             ;; Second test.
-             (compile-form second :target :stack :representation :unboxed-fixnum)
-             (compile-form third :target :stack :representation :unboxed-fixnum)
-             (emit test LABEL1)
-             (if (eq representation :java-boolean)
-                 (emit 'iconst_1)
-                 (emit-push-t))
-             (emit 'goto LABEL2)
-             (label LABEL1)
-             (if (eq representation :java-boolean)
-                 (emit 'iconst_0)
-                 (emit-push-nil))
-             (label LABEL2)
-             (emit-move-from-stack target representation))
+       (when (dolist (arg args t)
+               (unless (subtypep (derive-type arg) 'fixnum)
+                 (return nil)))
+         (let* ((first (%car args))
+                (second (%cadr args))
+                (third (%caddr args))
+                (test (case op
+                        (<  'if_icmpge)
+                        (<= 'if_icmpgt)
+                        (>  'if_icmple)
+                        (>= 'if_icmplt)
+                        (=  'if_icmpne)))
+                (LABEL1 (gensym))
+                (LABEL2 (gensym))
+                ;; If we do both tests, we need to use the second value twice,
+                ;; so we store that value in a temporary register.
+                (*register* *register*)
+                (temp-register (allocate-register)))
+           ;; First test.
+           (compile-form first :target :stack :representation :unboxed-fixnum)
+           (compile-form second :target :stack :representation :unboxed-fixnum)
+           (unless (and (single-valued-p first) (single-valued-p second))
+             (emit-clear-values))
+           ;; Store second value in temp register for second test (if needed).
+           (emit 'dup)
+           (emit 'istore temp-register)
+           (emit test LABEL1)
+           ;; Second test.
+           ;; Retrieve second value from temp register.
+           (emit 'iload temp-register)
+           (compile-form third :target :stack :representation :unboxed-fixnum)
+           (maybe-emit-clear-values third)
+           (emit test LABEL1)
+           (if (eq representation :java-boolean)
+               (emit 'iconst_1)
+               (emit-push-t))
+           (emit 'goto LABEL2)
+           (label LABEL1)
+           (if (eq representation :java-boolean)
+               (emit 'iconst_0)
+               (emit-push-nil))
+           (label LABEL2)
+           (emit-move-from-stack target representation)
            (return-from p2-numeric-comparison))))))
   ;; Still here?
   (compile-function-call form target representation))

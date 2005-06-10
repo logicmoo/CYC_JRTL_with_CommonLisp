@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.29 2005-06-10 15:24:05 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.30 2005-06-10 19:28:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 (export 'require-type)
 
 (defun require-type (arg type)
+  (declare (optimize speed))
   (if (typep arg type)
       arg
       (error 'simple-type-error
@@ -90,6 +91,8 @@
           (setf type (apply (get tp 'deftype-definition) i))
           (return)))
     (case tp
+      (INTEGER
+       (return-from normalize-type (if i (cons tp i) tp)))
       (CONS
        (let* ((len (length i))
               (car-typespec (if (> len 0) (car i) t))
