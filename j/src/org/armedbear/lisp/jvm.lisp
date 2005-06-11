@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.483 2005-06-11 12:28:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.484 2005-06-11 23:48:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1804,100 +1804,123 @@
 
 (defun instruction-label (instruction)
   (declare (optimize safety))
-;;   (declare (type instruction instruction))
   (and instruction
        (= (instruction-opcode (the instruction instruction)) 202)
        (car (instruction-args instruction))))
 
 ;; Remove unused labels.
 (defun optimize-1 ()
-  (let ((code (coerce *code* 'list))
+  (let ((code (coerce *code* 'vector))
         (changed nil)
         (marker (gensym)))
     ;; Mark the labels that are actually branched to.
-    (dolist (instruction code)
-      (when (branch-opcode-p (instruction-opcode instruction))
-        (let ((label (car (instruction-args instruction))))
-          (set label marker))))
+    (dotimes (i (length code))
+      (declare (type (unsigned-byte 16) i))
+      (let ((instruction (aref code i)))
+        (when (branch-opcode-p (instruction-opcode instruction))
+          (let ((label (car (instruction-args instruction))))
+            (set label marker)))))
     ;; Add labels used for exception handlers.
     (dolist (handler *handlers*)
       (set (handler-from handler) marker)
       (set (handler-to handler) marker)
       (set (handler-code handler) marker))
     ;; Remove labels that are not used as branch targets.
-    (let ((tail code))
-      (loop
-        (when (null tail)
-          (return))
-        (let ((instruction (car tail)))
-          (when (= (instruction-opcode instruction) 202) ; LABEL
-            (let ((label (car (instruction-args instruction))))
-              (unless (eq (symbol-value label) marker)
-                (setf (car tail) nil)
-                (setf changed t)))))
-        (setf tail (cdr tail))))
+    (dotimes (i (length code))
+      (declare (type (unsigned-byte 16) i))
+      (let ((instruction (aref code i)))
+        (when (= (instruction-opcode instruction) 202) ; LABEL
+          (let ((label (car (instruction-args instruction))))
+            (unless (eq (symbol-value label) marker)
+              (setf (aref code i) nil)
+              (setf changed t))))))
     (when changed
       (setf *code* (delete nil code))
       t)))
 
 (defun optimize-2 ()
-  (let* ((code (coerce *code* 'list))
-         (tail code)
+  (let* ((code (coerce *code* 'vector))
+         (length (length code))
          (changed nil))
-    (loop
-      (when (null (cdr tail))
-        (return))
-      (let ((instruction (car tail))
-            next-instruction)
-        (when (and instruction
-                   (= (instruction-opcode instruction) 167) ; GOTO
-                   (setf next-instruction (cadr tail)))
-          (cond ((and (= (instruction-opcode next-instruction) 202) ; LABEL
-                      (eq (car (instruction-args instruction))
-                          (car (instruction-args next-instruction))))
-                 ;; GOTO next instruction: we don't need this one.
-                 (setf (car tail) nil)
-                 (setf changed t))
-                ((= (instruction-opcode next-instruction) 167) ; GOTO
-                 ;; Two GOTOs in a row: the next instruction is unreachable.
-                 (setf (cadr tail) nil)
-                 (setf changed t)))))
-      (setf tail (cdr tail)))
+    (declare (type (unsigned-byte 16) length))
+    ;; Since we're looking at this instruction and the next one, we can stop
+    ;; one before the end.
+    (dotimes (i (1- length))
+      (declare (type (unsigned-byte 16) i))
+      (let ((instruction (aref code i)))
+        (when (and instruction (= (instruction-opcode instruction) 167)) ; GOTO
+          (do* ((j (1+ i) (1+ j))
+                (next-instruction (aref code j) (aref code j)))
+               ((>= j length))
+            (declare (type (unsigned-byte 16) j))
+            (when next-instruction
+              (cond ((= (instruction-opcode next-instruction) 167) ; GOTO
+                     (cond ((= j (1+ i))
+                            ;; Two GOTOs in a row: the second instruction is
+                            ;; unreachable.
+                            (setf (aref code j) nil)
+                            (setf changed t))
+                           (;;(equal next-instruction instruction)
+                            (eq (car (instruction-args next-instruction))
+                                (car (instruction-args instruction)))
+                            ;; We've reached another GOTO to the same destination.
+                            ;; We don't need the first GOTO; we can just fall
+                            ;; through to the second one.
+                            (setf (aref code i) nil)
+                            (setf changed t)))
+                     (return))
+                    ((= (instruction-opcode next-instruction) 202) ; LABEL
+                     (when (eq (car (instruction-args instruction))
+                               (car (instruction-args next-instruction)))
+                       ;; GOTO next instruction; we don't need this one.
+                       (setf (aref code i) nil)
+                       (setf changed t)
+                       (return)))
+                    (t
+                     ;; Not a GOTO or a label.
+                     (return))))))))
     (when changed
       (setf *code* (delete nil code))
       t)))
 
 (defun hash-labels (code)
   (let ((ht (make-hash-table :test 'eq))
-        (code (coerce code 'list))
-        (pending-label nil))
-    (dolist (instruction code)
-      (when pending-label
-        (setf (gethash pending-label ht) instruction)
-        (setf pending-label nil))
-      (when (label-p instruction)
-        (setf pending-label (instruction-label instruction))))
+        (code (coerce code 'vector))
+        (pending-labels '()))
+    (dotimes (i (length code))
+      (declare (type (unsigned-byte 16) i))
+      (let ((instruction (aref code i)))
+        (cond ((label-p instruction)
+               (push (instruction-label instruction) pending-labels))
+              (t
+               ;; Not a label.
+               (when pending-labels
+                 (dolist (label pending-labels)
+                   (setf (gethash label ht) instruction))
+                 (setf pending-labels nil))))))
     ht))
 
 (defun optimize-2b ()
-  (let* ((code (coerce *code* 'list))
+  (let* ((code (coerce *code* 'vector))
          (ht (hash-labels code))
          (changed nil))
-    (dolist (instruction code)
-      (when (and instruction (= (instruction-opcode instruction) 167)) ; GOTO
-        (let* ((target-label (car (instruction-args instruction)))
-               (next-instruction (sys:gethash-2op-1ret target-label ht)))
-          (when next-instruction
-            (case (instruction-opcode next-instruction)
-              (167 ; GOTO
-               (setf (instruction-args instruction)
-                     (instruction-args next-instruction)
-                     changed t))
-              (176 ; ARETURN
-               (setf (instruction-opcode instruction) 176
-                     (instruction-args instruction) nil
-                     changed t))
-              )))))
+    (dotimes (i (length code))
+      (declare (type (unsigned-byte 16) i))
+      (let ((instruction (aref code i)))
+        (when (and instruction (= (instruction-opcode instruction) 167)) ; GOTO
+          (let* ((target-label (car (instruction-args instruction)))
+                 (next-instruction (sys:gethash-2op-1ret target-label ht)))
+            (when next-instruction
+              (case (instruction-opcode next-instruction)
+                (167 ; GOTO
+                 (setf (instruction-args instruction)
+                       (instruction-args next-instruction)
+                       changed t))
+                (176 ; ARETURN
+                 (setf (instruction-opcode instruction) 176
+                       (instruction-args instruction) nil
+                       changed t))
+                ))))))
     (when changed
       (setf *code* (delete nil code))
       t)))
@@ -1905,67 +1928,57 @@
 ;; CLEAR-VALUES CLEAR-VALUES => CLEAR-VALUES
 ;; GETSTATIC POP => nothing
 (defun optimize-3 ()
-  (let* ((code (coerce *code* 'list))
-         (tail code)
+  (let* ((code (coerce *code* 'vector))
          (changed nil))
-    (loop
-      (when (null (cdr tail))
-        (return))
-      (let ((this-opcode (instruction-opcode (car tail)))
-            (next-opcode (instruction-opcode (cadr tail))))
+    (dotimes (i (1- (length code)))
+      (declare (type (unsigned-byte 16) i))
+      (let* ((this-instruction (aref code i))
+             (this-opcode (and this-instruction (instruction-opcode this-instruction)))
+             (next-instruction (aref code (1+ i)))
+             (next-opcode (and next-instruction (instruction-opcode next-instruction))))
         (case this-opcode
           (205 ; CLEAR-VALUES
            (when (eql next-opcode 205) ; CLEAR-VALUES
-             (setf (car tail) (cadr tail)
-                   (cdr tail) (cddr tail)
-                   changed t)))
+             (setf (aref code i) nil)
+             (setf changed t)))
           (178 ; GETSTATIC
            (when (eql next-opcode 87) ; POP
-             (setf (car tail) (caddr tail)
-                   (cdr tail) (cdddr tail)
-                   changed t)))))
-      (setf tail (cdr tail)))
+             (setf (aref code i) nil)
+             (setf (aref code (1+ i)) nil)
+             (setf changed t))))))
     (when changed
-      (setf *code* code)
+      (setf *code* (delete nil code))
       t)))
 
-(defvar *delete-unreachable-code-flag* t)
-
 (defun delete-unreachable-code ()
-  (when *delete-unreachable-code-flag*
-      ;; Look for unreachable code after GOTO.
-      (unless (listp *code*)
-        (setf *code* (coerce *code* 'list)))
-      (let* ((code *code*)
-             (tail code)
-             (locally-changed-p nil)
-             (after-goto nil))
-        (loop
-          (when (null tail)
-            (return))
-          (let ((instruction (car tail)))
-            (cond (after-goto
-                   (if (= (instruction-opcode instruction) 202) ; LABEL
-                       (setf after-goto nil)
-                       ;; Unreachable.
-                       (progn
-                         (setf (car tail) nil)
-                         (setf locally-changed-p t))))
-                  ((= (instruction-opcode instruction) 167) ; GOTO
-                   (setf after-goto t))))
-          (setf tail (cdr tail)))
-        (when locally-changed-p
-          (setf *code* (delete nil code))
-          t))))
+  ;; Look for unreachable code after GOTO.
+  (let* ((code (coerce *code* 'vector))
+         (changed nil)
+         (after-goto nil))
+    (dotimes (i (length code))
+      (declare (type (unsigned-byte 16) i))
+      (let ((instruction (aref code i)))
+        (cond (after-goto
+               (if (= (instruction-opcode instruction) 202) ; LABEL
+                   (setf after-goto nil)
+                   ;; Unreachable.
+                   (progn
+                     (setf (aref code i) nil)
+                     (setf changed t))))
+              ((= (instruction-opcode instruction) 167) ; GOTO
+               (setf after-goto t)))))
+    (when changed
+      (setf *code* (delete nil code))
+      t)))
 
 (defvar *enable-optimization* t)
 
 (defun optimize-code ()
   (unless *enable-optimization*
-    (sys::%format t "optimizations are disabled~%"))
+    (format t "optimizations are disabled~%"))
   (when *enable-optimization*
     (when *compiler-debug*
-      (sys::%format t "----- before optimization -----~%")
+      (format t "----- before optimization -----~%")
       (print-code))
     (loop
       (let ((changed-p nil))
@@ -1976,7 +1989,7 @@
         (setf changed-p (or (delete-unreachable-code) changed-p))
         (unless changed-p
           (return))))
-    (unless (typep *code* 'vector)
+    (unless (vectorp *code*)
       (setf *code* (coerce *code* 'vector)))
     (when *compiler-debug*
       (sys::%format t "----- after optimization -----~%")
@@ -2656,13 +2669,11 @@
 (defun compile-function-call-1 (op args target representation)
   (let ((arg (first args)))
     (when (eq op '1+)
-      (return-from compile-function-call-1 (p2-plus (list '+ arg 1)
-                                                    :target target
-                                                    :representation representation)))
+      (p2-plus (list '+ arg 1) :target target :representation representation)
+      (return-from compile-function-call-1 t))
     (when (eq op '1-)
-      (return-from compile-function-call-1 (p2-minus (list '- arg 1)
-                                                     :target target
-                                                     :representation representation)))
+      (p2-minus (list '- arg 1) :target target :representation representation)
+      (return-from compile-function-call-1 t))
     (let ((s (sys:gethash-2op-1ret op unary-operators)))
       (cond (s
              (compile-form arg :target :stack)
@@ -4835,6 +4846,10 @@
               (logxor-derive-type (%cdr form)))
              (-
               (derive-type-minus (%cdr form)))
+             (1-
+              (derive-type-minus (list (%cadr form) 1)))
+             (1+
+              (derive-type-plus (list (%cadr form) 1)))
              (MIN
               (derive-type-min (%cdr form)))
              (THE
@@ -4937,6 +4952,20 @@
            (type2 (derive-type (%cadr args))))
        (cond ((and (subtypep type1 '(integer 0 #.most-positive-fixnum))
                    (subtypep type2 '(integer 0 #.most-positive-fixnum)))
+              'fixnum)
+             (t
+              t))))
+    (t
+     t)))
+
+(defun derive-type-plus (args)
+  (case (length args)
+    (2
+     (let ((type1 (derive-type (%car args)))
+           (type2 (derive-type (%cadr args))))
+       ;; FIXME
+       (cond ((and (subtypep type1 '(unsigned-byte 16))
+                   (subtypep type2 '(unsigned-byte 16)))
               'fixnum)
              (t
               t))))
@@ -5092,7 +5121,6 @@
      (compile-function-call form target representation))))
 
 (defun p2-min/max (form &key (target :stack) representation)
-  (finish-output)
   (cond ((= (length form) 3)
          (let* ((args (%cdr form))
                 (arg1 (%car args))
@@ -5100,20 +5128,26 @@
                 (type1 (derive-type arg1))
                 (type2 (derive-type arg2)))
            (cond ((and (subtypep type1 'fixnum) (subtypep type2 'fixnum))
-                  (when target
-                    (unless (eq representation :unboxed-fixnum)
-                      (emit 'new +lisp-fixnum-class+)
-                      (emit 'dup))
-                    (compile-form arg1 :target :stack :representation :unboxed-fixnum)
-                    (maybe-emit-clear-values arg1)
-                    (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-                    (maybe-emit-clear-values arg2)
-                    (emit-invokestatic "java/lang/Math"
-                                       (if (eq (%car form) 'min) "min" "max")
-                                       '("I" "I") "I")
-                    (unless (eq representation :unboxed-fixnum)
-                      (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
-                    (emit-move-from-stack target representation)))
+                  (cond (target
+                          (unless (eq representation :unboxed-fixnum)
+                            (emit 'new +lisp-fixnum-class+)
+                            (emit 'dup))
+                          (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+                          (maybe-emit-clear-values arg1)
+                          (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+                          (maybe-emit-clear-values arg2)
+                          (emit-invokestatic "java/lang/Math"
+                                             (if (eq (%car form) 'min) "min" "max")
+                                             '("I" "I") "I")
+                          (unless (eq representation :unboxed-fixnum)
+                            (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+                          (emit-move-from-stack target representation))
+                        (t
+                         ;; No target.
+                         (compile-form arg1 :target nil)
+                         (maybe-emit-clear-values arg1)
+                         (compile-form arg2 :target nil)
+                         (maybe-emit-clear-values arg2))))
                  (t
                   (compile-function-call form target representation)))))
         (t
