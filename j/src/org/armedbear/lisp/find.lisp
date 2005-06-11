@@ -1,7 +1,7 @@
 ;;; find.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: find.lisp,v 1.12 2005-06-10 19:28:00 piso Exp $
+;;; $Id: find.lisp,v 1.13 2005-06-11 23:46:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -193,9 +193,7 @@
 
 (defun find (item sequence &key from-end (test #'eql) test-not (start 0)
                   end key)
-  (let ((end (or end (length sequence))))
-    (require-type start '(integer 0 #.most-positive-fixnum))
-    (require-type end '(integer 0 #.most-positive-fixnum))
+  (let ((end (check-sequence-bounds sequence start end)))
     (if (listp sequence)
         (list-find* item sequence from-end test test-not start end key)
         (vector-find* item sequence from-end test test-not start end key))))
