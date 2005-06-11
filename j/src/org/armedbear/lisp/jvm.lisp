@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.482 2005-06-11 03:40:01 piso Exp $
+;;; $Id: jvm.lisp,v 1.483 2005-06-11 12:28:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2165,13 +2165,7 @@
     (setf (method-max-locals constructor) 1)
     (emit 'aload_0) ;; this
     (cond ((equal super +lisp-compiled-function-class+)
-           (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
-                  (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
-                  (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
-                  (emit-invokestatic +lisp-class+ "internInPackage"
-                                     (list +java-string+ +java-string+) +lisp-symbol+))
-                 (t
-                  (emit 'aconst_null)))
+           (emit-constructor-lambda-name lambda-name)
            (emit-constructor-lambda-list args)
            (emit-push-nil) ;; body
            (emit 'aconst_null) ;; environment
@@ -2198,7 +2192,6 @@
            (emit-constructor-lambda-list args)
            (emit-invokespecial-init super (list +lisp-object+ +lisp-object+)))
           ((equal super +lisp-ctf-class+)
-           (emit 'aload_0) ;; this
            (emit-constructor-lambda-list args)
            (emit-invokespecial-init super (list +lisp-object+)))
           (t
