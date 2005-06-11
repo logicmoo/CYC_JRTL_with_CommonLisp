@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: fixme.lisp,v 1.33 2005-05-22 19:47:25 piso Exp $
+;;; $Id: fixme.lisp,v 1.34 2005-06-11 23:48:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,9 +27,11 @@
              decls)))
 
 (defun proclaim (declaration-specifier)
-  (require-type (car declaration-specifier) 'symbol)
+  (unless (symbolp (car declaration-specifier))
+    (%type-error (car declaration-specifier) 'symbol))
   ;; (cdr declaration-specifier) must be a proper list.
-  (require-type (cddr declaration-specifier) 'list)
+  (unless (listp (cddr declaration-specifier))
+    (%type-error (cddr declaration-specifier) 'list))
   (case (car declaration-specifier)
     (SPECIAL
      (dolist (name (cdr declaration-specifier))
