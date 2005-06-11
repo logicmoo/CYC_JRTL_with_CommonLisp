@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.481 2005-06-10 19:26:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.482 2005-06-11 03:40:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2136,21 +2136,35 @@
   code
   handlers)
 
+(defun emit-constructor-lambda-name (lambda-name)
+  (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
+         (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
+         (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
+         (emit-invokestatic +lisp-class+ "internInPackage"
+                            (list +java-string+ +java-string+) +lisp-symbol+))
+        (t
+         ;; No name.
+         (emit-push-nil))))
+
+(defun emit-constructor-lambda-list (lambda-list)
+  (let* ((*print-level* nil)
+         (*print-length* nil)
+         (s (sys::%format nil "~S" lambda-list)))
+    (emit 'ldc (pool-string s))
+    (emit-invokestatic +lisp-class+ "readObjectFromString"
+                       (list +java-string+) +lisp-object+)))
+
 (defun make-constructor (super lambda-name args)
-;;   (sys::%format t "make-constructor (length *static-code*) = ~S~%" (length *static-code*))
   (let* ((*compiler-debug* nil) ; We don't normally need to see debugging output for constructors.
          (constructor (make-method :name "<init>"
                                    :descriptor "()V"))
          (*code* ())
          (*handlers* nil))
-    (dformat t "make-constructor super = ~S~%" super)
     (setf (method-name-index constructor) (pool-name (method-name constructor)))
     (setf (method-descriptor-index constructor) (pool-name (method-descriptor constructor)))
     (setf (method-max-locals constructor) 1)
+    (emit 'aload_0) ;; this
     (cond ((equal super +lisp-compiled-function-class+)
-           (emit 'aload_0) ;; this
-;;            (emit 'aconst_null) ;; name
-
            (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
                   (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
                   (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
@@ -2158,93 +2172,34 @@
                                      (list +java-string+ +java-string+) +lisp-symbol+))
                  (t
                   (emit 'aconst_null)))
-
-           (let* ((*print-level* nil)
-                  (*print-length* nil)
-                  (s (sys::%format nil "~S" args)))
-             (emit 'ldc (pool-string s))
-             (emit-invokestatic +lisp-class+ "readObjectFromString"
-                                (list +java-string+) +lisp-object+))
+           (emit-constructor-lambda-list args)
            (emit-push-nil) ;; body
            (emit 'aconst_null) ;; environment
            (emit-invokespecial-init super
                                     (list +lisp-object+ +lisp-object+
                                           +lisp-object+ +lisp-environment+)))
           ((equal super +lisp-primitive-class+)
-           (emit 'aload_0) ; this
-           (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
-                  (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
-                  (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
-                  (emit-invokestatic +lisp-class+ "internInPackage"
-                                     (list +java-string+ +java-string+) +lisp-symbol+))
-                 (t
-                  (emit-push-nil))) ; no name
-           (let* ((*print-level* nil)
-                  (*print-length* nil)
-                  (s (sys::%format nil "~S" args)))
-             (emit 'ldc (pool-string s))
-             (emit-invokestatic +lisp-class+ "readObjectFromString"
-                                (list +java-string+) +lisp-object+))
+           (emit-constructor-lambda-name lambda-name)
+           (emit-constructor-lambda-list args)
            (emit-invokespecial-init super (list +lisp-object+ +lisp-object+)))
           ((equal super "org/armedbear/lisp/Primitive0R")
+           (emit-constructor-lambda-name lambda-name)
            (push '&REST args)
-           (emit 'aload_0) ; this
-           (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
-                  (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
-                  (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
-                  (emit-invokestatic +lisp-class+ "internInPackage"
-                                     (list +java-string+ +java-string+) +lisp-symbol+))
-                 (t
-                  (emit-push-nil))) ; no name
-           (let* ((*print-level* nil)
-                  (*print-length* nil)
-                  (s (sys::%format nil "~S" args)))
-             (emit 'ldc (pool-string s))
-             (emit-invokestatic +lisp-class+ "readObjectFromString"
-                                (list +java-string+) +lisp-object+))
+           (emit-constructor-lambda-list args)
            (emit-invokespecial-init super (list +lisp-object+ +lisp-object+)))
           ((equal super "org/armedbear/lisp/Primitive1R")
+           (emit-constructor-lambda-name lambda-name)
            (setf args (list (first args) '&REST (second args)))
-           (emit 'aload_0) ; this
-           (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
-                  (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
-                  (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
-                  (emit-invokestatic +lisp-class+ "internInPackage"
-                                     (list +java-string+ +java-string+) +lisp-symbol+))
-                 (t
-                  (emit-push-nil))) ; no name
-           (let* ((*print-level* nil)
-                  (*print-length* nil)
-                  (s (sys::%format nil "~S" args)))
-             (emit 'ldc (pool-string s))
-             (emit-invokestatic +lisp-class+ "readObjectFromString"
-                                (list +java-string+) +lisp-object+))
+           (emit-constructor-lambda-list args)
            (emit-invokespecial-init super (list +lisp-object+ +lisp-object+)))
           ((equal super "org/armedbear/lisp/Primitive2R")
+           (emit-constructor-lambda-name lambda-name)
            (setf args (list (first args) (second args) '&REST (third args)))
-           (emit 'aload_0) ; this
-           (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
-                  (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
-                  (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
-                  (emit-invokestatic +lisp-class+ "internInPackage"
-                                     (list +java-string+ +java-string+) +lisp-symbol+))
-                 (t
-                  (emit-push-nil))) ; no name
-           (let* ((*print-level* nil)
-                  (*print-length* nil)
-                  (s (sys::%format nil "~S" args)))
-             (emit 'ldc (pool-string s))
-             (emit-invokestatic +lisp-class+ "readObjectFromString"
-                                (list +java-string+) +lisp-object+))
+           (emit-constructor-lambda-list args)
            (emit-invokespecial-init super (list +lisp-object+ +lisp-object+)))
           ((equal super +lisp-ctf-class+)
            (emit 'aload_0) ;; this
-           (let* ((*print-level* nil)
-                  (*print-length* nil)
-                  (s (sys::%format nil "~S" args)))
-             (emit 'ldc (pool-string s))
-             (emit-invokestatic +lisp-class+ "readObjectFromString"
-                                (list +java-string+) +lisp-object+))
+           (emit-constructor-lambda-list args)
            (emit-invokespecial-init super (list +lisp-object+)))
           (t
            (aver nil)))
