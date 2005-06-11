@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.10 2005-05-25 12:25:57 piso Exp $
+;;; $Id: known-functions.lisp,v 1.11 2005-06-11 23:45:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -90,5 +90,7 @@
 (declaim (ftype (function * function) make-macro))
 
 (declaim (ftype (function * t) %set-arglist))
+
+(declaim (ftype (function * t) %type-error check-sequence-bounds))
 
 (provide '#:known-functions)

@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.30 2005-06-10 19:28:23 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.31 2005-06-11 23:41:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,8 +21,20 @@
 
 (export 'require-type)
 
-(defun require-type (arg type)
+(defun %type-error (datum expected-type)
+  (error 'type-error :datum datum :expected-type expected-type))
+
+(defun check-sequence-bounds (sequence start end)
   (declare (optimize speed))
+  (unless (fixnump start)
+    (%type-error start 'fixnum))
+  (if end
+      (unless (fixnump end)
+        (%type-error end 'fixnum))
+      (setf end (length sequence)))
+  end)
+
+(defun require-type (arg type)
   (if (typep arg type)
       arg
       (error 'simple-type-error
