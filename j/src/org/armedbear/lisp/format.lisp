@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: format.lisp,v 1.26 2005-05-12 18:09:12 piso Exp $
+;;; $Id: format.lisp,v 1.27 2005-06-12 15:08:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -197,38 +197,61 @@
          (let* ((s (sys:float-string x))
                 (length (length s))
                 (index (position #\. s)))
+
+           (when (and (< x 1)
+                      (> length 0)
+                      (eql (schar s 0) #\0))
+             (setf s (subseq s 1)
+                   length (length s)
+                   index (position #\. s)))
            (when fdigits
              ;; "Leading zeros are not permitted, except that a single zero
              ;; digit is output before the decimal point if the printed value
              ;; is less than one, and this single zero digit is not output at
              ;; all if w=d+1."
-             (when (and width
-                        (<= width (1+ fdigits))
-                        (< x 1)
-                        (> length 0)
-                        (eql (schar s 0) #\0))
-               ;; Remove the leading zero.
-               (setf s (subseq s 1)
-                     length (length s)
-                     index (position #\. s)))
              (let ((actual-fdigits (- length index 1)))
-               (when (< actual-fdigits fdigits)
-                 ;; Add the required number of trailing zeroes.
-                 (setf s (concatenate 'string s
-                                      (make-string (- fdigits actual-fdigits)
-                                                   :initial-element #\0))
-                       length (length s)))))
-           (when (and width
-                      (> length width))
+               (cond ((< actual-fdigits fdigits)
+                      ;; Add the required number of trailing zeroes.
+                      (setf s (concatenate 'string s
+                                           (make-string (- fdigits actual-fdigits)
+                                                        :initial-element #\0))
+                            length (length s)))
+                     ((> actual-fdigits fdigits)
+                      (let* ((desired-length (+ index 1 fdigits))
+                             (c (schar s desired-length)))
+                        (setf s (subseq s 0 (+ index 1 fdigits))
+                              length (length s)
+                              index (position #\. s))
+                        (when (char>= c #\5)
+                          (setf s (round-up s)
+                                length (length s)
+                                index (position #\. s))))))))
+           (when (and width (> length width))
              ;; The string is too long. Shorten it by removing insignificant
              ;; trailing zeroes if possible.
              (let ((minimum-width (+ (1+ index) (or fdigits 0))))
+               (when (< minimum-width width)
+                 (setf minimum-width width))
                (when (> length minimum-width)
                  ;; But we don't want to shorten e.g. "1.7d100"...
                  (when (every #'digit-char-p (subseq s (1+ index)))
-                   (setf s (subseq s 0 minimum-width)
-                         length minimum-width)))))
+                   (let ((c (schar s minimum-width)))
+                     (setf s (subseq s 0 minimum-width)
+                           length minimum-width)
+                     (when (char>= c #\5)
+                       (setf s (round-up s)
+                             length (length s)
+                             index (position #\. s))))))))
            (values s length (eql index 0) (eql index (1- length)) index)))))
+
+(defun round-up (string)
+  (let* ((index (position #\. string))
+         (n (read-from-string (remove #\. string)))
+         (s (princ-to-string (incf n))))
+    (cond ((null index)
+           s)
+          (t
+           (concatenate 'string (subseq s 0 index) "." (subseq s index))))))
 
 (defun scale-exponent (original-x)
   (let* ((x (coerce original-x 'long-float)))
@@ -2161,13 +2184,14 @@
     nil)
    (t
     (let ((spaceleft w))
-      (when (and w (or atsign (minusp number)))
+      (when (and w (or atsign (minusp (float-sign number))))
         (decf spaceleft))
       (multiple-value-bind (str len lpoint tpoint)
         (sys::flonum-to-string (abs number) spaceleft d k)
 	;;if caller specifically requested no fraction digits, suppress the
 	;;optional trailing zero
-	(when (and d (zerop d)) (setq tpoint nil))
+	(when (and d (zerop d))
+          (setf tpoint nil))
 	(when w
 	  (decf spaceleft len)
 	  ;;optional leading zero
@@ -2190,17 +2214,7 @@
                       (write-char #\- stream))
                      (atsign
                       (write-char #\+ stream)))
-	       (when lpoint
-                 (write-char #\0 stream)
-                 (when spaceleft
-                     (decf spaceleft)))
-               (when (and w (null d) (< spaceleft 0))
-                 ;; "A value is chosen for d in such a way that as many
-                 ;; digits as possible may be printed subject to the width
-                 ;; constraint imposed by the parameter w ..."
-                 (let ((index (position #\. str)))
-                   (when index
-                     (setf str (subseq str 0 (1+ index))))))
+	       (when lpoint (write-char #\0 stream))
 	       (write-string str stream)
 	       (when tpoint (write-char #\0 stream))
 	       nil)))))))
