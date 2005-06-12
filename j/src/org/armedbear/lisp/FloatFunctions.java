@@ -2,7 +2,7 @@
  * FloatFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: FloatFunctions.java,v 1.3 2005-06-12 11:57:47 piso Exp $
+ * $Id: FloatFunctions.java,v 1.4 2005-06-12 14:46:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,21 +277,49 @@ public final class FloatFunctions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof SingleFloat) {
-                String s1 = String.valueOf(((SingleFloat)arg).value);
-                String s2 = s1.replace('E', 'f');
-                if (s1 != s2 || _PRINT_READABLY_.symbolValue() == NIL)
-                    return new SimpleString(s2);
-                return new SimpleString(s2.concat("f0"));
+            final String s1;
+            if (arg instanceof SingleFloat)
+                s1 = String.valueOf(((SingleFloat)arg).value);
+            else if (arg instanceof DoubleFloat)
+                s1 = String.valueOf(((DoubleFloat)arg).value);
+            else
+                return signal(new TypeError(arg, Symbol.FLOAT));
+            int i = s1.indexOf('E');
+            if (i < 0)
+                return new SimpleString(s1);
+            String s2 = s1.substring(0, i);
+            int exponent = Integer.parseInt(s1.substring(i + 1));
+            if (exponent == 0)
+                return new SimpleString(s2);
+            int index = s2.indexOf('.');
+            if (index < 0)
+                return new SimpleString(s2);
+            StringBuffer sb = new StringBuffer(s2);
+            if (index >= 0)
+                sb.deleteCharAt(index);
+            // Now we've got just the digits in the StringBuffer.
+            if (exponent > 0) {
+                int newIndex = index + exponent;
+                if (newIndex < sb.length())
+                    sb.insert(newIndex, '.');
+                else if (newIndex == sb.length())
+                    sb.append('.');
+                else {
+                    // We need to add some zeros.
+                    while (newIndex > sb.length())
+                        sb.append('0');
+                    sb.append('.');
+                }
+            } else {
+                Debug.assertTrue(exponent < 0);
+                int newIndex = index + exponent;
+                while (newIndex < 0) {
+                    sb.insert(0, '0');
+                    ++newIndex;
+                }
+                sb.insert(0, '.');
             }
-            if (arg instanceof DoubleFloat) {
-                String s1 = String.valueOf(((DoubleFloat)arg).value);
-                String s2 = s1.replace('E', 'd');
-                if (s1 != s2 || _PRINT_READABLY_.symbolValue() == NIL)
-                    return new SimpleString(s2);
-                return new SimpleString(s2.concat("d0"));
-            }
-            return signal(new TypeError(arg, Symbol.FLOAT));
+            return new SimpleString(sb.toString());
         }
     };
 }
