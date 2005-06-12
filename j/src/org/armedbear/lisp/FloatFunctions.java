@@ -2,7 +2,7 @@
  * FloatFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: FloatFunctions.java,v 1.2 2005-03-17 14:45:50 piso Exp $
+ * $Id: FloatFunctions.java,v 1.3 2005-06-12 11:57:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -241,8 +241,9 @@ public final class FloatFunctions extends Lisp
         }
     };
 
+    // ### float-infinity-p
     private static final Primitive FLOAT_INFINITY_P =
-        new Primitive("float-infinity-p", PACKAGE_SYS, false)
+        new Primitive("float-infinity-p", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -255,8 +256,9 @@ public final class FloatFunctions extends Lisp
         }
     };
 
+    // ### float-nan-p
     private static final Primitive FLOAT_NAN_P =
-        new Primitive("float-nan-p", PACKAGE_SYS, false)
+        new Primitive("float-nan-p", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -269,6 +271,7 @@ public final class FloatFunctions extends Lisp
         }
     };
 
+    // ### float-string
     private static final Primitive FLOAT_STRING =
         new Primitive("float-string", PACKAGE_SYS, true)
     {
