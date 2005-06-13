@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.234 2005-06-09 11:49:06 piso Exp $
+ * $Id: Autoload.java,v 1.235 2005-06-13 00:20:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -567,8 +567,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "disassemble-class-bytes", "disassemble_class_bytes", true);
         autoload(PACKAGE_SYS, "double-float-high-bits", "FloatFunctions");
         autoload(PACKAGE_SYS, "double-float-low-bits", "FloatFunctions");
-        autoload(PACKAGE_SYS, "float-infinity-p", "FloatFunctions");
-        autoload(PACKAGE_SYS, "float-nan-p", "FloatFunctions");
+        autoload(PACKAGE_SYS, "float-infinity-p", "FloatFunctions", true);
+        autoload(PACKAGE_SYS, "float-nan-p", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "float-string", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "function-info", "function_info");
         autoload(PACKAGE_SYS, "generic-function-argument-precedence-order","StandardGenericFunction", true);
