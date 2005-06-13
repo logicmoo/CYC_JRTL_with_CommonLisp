@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.484 2005-06-11 23:48:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.485 2005-06-13 20:13:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2630,7 +2630,6 @@
 
 (defun initialize-unary-operators ()
   (dolist (pair '((ABS             "ABS")
-                  (ATOM            "ATOM")
                   (BIT-VECTOR-P    "BIT_VECTOR_P")
                   (CADR            "cadr")
                   (CDDR            "cddr")
@@ -2660,7 +2659,6 @@
                   (SIMPLE-STRING-P "SIMPLE_STRING_P")
                   (STRING          "STRING")
                   (STRINGP         "STRINGP")
-                  (SYMBOLP         "SYMBOLP")
                   (VECTORP         "VECTORP")))
     (define-unary-operator (first pair) (second pair))))
 
@@ -4019,6 +4017,23 @@
     (emit 'goto LABEL2)
     (label LABEL1)
     (emit-push-t)
+    (label LABEL2)
+    (emit-move-from-stack target)))
+
+(defun p2-symbolp (form &key (target :stack) representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-symbolp))
+  (compile-form (cadr form) :target :stack)
+  (maybe-emit-clear-values (cadr form))
+  (emit 'instanceof +lisp-symbol-class+)
+  (let ((LABEL1 (gensym))
+        (LABEL2 (gensym)))
+    (emit 'ifeq LABEL1)
+    (emit-push-t)
+    (emit 'goto LABEL2)
+    (label LABEL1)
+    (emit-push-nil)
     (label LABEL2)
     (emit-move-from-stack target)))
 
@@ -6858,6 +6873,7 @@
   (install-p2-handler 'svref            'p2-svref)
   (install-p2-handler 'setq             'p2-setq)
   (install-p2-handler 'symbol-name      'p2-symbol-name)
+  (install-p2-handler 'symbolp          'p2-symbolp)
   (install-p2-handler 'the              'p2-the)
   (install-p2-handler 'zerop            'p2-zerop)
 
