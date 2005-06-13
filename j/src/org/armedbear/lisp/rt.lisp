@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: rt.lisp,v 1.165 2005-05-24 19:16:51 piso Exp $
+;;; $Id: rt.lisp,v 1.166 2005-06-13 21:42:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 
 (defvar *prefix*
   #-(or windows mswindows) "/home/peter/gcl/ansi-tests/"
-  #+(or windows mswindows) "C:\\ansi-tests\\")
+  #+(or windows mswindows) "C:\\cygwin\\home\\peter\\gcl\\ansi-tests\\")
 
 (defvar *compile-tests* t)
 
