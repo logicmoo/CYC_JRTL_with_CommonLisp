@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: format.lisp,v 1.27 2005-06-12 15:08:15 piso Exp $
+;;; $Id: format.lisp,v 1.28 2005-06-13 00:58:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -194,10 +194,9 @@
 	(t
          (when scale
            (setf x (* x (expt 10 scale))))
-         (let* ((s (sys:float-string x))
+         (let* ((s (float-string x))
                 (length (length s))
                 (index (position #\. s)))
-
            (when (and (< x 1)
                       (> length 0)
                       (eql (schar s 0) #\0))
@@ -2178,8 +2177,8 @@
 (defun format-fixed-aux (stream number w d k ovf pad atsign)
   (cond
    ((and (floatp number)
-         (or (sys::float-infinity-p number)
-             (sys::float-nan-p number)))
+         (or (sys:float-infinity-p number)
+             (sys:float-nan-p number)))
     (prin1 number stream)
     nil)
    (t
