@@ -1,7 +1,7 @@
 ;;; swank-abcl.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: swank-abcl.lisp,v 1.8 2005-04-30 20:04:44 piso Exp $
+;;; $Id: swank-abcl.lisp,v 1.9 2005-06-13 20:16:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -51,28 +51,29 @@
           (*load-print* nil)
           (ext:*autoload-verbose* nil))
       (ext:resolve name)))
-  (cond ((ext:source name)
-         `((,(princ-to-string name)
-            (:location
-             (:file ,(namestring (ext:source-pathname name)))
-             (:position ,(or (ext:source-file-position name) 0) t)
-             (:function-name ,(symbol-name name))))))
-        ((not (null ext:*lisp-home*))
-         (let ((tagfile (merge-pathnames "tags" ext:*lisp-home*)))
-           (when (and tagfile (probe-file tagfile))
-             (with-open-file (s tagfile)
-               (loop
-                 (let ((text (read-line s nil s)))
-                   (cond ((eq text s)
-                          (return))
-                         ((string-equal name (string (read-from-string text nil nil)))
-                          ;; Found it!
-                          (with-input-from-string (string-stream text)
-                            (let* ((symbol (read string-stream text nil nil)) ; Ignored.
-                                   (file (read string-stream text nil nil)))
-                              (declare (ignore symbol))
-                              (return `((,(princ-to-string name)
-                                         (:location
-                                          (:file ,(namestring file))))))))))))))))
-        (t
-         nil)))
+  (let ((source (ext:source name)))
+    (cond ((and source (not (eq source :top-level)))
+           `((,(princ-to-string name)
+              (:location
+               (:file ,(namestring (ext:source-pathname name)))
+               (:position ,(or (ext:source-file-position name) 0) t)
+               (:function-name ,(symbol-name name))))))
+          ((not (null ext:*lisp-home*))
+           (let ((tagfile (merge-pathnames "tags" ext:*lisp-home*)))
+             (when (and tagfile (probe-file tagfile))
+               (with-open-file (s tagfile)
+                 (loop
+                   (let ((text (read-line s nil s)))
+                     (cond ((eq text s)
+                            (return))
+                           ((string-equal name (string (read-from-string text nil nil)))
+                            ;; Found it!
+                            (with-input-from-string (string-stream text)
+                              (let* ((symbol (read string-stream text nil nil)) ; Ignored.
+                                     (file (read string-stream text nil nil)))
+                                (declare (ignore symbol))
+                                (return `((,(princ-to-string name)
+                                           (:location
+                                            (:file ,(namestring file))))))))))))))))
+          (t
+           nil))))
