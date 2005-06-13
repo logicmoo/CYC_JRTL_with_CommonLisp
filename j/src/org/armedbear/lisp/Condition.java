@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.32 2005-06-09 18:56:57 piso Exp $
+ * $Id: Condition.java,v 1.33 2005-06-13 00:16:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,6 +135,11 @@ public class Condition extends StandardObject
             String s = getMessage();
             if (s != null)
                 return s;
+            if (formatControl instanceof Function) {
+                StringOutputStream stream = new StringOutputStream();
+                Symbol.APPLY.execute(formatControl, stream, formatArguments);
+                return stream.getString().getStringValue();
+            }
             if (formatControl != NIL)
                 return format(formatControl, formatArguments);
         }
