@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.31 2005-06-11 23:41:47 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.32 2005-06-14 17:56:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -83,13 +83,16 @@
             (return-from normalize-type '(string *)))
            (SIMPLE-STRING
             (return-from normalize-type '(simple-string *)))
+           ((nil)
+            (return-from normalize-type nil))
            (t
             (unless (get type 'deftype-definition)
               (return-from normalize-type type)))))
         ((classp type)
-         (when (eq (%class-name type) 'fixnum)
-           (return-from normalize-type
-                        '(integer #.most-negative-fixnum #.most-positive-fixnum))))
+         (return-from normalize-type
+                      (if (eq (%class-name type) 'fixnum)
+                          '(integer #.most-negative-fixnum #.most-positive-fixnum)
+                          type)))
         ((and (consp type)
               (memq (%car type) '(and or not eql member satisfies mod values)))
          (return-from normalize-type type)))
