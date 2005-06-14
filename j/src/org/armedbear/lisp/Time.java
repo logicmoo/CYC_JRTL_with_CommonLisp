@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Time.java,v 1.27 2005-06-10 15:26:30 piso Exp $
+ * $Id: Time.java,v 1.28 2005-06-14 14:07:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,7 +120,7 @@ public final class Time extends Lisp
         }
     };
 
-    // ### default-time-zone
+    // ### default-time-zone => offset daylight-p
     private static final Primitive DEFAULT_TIME_ZONE =
         new Primitive("default-time-zone", PACKAGE_SYS, false)
     {
@@ -130,11 +130,15 @@ public final class Time extends Lisp
             //int offset = tz.getOffset(System.currentTimeMillis());
             // Classpath hasn't implemented TimeZone.getOffset(long).
             int rawOffset = tz.getRawOffset();
-            if (tz.inDaylightTime(new Date(System.currentTimeMillis())))
+            final boolean inDaylightTime =
+                tz.inDaylightTime(new Date(System.currentTimeMillis()));
+            if (inDaylightTime)
                 rawOffset += tz.getDSTSavings();
             // "Time zone values increase with motion to the west..."
             // Convert milliseconds to hours.
-            return new Fixnum(- rawOffset).divideBy(new Fixnum(3600000));
+            return LispThread.currentThread().setValues(
+                new Fixnum(- rawOffset).divideBy(new Fixnum(3600000)),
+                inDaylightTime ? T : NIL);
         }
     };
 }
