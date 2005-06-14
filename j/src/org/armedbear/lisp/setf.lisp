@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: setf.lisp,v 1.56 2005-05-19 15:07:56 piso Exp $
+;;; $Id: setf.lisp,v 1.57 2005-06-14 18:46:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@
                       (if (functionp inverse)
                           `(funcall ,inverse ,@(cdr place) ,value-form)
                           `(,inverse ,@(cdr place) ,value-form))
-                      (if (cdr store-vars)
+                      (if (or (null store-vars) (cdr store-vars))
                           `(let* (,@(mapcar #'list dummies vals))
                              (multiple-value-bind ,store-vars ,value-form
                                ,setter))
@@ -85,7 +85,7 @@
                                     ,(list (car store-vars) value-form))
                                ,setter)))))))))
      ((oddp count)
-      (error "Odd number of args to SETF"))
+      (error "Odd number of arguments to SETF."))
      (t
       (do ((a args (cddr a)) (l nil))
           ((null a) `(progn ,@(nreverse l)))
