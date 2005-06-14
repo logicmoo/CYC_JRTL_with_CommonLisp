@@ -1,7 +1,7 @@
 ;;; time.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: time.lisp,v 1.1 2003-09-29 17:59:26 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: time.lisp,v 1.2 2005-06-14 14:07:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defconstant seconds-in-week (* 60 60 24 7))
 (defconstant weeks-offset 2145)
@@ -37,48 +37,43 @@
 ;;; information is ignored. The daylight saving time flag is nil if time-zone
 ;;; is supplied.
 (defun decode-universal-time (universal-time &optional time-zone)
-  (unless time-zone
-    (setf time-zone (default-time-zone)))
-  (multiple-value-bind (weeks secs)
-    (truncate (+ universal-time seconds-offset)
-              seconds-in-week)
-    (let* ((weeks (+ weeks weeks-offset))
-	   (second NIL)
-	   (minute NIL)
-	   (hour NIL)
-	   (date NIL)
-	   (month NIL)
-	   (year NIL)
-	   (day NIL)
-	   (daylight NIL)
-	   (timezone (* time-zone 60)))
-      (multiple-value-bind (t1 seconds) (truncate secs 60)
-	(setq second seconds)
-	(setq t1 (- t1 timezone))
-	(let* ((tday (if (< t1 0)
-			 (1- (truncate (1+ t1) minutes-per-day))
-			 (truncate t1 minutes-per-day))))
-	  (multiple-value-setq (hour minute)
-                               (truncate (- t1 (* tday minutes-per-day)) 60))
-	  (let* ((t2 (1- (* (+ (* weeks 7) tday november-17-1858) 4)))
-		 (tcent (truncate t2 quarter-days-per-century)))
-	    (setq t2 (mod t2 quarter-days-per-century))
-	    (setq t2 (+ (- t2 (mod t2 4)) 3))
-	    (setq year (+ (* tcent 100) (truncate t2 quarter-days-per-year)))
-	    (let ((days-since-mar0 (1+ (truncate (mod t2 quarter-days-per-year)
-						 4))))
-	      (setq day (mod (+ tday weekday-november-17-1858) 7))
-	      (let ((t3 (+ (* days-since-mar0 5) 456)))
-		(cond ((>= t3 1989)
-		       (setq t3 (- t3 1836))
-		       (setq year (1+ year))))
-		(multiple-value-setq (month t3) (truncate t3 153))
-		(setq date (1+ (truncate t3 5))))))))
-      (values second minute hour date month year day
-	      daylight
-	      (if daylight
-		  (1+ (/ timezone 60))
-		  (/ timezone 60))))))
+  (let (seconds-west daylight)
+    (if time-zone
+        (setf seconds-west (* time-zone 3600)
+              daylight nil)
+        (multiple-value-bind (time-zone daylight-p) (default-time-zone)
+          (setf seconds-west (* time-zone 3600)
+                daylight daylight-p)))
+    (multiple-value-bind (weeks secs)
+        (truncate (+ (- universal-time seconds-west) seconds-offset)
+                  seconds-in-week)
+      (let ((weeks (+ weeks weeks-offset)))
+        (multiple-value-bind (t1 second)
+            (truncate secs 60)
+          (let ((tday (truncate t1 minutes-per-day)))
+            (multiple-value-bind (hour minute)
+                (truncate (- t1 (* tday minutes-per-day)) 60)
+              (let* ((t2 (1- (* (+ (* weeks 7) tday november-17-1858) 4)))
+                     (tcent (truncate t2 quarter-days-per-century)))
+                (setq t2 (mod t2 quarter-days-per-century))
+                (setq t2 (+ (- t2 (mod t2 4)) 3))
+                (let* ((year (+ (* tcent 100)
+                                (truncate t2 quarter-days-per-year)))
+                       (days-since-mar0
+                        (1+ (truncate (mod t2 quarter-days-per-year) 4)))
+                       (day (mod (+ tday weekday-november-17-1858) 7))
+                       (t3 (+ (* days-since-mar0 5) 456)))
+                  (cond ((>= t3 1989)
+                         (setq t3 (- t3 1836))
+                         (setq year (1+ year))))
+                  (multiple-value-bind (month t3)
+                      (truncate t3 153)
+                    (let ((date (1+ (truncate t3 5))))
+                      (values second minute hour date month year day
+                              daylight
+                              (if daylight
+                                  (1+ (/ seconds-west 3600))
+                                  (/ seconds-west 3600))))))))))))))
 
 (defun get-decoded-time ()
   (decode-universal-time (get-universal-time)))
@@ -119,6 +114,20 @@
 		      (leap-years-before year))
 		  (* (- year 1900) 365)))
 	 (hours (+ hour (* days 24))))
-    (unless time-zone
-      (setf time-zone (default-time-zone)))
-    (+ second (* (+ minute (* (+ hours time-zone) 60)) 60))))
+    (cond (time-zone
+           (+ second (* (+ minute (* (+ hours time-zone) 60)) 60)))
+          ((> year 2037)
+           (labels ((leap-year-p (year)
+                      (cond ((zerop (mod year 400)) t)
+                            ((zerop (mod year 100)) nil)
+                            ((zerop (mod year 4)) t)
+                            (t nil))))
+             (let* ((fake-year (if (leap-year-p year) 2036 2037))
+                    (fake-time (encode-universal-time second minute hour
+                                                      date month fake-year)))
+               (+ fake-time
+                 (* 86400 (+ (* 365 (- year fake-year))
+                             (- (leap-years-before year)
+                                (leap-years-before fake-year))))))))
+          (t
+           (+ second (* (+ minute (* (+ hours (default-time-zone)) 60)) 60))))))
