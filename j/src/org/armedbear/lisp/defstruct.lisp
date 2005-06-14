@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.69 2005-05-16 16:03:41 piso Exp $
+;;; $Id: defstruct.lisp,v 1.70 2005-06-14 00:53:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -476,6 +476,7 @@
     (parse-name-and-options (if (atom name-and-options)
                                 (list name-and-options)
                                 name-and-options))
+    (check-declaration-type *dd-name*)
     (if *dd-constructors*
         (dolist (constructor *dd-constructors*)
           (unless (cadr constructor)

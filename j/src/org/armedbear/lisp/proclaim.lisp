@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: proclaim.lisp,v 1.1 2005-06-13 19:24:27 piso Exp $
+;;; $Id: proclaim.lisp,v 1.2 2005-06-14 00:53:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,12 +19,27 @@
 
 (in-package #:system)
 
-(export 'proclaimed-ftype)
+(export '(check-declaration-type proclaimed-ftype))
 
 (defmacro declaim (&rest decls)
 `(eval-when (:compile-toplevel :load-toplevel :execute)
    ,@(mapcar (lambda (decl) `(proclaim ',decl))
              decls)))
+
+(defvar *declaration-types* (make-hash-table :test 'eq))
+
+(defun declaration-error (name)
+  (error 'simple-error
+         :format-control "The symbol ~S cannot be both the name of a type and the name of a declaration."
+         :format-arguments (list name)))
+
+;; "A symbol cannot be both the name of a type and the name of a declaration.
+;; Defining a symbol as the name of a class, structure, condition, or type,
+;; when the symbol has been declared as a declaration name, or vice versa,
+;; signals an error."
+(defun check-declaration-type (name)
+  (when (gethash-2op-1ret name *declaration-types*)
+    (declaration-error name)))
 
 (defun proclaim (declaration-specifier)
   (unless (symbolp (car declaration-specifier))
@@ -57,7 +72,13 @@
     ((INLINE NOTINLINE)
      (dolist (name (cdr declaration-specifier))
        (when (symbolp name) ; FIXME Need to support non-symbol function names.
-         (setf (get name 'jvm::%inline) (car declaration-specifier)))))))
+         (setf (get name 'jvm::%inline) (car declaration-specifier)))))
+    (DECLARATION
+     (dolist (name (cdr declaration-specifier))
+       (when (or (get name 'deftype-definition)
+                 (find-class name nil))
+         (declaration-error name))
+       (setf (gethash name *declaration-types*) name)))))
 
 (defvar *proclaimed-ftypes* (make-hash-table :test 'equal))
 

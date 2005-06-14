@@ -1,7 +1,7 @@
 ;;; deftype.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: deftype.lisp,v 1.7 2005-05-27 12:18:28 piso Exp $
+;;; $Id: deftype.lisp,v 1.8 2005-06-14 00:53:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 (in-package #:system)
 
 (defmacro deftype (name lambda-list &rest body)
+  (check-declaration-type name)
   ;; Optional and keyword parameters default to * rather than NIL.
   (when (or (memq '&optional lambda-list)
             (memq '&key lambda-list))
