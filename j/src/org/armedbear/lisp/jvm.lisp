@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.486 2005-06-13 21:43:23 piso Exp $
+;;; $Id: jvm.lisp,v 1.487 2005-06-14 17:50:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -393,15 +393,27 @@
                    (setf (variable-declared-type variable) (car decl))))))))))
     free-specials))
 
+(defun check-name (name)
+  ;; FIXME Currently this error is signalled by the precompiler.
+  (unless (symbolp name)
+    (compiler-error "The variable ~S is not a symbol."))
+  (when (constantp name)
+    (compiler-error "The name of the variable ~S is already in use to name a constant."))
+  name)
+
 (defun p1-let-vars (varlist)
   (let ((vars ()))
     (dolist (varspec varlist)
       (cond ((consp varspec)
-             (let ((name (%car varspec))
-                   (initform (p1 (cadr varspec))))
+              ;; FIXME Currently this error is signalled by the precompiler.
+             (unless (= (length varspec) 2)
+               (compiler-error "The LET binding specification ~S is invalid."
+                               varspec))
+             (let ((name (check-name (%car varspec)))
+                   (initform (p1 (%cadr varspec))))
                (push (make-variable :name name :initform initform) vars)))
             (t
-             (push (make-variable :name varspec) vars))))
+             (push (make-variable :name (check-name varspec)) vars))))
     (setf vars (nreverse vars))
     (dolist (variable vars)
       (push variable *visible-variables*)
@@ -412,14 +424,18 @@
   (let ((vars ()))
     (dolist (varspec varlist)
       (cond ((consp varspec)
+              ;; FIXME Currently this error is signalled by the precompiler.
+             (unless (= (length varspec) 2)
+               (compiler-error "The LET* binding specification ~S is invalid."
+                               varspec))
              (let* ((name (%car varspec))
-                    (initform (p1 (cadr varspec)))
-                    (var (make-variable :name name :initform initform)))
+                    (initform (p1 (%cadr varspec)))
+                    (var (make-variable :name (check-name name) :initform initform)))
                (push var vars)
                (push var *visible-variables*)
                (push var *all-variables*)))
             (t
-             (let ((var (make-variable :name varspec)))
+             (let ((var (make-variable :name (check-name varspec))))
                (push var vars)
                (push var *visible-variables*)
                (push var *all-variables*)))))
@@ -1353,19 +1369,16 @@
   (throw 'compile-defun-abort (funcall *compiler-error-bailout*)))
 
 (defun compiler-style-warn (format-control &rest format-arguments)
-;;   (incf *style-warnings*)
   (warn 'style-warning
         :format-control format-control
         :format-arguments format-arguments))
 
 (defun compiler-warn (format-control &rest format-arguments)
-;;   (incf *warnings*)
   (warn 'warning
         :format-control format-control
         :format-arguments format-arguments))
 
 (defun compiler-error (format-control &rest format-arguments)
-;;   (incf *errors*)
   (error 'compiler-error
          :format-control format-control
          :format-arguments format-arguments))
@@ -4249,31 +4262,32 @@
                            :representation representation))))
 
 (defun compile-quote (form &key (target :stack) representation)
-   (let ((obj (second form)))
-     (cond ((null obj)
-            (when target
-              (emit-push-nil)
-              (emit-move-from-stack target)))
-           ((symbolp obj)
-            (if (symbol-package obj)
-                (let ((g (declare-symbol obj)))
-                  (emit 'getstatic *this-class* g +lisp-symbol+))
-                ;; An uninterned symbol.
-                (let ((g (if *compile-file-truename*
-                             (declare-object-as-string obj)
-                             (declare-object obj))))
-                  (emit 'getstatic *this-class* g +lisp-object+)))
-            (emit-move-from-stack target))
-           ((listp obj)
-            (let ((g (if *compile-file-truename*
-                         (declare-object-as-string obj)
-                         (declare-object obj))))
-              (emit 'getstatic *this-class* g +lisp-object+)
-              (emit-move-from-stack target)))
-           ((constantp obj)
-            (compile-constant obj :target target))
-           (t
-            (compiler-unsupported "COMPILE-QUOTE: unsupported case: ~S" form)))))
+  (check-arg-count form 1) ; FIXME
+  (let ((obj (second form)))
+    (cond ((null obj)
+           (when target
+             (emit-push-nil)
+             (emit-move-from-stack target)))
+          ((symbolp obj)
+           (if (symbol-package obj)
+               (let ((g (declare-symbol obj)))
+                 (emit 'getstatic *this-class* g +lisp-symbol+))
+               ;; An uninterned symbol.
+               (let ((g (if *compile-file-truename*
+                            (declare-object-as-string obj)
+                            (declare-object obj))))
+                 (emit 'getstatic *this-class* g +lisp-object+)))
+           (emit-move-from-stack target))
+          ((listp obj)
+           (let ((g (if *compile-file-truename*
+                        (declare-object-as-string obj)
+                        (declare-object obj))))
+             (emit 'getstatic *this-class* g +lisp-object+)
+             (emit-move-from-stack target)))
+          ((constantp obj)
+           (compile-constant obj :target target))
+          (t
+           (compiler-unsupported "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
 (defun p2-rplacd (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
@@ -4505,7 +4519,7 @@
 
 (defun p2-function (form &key (target :stack) representation)
   (let ((name (second form))
-        (local-function))
+        local-function)
     (cond ((symbolp name)
            (cond ((setf local-function (find-local-function name))
                   (dformat t "p2-function 1~%")
