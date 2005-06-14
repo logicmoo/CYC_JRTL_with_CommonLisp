@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.43 2005-05-25 01:35:39 piso Exp $
+ * $Id: SpecialOperators.java,v 1.44 2005-06-14 17:55:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,8 @@ public final class SpecialOperators extends Lisp
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
+            if (args.length() != 1)
+                return signal(new WrongNumberOfArgumentsException(this));
             return args.car();
         }
     };
@@ -68,6 +70,8 @@ public final class SpecialOperators extends Lisp
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
+            if (args.length() == 0)
+                return signal(new WrongNumberOfArgumentsException(this));
             return _let(args, env, false);
         }
     };
@@ -79,6 +83,8 @@ public final class SpecialOperators extends Lisp
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
+            if (args.length() == 0)
+                return signal(new WrongNumberOfArgumentsException(this));
             return _let(args, env, true);
         }
     };
@@ -122,6 +128,10 @@ public final class SpecialOperators extends Lisp
                     LispObject value;
                     LispObject obj = varList.car();
                     if (obj instanceof Cons) {
+                        if (obj.length() > 2)
+                            return signal(new LispError("The LET* binding specification " +
+                                                        obj.writeToString() +
+                                                        " is invalid."));
                         symbol = checkSymbol(obj.car());
                         value = eval(obj.cadr(), ext, thread);
                     } else {
@@ -143,9 +153,13 @@ public final class SpecialOperators extends Lisp
                 LispObject[] vals = new LispObject[length];
                 for (int i = 0; i < length; i++) {
                     LispObject obj = varList.car();
-                    if (obj instanceof Cons)
+                    if (obj instanceof Cons) {
+                        if (obj.length() > 2)
+                            return signal(new LispError("The LET binding specification " +
+                                                        obj.writeToString() +
+                                                        " is invalid."));
                         vals[i] = eval(obj.cadr(), env, thread);
-                    else
+                    } else
                         vals[i] = NIL;
                     varList = varList.cdr();
                 }
@@ -255,7 +269,8 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### locally
-    private static final SpecialOperator LOCALLY = new SpecialOperator("locally", "&body body")
+    private static final SpecialOperator LOCALLY =
+        new SpecialOperator("locally", "&body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
