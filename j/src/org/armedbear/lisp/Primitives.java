@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.796 2005-06-09 19:30:00 piso Exp $
+ * $Id: Primitives.java,v 1.797 2005-06-14 17:54:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2453,22 +2453,24 @@ public final class Primitives extends Lisp
             final LispThread thread = LispThread.currentThread();
             LispObject result = NIL;
             Cons splice = null;
-            try {
-                while (list != NIL) {
-                    LispObject obj = thread.execute(fun, ((Cons)list).car);
-                    if (splice == null) {
-                        splice = new Cons(obj, result);
-                        result = splice;
-                    } else {
-                        Cons cons = new Cons(obj);
-                        splice.cdr = cons;
-                        splice = cons;
-                    }
-                    list = ((Cons)list).cdr;
+            while (list != NIL) {
+                Cons cons;
+                try {
+                    cons = (Cons) list;
                 }
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(list, Symbol.LIST));
+                catch (ClassCastException e) {
+                    return signal(new TypeError(list, Symbol.LIST));
+                }
+                LispObject obj = thread.execute(fun, cons.car);
+                if (splice == null) {
+                    splice = new Cons(obj, result);
+                    result = splice;
+                } else {
+                    Cons c = new Cons(obj);
+                    splice.cdr = c;
+                    splice = c;
+                }
+                list = cons.cdr;
             }
             thread._values = null;
             return result;
