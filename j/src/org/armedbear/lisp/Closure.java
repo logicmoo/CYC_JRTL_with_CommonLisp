@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.104 2005-06-09 19:05:53 piso Exp $
+ * $Id: Closure.java,v 1.105 2005-06-14 16:21:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +72,9 @@ public class Closure extends Function
         super(name, lambdaExpression.cadr());
         final LispObject lambdaList = lambdaExpression.cadr();
         setLambdaList(lambdaList);
-        Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
+        if (!(lambdaList == NIL || lambdaList instanceof Cons))
+            signal(new LispError("The lambda list " + lambdaList.writeToString() +
+                                 " is invalid."));
         boolean _andKey = false;
         boolean _allowOtherKeys = false;
         if (lambdaList instanceof Cons) {
