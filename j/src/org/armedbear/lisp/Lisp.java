@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.362 2005-06-09 19:17:12 piso Exp $
+ * $Id: Lisp.java,v 1.363 2005-06-14 12:09:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,6 +199,7 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         if (form instanceof Cons) {
+            form.length(); // Force an error if form is not a proper list.
             LispObject car = ((Cons)form).car;
             if (car instanceof Symbol) {
                 LispObject obj = env.lookupFunction(car);
