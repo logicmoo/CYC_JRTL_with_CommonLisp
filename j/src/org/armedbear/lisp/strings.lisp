@@ -1,7 +1,7 @@
 ;;; strings.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: strings.lisp,v 1.7 2004-08-15 11:25:36 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: strings.lisp,v 1.8 2005-06-14 17:57:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun string-upcase (string &key (start 0) end)
   (%string-upcase string start end))
@@ -146,7 +146,7 @@
    ends."
   (setq string (string string))
   (setq end (length string))
-  (let ((left-end) (right-end))
+  (let (left-end right-end)
     (do ((index 0 (+ index 1)))
         ((or (= index end) (not (find (aref string index) char-bag)))
          (setq left-end index)))
