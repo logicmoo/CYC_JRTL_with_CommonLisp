@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.112 2005-05-25 01:36:50 piso Exp $
+;;; $Id: precompiler.lisp,v 1.113 2005-06-14 17:56:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -495,6 +495,10 @@
   (let ((result nil))
     (dolist (var vars)
       (cond ((consp var)
+;;              (when (> (length var) 2)
+;;                (error 'program-error
+;;                       :format-control "The LET/LET* binding specification ~S is invalid."
+;;                       :format-arguments (list var)))
              (let ((v (%car var))
                    (expr (cadr var)))
                (unless (symbolp v)
