@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.34 2005-04-11 14:07:58 piso Exp $
+;;; $Id: slime.lisp,v 1.35 2005-06-15 20:55:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -301,7 +301,7 @@
 ;;      (skip-chars-forward " \n\t\f\r#")
 ;;      (let ((pkg (ignore-errors (read (current-buffer)))))
 ;;        (if pkg (format "%s" pkg))))))
-  (let (mark (current-point))
+  (let ((mark (current-point)))
      (loop
         (setf mark (search-backward "(in-package"
                                       :start mark
@@ -328,7 +328,7 @@
 
 (defun goto-source-location (name location)
   (when (eq (car location) :location)
-    (let (file position function-name)
+    (let (file position)
       (dolist (item (cdr location))
         (case (car item)
           (:file
