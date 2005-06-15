@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.104 2005-06-15 01:45:37 piso Exp $
+ * $Id: Load.java,v 1.105 2005-06-15 17:05:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -380,7 +380,8 @@ public final class Load extends Lisp
                     break;
                 LispObject result = eval(obj, env, thread);
                 if (print) {
-                    Stream out = getStandardOutput();
+                    Stream out =
+                        checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue(thread));
                     out._writeLine(result.writeToString());
                     out._finishOutput();
                 }
