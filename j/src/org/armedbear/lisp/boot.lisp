@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.227 2005-06-13 19:23:32 piso Exp $
+;;; $Id: boot.lisp,v 1.228 2005-06-15 13:43:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -297,6 +297,7 @@
 (load-system-file "compiler-macro")
 (load-system-file "subtypep")
 (load-system-file "typep")
+(load-system-file "compiler-error")
 (load-system-file "precompiler")
 
 (precompile-package "PRECOMPILER")

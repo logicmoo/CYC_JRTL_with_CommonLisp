@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.487 2005-06-14 17:50:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.488 2005-06-15 13:42:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1367,26 +1367,6 @@
   (format *error-output* "~%; Caught ERROR:~%;   ~A~2%" condition)
   (incf *errors*)
   (throw 'compile-defun-abort (funcall *compiler-error-bailout*)))
-
-(defun compiler-style-warn (format-control &rest format-arguments)
-  (warn 'style-warning
-        :format-control format-control
-        :format-arguments format-arguments))
-
-(defun compiler-warn (format-control &rest format-arguments)
-  (warn 'warning
-        :format-control format-control
-        :format-arguments format-arguments))
-
-(defun compiler-error (format-control &rest format-arguments)
-  (error 'compiler-error
-         :format-control format-control
-         :format-arguments format-arguments))
-
-(defun compiler-unsupported (format-control &rest format-arguments)
-  (error 'compiler-unsupported-feature-error
-         :format-control format-control
-         :format-arguments format-arguments))
 
 ;; "In addition to situations for which the standard specifies
 ;; that conditions of type WARNING must or might be signaled, warnings might be
@@ -6695,13 +6675,9 @@
               (compile-1 (make-compiland :name name
                                          :lambda-expression (make-compiler-error-form form)
                                          :class-file class-file)))))
-;;       (handler-bind ((warning #'handle-warning)
-;;                      (compiler-error #'handle-compiler-error))
         (compile-1 (make-compiland :name name
                                    :lambda-expression (precompile-form form t)
-                                   :class-file class-file))
-;;         )
-      )))
+                                   :class-file class-file)))))
 
 (defun load-verbose-prefix ()
   (let ((s (make-array (max sys::*load-depth* 1)
