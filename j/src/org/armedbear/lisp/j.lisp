@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: j.lisp,v 1.44 2005-05-27 11:32:12 piso Exp $
+;;; $Id: j.lisp,v 1.45 2005-06-15 20:55:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,9 @@
 
 (in-package #:j)
 
-(export '(add-hook
+(export '(*current-command*
+          *last-command*
+          add-hook
           after-save-hook
           backward-char
           backward-sexp
@@ -99,6 +101,8 @@
           with-editor
           with-other-editor
           with-single-undo))
+
+(declaim (special *current-command* *last-command*))
 
 (autoload 'emacs-mode "emacs")
 
