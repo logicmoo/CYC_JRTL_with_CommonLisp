@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.92 2005-06-15 01:42:24 piso Exp $
+;;; $Id: compile-file.lisp,v 1.93 2005-06-15 17:06:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,13 +39,7 @@
      (compiler-unsupported-feature-error (condition)
        (fresh-line)
        (%format t "; UNSUPPORTED-FEATURE: ~A~%" condition)
-       (values nil condition))
-     #+nil
-     (error (condition)
-       (fresh-line)
-       (%format t "~A Note: ~A~%" (jvm::load-verbose-prefix) condition)
-       (values nil condition))
-     ))
+       (values nil condition))))
 
 ;; Dummy function. Should never be called.
 (defun dummy (&rest ignored)
