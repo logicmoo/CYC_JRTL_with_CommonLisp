@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.490 2005-06-15 16:19:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.491 2005-06-15 17:08:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6681,13 +6681,6 @@
                                    :lambda-expression (precompile-form form t)
                                    :class-file class-file)))))
 
-;; (defun load-verbose-prefix ()
-;;   (let ((s (make-array (max sys::*load-depth* 1)
-;;                        :element-type 'character
-;;                        :initial-element #\space)))
-;;     (setf (char s 0) #\;)
-;;     s))
-
 (defvar *catch-errors* t)
 
 (defvar *in-compilation-unit* nil)
@@ -6772,29 +6765,18 @@
       (values (or name compiled-definition) warnings-p failure-p))))
 
 (defun jvm-compile (name &optional definition)
-;;   (if *catch-errors*
-;;       (let ((prefix (load-verbose-prefix)))
-;;         (handler-case
-;;             (%jvm-compile name definition)
-;;           (compiler-unsupported-feature-error
-;;            (c)
-;;            (fresh-line)
-;;            (sys::%format t "; UNSUPPORTED FEATURE: ~A~%" c)
-;;            (if name
-;;                (sys::%format t "~A Unable to compile ~S.~%" prefix name)
-;;                (sys::%format t "~A Unable to compile top-level form.~%" prefix))
-;;            (precompiler::precompile name definition))
-;;           #+nil
-;;           (error (c)
-;;                  (fresh-line)
-;;                  (sys::%format t "~A Note: ~A~%" prefix c)
-;;                  (if name
-;;                      (sys::%format t "~A Unable to compile ~S.~%" prefix name)
-;;                      (sys::%format t "~A Unable to compile top-level form.~%" prefix))
-;;                  (precompiler::precompile name definition))
-;;           ))
-;;       (%jvm-compile name definition)))
-  (%jvm-compile name definition))
+  (if *catch-errors*
+      (handler-case
+          (%jvm-compile name definition)
+        (compiler-unsupported-feature-error
+         (c)
+         (fresh-line)
+         (sys::%format t "; UNSUPPORTED FEATURE: ~A~%" c)
+         (if name
+             (sys::%format t "; Unable to compile ~S.~%" name)
+             (sys::%format t "; Unable to compile top-level form.~%"))
+         (precompiler::precompile name definition)))
+      (%jvm-compile name definition)))
 
 (defun jvm-compile-package (package-designator)
   (let ((pkg (if (packagep package-designator)
