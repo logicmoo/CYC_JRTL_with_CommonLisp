@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.91 2005-05-25 23:55:41 piso Exp $
+;;; $Id: compile-file.lisp,v 1.92 2005-06-15 01:42:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -430,6 +430,7 @@
     (with-open-file (in input-file :direction :input)
       (let* ((*compile-file-pathname* (pathname in))
              (*compile-file-truename* (truename in))
+             (*source* *compile-file-truename*)
              (*class-number* 0)
              (namestring (namestring *compile-file-truename*))
              (start (get-internal-real-time))
@@ -450,7 +451,7 @@
               (let ((*package* (find-package '#:cl)))
                 (write (list 'init-fasl :version *fasl-version*) :stream out)
                 (terpri out)
-                (write (list 'setq '*fasl-source* *compile-file-truename*) :stream out)
+                (write (list 'setq '*source* *compile-file-truename*) :stream out)
                 (terpri out))
               (loop
                 (let* ((*source-position* (file-position in))

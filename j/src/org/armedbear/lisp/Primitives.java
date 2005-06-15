@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.797 2005-06-14 17:54:41 piso Exp $
+ * $Id: Primitives.java,v 1.798 2005-06-15 01:44:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1453,10 +1453,7 @@ public final class Primitives extends Lisp
                 if (oldDefinition != null && !(oldDefinition instanceof Autoload)) {
                     LispObject oldSource =
                         Extensions.SOURCE_PATHNAME.execute(arg);
-                    LispObject currentSource =
-                        Load._FASL_SOURCE_.symbolValue(thread);
-                    if (currentSource == NIL)
-                        currentSource = _LOAD_TRUENAME_.symbolValue(thread);
+                    LispObject currentSource = _SOURCE_.symbolValue(thread);
                     if (currentSource == NIL)
                         currentSource = Keyword.TOP_LEVEL;
                     if (oldSource != NIL) {
@@ -2950,16 +2947,13 @@ public final class Primitives extends Lisp
                 Symbol symbol = (Symbol) first;
                 symbol.setSymbolFunction(second);
                 final LispThread thread = LispThread.currentThread();
-                LispObject sourcePathname = Load._FASL_SOURCE_.symbolValue(thread);
+                LispObject sourcePathname = _SOURCE_.symbolValue(thread);
                 LispObject sourcePosition = third;
-                if (sourcePathname == NIL) {
-                    sourcePathname = _LOAD_TRUENAME_.symbolValue(thread);
-                    if (sourcePathname != NIL)
-                        sourcePosition = _SOURCE_POSITION_.symbolValue(thread);
-                }
+                if (sourcePathname != NIL)
+                    sourcePosition = _SOURCE_POSITION_.symbolValue(thread);
                 if (sourcePathname == NIL)
                     sourcePathname = Keyword.TOP_LEVEL;
-                if (sourcePathname != Keyword.TOP_LEVEL && sourcePosition != NIL)
+                if (sourcePathname != Keyword.TOP_LEVEL)
                     put(symbol, Symbol._SOURCE, new Cons(sourcePathname, third));
                 else
                     put(symbol, Symbol._SOURCE, sourcePathname);

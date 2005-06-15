@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.103 2005-05-25 16:59:09 piso Exp $
+ * $Id: Load.java,v 1.104 2005-06-15 01:45:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -240,15 +240,10 @@ public final class Load extends Lisp
         return signal(new LispError("file not found: " + filename));
     }
 
-    // ### *fasl-source*
-    // internal symbol
-    public static final Symbol _FASL_SOURCE_ =
-        internSpecial("*FASL-SOURCE*", PACKAGE_SYS, NIL);
-
     // ### *fasl-version*
     // internal symbol
     private static final Symbol _FASL_VERSION_ =
-        exportConstant("*FASL-VERSION*", PACKAGE_SYS, new Fixnum(27));
+        exportConstant("*FASL-VERSION*", PACKAGE_SYS, new Fixnum(28));
 
     // ### *fasl-anonymous-package*
     // internal symbol
@@ -270,7 +265,7 @@ public final class Load extends Lisp
                     readtable.setDispatchMacroCharacter('#', ':', FASL_SHARP_COLON);
                     thread.bindSpecial(_READTABLE_, readtable);
                     thread.bindSpecial(_FASL_ANONYMOUS_PACKAGE_, NIL);
-                    thread.bindSpecial(_FASL_SOURCE_, NIL);
+                    thread.bindSpecial(_SOURCE_, NIL);
                     return T;
                 }
             }
@@ -307,6 +302,8 @@ public final class Load extends Lisp
             thread.bindSpecial(_LOAD_PATHNAME_,
                                pathname != null ? pathname : NIL);
             thread.bindSpecial(_LOAD_TRUENAME_,
+                               pathname != null ? pathname : NIL);
+            thread.bindSpecial(_SOURCE_,
                                pathname != null ? pathname : NIL);
             if (verbose) {
                 Stream out = getStandardOutput();

@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.10 2005-05-17 23:33:11 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.11 2005-06-15 01:43:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,22 +25,18 @@
   (when (and *warn-on-redefinition* (fboundp name) (not (autoloadp name)))
     (cond ((symbolp name)
            (let ((old-source (source-pathname name))
-                 (current-source (or *fasl-source*
-                                     *load-truename*
-                                     *compile-file-truename*
-                                     :top-level)))
-             (unless (equal old-source current-source)
-               (if (eq current-source :top-level)
-                   (style-warn "redefining ~S at top level" name)
-                   (let ((*package* +cl-package+))
-                     (style-warn "redefining ~S in ~S" name current-source)))))))))
+                 (current-source (or *source* :top-level)))
+             (cond ((equal old-source current-source)) ; OK
+                   (t
+                    (if (eq current-source :top-level)
+                        (style-warn "redefining ~S at top level" name)
+                        (let ((*package* +cl-package+))
+                          (style-warn "redefining ~S in ~S (originally defined in ~S)"
+                                      name current-source old-source))))))))))
 
 (defun record-source-information (name &optional source-pathname source-position)
   (unless source-pathname
-    (setf source-pathname (or *fasl-source*
-                              *load-truename*
-                              *compile-file-truename*
-                              :top-level)))
+    (setf source-pathname (or *source* :top-level)))
   (unless source-position
     (setf source-position *source-position*))
   (let ((source (if source-position
