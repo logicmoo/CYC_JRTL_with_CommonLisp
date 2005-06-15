@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.488 2005-06-15 13:42:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.489 2005-06-15 16:03:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -685,7 +685,11 @@
   (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
 
 (defun p1-quote (form)
-  (if (numberp (cadr form))
+  (unless (= (length form) 2)
+    (compiler-error "Wrong number of arguments for special operator ~A (expected 1, but received ~D)."
+                    'QUOTE
+                    (1- (length form))))
+  (if (numberp (%cadr form))
       (%cadr form)
       form))
 
@@ -4241,8 +4245,7 @@
                            :target target
                            :representation representation))))
 
-(defun compile-quote (form &key (target :stack) representation)
-  (check-arg-count form 1) ; FIXME
+(defun p2-quote (form &key (target :stack) representation)
   (let ((obj (second form)))
     (cond ((null obj)
            (when target
@@ -6107,9 +6110,6 @@
       ;; methods count
       (write-u2 (1+ (length (class-file-methods class-file))) stream)
       ;; methods
-;;       (aver (= (length (class-file-methods class-file)) 1))
-;;       (let ((execute-method (car (class-file-methods class-file))))
-;;         (write-method execute-method stream))
       (dolist (method (class-file-methods class-file))
         (write-method method stream))
       (write-method constructor stream)
@@ -6623,7 +6623,6 @@
     (values)))
 
 (defun compile-1 (compiland)
-  (dformat t "compile-1 ~S~%" (compiland-name compiland))
   (let ((*all-variables* ())
         (*closure-variables* ())
         (*current-compiland* compiland)
@@ -6671,10 +6670,13 @@
                                         :lambda-name name
                                         :lambda-list (cadr form)))
            (*compiler-error-bailout*
-            (lambda ()
-              (compile-1 (make-compiland :name name
-                                         :lambda-expression (make-compiler-error-form form)
-                                         :class-file class-file)))))
+            `(lambda ()
+               (compile-1 (make-compiland :name ',name
+                                          :lambda-expression (make-compiler-error-form ',form)
+                                          :class-file
+                                          (make-class-file :pathname ,filespec
+                                                           :lambda-name ',name
+                                                           :lambda-list (cadr ',form)))))))
         (compile-1 (make-compiland :name name
                                    :lambda-expression (precompile-form form t)
                                    :class-file class-file)))))
@@ -6709,7 +6711,7 @@
               (funcall fn)
             (unless (and (zerop (+ *errors* *warnings* *style-warnings*))
                          (null *undefined-functions*))
-              (format *error-output* "~%; Compilation unit finished~%")
+              (format *error-output* "~&; Compilation unit finished~%")
               (unless (zerop *errors*)
                 (format *error-output* ";   Caught ~D ERROR condition~P~%"
                         *errors* *errors*))
@@ -6770,28 +6772,29 @@
       (values (or name compiled-definition) warnings-p failure-p))))
 
 (defun jvm-compile (name &optional definition)
-  (if *catch-errors*
-      (let ((prefix (load-verbose-prefix)))
-        (handler-case
-            (%jvm-compile name definition)
-          (compiler-unsupported-feature-error
-           (c)
-           (fresh-line)
-           (sys::%format t "; UNSUPPORTED FEATURE: ~A~%" c)
-           (if name
-               (sys::%format t "~A Unable to compile ~S.~%" prefix name)
-               (sys::%format t "~A Unable to compile top-level form.~%" prefix))
-           (precompiler::precompile name definition))
-          #+nil
-          (error (c)
-                 (fresh-line)
-                 (sys::%format t "~A Note: ~A~%" prefix c)
-                 (if name
-                     (sys::%format t "~A Unable to compile ~S.~%" prefix name)
-                     (sys::%format t "~A Unable to compile top-level form.~%" prefix))
-                 (precompiler::precompile name definition))
-          ))
-      (%jvm-compile name definition)))
+;;   (if *catch-errors*
+;;       (let ((prefix (load-verbose-prefix)))
+;;         (handler-case
+;;             (%jvm-compile name definition)
+;;           (compiler-unsupported-feature-error
+;;            (c)
+;;            (fresh-line)
+;;            (sys::%format t "; UNSUPPORTED FEATURE: ~A~%" c)
+;;            (if name
+;;                (sys::%format t "~A Unable to compile ~S.~%" prefix name)
+;;                (sys::%format t "~A Unable to compile top-level form.~%" prefix))
+;;            (precompiler::precompile name definition))
+;;           #+nil
+;;           (error (c)
+;;                  (fresh-line)
+;;                  (sys::%format t "~A Note: ~A~%" prefix c)
+;;                  (if name
+;;                      (sys::%format t "~A Unable to compile ~S.~%" prefix name)
+;;                      (sys::%format t "~A Unable to compile top-level form.~%" prefix))
+;;                  (precompiler::precompile name definition))
+;;           ))
+;;       (%jvm-compile name definition)))
+  (%jvm-compile name definition))
 
 (defun jvm-compile-package (package-designator)
   (let ((pkg (if (packagep package-designator)
@@ -6827,7 +6830,6 @@
                                multiple-value-prog1
                                nth
                                progn
-                               quote
                                throw
                                values))
 
@@ -6866,6 +6868,7 @@
   (install-p2-handler 'mod              'p2-mod)
   (install-p2-handler 'not              'p2-not/null)
   (install-p2-handler 'null             'p2-not/null)
+  (install-p2-handler 'quote            'p2-quote)
   (install-p2-handler 'return-from      'p2-return-from)
   (install-p2-handler 'rplacd           'p2-rplacd)
   (install-p2-handler 'schar            'p2-schar)
