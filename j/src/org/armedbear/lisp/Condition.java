@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.33 2005-06-13 00:16:46 piso Exp $
+ * $Id: Condition.java,v 1.34 2005-06-15 20:20:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,8 +140,12 @@ public class Condition extends StandardObject
                 Symbol.APPLY.execute(formatControl, stream, formatArguments);
                 return stream.getString().getStringValue();
             }
-            if (formatControl != NIL)
-                return format(formatControl, formatArguments);
+            if (formatControl != NIL) {
+                LispObject f = Symbol.FORMAT.getSymbolFunction();
+                if (f == null || f instanceof Autoload)
+                    return format(formatControl, formatArguments);
+                return Symbol.APPLY.execute(f, NIL, formatControl, formatArguments).getStringValue();
+            }
         }
         final int maxLevel;
         LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
