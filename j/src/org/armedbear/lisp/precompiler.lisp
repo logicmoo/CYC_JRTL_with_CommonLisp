@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.113 2005-06-14 17:56:51 piso Exp $
+;;; $Id: precompiler.lisp,v 1.114 2005-06-15 13:44:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -146,7 +146,7 @@
 (unless (find-package "PRECOMPILER")
   (make-package "PRECOMPILER"
                 :nicknames '("PRE")
-                :use '("COMMON-LISP" "EXTENSIONS")))
+                :use '("COMMON-LISP" "EXTENSIONS" "SYSTEM")))
 
 (in-package "PRECOMPILER")
 
