@@ -2,7 +2,7 @@
 
 (defpackage build-abcl
   (:use "COMMON-LISP")
-  (:export #:build-abcl)
+  (:export #:build-abcl #:make-dist)
   #+abcl (:import-from #:extensions #:run-shell-command #:probe-directory)
   #+allegro (:import-from #:excl #:probe-directory)
   #+clisp (:import-from #:ext #:probe-directory)
@@ -108,18 +108,18 @@
 
 #+(or sbcl cmu)
 (defun probe-directory (pathspec)
-  (let* ((truename (probe-file pathspec))
-         (namestring (and truename (namestring truename))))
+  (let* ((truename (probe-file pathspec)) ; TRUENAME is a pathname.
+         (namestring (and truename (namestring truename)))) ; NAMESTRING is a string.
     (and namestring
          (> (length namestring) 0)
          (eql (char namestring (1- (length namestring))) *file-separator-char*)
          truename)))
 
-(defparameter *jdk* nil)
+(defparameter *jdk*           nil)
 (defparameter *java-compiler* nil)
 (defparameter *javac-options* nil)
 (defparameter *jikes-options* nil)
-(defparameter *jar* nil)
+(defparameter *jar*           nil)
 
 (defparameter *build-root*
   (make-pathname :device (pathname-device *load-truename*)
@@ -344,32 +344,6 @@
                         (format t "Build failed.~%")
                         (return-from build-abcl nil)))))))
       (when (or compile-system full)
-;;         (let* ((java-namestring (safe-namestring *java*))
-;;                status)
-;;           (cond (*platform-is-windows*
-;;                  (with-open-file (stream
-;;                                   (merge-pathnames "compile-system.bat" *build-root*)
-;;                                   :direction :output
-;;                                   :if-exists :supersede)
-;;                    (princ java-namestring stream)
-;;                    (write-string " -cp " stream)
-;;                    (princ "src" stream)
-;;                    (write-char #\space stream)
-;;                    (write-string "org.armedbear.lisp.Main --eval \"(compile-system :quit t)\"" stream))
-;;                  (setf status
-;;                        (run-shell-command "compile-system.bat"
-;;                                           :directory *build-root*)))
-;;                 (t ; Linux
-;;                  (let ((cmdline
-;;                         (with-output-to-string (s)
-;;                           (princ java-namestring s)
-;;                           (write-string " -cp " s)
-;;                           (princ "src" s)
-;;                           (write-char #\space s)
-;;                           (write-string "org.armedbear.lisp.Main --eval \"(compile-system :quit t)\"" s))))
-;;                    (setf status
-;;                          (run-shell-command cmdline
-;;                                             :directory *build-root*)))))
         (let ((status (do-compile-system)))
           (unless (zerop status)
             (format t "Build failed.~%")
@@ -382,8 +356,8 @@
             (return-from build-abcl nil))))
 
       (when (and (or full libabcl)
-                 (or (string= (software-type) "Linux")
-                     (string= (software-type) "SunOS")))
+                 (or (search "Linux" (software-type))
+                     (search "SunOS" (software-type))))
         (and (let* ((javah-namestring (namestring (probe-file (merge-pathnames "bin/javah" *jdk*))))
                     (command
                      (format nil "~A -o org/armedbear/lisp/native.h org.armedbear.lisp.Native"
@@ -482,7 +456,7 @@
                (merge-pathnames file target-dir))))
 
 (defun make-dist-dir (version-string)
-  (unless (string= (software-type) "Linux")
+  (unless (search "Linux" (software-type))
     (error "MAKE-DIST is only supported on Linux."))
   (let ((target-root (pathname (concatenate 'string "/var/tmp/" version-string "/"))))
     (when (probe-directory target-root)
@@ -505,8 +479,9 @@
     (let* ((source-dir *abcl-dir*)
            (target-dir (merge-pathnames "src/org/armedbear/lisp/" target-root))
            (*default-pathname-defaults* source-dir)
-           (files (mapcar #'file-namestring
-                          (append (directory "*.java") (directory "*.lisp") (list "LICENSE" "native.c")))))
+           (files (mapcar #'file-namestring (append (directory "*.java")
+                                                    (directory "*.lisp")
+                                                    (list "LICENSE" "native.c")))))
       (copy-files files source-dir target-dir))
     (let* ((source-dir (merge-pathnames "java/awt/" *abcl-dir*))
            (target-dir (merge-pathnames "src/org/armedbear/lisp/java/awt/" target-root))
