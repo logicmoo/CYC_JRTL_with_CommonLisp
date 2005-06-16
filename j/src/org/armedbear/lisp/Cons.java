@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.61 2005-06-09 11:49:06 piso Exp $
+ * $Id: Cons.java,v 1.62 2005-06-16 01:24:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -296,24 +296,23 @@ public final class Cons extends LispObject
 
     public final LispObject nreverse() throws ConditionThrowable
     {
-        // Following code is adapted from CLISP.
         if (cdr instanceof Cons) {
             Cons cons = (Cons) cdr;
             if (cons.cdr instanceof Cons) {
                 Cons cons1 = cons;
                 LispObject list = NIL;
                 do {
-                    Cons h = (Cons) cons.cdr;
+                    Cons temp = (Cons) cons.cdr;
                     cons.cdr = list;
                     list = cons;
-                    cons = h;
+                    cons = temp;
                 } while (cons.cdr instanceof Cons);
                 cdr = list;
                 cons1.cdr = cons;
             }
-            LispObject h = car;
+            LispObject temp = car;
             car = cons.car;
-            cons.car = h;
+            cons.car = temp;
         }
         return this;
     }

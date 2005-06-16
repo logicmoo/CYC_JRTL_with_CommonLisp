@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.228 2005-06-15 13:43:33 piso Exp $
+;;; $Id: boot.lisp,v 1.229 2005-06-16 01:23:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -150,7 +150,6 @@
 
 (in-package #:system)
 
-;;; READ-CONDITIONAL (from OpenMCL)
 (defun read-feature (stream)
   (let* ((f (let* ((*package* +keyword-package+))
               (read stream t nil t))))
@@ -169,8 +168,6 @@
 
 (set-dispatch-macro-character #\# #\+ #'read-conditional *standard-readtable*)
 (set-dispatch-macro-character #\# #\- #'read-conditional *standard-readtable*)
-
-
 
 ;;; Reading circular data: the #= and ## reader macros (from SBCL)
 
