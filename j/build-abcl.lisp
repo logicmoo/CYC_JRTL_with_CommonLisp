@@ -1,5 +1,8 @@
 ;;; build-abcl.lisp
 
+#+abcl
+(require 'format)
+
 (defpackage build-abcl
   (:use "COMMON-LISP")
   (:export #:build-abcl #:make-dist)
@@ -21,6 +24,13 @@
         t
         nil)))
 
+(defparameter *platform-is-linux*
+  #+clisp
+  (and (not *platform-is-windows*)
+       (zerop (ext:run-shell-command "uname | grep -i linux" :output nil)))
+  #-clisp
+  (if (search "Linux" (software-type)) t nil))
+
 (defparameter *file-separator-char*
   (if *platform-is-windows* #\\ #\/))
 
@@ -38,9 +48,6 @@
        #+clisp
        (ext:cd old-directory)
        )))
-
-#+abcl
-(require 'format)
 
 #+sbcl
 (defun run-shell-command (command &key directory (output *standard-output*))
@@ -106,7 +113,7 @@
 (defun run-shell-command (command &key directory (output *standard-output*))
   (excl:run-shell-command command :directory directory :input nil :output output))
 
-#+(or sbcl cmu)
+#+(or sbcl cmu lispworks)
 (defun probe-directory (pathspec)
   (let* ((truename (probe-file pathspec)) ; TRUENAME is a pathname.
          (namestring (and truename (namestring truename)))) ; NAMESTRING is a string.
@@ -198,18 +205,6 @@
             (return))
           (write-line (substitute-in-string string substitutions-alist) out))))))
 
-(defun build-stamp ()
-  (multiple-value-bind
-    (second minute hour date month year day daylight-p zone)
-    (decode-universal-time (get-universal-time))
-    (declare (ignore daylight-p))
-    (setf day (nth day '("Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun")))
-    (setf month (nth (1- month) '("Jan" "Feb" "Mar" "Apr" "May" "Jun"
-                                  "Jul" "Aug" "Sep" "Oct" "Nov" "Dec")))
-    (setf zone (* zone 100)) ;; FIXME
-    (format nil "~A ~A ~D ~D ~2,'0D:~2,'0D:~2,'0D -~4,'0D"
-            day month date year hour minute second zone)))
-
 (defun build-javac-command-line (source-file)
   (concatenate 'string
                *java-compiler-command-line-prefix*
@@ -218,6 +213,48 @@
 (defun java-compile-file (source-file)
   (let ((cmdline (build-javac-command-line source-file)))
     (zerop (run-shell-command cmdline :directory *abcl-dir*))))
+
+(defun make-classes (force batch)
+  (let* ((source-files
+          (append (with-current-directory (*abcl-dir*)
+                    (directory "*.java"))
+                  (with-current-directory ((merge-pathnames "java/awt/" *abcl-dir*))
+                    (directory "*.java"))))
+         (to-do ()))
+    (if force
+        (setf to-do source-files)
+        (dolist (source-file source-files)
+          (let ((class-file (merge-pathnames (make-pathname :type "class"
+                                                            :defaults source-file))))
+            (when (or (null (probe-file class-file))
+                      (>= (file-write-date source-file)
+                          (file-write-date class-file)))
+              (push source-file to-do)))))
+    (format t "~&JDK: ~A~%" *jdk*)
+    (format t "Java compiler: ~A~%" *java-compiler*)
+    (format t "Compiler options: ~A~%" (if *java-compiler-options* *java-compiler-options* ""))
+    (cond ((null to-do)
+           (format t "~&Classes are up to date.~%")
+           t)
+          (t
+           (cond (batch
+                  (let* ((dir (pathname-directory *abcl-dir*))
+                         (cmdline (with-output-to-string (s)
+                                    (princ *java-compiler-command-line-prefix* s)
+                                    (dolist (source-file to-do)
+                                      (princ
+                                       (if (equal (pathname-directory source-file) dir)
+                                           (file-namestring source-file)
+                                           (namestring source-file))
+                                       s)
+                                      (princ #\space s))))
+                         (status (run-shell-command cmdline :directory *abcl-dir*)))
+                    (zerop status)))
+                 (t
+                  (dolist (source-file to-do t)
+                    (unless (java-compile-file source-file)
+                      (format t "Build failed.~%")
+                      (return nil)))))))))
 
 (defun make-jar ()
   (let ((*default-pathname-defaults* *build-root*)
@@ -266,6 +303,79 @@
     status
   ))
 
+(defun make-libabcl ()
+  (and (let* ((javah-namestring (namestring (probe-file (merge-pathnames "bin/javah" *jdk*))))
+              (command
+               (format nil "~A -o org/armedbear/lisp/native.h org.armedbear.lisp.Native"
+                       javah-namestring))
+              (status
+               (run-shell-command command :directory (merge-pathnames "src/" *build-root*))))
+         (unless (zerop status)
+           (format t "~A returned ~S~%" command status))
+         (zerop status))
+       (let* ((jdk-namestring (namestring *jdk*))
+              (command
+               (format nil "gcc -shared -o libabcl.so -O -D_REENTRANT -fpic -I~Ainclude -I~Ainclude/~A native.c"
+                       jdk-namestring jdk-namestring
+                       (cond (*platform-is-linux*
+                              "linux")
+                             ((search "SunOS" (software-type))
+                              "solaris"))))
+              (status
+               (run-shell-command command :directory *abcl-dir*)))
+         (unless (zerop status)
+           (format t "~A returned ~S~%" command status))
+         (zerop status))))
+
+;; abcl/abcl.bat
+(defun make-launch-script ()
+  (cond (*platform-is-windows*
+         (with-open-file (s
+                          (merge-pathnames "abcl.bat" *build-root*)
+                          :direction :output
+                          :if-exists :supersede)
+           (format s "~A -cp ~A;~A org.armedbear.lisp.Main %1 %2 %3 %4 %5 %6 %7 %8 %9~%"
+                   (safe-namestring *java*)
+                   (safe-namestring (merge-pathnames "src" *build-root*))
+                   (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
+        (t
+         (let ((pathname (merge-pathnames "abcl" *build-root*)))
+           (with-open-file (s pathname :direction :output :if-exists :supersede)
+             (if *platform-is-linux*
+                 ;; On Linux, set java.library.path for libabcl.so.
+                 (format s "#!/bin/sh~%exec ~A -Xrs -Djava.library.path=~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
+                         (safe-namestring *java*)
+                         (safe-namestring *abcl-dir*)
+                         (safe-namestring (merge-pathnames "src" *build-root*))
+                         (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))
+                 ;; Not Linux.
+                 (format s "#!/bin/sh~%exec ~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
+                         (safe-namestring *java*)
+                         (safe-namestring (merge-pathnames "src" *build-root*))
+                         (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
+           (run-shell-command (format nil "chmod +x ~A" (safe-namestring pathname))
+                              :directory *build-root*)))))
+
+(defun build-stamp ()
+  (multiple-value-bind
+      (second minute hour date month year day daylight-p zone)
+      (decode-universal-time (get-universal-time))
+    (declare (ignore daylight-p))
+    (setf day (nth day '("Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun")))
+    (setf month (nth (1- month) '("Jan" "Feb" "Mar" "Apr" "May" "Jun"
+                                  "Jul" "Aug" "Sep" "Oct" "Nov" "Dec")))
+    (setf zone (* zone 100)) ;; FIXME
+    (format nil "~A ~A ~D ~D ~2,'0D:~2,'0D:~2,'0D -~4,'0D"
+            day month date year hour minute second zone)))
+
+(defun make-build-stamp ()
+  (with-open-file (s
+                   (merge-pathnames (make-pathname :name "build"
+                                                   :defaults *abcl-dir*))
+                   :direction :output
+                   :if-exists :supersede)
+    (format s "~A" (build-stamp))))
+
 (defun delete-files (pathnames)
   (dolist (pathname pathnames)
     ;; SBCL signals an error if the file doesn't exist.
@@ -273,13 +383,11 @@
       (delete-file pathname))))
 
 (defun clean ()
-;;   (let ((*default-pathname-defaults* *abcl-dir*))
   (with-current-directory (*abcl-dir*)
     (delete-files (directory "*.class"))
     (delete-files (directory "*.abcl"))
     (delete-files (directory "*.cls"))
     (delete-files '("native.h" "libabcl.so" "build")))
-;;   (let ((*default-pathname-defaults* (merge-pathnames "java/awt/" *abcl-dir*)))
   (with-current-directory ((merge-pathnames "java/awt/" *abcl-dir*))
     (delete-files (directory "*.class"))))
 
@@ -296,129 +404,45 @@
                         clean
                         libabcl
                         full)
-  #+lispworks (setf batch nil)
-  (let ((start (get-internal-real-time))
-        end)
+  (let ((start (get-internal-real-time)))
+    #+lispworks (setf batch nil)
     (initialize-build)
+    (format t "~&Platform: ~A~%"
+            (cond (*platform-is-windows* "Windows")
+                  (*platform-is-linux* "Linux")
+                  (t (software-type))))
+    ;; clean
     (when clean
       (clean))
-    (let* ((source-files
-            (append (with-current-directory (*abcl-dir*)
-                      (directory "*.java"))
-                    (with-current-directory ((merge-pathnames "java/awt/" *abcl-dir*))
-                      (directory "*.java"))))
-           (to-do ()))
-      (if force
-          (setf to-do source-files)
-          (dolist (source-file source-files)
-            (let ((class-file (merge-pathnames (make-pathname :type "class"
-                                                              :defaults source-file))))
-              (when (or (null (probe-file class-file))
-                        (>= (file-write-date source-file)
-                            (file-write-date class-file)))
-                (push source-file to-do)))))
-      (cond ((null to-do)
-             (format t "~&Classes are up to date.~%"))
-            (t
-             (format t "~&JDK: ~A~%" *jdk*)
-             (format t "Java compiler: ~A~%" *java-compiler*)
-             (format t "Options: ~A~%" (if *java-compiler-options* *java-compiler-options* ""))
-             (cond (batch
-                    (let* ((dir (pathname-directory *abcl-dir*))
-                           (cmdline (with-output-to-string (s)
-                                      (princ *java-compiler-command-line-prefix* s)
-                                      (dolist (source-file to-do)
-                                        (princ
-                                         (if (equal (pathname-directory source-file) dir)
-                                             (file-namestring source-file)
-                                             (namestring source-file))
-                                         s)
-                                        (princ #\space s))))
-                           (status (run-shell-command cmdline :directory *abcl-dir*)))
-                      (unless (zerop status)
-                        (format t "Build failed.~%")
-                        (return-from build-abcl nil))))
-                   (t
-                    (dolist (source-file to-do)
-                      (unless (java-compile-file source-file)
-                        (format t "Build failed.~%")
-                        (return-from build-abcl nil)))))))
-      (when (or compile-system full)
-        (let ((status (do-compile-system)))
-          (unless (zerop status)
-            (format t "Build failed.~%")
-            (return-from build-abcl nil))))
-
-      (when (or jar full)
-        (let ((status (make-jar)))
-          (unless (zerop status)
-            (format t "Build failed.~%")
-            (return-from build-abcl nil))))
-
-      (when (and (or full libabcl)
-                 (or (search "Linux" (software-type))
-                     (search "SunOS" (software-type))))
-        (and (let* ((javah-namestring (namestring (probe-file (merge-pathnames "bin/javah" *jdk*))))
-                    (command
-                     (format nil "~A -o org/armedbear/lisp/native.h org.armedbear.lisp.Native"
-                             javah-namestring))
-                    (status
-                     (run-shell-command command :directory (merge-pathnames "src/" *build-root*))))
-               (unless (zerop status)
-                 (format t "~A returned ~S~%" command status))
-               (zerop status))
-             (let* ((jdk-namestring (namestring *jdk*))
-                    (command
-                     (format nil "gcc -shared -o libabcl.so -O -D_REENTRANT -fpic -I~Ainclude -I~Ainclude/~A native.c"
-                             jdk-namestring jdk-namestring
-                             (cond ((string= (software-type) "Linux")
-                                    "linux")
-                                   ((string= (software-type) "SunOS")
-                                    "solaris"))))
-                    (status
-                     (run-shell-command command :directory *abcl-dir*)))
-               (unless (zerop status)
-                 (format t "~A returned ~S~%" command status))
-               (zerop status))))
-      ;; Success!
-
-      ;; abcl/abcl.bat
-      (cond (*platform-is-windows*
-             (with-open-file (s
-                              (merge-pathnames "abcl.bat" *build-root*)
-                              :direction :output
-                              :if-exists :supersede)
-               (format s "~A -cp ~A;~A org.armedbear.lisp.Main %1 %2 %3 %4 %5 %6 %7 %8 %9~%"
-                       (safe-namestring *java*)
-                       (safe-namestring (merge-pathnames "src" *build-root*))
-                       (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
-            (t
-             (let ((pathname (merge-pathnames "abcl" *build-root*)))
-               (with-open-file (s pathname :direction :output :if-exists :supersede)
-                 (if (string= (software-type) "Linux")
-                     (format s "#!/bin/sh~%exec ~A -Xrs -Djava.library.path=~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
-                             (safe-namestring *java*)
-                             (safe-namestring *abcl-dir*)
-                             (safe-namestring (merge-pathnames "src" *build-root*))
-                             (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))
-                     ;; Not Linux.
-                     (format s "#!/bin/sh~%exec ~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
-                             (safe-namestring *java*)
-                             (safe-namestring (merge-pathnames "src" *build-root*))
-                             (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
-               (run-shell-command (format nil "chmod +x ~A" (safe-namestring pathname))
-                                  :directory *build-root*))))
-
-      (with-open-file (s
-                       (merge-pathnames (make-pathname :name "build"
-                                                       :defaults *abcl-dir*))
-                       :direction :output
-                       :if-exists :supersede)
-        (format s "~A" (build-stamp)))
-      (setf end (get-internal-real-time))
+    ;; classes
+    (unless (make-classes force batch)
+      (format t "Build failed.~%")
+      (return-from build-abcl nil))
+    ;; COMPILE-SYSTEM
+    (when (or full compile-system)
+      (let ((status (do-compile-system)))
+        (unless (zerop status)
+          (format t "Build failed.~%")
+          (return-from build-abcl nil))))
+    ;; abcl.jar
+    (when (or full jar)
+      (let ((status (make-jar)))
+        (unless (zerop status)
+          (format t "Build failed.~%")
+          (return-from build-abcl nil))))
+    ;; libabcl.so
+    (when (and (or full libabcl)
+               (or *platform-is-linux*
+                   (search "SunOS" (software-type))))
+      ;; A failure here is not fatal.
+      (make-libabcl))
+    ;; abcl/abcl.bat
+    (make-launch-script)
+    (make-build-stamp)
+    (let ((end (get-internal-real-time)))
       (format t "Build completed successfully in ~A seconds.~%"
-              (/ (float (- end start)) internal-time-units-per-second))
-      t)))
+              (/ (float (- end start)) internal-time-units-per-second)))
+    t))
 
 (defun build-abcl-executable ()
   (let* ((*default-pathname-defaults* *abcl-dir*)
@@ -431,8 +455,7 @@
                         (princ ".java" s)
                         (princ #\space s)))
                     (princ "--main=org.armedbear.lisp.Main -o lisp" s)))
-         (result (run-shell-command cmdline :directory *abcl-dir*))
-         )
+         (result (run-shell-command cmdline :directory *abcl-dir*)))
     (zerop result)))
 
 (defvar *copy-verbose* nil)
@@ -456,7 +479,7 @@
                (merge-pathnames file target-dir))))
 
 (defun make-dist-dir (version-string)
-  (unless (search "Linux" (software-type))
+  (unless *platform-is-linux*
     (error "MAKE-DIST is only supported on Linux."))
   (let ((target-root (pathname (concatenate 'string "/var/tmp/" version-string "/"))))
     (when (probe-directory target-root)
