@@ -235,9 +235,11 @@
               (push source-file to-do)))))
     (format t "~&JDK: ~A~%" *jdk*)
     (format t "Java compiler: ~A~%" *java-compiler*)
-    (format t "Compiler options: ~A~%" (if *java-compiler-options* *java-compiler-options* ""))
+    (format t "Compiler options: ~A~%~%" (if *java-compiler-options* *java-compiler-options* ""))
+    (finish-output)
     (cond ((null to-do)
-           (format t "~&Classes are up to date.~%")
+           (format t "Classes are up to date.~%")
+           (finish-output)
            t)
           (t
            (cond (batch
@@ -275,6 +277,8 @@
         status))))
 
 (defun do-compile-system ()
+  (terpri)
+  (finish-output)
   (let* ((java-namestring (safe-namestring *java*))
          status)
     (cond (*platform-is-windows*
@@ -303,8 +307,7 @@
              (setf status
                    (run-shell-command cmdline
                                       :directory *build-root*)))))
-    status
-  ))
+    status))
 
 (defun make-libabcl ()
   (and (let* ((javah-namestring (namestring (probe-file (merge-pathnames "bin/javah" *jdk*))))
@@ -408,12 +411,17 @@
                         libabcl
                         full)
   (let ((start (get-internal-real-time)))
-    #+lispworks (setf batch nil)
+
+    #+lispworks
+    (when *platform-is-windows*
+      (setf batch nil))
+
     (initialize-build)
     (format t "~&Platform: ~A~%"
             (cond (*platform-is-windows* "Windows")
                   (*platform-is-linux* "Linux")
                   (t (software-type))))
+    (finish-output)
     ;; clean
     (when clean
       (clean))
