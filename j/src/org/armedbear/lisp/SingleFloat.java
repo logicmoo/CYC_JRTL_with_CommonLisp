@@ -2,7 +2,7 @@
  * SingleFloat.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SingleFloat.java,v 1.2 2005-06-16 17:10:31 piso Exp $
+ * $Id: SingleFloat.java,v 1.3 2005-06-16 17:22:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -464,7 +464,7 @@ public final class SingleFloat extends LispObject
 
     public int hashCode()
     {
-        return floatToIntBits(value);
+        return Float.floatToIntBits(value);
     }
 
     public int psxhash()
