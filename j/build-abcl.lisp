@@ -122,12 +122,6 @@
          (eql (char namestring (1- (length namestring))) *file-separator-char*)
          truename)))
 
-(defparameter *jdk*           nil)
-(defparameter *java-compiler* nil)
-(defparameter *javac-options* nil)
-(defparameter *jikes-options* nil)
-(defparameter *jar*           nil)
-
 (defparameter *build-root*
   (make-pathname :device (pathname-device *load-truename*)
                  :directory (pathname-directory *load-truename*)))
@@ -138,7 +132,11 @@
 (defparameter *abcl-dir*
   (merge-pathnames "src/org/armedbear/lisp/" *build-root*))
 
-(defparameter *substitutions-alist* nil)
+(defparameter *jdk*           nil)
+(defparameter *java-compiler* nil)
+(defparameter *javac-options* nil)
+(defparameter *jikes-options* nil)
+(defparameter *jar*           nil)
 
 (defvar *classpath*)
 (defvar *java*)
@@ -146,6 +144,11 @@
 (defvar *java-compiler-command-line-prefix*)
 
 (defun initialize-build ()
+  (setf *jdk*           nil
+        *java-compiler* nil
+        *javac-options* nil
+        *jikes-options* nil
+        *jar*           nil)
   (load *customizations-file*)
   (setf *java* (probe-file (merge-pathnames (if *platform-is-windows*
                                                 "bin\\java.exe"
@@ -398,7 +401,7 @@
     string))
 
 (defun build-abcl (&key force
-                        (batch (if *platform-is-windows* nil t))
+                        (batch t)
                         compile-system
                         jar
                         clean

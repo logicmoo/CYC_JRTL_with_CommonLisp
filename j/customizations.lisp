@@ -19,21 +19,15 @@
 
 (in-package #:build-abcl)
 
-;; Standard options.
+;; Standard compiler options.
 (setf *javac-options* "-g")
-(setf *jikes-options*
-      (if *platform-is-windows*
-          "+Z0 +D -g" ;; +Z0 for jikes 1.21
-          "+D -g"))
+(setf *jikes-options* "+D -g")
 
 (cond (*platform-is-windows*
        (setf *jdk* "C:\\Program Files\\Java\\jdk1.5.0_02\\")
-;;        (setf *java-compiler* "C:\\Program Files\\Java\\jdk1.5.0_02\\bin\\javac")
-       (setf *java-compiler* "jikes")
-       )
-      (t ; Linux
+       (setf *java-compiler* "jikes"))
+      (t
+       ;; Linux
        (setf *jdk* "/home/peter/blackdown/j2sdk1.4.2/")
-;;        (setf *jdk* "/home/peter/sun/jdk1.5.0_02/")
-;;        (setf *java-compiler* "/usr/bin/jikes")
        (setf *java-compiler* "jikes")
        (setf *jar* "fastjar")))
