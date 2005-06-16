@@ -34,9 +34,10 @@ INSTALLATION
 ------------
 
 To build ABCL, you'll need a 1.4 or 1.5 JDK and a supported Common Lisp
-implementation (SBCL, CMUCL, Allegro, or LispWorks).
+implementation (SBCL, CMUCL, Allegro, LispWorks, or CLISP).
 
-Edit the file customizations.lisp, in this directory, to suit your situation.
+Edit the file customizations.lisp, in the directory containing this README
+file, to suit your situation.
 
 Start up one of the supported Common Lisp implementations in the directory
 containing this README file.
@@ -53,14 +54,20 @@ Wait for the build to finish and exit the host Lisp.
 
 Use abcl.bat on Windows or ./abcl on Unix to start ABCL.
 
+If the build fails in the javac stage, you might have better luck with this:
+
+    (build-abcl:build-abcl :clean t :full t :batch nil)
+
+This invokes javac separately for each .java file, which is considerably slower
+but avoids running into limitations on command line length.
+
 
 BUGS
 ----
 
-ABCL is a very young implementation. The current version, 0.0.5, is the first
-public release. You are certain to encounter bugs.
+ABCL is a very young implementation. You are certain to encounter bugs.
 
-ABCL 0.0.5 fails 79 out of 20817 test in the GCL ANSI test suite.
+ABCL 0.0.6 fails 77 out of 21085 tests in the GCL ANSI test suite.
 
 ABCL's CLOS does not handle on-the-fly redefinition of classes correctly, and
 in any event is intolerably slow. There is no support for the long form of
@@ -69,9 +76,10 @@ missing. Enough CLOS is there to run ASDF and CL-PPCRE, if you're in no hurry.
 
 There's no MOP worth mentioning.
 
-Since this is the first public release, there are likely to be build problems
-as well as runtime bugs. I don't have a Mac, so I've done no testing at all on
-OS X.
+Since this is only the second public release, there are likely to be build
+problems as well as runtime bugs.
+
+I don't have a Mac, so I've done no testing at all on OS X.
 
 Please report problems to the j-devel mailing list:
 
@@ -80,4 +88,4 @@ Please report problems to the j-devel mailing list:
 Have fun!
 
 Peter Graves
-May 31 2005
+June 16, 2005
