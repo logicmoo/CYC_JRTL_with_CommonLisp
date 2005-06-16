@@ -37,7 +37,7 @@ To build ABCL, you'll need a 1.4 or 1.5 JDK and a supported Common Lisp
 implementation (SBCL, CMUCL, Allegro, LispWorks, or CLISP).
 
 Edit the file customizations.lisp, in the directory containing this README
-file, to suit your situation.
+file, to suit your situation, paying attention to the comments in the file.
 
 Start up one of the supported Common Lisp implementations in the directory
 containing this README file.
@@ -78,8 +78,6 @@ There's no MOP worth mentioning.
 
 Since this is only the second public release, there are likely to be build
 problems as well as runtime bugs.
-
-I don't have a Mac, so I've done no testing at all on OS X.
 
 Please report problems to the j-devel mailing list:
 
