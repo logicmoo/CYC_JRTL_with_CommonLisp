@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.18 2005-05-19 15:09:55 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.19 2005-06-17 17:24:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -52,6 +52,7 @@
   (%defvar '*env-var* nil))
 
 (defun arg-count-error (error-kind name arg lambda-list minimum maximum)
+  (declare (ignore error-kind arg lambda-list minimum maximum))
   (error 'program-error
          :format-control "Wrong number of arguments for ~S."
          :format-arguments (list name)))
@@ -352,17 +353,18 @@
 ;; Redefine DEFMACRO to use PARSE-DEFMACRO.
 (defmacro defmacro (name lambda-list &rest body)
   (let* ((form (gensym "WHOLE-"))
-         (env (gensym "ENVIRONMENT-"))
-         (body (parse-defmacro lambda-list form body name 'defmacro
-                               :environment env))
-         (expander `(lambda (,form ,env) (block ,name ,body))))
-    `(progn
-       (let ((macro (make-macro ',name ,expander)))
-         (if (special-operator-p ',name)
-             (%put ',name 'macroexpand-macro macro)
-             (fset ',name macro))
-         (%set-arglist macro ',lambda-list)
-         ',name))))
+         (env (gensym "ENVIRONMENT-")))
+    (multiple-value-bind (body decls)
+        (parse-defmacro lambda-list form body name 'defmacro :environment env)
+      (let ((expander `(lambda (,form ,env) ,@decls (block ,name ,body))))
+        `(progn
+           (let ((macro (make-macro ',name
+                                    (or (precompile nil ,expander) ,expander))))
+             ,@(if (special-operator-p name)
+                   `((%put ',name 'macroexpand-macro macro))
+                   `((fset ',name macro)))
+             (%set-arglist macro ',lambda-list)
+             ',name))))))
 
 ;; Redefine SYS:MAKE-EXPANDER-FOR-MACROLET to use PARSE-DEFMACRO.
 (defun make-expander-for-macrolet (definition)
