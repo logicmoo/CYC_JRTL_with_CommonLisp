@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.182 2005-06-17 15:10:22 piso Exp $
+;;; $Id: clos.lisp,v 1.183 2005-06-17 18:32:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1560,6 +1560,12 @@
         (*call-next-method-p* nil)
         (*next-method-p-p* nil))
     (multiple-value-bind (body declarations) (parse-body body)
+      (let ((ignorable-vars '()))
+        (dolist (var lambda-list)
+          (if (memq var lambda-list-keywords)
+              (return)
+              (push var ignorable-vars)))
+        (push `(declare (ignorable ,@ignorable-vars)) declarations))
       (walk-form body)
       (cond ((or *call-next-method-p* *next-method-p-p*)
              `(lambda (args next-emfun)
@@ -1610,6 +1616,7 @@
   (let ((lambda-list (allow-other-keys (cadr lambda-expression))))
     (when (intersection lambda-list '(&rest &optional &key &allow-other-keys &aux))
       (return-from compute-method-fast-function nil))
+    ;; Only required args.
     (let ((body (cddr lambda-expression))
           (*call-next-method-p* nil)
           (*next-method-p-p* nil))
@@ -1617,6 +1624,12 @@
         (walk-form body)
         (when (or *call-next-method-p* *next-method-p-p*)
           (return-from compute-method-fast-function nil))
+        (let ((decls `(declare (ignorable ,@lambda-list))))
+          (setf lambda-expression
+                (list* (car lambda-expression)
+                       (cadr lambda-expression)
+                       decls
+                       (cddr lambda-expression))))
         (case (length lambda-list)
           (1
 ;;            `(lambda (args next-emfun)
@@ -1791,11 +1804,9 @@
   new-value)
 
 (defmethod documentation ((x standard-class) (doc-type (eql 't)))
-  (declare (ignore doc-type))
   (class-documentation x))
 
 (defmethod documentation ((x standard-class) (doc-type (eql 'type)))
-  (declare (ignore doc-type))
   (class-documentation x))
 
 (defmethod (setf documentation) (new-value (x standard-class) (doc-type (eql 't)))
@@ -1817,21 +1828,18 @@
   (%set-documentation x doc-type new-value))
 
 (defmethod documentation ((x standard-generic-function) (doc-type (eql 't)))
-  (declare (ignore doc-type))
   (generic-function-documentation x))
 
 (defmethod (setf documentation) (new-value (x standard-generic-function) (doc-type (eql 't)))
   (setf (generic-function-documentation x) new-value))
 
 (defmethod documentation ((x standard-generic-function) (doc-type (eql 'function)))
-  (declare (ignore doc-type))
   (generic-function-documentation x))
 
 (defmethod (setf documentation) (new-value (x standard-generic-function) (doc-type (eql 'function)))
   (setf (generic-function-documentation x) new-value))
 
 (defmethod documentation ((x standard-method) (doc-type (eql 't)))
-  (declare (ignore doc-type))
   (method-documentation x))
 
 (defmethod (setf documentation) (new-value (x standard-method) (doc-type (eql 't)))
@@ -1859,7 +1867,6 @@
                                           (class standard-class)
                                           instance
                                           slot-name)
-  (declare (ignore class)) ; FIXME
   (setf (std-slot-value instance slot-name) new-value))
 
 (defgeneric slot-exists-p-using-class (class instance slot-name))
@@ -1878,20 +1885,18 @@
 
 (defgeneric slot-boundp-using-class (class instance slot-name))
 (defmethod slot-boundp-using-class ((class standard-class) instance slot-name)
-  (declare (ignore class)) ; FIXME
   (std-slot-boundp instance slot-name))
 
 (defgeneric slot-makunbound-using-class (class instance slot-name))
 (defmethod slot-makunbound-using-class ((class standard-class)
                                         instance
                                         slot-name)
-  (declare (ignore class)) ; FIXME
   (std-slot-makunbound instance slot-name))
 
 (defgeneric slot-missing (class instance slot-name operation &optional new-value))
 
 (defmethod slot-missing ((class t) instance slot-name operation &optional new-value)
-  (declare (ignore instance operation new-value))
+  (declare (ignore new-value))
   (error "The slot ~S is missing from the class ~S." slot-name class))
 
 (defgeneric slot-unbound (class instance slot-name))
@@ -2067,7 +2072,6 @@
 						discarded-slots
 						property-list
 						&rest initargs)
-  (declare (ignore added-slots discarded-slots property-list))
   (check-initargs (class-of instance) initargs)
   (apply #'shared-initialize instance added-slots initargs))
 

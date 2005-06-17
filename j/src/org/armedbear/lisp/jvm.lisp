@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.492 2005-06-17 14:30:27 piso Exp $
+;;; $Id: jvm.lisp,v 1.493 2005-06-17 18:36:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6724,7 +6724,7 @@
               (funcall fn)
             (unless (and (zerop (+ *errors* *warnings* *style-warnings*))
                          (null *undefined-functions*))
-              (format *error-output* "~&; Compilation unit finished~%")
+              (format *error-output* "~&~%; Compilation unit finished~%")
               (unless (zerop *errors*)
                 (format *error-output* ";   Caught ~D ERROR condition~P~%"
                         *errors* *errors*))
