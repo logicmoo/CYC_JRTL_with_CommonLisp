@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: list.lisp,v 1.43 2005-04-23 16:17:07 piso Exp $
+;;; $Id: list.lisp,v 1.44 2005-06-17 17:26:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun fifth (list)
   (car (cddddr list)))
@@ -49,7 +49,7 @@
   #'(lambda (&rest x) (not (apply f x))))
 
 (defun constantly (x)
-  #'(lambda (&rest args) x))
+  #'(lambda (&rest args) (declare (ignore args)) x))
 
 (defun member (item list &key key test test-not)
   (%member item list key test test-not))
