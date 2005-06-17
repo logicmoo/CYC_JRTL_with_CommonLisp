@@ -1,7 +1,7 @@
 ;;; assert.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: assert.lisp,v 1.1 2003-12-19 03:04:16 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: assert.lisp,v 1.2 2005-06-17 18:33:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from CMUCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defmacro assert (test-form &optional places datum &rest arguments)
   "Signals an error if the value of test-form is nil.  Continuing from this
@@ -33,6 +33,7 @@
 	       places)))
 
 (defun assert-error (assertion places datum &rest arguments)
+  (declare (ignore places))
   (let ((c (if datum
                (coerce-to-condition
                 datum arguments
