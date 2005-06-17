@@ -1,7 +1,7 @@
 ;;; case.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: case.lisp,v 1.3 2005-01-31 17:22:22 piso Exp $
+;;; $Id: case.lisp,v 1.4 2005-06-17 18:35:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 ;;; Is X a (possibly-improper) list of at least N elements?
 (defun list-of-length-at-least-p (x n)
@@ -28,14 +28,8 @@
 	   (list-of-length-at-least-p (cdr x) (1- n)))))
 
 (defun case-body-error (name keyform keyform-value expected-type keys)
+  (declare (ignore name keys))
   (restart-case
-   #+sbcl
-   (error 'case-failure
-          :name name
-          :datum keyform-value
-          :expected-type expected-type
-          :possibilities keys)
-   #+armedbear
    (error 'type-error
           :datum keyform-value
           :expected-type expected-type)
