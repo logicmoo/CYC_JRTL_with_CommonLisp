@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: signal.lisp,v 1.12 2005-06-10 03:11:50 piso Exp $
+;;; $Id: signal.lisp,v 1.13 2005-06-17 23:06:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 ;;; Adapted from SBCL.
 
 (in-package #:system)
+
+(export 'coerce-to-condition)
 
 (defvar *maximum-error-depth* 10)
 
