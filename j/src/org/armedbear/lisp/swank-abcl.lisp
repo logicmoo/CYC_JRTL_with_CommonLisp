@@ -1,7 +1,7 @@
 ;;; swank-abcl.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: swank-abcl.lisp,v 1.9 2005-06-13 20:16:24 piso Exp $
+;;; $Id: swank-abcl.lisp,v 1.10 2005-06-17 17:39:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 (in-package #:swank)
 
 (defun create-socket (host port)
+  (declare (ignore host))
   (ext:make-server-socket port))
 
 (defun local-port (socket)
