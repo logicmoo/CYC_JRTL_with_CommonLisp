@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: typep.lisp,v 1.30 2005-06-10 19:27:30 piso Exp $
+;;; $Id: typep.lisp,v 1.31 2005-06-17 15:54:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -173,4 +173,5 @@
        nil))))
 
 (defun typep (object type &optional environment)
+  (declare (ignore environment))
   (%typep object type))
