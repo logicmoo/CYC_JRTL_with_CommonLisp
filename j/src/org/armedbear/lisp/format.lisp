@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: format.lisp,v 1.28 2005-06-13 00:58:58 piso Exp $
+;;; $Id: format.lisp,v 1.29 2005-06-17 17:25:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -184,6 +184,7 @@
 ;;; UNDERSTAND THIS CODE WITHOUT READING THE PAPER!
 
 (defun flonum-to-string (x &optional width fdigits scale fmin)
+  (declare (ignore fmin)) ; FIXME
   (cond ((zerop x)
 	 ;; Zero is a special case which FLOAT-STRING cannot handle.
 	 (if fdigits
