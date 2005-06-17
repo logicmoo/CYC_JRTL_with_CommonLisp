@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.93 2005-06-15 17:06:16 piso Exp $
+;;; $Id: compile-file.lisp,v 1.94 2005-06-17 15:56:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -407,6 +407,7 @@
                      ((:verbose *compile-verbose*) *compile-verbose*)
                      ((:print *compile-print*) *compile-print*)
                      external-format)
+  (declare (ignore external-format)) ; FIXME
   (unless (or (and (probe-file input-file) (not (file-directory-p input-file)))
               (pathname-type input-file))
     (let ((pathname (merge-pathnames (make-pathname :type "lisp") input-file)))
