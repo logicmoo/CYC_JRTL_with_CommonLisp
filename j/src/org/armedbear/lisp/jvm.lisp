@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.493 2005-06-17 18:36:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.494 2005-06-17 22:24:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4208,6 +4208,8 @@
            (compile-form arg :target :stack)
            (emit 'checkcast +lisp-cons-class+)
            (emit 'getfield +lisp-cons-class+ "car" +lisp-object+)
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
            (emit-move-from-stack target representation))
           (t
            (compile-form arg :target :stack)
@@ -4223,6 +4225,8 @@
            (compile-form arg :target :stack)
            (emit 'checkcast +lisp-cons-class+)
            (emit 'getfield +lisp-cons-class+ "cdr" +lisp-object+)
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
            (emit-move-from-stack target representation))
           (t
            (compile-form arg :target :stack)
