@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.181 2005-06-17 14:33:44 piso Exp $
+;;; $Id: clos.lisp,v 1.182 2005-06-17 15:10:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -82,6 +82,7 @@
 (defsetf standard-instance-access %set-standard-instance-access)
 
 (defun (setf find-class) (new-value symbol &optional errorp environment)
+  (declare (ignore errorp environment))
   (%set-find-class symbol new-value))
 
 (defun canonicalize-direct-slots (direct-slots)
@@ -212,8 +213,7 @@
   allocation-class
   (location nil))
 
-(defun make-direct-slot-definition (class &rest properties
-                                          &key name
+(defun make-direct-slot-definition (class &key name
                                           (initargs ())
                                           (initform nil)
                                           (initfunction nil)
@@ -232,14 +232,13 @@
     (setf (slot-definition-allocation-class slot) class)
     slot))
 
-(defun make-effective-slot-definition (&rest properties
-                                             &key name
-                                             (initargs ())
-                                             (initform nil)
-                                             (initfunction nil)
-                                             (allocation :instance)
-                                             (allocation-class nil)
-                                             &allow-other-keys)
+(defun make-effective-slot-definition (&key name
+                                            (initargs ())
+                                            (initform nil)
+                                            (initfunction nil)
+                                            (allocation :instance)
+                                            (allocation-class nil)
+                                            &allow-other-keys)
   (let ((slot (make-slot-definition)))
     (setf (slot-definition-name slot) name)
     (setf (slot-definition-initargs slot) initargs)
@@ -459,8 +458,8 @@
 (defun %set-slot-value (object slot-name new-value)
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (setf (std-slot-value object slot-name) new-value)
-      (setf-slot-value-using-class
-       new-value (class-of object) object slot-name)))
+      (set-slot-value-using-class new-value (class-of object)
+                                  object slot-name)))
 
 (defsetf slot-value %set-slot-value)
 
@@ -635,6 +634,7 @@
          ',name)))
 
   (defun expand-long-defcombin (whole)
+    (declare (ignore whole))
     (error "The long form of DEFINE-METHOD-COMBINATION is not implemented.")))
 
 (defmacro define-method-combination (&whole form &rest args)
@@ -1116,6 +1116,7 @@
                                       documentation
                                       function
                                       fast-function)
+  (declare (ignore gf))
   (let ((method (std-allocate-instance the-class-standard-method)))
     (setf (method-lambda-list method) lambda-list)
     (setf (method-qualifiers method) qualifiers)
@@ -1790,9 +1791,11 @@
   new-value)
 
 (defmethod documentation ((x standard-class) (doc-type (eql 't)))
+  (declare (ignore doc-type))
   (class-documentation x))
 
 (defmethod documentation ((x standard-class) (doc-type (eql 'type)))
+  (declare (ignore doc-type))
   (class-documentation x))
 
 (defmethod (setf documentation) (new-value (x standard-class) (doc-type (eql 't)))
@@ -1814,18 +1817,21 @@
   (%set-documentation x doc-type new-value))
 
 (defmethod documentation ((x standard-generic-function) (doc-type (eql 't)))
+  (declare (ignore doc-type))
   (generic-function-documentation x))
 
 (defmethod (setf documentation) (new-value (x standard-generic-function) (doc-type (eql 't)))
   (setf (generic-function-documentation x) new-value))
 
 (defmethod documentation ((x standard-generic-function) (doc-type (eql 'function)))
+  (declare (ignore doc-type))
   (generic-function-documentation x))
 
 (defmethod (setf documentation) (new-value (x standard-generic-function) (doc-type (eql 'function)))
   (setf (generic-function-documentation x) new-value))
 
 (defmethod documentation ((x standard-method) (doc-type (eql 't)))
+  (declare (ignore doc-type))
   (method-documentation x))
 
 (defmethod (setf documentation) (new-value (x standard-method) (doc-type (eql 't)))
@@ -1839,7 +1845,8 @@
 
 ;;; Slot access
 
-(defun setf-slot-value-using-class (new-value class instance slot-name)
+(defun set-slot-value-using-class (new-value class instance slot-name)
+  (declare (ignore class)) ; FIXME
   (setf (std-slot-value instance slot-name) new-value))
 
 (defgeneric slot-value-using-class (class instance slot-name))
@@ -1848,8 +1855,11 @@
   (std-slot-value instance slot-name))
 
 (defgeneric (setf slot-value-using-class) (new-value class instance slot-name))
-(defmethod (setf slot-value-using-class)
-  (new-value (class standard-class) instance slot-name)
+(defmethod (setf slot-value-using-class) (new-value
+                                          (class standard-class)
+                                          instance
+                                          slot-name)
+  (declare (ignore class)) ; FIXME
   (setf (std-slot-value instance slot-name) new-value))
 
 (defgeneric slot-exists-p-using-class (class instance slot-name))
@@ -1867,18 +1877,21 @@
   nil)
 
 (defgeneric slot-boundp-using-class (class instance slot-name))
-(defmethod slot-boundp-using-class
-  ((class standard-class) instance slot-name)
+(defmethod slot-boundp-using-class ((class standard-class) instance slot-name)
+  (declare (ignore class)) ; FIXME
   (std-slot-boundp instance slot-name))
 
 (defgeneric slot-makunbound-using-class (class instance slot-name))
-(defmethod slot-makunbound-using-class
-  ((class standard-class) instance slot-name)
+(defmethod slot-makunbound-using-class ((class standard-class)
+                                        instance
+                                        slot-name)
+  (declare (ignore class)) ; FIXME
   (std-slot-makunbound instance slot-name))
 
 (defgeneric slot-missing (class instance slot-name operation &optional new-value))
 
 (defmethod slot-missing ((class t) instance slot-name operation &optional new-value)
+  (declare (ignore instance operation new-value))
   (error "The slot ~S is missing from the class ~S." slot-name class))
 
 (defgeneric slot-unbound (class instance slot-name))
@@ -1891,9 +1904,11 @@
 (defgeneric allocate-instance (class &rest initargs &key &allow-other-keys))
 
 (defmethod allocate-instance ((class standard-class) &rest initargs)
+  (declare (ignore initargs))
   (std-allocate-instance class))
 
 (defmethod allocate-instance ((class structure-class) &rest initargs)
+  (declare (ignore initargs))
   (%make-structure (%class-name class)
                    (make-list (length (class-slots class))
                               :initial-element +slot-unbound+)))
@@ -2052,6 +2067,7 @@
 						discarded-slots
 						property-list
 						&rest initargs)
+  (declare (ignore added-slots discarded-slots property-list))
   (check-initargs (class-of instance) initargs)
   (apply #'shared-initialize instance added-slots initargs))
 
@@ -2177,9 +2193,11 @@
 (defgeneric make-load-form (object &optional environment))
 
 (defmethod make-load-form ((object t) &optional environment)
+  (declare (ignore environment))
   (apply #'no-applicable-method #'make-load-form (list object)))
 
 (defmethod make-load-form ((class class) &optional environment)
+  (declare (ignore environment))
   (let ((name (%class-name class)))
     (unless (and name (eq (find-class name nil) class))
       (error 'simple-type-error
