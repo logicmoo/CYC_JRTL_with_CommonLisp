@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.229 2005-06-16 01:23:55 piso Exp $
+;;; $Id: boot.lisp,v 1.230 2005-06-17 17:24:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -97,6 +97,13 @@
   (sys::stream-%set-charpos stream new-value))
 
 (export 'charpos '#:extensions)
+
+;; Redefined in precompiler.lisp.
+(defun precompile (name &optional definition)
+  (declare (ignore name definition))
+  nil)
+
+(export 'precompile '#:extensions)
 
 (in-package #:system)
 
