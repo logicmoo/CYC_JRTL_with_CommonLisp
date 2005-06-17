@@ -1,7 +1,7 @@
 ;;; make-load-form-saving-slots.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: make-load-form-saving-slots.lisp,v 1.4 2005-05-03 01:47:23 piso Exp $
+;;; $Id: make-load-form-saving-slots.lisp,v 1.5 2005-06-17 17:32:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 (resolve 'defstruct)
 
 (defun make-load-form-saving-slots (object &key slot-names environment)
+  (declare (ignore environment))
   (let ((class (class-of object))
         (inits ())
         (instance (gensym "INSTANCE-")))
