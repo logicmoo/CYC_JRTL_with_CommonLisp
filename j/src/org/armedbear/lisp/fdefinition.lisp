@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.11 2005-06-15 01:43:21 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.12 2005-06-17 15:50:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -47,10 +47,12 @@
 
 ;; Redefined in trace.lisp.
 (defun trace-redefined-update (&rest args)
+  (declare (ignore args))
   )
 
 ;; Redefined in trace.lisp.
 (defun untraced-function (name)
+  (declare (ignore name))
   nil)
 
 (defun fset (name function &optional source-position arglist)
