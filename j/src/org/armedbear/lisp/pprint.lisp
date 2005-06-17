@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: pprint.lisp,v 1.51 2005-05-09 17:00:28 piso Exp $
+;;; $Id: pprint.lisp,v 1.52 2005-06-17 18:34:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -953,6 +953,7 @@
           ))
 
   (defun check-block-abbreviation (xp args circle-check?)
+    (declare (ignore circle-check?))
     (cond ((not (listp args))
            (sys:output-object args xp) T)
           ((and *print-level*
