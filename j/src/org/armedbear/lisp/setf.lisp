@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: setf.lisp,v 1.57 2005-06-14 18:46:32 piso Exp $
+;;; $Id: setf.lisp,v 1.58 2005-06-17 17:27:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -115,6 +115,7 @@
       v)))
 
 (defun %define-setf-macro (name expander inverse doc)
+  (declare (ignore doc)) ; FIXME
   (when inverse
     (%put name 'setf-inverse inverse))
   (when expander
