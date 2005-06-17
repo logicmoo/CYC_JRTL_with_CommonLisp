@@ -1,7 +1,7 @@
 ;;; dump-class.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: dump-class.lisp,v 1.3 2005-06-10 18:52:04 piso Exp $
+;;; $Id: dump-class.lisp,v 1.4 2005-06-17 15:51:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (require '#:opcodes)
 
-(in-package "JVM")
+(in-package #:jvm)
 
 (defvar *pool* nil)
 
@@ -104,6 +104,7 @@
           (read-attribute i stream))))))
 
 (defun dump-exceptions (stream)
+  (declare (ignore stream))
   )
 
 (defun read-attribute (index stream)
