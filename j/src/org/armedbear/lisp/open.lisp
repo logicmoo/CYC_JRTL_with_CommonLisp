@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: open.lisp,v 1.24 2005-06-13 20:15:55 piso Exp $
+;;; $Id: open.lisp,v 1.25 2005-06-17 15:43:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,6 +94,7 @@
 	     (if-exists nil if-exists-given)
 	     (if-does-not-exist nil if-does-not-exist-given)
 	     (external-format :default))
+  (declare (ignore external-format)) ; FIXME
   (setf element-type (case element-type
                        ((character base-char)
                         'character)
