@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.45 2005-04-30 20:05:15 piso Exp $
+;;; $Id: top-level.lisp,v 1.46 2005-06-17 17:34:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -76,7 +76,8 @@
   (let ((obj (eval (read-from-string args))))
     (describe obj)))
 
-(defun error-command (args)
+(defun error-command (ignored)
+  (declare (ignore ignored))
   (when *debug-condition*
     (let* ((s (%format nil "~A" *debug-condition*))
            (len (length s)))
@@ -163,9 +164,11 @@
                (%format *standard-output* "Unknown package ~A.~%" args))))))
 
 (defun reset-command (ignored)
+  (declare (ignore ignored))
   (invoke-restart 'top-level))
 
 (defun exit-command (ignored)
+  (declare (ignore ignored))
   (exit))
 
 (defvar *old-pwd* nil)
@@ -238,6 +241,7 @@
       (require module))))
 
 (defun pwd-command (ignored)
+  (declare (ignore ignored))
   (%format t "~A~%" (namestring *default-pathname-defaults*)))
 
 (defun trace-command (args)
@@ -278,6 +282,7 @@
              *command-char* (if (eql *command-char* #\:) " by default" ""))))
 
 (defun help-command (&optional ignored)
+  (declare (ignore ignored))
   (%help-command nil))
 
 (defparameter *command-table*

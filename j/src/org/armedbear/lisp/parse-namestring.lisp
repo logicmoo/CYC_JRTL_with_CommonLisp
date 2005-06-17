@@ -1,7 +1,7 @@
 ;;; parse-namestring.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: parse-namestring.lisp,v 1.1 2004-02-11 00:23:30 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: parse-namestring.lisp,v 1.2 2005-06-17 17:33:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,12 +17,13 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 ;; FIXME
 (defun parse-namestring (thing
                          &optional host default-pathname
                          &key (start 0) end junk-allowed)
+  (declare (ignore host default-pathname junk-allowed)) ; FIXME
   (typecase thing
     (stream
      (values (pathname thing) start))
