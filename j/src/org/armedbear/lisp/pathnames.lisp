@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.8 2005-06-13 19:18:51 piso Exp $
+;;; $Id: pathnames.lisp,v 1.9 2005-06-17 15:41:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,4 +38,5 @@
   (%wild-pathname-p pathname field-key))
 
 (defun translate-pathname (&rest args)
+  (declare (ignore args)) ; FIXME
   (error "TRANSLATE-PATHNAME is not implemented."))
