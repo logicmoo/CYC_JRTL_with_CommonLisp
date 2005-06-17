@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: inspect.lisp,v 1.12 2005-04-08 12:44:25 piso Exp $
+;;; $Id: inspect.lisp,v 1.13 2005-06-17 15:47:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@
     (when (and (eq fast slow) (> n 0))
       (return (values nil :circular)))))
 
-(defun display-object (obj display-parts-p)
+(defun display-object (obj)
   (let ((*print-length* 2)
         (*print-level* 2))
     (cond ((typep obj 'standard-object)
@@ -123,7 +123,7 @@
 
 (defun display-current ()
   (if *inspect-break*
-      (display-object *inspected-object* t)
+      (display-object *inspected-object*)
       (format t "No object is being inspected.")))
 
 (defun inspect (obj)
