@@ -1,7 +1,7 @@
 ;;; load.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: load.lisp,v 1.2 2005-06-14 12:03:16 piso Exp $
+;;; $Id: load.lisp,v 1.3 2005-06-17 15:44:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
              (print *load-print*)
              (if-does-not-exist t)
              (external-format :default))
+  (declare (ignore external-format)) ; FIXME
   (%load (if (streamp filespec)
              filespec
              (merge-pathnames (pathname filespec)))
