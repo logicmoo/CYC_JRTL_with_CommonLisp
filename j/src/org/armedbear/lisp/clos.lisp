@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.180 2005-06-14 00:54:52 piso Exp $
+;;; $Id: clos.lisp,v 1.181 2005-06-17 14:33:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1574,11 +1574,13 @@
              (case (length lambda-list)
                (1
                 `(lambda (args next-emfun)
+                   (declare (ignore next-emfun))
                    (let ((,(%car lambda-list) (%car args)))
                      (declare (ignorable ,(%car lambda-list)))
                      ,@declarations ,@body)))
                (2
                 `(lambda (args next-emfun)
+                   (declare (ignore next-emfun))
                    (let ((,(%car lambda-list) (%car args))
                          (,(%cadr lambda-list) (%cadr args)))
                      (declare (ignorable ,(%car lambda-list)
@@ -1586,6 +1588,7 @@
                      ,@declarations ,@body)))
                (3
                 `(lambda (args next-emfun)
+                   (declare (ignore next-emfun))
                    (let ((,(%car lambda-list) (%car args))
                          (,(%cadr lambda-list) (%cadr args))
                          (,(%caddr lambda-list) (%caddr args)))
@@ -1595,9 +1598,11 @@
                      ,@declarations ,@body)))
                (t
                 `(lambda (args next-emfun)
+                   (declare (ignore next-emfun))
                    (apply #'(lambda ,lambda-list ,@declarations ,@body) args)))))
             (t
              `(lambda (args next-emfun)
+                (declare (ignore next-emfun))
                 (apply #'(lambda ,lambda-list ,@declarations ,@body) args)))))))
 
 (defun compute-method-fast-function (lambda-expression)
