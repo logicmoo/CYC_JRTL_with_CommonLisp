@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.491 2005-06-15 17:08:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.492 2005-06-17 14:30:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,8 +45,7 @@
     (apply #'sys::%format destination control-string args)))
 
 (defmacro dformat (&rest ignored)
-  (declare (ignore ignored))
-  )
+  (declare (ignore ignored)))
 
 (defun inline-expansion (name)
   (sys:get-function-info-value name :inline-expansion))
@@ -154,7 +153,7 @@
   (single-valued-p t))
 
 (defmethod print-object ((compiland compiland) stream)
-  (sys::%format stream "#<~S ~S>" 'compiland (compiland-name compiland)))
+  (format stream "#<~S ~S>" 'compiland (compiland-name compiland)))
 
 (defvar *current-compiland* nil)
 
@@ -339,6 +338,22 @@
 
 ;;; Pass 1.
 
+(defun process-ignore/ignorable (declaration names variables)
+  (when (memq declaration '(IGNORE IGNORABLE))
+    (let ((what (if (eq declaration 'IGNORE) "ignored" "ignorable")))
+      (dolist (name names)
+        (let ((variable (find name variables :key #'variable-name)))
+          (cond ((null variable)
+                 (compiler-style-warn "Declaring unknown variable ~S to be ~A."
+                                      name what))
+                ((variable-special-p variable)
+                 (compiler-style-warn "Declaring special variable ~S to be ~A."
+                                      name what))
+                ((eq declaration 'IGNORE)
+                 (setf (variable-ignore-p variable) t))
+                (t
+                 (setf (variable-ignorable-p variable) t))))))))
+
 ;; Returns a list of declared free specials, if any are found.
 (defun process-declarations-for-vars (body vars)
   (let ((free-specials '()))
@@ -352,27 +367,31 @@
              ;; Nothing to do here.
              )
             (IGNORE
-             (dolist (sym (%cdr decl))
-               (let ((variable (find sym vars :key #'variable-name)))
-                 (cond ((null variable)
-                        (compiler-style-warn "Declaring unknown variable ~S to be ignored."
-                                             sym))
-                       ((variable-special-p variable)
-                        (compiler-style-warn "Declaring special variable ~S to be ignored."
-                                             sym))
-                       (t
-                        (setf (variable-ignore-p variable) t))))))
+;;              (dolist (sym (%cdr decl))
+;;                (let ((variable (find sym vars :key #'variable-name)))
+;;                  (cond ((null variable)
+;;                         (compiler-style-warn "Declaring unknown variable ~S to be ignored."
+;;                                              sym))
+;;                        ((variable-special-p variable)
+;;                         (compiler-style-warn "Declaring special variable ~S to be ignored."
+;;                                              sym))
+;;                        (t
+;;                         (setf (variable-ignore-p variable) t)))))
+             (process-ignore/ignorable 'IGNORE (%cdr decl) vars)
+             )
             (IGNORABLE
-             (dolist (sym (%cdr decl))
-               (let ((variable (find sym vars :key #'variable-name)))
-                 (cond ((null variable)
-                        (compiler-style-warn "Declaring unknown variable ~S to be ignorable."
-                                             sym))
-                       ((variable-special-p variable)
-                        (compiler-style-warn "Declaring special variable ~S to be ignorable."
-                                             sym))
-                       (t
-                        (setf (variable-ignorable-p variable) t))))))
+;;              (dolist (sym (%cdr decl))
+;;                (let ((variable (find sym vars :key #'variable-name)))
+;;                  (cond ((null variable)
+;;                         (compiler-style-warn "Declaring unknown variable ~S to be ignorable."
+;;                                              sym))
+;;                        ((variable-special-p variable)
+;;                         (compiler-style-warn "Declaring special variable ~S to be ignorable."
+;;                                              sym))
+;;                        (t
+;;                         (setf (variable-ignorable-p variable) t))))
+             (process-ignore/ignorable 'IGNORABLE (%cdr decl) vars)
+             )
             (SPECIAL
              (dolist (sym (%cdr decl))
                (let ((variable (find sym vars :key #'variable-name)))
@@ -3490,6 +3509,8 @@
            (label LABEL2)))))
 
 (defun compile-multiple-value-list (form &key (target :stack) representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (emit-clear-values)
   (compile-form (second form) :target :stack)
   (emit-invokestatic +lisp-class+ "multipleValueList"
@@ -3497,6 +3518,8 @@
   (emit-move-from-stack target))
 
 (defun compile-multiple-value-prog1 (form &key (target :stack) representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (let ((first-subform (cadr form))
         (subforms (cddr form))
         (result-register (allocate-register))
@@ -3519,6 +3542,8 @@
     (emit-move-from-stack target)))
 
 (defun compile-multiple-value-call (form &key (target :stack) representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (case (length form)
     (1
      (error "Wrong number of arguments for MULTIPLE-VALUE-CALL."))
@@ -3565,6 +3590,13 @@
        (emit-invokevirtual +lisp-object-class+ "dispatch"
                            (list +lisp-object-array+) +lisp-object+)
        (emit-move-from-stack target)))))
+
+(defun check-for-unused-variables (list)
+  (dolist (variable list)
+    (when (and (not (variable-special-p variable))
+               (zerop (variable-reads variable))
+               (zerop (variable-writes variable)))
+      (unused-variable variable))))
 
 ;; Generates code to bind variable to value at top of runtime stack.
 (defun compile-binding (variable)
@@ -3850,7 +3882,9 @@
     (compiler-style-warn "The variable ~S is defined but never used."
                          (variable-name variable))))
 
-(defun compile-locally (form &key (target :stack) representation)
+(defun p2-locally (form &key (target :stack) representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (let ((*speed*  *speed*)
         (*space*  *space*)
         (*safety* *safety*)
@@ -3967,6 +4001,8 @@
       (emit-move-from-stack target))))
 
 (defun p2-go (form &key target representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (let* ((name (cadr form))
          (tag (find-tag name)))
     (unless tag
@@ -4104,6 +4140,8 @@
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
 
 (defun p2-return-from (form &key (target :stack) representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (let* ((name (second form))
          (result-form (third form))
          (block (find-block name)))
@@ -4246,6 +4284,8 @@
                            :representation representation))))
 
 (defun p2-quote (form &key (target :stack) representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (let ((obj (second form)))
     (cond ((null obj)
            (when target
@@ -4306,6 +4346,7 @@
       (emit-move-from-stack target))))
 
 (defun compile-declare (form &key target representation)
+  (declare (ignore form representation))
   (when target
     (emit-push-nil)
     (emit-move-from-stack target)))
@@ -4362,6 +4403,8 @@
                (delete-file pathname)))))))
 
 (defun p2-flet (form &key (target :stack) representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (let ((*local-functions* *local-functions*)
         (compilands (cadr form))
         (body (cddr form)))
@@ -4424,6 +4467,8 @@
                (delete-file pathname)))))))
 
 (defun p2-labels (form &key target representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (let ((*local-functions* *local-functions*)
         (local-functions (cadr form))
         (body (cddr form)))
@@ -4501,6 +4546,8 @@
     (emit-move-from-stack target)))
 
 (defun p2-function (form &key (target :stack) representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (let ((name (second form))
         local-function)
     (cond ((symbolp name)
@@ -5801,12 +5848,14 @@
           (return-from p2-char=)))))
   (compile-function-call form target representation))
 
-(defun compile-catch (form &key (target :stack) representation)
+(defun p2-catch (form &key (target :stack) representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (when (= (length form) 2) ; (catch 'foo)
     (when target
       (emit-push-nil)
       (emit-move-from-stack target))
-    (return-from compile-catch))
+    (return-from p2-catch))
   (let* ((*register* *register*)
          (tag-register (allocate-register))
          (label1 (gensym))
@@ -5887,7 +5936,9 @@
           (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
         form)))
 
-(defun compile-throw (form &key (target :stack) representation)
+(defun p2-throw (form &key (target :stack) representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (emit-push-current-thread)
   (compile-form (second form) :target :stack) ; Tag.
   (emit-clear-values) ; Do this unconditionally! (MISC.503)
@@ -6244,13 +6295,8 @@
             (push var *all-variables*)))
         (setf (compiland-arg-vars compiland) (nreverse vars))
         (let ((*visible-variables* *visible-variables*))
-          (dformat t "p1-compiland *visible-variables* = ~S~%"
-                   (mapcar #'variable-name *visible-variables*))
           (dolist (var (compiland-arg-vars compiland))
             (push var *visible-variables*))
-
-          (dformat t "p1-compiland *visible-variables* ==> ~S~%"
-                   (mapcar #'variable-name *visible-variables*))
           (setf (compiland-p1-result compiland)
                 (list* 'LAMBDA lambda-list (p1-body body))))))))
 
@@ -6338,14 +6384,8 @@
                                                      :descriptor descriptor)))
                   )))))
 
-;;     (dformat t "pass2 *visible-variables* = ~S~%"
-;;              (mapcar #'variable-name *visible-variables*))
-
     (dolist (var (compiland-arg-vars compiland))
       (push var *visible-variables*))
-
-;;     (dformat t "pass2 *visible-variables* ==> ~S~%"
-;;              (mapcar #'variable-name *visible-variables*))
 
     (dformat t "pass2 *using-arg-array* = ~S~%" *using-arg-array*)
     (dformat t "pass2 *child-p* = ~S~%" *child-p*)
@@ -6418,7 +6458,9 @@
                                 (not (variable-used-non-locally-p variable))
                                 (subtypep (variable-declared-type variable) 'FIXNUM))
                        (setf (variable-representation variable) :unboxed-fixnum)))))))
-            ((DYNAMIC-EXTENT FTYPE IGNORE IGNORABLE INLINE NOTINLINE OPTIMIZE SPECIAL)
+            ((IGNORE IGNORABLE)
+             (process-ignore/ignorable (%car decl) (%cdr decl) *visible-variables*))
+            ((DYNAMIC-EXTENT FTYPE INLINE NOTINLINE OPTIMIZE SPECIAL)
              ;; Nothing to do here.
              )
             (t
@@ -6433,10 +6475,6 @@
                                 (not (variable-used-non-locally-p variable))
                                 (subtypep (variable-declared-type variable) 'FIXNUM))
                        (setf (variable-representation variable) :unboxed-fixnum)))))))))))
-
-    (dump-variables (reverse parameters)
-                    (sys::%format nil "Arguments to ~A:~%" (compiland-name *current-compiland*))
-                    )
 
     (allocate-register) ;; register 0: "this" pointer
     (when (and *closure-variables* *child-p*)
@@ -6535,6 +6573,9 @@
 
     (resolve-variables)
 
+    ;; Warn if any unused args. (Is this the right place?)
+    (check-for-unused-variables (compiland-arg-vars compiland))
+
     ;; Go back and fill in prologue.
     (let ((code *code*))
       (setf *code* ())
@@ -6570,20 +6611,6 @@
       (maybe-initialize-thread-var)
       (setf *code* (append code *code*)))
 
-;;     (let ((prologue *code*))
-;;       (setf *code* ())
-;;       (compile-progn-body body :stack)
-;;       (unless *code*
-;;         (emit-push-nil))
-;;       (emit 'areturn)
-;;       (let ((body-code *code*))
-;;         (setf *code* prologue)
-;;         (maybe-initialize-thread-var)
-;;         (setf prologue *code*)
-;;         (setf *code* (append body-code prologue))))
-
-;;     (resolve-variables)
-
     (finalize-code)
     (optimize-code)
 
@@ -6618,8 +6645,6 @@
 
     (push execute-method (class-file-methods class-file))
 
-;;     (write-class-file (compiland-class-file compiland))
-    (dformat t "leaving p2-compiland ~S~%" (compiland-name compiland))
     (values)))
 
 (defun compile-1 (compiland)
@@ -6632,27 +6657,22 @@
         (*inline-declarations* *inline-declarations*))
     ;; Pass 1.
     (p1-compiland compiland)
-    (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
     (setf *closure-variables*
           (remove-if-not #'variable-used-non-locally-p *all-variables*))
-    (setf *closure-variables*
-          (remove-if #'variable-special-p *closure-variables*))
-    (dformat t "*closure-variables* = ~S~%" (mapcar #'variable-name *closure-variables*))
-
     (when *closure-variables*
-      (let ((i 0))
-        (dolist (var (reverse *closure-variables*))
-          (setf (variable-closure-index var) i)
-          (dformat t "var = ~S closure index = ~S~%" (variable-name var)
-                   (variable-closure-index var))
-          (incf i))))
-
+      (setf *closure-variables*
+            (remove-if #'variable-special-p *closure-variables*))
+      (when *closure-variables*
+        (let ((i 0))
+          (dolist (var (reverse *closure-variables*))
+            (setf (variable-closure-index var) i)
+            (dformat t "var = ~S closure index = ~S~%" (variable-name var)
+                     (variable-closure-index var))
+            (incf i)))))
     ;; Pass 2.
     (with-class-file (compiland-class-file compiland)
       (p2-compiland compiland)
       (write-class-file (compiland-class-file compiland)))
-
-    (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
     (class-file-pathname (compiland-class-file compiland))))
 
 (defvar *compiler-error-bailout*)
@@ -6802,17 +6822,14 @@
     (setf (get symbol 'p2-handler) handler)))
 
 (defun initialize-p2-handlers ()
-  (mapc #'install-p2-handler '(catch
-                               declare
+  (mapc #'install-p2-handler '(declare
                                funcall
                                if
-                               locally
                                multiple-value-call
                                multiple-value-list
                                multiple-value-prog1
                                nth
                                progn
-                               throw
                                values))
 
   (install-p2-handler '*                'p2-times)
@@ -6828,6 +6845,7 @@
   (install-p2-handler 'ash              'p2-ash)
   (install-p2-handler 'atom             'p2-atom)
   (install-p2-handler 'car              'p2-car)
+  (install-p2-handler 'catch            'p2-catch)
   (install-p2-handler 'cdr              'p2-cdr)
   (install-p2-handler 'char-code        'p2-char-code)
   (install-p2-handler 'char=            'p2-char=)
@@ -6841,6 +6859,7 @@
   (install-p2-handler 'labels           'p2-labels)
   (install-p2-handler 'length           'p2-length)
   (install-p2-handler 'list             'p2-list)
+  (install-p2-handler 'locally          'p2-locally)
   (install-p2-handler 'logand           'p2-logand)
   (install-p2-handler 'logior           'p2-logior)
   (install-p2-handler 'logxor           'p2-logxor)
@@ -6861,6 +6880,7 @@
   (install-p2-handler 'symbol-name      'p2-symbol-name)
   (install-p2-handler 'symbolp          'p2-symbolp)
   (install-p2-handler 'the              'p2-the)
+  (install-p2-handler 'throw            'p2-throw)
   (install-p2-handler 'zerop            'p2-zerop)
 
   (install-p2-handler 'sys:write-8-bits 'p2-write-8-bits)
