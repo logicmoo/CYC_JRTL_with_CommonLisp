@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.65 2005-04-23 18:58:11 piso Exp $
+;;; $Id: subtypep.lisp,v 1.66 2005-06-17 15:54:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -757,4 +757,5 @@
            (values nil nil)))))
 
 (defun subtypep (type1 type2 &optional environment)
+  (declare (ignore environment))
   (%subtypep type1 type2))
