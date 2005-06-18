@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Environment.java,v 1.24 2005-03-21 17:17:06 piso Exp $
+ * $Id: Environment.java,v 1.25 2005-06-18 23:10:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,11 +190,11 @@ public final class Environment extends LispObject
                 while (decls != NIL) {
                     LispObject decl = decls.car();
                     if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
-                        LispObject vars = decl.cdr();
-                        while (vars != NIL) {
-                            Symbol var = checkSymbol(vars.car());
+                        LispObject names = decl.cdr();
+                        while (names != NIL) {
+                            Symbol var = checkSymbol(names.car());
                             declareSpecial(var);
-                            vars = vars.cdr();
+                            names = names.cdr();
                         }
                     }
                     decls = decls.cdr();
