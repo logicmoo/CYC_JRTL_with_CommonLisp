@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.235 2005-06-13 00:20:59 piso Exp $
+ * $Id: Autoload.java,v 1.236 2005-06-18 23:13:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -537,6 +537,15 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-orc1", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-orc2", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-xor", "SimpleBitVector");
+        autoload(PACKAGE_SYS, "%slot-definition-allocation", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "%slot-definition-allocation-class", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "%slot-definition-initargs", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "%slot-definition-initform", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "%slot-definition-initfunction", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "%slot-definition-location", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "%slot-definition-name", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "%slot-definition-readers", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "%slot-definition-writers", "SlotDefinition", true);
         autoload(PACKAGE_SYS, "%socket-accept", "socket_accept");
         autoload(PACKAGE_SYS, "%socket-close", "socket_close");
         autoload(PACKAGE_SYS, "%socket-stream", "socket_stream");
@@ -592,6 +601,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
         autoload(PACKAGE_SYS, "make-forward-referenced-class", "ForwardReferencedClass", true);
         autoload(PACKAGE_SYS, "make-layout", "Layout", true);
+        autoload(PACKAGE_SYS, "make-slot-definition", "SlotDefinition", true);
         autoload(PACKAGE_SYS, "make-structure-class", "StructureClass");
         autoload(PACKAGE_SYS, "make-symbol-macro", "SymbolMacro");
         autoload(PACKAGE_SYS, "method-documentation", "StandardMethod", true);
@@ -610,6 +620,15 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "set-method-documentation", "StandardMethod", true);
         autoload(PACKAGE_SYS, "set-method-lambda-list", "StandardMethod", true);
         autoload(PACKAGE_SYS, "set-method-qualifiers", "StandardMethod", true);
+        autoload(PACKAGE_SYS, "set-slot-definition-allocation", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "set-slot-definition-allocation-class", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "set-slot-definition-initargs", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "set-slot-definition-initform", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "set-slot-definition-initfunction", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "set-slot-definition-location", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "set-slot-definition-name", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "set-slot-definition-readers", "SlotDefinition", true);
+        autoload(PACKAGE_SYS, "set-slot-definition-writers", "SlotDefinition", true);
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
     }
 }
