@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.183 2005-06-17 18:32:11 piso Exp $
+;;; $Id: clos.lisp,v 1.184 2005-06-18 23:14:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -200,19 +200,6 @@
 (defun make-initfunction (initform)
   `(function (lambda () ,initform)))
 
-;;; Slot definition metaobjects
-
-(defstruct slot-definition
-  name
-  initfunction
-  initform
-  initargs
-  readers
-  writers
-  allocation
-  allocation-class
-  (location nil))
-
 (defun make-direct-slot-definition (class &key name
                                           (initargs ())
                                           (initform nil)
@@ -222,14 +209,14 @@
                                           (allocation :instance)
                                           &allow-other-keys)
   (let ((slot (make-slot-definition)))
-    (setf (slot-definition-name slot) name)
-    (setf (slot-definition-initargs slot) initargs)
-    (setf (slot-definition-initform slot) initform)
-    (setf (slot-definition-initfunction slot) initfunction)
-    (setf (slot-definition-readers slot) readers)
-    (setf (slot-definition-writers slot) writers)
-    (setf (slot-definition-allocation slot) allocation)
-    (setf (slot-definition-allocation-class slot) class)
+    (set-slot-definition-name slot name)
+    (set-slot-definition-initargs slot initargs)
+    (set-slot-definition-initform slot initform)
+    (set-slot-definition-initfunction slot initfunction)
+    (set-slot-definition-readers slot readers)
+    (set-slot-definition-writers slot writers)
+    (set-slot-definition-allocation slot allocation)
+    (set-slot-definition-allocation-class slot class)
     slot))
 
 (defun make-effective-slot-definition (&key name
@@ -240,12 +227,12 @@
                                             (allocation-class nil)
                                             &allow-other-keys)
   (let ((slot (make-slot-definition)))
-    (setf (slot-definition-name slot) name)
-    (setf (slot-definition-initargs slot) initargs)
-    (setf (slot-definition-initform slot) initform)
-    (setf (slot-definition-initfunction slot) initfunction)
-    (setf (slot-definition-allocation slot) allocation)
-    (setf (slot-definition-allocation-class slot) allocation-class)
+    (set-slot-definition-name slot name)
+    (set-slot-definition-initargs slot initargs)
+    (set-slot-definition-initform slot initform)
+    (set-slot-definition-initfunction slot initfunction)
+    (set-slot-definition-allocation slot allocation)
+    (set-slot-definition-allocation-class slot allocation-class)
     slot))
 
 ;;; finalize-inheritance
@@ -269,27 +256,27 @@
         (instance-slots '())
         (shared-slots '()))
     (dolist (slot (class-slots class))
-      (case (slot-definition-allocation slot)
+      (case (%slot-definition-allocation slot)
         (:instance
-         (setf (slot-definition-location slot) length)
+         (set-slot-definition-location slot length)
          (incf length)
-         (push (slot-definition-name slot) instance-slots))
+         (push (%slot-definition-name slot) instance-slots))
         (:class
-         (unless (slot-definition-location slot)
-           (let ((allocation-class (slot-definition-allocation-class slot)))
-             (setf (slot-definition-location slot)
-                   (if (eq allocation-class class)
-                       (cons (slot-definition-name slot) +slot-unbound+)
-                       (slot-location allocation-class (slot-definition-name slot))))))
-         (push (slot-definition-location slot) shared-slots))))
+         (unless (%slot-definition-location slot)
+           (let ((allocation-class (%slot-definition-allocation-class slot)))
+             (set-slot-definition-location slot
+                                           (if (eq allocation-class class)
+                                               (cons (%slot-definition-name slot) +slot-unbound+)
+                                               (slot-location allocation-class (%slot-definition-name slot))))))
+         (push (%slot-definition-location slot) shared-slots))))
     (when old-layout
       ;; Redefined class: initialize added shared slots.
       (dolist (location shared-slots)
         (let* ((slot-name (car location))
                (old-location (layout-slot-location old-layout slot-name)))
           (unless old-location
-            (let* ((slot-definition (find slot-name (class-slots class) :key #'slot-definition-name))
-                   (initfunction (slot-definition-initfunction slot-definition)))
+            (let* ((slot-definition (find slot-name (class-slots class) :key #'%slot-definition-name))
+                   (initfunction (%slot-definition-initfunction slot-definition)))
               (when initfunction
                 (setf (cdr location) (funcall initfunction))))))))
     (setf (class-layout class)
@@ -394,7 +381,7 @@
   (let* ((all-slots (mapappend #'class-direct-slots
                                (class-precedence-list class)))
          (all-names (remove-duplicates
-                     (mapcar #'slot-definition-name all-slots))))
+                     (mapcar #'%slot-definition-name all-slots))))
     (mapcar #'(lambda (name)
                (funcall
                 (if (eq (class-of class) the-class-standard-class)
@@ -402,27 +389,27 @@
                     #'compute-effective-slot-definition)
                 class
                 (remove name all-slots
-                        :key #'slot-definition-name
+                        :key #'%slot-definition-name
                         :test-not #'eq)))
             all-names)))
 
 (defun std-compute-effective-slot-definition (class direct-slots)
   (declare (ignore class))
   (let ((initer (find-if-not #'null direct-slots
-                             :key #'slot-definition-initfunction)))
+                             :key #'%slot-definition-initfunction)))
     (make-effective-slot-definition
-     :name (slot-definition-name (car direct-slots))
+     :name (%slot-definition-name (car direct-slots))
      :initform (if initer
-                   (slot-definition-initform initer)
+                   (%slot-definition-initform initer)
                    nil)
      :initfunction (if initer
-                       (slot-definition-initfunction initer)
+                       (%slot-definition-initfunction initer)
                        nil)
      :initargs (remove-duplicates
-                (mapappend #'slot-definition-initargs
+                (mapappend #'%slot-definition-initargs
                            direct-slots))
-     :allocation (slot-definition-allocation (car direct-slots))
-     :allocation-class (slot-definition-allocation-class (car direct-slots)))))
+     :allocation (%slot-definition-allocation (car direct-slots))
+     :allocation-class (%slot-definition-allocation-class (car direct-slots)))))
 
 ;;; Standard instance slot access
 
@@ -435,13 +422,13 @@
 
 (defun find-slot-definition (class slot-name)
   (dolist (slot (class-slots class) nil)
-    (when (eq slot-name (slot-definition-name slot))
+    (when (eq slot-name (%slot-definition-name slot))
       (return slot))))
 
 (defun slot-location (class slot-name)
   (let ((slot (find-slot-definition class slot-name)))
     (if slot
-        (slot-definition-location slot)
+        (%slot-definition-location slot)
         nil)))
 
 (defun instance-slot-location (instance slot-name)
@@ -485,7 +472,7 @@
 
 (defun std-slot-exists-p (instance slot-name)
   (not (null (find slot-name (class-slots (class-of instance))
-                   :key #'slot-definition-name))))
+                   :key #'%slot-definition-name))))
 
 (defun slot-exists-p (object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
@@ -493,7 +480,7 @@
       (slot-exists-p-using-class (class-of object) object slot-name)))
 
 (defun instance-slot-p (slot)
-  (eq (slot-definition-allocation slot) :instance))
+  (eq (%slot-definition-allocation slot) :instance))
 
 (defun std-allocate-instance (class)
   (let* ((layout (class-layout class))
@@ -538,12 +525,12 @@
                        direct-slots)))
     (setf (class-direct-slots class) slots)
     (dolist (direct-slot slots)
-      (dolist (reader (slot-definition-readers direct-slot))
+      (dolist (reader (%slot-definition-readers direct-slot))
         (add-reader-method
-         class reader (slot-definition-name direct-slot)))
-      (dolist (writer (slot-definition-writers direct-slot))
+         class reader (%slot-definition-name direct-slot)))
+      (dolist (writer (%slot-definition-writers direct-slot))
         (add-writer-method
-         class writer (slot-definition-name direct-slot)))))
+         class writer (%slot-definition-name direct-slot)))))
   (setf (class-direct-default-initargs class) direct-default-initargs)
   (funcall (if (eq (class-of class) (find-class 'standard-class))
                #'std-finalize-inheritance
@@ -575,9 +562,15 @@
         (error 'program-error
                :format-control "Duplicate initialization argument name ~S in :DEFAULT-INITARGS."
                :format-arguments (list name)))))
+  (let ((direct-superclasses (getf all-keys :direct-superclasses)))
+    (dolist (class direct-superclasses)
+      (when (typep class 'built-in-class)
+        (error "Attempt to define a subclass of a built-in-class: ~S" class))))
   (let ((old-class (find-class name nil)))
     (cond ((and old-class (eq name (%class-name old-class)))
-           (cond ((typep old-class 'forward-referenced-class)
+           (cond ((typep old-class 'built-in-class)
+                  (error "The symbol ~S names a built-in class." name))
+                 ((typep old-class 'forward-referenced-class)
                   (let ((new-class (apply #'make-instance-standard-class
                                           (find-class 'standard-class)
                                           :name name all-keys)))
@@ -1935,7 +1928,7 @@
 
 (defun valid-initarg-p (initarg slots)
   (dolist (slot slots nil)
-    (let ((valid-initargs (slot-definition-initargs slot)))
+    (let ((valid-initargs (%slot-definition-initargs slot)))
       (when (memq initarg valid-initargs)
         (return t)))))
 
@@ -1985,17 +1978,17 @@
   (when (oddp (length all-keys))
     (error 'program-error :format-control "Odd number of keyword arguments."))
   (dolist (slot (class-slots (class-of instance)))
-    (let ((slot-name (slot-definition-name slot)))
+    (let ((slot-name (%slot-definition-name slot)))
       (multiple-value-bind (init-key init-value foundp)
-          (get-properties all-keys (slot-definition-initargs slot))
+          (get-properties all-keys (%slot-definition-initargs slot))
         (if foundp
             (setf (std-slot-value instance slot-name) init-value)
             (when (and (not (std-slot-boundp instance slot-name))
-                       (slot-definition-initfunction slot)
+                       (%slot-definition-initfunction slot)
                        (or (eq slot-names t)
                            (member slot-name slot-names)))
               (setf (std-slot-value instance slot-name)
-                    (funcall (slot-definition-initfunction slot))))))))
+                    (funcall (%slot-definition-initfunction slot))))))))
   instance)
 
 (defgeneric shared-initialize (instance slot-names &key))
@@ -2017,8 +2010,8 @@
     ;; unbound."
     (dolist (new-slot new-slots)
       (when (instance-slot-p new-slot)
-        (let* ((slot-name (slot-definition-name new-slot))
-               (old-slot (find slot-name old-slots :key #'slot-definition-name)))
+        (let* ((slot-name (%slot-definition-name new-slot))
+               (old-slot (find slot-name old-slots :key #'%slot-definition-name)))
           ;; "The values of slots specified as shared in the class CFROM and as
           ;; local in the class CTO are retained."
           (when (and old-slot (slot-boundp old-instance slot-name))
@@ -2041,7 +2034,7 @@
   (let ((added-slots
          (remove-if #'(lambda (slot-name)
                        (slot-exists-p old slot-name))
-                    (mapcar #'slot-definition-name
+                    (mapcar #'%slot-definition-name
                             (class-slots (class-of new))))))
     (check-initargs (class-of new) initargs)
     (apply #'shared-initialize new added-slots initargs)))

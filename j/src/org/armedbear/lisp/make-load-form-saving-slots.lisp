@@ -1,7 +1,7 @@
 ;;; make-load-form-saving-slots.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: make-load-form-saving-slots.lisp,v 1.5 2005-06-17 17:32:50 piso Exp $
+;;; $Id: make-load-form-saving-slots.lisp,v 1.6 2005-06-18 23:15:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
                (incf index))))
           ((typep object 'standard-object)
            (dolist (slot (class-slots class))
-             (let ((slot-name (mop::slot-definition-name slot)))
+             (let ((slot-name (%slot-definition-name slot)))
                (when (or (memq slot-name slot-names)
                          (null slot-names))
                  (when (slot-boundp object slot-name)

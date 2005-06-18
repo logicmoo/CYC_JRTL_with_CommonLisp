@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.39 2005-05-21 15:45:26 piso Exp $
+ * $Id: BuiltInClass.java,v 1.40 2005-06-18 23:12:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,7 +118,6 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass SIMPLE_BIT_VECTOR                = addClass(Symbol.SIMPLE_BIT_VECTOR);
     public static final BuiltInClass SIMPLE_ERROR                     = addClass(Symbol.SIMPLE_ERROR);
     public static final BuiltInClass SIMPLE_STRING                    = addClass(Symbol.SIMPLE_STRING);
-    public static final BuiltInClass SIMPLE_TYPE_ERROR                = addClass(Symbol.SIMPLE_TYPE_ERROR);
     public static final BuiltInClass SIMPLE_VECTOR                    = addClass(Symbol.SIMPLE_VECTOR);
     public static final BuiltInClass SINGLE_FLOAT                     = addClass(Symbol.SINGLE_FLOAT);
     public static final BuiltInClass SLIME_INPUT_STREAM               = addClass(Symbol.SLIME_INPUT_STREAM);
@@ -131,7 +130,6 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass STRING_OUTPUT_STREAM             = addClass(Symbol.STRING_OUTPUT_STREAM);
     public static final BuiltInClass STRING_STREAM                    = addClass(Symbol.STRING_STREAM);
     public static final BuiltInClass STRUCTURE_CLASS                  = addClass(Symbol.STRUCTURE_CLASS);
-    public static final BuiltInClass STYLE_WARNING                    = addClass(Symbol.STYLE_WARNING);
     public static final BuiltInClass SYMBOL                           = addClass(Symbol.SYMBOL);
     public static final BuiltInClass SYNONYM_STREAM                   = addClass(Symbol.SYNONYM_STREAM);
     public static final BuiltInClass TWO_WAY_STREAM                   = addClass(Symbol.TWO_WAY_STREAM);
@@ -183,6 +181,12 @@ public class BuiltInClass extends LispClass
         new StandardClass(Symbol.SIMPLE_WARNING, list2(SIMPLE_CONDITION, WARNING));
     static {
         addClass(Symbol.SIMPLE_WARNING, SIMPLE_WARNING);
+    }
+
+    public static final StandardClass STYLE_WARNING =
+        new StandardClass(Symbol.STYLE_WARNING, list1(WARNING));
+    static {
+        addClass(Symbol.STYLE_WARNING, STYLE_WARNING);
     }
 
     public static final StandardClass ERROR =
@@ -263,6 +267,12 @@ public class BuiltInClass extends LispClass
         addClass(Symbol.TYPE_ERROR, TYPE_ERROR);
     }
 
+    public static final StandardClass SIMPLE_TYPE_ERROR =
+        new StandardClass(Symbol.SIMPLE_TYPE_ERROR, list2(SIMPLE_CONDITION, TYPE_ERROR));
+    static {
+        addClass(Symbol.SIMPLE_TYPE_ERROR, SIMPLE_TYPE_ERROR);
+    }
+
     public static final StandardClass READER_ERROR =
         new StandardClass(Symbol.READER_ERROR, list2(PARSE_ERROR, STREAM_ERROR));
     static {
@@ -291,6 +301,12 @@ public class BuiltInClass extends LispClass
         new StandardMethodClass();
     static {
         addClass(Symbol.STANDARD_METHOD, STANDARD_METHOD);
+    }
+
+    public static final StandardClass SLOT_DEFINITION =
+        new SlotDefinitionClass();
+    static {
+        addClass(Symbol.SLOT_DEFINITION, SLOT_DEFINITION);
     }
 
     static {
@@ -458,6 +474,8 @@ public class BuiltInClass extends LispClass
         SLIME_OUTPUT_STREAM.setDirectSuperclass(STRING_STREAM);
         SLIME_OUTPUT_STREAM.setCPL(SLIME_OUTPUT_STREAM, STRING_STREAM, STREAM,
                                     CLASS_T);
+        SLOT_DEFINITION.setDirectSuperclass(STANDARD_OBJECT);
+        SLOT_DEFINITION.setCPL(SLOT_DEFINITION, STANDARD_OBJECT, CLASS_T);
         SOCKET_STREAM.setDirectSuperclass(TWO_WAY_STREAM);
         SOCKET_STREAM.setCPL(SOCKET_STREAM, TWO_WAY_STREAM, STREAM, CLASS_T);
         STANDARD_CLASS.setDirectSuperclass(CLASS);
