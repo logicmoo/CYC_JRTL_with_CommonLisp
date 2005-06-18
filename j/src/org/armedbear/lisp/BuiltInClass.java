@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.40 2005-06-18 23:12:14 piso Exp $
+ * $Id: BuiltInClass.java,v 1.41 2005-06-18 23:22:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,7 +116,6 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass SIMPLE_ARRAY                     = addClass(Symbol.SIMPLE_ARRAY);
     public static final BuiltInClass SIMPLE_BASE_STRING               = addClass(Symbol.SIMPLE_BASE_STRING);
     public static final BuiltInClass SIMPLE_BIT_VECTOR                = addClass(Symbol.SIMPLE_BIT_VECTOR);
-    public static final BuiltInClass SIMPLE_ERROR                     = addClass(Symbol.SIMPLE_ERROR);
     public static final BuiltInClass SIMPLE_STRING                    = addClass(Symbol.SIMPLE_STRING);
     public static final BuiltInClass SIMPLE_VECTOR                    = addClass(Symbol.SIMPLE_VECTOR);
     public static final BuiltInClass SINGLE_FLOAT                     = addClass(Symbol.SINGLE_FLOAT);
@@ -253,6 +252,12 @@ public class BuiltInClass extends LispClass
         new StandardClass(Symbol.PROGRAM_ERROR, list1(ERROR));
     static {
         addClass(Symbol.PROGRAM_ERROR, PROGRAM_ERROR);
+    }
+
+    public static final StandardClass SIMPLE_ERROR =
+        new StandardClass(Symbol.SIMPLE_ERROR, list2(SIMPLE_CONDITION, ERROR));
+    static {
+        addClass(Symbol.SIMPLE_ERROR, SIMPLE_ERROR);
     }
 
     public static final StandardClass STREAM_ERROR =
@@ -450,7 +455,6 @@ public class BuiltInClass extends LispClass
                                  SIMPLE_ARRAY, ARRAY, SEQUENCE, CLASS_T);
         SIMPLE_CONDITION.setCPL(SIMPLE_CONDITION, CONDITION, STANDARD_OBJECT,
                                 CLASS_T);
-        SIMPLE_ERROR.setDirectSuperclass(ERROR);
         SIMPLE_ERROR.setCPL(SIMPLE_ERROR, SIMPLE_CONDITION, ERROR,
                             SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                             CLASS_T);
