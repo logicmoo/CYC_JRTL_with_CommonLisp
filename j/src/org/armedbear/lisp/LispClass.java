@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.56 2005-05-16 16:05:41 piso Exp $
+ * $Id: LispClass.java,v 1.57 2005-06-18 23:09:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public class LispClass extends StandardObject
 
     protected Symbol symbol;
     private LispObject propertyList;
-    private Layout layout;
+    private Layout classLayout;
     private LispObject directSuperclasses = NIL;
     private LispObject directSubclasses = NIL;
     public LispObject classPrecedenceList = NIL; // FIXME! Should be private!
@@ -78,7 +78,7 @@ public class LispClass extends StandardObject
     {
         LispObject result = NIL;
         result = result.push(new Cons("NAME", symbol != null ? symbol : NIL));
-        result = result.push(new Cons("LAYOUT", layout != null ? layout : NIL));
+        result = result.push(new Cons("LAYOUT", classLayout != null ? classLayout : NIL));
         result = result.push(new Cons("DIRECT-SUPERCLASSES", directSuperclasses));
         result = result.push(new Cons("DIRECT-SUBCLASSES", directSubclasses));
         result = result.push(new Cons("CLASS-PRECEDENCE-LIST", classPrecedenceList));
@@ -108,12 +108,12 @@ public class LispClass extends StandardObject
 
     public final Layout getClassLayout()
     {
-        return layout;
+        return classLayout;
     }
 
     public final void setClassLayout(Layout layout)
     {
-        this.layout = layout;
+        classLayout = layout;
     }
 
     public LispObject getEffectiveSlots()
