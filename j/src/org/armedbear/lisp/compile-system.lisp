@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.55 2005-06-15 13:41:37 piso Exp $
+;;; $Id: compile-system.lisp,v 1.56 2005-06-18 14:55:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -164,6 +164,7 @@
                                  "enough-namestring.lisp"
                                  "ensure-directories-exist.lisp"
                                  "error.lisp"
+                                 "featurep.lisp"
                                  "fdefinition.lisp"
                                  "fill.lisp"
                                  "find-all-symbols.lisp"
@@ -213,6 +214,7 @@
                                  "prog.lisp"
                                  "psetf.lisp"
                                  "query.lisp"
+                                 "read-conditional.lisp"
                                  "read-from-string.lisp"
                                  "read-sequence.lisp"
                                  "reduce.lisp"
