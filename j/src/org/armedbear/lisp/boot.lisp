@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.230 2005-06-17 17:24:04 piso Exp $
+;;; $Id: boot.lisp,v 1.231 2005-06-18 14:56:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -123,6 +123,8 @@
 (load-system-file "destructuring-bind")
 (load-system-file "setf")
 (load-system-file "fdefinition")
+(load-system-file "featurep")
+(load-system-file "read-conditional")
 
 (defmacro defvar (var &optional (val nil valp) (doc nil docp))
   `(progn
@@ -136,45 +138,6 @@
 
 (defun make-package (package-name &key nicknames use)
   (%make-package package-name nicknames use))
-
-(in-package #:extensions)
-
-(defun featurep (form)
-  (cond ((atom form)
-         (memq form *features*))
-        ((eq (car form) :not)
-         (not (featurep (cadr form))))
-        ((eq (car form) :and)
-         (dolist (subform (cdr form) t)
-           (unless (featurep subform) (return))))
-        ((eq (car form) :or)
-         (dolist (subform (cdr form) nil)
-           (when (featurep subform) (return t))))
-        (t
-         (error "READ-FEATURE"))))
-
-(export 'featurep '#:extensions)
-
-(in-package #:system)
-
-(defun read-feature (stream)
-  (let* ((f (let* ((*package* +keyword-package+))
-              (read stream t nil t))))
-    (if (featurep f) #\+ #\-)))
-
-(defun read-conditional (stream subchar int)
-  (cond (*read-suppress*
-         (read stream t nil t)
-         (values))
-        ((eql subchar (read-feature stream))
-         (read stream t nil t))
-        (t
-         (let ((*read-suppress* t))
-           (read stream t nil t)
-           (values)))))
-
-(set-dispatch-macro-character #\# #\+ #'read-conditional *standard-readtable*)
-(set-dispatch-macro-character #\# #\- #'read-conditional *standard-readtable*)
 
 ;;; Reading circular data: the #= and ## reader macros (from SBCL)
 
@@ -287,7 +250,6 @@
 
 (set-dispatch-macro-character #\# #\= #'sharp-equal *standard-readtable*)
 (set-dispatch-macro-character #\# #\# #'sharp-sharp *standard-readtable*)
-
 
 (copy-readtable *standard-readtable* *readtable*)
 
