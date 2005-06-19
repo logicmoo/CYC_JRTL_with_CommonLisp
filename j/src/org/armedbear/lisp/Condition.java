@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.34 2005-06-15 20:20:54 piso Exp $
+ * $Id: Condition.java,v 1.35 2005-06-19 23:01:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,13 +23,14 @@ package org.armedbear.lisp;
 
 public class Condition extends StandardObject
 {
-    private LispObject formatControl = NIL;
-    private LispObject formatArguments = NIL;
-
     protected String message = null;
 
     public Condition()
     {
+        super(BuiltInClass.CONDITION, 2); // FIXME hard-coded 2
+        Debug.assertTrue(slots.length == 2);
+        slots[0] = NIL;
+        slots[1] = NIL;
         message = null;
     }
 
@@ -41,7 +42,7 @@ public class Condition extends StandardObject
 
     public Condition(LispObject initArgs) throws ConditionThrowable
     {
-        super(BuiltInClass.CONDITION, 0);
+        super(BuiltInClass.CONDITION, 2); // FIXME hard-coded 2
         LispObject control = NIL;
         LispObject arguments = NIL;
         LispObject first, second;
@@ -66,22 +67,22 @@ public class Condition extends StandardObject
 
     public final LispObject getFormatControl()
     {
-        return formatControl;
+        return slots[0];
     }
 
     public final void setFormatControl(LispObject formatControl)
     {
-        this.formatControl = formatControl;
+        slots[0] = formatControl;
     }
 
     public final LispObject getFormatArguments()
     {
-        return formatArguments;
+        return slots[1];
     }
 
     public final void setFormatArguments(LispObject formatArguments)
     {
-        this.formatArguments = formatArguments;
+        slots[1] = formatArguments;
     }
 
     public String getMessage()
@@ -119,9 +120,10 @@ public class Condition extends StandardObject
         String s = getMessage();
         if (s != null)
             return s;
+        LispObject formatControl = getFormatControl();
         if (formatControl != NIL) {
             try {
-                return format(formatControl, formatArguments);
+                return format(formatControl, getFormatArguments());
             }
             catch (Throwable t) {}
         }
@@ -135,16 +137,17 @@ public class Condition extends StandardObject
             String s = getMessage();
             if (s != null)
                 return s;
+            LispObject formatControl = getFormatControl();
             if (formatControl instanceof Function) {
                 StringOutputStream stream = new StringOutputStream();
-                Symbol.APPLY.execute(formatControl, stream, formatArguments);
+                Symbol.APPLY.execute(formatControl, stream, getFormatArguments());
                 return stream.getString().getStringValue();
             }
-            if (formatControl != NIL) {
+            if (formatControl instanceof AbstractString) {
                 LispObject f = Symbol.FORMAT.getSymbolFunction();
                 if (f == null || f instanceof Autoload)
-                    return format(formatControl, formatArguments);
-                return Symbol.APPLY.execute(f, NIL, formatControl, formatArguments).getStringValue();
+                    return format(formatControl, getFormatArguments());
+                return Symbol.APPLY.execute(f, NIL, formatControl, getFormatArguments()).getStringValue();
             }
         }
         final int maxLevel;

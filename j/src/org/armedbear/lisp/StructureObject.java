@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.49 2005-05-12 19:15:07 piso Exp $
+ * $Id: StructureObject.java,v 1.50 2005-06-19 23:06:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public final class StructureObject extends LispObject
     {
         LispObject result = NIL;
         result = result.push(new Cons("class", structureClass));
-        LispObject effectiveSlots = structureClass.getEffectiveSlots();
+        LispObject effectiveSlots = structureClass.getSlots();
         LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
         for (int i = 0; i < slots.length; i++) {
             SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
@@ -152,14 +152,13 @@ public final class StructureObject extends LispObject
             StringBuffer sb = new StringBuffer("#S(");
             sb.append(structureClass.getSymbol().writeToString());
             if (currentLevel < maxLevel) {
-                LispObject effectiveSlots = structureClass.getEffectiveSlots();
+                LispObject effectiveSlots = structureClass.getSlots();
                 LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
                 Debug.assertTrue(effectiveSlotsArray.length == slots.length);
                 final LispObject printLength = _PRINT_LENGTH_.symbolValue(thread);
                 final int limit;
                 if (printLength instanceof Fixnum)
-                    limit = Math.min(slots.length,
-                                     ((Fixnum)printLength).value);
+                    limit = Math.min(slots.length, ((Fixnum)printLength).value);
                 else
                     limit = slots.length;
                 final boolean printCircle =

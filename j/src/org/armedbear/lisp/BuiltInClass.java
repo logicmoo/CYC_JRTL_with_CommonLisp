@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.41 2005-06-18 23:22:32 piso Exp $
+ * $Id: BuiltInClass.java,v 1.42 2005-06-19 23:02:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,7 +122,6 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass SLIME_INPUT_STREAM               = addClass(Symbol.SLIME_INPUT_STREAM);
     public static final BuiltInClass SLIME_OUTPUT_STREAM              = addClass(Symbol.SLIME_OUTPUT_STREAM);
     public static final BuiltInClass SOCKET_STREAM                    = addClass(Symbol.SOCKET_STREAM);
-    public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
     public static final BuiltInClass STRING                           = addClass(Symbol.STRING);
     public static final BuiltInClass STRING_INPUT_STREAM              = addClass(Symbol.STRING_INPUT_STREAM);
@@ -168,6 +167,12 @@ public class BuiltInClass extends LispClass
         new StandardClass(Symbol.SERIOUS_CONDITION, list1(CONDITION));
     static {
         addClass(Symbol.SERIOUS_CONDITION, SERIOUS_CONDITION);
+    }
+
+    public static final StandardClass STORAGE_CONDITION =
+        new StandardClass(Symbol.STORAGE_CONDITION, list1(SERIOUS_CONDITION));
+    static {
+        addClass(Symbol.STORAGE_CONDITION, STORAGE_CONDITION);
     }
 
     public static final StandardClass WARNING =
@@ -343,6 +348,11 @@ public class BuiltInClass extends LispClass
         CONCATENATED_STREAM.setDirectSuperclass(STREAM);
         CONCATENATED_STREAM.setCPL(CONCATENATED_STREAM, STREAM, CLASS_T);
         CONDITION.setCPL(CONDITION, STANDARD_OBJECT, CLASS_T);
+        CONDITION.setDirectSlots(
+            list2(new SlotDefinition(PACKAGE_SYS.intern("FORMAT-CONTROL"),
+                                     list1(PACKAGE_CL.intern("SIMPLE-CONDITION-FORMAT-CONTROL"))),
+                  new SlotDefinition(PACKAGE_SYS.intern("FORMAT-ARGUMENTS"),
+                                     list1(PACKAGE_CL.intern("SIMPLE-CONDITION-FORMAT-ARGUMENTS")))));
         CONS.setDirectSuperclass(LIST);
         CONS.setCPL(CONS, LIST, SEQUENCE, CLASS_T);
         CONTROL_ERROR.setCPL(CONTROL_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
@@ -441,7 +451,6 @@ public class BuiltInClass extends LispClass
         RESTART.setCPL(RESTART, CLASS_T);
         SEQUENCE.setDirectSuperclass(CLASS_T);
         SEQUENCE.setCPL(SEQUENCE, CLASS_T);
-        SERIOUS_CONDITION.setDirectSuperclass(CONDITION);
         SERIOUS_CONDITION.setCPL(SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                                  CLASS_T);
         SIMPLE_ARRAY.setDirectSuperclass(ARRAY);
@@ -453,6 +462,7 @@ public class BuiltInClass extends LispClass
         SIMPLE_BIT_VECTOR.setDirectSuperclasses(list2(BIT_VECTOR, SIMPLE_ARRAY));
         SIMPLE_BIT_VECTOR.setCPL(SIMPLE_BIT_VECTOR, BIT_VECTOR, VECTOR,
                                  SIMPLE_ARRAY, ARRAY, SEQUENCE, CLASS_T);
+
         SIMPLE_CONDITION.setCPL(SIMPLE_CONDITION, CONDITION, STANDARD_OBJECT,
                                 CLASS_T);
         SIMPLE_ERROR.setCPL(SIMPLE_ERROR, SIMPLE_CONDITION, ERROR,
@@ -490,7 +500,6 @@ public class BuiltInClass extends LispClass
         STANDARD_METHOD.setDirectSuperclass(METHOD);
         STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT, CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
-        STORAGE_CONDITION.setDirectSuperclass(SERIOUS_CONDITION);
         STORAGE_CONDITION.setCPL(STORAGE_CONDITION, SERIOUS_CONDITION, CONDITION,
                                  STANDARD_OBJECT, CLASS_T);
         STREAM.setDirectSuperclass(CLASS_T);
@@ -522,6 +531,11 @@ public class BuiltInClass extends LispClass
         TWO_WAY_STREAM.setCPL(TWO_WAY_STREAM, STREAM, CLASS_T);
         TYPE_ERROR.setCPL(TYPE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, CLASS_T);
+        TYPE_ERROR.setDirectSlots(
+            list2(new SlotDefinition(PACKAGE_SYS.intern("DATUM"),
+                                     list1(PACKAGE_CL.intern("TYPE-ERROR-DATUM"))),
+                  new SlotDefinition(PACKAGE_SYS.intern("EXPECTED-TYPE"),
+                                     list1(PACKAGE_CL.intern("TYPE-ERROR-EXPECTED-TYPE")))));
         UNBOUND_SLOT.setCPL(UNBOUND_SLOT, CELL_ERROR, ERROR, SERIOUS_CONDITION,
                             CONDITION, STANDARD_OBJECT, CLASS_T);
         UNBOUND_VARIABLE.setCPL(UNBOUND_VARIABLE, CELL_ERROR, ERROR,
@@ -533,5 +547,18 @@ public class BuiltInClass extends LispClass
         VECTOR.setDirectSuperclasses(list2(ARRAY, SEQUENCE));
         VECTOR.setCPL(VECTOR, ARRAY, SEQUENCE, CLASS_T);
         WARNING.setCPL(WARNING, CONDITION, STANDARD_OBJECT, CLASS_T);
+    }
+
+    static {
+        CONDITION.finalizeClassLayout();
+        SERIOUS_CONDITION.finalizeClassLayout();
+        STORAGE_CONDITION.finalizeClassLayout();
+        WARNING.finalizeClassLayout();
+        STYLE_WARNING.finalizeClassLayout();
+        ERROR.finalizeClassLayout();
+        SIMPLE_CONDITION.finalizeClassLayout();
+        PACKAGE_ERROR.finalizeClassLayout();
+        TYPE_ERROR.finalizeClassLayout();
+        SIMPLE_TYPE_ERROR.finalizeClassLayout();
     }
 }

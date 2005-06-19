@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SlotClass.java,v 1.10 2005-05-03 01:51:50 piso Exp $
+ * $Id: SlotClass.java,v 1.11 2005-06-19 23:04:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,9 +24,9 @@ package org.armedbear.lisp;
 public class SlotClass extends LispClass
 {
     private LispObject directSlots = NIL;
-    private LispObject effectiveSlots = NIL;
+    private LispObject slots = NIL;
     private LispObject directDefaultInitargs = NIL;
-    private LispObject effectiveDefaultInitargs = NIL;
+    private LispObject defaultInitargs = NIL;
 
     public SlotClass()
     {
@@ -41,9 +41,9 @@ public class SlotClass extends LispClass
     {
         LispObject result = super.getParts().nreverse();
         result = result.push(new Cons("DIRECT-SLOTS", directSlots));
-        result = result.push(new Cons("EFFECTIVE-SLOTS", effectiveSlots));
+        result = result.push(new Cons("SLOTS", slots));
         result = result.push(new Cons("DIRECT-DEFAULT-INITARGS", directDefaultInitargs));
-        result = result.push(new Cons("EFFECTIVE-DEFAULT-INITARGS", effectiveDefaultInitargs));
+        result = result.push(new Cons("DEFAULT-INITARGS", defaultInitargs));
         return result.nreverse();
     }
 
@@ -52,19 +52,65 @@ public class SlotClass extends LispClass
         return super.typep(type);
     }
 
+    public LispObject getDirectSlots()
+    {
+        return directSlots;
+    }
+
     public void setDirectSlots(LispObject directSlots)
     {
         this.directSlots = directSlots;
     }
 
-    public final LispObject getEffectiveSlots()
+    public final LispObject getSlots()
     {
-        return effectiveSlots;
+        return slots;
     }
 
-    public void setEffectiveSlots(LispObject slots)
+    public void setSlots(LispObject slots)
     {
-        this.effectiveSlots = slots;
+        this.slots = slots;
+    }
+
+    public void finalizeClassLayout()
+    {
+        if (isFinalized())
+            return;
+        try {
+            Debug.assertTrue(slots == NIL);
+            LispObject cpl = getCPL();
+            Debug.assertTrue(cpl != null);
+            Debug.assertTrue(cpl.listp());
+            while (cpl != NIL) {
+                LispObject car = cpl.car();
+                if (car instanceof StandardClass) {
+                    StandardClass cls = (StandardClass) car;
+                    LispObject directSlots = cls.getDirectSlots();
+                    Debug.assertTrue(directSlots != null);
+                    Debug.assertTrue(directSlots.listp());
+                    while (directSlots != NIL) {
+                        slots = slots.push(directSlots.car());
+                        directSlots = directSlots.cdr();
+                    }
+                }
+                cpl = cpl.cdr();
+            }
+            slots = slots.nreverse();
+            LispObject[] instanceSlotNames = new LispObject[slots.length()];
+            int i = 0;
+            LispObject tail = slots;
+            while (tail != NIL) {
+                SlotDefinition slotDefinition = (SlotDefinition) tail.car();
+                slotDefinition.setLocation(i);
+                instanceSlotNames[i++] = slotDefinition.getName();
+                tail = tail.cdr();
+            }
+            setClassLayout(new Layout(this, instanceSlotNames, NIL));
+            setFinalized(true);
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
     }
 
     // ### class-direct-slots
@@ -107,7 +153,7 @@ public class SlotClass extends LispClass
             throws ConditionThrowable
         {
             if (arg instanceof SlotClass)
-                return ((SlotClass)arg).effectiveSlots;
+                return ((SlotClass)arg).slots;
             if (arg instanceof BuiltInClass)
                 return NIL;
             return signal(new TypeError(arg, Symbol.STANDARD_CLASS));
@@ -122,7 +168,7 @@ public class SlotClass extends LispClass
             throws ConditionThrowable
         {
             try {
-                ((SlotClass)first).effectiveSlots = second;
+                ((SlotClass)first).slots = second;
                 return second;
             }
             catch (ClassCastException e) {
@@ -171,7 +217,7 @@ public class SlotClass extends LispClass
             throws ConditionThrowable
         {
             if (arg instanceof SlotClass)
-                return ((SlotClass)arg).effectiveDefaultInitargs;
+                return ((SlotClass)arg).defaultInitargs;
             if (arg instanceof BuiltInClass)
                 return NIL;
             return signal(new TypeError(arg, Symbol.STANDARD_CLASS));
@@ -186,7 +232,7 @@ public class SlotClass extends LispClass
             throws ConditionThrowable
         {
             if (first instanceof SlotClass) {
-                ((SlotClass)first).effectiveDefaultInitargs = second;
+                ((SlotClass)first).defaultInitargs = second;
                 return second;
             }
             return signal(new TypeError(first, Symbol.STANDARD_CLASS));

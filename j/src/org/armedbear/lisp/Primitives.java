@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.798 2005-06-15 01:44:35 piso Exp $
+ * $Id: Primitives.java,v 1.799 2005-06-19 23:01:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public final class Primitives extends Lisp
 {
     // ### *
-    public static final Primitive MULTIPLY = new Primitive("*","&rest numbers")
+    public static final Primitive MULTIPLY = new Primitive("*", "&rest numbers")
     {
         public LispObject execute()
         {
@@ -5254,7 +5254,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return ((LispClass)arg).getFinalized();
+                return ((LispClass)arg).isFinalized() ? T : NIL;
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.CLASS));
@@ -5270,7 +5270,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             try {
-                ((LispClass)first).setFinalized(second);
+                ((LispClass)first).setFinalized(second != NIL);
                 return second;
             }
             catch (ClassCastException e) {

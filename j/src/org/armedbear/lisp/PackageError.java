@@ -1,8 +1,8 @@
 /*
  * PackageError.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: PackageError.java,v 1.15 2004-11-28 15:43:50 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: PackageError.java,v 1.16 2005-06-19 23:03:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ public class PackageError extends LispError
             return T;
         return super.typep(type);
     }
-    
+
     public LispObject getPackage()
     {
         return pkg;

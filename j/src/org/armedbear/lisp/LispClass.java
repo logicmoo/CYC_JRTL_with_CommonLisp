@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.57 2005-06-18 23:09:20 piso Exp $
+ * $Id: LispClass.java,v 1.58 2005-06-19 23:03:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public class LispClass extends StandardObject
     public LispObject classPrecedenceList = NIL; // FIXME! Should be private!
     public LispObject directMethods = NIL; // FIXME! Should be private!
     public LispObject documentation = NIL; // FIXME! Should be private!
-    private LispObject finalized = NIL;
+    private boolean finalized;
 
     protected LispClass()
     {
@@ -116,7 +116,7 @@ public class LispClass extends StandardObject
         classLayout = layout;
     }
 
-    public LispObject getEffectiveSlots()
+    public LispObject getSlots()
     {
         return NIL;
     }
@@ -131,14 +131,14 @@ public class LispClass extends StandardObject
         this.directSuperclasses = directSuperclasses;
     }
 
-    public final LispObject getFinalized()
+    public final boolean isFinalized()
     {
         return finalized;
     }
 
-    public final void setFinalized(LispObject finalized)
+    public final void setFinalized(boolean b)
     {
-        this.finalized = finalized;
+        finalized = b;
     }
 
     // When there's only one direct superclass...

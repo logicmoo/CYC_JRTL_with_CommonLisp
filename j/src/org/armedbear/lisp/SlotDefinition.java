@@ -2,7 +2,7 @@
  * SlotDefinition.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: SlotDefinition.java,v 1.1 2005-06-18 23:07:14 piso Exp $
+ * $Id: SlotDefinition.java,v 1.2 2005-06-19 23:05:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,13 +21,51 @@
 
 package org.armedbear.lisp;
 
-public class SlotDefinition extends StandardObject
+public final class SlotDefinition extends StandardObject
 {
     public SlotDefinition()
     {
         super(BuiltInClass.SLOT_DEFINITION,
               BuiltInClass.SLOT_DEFINITION.getClassLayout().getLength());
         slots[SlotDefinitionClass.SLOT_INDEX_LOCATION] = NIL;
+    }
+
+    public SlotDefinition(Symbol name, LispObject readers)
+    {
+        this();
+        try {
+            Debug.assertTrue(name instanceof Symbol);
+            slots[SlotDefinitionClass.SLOT_INDEX_NAME] = name;
+            slots[SlotDefinitionClass.SLOT_INDEX_INITFUNCTION] = NIL;
+            slots[SlotDefinitionClass.SLOT_INDEX_INITARGS] =
+                new Cons(PACKAGE_KEYWORD.intern(name.getName()));
+            slots[SlotDefinitionClass.SLOT_INDEX_READERS] = readers;
+            slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION] = PACKAGE_KEYWORD.intern("INSTANCE");
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
+    }
+
+    public final LispObject getName()
+    {
+        return slots[SlotDefinitionClass.SLOT_INDEX_NAME];
+    }
+
+    public final void setLocation(int i)
+    {
+        slots[SlotDefinitionClass.SLOT_INDEX_LOCATION] = new Fixnum(i);
+    }
+
+    public String writeToString() throws ConditionThrowable
+    {
+        StringBuffer sb = new StringBuffer(Symbol.SLOT_DEFINITION.writeToString());
+        LispObject name = slots[SlotDefinitionClass.SLOT_INDEX_NAME];
+        if (name != null && name != NIL) {
+            sb.append(' ');
+            sb.append(name.writeToString());
+        }
+        return unreadableString(sb.toString());
     }
 
     // ### make-slot-definition
