@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.58 2005-06-19 23:03:16 piso Exp $
+ * $Id: LispClass.java,v 1.59 2005-06-20 15:49:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,6 +114,13 @@ public class LispClass extends StandardObject
     public final void setClassLayout(Layout layout)
     {
         classLayout = layout;
+    }
+
+    public final int getLayoutLength()
+    {
+        if (layout == null)
+            return 0;
+        return layout.getLength();
     }
 
     public LispObject getSlots()
