@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.63 2005-06-20 16:01:16 piso Exp $
+ * $Id: Cons.java,v 1.64 2005-06-20 17:24:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -296,12 +296,14 @@ public final class Cons extends LispObject
 
     public LispObject reverse() throws ConditionThrowable
     {
-        LispObject result = NIL;
-        LispObject arg = this; // FIXME optimize
-        while (arg != NIL) {
-            result = new Cons(arg.car(), result);
-            arg = arg.cdr();
+        Cons cons = this;
+        LispObject result = new Cons(cons.car);
+        while (cons.cdr instanceof Cons) {
+            cons = (Cons) cons.cdr;
+            result = new Cons(cons.car, result);
         }
+        if (cons.cdr != NIL)
+            return signal(new TypeError(cons.cdr, Symbol.LIST));
         return result;
     }
 
@@ -318,13 +320,17 @@ public final class Cons extends LispObject
                     list = cons;
                     cons = temp;
                 } while (cons.cdr instanceof Cons);
+                if (cons.cdr != NIL)
+                    return signal(new TypeError(cons.cdr, Symbol.LIST));
                 cdr = list;
                 cons1.cdr = cons;
-            }
+            } else if (cons.cdr != NIL)
+                return signal(new TypeError(cons.cdr, Symbol.LIST));
             LispObject temp = car;
             car = cons.car;
             cons.car = temp;
-        }
+        } else if (cdr != NIL)
+            return signal(new TypeError(cdr, Symbol.LIST));
         return this;
     }
 
