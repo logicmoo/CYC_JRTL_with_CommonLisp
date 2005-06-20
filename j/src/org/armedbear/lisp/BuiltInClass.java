@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.44 2005-06-20 03:30:50 piso Exp $
+ * $Id: BuiltInClass.java,v 1.45 2005-06-20 15:56:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -349,9 +349,9 @@ public class BuiltInClass extends LispClass
         CONCATENATED_STREAM.setCPL(CONCATENATED_STREAM, STREAM, CLASS_T);
         CONDITION.setCPL(CONDITION, STANDARD_OBJECT, CLASS_T);
         CONDITION.setDirectSlots(
-            list2(new SlotDefinition(PACKAGE_SYS.intern("FORMAT-CONTROL"),
+            list2(new SlotDefinition(Symbol.FORMAT_CONTROL,
                                      list1(PACKAGE_CL.intern("SIMPLE-CONDITION-FORMAT-CONTROL"))),
-                  new SlotDefinition(PACKAGE_SYS.intern("FORMAT-ARGUMENTS"),
+                  new SlotDefinition(Symbol.FORMAT_ARGUMENTS,
                                      list1(PACKAGE_CL.intern("SIMPLE-CONDITION-FORMAT-ARGUMENTS")))));
         CONS.setDirectSuperclass(LIST);
         CONS.setCPL(CONS, LIST, SEQUENCE, CLASS_T);
@@ -425,6 +425,9 @@ public class BuiltInClass extends LispClass
         PACKAGE.setCPL(PACKAGE, CLASS_T);
         PACKAGE_ERROR.setCPL(PACKAGE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                              STANDARD_OBJECT, CLASS_T);
+        PACKAGE_ERROR.setDirectSlots(
+            list1(new SlotDefinition(Symbol.PACKAGE,
+                                     list1(PACKAGE_CL.intern("PACKAGE-ERROR-PACKAGE")))));
         PARSE_ERROR.setCPL(PARSE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                            STANDARD_OBJECT, CLASS_T);
         PATHNAME.setDirectSuperclass(CLASS_T);

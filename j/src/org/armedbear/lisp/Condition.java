@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.35 2005-06-19 23:01:42 piso Exp $
+ * $Id: Condition.java,v 1.36 2005-06-20 15:56:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,18 @@ public class Condition extends StandardObject
 
     public Condition()
     {
-        super(BuiltInClass.CONDITION, 2); // FIXME hard-coded 2
+//         super(BuiltInClass.CONDITION, 2); // FIXME hard-coded 2
+        super(BuiltInClass.CONDITION);
         Debug.assertTrue(slots.length == 2);
+        slots[0] = NIL;
+        slots[1] = NIL;
+        message = null;
+    }
+
+    protected Condition(LispClass cls)
+    {
+        super(cls);
+        Debug.assertTrue(slots.length >= 2);
         slots[0] = NIL;
         slots[1] = NIL;
         message = null;
@@ -37,12 +47,16 @@ public class Condition extends StandardObject
     public Condition(LispClass cls, int length)
     {
         super(cls, length);
+//         super(cls);
+//         Debug.assertTrue(length == cls.getLayoutLength());
         message = null;
     }
 
     public Condition(LispObject initArgs) throws ConditionThrowable
     {
-        super(BuiltInClass.CONDITION, 2); // FIXME hard-coded 2
+//         super(BuiltInClass.CONDITION, 2); // FIXME hard-coded 2
+        super(BuiltInClass.CONDITION);
+        Debug.assertTrue(slots.length == 2);
         LispObject control = NIL;
         LispObject arguments = NIL;
         LispObject first, second;
@@ -67,22 +81,34 @@ public class Condition extends StandardObject
 
     public final LispObject getFormatControl()
     {
-        return slots[0];
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(Symbol.FORMAT_CONTROL);
+        Debug.assertTrue(index >= 0);
+        return slots[index];
     }
 
     public final void setFormatControl(LispObject formatControl)
     {
-        slots[0] = formatControl;
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(Symbol.FORMAT_CONTROL);
+        Debug.assertTrue(index >= 0);
+        slots[index] = formatControl;
     }
 
     public final LispObject getFormatArguments()
     {
-        return slots[1];
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(Symbol.FORMAT_ARGUMENTS);
+        Debug.assertTrue(index >= 0);
+        return slots[index];
     }
 
     public final void setFormatArguments(LispObject formatArguments)
     {
-        slots[1] = formatArguments;
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(Symbol.FORMAT_ARGUMENTS);
+        Debug.assertTrue(index >= 0);
+        slots[index] = formatArguments;
     }
 
     public String getMessage()

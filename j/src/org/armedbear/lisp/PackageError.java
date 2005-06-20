@@ -2,7 +2,7 @@
  * PackageError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: PackageError.java,v 1.16 2005-06-19 23:03:55 piso Exp $
+ * $Id: PackageError.java,v 1.17 2005-06-20 15:57:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +21,19 @@
 
 package org.armedbear.lisp;
 
-public class PackageError extends LispError
+public final class PackageError extends LispError
 {
-    private final LispObject pkg;
+//     private final LispObject pkg;
+
+//     protected PackageError(LispClass cls)
+//     {
+//         super(cls);
+//         pkg = NIL; // FIXME
+//     }
 
     public PackageError(LispObject initArgs) throws ConditionThrowable
     {
+        super(BuiltInClass.PACKAGE_ERROR);
         LispObject pkg = NIL;
         LispObject first, second;
         while (initArgs != NIL) {
@@ -37,13 +44,16 @@ public class PackageError extends LispError
             if (first == Keyword.PACKAGE)
                 pkg = second;
         }
-        this.pkg = pkg;
+//         this.pkg = pkg;
+        setPackage(pkg);
     }
 
     public PackageError(String message)
     {
-        super(message);
-        pkg = NIL;
+//         super(message);
+        super(BuiltInClass.PACKAGE_ERROR);
+        setFormatControl(new SimpleString(message));
+//         pkg = NIL;
     }
 
     public LispObject typeOf()
@@ -67,6 +77,17 @@ public class PackageError extends LispError
 
     public LispObject getPackage()
     {
-        return pkg;
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(Symbol.PACKAGE);
+        Debug.assertTrue(index >= 0);
+        return slots[index];
+    }
+
+    public void setPackage(LispObject pkg)
+    {
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(Symbol.PACKAGE);
+        Debug.assertTrue(index >= 0);
+        slots[index] = pkg;
     }
 }
