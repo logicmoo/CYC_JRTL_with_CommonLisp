@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: proclaim.lisp,v 1.2 2005-06-14 00:53:10 piso Exp $
+;;; $Id: proclaim.lisp,v 1.3 2005-06-20 23:35:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package #:system)
 
-(export '(check-declaration-type proclaimed-ftype))
+(export '(check-declaration-type proclaimed-ftype ftype-result-type))
 
 (defmacro declaim (&rest decls)
 `(eval-when (:compile-toplevel :load-toplevel :execute)
@@ -92,3 +92,11 @@
   (if (symbolp name)
       (get name 'proclaimed-ftype)
       (gethash-2op-1ret name *proclaimed-ftypes*)))
+
+(defun ftype-result-type (ftype)
+  (if (atom ftype)
+      '*
+      (let ((result-type (third ftype)))
+        (if result-type
+            result-type
+            '*))))
