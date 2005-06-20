@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.495 2005-06-20 18:05:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.496 2005-06-20 23:38:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1310,8 +1310,9 @@
         (t
          (when (sys:symbol-single-valued-p (%car form))
            (return-from single-valued-p t))
-         (let ((ftype (sys:proclaimed-ftype (%car form))))
-           (if (and ftype (third ftype) (atom (third ftype)))
+         (let* ((ftype (proclaimed-ftype (%car form)))
+                (result-type (ftype-result-type ftype)))
+           (if (and result-type (atom result-type) (neq result-type '*))
                t
                nil)))))
 
@@ -4930,10 +4931,7 @@
              (THE
               (second form))
              (t
-              (let ((ftype (sys:proclaimed-ftype op)))
-                (if ftype
-                    (or (third ftype) t)
-                    t))))))
+              (ftype-result-type (proclaimed-ftype op))))))
         ((fixnump form)
          (list 'INTEGER form form))
         ((characterp form)
