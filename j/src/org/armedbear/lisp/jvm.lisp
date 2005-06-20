@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.494 2005-06-17 22:24:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.495 2005-06-20 18:05:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2671,6 +2671,7 @@
                   (RATIONALP       "RATIONALP")
                   (REALP           "REALP")
                   (REST            "cdr")
+                  (REVERSE         "reverse")
                   (SECOND          "cadr")
                   (SIMPLE-STRING-P "SIMPLE_STRING_P")
                   (STRING          "STRING")
