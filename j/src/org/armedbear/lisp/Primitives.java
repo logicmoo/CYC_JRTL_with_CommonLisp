@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.799 2005-06-19 23:01:18 piso Exp $
+ * $Id: Primitives.java,v 1.800 2005-06-20 16:00:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4314,19 +4314,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof AbstractVector)
-                return ((AbstractVector)arg).reverse();
-            if (arg instanceof Cons) {
-                LispObject result = NIL;
-                while (arg != NIL) {
-                    result = new Cons(arg.car(), result);
-                    arg = arg.cdr();
-                }
-                return result;
-            }
-            if (arg == NIL)
-                return NIL;
-            return signal(new TypeError(arg, Symbol.SEQUENCE));
+            return arg.reverse();
         }
     };
 
