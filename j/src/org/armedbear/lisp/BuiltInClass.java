@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.43 2005-06-20 01:43:50 piso Exp $
+ * $Id: BuiltInClass.java,v 1.44 2005-06-20 03:30:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,217 +139,161 @@ public class BuiltInClass extends LispClass
         addClass(Symbol.STRUCTURE_OBJECT, STRUCTURE_OBJECT);
     }
 
-    private static StandardClass addStandardClass(Symbol symbol,
-                                                  LispObject directSuperclasses)
-    {
-        StandardClass c = new StandardClass(symbol, directSuperclasses);
-        addClass(symbol, c);
-        return c;
+    public static final StandardClass STANDARD_CLASS =
+        new StandardClass(Symbol.STANDARD_CLASS, list1(CLASS_T));
+    static {
+        addClass(Symbol.STANDARD_CLASS, STANDARD_CLASS);
     }
 
     public static final StandardClass STANDARD_OBJECT =
-        addStandardClass(Symbol.STANDARD_OBJECT, list1(CLASS_T));
-
+        new StandardClass(Symbol.STANDARD_OBJECT, list1(CLASS_T));
     static {
-        ARRAY.setDirectSuperclass(CLASS_T);
-        ARRAY.setCPL(ARRAY, CLASS_T);
-        BASE_STRING.setDirectSuperclass(STRING);
-        BASE_STRING.setCPL(BASE_STRING, STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
-        BIGNUM.setDirectSuperclass(INTEGER);
-        BIGNUM.setCPL(BIGNUM, INTEGER, RATIONAL, REAL, NUMBER, CLASS_T);
-        BIT_VECTOR.setDirectSuperclass(VECTOR);
-        BIT_VECTOR.setCPL(BIT_VECTOR, VECTOR, ARRAY, SEQUENCE, CLASS_T);
-        BROADCAST_STREAM.setDirectSuperclass(STREAM);
-        BROADCAST_STREAM.setCPL(BROADCAST_STREAM, STREAM, CLASS_T);
-        BUILT_IN_CLASS.setDirectSuperclass(CLASS);
-        BUILT_IN_CLASS.setCPL(BUILT_IN_CLASS, CLASS, STANDARD_OBJECT, CLASS_T);
-        CASE_FROB_STREAM.setDirectSuperclass(STREAM);
-        CASE_FROB_STREAM.setCPL(CASE_FROB_STREAM, STREAM, CLASS_T);
-        CHARACTER.setDirectSuperclass(CLASS_T);
-        CHARACTER.setCPL(CHARACTER, CLASS_T);
-        CLASS.setDirectSuperclass(CLASS_T);
-        CLASS.setCPL(CLASS, STANDARD_OBJECT, CLASS_T);
-        CLASS_T.setCPL(CLASS_T);
-        COMPLEX.setDirectSuperclass(NUMBER);
-        COMPLEX.setCPL(COMPLEX, NUMBER, CLASS_T);
-        CONCATENATED_STREAM.setDirectSuperclass(STREAM);
-        CONCATENATED_STREAM.setCPL(CONCATENATED_STREAM, STREAM, CLASS_T);
-        CONS.setDirectSuperclass(LIST);
-        CONS.setCPL(CONS, LIST, SEQUENCE, CLASS_T);
-        DOUBLE_FLOAT.setDirectSuperclass(FLOAT);
-        DOUBLE_FLOAT.setCPL(DOUBLE_FLOAT, FLOAT, REAL, NUMBER, CLASS_T);
-        ECHO_STREAM.setDirectSuperclass(STREAM);
-        ECHO_STREAM.setCPL(ECHO_STREAM, STREAM, CLASS_T);
-        ENVIRONMENT.setDirectSuperclass(CLASS_T);
-        ENVIRONMENT.setCPL(ENVIRONMENT, CLASS_T);
-        FIXNUM.setDirectSuperclass(INTEGER);
-        FIXNUM.setCPL(FIXNUM, INTEGER, RATIONAL, REAL, NUMBER, CLASS_T);
-        FILE_STREAM.setDirectSuperclass(STREAM);
-        FILE_STREAM.setCPL(FILE_STREAM, STREAM, CLASS_T);
-        FLOAT.setDirectSuperclass(REAL);
-        FLOAT.setCPL(FLOAT, REAL, NUMBER, CLASS_T);
-        FORWARD_REFERENCED_CLASS.setDirectSuperclass(CLASS);
-        FORWARD_REFERENCED_CLASS.setCPL(FORWARD_REFERENCED_CLASS, CLASS, CLASS_T);
-        FUNCTION.setDirectSuperclass(CLASS_T);
-        FUNCTION.setCPL(FUNCTION, CLASS_T);
-        HASH_TABLE.setDirectSuperclass(CLASS_T);
-        HASH_TABLE.setCPL(HASH_TABLE, CLASS_T);
-        INTEGER.setDirectSuperclass(RATIONAL);
-        INTEGER.setCPL(INTEGER, RATIONAL, REAL, NUMBER, CLASS_T);
-        LIST.setDirectSuperclass(SEQUENCE);
-        LIST.setCPL(LIST, SEQUENCE, CLASS_T);
-        LOGICAL_PATHNAME.setDirectSuperclass(PATHNAME);
-        LOGICAL_PATHNAME.setCPL(LOGICAL_PATHNAME, PATHNAME, CLASS_T);
-        METHOD_COMBINATION.setDirectSuperclass(CLASS_T);
-        METHOD_COMBINATION.setCPL(METHOD_COMBINATION, CLASS_T);
-        NIL_VECTOR.setDirectSuperclass(STRING);
-        NIL_VECTOR.setCPL(NIL_VECTOR, STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
-        NULL.setDirectSuperclass(LIST);
-        NULL.setCPL(NULL, SYMBOL, LIST, SEQUENCE, CLASS_T);
-        NUMBER.setDirectSuperclass(CLASS_T);
-        NUMBER.setCPL(NUMBER, CLASS_T);
-        PACKAGE.setDirectSuperclass(CLASS_T);
-        PACKAGE.setCPL(PACKAGE, CLASS_T);
-        PATHNAME.setDirectSuperclass(CLASS_T);
-        PATHNAME.setCPL(PATHNAME, CLASS_T);
-        RANDOM_STATE.setDirectSuperclass(CLASS_T);
-        RANDOM_STATE.setCPL(RANDOM_STATE, CLASS_T);
-        RATIO.setDirectSuperclass(RATIONAL);
-        RATIO.setCPL(RATIO, RATIONAL, REAL, NUMBER, CLASS_T);
-        RATIONAL.setDirectSuperclass(REAL);
-        RATIONAL.setCPL(RATIONAL, REAL, NUMBER, CLASS_T);
-        READTABLE.setDirectSuperclass(CLASS_T);
-        READTABLE.setCPL(READTABLE, CLASS_T);
-        REAL.setDirectSuperclass(NUMBER);
-        REAL.setCPL(REAL, NUMBER, CLASS_T);
-        RESTART.setDirectSuperclass(CLASS_T);
-        RESTART.setCPL(RESTART, CLASS_T);
-        SEQUENCE.setDirectSuperclass(CLASS_T);
-        SEQUENCE.setCPL(SEQUENCE, CLASS_T);
-        SIMPLE_ARRAY.setDirectSuperclass(ARRAY);
-        SIMPLE_ARRAY.setCPL(SIMPLE_ARRAY, ARRAY, CLASS_T);
-        SIMPLE_BASE_STRING.setDirectSuperclasses(list2(BASE_STRING, SIMPLE_STRING));
-        SIMPLE_BASE_STRING.setCPL(SIMPLE_BASE_STRING, BASE_STRING, SIMPLE_STRING,
-                                  STRING, VECTOR, SIMPLE_ARRAY, ARRAY, SEQUENCE,
-                                  CLASS_T);
-        SIMPLE_BIT_VECTOR.setDirectSuperclasses(list2(BIT_VECTOR, SIMPLE_ARRAY));
-        SIMPLE_BIT_VECTOR.setCPL(SIMPLE_BIT_VECTOR, BIT_VECTOR, VECTOR,
-                                 SIMPLE_ARRAY, ARRAY, SEQUENCE, CLASS_T);
-
-        SIMPLE_STRING.setDirectSuperclasses(list2(STRING, SIMPLE_ARRAY));
-        SIMPLE_STRING.setCPL(SIMPLE_STRING, STRING, VECTOR, SIMPLE_ARRAY, ARRAY,
-                             SEQUENCE, CLASS_T);
-        SIMPLE_VECTOR.setDirectSuperclasses(list2(VECTOR, SIMPLE_ARRAY));
-        SIMPLE_VECTOR.setCPL(SIMPLE_VECTOR, VECTOR, SIMPLE_ARRAY, ARRAY, SEQUENCE,
-                             CLASS_T);
-        SINGLE_FLOAT.setDirectSuperclass(FLOAT);
-        SINGLE_FLOAT.setCPL(SINGLE_FLOAT, FLOAT, REAL, NUMBER, CLASS_T);
-        SLIME_INPUT_STREAM.setDirectSuperclass(STRING_STREAM);
-        SLIME_INPUT_STREAM.setCPL(SLIME_INPUT_STREAM, STRING_STREAM, STREAM,
-                                   CLASS_T);
-        SLIME_OUTPUT_STREAM.setDirectSuperclass(STRING_STREAM);
-        SLIME_OUTPUT_STREAM.setCPL(SLIME_OUTPUT_STREAM, STRING_STREAM, STREAM,
-                                    CLASS_T);
-        SOCKET_STREAM.setDirectSuperclass(TWO_WAY_STREAM);
-        SOCKET_STREAM.setCPL(SOCKET_STREAM, TWO_WAY_STREAM, STREAM, CLASS_T);
-        STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
-        STREAM.setDirectSuperclass(CLASS_T);
-        STREAM.setCPL(STREAM, CLASS_T);
-        STRING.setDirectSuperclass(VECTOR);
-        STRING.setCPL(STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
-        STRING_INPUT_STREAM.setDirectSuperclass(STRING_STREAM);
-        STRING_INPUT_STREAM.setCPL(STRING_INPUT_STREAM, STRING_STREAM, STREAM,
-                                   CLASS_T);
-        STRING_OUTPUT_STREAM.setDirectSuperclass(STRING_STREAM);
-        STRING_OUTPUT_STREAM.setCPL(STRING_OUTPUT_STREAM, STRING_STREAM, STREAM,
-                                    CLASS_T);
-        STRING_STREAM.setDirectSuperclass(STREAM);
-        STRING_STREAM.setCPL(STRING_STREAM, STREAM, CLASS_T);
-        SYMBOL.setDirectSuperclass(CLASS_T);
-        SYMBOL.setCPL(SYMBOL, CLASS_T);
-        SYNONYM_STREAM.setDirectSuperclass(STREAM);
-        SYNONYM_STREAM.setCPL(SYNONYM_STREAM, STREAM, CLASS_T);
-        TWO_WAY_STREAM.setDirectSuperclass(STREAM);
-        TWO_WAY_STREAM.setCPL(TWO_WAY_STREAM, STREAM, CLASS_T);
-        VECTOR.setDirectSuperclasses(list2(ARRAY, SEQUENCE));
-        VECTOR.setCPL(VECTOR, ARRAY, SEQUENCE, CLASS_T);
+        addClass(Symbol.STANDARD_OBJECT, STANDARD_OBJECT);
     }
 
-    // Standard classes.
-    public static final StandardClass STANDARD_CLASS =
-        addStandardClass(Symbol.STANDARD_CLASS, list1(CLASS_T));
-
     public static final StandardClass CONDITION =
-        addStandardClass(Symbol.CONDITION, list1(STANDARD_OBJECT));
+        new StandardClass(Symbol.CONDITION, list1(STANDARD_OBJECT));
+    static {
+        addClass(Symbol.CONDITION, CONDITION);
+    }
 
     public static final StandardClass SIMPLE_CONDITION =
-        addStandardClass(Symbol.SIMPLE_CONDITION, list1(CONDITION));
+        new StandardClass(Symbol.SIMPLE_CONDITION, list1(CONDITION));
+    static {
+        addClass(Symbol.SIMPLE_CONDITION, SIMPLE_CONDITION);
+    }
 
     public static final StandardClass SERIOUS_CONDITION =
-        addStandardClass(Symbol.SERIOUS_CONDITION, list1(CONDITION));
+        new StandardClass(Symbol.SERIOUS_CONDITION, list1(CONDITION));
+    static {
+        addClass(Symbol.SERIOUS_CONDITION, SERIOUS_CONDITION);
+    }
 
     public static final StandardClass STORAGE_CONDITION =
-        addStandardClass(Symbol.STORAGE_CONDITION, list1(SERIOUS_CONDITION));
+        new StandardClass(Symbol.STORAGE_CONDITION, list1(SERIOUS_CONDITION));
+    static {
+        addClass(Symbol.STORAGE_CONDITION, STORAGE_CONDITION);
+    }
 
     public static final StandardClass WARNING =
-        addStandardClass(Symbol.WARNING, list1(CONDITION));
+        new StandardClass(Symbol.WARNING, list1(CONDITION));
+    static {
+        addClass(Symbol.WARNING, WARNING);
+    }
 
     public static final StandardClass SIMPLE_WARNING =
-        addStandardClass(Symbol.SIMPLE_WARNING, list2(SIMPLE_CONDITION, WARNING));
+        new StandardClass(Symbol.SIMPLE_WARNING, list2(SIMPLE_CONDITION, WARNING));
+    static {
+        addClass(Symbol.SIMPLE_WARNING, SIMPLE_WARNING);
+    }
 
     public static final StandardClass STYLE_WARNING =
-        addStandardClass(Symbol.STYLE_WARNING, list1(WARNING));
+        new StandardClass(Symbol.STYLE_WARNING, list1(WARNING));
+    static {
+        addClass(Symbol.STYLE_WARNING, STYLE_WARNING);
+    }
 
     public static final StandardClass ERROR =
-        addStandardClass(Symbol.ERROR, list1(SERIOUS_CONDITION));
+        new StandardClass(Symbol.ERROR, list1(SERIOUS_CONDITION));
+    static {
+        addClass(Symbol.ERROR, ERROR);
+    }
 
     public static final StandardClass ARITHMETIC_ERROR =
-        addStandardClass(Symbol.ARITHMETIC_ERROR, list1(ERROR));
+        new StandardClass(Symbol.ARITHMETIC_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.ARITHMETIC_ERROR, ARITHMETIC_ERROR);
+    }
 
     public static final StandardClass CELL_ERROR =
-        addStandardClass(Symbol.CELL_ERROR, list1(ERROR));
+        new StandardClass(Symbol.CELL_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.CELL_ERROR, CELL_ERROR);
+    }
 
     public static final StandardClass UNBOUND_SLOT =
-        addStandardClass(Symbol.UNBOUND_SLOT, list1(CELL_ERROR));
+        new StandardClass(Symbol.UNBOUND_SLOT, list1(CELL_ERROR));
+    static {
+        addClass(Symbol.UNBOUND_SLOT, UNBOUND_SLOT);
+    }
 
     public static final StandardClass UNBOUND_VARIABLE =
-        addStandardClass(Symbol.UNBOUND_VARIABLE, list1(CELL_ERROR));
+        new StandardClass(Symbol.UNBOUND_VARIABLE, list1(CELL_ERROR));
+    static {
+        addClass(Symbol.UNBOUND_VARIABLE, UNBOUND_VARIABLE);
+    }
 
     public static final StandardClass UNDEFINED_FUNCTION =
-        addStandardClass(Symbol.UNDEFINED_FUNCTION, list1(CELL_ERROR));
+        new StandardClass(Symbol.UNDEFINED_FUNCTION, list1(CELL_ERROR));
+    static {
+        addClass(Symbol.UNDEFINED_FUNCTION, UNDEFINED_FUNCTION);
+    }
 
     public static final StandardClass CONTROL_ERROR =
-        addStandardClass(Symbol.CONTROL_ERROR, list1(ERROR));
+        new StandardClass(Symbol.CONTROL_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.CONTROL_ERROR, CONTROL_ERROR);
+    }
 
     public static final StandardClass FILE_ERROR =
-        addStandardClass(Symbol.FILE_ERROR, list1(ERROR));
+        new StandardClass(Symbol.FILE_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.FILE_ERROR, FILE_ERROR);
+    }
 
     public static final StandardClass PACKAGE_ERROR =
-        addStandardClass(Symbol.PACKAGE_ERROR, list1(ERROR));
+        new StandardClass(Symbol.PACKAGE_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.PACKAGE_ERROR, PACKAGE_ERROR);
+    }
 
     public static final StandardClass PARSE_ERROR =
-        addStandardClass(Symbol.PARSE_ERROR, list1(ERROR));
+        new StandardClass(Symbol.PARSE_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.PARSE_ERROR, PARSE_ERROR);
+    }
 
     public static final StandardClass PROGRAM_ERROR =
-        addStandardClass(Symbol.PROGRAM_ERROR, list1(ERROR));
+        new StandardClass(Symbol.PROGRAM_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.PROGRAM_ERROR, PROGRAM_ERROR);
+    }
 
     public static final StandardClass SIMPLE_ERROR =
-        addStandardClass(Symbol.SIMPLE_ERROR, list2(SIMPLE_CONDITION, ERROR));
+        new StandardClass(Symbol.SIMPLE_ERROR, list2(SIMPLE_CONDITION, ERROR));
+    static {
+        addClass(Symbol.SIMPLE_ERROR, SIMPLE_ERROR);
+    }
 
     public static final StandardClass STREAM_ERROR =
-        addStandardClass(Symbol.STREAM_ERROR, list1(ERROR));
+        new StandardClass(Symbol.STREAM_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.STREAM_ERROR, STREAM_ERROR);
+    }
 
     public static final StandardClass TYPE_ERROR =
-        addStandardClass(Symbol.TYPE_ERROR, list1(ERROR));
+        new StandardClass(Symbol.TYPE_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.TYPE_ERROR, TYPE_ERROR);
+    }
 
     public static final StandardClass SIMPLE_TYPE_ERROR =
-        addStandardClass(Symbol.SIMPLE_TYPE_ERROR, list2(SIMPLE_CONDITION, TYPE_ERROR));
+        new StandardClass(Symbol.SIMPLE_TYPE_ERROR, list2(SIMPLE_CONDITION, TYPE_ERROR));
+    static {
+        addClass(Symbol.SIMPLE_TYPE_ERROR, SIMPLE_TYPE_ERROR);
+    }
 
     public static final StandardClass READER_ERROR =
-        addStandardClass(Symbol.READER_ERROR, list2(PARSE_ERROR, STREAM_ERROR));
+        new StandardClass(Symbol.READER_ERROR, list2(PARSE_ERROR, STREAM_ERROR));
+    static {
+        addClass(Symbol.READER_ERROR, READER_ERROR);
+    }
 
     public static final StandardClass GENERIC_FUNCTION =
-        addStandardClass(Symbol.GENERIC_FUNCTION, list2(FUNCTION, STANDARD_OBJECT));
+        new StandardClass(Symbol.GENERIC_FUNCTION, list2(FUNCTION, STANDARD_OBJECT));
+    static {
+        addClass(Symbol.GENERIC_FUNCTION, GENERIC_FUNCTION);
+    }
 
     public static final StandardClass STANDARD_GENERIC_FUNCTION =
         new StandardGenericFunctionClass();
@@ -358,7 +302,10 @@ public class BuiltInClass extends LispClass
     }
 
     public static final StandardClass METHOD =
-        addStandardClass(Symbol.METHOD, list1(STANDARD_OBJECT));
+        new StandardClass(Symbol.METHOD, list1(STANDARD_OBJECT));
+    static {
+        addClass(Symbol.METHOD, METHOD);
+    }
 
     public static final StandardClass STANDARD_METHOD =
         new StandardMethodClass();
@@ -375,27 +322,64 @@ public class BuiltInClass extends LispClass
     static {
         ARITHMETIC_ERROR.setCPL(ARITHMETIC_ERROR, ERROR, SERIOUS_CONDITION,
                                 CONDITION, STANDARD_OBJECT, CLASS_T);
+        ARRAY.setDirectSuperclass(CLASS_T);
+        ARRAY.setCPL(ARRAY, CLASS_T);
+        BASE_STRING.setDirectSuperclass(STRING);
+        BASE_STRING.setCPL(BASE_STRING, STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
+        BIGNUM.setDirectSuperclass(INTEGER);
+        BIGNUM.setCPL(BIGNUM, INTEGER, RATIONAL, REAL, NUMBER, CLASS_T);
+        BIT_VECTOR.setDirectSuperclass(VECTOR);
+        BIT_VECTOR.setCPL(BIT_VECTOR, VECTOR, ARRAY, SEQUENCE, CLASS_T);
+        BROADCAST_STREAM.setDirectSuperclass(STREAM);
+        BROADCAST_STREAM.setCPL(BROADCAST_STREAM, STREAM, CLASS_T);
+        BUILT_IN_CLASS.setDirectSuperclass(CLASS);
+        BUILT_IN_CLASS.setCPL(BUILT_IN_CLASS, CLASS, STANDARD_OBJECT, CLASS_T);
+        CASE_FROB_STREAM.setDirectSuperclass(STREAM);
+        CASE_FROB_STREAM.setCPL(CASE_FROB_STREAM, STREAM, CLASS_T);
         CELL_ERROR.setCPL(CELL_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, CLASS_T);
+        CHARACTER.setDirectSuperclass(CLASS_T);
+        CHARACTER.setCPL(CHARACTER, CLASS_T);
+        CLASS.setDirectSuperclass(CLASS_T);
+        CLASS.setCPL(CLASS, STANDARD_OBJECT, CLASS_T);
+        CLASS_T.setCPL(CLASS_T);
+        COMPLEX.setDirectSuperclass(NUMBER);
+        COMPLEX.setCPL(COMPLEX, NUMBER, CLASS_T);
+        CONCATENATED_STREAM.setDirectSuperclass(STREAM);
+        CONCATENATED_STREAM.setCPL(CONCATENATED_STREAM, STREAM, CLASS_T);
         CONDITION.setCPL(CONDITION, STANDARD_OBJECT, CLASS_T);
         CONDITION.setDirectSlots(
-            list2(new SlotDefinition(Symbol.FORMAT_CONTROL,
+            list2(new SlotDefinition(PACKAGE_SYS.intern("FORMAT-CONTROL"),
                                      list1(PACKAGE_CL.intern("SIMPLE-CONDITION-FORMAT-CONTROL"))),
-                  new SlotDefinition(Symbol.FORMAT_ARGUMENTS,
+                  new SlotDefinition(PACKAGE_SYS.intern("FORMAT-ARGUMENTS"),
                                      list1(PACKAGE_CL.intern("SIMPLE-CONDITION-FORMAT-ARGUMENTS")))));
+        CONS.setDirectSuperclass(LIST);
+        CONS.setCPL(CONS, LIST, SEQUENCE, CLASS_T);
         CONTROL_ERROR.setCPL(CONTROL_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                              STANDARD_OBJECT, CLASS_T);
         DIVISION_BY_ZERO.setDirectSuperclass(ARITHMETIC_ERROR);
         DIVISION_BY_ZERO.setCPL(DIVISION_BY_ZERO, ARITHMETIC_ERROR, ERROR,
                                 SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                                 CLASS_T);
+        DOUBLE_FLOAT.setDirectSuperclass(FLOAT);
+        DOUBLE_FLOAT.setCPL(DOUBLE_FLOAT, FLOAT, REAL, NUMBER, CLASS_T);
+        ECHO_STREAM.setDirectSuperclass(STREAM);
+        ECHO_STREAM.setCPL(ECHO_STREAM, STREAM, CLASS_T);
         END_OF_FILE.setDirectSuperclass(STREAM_ERROR);
         END_OF_FILE.setCPL(END_OF_FILE, STREAM_ERROR, ERROR, SERIOUS_CONDITION,
                            CONDITION, STANDARD_OBJECT, CLASS_T);
+        ENVIRONMENT.setDirectSuperclass(CLASS_T);
+        ENVIRONMENT.setCPL(ENVIRONMENT, CLASS_T);
         ERROR.setCPL(ERROR, SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                      CLASS_T);
+        FIXNUM.setDirectSuperclass(INTEGER);
+        FIXNUM.setCPL(FIXNUM, INTEGER, RATIONAL, REAL, NUMBER, CLASS_T);
         FILE_ERROR.setCPL(FILE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, CLASS_T);
+        FILE_STREAM.setDirectSuperclass(STREAM);
+        FILE_STREAM.setCPL(FILE_STREAM, STREAM, CLASS_T);
+        FLOAT.setDirectSuperclass(REAL);
+        FLOAT.setCPL(FLOAT, REAL, NUMBER, CLASS_T);
         FLOATING_POINT_INEXACT.setDirectSuperclass(ARITHMETIC_ERROR);
         FLOATING_POINT_INEXACT.setCPL(FLOATING_POINT_INEXACT, ARITHMETIC_ERROR,
                                       ERROR, SERIOUS_CONDITION, CONDITION,
@@ -413,27 +397,72 @@ public class BuiltInClass extends LispClass
         FLOATING_POINT_UNDERFLOW.setCPL(FLOATING_POINT_UNDERFLOW, ARITHMETIC_ERROR,
                                         ERROR, SERIOUS_CONDITION, CONDITION,
                                         STANDARD_OBJECT, CLASS_T);
+        FORWARD_REFERENCED_CLASS.setDirectSuperclass(CLASS);
+        FORWARD_REFERENCED_CLASS.setCPL(FORWARD_REFERENCED_CLASS, CLASS, CLASS_T);
+        FUNCTION.setDirectSuperclass(CLASS_T);
+        FUNCTION.setCPL(FUNCTION, CLASS_T);
         GENERIC_FUNCTION.setCPL(GENERIC_FUNCTION, STANDARD_OBJECT, FUNCTION,
                                 CLASS_T);
+        HASH_TABLE.setDirectSuperclass(CLASS_T);
+        HASH_TABLE.setCPL(HASH_TABLE, CLASS_T);
+        INTEGER.setDirectSuperclass(RATIONAL);
+        INTEGER.setCPL(INTEGER, RATIONAL, REAL, NUMBER, CLASS_T);
+        LIST.setDirectSuperclass(SEQUENCE);
+        LIST.setCPL(LIST, SEQUENCE, CLASS_T);
+        LOGICAL_PATHNAME.setDirectSuperclass(PATHNAME);
+        LOGICAL_PATHNAME.setCPL(LOGICAL_PATHNAME, PATHNAME, CLASS_T);
         METHOD.setDirectSuperclass(STANDARD_OBJECT);
         METHOD.setCPL(METHOD, STANDARD_OBJECT, CLASS_T);
+        METHOD_COMBINATION.setDirectSuperclass(CLASS_T);
+        METHOD_COMBINATION.setCPL(METHOD_COMBINATION, CLASS_T);
+        NIL_VECTOR.setDirectSuperclass(STRING);
+        NIL_VECTOR.setCPL(NIL_VECTOR, STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
+        NULL.setDirectSuperclass(LIST);
+        NULL.setCPL(NULL, SYMBOL, LIST, SEQUENCE, CLASS_T);
+        NUMBER.setDirectSuperclass(CLASS_T);
+        NUMBER.setCPL(NUMBER, CLASS_T);
+        PACKAGE.setDirectSuperclass(CLASS_T);
+        PACKAGE.setCPL(PACKAGE, CLASS_T);
         PACKAGE_ERROR.setCPL(PACKAGE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                              STANDARD_OBJECT, CLASS_T);
-        PACKAGE_ERROR.setDirectSlots(
-            list1(new SlotDefinition(Symbol.PACKAGE,
-                                     list1(PACKAGE_CL.intern("PACKAGE-ERROR-PACKAGE")))));
         PARSE_ERROR.setCPL(PARSE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                            STANDARD_OBJECT, CLASS_T);
+        PATHNAME.setDirectSuperclass(CLASS_T);
+        PATHNAME.setCPL(PATHNAME, CLASS_T);
         PRINT_NOT_READABLE.setDirectSuperclass(ERROR);
         PRINT_NOT_READABLE.setCPL(PRINT_NOT_READABLE, ERROR, SERIOUS_CONDITION,
                                   CONDITION, STANDARD_OBJECT, CLASS_T);
         PROGRAM_ERROR.setCPL(PROGRAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                              STANDARD_OBJECT, CLASS_T);
+        RANDOM_STATE.setDirectSuperclass(CLASS_T);
+        RANDOM_STATE.setCPL(RANDOM_STATE, CLASS_T);
+        RATIO.setDirectSuperclass(RATIONAL);
+        RATIO.setCPL(RATIO, RATIONAL, REAL, NUMBER, CLASS_T);
+        RATIONAL.setDirectSuperclass(REAL);
+        RATIONAL.setCPL(RATIONAL, REAL, NUMBER, CLASS_T);
         READER_ERROR.setCPL(READER_ERROR, PARSE_ERROR, STREAM_ERROR, ERROR,
                             SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                             CLASS_T);
+        READTABLE.setDirectSuperclass(CLASS_T);
+        READTABLE.setCPL(READTABLE, CLASS_T);
+        REAL.setDirectSuperclass(NUMBER);
+        REAL.setCPL(REAL, NUMBER, CLASS_T);
+        RESTART.setDirectSuperclass(CLASS_T);
+        RESTART.setCPL(RESTART, CLASS_T);
+        SEQUENCE.setDirectSuperclass(CLASS_T);
+        SEQUENCE.setCPL(SEQUENCE, CLASS_T);
         SERIOUS_CONDITION.setCPL(SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                                  CLASS_T);
+        SIMPLE_ARRAY.setDirectSuperclass(ARRAY);
+        SIMPLE_ARRAY.setCPL(SIMPLE_ARRAY, ARRAY, CLASS_T);
+        SIMPLE_BASE_STRING.setDirectSuperclasses(list2(BASE_STRING, SIMPLE_STRING));
+        SIMPLE_BASE_STRING.setCPL(SIMPLE_BASE_STRING, BASE_STRING, SIMPLE_STRING,
+                                  STRING, VECTOR, SIMPLE_ARRAY, ARRAY, SEQUENCE,
+                                  CLASS_T);
+        SIMPLE_BIT_VECTOR.setDirectSuperclasses(list2(BIT_VECTOR, SIMPLE_ARRAY));
+        SIMPLE_BIT_VECTOR.setCPL(SIMPLE_BIT_VECTOR, BIT_VECTOR, VECTOR,
+                                 SIMPLE_ARRAY, ARRAY, SEQUENCE, CLASS_T);
+
         SIMPLE_CONDITION.setCPL(SIMPLE_CONDITION, CONDITION, STANDARD_OBJECT,
                                 CLASS_T);
         SIMPLE_ERROR.setCPL(SIMPLE_ERROR, SIMPLE_CONDITION, ERROR,
@@ -443,10 +472,26 @@ public class BuiltInClass extends LispClass
         SIMPLE_TYPE_ERROR.setCPL(SIMPLE_TYPE_ERROR, SIMPLE_CONDITION,
                                  TYPE_ERROR, ERROR, SERIOUS_CONDITION,
                                  CONDITION, STANDARD_OBJECT, CLASS_T);
+        SIMPLE_STRING.setDirectSuperclasses(list2(STRING, SIMPLE_ARRAY));
+        SIMPLE_STRING.setCPL(SIMPLE_STRING, STRING, VECTOR, SIMPLE_ARRAY, ARRAY,
+                             SEQUENCE, CLASS_T);
+        SIMPLE_VECTOR.setDirectSuperclasses(list2(VECTOR, SIMPLE_ARRAY));
+        SIMPLE_VECTOR.setCPL(SIMPLE_VECTOR, VECTOR, SIMPLE_ARRAY, ARRAY, SEQUENCE,
+                             CLASS_T);
         SIMPLE_WARNING.setCPL(SIMPLE_WARNING, SIMPLE_CONDITION, WARNING,
                               CONDITION, STANDARD_OBJECT, CLASS_T);
+        SINGLE_FLOAT.setDirectSuperclass(FLOAT);
+        SINGLE_FLOAT.setCPL(SINGLE_FLOAT, FLOAT, REAL, NUMBER, CLASS_T);
+        SLIME_INPUT_STREAM.setDirectSuperclass(STRING_STREAM);
+        SLIME_INPUT_STREAM.setCPL(SLIME_INPUT_STREAM, STRING_STREAM, STREAM,
+                                   CLASS_T);
+        SLIME_OUTPUT_STREAM.setDirectSuperclass(STRING_STREAM);
+        SLIME_OUTPUT_STREAM.setCPL(SLIME_OUTPUT_STREAM, STRING_STREAM, STREAM,
+                                    CLASS_T);
         SLOT_DEFINITION.setDirectSuperclass(STANDARD_OBJECT);
         SLOT_DEFINITION.setCPL(SLOT_DEFINITION, STANDARD_OBJECT, CLASS_T);
+        SOCKET_STREAM.setDirectSuperclass(TWO_WAY_STREAM);
+        SOCKET_STREAM.setCPL(SOCKET_STREAM, TWO_WAY_STREAM, STREAM, CLASS_T);
         STANDARD_CLASS.setDirectSuperclass(CLASS);
         STANDARD_CLASS.setCPL(STANDARD_CLASS, CLASS, STANDARD_OBJECT, CLASS_T);
         STANDARD_GENERIC_FUNCTION.setCPL(STANDARD_GENERIC_FUNCTION,
@@ -454,10 +499,23 @@ public class BuiltInClass extends LispClass
                                          FUNCTION, CLASS_T);
         STANDARD_METHOD.setDirectSuperclass(METHOD);
         STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT, CLASS_T);
+        STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
         STORAGE_CONDITION.setCPL(STORAGE_CONDITION, SERIOUS_CONDITION, CONDITION,
                                  STANDARD_OBJECT, CLASS_T);
+        STREAM.setDirectSuperclass(CLASS_T);
+        STREAM.setCPL(STREAM, CLASS_T);
         STREAM_ERROR.setCPL(STREAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                             STANDARD_OBJECT, CLASS_T);
+        STRING.setDirectSuperclass(VECTOR);
+        STRING.setCPL(STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
+        STRING_INPUT_STREAM.setDirectSuperclass(STRING_STREAM);
+        STRING_INPUT_STREAM.setCPL(STRING_INPUT_STREAM, STRING_STREAM, STREAM,
+                                   CLASS_T);
+        STRING_OUTPUT_STREAM.setDirectSuperclass(STRING_STREAM);
+        STRING_OUTPUT_STREAM.setCPL(STRING_OUTPUT_STREAM, STRING_STREAM, STREAM,
+                                    CLASS_T);
+        STRING_STREAM.setDirectSuperclass(STREAM);
+        STRING_STREAM.setCPL(STRING_STREAM, STREAM, CLASS_T);
         STRUCTURE_CLASS.setDirectSuperclass(CLASS);
         STRUCTURE_CLASS.setCPL(STRUCTURE_CLASS, CLASS, STANDARD_OBJECT,
                                CLASS_T);
@@ -465,6 +523,12 @@ public class BuiltInClass extends LispClass
         STYLE_WARNING.setDirectSuperclass(WARNING);
         STYLE_WARNING.setCPL(STYLE_WARNING, WARNING, CONDITION, STANDARD_OBJECT,
                              CLASS_T);
+        SYMBOL.setDirectSuperclass(CLASS_T);
+        SYMBOL.setCPL(SYMBOL, CLASS_T);
+        SYNONYM_STREAM.setDirectSuperclass(STREAM);
+        SYNONYM_STREAM.setCPL(SYNONYM_STREAM, STREAM, CLASS_T);
+        TWO_WAY_STREAM.setDirectSuperclass(STREAM);
+        TWO_WAY_STREAM.setCPL(TWO_WAY_STREAM, STREAM, CLASS_T);
         TYPE_ERROR.setCPL(TYPE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, CLASS_T);
         TYPE_ERROR.setDirectSlots(
@@ -480,6 +544,8 @@ public class BuiltInClass extends LispClass
         UNDEFINED_FUNCTION.setCPL(UNDEFINED_FUNCTION, CELL_ERROR, ERROR,
                                   SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                                   CLASS_T);
+        VECTOR.setDirectSuperclasses(list2(ARRAY, SEQUENCE));
+        VECTOR.setCPL(VECTOR, ARRAY, SEQUENCE, CLASS_T);
         WARNING.setCPL(WARNING, CONDITION, STANDARD_OBJECT, CLASS_T);
     }
 
