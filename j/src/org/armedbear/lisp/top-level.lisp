@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.46 2005-06-17 17:34:01 piso Exp $
+;;; $Id: top-level.lisp,v 1.47 2005-06-20 17:49:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -287,7 +287,7 @@
 
 (defparameter *command-table*
   '(("apropos" "ap" apropos-command "apropos")
-    ("bt" nil backtrace-command "backtrace n stack frames (default all)")
+    ("bt" nil backtrace-command "backtrace n stack frames (default 8)")
     ("cd" nil cd-command "change default directory")
     ("cf" nil cf-command "compile file(s)")
     ("cload" "cl" cload-command "compile and load file(s)")
