@@ -2,7 +2,7 @@
  * StandardObjectFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObjectFunctions.java,v 1.8 2005-05-21 15:52:55 piso Exp $
+ * $Id: StandardObjectFunctions.java,v 1.9 2005-06-20 16:04:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,10 +34,10 @@ public class StandardObjectFunctions extends Lisp
                 return new StandardClass();
             if (arg instanceof LispClass) {
                 LispClass cls = (LispClass) arg;
-                Layout layout = cls.getClassLayout();
+                final Layout layout = cls.getClassLayout();
                 if (layout == null)
                     return signal(new LispError("No layout for " + arg.writeToString()));
-                int length = layout.getLength();
+                final int length = layout.getLength();
                 Symbol symbol = cls.getSymbol();
                 if (symbol == Symbol.STANDARD_GENERIC_FUNCTION)
                     return new StandardGenericFunction();

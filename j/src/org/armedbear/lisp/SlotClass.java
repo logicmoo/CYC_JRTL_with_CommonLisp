@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SlotClass.java,v 1.13 2005-06-20 04:00:43 piso Exp $
+ * $Id: SlotClass.java,v 1.14 2005-06-20 16:03:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,6 +81,7 @@ public class SlotClass extends LispClass
             LispObject cpl = getCPL();
             Debug.assertTrue(cpl != null);
             Debug.assertTrue(cpl.listp());
+            cpl = cpl.reverse();
             while (cpl != NIL) {
                 LispObject car = cpl.car();
                 if (car instanceof StandardClass) {
