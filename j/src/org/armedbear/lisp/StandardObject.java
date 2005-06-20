@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.44 2005-05-23 16:28:40 piso Exp $
+ * $Id: StandardObject.java,v 1.45 2005-06-20 15:55:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public class StandardObject extends LispObject
             slots[i] = UNBOUND_VALUE;
     }
 
-    private StandardObject(LispClass cls)
+    protected StandardObject(LispClass cls)
     {
         layout = cls.getClassLayout();
         slots = new LispObject[layout.getLength()];
