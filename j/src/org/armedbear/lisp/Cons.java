@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.62 2005-06-16 01:24:16 piso Exp $
+ * $Id: Cons.java,v 1.63 2005-06-20 16:01:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -292,6 +292,17 @@ public final class Cons extends LispObject
             // Not reached.
             return NIL;
         }
+    }
+
+    public LispObject reverse() throws ConditionThrowable
+    {
+        LispObject result = NIL;
+        LispObject arg = this; // FIXME optimize
+        while (arg != NIL) {
+            result = new Cons(arg.car(), result);
+            arg = arg.cdr();
+        }
+        return result;
     }
 
     public final LispObject nreverse() throws ConditionThrowable

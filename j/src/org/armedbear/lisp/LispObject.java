@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.131 2005-06-09 11:49:06 piso Exp $
+ * $Id: LispObject.java,v 1.132 2005-06-20 16:03:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -385,6 +385,11 @@ public class LispObject extends Lisp
     }
 
     public LispObject elt(int index) throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.SEQUENCE));
+    }
+
+    public LispObject reverse() throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.SEQUENCE));
     }
