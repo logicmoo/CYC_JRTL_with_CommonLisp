@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.36 2005-06-20 15:56:14 piso Exp $
+ * $Id: Condition.java,v 1.37 2005-06-21 13:58:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,9 +54,13 @@ public class Condition extends StandardObject
 
     public Condition(LispObject initArgs) throws ConditionThrowable
     {
-//         super(BuiltInClass.CONDITION, 2); // FIXME hard-coded 2
         super(BuiltInClass.CONDITION);
         Debug.assertTrue(slots.length == 2);
+        initialize(initArgs);
+    }
+
+    protected void initialize(LispObject initArgs) throws ConditionThrowable
+    {
         LispObject control = NIL;
         LispObject arguments = NIL;
         LispObject first, second;
