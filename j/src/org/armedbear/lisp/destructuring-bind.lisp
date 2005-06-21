@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.19 2005-06-17 17:24:40 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.20 2005-06-21 13:39:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -141,13 +141,13 @@
          (minimum 0)
          (keys ())
          rest-name restp allow-other-keys-p env-arg-used)
-    ;; This really strange way to test for '&whole is neccessary because member
+    ;; This really strange way to test for &WHOLE is necessary because MEMBER
     ;; does not have to work on dotted lists, and dotted lists are legal
-    ;; in lambda-lists.
+    ;; in lambda lists.
     (when (and (do ((list lambda-list (cdr list)))
 		   ((atom list) nil)
-		 (when (eq (car list) '&whole) (return t)))
-	       (not (eq (car lambda-list) '&whole)))
+		 (when (eq (car list) '&WHOLE) (return t)))
+	       (not (eq (car lambda-list) '&WHOLE)))
       (error "&Whole must appear first in ~S lambda-list." error-kind))
     (do ((rest-of-args lambda-list (cdr rest-of-args)))
 	((atom rest-of-args)
