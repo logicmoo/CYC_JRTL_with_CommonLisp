@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.85 2005-06-16 17:53:10 piso Exp $
+ * $Id: Interpreter.java,v 1.86 2005-06-21 01:10:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,10 +220,21 @@ public final class Interpreter extends Lisp
                             result = evaluate(args[i + 1]);
                         }
                         catch (ConditionThrowable c) {
-                            System.err.println("Caught condition: " +
-                                               c.getCondition().writeToString() +
-                                               " while evaluating: " +
-                                               args[i+1]);
+                            final String separator =
+                                System.getProperty("line.separator");
+                            StringBuffer sb = new StringBuffer();
+                            sb.append(separator);
+                            sb.append("Caught ");
+                            sb.append(c.getCondition().typeOf().writeToString());
+                            sb.append(" while processing --eval option \"" +
+                                               args[i + 1] + "\":");
+                            sb.append(separator);
+                            sb.append("  ");
+                            final LispThread thread = LispThread.currentThread();
+                            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                            sb.append(c.getCondition().writeToString());
+                            sb.append(separator);
+                            System.err.print(sb.toString());
                             System.exit(2);
                         }
                         ++i;
