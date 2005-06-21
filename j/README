@@ -52,7 +52,9 @@ Then do:
 
 Wait for the build to finish and exit the host Lisp.
 
-Use abcl.bat on Windows or ./abcl on Unix to start ABCL.
+Use abcl.bat on Windows or ./abcl on Unix to start ABCL. (Note that abcl.bat
+and abcl contain absolute paths, so you'll need to edit the relevant file if
+you move things around after the build.)
 
 If the build fails in the javac stage, you might have better luck with this:
 
