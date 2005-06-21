@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: proclaim.lisp,v 1.3 2005-06-20 23:35:26 piso Exp $
+;;; $Id: proclaim.lisp,v 1.4 2005-06-21 04:00:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -68,6 +68,8 @@
              (DEBUG
               (setf jvm::*debug* val)))))))
     (FTYPE
+     (unless (cdr declaration-specifier)
+       (error "No type specified in FTYPE declaration: ~S" declaration-specifier))
      (apply 'proclaim-ftype (cdr declaration-specifier)))
     ((INLINE NOTINLINE)
      (dolist (name (cdr declaration-specifier))
