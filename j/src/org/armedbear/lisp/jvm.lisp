@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.496 2005-06-20 23:38:21 piso Exp $
+;;; $Id: jvm.lisp,v 1.497 2005-06-21 00:07:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2999,7 +2999,8 @@
     (when (and (boundp '*defined-functions*) (boundp '*undefined-functions*))
       (unless (or (fboundp op)
                   (eq op (compiland-name *current-compiland*))
-                  (memq op *defined-functions*))
+                  (memq op *defined-functions*)
+                  (proclaimed-ftype op))
         (pushnew op *undefined-functions*)))
     (let ((numargs (length args)))
       (case (length args)
