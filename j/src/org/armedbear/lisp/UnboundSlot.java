@@ -1,8 +1,8 @@
 /*
  * UnboundSlot.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: UnboundSlot.java,v 1.4 2004-10-13 00:22:20 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: UnboundSlot.java,v 1.5 2005-06-21 18:42:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,14 +63,14 @@ public final class UnboundSlot extends CellError
 
     public LispObject classOf()
     {
-        return BuiltInClass.UNBOUND_SLOT;
+        return StandardClass.UNBOUND_SLOT;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.UNBOUND_SLOT)
             return T;
-        if (type == BuiltInClass.UNBOUND_SLOT)
+        if (type == StandardClass.UNBOUND_SLOT)
             return T;
         return super.typep(type);
     }

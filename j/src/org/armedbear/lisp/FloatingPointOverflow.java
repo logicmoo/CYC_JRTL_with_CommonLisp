@@ -2,7 +2,7 @@
  * FloatingPointOverflow.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FloatingPointOverflow.java,v 1.2 2004-10-13 00:22:18 piso Exp $
+ * $Id: FloatingPointOverflow.java,v 1.3 2005-06-21 18:42:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,14 +45,14 @@ public class FloatingPointOverflow extends ArithmeticError
 
     public LispObject classOf()
     {
-        return BuiltInClass.FLOATING_POINT_OVERFLOW;
+        return StandardClass.FLOATING_POINT_OVERFLOW;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.FLOATING_POINT_OVERFLOW)
             return T;
-        if (type == BuiltInClass.FLOATING_POINT_OVERFLOW)
+        if (type == StandardClass.FLOATING_POINT_OVERFLOW)
             return T;
         return super.typep(type);
     }

@@ -1,8 +1,8 @@
 /*
  * PrintNotReadable.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: PrintNotReadable.java,v 1.7 2005-02-28 02:50:04 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: PrintNotReadable.java,v 1.8 2005-06-21 18:42:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,14 +50,14 @@ public class PrintNotReadable extends LispError
 
     public LispObject classOf()
     {
-        return BuiltInClass.PRINT_NOT_READABLE;
+        return StandardClass.PRINT_NOT_READABLE;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.PRINT_NOT_READABLE)
             return T;
-        if (type == BuiltInClass.PRINT_NOT_READABLE)
+        if (type == StandardClass.PRINT_NOT_READABLE)
             return T;
         return super.typep(type);
     }

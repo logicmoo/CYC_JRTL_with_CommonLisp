@@ -2,7 +2,7 @@
  * SlotDefinition.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: SlotDefinition.java,v 1.2 2005-06-19 23:05:18 piso Exp $
+ * $Id: SlotDefinition.java,v 1.3 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,8 @@ public final class SlotDefinition extends StandardObject
 {
     public SlotDefinition()
     {
-        super(BuiltInClass.SLOT_DEFINITION,
-              BuiltInClass.SLOT_DEFINITION.getClassLayout().getLength());
+        super(StandardClass.SLOT_DEFINITION,
+              StandardClass.SLOT_DEFINITION.getClassLayout().getLength());
         slots[SlotDefinitionClass.SLOT_INDEX_LOCATION] = NIL;
     }
 

@@ -1,8 +1,8 @@
 /*
  * ParseError.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: ParseError.java,v 1.11 2004-10-13 00:22:19 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: ParseError.java,v 1.12 2005-06-21 18:42:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,14 +40,14 @@ public class ParseError extends LispError
 
     public LispObject classOf()
     {
-        return BuiltInClass.PARSE_ERROR;
+        return StandardClass.PARSE_ERROR;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.PARSE_ERROR)
             return T;
-        if (type == BuiltInClass.PARSE_ERROR)
+        if (type == StandardClass.PARSE_ERROR)
             return T;
         return super.typep(type);
     }

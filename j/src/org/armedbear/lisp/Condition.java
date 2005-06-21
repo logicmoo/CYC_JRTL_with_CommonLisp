@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.37 2005-06-21 13:58:40 piso Exp $
+ * $Id: Condition.java,v 1.38 2005-06-21 18:42:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ public class Condition extends StandardObject
     public Condition()
     {
 //         super(BuiltInClass.CONDITION, 2); // FIXME hard-coded 2
-        super(BuiltInClass.CONDITION);
+        super(StandardClass.CONDITION);
         Debug.assertTrue(slots.length == 2);
         slots[0] = NIL;
         slots[1] = NIL;
@@ -54,7 +54,7 @@ public class Condition extends StandardObject
 
     public Condition(LispObject initArgs) throws ConditionThrowable
     {
-        super(BuiltInClass.CONDITION);
+        super(StandardClass.CONDITION);
         Debug.assertTrue(slots.length == 2);
         initialize(initArgs);
     }
@@ -133,14 +133,14 @@ public class Condition extends StandardObject
         LispClass c = getLispClass();
         if (c != null)
             return c;
-        return BuiltInClass.CONDITION;
+        return StandardClass.CONDITION;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.CONDITION)
             return T;
-        if (type == BuiltInClass.CONDITION)
+        if (type == StandardClass.CONDITION)
             return T;
         return super.typep(type);
     }

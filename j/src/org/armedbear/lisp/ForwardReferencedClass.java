@@ -2,7 +2,7 @@
  * ForwardReferencedClass.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ForwardReferencedClass.java,v 1.2 2005-05-03 01:41:52 piso Exp $
+ * $Id: ForwardReferencedClass.java,v 1.3 2005-06-21 18:42:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,14 +35,14 @@ public class ForwardReferencedClass extends LispClass
 
     public LispObject classOf()
     {
-        return BuiltInClass.FORWARD_REFERENCED_CLASS;
+        return StandardClass.FORWARD_REFERENCED_CLASS;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.FORWARD_REFERENCED_CLASS)
             return T;
-        if (type == BuiltInClass.FORWARD_REFERENCED_CLASS)
+        if (type == StandardClass.FORWARD_REFERENCED_CLASS)
             return T;
         return super.typep(type);
     }

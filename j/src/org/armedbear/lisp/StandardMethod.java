@@ -2,7 +2,7 @@
  * StandardMethod.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardMethod.java,v 1.3 2005-05-22 13:20:37 piso Exp $
+ * $Id: StandardMethod.java,v 1.4 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,8 @@ public final class StandardMethod extends StandardObject
 {
     public StandardMethod()
     {
-        super(BuiltInClass.STANDARD_METHOD,
-              BuiltInClass.STANDARD_METHOD.getClassLayout().getLength());
+        super(StandardClass.STANDARD_METHOD,
+              StandardClass.STANDARD_METHOD.getClassLayout().getLength());
     }
 
     public StandardMethod(StandardGenericFunction gf,
@@ -320,7 +320,7 @@ public final class StandardMethod extends StandardObject
                                     true,
                                     _METHOD_SPECIALIZERS,
                                     list1(Symbol.METHOD),
-                                    list1(BuiltInClass.STANDARD_METHOD));
+                                    list1(StandardClass.STANDARD_METHOD));
 
     private static final StandardGenericFunction METHOD_QUALIFIERS =
         new StandardGenericFunction("method-qualifiers",
@@ -328,6 +328,6 @@ public final class StandardMethod extends StandardObject
                                     true,
                                     _METHOD_QUALIFIERS,
                                     list1(Symbol.METHOD),
-                                    list1(BuiltInClass.STANDARD_METHOD));
+                                    list1(StandardClass.STANDARD_METHOD));
 
 }

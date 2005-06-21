@@ -2,7 +2,7 @@
  * StandardObjectFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObjectFunctions.java,v 1.9 2005-06-20 16:04:27 piso Exp $
+ * $Id: StandardObjectFunctions.java,v 1.10 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public class StandardObjectFunctions extends Lisp
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
         {
-            if (arg == BuiltInClass.STANDARD_CLASS)
+            if (arg == StandardClass.STANDARD_CLASS)
                 return new StandardClass();
             if (arg instanceof LispClass) {
                 LispClass cls = (LispClass) arg;
@@ -46,7 +46,7 @@ public class StandardObjectFunctions extends Lisp
                 LispObject cpl = cls.getCPL();
                 while (cpl != NIL) {
                     LispObject obj = cpl.car();
-                    if (obj == BuiltInClass.CONDITION)
+                    if (obj == StandardClass.CONDITION)
                         return new Condition(cls, length);
                     cpl = cpl.cdr();
                 }

@@ -1,8 +1,8 @@
 /*
  * UnboundVariable.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: UnboundVariable.java,v 1.12 2005-02-28 02:50:05 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: UnboundVariable.java,v 1.13 2005-06-21 18:42:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,14 +52,14 @@ public final class UnboundVariable extends CellError
 
     public LispObject classOf()
     {
-        return BuiltInClass.UNBOUND_VARIABLE;
+        return StandardClass.UNBOUND_VARIABLE;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.UNBOUND_VARIABLE)
             return T;
-        if (type == BuiltInClass.UNBOUND_VARIABLE)
+        if (type == StandardClass.UNBOUND_VARIABLE)
             return T;
         return super.typep(type);
     }

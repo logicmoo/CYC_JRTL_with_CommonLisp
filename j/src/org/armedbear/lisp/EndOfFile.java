@@ -1,8 +1,8 @@
 /*
  * EndOfFile.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: EndOfFile.java,v 1.4 2004-10-19 00:13:19 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: EndOfFile.java,v 1.5 2005-06-21 18:42:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,20 +40,20 @@ public final class EndOfFile extends StreamError
 
     public LispObject classOf()
     {
-        return BuiltInClass.END_OF_FILE;
+        return StandardClass.END_OF_FILE;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.END_OF_FILE)
             return T;
-        if (type == BuiltInClass.END_OF_FILE)
+        if (type == StandardClass.END_OF_FILE)
             return T;
         return super.typep(type);
     }
 
-    public String writeToString()
+    public String writeToString() throws ConditionThrowable
     {
-        return unreadableString("END-OF-FILE");
+        return unreadableString(Symbol.END_OF_FILE);
     }
 }

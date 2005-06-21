@@ -2,7 +2,7 @@
  * SlotDefinitionClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: SlotDefinitionClass.java,v 1.1 2005-06-18 23:07:04 piso Exp $
+ * $Id: SlotDefinitionClass.java,v 1.2 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class SlotDefinitionClass extends StandardClass
 
     public SlotDefinitionClass()
     {
-        super(Symbol.SLOT_DEFINITION, list1(BuiltInClass.STANDARD_OBJECT));
+        super(Symbol.SLOT_DEFINITION, list1(StandardClass.STANDARD_OBJECT));
         Package pkg = PACKAGE_SYS;
         LispObject[] instanceSlotNames = {
             pkg.intern("NAME"),

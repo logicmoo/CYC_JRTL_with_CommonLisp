@@ -1,8 +1,8 @@
 /*
  * SimpleWarning.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: SimpleWarning.java,v 1.3 2004-10-13 00:22:19 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: SimpleWarning.java,v 1.4 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,18 +41,18 @@ public class SimpleWarning extends Warning
 
     public LispObject classOf()
     {
-        return BuiltInClass.SIMPLE_WARNING;
+        return StandardClass.SIMPLE_WARNING;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.SIMPLE_WARNING)
             return T;
-        if (type == BuiltInClass.SIMPLE_WARNING)
+        if (type == StandardClass.SIMPLE_WARNING)
             return T;
         if (type == Symbol.SIMPLE_CONDITION)
             return T;
-        if (type == BuiltInClass.SIMPLE_CONDITION)
+        if (type == StandardClass.SIMPLE_CONDITION)
             return T;
         return super.typep(type);
     }

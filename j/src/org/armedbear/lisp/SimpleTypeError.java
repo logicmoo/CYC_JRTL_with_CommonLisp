@@ -2,7 +2,7 @@
  * SimpleTypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SimpleTypeError.java,v 1.8 2005-05-01 16:48:17 piso Exp $
+ * $Id: SimpleTypeError.java,v 1.9 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,18 +35,18 @@ public final class SimpleTypeError extends TypeError
 
     public LispObject classOf()
     {
-        return BuiltInClass.SIMPLE_TYPE_ERROR;
+        return StandardClass.SIMPLE_TYPE_ERROR;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.SIMPLE_TYPE_ERROR)
             return T;
-        if (type == BuiltInClass.SIMPLE_TYPE_ERROR)
+        if (type == StandardClass.SIMPLE_TYPE_ERROR)
             return T;
         if (type == Symbol.SIMPLE_CONDITION)
             return T;
-        if (type == BuiltInClass.SIMPLE_CONDITION)
+        if (type == StandardClass.SIMPLE_CONDITION)
             return T;
         return super.typep(type);
     }

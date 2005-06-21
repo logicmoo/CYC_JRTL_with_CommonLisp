@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.5 2005-06-09 11:49:06 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.6 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,8 @@ public final class StandardGenericFunction extends StandardObject
 
     public StandardGenericFunction()
     {
-        super(BuiltInClass.STANDARD_GENERIC_FUNCTION,
-              BuiltInClass.STANDARD_GENERIC_FUNCTION.getClassLayout().getLength());
+        super(StandardClass.STANDARD_GENERIC_FUNCTION,
+              StandardClass.STANDARD_GENERIC_FUNCTION.getClassLayout().getLength());
     }
 
     public StandardGenericFunction(String name, Package pkg, boolean exported,
@@ -56,7 +56,7 @@ public final class StandardGenericFunction extends StandardObject
             slots[StandardGenericFunctionClass.SLOT_INDEX_METHODS] =
                 list1(method);
             slots[StandardGenericFunctionClass.SLOT_INDEX_METHOD_CLASS] =
-                BuiltInClass.STANDARD_METHOD;
+                StandardClass.STANDARD_METHOD;
             slots[StandardGenericFunctionClass.SLOT_INDEX_METHOD_COMBINATION] =
                 Symbol.STANDARD;
             slots[StandardGenericFunctionClass.SLOT_INDEX_ARGUMENT_PRECEDENCE_ORDER] =
@@ -566,5 +566,5 @@ public final class StandardGenericFunction extends StandardObject
                                     true,
                                     _GENERIC_FUNCTION_NAME,
                                     list1(Symbol.GENERIC_FUNCTION),
-                                    list1(BuiltInClass.STANDARD_GENERIC_FUNCTION));
+                                    list1(StandardClass.STANDARD_GENERIC_FUNCTION));
 }

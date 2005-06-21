@@ -2,7 +2,7 @@
  * SeriousCondition.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SeriousCondition.java,v 1.3 2005-06-20 15:58:33 piso Exp $
+ * $Id: SeriousCondition.java,v 1.4 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,14 +49,14 @@ public class SeriousCondition extends Condition
 
     public LispObject classOf()
     {
-        return BuiltInClass.SERIOUS_CONDITION;
+        return StandardClass.SERIOUS_CONDITION;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.SERIOUS_CONDITION)
             return T;
-        if (type == BuiltInClass.SERIOUS_CONDITION)
+        if (type == StandardClass.SERIOUS_CONDITION)
             return T;
         return super.typep(type);
     }

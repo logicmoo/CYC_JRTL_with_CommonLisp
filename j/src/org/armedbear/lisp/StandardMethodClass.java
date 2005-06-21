@@ -2,7 +2,7 @@
  * StandardMethodClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardMethodClass.java,v 1.2 2005-05-21 15:49:28 piso Exp $
+ * $Id: StandardMethodClass.java,v 1.3 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class StandardMethodClass extends StandardClass
 
     public StandardMethodClass()
     {
-        super(Symbol.STANDARD_METHOD, list1(BuiltInClass.METHOD));
+        super(Symbol.STANDARD_METHOD, list1(StandardClass.METHOD));
         Package pkg = PACKAGE_SYS;
         LispObject[] instanceSlotNames = {
             Symbol.GENERIC_FUNCTION,

@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.59 2005-06-20 15:49:40 piso Exp $
+ * $Id: LispClass.java,v 1.60 2005-06-21 18:42:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,14 +250,14 @@ public class LispClass extends StandardObject
 
     public LispObject classOf()
     {
-        return BuiltInClass.CLASS;
+        return StandardClass.CLASS;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.CLASS)
             return T;
-        if (type == BuiltInClass.CLASS)
+        if (type == StandardClass.CLASS)
             return T;
         return super.typep(type);
     }

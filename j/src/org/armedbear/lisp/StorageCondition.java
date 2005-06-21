@@ -1,8 +1,8 @@
 /*
  * StorageCondition.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: StorageCondition.java,v 1.2 2004-10-13 00:22:19 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: StorageCondition.java,v 1.3 2005-06-21 18:42:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,14 +44,14 @@ public class StorageCondition extends SeriousCondition
 
     public LispObject classOf()
     {
-        return BuiltInClass.STORAGE_CONDITION;
+        return StandardClass.STORAGE_CONDITION;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.STORAGE_CONDITION)
             return T;
-        if (type == BuiltInClass.STORAGE_CONDITION)
+        if (type == StandardClass.STORAGE_CONDITION)
             return T;
         return super.typep(type);
     }

@@ -2,7 +2,7 @@
  * StandardGenericFunctionClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardGenericFunctionClass.java,v 1.2 2005-05-22 17:25:53 piso Exp $
+ * $Id: StandardGenericFunctionClass.java,v 1.3 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ public final class StandardGenericFunctionClass extends StandardClass
 
     public StandardGenericFunctionClass()
     {
-        super(Symbol.STANDARD_GENERIC_FUNCTION, list1(BuiltInClass.GENERIC_FUNCTION));
+        super(Symbol.STANDARD_GENERIC_FUNCTION, list1(StandardClass.GENERIC_FUNCTION));
         Package pkg = PACKAGE_SYS;
         LispObject[] instanceSlotNames = {
             pkg.intern("NAME"),

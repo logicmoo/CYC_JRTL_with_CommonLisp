@@ -1,8 +1,8 @@
 /*
  * Warning.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Warning.java,v 1.3 2004-10-13 00:22:20 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Warning.java,v 1.4 2005-06-21 18:42:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,14 +39,14 @@ public class Warning extends Condition
 
     public LispObject classOf()
     {
-        return BuiltInClass.WARNING;
+        return StandardClass.WARNING;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.WARNING)
             return T;
-        if (type == BuiltInClass.WARNING)
+        if (type == StandardClass.WARNING)
             return T;
         return super.typep(type);
     }

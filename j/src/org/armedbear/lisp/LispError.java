@@ -2,7 +2,7 @@
  * LispError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispError.java,v 1.12 2005-06-20 15:59:14 piso Exp $
+ * $Id: LispError.java,v 1.13 2005-06-21 18:42:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,14 +49,14 @@ public class LispError extends SeriousCondition
 
     public LispObject classOf()
     {
-        return BuiltInClass.ERROR;
+        return StandardClass.ERROR;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.ERROR)
             return T;
-        if (type == BuiltInClass.ERROR)
+        if (type == StandardClass.ERROR)
             return T;
         return super.typep(type);
     }

@@ -2,7 +2,7 @@
  * ReaderError.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ReaderError.java,v 1.5 2005-05-05 15:12:25 piso Exp $
+ * $Id: ReaderError.java,v 1.6 2005-06-21 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,18 +45,18 @@ public class ReaderError extends StreamError
 
     public LispObject classOf()
     {
-        return BuiltInClass.READER_ERROR;
+        return StandardClass.READER_ERROR;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.READER_ERROR)
             return T;
-        if (type == BuiltInClass.READER_ERROR)
+        if (type == StandardClass.READER_ERROR)
             return T;
         if (type == Symbol.PARSE_ERROR)
             return T;
-        if (type == BuiltInClass.PARSE_ERROR)
+        if (type == StandardClass.PARSE_ERROR)
             return T;
         return super.typep(type);
     }

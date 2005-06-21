@@ -1,8 +1,8 @@
 /*
  * StyleWarning.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: StyleWarning.java,v 1.2 2004-10-13 00:22:20 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: StyleWarning.java,v 1.3 2005-06-21 18:42:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,14 +35,14 @@ public class StyleWarning extends Warning
 
     public LispObject classOf()
     {
-        return BuiltInClass.STYLE_WARNING;
+        return StandardClass.STYLE_WARNING;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.STYLE_WARNING)
             return T;
-        if (type == BuiltInClass.STYLE_WARNING)
+        if (type == StandardClass.STYLE_WARNING)
             return T;
         return super.typep(type);
     }

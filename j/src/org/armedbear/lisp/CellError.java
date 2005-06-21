@@ -1,8 +1,8 @@
 /*
  * CellError.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: CellError.java,v 1.3 2004-10-18 19:17:29 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: CellError.java,v 1.4 2005-06-21 18:42:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,14 +52,14 @@ public class CellError extends LispError
 
     public LispObject classOf()
     {
-        return BuiltInClass.CELL_ERROR;
+        return StandardClass.CELL_ERROR;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.CELL_ERROR)
             return T;
-        if (type == BuiltInClass.CELL_ERROR)
+        if (type == StandardClass.CELL_ERROR)
             return T;
         return super.typep(type);
     }
