@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.198 2005-06-20 02:09:22 piso Exp $
+ * $Id: Symbol.java,v 1.199 2005-06-21 13:59:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,7 +188,8 @@ public class Symbol extends LispObject
     public static final Symbol BACKQUOTE_MACRO                     = PACKAGE_SYS.addInternalSymbol("BACKQUOTE-MACRO");
     public static final Symbol CLASS_BYTES                         = PACKAGE_SYS.addExternalSymbol("CLASS-BYTES");
     public static final Symbol COMMA_MACRO                         = PACKAGE_SYS.addInternalSymbol("COMMA-MACRO");
-    public static final Symbol _DOCUMENTATION                      = PACKAGE_SYS.addExternalSymbol("%DOCUMENTATION");
+    public static final Symbol DATUM                               = PACKAGE_SYS.addInternalSymbol("DATUM");
+    public static final Symbol EXPECTED_TYPE                       = PACKAGE_SYS.addInternalSymbol("EXPECTED-TYPE");
     public static final Symbol FORMAT_ARGUMENTS                    = PACKAGE_SYS.addInternalSymbol("FORMAT-ARGUMENTS");
     public static final Symbol FORMAT_CONTROL                      = PACKAGE_SYS.addInternalSymbol("FORMAT-CONTROL");
     public static final Symbol FSET                                = PACKAGE_SYS.addInternalSymbol("FSET");
@@ -197,6 +198,7 @@ public class Symbol extends LispObject
     public static final Symbol SETF_FUNCTION                       = PACKAGE_SYS.addExternalSymbol("SETF-FUNCTION");
     public static final Symbol SETF_INVERSE                        = PACKAGE_SYS.addExternalSymbol("SETF-INVERSE");
     public static final Symbol SLOT_DEFINITION                     = PACKAGE_SYS.addExternalSymbol("SLOT-DEFINITION");
+    public static final Symbol _DOCUMENTATION                      = PACKAGE_SYS.addExternalSymbol("%DOCUMENTATION");
     public static final Symbol _SOURCE                             = PACKAGE_SYS.addInternalSymbol("%SOURCE");
 
     public static final Symbol SINGLE_FLOAT_POSITIVE_INFINITY      = PACKAGE_EXT.addExternalSymbol("SINGLE-FLOAT-POSITIVE-INFINITY");
