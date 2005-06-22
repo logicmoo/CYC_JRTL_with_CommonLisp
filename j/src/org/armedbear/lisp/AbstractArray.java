@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: AbstractArray.java,v 1.40 2005-05-07 14:33:48 piso Exp $
+ * $Id: AbstractArray.java,v 1.41 2005-06-22 18:18:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,7 +143,7 @@ public abstract class AbstractArray extends LispObject
                 StringBuffer sb = new StringBuffer("Invalid index ");
                 sb.append(n);
                 sb.append(" for array ");
-                sb.append(this);
+                sb.append(writeToString());
                 sb.append('.');
                 signal(new ProgramError(sb.toString()));
             }
