@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.26 2005-06-22 19:13:03 piso Exp $
+ * $Id: StandardClass.java,v 1.27 2005-06-22 23:32:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -340,6 +340,7 @@ public class StandardClass extends SlotClass
 
         ARITHMETIC_ERROR.finalizeClassLayout();
         CELL_ERROR.finalizeClassLayout();
+        CONTROL_ERROR.finalizeClassLayout();
         CONDITION.finalizeClassLayout();
         DIVISION_BY_ZERO.finalizeClassLayout();
         ERROR.finalizeClassLayout();

@@ -1,8 +1,8 @@
 /*
  * Go.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Go.java,v 1.4 2004-07-27 19:02:18 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Go.java,v 1.5 2005-06-22 23:32:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,9 +37,15 @@ public final class Go extends ConditionThrowable
 
     public LispObject getCondition()
     {
-        StringBuffer sb = new StringBuffer("no tag named ");
-        sb.append(tag);
-        sb.append(" is currently visible");
-        return new ControlError(sb.toString());
+        try {
+            StringBuffer sb = new StringBuffer("No tag named ");
+            sb.append(tag.writeToString());
+            sb.append(" is currently visible");
+            return new ControlError(sb.toString());
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+            return new Condition();
+        }
     }
 }
