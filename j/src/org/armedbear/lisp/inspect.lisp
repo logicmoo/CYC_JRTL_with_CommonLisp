@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: inspect.lisp,v 1.13 2005-06-17 15:47:54 piso Exp $
+;;; $Id: inspect.lisp,v 1.14 2005-06-22 19:13:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 (require 'format)
 
 (defun leader (name)
-  (let ((size (max 0 (- 12 (length (string name))))))
+  (let ((size (max 0 (- 16 (length (string name))))))
     (concatenate 'string (make-string size :initial-element #\-) "->")))
 
 (defun safe-length (x)
