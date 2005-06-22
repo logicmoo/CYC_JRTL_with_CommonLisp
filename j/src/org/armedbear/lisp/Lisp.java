@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.365 2005-06-22 18:19:15 piso Exp $
+ * $Id: Lisp.java,v 1.366 2005-06-22 18:20:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1445,7 +1445,7 @@ public abstract class Lisp
         LispObject prev = null;
         while (list != NIL) {
             if (!(list.cdr() instanceof Cons))
-                signal(new ProgramError(symbol.writeToString() +
+                signal(new ProgramError("The symbol " + symbol.writeToString() +
                                         " has an odd number of items in its property list."));
             if (list.car() == indicator) {
                 // Found it!
