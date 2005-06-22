@@ -2,7 +2,7 @@
  * ArithmeticError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ArithmeticError.java,v 1.13 2005-06-21 18:42:13 piso Exp $
+ * $Id: ArithmeticError.java,v 1.14 2005-06-22 17:47:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,20 @@ package org.armedbear.lisp;
 
 public class ArithmeticError extends LispError
 {
-    private final LispObject operation;
-    private final LispObject operands;
-
-    public ArithmeticError()
+    protected ArithmeticError(LispClass cls)
     {
-        operation = NIL;
-        operands = NIL;
+        super(cls);
     }
 
     public ArithmeticError(LispObject initArgs) throws ConditionThrowable
     {
-        super(initArgs);
+        super(StandardClass.ARITHMETIC_ERROR);
+        initialize(initArgs);
+    }
+
+    protected void initialize(LispObject initArgs) throws ConditionThrowable
+    {
+        super.initialize(initArgs);
         LispObject operation = NIL;
         LispObject operands = NIL;
         LispObject first, second;
@@ -48,15 +50,17 @@ public class ArithmeticError extends LispError
             else if (first == Keyword.OPERANDS)
                 operands = second;
         }
-        this.operation = operation;
-        this.operands = operands;
+        setOperation(operation);
+        setOperands(operands);
     }
 
-    public ArithmeticError(String message)
+    public ArithmeticError(String message) throws ConditionThrowable
     {
-        super(message);
-        operation = NIL;
-        operands = NIL;
+        super(StandardClass.ARITHMETIC_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+        setOperation(NIL);
+        setOperands(NIL);
     }
 
     public LispObject typeOf()
@@ -78,6 +82,28 @@ public class ArithmeticError extends LispError
         return super.typep(type);
     }
 
+    private final LispObject getOperation() throws ConditionThrowable
+    {
+        return getInstanceSlotValue(Symbol.OPERATION);
+    }
+
+    private final void setOperation(LispObject operation)
+        throws ConditionThrowable
+    {
+        setInstanceSlotValue(Symbol.OPERATION, operation);
+    }
+
+    private final LispObject getOperands() throws ConditionThrowable
+    {
+        return getInstanceSlotValue(Symbol.OPERANDS);
+    }
+
+    private final void setOperands(LispObject operands)
+        throws ConditionThrowable
+    {
+        setInstanceSlotValue(Symbol.OPERANDS, operands);
+    }
+
     // ### arithmetic-error-operation
     private static final Primitive ARITHMETIC_ERROR_OPERATION =
         new Primitive("arithmetic-error-operation", "condition")
@@ -85,7 +111,7 @@ public class ArithmeticError extends LispError
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return ((ArithmeticError)arg).operation;
+                return ((ArithmeticError)arg).getOperation();
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.ARITHMETIC_ERROR));
@@ -99,7 +125,7 @@ public class ArithmeticError extends LispError
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return ((ArithmeticError)arg).operands;
+                return ((ArithmeticError)arg).getOperands();
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.ARITHMETIC_ERROR));

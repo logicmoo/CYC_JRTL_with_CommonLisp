@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.39 2005-06-22 15:30:00 piso Exp $
+ * $Id: Condition.java,v 1.40 2005-06-22 17:48:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,41 +82,31 @@ public class Condition extends StandardObject
         this.message = message;
     }
 
-    public final LispObject getFormatControl()
+    public final LispObject getFormatControl() throws ConditionThrowable
     {
-        Debug.assertTrue(layout != null);
-        int index = layout.getSlotIndex(Symbol.FORMAT_CONTROL);
-        Debug.assertTrue(index >= 0);
-        return slots[index];
+        return getInstanceSlotValue(Symbol.FORMAT_CONTROL);
     }
 
     public final void setFormatControl(LispObject formatControl)
+        throws ConditionThrowable
     {
-        Debug.assertTrue(layout != null);
-        int index = layout.getSlotIndex(Symbol.FORMAT_CONTROL);
-        Debug.assertTrue(index >= 0);
-        slots[index] = formatControl;
+        setInstanceSlotValue(Symbol.FORMAT_CONTROL, formatControl);
     }
 
-    public final void setFormatControl(String s)
+    public final void setFormatControl(String s) throws ConditionThrowable
     {
         setFormatControl(new SimpleString(s));
     }
 
-    public final LispObject getFormatArguments()
+    public final LispObject getFormatArguments() throws ConditionThrowable
     {
-        Debug.assertTrue(layout != null);
-        int index = layout.getSlotIndex(Symbol.FORMAT_ARGUMENTS);
-        Debug.assertTrue(index >= 0);
-        return slots[index];
+        return getInstanceSlotValue(Symbol.FORMAT_ARGUMENTS);
     }
 
     public final void setFormatArguments(LispObject formatArguments)
+        throws ConditionThrowable
     {
-        Debug.assertTrue(layout != null);
-        int index = layout.getSlotIndex(Symbol.FORMAT_ARGUMENTS);
-        Debug.assertTrue(index >= 0);
-        slots[index] = formatArguments;
+        setInstanceSlotValue(Symbol.FORMAT_ARGUMENTS, formatArguments);
     }
 
     public String getMessage()

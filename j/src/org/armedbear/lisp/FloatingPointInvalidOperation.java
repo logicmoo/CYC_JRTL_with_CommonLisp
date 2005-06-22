@@ -2,7 +2,7 @@
  * FloatingPointInvalidOperation.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FloatingPointInvalidOperation.java,v 1.3 2005-06-21 18:42:13 piso Exp $
+ * $Id: FloatingPointInvalidOperation.java,v 1.4 2005-06-22 17:50:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,21 +21,13 @@
 
 package org.armedbear.lisp;
 
-public class FloatingPointInvalidOperation extends ArithmeticError
+public final class FloatingPointInvalidOperation extends ArithmeticError
 {
-    public FloatingPointInvalidOperation()
-    {
-    }
-
     public FloatingPointInvalidOperation(LispObject initArgs)
         throws ConditionThrowable
     {
-        super(initArgs);
-    }
-
-    public FloatingPointInvalidOperation(String message)
-    {
-        super(message);
+        super(StandardClass.FLOATING_POINT_INVALID_OPERATION);
+        initialize(initArgs);
     }
 
     public LispObject typeOf()

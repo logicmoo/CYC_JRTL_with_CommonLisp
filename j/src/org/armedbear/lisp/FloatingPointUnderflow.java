@@ -2,7 +2,7 @@
  * FloatingPointUnderflow.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FloatingPointUnderflow.java,v 1.3 2005-06-21 18:42:13 piso Exp $
+ * $Id: FloatingPointUnderflow.java,v 1.4 2005-06-22 17:50:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,21 +21,13 @@
 
 package org.armedbear.lisp;
 
-public class FloatingPointUnderflow extends ArithmeticError
+public final class FloatingPointUnderflow extends ArithmeticError
 {
-    public FloatingPointUnderflow()
-    {
-    }
-
     public FloatingPointUnderflow(LispObject initArgs)
         throws ConditionThrowable
     {
-        super(initArgs);
-    }
-
-    public FloatingPointUnderflow(String message)
-    {
-        super(message);
+        super(StandardClass.FLOATING_POINT_UNDERFLOW);
+        initialize(initArgs);
     }
 
     public LispObject typeOf()

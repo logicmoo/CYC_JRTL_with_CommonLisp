@@ -1,8 +1,8 @@
 /*
  * FloatingPointOverflow.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: FloatingPointOverflow.java,v 1.3 2005-06-21 18:42:13 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: FloatingPointOverflow.java,v 1.4 2005-06-22 17:49:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,21 +21,13 @@
 
 package org.armedbear.lisp;
 
-public class FloatingPointOverflow extends ArithmeticError
+public final class FloatingPointOverflow extends ArithmeticError
 {
-    public FloatingPointOverflow()
-    {
-    }
-
     public FloatingPointOverflow(LispObject initArgs)
         throws ConditionThrowable
     {
-        super(initArgs);
-    }
-
-    public FloatingPointOverflow(String message)
-    {
-        super(message);
+        super(StandardClass.FLOATING_POINT_OVERFLOW);
+        initialize(initArgs);
     }
 
     public LispObject typeOf()

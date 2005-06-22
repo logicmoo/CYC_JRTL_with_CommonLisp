@@ -2,7 +2,7 @@
  * SimpleWarning.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleWarning.java,v 1.4 2005-06-21 18:42:14 piso Exp $
+ * $Id: SimpleWarning.java,v 1.5 2005-06-22 17:47:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class SimpleWarning extends Warning
+public final class SimpleWarning extends Warning
 {
     public SimpleWarning(LispObject initArgs) throws ConditionThrowable
     {
@@ -29,6 +29,7 @@ public class SimpleWarning extends Warning
     }
 
     public SimpleWarning(LispObject formatControl, LispObject formatArguments)
+        throws ConditionThrowable
     {
         setFormatControl(formatControl);
         setFormatArguments(formatArguments);

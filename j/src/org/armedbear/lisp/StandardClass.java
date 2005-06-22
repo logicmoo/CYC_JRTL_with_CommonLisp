@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.23 2005-06-22 00:18:17 piso Exp $
+ * $Id: StandardClass.java,v 1.24 2005-06-22 17:45:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,6 +220,11 @@ public class StandardClass extends SlotClass
 
         ARITHMETIC_ERROR.setCPL(ARITHMETIC_ERROR, ERROR, SERIOUS_CONDITION,
                                 CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+        ARITHMETIC_ERROR.setDirectSlots(
+            list2(new SlotDefinition(Symbol.OPERATION,
+                                     list1(PACKAGE_CL.intern("ARITHMETIC-ERROR-OPERATION"))),
+                  new SlotDefinition(Symbol.OPERANDS,
+                                     list1(PACKAGE_CL.intern("ARITHMETIC-ERROR-OPERANDS")))));
         BUILT_IN_CLASS.setCPL(BUILT_IN_CLASS, CLASS, STANDARD_OBJECT,
                               BuiltInClass.CLASS_T);
         CELL_ERROR.setCPL(CELL_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
@@ -327,8 +332,14 @@ public class StandardClass extends SlotClass
         WARNING.setCPL(WARNING, CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
 
 
+        ARITHMETIC_ERROR.finalizeClassLayout();
         CONDITION.finalizeClassLayout();
+        DIVISION_BY_ZERO.finalizeClassLayout();
         ERROR.finalizeClassLayout();
+        FLOATING_POINT_INEXACT.finalizeClassLayout();
+        FLOATING_POINT_INVALID_OPERATION.finalizeClassLayout();
+        FLOATING_POINT_OVERFLOW.finalizeClassLayout();
+        FLOATING_POINT_UNDERFLOW.finalizeClassLayout();
         PACKAGE_ERROR.finalizeClassLayout();
         SERIOUS_CONDITION.finalizeClassLayout();
         SIMPLE_CONDITION.finalizeClassLayout();

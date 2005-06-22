@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: TypeError.java,v 1.28 2005-06-22 15:31:46 piso Exp $
+ * $Id: TypeError.java,v 1.29 2005-06-22 17:48:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public class TypeError extends LispError
 {
     private String typeString;
 
-    public TypeError()
+    public TypeError() throws ConditionThrowable
     {
         super(StandardClass.TYPE_ERROR);
         setDatum(NIL);
@@ -38,6 +38,7 @@ public class TypeError extends LispError
     }
 
     public TypeError(LispObject datum, LispObject expectedType)
+        throws ConditionThrowable
     {
         super(StandardClass.TYPE_ERROR);
         setDatum(datum);
@@ -71,7 +72,7 @@ public class TypeError extends LispError
         this.typeString = expectedType.writeToString();
     }
 
-    public TypeError(String message)
+    public TypeError(String message) throws ConditionThrowable
     {
         super(StandardClass.TYPE_ERROR);
         setFormatControl(message);
@@ -80,6 +81,7 @@ public class TypeError extends LispError
     }
 
     public TypeError(String message, LispObject datum, LispObject expectedType)
+        throws ConditionThrowable
     {
         super(StandardClass.TYPE_ERROR);
         setFormatControl(message);
@@ -88,6 +90,7 @@ public class TypeError extends LispError
     }
 
     public TypeError(LispObject datum, String typeString)
+        throws ConditionThrowable
     {
         super(StandardClass.TYPE_ERROR);
         setDatum(datum);
@@ -163,36 +166,25 @@ public class TypeError extends LispError
         }
     }
 
-    public final LispObject getDatum()
+    public final LispObject getDatum() throws ConditionThrowable
     {
-        Debug.assertTrue(layout != null);
-        int index = layout.getSlotIndex(Symbol.DATUM);
-        Debug.assertTrue(index >= 0);
-        return slots[index];
+        return getInstanceSlotValue(Symbol.DATUM);
     }
 
-    private final void setDatum(LispObject datum)
+    private final void setDatum(LispObject datum) throws ConditionThrowable
     {
-        Debug.assertTrue(layout != null);
-        int index = layout.getSlotIndex(Symbol.DATUM);
-        Debug.assertTrue(index >= 0);
-        slots[index] = datum;
+        setInstanceSlotValue(Symbol.DATUM, datum);
     }
 
-    public final LispObject getExpectedType()
+    public final LispObject getExpectedType() throws ConditionThrowable
     {
-        Debug.assertTrue(layout != null);
-        int index = layout.getSlotIndex(Symbol.EXPECTED_TYPE);
-        Debug.assertTrue(index >= 0);
-        return slots[index];
+        return getInstanceSlotValue(Symbol.EXPECTED_TYPE);
     }
 
     private final void setExpectedType(LispObject expectedType)
+        throws ConditionThrowable
     {
-        Debug.assertTrue(layout != null);
-        int index = layout.getSlotIndex(Symbol.EXPECTED_TYPE);
-        Debug.assertTrue(index >= 0);
-        slots[index] = expectedType;
+        setInstanceSlotValue(Symbol.EXPECTED_TYPE, expectedType);
     }
 
     // ### type-error-datum

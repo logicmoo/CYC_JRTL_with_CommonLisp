@@ -2,7 +2,7 @@
  * SimpleError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleError.java,v 1.9 2005-06-21 18:42:14 piso Exp $
+ * $Id: SimpleError.java,v 1.10 2005-06-22 17:46:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.lisp;
 public class SimpleError extends LispError
 {
     public SimpleError(LispObject formatControl, LispObject formatArguments)
+        throws ConditionThrowable
     {
         setFormatControl(formatControl);
         setFormatArguments(formatArguments);

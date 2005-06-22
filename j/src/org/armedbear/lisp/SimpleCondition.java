@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleCondition.java,v 1.11 2005-06-21 18:42:14 piso Exp $
+ * $Id: SimpleCondition.java,v 1.12 2005-06-22 17:46:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,13 +23,14 @@ package org.armedbear.lisp;
 
 public class SimpleCondition extends Condition
 {
-    public SimpleCondition()
+    public SimpleCondition() throws ConditionThrowable
     {
         setFormatControl(NIL);
         setFormatArguments(NIL);
     }
 
     public SimpleCondition(LispObject formatControl, LispObject formatArguments)
+        throws ConditionThrowable
     {
         setFormatControl(formatControl);
         setFormatArguments(formatArguments);

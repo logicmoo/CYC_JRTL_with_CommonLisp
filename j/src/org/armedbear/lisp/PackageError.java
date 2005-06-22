@@ -2,7 +2,7 @@
  * PackageError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: PackageError.java,v 1.20 2005-06-22 15:32:17 piso Exp $
+ * $Id: PackageError.java,v 1.21 2005-06-22 17:46:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public final class PackageError extends LispError
         setPackage(pkg);
     }
 
-    public PackageError(String message)
+    public PackageError(String message) throws ConditionThrowable
     {
         super(StandardClass.PACKAGE_ERROR);
         setFormatControl(message);
