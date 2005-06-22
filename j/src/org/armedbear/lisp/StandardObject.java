@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.46 2005-06-21 18:42:14 piso Exp $
+ * $Id: StandardObject.java,v 1.47 2005-06-22 17:02:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,6 +201,36 @@ public class StandardObject extends LispObject
         Symbol.UPDATE_INSTANCE_FOR_REDEFINED_CLASS.execute(this, added,
                                                            discarded, plist);
         return newLayout;
+    }
+
+    // Only handles instance slots (not shared slots).
+    public LispObject getInstanceSlotValue(LispObject slotName)
+        throws ConditionThrowable
+    {
+        Debug.assertTrue(layout != null);
+        if (layout.isInvalid()) {
+            // Update instance.
+            layout = updateLayout();
+        }
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(slotName);
+        Debug.assertTrue(index >= 0);
+        return slots[index];
+    }
+
+    // Only handles instance slots (not shared slots).
+    public void setInstanceSlotValue(LispObject slotName, LispObject newValue)
+        throws ConditionThrowable
+    {
+        Debug.assertTrue(layout != null);
+        if (layout.isInvalid()) {
+            // Update instance.
+            layout = updateLayout();
+        }
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(slotName);
+        Debug.assertTrue(index >= 0);
+        slots[index] = newValue;
     }
 
     // ### swap-slots instance-1 instance-2 => nil
