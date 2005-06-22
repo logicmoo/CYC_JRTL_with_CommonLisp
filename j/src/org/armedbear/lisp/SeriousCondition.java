@@ -2,7 +2,7 @@
  * SeriousCondition.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SeriousCondition.java,v 1.4 2005-06-21 18:42:14 piso Exp $
+ * $Id: SeriousCondition.java,v 1.5 2005-06-22 13:59:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,11 @@ public class SeriousCondition extends Condition
     public SeriousCondition(LispObject initArgs) throws ConditionThrowable
     {
         super(initArgs);
+    }
+
+    protected void initialize(LispObject initArgs) throws ConditionThrowable
+    {
+        super.initialize(initArgs);
     }
 
     public SeriousCondition(String message)

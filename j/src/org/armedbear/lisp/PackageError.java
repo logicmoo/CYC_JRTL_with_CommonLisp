@@ -2,7 +2,7 @@
  * PackageError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: PackageError.java,v 1.18 2005-06-21 18:42:13 piso Exp $
+ * $Id: PackageError.java,v 1.19 2005-06-22 14:00:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,17 +23,15 @@ package org.armedbear.lisp;
 
 public final class PackageError extends LispError
 {
-//     private final LispObject pkg;
-
-//     protected PackageError(LispClass cls)
-//     {
-//         super(cls);
-//         pkg = NIL; // FIXME
-//     }
-
     public PackageError(LispObject initArgs) throws ConditionThrowable
     {
         super(StandardClass.PACKAGE_ERROR);
+        initialize(initArgs);
+    }
+
+    protected void initialize(LispObject initArgs) throws ConditionThrowable
+    {
+        super.initialize(initArgs);
         LispObject pkg = NIL;
         LispObject first, second;
         while (initArgs != NIL) {
@@ -44,16 +42,13 @@ public final class PackageError extends LispError
             if (first == Keyword.PACKAGE)
                 pkg = second;
         }
-//         this.pkg = pkg;
         setPackage(pkg);
     }
 
     public PackageError(String message)
     {
-//         super(message);
         super(StandardClass.PACKAGE_ERROR);
         setFormatControl(new SimpleString(message));
-//         pkg = NIL;
     }
 
     public LispObject typeOf()
