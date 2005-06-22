@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.86 2005-06-21 01:10:20 piso Exp $
+ * $Id: Interpreter.java,v 1.87 2005-06-22 15:30:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -388,7 +388,7 @@ public final class Interpreter extends Lisp
             out.freshLine();
             Condition condition = (Condition) c.getCondition();
             out._writeLine("Error: unhandled condition: " +
-                           condition.getConditionReport());
+                           condition.writeToString());
             if (thread != null)
                 thread.backtrace();
         }
