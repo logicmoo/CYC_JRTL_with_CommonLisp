@@ -2,7 +2,7 @@
  * ProgramError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ProgramError.java,v 1.13 2005-06-21 18:42:14 piso Exp $
+ * $Id: ProgramError.java,v 1.14 2005-06-22 18:21:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,22 @@ package org.armedbear.lisp;
 
 public class ProgramError extends LispError
 {
-    public ProgramError()
+    protected ProgramError(LispClass cls)
     {
+        super(cls);
     }
 
     public ProgramError(LispObject initArgs) throws ConditionThrowable
     {
-        super(initArgs);
+        super(StandardClass.PROGRAM_ERROR);
+        initialize(initArgs);
     }
 
-    public ProgramError(String message)
+    public ProgramError(String message) throws ConditionThrowable
     {
-        super(message);
+        super(StandardClass.PROGRAM_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
     }
 
     public LispObject typeOf()

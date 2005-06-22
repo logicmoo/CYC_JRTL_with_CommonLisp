@@ -2,7 +2,7 @@
  * WrongNumberOfArgumentsException.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: WrongNumberOfArgumentsException.java,v 1.8 2005-05-25 01:35:07 piso Exp $
+ * $Id: WrongNumberOfArgumentsException.java,v 1.9 2005-06-22 18:20:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,9 @@ public final class WrongNumberOfArgumentsException extends ProgramError
 
     public WrongNumberOfArgumentsException(Operator operator)
     {
+        // This is really just an ordinary PROGRAM-ERROR, broken out into its
+        // own Java class as a convenience for the implementation.
+        super(StandardClass.PROGRAM_ERROR);
         this.operator = operator;
     }
 

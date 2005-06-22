@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.24 2005-06-22 17:45:37 piso Exp $
+ * $Id: StandardClass.java,v 1.25 2005-06-22 18:21:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -341,6 +341,7 @@ public class StandardClass extends SlotClass
         FLOATING_POINT_OVERFLOW.finalizeClassLayout();
         FLOATING_POINT_UNDERFLOW.finalizeClassLayout();
         PACKAGE_ERROR.finalizeClassLayout();
+        PROGRAM_ERROR.finalizeClassLayout();
         SERIOUS_CONDITION.finalizeClassLayout();
         SIMPLE_CONDITION.finalizeClassLayout();
         SIMPLE_TYPE_ERROR.finalizeClassLayout();
