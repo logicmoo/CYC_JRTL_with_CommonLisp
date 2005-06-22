@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.38 2005-06-21 18:42:13 piso Exp $
+ * $Id: Condition.java,v 1.39 2005-06-22 15:30:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@ public class Condition extends StandardObject
 
     public Condition()
     {
-//         super(BuiltInClass.CONDITION, 2); // FIXME hard-coded 2
         super(StandardClass.CONDITION);
         Debug.assertTrue(slots.length == 2);
         slots[0] = NIL;
@@ -99,6 +98,11 @@ public class Condition extends StandardObject
         slots[index] = formatControl;
     }
 
+    public final void setFormatControl(String s)
+    {
+        setFormatControl(new SimpleString(s));
+    }
+
     public final LispObject getFormatArguments()
     {
         Debug.assertTrue(layout != null);
@@ -143,21 +147,6 @@ public class Condition extends StandardObject
         if (type == StandardClass.CONDITION)
             return T;
         return super.typep(type);
-    }
-
-    public String getConditionReport() throws ConditionThrowable
-    {
-        String s = getMessage();
-        if (s != null)
-            return s;
-        LispObject formatControl = getFormatControl();
-        if (formatControl != NIL) {
-            try {
-                return format(formatControl, getFormatArguments());
-            }
-            catch (Throwable t) {}
-        }
-        return unreadableString(typeOf().writeToString());
     }
 
     public String writeToString() throws ConditionThrowable

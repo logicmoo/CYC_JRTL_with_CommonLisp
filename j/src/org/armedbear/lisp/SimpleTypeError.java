@@ -2,7 +2,7 @@
  * SimpleTypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SimpleTypeError.java,v 1.9 2005-06-21 18:42:14 piso Exp $
+ * $Id: SimpleTypeError.java,v 1.10 2005-06-22 15:31:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,8 @@ public final class SimpleTypeError extends TypeError
 {
     public SimpleTypeError(LispObject initArgs) throws ConditionThrowable
     {
-        super(initArgs);
+        super(StandardClass.SIMPLE_TYPE_ERROR);
+        initialize(initArgs);
     }
 
     public LispObject typeOf()
@@ -65,6 +66,8 @@ public final class SimpleTypeError extends TypeError
                                                                        formatArguments));
                 return result.getStringValue();
             }
+            final LispObject datum = getDatum();
+            final LispObject expectedType = getExpectedType();
             if (datum != null && expectedType != null) {
                 StringBuffer sb = new StringBuffer("The value ");
                 sb.append(datum.writeToString());

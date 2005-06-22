@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: TypeError.java,v 1.27 2005-06-21 18:42:15 piso Exp $
+ * $Id: TypeError.java,v 1.28 2005-06-22 15:31:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,25 +23,36 @@ package org.armedbear.lisp;
 
 public class TypeError extends LispError
 {
-    protected LispObject datum;
-    protected LispObject expectedType;
     private String typeString;
 
     public TypeError()
     {
-        datum = NIL;
-        expectedType = NIL;
+        super(StandardClass.TYPE_ERROR);
+        setDatum(NIL);
+        setExpectedType(NIL);
+    }
+
+    protected TypeError(LispClass cls)
+    {
+        super(cls);
     }
 
     public TypeError(LispObject datum, LispObject expectedType)
     {
-        this.datum = datum;
-        this.expectedType = expectedType;
+        super(StandardClass.TYPE_ERROR);
+        setDatum(datum);
+        setExpectedType(expectedType);
     }
 
     public TypeError(LispObject initArgs) throws ConditionThrowable
     {
-        super(initArgs);
+        super(StandardClass.TYPE_ERROR);
+        initialize(initArgs);
+    }
+
+    protected void initialize(LispObject initArgs) throws ConditionThrowable
+    {
+        super.initialize(initArgs);
         LispObject datum = NIL;
         LispObject expectedType = NIL;
         LispObject first, second;
@@ -55,29 +66,32 @@ public class TypeError extends LispError
             else if (first == Keyword.EXPECTED_TYPE)
                 expectedType = second;
         }
-        this.datum = datum;
-        this.expectedType = expectedType;
+        setDatum(datum);
+        setExpectedType(expectedType);
         this.typeString = expectedType.writeToString();
     }
 
     public TypeError(String message)
     {
-        super(message);
-        datum = NIL;
-        expectedType = NIL;
+        super(StandardClass.TYPE_ERROR);
+        setFormatControl(message);
+        setDatum(NIL);
+        setExpectedType(NIL);
     }
 
     public TypeError(String message, LispObject datum, LispObject expectedType)
     {
-        super(message);
-        this.datum = datum;
-        this.expectedType = expectedType;
+        super(StandardClass.TYPE_ERROR);
+        setFormatControl(message);
+        setDatum(datum);
+        setExpectedType(expectedType);
     }
 
     public TypeError(LispObject datum, String typeString)
     {
-        this.datum = datum;
-        expectedType = NIL;
+        super(StandardClass.TYPE_ERROR);
+        setDatum(datum);
+        setExpectedType(NIL);
         this.typeString = typeString;
     }
 
@@ -111,6 +125,8 @@ public class TypeError extends LispError
                 String s = super.getMessage();
                 if (s != null)
                     return s;
+                final LispObject datum = getDatum();
+                final LispObject expectedType = getExpectedType();
                 StringBuffer sb = new StringBuffer();
                 String name = datum != null ? datum.writeToString() : null;
                 String type = null;
@@ -147,15 +163,50 @@ public class TypeError extends LispError
         }
     }
 
+    public final LispObject getDatum()
+    {
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(Symbol.DATUM);
+        Debug.assertTrue(index >= 0);
+        return slots[index];
+    }
+
+    private final void setDatum(LispObject datum)
+    {
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(Symbol.DATUM);
+        Debug.assertTrue(index >= 0);
+        slots[index] = datum;
+    }
+
+    public final LispObject getExpectedType()
+    {
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(Symbol.EXPECTED_TYPE);
+        Debug.assertTrue(index >= 0);
+        return slots[index];
+    }
+
+    private final void setExpectedType(LispObject expectedType)
+    {
+        Debug.assertTrue(layout != null);
+        int index = layout.getSlotIndex(Symbol.EXPECTED_TYPE);
+        Debug.assertTrue(index >= 0);
+        slots[index] = expectedType;
+    }
+
     // ### type-error-datum
     private static final Primitive TYPE_ERROR_DATUM =
         new Primitive("type-error-datum", "condition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof TypeError)
-                return ((TypeError)arg).datum;
-            return signal(new TypeError(arg, Symbol.TYPE_ERROR));
+            try {
+                return ((TypeError)arg).getDatum();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.TYPE_ERROR));
+            }
         }
     };
 
@@ -165,9 +216,12 @@ public class TypeError extends LispError
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof TypeError)
-                return ((TypeError)arg).expectedType;
-            return signal(new TypeError(arg, Symbol.TYPE_ERROR));
+            try {
+                return ((TypeError)arg).getExpectedType();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.TYPE_ERROR));
+            }
         }
     };
 }
