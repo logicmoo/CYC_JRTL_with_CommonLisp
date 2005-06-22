@@ -2,7 +2,7 @@
  * UnboundSlot.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: UnboundSlot.java,v 1.5 2005-06-21 18:42:15 piso Exp $
+ * $Id: UnboundSlot.java,v 1.6 2005-06-22 19:12:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,37 +23,52 @@ package org.armedbear.lisp;
 
 public final class UnboundSlot extends CellError
 {
-    private LispObject instance = NIL;
-
     public UnboundSlot(LispObject initArgs) throws ConditionThrowable
     {
-        super(initArgs);
+        super(StandardClass.UNBOUND_SLOT);
+        initialize(initArgs);
+    }
+
+    protected void initialize(LispObject initArgs) throws ConditionThrowable
+    {
+        super.initialize(initArgs);
         LispObject first, second;
         while (initArgs != NIL) {
             first = initArgs.car();
             initArgs = initArgs.cdr();
             second = initArgs.car();
             if (first == Keyword.INSTANCE) {
-                instance = second;
+                setInstance(second);
                 break;
             }
             initArgs = initArgs.cdr();
         }
     }
 
-    public LispObject getInstance()
+    public LispObject getInstance() throws ConditionThrowable
     {
-        return instance;
+        return getInstanceSlotValue(Symbol.INSTANCE);
+    }
+
+    private void setInstance(LispObject instance) throws ConditionThrowable
+    {
+        setInstanceSlotValue(Symbol.INSTANCE, instance);
     }
 
     public String getMessage()
     {
-        StringBuffer sb = new StringBuffer("The slot ");
-        sb.append(safeWriteToString(getCellName()));
-        sb.append(" is unbound in the object ");
-        sb.append(safeWriteToString(instance));
-        sb.append('.');
-        return sb.toString();
+        try {
+            StringBuffer sb = new StringBuffer("The slot ");
+            sb.append(safeWriteToString(getCellName()));
+            sb.append(" is unbound in the object ");
+            sb.append(safeWriteToString(getInstance()));
+            sb.append('.');
+            return sb.toString();
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+            return null;
+        }
     }
 
     public LispObject typeOf()

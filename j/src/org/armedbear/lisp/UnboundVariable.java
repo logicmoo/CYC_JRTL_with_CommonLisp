@@ -2,7 +2,7 @@
  * UnboundVariable.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: UnboundVariable.java,v 1.13 2005-06-21 18:42:15 piso Exp $
+ * $Id: UnboundVariable.java,v 1.14 2005-06-22 19:12:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,11 @@ public final class UnboundVariable extends CellError
     // obj is either the unbound variable itself or an initArgs list.
     public UnboundVariable(LispObject obj) throws ConditionThrowable
     {
-        super(obj instanceof Cons ? obj : list2(Keyword.NAME, obj));
+        super(StandardClass.UNBOUND_VARIABLE);
+        if (obj instanceof Cons)
+            initialize(obj);
+        else
+            setCellName(obj);
     }
 
     public String getMessage()

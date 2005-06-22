@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.25 2005-06-22 18:21:19 piso Exp $
+ * $Id: StandardClass.java,v 1.26 2005-06-22 19:13:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,6 +229,9 @@ public class StandardClass extends SlotClass
                               BuiltInClass.CLASS_T);
         CELL_ERROR.setCPL(CELL_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, BuiltInClass.CLASS_T);
+        CELL_ERROR.setDirectSlots(
+            list1(new SlotDefinition(Symbol.NAME,
+                                     list1(PACKAGE_CL.intern("CELL-ERROR-NAME")))));
         CLASS.setCPL(CLASS, STANDARD_OBJECT, BuiltInClass.CLASS_T);
         CONDITION.setCPL(CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
         CONDITION.setDirectSlots(
@@ -323,6 +326,9 @@ public class StandardClass extends SlotClass
                                      list1(PACKAGE_CL.intern("TYPE-ERROR-EXPECTED-TYPE")))));
         UNBOUND_SLOT.setCPL(UNBOUND_SLOT, CELL_ERROR, ERROR, SERIOUS_CONDITION,
                             CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+        UNBOUND_SLOT.setDirectSlots(
+            list1(new SlotDefinition(Symbol.INSTANCE,
+                                     list1(PACKAGE_CL.intern("UNBOUND-SLOT-INSTANCE")))));
         UNBOUND_VARIABLE.setCPL(UNBOUND_VARIABLE, CELL_ERROR, ERROR,
                                 SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                                 BuiltInClass.CLASS_T);
@@ -333,6 +339,7 @@ public class StandardClass extends SlotClass
 
 
         ARITHMETIC_ERROR.finalizeClassLayout();
+        CELL_ERROR.finalizeClassLayout();
         CONDITION.finalizeClassLayout();
         DIVISION_BY_ZERO.finalizeClassLayout();
         ERROR.finalizeClassLayout();
@@ -348,6 +355,9 @@ public class StandardClass extends SlotClass
         STORAGE_CONDITION.finalizeClassLayout();
         STYLE_WARNING.finalizeClassLayout();
         TYPE_ERROR.finalizeClassLayout();
+        UNBOUND_SLOT.finalizeClassLayout();
+        UNBOUND_VARIABLE.finalizeClassLayout();
+        UNDEFINED_FUNCTION.finalizeClassLayout();
         WARNING.finalizeClassLayout();
     }
 }
