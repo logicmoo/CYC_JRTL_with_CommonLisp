@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.19 2005-06-23 16:26:35 piso Exp $
+ * $Id: Layout.java,v 1.20 2005-06-23 16:27:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,9 +124,8 @@ public final class Layout extends LispObject
     {
         LispObject list = NIL;
         try {
-            for (int i = slotNames.length; i-- > 0;) {
+            for (int i = slotNames.length; i-- > 0;)
                 list = list.push(new SlotDefinition(slotNames[i], NIL));
-            }
         }
         catch (Throwable t) {
             // Shouldn't happen.
