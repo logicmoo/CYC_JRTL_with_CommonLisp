@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.36 2005-06-23 18:10:12 piso Exp $
+ * $Id: StandardClass.java,v 1.37 2005-06-23 19:08:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,10 +307,6 @@ public class StandardClass extends SlotClass
                               CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
         STANDARD_CLASS.setCPL(STANDARD_CLASS, CLASS,
                               STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        STANDARD_GENERIC_FUNCTION.setCPL(STANDARD_GENERIC_FUNCTION,
-                                         GENERIC_FUNCTION, STANDARD_OBJECT,
-                                         BuiltInClass.FUNCTION,
-                                         BuiltInClass.CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, BuiltInClass.CLASS_T);
         STORAGE_CONDITION.setCPL(STORAGE_CONDITION, SERIOUS_CONDITION, CONDITION,
                                  STANDARD_OBJECT, BuiltInClass.CLASS_T);
@@ -391,5 +387,15 @@ public class StandardClass extends SlotClass
         STANDARD_METHOD.setDirectSlots(STANDARD_METHOD.getClassLayout().generateSlotDefinitions());
         // There are no inherited slots.
         STANDARD_METHOD.setSlots(STANDARD_METHOD.getDirectSlots());
+
+        // STANDARD-GENERIC-FUNCTION
+        Debug.assertTrue(STANDARD_GENERIC_FUNCTION.isFinalized());
+        STANDARD_GENERIC_FUNCTION.setCPL(STANDARD_GENERIC_FUNCTION,
+                                         GENERIC_FUNCTION, STANDARD_OBJECT,
+                                         BuiltInClass.FUNCTION,
+                                         BuiltInClass.CLASS_T);
+        STANDARD_GENERIC_FUNCTION.setDirectSlots(STANDARD_GENERIC_FUNCTION.getClassLayout().generateSlotDefinitions());
+        // There are no inherited slots.
+        STANDARD_GENERIC_FUNCTION.setSlots(STANDARD_GENERIC_FUNCTION.getDirectSlots());
     }
 }

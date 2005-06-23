@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: GenericFunction.java,v 1.23 2005-05-21 15:27:09 piso Exp $
+ * $Id: GenericFunction.java,v 1.24 2005-06-23 19:07:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,23 @@
 
 package org.armedbear.lisp;
 
-public final class GenericFunction extends StandardObject
+public class GenericFunction extends StandardObject
 {
+    protected GenericFunction(LispClass cls, int length)
+    {
+        super(cls, length);
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.GENERIC_FUNCTION)
+            return T;
+        if (type == StandardClass.GENERIC_FUNCTION)
+            return T;
+        if (type == Symbol.FUNCTION)
+            return T;
+        if (type == BuiltInClass.FUNCTION)
+            return T;
+        return super.typep(type);
+    }
 }
