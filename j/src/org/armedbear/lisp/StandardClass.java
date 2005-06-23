@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.27 2005-06-22 23:32:35 piso Exp $
+ * $Id: StandardClass.java,v 1.28 2005-06-23 00:09:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -313,6 +313,9 @@ public class StandardClass extends SlotClass
                                  STANDARD_OBJECT, BuiltInClass.CLASS_T);
         STREAM_ERROR.setCPL(STREAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                             STANDARD_OBJECT, BuiltInClass.CLASS_T);
+        STREAM_ERROR.setDirectSlots(
+            list1(new SlotDefinition(Symbol.STREAM,
+                                     list1(PACKAGE_CL.intern("STREAM-ERROR-STREAM")))));
         STRUCTURE_CLASS.setCPL(STRUCTURE_CLASS, CLASS, STANDARD_OBJECT,
                                BuiltInClass.CLASS_T);
         STYLE_WARNING.setCPL(STYLE_WARNING, WARNING, CONDITION, STANDARD_OBJECT,
@@ -343,6 +346,7 @@ public class StandardClass extends SlotClass
         CONTROL_ERROR.finalizeClassLayout();
         CONDITION.finalizeClassLayout();
         DIVISION_BY_ZERO.finalizeClassLayout();
+        END_OF_FILE.finalizeClassLayout();
         ERROR.finalizeClassLayout();
         FLOATING_POINT_INEXACT.finalizeClassLayout();
         FLOATING_POINT_INVALID_OPERATION.finalizeClassLayout();
@@ -350,10 +354,12 @@ public class StandardClass extends SlotClass
         FLOATING_POINT_UNDERFLOW.finalizeClassLayout();
         PACKAGE_ERROR.finalizeClassLayout();
         PROGRAM_ERROR.finalizeClassLayout();
+        READER_ERROR.finalizeClassLayout();
         SERIOUS_CONDITION.finalizeClassLayout();
         SIMPLE_CONDITION.finalizeClassLayout();
         SIMPLE_TYPE_ERROR.finalizeClassLayout();
         STORAGE_CONDITION.finalizeClassLayout();
+        STREAM_ERROR.finalizeClassLayout();
         STYLE_WARNING.finalizeClassLayout();
         TYPE_ERROR.finalizeClassLayout();
         UNBOUND_SLOT.finalizeClassLayout();

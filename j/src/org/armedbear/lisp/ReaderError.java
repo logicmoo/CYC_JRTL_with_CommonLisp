@@ -2,7 +2,7 @@
  * ReaderError.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ReaderError.java,v 1.6 2005-06-21 18:42:14 piso Exp $
+ * $Id: ReaderError.java,v 1.7 2005-06-23 00:09:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,21 +21,27 @@
 
 package org.armedbear.lisp;
 
-public class ReaderError extends StreamError
+public final class ReaderError extends StreamError
 {
-    public ReaderError(String message)
+    public ReaderError(String message) throws ConditionThrowable
     {
-        super(message);
+        super(StandardClass.READER_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
     }
 
-    public ReaderError(String message, Stream stream)
+    public ReaderError(String message, Stream stream) throws ConditionThrowable
     {
-        super(message, stream);
+        super(StandardClass.READER_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+        setStream(stream);
     }
 
     public ReaderError(LispObject initArgs) throws ConditionThrowable
     {
-        super(initArgs);
+        super(StandardClass.READER_ERROR);
+        initialize(initArgs);
     }
 
     public LispObject typeOf()

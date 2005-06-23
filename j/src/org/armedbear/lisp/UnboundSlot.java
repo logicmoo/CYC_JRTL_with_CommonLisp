@@ -2,7 +2,7 @@
  * UnboundSlot.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: UnboundSlot.java,v 1.6 2005-06-22 19:12:11 piso Exp $
+ * $Id: UnboundSlot.java,v 1.7 2005-06-23 00:09:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,13 +32,11 @@ public final class UnboundSlot extends CellError
     protected void initialize(LispObject initArgs) throws ConditionThrowable
     {
         super.initialize(initArgs);
-        LispObject first, second;
         while (initArgs != NIL) {
-            first = initArgs.car();
+            LispObject first = initArgs.car();
             initArgs = initArgs.cdr();
-            second = initArgs.car();
             if (first == Keyword.INSTANCE) {
-                setInstance(second);
+                setInstance(initArgs.car());
                 break;
             }
             initArgs = initArgs.cdr();

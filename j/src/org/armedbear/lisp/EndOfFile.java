@@ -2,7 +2,7 @@
  * EndOfFile.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: EndOfFile.java,v 1.5 2005-06-21 18:42:13 piso Exp $
+ * $Id: EndOfFile.java,v 1.6 2005-06-23 00:09:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,16 @@ package org.armedbear.lisp;
 
 public final class EndOfFile extends StreamError
 {
-    public EndOfFile(Stream stream)
+    public EndOfFile(Stream stream) throws ConditionThrowable
     {
-        super(stream);
+        super(StandardClass.END_OF_FILE);
+        setStream(stream);
     }
 
     public EndOfFile(LispObject initArgs) throws ConditionThrowable
     {
-        super(initArgs);
+        super(StandardClass.END_OF_FILE);
+        initialize(initArgs);
     }
 
     public LispObject typeOf()
