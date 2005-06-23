@@ -2,7 +2,7 @@
  * FileError.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FileError.java,v 1.5 2005-06-21 18:42:13 piso Exp $
+ * $Id: FileError.java,v 1.6 2005-06-23 00:41:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,44 +23,56 @@ package org.armedbear.lisp;
 
 public final class FileError extends LispError
 {
-    private LispObject pathname = NIL;
-
     // initArgs is either a normal initArgs list or a pathname.
     public FileError(LispObject initArgs) throws ConditionThrowable
     {
-        super(initArgs);
-        if (initArgs instanceof Cons) {
-            LispObject pathname = NIL;
-            LispObject first, second;
-            while (initArgs != NIL) {
-                first = initArgs.car();
-                initArgs = initArgs.cdr();
-                second = initArgs.car();
-                initArgs = initArgs.cdr();
-                if (first == Keyword.PATHNAME) {
-                    pathname = second;
-                    break;
-                }
-            }
-            this.pathname = pathname;
-        } else
-            pathname = initArgs;
+        super(StandardClass.FILE_ERROR);
+        if (initArgs instanceof Cons)
+            initialize(initArgs);
+        else
+            setPathname(initArgs);
     }
 
-    public FileError(String message)
+    protected void initialize(LispObject initArgs) throws ConditionThrowable
     {
-        super(message);
+        super.initialize(initArgs);
+        LispObject pathname = NIL;
+        while (initArgs != NIL) {
+            LispObject first = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.PATHNAME) {
+                pathname = initArgs.car();
+                break;
+            }
+            initArgs = initArgs.cdr();
+        }
+        setPathname(pathname);
+    }
+
+    public FileError(String message) throws ConditionThrowable
+    {
+        super(StandardClass.FILE_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
     }
 
     public FileError(String message, LispObject pathname)
+        throws ConditionThrowable
     {
-        super(message);
-        this.pathname = pathname;
+        super(StandardClass.FILE_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+        setPathname(pathname);
     }
 
-    public LispObject getPathname()
+    public LispObject getPathname() throws ConditionThrowable
     {
-        return pathname;
+        return getInstanceSlotValue(Symbol.PATHNAME);
+    }
+
+    private void setPathname(LispObject pathname) throws ConditionThrowable
+    {
+        setInstanceSlotValue(Symbol.PATHNAME, pathname);
     }
 
     public LispObject typeOf()

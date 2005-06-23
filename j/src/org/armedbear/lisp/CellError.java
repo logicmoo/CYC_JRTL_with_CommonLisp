@@ -2,7 +2,7 @@
  * CellError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: CellError.java,v 1.5 2005-06-22 19:11:43 piso Exp $
+ * $Id: CellError.java,v 1.6 2005-06-23 00:41:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,28 +23,29 @@ package org.armedbear.lisp;
 
 public class CellError extends LispError
 {
+    protected CellError(LispClass cls)
+    {
+        super(cls);
+    }
+
     public CellError(LispObject initArgs) throws ConditionThrowable
     {
         super(StandardClass.CELL_ERROR);
         initialize(initArgs);
     }
 
-    protected CellError(LispClass cls)
-    {
-        super(cls);
-    }
-
     protected void initialize(LispObject initArgs) throws ConditionThrowable
     {
+        super.initialize(initArgs);
         LispObject name = NIL;
-        LispObject first, second;
         while (initArgs != NIL) {
-            first = initArgs.car();
+            LispObject first = initArgs.car();
             initArgs = initArgs.cdr();
-            second = initArgs.car();
+            if (first == Keyword.NAME) {
+                name = initArgs.car();;
+                break;
+            }
             initArgs = initArgs.cdr();
-            if (first == Keyword.NAME)
-                name = second;
         }
         setCellName(name);
     }

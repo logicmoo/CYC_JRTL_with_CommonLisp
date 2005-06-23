@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.29 2005-06-23 00:16:42 piso Exp $
+ * $Id: StandardClass.java,v 1.30 2005-06-23 00:41:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,6 +250,9 @@ public class StandardClass extends SlotClass
                      BuiltInClass.CLASS_T);
         FILE_ERROR.setCPL(FILE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, BuiltInClass.CLASS_T);
+        FILE_ERROR.setDirectSlots(
+            list1(new SlotDefinition(Symbol.PATHNAME,
+                                     list1(PACKAGE_CL.intern("FILE-ERROR-PATHNAME")))));
         FLOATING_POINT_INEXACT.setCPL(FLOATING_POINT_INEXACT, ARITHMETIC_ERROR,
                                       ERROR, SERIOUS_CONDITION, CONDITION,
                                       STANDARD_OBJECT, BuiltInClass.CLASS_T);
@@ -278,6 +281,9 @@ public class StandardClass extends SlotClass
                            STANDARD_OBJECT, BuiltInClass.CLASS_T);
         PRINT_NOT_READABLE.setCPL(PRINT_NOT_READABLE, ERROR, SERIOUS_CONDITION,
                                   CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+        PRINT_NOT_READABLE.setDirectSlots(
+            list1(new SlotDefinition(Symbol.OBJECT,
+                                     list1(PACKAGE_CL.intern("PRINT-NOT-READABLE-OBJECT")))));
         PROGRAM_ERROR.setCPL(PROGRAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                              STANDARD_OBJECT, BuiltInClass.CLASS_T);
         READER_ERROR.setCPL(READER_ERROR, PARSE_ERROR, STREAM_ERROR, ERROR,
@@ -343,17 +349,19 @@ public class StandardClass extends SlotClass
 
         ARITHMETIC_ERROR.finalizeClassLayout();
         CELL_ERROR.finalizeClassLayout();
-        CONTROL_ERROR.finalizeClassLayout();
         CONDITION.finalizeClassLayout();
+        CONTROL_ERROR.finalizeClassLayout();
         DIVISION_BY_ZERO.finalizeClassLayout();
         END_OF_FILE.finalizeClassLayout();
         ERROR.finalizeClassLayout();
+        FILE_ERROR.finalizeClassLayout();
         FLOATING_POINT_INEXACT.finalizeClassLayout();
         FLOATING_POINT_INVALID_OPERATION.finalizeClassLayout();
         FLOATING_POINT_OVERFLOW.finalizeClassLayout();
         FLOATING_POINT_UNDERFLOW.finalizeClassLayout();
         PACKAGE_ERROR.finalizeClassLayout();
         PARSE_ERROR.finalizeClassLayout();
+        PRINT_NOT_READABLE.finalizeClassLayout();
         PROGRAM_ERROR.finalizeClassLayout();
         READER_ERROR.finalizeClassLayout();
         SERIOUS_CONDITION.finalizeClassLayout();
