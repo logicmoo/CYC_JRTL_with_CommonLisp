@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.34 2005-06-23 15:48:48 piso Exp $
+ * $Id: StandardClass.java,v 1.35 2005-06-23 16:27:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -382,18 +382,7 @@ public class StandardClass extends SlotClass
         Debug.assertTrue(SLOT_DEFINITION.isFinalized());
         SLOT_DEFINITION.setCPL(SLOT_DEFINITION, STANDARD_OBJECT,
                                BuiltInClass.CLASS_T);
-        // FIXME We need to keep the slot definition names here in sync with
-        // the instance slot names in SlotDefinitionClass.java!
-        SLOT_DEFINITION.setDirectSlots(
-            list9(new SlotDefinition(Symbol.NAME, NIL),
-                  new SlotDefinition(PACKAGE_SYS.intern("INITFUNCTION"), NIL),
-                  new SlotDefinition(PACKAGE_SYS.intern("INITFORM"), NIL),
-                  new SlotDefinition(PACKAGE_SYS.intern("INITARGS"), NIL),
-                  new SlotDefinition(PACKAGE_SYS.intern("READERS"), NIL),
-                  new SlotDefinition(PACKAGE_SYS.intern("WRITERS"), NIL),
-                  new SlotDefinition(PACKAGE_SYS.intern("ALLOCATION"), NIL),
-                  new SlotDefinition(PACKAGE_SYS.intern("ALLOCATION-CLASS"), NIL),
-                  new SlotDefinition(PACKAGE_SYS.intern("LOCATION"), NIL)));
+        SLOT_DEFINITION.setDirectSlots(SLOT_DEFINITION.getClassLayout().generateSlotDefinitions());
         // There are no inherited slots.
         SLOT_DEFINITION.setSlots(SLOT_DEFINITION.getDirectSlots());
 
@@ -401,21 +390,8 @@ public class StandardClass extends SlotClass
         Debug.assertTrue(STANDARD_METHOD.isFinalized());
         STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT,
                                BuiltInClass.CLASS_T);
-        Layout layout = STANDARD_METHOD.getClassLayout();
-        Debug.assertTrue(layout != null);
-        LispObject[] slotNames = layout.getSlotNames();
-        LispObject directSlots = NIL;
-        try {
-            for (int i = slotNames.length; i-- > 0;) {
-                directSlots = directSlots.push(new SlotDefinition(slotNames[i], NIL));
-            }
-        }
-        catch (Throwable t) {
-            // Shouldn't happen.
-            Debug.trace(t);
-        }
-        STANDARD_METHOD.setDirectSlots(directSlots);
+        STANDARD_METHOD.setDirectSlots(STANDARD_METHOD.getClassLayout().generateSlotDefinitions());
         // There are no inherited slots.
-        STANDARD_METHOD.setSlots(directSlots);
+        STANDARD_METHOD.setSlots(STANDARD_METHOD.getDirectSlots());
     }
 }
