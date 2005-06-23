@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.17 2005-05-23 16:28:04 piso Exp $
+ * $Id: Layout.java,v 1.18 2005-06-23 14:18:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,9 +114,9 @@ public final class Layout extends LispObject
         return sharedSlots;
     }
 
-    public String writeToString()
+    public String writeToString() throws ConditionThrowable
     {
-        return unreadableString("LAYOUT");
+        return unreadableString(Symbol.LAYOUT);
     }
 
     // ### make-layout
@@ -149,7 +149,7 @@ public final class Layout extends LispObject
                 return ((Layout)arg).cls;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "layout"));
+                return signal(new TypeError(arg, Symbol.LAYOUT));
             }
         }
     };
@@ -164,7 +164,7 @@ public final class Layout extends LispObject
                 return new Fixnum(((Layout)arg).slotNames.length);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "layout"));
+                return signal(new TypeError(arg, Symbol.LAYOUT));
             }
         }
     };
@@ -207,7 +207,7 @@ public final class Layout extends LispObject
                 return NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, "layout"));
+                return signal(new TypeError(first, Symbol.LAYOUT));
             }
         }
     };
@@ -237,7 +237,7 @@ public final class Layout extends LispObject
                 return NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, "layout"));
+                return signal(new TypeError(first, Symbol.LAYOUT));
             }
         }
     };

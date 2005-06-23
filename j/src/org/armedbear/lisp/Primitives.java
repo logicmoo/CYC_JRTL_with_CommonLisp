@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.800 2005-06-20 16:00:09 piso Exp $
+ * $Id: Primitives.java,v 1.801 2005-06-23 14:18:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5065,7 +5065,7 @@ public final class Primitives extends Lisp
                 if (!(first instanceof LispClass))
                     return signal(new TypeError(first, Symbol.CLASS));
                 if (!(second instanceof Layout))
-                    return signal(new TypeError(second, "layout"));
+                    return signal(new TypeError(second, Symbol.LAYOUT));
                 // Not reached.
                 return NIL;
             }

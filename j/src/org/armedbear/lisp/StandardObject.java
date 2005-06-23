@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.47 2005-06-22 17:02:11 piso Exp $
+ * $Id: StandardObject.java,v 1.48 2005-06-23 14:18:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,7 +290,7 @@ public class StandardObject extends LispObject
                 if (!(first instanceof StandardObject))
                     return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
                 if (!(second instanceof Layout))
-                    return signal(new TypeError(second, "layout"));
+                    return signal(new TypeError(second, Symbol.LAYOUT));
                 // Not reached.
                 return NIL;
             }

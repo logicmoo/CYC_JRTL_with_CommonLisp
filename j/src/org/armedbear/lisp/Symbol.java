@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.202 2005-06-23 00:19:10 piso Exp $
+ * $Id: Symbol.java,v 1.203 2005-06-23 14:17:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -194,6 +194,7 @@ public class Symbol extends LispObject
     public static final Symbol FORMAT_CONTROL                      = PACKAGE_SYS.addInternalSymbol("FORMAT-CONTROL");
     public static final Symbol FSET                                = PACKAGE_SYS.addInternalSymbol("FSET");
     public static final Symbol INSTANCE                            = PACKAGE_SYS.addInternalSymbol("INSTANCE");
+    public static final Symbol LAYOUT                              = PACKAGE_SYS.addExternalSymbol("LAYOUT");
     public static final Symbol MACROEXPAND_MACRO                   = PACKAGE_SYS.addInternalSymbol("MACROEXPAND-MACRO");
     public static final Symbol NAME                                = PACKAGE_SYS.addInternalSymbol("NAME");
     public static final Symbol OBJECT                              = PACKAGE_SYS.addInternalSymbol("OBJECT");
