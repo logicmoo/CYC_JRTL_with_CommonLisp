@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.33 2005-06-23 15:26:21 piso Exp $
+ * $Id: StandardClass.java,v 1.34 2005-06-23 15:48:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -196,6 +196,7 @@ public class StandardClass extends SlotClass
     static {
         addClass(Symbol.STANDARD_METHOD, STANDARD_METHOD);
     }
+
     public static final StandardClass STANDARD_GENERIC_FUNCTION =
         new StandardGenericFunctionClass();
     static {
@@ -310,8 +311,8 @@ public class StandardClass extends SlotClass
                                          GENERIC_FUNCTION, STANDARD_OBJECT,
                                          BuiltInClass.FUNCTION,
                                          BuiltInClass.CLASS_T);
-        STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT,
-                               BuiltInClass.CLASS_T);
+//         STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT,
+//                                BuiltInClass.CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, BuiltInClass.CLASS_T);
         STORAGE_CONDITION.setCPL(STORAGE_CONDITION, SERIOUS_CONDITION, CONDITION,
                                  STANDARD_OBJECT, BuiltInClass.CLASS_T);
@@ -395,5 +396,26 @@ public class StandardClass extends SlotClass
                   new SlotDefinition(PACKAGE_SYS.intern("LOCATION"), NIL)));
         // There are no inherited slots.
         SLOT_DEFINITION.setSlots(SLOT_DEFINITION.getDirectSlots());
+
+        // STANDARD-METHOD
+        Debug.assertTrue(STANDARD_METHOD.isFinalized());
+        STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT,
+                               BuiltInClass.CLASS_T);
+        Layout layout = STANDARD_METHOD.getClassLayout();
+        Debug.assertTrue(layout != null);
+        LispObject[] slotNames = layout.getSlotNames();
+        LispObject directSlots = NIL;
+        try {
+            for (int i = slotNames.length; i-- > 0;) {
+                directSlots = directSlots.push(new SlotDefinition(slotNames[i], NIL));
+            }
+        }
+        catch (Throwable t) {
+            // Shouldn't happen.
+            Debug.trace(t);
+        }
+        STANDARD_METHOD.setDirectSlots(directSlots);
+        // There are no inherited slots.
+        STANDARD_METHOD.setSlots(directSlots);
     }
 }
