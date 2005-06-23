@@ -2,7 +2,7 @@
  * SlotDefinition.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: SlotDefinition.java,v 1.3 2005-06-21 18:42:14 piso Exp $
+ * $Id: SlotDefinition.java,v 1.4 2005-06-23 15:47:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class SlotDefinition extends StandardObject
         slots[SlotDefinitionClass.SLOT_INDEX_LOCATION] = NIL;
     }
 
-    public SlotDefinition(Symbol name, LispObject readers)
+    public SlotDefinition(LispObject name, LispObject readers)
     {
         this();
         try {
@@ -38,7 +38,7 @@ public final class SlotDefinition extends StandardObject
             slots[SlotDefinitionClass.SLOT_INDEX_NAME] = name;
             slots[SlotDefinitionClass.SLOT_INDEX_INITFUNCTION] = NIL;
             slots[SlotDefinitionClass.SLOT_INDEX_INITARGS] =
-                new Cons(PACKAGE_KEYWORD.intern(name.getName()));
+                new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName()));
             slots[SlotDefinitionClass.SLOT_INDEX_READERS] = readers;
             slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION] = PACKAGE_KEYWORD.intern("INSTANCE");
         }
