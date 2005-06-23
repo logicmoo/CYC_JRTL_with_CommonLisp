@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.18 2005-06-23 14:18:14 piso Exp $
+ * $Id: Layout.java,v 1.19 2005-06-23 16:26:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,6 +117,22 @@ public final class Layout extends LispObject
     public String writeToString() throws ConditionThrowable
     {
         return unreadableString(Symbol.LAYOUT);
+    }
+
+    // Generates a list of slot definitions for the slot names in this layout.
+    protected LispObject generateSlotDefinitions()
+    {
+        LispObject list = NIL;
+        try {
+            for (int i = slotNames.length; i-- > 0;) {
+                list = list.push(new SlotDefinition(slotNames[i], NIL));
+            }
+        }
+        catch (Throwable t) {
+            // Shouldn't happen.
+            Debug.trace(t);
+        }
+        return list;
     }
 
     // ### make-layout
