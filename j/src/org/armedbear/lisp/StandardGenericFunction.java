@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.6 2005-06-21 18:42:14 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.7 2005-06-23 19:07:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,6 +78,10 @@ public final class StandardGenericFunction extends StandardObject
             else
                 return NIL;
         }
+        if (type == Symbol.STANDARD_GENERIC_FUNCTION)
+            return T;
+        if (type == StandardClass.STANDARD_GENERIC_FUNCTION)
+            return T;
         return super.typep(type);
     }
 
