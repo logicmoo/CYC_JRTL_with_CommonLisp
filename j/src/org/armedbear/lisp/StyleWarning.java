@@ -2,7 +2,7 @@
  * StyleWarning.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: StyleWarning.java,v 1.3 2005-06-21 18:42:15 piso Exp $
+ * $Id: StyleWarning.java,v 1.4 2005-06-23 00:53:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,12 @@
 
 package org.armedbear.lisp;
 
-public class StyleWarning extends Warning
+public final class StyleWarning extends Warning
 {
     public StyleWarning(LispObject initArgs) throws ConditionThrowable
     {
-        super(initArgs);
+        super(StandardClass.STYLE_WARNING);
+        initialize(initArgs);
     }
 
     public LispObject typeOf()

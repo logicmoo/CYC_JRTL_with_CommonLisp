@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.30 2005-06-23 00:41:08 piso Exp $
+ * $Id: StandardClass.java,v 1.31 2005-06-23 00:53:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -346,7 +346,7 @@ public class StandardClass extends SlotClass
                                   BuiltInClass.CLASS_T);
         WARNING.setCPL(WARNING, CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
 
-
+        // Condition classes.
         ARITHMETIC_ERROR.finalizeClassLayout();
         CELL_ERROR.finalizeClassLayout();
         CONDITION.finalizeClassLayout();
@@ -366,7 +366,9 @@ public class StandardClass extends SlotClass
         READER_ERROR.finalizeClassLayout();
         SERIOUS_CONDITION.finalizeClassLayout();
         SIMPLE_CONDITION.finalizeClassLayout();
+        SIMPLE_ERROR.finalizeClassLayout();
         SIMPLE_TYPE_ERROR.finalizeClassLayout();
+        SIMPLE_WARNING.finalizeClassLayout();
         STORAGE_CONDITION.finalizeClassLayout();
         STREAM_ERROR.finalizeClassLayout();
         STYLE_WARNING.finalizeClassLayout();
