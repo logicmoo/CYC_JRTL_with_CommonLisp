@@ -2,7 +2,7 @@
  * StandardGenericFunctionClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardGenericFunctionClass.java,v 1.3 2005-06-21 18:42:14 piso Exp $
+ * $Id: StandardGenericFunctionClass.java,v 1.4 2005-06-23 01:20:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,26 @@ public final class StandardGenericFunctionClass extends StandardClass
     {
         super(Symbol.STANDARD_GENERIC_FUNCTION, list1(StandardClass.GENERIC_FUNCTION));
         Package pkg = PACKAGE_SYS;
+//         setDirectSlots(
+//             // FIXME readers
+//             list9(new SlotDefinition(Symbol.NAME,
+//                                      NIL),
+//                   new SlotDefinition(pkg.intern("LAMBDA-LIST"),
+//                                      NIL),
+//                   new SlotDefinition(pkg.intern("REQUIRED-ARGS"),
+//                                      NIL),
+//                   new SlotDefinition(pkg.intern("INITIAL-METHODS"),
+//                                      NIL),
+//                   new SlotDefinition(pkg.intern("METHODS"),
+//                                      NIL),
+//                   new SlotDefinition(pkg.intern("METHOD-CLASS"),
+//                                      NIL),
+//                   new SlotDefinition(pkg.intern("METHOD-COMBINATION"),
+//                                      NIL),
+//                   new SlotDefinition(pkg.intern("ARGUMENT-PRECEDENCE-ORDER"),
+//                                      NIL),
+//                   new SlotDefinition(pkg.intern("CLASSES-TO-EMF-TABLE"),
+//                                      NIL)));
         LispObject[] instanceSlotNames = {
             pkg.intern("NAME"),
             pkg.intern("LAMBDA-LIST"),
@@ -45,7 +65,7 @@ public final class StandardGenericFunctionClass extends StandardClass
             pkg.intern("INITIAL-METHODS"),
             pkg.intern("METHODS"),
             pkg.intern("METHOD-CLASS"),
-            pkg.intern("METHOD_COMBINATION"),
+            pkg.intern("METHOD-COMBINATION"),
             pkg.intern("ARGUMENT-PRECEDENCE-ORDER"),
             pkg.intern("CLASSES-TO-EMF-TABLE"),
             Symbol.DOCUMENTATION
