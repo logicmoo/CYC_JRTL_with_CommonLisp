@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.35 2005-06-23 16:27:43 piso Exp $
+ * $Id: StandardClass.java,v 1.36 2005-06-23 18:10:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -311,8 +311,6 @@ public class StandardClass extends SlotClass
                                          GENERIC_FUNCTION, STANDARD_OBJECT,
                                          BuiltInClass.FUNCTION,
                                          BuiltInClass.CLASS_T);
-//         STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT,
-//                                BuiltInClass.CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, BuiltInClass.CLASS_T);
         STORAGE_CONDITION.setCPL(STORAGE_CONDITION, SERIOUS_CONDITION, CONDITION,
                                  STANDARD_OBJECT, BuiltInClass.CLASS_T);
