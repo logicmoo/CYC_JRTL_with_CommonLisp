@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.31 2005-06-23 00:53:43 piso Exp $
+ * $Id: StandardClass.java,v 1.32 2005-06-23 15:08:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,8 +304,20 @@ public class StandardClass extends SlotClass
         SIMPLE_WARNING.setDirectSuperclasses(list2(SIMPLE_CONDITION, WARNING));
         SIMPLE_WARNING.setCPL(SIMPLE_WARNING, SIMPLE_CONDITION, WARNING,
                               CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        SLOT_DEFINITION.setCPL(SLOT_DEFINITION, STANDARD_OBJECT,
-                               BuiltInClass.CLASS_T);
+//         SLOT_DEFINITION.setCPL(SLOT_DEFINITION, STANDARD_OBJECT,
+//                                BuiltInClass.CLASS_T);
+//         SLOT_DEFINITION.setDirectSlots(
+//             list9(new SlotDefinition(Symbol.NAME, NIL),
+//                   new SlotDefinition(PACKAGE_SYS.intern("INITFUNCTION"), NIL),
+//                   new SlotDefinition(PACKAGE_SYS.intern("INITFORM"), NIL),
+//                   new SlotDefinition(PACKAGE_SYS.intern("INITARGS"), NIL),
+//                   new SlotDefinition(PACKAGE_SYS.intern("READERS"), NIL),
+//                   new SlotDefinition(PACKAGE_SYS.intern("WRITERS"), NIL),
+//                   new SlotDefinition(PACKAGE_SYS.intern("ALLOCATION"), NIL),
+//                   new SlotDefinition(PACKAGE_SYS.intern("ALLOCATION-CLASS"), NIL),
+//                   new SlotDefinition(PACKAGE_SYS.intern("LOCATION"), NIL)));
+//         SLOT_DEFINITION.setSlots(SLOT_DEFINITION.getDirectSlots());
+//         Debug.assertTrue(SLOT_DEFINITION.isFinalized());
         STANDARD_CLASS.setCPL(STANDARD_CLASS, CLASS,
                               STANDARD_OBJECT, BuiltInClass.CLASS_T);
         STANDARD_GENERIC_FUNCTION.setCPL(STANDARD_GENERIC_FUNCTION,
@@ -377,5 +389,25 @@ public class StandardClass extends SlotClass
         UNBOUND_VARIABLE.finalizeClassLayout();
         UNDEFINED_FUNCTION.finalizeClassLayout();
         WARNING.finalizeClassLayout();
+
+        // SYS:SLOT-DEFINITION is constructed and finalized in
+        // SlotDefinitionClass.java, but we need to fill in a few things here.
+        Debug.assertTrue(SLOT_DEFINITION.isFinalized());
+        SLOT_DEFINITION.setCPL(SLOT_DEFINITION, STANDARD_OBJECT,
+                               BuiltInClass.CLASS_T);
+        // FIXME We need to keep the slot definition names here in sync with
+        // the instance slot names in SlotDefinitionClass.java!
+        SLOT_DEFINITION.setDirectSlots(
+            list9(new SlotDefinition(Symbol.NAME, NIL),
+                  new SlotDefinition(PACKAGE_SYS.intern("INITFUNCTION"), NIL),
+                  new SlotDefinition(PACKAGE_SYS.intern("INITFORM"), NIL),
+                  new SlotDefinition(PACKAGE_SYS.intern("INITARGS"), NIL),
+                  new SlotDefinition(PACKAGE_SYS.intern("READERS"), NIL),
+                  new SlotDefinition(PACKAGE_SYS.intern("WRITERS"), NIL),
+                  new SlotDefinition(PACKAGE_SYS.intern("ALLOCATION"), NIL),
+                  new SlotDefinition(PACKAGE_SYS.intern("ALLOCATION-CLASS"), NIL),
+                  new SlotDefinition(PACKAGE_SYS.intern("LOCATION"), NIL)));
+        // There are no inherited slots.
+        SLOT_DEFINITION.setSlots(SLOT_DEFINITION.getDirectSlots());
     }
 }

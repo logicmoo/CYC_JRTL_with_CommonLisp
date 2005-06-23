@@ -2,7 +2,7 @@
  * SlotDefinitionClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: SlotDefinitionClass.java,v 1.2 2005-06-21 18:42:14 piso Exp $
+ * $Id: SlotDefinitionClass.java,v 1.3 2005-06-23 15:07:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,5 +49,6 @@ public final class SlotDefinitionClass extends StandardClass
             pkg.intern("LOCATION")
         };
         setClassLayout(new Layout(this, instanceSlotNames, NIL));
+        setFinalized(true);
     }
 }
