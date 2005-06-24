@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.115 2005-06-17 14:30:05 piso Exp $
+;;; $Id: precompiler.lisp,v 1.116 2005-06-24 20:02:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -80,7 +80,14 @@
 
 (define-compiler-macro typep (&whole form &rest args)
   (if (= (length args) 2)
-      `(%typep ,@args)
+      (let ((object (%car args))
+            (type-specifier (%cadr args)))
+        (cond ((equal type-specifier '(QUOTE SYMBOL))
+               `(symbolp ,object))
+              ((equal type-specifier '(QUOTE CONS))
+               `(consp ,object))
+              (t
+               `(%typep ,@args))))
       form))
 
 (define-compiler-macro subtypep (&whole form &rest args)
