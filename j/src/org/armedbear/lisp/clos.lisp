@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.184 2005-06-18 23:14:34 piso Exp $
+;;; $Id: clos.lisp,v 1.185 2005-06-24 00:14:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1911,6 +1911,11 @@
                    (make-list (length (class-slots class))
                               :initial-element +slot-unbound+)))
 
+;; "The set of valid initialization arguments for a class is the set of valid
+;; initialization arguments that either fill slots or supply arguments to
+;; methods, along with the predefined initialization argument :ALLOW-OTHER-KEYS."
+;; 7.1.2
+#+nil
 (defun check-initargs (class initargs)
   (when (oddp (length initargs))
     (error 'program-error
@@ -1926,13 +1931,17 @@
                  :format-control "Invalid initarg ~S."
                  :format-arguments (list initarg)))))))
 
+;; FIXME
+(defun check-initargs (class initargs)
+  (declare (ignore class initargs)))
+
 (defun valid-initarg-p (initarg slots)
   (dolist (slot slots nil)
     (let ((valid-initargs (%slot-definition-initargs slot)))
       (when (memq initarg valid-initargs)
         (return t)))))
 
-(defgeneric make-instance (class &key))
+(defgeneric make-instance (class &rest initargs &key &allow-other-keys))
 
 (defmethod make-instance ((class standard-class) &rest initargs)
   (when (oddp (length initargs))
