@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.497 2005-06-21 00:07:56 piso Exp $
+;;; $Id: jvm.lisp,v 1.498 2005-06-24 20:04:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -48,10 +48,10 @@
   (declare (ignore ignored)))
 
 (defun inline-expansion (name)
-  (sys:get-function-info-value name :inline-expansion))
+  (get-function-info-value name :inline-expansion))
 
 (defun (setf inline-expansion) (expansion name)
-  (sys:set-function-info-value name :inline-expansion expansion))
+  (set-function-info-value name :inline-expansion expansion))
 
 ;; Just an experiment...
 (defmacro defsubst (name lambda-list &rest body)
@@ -178,6 +178,9 @@
   to
   code
   catch-type)
+
+;; Number of objects processed by P1.
+(defvar *p1-size* 0)
 
 ;; Variables visible at the current point of compilation.
 (defvar *visible-variables* ())
@@ -672,7 +675,7 @@
                                              :lambda-expression lambda-form
                                              :parent *current-compiland*)))
              (multiple-value-bind (body decls)
-               (sys::parse-body body)
+                 (parse-body body)
                (setf (compiland-lambda-expression compiland)
                      `(lambda ,lambda-list ,@decls (block nil ,@body)))
                (let ((*visible-variables* *visible-variables*)
@@ -831,6 +834,7 @@
 
 (defun p1 (form)
   (cond ((symbolp form)
+         (incf *p1-size*)
          (cond ((constantp form) ; a DEFCONSTANT
                 (let ((value (symbol-value form)))
                   (if (numberp value)
@@ -859,6 +863,7 @@
                       (dformat t "p1: unknown variable ~S~%" form)))
                 form)))
         ((atom form)
+         (incf *p1-size*)
          form)
         (t
          (let ((op (%car form))
@@ -2705,24 +2710,24 @@
   (setf (gethash operator binary-operators) translation))
 
 (defun initialize-binary-operators ()
-  (dolist (pair '((EQL                 "EQL")
-                  (EQUAL               "EQUAL")
-                  (+                   "add")
-                  (-                   "subtract")
-                  (/                   "divideBy")
-                  (*                   "multiplyBy")
-                  (<                   "IS_LT")
-                  (<=                  "IS_LE")
-                  (>                   "IS_GT")
-                  (>=                  "IS_GE")
-                  ( =                  "IS_E")
-                  (/=                  "IS_NE")
-                  (ASH                 "ash")
-                  (LOGAND              "logand")
-                  (AREF                "AREF")
-                  (SYS::SIMPLE-TYPEP   "typep")
-                  (RPLACA              "RPLACA")
-                  (RPLACD              "RPLACD")))
+  (dolist (pair '((EQL          "EQL")
+                  (EQUAL        "EQUAL")
+                  (+            "add")
+                  (-            "subtract")
+                  (/            "divideBy")
+                  (*            "multiplyBy")
+                  (<            "IS_LT")
+                  (<=           "IS_LE")
+                  (>            "IS_GT")
+                  (>=           "IS_GE")
+                  ( =           "IS_E")
+                  (/=           "IS_NE")
+                  (ASH          "ash")
+                  (LOGAND       "logand")
+                  (AREF         "AREF")
+                  (SIMPLE-TYPEP "typep")
+                  (RPLACA       "RPLACA")
+                  (RPLACD       "RPLACD")))
     (define-binary-operator (first pair) (second pair))))
 
 (initialize-binary-operators)
@@ -3047,7 +3052,7 @@
            (process-args args)
            (emit-call-thread-execute numargs)))))
 
-(sys::define-source-transform funcall (&whole form fun &rest args)
+(define-source-transform funcall (&whole form fun &rest args)
   (cond ((> *debug* *speed*)
          form)
         ((and (consp fun)
@@ -4031,13 +4036,9 @@
             (emit 'aload *thread*)
             (emit 'aload register)
             (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))
-
-          ;; FIXME Not exactly the right place for this, but better than nothing.
-;;           (maybe-generate-interrupt-check)
-
+          (maybe-generate-interrupt-check)
           (emit 'goto (tag-label tag))
           (return-from p2-go))))
-
     ;; Non-local GO.
     (emit 'new +lisp-go-class+)
     (emit 'dup)
@@ -6298,11 +6299,14 @@
             (push var vars)
             (push var *all-variables*)))
         (setf (compiland-arg-vars compiland) (nreverse vars))
-        (let ((*visible-variables* *visible-variables*))
+        (let ((*visible-variables* *visible-variables*)
+              (*p1-size* 0))
           (dolist (var (compiland-arg-vars compiland))
             (push var *visible-variables*))
           (setf (compiland-p1-result compiland)
-                (list* 'LAMBDA lambda-list (p1-body body))))))))
+                (list* 'LAMBDA lambda-list (p1-body body)))
+;;           (format t "*p1-size* = ~S~%" *p1-size*)
+          )))))
 
 (defun p2-%call-internal (form &key (target :stack) representation)
   (dformat t "p2-%call-internal~%")
@@ -6586,7 +6590,7 @@
       (let ((arity (compiland-arity compiland)))
         (when arity
           (generate-arg-count-check arity)))
-      (maybe-generate-interrupt-check)
+;;       (maybe-generate-interrupt-check)
 
       (when *hairy-arglist-p*
         (emit 'aload_0) ; this
