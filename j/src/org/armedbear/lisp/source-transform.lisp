@@ -1,7 +1,7 @@
 ;;; source-transform.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: source-transform.lisp,v 1.3 2005-04-20 14:44:10 piso Exp $
+;;; $Id: source-transform.lisp,v 1.4 2005-06-24 20:03:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package #:system)
+
+(export '(source-transform define-source-transform expand-source-transform))
 
 (defun source-transform (name)
   (get-function-info-value name :source-transform))
