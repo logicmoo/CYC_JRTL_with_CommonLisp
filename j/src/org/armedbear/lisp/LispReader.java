@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.37 2005-05-05 15:15:01 piso Exp $
+ * $Id: LispReader.java,v 1.38 2005-06-25 17:41:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,8 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char terminator)
             throws ConditionThrowable
         {
-            Readtable rt = currentReadtable();
+            final LispThread thread = LispThread.currentThread();
+            final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
             StringBuffer sb = new StringBuffer();
             while (true) {
                 int n = stream._readChar();
@@ -154,8 +155,9 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
+            final LispThread thread = LispThread.currentThread();
             LispObject list = stream.readList(true);
-            if (_BACKQUOTE_COUNT_.symbolValue().zerop()) {
+            if (_BACKQUOTE_COUNT_.symbolValue(thread).zerop()) {
                 if (n >= 0) {
                     LispObject[] array = new LispObject[n];
                     for (int i = 0; i < n; i++) {
@@ -167,7 +169,7 @@ public final class LispReader extends Lisp
                 } else
                     return new SimpleVector(list);
             }
-            return new Cons(_BQ_VECTOR_FLAG_.symbolValue(), list);
+            return new Cons(_BQ_VECTOR_FLAG_.symbolValue(thread), list);
         }
     };
 
@@ -179,7 +181,9 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char ignored, int n)
             throws ConditionThrowable
         {
-            final boolean suppress = _READ_SUPPRESS_.symbolValue() != NIL;
+            final LispThread thread = LispThread.currentThread();
+            final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+            final boolean suppress = _READ_SUPPRESS_.symbolValue(thread) != NIL;
             StringBuffer sb = new StringBuffer();
             while (true) {
                 int ch = stream._readChar();
@@ -189,7 +193,7 @@ public final class LispReader extends Lisp
                 if (c == '0' || c == '1')
                     sb.append(c);
                 else {
-                    int syntaxType = currentReadtable().getSyntaxType(c);
+                    int syntaxType = rt.getSyntaxType(c);
                     if (syntaxType == Readtable.SYNTAX_TYPE_WHITESPACE ||
                         syntaxType == Readtable.SYNTAX_TYPE_TERMINATING_MACRO) {
                         stream._unreadChar(c);
@@ -236,13 +240,13 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            if (_READ_EVAL_.symbolValueNoThrow() == NIL)
+            final LispThread thread = LispThread.currentThread();
+            if (_READ_EVAL_.symbolValue(thread) == NIL)
                 return signal(new ReaderError("Can't read #. when *READ-EVAL* is NIL.",
                                               stream));
             else
                 return eval(stream.read(true, NIL, true),
-                            new Environment(),
-                            LispThread.currentThread());
+                            new Environment(), thread);
         }
     };
 
