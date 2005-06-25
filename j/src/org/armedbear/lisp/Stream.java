@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.124 2005-06-25 12:26:34 piso Exp $
+ * $Id: Stream.java,v 1.125 2005-06-25 17:42:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -636,7 +636,6 @@ public class Stream extends LispObject
         StringBuffer sb = new StringBuffer();
         sb.append(c);
         final LispThread thread = LispThread.currentThread();
-//         final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
         BitSet flags = _readToken(sb, rt);
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
