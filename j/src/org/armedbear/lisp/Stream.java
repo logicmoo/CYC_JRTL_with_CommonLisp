@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.123 2005-05-15 19:22:44 piso Exp $
+ * $Id: Stream.java,v 1.124 2005-06-25 12:26:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -279,7 +279,7 @@ public class Stream extends LispObject
                 char c = (char) n;
                 if (rt.isWhitespace(c))
                     continue;
-                LispObject result = processChar(c);
+                LispObject result = processChar(c, rt);
                 if (result != null)
                     return result;
             }
@@ -289,14 +289,15 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject processChar(char c) throws ConditionThrowable
+    private LispObject processChar(char c, Readtable rt)
+        throws ConditionThrowable
     {
-        LispObject handler = currentReadtable().getReaderMacroFunction(c);
+        final LispObject handler = rt.getReaderMacroFunction(c);
         if (handler instanceof ReaderMacroFunction)
             return ((ReaderMacroFunction)handler).execute(this, c);
         if (handler != null && handler != NIL)
             return handler.execute(this, LispCharacter.getInstance(c));
-        return readToken(c);
+        return readToken(c, rt);
     }
 
     public LispObject readPathname() throws ConditionThrowable
@@ -363,10 +364,12 @@ public class Stream extends LispObject
 
     public LispObject readList(boolean requireProper) throws ConditionThrowable
     {
+        final LispThread thread = LispThread.currentThread();
         Cons first = null;
         Cons last = null;
         while (true) {
-            char c = flushWhitespace();
+            Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+            char c = flushWhitespace(rt);
             if (c == ')') {
                 return first == null ? NIL : first;
             }
@@ -375,9 +378,9 @@ public class Stream extends LispObject
                 if (n < 0)
                     return signal(new EndOfFile(this));
                 char nextChar = (char) n;
-                if (isTokenDelimiter(nextChar)) {
+                if (isTokenDelimiter(nextChar, rt)) {
                     if (last == null) {
-                        if (_READ_SUPPRESS_.symbolValue() != NIL)
+                        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
                             return NIL;
                         else
                             return signal(new ReaderError("Nothing appears before . in list.",
@@ -389,7 +392,8 @@ public class Stream extends LispObject
                         if (!obj.listp())
                             signal(new ReaderError("The value " +
                                                    obj.writeToString() +
-                                                   " is not of type LIST.",
+                                                   " is not of type " +
+                                                   Symbol.LIST.writeToString() + ".",
                                                    this));
                     }
                     last.setCdr(obj);
@@ -398,7 +402,7 @@ public class Stream extends LispObject
                 // normal token beginning with '.'
                 _unreadChar(nextChar);
             }
-            LispObject obj = processChar(c);
+            LispObject obj = processChar(c, rt);
             if (obj == null) {
                 // A comment.
                 continue;
@@ -414,7 +418,7 @@ public class Stream extends LispObject
         }
     }
 
-    private static final boolean isTokenDelimiter(char c)
+    private static final boolean isTokenDelimiter(char c, Readtable rt)
         throws ConditionThrowable
     {
         switch (c) {
@@ -427,7 +431,7 @@ public class Stream extends LispObject
             case '`':
                 return true;
             default:
-                return currentReadtable().isWhitespace(c);
+                return rt.isWhitespace(c);
         }
     }
 
@@ -446,12 +450,12 @@ public class Stream extends LispObject
                 numArg = 0;
             numArg = numArg * 10 + c - '0';
         }
-        LispObject fun =
-            currentReadtable().getDispatchMacroCharacter(dispChar, c);
+        final LispThread thread = LispThread.currentThread();
+        Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+        LispObject fun = rt.getDispatchMacroCharacter(dispChar, c);
         if (fun instanceof DispatchMacroFunction)
             return ((DispatchMacroFunction)fun).execute(this, c, numArg);
         if (fun != NIL) {
-            final LispThread thread = LispThread.currentThread();
             LispObject result =
                 thread.execute(fun, this, LispCharacter.getInstance(c),
                                (numArg < 0) ? NIL : new Fixnum(numArg));
@@ -473,7 +477,8 @@ public class Stream extends LispObject
         char c = (char) n;
         StringBuffer sb = new StringBuffer();
         sb.append(c);
-        Readtable rt = currentReadtable();
+        final LispThread thread = LispThread.currentThread();
+        final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
         while (true) {
             n = _readChar();
             if (n < 0)
@@ -487,11 +492,11 @@ public class Stream extends LispObject
             }
             sb.append(c);
         }
-        if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
+        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
+        if (sb.length() == 1)
+            return LispCharacter.getInstance(sb.charAt(0));
         String token = sb.toString();
-        if (token.length() == 1)
-            return LispCharacter.getInstance(token.charAt(0));
         n = LispCharacter.nameToChar(token);
         if (n >= 0)
             return LispCharacter.getInstance((char)n);
@@ -625,12 +630,13 @@ public class Stream extends LispObject
         return -1;
     }
 
-    private final LispObject readToken(char c) throws ConditionThrowable
+    private final LispObject readToken(char c, Readtable rt)
+        throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
         sb.append(c);
         final LispThread thread = LispThread.currentThread();
-        final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+//         final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
         BitSet flags = _readToken(sb, rt);
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
@@ -1025,9 +1031,8 @@ public class Stream extends LispObject
         return signal(new LispError());
     }
 
-    private char flushWhitespace() throws ConditionThrowable
+    private char flushWhitespace(Readtable rt) throws ConditionThrowable
     {
-        final Readtable rt = currentReadtable();
         while (true) {
             int n = _readChar();
             if (n < 0) {
@@ -1047,10 +1052,11 @@ public class Stream extends LispObject
         final LispThread thread = LispThread.currentThread();
         LispObject result = NIL;
         while (true) {
-            char c = flushWhitespace();
+            Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+            char c = flushWhitespace(rt);
             if (c == delimiter)
                 break;
-            LispObject obj = processChar(c);
+            LispObject obj = processChar(c, rt);
             if (obj != null)
                 result = new Cons(obj, result);
         }
