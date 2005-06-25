@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.203 2005-06-23 14:17:03 piso Exp $
+ * $Id: Symbol.java,v 1.204 2005-06-25 12:23:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -551,7 +551,8 @@ public class Symbol extends LispObject
         final LispThread thread = LispThread.currentThread();
         boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
         LispObject printCase = _PRINT_CASE_.symbolValue(thread);
-        LispObject readtableCase = currentReadtable().getReadtableCase();
+        final LispObject readtableCase =
+            ((Readtable)_READTABLE_.symbolValue(thread)).getReadtableCase();
         boolean printReadably = (_PRINT_READABLY_.symbolValue(thread) != NIL);
         if (printReadably) {
             if (readtableCase != Keyword.UPCASE ||
