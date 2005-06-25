@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.106 2005-06-25 12:23:11 piso Exp $
+ * $Id: Load.java,v 1.107 2005-06-25 19:36:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,9 +261,7 @@ public final class Load extends Lisp
                 if (second.eql(_FASL_VERSION_.getSymbolValue())) {
                     // OK
                     final LispThread thread = LispThread.currentThread();
-                    Readtable readtable = new Readtable(NIL);
-                    readtable.setDispatchMacroCharacter('#', ':', FASL_SHARP_COLON);
-                    thread.bindSpecial(_READTABLE_, readtable);
+                    thread.bindSpecial(_READTABLE_, FaslReadtable.getInstance());
                     thread.bindSpecial(_FASL_ANONYMOUS_PACKAGE_, NIL);
                     thread.bindSpecial(_SOURCE_, NIL);
                     return T;
@@ -339,27 +337,6 @@ public final class Load extends Lisp
             sb.append(' ');
         return sb.toString();
     }
-
-    // ### fasl-sharp-colon
-    public static final DispatchMacroFunction FASL_SHARP_COLON =
-        new DispatchMacroFunction("fasl-sharp-colon", PACKAGE_SYS, false,
-                                  "stream sub-char numarg")
-    {
-        public LispObject execute(Stream stream, char c, int n)
-            throws ConditionThrowable
-        {
-            LispThread thread = LispThread.currentThread();
-            Symbol symbol = (Symbol) stream.readSymbol();
-            LispObject pkg = _FASL_ANONYMOUS_PACKAGE_.symbolValue(thread);
-            if (pkg == NIL) {
-                thread.bindSpecial(_FASL_ANONYMOUS_PACKAGE_,
-                                   pkg = new Package());
-            }
-            symbol = ((Package)pkg).intern(symbol.getName());
-            symbol.setPackage(NIL);
-            return symbol;
-        }
-    };
 
     private static final LispObject loadStream(Stream in, boolean print)
         throws ConditionThrowable

@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Readtable.java,v 1.42 2005-05-05 15:14:09 piso Exp $
+ * $Id: Readtable.java,v 1.43 2005-06-25 19:37:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,7 @@
 
 package org.armedbear.lisp;
 
-import java.util.ArrayList;
-
-public final class Readtable extends LispObject
+public class Readtable extends LispObject
 {
     public static final byte SYNTAX_TYPE_CONSTITUENT           = 0;
     public static final byte SYNTAX_TYPE_WHITESPACE            = 1;
@@ -32,13 +30,18 @@ public final class Readtable extends LispObject
     public static final byte SYNTAX_TYPE_SINGLE_ESCAPE         = 4;
     public static final byte SYNTAX_TYPE_MULTIPLE_ESCAPE       = 5;
 
-    private final byte[]          syntax               = new byte[CHAR_MAX];
-    private final LispObject[]    readerMacroFunctions = new LispObject[CHAR_MAX];
-    private final DispatchTable[] dispatchTables       = new DispatchTable[CHAR_MAX];
+    protected final byte[]          syntax               = new byte[CHAR_MAX];
+    protected final LispObject[]    readerMacroFunctions = new LispObject[CHAR_MAX];
+    protected final DispatchTable[] dispatchTables       = new DispatchTable[CHAR_MAX];
 
-    private LispObject readtableCase;
+    protected LispObject readtableCase;
 
     public Readtable()
+    {
+        initialize();
+    }
+
+    protected void initialize()
     {
         syntax[9]    = SYNTAX_TYPE_WHITESPACE; // tab
         syntax[10]   = SYNTAX_TYPE_WHITESPACE; // linefeed
@@ -276,7 +279,7 @@ public final class Readtable extends LispObject
         dispatchTable.functions[Utilities.toUpperCase(subChar)] = function;
     }
 
-    private static class DispatchTable
+    protected static class DispatchTable
     {
         public LispObject[] functions = new LispObject[CHAR_MAX];
 
