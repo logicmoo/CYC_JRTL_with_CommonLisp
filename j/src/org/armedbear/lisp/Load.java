@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.105 2005-06-15 17:05:22 piso Exp $
+ * $Id: Load.java,v 1.106 2005-06-25 12:23:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -342,7 +342,7 @@ public final class Load extends Lisp
 
     // ### fasl-sharp-colon
     public static final DispatchMacroFunction FASL_SHARP_COLON =
-        new DispatchMacroFunction("sharp-colon", PACKAGE_SYS, false,
+        new DispatchMacroFunction("fasl-sharp-colon", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
         public LispObject execute(Stream stream, char c, int n)
