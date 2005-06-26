@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: setf.lisp,v 1.58 2005-06-17 17:27:57 piso Exp $
+;;; $Id: setf.lisp,v 1.59 2005-06-26 13:44:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -47,6 +47,9 @@
                                  t))))
 
 (defun get-setf-expansion (form &optional environment)
+  (when (and (consp form)
+             (autoloadp (%car form)))
+    (resolve (%car form)))
   (let (temp)
     (cond ((symbolp form)
            (let ((new-var (gensym)))
