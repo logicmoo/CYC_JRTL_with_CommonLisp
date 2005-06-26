@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.126 2005-06-26 00:39:07 piso Exp $
+ * $Id: Stream.java,v 1.127 2005-06-26 01:56:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,24 +289,13 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject processChar(char c, Readtable rt)
-        throws ConditionThrowable
-    {
-        final LispObject handler = rt.getReaderMacroFunction(c);
-        if (handler instanceof ReaderMacroFunction)
-            return ((ReaderMacroFunction)handler).execute(this, c);
-        if (handler != null && handler != NIL)
-            return handler.execute(this, LispCharacter.getInstance(c));
-        return readToken(c, rt);
-    }
-
     public LispObject faslRead(boolean eofError, LispObject eofValue,
                                boolean recursive)
         throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
         LispObject result = faslReadPreservingWhitespace(eofError, eofValue,
-                                                     recursive, thread);
+                                                         recursive, thread);
         if (result != eofValue && !recursive) {
             if (_charReady()) {
                 int n = _readChar();
@@ -324,10 +313,10 @@ public class Stream extends LispObject
             return result;
     }
 
-    public LispObject faslReadPreservingWhitespace(boolean eofError,
-                                                   LispObject eofValue,
-                                                   boolean recursive,
-                                                   LispThread thread)
+    private final LispObject faslReadPreservingWhitespace(boolean eofError,
+                                                          LispObject eofValue,
+                                                          boolean recursive,
+                                                          LispThread thread)
         throws ConditionThrowable
     {
         if (recursive) {
@@ -343,7 +332,7 @@ public class Stream extends LispObject
                 char c = (char) n;
                 if (rt.isWhitespace(c))
                     continue;
-                LispObject result = faslProcessChar(c, rt);
+                LispObject result = processChar(c, rt);
                 if (result != null)
                     return result;
             }
@@ -353,7 +342,7 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject faslProcessChar(char c, Readtable rt)
+    private final LispObject processChar(char c, Readtable rt)
         throws ConditionThrowable
     {
         final LispObject handler = rt.getReaderMacroFunction(c);
@@ -486,13 +475,18 @@ public class Stream extends LispObject
                                       this));
     }
 
-    public LispObject readList(boolean requireProper) throws ConditionThrowable
+    public LispObject readList(boolean requireProperList, boolean useFaslReadtable)
+        throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
         Cons first = null;
         Cons last = null;
+        Readtable rt = null;
+        if (useFaslReadtable)
+            rt = FaslReadtable.getInstance();
         while (true) {
-            Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+            if (!useFaslReadtable)
+                rt = (Readtable) _READTABLE_.symbolValue(thread);
             char c = flushWhitespace(rt);
             if (c == ')') {
                 return first == null ? NIL : first;
@@ -512,63 +506,7 @@ public class Stream extends LispObject
                     }
                     _unreadChar(nextChar);
                     LispObject obj = read(true, NIL, true);
-                    if (requireProper) {
-                        if (!obj.listp())
-                            signal(new ReaderError("The value " +
-                                                   obj.writeToString() +
-                                                   " is not of type " +
-                                                   Symbol.LIST.writeToString() + ".",
-                                                   this));
-                    }
-                    last.setCdr(obj);
-                    continue;
-                }
-                // normal token beginning with '.'
-                _unreadChar(nextChar);
-            }
-            LispObject obj = processChar(c, rt);
-            if (obj == null) {
-                // A comment.
-                continue;
-            }
-            if (first == null) {
-                first = new Cons(obj);
-                last = first;
-            } else {
-                Cons newCons = new Cons(obj);
-                last.setCdr(newCons);
-                last = newCons;
-            }
-        }
-    }
-
-    public LispObject faslReadList(boolean requireProper) throws ConditionThrowable
-    {
-        final LispThread thread = LispThread.currentThread();
-        Cons first = null;
-        Cons last = null;
-        Readtable rt = FaslReadtable.getInstance();
-        while (true) {
-            char c = flushWhitespace(rt);
-            if (c == ')') {
-                return first == null ? NIL : first;
-            }
-            if (c == '.') {
-                int n = _readChar();
-                if (n < 0)
-                    return signal(new EndOfFile(this));
-                char nextChar = (char) n;
-                if (isTokenDelimiter(nextChar, rt)) {
-                    if (last == null) {
-                        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
-                            return NIL;
-                        else
-                            return signal(new ReaderError("Nothing appears before . in list.",
-                                                          this));
-                    }
-                    _unreadChar(nextChar);
-                    LispObject obj = faslRead(true, NIL, true);
-                    if (requireProper) {
+                    if (requireProperList) {
                         if (!obj.listp())
                             signal(new ReaderError("The value " +
                                                    obj.writeToString() +
@@ -615,7 +553,8 @@ public class Stream extends LispObject
         }
     }
 
-    public LispObject readDispatchChar(char dispChar) throws ConditionThrowable
+    public LispObject readDispatchChar(char dispChar, boolean useFaslReadtable)
+        throws ConditionThrowable
     {
         int numArg = -1;
         char c;
@@ -631,41 +570,11 @@ public class Stream extends LispObject
             numArg = numArg * 10 + c - '0';
         }
         final LispThread thread = LispThread.currentThread();
-        Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
-        LispObject fun = rt.getDispatchMacroCharacter(dispChar, c);
-        if (fun instanceof DispatchMacroFunction)
-            return ((DispatchMacroFunction)fun).execute(this, c, numArg);
-        if (fun != NIL) {
-            LispObject result =
-                thread.execute(fun, this, LispCharacter.getInstance(c),
-                               (numArg < 0) ? NIL : new Fixnum(numArg));
-            LispObject[] values = thread.getValues();
-            if (values != null && values.length == 0)
-                result = null;
-            thread.clearValues();
-            return result;
-        }
-        return signal(new ReaderError("No dispatch function defined for #\\" + c,
-                                      this));
-    }
-
-    public LispObject faslReadDispatchChar(char dispChar) throws ConditionThrowable
-    {
-        int numArg = -1;
-        char c;
-        while (true) {
-            int n = _readChar();
-            if (n < 0)
-                return signal(new EndOfFile(this));
-            c = (char) n;
-            if (c < '0' || c > '9')
-                break;
-            if (numArg < 0)
-                numArg = 0;
-            numArg = numArg * 10 + c - '0';
-        }
-        final LispThread thread = LispThread.currentThread();
-        Readtable rt = FaslReadtable.getInstance();
+        final Readtable rt;
+        if (useFaslReadtable)
+            rt = FaslReadtable.getInstance();
+        else
+            rt = (Readtable) _READTABLE_.symbolValue(thread);
         LispObject fun = rt.getDispatchMacroCharacter(dispChar, c);
         if (fun instanceof DispatchMacroFunction)
             return ((DispatchMacroFunction)fun).execute(this, c, numArg);

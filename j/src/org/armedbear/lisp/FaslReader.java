@@ -2,7 +2,7 @@
  * FaslReader.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: FaslReader.java,v 1.2 2005-06-26 00:37:09 piso Exp $
+ * $Id: FaslReader.java,v 1.3 2005-06-26 01:58:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char ignored)
             throws ConditionThrowable
         {
-            return stream.faslReadList(false);
+            return stream.readList(false, true);
         }
     };
 
@@ -142,7 +142,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c)
             throws ConditionThrowable
         {
-            return stream.faslReadDispatchChar(c);
+            return stream.readDispatchChar(c, true);
         }
     };
 
@@ -155,7 +155,7 @@ public final class FaslReader extends Lisp
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            LispObject list = stream.faslReadList(true);
+            LispObject list = stream.readList(true, true);
             if (_BACKQUOTE_COUNT_.symbolValue(thread).zerop()) {
                 if (n >= 0) {
                     LispObject[] array = new LispObject[n];
