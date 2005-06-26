@@ -2,7 +2,7 @@
  * FaslReader.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: FaslReader.java,v 1.1 2005-06-25 19:36:29 piso Exp $
+ * $Id: FaslReader.java,v 1.2 2005-06-26 00:37:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,8 +49,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char terminator)
             throws ConditionThrowable
         {
-            final LispThread thread = LispThread.currentThread();
-            final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+            final Readtable rt = FaslReadtable.getInstance();
             StringBuffer sb = new StringBuffer();
             while (true) {
                 int n = stream._readChar();
@@ -106,7 +105,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char ignored)
             throws ConditionThrowable
         {
-            return stream.readList(false);
+            return stream.faslReadList(false);
         }
     };
 
@@ -131,7 +130,7 @@ public final class FaslReader extends Lisp
             throws ConditionThrowable
         {
             return new Cons(Symbol.QUOTE,
-                            new Cons(stream.read(true, NIL, true)));
+                            new Cons(stream.faslRead(true, NIL, true)));
         }
     };
 
@@ -143,7 +142,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c)
             throws ConditionThrowable
         {
-            return stream.readDispatchChar(c);
+            return stream.faslReadDispatchChar(c);
         }
     };
 
@@ -156,7 +155,7 @@ public final class FaslReader extends Lisp
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            LispObject list = stream.readList(true);
+            LispObject list = stream.faslReadList(true);
             if (_BACKQUOTE_COUNT_.symbolValue(thread).zerop()) {
                 if (n >= 0) {
                     LispObject[] array = new LispObject[n];
@@ -182,7 +181,7 @@ public final class FaslReader extends Lisp
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+            final Readtable rt = FaslReadtable.getInstance();
             final boolean suppress = _READ_SUPPRESS_.symbolValue(thread) != NIL;
             StringBuffer sb = new StringBuffer();
             while (true) {
@@ -245,7 +244,7 @@ public final class FaslReader extends Lisp
                 return signal(new ReaderError("Can't read #. when *READ-EVAL* is NIL.",
                                               stream));
             else
-                return eval(stream.read(true, NIL, true),
+                return eval(stream.faslRead(true, NIL, true),
                             new Environment(), thread);
         }
     };
@@ -259,7 +258,7 @@ public final class FaslReader extends Lisp
             throws ConditionThrowable
         {
             LispThread thread = LispThread.currentThread();
-            Symbol symbol = (Symbol) stream.readSymbol();
+            Symbol symbol = (Symbol) stream.readSymbol(FaslReadtable.getInstance());
             LispObject pkg = Load._FASL_ANONYMOUS_PACKAGE_.symbolValue(thread);
             if (pkg == NIL) {
                 thread.bindSpecial(Load._FASL_ANONYMOUS_PACKAGE_,
@@ -279,7 +278,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            return stream.readArray(n);
+            return stream.faslReadArray(n);
         }
     };
 
@@ -291,7 +290,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            return stream.readRadix(2);
+            return stream.faslReadRadix(2);
         }
     };
 
@@ -303,7 +302,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            return stream.readComplex();
+            return stream.faslReadComplex();
         }
     };
 
@@ -315,7 +314,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            return stream.readRadix(8);
+            return stream.faslReadRadix(8);
         }
     };
 
@@ -327,7 +326,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            return stream.readPathname();
+            return stream.faslReadPathname();
         }
     };
 
@@ -339,7 +338,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            return stream.readRadix(n);
+            return stream.faslReadRadix(n);
         }
     };
 
@@ -363,7 +362,7 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            return stream.readRadix(16);
+            return stream.faslReadRadix(16);
         }
     };
 
@@ -376,7 +375,7 @@ public final class FaslReader extends Lisp
             throws ConditionThrowable
         {
             return new Cons(Symbol.FUNCTION,
-                            new Cons(stream.read(true, NIL, true)));
+                            new Cons(stream.faslRead(true, NIL, true)));
         }
     };
 
@@ -388,7 +387,8 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            return stream.readCharacterLiteral();
+            return stream.readCharacterLiteral(FaslReadtable.getInstance(),
+                                               LispThread.currentThread());
         }
     };
 

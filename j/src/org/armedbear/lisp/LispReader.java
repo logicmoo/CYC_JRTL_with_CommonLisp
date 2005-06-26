@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.38 2005-06-25 17:41:39 piso Exp $
+ * $Id: LispReader.java,v 1.39 2005-06-26 00:40:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -379,7 +379,9 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            return stream.readCharacterLiteral();
+            final LispThread thread = LispThread.currentThread();
+            final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+            return stream.readCharacterLiteral(rt, thread);
         }
     };
 
