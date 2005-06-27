@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.204 2005-06-25 12:23:50 piso Exp $
+ * $Id: Symbol.java,v 1.205 2005-06-27 11:51:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,7 @@ public class Symbol extends LispObject
     public static final Symbol LAMBDA                              = PACKAGE_CL.addExternalSymbol("LAMBDA");
     public static final Symbol LET                                 = PACKAGE_CL.addExternalSymbol("LET");
     public static final Symbol LOAD                                = PACKAGE_CL.addExternalSymbol("LOAD");
+    public static final Symbol MACRO_FUNCTION                      = PACKAGE_CL.addExternalSymbol("MACRO-FUNCTION");
     public static final Symbol OTHERWISE                           = PACKAGE_CL.addExternalSymbol("OTHERWISE");
     public static final Symbol OUTPUT_STREAM_P                     = PACKAGE_CL.addExternalSymbol("OUTPUT-STREAM-P");
     public static final Symbol QUOTE                               = PACKAGE_CL.addExternalSymbol("QUOTE");
