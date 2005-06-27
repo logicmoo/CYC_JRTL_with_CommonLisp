@@ -1,7 +1,7 @@
 ;;; source-transform.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: source-transform.lisp,v 1.4 2005-06-24 20:03:31 piso Exp $
+;;; $Id: source-transform.lisp,v 1.5 2005-06-27 12:18:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,8 +30,8 @@
 (defmacro define-source-transform (name lambda-list &rest body)
   (let* ((form (gensym))
          (env (gensym))
-         (body (sys::parse-defmacro lambda-list form body name 'defmacro
-                                    :environment env))
+         (body (parse-defmacro lambda-list form body name 'defmacro
+                               :environment env))
          (expander
           (if (symbolp name)
               `(lambda (,form) (block ,name ,body))
