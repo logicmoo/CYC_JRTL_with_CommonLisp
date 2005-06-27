@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.116 2005-06-24 20:02:41 piso Exp $
+;;; $Id: precompiler.lisp,v 1.117 2005-06-27 12:22:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -874,21 +874,21 @@
 ;; (defun eval (form)
 ;;   (%eval (precompile-form form nil)))
 
-;; Redefine DEFMACRO to precompile the expansion function on the fly.
-(defmacro defmacro (name lambda-list &rest body)
-  (let* ((form (gensym "WHOLE-"))
-         (env (gensym "ENVIRONMENT-")))
-    (multiple-value-bind (body decls)
-        (parse-defmacro lambda-list form body name 'defmacro :environment env)
-      (let ((expander `(lambda (,form ,env) ,@decls (block ,name ,body))))
-        `(progn
-           (let ((macro (make-macro ',name
-                                    (or (precompile nil ,expander) ,expander))))
-             ,@(if (special-operator-p name)
-                   `((%put ',name 'macroexpand-macro macro))
-                   `((fset ',name macro)))
-             (%set-arglist macro ',lambda-list)
-             ',name))))))
+;; ;; Redefine DEFMACRO to precompile the expansion function on the fly.
+;; (defmacro defmacro (name lambda-list &rest body)
+;;   (let* ((form (gensym "WHOLE-"))
+;;          (env (gensym "ENVIRONMENT-")))
+;;     (multiple-value-bind (body decls)
+;;         (parse-defmacro lambda-list form body name 'defmacro :environment env)
+;;       (let ((expander `(lambda (,form ,env) ,@decls (block ,name ,body))))
+;;         `(progn
+;;            (let ((macro (make-macro ',name
+;;                                     (or (precompile nil ,expander) ,expander))))
+;;              ,@(if (special-operator-p name)
+;;                    `((%put ',name 'macroexpand-macro macro))
+;;                    `((fset ',name macro)))
+;;              (%set-arglist macro ',lambda-list)
+;;              ',name))))))
 
 ;; Make an exception just this one time...
 (when (get 'defmacro 'macroexpand-macro)
