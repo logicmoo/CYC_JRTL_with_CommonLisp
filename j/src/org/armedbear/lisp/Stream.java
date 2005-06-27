@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.128 2005-06-27 20:03:50 piso Exp $
+ * $Id: Stream.java,v 1.129 2005-06-27 22:08:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1572,14 +1572,6 @@ public class Stream extends LispObject
             // Not reached.
             return -1;
         }
-    }
-
-    // Writes an 8-bit byte.
-    public void writeByte(int n) throws ConditionThrowable
-    {
-        if (n < 0 || n > 255)
-            signal(new TypeError(new Fixnum(n), UNSIGNED_BYTE_8));
-        _writeByte(n);
     }
 
     // Writes an 8-bit byte.
