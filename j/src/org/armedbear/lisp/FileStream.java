@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FileStream.java,v 1.24 2005-05-17 16:10:32 piso Exp $
+ * $Id: FileStream.java,v 1.25 2005-06-27 20:08:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,8 @@ public final class FileStream extends Stream
     private static final int BUFSIZE = 4096;
 
     private final RandomAccessFile raf;
+    private final RandomAccessFile in;
+    private final RandomAccessFile out;
     private final Pathname pathname;
     private final int bytesPerUnit;
     private final byte[] inputBuffer;
@@ -61,6 +63,8 @@ public final class FileStream extends Stream
         }
         Debug.assertTrue(mode != null);
         raf = new RandomAccessFile(file, mode);
+        in = isInputStream ? raf : null;
+        out = isOutputStream ? raf : null;
         // ifExists is ignored unless we have an output stream.
         if (isOutputStream) {
             final long length = file.isFile() ? file.length() : 0;
@@ -130,13 +134,16 @@ public final class FileStream extends Stream
     public LispObject listen() throws ConditionThrowable
     {
         try {
-            return raf.getFilePointer() < raf.length() ? T : NIL;
+            return in.getFilePointer() < in.length() ? T : NIL;
+        }
+        catch (NullPointerException e) {
+            streamNotInputStream();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
-            // Not reached.
-            return NIL;
         }
+        // Not reached.
+        return NIL;
     }
 
     public LispObject fileLength() throws ConditionThrowable
@@ -183,9 +190,9 @@ public final class FileStream extends Stream
                         --inputBufferOffset;
                     } else {
                         clearInputBuffer();
-                        long pos = raf.getFilePointer();
+                        long pos = in.getFilePointer();
                         if (pos > 0)
-                            raf.seek(pos - 1);
+                            in.seek(pos - 1);
                     }
                 }
                 return c;
@@ -196,11 +203,14 @@ public final class FileStream extends Stream
             }
             return c;
         }
+        catch (NullPointerException e) {
+            streamNotInputStream();
+        }
         catch (IOException e) {
             signal(new StreamError(this, e));
-            // Not reached.
-            return -1;
         }
+        // Not reached.
+        return -1;
     }
 
     protected void _unreadChar(int n) throws ConditionThrowable
@@ -227,20 +237,23 @@ public final class FileStream extends Stream
             if (inputBuffer != null && inputBufferFilePosition >= 0)
                 pos = inputBufferFilePosition + inputBufferOffset;
             else
-                pos = raf.getFilePointer();
+                pos = in.getFilePointer();
             clearInputBuffer();
             if (pos > 0)
-                raf.seek(pos - 1);
+                in.seek(pos - 1);
             if (Utilities.isPlatformWindows && n == '\n') {
                 // Check for preceding '\r'.
-                pos = raf.getFilePointer();
+                pos = in.getFilePointer();
                 if (pos > 0) {
-                    raf.seek(pos - 1);
-                    n = raf.read();
+                    in.seek(pos - 1);
+                    n = in.read();
                     if (n == '\r')
-                        raf.seek(pos - 1);
+                        in.seek(pos - 1);
                 }
             }
+        }
+        catch (NullPointerException e) {
+            streamNotInputStream();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -336,13 +349,16 @@ public final class FileStream extends Stream
         if (inputBuffer != null)
             return readByteFromBuffer();
         try {
-            return raf.read(); // Reads an 8-bit byte.
+            return in.read(); // Reads an 8-bit byte.
+        }
+        catch (NullPointerException e) {
+            streamNotInputStream();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
-            // Not reached.
-            return -1;
         }
+        // Not reached.
+        return -1;
     }
 
     // Writes an 8-bit byte.
@@ -352,7 +368,10 @@ public final class FileStream extends Stream
             writeByteToBuffer((byte)n);
         } else {
             try {
-                raf.write((byte)n); // Writes an 8-bit byte.
+                out.write((byte)n); // Writes an 8-bit byte.
+            }
+            catch (NullPointerException e) {
+                streamNotOutputStream();
             }
             catch (IOException e) {
                 signal(new StreamError(this, e));
@@ -369,8 +388,11 @@ public final class FileStream extends Stream
     public void _clearInput() throws ConditionThrowable
     {
         try {
-            raf.seek(raf.length());
+            in.seek(in.length());
             clearInputBuffer();
+        }
+        catch (NullPointerException e) {
+            streamNotInputStream();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -446,9 +468,12 @@ public final class FileStream extends Stream
     private void fillInputBuffer() throws ConditionThrowable
     {
         try {
-            inputBufferFilePosition = raf.getFilePointer();
+            inputBufferFilePosition = in.getFilePointer();
             inputBufferOffset = 0;
-            inputBufferCount = raf.read(inputBuffer, 0, BUFSIZE);
+            inputBufferCount = in.read(inputBuffer, 0, BUFSIZE);
+        }
+        catch (NullPointerException e) {
+            streamNotInputStream();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -473,8 +498,11 @@ public final class FileStream extends Stream
     {
         if (outputBufferOffset > 0) {
             try {
-                raf.write(outputBuffer, 0, outputBufferOffset);
+                out.write(outputBuffer, 0, outputBufferOffset);
                 outputBufferOffset = 0;
+            }
+            catch (NullPointerException e) {
+                streamNotOutputStream();
             }
             catch (IOException e) {
                 signal(new StreamError(this, e));
@@ -482,9 +510,9 @@ public final class FileStream extends Stream
         }
     }
 
-    public String writeToString()
+    public String writeToString() throws ConditionThrowable
     {
-        return unreadableString("FILE-STREAM");
+        return unreadableString(Symbol.FILE_STREAM);
     }
 
     // ### make-file-stream pathname element-type direction if-exists => stream

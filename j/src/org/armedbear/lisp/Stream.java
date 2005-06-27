@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.127 2005-06-26 01:56:12 piso Exp $
+ * $Id: Stream.java,v 1.128 2005-06-27 20:03:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1579,11 +1579,7 @@ public class Stream extends LispObject
     {
         if (n < 0 || n > 255)
             signal(new TypeError(new Fixnum(n), UNSIGNED_BYTE_8));
-        if (isBinaryOutputStream())
-            _writeByte(n);
-        else
-            signal(new LispError(this.writeToString() +
-                                 " is not a binary output stream."));
+        _writeByte(n);
     }
 
     // Writes an 8-bit byte.
@@ -1591,6 +1587,10 @@ public class Stream extends LispObject
     {
         try {
             out.write(n); // Writes an 8-bit byte.
+        }
+        catch (NullPointerException e) {
+            // out is null, but the stream might still be a character output stream.
+            signal(new StreamError(this, writeToString() + " is not a binary output stream."));
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -1668,6 +1668,16 @@ public class Stream extends LispObject
         catch (IOException e) {
             signal(new StreamError(this, e));
         }
+    }
+
+    protected LispObject streamNotInputStream() throws ConditionThrowable
+    {
+        return signal(new StreamError(this, writeToString() + " is not an input stream."));
+    }
+
+    protected LispObject streamNotOutputStream() throws ConditionThrowable
+    {
+        return signal(new StreamError(this, writeToString() + " is not an output stream."));
     }
 
     // ### file-position
