@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.231 2005-06-18 14:56:15 piso Exp $
+;;; $Id: boot.lisp,v 1.232 2005-06-27 12:25:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -121,6 +121,7 @@
 (load-system-file "early-defuns")
 (load-system-file "backquote")
 (load-system-file "destructuring-bind")
+(load-system-file "defmacro")
 (load-system-file "setf")
 (load-system-file "fdefinition")
 (load-system-file "featurep")
