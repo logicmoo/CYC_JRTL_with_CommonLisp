@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.20 2005-06-21 13:39:56 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.21 2005-06-27 12:24:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -349,22 +349,6 @@
       `(let ((,arg-list-name ,arg-list))
 	 ,@local-decls
 	 ,body))))
-
-;; Redefine DEFMACRO to use PARSE-DEFMACRO.
-(defmacro defmacro (name lambda-list &rest body)
-  (let* ((form (gensym "WHOLE-"))
-         (env (gensym "ENVIRONMENT-")))
-    (multiple-value-bind (body decls)
-        (parse-defmacro lambda-list form body name 'defmacro :environment env)
-      (let ((expander `(lambda (,form ,env) ,@decls (block ,name ,body))))
-        `(progn
-           (let ((macro (make-macro ',name
-                                    (or (precompile nil ,expander) ,expander))))
-             ,@(if (special-operator-p name)
-                   `((%put ',name 'macroexpand-macro macro))
-                   `((fset ',name macro)))
-             (%set-arglist macro ',lambda-list)
-             ',name))))))
 
 ;; Redefine SYS:MAKE-EXPANDER-FOR-MACROLET to use PARSE-DEFMACRO.
 (defun make-expander-for-macrolet (definition)
