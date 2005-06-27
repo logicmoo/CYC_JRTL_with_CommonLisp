@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.368 2005-06-26 00:41:08 piso Exp $
+ * $Id: Lisp.java,v 1.369 2005-06-27 22:07:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1207,12 +1207,14 @@ public abstract class Lisp
     public static final void writeByte(int n, LispObject obj)
         throws ConditionThrowable
     {
-            try {
-                ((Stream)obj).writeByte(n);
-            }
-            catch (ClassCastException e) {
-                signal(new TypeError(obj, Symbol.STREAM));
-            }
+        if (n < 0 || n > 255)
+            signal(new TypeError(new Fixnum(n), UNSIGNED_BYTE_8));
+        try {
+            ((Stream)obj)._writeByte(n);
+        }
+        catch (ClassCastException e) {
+            signal(new TypeError(obj, Symbol.STREAM));
+        }
     }
 
     public static final Readtable checkReadtable(LispObject obj)
