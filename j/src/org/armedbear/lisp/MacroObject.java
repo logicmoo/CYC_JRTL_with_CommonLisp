@@ -2,7 +2,7 @@
  * MacroObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: MacroObject.java,v 1.12 2005-06-09 11:49:06 piso Exp $
+ * $Id: MacroObject.java,v 1.13 2005-06-27 11:52:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,9 @@ public final class MacroObject extends Function
     {
         this.name = name;
         this.expander = expander;
+        if (name instanceof Symbol && name != NIL && expander instanceof Function)
+            ((Function)expander).setLambdaName(list2(Symbol.MACRO_FUNCTION,
+                                                     name));
     }
 
     public LispObject getExpander()
