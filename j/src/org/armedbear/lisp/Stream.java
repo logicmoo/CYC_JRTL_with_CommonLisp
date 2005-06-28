@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.129 2005-06-27 22:08:23 piso Exp $
+ * $Id: Stream.java,v 1.130 2005-06-28 04:28:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1501,6 +1501,10 @@ public class Stream extends LispObject
             } else
                 ++charPos;
         }
+        catch (NullPointerException e) {
+            // writer is null
+            streamNotCharacterOutputStream();
+        }
         catch (IOException e) {
             signal(new StreamError(this, e));
         }
@@ -1526,6 +1530,12 @@ public class Stream extends LispObject
                 writer.flush();
             }
         }
+        catch (NullPointerException e) {
+            if (writer == null)
+                streamNotCharacterOutputStream();
+            else
+                throw e;
+        }
         catch (IOException e) {
             signal(new StreamError(this, e));
         }
@@ -1543,6 +1553,12 @@ public class Stream extends LispObject
                 writer.flush();
             }
         }
+        catch (NullPointerException e) {
+            if (writer == null)
+                streamNotCharacterOutputStream();
+            else
+                throw e;
+        }
         catch (IOException e) {
             signal(new StreamError(this, e));
         }
@@ -1555,6 +1571,10 @@ public class Stream extends LispObject
             writer.write('\n');
             writer.flush();
             charPos = 0;
+        }
+        catch (NullPointerException e) {
+            // writer is null
+            streamNotCharacterOutputStream();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -1581,8 +1601,8 @@ public class Stream extends LispObject
             out.write(n); // Writes an 8-bit byte.
         }
         catch (NullPointerException e) {
-            // out is null, but the stream might still be a character output stream.
-            signal(new StreamError(this, writeToString() + " is not a binary output stream."));
+            // out is null
+            streamNotBinaryOutputStream();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -1670,6 +1690,16 @@ public class Stream extends LispObject
     protected LispObject streamNotOutputStream() throws ConditionThrowable
     {
         return signal(new StreamError(this, writeToString() + " is not an output stream."));
+    }
+
+    protected LispObject streamNotBinaryOutputStream() throws ConditionThrowable
+    {
+        return signal(new StreamError(this, writeToString() + " is not a binary output stream."));
+    }
+
+    protected LispObject streamNotCharacterOutputStream() throws ConditionThrowable
+    {
+        return signal(new StreamError(this, writeToString() + " is not a character output stream."));
     }
 
     // ### file-position

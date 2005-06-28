@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.95 2005-06-17 15:57:58 piso Exp $
+;;; $Id: compile-file.lisp,v 1.96 2005-06-28 04:29:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,24 +54,24 @@
 
 (defun dump-list (object stream)
   (cond ((and (eq (car object) 'QUOTE) (= (length object) 2))
-         (write-char #\' stream)
+         (%stream-write-char #\' stream)
          (dump-object (cadr object) stream))
         (t
-         (write-char #\( stream)
+         (%stream-write-char #\( stream)
          (loop
            (dump-object (car object) stream)
            (setf object (cdr object))
            (when (null object)
              (return))
            (when (> (charpos stream) 80)
-             (terpri stream))
-           (write-char #\space stream)
+             (%stream-terpri stream))
+           (%stream-write-char #\space stream)
            (when (atom object)
-             (write-char #\. stream)
-             (write-char #\space stream)
+             (%stream-write-char #\. stream)
+             (%stream-write-char #\space stream)
              (dump-object object stream)
              (return)))
-         (write-char #\) stream))))
+         (%stream-write-char #\) stream))))
 
 (defun dump-vector (object stream)
   (write-string "#(" stream)
@@ -80,10 +80,10 @@
       (dotimes (i (1- length))
         (dump-object (aref object i) stream)
         (when (> (charpos stream) 80)
-          (terpri stream))
-        (write-char #\space stream))
+          (%stream-terpri stream))
+        (%stream-write-char #\space stream))
       (dump-object (aref object (1- length)) stream))
-    (write-char #\) stream)))
+    (%stream-write-char #\) stream)))
 
 (defun dump-structure (object stream)
   (multiple-value-bind (creation-form initialization-form)
@@ -124,12 +124,12 @@
           (*print-level* nil)
           (*print-length* nil)
           (*print-circle* nil))
-      (if (eq (car form) 'IMPORT)
+      (if (eq (%car form) 'IMPORT)
           ;; Make sure package prefix is printed when symbols are imported.
           (let ((*package* +keyword-package+))
             (dump-object form stream))
           (dump-object form stream)))
-    (terpri stream)))
+    (%stream-terpri stream)))
 
 (defun process-defconstant (form stream)
   ;; "If a DEFCONSTANT form appears as a top level form, the compiler
@@ -443,12 +443,12 @@
                   (jvm::*functions-defined-in-current-file* '())
                   (*fbound-names* '()))
               (write "; -*- Mode: Lisp -*-" :escape nil :stream out)
-              (terpri out)
+              (%stream-terpri out)
               (let ((*package* (find-package '#:cl)))
                 (write (list 'init-fasl :version *fasl-version*) :stream out)
-                (terpri out)
+                (%stream-terpri out)
                 (write (list 'setq '*source* *compile-file-truename*) :stream out)
-                (terpri out))
+                (%stream-terpri out))
               (loop
                 (let* ((*source-position* (file-position in))
                        (jvm::*source-line-number* (stream-line-number in))
@@ -470,7 +470,7 @@
 
 (defmacro defun (name lambda-list &body body &environment env)
     (multiple-value-bind (body decls doc)
-        (sys::parse-body body)
+        (parse-body body)
       (let* ((block-name (fdefinition-block-name name))
              (lambda-expression `(lambda ,lambda-list ,@decls (block ,block-name ,@body))))
         (cond (*compile-file-truename*

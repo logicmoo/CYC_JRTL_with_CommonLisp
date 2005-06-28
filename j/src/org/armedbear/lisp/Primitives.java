@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.802 2005-06-27 20:00:12 piso Exp $
+ * $Id: Primitives.java,v 1.803 2005-06-28 04:29:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -707,8 +707,23 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %terpri
-    // %terpri output-stream => nil
+    // ### %stream-terpri output-stream => nil
+    private static final Primitive _STREAM_TERPRI =
+        new Primitive("%stream-terpri", PACKAGE_SYS, true, "output-stream")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                ((Stream)arg)._writeChar('\n');
+                return NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.STREAM));
+            }
+        }
+    };
+
+    // ### %terpri output-stream => nil
     private static final Primitive _TERPRI =
         new Primitive("%terpri", PACKAGE_SYS, false, "output-stream")
     {
@@ -3560,9 +3575,30 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %write-char
-    // %write-char character output-stream => character
+    // ### %stream-write-char character output-stream => character
+    // OUTPUT-STREAM must be a real stream, not an output stream designator!
     private static final Primitive _WRITE_CHAR =
+        new Primitive("%stream-write-char", PACKAGE_SYS, true,
+                      "character output-stream")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((Stream)second)._writeChar(((LispCharacter)first).value);
+            }
+            catch (ClassCastException e) {
+                if (second instanceof Stream)
+                    return signal(new TypeError(first, Symbol.CHARACTER));
+                else
+                    return signal(new TypeError(second, Symbol.STREAM));
+            }
+            return first;
+        }
+    };
+
+    // ### %write-char character output-stream => character
+    private static final Primitive _STREAM_WRITE_CHAR =
         new Primitive("%write-char", PACKAGE_SYS, false,
                       "character output-stream")
     {

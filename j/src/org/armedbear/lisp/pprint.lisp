@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: pprint.lisp,v 1.52 2005-06-17 18:34:42 piso Exp $
+;;; $Id: pprint.lisp,v 1.53 2005-06-28 04:29:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -750,7 +750,7 @@
   (setf stream (sys:out-synonym-of stream))
   (if (xp-structure-p stream)
       (write-char+ char stream)
-      (sys::%write-char char stream))
+      (sys:%stream-write-char char stream))
   char)
 
 (defun write-string (string &optional (stream *standard-output*)
@@ -781,7 +781,7 @@
   (setf stream (sys:out-synonym-of stream))
   (if (xp-structure-p stream)
       (pprint-newline+ :unconditional stream)
-      (sys::%terpri stream))
+      (sys:%stream-terpri stream))
   nil)
 
 ;This has to violate the XP data abstraction and fool with internal
