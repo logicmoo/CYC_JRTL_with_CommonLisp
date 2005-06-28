@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.499 2005-06-28 12:31:49 piso Exp $
+;;; $Id: jvm.lisp,v 1.500 2005-06-28 12:38:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5434,6 +5434,9 @@
 
 (defun p2-schar (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-schar))
+  (unless (subtypep (derive-type (third form)) 'fixnum)
     (compile-function-call form target representation)
     (return-from p2-schar))
   (compile-form (second form) :target :stack)
