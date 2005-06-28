@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.500 2005-06-28 12:38:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.501 2005-06-28 20:24:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1046,10 +1046,10 @@
 
 (defconstant +java-string+ "Ljava/lang/String;")
 (defconstant +lisp-class+ "org/armedbear/lisp/Lisp")
+(defconstant +lisp-class-class+ "org/armedbear/lisp/LispClass")
 (defconstant +lisp-object-class+ "org/armedbear/lisp/LispObject")
 (defconstant +lisp-object+ "Lorg/armedbear/lisp/LispObject;")
 (defconstant +lisp-object-array+ "[Lorg/armedbear/lisp/LispObject;")
-(defconstant +lisp-string+ "Lorg/armedbear/lisp/SimpleString;")
 (defconstant +lisp-symbol-class+ "org/armedbear/lisp/Symbol")
 (defconstant +lisp-symbol+ "Lorg/armedbear/lisp/Symbol;")
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
@@ -1059,6 +1059,9 @@
 (defconstant +lisp-fixnum-class+ "org/armedbear/lisp/Fixnum")
 (defconstant +lisp-fixnum+ "Lorg/armedbear/lisp/Fixnum;")
 (defconstant +lisp-character-class+ "org/armedbear/lisp/LispCharacter")
+(defconstant +lisp-abstract-vector-class+ "org/armedbear/lisp/AbstractVector")
+(defconstant +lisp-abstract-string-class+ "org/armedbear/lisp/AbstractString")
+(defconstant +lisp-simple-vector-class+ "org/armedbear/lisp/SimpleVector")
 (defconstant +lisp-simple-string-class+ "org/armedbear/lisp/SimpleString")
 (defconstant +lisp-simple-string+ "Lorg/armedbear/lisp/SimpleString;")
 (defconstant +lisp-environment+ "Lorg/armedbear/lisp/Environment;")
@@ -2525,12 +2528,12 @@
 
 (defun declare-object (obj)
   (let ((key (symbol-name (gensym))))
-    (sys::remember key obj)
+    (remember key obj)
     (let* ((g1 (declare-string key))
            (g2 (symbol-name (gensym)))
            (*code* *static-code*))
       (declare-field g2 +lisp-object+)
-      (emit 'getstatic *this-class* g1 +lisp-string+)
+      (emit 'getstatic *this-class* g1 +lisp-simple-string+)
       (emit-invokestatic +lisp-class+ "recall"
                          (list +lisp-simple-string+) +lisp-object+)
       (emit 'putstatic *this-class* g2 +lisp-object+)
@@ -3192,8 +3195,7 @@
   (setf (gethash predicate java-predicates) translation))
 
 (defun initialize-java-predicates ()
-  (dolist (pair '((CHARACTERP         "characterp")
-                  (CONSTANTP          "constantp")
+  (dolist (pair '((CONSTANTP          "constantp")
                   (ENDP               "endp")
                   (EVENP              "evenp")
                   (FLOATP             "floatp")
@@ -3205,9 +3207,7 @@
                   (PLUSP              "plusp")
                   (RATIONALP          "rationalp")
                   (REALP              "realp")
-                  (STRINGP            "stringp")
                   (SPECIAL-VARIABLE-P "isSpecialVariable")
-                  (VECTORP            "vectorp")
                   (ZEROP              "zerop")))
     (define-java-predicate (car pair) (cadr pair))))
 
@@ -3233,6 +3233,10 @@
       (process-args args)
       (emit 'instanceof +lisp-symbol-class+)
       (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+    (when (eq op 'CHARACTERP)
+      (process-args args)
+      (emit 'instanceof +lisp-character-class+)
+      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
     (when (eq op 'FIXNUMP)
       (process-args args)
       (emit 'instanceof +lisp-fixnum-class+)
@@ -3245,7 +3249,27 @@
       (process-args args)
       (emit 'instanceof +lisp-cons-class+)
       (return-from compile-test-2 (if negatep 'ifeq 'ifne)))
-    (let ((s (sys:gethash-2op-1ret op java-predicates)))
+    (when (eq op 'CLASSP)
+      (process-args args)
+      (emit 'instanceof +lisp-class-class+)
+      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+    (when (eq op 'STRINGP)
+      (process-args args)
+      (emit 'instanceof +lisp-abstract-string-class+)
+      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+    (when (eq op 'SIMPLE-STRING-P)
+      (process-args args)
+      (emit 'instanceof +lisp-simple-string-class+)
+      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+    (when (eq op 'VECTORP)
+      (process-args args)
+      (emit 'instanceof +lisp-abstract-vector-class+)
+      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+    (when (eq op 'SIMPLE-VECTOR-P)
+      (process-args args)
+      (emit 'instanceof +lisp-simple-vector-class+)
+      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+    (let ((s (gethash-2op-1ret op java-predicates)))
       (when s
         (process-args args)
         (emit-invokevirtual +lisp-object-class+ s nil "Z")
@@ -4069,12 +4093,36 @@
     (emit-move-from-stack target)))
 
 (defun p2-symbolp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-symbol-class+))
+
+(defun p2-characterp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-character-class+))
+
+(defun p2-classp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-class-class+))
+
+(defun p2-fixnump (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-fixnum-class+))
+
+(defun p2-stringp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-abstract-string-class+))
+
+(defun p2-simple-string-p (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-simple-string-class+))
+
+(defun p2-vectorp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-abstract-vector-class+))
+
+(defun p2-simple-vector-p (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-simple-vector-class+))
+
+(defun p2-instanceof-predicate (form target representation java-class)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
-    (return-from p2-symbolp))
-  (compile-form (cadr form) :target :stack)
-  (maybe-emit-clear-values (cadr form))
-  (emit 'instanceof +lisp-symbol-class+)
+    (return-from p2-instanceof-predicate))
+  (compile-form (%cadr form) :target :stack)
+  (maybe-emit-clear-values (%cadr form))
+  (emit 'instanceof java-class)
   (let ((LABEL1 (gensym))
         (LABEL2 (gensym)))
     (emit 'ifeq LABEL1)
@@ -6880,12 +6928,15 @@
   (install-p2-handler 'car              'p2-car)
   (install-p2-handler 'catch            'p2-catch)
   (install-p2-handler 'cdr              'p2-cdr)
+  (install-p2-handler 'characterp       'p2-characterp)
   (install-p2-handler 'char-code        'p2-char-code)
   (install-p2-handler 'char=            'p2-char=)
+  (install-p2-handler 'classp           'p2-classp)
   (install-p2-handler 'cons             'p2-cons)
   (install-p2-handler 'elt              'p2-elt)
   (install-p2-handler 'eql              'p2-eql)
   (install-p2-handler 'eval-when        'p2-eval-when)
+  (install-p2-handler 'fixnump          'p2-fixnump)
   (install-p2-handler 'flet             'p2-flet)
   (install-p2-handler 'go               'p2-go)
   (install-p2-handler 'function         'p2-function)
@@ -6910,10 +6961,14 @@
   (install-p2-handler 'sys:set-cdr      'p2-set-car/cdr)
   (install-p2-handler 'svref            'p2-svref)
   (install-p2-handler 'setq             'p2-setq)
+  (install-p2-handler 'simple-string-p  'p2-simple-string-p)
+  (install-p2-handler 'simple-vector-p  'p2-simple-vector-p)
+  (install-p2-handler 'stringp          'p2-stringp)
   (install-p2-handler 'symbol-name      'p2-symbol-name)
   (install-p2-handler 'symbolp          'p2-symbolp)
   (install-p2-handler 'the              'p2-the)
   (install-p2-handler 'throw            'p2-throw)
+  (install-p2-handler 'vectorp          'p2-vectorp)
   (install-p2-handler 'zerop            'p2-zerop)
 
   (install-p2-handler 'sys:write-8-bits 'p2-write-8-bits)
