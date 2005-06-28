@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: format.lisp,v 1.29 2005-06-17 17:25:30 piso Exp $
+;;; $Id: format.lisp,v 1.30 2005-06-28 12:27:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -385,14 +385,17 @@
 	(pprint nil)
 	(semi nil)
 	(justification-semi 0))
+    (declare (type index fixnum))
     (loop
       (let ((next-directive (or (position #\~ string :start index) end)))
+        (declare (type index next-directive))
 	(when (> next-directive index)
 	  (push (subseq string index next-directive) result))
 	(when (= next-directive end)
 	  (return))
 	(let* ((directive (parse-directive string next-directive))
 	       (directive-char (format-directive-character directive)))
+          (declare (type character directive-char))
 	  ;; We are looking for illegal combinations of format
 	  ;; directives in the control string.  See the last paragraph
 	  ;; of CLHS 22.3.5.2: "an error is also signaled if the
