@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.369 2005-06-27 22:07:36 piso Exp $
+ * $Id: Lisp.java,v 1.370 2005-06-28 18:43:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1560,7 +1560,7 @@ public abstract class Lisp
     }
 
     public static final Primitive REMEMBER =
-        new Primitive("remember", PACKAGE_SYS, false)
+        new Primitive("remember", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject key, LispObject value)
             throws ConditionThrowable
