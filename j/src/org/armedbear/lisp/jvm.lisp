@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.501 2005-06-28 20:24:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.502 2005-06-29 19:47:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3122,13 +3122,11 @@
            (emit 'aload_0))
           ((local-function-variable local-function)
            ;; LABELS
-           (dformat t "compile-local-function-call LABELS case~%")
-           (dformat t "save args here: ~S~%"
-                    (mapcar #'variable-name
-                            (compiland-arg-vars (local-function-compiland local-function))))
            (unless (null (compiland-parent compiland))
              (setf saved-vars
-                   (save-variables (compiland-arg-vars (local-function-compiland local-function)))))
+                   (save-variables (intersection
+                                    (compiland-arg-vars (local-function-compiland local-function))
+                                    *visible-variables*))))
            (emit 'var-ref (local-function-variable local-function) :stack))
           (t
            (dformat t "compile-local-function-call default case~%")
@@ -4433,7 +4431,7 @@
                  (write-class-file (compiland-class-file compiland))))
              ;; Verify that the class file is loadable.
              (let ((*load-truename* (pathname pathname)))
-               (unless (ignore-errors (sys:load-compiled-function pathname))
+               (unless (ignore-errors (load-compiled-function pathname))
                  (error "Unable to load ~S." pathname)))
              (push (make-local-function :name (compiland-name compiland)
                                         :class-file class-file)
@@ -4496,7 +4494,7 @@
                  (write-class-file (compiland-class-file compiland))))
              ;; Verify that the class file is loadable.
              (let ((*load-truename* (pathname pathname)))
-               (unless (ignore-errors (sys:load-compiled-function pathname))
+               (unless (ignore-errors (load-compiled-function pathname))
                  (error "Unable to load ~S." pathname)))
              (setf (local-function-class-file local-function) class-file)
              (let ((g (declare-local-function local-function)))
@@ -6468,10 +6466,6 @@
     (dolist (var (compiland-arg-vars compiland))
       (push var *visible-variables*))
 
-    (dformat t "pass2 *using-arg-array* = ~S~%" *using-arg-array*)
-    (dformat t "pass2 *child-p* = ~S~%" *child-p*)
-    (dformat t "pass2 *closure-variables* = ~S~%"
-             (mapcar #'variable-name *closure-variables*))
     (setf (method-name-index execute-method)
           (pool-name (method-name execute-method)))
     (setf (method-descriptor-index execute-method)
