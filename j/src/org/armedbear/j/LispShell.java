@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShell.java,v 1.84 2005-02-04 19:34:23 piso Exp $
+ * $Id: LispShell.java,v 1.85 2005-06-30 16:07:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -745,7 +745,7 @@ public class LispShell extends Shell
                     String vm = System.getProperty("java.vm.name");
                     if (vm != null && vm.toLowerCase().indexOf("server") >= 0)
                         sb.append(" -server");
-                    sb.append(" -Xmx128M");
+                    sb.append(" -Xmx256M");
                     if (Platform.isPlatformUnix()) {
                         String lispHome = org.armedbear.lisp.Site.getLispHome();
                         if (lispHome != null) {
