@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.117 2005-06-27 12:22:28 piso Exp $
+;;; $Id: precompiler.lisp,v 1.118 2005-06-30 17:35:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -274,7 +274,9 @@
         (cons 'PROGN (mapcar #'precompile1 body)))))
 
 (defun precompile-progv (form)
-  (list* 'PROGV (cadr form) (caddr form) (mapcar #'precompile1 (cdddr form))))
+  (if (< (length form) 3)
+      (compiler-error "Not enough arguments for ~S." 'progv)
+      (list* 'PROGV (cadr form) (caddr form) (mapcar #'precompile1 (cdddr form)))))
 
 (defun precompile-setf (form)
   (let ((place (second form)))
@@ -898,7 +900,7 @@
 ;; Redefine DEFUN to precompile the definition on the fly.
 (defmacro defun (name lambda-list &rest body &environment env)
   (multiple-value-bind (body decls doc)
-      (sys::parse-body body)
+      (parse-body body)
     (let* ((block-name (fdefinition-block-name name))
            (lambda-expression `(lambda ,lambda-list ,@decls (block ,block-name ,@body))))
     (when (and env (empty-environment-p env))
