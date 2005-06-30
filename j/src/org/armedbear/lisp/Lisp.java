@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.370 2005-06-28 18:43:08 piso Exp $
+ * $Id: Lisp.java,v 1.371 2005-06-30 17:25:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -620,6 +620,26 @@ public abstract class Lisp
             return thread.execute(coerceToFunction(function), result);
         else
             return funcall(coerceToFunction(function), values, thread);
+    }
+
+    public static final void progvBindVars(LispObject symbols,
+                                           LispObject values,
+                                           LispThread thread)
+        throws ConditionThrowable
+    {
+        for (LispObject list = symbols; list != NIL; list = list.cdr()) {
+            Symbol symbol = checkSymbol(list.car());
+            LispObject value;
+            if (values != NIL) {
+                value = values.car();
+                values = values.cdr();
+            } else {
+                // "If too few values are supplied, the remaining symbols are
+                // bound and then made to have no value."
+                value = null;
+            }
+            thread.bindSpecial(symbol, value);
+        }
     }
 
     public static Symbol checkSymbol(LispObject obj) throws ConditionThrowable
