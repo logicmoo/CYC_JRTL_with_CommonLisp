@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.40 2005-06-26 01:57:52 piso Exp $
+ * $Id: LispReader.java,v 1.41 2005-06-30 17:28:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ public final class LispReader extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
-            StringBuffer sb = new StringBuffer();
+            FastStringBuffer sb = new FastStringBuffer();
             while (true) {
                 int n = stream._readChar();
                 if (n < 0) {
@@ -184,7 +184,7 @@ public final class LispReader extends Lisp
             final LispThread thread = LispThread.currentThread();
             final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
             final boolean suppress = _READ_SUPPRESS_.symbolValue(thread) != NIL;
-            StringBuffer sb = new StringBuffer();
+            FastStringBuffer sb = new FastStringBuffer();
             while (true) {
                 int ch = stream._readChar();
                 if (ch < 0)
@@ -406,7 +406,7 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            StringBuffer sb = new StringBuffer("Illegal # macro character: #\\");
+            FastStringBuffer sb = new FastStringBuffer("Illegal # macro character: #\\");
             String s = LispCharacter.charToName(c);
             if (s != null)
                 sb.append(s);

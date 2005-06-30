@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.61 2005-04-05 15:40:50 piso Exp $
+ * $Id: LispCharacter.java,v 1.62 2005-06-30 17:33:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ public final class LispCharacter extends LispObject
 
     public LispObject getDescription()
     {
-        StringBuffer sb = new StringBuffer("character #\\");
+        FastStringBuffer sb = new FastStringBuffer("character #\\");
         sb.append(value);
         sb.append(" char-code #x");
         sb.append(Integer.toHexString(value));
@@ -178,14 +178,15 @@ public final class LispCharacter extends LispObject
 
     public final String writeToString() throws ConditionThrowable
     {
-        boolean printReadably = (_PRINT_READABLY_.symbolValue() != NIL);
+        final LispThread thread = LispThread.currentThread();
+        boolean printReadably = (_PRINT_READABLY_.symbolValue(thread) != NIL);
         // "Specifically, if *PRINT-READABLY* is true, printing proceeds as if
         // *PRINT-ESCAPE*, *PRINT-ARRAY*, and *PRINT-GENSYM* were also true,
         // and as if *PRINT-LENGTH*, *PRINT-LEVEL*, and *PRINT-LINES* were
         // false."
         boolean printEscape =
-            printReadably || (_PRINT_ESCAPE_.symbolValue() != NIL);
-        StringBuffer sb = new StringBuffer();
+            printReadably || (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
+        FastStringBuffer sb = new FastStringBuffer();
         if (printEscape) {
             sb.append("#\\");
             switch (value) {

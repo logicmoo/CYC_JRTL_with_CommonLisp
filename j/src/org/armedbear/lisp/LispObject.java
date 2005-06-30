@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.132 2005-06-20 16:03:03 piso Exp $
+ * $Id: LispObject.java,v 1.133 2005-06-30 17:27:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public class LispObject extends Lisp
 
     public LispObject getDescription() throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer("An object of type ");
+        FastStringBuffer sb = new FastStringBuffer("An object of type ");
         sb.append(typeOf().writeToString());
         sb.append(" at #x");
         sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
@@ -550,7 +550,7 @@ public class LispObject extends Lisp
 
     public String unreadableString(String s)
     {
-        StringBuffer sb = new StringBuffer("#<");
+        FastStringBuffer sb = new FastStringBuffer("#<");
         sb.append(s);
         sb.append(" {");
         sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
@@ -560,7 +560,7 @@ public class LispObject extends Lisp
 
     public String unreadableString(Symbol symbol) throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer("#<");
+        FastStringBuffer sb = new FastStringBuffer("#<");
         sb.append(symbol.writeToString());
         sb.append(" {");
         sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());

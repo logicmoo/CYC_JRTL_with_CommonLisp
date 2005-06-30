@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.130 2005-06-28 04:28:40 piso Exp $
+ * $Id: Stream.java,v 1.131 2005-06-30 17:34:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -377,14 +377,14 @@ public class Stream extends LispObject
     {
         final Readtable rt =
             (Readtable) _READTABLE_.symbolValue(LispThread.currentThread());
-        StringBuffer sb = new StringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         _readToken(sb, rt);
         return new Symbol(sb.toString());
     }
 
     public LispObject readSymbol(Readtable rt) throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         _readToken(sb, rt);
         return new Symbol(sb.toString());
     }
@@ -599,8 +599,7 @@ public class Stream extends LispObject
         if (n < 0)
             return signal(new EndOfFile(this));
         char c = (char) n;
-        StringBuffer sb = new StringBuffer();
-        sb.append(c);
+        FastStringBuffer sb = new FastStringBuffer(c);
         while (true) {
             n = _readChar();
             if (n < 0)
@@ -697,7 +696,7 @@ public class Stream extends LispObject
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
         // Error.
-        StringBuffer sb = new StringBuffer("Invalid complex number format");
+        FastStringBuffer sb = new FastStringBuffer("Invalid complex number format");
         if (this instanceof FileStream) {
             Pathname p = ((FileStream)this).getPathname();
             if (p != null) {
@@ -724,7 +723,7 @@ public class Stream extends LispObject
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
         // Error.
-        StringBuffer sb = new StringBuffer("Invalid complex number format");
+        FastStringBuffer sb = new FastStringBuffer("Invalid complex number format");
         if (this instanceof FileStream) {
             Pathname p = ((FileStream)this).getPathname();
             if (p != null) {
@@ -745,7 +744,7 @@ public class Stream extends LispObject
 
     private String readMultipleEscape(Readtable rt) throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         while (true) {
             int n = _readChar();
             if (n < 0) {
@@ -803,8 +802,7 @@ public class Stream extends LispObject
     private final LispObject readToken(char c, Readtable rt)
         throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
-        sb.append(c);
+        FastStringBuffer sb = new FastStringBuffer(c);
         final LispThread thread = LispThread.currentThread();
         BitSet flags = _readToken(sb, rt);
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
@@ -894,7 +892,7 @@ public class Stream extends LispObject
         return ((Package)_PACKAGE_.symbolValue(thread)).intern(token);
     }
 
-    private final BitSet _readToken(StringBuffer sb, Readtable rt)
+    private final BitSet _readToken(FastStringBuffer sb, Readtable rt)
         throws ConditionThrowable
     {
         BitSet flags = null;
@@ -996,7 +994,7 @@ public class Stream extends LispObject
                 state = LOWER;
             }
         }
-        StringBuffer sb = new StringBuffer(limit);
+        FastStringBuffer sb = new FastStringBuffer(limit);
         for (int i = 0; i < limit; i++) {
             char c = s.charAt(i);
             if (flags != null && flags.get(i)) // Escaped.
@@ -1111,7 +1109,7 @@ public class Stream extends LispObject
     {
         if (length == 0)
             return null;
-        StringBuffer sb = new StringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         int i = 0;
         boolean maybe = false;
         char marker = 0;
@@ -1175,7 +1173,7 @@ public class Stream extends LispObject
 
     public LispObject readRadix(int radix) throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         final LispThread thread = LispThread.currentThread();
         final Readtable rt =
             (Readtable) _READTABLE_.symbolValue(thread);
@@ -1202,7 +1200,7 @@ public class Stream extends LispObject
 
     public LispObject faslReadRadix(int radix) throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         final LispThread thread = LispThread.currentThread();
         final Readtable rt = FaslReadtable.getInstance();
         boolean escaped = (_readToken(sb, rt) != null);
@@ -1268,7 +1266,7 @@ public class Stream extends LispObject
         throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        StringBuffer sb = new StringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         while (true) {
             int n = _readChar();
             if (n < 0) {

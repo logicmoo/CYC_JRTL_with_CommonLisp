@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.205 2005-06-27 11:51:23 piso Exp $
+ * $Id: Symbol.java,v 1.206 2005-06-30 17:30:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -294,7 +294,7 @@ public class Symbol extends LispObject
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_PRINT_ESCAPE_, NIL);
         try {
-            StringBuffer sb = new StringBuffer("The symbol ");
+            FastStringBuffer sb = new FastStringBuffer("The symbol ");
             sb.append(name.writeToString());
             sb.append(" at #x");
             sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
@@ -435,7 +435,7 @@ public class Symbol extends LispObject
                 return("#:".concat(n));
             if (pkg == PACKAGE_KEYWORD)
                 return ":".concat(n);
-            StringBuffer sb = new StringBuffer(((Package)pkg).getName());
+            FastStringBuffer sb = new FastStringBuffer(((Package)pkg).getName());
             if (((Package)pkg).findExternalSymbol(name) != null)
                 sb.append(':');
             else
@@ -559,7 +559,7 @@ public class Symbol extends LispObject
             if (readtableCase != Keyword.UPCASE ||
                 printCase != Keyword.UPCASE)
             {
-                StringBuffer sb = new StringBuffer();
+                FastStringBuffer sb = new FastStringBuffer();
                 if (pkg == PACKAGE_KEYWORD) {
                     sb.append(':');
                 } else if (pkg instanceof Package) {
@@ -663,7 +663,7 @@ public class Symbol extends LispObject
                 packageName = invert(packageName);
             }
         }
-        StringBuffer sb = new StringBuffer(packageName);
+        FastStringBuffer sb = new FastStringBuffer(packageName);
         if (((Package)pkg).findExternalSymbol(n) != null)
             sb.append(':');
         else
@@ -694,7 +694,7 @@ public class Symbol extends LispObject
                 state = LOWER;
             }
         }
-        StringBuffer sb = new StringBuffer(limit);
+        FastStringBuffer sb = new FastStringBuffer(limit);
         for (int i = 0; i < limit; i++) {
             char c = s.charAt(i);
             if (Character.isUpperCase(c))
@@ -769,7 +769,7 @@ public class Symbol extends LispObject
 
     private static final String multipleEscape(String s)
     {
-        StringBuffer sb = new StringBuffer("|");
+        FastStringBuffer sb = new FastStringBuffer("|");
         final int limit = s.length();
         for (int i = 0; i < limit; i++) {
             char c = s.charAt(i);
@@ -786,7 +786,7 @@ public class Symbol extends LispObject
         if (readtableCase == Keyword.INVERT || readtableCase == Keyword.PRESERVE)
             return s;
         final int limit = s.length();
-        StringBuffer sb = new StringBuffer(limit);
+        FastStringBuffer sb = new FastStringBuffer(limit);
         boolean lastCharWasAlphanumeric = false;
         for (int i = 0; i < limit; i++) {
             char c = s.charAt(i);

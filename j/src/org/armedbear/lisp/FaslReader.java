@@ -2,7 +2,7 @@
  * FaslReader.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: FaslReader.java,v 1.3 2005-06-26 01:58:02 piso Exp $
+ * $Id: FaslReader.java,v 1.4 2005-06-30 17:33:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public final class FaslReader extends Lisp
             throws ConditionThrowable
         {
             final Readtable rt = FaslReadtable.getInstance();
-            StringBuffer sb = new StringBuffer();
+            FastStringBuffer sb = new FastStringBuffer();
             while (true) {
                 int n = stream._readChar();
                 if (n < 0) {
@@ -183,7 +183,7 @@ public final class FaslReader extends Lisp
             final LispThread thread = LispThread.currentThread();
             final Readtable rt = FaslReadtable.getInstance();
             final boolean suppress = _READ_SUPPRESS_.symbolValue(thread) != NIL;
-            StringBuffer sb = new StringBuffer();
+            FastStringBuffer sb = new FastStringBuffer();
             while (true) {
                 int ch = stream._readChar();
                 if (ch < 0)
@@ -413,7 +413,8 @@ public final class FaslReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            StringBuffer sb = new StringBuffer("Illegal # macro character: #\\");
+            FastStringBuffer sb =
+                new FastStringBuffer("Illegal # macro character: #\\");
             String s = LispCharacter.charToName(c);
             if (s != null)
                 sb.append(s);

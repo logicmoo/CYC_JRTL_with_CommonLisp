@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SimpleString.java,v 1.28 2005-03-25 03:19:22 piso Exp $
+ * $Id: SimpleString.java,v 1.29 2005-06-30 17:29:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,12 @@ public final class SimpleString extends AbstractString
         sb.getChars(0, capacity, chars, 0);
     }
 
+    public SimpleString(FastStringBuffer sb)
+    {
+        chars = new char[capacity = sb.length()];
+        sb.getChars(0, capacity, chars, 0);
+    }
+
     private SimpleString(char[] chars)
     {
         this.chars = chars;
@@ -92,7 +98,7 @@ public final class SimpleString extends AbstractString
 
     public LispObject getDescription()
     {
-        StringBuffer sb = new StringBuffer("A simple-string (");
+        FastStringBuffer sb = new FastStringBuffer("A simple-string (");
         sb.append(capacity);
         sb.append(") \"");
         sb.append(chars);

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.803 2005-06-28 04:29:04 piso Exp $
+ * $Id: Primitives.java,v 1.804 2005-06-30 17:32:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1940,7 +1940,8 @@ public final class Primitives extends Lisp
             AbstractArray array = checkArray(args[0]);
             int rank = array.getRank();
             if (rank != args.length - 1) {
-                StringBuffer sb = new StringBuffer("ARRAY-IN-BOUNDS-P: ");
+                FastStringBuffer sb =
+                    new FastStringBuffer("ARRAY-IN-BOUNDS-P: ");
                 sb.append("wrong number of subscripts (");
                 sb.append(args.length - 1);
                 sb.append(") for array of rank ");
@@ -1991,8 +1992,8 @@ public final class Primitives extends Lisp
             AbstractArray array = checkArray(arg);
             if (array.getRank() == 0)
                 return array.AREF(0);
-            StringBuffer sb =
-                new StringBuffer("Wrong number of subscripts (0) for array of rank ");
+            FastStringBuffer sb =
+                new FastStringBuffer("Wrong number of subscripts (0) for array of rank ");
             sb.append(array.getRank());
             sb.append('.');
             signal(new ProgramError(sb.toString()));
@@ -2601,14 +2602,14 @@ public final class Primitives extends Lisp
             if (arg instanceof Fixnum) {
                 int n = ((Fixnum)arg).value;
                 if (n >= 0) {
-                    StringBuffer sb = new StringBuffer("G");
+                    FastStringBuffer sb = new FastStringBuffer('G');
                     sb.append(n); // Decimal representation.
                     return new Symbol(new SimpleString(sb));
                 }
             } else if (arg instanceof Bignum) {
                 BigInteger n = ((Bignum)arg).value;
                 if (n.signum() >= 0) {
-                    StringBuffer sb = new StringBuffer("G");
+                    FastStringBuffer sb = new FastStringBuffer('G');
                     sb.append(n.toString()); // Decimal representation.
                     return new Symbol(new SimpleString(sb));
                 }
@@ -2623,7 +2624,7 @@ public final class Primitives extends Lisp
 
     private static final Symbol gensym(String prefix) throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer(prefix);
+        FastStringBuffer sb = new FastStringBuffer(prefix);
         SpecialBinding binding =
             LispThread.currentThread().getSpecialBinding(_GENSYM_COUNTER_);
         final LispObject oldValue;
@@ -3271,7 +3272,7 @@ public final class Primitives extends Lisp
             }
             LispObject block = env.lookupBlock(symbol);
             if (block == null) {
-                StringBuffer sb = new StringBuffer("No block named ");
+                FastStringBuffer sb = new FastStringBuffer("No block named ");
                 sb.append(symbol.getName());
                 sb.append(" is currently visible.");
                 signal(new LispError(sb.toString()));
@@ -4147,7 +4148,7 @@ public final class Primitives extends Lisp
         {
             final int start = Fixnum.getValue(second);
             if (start < 0) {
-                StringBuffer sb = new StringBuffer("Bad start index (");
+                FastStringBuffer sb = new FastStringBuffer("Bad start index (");
                 sb.append(start);
                 sb.append(") for SUBSEQ.");
                 signal(new TypeError(sb.toString()));
@@ -4166,7 +4167,7 @@ public final class Primitives extends Lisp
         {
             final int start = Fixnum.getValue(second);
             if (start < 0) {
-                StringBuffer sb = new StringBuffer("Bad start index (");
+                FastStringBuffer sb = new FastStringBuffer("Bad start index (");
                 sb.append(start);
                 sb.append(").");
                 signal(new TypeError(sb.toString()));
@@ -4175,7 +4176,7 @@ public final class Primitives extends Lisp
             if (third != NIL) {
                 end = Fixnum.getValue(third);
                 if (start > end) {
-                    StringBuffer sb = new StringBuffer("Start index (");
+                    FastStringBuffer sb = new FastStringBuffer("Start index (");
                     sb.append(start);
                     sb.append(") is greater than end index (");
                     sb.append(end);
@@ -4977,7 +4978,8 @@ public final class Primitives extends Lisp
         {
             LispObject c = LispClass.findClass(checkSymbol(symbol));
             if (c == null) {
-                StringBuffer sb = new StringBuffer("There is no class named ");
+                FastStringBuffer sb =
+                    new FastStringBuffer("There is no class named ");
                 sb.append(symbol.writeToString());
                 sb.append('.');
                 return signal(new LispError(sb.toString()));
@@ -4990,7 +4992,8 @@ public final class Primitives extends Lisp
             LispObject c = LispClass.findClass(checkSymbol(symbol));
             if (c == null) {
                 if (errorp != NIL) {
-                    StringBuffer sb = new StringBuffer("There is no class named ");
+                    FastStringBuffer sb =
+                        new FastStringBuffer("There is no class named ");
                     sb.append(symbol.writeToString());
                     sb.append('.');
                     return signal(new LispError(sb.toString()));
