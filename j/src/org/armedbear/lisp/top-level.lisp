@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.47 2005-06-20 17:49:04 piso Exp $
+;;; $Id: top-level.lisp,v 1.48 2005-06-30 00:29:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,6 +58,8 @@
 (defun peek-char-non-whitespace (stream)
   (loop
     (let ((c (read-char stream nil)))
+      (when (null c) ; control d
+        (quit))
       (unless (eql c #\space)
         (unread-char c stream)
         (return c)))))
