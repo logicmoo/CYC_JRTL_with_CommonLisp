@@ -345,17 +345,19 @@
                    (safe-namestring (merge-pathnames "src" *build-root*))
                    (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
         (t
+         ;; Use the -Xmx256M flag on non-Windows platforms so that the default
+         ;; launch script can be used to build sbcl.
          (let ((pathname (merge-pathnames "abcl" *build-root*)))
            (with-open-file (s pathname :direction :output :if-exists :supersede)
              (if *platform-is-linux*
                  ;; On Linux, set java.library.path for libabcl.so.
-                 (format s "#!/bin/sh~%exec ~A -Xrs -Djava.library.path=~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
+                 (format s "#!/bin/sh~%exec ~A -Xmx256M -Xrs -Djava.library.path=~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
                          (safe-namestring *java*)
                          (safe-namestring *abcl-dir*)
                          (safe-namestring (merge-pathnames "src" *build-root*))
                          (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))
                  ;; Not Linux.
-                 (format s "#!/bin/sh~%exec ~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
+                 (format s "#!/bin/sh~%exec ~A -Xmx256M -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
                          (safe-namestring *java*)
                          (safe-namestring (merge-pathnames "src" *build-root*))
                          (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
