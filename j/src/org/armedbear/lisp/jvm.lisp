@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.502 2005-06-29 19:47:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.503 2005-06-30 17:35:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -706,6 +706,13 @@
 (defun p1-eval-when (form)
   (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
 
+(defun p1-progv (form)
+  ;; We've already checked argument count in PRECOMPILE-PROGV.
+  (let ((symbols-form (cadr form))
+        (values-form (caddr form))
+        (body (cdddr form)))
+    `(progv ,(p1 symbols-form) ,(p1 values-form) ,@(p1-body body))))
+
 (defun p1-quote (form)
   (unless (= (length form) 2)
     (compiler-error "Wrong number of arguments for special operator ~A (expected 1, but received ~D)."
@@ -912,7 +919,7 @@
                   (MULTIPLE-VALUE-LIST  p1-default)
                   (MULTIPLE-VALUE-PROG1 p1-default)
                   (PROGN                p1-default)
-                  (PROGV                identity)
+                  (PROGV                p1-progv)
                   (QUOTE                p1-quote)
                   (RETURN-FROM          p1-return-from)
                   (SETQ                 p1-setq)
@@ -4337,6 +4344,32 @@
                            :target target
                            :representation representation))))
 
+(defun p2-progv (form &key (target :stack) representation)
+  (let* ((symbols-form (cadr form))
+         (values-form (caddr form))
+         (*register* *register*)
+         (environment-register (allocate-register)))
+    (compile-form symbols-form :target :stack)
+    (compile-form values-form :target :stack)
+    (unless (and (single-valued-p symbols-form)
+                 (single-valued-p values-form))
+      (emit-clear-values))
+    (emit-push-current-thread)
+    (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+)
+    (emit 'astore environment-register)
+    ;; Compile call to Lisp.progvBindVars().
+    (emit 'aload *thread*)
+    (emit-invokestatic +lisp-class+ "progvBindVars"
+                       (list +lisp-object+ +lisp-object+ +lisp-thread+) nil)
+    ;; Implicit PROGN.
+    (compile-progn-body (cdddr form) target)
+    ;; Restore dynamic environment.
+    (emit 'aload *thread*)
+    (emit 'aload environment-register)
+    (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+)
+    (when (eq representation :unboxed-fixnum)
+      (emit-unbox-fixnum))))
+
 (defun p2-quote (form &key (target :stack) representation)
   ;; FIXME What if we're called with a non-NIL representation?
   (declare (ignore representation))
@@ -6947,6 +6980,7 @@
   (install-p2-handler 'mod              'p2-mod)
   (install-p2-handler 'not              'p2-not/null)
   (install-p2-handler 'null             'p2-not/null)
+  (install-p2-handler 'progv            'p2-progv)
   (install-p2-handler 'quote            'p2-quote)
   (install-p2-handler 'return-from      'p2-return-from)
   (install-p2-handler 'rplacd           'p2-rplacd)
