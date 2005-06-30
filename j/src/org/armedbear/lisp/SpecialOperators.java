@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.44 2005-06-14 17:55:44 piso Exp $
+ * $Id: SpecialOperators.java,v 1.45 2005-06-30 17:26:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -402,7 +402,8 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### progv
-    private static final SpecialOperator PROGV = new SpecialOperator("progv", "vars vals &body body")
+    private static final SpecialOperator PROGV =
+        new SpecialOperator("progv", "symbols values &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -415,16 +416,7 @@ public final class SpecialOperators extends Lisp
             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             try {
                 // Set up the new bindings.
-                for (LispObject list = symbols; list != NIL; list = list.cdr()) {
-                    Symbol symbol = checkSymbol(list.car());
-                    LispObject value;
-                    if (values != NIL) {
-                        value = values.car();
-                        values = values.cdr();
-                    } else
-                        value = null;
-                    thread.bindSpecial(symbol, value);
-                }
+                progvBindVars(symbols, values, thread);
                 // Implicit PROGN.
                 LispObject result = NIL;
                 LispObject body = args.cdr().cdr();
