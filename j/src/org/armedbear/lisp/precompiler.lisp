@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.118 2005-06-30 17:35:02 piso Exp $
+;;; $Id: precompiler.lisp,v 1.119 2005-07-01 06:07:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -276,7 +276,7 @@
 (defun precompile-progv (form)
   (if (< (length form) 3)
       (compiler-error "Not enough arguments for ~S." 'progv)
-      (list* 'PROGV (cadr form) (caddr form) (mapcar #'precompile1 (cdddr form)))))
+      (list* 'PROGV (mapcar #'precompile1 (%cdr form)))))
 
 (defun precompile-setf (form)
   (let ((place (second form)))
