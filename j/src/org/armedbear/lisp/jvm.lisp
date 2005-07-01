@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.504 2005-07-01 06:08:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.505 2005-07-01 19:45:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3305,10 +3305,6 @@
       (process-args args)
       (emit 'instanceof +lisp-abstract-string-class+)
       (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
-    (when (eq op 'SIMPLE-STRING-P)
-      (process-args args)
-      (emit 'instanceof +lisp-simple-string-class+)
-      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
     (when (eq op 'VECTORP)
       (process-args args)
       (emit 'instanceof +lisp-abstract-vector-class+)
@@ -4154,9 +4150,6 @@
 
 (defun p2-stringp (form &key (target :stack) representation)
   (p2-instanceof-predicate form target representation +lisp-abstract-string-class+))
-
-(defun p2-simple-string-p (form &key (target :stack) representation)
-  (p2-instanceof-predicate form target representation +lisp-simple-string-class+))
 
 (defun p2-vectorp (form &key (target :stack) representation)
   (p2-instanceof-predicate form target representation +lisp-abstract-vector-class+))
@@ -7005,7 +6998,6 @@
   (install-p2-handler 'sys:set-cdr      'p2-set-car/cdr)
   (install-p2-handler 'svref            'p2-svref)
   (install-p2-handler 'setq             'p2-setq)
-  (install-p2-handler 'simple-string-p  'p2-simple-string-p)
   (install-p2-handler 'simple-vector-p  'p2-simple-vector-p)
   (install-p2-handler 'stringp          'p2-stringp)
   (install-p2-handler 'symbol-name      'p2-symbol-name)
