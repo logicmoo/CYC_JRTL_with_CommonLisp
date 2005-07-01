@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.131 2005-06-30 17:34:31 piso Exp $
+ * $Id: Stream.java,v 1.132 2005-07-01 19:05:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -257,7 +257,7 @@ public class Stream extends LispObject
 
     // ### *sharp-equal-alist*
     // internal symbol
-    public static final Symbol _SHARP_EQUAL_ALIST_ =
+    private static final Symbol _SHARP_EQUAL_ALIST_ =
         internSpecial("*SHARP-EQUAL-ALIST*", PACKAGE_SYS, NIL);
 
     public LispObject readPreservingWhitespace(boolean eofError,
@@ -1400,9 +1400,12 @@ public class Stream extends LispObject
         LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_PRINT_ESCAPE_, T);
-        String s = obj.writeToString();
-        thread.lastSpecialBinding = lastSpecialBinding;
-        _writeString(s);
+        try {
+            _writeString(obj.writeToString());
+        }
+        finally {
+            thread.lastSpecialBinding = lastSpecialBinding;
+        }
     }
 
     public LispObject listen() throws ConditionThrowable
