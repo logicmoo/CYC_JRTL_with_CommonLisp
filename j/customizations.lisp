@@ -23,11 +23,16 @@
 (setf *javac-options* "-g")
 (setf *jikes-options* "+D -g")
 
-(cond (*platform-is-windows*
-       (setf *jdk* "C:\\Program Files\\Java\\jdk1.5.0_02\\")
-       (setf *java-compiler* "jikes"))
-      (t
-       ;; Linux
-       (setf *jdk* "/home/peter/blackdown/j2sdk1.4.2/")
-       (setf *java-compiler* "jikes")
-       (setf *jar* "fastjar")))
+;; *PLATFORM* will be either :WINDOWS, :DARWIN, :LINUX, or :UNKNOWN.
+(case *platform*
+  (:windows
+   (setf *jdk*           "C:\\Program Files\\Java\\jdk1.5.0_02\\")
+   (setf *java-compiler* "jikes"))
+  (:darwin
+   (setf *jdk*           "/usr/")
+   (setf *java-compiler* "jikes")
+   #+(or) (setf *jar*    "jar"))
+  ((:linux :unknown)
+   (setf *jdk*           "/home/peter/blackdown/j2sdk1.4.2/")
+   (setf *java-compiler* "jikes")
+   (setf *jar*           "fastjar")))

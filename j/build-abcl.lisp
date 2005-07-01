@@ -13,29 +13,37 @@
 
 (in-package #:build-abcl)
 
-(defparameter *platform-is-windows*
-  #+clisp
-  (if (member :win32 *features*) t nil)
+;; Platform detection.
+
+(defun platform ()
   #-clisp
   (let ((software-type (software-type)))
-    (if (and (stringp software-type)
-             (>= (length software-type) 7)
-             (string-equal (subseq software-type 0 7) "Windows"))
-        t
-        nil)))
-
-(defparameter *platform-is-linux*
+    (cond ((search "Linux" software-type)
+           :linux)
+          ((or (search "Mac OS X" software-type) ; abcl
+               (search "Darwin" software-type))  ; sbcl
+           :darwin)
+          ((search "Windows" software-type)
+           :windows)
+          (t
+           :unknown)))
   #+clisp
-  (and (not *platform-is-windows*)
-       (zerop (ext:run-shell-command "uname | grep -i linux" :output nil)))
-  #-clisp
-  (if (search "Linux" (software-type)) t nil))
+  (cond ((member :win32 *features*)
+         :windows)
+        ((zerop (ext:run-shell-command "uname | grep -i darwin" :output nil))
+         :darwin)
+        ((zerop (ext:run-shell-command "uname | grep -i linux" :output nil))
+         :linux)
+        (t
+         :unknown)))
+
+(defparameter *platform* (platform))
 
 (defparameter *file-separator-char*
-  (if *platform-is-windows* #\\ #\/))
+  (if (eq *platform* :windows) #\\ #\/))
 
 (defparameter *path-separator-char*
-  (if *platform-is-windows* #\; #\:))
+  (if (eq *platform* :windows) #\; #\:))
 
 (defmacro with-current-directory ((directory) &body body)
   `(let ((*default-pathname-defaults* ,directory)
@@ -98,7 +106,7 @@
 #+lispworks
 (defun run-shell-command (command &key directory (output *standard-output*))
   (when directory
-    (unless *platform-is-windows*
+    (unless (eq *platform* :windows)
       (setf command (concatenate 'string
                                  "\\cd \""
                                  (namestring (pathname directory))
@@ -150,24 +158,26 @@
         *jikes-options* nil
         *jar*           nil)
   (load *customizations-file*)
-  (setf *java* (probe-file (merge-pathnames (if *platform-is-windows*
+  (setf *java* (probe-file (merge-pathnames (if (eq *platform* :windows)
                                                 "bin\\java.exe"
                                                 "bin/java")
                                             *jdk*)))
   (unless *java*
     (error "Can't find Java executable."))
   (unless *java-compiler*
-    (setf *java-compiler* (merge-pathnames (if *platform-is-windows*
+    (setf *java-compiler* (merge-pathnames (if (eq *platform* :windows)
                                                "bin/javac.exe"
                                                "bin/javac")
                                            *jdk*)))
   (unless *jar*
-    (setf *jar* (merge-pathnames (if *platform-is-windows*
+    (setf *jar* (merge-pathnames (if (eq *platform* :windows)
                                      "bin/jar.exe"
                                      "bin/jar")
                                  *jdk*)))
   (let ((classpath-components (list (merge-pathnames "src" *build-root*)
-                                    (merge-pathnames "jre/lib/rt.jar" *jdk*))))
+                                    (if (eq *platform* :darwin)
+                                        #p"/System/Library/Frameworks/JavaVM.framework/Classes/classes.jar"
+                                        (merge-pathnames "jre/lib/rt.jar" *jdk*)))))
     (setf *classpath*
           (with-output-to-string (s)
             (do* ((components classpath-components (cdr components))
@@ -267,9 +277,9 @@
     (when (position #\space jar-namestring)
       (setf jar-namestring (concatenate 'string "\"" jar-namestring "\"")))
     (let ((substitutions-alist (acons "@JAR@" jar-namestring nil))
-          (source-file (if *platform-is-windows* "make-jar.bat.in" "make-jar.in"))
-          (target-file (if *platform-is-windows* "make-jar.bat" "make-jar"))
-          (command (if *platform-is-windows* "make-jar.bat" "sh make-jar")))
+          (source-file (if (eq *platform* :windows) "make-jar.bat.in" "make-jar.in"))
+          (target-file (if (eq *platform* :windows) "make-jar.bat"    "make-jar"))
+          (command     (if (eq *platform* :windows) "make-jar.bat"    "sh make-jar")))
       (copy-with-substitutions source-file target-file substitutions-alist)
       (let ((status (run-shell-command command :directory *build-root*)))
         (unless (zerop status)
@@ -281,7 +291,7 @@
   (finish-output)
   (let* ((java-namestring (safe-namestring *java*))
          status)
-    (cond (*platform-is-windows*
+    (cond ((eq *platform* :windows)
            (with-open-file (stream
                             (merge-pathnames "compile-system.bat" *build-root*)
                             :direction :output
@@ -323,7 +333,7 @@
               (command
                (format nil "gcc -shared -o libabcl.so -O -D_REENTRANT -fpic -I~Ainclude -I~Ainclude/~A native.c"
                        jdk-namestring jdk-namestring
-                       (cond (*platform-is-linux*
+                       (cond ((eq *platform* :linux)
                               "linux")
                              ((search "SunOS" (software-type))
                               "solaris"))))
@@ -335,7 +345,7 @@
 
 ;; abcl/abcl.bat
 (defun make-launch-script ()
-  (cond (*platform-is-windows*
+  (cond ((eq *platform* :windows)
          (with-open-file (s
                           (merge-pathnames "abcl.bat" *build-root*)
                           :direction :output
@@ -349,7 +359,7 @@
          ;; launch script can be used to build sbcl.
          (let ((pathname (merge-pathnames "abcl" *build-root*)))
            (with-open-file (s pathname :direction :output :if-exists :supersede)
-             (if *platform-is-linux*
+             (if (eq *platform* :linux)
                  ;; On Linux, set java.library.path for libabcl.so.
                  (format s "#!/bin/sh~%exec ~A -Xmx256M -Xrs -Djava.library.path=~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
                          (safe-namestring *java*)
@@ -415,14 +425,16 @@
   (let ((start (get-internal-real-time)))
 
     #+lispworks
-    (when *platform-is-windows*
+    (when (eq *platform* :windows)
       (setf batch nil))
 
     (initialize-build)
     (format t "~&Platform: ~A~%"
-            (cond (*platform-is-windows* "Windows")
-                  (*platform-is-linux* "Linux")
-                  (t (software-type))))
+            (case *platform*
+              (:windows "Windows")
+              (:linux   "Linux")
+              (:darwin  "Mac OS X")
+              (t        (software-type))))
     (finish-output)
     ;; clean
     (when clean
@@ -445,7 +457,7 @@
           (return-from build-abcl nil))))
     ;; libabcl.so
     (when (and (or full libabcl)
-               (or *platform-is-linux*
+               (or (eq *platform* :linux)
                    (search "SunOS" (software-type))))
       ;; A failure here is not fatal.
       (make-libabcl))
@@ -492,7 +504,7 @@
                (merge-pathnames file target-dir))))
 
 (defun make-dist-dir (version-string)
-  (unless *platform-is-linux*
+  (unless (eq *platform* :linux)
     (error "MAKE-DIST is only supported on Linux."))
   (let ((target-root (pathname (concatenate 'string "/var/tmp/" version-string "/"))))
     (when (probe-directory target-root)
