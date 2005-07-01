@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.108 2005-06-26 00:43:35 piso Exp $
+ * $Id: Load.java,v 1.109 2005-07-01 19:04:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -351,7 +351,7 @@ public final class Load extends Lisp
             final Environment env = new Environment();
             while (true) {
                 sourcePositionBinding.value = new Fixnum(in.getOffset());
-                LispObject obj = in.read(false, EOF, true);
+                LispObject obj = in.read(false, EOF, false);
                 if (obj == EOF)
                     break;
                 LispObject result = eval(obj, env, thread);
