@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.503 2005-06-30 17:35:39 piso Exp $
+;;; $Id: jvm.lisp,v 1.504 2005-07-01 06:08:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -708,10 +708,26 @@
 
 (defun p1-progv (form)
   ;; We've already checked argument count in PRECOMPILE-PROGV.
+  (let ((new-form (rewrite-progv form)))
+    (when (neq new-form form)
+      (return-from p1-progv (p1 new-form))))
   (let ((symbols-form (cadr form))
         (values-form (caddr form))
         (body (cdddr form)))
     `(progv ,(p1 symbols-form) ,(p1 values-form) ,@(p1-body body))))
+
+(defun rewrite-progv (form)
+  (let ((symbols-form (cadr form))
+        (values-form (caddr form))
+        (body (cdddr form)))
+    (cond ((or (unsafe-p symbols-form) (unsafe-p values-form))
+           (let ((g1 (gensym))
+                 (g2 (gensym)))
+             `(let ((,g1 ,symbols-form)
+                    (,g2 ,values-form))
+                (progv ,g1 ,g2 ,@body))))
+          (t
+           form))))
 
 (defun p1-quote (form)
   (unless (= (length form) 2)
@@ -781,6 +797,33 @@
     (when (neq new-form form)
       (return-from p1-throw (p1 new-form))))
   (list* 'THROW (mapcar #'p1 (cdr form))))
+
+(defun rewrite-throw (form)
+  (let ((args (cdr form)))
+    (if (unsafe-p args)
+        (let ((syms ())
+              (lets ()))
+          ;; Tag.
+          (let ((arg (first args)))
+            (if (constantp arg)
+                (push arg syms)
+                (let ((sym (gensym)))
+                  (push sym syms)
+                  (push (list sym arg) lets))))
+          ;; Result. "If the result-form produces multiple values, then all the
+          ;; values are saved."
+          (let ((arg (second args)))
+            (if (constantp arg)
+                (push arg syms)
+                (let ((sym (gensym)))
+                  (cond ((single-valued-p arg)
+                         (push sym syms)
+                         (push (list sym arg) lets))
+                        (t
+                         (push (list 'VALUES-LIST sym) syms)
+                         (push (list sym (list 'MULTIPLE-VALUE-LIST arg)) lets))))))
+          (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
+        form)))
 
 (defun expand-inline (form expansion)
   (let ((args (cdr form))
@@ -6017,33 +6060,6 @@
                                   :catch-type 0)))
       (push handler1 *handlers*)
       (push handler2 *handlers*))))
-
-(defun rewrite-throw (form)
-  (let ((args (cdr form)))
-    (if (unsafe-p args)
-        (let ((syms ())
-              (lets ()))
-          ;; Tag.
-          (let ((arg (first args)))
-            (if (constantp arg)
-                (push arg syms)
-                (let ((sym (gensym)))
-                  (push sym syms)
-                  (push (list sym arg) lets))))
-          ;; Result. "If the result-form produces multiple values, then all the
-          ;; values are saved."
-          (let ((arg (second args)))
-            (if (constantp arg)
-                (push arg syms)
-                (let ((sym (gensym)))
-                  (cond ((single-valued-p arg)
-                         (push sym syms)
-                         (push (list sym arg) lets))
-                        (t
-                         (push (list 'VALUES-LIST sym) syms)
-                         (push (list sym (list 'MULTIPLE-VALUE-LIST arg)) lets))))))
-          (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
-        form)))
 
 (defun p2-throw (form &key (target :stack) representation)
   ;; FIXME What if we're called with a non-NIL representation?
