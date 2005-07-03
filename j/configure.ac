@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2004 Peter Graves
-dnl  $Id: configure.ac,v 1.74 2005-06-01 14:50:01 piso Exp $
+dnl  $Id: configure.ac,v 1.75 2005-07-03 16:11:12 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.74 $)
+AC_REVISION($Revision: 1.75 $)
 
 BOOTFILE=./configure-options
 
@@ -151,17 +151,17 @@ dnl  Java runtime classes and options
 if test -f $JDK/jre/lib/rt.jar ; then
     # SUN
     JAVA_RUNTIME=$JDK/jre/lib/rt.jar
-    ABCL_JAVA_OPTIONS="-server -Xmx128M"
+    ABCL_JAVA_OPTIONS="-server -Xmx256M"
 elif test -f $JDK/jre/lib/core.jar ; then
     # IBM
     JAVA_RUNTIME=""
     for i in $JDK/jre/lib/*.jar ; do JAVA_RUNTIME=$JAVA_RUNTIME:$i ; done
-    ABCL_JAVA_OPTIONS="-Xss512K -Xmx128M"
+    ABCL_JAVA_OPTIONS="-Xss512K -Xmx256M"
 elif test -d $JDK/Classes ; then
     # Mac OS X
     JAVA_RUNTIME=""
     for i in $JDK/Classes/*.jar ; do JAVA_RUNTIME=$JAVA_RUNTIME:$i ; done
-    ABCL_JAVA_OPTIONS="-server"
+    ABCL_JAVA_OPTIONS="-server -Xmx256M"
 else
     AC_MSG_ERROR(unable to find Java runtime)
 fi
