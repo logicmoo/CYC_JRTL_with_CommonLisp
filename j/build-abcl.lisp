@@ -396,9 +396,9 @@
 
 (defun delete-files (pathnames)
   (dolist (pathname pathnames)
-    ;; SBCL signals an error if the file doesn't exist.
-    (when (probe-file pathname)
-      (delete-file pathname))))
+    (let ((truename (probe-file pathname)))
+      (when truename
+        (delete-file truename)))))
 
 (defun clean ()
   (with-current-directory (*abcl-dir*)
