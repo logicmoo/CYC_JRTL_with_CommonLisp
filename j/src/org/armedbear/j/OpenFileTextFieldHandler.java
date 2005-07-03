@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.56 2005-01-11 04:17:57 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.57 2005-07-03 15:59:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -515,7 +515,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         }
     }
 
-    // Returns file.netPath(), file.canonicalPath(), or file.getName(),
+    // Returns file.netPath(), file.getName(), or file.getAbsolutePath(),
     // depending on the situation.
     private String getNameForFile(File file, File currentDirectory)
     {
@@ -527,7 +527,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 else if (currentDirectory.equals(file.getParentFile()))
                     name = file.getName();
                 else
-                    name = file.canonicalPath();
+                    name = file.getAbsolutePath();
             } else {
                 // Current directory is remote. There might be local as well as
                 // remote completions, so we need to use the net path.
