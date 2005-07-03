@@ -1,8 +1,8 @@
 /*
  * File.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: File.java,v 1.14 2004-11-14 15:29:07 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: File.java,v 1.15 2005-07-03 16:00:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -835,10 +835,10 @@ public class File implements Comparable
         if (names == null)
             return null;
         final FastStringBuffer sb = new FastStringBuffer();
-        final String cp = canonicalPath();
+        final String path = getAbsolutePath();
         File[] files = new File[names.length];
         for (int i = 0; i < names.length; i++) {
-            sb.setText(cp);
+            sb.setText(path);
             sb.append(LocalFile.getSeparator());
             sb.append(names[i]);
             files[i] = new File(sb.toString());
