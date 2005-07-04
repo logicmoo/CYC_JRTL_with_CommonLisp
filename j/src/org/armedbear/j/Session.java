@@ -1,8 +1,8 @@
 /*
  * Session.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Session.java,v 1.11 2003-06-29 00:19:34 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Session.java,v 1.12 2005-07-04 21:48:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -217,10 +217,14 @@ public final class Session extends DefaultHandler implements Constants
             if (entry != null) {
                 File file = File.getInstance(entry.getPath());
                 if (file != null && file.isLocal()) {
-                    Buffer buf = null;
-                    if (file.isDirectory())
+                    // See if a buffer already exists.  (The buffer would have
+                    //  been created by autosave recovering a local file.)
+                    Buffer buf = Editor.getBufferList().findBuffer(file);
+                    if (buf != null) {
+                        // do nothing, we already have a buffer
+                    } else if (file.isDirectory()) {
                         buf = new Directory(file);
-                    else if (file.isFile() && file.canRead()) {
+                    } else if (file.isFile() && file.canRead()) {
                         if (entry.getModeId() == WEB_MODE)
                             buf = WebBuffer.createWebBuffer(file, null, null);
                         else
