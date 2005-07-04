@@ -1,8 +1,8 @@
 /*
  * Autosave.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Autosave.java,v 1.2 2002-10-11 14:06:18 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Autosave.java,v 1.3 2005-07-04 21:46:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,11 +178,15 @@ public final class Autosave implements Constants
                     }
                 }
             } else {
-                // BUG! Should back up old file first!
-                file.delete();
-                // BUG! Error handling! What if rename and copy both fail?
-                if (autosaveFile.renameTo(file) || Utilities.copyFile(autosaveFile, file)) {
-                    autosaveFile.delete();
+                // Trick it into loading the contents from the autosave file
+                //  by pretending to be a cache file.
+                Buffer buf = Buffer.createBuffer(file, autosaveFile, null);
+                if (buf != null) {
+                    // Mark as changed!
+                    buf.incrementModCount();
+                    // Now that the buffer owns the autosave, we can remove the
+                    //  autosave from the catalog.  (Even if we didn't, the
+                    //  catalog file would still get deleted...)
                     catalog.remove(netPath);
                 }
             }
