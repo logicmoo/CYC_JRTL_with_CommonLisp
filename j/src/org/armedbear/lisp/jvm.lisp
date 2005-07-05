@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.505 2005-07-01 19:45:26 piso Exp $
+;;; $Id: jvm.lisp,v 1.506 2005-07-05 21:16:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -288,7 +288,7 @@
 (defvar *local-functions* ())
 
 (defun find-local-function (name)
-  (find name *local-functions* :key #'local-function-name))
+  (find name *local-functions* :key #'local-function-name :test #'equal))
 
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
@@ -6765,8 +6765,9 @@
     (values)))
 
 (defun compile-1 (compiland)
-  (let ((*all-variables* ())
-        (*closure-variables* ())
+  (let ((*all-variables* '())
+        (*closure-variables* '())
+        (*local-functions* '())
         (*current-compiland* compiland)
         (*speed* *speed*)
         (*safety* *safety*)
