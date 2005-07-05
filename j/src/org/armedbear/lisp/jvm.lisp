@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.506 2005-07-05 21:16:39 piso Exp $
+;;; $Id: jvm.lisp,v 1.507 2005-07-05 22:37:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -606,6 +606,7 @@
 (defun p1-flet (form)
   (incf (compiland-children *current-compiland*) (length (cadr form)))
   (let ((*current-compiland* *current-compiland*)
+        (*local-functions* *local-functions*)
         (compilands '()))
     (dolist (definition (cadr form))
       (let ((name (car definition)))
@@ -631,7 +632,7 @@
   (let ((*visible-variables* *visible-variables*)
         (*local-functions* *local-functions*)
         (*current-compiland* *current-compiland*)
-        (local-functions ()))
+        (local-functions '()))
     (dolist (definition (cadr form))
       (let ((name (car definition)))
         ;; FIXME
@@ -645,8 +646,7 @@
                (local-function (make-local-function :name name
                                                     :compiland compiland
                                                     :variable variable)))
-          (multiple-value-bind (body decls)
-            (sys::parse-body body)
+          (multiple-value-bind (body decls) (parse-body body)
             (setf (compiland-lambda-expression compiland)
                   `(lambda ,lambda-list ,@decls (block ,name ,@body))))
           (push variable *all-variables*)
@@ -845,9 +845,9 @@
         (dformat t "old form = ~S~%" form)
         (dformat t "new form = ~S~%" new-form)
         (return-from p1-function-call (p1 new-form))))
-    (let ((source-transform (sys::source-transform op)))
+    (let ((source-transform (source-transform op)))
       (when source-transform
-        (let ((new-form (sys::expand-source-transform form)))
+        (let ((new-form (expand-source-transform form)))
           (when (neq new-form form)
             (return-from p1-function-call (p1 new-form))))))
     (let ((expansion (inline-expansion op)))
@@ -855,7 +855,7 @@
         (return-from p1-function-call (p1 (expand-inline form expansion)))))
     (let ((local-function (find-local-function op)))
       (cond (local-function
-             (dformat t "p1 local function ~S~%" op)
+             (dformat t "p1 local call to ~S~%" op)
 
              ;; FIXME
              (dformat t "local function assumed not single-valued~%")
@@ -870,6 +870,7 @@
                      (setf (variable-used-non-locally-p variable) t))))))
             (t
              ;; Not a local function call.
+             (dformat t "p1 non-local call to ~S~%" op)
              (unless (single-valued-p form)
 ;;                (sys::%format t "not single-valued op = ~S~%" op)
                (setf (compiland-single-valued-p *current-compiland*) nil)))))
@@ -3046,7 +3047,6 @@
     (emit-invokevirtual +lisp-thread-class+ "execute" arg-types return-type)))
 
 (defun compile-function-call (form target representation)
-  (dformat t "compile-function-call ~S representation = ~S~%" (car form) representation)
   (let ((op (car form))
         (args (cdr form)))
     (unless (symbolp op)
