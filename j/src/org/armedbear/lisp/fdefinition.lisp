@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.12 2005-06-17 15:50:06 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.13 2005-07-05 20:25:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,8 +31,11 @@
                     (if (eq current-source :top-level)
                         (style-warn "redefining ~S at top level" name)
                         (let ((*package* +cl-package+))
-                          (style-warn "redefining ~S in ~S (originally defined in ~S)"
-                                      name current-source old-source))))))))))
+                          (if (eq old-source :top-level)
+                              (style-warn "redefining ~S in ~S (previously defined at top level)"
+                                          name current-source)
+                              (style-warn "redefining ~S in ~S (previously defined in ~S)"
+                                          name current-source old-source)))))))))))
 
 (defun record-source-information (name &optional source-pathname source-position)
   (unless source-pathname
