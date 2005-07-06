@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.151 2005-07-06 04:12:43 piso Exp $
+ * $Id: Editor.java,v 1.152 2005-07-06 23:35:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6759,24 +6759,46 @@ public final class Editor extends JPanel implements Constants,
     {
         Position pos = new Position(dot);
         int count = 1;
-        while (pos.next()) {
-            char c = pos.getChar();
-            if (c == '(')
-                ++count;
-            else if (c == ')')
-                --count;
-            if (count == 0)
-                break;
+        if (pos.getChar() == ')') {
+            count = 0;
+        } else {
+            while (pos.next()) {
+                char c = pos.getChar();
+                if (c == '(')
+                    ++count;
+                else if (c == ')')
+                    --count;
+                if (count == 0)
+                    break;
+            }
         }
         if (count == 0) {
-            pos.next();
-            updateDotLine();
-            CompoundEdit compoundEdit = beginCompoundEdit();
-            addUndo(SimpleEdit.MOVE);
-            dot.moveTo(pos);
-            updateDotLine();
-            newlineAndIndent();
-            endCompoundEdit(compoundEdit);
+            try {
+                buffer.lockWrite();
+            }
+            catch (InterruptedException e) {
+                Log.error(e);
+                return;
+            }
+            try {
+                CompoundEdit compoundEdit = beginCompoundEdit();
+                addUndo(SimpleEdit.MOVE);
+                unmark();
+                dot.moveTo(pos);
+                if (Utilities.isWhitespace(getDotLine().substring(0, getDotOffset()))) {
+                    justOneSpace();
+                    addUndo(SimpleEdit.MOVE);
+                    dot.skip(-1);
+                    deleteNormalChar();
+                }
+                addUndo(SimpleEdit.MOVE);
+                dot.next();
+                newlineAndIndent();
+                endCompoundEdit(compoundEdit);
+            }
+            finally {
+                buffer.unlockWrite();
+            }
         }
     }
 
@@ -6798,7 +6820,7 @@ public final class Editor extends JPanel implements Constants,
         endCompoundEdit(compoundEdit);
     }
 
-    public void justOneSpace ()
+    public void justOneSpace()
     {
         try {
             buffer.lockWrite();
