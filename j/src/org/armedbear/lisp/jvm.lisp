@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.508 2005-07-06 00:45:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.509 2005-07-06 14:26:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -610,9 +610,9 @@
         (compilands '()))
     (dolist (definition (cadr form))
       (let ((name (car definition)))
-        ;; FIXME
-        (when (and (consp name) (eq (%car name) 'SETF))
-          (compiler-unsupported "P1-FLET: can't handle ~S." name))
+        (unless (or (symbolp name)
+                    (and (consp name) (setf-function-name-p name)))
+          (compiler-error "~S is not a valid function name." name))
         (let* ((lambda-list (cadr definition))
                (body (cddr definition))
                (compiland (make-compiland :name name
@@ -621,6 +621,7 @@
             (setf (compiland-lambda-expression compiland)
                   `(lambda ,lambda-list ,@decls (block ,name ,@body)))
             (let ((*visible-variables* *visible-variables*)
+                  (*local-functions* *local-functions*)
                   (*current-compiland* compiland))
               (p1-compiland compiland)))
           (push compiland compilands))))
@@ -4710,7 +4711,22 @@
                   (emit-move-from-stack target))))
           ((and (consp name) (eq (%car name) 'SETF))
            ; FIXME Need to check for NOTINLINE declaration!
-           (cond ((member name *functions-defined-in-current-file* :test #'equal)
+           (cond ((setf local-function (find-local-function name))
+                  (dformat t "p2-function 1~%")
+                  (when (eq (local-function-compiland local-function) *current-compiland*)
+                    (emit 'aload 0) ; this
+                    (emit-move-from-stack target)
+                    (return-from p2-function))
+                  (cond ((local-function-variable local-function)
+                         (dformat t "p2-function 2~%")
+                         (emit 'var-ref (local-function-variable local-function) :stack))
+                        (t
+                         (let ((g (if *compile-file-truename*
+                                      (declare-local-function local-function)
+                                      (declare-object (local-function-function local-function)))))
+                           (emit 'getstatic *this-class*
+                                 g +lisp-object+))))) ; Stack: template-function
+                 ((member name *functions-defined-in-current-file* :test #'equal)
                   (emit 'getstatic *this-class*
                         (declare-setf-function name) +lisp-object+)
                   (emit-move-from-stack target))
