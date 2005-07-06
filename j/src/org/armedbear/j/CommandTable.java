@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: CommandTable.java,v 1.58 2005-03-07 19:50:20 piso Exp $
+ * $Id: CommandTable.java,v 1.59 2005-07-06 04:13:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +89,7 @@ public class CommandTable
             addCommand("electricColon");
             addCommand("electricOpenBrace");
             addCommand("electricPound");
+            addCommand("electricQuote");
             addCommand("electricSemi");
             addCommand("electricStar");
             addCommand("end");
@@ -122,6 +123,7 @@ public class CommandTable
             addCommand("insertString");
             addCommand("insertTab");
             addCommand("jmips");
+            addCommand("justOneSpace");
             addCommand("killAppend");
             addCommand("killBuffer");
             addCommand("killFrame");

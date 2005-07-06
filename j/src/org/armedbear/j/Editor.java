@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.150 2005-04-26 23:21:56 piso Exp $
+ * $Id: Editor.java,v 1.151 2005-07-06 04:12:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6777,6 +6777,56 @@ public final class Editor extends JPanel implements Constants,
             updateDotLine();
             newlineAndIndent();
             endCompoundEdit(compoundEdit);
+        }
+    }
+
+    public void electricQuote()
+    {
+        CompoundEdit compoundEdit = beginCompoundEdit();
+        if (getDotChar() == '"') {
+            addUndo(SimpleEdit.MOVE);
+            dot.skip(1);
+            newlineAndIndent();
+        } else {
+            fillToCaret();
+            addUndo(SimpleEdit.INSERT_STRING);
+            insertStringInternal("\"\"");
+            addUndo(SimpleEdit.MOVE);
+            dot.skip(-1);
+        }
+        moveCaretToDotCol();
+        endCompoundEdit(compoundEdit);
+    }
+
+    public void justOneSpace ()
+    {
+        try {
+            buffer.lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+            return;
+        }
+        try {
+            CompoundEdit compoundEdit = beginCompoundEdit();
+            addUndo(SimpleEdit.MOVE);
+            unmark();
+            while (inWhitespace() && nextChar())
+                ;
+            setMarkAtDot();
+            while (prevChar()) {
+                if (!inWhitespace()) {
+                    nextChar();
+                    break;
+                }
+            }
+
+            deleteRegion();
+            insertChar(' ');
+            endCompoundEdit(compoundEdit);
+        }
+        finally {
+            buffer.unlockWrite();
         }
     }
 

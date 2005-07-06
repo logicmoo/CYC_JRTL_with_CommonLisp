@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.97 2005-06-30 15:58:48 piso Exp $
+ * $Id: LispMode.java,v 1.98 2005-07-06 04:13:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +89,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "lispSelectSyntax");
         km.mapKey(KeyEvent.VK_9, CTRL_MASK | SHIFT_MASK, "insertParentheses");
         km.mapKey(KeyEvent.VK_0, CTRL_MASK | SHIFT_MASK, "movePastCloseAndReindent");
+        km.mapKey(KeyEvent.VK_QUOTE, CTRL_MASK | SHIFT_MASK, "electricQuote");
+        km.mapKey(KeyEvent.VK_SPACE, CTRL_MASK | SHIFT_MASK, "justOneSpace");
     }
 
     public void populateModeMenu(Editor editor, Menu menu)
