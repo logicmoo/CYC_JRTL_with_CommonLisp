@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.805 2005-07-05 17:54:55 piso Exp $
+ * $Id: Primitives.java,v 1.806 2005-07-06 15:05:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2940,7 +2940,7 @@ public final class Primitives extends Lisp
 
     // ### fset name function &optional source-position arglist => function
     private static final Primitive FSET =
-        new Primitive("fset", PACKAGE_SYS, false)
+        new Primitive("fset", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
