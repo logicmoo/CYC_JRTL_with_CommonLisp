@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.507 2005-07-05 22:37:07 piso Exp $
+;;; $Id: jvm.lisp,v 1.508 2005-07-06 00:45:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -617,15 +617,14 @@
                (body (cddr definition))
                (compiland (make-compiland :name name
                                           :parent *current-compiland*)))
-          (multiple-value-bind (body decls)
-            (sys::parse-body body)
+          (multiple-value-bind (body decls) (parse-body body)
             (setf (compiland-lambda-expression compiland)
                   `(lambda ,lambda-list ,@decls (block ,name ,@body)))
             (let ((*visible-variables* *visible-variables*)
                   (*current-compiland* compiland))
               (p1-compiland compiland)))
           (push compiland compilands))))
-  (list* (car form) (nreverse compilands) (mapcar #'p1 (cddr form)))))
+  (list* (car form) (nreverse compilands) (p1-body (cddr form)))))
 
 (defun p1-labels (form)
   (incf (compiland-children *current-compiland*) (length (cadr form)))
