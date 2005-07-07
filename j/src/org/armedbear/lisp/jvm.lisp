@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.511 2005-07-07 05:40:11 piso Exp $
+;;; $Id: jvm.lisp,v 1.512 2005-07-07 18:36:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1501,7 +1501,6 @@
                126 ; IAND
                128 ; IOR
                130 ; IXOR
-               132 ; IINC
                133 ; I2L
                136 ; L2I
                153 ; IFEQ
@@ -1638,6 +1637,13 @@
   (let* ((args (instruction-args instruction))
          (index (pool-class (first args))))
     (inst (instruction-opcode instruction) (u2 index))))
+
+;; IINC
+(define-resolver 132 (instruction)
+  (let* ((args (instruction-args instruction))
+         (register (first args))
+         (n (second args)))
+    (inst 132 (list register (logand n #xff)))))
 
 (defun resolve-instruction (instruction)
   (declare (optimize speed))
@@ -5068,9 +5074,10 @@
 
 (defun aref-derive-type (args)
   (let* ((array-arg (car args))
-         (array-type (derive-type array-arg))
+         (array-type (normalize-type (derive-type array-arg)))
          (result-type t))
-    (dformat t "aref-derive-type array type = ~S~%" array-type)
+    (dformat t "aref-derive-type array-arg = ~S~%" array-arg)
+    (dformat t "aref-derive-type array-type = ~S~%" array-type)
     (when (and (consp array-type)
                (memq (%car array-type) '(ARRAY SIMPLE-ARRAY VECTOR)))
       (let ((element-type (second array-type)))
@@ -5269,7 +5276,7 @@
                           +lisp-cons+)
        (unless (every 'single-valued-p args)
          (emit-clear-values))
-       (emit-move-from-stack target))       
+       (emit-move-from-stack target))
       (t
        (compile-function-call form target representation)))))
 
@@ -5606,25 +5613,16 @@
 (defun p2-aref (form &key (target :stack) representation)
   ;; We only optimize the 2-arg case.
   (cond ((= (length form) 3)
-         (let ((array-derived-type t))
-           (when (symbolp (second form))
-             (let ((variable (find-visible-variable (second form))))
-               (when variable
-                 (setf array-derived-type (derive-type variable)))))
-           (compile-form (second form) :target :stack)
-           (compile-form (third form) :target :stack :representation :unboxed-fixnum)
-           (unless (and (single-valued-p (second form))
-                        (single-valued-p (third form)))
+         (let ((arg1 (%cadr form))
+               (arg2 (%caddr form)))
+           (compile-form arg1 :target :stack) ; array
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum) ; index
+           (unless (and (single-valued-p arg1)
+                        (single-valued-p arg2))
              (emit-clear-values))
-           (cond ((subtypep array-derived-type '(array (unsigned-byte 8)))
-                  (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I")
-                  (unless (eq representation :unboxed-fixnum)
-                    (emit 'i2l)
-                    (emit-box-long)))
-                 (t
-                  (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
-                  (when (eq representation :unboxed-fixnum)
-                    (emit-unbox-fixnum))))
+           (if (eq representation :unboxed-fixnum)
+               (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I")
+               (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+))
            (emit-move-from-stack target representation)))
         (t
          (compile-function-call form target representation))))
@@ -5814,7 +5812,7 @@
   (unless (= (length form) 3)
     (return-from p2-setq (compile-form (precompiler::precompile-setq form)
                                        :target target)))
-  (let ((expansion (macroexpand (%cadr form) sys:*compile-file-environment*)))
+  (let ((expansion (macroexpand (%cadr form) *compile-file-environment*)))
     (unless (eq expansion (%cadr form))
       (compile-form (list 'SETF expansion (%caddr form)))
       (return-from p2-setq)))
@@ -5853,6 +5851,23 @@
                     (equal value-form (list '+ 1 (variable-name variable)))))
            (dformat t "p2-setq incf unboxed-fixnum case~%")
            (emit 'iinc (variable-register variable) 1)
+           (when target
+             (cond ((eq representation :unboxed-fixnum)
+                    (emit 'iload (variable-register variable)))
+                   (t
+                    (dformat t "p2-setq constructing boxed fixnum for ~S~%"
+                             (variable-name variable))
+                    (emit 'new +lisp-fixnum-class+)
+                    (emit 'dup)
+                    (aver (variable-register variable))
+                    (emit 'iload (variable-register variable))
+                    (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+             (emit-move-from-stack target representation)))
+          ((and (eq (variable-representation variable) :unboxed-fixnum)
+                (or (equal value-form (list '1- (variable-name variable)))
+                    (equal value-form (list '- (variable-name variable) 1))))
+           (dformat t "p2-setq decf unboxed-fixnum case~%")
+           (emit 'iinc (variable-register variable) -1)
            (when target
              (cond ((eq representation :unboxed-fixnum)
                     (emit 'iload (variable-register variable)))
