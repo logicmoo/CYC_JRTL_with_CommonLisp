@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.510 2005-07-07 03:20:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.511 2005-07-07 05:40:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -288,7 +288,10 @@
 (defvar *local-functions* ())
 
 (defun find-local-function (name)
-  (find name *local-functions* :key #'local-function-name :test #'equal))
+;;   (find name *local-functions* :key #'local-function-name :test #'equal)
+  (dolist (local-function *local-functions* nil)
+    (when (equal name (local-function-name local-function))
+        (return local-function))))
 
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
@@ -370,31 +373,9 @@
              ;; Nothing to do here.
              )
             (IGNORE
-;;              (dolist (sym (%cdr decl))
-;;                (let ((variable (find sym vars :key #'variable-name)))
-;;                  (cond ((null variable)
-;;                         (compiler-style-warn "Declaring unknown variable ~S to be ignored."
-;;                                              sym))
-;;                        ((variable-special-p variable)
-;;                         (compiler-style-warn "Declaring special variable ~S to be ignored."
-;;                                              sym))
-;;                        (t
-;;                         (setf (variable-ignore-p variable) t)))))
-             (process-ignore/ignorable 'IGNORE (%cdr decl) vars)
-             )
+             (process-ignore/ignorable 'IGNORE (%cdr decl) vars))
             (IGNORABLE
-;;              (dolist (sym (%cdr decl))
-;;                (let ((variable (find sym vars :key #'variable-name)))
-;;                  (cond ((null variable)
-;;                         (compiler-style-warn "Declaring unknown variable ~S to be ignorable."
-;;                                              sym))
-;;                        ((variable-special-p variable)
-;;                         (compiler-style-warn "Declaring special variable ~S to be ignorable."
-;;                                              sym))
-;;                        (t
-;;                         (setf (variable-ignorable-p variable) t))))
-             (process-ignore/ignorable 'IGNORABLE (%cdr decl) vars)
-             )
+             (process-ignore/ignorable 'IGNORABLE (%cdr decl) vars))
             (SPECIAL
              (dolist (sym (%cdr decl))
                (let ((variable (find sym vars :key #'variable-name)))
@@ -2707,6 +2688,7 @@
 (defun initialize-unary-operators ()
   (dolist (pair '((ABS             "ABS")
                   (BIT-VECTOR-P    "BIT_VECTOR_P")
+                  (CADDR           "caddr")
                   (CADR            "cadr")
                   (CDDR            "cddr")
                   (CDR             "cdr")
@@ -2736,6 +2718,7 @@
                   (SIMPLE-STRING-P "SIMPLE_STRING_P")
                   (STRING          "STRING")
                   (STRINGP         "STRINGP")
+                  (THIRD           "caddr")
                   (VECTORP         "VECTORP")))
     (define-unary-operator (first pair) (second pair))))
 
@@ -5278,6 +5261,15 @@
          (unless (every 'single-valued-p args)
            (emit-clear-values))
          (emit-move-from-stack target)))
+      (4
+       (dolist (arg args)
+         (compile-form arg :target :stack))
+       (emit-invokestatic +lisp-class+ "list4"
+                          (list +lisp-object+ +lisp-object+ +lisp-object+ +lisp-object+)
+                          +lisp-cons+)
+       (unless (every 'single-valued-p args)
+         (emit-clear-values))
+       (emit-move-from-stack target))       
       (t
        (compile-function-call form target representation)))))
 
