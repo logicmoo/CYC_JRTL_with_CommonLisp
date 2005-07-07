@@ -2,7 +2,7 @@
  * cxr.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: cxr.java,v 1.10 2005-04-18 02:05:31 piso Exp $
+ * $Id: cxr.java,v 1.11 2005-07-07 05:28:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,7 +106,7 @@ public final class cxr extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return arg.cdr().cdr().car();
+            return arg.caddr();
         }
     };
 
@@ -196,7 +196,7 @@ public final class cxr extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return arg.cdr().cadr();
+            return arg.caddr();
         }
     };
 
