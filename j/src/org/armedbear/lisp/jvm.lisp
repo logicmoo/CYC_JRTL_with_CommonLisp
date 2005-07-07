@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.509 2005-07-06 14:26:56 piso Exp $
+;;; $Id: jvm.lisp,v 1.510 2005-07-07 03:20:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -418,9 +418,9 @@
 (defun check-name (name)
   ;; FIXME Currently this error is signalled by the precompiler.
   (unless (symbolp name)
-    (compiler-error "The variable ~S is not a symbol."))
+    (compiler-error "The variable ~S is not a symbol." name))
   (when (constantp name)
-    (compiler-error "The name of the variable ~S is already in use to name a constant."))
+    (compiler-error "The name of the variable ~S is already in use to name a constant." name))
   name)
 
 (defun p1-let-vars (varlist)
