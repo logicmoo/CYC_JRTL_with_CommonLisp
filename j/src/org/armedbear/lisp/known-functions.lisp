@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.12 2005-06-28 12:31:15 piso Exp $
+;;; $Id: known-functions.lisp,v 1.13 2005-07-07 03:21:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@
         %dpb
         ))
 
-(declaim (ftype (function character (unsigned-byte 16)) char-code))
+(declaim (ftype (function (character) (unsigned-byte 16)) char-code))
 
 (declaim (ftype (function * character) char schar))
 
@@ -85,7 +85,7 @@
  (ftype (function (real real) real)
         mod rem))
 
-(declaim (ftype (function number rational) rational rationalize))
+(declaim (ftype (function (number) rational) rational rationalize))
 
 (declaim (ftype (function * bit) bit sbit))
 
