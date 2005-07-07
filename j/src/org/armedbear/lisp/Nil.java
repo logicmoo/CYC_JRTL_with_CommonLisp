@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Nil.java,v 1.40 2005-06-20 16:02:39 piso Exp $
+ * $Id: Nil.java,v 1.41 2005-07-07 05:27:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,6 +101,11 @@ public final class Nil extends Symbol
     }
 
     public final LispObject cddr()
+    {
+        return this;
+    }
+
+    public final LispObject caddr()
     {
         return this;
     }
