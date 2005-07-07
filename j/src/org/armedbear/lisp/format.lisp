@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: format.lisp,v 1.30 2005-06-28 12:27:58 piso Exp $
+;;; $Id: format.lisp,v 1.31 2005-07-07 23:31:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -246,11 +246,17 @@
 
 (defun round-up (string)
   (let* ((index (position #\. string))
-         (n (read-from-string (remove #\. string)))
+         (n (read-from-string (setf string (remove #\. string))))
          (s (princ-to-string (incf n))))
     (cond ((null index)
            s)
           (t
+           (when (> (length s) (length string))
+             ;; Rounding up made the string longer, which means we went from (say) 99
+             ;; to 100. Drop the trailing #\0 and move the #\. one character to the
+             ;; right.
+             (setf s (subseq s 0 (1- (length s))))
+             (incf index))
            (concatenate 'string (subseq s 0 index) "." (subseq s index))))))
 
 (defun scale-exponent (original-x)
