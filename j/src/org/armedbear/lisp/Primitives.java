@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.807 2005-07-09 03:59:32 piso Exp $
+ * $Id: Primitives.java,v 1.808 2005-07-09 15:56:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2063,7 +2063,7 @@ public final class Primitives extends Lisp
 
     // ### aset array subscripts new-element => new-element
     private static final Primitive ASET =
-        new Primitive("aset", PACKAGE_SYS, false,
+        new Primitive("aset", PACKAGE_SYS, true,
                       "array subscripts new-element")
     {
         public LispObject execute(LispObject first, LispObject second)
