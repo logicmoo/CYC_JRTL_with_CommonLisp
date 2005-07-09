@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.99 2005-07-09 19:41:24 piso Exp $
+;;; $Id: compile-file.lisp,v 1.100 2005-07-09 23:54:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -149,6 +149,7 @@
 
 (defun note-toplevel-form (form)
   (when *compile-print*
+    (fresh-line)
     (princ "; ")
     (let ((*print-length* 2)
           (*print-level* 2)
