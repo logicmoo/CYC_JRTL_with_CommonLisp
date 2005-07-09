@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.98 2005-07-09 15:52:15 piso Exp $
+;;; $Id: compile-file.lisp,v 1.99 2005-07-09 19:41:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,9 +53,9 @@
           (load-compiled-function classfile)))))
 
 (defun dump-list (object stream)
-  (cond ((and (eq (car object) 'QUOTE) (= (length object) 2))
+  (cond ((and (eq (car object) 'QUOTE) (null (cddr object)))
          (%stream-write-char #\' stream)
-         (dump-object (cadr object) stream))
+         (dump-object (%cadr object) stream))
         (t
          (%stream-write-char #\( stream)
          (loop
@@ -147,6 +147,15 @@
         (t
          (dump-form form stream))))
 
+(defun note-toplevel-form (form)
+  (when *compile-print*
+    (princ "; ")
+    (let ((*print-length* 2)
+          (*print-level* 2)
+          (*print-pretty* nil))
+      (prin1 form))
+    (terpri)))
+
 (defun process-toplevel-form (form stream compile-time-too)
   (cond ((atom form)
          (when compile-time-too
@@ -158,8 +167,10 @@
               (process-toplevel-macrolet form stream compile-time-too)
               (return-from process-toplevel-form))
              ((IN-PACKAGE DEFPACKAGE)
+              (note-toplevel-form form)
               (eval form))
              ((DEFVAR DEFPARAMETER)
+              (note-toplevel-form form)
               (if compile-time-too
                   (eval form)
                   ;; "If a DEFVAR or DEFPARAMETER form appears as a top level form,
@@ -170,80 +181,61 @@
                   (let ((name (second form)))
                     (%defvar name))))
              (DEFCONSTANT
+              (note-toplevel-form form)
               (process-defconstant form stream)
               (return-from process-toplevel-form))
              (DEFUN
+              (note-toplevel-form form)
               (let* ((name (second form))
-                     (block-name (fdefinition-block-name name)))
-                (when *compile-print*
-;;                   (format t "; Processing function ~A~%" name)
-                  (princ "; Processing function ")
-                  (princ name)
-                  (terpri))
-                (let* ((lambda-list (third form))
-                       (body (nthcdr 3 form))
-                       (jvm::*speed* jvm::*speed*)
-                       (jvm::*safety* jvm::*safety*)
-                       (jvm::*debug* jvm::*debug*))
-                  (multiple-value-bind (body decls) (parse-body body)
-                    (let* ((expr `(lambda ,lambda-list ,@decls (block ,block-name ,@body)))
-                           (classfile-name (next-classfile-name))
-                           (classfile (report-error
-                                       (jvm:compile-defun name expr nil classfile-name)))
-                           (compiled-function (verify-load classfile)))
-                      (cond (compiled-function
-                             (when *compile-print*
-;;                                (format t ";  ~A => ~A.cls~%" name
-;;                                        (pathname-name (pathname classfile-name)))
-                               (princ ";  ")
-                               (princ name)
-                               (princ " => ")
-                               (princ (pathname-name (pathname classfile-name)))
-                               (princ ".cls")
-                               (terpri))
+                     (block-name (fdefinition-block-name name))
+                     (lambda-list (third form))
+                     (body (nthcdr 3 form))
+                     (jvm::*speed* jvm::*speed*)
+                     (jvm::*safety* jvm::*safety*)
+                     (jvm::*debug* jvm::*debug*))
+                (multiple-value-bind (body decls) (parse-body body)
+                  (let* ((expr `(lambda ,lambda-list ,@decls (block ,block-name ,@body)))
+                         (classfile-name (next-classfile-name))
+                         (classfile (report-error
+                                     (jvm:compile-defun name expr nil classfile-name)))
+                         (compiled-function (verify-load classfile)))
+                    (cond (compiled-function
+                           (setf form
+                                 `(fset ',name
+                                        (load-compiled-function ,(file-namestring classfile))
+                                        ,*source-position*
+                                        ',lambda-list))
+                           (when compile-time-too
+                             (fset name compiled-function)))
+                          (t
+                           ;; FIXME This should be a warning or error of some sort...
+                           (format *error-output* "; Unable to compile function ~A~%" name)
+                           (let ((precompiled-function (precompile-form expr nil)))
                              (setf form
                                    `(fset ',name
-                                          (load-compiled-function ,(file-namestring classfile))
+                                          ,precompiled-function
                                           ,*source-position*
-                                          ',lambda-list))
-                             (when compile-time-too
-                               (fset name compiled-function)))
-                            (t
-                             ;; FIXME This should be a warning or error of some sort...
-                             (format *error-output* "; Unable to compile function ~A~%" name)
-                             (let ((precompiled-function (precompile-form expr nil)))
-                               (setf form
-                                     `(fset ',name
-                                            ,precompiled-function
-                                            ,*source-position*
-                                            ',lambda-list)))
-                             (when compile-time-too
-                               (eval form))))))
-                  (push name jvm::*functions-defined-in-current-file*)
-                  (jvm::note-name-defined name)
-                  ;; If NAME is not fbound, provide a dummy definition so that
-                  ;; getSymbolFunctionOrDie() will succeed when we try to verify that
-                  ;; functions defined later in the same file can be loaded correctly.
-                  (unless (fboundp name)
-                    (setf (fdefinition name) #'dummy)
-                    (push name *fbound-names*)))))
+                                          ',lambda-list)))
+                           (when compile-time-too
+                             (eval form))))))
+                (push name jvm::*functions-defined-in-current-file*)
+                (jvm::note-name-defined name)
+                ;; If NAME is not fbound, provide a dummy definition so that
+                ;; getSymbolFunctionOrDie() will succeed when we try to verify that
+                ;; functions defined later in the same file can be loaded correctly.
+                (unless (fboundp name)
+                  (setf (fdefinition name) #'dummy)
+                  (push name *fbound-names*))))
              ((DEFGENERIC DEFMETHOD)
-              (when *compile-print*
-                (let ((*print-length* 2)
-                      (*print-level* 2))
-                  (format t "; Processing ~S~%" form)))
+              (note-toplevel-form form)
               (jvm::note-name-defined (second form))
-              (process-toplevel-form (macroexpand-1 form *compile-file-environment*)
-                                     stream compile-time-too)
+              (let ((*compile-print* nil))
+                (process-toplevel-form (macroexpand-1 form *compile-file-environment*)
+                                       stream compile-time-too))
               (return-from process-toplevel-form))
              (DEFMACRO
+              (note-toplevel-form form)
               (let ((name (second form)))
-                (when *compile-print*
-;;                   (format t "; Processing macro ~A~%" name)
-                  (princ "; Processing macro ")
-                  (princ name)
-                  (terpri)
-                  )
                 (eval form)
                 (let* ((expr (function-lambda-expression (macro-function name)))
                        (classfile-name (next-classfile-name))
@@ -252,16 +244,6 @@
                          (jvm:compile-defun nil expr nil classfile-name))))
                   (if (verify-load classfile)
                       (progn
-                        (when *compile-print*
-;;                           (format t ";  Macro ~A => ~A.cls~%" name
-;;                                   (pathname-name (pathname classfile-name)))
-                          (princ ";  Macro ")
-                          (princ name)
-                          (princ " => ")
-                          (princ (pathname-name (pathname classfile-name)))
-                          (princ ".cls")
-                          (terpri)
-                          )
                         (setf form
                               (if (special-operator-p name)
                                   `(%put ',name 'macroexpand-macro
@@ -277,6 +259,7 @@
                       ;; FIXME error or warning
                       (format *error-output* "; Unable to compile macro ~A~%" name)))))
              (DEFTYPE
+              (note-toplevel-form form)
               (eval form))
              (EVAL-WHEN
               (multiple-value-bind (ct lt e)
@@ -303,15 +286,17 @@
               (process-toplevel-progn (cdr form) stream compile-time-too)
               (return-from process-toplevel-form))
              (DECLARE
-              (jvm::compiler-style-warn "Misplaced declaration: ~S" form))
+              (compiler-style-warn "Misplaced declaration: ~S" form))
              (t
               (when (and (symbolp (car form))
-                         (macro-function (car form) *compile-file-environment*))
+                         (macro-function (%car form) *compile-file-environment*))
+                (note-toplevel-form form)
                 ;; Note that we want MACROEXPAND-1 and not MACROEXPAND here, in
                 ;; case the form being expanded expands into something that needs
                 ;; special handling by PROCESS-TOPLEVEL-FORM (e.g. DEFMACRO).
-                (process-toplevel-form (macroexpand-1 form *compile-file-environment*)
-                                       stream compile-time-too)
+                (let ((*compile-print* nil))
+                  (process-toplevel-form (macroexpand-1 form *compile-file-environment*)
+                                         stream compile-time-too))
                 (return-from process-toplevel-form))
 
               (when compile-time-too
@@ -364,7 +349,7 @@
                              (jvm:compile-defun nil lambda-expression nil classfile-name)))
                  (compiled-function (verify-load classfile)))
             (cond (compiled-function
-                   (when *compile-print*
+                   #+nil (when *compile-print*
                      (format t ";  method => ~A.cls~%"
                              (pathname-name (pathname classfile-name))))
                    (setf (getf tail key)
@@ -374,7 +359,7 @@
                    (format *error-output* "; Unable to compile method~%")))))))))
 
 (defun convert-toplevel-form (form)
-  (when *compile-print*
+  #+nil (when *compile-print*
     (let ((*print-length* 2)
           (*print-level* 2))
       (format t "; Converting ~S~%" form)))
