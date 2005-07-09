@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte8.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: BasicVector_UnsignedByte8.java,v 1.5 2005-03-25 16:08:41 piso Exp $
+ * $Id: BasicVector_UnsignedByte8.java,v 1.6 2005-07-09 03:56:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,23 +32,6 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     {
         elements = new byte[capacity];
         this.capacity = capacity;
-    }
-
-    public BasicVector_UnsignedByte8(LispObject obj) throws ConditionThrowable
-    {
-        if (obj.listp()) {
-            LispObject[] objects = obj.copyToArray();
-            capacity = objects.length;
-            elements = new byte[capacity];
-            for (int i = objects.length; i-- > 0;)
-                elements[i] = coerceLispObjectToJavaByte(objects[i]);
-        } else if (obj instanceof AbstractVector) {
-            capacity = obj.length();
-            elements = new byte[capacity];
-            for (int i = 0; i < capacity; i++)
-                elements[i] = coerceLispObjectToJavaByte(obj.elt(i));
-        } else
-            Debug.assertTrue(false);
     }
 
     public BasicVector_UnsignedByte8(LispObject[] array)

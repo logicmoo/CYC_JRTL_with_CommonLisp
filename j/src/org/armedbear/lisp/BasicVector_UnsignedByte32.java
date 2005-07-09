@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte32.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: BasicVector_UnsignedByte32.java,v 1.2 2005-03-25 03:19:20 piso Exp $
+ * $Id: BasicVector_UnsignedByte32.java,v 1.3 2005-07-09 03:58:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,20 +36,6 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
         for (int i = capacity; i-- > 0;)
             elements[i] = Fixnum.ZERO;
         this.capacity = capacity;
-    }
-
-    public BasicVector_UnsignedByte32(LispObject obj) throws ConditionThrowable
-    {
-        if (obj.listp()) {
-            elements = obj.copyToArray();
-            capacity = elements.length;
-        } else if (obj instanceof AbstractVector) {
-            capacity = obj.length();
-            elements = new LispObject[capacity];
-            for (int i = 0; i < capacity; i++)
-                elements[i] = obj.elt(i);
-        } else
-            Debug.assertTrue(false);
     }
 
     public BasicVector_UnsignedByte32(LispObject[] array)

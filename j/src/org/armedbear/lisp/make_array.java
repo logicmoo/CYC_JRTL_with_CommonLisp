@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: make_array.java,v 1.28 2005-03-25 03:19:39 piso Exp $
+ * $Id: make_array.java,v 1.29 2005-07-09 04:02:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,7 +115,7 @@ public final class make_array extends Primitive
                     sb.append(" is negative.");
                 return signal(new LispError(sb.toString()));
             }
-            AbstractVector v;
+            final AbstractVector v;
             if (upgradedType == Symbol.CHARACTER) {
                 if (fillPointer != NIL || adjustable != NIL)
                     v = new ComplexString(size);
@@ -131,6 +131,9 @@ public final class make_array extends Primitive
                     v = new ComplexVector_UnsignedByte8(size);
                 else
                     v = new BasicVector_UnsignedByte8(size);
+            } else if (upgradedType.equal(UNSIGNED_BYTE_16) &&
+                       fillPointer == NIL && adjustable == NIL) {
+                v = new BasicVector_UnsignedByte16(size);
             } else if (upgradedType.equal(UNSIGNED_BYTE_32)) {
                 if (fillPointer != NIL || adjustable != NIL)
                     v = new ComplexVector_UnsignedByte32(size);
@@ -172,6 +175,14 @@ public final class make_array extends Primitive
                     array = new SimpleArray_UnsignedByte8(dimv, initialContents);
                 } else {
                     array = new SimpleArray_UnsignedByte8(dimv);
+                    if (initialElementProvided != NIL)
+                        array.fill(initialElement);
+                }
+            } else if (upgradedType.equal(UNSIGNED_BYTE_16)) {
+                if (initialContents != NIL) {
+                    array = new SimpleArray_UnsignedByte16(dimv, initialContents);
+                } else {
+                    array = new SimpleArray_UnsignedByte16(dimv);
                     if (initialElementProvided != NIL)
                         array.fill(initialElement);
                 }
