@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.514 2005-07-09 16:14:23 piso Exp $
+;;; $Id: jvm.lisp,v 1.515 2005-07-09 18:29:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2917,6 +2917,28 @@
                                (list +lisp-object+) +lisp-object+)
            (emit-move-from-stack target)))))
 
+;; get symbol indicator &optional default => value
+(defun p2-get (form &key (target :stack) representation)
+  (aver (null representation))
+  (let* ((args (cdr form))
+         (arg1 (first args))
+         (arg2 (second args))
+         (arg3 (third args)))
+    (case (length args)
+      ((2 3)
+       (compile-form arg1 :target :stack)
+       (compile-form arg2 :target :stack)
+       (compile-form arg3 :target :stack) ; NIL if only 2 args
+       (unless (every #'single-valued-p args)
+         (emit-clear-values))
+       (emit-invokestatic +lisp-class+ "get"
+                          (list +lisp-object+ +lisp-object+ +lisp-object+) +lisp-object+)
+       (emit-move-from-stack target))
+      (t
+       (compiler-warn "Wrong number of arguments for ~A (expected 2 or 3, but received ~D)."
+                    'GET (length args))
+       (compile-function-call form target representation)))))
+
 (defun compile-function-call-3 (op args target)
   (case op
     (SYS::%STRUCTURE-SET
@@ -2949,7 +2971,7 @@
   (declare (optimize speed))
   (cond ((notinline-p name)
          nil)
-        ((sys:built-in-function-p name)
+        ((built-in-function-p name)
          t)
         ((memq name *functions-defined-in-current-file*)
          t)
@@ -7021,6 +7043,7 @@
   (install-p2-handler 'fixnump            'p2-fixnump)
   (install-p2-handler 'flet               'p2-flet)
   (install-p2-handler 'function           'p2-function)
+  (install-p2-handler 'get                'p2-get)
   (install-p2-handler 'go                 'p2-go)
   (install-p2-handler 'labels             'p2-labels)
   (install-p2-handler 'length             'p2-length)
