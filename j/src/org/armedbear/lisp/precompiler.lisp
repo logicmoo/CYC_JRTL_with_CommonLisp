@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.120 2005-07-06 18:12:39 piso Exp $
+;;; $Id: precompiler.lisp,v 1.121 2005-07-09 18:30:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -430,7 +430,7 @@
                                     :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body)))
          (compiled-expander (sys::%compile nil expander)))
-    (sys::coerce-to-function (or compiled-expander expander))))
+    (sys:coerce-to-function (or compiled-expander expander))))
 
 (defvar *local-functions-and-macros* ())
 
