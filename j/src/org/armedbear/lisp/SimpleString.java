@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SimpleString.java,v 1.29 2005-06-30 17:29:36 piso Exp $
+ * $Id: SimpleString.java,v 1.30 2005-07-09 03:57:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -282,13 +282,16 @@ public final class SimpleString extends AbstractString
         }
     }
 
-    public void aset(int index, LispObject newValue) throws ConditionThrowable
+    public void aset(int index, LispObject obj) throws ConditionThrowable
     {
         try {
-            chars[index] = LispCharacter.getValue(newValue);
+            chars[index] = ((LispCharacter)obj).value;
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
+        }
+        catch (ClassCastException e) {
+            signal(new TypeError(obj, Symbol.CHARACTER));
         }
     }
 
