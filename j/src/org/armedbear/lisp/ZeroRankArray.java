@@ -1,8 +1,8 @@
 /*
  * ZeroRankArray.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: ZeroRankArray.java,v 1.10 2005-03-25 03:19:39 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: ZeroRankArray.java,v 1.11 2005-07-09 04:07:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,12 +91,12 @@ public final class ZeroRankArray extends AbstractArray
             return signal(new TypeError("Bad row major index " + index + "."));
     }
 
-    public void aset(int index, LispObject newValue) throws ConditionThrowable
+    public void aset(int index, LispObject obj) throws ConditionThrowable
     {
-        if (newValue.typep(elementType) == NIL)
-            signal(new TypeError(newValue, elementType));
+        if (obj.typep(elementType) == NIL)
+            signal(new TypeError(obj, elementType));
         if (index == 0)
-            data = newValue;
+            data = obj;
         else
             signal(new TypeError("Bad row major index " + index + "."));
     }

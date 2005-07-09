@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.371 2005-06-30 17:25:27 piso Exp $
+ * $Id: Lisp.java,v 1.372 2005-07-09 04:08:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -996,7 +996,7 @@ public abstract class Lisp
             if (type.equal(UNSIGNED_BYTE_8))
                 return type;
             if (type.equal(UNSIGNED_BYTE_16))
-                return UNSIGNED_BYTE_32;
+                return type;
             if (type.equal(UNSIGNED_BYTE_32))
                 return type;
             LispObject car = type.car();
@@ -1010,11 +1010,16 @@ public abstract class Lisp
                     upper = upper.car().decr();
                 if (lower instanceof Fixnum && upper instanceof Fixnum) {
                     int l = ((Fixnum)lower).value;
-                    int u = ((Fixnum)upper).value;
-                    if (l >= 0 && u <= 1)
-                        return Symbol.BIT;
-                    if (l >= 0 && u <= 255)
-                        return UNSIGNED_BYTE_8;
+                    if (l >= 0) {
+                        int u = ((Fixnum)upper).value;
+                        if (u <= 1)
+                            return Symbol.BIT;
+                        if (u <= 255)
+                            return UNSIGNED_BYTE_8;
+                        if (u <= 65535)
+                            return UNSIGNED_BYTE_16;
+                        return UNSIGNED_BYTE_32;
+                    }
                 }
                 if (lower.isGreaterThanOrEqualTo(Fixnum.ZERO)) {
                     if (lower.isLessThan(UNSIGNED_BYTE_32_MAX_VALUE)) {
@@ -1031,6 +1036,8 @@ public abstract class Lisp
                             return Symbol.BIT;
                         if (val <= 255)
                             return UNSIGNED_BYTE_8;
+                        if (val <= 65535)
+                            return UNSIGNED_BYTE_16;
                         return UNSIGNED_BYTE_32;
                     }
                 } else if (obj instanceof Bignum) {
@@ -1047,7 +1054,14 @@ public abstract class Lisp
     public static final byte coerceLispObjectToJavaByte(LispObject obj)
         throws ConditionThrowable
     {
-        return (byte) Fixnum.getValue(obj);
+        try {
+            return (byte) ((Fixnum)obj).value;
+        }
+        catch (ClassCastException e) {
+            signal(new TypeError(obj, Symbol.FIXNUM));
+            // Not reached.
+            return 0;
+        }
     }
 
     public static final LispObject coerceJavaByteToLispObject(byte b)
