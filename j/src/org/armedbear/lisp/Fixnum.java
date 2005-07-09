@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.117 2005-06-09 19:43:10 piso Exp $
+ * $Id: Fixnum.java,v 1.118 2005-07-09 04:07:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,6 +114,8 @@ public final class Fixnum extends LispObject
         } else if (type instanceof Cons) {
             if (type.equal(UNSIGNED_BYTE_8))
                 return (value >= 0 && value <= 255) ? T : NIL;
+            if (type.equal(UNSIGNED_BYTE_16))
+                return (value >= 0 && value <= 65535) ? T : NIL;
             if (type.equal(UNSIGNED_BYTE_32))
                 return value >= 0 ? T : NIL;
         }
