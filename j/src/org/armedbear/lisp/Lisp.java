@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.372 2005-07-09 04:08:50 piso Exp $
+ * $Id: Lisp.java,v 1.373 2005-07-09 18:22:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -209,11 +209,11 @@ public abstract class Lisp
                     obj = car.getSymbolFunction();
                 }
                 if (obj instanceof SpecialOperator) {
-                    obj = get((Symbol)car, Symbol.MACROEXPAND_MACRO);
+                    obj = get(car, Symbol.MACROEXPAND_MACRO, null);
                     if (obj instanceof Autoload) {
                         Autoload autoload = (Autoload) obj;
                         autoload.load();
-                        obj = get((Symbol)car, Symbol.MACROEXPAND_MACRO);
+                        obj = get(car, Symbol.MACROEXPAND_MACRO, null);
                     }
                 }
                 if (obj instanceof MacroObject) {
@@ -1409,30 +1409,23 @@ public abstract class Lisp
         return defaultValue;
     }
 
-    public static final LispObject get(Symbol symbol, LispObject indicator,
+    public static final LispObject get(LispObject symbol, LispObject indicator,
                                        LispObject defaultValue)
         throws ConditionThrowable
     {
-        LispObject list = symbol.getPropertyList();
+        LispObject list;
+        try {
+            list = ((Symbol)symbol).getPropertyList();
+        }
+        catch (ClassCastException e) {
+            return signal(new TypeError(symbol, Symbol.SYMBOL));
+        }
         while (list != NIL) {
             if (list.car() == indicator)
                 return list.cadr();
             list = list.cddr();
         }
         return defaultValue;
-    }
-
-    // Returns null if there is no property with the specified indicator.
-    public static final LispObject get(Symbol symbol, LispObject indicator)
-        throws ConditionThrowable
-    {
-        LispObject list = symbol.getPropertyList();
-        while (list != NIL) {
-            if (list.car() == indicator)
-                return list.cadr();
-            list = list.cddr();
-        }
-        return null;
     }
 
     public static final LispObject put(Symbol symbol, LispObject indicator,
