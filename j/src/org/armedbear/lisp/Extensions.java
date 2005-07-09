@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Extensions.java,v 1.38 2005-05-10 18:11:32 piso Exp $
+ * $Id: Extensions.java,v 1.39 2005-07-09 18:23:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@ package org.armedbear.lisp;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.Socket;
 
 public final class Extensions extends Lisp
 {
@@ -91,7 +90,7 @@ public final class Extensions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return get(checkSymbol(arg), Symbol._SOURCE, NIL);
+            return get(arg, Symbol._SOURCE, NIL);
         }
     };
 
@@ -101,7 +100,7 @@ public final class Extensions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            LispObject obj = get(checkSymbol(arg), Symbol._SOURCE, NIL);
+            LispObject obj = get(arg, Symbol._SOURCE, NIL);
             if (obj instanceof Cons)
                 return obj.cdr();
             return NIL;
@@ -114,7 +113,7 @@ public final class Extensions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            LispObject obj = get(checkSymbol(arg), Symbol._SOURCE, NIL);
+            LispObject obj = get(arg, Symbol._SOURCE, NIL);
             if (obj instanceof Cons)
                 return obj.car();
             return obj;

@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.206 2005-06-30 17:30:15 piso Exp $
+ * $Id: Symbol.java,v 1.207 2005-07-09 18:25:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -519,7 +519,7 @@ public class Symbol extends LispObject
     public final LispObject getSymbolSetfFunctionOrDie()
         throws ConditionThrowable
     {
-        LispObject obj = get(this, Symbol.SETF_FUNCTION);
+        LispObject obj = get(this, Symbol.SETF_FUNCTION, null);
         if (obj == null)
             signal(new UndefinedFunction(list2(Keyword.NAME,
                                                list2(Symbol.SETF,

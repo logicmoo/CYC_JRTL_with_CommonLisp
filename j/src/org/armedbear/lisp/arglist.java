@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: arglist.java,v 1.18 2005-04-24 23:40:47 piso Exp $
+ * $Id: arglist.java,v 1.19 2005-07-09 18:27:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +39,7 @@ public final class arglist extends Lisp
                 Operator operator = (Operator) function;
                 if (operator.getLambdaList() != null)
                     return operator;
-                LispObject other =
-                    get(checkSymbol(obj), Symbol.MACROEXPAND_MACRO, NIL);
+                LispObject other = get(obj, Symbol.MACROEXPAND_MACRO, null);
                 if (other != null)
                     return getOperator(other);
                 else

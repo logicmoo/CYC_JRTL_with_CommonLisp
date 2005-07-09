@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.808 2005-07-09 15:56:24 piso Exp $
+ * $Id: Primitives.java,v 1.809 2005-07-09 18:24:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -772,8 +772,7 @@ public final class Primitives extends Lisp
             if (arg instanceof Symbol)
                 return arg.getSymbolFunction() != null ? T : NIL;
             if (isValidSetfFunctionName(arg)) {
-                LispObject f =
-                    get((Symbol)arg.cadr(), Symbol.SETF_FUNCTION);
+                LispObject f = get(arg.cadr(), Symbol.SETF_FUNCTION, null);
                 return f != null ? T : NIL;
             }
             return signal(new TypeError(arg, FUNCTION_NAME));
@@ -1562,10 +1561,10 @@ public final class Primitives extends Lisp
             if (obj instanceof MacroObject)
                 return ((MacroObject)obj).getExpander();
             if (obj instanceof SpecialOperator) {
-                obj = get((Symbol) arg, Symbol.MACROEXPAND_MACRO, NIL);
+                obj = get(arg, Symbol.MACROEXPAND_MACRO, NIL);
                 if (obj instanceof AutoloadMacro) {
                     ((AutoloadMacro)obj).load();
-                    obj = get((Symbol) arg, Symbol.MACROEXPAND_MACRO, NIL);
+                    obj = get(arg, Symbol.MACROEXPAND_MACRO, NIL);
                 }
                 if (obj instanceof MacroObject)
                     return ((MacroObject)obj).getExpander();
@@ -1588,10 +1587,10 @@ public final class Primitives extends Lisp
             if (obj instanceof MacroObject)
                 return ((MacroObject)obj).getExpander();
             if (obj instanceof SpecialOperator) {
-                obj = get((Symbol) first, Symbol.MACROEXPAND_MACRO, NIL);
+                obj = get(first, Symbol.MACROEXPAND_MACRO, NIL);
                 if (obj instanceof AutoloadMacro) {
                     ((AutoloadMacro)obj).load();
-                    obj = get((Symbol) first, Symbol.MACROEXPAND_MACRO, NIL);
+                    obj = get(first, Symbol.MACROEXPAND_MACRO, NIL);
                 }
                 if (obj instanceof MacroObject)
                     return ((MacroObject)obj).getExpander();
@@ -3026,32 +3025,21 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### get
-    // get symbol indicator &optional default => value
+    // ### get symbol indicator &optional default => value
     private static final Primitive GET =
         new Primitive("get", "symbol indicator &optional default")
     {
         public LispObject execute(LispObject symbol, LispObject indicator)
             throws ConditionThrowable
         {
-            try {
-                return get((Symbol)symbol, indicator, NIL);
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(symbol, Symbol.SYMBOL));
-            }
+            return get(symbol, indicator, NIL);
         }
 
         public LispObject execute(LispObject symbol, LispObject indicator,
                                   LispObject defaultValue)
             throws ConditionThrowable
         {
-            try {
-                return get((Symbol)symbol, indicator, defaultValue);
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(symbol, Symbol.SYMBOL));
-            }
+            return get(symbol, indicator, defaultValue);
         }
     };
 
