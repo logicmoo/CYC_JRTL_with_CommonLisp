@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2005 Peter Graves
-# $Id: Makefile.in,v 1.213 2005-07-02 16:15:28 piso Exp $
+# $Id: Makefile.in,v 1.214 2005-07-09 04:01:56 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ CLASSFILES =	AbstractArray.class \
 		Autoload.class \
 		AutoloadMacro.class \
 		BasicVector_UnsignedByte8.class \
+		BasicVector_UnsignedByte16.class \
 		BasicVector_UnsignedByte32.class \
 		Bignum.class \
 		Binding.class \
@@ -149,6 +150,7 @@ CLASSFILES =	AbstractArray.class \
 		ShellCommand.class \
 		SimpleArray_T.class \
 		SimpleArray_UnsignedByte8.class \
+		SimpleArray_UnsignedByte16.class \
 		SimpleArray_UnsignedByte32.class \
 		SimpleBitVector.class \
 		SimpleCondition.class \
