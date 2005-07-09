@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.33 2005-07-07 16:04:22 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.34 2005-07-09 18:28:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package #:system)
 
-(export '(require-type normalize-type))
+(export '(check-sequence-bounds require-type normalize-type))
 
 (defun %type-error (datum expected-type)
   (error 'type-error :datum datum :expected-type expected-type))
