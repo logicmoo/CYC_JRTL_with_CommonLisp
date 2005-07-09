@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.512 2005-07-07 18:36:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.513 2005-07-09 15:52:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -722,8 +722,8 @@
 (defun p1-setq (form)
   (unless (= (length form) 3)
     (error "Too many arguments for SETQ."))
-  (let ((arg1 (second form))
-        (arg2 (third form)))
+  (let ((arg1 (%cadr form))
+        (arg2 (%caddr form)))
     (let ((variable (find-visible-variable arg1)))
       (if variable
           (progn
@@ -864,6 +864,7 @@
         (eq (cdr entry) 'NOTINLINE)
         (eq (get name '%inline) 'NOTINLINE))))
 
+(declaim (ftype (function (t) t) p1))
 (defun p1 (form)
   (cond ((symbolp form)
          (incf *p1-size*)
@@ -904,14 +905,14 @@
                   (when (compiler-macro-function op)
                     (unless (notinline-p op)
                       (multiple-value-bind (expansion expanded-p)
-                          (sys:compiler-macroexpand form)
+                          (compiler-macroexpand form)
                         ;; Fall through if no change...
                         (when expanded-p
                           (return-from p1 (p1 expansion))))))
                   (cond ((setf handler (get op 'p1-handler))
                          (funcall handler form))
-                        ((macro-function op sys:*compile-file-environment*)
-                         (p1 (macroexpand form sys:*compile-file-environment*)))
+                        ((macro-function op *compile-file-environment*)
+                         (p1 (macroexpand form *compile-file-environment*)))
                         ((special-operator-p op)
                          (compiler-unsupported "P1: unsupported special operator ~S" op))
                         (t
@@ -1134,6 +1135,7 @@
 
 (defparameter *descriptors* (make-hash-table :test #'equal))
 
+(declaim (ftype (function * t) get-descriptor-info))
 (defun get-descriptor-info (arg-types return-type)
   (let* ((key (list arg-types return-type))
          (descriptor-info (sys:gethash-2op-1ret key *descriptors*)))
@@ -1181,6 +1183,7 @@
 (defsubst ensure-thread-var-initialized ()
   (setf *initialize-thread-var* t))
 
+(declaim (ftype (function () t) emit-push-current-thread))
 (defun emit-push-current-thread ()
   (declare (optimize speed))
   (ensure-thread-var-initialized)
@@ -1330,31 +1333,33 @@
              (single-valued-p (node-form form))))
         ((atom form)
          t)
-        ((eq (%car form) 'IF)
-         (and (single-valued-p (third form))
-              (single-valued-p (fourth form))))
-        ((eq (%car form) 'PROGN)
-         (single-valued-p (car (last form))))
-        ((memq (%car form) '(LET LET*))
-         (single-valued-p (car (last (cddr form)))))
-        ((memq (%car form) '(AND OR))
-         (every #'single-valued-p (cdr form)))
-        ((eq (%car form) 'RETURN-FROM)
-         (single-valued-p (third form)))
-        ((eq (%car form) 'THE)
-         (dformat t "single-valued-p THE ~S~%" form)
-         (single-valued-p (third form)))
-        ((eq (%car form) (compiland-name *current-compiland*))
-         (dformat t "single-valued-p recursive call ~S~%" (first form))
-         (compiland-single-valued-p *current-compiland*))
         (t
-         (when (sys:symbol-single-valued-p (%car form))
-           (return-from single-valued-p t))
-         (let* ((ftype (proclaimed-ftype (%car form)))
-                (result-type (ftype-result-type ftype)))
-           (if (and result-type (atom result-type) (neq result-type '*))
-               t
-               nil)))))
+         (let ((op (%car form)))
+           (cond ((eq op 'IF)
+                  (and (single-valued-p (third form))
+                       (single-valued-p (fourth form))))
+                 ((eq op 'PROGN)
+                  (single-valued-p (car (last form))))
+                 ((memq op '(LET LET*))
+                  (single-valued-p (car (last (cddr form)))))
+                 ((memq op '(AND OR))
+                  (every #'single-valued-p (cdr form)))
+                 ((eq op 'RETURN-FROM)
+                  (single-valued-p (third form)))
+                 ((eq op 'THE)
+                  (dformat t "single-valued-p THE ~S~%" form)
+                  (single-valued-p (third form)))
+                 ((eq op (compiland-name *current-compiland*))
+                  (dformat t "single-valued-p recursive call ~S~%" (first form))
+                  (compiland-single-valued-p *current-compiland*))
+                 ((symbol-single-valued-p op)
+                  t)
+                 (t
+                  (let* ((ftype (proclaimed-ftype op))
+                         (result-type (ftype-result-type ftype)))
+                    (if (and result-type (atom result-type) (neq result-type '*))
+                        t
+                        nil))))))))
 
 (declaim (ftype (function * t) emit-clear-values))
 (defun emit-clear-values ()
@@ -1366,7 +1371,8 @@
 (defun maybe-emit-clear-values (form)
   (declare (optimize speed))
   (unless (single-valued-p form)
-;;     (format t "Not single-valued: ~S~%" form)
+;;     (let ((*print-structure* nil))
+;;       (format t "Not single-valued: ~S~%" form))
     (ensure-thread-var-initialized)
     (emit 'clear-values)))
 
@@ -1441,6 +1447,7 @@
 ;; calling built-in Lisp functions with a wrong number of arguments or
 ;; malformed keyword argument lists, and using unrecognized declaration
 ;; specifiers." (3.2.5)
+(declaim (ftype (function (t fixnum) t) check-arg-count))
 (defun check-arg-count (form n)
   (declare (type fixnum n))
   (let* ((op (car form))
@@ -2827,7 +2834,7 @@
   (or (fixnump arg)
       (unboxed-fixnum-variable arg)))
 
-(declaim (ftype (function t t) emit-push-int))
+(declaim (ftype (function (t) t) emit-push-int))
 (defun emit-push-int (arg)
   (if (fixnump arg)
       (emit-push-constant-int arg)
@@ -2836,7 +2843,7 @@
             (emit 'iload (variable-register variable))
             (aver nil)))))
 
-(declaim (ftype (function t t) emit-push-long))
+(declaim (ftype (function (t) t) emit-push-long))
 (defun emit-push-long (arg)
   (cond ((eql arg 0)
          (emit 'lconst_0))
@@ -4343,6 +4350,8 @@
              (unless (null (cdr forms))
                (unless must-clear-values
                  (unless (single-valued-p form)
+;;                    (let ((*print-structure* nil))
+;;                          (format t "not single-valued: ~S~%" form))
                    (setf must-clear-values t)))))))))
 
 (defun compile-progn (form &key (target :stack) representation)
@@ -5027,6 +5036,7 @@
         (t
          (compile-function-call form target representation)))))
 
+(declaim (ftype (function (t) t) derive-type))
 (defun derive-type (form)
   (cond ((consp form)
          (let ((op (%car form)))
@@ -6146,6 +6156,7 @@
                                    :catch-type 0)))
         (push handler *handlers*)))))
 
+(declaim (ftype (function * t) compile-form))
 (defun compile-form (form &key (target :stack) representation)
   (cond ((consp form)
          (let ((op (%car form))
@@ -6207,7 +6218,8 @@
         ((constantp form)
          (compile-constant form :target target :representation representation))
         (t
-         (compiler-unsupported "COMPILE-FORM unhandled case ~S" form))))
+         (compiler-unsupported "COMPILE-FORM unhandled case ~S" form)))
+  t)
 
 ;; Returns descriptor.
 (defun analyze-args (compiland)

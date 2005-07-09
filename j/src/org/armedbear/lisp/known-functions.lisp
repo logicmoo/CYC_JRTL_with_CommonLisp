@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.14 2005-07-09 14:43:38 piso Exp $
+;;; $Id: known-functions.lisp,v 1.15 2005-07-09 15:51:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -96,5 +96,17 @@
 (declaim (ftype (function * t) %type-error check-sequence-bounds))
 
 (declaim (ftype (function * t) out-synonym-of))
+
+(declaim
+ (ftype (function * t)
+        error
+        compiler-style-warn
+        compiler-warn
+        compiler-error
+        compiler-unsupported))
+
+(declaim (ftype (function (symbol) function) resolve))
+
+(declaim (ftype (function (symbol) t) boundp))
 
 (provide '#:known-functions)

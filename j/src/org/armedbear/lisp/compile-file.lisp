@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.97 2005-07-06 18:13:21 piso Exp $
+;;; $Id: compile-file.lisp,v 1.98 2005-07-09 15:52:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -176,14 +176,16 @@
               (let* ((name (second form))
                      (block-name (fdefinition-block-name name)))
                 (when *compile-print*
-                  (format t "; Processing function ~A~%" name))
+;;                   (format t "; Processing function ~A~%" name)
+                  (princ "; Processing function ")
+                  (princ name)
+                  (terpri))
                 (let* ((lambda-list (third form))
                        (body (nthcdr 3 form))
                        (jvm::*speed* jvm::*speed*)
                        (jvm::*safety* jvm::*safety*)
                        (jvm::*debug* jvm::*debug*))
-                  (multiple-value-bind (body decls)
-                      (parse-body body)
+                  (multiple-value-bind (body decls) (parse-body body)
                     (let* ((expr `(lambda ,lambda-list ,@decls (block ,block-name ,@body)))
                            (classfile-name (next-classfile-name))
                            (classfile (report-error
@@ -191,8 +193,14 @@
                            (compiled-function (verify-load classfile)))
                       (cond (compiled-function
                              (when *compile-print*
-                               (format t ";  ~A => ~A.cls~%" name
-                                       (pathname-name (pathname classfile-name))))
+;;                                (format t ";  ~A => ~A.cls~%" name
+;;                                        (pathname-name (pathname classfile-name)))
+                               (princ ";  ")
+                               (princ name)
+                               (princ " => ")
+                               (princ (pathname-name (pathname classfile-name)))
+                               (princ ".cls")
+                               (terpri))
                              (setf form
                                    `(fset ',name
                                           (load-compiled-function ,(file-namestring classfile))
@@ -231,7 +239,11 @@
              (DEFMACRO
               (let ((name (second form)))
                 (when *compile-print*
-                  (format t "; Processing macro ~A~%" name))
+;;                   (format t "; Processing macro ~A~%" name)
+                  (princ "; Processing macro ")
+                  (princ name)
+                  (terpri)
+                  )
                 (eval form)
                 (let* ((expr (function-lambda-expression (macro-function name)))
                        (classfile-name (next-classfile-name))
@@ -241,8 +253,15 @@
                   (if (verify-load classfile)
                       (progn
                         (when *compile-print*
-                          (format t ";  Macro ~A => ~A.cls~%" name
-                                  (pathname-name (pathname classfile-name))))
+;;                           (format t ";  Macro ~A => ~A.cls~%" name
+;;                                   (pathname-name (pathname classfile-name)))
+                          (princ ";  Macro ")
+                          (princ name)
+                          (princ " => ")
+                          (princ (pathname-name (pathname classfile-name)))
+                          (princ ".cls")
+                          (terpri)
+                          )
                         (setf form
                               (if (special-operator-p name)
                                   `(%put ',name 'macroexpand-macro
