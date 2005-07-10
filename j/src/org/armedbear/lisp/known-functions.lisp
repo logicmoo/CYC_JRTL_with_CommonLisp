@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.16 2005-07-10 15:18:39 piso Exp $
+;;; $Id: known-functions.lisp,v 1.17 2005-07-10 20:23:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,13 +42,17 @@
 (declaim
  (ftype (function * t)
         %failed-aver
+        %ldb
         %make-structure
+        %method-function
         %set-cddr
+        %set-std-slot-value
         %stream-terpri
         %stream-write-char
         %structure-ref
         %structure-set
         %svset
+        alphanumericp
         array-has-fill-pointer-p
         aset
         bit-and
@@ -62,6 +66,7 @@
         bit-orc1
         bit-orc2
         bit-xor
+        both-case-p
         caadr
         char-equal
         characterp
@@ -78,14 +83,20 @@
         file-namestring
         file-position
         fill
+        float
         fmakunbound
+        fset
         get-internal-real-time
         getf
         hash-table-p
         host-namestring
         intersection
+        ldb
         ldb-test
+        list-all-packages
         load-compiled-function
+        lower-case-p
+        map
         merge-pathnames
         namestring
         namestring
@@ -95,6 +106,7 @@
         nsubst
         nsubst-if
         nsubst-if-not
+        nth
         oddp
         pathname-type
         pathname-type
@@ -103,6 +115,7 @@
         probe-file
         random
         read
+        read-sequence
         reduce
         replace
         scale-float
@@ -110,14 +123,19 @@
         simple-search
         simple-typep
         some
+        std-slot-value
         stream-line-number
         string<=
         subst
         subst-if
         subst-if-not
+        upper-case-p
         truename
         vector
         vectorp
+        write-char
+        write-sequence
+        zerop
         ))
 
 (declaim
@@ -127,7 +145,6 @@
         numerator denominator
         boole
         array-dimension
-        char-code
         %dpb
         ))
 

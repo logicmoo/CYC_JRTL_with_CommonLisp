@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.519 2005-07-10 15:17:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.520 2005-07-10 20:21:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1397,12 +1397,24 @@
   (declare (optimize speed))
   (emit-invokestatic +lisp-class+ "number" (list "J") +lisp-object+))
 
+(declaim (ftype (function () t) emit-unbox-boolean))
+(defun emit-unbox-boolean ()
+  (let ((LABEL1 (gensym))
+        (LABEL2 (gensym)))
+    (emit-push-nil)
+    (emit 'if_acmpeq LABEL1)
+    (emit 'iconst_1)
+    (emit 'goto LABEL2)
+    (label LABEL1)
+    (emit 'iconst_0)
+    (label LABEL2)))
+
 (declaim (ftype (function (t &optional t) t) emit-move-from-stack))
 (defun emit-move-from-stack (target &optional representation)
   (declare (optimize speed))
   (cond ((null target)
          (emit 'pop))
-        ((eq target :stack))
+        ((eq target :stack)) ; Nothing to do.
         ((fixnump target)
          (emit
           (case representation
@@ -2751,7 +2763,7 @@
     (when (eq op '1-)
       (p2-minus (list '- arg 1) :target target :representation representation)
       (return-from compile-function-call-1 t))
-    (let ((s (sys:gethash-2op-1ret op unary-operators)))
+    (let ((s (gethash-2op-1ret op unary-operators)))
       (cond (s
              (compile-form arg :target :stack)
              (maybe-emit-clear-values arg)
@@ -3116,8 +3128,11 @@
       (if (> *speed* *debug*)
           (emit-call-execute numargs)
           (emit-call-thread-execute numargs))
-      (when (eq representation :unboxed-fixnum)
-        (emit-unbox-fixnum))
+      (case representation
+        (:unboxed-fixnum
+         (emit-unbox-fixnum))
+        (:java-boolean
+         (emit-unbox-boolean)))
       (emit-move-from-stack target))))
 
 (defun compile-call (args)
@@ -3466,6 +3481,9 @@
     (when (eq op 'EQ)
       (process-args args)
       (return-from compile-test-3 (if negatep 'if_acmpeq 'if_acmpne)))
+    (when (eq op 'CHAR=)
+      (p2-char= form :target :stack :representation :java-boolean)
+      (return-from compile-test-3 (if negatep 'ifne 'ifeq)))
     (let* ((arg1 (first args))
            (arg2 (second args))
            (var1 (unboxed-fixnum-variable arg1)))
@@ -3592,7 +3610,7 @@
   (emit-push-nil)
   (if negatep 'if_acmpne 'if_acmpeq))
 
-(defun compile-if (form &key (target :stack) representation)
+(defun p2-if (form &key (target :stack) representation)
   (let* ((test (second form))
          (consequent (third form))
          (alternate (fourth form))
@@ -6001,6 +6019,7 @@
            (compile-function-call form target representation)))))
 
 (defun p2-char= (form &key (target :stack) representation)
+;;   (format t "p2-char= representation = ~S~%" representation)
   (let* ((args (cdr form))
          (numargs (length args)))
     (when (= numargs 0)
@@ -6014,13 +6033,18 @@
           (arg2 (%cadr args)))
       (when (and (characterp arg1) (characterp arg2))
         (cond ((eql arg1 arg2)
-               (emit-push-t))
+               (if (eq representation :java-boolean)
+                   (emit 'iconst_1)
+                   (emit-push-t)))
               (t
-               (emit-push-nil)))
-        (emit-move-from-stack target)
+               (if (eq representation :java-boolean)
+                   (emit 'iconst_0)
+                   (emit-push-nil))))
+        (emit-move-from-stack target representation)
         (return-from p2-char=))
       (let ((type1 (derive-type arg1))
             (type2 (derive-type arg2)))
+;;         (format t "p2-char= type1 = ~S type2 = ~S~%" type1 type2)
         (unless (and (eq type1 'character) (eq type2 'character))
           (compile-function-call form target representation)
           (return-from p2-char=))
@@ -6031,6 +6055,7 @@
                (emit 'getfield +lisp-character-class+ "value" "C")
                (maybe-emit-clear-values arg2))
               ((characterp arg2)
+;;                (format t "characterp arg2 case~%")
                (compile-form arg1 :target :stack)
                (emit 'checkcast +lisp-character-class+)
                (emit 'getfield +lisp-character-class+ "value" "C")
@@ -6043,17 +6068,20 @@
                (compile-form arg2 :target :stack)
                (emit 'checkcast +lisp-character-class+)
                (emit 'getfield +lisp-character-class+ "value" "C")
-               (unless (and (single-valued-p arg1) (single-valued-p arg2))
-                 (emit-clear-values))))
+               (maybe-emit-clear-values arg1 arg2)))
         (let ((LABEL1 (gensym))
               (LABEL2 (gensym)))
           (emit 'if_icmpeq LABEL1)
-          (emit-push-nil)
+          (if (eq representation :java-boolean)
+              (emit 'iconst_0)
+              (emit-push-nil))
           (emit 'goto LABEL2)
           (label LABEL1)
-          (emit-push-t)
+          (if (eq representation :java-boolean)
+              (emit 'iconst_1)
+              (emit-push-t))
           (label LABEL2)
-          (emit-move-from-stack target))))))
+          (emit-move-from-stack target representation))))))
 
 (defun p2-catch (form &key (target :stack) representation)
   ;; FIXME What if we're called with a non-NIL representation?
@@ -7006,7 +7034,6 @@
 (defun initialize-p2-handlers ()
   (mapc #'install-p2-handler '(declare
                                funcall
-                               if
                                multiple-value-call
                                multiple-value-list
                                multiple-value-prog1
@@ -7044,6 +7071,7 @@
   (install-p2-handler 'function           'p2-function)
   (install-p2-handler 'get                'p2-get)
   (install-p2-handler 'go                 'p2-go)
+  (install-p2-handler 'if                 'p2-if)
   (install-p2-handler 'labels             'p2-labels)
   (install-p2-handler 'length             'p2-length)
   (install-p2-handler 'list               'p2-list)

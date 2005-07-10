@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.13 2005-07-05 20:25:58 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.14 2005-07-10 20:22:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,7 +74,8 @@
          (require-type name '(or symbol (cons (eql setf) (cons symbol null))))))
   (when (functionp function) ; FIXME Is this test needed?
     (%set-lambda-name function name))
-  (trace-redefined-update name function))
+  (trace-redefined-update name function)
+  function)
 
 (defun fdefinition (name)
   (cond ((symbolp name)
