@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.100 2005-07-09 23:54:28 piso Exp $
+;;; $Id: compile-file.lisp,v 1.101 2005-07-10 00:57:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -360,10 +360,6 @@
                    (format *error-output* "; Unable to compile method~%")))))))))
 
 (defun convert-toplevel-form (form)
-  #+nil (when *compile-print*
-    (let ((*print-length* 2)
-          (*print-level* 2))
-      (format t "; Converting ~S~%" form)))
   (let* ((expr `(lambda () ,form))
          (classfile-name (next-classfile-name))
          (classfile (report-error
