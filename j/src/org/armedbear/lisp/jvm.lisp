@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.517 2005-07-10 03:28:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.518 2005-07-10 04:53:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5958,7 +5958,9 @@
     (return-from p2-char-code))
   (let* ((arg (second form))
          (type (derive-type arg)))
-    (cond ((and (eq type 'character) (< *safety* 3))
+    (cond ((characterp arg)
+           (compile-constant (char-code arg) :target target :representation representation))
+          ((and (eq type 'character) (< *safety* 3))
            (unless (eq representation :unboxed-fixnum)
              (emit 'new +lisp-fixnum-class+)
              (emit 'dup))
