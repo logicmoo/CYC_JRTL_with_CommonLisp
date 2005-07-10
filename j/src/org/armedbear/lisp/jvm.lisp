@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.518 2005-07-10 04:53:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.519 2005-07-10 15:17:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -101,8 +101,10 @@
 
 (defun class-name-from-filespec (filespec)
   (let* ((name (pathname-name filespec)))
+    (declare (type string name))
     (dotimes (i (length name))
-      (when (eql (char name i) #\-)
+      (declare (type fixnum i))
+      (when (char= (char name i) #\-)
         (setf (char name i) #\_)))
     (concatenate 'string "org/armedbear/lisp/" name)))
 
@@ -231,6 +233,7 @@
 
 ;; obj can be a symbol or variable
 ;; returns variable or nil
+(declaim (ftype (function (t) t) unboxed-fixnum-variable))
 (defun unboxed-fixnum-variable (obj)
   (cond ((symbolp obj)
          (let ((variable (find-visible-variable obj)))
@@ -256,6 +259,7 @@
 ;; True for local functions defined with FLET or LABELS.
 (defvar *child-p* nil)
 
+(declaim (ftype (function (t) t) unboxed-fixnum-variable))
 (defun find-visible-variable (name)
   (dolist (variable *visible-variables*)
     (when (eq name (variable-name variable))
@@ -1334,7 +1338,8 @@
         ((atom form)
          t)
         (t
-         (let ((op (%car form)))
+         (let ((op (%car form))
+               ftype)
            (cond ((eq op 'IF)
                   (and (single-valued-p (third form))
                        (single-valued-p (fourth form))))
@@ -1349,17 +1354,16 @@
                  ((eq op 'THE)
                   (dformat t "single-valued-p THE ~S~%" form)
                   (single-valued-p (third form)))
+                 ((setf ftype (proclaimed-ftype op))
+                  (let ((result-type (ftype-result-type ftype)))
+                    (and result-type (atom result-type) (neq result-type '*) t)))
                  ((eq op (compiland-name *current-compiland*))
                   (dformat t "single-valued-p recursive call ~S~%" (first form))
                   (compiland-single-valued-p *current-compiland*))
                  ((symbol-single-valued-p op)
                   t)
                  (t
-                  (let* ((ftype (proclaimed-ftype op))
-                         (result-type (ftype-result-type ftype)))
-                    (if (and result-type (atom result-type) (neq result-type '*))
-                        t
-                        nil))))))))
+                  nil))))))
 
 (declaim (ftype (function * t) emit-clear-values))
 (defun emit-clear-values ()
@@ -1368,13 +1372,15 @@
   (emit 'clear-values))
 
 (declaim (ftype (function * t) maybe-emit-clear-values))
-(defun maybe-emit-clear-values (form)
+(defun maybe-emit-clear-values (&rest forms)
   (declare (optimize speed))
-  (unless (single-valued-p form)
-;;     (let ((*print-structure* nil))
-;;       (format t "Not single-valued: ~S~%" form))
-    (ensure-thread-var-initialized)
-    (emit 'clear-values)))
+  (dolist (form forms)
+    (unless (single-valued-p form)
+;;       (let ((*print-structure* nil))
+;;         (format t "Not single-valued: ~S~%" form))
+      (ensure-thread-var-initialized)
+      (emit 'clear-values)
+      (return))))
 
 (declaim (ftype (function () t) emit-unbox-fixnum))
 (defun emit-unbox-fixnum ()
@@ -2361,14 +2367,13 @@
   (write-u2 (field-descriptor-index field) stream)
   (write-u2 0 stream)) ; attributes count
 
+(declaim (ftype (function (t t) t) declare-field))
 (defun declare-field (name descriptor)
   (let ((field (make-field :name name :descriptor descriptor)))
     (setf (field-access-flags field) (logior #x8 #x2)) ; private static
     (setf (field-name-index field) (pool-name (field-name field)))
     (setf (field-descriptor-index field) (pool-name (field-descriptor field)))
     (push field *fields*)))
-
-(declaim (ftype (function (character) character) char-downcase char-upcase))
 
 (declaim (ftype (function (symbol) string) sanitize))
 (defun sanitize (symbol)
@@ -2571,6 +2576,7 @@
     (setf *static-code* *code*)
     g))
 
+(declaim (ftype (function (t) string) declare-object))
 (defun declare-object (obj)
   (let ((key (symbol-name (gensym))))
     (remember key obj)
@@ -2863,8 +2869,8 @@
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
     (return-from p2-eql))
-  (let ((arg1 (second form))
-        (arg2 (third form)))
+  (let ((arg1 (%cadr form))
+        (arg2 (%caddr form)))
     (cond ((and (fixnum-or-unboxed-variable-p arg1)
                 (fixnum-or-unboxed-variable-p arg2))
            (emit-push-int arg1)
@@ -3011,6 +3017,7 @@
           (list 'LET* (nreverse lets) (list* (car form) (nreverse syms))))
         form)))
 
+(declaim (ftype (function (t) t) process-args))
 (defun process-args (args)
   (let ((numargs (length args)))
     (when (plusp numargs)
@@ -3035,7 +3042,8 @@
                        (setf must-clear-values t)))
                    (incf i)))))
         (when must-clear-values
-          (emit-clear-values))))))
+          (emit-clear-values)))))
+  t)
 
 (defparameter *lisp-object-arg-types-ht* (make-hash-table))
 
@@ -3175,6 +3183,7 @@
       (emit 'aload register)
       (emit 'aastore))))
 
+(declaim (ftype (function (t t t) t) compile-local-function-call))
 (defun compile-local-function-call (form target representation)
   (let* ((compiland *current-compiland*)
          (op (car form))
@@ -3253,7 +3262,8 @@
       (emit-unbox-fixnum))
     (emit-move-from-stack target representation)
     (when saved-vars
-      (restore-variables saved-vars))))
+      (restore-variables saved-vars)))
+  t)
 
 (defparameter java-predicates (make-hash-table :test 'eq))
 
@@ -4383,7 +4393,7 @@
                (unless must-clear-values
                  (unless (single-valued-p form)
 ;;                    (let ((*print-structure* nil))
-;;                          (format t "not single-valued: ~S~%" form))
+;;                      (format t "not single-valued: ~S~%" form))
                    (setf must-clear-values t)))))))))
 
 (defun compile-progn (form &key (target :stack) representation)
@@ -5621,6 +5631,22 @@
          (emit-move-from-stack target representation))
         (t
          (compile-function-call form target representation))))
+
+(defun p2-char (form &key (target :stack) representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-char))
+  (let ((arg1 (%cadr form))
+        (arg2 (%caddr form)))
+    (cond ((and (subtypep (derive-type arg1) 'string)
+                (subtypep (derive-type arg2) 'fixnum))
+           (compile-form arg1 :target :stack)
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
+           (emit-move-from-stack target representation))
+          (t
+           (compile-function-call form target representation)))))
 
 (defun p2-aref (form &key (target :stack) representation)
   ;; We only optimize the 2-arg case.
@@ -7003,6 +7029,7 @@
   (install-p2-handler 'car                'p2-car)
   (install-p2-handler 'catch              'p2-catch)
   (install-p2-handler 'cdr                'p2-cdr)
+  (install-p2-handler 'char               'p2-char)
   (install-p2-handler 'char-code          'p2-char-code)
   (install-p2-handler 'char=              'p2-char=)
   (install-p2-handler 'characterp         'p2-characterp)

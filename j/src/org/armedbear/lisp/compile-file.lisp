@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.101 2005-07-10 00:57:13 piso Exp $
+;;; $Id: compile-file.lisp,v 1.102 2005-07-10 15:17:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
 
 (defvar *output-file-pathname*)
 
+(declaim (ftype (function () t) next-classfile-name))
 (defun next-classfile-name ()
   (let ((name (%format nil "~A-~D"
                        (pathname-name *output-file-pathname*)
@@ -46,12 +47,14 @@
   (declare (ignore ignored))
   (assert nil))
 
+(declaim (ftype (function (t) t) verify-load))
 (defun verify-load (classfile)
   (and classfile
        (let ((*load-truename* *output-file-pathname*))
          (report-error
           (load-compiled-function classfile)))))
 
+(declaim (ftype (function (t stream) t) dump-list))
 (defun dump-list (object stream)
   (cond ((and (eq (car object) 'QUOTE) (null (cddr object)))
          (%stream-write-char #\' stream)
@@ -73,6 +76,7 @@
              (return)))
          (%stream-write-char #\) stream))))
 
+(declaim (ftype (function (t stream) t) dump-vector))
 (defun dump-vector (object stream)
   (write-string "#(" stream)
   (let ((length (length object)))
@@ -85,6 +89,7 @@
       (dump-object (aref object (1- length)) stream))
     (%stream-write-char #\) stream)))
 
+(declaim (ftype (function (t stream) t) dump-structure))
 (defun dump-structure (object stream)
   (multiple-value-bind (creation-form initialization-form)
       (make-load-form object)
@@ -104,6 +109,7 @@
           (dump-object load-form stream))
         (dump-object creation-form stream))))
 
+(declaim (ftype (function (t stream) t) dump-object))
 (defun dump-object (object stream)
   (cond ((consp object)
          (dump-list object stream))
@@ -118,6 +124,7 @@
         (t
          (write object :stream stream))))
 
+(declaim (ftype (function (t stream) t) dump-form))
 (defun dump-form (form stream)
   (when (and (consp form) (neq (%car form) 'QUOTE))
     (let ((*print-fasl* t)
@@ -131,6 +138,7 @@
           (dump-object form stream)))
     (%stream-terpri stream)))
 
+(declaim (ftype (function (t stream) t) process-defconstant))
 (defun process-defconstant (form stream)
   ;; "If a DEFCONSTANT form appears as a top level form, the compiler
   ;; must recognize that [the] name names a constant variable. An
@@ -147,6 +155,7 @@
         (t
          (dump-form form stream))))
 
+(declaim (ftype (function (t) t) note-toplevel-form))
 (defun note-toplevel-form (form)
   (when *compile-print*
     (fresh-line)
@@ -157,6 +166,7 @@
       (prin1 form))
     (terpri)))
 
+(declaim (ftype (function (t stream t) t) process-toplevel-form))
 (defun process-toplevel-form (form stream compile-time-too)
   (cond ((atom form)
          (when compile-time-too
@@ -331,11 +341,13 @@
                      (setf form (precompile-form form nil)))))))))
   (dump-form form stream))
 
+(declaim (ftype (function (t) t) convert-ensure-method))
 (defun convert-ensure-method (form)
   (c-e-m-1 form :function)
   (c-e-m-1 form :fast-function)
   (precompile-form form nil))
 
+(declaim (ftype (function (t t) t) c-e-m-1))
 (defun c-e-m-1 (form key)
   (let* ((tail (cddr form))
          (function-form (getf tail key)))
@@ -350,9 +362,6 @@
                              (jvm:compile-defun nil lambda-expression nil classfile-name)))
                  (compiled-function (verify-load classfile)))
             (cond (compiled-function
-                   #+nil (when *compile-print*
-                     (format t ";  method => ~A.cls~%"
-                             (pathname-name (pathname classfile-name))))
                    (setf (getf tail key)
                          `(load-compiled-function ,(file-namestring classfile))))
                   (t
@@ -381,6 +390,7 @@
     (dolist (body-form (cddr form))
       (process-toplevel-form body-form stream compile-time-too))))
 
+(declaim (ftype (function (t stream t) t) process-toplevel-progn))
 (defun process-toplevel-progn (forms stream compile-time-too)
   (dolist (form forms)
     (process-toplevel-form form stream compile-time-too)))

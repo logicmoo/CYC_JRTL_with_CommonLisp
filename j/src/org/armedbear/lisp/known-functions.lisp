@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.15 2005-07-09 15:51:38 piso Exp $
+;;; $Id: known-functions.lisp,v 1.16 2005-07-10 15:18:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,38 +33,91 @@
 
 (declaim (ftype (function * string) write-string))
 
+(declaim (ftype (function (symbol) string) symbol-name))
+
+(declaim (ftype (function (character) character) char-downcase char-upcase))
+
+(declaim (ftype (function * t) finish-output terpri fresh-line))
+
 (declaim
  (ftype (function * t)
-        replace simple-search fill nstring-upcase random
-        ldb-test
-        complex conjugate
-        reduce
-        vector
-        aset
-        oddp
-        bit-and bit-andc1 bit-andc2 bit-eqv bit-ior bit-nand bit-nor
-        bit-not bit-orc1 bit-orc2 bit-xor
-        array-has-fill-pointer-p
-        phase
-        scale-float
-        char-equal
-        string<=
-        simple-typep
+        %failed-aver
         %make-structure
+        %set-cddr
+        %stream-terpri
+        %stream-write-char
         %structure-ref
         %structure-set
-        caadr
-        %set-cddr
-        neq
-        set
-        every
-        some
         %svset
-        vectorp
-        pathnamep
-        hash-table-p
+        array-has-fill-pointer-p
+        aset
+        bit-and
+        bit-andc1
+        bit-andc2
+        bit-eqv
+        bit-ior
+        bit-nand
+        bit-nor
+        bit-not
+        bit-orc1
+        bit-orc2
+        bit-xor
+        caadr
+        char-equal
         characterp
-        %failed-aver
+        charpos
+        close
+        coerce
+        coerce-to-function
+        compile-file-pathname
+        complex conjugate
+        directory-namestring
+        enough-namestring
+        every
+        file-directory-p
+        file-namestring
+        file-position
+        fill
+        fmakunbound
+        get-internal-real-time
+        getf
+        hash-table-p
+        host-namestring
+        intersection
+        ldb-test
+        load-compiled-function
+        merge-pathnames
+        namestring
+        namestring
+        neq
+        nintersection
+        nstring-upcase
+        nsubst
+        nsubst-if
+        nsubst-if-not
+        oddp
+        pathname-type
+        pathname-type
+        pathnamep
+        phase
+        probe-file
+        random
+        read
+        reduce
+        replace
+        scale-float
+        set
+        simple-search
+        simple-typep
+        some
+        stream-line-number
+        string<=
+        subst
+        subst-if
+        subst-if-not
+        truename
+        vector
+        vectorp
         ))
 
 (declaim
@@ -74,12 +127,18 @@
         numerator denominator
         boole
         array-dimension
+        char-code
         %dpb
         ))
 
 (declaim (ftype (function (character) (unsigned-byte 16)) char-code))
 
 (declaim (ftype (function * character) char schar))
+
+(declaim
+ (ftype (function * t)
+        char= char/= char< char> char<= char>= char-equal char-not-equal
+        char-lessp char-greaterp char-not-greaterp char-not-lessp))
 
 (declaim
  (ftype (function (real real) real)
@@ -108,5 +167,9 @@
 (declaim (ftype (function (symbol) function) resolve))
 
 (declaim (ftype (function (symbol) t) boundp))
+
+(declaim (ftype (function (string fixnum character) character) %set-char))
+
+(declaim (ftype (function (t t t) t) set-function-info-value))
 
 (provide '#:known-functions)

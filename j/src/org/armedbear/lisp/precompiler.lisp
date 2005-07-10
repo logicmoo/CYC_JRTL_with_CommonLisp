@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.121 2005-07-09 18:30:14 piso Exp $
+;;; $Id: precompiler.lisp,v 1.122 2005-07-10 15:17:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -166,6 +166,7 @@
     (when (eq sym (car varspec))
       (return varspec))))
 
+(declaim (ftype (function (t) t) precompile1))
 (defun precompile1 (form)
   (cond ((symbolp form)
          (let ((varspec (find-varspec form)))
@@ -196,6 +197,7 @@
   (declare (optimize speed))
   form)
 
+(declaim (ftype (function (t t) t) precompile-cons))
 (defun precompile-cons (form)
   (cons (car form) (mapcar #'precompile1 (cdr form))))
 
@@ -743,6 +745,7 @@
         (return-from expand-macro result))
       (setf form result))))
 
+(declaim (ftype (function (t t) t) precompile-form))
 (defun precompile-form (form in-jvm-compile)
   (let ((*in-jvm-compile* in-jvm-compile)
         (*local-functions-and-macros* ()))
