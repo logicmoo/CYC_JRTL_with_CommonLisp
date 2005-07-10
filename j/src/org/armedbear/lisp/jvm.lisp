@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.516 2005-07-10 00:57:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.517 2005-07-10 03:28:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5283,7 +5283,7 @@
                  (t
                   (dolist (arg args)
                     (compile-form arg :target :stack))
-                  (let ((s "list "))
+                  (let ((s (copy-seq "list ")))
                     (setf (schar s 4) (code-char (+ (char-code #\0) len)))
                     (emit-invokestatic +lisp-class+ s
                                        (make-list len :initial-element +lisp-object+)
