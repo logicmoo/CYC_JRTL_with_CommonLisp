@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StringFunctions.java,v 1.35 2005-03-25 03:19:23 piso Exp $
+ * $Id: StringFunctions.java,v 1.36 2005-07-10 15:19:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -873,7 +873,7 @@ public final class StringFunctions extends Lisp
         {
             try {
                 ((AbstractString)first).aset(((Fixnum)second).value,
-                                                    ((LispCharacter)third));
+                                             ((LispCharacter)third));
                 return third;
             }
             catch (ClassCastException e) {
