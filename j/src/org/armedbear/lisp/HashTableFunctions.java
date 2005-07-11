@@ -2,7 +2,7 @@
  * HashTableFunctions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: HashTableFunctions.java,v 1.2 2005-04-30 18:33:15 piso Exp $
+ * $Id: HashTableFunctions.java,v 1.3 2005-07-11 17:20:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,7 +107,7 @@ public final class HashTableFunctions extends Lisp
     // ### puthash
     // puthash key hash-table new-value &optional default => value
     private static final Primitive PUTHASH =
-        new Primitive("puthash", PACKAGE_SYS, false)
+        new Primitive("puthash", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject key, LispObject ht,
                                   LispObject value)
