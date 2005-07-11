@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.520 2005-07-10 20:21:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.521 2005-07-11 15:00:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -259,6 +259,12 @@
 ;; True for local functions defined with FLET or LABELS.
 (defvar *child-p* nil)
 
+(declaim (ftype (function (symbol list) t) find-variable))
+(defun find-variable (name variables)
+  (dolist (variable variables)
+    (when (eq name (variable-name variable))
+      (return variable))))
+
 (declaim (ftype (function (t) t) unboxed-fixnum-variable))
 (defun find-visible-variable (name)
   (dolist (variable *visible-variables*)
@@ -352,7 +358,8 @@
   (when (memq declaration '(IGNORE IGNORABLE))
     (let ((what (if (eq declaration 'IGNORE) "ignored" "ignorable")))
       (dolist (name names)
-        (let ((variable (find name variables :key #'variable-name)))
+;;         (let ((variable (find name variables :key #'variable-name)))
+        (let ((variable (find-variable name variables)))
           (cond ((null variable)
                  (compiler-style-warn "Declaring unknown variable ~S to be ~A."
                                       name what))
@@ -365,7 +372,8 @@
                  (setf (variable-ignorable-p variable) t))))))))
 
 ;; Returns a list of declared free specials, if any are found.
-(defun process-declarations-for-vars (body vars)
+(declaim (ftype (function (list list) list) process-declarations-for-vars))
+(defun process-declarations-for-vars (body variables)
   (let ((free-specials '()))
     (dolist (subform body)
       (unless (and (consp subform) (eq (%car subform) 'DECLARE))
@@ -376,28 +384,26 @@
             ((DYNAMIC-EXTENT FTYPE INLINE NOTINLINE OPTIMIZE)
              ;; Nothing to do here.
              )
-            (IGNORE
-             (process-ignore/ignorable 'IGNORE (%cdr decl) vars))
-            (IGNORABLE
-             (process-ignore/ignorable 'IGNORABLE (%cdr decl) vars))
+            ((IGNORE IGNORABLE)
+             (process-ignore/ignorable (%car decl) (%cdr decl) variables))
             (SPECIAL
-             (dolist (sym (%cdr decl))
-               (let ((variable (find sym vars :key #'variable-name)))
+             (dolist (name (%cdr decl))
+               (let ((variable (find-variable name variables)))
                  (cond (variable
                         (setf (variable-special-p variable) t))
                        (t
-                        (dformat t "adding free special ~S~%" sym)
-                        (push (make-variable :name sym :special-p t) free-specials))))))
+                        (dformat t "adding free special ~S~%" name)
+                        (push (make-variable :name name :special-p t) free-specials))))))
             (TYPE
-             (dolist (sym (cddr decl))
-               (dolist (variable vars)
-                 (when (eq sym (variable-name variable))
+             (dolist (name (cddr decl))
+               (let ((variable (find-variable name variables)))
+                 (when variable
                    (setf (variable-declared-type variable) (cadr decl))))))
             (t
-             (dolist (sym (cdr decl))
-               (dolist (variable vars)
-                 (when (eq sym (variable-name variable))
-                   (setf (variable-declared-type variable) (car decl))))))))))
+             (dolist (name (cdr decl))
+               (let ((variable (find-variable name variables)))
+                 (when variable
+                   (setf (variable-declared-type variable) (%car decl))))))))))
     free-specials))
 
 (defun check-name (name)
@@ -1192,6 +1198,61 @@
   (declare (optimize speed))
   (ensure-thread-var-initialized)
   (emit 'aload *thread*))
+
+(declaim (ftype (function (t t) t) generate-instanceof-type-check))
+(defun generate-instanceof-type-check (variable expected-type)
+  (declare (type symbol expected-type))
+  (let ((instanceof-class (ecase expected-type
+                            (SYMBOL    +lisp-symbol-class+)
+                            (CHARACTER +lisp-character-class+)
+                            (FIXNUM    +lisp-fixnum-class+)
+                            (STRING    +lisp-abstract-string-class+)))
+        (LABEL1 (gensym))
+        register
+        index)
+    (cond ((setf register (variable-register variable))
+           (emit 'aload register)
+           (emit 'instanceof instanceof-class)
+           (emit 'ifne LABEL1)
+           (emit 'getstatic *this-class* (declare-symbol '%type-error) +lisp-symbol+)
+           (emit 'aload register)) ; datum
+          ((setf index (variable-index variable))
+           (let ((argument-register (compiland-argument-register *current-compiland*)))
+             (aver (not (null argument-register)))
+             (emit 'aload argument-register)
+             (emit-push-constant-int index)
+             (emit 'aaload)
+             (emit 'instanceof instanceof-class)
+             (emit 'ifne LABEL1)
+             (emit 'getstatic *this-class* (declare-symbol '%type-error) +lisp-symbol+)
+             (emit 'aload argument-register)
+             (emit-push-constant-int index)
+             (emit 'aaload))) ; datum
+          (t
+           (return-from generate-instanceof-type-check)))
+    (emit 'getstatic +lisp-symbol-class+ (symbol-name expected-type) +lisp-symbol+)
+    (emit-call-execute 2)
+    (emit 'pop) ; Needed for JVM stack consistency.
+    (label LABEL1)))
+
+(declaim (ftype (function (list) t) generate-type-checks))
+(defun generate-type-checks (variables)
+  (unless (zerop *safety*)
+    (dolist (variable variables)
+      (unless (variable-special-p variable)
+        (let ((declared-type (variable-declared-type variable)))
+          (cond ((eq declared-type :none)) ; Nothing to do.
+                ((eq declared-type 'symbol)
+                 (generate-instanceof-type-check variable 'SYMBOL))
+                ((eq declared-type 'character)
+                 (generate-instanceof-type-check variable 'CHARACTER))
+                ((subtypep declared-type 'fixnum)
+                 (generate-instanceof-type-check variable 'FIXNUM))
+                ((subtypep declared-type 'string)
+                 (generate-instanceof-type-check variable 'STRING))
+                (t
+                 nil)))))
+    t))
 
 (defun generate-arg-count-check (arity)
   (aver (fixnump arity))
@@ -2406,7 +2467,7 @@
 (declaim (ftype (function (symbol) string) declare-symbol))
 (defun declare-symbol (symbol)
   (declare (type symbol symbol))
-  (let ((g (sys:gethash-2op-1ret symbol *declared-symbols*)))
+  (let ((g (gethash-2op-1ret symbol *declared-symbols*)))
     (unless g
       (let ((*code* *static-code*)
             (s (sanitize symbol)))
@@ -2423,9 +2484,10 @@
         (setf (gethash symbol *declared-symbols*) g)))
     g))
 
+(declaim (ftype (function (symbol) string) declare-keyword))
 (defun declare-keyword (symbol)
   (declare (type symbol symbol))
-  (let ((g (sys:gethash-2op-1ret symbol *declared-symbols*)))
+  (let ((g (gethash-2op-1ret symbol *declared-symbols*)))
     (unless g
       (let ((*code* *static-code*))
         (setf g (symbol-name (gensym)))
@@ -6652,7 +6714,7 @@
     (dolist (subform body)
       (unless (and (consp subform) (eq (%car subform) 'DECLARE))
         (return))
-      (let ((decls (cdr subform)))
+      (let ((decls (%cdr subform)))
         (dolist (decl decls)
           (case (car decl)
             (TYPE
@@ -6701,6 +6763,8 @@
        (dformat t "closure register = ~S~%" (compiland-closure-register compiland)))
     ;; Reserve the next available slot for the thread register.
     (setf *thread* (allocate-register))
+
+;;     (generate-type-checks parameters)
 
     ;; Move args from their original registers to the closure variables array,
     ;; if applicable.
@@ -6807,6 +6871,8 @@
                                    (list +lisp-object-array+)
                                    +lisp-object-array+)))
         (emit 'astore (compiland-argument-register compiland)))
+
+      (generate-type-checks parameters)
 
       (unless (or ;;*child-p*
                   *using-arg-array*)
