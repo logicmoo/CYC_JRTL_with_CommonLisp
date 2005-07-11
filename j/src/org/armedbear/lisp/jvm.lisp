@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.521 2005-07-11 15:00:36 piso Exp $
+;;; $Id: jvm.lisp,v 1.522 2005-07-11 19:59:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -459,7 +459,7 @@
   (let* ((*visible-variables* *visible-variables*)
          (block (make-block-node :name '(LET)))
          (*blocks* (cons block *blocks*))
-         (op (car form))
+         (op (%car form))
          (varlist (cadr form))
          (body (cddr form)))
     (aver (or (eq op 'LET) (eq op 'LET*)))
@@ -992,7 +992,7 @@
 (declaim (ftype (function (t) fixnum) pool-get))
 (defun pool-get (entry)
   (declare (optimize speed))
-  (let ((index (sys:gethash-2op-1ret entry *pool-entries*)))
+  (let ((index (gethash-2op-1ret entry (the hash-table *pool-entries*))))
     (unless index
       (setf index *pool-count*)
       (push entry *pool*)
@@ -1116,6 +1116,7 @@
 (defconstant +lisp-compiled-closure-class+ "org/armedbear/lisp/CompiledClosure")
 (defconstant +lisp-compiled-function-class+ "org/armedbear/lisp/CompiledFunction")
 (defconstant +lisp-primitive-class+ "org/armedbear/lisp/Primitive")
+(defconstant +lisp-hash-table-class+ "org/armedbear/lisp/HashTable")
 
 (defsubst emit-push-nil ()
   (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
@@ -1148,10 +1149,11 @@
 (declaim (ftype (function * t) get-descriptor-info))
 (defun get-descriptor-info (arg-types return-type)
   (let* ((key (list arg-types return-type))
-         (descriptor-info (sys:gethash-2op-1ret key *descriptors*)))
+         (ht *descriptors*)
+         (descriptor-info (gethash-2op-1ret key ht)))
+    (declare (type hash-table ht))
     (or descriptor-info
-        (setf (gethash key *descriptors*)
-              (make-descriptor-info arg-types return-type)))))
+        (setf (gethash key ht) (make-descriptor-info arg-types return-type)))))
 
 (defsubst get-descriptor (arg-types return-type)
   (car (get-descriptor-info arg-types return-type)))
@@ -1203,10 +1205,16 @@
 (defun generate-instanceof-type-check (variable expected-type)
   (declare (type symbol expected-type))
   (let ((instanceof-class (ecase expected-type
-                            (SYMBOL    +lisp-symbol-class+)
-                            (CHARACTER +lisp-character-class+)
-                            (FIXNUM    +lisp-fixnum-class+)
-                            (STRING    +lisp-abstract-string-class+)))
+                            (SYMBOL     +lisp-symbol-class+)
+                            (CHARACTER  +lisp-character-class+)
+                            (CONS       +lisp-cons-class+)
+                            (HASH-TABLE +lisp-hash-table-class+)
+                            (FIXNUM     +lisp-fixnum-class+)
+                            (STRING     +lisp-abstract-string-class+)))
+        (expected-type-java-symbol-name (case expected-type
+                                          (HASH-TABLE "HASH_TABLE")
+                                          (t
+                                           (symbol-name expected-type))))
         (LABEL1 (gensym))
         register
         index)
@@ -1230,28 +1238,47 @@
              (emit 'aaload))) ; datum
           (t
            (return-from generate-instanceof-type-check)))
-    (emit 'getstatic +lisp-symbol-class+ (symbol-name expected-type) +lisp-symbol+)
+    (emit 'getstatic +lisp-symbol-class+ expected-type-java-symbol-name +lisp-symbol+)
     (emit-call-execute 2)
     (emit 'pop) ; Needed for JVM stack consistency.
-    (label LABEL1)))
+    (label LABEL1))
+  t)
+
+(declaim (ftype (function (t) t) generate-type-check))
+(defun generate-type-check (variable)
+  (let ((declared-type (variable-declared-type variable)))
+    (cond ((eq declared-type :none)) ; Nothing to do.
+          ((eq declared-type 'symbol)
+           (generate-instanceof-type-check variable 'SYMBOL))
+          ((eq declared-type 'character)
+           (generate-instanceof-type-check variable 'CHARACTER))
+          ((eq declared-type 'cons)
+           (generate-instanceof-type-check variable 'CONS))
+          ((eq declared-type 'hash-table)
+           (generate-instanceof-type-check variable 'HASH-TABLE))
+          ((subtypep declared-type 'fixnum)
+           (generate-instanceof-type-check variable 'FIXNUM))
+          ((subtypep declared-type 'string)
+           (generate-instanceof-type-check variable 'STRING))
+          (t
+           nil))))
+
+(declaim (ftype (function (t) t) maybe-generate-type-check))
+(defun maybe-generate-type-check (variable)
+  (unless (or (zerop *safety*)
+              (variable-special-p variable)
+              (eq (variable-representation variable) :unboxed-fixnum))
+    (let ((declared-type (variable-declared-type variable)))
+      (unless (eq declared-type :none)
+        (unless (subtypep (derive-type (variable-initform variable)) declared-type)
+          (generate-type-check variable))))))
 
 (declaim (ftype (function (list) t) generate-type-checks))
 (defun generate-type-checks (variables)
   (unless (zerop *safety*)
     (dolist (variable variables)
       (unless (variable-special-p variable)
-        (let ((declared-type (variable-declared-type variable)))
-          (cond ((eq declared-type :none)) ; Nothing to do.
-                ((eq declared-type 'symbol)
-                 (generate-instanceof-type-check variable 'SYMBOL))
-                ((eq declared-type 'character)
-                 (generate-instanceof-type-check variable 'CHARACTER))
-                ((subtypep declared-type 'fixnum)
-                 (generate-instanceof-type-check variable 'FIXNUM))
-                ((subtypep declared-type 'string)
-                 (generate-instanceof-type-check variable 'STRING))
-                (t
-                 nil)))))
+        (generate-type-check variable)))
     t))
 
 (defun generate-arg-count-check (arity)
@@ -1390,7 +1417,7 @@
 (eval-when (:load-toplevel :execute)
   (single-valued-p-init))
 
-(declaim (ftype (function t t) single-valued-p))
+(declaim (ftype (function (t) t) single-valued-p))
 (defun single-valued-p (form)
   (cond ((block-node-p form)
          (if (equal (block-name form) '(TAGBODY))
@@ -1733,7 +1760,8 @@
 
 (defun resolve-instruction (instruction)
   (declare (optimize speed))
-  (let ((resolver (sys:gethash-2op-1ret (instruction-opcode instruction) *resolvers*)))
+  (let ((resolver (gethash-2op-1ret (instruction-opcode instruction)
+                                    (the hash-table *resolvers*))))
     (if resolver
         (funcall resolver instruction)
         instruction)))
@@ -2032,6 +2060,7 @@
       (setf *code* (delete nil code))
       t)))
 
+(declaim (ftype (function (t) hash-table) hash-labels))
 (defun hash-labels (code)
   (let ((ht (make-hash-table :test 'eq))
         (code (coerce code 'vector))
@@ -2058,7 +2087,7 @@
       (let ((instruction (aref code i)))
         (when (and instruction (= (instruction-opcode instruction) 167)) ; GOTO
           (let* ((target-label (car (instruction-args instruction)))
-                 (next-instruction (sys:gethash-2op-1ret target-label ht)))
+                 (next-instruction (gethash-2op-1ret target-label ht)))
             (when next-instruction
               (case (instruction-opcode next-instruction)
                 (167 ; GOTO
@@ -2467,7 +2496,9 @@
 (declaim (ftype (function (symbol) string) declare-symbol))
 (defun declare-symbol (symbol)
   (declare (type symbol symbol))
-  (let ((g (gethash-2op-1ret symbol *declared-symbols*)))
+  (let* ((ht *declared-symbols*)
+         (g (gethash-2op-1ret symbol ht)))
+    (declare (type hash-table ht))
     (unless g
       (let ((*code* *static-code*)
             (s (sanitize symbol)))
@@ -2481,13 +2512,15 @@
                            (list +java-string+ +java-string+) +lisp-symbol+)
         (emit 'putstatic *this-class* g +lisp-symbol+)
         (setf *static-code* *code*)
-        (setf (gethash symbol *declared-symbols*) g)))
+        (setf (gethash symbol ht) g)))
     g))
 
 (declaim (ftype (function (symbol) string) declare-keyword))
 (defun declare-keyword (symbol)
   (declare (type symbol symbol))
-  (let ((g (gethash-2op-1ret symbol *declared-symbols*)))
+  (let* ((ht *declared-symbols*)
+         (g (gethash-2op-1ret symbol ht)))
+    (declare (type hash-table ht))
     (unless g
       (let ((*code* *static-code*))
         (setf g (symbol-name (gensym)))
@@ -2497,19 +2530,21 @@
                            (list +java-string+) +lisp-symbol+)
         (emit 'putstatic *this-class* g +lisp-symbol+)
         (setf *static-code* *code*)
-        (setf (gethash symbol *declared-symbols*) g)))
+        (setf (gethash symbol ht) g)))
     g))
 
 (defun declare-function (symbol)
   (declare (type symbol symbol))
-  (let ((f (sys:gethash-2op-1ret symbol *declared-functions*)))
+  (let* ((ht *declared-functions*)
+         (f (gethash-2op-1ret symbol ht)))
+    (declare (type hash-table ht))
     (unless f
       (setf f (symbol-name (gensym)))
       (let ((s (sanitize symbol)))
         (when s
           (setf f (concatenate 'string f "_" s))))
       (let ((*code* *static-code*)
-            (g (sys:gethash-2op-1ret symbol *declared-symbols*)))
+            (g (gethash-2op-1ret symbol (the hash-table *declared-symbols*))))
         (cond (g
                (emit 'getstatic *this-class* g +lisp-symbol+))
               (t
@@ -2523,11 +2558,13 @@
                             nil +lisp-object+)
         (emit 'putstatic *this-class* f +lisp-object+)
         (setq *static-code* *code*)
-        (setf (gethash symbol *declared-functions*) f)))
+        (setf (gethash symbol ht) f)))
     f))
 
 (defun declare-setf-function (name)
-  (let ((f (sys:gethash-2op-1ret name *declared-functions*)))
+  (let* ((ht *declared-functions*)
+         (f (gethash-2op-1ret name ht)))
+    (declare (type hash-table ht))
     (unless f
       (let ((symbol (cadr name)))
         (setf f (symbol-name (gensym)))
@@ -2535,7 +2572,7 @@
           (when s
             (setf f (concatenate 'string f "_SETF_" s))))
         (let ((*code* *static-code*)
-              (g (sys:gethash-2op-1ret symbol *declared-symbols*)))
+              (g (gethash-2op-1ret symbol (the hash-table *declared-symbols*))))
           (cond (g
                  (emit 'getstatic *this-class* g +lisp-symbol+))
                 (t
@@ -2549,12 +2586,14 @@
                               nil +lisp-object+)
           (emit 'putstatic *this-class* f +lisp-object+)
           (setq *static-code* *code*)
-          (setf (gethash name *declared-functions*) f))))
+          (setf (gethash name ht) f))))
     f))
 
 (defun declare-fixnum (n)
   (declare (type fixnum n))
-  (let ((g (sys:gethash-2op-1ret n *declared-fixnums*)))
+  (let* ((ht *declared-fixnums*)
+         (g (gethash-2op-1ret n ht)))
+    (declare (type hash-table ht))
     (unless g
       (let ((*code* *static-code*))
         (setf g (sys::%format nil "FIXNUM_~A~D"
@@ -2583,7 +2622,7 @@
         (emit-invokespecial-init +lisp-fixnum-class+ '("I"))
         (emit 'putstatic *this-class* g +lisp-fixnum+)
         (setf *static-code* *code*)
-        (setf (gethash n *declared-fixnums*) g)))
+        (setf (gethash n ht) g)))
     g))
 
 (defun declare-object-as-string (obj)
@@ -2695,7 +2734,9 @@
     g))
 
 (defun declare-string (string)
-  (let ((g (sys:gethash-2op-1ret string *declared-strings*)))
+  (let* ((ht *declared-strings*)
+         (g (gethash-2op-1ret string ht)))
+    (declare (type hash-table ht))
     (unless g
       (let ((*code* *static-code*))
         (setf g (symbol-name (gensym)))
@@ -2706,7 +2747,7 @@
         (emit-invokespecial-init +lisp-simple-string-class+ (list +java-string+))
         (emit 'putstatic *this-class* g +lisp-simple-string+)
         (setf *static-code* *code*)
-        (setf (gethash string *declared-strings*) g)))
+        (setf (gethash string ht) g)))
     g))
 
 (defun compile-constant (form &key (target :stack) representation)
@@ -2773,10 +2814,10 @@
                    (declare-object form) +lisp-object+))))
   (emit-move-from-stack target))
 
-(defparameter unary-operators (make-hash-table :test 'eq))
+(defparameter *unary-operators* (make-hash-table :test 'eq))
 
 (defun define-unary-operator (operator translation)
-  (setf (gethash operator unary-operators) translation))
+  (setf (gethash operator *unary-operators*) translation))
 
 (defun initialize-unary-operators ()
   (dolist (pair '((ABS             "ABS")
@@ -2825,7 +2866,7 @@
     (when (eq op '1-)
       (p2-minus (list '- arg 1) :target target :representation representation)
       (return-from compile-function-call-1 t))
-    (let ((s (gethash-2op-1ret op unary-operators)))
+    (let ((s (gethash-2op-1ret op (the hash-table *unary-operators*))))
       (cond (s
              (compile-form arg :target :stack)
              (maybe-emit-clear-values arg)
@@ -2834,10 +2875,10 @@
             (t
              nil)))))
 
-(defparameter binary-operators (make-hash-table :test 'eq))
+(defparameter *binary-operators* (make-hash-table :test 'eq))
 
 (defun define-binary-operator (operator translation)
-  (setf (gethash operator binary-operators) translation))
+  (setf (gethash operator *binary-operators*) translation))
 
 (defun initialize-binary-operators ()
   (dolist (pair '((EQL          "EQL")
@@ -2874,39 +2915,39 @@
   (emit-move-from-stack target))
 
 (defun compile-function-call-2 (op args target representation)
-  (let ((translation (sys:gethash-2op-1ret op binary-operators))
-        (first (first args))
-        (second (second args)))
+  (let ((translation (gethash-2op-1ret op (the hash-table *binary-operators*))))
     (if translation
         (compile-binary-operation translation args target representation)
         (case op
           (EQ
-           (compile-form first :target :stack)
-           (compile-form second :target :stack)
-           (unless (and (single-valued-p first)
-                        (single-valued-p second))
-             (emit-clear-values))
-           (let ((label1 (gensym))
-                 (label2 (gensym)))
-             (emit 'if_acmpeq `,label1)
-             (emit-push-nil)
-             (emit 'goto `,label2)
-             (emit 'label `,label1)
-             (emit-push-t)
-             (emit 'label `,label2))
-           (emit-move-from-stack target)
+           (let ((first (first args))
+                 (second (second args)))
+             (compile-form first :target :stack)
+             (compile-form second :target :stack)
+             (maybe-emit-clear-values first second)
+             (let ((label1 (gensym))
+                   (label2 (gensym)))
+               (emit 'if_acmpeq `,label1)
+               (emit-push-nil)
+               (emit 'goto `,label2)
+               (emit 'label `,label1)
+               (emit-push-t)
+               (emit 'label `,label2))
+             (emit-move-from-stack target))
            t)
           (SYS::%STRUCTURE-REF
-           (when (fixnump second)
-             (compile-form first :target :stack)
-             (maybe-emit-clear-values first)
-             (emit 'sipush second)
-             (emit-invokevirtual +lisp-object-class+ "getSlotValue"
-                                 '("I") +lisp-object+)
-             (when (eq representation :unboxed-fixnum)
-               (emit-unbox-fixnum))
-             (emit-move-from-stack target representation)
-             t))
+           (let ((first (first args))
+                 (second (second args)))
+             (when (fixnump second)
+               (compile-form first :target :stack)
+               (maybe-emit-clear-values first)
+               (emit 'sipush second)
+               (emit-invokevirtual +lisp-object-class+ "getSlotValue"
+                                   '("I") +lisp-object+)
+               (when (eq representation :unboxed-fixnum)
+                 (emit-unbox-fixnum))
+               (emit-move-from-stack target representation)
+               t)))
           (t
            nil)))))
 
@@ -3019,6 +3060,33 @@
                     'GET (length args))
        (compile-function-call form target representation)))))
 
+;; gethash key hash-table &optional default => value, present-p
+(defun p2-gethash (form &key (target :stack) representation)
+  (cond ((and (eq (car form) 'GETHASH-2OP-1RET)
+              (= (length form) 3)
+              (eq (derive-type (third form)) 'HASH-TABLE))
+         (let ((key-form (second form))
+               (ht-form (third form)))
+           (compile-form ht-form :target :stack)
+           (emit 'checkcast +lisp-hash-table-class+)
+           (compile-form key-form :target :stack)
+           (maybe-emit-clear-values key-form ht-form)
+           (emit-invokevirtual +lisp-hash-table-class+ "gethash_2op_1ret"
+                               (list +lisp-object+) +lisp-object+)
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
+           (emit-move-from-stack target representation)))
+        (t
+         (compile-function-call form target representation))))
+
+;; puthash key hash-table new-value &optional default => value
+;; (defun p2-puthash (form &key (target :stack) representation)
+;;   (cond ((and (= (length form) 4)
+;;               (eq (derive-type (%cadr form)) 'HASH-TABLE))
+;;          (let ((arg1 (second form))
+;;                (arg2 (third form))
+;;                (arg3 (fourth form)))
+
 (defun compile-function-call-3 (op args target)
   (case op
     (SYS::%STRUCTURE-SET
@@ -3124,10 +3192,12 @@
 (defun lisp-object-arg-types (n)
   (if (zerop n)
       nil
-      (let ((arg-types (gethash-2op-1ret n *lisp-object-arg-types-ht*)))
+      (let* ((ht *lisp-object-arg-types-ht*)
+             (arg-types (gethash-2op-1ret n ht)))
+        (declare (type hash-table ht))
         (unless arg-types
           (setf arg-types (make-list n :initial-element +lisp-object+))
-          (setf (gethash n *lisp-object-arg-types-ht*) arg-types))
+          (setf (gethash n ht) arg-types))
         arg-types)))
 
 ;; FIXME
@@ -3418,7 +3488,7 @@
       (process-args args)
       (emit 'instanceof +lisp-simple-vector-class+)
       (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
-    (let ((s (gethash-2op-1ret op java-predicates)))
+    (let ((s (gethash-2op-1ret op (the hash-table java-predicates))))
       (when s
         (process-args args)
         (emit-invokevirtual +lisp-object-class+ s nil "Z")
@@ -3783,6 +3853,7 @@
       (unused-variable variable))))
 
 ;; Generates code to bind variable to value at top of runtime stack.
+(declaim (ftype (function (t) t) compile-binding))
 (defun compile-binding (variable)
   (cond ((variable-register variable)
          (emit 'astore (variable-register variable)))
@@ -4007,6 +4078,7 @@
           (unused-variable variable))
         (cond ((and (variable-special-p variable)
                     (eq initform (variable-name variable)))
+               ;; The special case of binding a special to its current value.
                (emit-push-current-thread)
                (emit 'getstatic *this-class*
                      (declare-symbol (variable-name variable)) +lisp-symbol+)
@@ -4056,7 +4128,8 @@
             (setf (variable-register variable) (allocate-register))))
         (push variable *visible-variables*)
         (unless boundp
-          (compile-binding variable))))
+          (compile-binding variable))
+        (maybe-generate-type-check variable)))
     (when must-clear-values
       (emit-clear-values))))
 
@@ -5188,7 +5261,9 @@
         ((fixnump form)
          (list 'INTEGER form form))
         ((characterp form)
-         'character)
+         'CHARACTER)
+        ((stringp form)
+         'STRING)
         ((variable-p form)
          (cond ((neq (variable-declared-type form) :none)
                 (variable-declared-type form))
@@ -6764,8 +6839,6 @@
     ;; Reserve the next available slot for the thread register.
     (setf *thread* (allocate-register))
 
-;;     (generate-type-checks parameters)
-
     ;; Move args from their original registers to the closure variables array,
     ;; if applicable.
     (when (and *closure-variables*
@@ -6855,7 +6928,6 @@
       (let ((arity (compiland-arity compiland)))
         (when arity
           (generate-arg-count-check arity)))
-;;       (maybe-generate-interrupt-check)
 
       (when *hairy-arglist-p*
         (emit 'aload_0) ; this
@@ -7136,6 +7208,8 @@
   (install-p2-handler 'flet               'p2-flet)
   (install-p2-handler 'function           'p2-function)
   (install-p2-handler 'get                'p2-get)
+  (install-p2-handler 'gethash            'p2-gethash)
+  (install-p2-handler 'gethash-2op-1ret   'p2-gethash)
   (install-p2-handler 'go                 'p2-go)
   (install-p2-handler 'if                 'p2-if)
   (install-p2-handler 'labels             'p2-labels)
@@ -7152,6 +7226,7 @@
   (install-p2-handler 'not                'p2-not/null)
   (install-p2-handler 'null               'p2-not/null)
   (install-p2-handler 'progv              'p2-progv)
+;;   (install-p2-handler 'puthash            'p2-puthash)
   (install-p2-handler 'quote              'p2-quote)
   (install-p2-handler 'return-from        'p2-return-from)
   (install-p2-handler 'rplacd             'p2-rplacd)
