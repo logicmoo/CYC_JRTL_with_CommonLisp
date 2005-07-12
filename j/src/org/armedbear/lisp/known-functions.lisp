@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.17 2005-07-10 20:23:09 piso Exp $
+;;; $Id: known-functions.lisp,v 1.18 2005-07-12 02:33:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -188,5 +188,7 @@
 (declaim (ftype (function (string fixnum character) character) %set-char))
 
 (declaim (ftype (function (t t t) t) set-function-info-value))
+
+(declaim (ftype (function * hash-table) make-hash-table))
 
 (provide '#:known-functions)
