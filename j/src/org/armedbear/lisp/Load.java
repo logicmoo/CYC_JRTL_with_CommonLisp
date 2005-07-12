@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.109 2005-07-01 19:04:08 piso Exp $
+ * $Id: Load.java,v 1.110 2005-07-12 02:45:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -237,7 +237,7 @@ public final class Load extends Lisp
                 }
             }
         }
-        return signal(new LispError("file not found: " + filename));
+        return signal(new LispError("File not found: " + filename));
     }
 
     // ### *fasl-version*
