@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.522 2005-07-11 19:59:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.523 2005-07-12 02:42:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -935,7 +935,7 @@
 (defun install-p1-handler (symbol handler)
   (setf (get symbol 'p1-handler) handler))
 
-(defun initilize-p1-handlers ()
+(defun initialize-p1-handlers ()
   (dolist (pair '((BLOCK                p1-block)
                   (CATCH                p1-default)
                   (DECLARE              identity)
@@ -964,9 +964,9 @@
                   (THE                  p1-the)
                   (THROW                p1-throw)
                   (UNWIND-PROTECT       p1-unwind-protect)))
-    (install-p1-handler (car pair) (cadr pair))))
+    (install-p1-handler (%car pair) (%cadr pair))))
 
-(initilize-p1-handlers)
+(initialize-p1-handlers)
 
 (defun dump-pool ()
   (let ((pool (reverse *pool*))
@@ -992,11 +992,13 @@
 (declaim (ftype (function (t) fixnum) pool-get))
 (defun pool-get (entry)
   (declare (optimize speed))
-  (let ((index (gethash-2op-1ret entry (the hash-table *pool-entries*))))
+  (let* ((ht *pool-entries*)
+         (index (gethash-2op-1ret entry ht)))
+    (declare (type hash-table ht))
     (unless index
       (setf index *pool-count*)
       (push entry *pool*)
-      (setf (gethash entry *pool-entries*) index)
+      (setf (gethash entry ht) index)
       (setf *pool-count* (1+ index)))
     index))
 
@@ -1567,80 +1569,82 @@
                op n (length args)))
     ok))
 
-(defparameter *resolvers* (make-hash-table :test #'eql))
+(defparameter *resolvers* nil)
 
 (defun unsupported-opcode (instruction)
   (error "Unsupported opcode ~D." (instruction-opcode instruction)))
 
 (defun initialize-resolvers ()
-  (dotimes (n (1+ *last-opcode*))
-    (setf (gethash n *resolvers*) #'unsupported-opcode))
-  ;; The following opcodes resolve to themselves.
-  (dolist (n '(0 ; NOP
-               1 ; ACONST_NULL
-               2 ; ICONST_M1
-               3 ; ICONST_0
-               4 ; ICONST_1
-               5 ; ICONST_2
-               6 ; ICONST_3
-               7 ; ICONST_4
-               8 ; ICONST_5
-               9 ; LCONST_0
-               10 ; LCONST_1
-               42 ; ALOAD_0
-               43 ; ALOAD_1
-               44 ; ALOAD_2
-               45 ; ALOAD_3
-               50 ; AALOAD
-               75 ; ASTORE_0
-               76 ; ASTORE_1
-               77 ; ASTORE_2
-               78 ; ASTORE_3
-               83 ; AASTORE
-               87 ; POP
-               89 ; DUP
-               90 ; DUP_X1
-               91 ; DUP_X2
-               95 ; SWAP
-               96 ; IADD
-               97 ; LADD
-               100 ; ISUB
-               101 ; LSUB
-               116 ; INEG
-               120 ; ISHL
-               121 ; LSHL
-               122 ; ISHR
-               123 ; LSHR
-               126 ; IAND
-               128 ; IOR
-               130 ; IXOR
-               133 ; I2L
-               136 ; L2I
-               153 ; IFEQ
-               154 ; IFNE
-               155 ; IFGE
-               156 ; IFGT
-               157 ; IFGT
-               158 ; IFLE
-               159 ; IF_ICMPEQ
-               160 ; IF_ICMPNE
-               161 ; IF_ICMPLT
-               162 ; IF_ICMPGE
-               163 ; IF_ICMPGT
-               164 ; IF_ICMPLE
-               165 ; IF_ACMPEQ
-               166 ; IF_ACMPNE
-               167 ; GOTO
-               168 ; JSR
-               169 ; RET
-               176 ; ARETURN
-               177 ; RETURN
-               190 ; ARRAYLENGTH
-               191 ; ATHROW
-               198 ; IFNULL
-               202 ; LABEL
-               ))
-    (setf (gethash n *resolvers*) nil)))
+  (let ((ht (make-hash-table)))
+    (dotimes (n (1+ *last-opcode*))
+      (setf (gethash n ht) #'unsupported-opcode))
+    ;; The following opcodes resolve to themselves.
+    (dolist (n '(0 ; NOP
+                 1 ; ACONST_NULL
+                 2 ; ICONST_M1
+                 3 ; ICONST_0
+                 4 ; ICONST_1
+                 5 ; ICONST_2
+                 6 ; ICONST_3
+                 7 ; ICONST_4
+                 8 ; ICONST_5
+                 9 ; LCONST_0
+                 10 ; LCONST_1
+                 42 ; ALOAD_0
+                 43 ; ALOAD_1
+                 44 ; ALOAD_2
+                 45 ; ALOAD_3
+                 50 ; AALOAD
+                 75 ; ASTORE_0
+                 76 ; ASTORE_1
+                 77 ; ASTORE_2
+                 78 ; ASTORE_3
+                 83 ; AASTORE
+                 87 ; POP
+                 89 ; DUP
+                 90 ; DUP_X1
+                 91 ; DUP_X2
+                 95 ; SWAP
+                 96 ; IADD
+                 97 ; LADD
+                 100 ; ISUB
+                 101 ; LSUB
+                 116 ; INEG
+                 120 ; ISHL
+                 121 ; LSHL
+                 122 ; ISHR
+                 123 ; LSHR
+                 126 ; IAND
+                 128 ; IOR
+                 130 ; IXOR
+                 133 ; I2L
+                 136 ; L2I
+                 153 ; IFEQ
+                 154 ; IFNE
+                 155 ; IFGE
+                 156 ; IFGT
+                 157 ; IFGT
+                 158 ; IFLE
+                 159 ; IF_ICMPEQ
+                 160 ; IF_ICMPNE
+                 161 ; IF_ICMPLT
+                 162 ; IF_ICMPGE
+                 163 ; IF_ICMPGT
+                 164 ; IF_ICMPLE
+                 165 ; IF_ACMPEQ
+                 166 ; IF_ACMPNE
+                 167 ; GOTO
+                 168 ; JSR
+                 169 ; RET
+                 176 ; ARETURN
+                 177 ; RETURN
+                 190 ; ARRAYLENGTH
+                 191 ; ATHROW
+                 198 ; IFNULL
+                 202 ; LABEL
+                 ))
+      (setf (gethash n ht) nil))
+    (setf *resolvers* ht)))
 
 (initialize-resolvers)
 
@@ -2814,47 +2818,47 @@
                    (declare-object form) +lisp-object+))))
   (emit-move-from-stack target))
 
-(defparameter *unary-operators* (make-hash-table :test 'eq))
-
-(defun define-unary-operator (operator translation)
-  (setf (gethash operator *unary-operators*) translation))
+(defparameter *unary-operators* nil)
 
 (defun initialize-unary-operators ()
-  (dolist (pair '((ABS             "ABS")
-                  (BIT-VECTOR-P    "BIT_VECTOR_P")
-                  (CADDR           "caddr")
-                  (CADR            "cadr")
-                  (CDDR            "cddr")
-                  (CDR             "cdr")
-                  (CHARACTERP      "CHARACTERP")
-                  (CLASS-OF        "classOf")
-                  (COMPLEXP        "COMPLEXP")
-                  (CONSTANTP       "CONSTANTP")
-                  (DENOMINATOR     "DENOMINATOR")
-                  (ENDP            "ENDP")
-                  (EVENP           "EVENP")
-                  (FIRST           "car")
-                  (FLOATP          "FLOATP")
-                  (INTEGERP        "INTEGERP")
-                  (LENGTH          "LENGTH")
-                  (LISTP           "LISTP")
-                  (MINUSP          "MINUSP")
-                  (NREVERSE        "nreverse")
-                  (NUMBERP         "NUMBERP")
-                  (NUMERATOR       "NUMERATOR")
-                  (ODDP            "ODDP")
-                  (PLUSP           "PLUSP")
-                  (RATIONALP       "RATIONALP")
-                  (REALP           "REALP")
-                  (REST            "cdr")
-                  (REVERSE         "reverse")
-                  (SECOND          "cadr")
-                  (SIMPLE-STRING-P "SIMPLE_STRING_P")
-                  (STRING          "STRING")
-                  (STRINGP         "STRINGP")
-                  (THIRD           "caddr")
-                  (VECTORP         "VECTORP")))
-    (define-unary-operator (first pair) (second pair))))
+  (let ((ht (make-hash-table :test 'eq)))
+    (dolist (pair '((ABS             "ABS")
+                    (BIT-VECTOR-P    "BIT_VECTOR_P")
+                    (CADDR           "caddr")
+                    (CADR            "cadr")
+                    (CDDR            "cddr")
+                    (CDR             "cdr")
+                    (CHARACTERP      "CHARACTERP")
+                    (CLASS-OF        "classOf")
+                    (COMPLEXP        "COMPLEXP")
+                    (CONSTANTP       "CONSTANTP")
+                    (DENOMINATOR     "DENOMINATOR")
+                    (ENDP            "ENDP")
+                    (EVENP           "EVENP")
+                    (FIRST           "car")
+                    (FLOATP          "FLOATP")
+                    (INTEGERP        "INTEGERP")
+                    (LENGTH          "LENGTH")
+                    (LISTP           "LISTP")
+                    (MINUSP          "MINUSP")
+                    (NREVERSE        "nreverse")
+                    (NUMBERP         "NUMBERP")
+                    (NUMERATOR       "NUMERATOR")
+                    (ODDP            "ODDP")
+                    (PLUSP           "PLUSP")
+                    (RATIONALP       "RATIONALP")
+                    (REALP           "REALP")
+                    (REST            "cdr")
+                    (REVERSE         "reverse")
+                    (SECOND          "cadr")
+                    (SIMPLE-STRING-P "SIMPLE_STRING_P")
+                    (STRING          "STRING")
+                    (STRINGP         "STRINGP")
+                    (THIRD           "caddr")
+                    (VECTORP         "VECTORP")))
+      ;;     (define-unary-operator (%car pair) (%cadr pair))
+      (setf (gethash (%car pair) ht) (%cadr pair)))
+    (setf *unary-operators* ht)))
 
 (initialize-unary-operators)
 
@@ -2875,31 +2879,30 @@
             (t
              nil)))))
 
-(defparameter *binary-operators* (make-hash-table :test 'eq))
-
-(defun define-binary-operator (operator translation)
-  (setf (gethash operator *binary-operators*) translation))
+(defparameter *binary-operators* nil)
 
 (defun initialize-binary-operators ()
-  (dolist (pair '((EQL          "EQL")
-                  (EQUAL        "EQUAL")
-                  (+            "add")
-                  (-            "subtract")
-                  (/            "divideBy")
-                  (*            "multiplyBy")
-                  (<            "IS_LT")
-                  (<=           "IS_LE")
-                  (>            "IS_GT")
-                  (>=           "IS_GE")
-                  ( =           "IS_E")
-                  (/=           "IS_NE")
-                  (ASH          "ash")
-                  (LOGAND       "logand")
-                  (AREF         "AREF")
-                  (SIMPLE-TYPEP "typep")
-                  (RPLACA       "RPLACA")
-                  (RPLACD       "RPLACD")))
-    (define-binary-operator (first pair) (second pair))))
+  (let ((ht (make-hash-table :test 'eq)))
+    (dolist (pair '((EQL          "EQL")
+                    (EQUAL        "EQUAL")
+                    (+            "add")
+                    (-            "subtract")
+                    (/            "divideBy")
+                    (*            "multiplyBy")
+                    (<            "IS_LT")
+                    (<=           "IS_LE")
+                    (>            "IS_GT")
+                    (>=           "IS_GE")
+                    ( =           "IS_E")
+                    (/=           "IS_NE")
+                    (ASH          "ash")
+                    (LOGAND       "logand")
+                    (AREF         "AREF")
+                    (SIMPLE-TYPEP "typep")
+                    (RPLACA       "RPLACA")
+                    (RPLACD       "RPLACD")))
+      (setf (gethash (%car pair) ht) (%cadr pair)))
+    (setf *binary-operators* ht)))
 
 (initialize-binary-operators)
 
@@ -3064,13 +3067,13 @@
 (defun p2-gethash (form &key (target :stack) representation)
   (cond ((and (eq (car form) 'GETHASH-2OP-1RET)
               (= (length form) 3)
-              (eq (derive-type (third form)) 'HASH-TABLE))
-         (let ((key-form (second form))
-               (ht-form (third form)))
+              (eq (derive-type (%caddr form)) 'HASH-TABLE))
+         (let ((key-form (%cadr form))
+               (ht-form (%caddr form)))
            (compile-form ht-form :target :stack)
            (emit 'checkcast +lisp-hash-table-class+)
            (compile-form key-form :target :stack)
-           (maybe-emit-clear-values key-form ht-form)
+           (maybe-emit-clear-values ht-form key-form)
            (emit-invokevirtual +lisp-hash-table-class+ "gethash_2op_1ret"
                                (list +lisp-object+) +lisp-object+)
            (when (eq representation :unboxed-fixnum)
@@ -3080,12 +3083,28 @@
          (compile-function-call form target representation))))
 
 ;; puthash key hash-table new-value &optional default => value
-;; (defun p2-puthash (form &key (target :stack) representation)
-;;   (cond ((and (= (length form) 4)
-;;               (eq (derive-type (%cadr form)) 'HASH-TABLE))
-;;          (let ((arg1 (second form))
-;;                (arg2 (third form))
-;;                (arg3 (fourth form)))
+(defun p2-puthash (form &key (target :stack) representation)
+  (cond ((and (= (length form) 4)
+              (eq (derive-type (%caddr form)) 'HASH-TABLE))
+         (let ((key-form (%cadr form))
+               (ht-form (%caddr form))
+               (value-form (fourth form)))
+           (compile-form ht-form :target :stack)
+           (emit 'checkcast +lisp-hash-table-class+)
+           (compile-form key-form :target :stack)
+           (compile-form value-form :target :stack)
+           (maybe-emit-clear-values ht-form key-form value-form)
+           (cond (target
+                  (emit-invokevirtual +lisp-hash-table-class+ "puthash"
+                                      (list +lisp-object+ +lisp-object+) +lisp-object+)
+                  (when (eq representation :unboxed-fixnum)
+                    (emit-unbox-fixnum))
+                  (emit-move-from-stack target representation))
+                 (t
+                  (emit-invokevirtual +lisp-hash-table-class+ "put"
+                                      (list +lisp-object+ +lisp-object+) nil)))))
+        (t
+         (compile-function-call form target representation))))
 
 (defun compile-function-call-3 (op args target)
   (case op
@@ -3412,27 +3431,26 @@
       (restore-variables saved-vars)))
   t)
 
-(defparameter java-predicates (make-hash-table :test 'eq))
-
-(defun define-java-predicate (predicate translation)
-  (setf (gethash predicate java-predicates) translation))
+(defparameter *java-predicates* (make-hash-table :test 'eq))
 
 (defun initialize-java-predicates ()
-  (dolist (pair '((CONSTANTP          "constantp")
-                  (ENDP               "endp")
-                  (EVENP              "evenp")
-                  (FLOATP             "floatp")
-                  (INTEGERP           "integerp")
-                  (LISTP              "listp")
-                  (MINUSP             "minusp")
-                  (NUMBERP            "numberp")
-                  (ODDP               "oddp")
-                  (PLUSP              "plusp")
-                  (RATIONALP          "rationalp")
-                  (REALP              "realp")
-                  (SPECIAL-VARIABLE-P "isSpecialVariable")
-                  (ZEROP              "zerop")))
-    (define-java-predicate (car pair) (cadr pair))))
+  (let ((ht (make-hash-table :test 'eq)))
+    (dolist (pair '((CONSTANTP          "constantp")
+                    (ENDP               "endp")
+                    (EVENP              "evenp")
+                    (FLOATP             "floatp")
+                    (INTEGERP           "integerp")
+                    (LISTP              "listp")
+                    (MINUSP             "minusp")
+                    (NUMBERP            "numberp")
+                    (ODDP               "oddp")
+                    (PLUSP              "plusp")
+                    (RATIONALP          "rationalp")
+                    (REALP              "realp")
+                    (SPECIAL-VARIABLE-P "isSpecialVariable")
+                    (ZEROP              "zerop")))
+      (setf (gethash (%car pair) ht) (%cadr pair)))
+    (setf *java-predicates* ht)))
 
 (initialize-java-predicates)
 
@@ -3488,7 +3506,7 @@
       (process-args args)
       (emit 'instanceof +lisp-simple-vector-class+)
       (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
-    (let ((s (gethash-2op-1ret op (the hash-table java-predicates))))
+    (let ((s (gethash-2op-1ret op (the hash-table *java-predicates*))))
       (when s
         (process-args args)
         (emit-invokevirtual +lisp-object-class+ s nil "Z")
@@ -7226,7 +7244,7 @@
   (install-p2-handler 'not                'p2-not/null)
   (install-p2-handler 'null               'p2-not/null)
   (install-p2-handler 'progv              'p2-progv)
-;;   (install-p2-handler 'puthash            'p2-puthash)
+  (install-p2-handler 'puthash            'p2-puthash)
   (install-p2-handler 'quote              'p2-quote)
   (install-p2-handler 'return-from        'p2-return-from)
   (install-p2-handler 'rplacd             'p2-rplacd)
