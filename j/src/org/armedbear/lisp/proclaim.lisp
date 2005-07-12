@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: proclaim.lisp,v 1.4 2005-06-21 04:00:18 piso Exp $
+;;; $Id: proclaim.lisp,v 1.5 2005-07-12 02:34:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,19 +26,19 @@
    ,@(mapcar (lambda (decl) `(proclaim ',decl))
              decls)))
 
-(defvar *declaration-types* (make-hash-table :test 'eq))
-
 (defun declaration-error (name)
   (error 'simple-error
          :format-control "The symbol ~S cannot be both the name of a type and the name of a declaration."
          :format-arguments (list name)))
+
+(defvar *declaration-types* (make-hash-table :test 'eq))
 
 ;; "A symbol cannot be both the name of a type and the name of a declaration.
 ;; Defining a symbol as the name of a class, structure, condition, or type,
 ;; when the symbol has been declared as a declaration name, or vice versa,
 ;; signals an error."
 (defun check-declaration-type (name)
-  (when (gethash-2op-1ret name *declaration-types*)
+  (when (gethash-2op-1ret name (the hash-table *declaration-types*))
     (declaration-error name)))
 
 (defun proclaim (declaration-specifier)
@@ -80,7 +80,7 @@
        (when (or (get name 'deftype-definition)
                  (find-class name nil))
          (declaration-error name))
-       (setf (gethash name *declaration-types*) name)))))
+       (setf (gethash name (the hash-table *declaration-types*)) name)))))
 
 (defvar *proclaimed-ftypes* (make-hash-table :test 'equal))
 
@@ -88,12 +88,12 @@
   (dolist (name names)
     (if (symbolp name)
         (setf (get name 'proclaimed-ftype) ftype)
-        (setf (gethash name *proclaimed-ftypes*) ftype))))
+        (setf (gethash name (the hash-table *proclaimed-ftypes*)) ftype))))
 
 (defun proclaimed-ftype (name)
   (if (symbolp name)
       (get name 'proclaimed-ftype)
-      (gethash-2op-1ret name *proclaimed-ftypes*)))
+      (gethash-2op-1ret name (the hash-table *proclaimed-ftypes*))))
 
 (defun ftype-result-type (ftype)
   (if (atom ftype)
