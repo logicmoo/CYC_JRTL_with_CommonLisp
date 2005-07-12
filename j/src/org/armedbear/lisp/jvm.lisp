@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.524 2005-07-12 11:41:36 piso Exp $
+;;; $Id: jvm.lisp,v 1.525 2005-07-12 17:09:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3457,63 +3457,63 @@
 
 (initialize-java-predicates)
 
-(defun compile-test-2 (form negatep)
+(defun compile-test-1 (form negatep)
   (let* ((op (car form))
          (args (cdr form))
          (arg (car args)))
     (when (memq op '(NOT NULL))
-      (return-from compile-test-2 (compile-test arg (not negatep))))
+      (return-from compile-test-1 (compile-test arg (not negatep))))
     (when (subtypep (derive-type arg) 'FIXNUM)
       (case op
         (MINUSP
-         (dformat t "compile-test-2 minusp case~%")
+         (dformat t "compile-test-1 minusp case~%")
          (compile-form arg :target :stack :representation :unboxed-fixnum)
-         (return-from compile-test-2 (if negatep 'iflt 'ifge)))
+         (return-from compile-test-1 (if negatep 'iflt 'ifge)))
         (ZEROP
-         (dformat t "compile-test-2 zerop case~%")
+         (dformat t "compile-test-1 zerop case~%")
          (compile-form arg :target :stack :representation :unboxed-fixnum)
-         (return-from compile-test-2 (if negatep 'ifeq 'ifne)))))
+         (return-from compile-test-1 (if negatep 'ifeq 'ifne)))))
     (when (eq op 'SYMBOLP)
       (process-args args)
       (emit 'instanceof +lisp-symbol-class+)
-      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
     (when (eq op 'CHARACTERP)
       (process-args args)
       (emit 'instanceof +lisp-character-class+)
-      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
     (when (eq op 'FIXNUMP)
       (process-args args)
       (emit 'instanceof +lisp-fixnum-class+)
-      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
     (when (eq op 'CONSP)
       (process-args args)
       (emit 'instanceof +lisp-cons-class+)
-      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
     (when (eq op 'ATOM)
       (process-args args)
       (emit 'instanceof +lisp-cons-class+)
-      (return-from compile-test-2 (if negatep 'ifeq 'ifne)))
+      (return-from compile-test-1 (if negatep 'ifeq 'ifne)))
     (when (eq op 'CLASSP)
       (process-args args)
       (emit 'instanceof +lisp-class-class+)
-      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
     (when (eq op 'STRINGP)
       (process-args args)
       (emit 'instanceof +lisp-abstract-string-class+)
-      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
     (when (eq op 'VECTORP)
       (process-args args)
       (emit 'instanceof +lisp-abstract-vector-class+)
-      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
     (when (eq op 'SIMPLE-VECTOR-P)
       (process-args args)
       (emit 'instanceof +lisp-simple-vector-class+)
-      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
     (let ((s (gethash-2op-1ret op (the hash-table *java-predicates*))))
       (when s
         (process-args args)
         (emit-invokevirtual +lisp-object-class+ s nil "Z")
-        (return-from compile-test-2 (if negatep 'ifne 'ifeq)))))
+        (return-from compile-test-1 (if negatep 'ifne 'ifeq)))))
   ;; Otherwise...
   (compile-form form :target :stack)
   (maybe-emit-clear-values form)
@@ -3628,15 +3628,15 @@
   ;; Still here?
   (compile-function-call form target representation))
 
-(defun compile-test-3 (form negatep)
+(defun compile-test-2 (form negatep)
   (let ((op (%car form))
         (args (%cdr form)))
     (when (eq op 'EQ)
       (process-args args)
-      (return-from compile-test-3 (if negatep 'if_acmpeq 'if_acmpne)))
+      (return-from compile-test-2 (if negatep 'if_acmpeq 'if_acmpne)))
     (when (eq op 'CHAR=)
       (p2-char= form :target :stack :representation :java-boolean)
-      (return-from compile-test-3 (if negatep 'ifne 'ifeq)))
+      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
     (let* ((arg1 (first args))
            (arg2 (second args))
            (var1 (unboxed-fixnum-variable arg1)))
@@ -3649,17 +3649,17 @@
           (maybe-emit-clear-values arg2)
           (case op
             (<
-             (return-from compile-test-3 (if negatep 'if_icmplt 'if_icmpge)))
+             (return-from compile-test-2 (if negatep 'if_icmplt 'if_icmpge)))
             (<=
-             (return-from compile-test-3 (if negatep 'if_icmple 'if_icmpgt)))
+             (return-from compile-test-2 (if negatep 'if_icmple 'if_icmpgt)))
             (>
-             (return-from compile-test-3 (if negatep 'if_icmpgt 'if_icmple)))
+             (return-from compile-test-2 (if negatep 'if_icmpgt 'if_icmple)))
             (>=
-             (return-from compile-test-3 (if negatep 'if_icmpge 'if_icmplt)))
+             (return-from compile-test-2 (if negatep 'if_icmpge 'if_icmplt)))
             (=
-             (return-from compile-test-3 (if negatep 'if_icmpeq 'if_icmpne)))
+             (return-from compile-test-2 (if negatep 'if_icmpeq 'if_icmpne)))
             (/=
-             (return-from compile-test-3 (if negatep 'if_icmpne 'if_icmpeq)))
+             (return-from compile-test-2 (if negatep 'if_icmpne 'if_icmpeq)))
             ))
 
         ;; Otherwise...
@@ -3677,11 +3677,11 @@
                                 (/= "isNotEqualTo"))
                               '("I")
                               "Z")
-          (return-from compile-test-3 (if negatep 'ifne 'ifeq))))
+          (return-from compile-test-2 (if negatep 'ifne 'ifeq))))
 
       (when (eq op '<)
           (when var1
-            (dformat t "compile-test-3 unboxed fixnum var1 comparison case~%")
+            (dformat t "compile-test-2 unboxed fixnum var1 comparison case~%")
             (aver (variable-register var1))
             (emit 'iload (variable-register var1))
             (compile-form arg2 :target :stack)
@@ -3690,7 +3690,7 @@
                                 "isGreaterThan"
                                 '("I")
                                 "Z")
-            (return-from compile-test-3 (if negatep 'ifne 'ifeq)))))
+            (return-from compile-test-2 (if negatep 'ifne 'ifeq)))))
 
     (let ((s (cdr (assq op
                         '((=      . "isEqualTo")
@@ -3720,7 +3720,7 @@
                 (t
                  (process-args args)
                  (emit-invokevirtual +lisp-object-class+ s (list +lisp-object+) "Z")))
-          (return-from compile-test-3 (if negatep 'ifne 'ifeq))))))
+          (return-from compile-test-2 (if negatep 'ifne 'ifeq))))))
 
   ;; Otherwise...
   (compile-form form :target :stack)
@@ -3728,7 +3728,7 @@
   (emit-push-nil)
   (if negatep 'if_acmpne 'if_acmpeq))
 
-(defun compile-test-4 (form negatep)
+(defun compile-test-3 (form negatep)
   (let ((op (%car form))
         (args (%cdr form)))
     (cond ((and (memq op '(< <= > >= =))
@@ -3748,13 +3748,13 @@
   ;; Use a Java boolean if possible.
   (when (and (consp form)
              (not (special-operator-p (%car form))))
-    (case (length form)
+    (case (length (%cdr form))
+      (1
+       (return-from compile-test (compile-test-1 form negatep)))
       (2
        (return-from compile-test (compile-test-2 form negatep)))
       (3
        (return-from compile-test (compile-test-3 form negatep)))
-      (4
-       (return-from compile-test (compile-test-4 form negatep)))
       )
     )
   ;; Otherwise...
