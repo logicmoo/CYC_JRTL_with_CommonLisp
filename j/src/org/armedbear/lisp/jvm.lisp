@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.523 2005-07-12 02:42:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.524 2005-07-12 11:41:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1071,7 +1071,7 @@
 
 (defun inst (instr &optional args)
   (declare (optimize speed))
-  (let ((opcode (if (numberp instr)
+  (let ((opcode (if (fixnump instr)
                     instr
                     (opcode-number instr))))
     (unless (listp args)
@@ -1224,7 +1224,6 @@
            (emit 'aload register)
            (emit 'instanceof instanceof-class)
            (emit 'ifne LABEL1)
-           (emit 'getstatic *this-class* (declare-symbol '%type-error) +lisp-symbol+)
            (emit 'aload register)) ; datum
           ((setf index (variable-index variable))
            (let ((argument-register (compiland-argument-register *current-compiland*)))
@@ -1234,14 +1233,14 @@
              (emit 'aaload)
              (emit 'instanceof instanceof-class)
              (emit 'ifne LABEL1)
-             (emit 'getstatic *this-class* (declare-symbol '%type-error) +lisp-symbol+)
              (emit 'aload argument-register)
              (emit-push-constant-int index)
              (emit 'aaload))) ; datum
           (t
            (return-from generate-instanceof-type-check)))
     (emit 'getstatic +lisp-symbol-class+ expected-type-java-symbol-name +lisp-symbol+)
-    (emit-call-execute 2)
+    (emit-invokestatic +lisp-class+ "signalTypeError"
+                       (lisp-object-arg-types 2) +lisp-object+)
     (emit 'pop) ; Needed for JVM stack consistency.
     (label LABEL1))
   t)
@@ -1477,7 +1476,7 @@
   (declare (optimize speed))
   (cond ((= *safety* 3)
          (emit-invokestatic +lisp-fixnum-class+ "getValue"
-                            (list +lisp-object+) "I"))
+                            (lisp-object-arg-types 1) "I"))
         (t
          (emit 'checkcast +lisp-fixnum-class+)
          (emit 'getfield +lisp-fixnum-class+ "value" "I"))))
@@ -2862,6 +2861,7 @@
 
 (initialize-unary-operators)
 
+(declaim (ftype (function (t t t t) t) compile-function-call-1))
 (defun compile-function-call-1 (op args target representation)
   (let ((arg (first args)))
     (when (eq op '1+)
@@ -2917,6 +2917,7 @@
     (emit-unbox-fixnum))
   (emit-move-from-stack target))
 
+(declaim (ftype (function (t t t t) t) compile-function-call-2))
 (defun compile-function-call-2 (op args target representation)
   (let ((translation (gethash-2op-1ret op (the hash-table *binary-operators*))))
     (if translation
@@ -3075,7 +3076,7 @@
            (compile-form key-form :target :stack)
            (maybe-emit-clear-values ht-form key-form)
            (emit-invokevirtual +lisp-hash-table-class+ "gethash_2op_1ret"
-                               (list +lisp-object+) +lisp-object+)
+                               (lisp-object-arg-types 1) +lisp-object+)
            (when (eq representation :unboxed-fixnum)
              (emit-unbox-fixnum))
            (emit-move-from-stack target representation)))
@@ -3096,16 +3097,17 @@
            (maybe-emit-clear-values ht-form key-form value-form)
            (cond (target
                   (emit-invokevirtual +lisp-hash-table-class+ "puthash"
-                                      (list +lisp-object+ +lisp-object+) +lisp-object+)
+                                      (lisp-object-arg-types 2) +lisp-object+)
                   (when (eq representation :unboxed-fixnum)
                     (emit-unbox-fixnum))
                   (emit-move-from-stack target representation))
                  (t
                   (emit-invokevirtual +lisp-hash-table-class+ "put"
-                                      (list +lisp-object+ +lisp-object+) nil)))))
+                                      (lisp-object-arg-types 2) nil)))))
         (t
          (compile-function-call form target representation))))
 
+(declaim (ftype (function (t t t t) t) compile-function-call-3))
 (defun compile-function-call-3 (op args target)
   (case op
     (SYS::%STRUCTURE-SET
@@ -3145,6 +3147,7 @@
         (t
          nil)))
 
+(declaim (ftype (function (t) t) unsafe-p))
 (defun unsafe-p (args)
   (cond ((node-p args)
          (unsafe-p (node-form args)))
@@ -3206,20 +3209,19 @@
           (emit-clear-values)))))
   t)
 
-(defparameter *lisp-object-arg-types-ht* (make-hash-table))
+(declaim (ftype (function (fixnum) list) lisp-object-arg-types))
+(let ((table (make-array 10)))
+  (dotimes (i 10)
+    (declare (type fixnum i))
+    (setf (aref table i) (make-list i :initial-element +lisp-object+)))
+  (defun lisp-object-arg-types (n)
+    (declare (type fixnum n))
+    (declare (optimize speed (safety 0)))
+    (if (< n 10)
+        (aref table n)
+        (make-list n :initial-element +lisp-object+))))
 
-(defun lisp-object-arg-types (n)
-  (if (zerop n)
-      nil
-      (let* ((ht *lisp-object-arg-types-ht*)
-             (arg-types (gethash-2op-1ret n ht)))
-        (declare (type hash-table ht))
-        (unless arg-types
-          (setf arg-types (make-list n :initial-element +lisp-object+))
-          (setf (gethash n ht) arg-types))
-        arg-types)))
-
-;; FIXME
+(declaim (ftype (function (t) t) emit-call-execute))
 (defun emit-call-execute (numargs)
   (let ((arg-types (if (<= numargs call-registers-limit)
                        (lisp-object-arg-types numargs)
@@ -3227,7 +3229,7 @@
         (return-type +lisp-object+))
     (emit-invokevirtual +lisp-object-class+ "execute" arg-types return-type)))
 
-;; FIXME
+(declaim (ftype (function (t) t) emit-call-thread-execute))
 (defun emit-call-thread-execute (numargs)
   (let ((arg-types (if (<= numargs call-registers-limit)
                        (lisp-object-arg-types (1+ numargs))
@@ -3235,6 +3237,7 @@
         (return-type +lisp-object+))
     (emit-invokevirtual +lisp-thread-class+ "execute" arg-types return-type)))
 
+(declaim (ftype (function (t t t) t) compile-function-call))
 (defun compile-function-call (form target representation)
   (let ((op (car form))
         (args (cdr form)))
