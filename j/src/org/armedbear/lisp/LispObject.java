@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.135 2005-07-07 18:35:21 piso Exp $
+ * $Id: LispObject.java,v 1.136 2005-07-13 17:46:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -492,6 +492,11 @@ public class LispObject extends Lisp
     public LispObject NOT()
     {
         return NIL;
+    }
+
+    public boolean isSpecialOperator()
+    {
+        return false;
     }
 
     public boolean isSpecialVariable()
