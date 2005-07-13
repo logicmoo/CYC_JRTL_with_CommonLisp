@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.527 2005-07-13 12:03:56 piso Exp $
+;;; $Id: jvm.lisp,v 1.528 2005-07-13 16:18:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1527,21 +1527,39 @@
 (defvar *warnings* nil)
 (defvar *errors* nil)
 
+(defvar *last-error-context* nil)
+
+(defun note-error-context ()
+  (let ((context *compiler-error-context*))
+    (when (and context (neq context *last-error-context*))
+      (fresh-line *error-output*)
+      (princ "; in " *error-output*)
+      (let ((*print-length* 2)
+            (*print-level* 2)
+            (*print-pretty* nil))
+        (prin1 context *error-output*))
+      (terpri *error-output*)
+      (terpri *error-output*)
+      (setf *last-error-context* context))))
+
 (defun handle-style-warning (condition)
   (fresh-line *error-output*)
-  (format *error-output* "~%; Caught ~A:~%;   ~A~2%" (type-of condition) condition)
+  (note-error-context)
+  (format *error-output* "; Caught ~A:~%;   ~A~2%" (type-of condition) condition)
   (incf *style-warnings*)
   (muffle-warning))
 
 (defun handle-warning (condition)
   (fresh-line *error-output*)
-  (format *error-output* "~%; Caught ~A:~%;   ~A~2%" (type-of condition) condition)
+  (note-error-context)
+  (format *error-output* "; Caught ~A:~%;   ~A~2%" (type-of condition) condition)
   (incf *warnings*)
   (muffle-warning))
 
 (defun handle-compiler-error (condition)
   (fresh-line *error-output*)
-  (format *error-output* "~%; Caught ERROR:~%;   ~A~2%" condition)
+  (note-error-context)
+  (format *error-output* "; Caught ERROR:~%;   ~A~2%" condition)
   (incf *errors*)
   (throw 'compile-defun-abort (funcall *compiler-error-bailout*)))
 
@@ -3665,7 +3683,7 @@
     (let ((arg (%cadr form)))
       (compile-form arg :target :stack)
       (maybe-emit-clear-values arg)
-      (emit-invokevirtual +lisp-object-class+ java-predicate nil "Z")
+      (emit-invokevirtual +lisp-object-class+ "constantp" nil "Z")
       'ifeq)))
 
 (defun p2-test-endp (form)
@@ -7223,7 +7241,7 @@
               (funcall fn)
             (unless (and (zerop (+ *errors* *warnings* *style-warnings*))
                          (null *undefined-functions*))
-              (format *error-output* "~&~%; Compilation unit finished~%")
+              (format *error-output* "~%; Compilation unit finished~%")
               (unless (zerop *errors*)
                 (format *error-output* ";   Caught ~D ERROR condition~P~%"
                         *errors* *errors*))
