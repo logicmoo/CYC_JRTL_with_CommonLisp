@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.102 2005-07-10 15:17:18 piso Exp $
+;;; $Id: compile-file.lisp,v 1.103 2005-07-13 16:18:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -463,7 +463,8 @@
               (loop
                 (let* ((*source-position* (file-position in))
                        (jvm::*source-line-number* (stream-line-number in))
-                       (form (read in nil in)))
+                       (form (read in nil in))
+                       (*compiler-error-context* form))
                   (when (eq form in)
                     (return))
                   (process-toplevel-form form out nil)))
