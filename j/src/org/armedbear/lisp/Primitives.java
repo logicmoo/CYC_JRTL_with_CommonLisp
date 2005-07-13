@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.809 2005-07-09 18:24:37 piso Exp $
+ * $Id: Primitives.java,v 1.810 2005-07-13 03:31:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1766,16 +1766,17 @@ public final class Primitives extends Lisp
     };
 
     // ### ecase
-    private static final SpecialOperator ECASE = new SpecialOperator("ecase", "keyform &body cases")
+    private static final SpecialOperator ECASE =
+        new SpecialOperator("ecase", "keyform &body cases")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
             LispObject key = eval(args.car(), env, thread);
-            args = args.cdr();
-            while (args != NIL) {
-                LispObject clause = args.car();
+            LispObject clauses = args.cdr();
+            while (clauses != NIL) {
+                LispObject clause = clauses.car();
                 LispObject keys = clause.car();
                 boolean match = false;
                 if (keys.listp()) {
@@ -1795,10 +1796,25 @@ public final class Primitives extends Lisp
                 if (match) {
                     return progn(clause.cdr(), env, thread);
                 }
-                args = args.cdr();
+                clauses = clauses.cdr();
             }
-            signal(new TypeError("ECASE: no match for " + key));
-            return NIL;
+            LispObject expectedType = NIL;
+            clauses = args.cdr();
+            while (clauses != NIL) {
+                LispObject clause = clauses.car();
+                LispObject keys = clause.car();
+                if (keys.listp()) {
+                    while (keys != NIL) {
+                        expectedType = expectedType.push(keys.car());
+                        keys = keys.cdr();
+                    }
+                } else
+                    expectedType = expectedType.push(keys);
+                clauses = clauses.cdr();
+            }
+            expectedType = expectedType.nreverse();
+            expectedType = expectedType.push(Symbol.MEMBER);
+            return signalTypeError(key, expectedType);
         }
     };
 
