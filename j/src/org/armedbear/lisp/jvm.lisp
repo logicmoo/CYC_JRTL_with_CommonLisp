@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.526 2005-07-13 05:27:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.527 2005-07-13 12:03:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3319,6 +3319,42 @@
         (t
          form)))
 
+;; (define-source-transform min (&whole form &rest args)
+;;   (cond ((= (length args) 2)
+;;          (let* ((arg1 (%car args))
+;;                 (arg2 (%cadr args))
+;;                 (sym1 (if (consp arg1) (gensym) arg1))
+;;                 (sym2 (if (consp arg2) (gensym) arg2))
+;;                 (lets '()))
+;;            (when (consp arg1)
+;;              (push `(,sym1 ,arg1) lets))
+;;            (when (consp arg2)
+;;              (push `(,sym2 ,arg2) lets))
+;;            (if lets
+;;                `(let (,@(nreverse lets))
+;;                   (if (<= ,sym1 ,sym2) ,sym1 ,sym2))
+;;                `(if (<= ,sym1 ,sym2) ,sym1 ,sym2))))
+;;         (t
+;;          form)))
+
+;; (define-source-transform max (&whole form &rest args)
+;;   (cond ((= (length args) 2)
+;;          (let* ((arg1 (%car args))
+;;                 (arg2 (%cadr args))
+;;                 (sym1 (if (consp arg1) (gensym) arg1))
+;;                 (sym2 (if (consp arg2) (gensym) arg2))
+;;                 (lets '()))
+;;            (when (consp arg1)
+;;              (push `(,sym1 ,arg1) lets))
+;;            (when (consp arg2)
+;;              (push `(,sym2 ,arg2) lets))
+;;            (if lets
+;;                `(let (,@(nreverse lets))
+;;                   (if (>= ,sym1 ,sym2) ,sym1 ,sym2))
+;;                `(if (>= ,sym1 ,sym2) ,sym1 ,sym2))))
+;;         (t
+;;          form)))
+
 (defun compile-funcall (form &key (target :stack) representation)
   (unless (> (length form) 1)
     (compiler-warn "Wrong number of arguments for ~A." (car form))
@@ -3434,93 +3470,6 @@
       (restore-variables saved-vars)))
   t)
 
-(defparameter *java-predicates* (make-hash-table :test 'eq))
-
-(defun initialize-java-predicates ()
-  (let ((ht (make-hash-table :test 'eq)))
-    (dolist (pair '((CONSTANTP          "constantp")
-                    (ENDP               "endp")
-                    (EVENP              "evenp")
-                    (FLOATP             "floatp")
-                    (INTEGERP           "integerp")
-                    (LISTP              "listp")
-                    (MINUSP             "minusp")
-                    (NUMBERP            "numberp")
-                    (ODDP               "oddp")
-                    (PLUSP              "plusp")
-                    (RATIONALP          "rationalp")
-                    (REALP              "realp")
-                    (SPECIAL-VARIABLE-P "isSpecialVariable")
-                    (ZEROP              "zerop")))
-      (setf (gethash (%car pair) ht) (%cadr pair)))
-    (setf *java-predicates* ht)))
-
-(initialize-java-predicates)
-
-(defun compile-test-1 (form negatep)
-  (aver nil)
-  (let* ((op (car form))
-         (args (cdr form))
-         (arg (car args)))
-    (when (memq op '(NOT NULL))
-      (return-from compile-test-1 (compile-test arg (not negatep))))
-    (when (subtypep (derive-type arg) 'FIXNUM)
-      (case op
-        (MINUSP
-         (dformat t "compile-test-1 minusp case~%")
-         (compile-form arg :target :stack :representation :unboxed-fixnum)
-         (return-from compile-test-1 (if negatep 'iflt 'ifge)))
-        (ZEROP
-         (dformat t "compile-test-1 zerop case~%")
-         (compile-form arg :target :stack :representation :unboxed-fixnum)
-         (return-from compile-test-1 (if negatep 'ifeq 'ifne)))))
-    (when (eq op 'SYMBOLP)
-      (process-args args)
-      (emit 'instanceof +lisp-symbol-class+)
-      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
-    (when (eq op 'CHARACTERP)
-      (process-args args)
-      (emit 'instanceof +lisp-character-class+)
-      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
-    (when (eq op 'FIXNUMP)
-      (process-args args)
-      (emit 'instanceof +lisp-fixnum-class+)
-      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
-    (when (eq op 'CONSP)
-      (process-args args)
-      (emit 'instanceof +lisp-cons-class+)
-      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
-    (when (eq op 'ATOM)
-      (process-args args)
-      (emit 'instanceof +lisp-cons-class+)
-      (return-from compile-test-1 (if negatep 'ifeq 'ifne)))
-    (when (eq op 'CLASSP)
-      (process-args args)
-      (emit 'instanceof +lisp-class-class+)
-      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
-    (when (eq op 'STRINGP)
-      (process-args args)
-      (emit 'instanceof +lisp-abstract-string-class+)
-      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
-    (when (eq op 'VECTORP)
-      (process-args args)
-      (emit 'instanceof +lisp-abstract-vector-class+)
-      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
-    (when (eq op 'SIMPLE-VECTOR-P)
-      (process-args args)
-      (emit 'instanceof +lisp-simple-vector-class+)
-      (return-from compile-test-1 (if negatep 'ifne 'ifeq)))
-    (let ((s (gethash-2op-1ret op (the hash-table *java-predicates*))))
-      (when s
-        (process-args args)
-        (emit-invokevirtual +lisp-object-class+ s nil "Z")
-        (return-from compile-test-1 (if negatep 'ifne 'ifeq)))))
-  ;; Otherwise...
-  (compile-form form :target :stack)
-  (maybe-emit-clear-values form)
-  (emit-push-nil)
-  (if negatep 'if_acmpne 'if_acmpeq))
-
 ;; Note that /= is not transitive, so we don't handle it here.
 (defun p2-numeric-comparison (form &key (target :stack) representation)
   (let ((op (car form))
@@ -3629,107 +3578,6 @@
   ;; Still here?
   (compile-function-call form target representation))
 
-(defun compile-test-2 (form negatep)
-  (aver nil)
-  (let ((op (%car form))
-        (args (%cdr form)))
-    (when (eq op 'EQ)
-      (process-args args)
-      (return-from compile-test-2 (if negatep 'if_acmpeq 'if_acmpne)))
-    (when (eq op 'CHAR=)
-      (p2-char= form :target :stack :representation :java-boolean)
-      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
-    (let* ((arg1 (first args))
-           (arg2 (second args))
-           (var1 (unboxed-fixnum-variable arg1)))
-      (when (memq op '(< <= > >= = /=))
-        (when (and (subtypep (derive-type arg1) 'fixnum)
-                   (subtypep (derive-type arg2) 'fixnum))
-          (compile-form arg1 :target :stack :representation :unboxed-fixnum)
-          (maybe-emit-clear-values arg1)
-          (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-          (maybe-emit-clear-values arg2)
-          (case op
-            (<
-             (return-from compile-test-2 (if negatep 'if_icmplt 'if_icmpge)))
-            (<=
-             (return-from compile-test-2 (if negatep 'if_icmple 'if_icmpgt)))
-            (>
-             (return-from compile-test-2 (if negatep 'if_icmpgt 'if_icmple)))
-            (>=
-             (return-from compile-test-2 (if negatep 'if_icmpge 'if_icmplt)))
-            (=
-             (return-from compile-test-2 (if negatep 'if_icmpeq 'if_icmpne)))
-            (/=
-             (return-from compile-test-2 (if negatep 'if_icmpne 'if_icmpeq)))
-            ))
-
-        ;; Otherwise...
-        (when (arg-is-fixnum-p arg2)
-          (compile-form arg1 :target :stack)
-          (maybe-emit-clear-values arg1)
-          (emit-push-int arg2)
-          (emit-invokevirtual +lisp-object-class+
-                              (case op
-                                (<  "isLessThan")
-                                (<= "isLessThanOrEqualTo")
-                                (>  "isGreaterThan")
-                                (>= "isGreaterThanOrEqualTo")
-                                (=  "isEqualTo")
-                                (/= "isNotEqualTo"))
-                              '("I")
-                              "Z")
-          (return-from compile-test-2 (if negatep 'ifne 'ifeq))))
-
-      (when (eq op '<)
-          (when var1
-            (dformat t "compile-test-2 unboxed fixnum var1 comparison case~%")
-            (aver (variable-register var1))
-            (emit 'iload (variable-register var1))
-            (compile-form arg2 :target :stack)
-            (emit 'swap)
-            (emit-invokevirtual +lisp-object-class+
-                                "isGreaterThan"
-                                '("I")
-                                "Z")
-            (return-from compile-test-2 (if negatep 'ifne 'ifeq)))))
-
-    (let ((s (cdr (assq op
-                        '((=      . "isEqualTo")
-                          (/=     . "isNotEqualTo")
-                          (<      . "isLessThan")
-                          (<=     . "isLessThanOrEqualTo")
-                          (>      . "isGreaterThan")
-                          (>=     . "isGreaterThanOrEqualTo")
-                          (EQL    . "eql")
-                          (EQUAL  . "equal")
-                          (EQUALP . "equalp"))))))
-      (when s
-        (let ((first (first args))
-              (second (second args))
-              variable)
-          (cond ((fixnump second)
-                 (compile-form first :target :stack)
-                 (maybe-emit-clear-values first)
-                 (emit-push-constant-int second)
-                 (emit-invokevirtual +lisp-object-class+ s '("I") "Z"))
-                ((setf variable (unboxed-fixnum-variable second))
-                 (compile-form first :target :stack)
-                 (maybe-emit-clear-values first)
-                 (aver (variable-register variable))
-                 (emit 'iload (variable-register variable))
-                 (emit-invokevirtual +lisp-object-class+ s '("I") "Z"))
-                (t
-                 (process-args args)
-                 (emit-invokevirtual +lisp-object-class+ s (list +lisp-object+) "Z")))
-          (return-from compile-test-2 (if negatep 'ifne 'ifeq))))))
-
-  ;; Otherwise...
-  (compile-form form :target :stack)
-  (maybe-emit-clear-values form)
-  (emit-push-nil)
-  (if negatep 'if_acmpne 'if_acmpeq))
-
 (defun compile-test-3 (form negatep)
   (aver nil)
   (let ((op (%car form))
@@ -3747,26 +3595,6 @@
            (emit-push-nil)
            (if negatep 'if_acmpne 'if_acmpeq)))))
 
-(defun compile-test (form negatep)
-  (aver nil)
-  ;; Use a Java boolean if possible.
-  (when (and (consp form)
-             (not (special-operator-p (%car form))))
-    (case (length (%cdr form))
-      (1
-       (return-from compile-test (compile-test-1 form negatep)))
-      (2
-       (return-from compile-test (compile-test-2 form negatep)))
-      (3
-       (return-from compile-test (compile-test-3 form negatep)))
-      )
-    )
-  ;; Otherwise...
-  (compile-form form :target :stack)
-  (maybe-emit-clear-values form)
-  (emit-push-nil)
-  (if negatep 'if_acmpne 'if_acmpeq))
-
 (defparameter *p2-test-handlers* nil)
 
 (defun p2-test-handler (op)
@@ -3776,28 +3604,52 @@
   (let ((ht (make-hash-table :test 'eq)))
     (dolist (pair '(
 ;;                     (CHAR= p2-test-char=)
-                    (<               p2-test-numeric-comparison)
-                    (<=              p2-test-numeric-comparison)
-                    (>               p2-test-numeric-comparison)
-                    (>=              p2-test-numeric-comparison)
-                    (=               p2-test-numeric-comparison)
-                    (/=              p2-test-numeric-comparison)
-                    (CONSP           p2-test-consp)
-                    (EQ              p2-test-eq)
-                    (EQL             p2-test-equality)
-                    (EQUAL           p2-test-equality)
-                    (EQUALP          p2-test-equality)
-                    (NOT             p2-test-not/null)
-                    (NULL            p2-test-not/null)
-                    (SYMBOLP         p2-test-symbolp)
-                    (STRINGP         p2-test-stringp)
-                    (VECTORP         p2-test-vectorp)
-                    (SIMPLE-VECTOR-P p2-test-simple-vector-p)
+                    (/=                 p2-test-numeric-comparison)
+                    (<                  p2-test-numeric-comparison)
+                    (<=                 p2-test-numeric-comparison)
+                    (=                  p2-test-numeric-comparison)
+                    (>                  p2-test-numeric-comparison)
+                    (>=                 p2-test-numeric-comparison)
+                    (ATOM               p2-test-atom)
+                    (CLASSP             p2-test-classp)
+                    (CONSP              p2-test-consp)
+                    (CONSTANTP          p2-test-constantp)
+                    (ENDP               p2-test-endp)
+                    (EQ                 p2-test-eq)
+                    (EQL                p2-test-equality)
+                    (EQUAL              p2-test-equality)
+                    (EQUALP             p2-test-equality)
+                    (EVENP              p2-test-evenp)
+                    (FLOATP             p2-test-floatp)
+                    (INTEGERP           p2-test-integerp)
+                    (LISTP              p2-test-listp)
+                    (MINUSP             p2-test-minusp)
+                    (NOT                p2-test-not/null)
+                    (NULL               p2-test-not/null)
+                    (NUMBERP            p2-test-numberp)
+                    (ODDP               p2-test-oddp)
+                    (PLUSP              p2-test-plusp)
+                    (RATIONALP          p2-test-rationalp)
+                    (REALP              p2-test-realp)
+                    (SIMPLE-VECTOR-P    p2-test-simple-vector-p)
+                    (SPECIAL-VARIABLE-P p2-test-special-variable-p)
+                    (STRINGP            p2-test-stringp)
+                    (SYMBOLP            p2-test-symbolp)
+                    (VECTORP            p2-test-vectorp)
+                    (ZEROP              p2-test-zerop)
                     ))
       (setf (gethash (%car pair) ht) (%cadr pair)))
     (setf *p2-test-handlers* ht)))
 
 (initialize-p2-test-handlers)
+
+(defun p2-test-predicate (form java-predicate)
+  (when (check-arg-count form 1)
+    (let ((arg (%cadr form)))
+      (compile-form arg :target :stack)
+      (maybe-emit-clear-values arg)
+      (emit-invokevirtual +lisp-object-class+ java-predicate nil "Z")
+      'ifeq)))
 
 (defun p2-test-instanceof-predicate (form java-class)
   (when (check-arg-count form 1)
@@ -3807,11 +3659,86 @@
       (emit 'instanceof java-class)
       'ifeq)))
 
+;; constantp form &optional environment => generalized-boolean
+(defun p2-test-constantp (form)
+  (when (eq (length form) 2)
+    (let ((arg (%cadr form)))
+      (compile-form arg :target :stack)
+      (maybe-emit-clear-values arg)
+      (emit-invokevirtual +lisp-object-class+ java-predicate nil "Z")
+      'ifeq)))
+
+(defun p2-test-endp (form)
+  (p2-test-predicate form "endp"))
+
+(defun p2-test-evenp (form)
+  (p2-test-predicate form "evenp"))
+
+(defun p2-test-floatp (form)
+  (p2-test-predicate form "floatp"))
+
+(defun p2-test-integerp (form)
+  (p2-test-predicate form "integerp"))
+
+(defun p2-test-listp (form)
+  (p2-test-predicate form "listp"))
+
+(defun p2-test-minusp (form)
+  (when (check-arg-count form 1)
+    (let ((arg (%cadr form)))
+      (cond ((subtypep (derive-type arg) 'FIXNUM)
+             (compile-form arg :target :stack :representation :unboxed-fixnum)
+             (maybe-emit-clear-values arg)
+             'ifge)
+            (t
+             (compile-form arg :target :stack)
+             (maybe-emit-clear-values arg)
+             (emit-invokevirtual +lisp-object-class+ "minusp" nil "Z")
+             'ifeq)))))
+
+(defun p2-test-zerop (form)
+  (when (check-arg-count form 1)
+    (let ((arg (%cadr form)))
+      (cond ((subtypep (derive-type arg) 'FIXNUM)
+             (compile-form arg :target :stack :representation :unboxed-fixnum)
+             (maybe-emit-clear-values arg)
+             'ifne)
+            (t
+             (compile-form arg :target :stack)
+             (maybe-emit-clear-values arg)
+             (emit-invokevirtual +lisp-object-class+ "zerop" nil "Z")
+             'ifeq)))))
+
+(defun p2-test-numberp (form)
+  (p2-test-predicate form "numberp"))
+
+(defun p2-test-oddp (form)
+  (p2-test-predicate form "oddp"))
+
+(defun p2-test-plusp (form)
+  (p2-test-predicate form "plusp"))
+
+(defun p2-test-rationalp (form)
+  (p2-test-predicate form "rationalp"))
+
+(defun p2-test-realp (form)
+  (p2-test-predicate form "realp"))
+
+(defun p2-test-special-variable-p (form)
+  (p2-test-predicate form "isSpecialVariable"))
+
+(defun p2-test-classp (form)
+  (p2-test-instanceof-predicate form +lisp-class-class+))
+
 (defun p2-test-symbolp (form)
   (p2-test-instanceof-predicate form +lisp-symbol-class+))
 
 (defun p2-test-consp (form)
   (p2-test-instanceof-predicate form +lisp-cons-class+))
+
+(defun p2-test-atom (form)
+  (p2-test-instanceof-predicate form +lisp-cons-class+)
+  'ifne)
 
 (defun p2-test-stringp (form)
   (p2-test-instanceof-predicate form +lisp-abstract-string-class+))
@@ -3822,17 +3749,10 @@
 (defun p2-test-simple-vector-p (form)
   (p2-test-instanceof-predicate form +lisp-simple-vector-class+))
 
-(defun p2-test-char= (form)
-  (declare (ignorable form))
-  (format t "p2-test-char=~%")
-  nil)
-
 (defun p2-test-not/null (form)
-;;   (format t "p2-test-not/null~%")
   (when (check-arg-count form 1)
     (let* ((arg (%cadr form))
            (result (compile-test-form arg)))
-;;       (format t "result = ~S~%" result)
       (ecase result
         ('if_acmpeq  'if_acmpne)
         ('if_acmpne  'if_acmpeq)
@@ -3840,12 +3760,14 @@
         ('ifne       'ifeq)
         ('if_icmpne  'if_icmpeq)
         ('if_icmpeq  'if_icmpne)
+        ('iflt       'ifge)
+        ('ifge       'iflt)
+        ('ifgt       'ifle)
+        ('ifle       'ifgt)
         (:alternate  :consequent)
-        (:consequent :alternate)
-        ))))
+        (:consequent :alternate)))))
 
 (defun p2-test-eq (form)
-;;   (format t "p2-test-eq=~%")
   (when (check-arg-count form 2)
     (let ((arg1 (%cadr form))
           (arg2 (%caddr form)))
@@ -7173,7 +7095,7 @@
                                    +lisp-object-array+)))
         (emit 'astore (compiland-argument-register compiland)))
 
-      (generate-type-checks parameters)
+      (generate-type-checks (reverse parameters))
 
       (unless (or ;;*child-p*
                   *using-arg-array*)
