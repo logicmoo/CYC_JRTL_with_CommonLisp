@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.528 2005-07-13 16:18:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.529 2005-07-13 19:16:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1119,6 +1119,7 @@
 (defconstant +lisp-compiled-function-class+ "org/armedbear/lisp/CompiledFunction")
 (defconstant +lisp-primitive-class+ "org/armedbear/lisp/Primitive")
 (defconstant +lisp-hash-table-class+ "org/armedbear/lisp/HashTable")
+(defconstant +lisp-package-class+ "org/armedbear/lisp/Package")
 
 (defsubst emit-push-nil ()
   (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
@@ -1583,6 +1584,20 @@
                    #'compiler-warn ; See above!
                    #'compiler-style-warn)
                "Wrong number of arguments for ~A (expected ~D, but received ~D)."
+               op n (length args)))
+    ok))
+
+(declaim (ftype (function (t fixnum) t) check-min-args))
+(defun check-min-args (form n)
+  (declare (type fixnum n))
+  (let* ((op (car form))
+         (args (cdr form))
+         (ok (>= (length args) n)))
+    (unless ok
+      (funcall (if (eq (symbol-package op) sys:+cl-package+)
+                   #'compiler-warn ; See above!
+                   #'compiler-style-warn)
+               "Wrong number of arguments for ~A (expected at least ~D, but received ~D)."
                op n (length args)))
     ok))
 
@@ -3075,7 +3090,7 @@
        (unless (every #'single-valued-p args)
          (emit-clear-values))
        (emit-invokestatic +lisp-class+ "get"
-                          (list +lisp-object+ +lisp-object+ +lisp-object+) +lisp-object+)
+                          (lisp-object-arg-types 3) +lisp-object+)
        (emit-move-from-stack target))
       (t
        (compiler-warn "Wrong number of arguments for ~A (expected 2 or 3, but received ~D)."
@@ -3622,34 +3637,40 @@
   (let ((ht (make-hash-table :test 'eq)))
     (dolist (pair '(
 ;;                     (CHAR= p2-test-char=)
-                    (/=                 p2-test-numeric-comparison)
+                    (/=                 p2-test-/=)
                     (<                  p2-test-numeric-comparison)
                     (<=                 p2-test-numeric-comparison)
                     (=                  p2-test-numeric-comparison)
                     (>                  p2-test-numeric-comparison)
                     (>=                 p2-test-numeric-comparison)
                     (ATOM               p2-test-atom)
+                    (CHARACTERP         p2-test-characterp)
                     (CLASSP             p2-test-classp)
                     (CONSP              p2-test-consp)
                     (CONSTANTP          p2-test-constantp)
                     (ENDP               p2-test-endp)
                     (EQ                 p2-test-eq)
+                    (NEQ                p2-test-neq)
                     (EQL                p2-test-equality)
                     (EQUAL              p2-test-equality)
                     (EQUALP             p2-test-equality)
                     (EVENP              p2-test-evenp)
+                    (FIXNUMP            p2-test-fixnump)
                     (FLOATP             p2-test-floatp)
                     (INTEGERP           p2-test-integerp)
                     (LISTP              p2-test-listp)
+                    (MEMQ               p2-test-memq)
                     (MINUSP             p2-test-minusp)
                     (NOT                p2-test-not/null)
                     (NULL               p2-test-not/null)
                     (NUMBERP            p2-test-numberp)
+                    (PACKAGEP           p2-test-packagep)
                     (ODDP               p2-test-oddp)
                     (PLUSP              p2-test-plusp)
                     (RATIONALP          p2-test-rationalp)
                     (REALP              p2-test-realp)
                     (SIMPLE-VECTOR-P    p2-test-simple-vector-p)
+                    (SPECIAL-OPERATOR-P p2-test-special-operator-p)
                     (SPECIAL-VARIABLE-P p2-test-special-variable-p)
                     (STRINGP            p2-test-stringp)
                     (SYMBOLP            p2-test-symbolp)
@@ -3676,6 +3697,9 @@
       (maybe-emit-clear-values arg)
       (emit 'instanceof java-class)
       'ifeq)))
+
+(defun p2-test-characterp (form)
+  (p2-test-instanceof-predicate form +lisp-character-class+))
 
 ;; constantp form &optional environment => generalized-boolean
 (defun p2-test-constantp (form)
@@ -3733,6 +3757,9 @@
 (defun p2-test-oddp (form)
   (p2-test-predicate form "oddp"))
 
+(defun p2-test-packagep (form)
+  (p2-test-instanceof-predicate form +lisp-package-class+))
+
 (defun p2-test-plusp (form)
   (p2-test-predicate form "plusp"))
 
@@ -3741,6 +3768,9 @@
 
 (defun p2-test-realp (form)
   (p2-test-predicate form "realp"))
+
+(defun p2-test-special-operator-p (form)
+  (p2-test-predicate form "isSpecialOperator"))
 
 (defun p2-test-special-variable-p (form)
   (p2-test-predicate form "isSpecialVariable"))
@@ -3757,6 +3787,9 @@
 (defun p2-test-atom (form)
   (p2-test-instanceof-predicate form +lisp-cons-class+)
   'ifne)
+
+(defun p2-test-fixnump (form)
+  (p2-test-instanceof-predicate form +lisp-fixnum-class+))
 
 (defun p2-test-stringp (form)
   (p2-test-instanceof-predicate form +lisp-abstract-string-class+))
@@ -3794,6 +3827,10 @@
       (maybe-emit-clear-values arg1 arg2)
      'if_acmpne)))
 
+(defun p2-test-neq (form)
+  (p2-test-eq form)
+  'if_acmpeq)
+
 (defun p2-test-equality (form)
 ;;   (format t "p2-test-equality ~S~%" (%car form))
   (when (check-arg-count form 2)
@@ -3822,79 +3859,126 @@
                                  (lisp-object-arg-types 1) "Z")))
       'ifeq)))
 
-(defun p2-test-numeric-comparison (form)
+(defun p2-test-memq (form)
+  (when (check-arg-count form 2)
+    (let ((arg1 (%cadr form))
+          (arg2 (%caddr form)))
+      (compile-form arg1 :target :stack)
+      (compile-form arg2 :target :stack)
+      (maybe-emit-clear-values arg1 arg2)
+      (emit-invokestatic +lisp-class+ "memq"
+                         (lisp-object-arg-types 2) "Z")
+      'ifeq)))
+
+(defun p2-test-/= (form)
   (when (= (length form) 3)
-    (let ((op (%car form)))
-      (when (memq op '(< <= > >= = /=))
-        (let* ((arg1 (%cadr form))
-               (arg2 (%caddr form))
-               (type1 (derive-type arg1))
-               (type2 (derive-type arg2)))
-          (cond ((and (fixnump arg1) (fixnump arg2))
-                 (if (funcall op arg1 arg2) :consequent :alternate))
-                ((and (subtypep type1 'fixnum)
-                      (subtypep type2 'fixnum))
-                 (compile-form arg1 :target :stack :representation :unboxed-fixnum)
-                 (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-                 (maybe-emit-clear-values arg1 arg2)
-                 (ecase op
-                   (<  'if_icmpge)
-                   (<= 'if_icmpgt)
-                   (>  'if_icmple)
-                   (>= 'if_icmplt)
-                   (=  'if_icmpne)
-                   (/= 'if_icmpeq)))
-                ((subtypep type2 'fixnum)
-                 (compile-form arg1 :target :stack)
-                 (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-                 (maybe-emit-clear-values arg1 arg2)
-                 (emit-invokevirtual +lisp-object-class+
-                                     (ecase op
-                                       (<  "isLessThan")
-                                       (<= "isLessThanOrEqualTo")
-                                       (>  "isGreaterThan")
-                                       (>= "isGreaterThanOrEqualTo")
-                                       (=  "isEqualTo")
-                                       (/= "isNotEqualTo"))
-                                     '("I") "Z")
-                 'ifeq)
-                ((subtypep type1 'fixnum)
-                 ;; FIXME We can compile the args in reverse order and avoid
-                 ;; the swap if either arg is a fixnum or a lexical variable.
-                 (compile-form arg1 :target :stack :representation :unboxed-fixnum)
-                 (compile-form arg2 :target :stack)
-                 (maybe-emit-clear-values arg1 arg2)
-                 (emit 'swap)
-                 (emit-invokevirtual +lisp-object-class+
-                                     (ecase op
-                                       (<  "isGreaterThan")
-                                       (<= "isGreaterThanOrEqualTo")
-                                       (>  "isLessThan")
-                                       (>= "isLessThanOrEqualTo")
-                                       (=  "isEqualTo")
-                                       (/= "isNotEqualTo"))
-                                     '("I") "Z")
-                 'ifeq)
-                (t
-                 (compile-form arg1 :target :stack)
-                 (compile-form arg2 :target :stack)
-                 (maybe-emit-clear-values arg1 arg2)
-                 (emit-invokevirtual +lisp-object-class+
-                                     (ecase op
-                                       (<  "isLessThan")
-                                       (<= "isLessThanOrEqualTo")
-                                       (>  "isGreaterThan")
-                                       (>= "isGreaterThanOrEqualTo")
-                                       (=  "isEqualTo")
-                                       (/= "isNotEqualTo"))
-                                     (lisp-object-arg-types 1) "Z")
-                 'ifeq)))))))
+    (let* ((arg1 (%cadr form))
+           (arg2 (%caddr form))
+           (type1 (derive-type arg1))
+           (type2 (derive-type arg2)))
+      (cond ((and (fixnump arg1) (fixnump arg2))
+             (if (/= arg1 arg2) :consequent :alternate))
+            ((and (subtypep type1 'fixnum)
+                  (subtypep type2 'fixnum))
+             (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+             (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+             (maybe-emit-clear-values arg1 arg2)
+             'if_icmpeq)
+            ((subtypep type2 'fixnum)
+             (compile-form arg1 :target :stack)
+             (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+             (maybe-emit-clear-values arg1 arg2)
+             (emit-invokevirtual +lisp-object-class+ "isNotEqualTo" '("I") "Z")
+             'ifeq)
+            ((subtypep type1 'fixnum)
+             ;; FIXME We can compile the args in reverse order and avoid
+             ;; the swap if either arg is a fixnum or a lexical variable.
+             (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+             (compile-form arg2 :target :stack)
+             (maybe-emit-clear-values arg1 arg2)
+             (emit 'swap)
+             (emit-invokevirtual +lisp-object-class+ "isNotEqualTo" '("I") "Z")
+             'ifeq)
+            (t
+             (compile-form arg1 :target :stack)
+             (compile-form arg2 :target :stack)
+             (maybe-emit-clear-values arg1 arg2)
+             (emit-invokevirtual +lisp-object-class+ "isNotEqualTo"
+                                 (lisp-object-arg-types 1) "Z")
+             'ifeq)))))
+
+(defun p2-test-numeric-comparison (form)
+  (when (check-min-args form 1)
+    (when (= (length form) 3)
+      (let* ((op (%car form))
+             (args (%cdr form))
+             (arg1 (%car args))
+             (arg2 (%cadr args))
+             (type1 (derive-type arg1))
+             (type2 (derive-type arg2)))
+        (cond ((and (fixnump arg1) (fixnump arg2))
+               (if (funcall op arg1 arg2) :consequent :alternate))
+              ((and (subtypep type1 'fixnum)
+                    (subtypep type2 'fixnum))
+               (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+               (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+               (maybe-emit-clear-values arg1 arg2)
+               (ecase op
+                 (<  'if_icmpge)
+                 (<= 'if_icmpgt)
+                 (>  'if_icmple)
+                 (>= 'if_icmplt)
+                 (=  'if_icmpne)))
+              ((subtypep type2 'fixnum)
+               (compile-form arg1 :target :stack)
+               (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+               (maybe-emit-clear-values arg1 arg2)
+               (emit-invokevirtual +lisp-object-class+
+                                   (ecase op
+                                     (<  "isLessThan")
+                                     (<= "isLessThanOrEqualTo")
+                                     (>  "isGreaterThan")
+                                     (>= "isGreaterThanOrEqualTo")
+                                     (=  "isEqualTo"))
+                                   '("I") "Z")
+               'ifeq)
+              ((subtypep type1 'fixnum)
+               ;; FIXME We can compile the args in reverse order and avoid
+               ;; the swap if either arg is a fixnum or a lexical variable.
+               (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+               (compile-form arg2 :target :stack)
+               (maybe-emit-clear-values arg1 arg2)
+               (emit 'swap)
+               (emit-invokevirtual +lisp-object-class+
+                                   (ecase op
+                                     (<  "isGreaterThan")
+                                     (<= "isGreaterThanOrEqualTo")
+                                     (>  "isLessThan")
+                                     (>= "isLessThanOrEqualTo")
+                                     (=  "isEqualTo"))
+                                   '("I") "Z")
+               'ifeq)
+              (t
+               (compile-form arg1 :target :stack)
+               (compile-form arg2 :target :stack)
+               (maybe-emit-clear-values arg1 arg2)
+               (emit-invokevirtual +lisp-object-class+
+                                   (ecase op
+                                     (<  "isLessThan")
+                                     (<= "isLessThanOrEqualTo")
+                                     (>  "isGreaterThan")
+                                     (>= "isGreaterThanOrEqualTo")
+                                     (=  "isEqualTo"))
+                                   (lisp-object-arg-types 1) "Z")
+               'ifeq))))))
 
 (defun compile-test-form (test-form)
   (when (consp test-form)
     (let* ((op (%car test-form))
            (handler (p2-test-handler op))
            (result (and handler (funcall handler test-form))))
+;;       (unless handler
+;;         (format t "no test handler for ~S~%" op))
       (when result
         (return-from compile-test-form result))))
   ;; Otherwise...
