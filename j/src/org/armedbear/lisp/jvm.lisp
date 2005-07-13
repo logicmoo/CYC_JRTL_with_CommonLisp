@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.529 2005-07-13 19:16:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.530 2005-07-13 21:00:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3611,23 +3611,6 @@
   ;; Still here?
   (compile-function-call form target representation))
 
-(defun compile-test-3 (form negatep)
-  (aver nil)
-  (let ((op (%car form))
-        (args (%cdr form)))
-    (cond ((and (memq op '(< <= > >= =))
-                (every #'atom args)
-                (dolist (arg args t)
-                 (unless (subtypep (derive-type arg) 'fixnum)
-                   (return nil))))
-           (p2-numeric-comparison form :target :stack :representation :java-boolean)
-           (if negatep 'ifne 'ifeq))
-          (t
-           (compile-form form :target :stack)
-           (maybe-emit-clear-values form)
-           (emit-push-nil)
-           (if negatep 'if_acmpne 'if_acmpeq)))))
-
 (defparameter *p2-test-handlers* nil)
 
 (defun p2-test-handler (op)
@@ -4007,7 +3990,6 @@
                (:alternate
                 (compile-form alternate :target target :representation representation))
                (t
-;;                 (emit (compile-test test nil) LABEL1)
                 (emit result LABEL1)
                 (compile-form consequent :target target :representation representation)
                 (emit 'goto LABEL2)
