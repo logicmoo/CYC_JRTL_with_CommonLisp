@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.530 2005-07-13 21:00:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.531 2005-07-14 18:53:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -226,6 +226,7 @@
   register ; register number or NIL
   index
   closure-index
+  reserved-register
   (reads 0)
   (writes 0)
   used-non-locally-p
@@ -265,7 +266,7 @@
     (when (eq name (variable-name variable))
       (return variable))))
 
-(declaim (ftype (function (t) t) unboxed-fixnum-variable))
+(declaim (ftype (function (t) t) find-visible-variable))
 (defun find-visible-variable (name)
   (dolist (variable *visible-variables*)
     (when (eq name (variable-name variable))
@@ -1250,17 +1251,17 @@
 (defun generate-type-check (variable)
   (let ((declared-type (variable-declared-type variable)))
     (cond ((eq declared-type :none)) ; Nothing to do.
-          ((eq declared-type 'symbol)
+          ((eq declared-type 'SYMBOL)
            (generate-instanceof-type-check variable 'SYMBOL))
-          ((eq declared-type 'character)
+          ((eq declared-type 'CHARACTER)
            (generate-instanceof-type-check variable 'CHARACTER))
-          ((eq declared-type 'cons)
+          ((eq declared-type 'CONS)
            (generate-instanceof-type-check variable 'CONS))
-          ((eq declared-type 'hash-table)
+          ((eq declared-type 'HASH-TABLE)
            (generate-instanceof-type-check variable 'HASH-TABLE))
-          ((subtypep declared-type 'fixnum)
+          ((subtypep declared-type 'FIXNUM)
            (generate-instanceof-type-check variable 'FIXNUM))
-          ((subtypep declared-type 'string)
+          ((subtypep declared-type 'STRING)
            (generate-instanceof-type-check variable 'STRING))
           (t
            nil))))
@@ -6978,12 +6979,12 @@
           (pool-name (method-descriptor execute-method)))
     (cond (*hairy-arglist-p*
            (let* ((closure (sys::make-closure p1-result nil))
-                  (vars (sys::varlist closure))
+                  (parameter-names (sys::varlist closure))
                   (index 0))
-             (dolist (var vars)
-               (let ((variable (find-visible-variable var)))
-                 (when (null variable)
-                   (dformat t "unable to find variable ~S~%" var)
+             (dolist (name parameter-names)
+               (let ((variable (find-visible-variable name)))
+                 (unless variable
+                   (format t "1: unable to find variable ~S~%" name)
                    (aver nil))
                  (aver (null (variable-register variable)))
                  (aver (null (variable-index variable)))
@@ -6998,7 +6999,7 @@
              (dolist (arg args)
                (let ((variable (find-visible-variable arg)))
                  (when (null variable)
-                   (dformat t "unable to find variable ~S~%" arg)
+                   (format t "2: unable to find variable ~S~%" arg)
                    (aver nil))
                  (aver (null (variable-register variable)))
                  (setf (variable-register variable) (if *using-arg-array* nil register))
@@ -7061,24 +7062,31 @@
     (when (and *closure-variables* *child-p*)
       (setf (compiland-closure-register compiland) (allocate-register)) ;; register 1
       (dformat t "closure register = ~S~%" (compiland-closure-register compiland)))
-    (if *using-arg-array*
-        ;; One slot for arg array.
-        (setf (compiland-argument-register compiland) (allocate-register))
-        ;; Otherwise, one register for each argument.
-        (dolist (arg args)
-          (declare (ignore arg))
-          (allocate-register)))
+    (cond (*using-arg-array*
+           ;; One slot for arg array.
+           (setf (compiland-argument-register compiland) (allocate-register))
+
+           (unless (or *closure-variables* *child-p*)
+             ;; Reserve a register for each parameter.
+             (dolist (variable (reverse parameters))
+               (aver (null (variable-register variable)))
+               (aver (null (variable-reserved-register variable)))
+               (unless (variable-special-p variable)
+                 (setf (variable-reserved-register variable) (allocate-register))))))
+          (t
+           ;; Otherwise, one register for each argument.
+           (dolist (arg args)
+             (declare (ignore arg))
+             (allocate-register))))
     (when (and *closure-variables* (not *child-p*))
-       (setf (compiland-closure-register compiland) (allocate-register))
+      (setf (compiland-closure-register compiland) (allocate-register))
        (dformat t "closure register = ~S~%" (compiland-closure-register compiland)))
     ;; Reserve the next available slot for the thread register.
     (setf *thread* (allocate-register))
 
     ;; Move args from their original registers to the closure variables array,
     ;; if applicable.
-    (when (and *closure-variables*
-               #+nil (some #'variable-closure-index parameters)
-               )
+    (when *closure-variables*
       (dformat t "~S moving arguments to closure array (if applicable)~%"
                (compiland-name compiland))
       (cond (*child-p*
@@ -7121,6 +7129,34 @@
              (emit 'astore (compiland-closure-register compiland))))
       (dformat t "~S done moving arguments to closure array~%"
                (compiland-name compiland)))
+
+    ;; If applicable, move args from arg array to registers.
+    (when *using-arg-array*
+      (unless (or *closure-variables* *child-p*)
+        (dolist (variable (reverse parameters))
+          (when (variable-reserved-register variable)
+            (aver (not (variable-special-p variable)))
+            (emit 'aload 1)
+            (emit 'bipush (variable-index variable))
+            (emit 'aaload)
+            (emit 'astore (variable-reserved-register variable))
+            (setf (variable-register variable) (variable-reserved-register variable))
+            (setf (variable-index variable) nil)))))
+
+    (generate-type-checks (reverse parameters))
+
+    ;; Unbox variables.
+;;     (dolist (variable (compiland-arg-vars compiland))
+    (dolist (variable (reverse parameters))
+      (when (and (variable-register variable)
+                 (not (variable-special-p variable))
+                 (not (variable-used-non-locally-p variable))
+                 (subtypep (variable-declared-type variable) 'FIXNUM))
+;;         (format t "unboxing ~S~%" (variable-name variable))
+        (emit 'aload (variable-register variable))
+        (emit-unbox-fixnum)
+        (emit 'istore (variable-register variable))
+        (setf (variable-representation variable) :unboxed-fixnum)))
 
     ;; Establish dynamic bindings for any variables declared special.
     (dolist (variable parameters)
@@ -7179,16 +7215,18 @@
                                    +lisp-object-array+)))
         (emit 'astore (compiland-argument-register compiland)))
 
-      (generate-type-checks (reverse parameters))
+;;       (generate-type-checks (reverse parameters))
 
-      (unless (or ;;*child-p*
-                  *using-arg-array*)
-;;         (dolist (variable (reverse *visible-variables*))
-        (dolist (variable (compiland-arg-vars compiland))
-          (when (eq (variable-representation variable) :unboxed-fixnum)
-            (emit 'aload (variable-register variable))
-            (emit-unbox-fixnum)
-            (emit 'istore (variable-register variable)))))
+;;         (dolist (variable (compiland-arg-vars compiland))
+;;           (when (and (variable-register variable)
+;;                      (not (variable-special-p variable))
+;;                      (not (variable-used-non-locally-p variable))
+;;                      (subtypep (variable-declared-type variable) 'FIXNUM))
+;;             (format t "unboxing ~S~%" (variable-name variable))
+;;             (emit 'aload (variable-register variable))
+;;             (emit-unbox-fixnum)
+;;             (emit 'istore (variable-register variable))
+;;             (setf (variable-representation variable) :unboxed-fixnum)))
 
       (maybe-initialize-thread-var)
       (setf *code* (append code *code*)))

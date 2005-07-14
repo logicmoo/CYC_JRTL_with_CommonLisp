@@ -1,7 +1,7 @@
 ;;; write-sequence.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: write-sequence.lisp,v 1.6 2005-05-15 19:21:28 piso Exp $
+;;; $Id: write-sequence.lisp,v 1.7 2005-07-14 18:52:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,17 +19,9 @@
 
 (in-package #:system)
 
-(defun write-specialized-vector-unsigned-byte-8 (vector stream start end)
-  (declare (optimize speed))
-  (declare (type '(array (unsigned-byte-8) (*)) vector))
-  (declare (type fixnum start end))
-  (do ((i start (the fixnum (1+ i))))
-      ((>= i end) vector)
-    (declare (type fixnum i))
-    (write-8-bits (aref vector i) stream)))
-
 (defun write-sequence (sequence stream &key (start 0) end)
-  (unless (and (integerp start) (>= start 0))
+  (declare (type fixnum start))
+  (unless (>= start 0)
     (error 'simple-type-error
            :datum start
            :expected-type '(integer 0)))
@@ -49,7 +41,7 @@
           ((and (equal stream-element-type '(unsigned-byte 8))
                 (vectorp sequence)
                 (equal (array-element-type sequence) '(unsigned-byte 8)))
-           (write-specialized-vector-unsigned-byte-8 sequence stream start end))
+           (write-vector-unsigned-byte-8 sequence stream start end))
           (t
            (do ((i start (1+ i)))
                ((>= i end) sequence)
