@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.18 2005-07-12 02:33:26 piso Exp $
+;;; $Id: known-functions.lisp,v 1.19 2005-07-14 18:24:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -124,6 +124,7 @@
         simple-typep
         some
         std-slot-value
+        stream-element-type
         stream-line-number
         string<=
         subst
