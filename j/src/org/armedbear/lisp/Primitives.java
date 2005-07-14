@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.811 2005-07-13 17:48:39 piso Exp $
+ * $Id: Primitives.java,v 1.812 2005-07-14 18:52:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5352,6 +5352,31 @@ public final class Primitives extends Lisp
                 objects[i] = new Fixnum(n);
             }
             return new SimpleVector(objects);
+        }
+    };
+
+    // ### write-vector-unsigned-byte-8
+    private static final Primitive WRITE_VECTOR_UNSIGNED_BYTE_8 =
+        new Primitive("write-vector-unsigned-byte-8", PACKAGE_SYS, true,
+                      "vector stream start end")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
+        {
+            final AbstractVector v = checkVector(first);
+            final Stream stream;
+            try {
+                stream = (Stream) second;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.STREAM);
+            }
+            int start = Fixnum.getValue(third);
+            int end = Fixnum.getValue(fourth);
+            for (int i = start; i < end; i++)
+                stream._writeByte(v.aref(i));
+            return v;
         }
     };
 
