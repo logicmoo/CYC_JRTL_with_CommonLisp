@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.533 2005-07-15 16:14:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.534 2005-07-15 20:24:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -883,7 +883,7 @@
   (cond ((symbolp form)
          (incf *p1-size*)
          (cond ((constantp form) ; a DEFCONSTANT
-                (let ((value (symbol-value form)))
+                (let ((value (symbol-value (the symbol form))))
                   (if (numberp value)
                       value
                       form)))
@@ -1218,7 +1218,8 @@
                             (CONS       +lisp-cons-class+)
                             (HASH-TABLE +lisp-hash-table-class+)
                             (FIXNUM     +lisp-fixnum-class+)
-                            (STRING     +lisp-abstract-string-class+)))
+                            (STRING     +lisp-abstract-string-class+)
+                            (VECTOR     +lisp-abstract-vector-class+)))
         (expected-type-java-symbol-name (case expected-type
                                           (HASH-TABLE "HASH_TABLE")
                                           (t
@@ -1267,6 +1268,8 @@
            (generate-instanceof-type-check variable 'FIXNUM))
           ((subtypep declared-type 'STRING)
            (generate-instanceof-type-check variable 'STRING))
+          ((subtypep declared-type 'VECTOR)
+           (generate-instanceof-type-check variable 'VECTOR))
           (t
            nil))))
 
@@ -1865,30 +1868,33 @@
 (declaim (ftype (function (t t t) t) walk-code))
 (defun walk-code (code start-index depth)
   (declare (optimize speed))
+  (declare (type fixnum start-index depth))
   (do* ((i start-index (1+ i))
         (limit (length code)))
        ((>= i limit))
     (declare (type fixnum i limit))
-    (let ((instruction (aref code i)))
-      (when (instruction-depth instruction)
-        (unless (eql (instruction-depth instruction) (+ depth (instruction-stack instruction)))
-          (fresh-line)
-          (sys::%format t "Stack inconsistency at index ~D: found ~S, expected ~S.~%"
-                   i
-                   (instruction-depth instruction)
-                   (+ depth (instruction-stack instruction))))
+    (let* ((instruction (aref code i))
+           (instruction-depth (instruction-depth instruction))
+           (instruction-stack (instruction-stack instruction)))
+      (declare (type fixnum instruction-stack))
+      (when instruction-depth
+        (unless (= (the fixnum instruction-depth) (the fixnum (+ depth instruction-stack)))
+          (format t "~&Stack inconsistency at index ~D: found ~S, expected ~S.~%"
+                   i instruction-depth (+ depth instruction-stack)))
         (return-from walk-code))
       (let ((opcode (instruction-opcode instruction)))
         (unless (eql opcode 168) ; JSR
-          (setf depth (+ depth (instruction-stack instruction))))
+          (setf depth (+ depth instruction-stack)))
         (setf (instruction-depth instruction) depth)
         (if (eql opcode 168) ; JSR
             (let ((label (car (instruction-args instruction))))
+              (declare (type symbol label))
               (walk-code code (symbol-value label) (1+ depth)))
             (when (branch-opcode-p opcode)
               (let ((label (car (instruction-args instruction))))
+                (declare (type symbol label))
                 (walk-code code (symbol-value label) depth))))
-        (when (member opcode '(167 169 176 191)) ; GOTO RET ATHROW
+        (when (member opcode '(167 169 176 191)) ; GOTO RET ARETURN ATHROW
           ;; Current path ends.
           (return-from walk-code))))))
 
@@ -1896,8 +1902,7 @@
 (defun analyze-stack ()
   (let* ((code *code*)
          (code-length (length code)))
-    (declare (type fixnum code-length))
-    (aver (vectorp code))
+    (declare (type vector code))
     (dotimes (i code-length)
       (declare (type fixnum i))
       (let* ((instruction (aref code i))
@@ -1913,7 +1918,6 @@
                          (opcode-stack-effect opcode))
                 (sys::%format t "index = ~D instruction = ~A~%" i (print-instruction instruction))))
             (setf (instruction-stack instruction) (opcode-stack-effect opcode)))
-;;         (aver (not (null (instruction-stack instruction))))
         (unless (instruction-stack instruction)
           (sys::%format t "no stack information for instruction ~D~%" (instruction-opcode instruction))
           (aver nil))))
@@ -1922,17 +1926,18 @@
       ;; Stack depth is always 1 when handler is called.
       (walk-code code (symbol-value (handler-code handler)) 1))
     (let ((max-stack 0))
+      (declare (type fixnum max-stack))
       (dotimes (i code-length)
         (declare (type fixnum i))
         (let* ((instruction (aref code i))
-               (depth (instruction-depth instruction)))
-          (when depth
-            (setf max-stack (max max-stack depth)))))
-      (when *compiler-debug*
-        (sys::%format t "compiland name = ~S~%" (compiland-name *current-compiland*))
-        (sys::%format t "max-stack = ~D~%" max-stack)
-        (sys::%format t "----- after stack analysis -----~%")
-        (print-code))
+               (instruction-depth (instruction-depth instruction)))
+          (when instruction-depth
+            (setf max-stack (max max-stack (the fixnum instruction-depth))))))
+;;       (when *compiler-debug*
+;;         (sys::%format t "compiland name = ~S~%" (compiland-name *current-compiland*))
+;;         (sys::%format t "max-stack = ~D~%" max-stack)
+;;         (sys::%format t "----- after stack analysis -----~%")
+;;         (print-code))
       max-stack)))
 
 (defun resolve-variables ()
@@ -2061,6 +2066,7 @@
       (let ((instruction (aref code i)))
         (when (= (instruction-opcode instruction) 202) ; LABEL
           (let ((label (car (instruction-args instruction))))
+            (declare (type symbol label))
             (unless (eq (symbol-value label) marker)
               (setf (aref code i) nil)
               (setf changed t))))))
@@ -2246,7 +2252,7 @@
         (let ((instruction (aref code i)))
           (when (branch-opcode-p (instruction-opcode instruction))
             (let* ((label (car (instruction-args instruction)))
-                   (offset (- (symbol-value `,label) index)))
+                   (offset (- (symbol-value (the symbol label)) index)))
               (setf (instruction-args instruction) (u2 offset))))
           (unless (= (instruction-opcode instruction) 202) ; LABEL
             (incf index (opcode-size (instruction-opcode instruction)))))))
@@ -5508,12 +5514,13 @@
               (derive-type-minus (list (%cadr form) 1)))
              (1+
               (derive-type-plus (list (%cadr form) 1)))
-             (MIN
-              (derive-type-min (%cdr form)))
+             ((MIN MAX)
+              (derive-type-min/max (%cdr form)))
              (THE
               (second form))
              (t
-              (ftype-result-type (proclaimed-ftype op))))))
+              (let ((type (ftype-result-type (proclaimed-ftype op))))
+                (if (eq type '*) t type))))))
         ((fixnump form)
          (list 'INTEGER form form))
         ((characterp form)
@@ -5630,11 +5637,10 @@
     (t
      t)))
 
-(defun derive-type-min (args)
-  (dolist (arg args)
+(defun derive-type-min/max (args)
+  (dolist (arg args 'fixnum)
     (unless (subtypep (derive-type arg) 'fixnum)
-      (return-from derive-type-min t)))
-  'fixnum)
+      (return t))))
 
 (defun ash-derive-type (arg1 arg2)
   (let* ((type1 (sys::normalize-type (derive-type arg1)))
@@ -5770,9 +5776,8 @@
                             (emit 'new +lisp-fixnum-class+)
                             (emit 'dup))
                           (compile-form arg1 :target :stack :representation :unboxed-fixnum)
-                          (maybe-emit-clear-values arg1)
                           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-                          (maybe-emit-clear-values arg2)
+                          (maybe-emit-clear-values arg1 arg2)
                           (emit-invokestatic "java/lang/Math"
                                              (if (eq (%car form) 'min) "min" "max")
                                              '("I" "I") "I")
@@ -6066,9 +6071,7 @@
                (arg2 (%caddr form)))
            (compile-form arg1 :target :stack) ; array
            (compile-form arg2 :target :stack :representation :unboxed-fixnum) ; index
-           (unless (and (single-valued-p arg1)
-                        (single-valued-p arg2))
-             (emit-clear-values))
+           (maybe-emit-clear-values arg1 arg2)
            (if (eq representation :unboxed-fixnum)
                (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I")
                (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+))
@@ -6213,6 +6216,7 @@
   (emit-move-from-stack target representation))
 
 (defun compile-variable-reference (name target representation)
+  (declare (type symbol name))
   (unless (null target)
     (let ((variable (find-visible-variable name)))
       (cond ((null variable)
@@ -6370,6 +6374,23 @@
            (emit-move-from-stack target representation))
           (t
            (compile-function-call form target representation)))))
+
+(defun p2-symbol-value (form &key (target :stack) representation)
+  (when (check-arg-count form 1)
+    (let ((arg (%cadr form)))
+      (when (eq (derive-type arg) 'SYMBOL)
+        (compile-form arg)
+        (maybe-emit-clear-values arg)
+        (emit 'checkcast +lisp-symbol-class+)
+        (emit-push-current-thread)
+        (emit-invokevirtual +lisp-symbol-class+ "symbolValue"
+                            (list +lisp-thread+) +lisp-object+)
+        (when (eq representation :unboxed-fixnum)
+          (emit-unbox-fixnum))
+        (emit-move-from-stack target representation)
+        (return-from p2-symbol-value))))
+  ;; Otherwise...
+  (compile-function-call form target representation))
 
 (defun p2-the (form &key (target :stack) representation)
 ;;   (compile-form (third form) :target target :representation representation)
@@ -7520,6 +7541,7 @@
   (install-p2-handler 'stringp            'p2-stringp)
   (install-p2-handler 'svref              'p2-svref)
   (install-p2-handler 'symbol-name        'p2-symbol-name)
+  (install-p2-handler 'symbol-value       'p2-symbol-value)
   (install-p2-handler 'symbolp            'p2-symbolp)
   (install-p2-handler 'the                'p2-the)
   (install-p2-handler 'throw              'p2-throw)
