@@ -1,7 +1,7 @@
 ;;; read-sequence.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: read-sequence.lisp,v 1.4 2005-03-30 15:47:32 piso Exp $
+;;; $Id: read-sequence.lisp,v 1.5 2005-07-15 20:22:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@
           ((equal element-type '(unsigned-byte 8))
            (if (and (vectorp sequence)
                     (equal (array-element-type sequence) '(unsigned-byte 8)))
-               (read-vector-ub8 sequence stream start end)
+               (read-vector-unsigned-byte-8 sequence stream start end)
                (do ((pos start (1+ pos)))
                    ((>= pos end) pos)
                  (let ((element (read-8-bits stream nil :eof)))

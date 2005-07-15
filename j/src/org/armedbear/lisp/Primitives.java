@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.812 2005-07-14 18:52:44 piso Exp $
+ * $Id: Primitives.java,v 1.813 2005-07-15 20:21:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5380,9 +5380,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### read-vector-ub8 vector stream start end => position
-    private static final Primitive _READ_VECTOR =
-        new Primitive("read-vector-ub8", PACKAGE_SYS, true,
+    // ### read-vector-unsigned-byte-8 vector stream start end => position
+    private static final Primitive READ_VECTOR_UNSIGNED_BYTE_8 =
+        new Primitive("read-vector-unsigned-byte-8", PACKAGE_SYS, true,
                       "vector stream start end")
     {
         public LispObject execute(LispObject first, LispObject second,
