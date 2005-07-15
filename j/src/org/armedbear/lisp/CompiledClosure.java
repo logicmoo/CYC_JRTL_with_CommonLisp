@@ -2,7 +2,7 @@
  * CompiledClosure.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: CompiledClosure.java,v 1.6 2005-06-09 11:49:06 piso Exp $
+ * $Id: CompiledClosure.java,v 1.7 2005-07-15 11:29:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,10 +33,10 @@ public class CompiledClosure extends Function
         this.context = context;
     }
 
-    protected final LispObject[] processArgs(LispObject[] args, int extra)
+    protected final LispObject[] processArgs(LispObject[] args, LispThread thread)
         throws ConditionThrowable
     {
-        return ctf.processArgs(args, extra);
+        return ctf.processArgs(args, thread);
     }
 
     public LispObject execute() throws ConditionThrowable

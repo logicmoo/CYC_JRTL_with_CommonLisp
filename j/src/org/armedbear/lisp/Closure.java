@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.105 2005-06-14 16:21:07 piso Exp $
+ * $Id: Closure.java,v 1.106 2005-07-15 11:29:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -764,7 +764,10 @@ public class Closure extends Function
             for (int i = 0; i < specials.length; i++)
                 ext.declareSpecial(specials[i]);
         }
-        args = processArgs(args, 0);
+        if (optionalParameters == null && keywordParameters == null)
+            args = fastProcessArgs(args);
+        else
+            args = processArgs(args, thread);
         Debug.assertTrue(args.length == variables.length);
         if (envVar != null) {
             if (isSpecial(envVar))
@@ -808,26 +811,24 @@ public class Closure extends Function
         return false;
     }
 
-    protected final LispObject[] processArgs(LispObject[] args, int extra)
+    protected final LispObject[] processArgs(LispObject[] args, LispThread thread)
         throws ConditionThrowable
     {
-        if (optionalParameters == null && keywordParameters == null) {
-            Debug.assertTrue(extra == 0);
+        if (optionalParameters == null && keywordParameters == null)
             return fastProcessArgs(args);
-        }
         final int argsLength = args.length;
         if (arity >= 0) {
             // Fixed arity.
             if (argsLength != arity)
                 signal(new WrongNumberOfArgumentsException(this));
-            if (extra == 0)
                 return args;
         }
-        // Not fixed arity, or extra != 0.
+        // Not fixed arity.
         if (argsLength < minArgs)
             signal(new WrongNumberOfArgumentsException(this));
-        final LispThread thread = LispThread.currentThread();
-        final LispObject[] array = new LispObject[variables.length + extra];
+        if (thread == null)
+            thread = LispThread.currentThread();
+        final LispObject[] array = new LispObject[variables.length];
         int index = 0;
         // The bindings established here (if any) are lost when this function
         // returns. They are used only in the evaluation of initforms for

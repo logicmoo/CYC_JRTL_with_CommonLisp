@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.531 2005-07-14 18:53:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.532 2005-07-15 11:30:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1194,7 +1194,8 @@
 (defun maybe-initialize-thread-var ()
   (when *initialize-thread-var*
     (emit-invokestatic +lisp-thread-class+ "currentThread" nil +lisp-thread+)
-    (emit 'astore *thread*)))
+    (emit 'astore *thread*)
+    (setf *initialize-thread-var* nil)))
 
 (defsubst ensure-thread-var-initialized ()
   (setf *initialize-thread-var* t))
@@ -7205,28 +7206,17 @@
         (aver (not (null (compiland-argument-register compiland))))
         (emit 'aload (compiland-argument-register compiland)) ; arg vector
         (cond ((or (memq '&OPTIONAL args) (memq '&KEY args))
-               (emit 'iconst_0)
+               (ensure-thread-var-initialized)
+               (maybe-initialize-thread-var)
+               (emit 'aload *thread*)
                (emit-invokevirtual *this-class* "processArgs"
-                                   (list +lisp-object-array+ "I")
+                                   (list +lisp-object-array+ +lisp-thread+)
                                    +lisp-object-array+))
               (t
                (emit-invokevirtual *this-class* "fastProcessArgs"
                                    (list +lisp-object-array+)
                                    +lisp-object-array+)))
         (emit 'astore (compiland-argument-register compiland)))
-
-;;       (generate-type-checks (reverse parameters))
-
-;;         (dolist (variable (compiland-arg-vars compiland))
-;;           (when (and (variable-register variable)
-;;                      (not (variable-special-p variable))
-;;                      (not (variable-used-non-locally-p variable))
-;;                      (subtypep (variable-declared-type variable) 'FIXNUM))
-;;             (format t "unboxing ~S~%" (variable-name variable))
-;;             (emit 'aload (variable-register variable))
-;;             (emit-unbox-fixnum)
-;;             (emit 'istore (variable-register variable))
-;;             (setf (variable-representation variable) :unboxed-fixnum)))
 
       (maybe-initialize-thread-var)
       (setf *code* (append code *code*)))
