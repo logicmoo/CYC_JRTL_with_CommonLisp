@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.532 2005-07-15 11:30:26 piso Exp $
+;;; $Id: jvm.lisp,v 1.533 2005-07-15 16:14:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -770,6 +770,7 @@
           (t
                (list 'THE type (p1 expr))))))
 
+(declaim (ftype (function (t) t) p1-body))
 (defun p1-body (body)
   (declare (optimize speed))
   (let ((tail body))
@@ -780,6 +781,7 @@
       (setf tail (%cdr tail))))
   body)
 
+(declaim (ftype (function (t) t) p1-default))
 (defun p1-default (form)
   (setf (cdr form) (p1-body (cdr form)))
   form)
@@ -868,6 +870,7 @@
                (setf (compiland-single-valued-p *current-compiland*) nil)))))
     (p1-default form)))
 
+(declaim (ftype (function (t) t) notinline-p))
 (defun notinline-p (name)
   (declare (optimize speed))
   (let ((entry (assoc name *inline-declarations*)))
@@ -1448,7 +1451,17 @@
                   (single-valued-p (third form)))
                  ((setf ftype (proclaimed-ftype op))
                   (let ((result-type (ftype-result-type ftype)))
-                    (and result-type (atom result-type) (neq result-type '*) t)))
+;;                     (and result-type (atom result-type) (neq result-type '*) t)
+                    (cond ((null result-type)
+                           nil)
+                          ((eq result-type '*)
+                           nil)
+                          ((atom result-type)
+                           t)
+                          ((eq (%car result-type) 'VALUES)
+                           (= (length result-type) 2))
+                          (t
+                           t))))
                  ((eq op (compiland-name *current-compiland*))
                   (dformat t "single-valued-p recursive call ~S~%" (first form))
                   (compiland-single-valued-p *current-compiland*))
@@ -1842,13 +1855,14 @@
 ;;     198 ; IFNULL
 ;;     ))
 
+(declaim (ftype (function (t) t) branch-opcode))
 (defun branch-opcode-p (opcode)
   (declare (optimize speed))
-;;   (member opcode +branch-opcodes+)
   (declare (type fixnum opcode))
   (or (<= 153 opcode 168)
       (= opcode 198)))
 
+(declaim (ftype (function (t t t) t) walk-code))
 (defun walk-code (code start-index depth)
   (declare (optimize speed))
   (do* ((i start-index (1+ i))
@@ -1878,6 +1892,7 @@
           ;; Current path ends.
           (return-from walk-code))))))
 
+(declaim (ftype (function () t) analyze-stack))
 (defun analyze-stack ()
   (let* ((code *code*)
          (code-length (length code)))
@@ -2663,6 +2678,7 @@
         (setf (gethash n ht) g)))
     g))
 
+(declaim (ftype (function (t) string) declare-object-as-string))
 (defun declare-object-as-string (obj)
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
@@ -2990,6 +3006,7 @@
           (t
            nil)))))
 
+(declaim (ftype (function (t) t) fixnum-or-unboxed-variable-p))
 (defun fixnum-or-unboxed-variable-p (arg)
   (or (fixnump arg)
       (unboxed-fixnum-variable arg)))
@@ -3667,6 +3684,7 @@
 
 (initialize-p2-test-handlers)
 
+(declaim (ftype (function (t t) t) p2-test-predicate))
 (defun p2-test-predicate (form java-predicate)
   (when (check-arg-count form 1)
     (let ((arg (%cadr form)))
@@ -3675,6 +3693,7 @@
       (emit-invokevirtual +lisp-object-class+ java-predicate nil "Z")
       'ifeq)))
 
+(declaim (ftype (function (t t) t) p2-test-instanceof-predicate))
 (defun p2-test-instanceof-predicate (form java-class)
   (when (check-arg-count form 1)
     (let ((arg (%cadr form)))

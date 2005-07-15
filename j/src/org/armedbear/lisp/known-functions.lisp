@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.19 2005-07-14 18:24:28 piso Exp $
+;;; $Id: known-functions.lisp,v 1.20 2005-07-15 16:13:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,13 +31,24 @@
 
 (declaim (ftype (function * cons) backq-cons))
 
-(declaim (ftype (function * string) write-string))
+(declaim (ftype (function (character) character) char-downcase char-upcase))
+
+(declaim (ftype (function * t) finish-output force-output clear-output terpri fresh-line))
 
 (declaim (ftype (function (symbol) string) symbol-name))
 
-(declaim (ftype (function (character) character) char-downcase char-upcase))
-
-(declaim (ftype (function * t) finish-output terpri fresh-line))
+(declaim
+ (ftype (function * string)
+        get-output-stream-string
+        nstring-capitalize
+        nstring-downcase
+        nstring-upcase
+        string-capitalize
+        string-downcase
+        string-upcase
+        write-line
+        write-string
+        ))
 
 (declaim
  (ftype (function * t)
@@ -45,7 +56,9 @@
         %ldb
         %make-structure
         %method-function
+        %put
         %set-cddr
+        %set-schar
         %set-std-slot-value
         %stream-terpri
         %stream-write-char
@@ -67,6 +80,7 @@
         bit-orc2
         bit-xor
         both-case-p
+        built-in-function-p
         caadr
         char-equal
         characterp
@@ -75,7 +89,9 @@
         coerce
         coerce-to-function
         compile-file-pathname
-        complex conjugate
+        complex
+        conjugate
+        delete-file
         directory-namestring
         enough-namestring
         every
@@ -86,8 +102,10 @@
         float
         fmakunbound
         fset
+        ftype-result-type
         get-internal-real-time
         getf
+        hash-table-count
         hash-table-p
         host-namestring
         intersection
@@ -96,13 +114,13 @@
         list-all-packages
         load-compiled-function
         lower-case-p
+        make-string-output-stream
         map
         merge-pathnames
         namestring
-        namestring
         neq
         nintersection
-        nstring-upcase
+        normalize-type
         nsubst
         nsubst-if
         nsubst-if-not
@@ -113,6 +131,7 @@
         pathnamep
         phase
         probe-file
+        proclaimed-ftype
         random
         read
         read-sequence
@@ -120,9 +139,14 @@
         replace
         scale-float
         set
+        setf-function-name-p
+        simple-condition-format-arguments
+        simple-condition-format-control
         simple-search
         simple-typep
         some
+        sort
+        stable-sort
         std-slot-value
         stream-element-type
         stream-line-number
@@ -134,7 +158,7 @@
         truename
         vector
         vectorp
-        write-char
+        write-byte
         write-sequence
         zerop
         ))
@@ -151,7 +175,7 @@
 
 (declaim (ftype (function (character) (unsigned-byte 16)) char-code))
 
-(declaim (ftype (function * character) char schar))
+(declaim (ftype (function * character) char schar write-char))
 
 (declaim
  (ftype (function * t)
