@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.813 2005-07-15 20:21:49 piso Exp $
+ * $Id: Primitives.java,v 1.814 2005-07-16 18:05:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2493,7 +2493,7 @@ public final class Primitives extends Lisp
                     cons = (Cons) list;
                 }
                 catch (ClassCastException e) {
-                    return signal(new TypeError(list, Symbol.LIST));
+                    return signalTypeError(list, Symbol.LIST);
                 }
                 LispObject obj = thread.execute(fun, cons.car);
                 if (splice == null) {
@@ -2542,7 +2542,7 @@ public final class Primitives extends Lisp
             int commonLength = -1;
             for (int i = 1; i < numArgs; i++) {
                 if (!args[i].listp())
-                    signal(new TypeError(args[i], Symbol.LIST));
+                    signalTypeError(args[i], Symbol.LIST);
                 int len = args[i].length();
                 if (commonLength < 0)
                     commonLength = len;
@@ -2560,10 +2560,79 @@ public final class Primitives extends Lisp
                 for (int j = 1; j < numArgs; j++)
                     args[j] = args[j].cdr();
             }
-            thread.clearValues();
+            thread._values = null;
             LispObject result = NIL;
             for (int i = commonLength; i-- > 0;)
                 result = new Cons(results[i], result);
+            return result;
+        }
+    };
+
+    // ### mapc
+    private static final Primitive MAPC =
+        new Primitive("mapc", "function &rest lists")
+    {
+        public LispObject execute(LispObject fun, LispObject list)
+            throws ConditionThrowable
+        {
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = list;
+            while (list != NIL) {
+                Cons cons;
+                try {
+                    cons = (Cons) list;
+                }
+                catch (ClassCastException e) {
+                    return signalTypeError(list, Symbol.LIST);
+                }
+                thread.execute(fun, cons.car);
+                list = cons.cdr;
+            }
+            thread._values = null;
+            return result;
+        }
+        public LispObject execute(LispObject fun, LispObject list1,
+                                  LispObject list2)
+            throws ConditionThrowable
+        {
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = list1;
+            while (list1 != NIL && list2 != NIL) {
+                thread.execute(fun, list1.car(), list2.car());
+                list1 = list1.cdr();
+                list2 = list2.cdr();
+            }
+            thread._values = null;
+            return result;
+        }
+        public LispObject execute(final LispObject[] args)
+            throws ConditionThrowable
+        {
+            final int numArgs = args.length;
+            if (numArgs < 2)
+                signal(new WrongNumberOfArgumentsException(this));
+            int commonLength = -1;
+            for (int i = 1; i < numArgs; i++) {
+                if (!args[i].listp())
+                    signalTypeError(args[i], Symbol.LIST);
+                int len = args[i].length();
+                if (commonLength < 0)
+                    commonLength = len;
+                else if (commonLength > len)
+                    commonLength = len;
+            }
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = args[1];
+            final int numFunArgs = numArgs - 1;
+            final LispObject[] funArgs = new LispObject[numFunArgs];
+            for (int i = 0; i < commonLength; i++) {
+                for (int j = 0; j < numFunArgs; j++)
+                    funArgs[j] = args[j+1].car();
+                funcall(args[0], funArgs, thread);
+                for (int j = 1; j < numArgs; j++)
+                    args[j] = args[j].cdr();
+            }
+            thread._values = null;
             return result;
         }
     };
