@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.189 2005-06-13 19:19:12 piso Exp $
+;;; $Id: autoloads.lisp,v 1.190 2005-07-16 18:05:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@
 (autoload '(assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not
             acons pairlis copy-alist)
           "assoc")
-(autoload '(mapc mapcan mapl maplist mapcon) "map1")
+(autoload '(mapcan mapl maplist mapcon) "map1")
 (autoload 'make-sequence)
 (autoload '(copy-seq fill replace))
 (autoload '(map map-into))
