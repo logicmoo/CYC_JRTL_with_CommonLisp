@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.50 2005-06-19 23:06:46 piso Exp $
+ * $Id: StructureObject.java,v 1.51 2005-07-16 17:36:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,13 @@ package org.armedbear.lisp;
 
 public final class StructureObject extends LispObject
 {
-    private final LispClass structureClass;
+    private final StructureClass structureClass;
     private final LispObject[] slots;
 
     public StructureObject(Symbol symbol, LispObject list)
         throws ConditionThrowable
     {
-        structureClass = LispClass.findClass(symbol); // Might return null.
-        Debug.assertTrue(structureClass instanceof StructureClass);
+        structureClass = (StructureClass) LispClass.findClass(symbol); // Might return null.
         slots = list.copyToArray();
     }
 
@@ -78,9 +77,8 @@ public final class StructureObject extends LispObject
             return T;
         if (type instanceof Symbol) {
             LispClass c = LispClass.findClass((Symbol)type);
-            if (c != null) {
+            if (c != null)
                 return memq(c, structureClass.getCPL()) ? T : NIL;
-            }
         }
         return super.typep(type);
     }
@@ -152,7 +150,7 @@ public final class StructureObject extends LispObject
             StringBuffer sb = new StringBuffer("#S(");
             sb.append(structureClass.getSymbol().writeToString());
             if (currentLevel < maxLevel) {
-                LispObject effectiveSlots = structureClass.getSlots();
+                LispObject effectiveSlots = structureClass.getSlotDefinitions();
                 LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
                 Debug.assertTrue(effectiveSlotsArray.length == slots.length);
                 final LispObject printLength = _PRINT_LENGTH_.symbolValue(thread);

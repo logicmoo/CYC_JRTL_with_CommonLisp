@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.132 2005-07-01 19:05:37 piso Exp $
+ * $Id: Stream.java,v 1.133 2005-07-16 17:38:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1460,11 +1460,15 @@ public class Stream extends LispObject
                 ++lineNumber;
             return n;
         }
+        catch (NullPointerException e) {
+            // reader is null
+            streamNotCharacterInputStream();
+        }
         catch (IOException e) {
             signal(new StreamError(this, e));
-            // Not reached.
-            return -1;
         }
+        // Not reached.
+        return -1;
     }
 
     protected void _unreadChar(int n) throws ConditionThrowable
@@ -1474,6 +1478,10 @@ public class Stream extends LispObject
             --offset;
             if (n == '\n')
                 --lineNumber;
+        }
+        catch (NullPointerException e) {
+            // reader is null
+            streamNotCharacterInputStream();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -1485,11 +1493,15 @@ public class Stream extends LispObject
         try {
             return reader.ready();
         }
+        catch (NullPointerException e) {
+            // reader is null
+            streamNotCharacterInputStream();
+        }
         catch (IOException e) {
             signal(new StreamError(this, e));
-            // Not reached.
-            return false;
         }
+        // Not reached.
+        return false;
     }
 
     public void _writeChar(char c) throws ConditionThrowable
@@ -1686,6 +1698,11 @@ public class Stream extends LispObject
     protected LispObject streamNotInputStream() throws ConditionThrowable
     {
         return signal(new StreamError(this, writeToString() + " is not an input stream."));
+    }
+
+    protected LispObject streamNotCharacterInputStream() throws ConditionThrowable
+    {
+        return signal(new StreamError(this, writeToString() + " is not a character input stream."));
     }
 
     protected LispObject streamNotOutputStream() throws ConditionThrowable
