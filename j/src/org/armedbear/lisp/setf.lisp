@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: setf.lisp,v 1.59 2005-06-26 13:44:29 piso Exp $
+;;; $Id: setf.lisp,v 1.60 2005-07-16 05:06:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,9 +38,8 @@
 ;;; If a macro, expand one level and try again.  If not, go for the
 ;;; SETF function.
 (defun expand-or-get-setf-inverse (form environment)
-  (multiple-value-bind
-    (expansion expanded)
-    (macroexpand-1 form environment)
+  (multiple-value-bind (expansion expanded)
+      (macroexpand-1 form environment)
     (if expanded
         (get-setf-expansion expansion environment)
         (get-setf-method-inverse form `(funcall #'(setf ,(car form)))
@@ -71,10 +70,10 @@
         (if (atom place)
             `(setq ,place ,value-form)
             (progn
-              (when (symbolp (car place))
-                (resolve (car place)))
+              (when (symbolp (%car place))
+                (resolve (%car place)))
               (multiple-value-bind (dummies vals store-vars setter getter)
-                (get-setf-expansion place environment)
+                  (get-setf-expansion place environment)
                 (let ((inverse (get (car place) 'setf-inverse)))
                   (if (and inverse (eq inverse (car setter)))
                       (if (functionp inverse)

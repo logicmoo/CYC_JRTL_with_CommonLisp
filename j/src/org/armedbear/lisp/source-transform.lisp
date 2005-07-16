@@ -1,7 +1,7 @@
 ;;; source-transform.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: source-transform.lisp,v 1.5 2005-06-27 12:18:22 piso Exp $
+;;; $Id: source-transform.lisp,v 1.6 2005-07-16 05:06:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,14 +45,14 @@
         (newdef nil))
     (cond ((atom form)
            (values form nil))
-          ((and (consp (car form))
+          ((and (consp (%car form))
                 (eq (caar form) 'SETF)
-                (setf expander (source-transform (car form))))
-           (values (setq newdef (funcall expander form))
+                (setf expander (source-transform (%car form))))
+           (values (setf newdef (funcall expander form))
                    (not (eq newdef form))))
-          ((and (symbolp (car form))
-                (setf expander (source-transform (car form))))
-           (values (setq newdef (funcall expander form))
+          ((and (symbolp (%car form))
+                (setf expander (source-transform (%car form))))
+           (values (setf newdef (funcall expander form))
                    (not (eq newdef form))))
           (t
            (values form nil)))))

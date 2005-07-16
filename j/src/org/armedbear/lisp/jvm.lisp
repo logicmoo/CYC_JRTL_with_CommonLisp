@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.534 2005-07-15 20:24:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.535 2005-07-16 05:05:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -654,6 +654,30 @@
         (p1-compiland (local-function-compiland local-function))))
     (list* (car form) local-functions (mapcar #'p1 (cddr form)))))
 
+(defun p1-funcall (form)
+  (unless (> (length form) 1)
+    (compiler-warn "Wrong number of arguments for ~A." (car form))
+    (return-from p1-funcall form))
+  (let ((function-form (%cadr form)))
+    (when (and (consp function-form)
+               (eq (%car function-form) 'FUNCTION))
+      (let ((name (%cadr function-form)))
+;;         (format t "p1-funcall name = ~S~%" name)
+        (let ((source-transform (source-transform name)))
+          (when source-transform
+;;             (format t "found source transform for ~S~%" name)
+;;             (format t "old form = ~S~%" form)
+;;             (let ((new-form (expand-source-transform form)))
+;;               (when (neq new-form form)
+;;                 (format t "new form = ~S~%" new-form)
+;;                 (return-from p1-funcall (p1 new-form))))
+            (let ((new-form (expand-source-transform (list* name (cddr form)))))
+;;               (format t "new form = ~S~%" new-form)
+              (return-from p1-funcall (p1 new-form)))
+            )))))
+  ;; Otherwise...
+  (p1-function-call form))
+
 (defun p1-function (form)
   (let (local-function)
     (cond ((and (consp (cadr form)) (eq (caadr form) 'LAMBDA))
@@ -945,6 +969,7 @@
                   (DECLARE              identity)
                   (EVAL-WHEN            p1-eval-when)
                   (FLET                 p1-flet)
+                  (FUNCALL              p1-funcall)
                   (FUNCTION             p1-function)
                   (GO                   p1-go)
                   (IF                   p1-default)
@@ -3413,13 +3438,13 @@
 ;;         (t
 ;;          form)))
 
-(defun compile-funcall (form &key (target :stack) representation)
+(defun p2-funcall (form &key (target :stack) representation)
   (unless (> (length form) 1)
     (compiler-warn "Wrong number of arguments for ~A." (car form))
     (compile-function-call form target representation)
-    (return-from compile-funcall))
+    (return-from p2-funcall))
   (when (> *debug* *speed*)
-    (return-from compile-funcall (compile-function-call form target representation)))
+    (return-from p2-funcall (compile-function-call form target representation)))
   (compile-form (cadr form) :target :stack)
   (maybe-emit-clear-values (cadr form))
   (compile-call (cddr form))
@@ -4333,8 +4358,8 @@
     (dolist (variable (block-vars block))
       (let* ((initform (variable-initform variable))
              (unused-p (and (not (variable-special-p variable))
-                          (zerop (variable-reads variable))
-                          (zerop (variable-writes variable))))
+                            (zerop (variable-reads variable))
+                            (zerop (variable-writes variable))))
              (boundp nil))
         (when unused-p
           (unused-variable variable))
@@ -7474,7 +7499,6 @@
 
 (defun initialize-p2-handlers ()
   (mapc #'install-p2-handler '(declare
-                               funcall
                                multiple-value-call
                                multiple-value-list
                                multiple-value-prog1
@@ -7509,6 +7533,7 @@
   (install-p2-handler 'eval-when          'p2-eval-when)
   (install-p2-handler 'fixnump            'p2-fixnump)
   (install-p2-handler 'flet               'p2-flet)
+  (install-p2-handler 'funcall            'p2-funcall)
   (install-p2-handler 'function           'p2-function)
   (install-p2-handler 'get                'p2-get)
   (install-p2-handler 'gethash            'p2-gethash)
