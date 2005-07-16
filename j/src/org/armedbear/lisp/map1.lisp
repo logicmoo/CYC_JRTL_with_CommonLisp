@@ -1,7 +1,7 @@
 ;;; map1.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: map1.lisp,v 1.2 2004-03-24 01:32:41 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: map1.lisp,v 1.3 2005-07-16 18:06:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+;;; Adapted from CMUCL.
 
-;;; Mapping functions (from CMUCL)
+(in-package #:system)
 
 (defun map1 (function original-arglists accumulate take-car)
   (let* ((arglists (copy-list original-arglists))
@@ -40,10 +40,6 @@
 	(:nconc (setq temp (last (nconc temp res))))
 	(:list (rplacd temp (list res))
 	       (setq temp (cdr temp)))))))
-
-
-(defun mapc (function list &rest more-lists)
-  (map1 function (cons list more-lists) nil t))
 
 (defun mapcan (function list &rest more-lists)
   (map1 function (cons list more-lists) :nconc t))
