@@ -2,7 +2,7 @@
  * ItemListener.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ItemListener.java,v 1.3 2005-07-16 14:44:30 piso Exp $
+ * $Id: ItemListener.java,v 1.4 2005-07-16 14:44:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@ import javax.swing.ButtonModel;
 import javax.swing.DefaultButtonModel;
 import javax.swing.JComboBox;
 import org.armedbear.lisp.JHandler;
-
 
 public class ItemListener implements java.awt.event.ItemListener
 {
