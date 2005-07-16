@@ -2,7 +2,7 @@
  * StreamError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: StreamError.java,v 1.19 2005-06-27 20:06:50 piso Exp $
+ * $Id: StreamError.java,v 1.20 2005-07-16 14:44:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,9 +126,9 @@ public class StreamError extends LispError
     public String getMessage()
     {
         if (cause != null) {
-            String message = cause.getMessage();
-            if (message != null && message.length() > 0)
-                return message;
+            String s = cause.getMessage();
+            if (s != null && s.length() > 0)
+                return s;
         }
         return null;
     }

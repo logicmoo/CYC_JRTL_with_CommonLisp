@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureClass.java,v 1.14 2005-06-21 18:42:15 piso Exp $
+ * $Id: StructureClass.java,v 1.15 2005-07-16 14:44:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,8 +86,8 @@ public class StructureClass extends SlotClass
                 c.setCPL(new Cons(c, includedClass.getCPL()));
             } else
                 c.setCPL(c, BuiltInClass.STRUCTURE_OBJECT, BuiltInClass.CLASS_T);
-            c.setDirectSlots(directSlots);
-            c.setSlots(slots);
+            c.setDirectSlotDefinitions(directSlots);
+            c.setSlotDefinitions(slots);
             addClass(symbol, c);
             return c;
         }

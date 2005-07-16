@@ -1,7 +1,8 @@
 /*
  * ItemListener.java
  *
- * Copyright (C) 2003 Peter Graves
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: ItemListener.java,v 1.3 2005-07-16 14:44:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,52 +21,58 @@
 
 package org.armedbear.lisp.java.awt;
 
-import org.armedbear.lisp.JHandler;
-import java.awt.event.ItemEvent;
 import java.awt.Checkbox;
 import java.awt.CheckboxMenuItem;
 import java.awt.Choice;
 import java.awt.ItemSelectable;
 import java.awt.List;
+import java.awt.event.ItemEvent;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultButtonModel;
 import javax.swing.JComboBox;
+import org.armedbear.lisp.JHandler;
 
 
-public class ItemListener implements java.awt.event.ItemListener {
-
-    public void itemStateChanged(ItemEvent itemevent) {
+public class ItemListener implements java.awt.event.ItemListener
+{
+    public void itemStateChanged(ItemEvent itemevent)
+    {
         String as[] = { itemevent.paramString(), itemevent.getItem().toString() };
-        int ai[] = { itemevent.getStateChange() != itemevent.SELECTED ? 0 : 1 };
+        int ai[] = { itemevent.getStateChange() != ItemEvent.SELECTED ? 0 : 1 };
         JHandler.callLisp("ITEMSTATECHANGED", handle, as, ai);
     }
 
-    public static synchronized void addTo(Checkbox checkbox) {
+    public static synchronized void addTo(Checkbox checkbox)
+    {
         ItemListener itemlistener = new ItemListener();
         itemlistener.handle = checkbox;
         checkbox.addItemListener(itemlistener);
     }
 
-    public static synchronized void addTo(CheckboxMenuItem checkboxmenuitem) {
+    public static synchronized void addTo(CheckboxMenuItem checkboxmenuitem)
+    {
         ItemListener itemlistener = new ItemListener();
         itemlistener.handle = checkboxmenuitem;
         checkboxmenuitem.addItemListener(itemlistener);
     }
 
-    public static synchronized void addTo(Choice choice) {
+    public static synchronized void addTo(Choice choice)
+    {
         ItemListener itemlistener = new ItemListener();
         itemlistener.handle = choice;
         choice.addItemListener(itemlistener);
     }
 
-    public static synchronized void addTo(ItemSelectable itemselectable) {
+    public static synchronized void addTo(ItemSelectable itemselectable)
+    {
         ItemListener itemlistener = new ItemListener();
         itemlistener.handle = itemselectable;
         itemselectable.addItemListener(itemlistener);
     }
 
-    public static synchronized void addTo(List list) {
+    public static synchronized void addTo(List list)
+    {
         ItemListener itemlistener = new ItemListener();
         itemlistener.handle = list;
         list.addItemListener(itemlistener);
@@ -73,25 +80,29 @@ public class ItemListener implements java.awt.event.ItemListener {
 
     //Swing
 
-    public static synchronized void addTo(AbstractButton abstractbutton) {
+    public static synchronized void addTo(AbstractButton abstractbutton)
+    {
         ItemListener itemlistener = new ItemListener();
         itemlistener.handle = abstractbutton;
         abstractbutton.addItemListener(itemlistener);
     }
 
-    public static synchronized void addTo(ButtonModel buttonmodel) {
+    public static synchronized void addTo(ButtonModel buttonmodel)
+    {
         ItemListener itemlistener = new ItemListener();
         itemlistener.handle = buttonmodel;
         buttonmodel.addItemListener(itemlistener);
     }
 
-    public static synchronized void addTo(DefaultButtonModel defaultbuttonmodel) {
+    public static synchronized void addTo(DefaultButtonModel defaultbuttonmodel)
+    {
         ItemListener itemlistener = new ItemListener();
         itemlistener.handle = defaultbuttonmodel;
         defaultbuttonmodel.addItemListener(itemlistener);
     }
 
-    public static synchronized void addTo(JComboBox jcombobox) {
+    public static synchronized void addTo(JComboBox jcombobox)
+    {
         ItemListener itemlistener = new ItemListener();
         itemlistener.handle = jcombobox;
         jcombobox.addItemListener(itemlistener);

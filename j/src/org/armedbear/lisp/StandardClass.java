@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.37 2005-06-23 19:08:24 piso Exp $
+ * $Id: StandardClass.java,v 1.38 2005-07-16 14:44:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -221,7 +221,7 @@ public class StandardClass extends SlotClass
 
         ARITHMETIC_ERROR.setCPL(ARITHMETIC_ERROR, ERROR, SERIOUS_CONDITION,
                                 CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        ARITHMETIC_ERROR.setDirectSlots(
+        ARITHMETIC_ERROR.setDirectSlotDefinitions(
             list2(new SlotDefinition(Symbol.OPERATION,
                                      list1(PACKAGE_CL.intern("ARITHMETIC-ERROR-OPERATION"))),
                   new SlotDefinition(Symbol.OPERANDS,
@@ -230,12 +230,12 @@ public class StandardClass extends SlotClass
                               BuiltInClass.CLASS_T);
         CELL_ERROR.setCPL(CELL_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        CELL_ERROR.setDirectSlots(
+        CELL_ERROR.setDirectSlotDefinitions(
             list1(new SlotDefinition(Symbol.NAME,
                                      list1(PACKAGE_CL.intern("CELL-ERROR-NAME")))));
         CLASS.setCPL(CLASS, STANDARD_OBJECT, BuiltInClass.CLASS_T);
         CONDITION.setCPL(CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        CONDITION.setDirectSlots(
+        CONDITION.setDirectSlotDefinitions(
             list2(new SlotDefinition(Symbol.FORMAT_CONTROL,
                                      list1(PACKAGE_CL.intern("SIMPLE-CONDITION-FORMAT-CONTROL"))),
                   new SlotDefinition(Symbol.FORMAT_ARGUMENTS,
@@ -251,7 +251,7 @@ public class StandardClass extends SlotClass
                      BuiltInClass.CLASS_T);
         FILE_ERROR.setCPL(FILE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        FILE_ERROR.setDirectSlots(
+        FILE_ERROR.setDirectSlotDefinitions(
             list1(new SlotDefinition(Symbol.PATHNAME,
                                      list1(PACKAGE_CL.intern("FILE-ERROR-PATHNAME")))));
         FLOATING_POINT_INEXACT.setCPL(FLOATING_POINT_INEXACT, ARITHMETIC_ERROR,
@@ -275,14 +275,14 @@ public class StandardClass extends SlotClass
         METHOD.setCPL(METHOD, STANDARD_OBJECT, BuiltInClass.CLASS_T);
         PACKAGE_ERROR.setCPL(PACKAGE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                              STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        PACKAGE_ERROR.setDirectSlots(
+        PACKAGE_ERROR.setDirectSlotDefinitions(
             list1(new SlotDefinition(Symbol.PACKAGE,
                                      list1(PACKAGE_CL.intern("PACKAGE-ERROR-PACKAGE")))));
         PARSE_ERROR.setCPL(PARSE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                            STANDARD_OBJECT, BuiltInClass.CLASS_T);
         PRINT_NOT_READABLE.setCPL(PRINT_NOT_READABLE, ERROR, SERIOUS_CONDITION,
                                   CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        PRINT_NOT_READABLE.setDirectSlots(
+        PRINT_NOT_READABLE.setDirectSlotDefinitions(
             list1(new SlotDefinition(Symbol.OBJECT,
                                      list1(PACKAGE_CL.intern("PRINT-NOT-READABLE-OBJECT")))));
         PROGRAM_ERROR.setCPL(PROGRAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
@@ -312,7 +312,7 @@ public class StandardClass extends SlotClass
                                  STANDARD_OBJECT, BuiltInClass.CLASS_T);
         STREAM_ERROR.setCPL(STREAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                             STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        STREAM_ERROR.setDirectSlots(
+        STREAM_ERROR.setDirectSlotDefinitions(
             list1(new SlotDefinition(Symbol.STREAM,
                                      list1(PACKAGE_CL.intern("STREAM-ERROR-STREAM")))));
         STRUCTURE_CLASS.setCPL(STRUCTURE_CLASS, CLASS, STANDARD_OBJECT,
@@ -321,14 +321,14 @@ public class StandardClass extends SlotClass
                              BuiltInClass.CLASS_T);
         TYPE_ERROR.setCPL(TYPE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        TYPE_ERROR.setDirectSlots(
+        TYPE_ERROR.setDirectSlotDefinitions(
             list2(new SlotDefinition(Symbol.DATUM,
                                      list1(PACKAGE_CL.intern("TYPE-ERROR-DATUM"))),
                   new SlotDefinition(Symbol.EXPECTED_TYPE,
                                      list1(PACKAGE_CL.intern("TYPE-ERROR-EXPECTED-TYPE")))));
         UNBOUND_SLOT.setCPL(UNBOUND_SLOT, CELL_ERROR, ERROR, SERIOUS_CONDITION,
                             CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
-        UNBOUND_SLOT.setDirectSlots(
+        UNBOUND_SLOT.setDirectSlotDefinitions(
             list1(new SlotDefinition(Symbol.INSTANCE,
                                      list1(PACKAGE_CL.intern("UNBOUND-SLOT-INSTANCE")))));
         UNBOUND_VARIABLE.setCPL(UNBOUND_VARIABLE, CELL_ERROR, ERROR,
@@ -376,17 +376,17 @@ public class StandardClass extends SlotClass
         Debug.assertTrue(SLOT_DEFINITION.isFinalized());
         SLOT_DEFINITION.setCPL(SLOT_DEFINITION, STANDARD_OBJECT,
                                BuiltInClass.CLASS_T);
-        SLOT_DEFINITION.setDirectSlots(SLOT_DEFINITION.getClassLayout().generateSlotDefinitions());
+        SLOT_DEFINITION.setDirectSlotDefinitions(SLOT_DEFINITION.getClassLayout().generateSlotDefinitions());
         // There are no inherited slots.
-        SLOT_DEFINITION.setSlots(SLOT_DEFINITION.getDirectSlots());
+        SLOT_DEFINITION.setSlotDefinitions(SLOT_DEFINITION.getDirectSlotDefinitions());
 
         // STANDARD-METHOD
         Debug.assertTrue(STANDARD_METHOD.isFinalized());
         STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT,
                                BuiltInClass.CLASS_T);
-        STANDARD_METHOD.setDirectSlots(STANDARD_METHOD.getClassLayout().generateSlotDefinitions());
+        STANDARD_METHOD.setDirectSlotDefinitions(STANDARD_METHOD.getClassLayout().generateSlotDefinitions());
         // There are no inherited slots.
-        STANDARD_METHOD.setSlots(STANDARD_METHOD.getDirectSlots());
+        STANDARD_METHOD.setSlotDefinitions(STANDARD_METHOD.getDirectSlotDefinitions());
 
         // STANDARD-GENERIC-FUNCTION
         Debug.assertTrue(STANDARD_GENERIC_FUNCTION.isFinalized());
@@ -394,8 +394,8 @@ public class StandardClass extends SlotClass
                                          GENERIC_FUNCTION, STANDARD_OBJECT,
                                          BuiltInClass.FUNCTION,
                                          BuiltInClass.CLASS_T);
-        STANDARD_GENERIC_FUNCTION.setDirectSlots(STANDARD_GENERIC_FUNCTION.getClassLayout().generateSlotDefinitions());
+        STANDARD_GENERIC_FUNCTION.setDirectSlotDefinitions(STANDARD_GENERIC_FUNCTION.getClassLayout().generateSlotDefinitions());
         // There are no inherited slots.
-        STANDARD_GENERIC_FUNCTION.setSlots(STANDARD_GENERIC_FUNCTION.getDirectSlots());
+        STANDARD_GENERIC_FUNCTION.setSlotDefinitions(STANDARD_GENERIC_FUNCTION.getDirectSlotDefinitions());
     }
 }

@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SlotClass.java,v 1.14 2005-06-20 16:03:54 piso Exp $
+ * $Id: SlotClass.java,v 1.15 2005-07-16 14:44:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ package org.armedbear.lisp;
 
 public class SlotClass extends LispClass
 {
-    private LispObject directSlots = NIL;
-    private LispObject slots = NIL;
+    private LispObject directSlotDefinitions = NIL;
+    private LispObject slotDefinitions = NIL;
     private LispObject directDefaultInitargs = NIL;
     private LispObject defaultInitargs = NIL;
 
@@ -40,8 +40,8 @@ public class SlotClass extends LispClass
     public LispObject getParts() throws ConditionThrowable
     {
         LispObject result = super.getParts().nreverse();
-        result = result.push(new Cons("DIRECT-SLOTS", directSlots));
-        result = result.push(new Cons("SLOTS", slots));
+        result = result.push(new Cons("DIRECT-SLOTS", directSlotDefinitions));
+        result = result.push(new Cons("SLOTS", slotDefinitions));
         result = result.push(new Cons("DIRECT-DEFAULT-INITARGS", directDefaultInitargs));
         result = result.push(new Cons("DEFAULT-INITARGS", defaultInitargs));
         return result.nreverse();
@@ -52,24 +52,24 @@ public class SlotClass extends LispClass
         return super.typep(type);
     }
 
-    public LispObject getDirectSlots()
+    public LispObject getDirectSlotDefinitions()
     {
-        return directSlots;
+        return directSlotDefinitions;
     }
 
-    public void setDirectSlots(LispObject directSlots)
+    public void setDirectSlotDefinitions(LispObject directSlotDefinitions)
     {
-        this.directSlots = directSlots;
+        this.directSlotDefinitions = directSlotDefinitions;
     }
 
-    public final LispObject getSlots()
+    public final LispObject getSlotDefinitions()
     {
-        return slots;
+        return slotDefinitions;
     }
 
-    public void setSlots(LispObject slots)
+    public void setSlotDefinitions(LispObject slotDefinitions)
     {
-        this.slots = slots;
+        this.slotDefinitions = slotDefinitions;
     }
 
     public void finalizeClassLayout()
@@ -77,7 +77,7 @@ public class SlotClass extends LispClass
         if (isFinalized())
             return;
         try {
-            Debug.assertTrue(slots == NIL);
+            Debug.assertTrue(slotDefinitions == NIL);
             LispObject cpl = getCPL();
             Debug.assertTrue(cpl != null);
             Debug.assertTrue(cpl.listp());
@@ -86,20 +86,20 @@ public class SlotClass extends LispClass
                 LispObject car = cpl.car();
                 if (car instanceof StandardClass) {
                     StandardClass cls = (StandardClass) car;
-                    LispObject directSlots = cls.getDirectSlots();
-                    Debug.assertTrue(directSlots != null);
-                    Debug.assertTrue(directSlots.listp());
-                    while (directSlots != NIL) {
-                        slots = slots.push(directSlots.car());
-                        directSlots = directSlots.cdr();
+                    LispObject defs = cls.getDirectSlotDefinitions();
+                    Debug.assertTrue(defs != null);
+                    Debug.assertTrue(defs.listp());
+                    while (defs != NIL) {
+                        slotDefinitions = slotDefinitions.push(defs.car());
+                        defs = defs.cdr();
                     }
                 }
                 cpl = cpl.cdr();
             }
-            slots = slots.nreverse();
-            LispObject[] instanceSlotNames = new LispObject[slots.length()];
+            slotDefinitions = slotDefinitions.nreverse();
+            LispObject[] instanceSlotNames = new LispObject[slotDefinitions.length()];
             int i = 0;
-            LispObject tail = slots;
+            LispObject tail = slotDefinitions;
             while (tail != NIL) {
                 SlotDefinition slotDefinition = (SlotDefinition) tail.car();
                 slotDefinition.setLocation(i);
@@ -122,7 +122,7 @@ public class SlotClass extends LispClass
             throws ConditionThrowable
         {
             if (arg instanceof SlotClass)
-                return ((SlotClass)arg).directSlots;
+                return ((SlotClass)arg).directSlotDefinitions;
             if (arg instanceof BuiltInClass)
                 return NIL;
             return signal(new TypeError(arg, Symbol.STANDARD_CLASS));
@@ -137,7 +137,7 @@ public class SlotClass extends LispClass
             throws ConditionThrowable
         {
             try {
-                ((SlotClass)first).directSlots = second;
+                ((SlotClass)first).directSlotDefinitions = second;
                 return second;
             }
             catch (ClassCastException e) {
@@ -154,7 +154,7 @@ public class SlotClass extends LispClass
             throws ConditionThrowable
         {
             if (arg instanceof SlotClass)
-                return ((SlotClass)arg).slots;
+                return ((SlotClass)arg).slotDefinitions;
             if (arg instanceof BuiltInClass)
                 return NIL;
             return signal(new TypeError(arg, Symbol.STANDARD_CLASS));
@@ -169,7 +169,7 @@ public class SlotClass extends LispClass
             throws ConditionThrowable
         {
             try {
-                ((SlotClass)first).slots = second;
+                ((SlotClass)first).slotDefinitions = second;
                 return second;
             }
             catch (ClassCastException e) {
