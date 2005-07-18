@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.814 2005-07-16 18:05:10 piso Exp $
+ * $Id: Primitives.java,v 1.815 2005-07-18 17:24:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2896,31 +2896,29 @@ public final class Primitives extends Lisp
 
     // ### %in-package
     private static final Primitive _IN_PACKAGE =
-        new Primitive("%in-package", PACKAGE_SYS, false)
+        new Primitive("%in-package", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String packageName = javaString(arg);
-            Package pkg = Packages.findPackage(packageName);
+            final String packageName = javaString(arg);
+            final Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
-                signal(new PackageError("The name " + packageName +
-                                        " does not designate any package."));
-            LispThread thread = LispThread.currentThread();
-            SpecialBinding binding = thread.getSpecialBinding(_PACKAGE_);
-            if (binding != null) {
+                return signal(new PackageError("The name " + packageName +
+                                               " does not designate any package."));
+            SpecialBinding binding =
+                LispThread.currentThread().getSpecialBinding(_PACKAGE_);
+            if (binding != null)
                 binding.value = pkg;
-                return pkg;
-            }
-            // No dynamic binding.
-            _PACKAGE_.setSymbolValue(pkg);
+            else
+                // No dynamic binding.
+                _PACKAGE_.setSymbolValue(pkg);
             return pkg;
         }
     };
 
-    // ### use-package
-    // use-package packages-to-use &optional package => t
+    // ### use-package packages-to-use &optional package => t
     private static final Primitive USE_PACKAGE =
-        new Primitive("use-package","packages-to-use &optional package")
+        new Primitive("use-package", "packages-to-use &optional package")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
