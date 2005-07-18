@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.535 2005-07-16 05:05:10 piso Exp $
+;;; $Id: jvm.lisp,v 1.536 2005-07-18 13:43:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,7 +31,8 @@
   (require '#:print-object)
   (require '#:source-transform)
   (require '#:opcodes)
-  (require '#:known-functions))
+  (require '#:known-functions)
+  (require '#:dump-form))
 
 (defvar *inline-declarations* nil)
 
@@ -2712,9 +2713,8 @@
 (declaim (ftype (function (t) string) declare-object-as-string))
 (defun declare-object-as-string (obj)
   (let* ((g (symbol-name (gensym)))
-         (*print-level* nil)
-         (*print-length* nil)
-         (s (sys::%format nil "~S" obj))
+         (s (with-output-to-string (stream)
+              (dump-form obj stream)))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc (pool-string s))
@@ -2726,9 +2726,8 @@
 
 (defun declare-load-time-value (obj)
   (let* ((g (symbol-name (gensym)))
-         (*print-level* nil)
-         (*print-length* nil)
-         (s (sys::%format nil "~S" obj))
+         (s (with-output-to-string (stream)
+              (dump-form obj stream)))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc (pool-string s))
@@ -2742,23 +2741,20 @@
 
 (defun declare-structure (obj)
   (aver (not (null *compile-file-truename*)))
-  (aver (sys::structure-object-p obj))
-  (multiple-value-bind (creation-form initialization-form)
-      (make-load-form obj)
-    (let* ((g (symbol-name (gensym)))
-           (*print-level* nil)
-           (*print-length* nil)
-           (s (sys::%format nil "~S" creation-form))
-           (*code* *static-code*))
-      (declare-field g +lisp-object+)
-      (emit 'ldc (pool-string s))
-      (emit-invokestatic +lisp-class+ "readObjectFromString"
-                         (list +java-string+) +lisp-object+)
-      (emit-invokestatic +lisp-class+ "loadTimeValue"
-                         (list +lisp-object+) +lisp-object+)
-      (emit 'putstatic *this-class* g +lisp-object+)
-      (setf *static-code* *code*)
-      g)))
+  (aver (structure-object-p obj))
+  (let* ((g (symbol-name (gensym)))
+         (s (with-output-to-string (stream)
+              (dump-form obj stream)))
+         (*code* *static-code*))
+    (declare-field g +lisp-object+)
+    (emit 'ldc (pool-string s))
+    (emit-invokestatic +lisp-class+ "readObjectFromString"
+                       (list +java-string+) +lisp-object+)
+    (emit-invokestatic +lisp-class+ "loadTimeValue"
+                       (list +lisp-object+) +lisp-object+)
+    (emit 'putstatic *this-class* g +lisp-object+)
+    (setf *static-code* *code*)
+    g))
 
 (defun declare-package (obj)
   (let* ((g (symbol-name (gensym)))
@@ -2887,7 +2883,7 @@
                       (declare-package form)
                       (declare-object form))))
            (emit 'getstatic *this-class* g +lisp-object+)))
-        ((sys::structure-object-p form)
+        ((structure-object-p form)
          (let ((g (if *compile-file-truename*
                       (declare-structure form)
                       (declare-object form))))

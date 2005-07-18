@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.103 2005-07-13 16:18:09 piso Exp $
+;;; $Id: compile-file.lisp,v 1.104 2005-07-18 13:44:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package #:system)
 
-(require 'jvm)
+(require '#:jvm)
 
 (defvar *fbound-names*)
 
@@ -53,90 +53,6 @@
        (let ((*load-truename* *output-file-pathname*))
          (report-error
           (load-compiled-function classfile)))))
-
-(declaim (ftype (function (t stream) t) dump-list))
-(defun dump-list (object stream)
-  (cond ((and (eq (car object) 'QUOTE) (null (cddr object)))
-         (%stream-write-char #\' stream)
-         (dump-object (%cadr object) stream))
-        (t
-         (%stream-write-char #\( stream)
-         (loop
-           (dump-object (car object) stream)
-           (setf object (cdr object))
-           (when (null object)
-             (return))
-           (when (> (charpos stream) 80)
-             (%stream-terpri stream))
-           (%stream-write-char #\space stream)
-           (when (atom object)
-             (%stream-write-char #\. stream)
-             (%stream-write-char #\space stream)
-             (dump-object object stream)
-             (return)))
-         (%stream-write-char #\) stream))))
-
-(declaim (ftype (function (t stream) t) dump-vector))
-(defun dump-vector (object stream)
-  (write-string "#(" stream)
-  (let ((length (length object)))
-    (when (> length 0)
-      (dotimes (i (1- length))
-        (dump-object (aref object i) stream)
-        (when (> (charpos stream) 80)
-          (%stream-terpri stream))
-        (%stream-write-char #\space stream))
-      (dump-object (aref object (1- length)) stream))
-    (%stream-write-char #\) stream)))
-
-(declaim (ftype (function (t stream) t) dump-structure))
-(defun dump-structure (object stream)
-  (multiple-value-bind (creation-form initialization-form)
-      (make-load-form object)
-    (write-string "#." stream)
-    (if initialization-form
-        (let* ((instance (gensym))
-               load-form)
-          (setf initialization-form
-                (subst instance object initialization-form))
-          (setf initialization-form
-                (subst instance (list 'quote instance) initialization-form
-                       :test #'equal))
-          (setf load-form `(progn
-                             (let ((,instance ,creation-form))
-                               ,initialization-form
-                               ,instance)))
-          (dump-object load-form stream))
-        (dump-object creation-form stream))))
-
-(declaim (ftype (function (t stream) t) dump-object))
-(defun dump-object (object stream)
-  (cond ((consp object)
-         (dump-list object stream))
-        ((stringp object)
-         (write object :stream stream))
-        ((bit-vector-p object)
-         (write object :stream stream))
-        ((vectorp object)
-         (dump-vector object stream))
-        ((structure-object-p object)
-         (dump-structure object stream))
-        (t
-         (write object :stream stream))))
-
-(declaim (ftype (function (t stream) t) dump-form))
-(defun dump-form (form stream)
-  (when (and (consp form) (neq (%car form) 'QUOTE))
-    (let ((*print-fasl* t)
-          (*print-level* nil)
-          (*print-length* nil)
-          (*print-circle* nil))
-      (if (eq (%car form) 'IMPORT)
-          ;; Make sure package prefix is printed when symbols are imported.
-          (let ((*package* +keyword-package+))
-            (dump-object form stream))
-          (dump-object form stream)))
-    (%stream-terpri stream)))
 
 (declaim (ftype (function (t stream) t) process-defconstant))
 (defun process-defconstant (form stream)
@@ -172,8 +88,8 @@
          (when compile-time-too
            (eval form)))
         (t
-         (let ((first (first form)))
-           (case (car form)
+         (let ((operator (%car form)))
+           (case operator
              (MACROLET
               (process-toplevel-macrolet form stream compile-time-too)
               (return-from process-toplevel-form))
@@ -299,8 +215,8 @@
              (DECLARE
               (compiler-style-warn "Misplaced declaration: ~S" form))
              (t
-              (when (and (symbolp (car form))
-                         (macro-function (%car form) *compile-file-environment*))
+              (when (and (symbolp operator)
+                         (macro-function operator *compile-file-environment*))
                 (note-toplevel-form form)
                 ;; Note that we want MACROEXPAND-1 and not MACROEXPAND here, in
                 ;; case the form being expanded expands into something that needs
@@ -313,33 +229,52 @@
               (when compile-time-too
                 (eval form))
 
-              (cond ((eq first 'QUOTE)
+              (cond ((eq operator 'QUOTE)
                      (setf form (precompile-form form nil)))
-                    ((eq first '%PUT)
+                    ((eq operator '%PUT)
                      (setf form (precompile-form form nil)))
-                    ((and (memq first '(EXPORT REQUIRE PROVIDE SHADOW))
+                    ((eq operator 'PROCLAIM)
+                     (setf form (precompile-form form nil)))
+                    ((and (memq operator '(EXPORT REQUIRE PROVIDE SHADOW))
                           (or (keywordp (second form))
                               (and (listp (second form))
                                    (eq (first (second form)) 'QUOTE))))
                      (setf form (precompile-form form nil)))
-                    ((and (eq first '%SET-FDEFINITION)
+                    ((eq operator 'IMPORT)
+                     (setf form (precompile-form form nil))
+                     ;; Make sure package prefix is printed when symbols are imported.
+                     (let ((*package* +keyword-package+))
+                       (dump-form form stream))
+                     (return-from process-toplevel-form))
+                    ((and (eq operator '%SET-FDEFINITION)
                           (eq (car (second form)) 'QUOTE)
                           (consp (third form))
                           (eq (%car (third form)) 'FUNCTION)
                           (symbolp (cadr (third form))))
                      (setf form (precompile-form form nil)))
-                    ((memq first '(LET LET*))
-                     (let ((body (cddr form)))
-                       (if (dolist (subform body nil)
-                             (when (and (consp subform) (eq (%car subform) 'DEFUN))
-                               (return t)))
-                           (setf form (convert-toplevel-form form))
-                           (setf form (precompile-form form nil)))))
-                    ((eq first 'mop::ensure-method)
+;;                     ((memq operator '(LET LET*))
+;;                      (let ((body (cddr form)))
+;;                        (if (dolist (subform body nil)
+;;                              (when (and (consp subform) (eq (%car subform) 'DEFUN))
+;;                                (return t)))
+;;                            (setf form (convert-toplevel-form form))
+;;                            (setf form (precompile-form form nil)))))
+                    ((eq operator 'mop::ensure-method)
                      (setf form (convert-ensure-method form)))
                     (t
-                     (setf form (precompile-form form nil)))))))))
-  (dump-form form stream))
+;;                      (setf form (precompile-form form nil))
+                     (setf form (convert-toplevel-form form))
+                     )))))))
+;;   (dump-form form stream)
+  (when (and (consp form) (neq (%car form) 'QUOTE))
+;;     (if (eq (%car form) 'IMPORT)
+;;         ;; Make sure package prefix is printed when symbols are imported.
+;;         (let ((*package* +keyword-package+))
+;;           (dump-form form stream))
+    (dump-form form stream)
+;;         )
+    )
+  )
 
 (declaim (ftype (function (t) t) convert-ensure-method))
 (defun convert-ensure-method (form)
@@ -368,6 +303,7 @@
                    ;; FIXME This should be a warning or error of some sort...
                    (format *error-output* "; Unable to compile method~%")))))))))
 
+(declaim (ftype (function (t) t) convert-toplevel-form))
 (defun convert-toplevel-form (form)
   (let* ((expr `(lambda () ,form))
          (classfile-name (next-classfile-name))
@@ -477,5 +413,5 @@
         (setf elapsed (/ (- (get-internal-real-time) start) 1000.0))
         (rename-file temp-file output-file)
         (when *compile-verbose*
-          (format t "~&; Compiled ~A (~A seconds)~%" namestring elapsed))))
+          (format t "~&; Wrote ~A (~A seconds)~%" (namestring output-file) elapsed))))
     (values (truename output-file) warnings-p failure-p)))
