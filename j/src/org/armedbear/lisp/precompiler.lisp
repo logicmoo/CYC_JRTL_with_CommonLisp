@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.122 2005-07-10 15:17:32 piso Exp $
+;;; $Id: precompiler.lisp,v 1.123 2005-07-18 12:23:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -127,6 +127,7 @@
       form))
 
 (define-compiler-macro catch (&whole form tag &rest args)
+  (declare (ignore tag))
   (if (and (null (cdr args))
            (constantp (car args)))
       (car args)
