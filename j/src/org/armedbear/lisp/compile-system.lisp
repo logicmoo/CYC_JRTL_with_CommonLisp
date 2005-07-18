@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.57 2005-06-27 12:53:48 piso Exp $
+;;; $Id: compile-system.lisp,v 1.58 2005-07-18 13:42:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -84,6 +84,7 @@
     (load (maybe-compile-file "source-transform.lisp"))
     (load (maybe-compile-file "compiler-macro.lisp"))
     (load (maybe-compile-file "opcodes.lisp"))
+    (load (maybe-compile-file "dump-form.lisp"))
     (load (maybe-compile-file "jvm.lisp"))
     (load (maybe-compile-file "compile-file.lisp"))
     ;; FIXME We need to load clos.lisp before we can compile clos.lisp.
