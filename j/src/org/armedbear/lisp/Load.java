@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.110 2005-07-12 02:45:57 piso Exp $
+ * $Id: Load.java,v 1.111 2005-07-18 17:25:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,7 +263,7 @@ public final class Load extends Lisp
                     final LispThread thread = LispThread.currentThread();
                     thread.bindSpecial(_FASL_ANONYMOUS_PACKAGE_, NIL);
                     thread.bindSpecial(_SOURCE_, NIL);
-                    return faslLoadStream();
+                    return faslLoadStream(thread);
                 }
             }
             throw new FaslVersionMismatch(second);
@@ -369,10 +369,9 @@ public final class Load extends Lisp
         }
     }
 
-    private static final LispObject faslLoadStream()
+    private static final LispObject faslLoadStream(LispThread thread)
         throws ConditionThrowable
     {
-        final LispThread thread = LispThread.currentThread();
         Stream in = (Stream) _LOAD_STREAM_.symbolValue(thread);
         final Environment env = new Environment();
         while (true) {
