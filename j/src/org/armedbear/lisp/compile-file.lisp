@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.104 2005-07-18 13:44:03 piso Exp $
+;;; $Id: compile-file.lisp,v 1.105 2005-07-19 00:32:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -95,7 +95,12 @@
               (return-from process-toplevel-form))
              ((IN-PACKAGE DEFPACKAGE)
               (note-toplevel-form form)
-              (eval form))
+              (setf form (precompile-form form nil))
+              (eval form)
+              ;; Force package prefix to be used when dumping form.
+              (let ((*package* +keyword-package+))
+                (dump-form form stream))
+              (return-from process-toplevel-form))
              ((DEFVAR DEFPARAMETER)
               (note-toplevel-form form)
               (if compile-time-too
@@ -230,7 +235,9 @@
                 (eval form))
 
               (cond ((eq operator 'QUOTE)
-                     (setf form (precompile-form form nil)))
+;;                      (setf form (precompile-form form nil))
+                     (return-from process-toplevel-form)
+                     )
                     ((eq operator '%PUT)
                      (setf form (precompile-form form nil)))
                     ((eq operator 'PROCLAIM)
@@ -261,20 +268,16 @@
 ;;                            (setf form (precompile-form form nil)))))
                     ((eq operator 'mop::ensure-method)
                      (setf form (convert-ensure-method form)))
+                    ((and (symbolp operator)
+                          (not (special-operator-p operator))
+                          (null (cdr form)))
+                     (setf form (precompile-form form nil)))
                     (t
 ;;                      (setf form (precompile-form form nil))
                      (setf form (convert-toplevel-form form))
                      )))))))
-;;   (dump-form form stream)
-  (when (and (consp form) (neq (%car form) 'QUOTE))
-;;     (if (eq (%car form) 'IMPORT)
-;;         ;; Make sure package prefix is printed when symbols are imported.
-;;         (let ((*package* +keyword-package+))
-;;           (dump-form form stream))
-    (dump-form form stream)
-;;         )
-    )
-  )
+  (when (consp form)
+    (dump-form form stream)))
 
 (declaim (ftype (function (t) t) convert-ensure-method))
 (defun convert-ensure-method (form)
