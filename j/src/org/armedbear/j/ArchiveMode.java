@@ -1,8 +1,8 @@
 /*
  * ArchiveMode.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: ArchiveMode.java,v 1.3 2003-07-05 16:03:04 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: ArchiveMode.java,v 1.4 2005-07-19 23:46:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -183,8 +183,10 @@ public final class ArchiveMode extends AbstractMode implements Constants, Mode
             try {
                 in = new ZipInputStream(file.getInputStream());
                 ZipEntry ze;
-                while((ze = in.getNextEntry()) != null)
+                while((ze = in.getNextEntry()) != null) {
+                    in.closeEntry();
                     appendLine(buffer, ze);
+                }
                 buffer.renumber();
 
                 // Is this right if we're loading from a local cache?
