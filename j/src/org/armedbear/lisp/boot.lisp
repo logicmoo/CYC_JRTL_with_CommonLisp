@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.232 2005-06-27 12:25:10 piso Exp $
+;;; $Id: boot.lisp,v 1.233 2005-07-19 00:30:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(sys::%in-package "SYSTEM")
+(sys:%in-package "SYSTEM")
 
 (setq *autoload-verbose* nil)
 (setq *load-verbose* nil)
@@ -287,26 +287,10 @@
   (:export
    #:output-pretty-object))
 
-;;; PROVIDE, REQUIRE (from SBCL)
-(defun provide (module-name)
-  (pushnew (string module-name) *modules* :test #'string=)
-  t)
-
-(defun require (module-name &optional pathnames)
-  (unless (member (string module-name) *modules* :test #'string=)
-    (let ((saved-modules (copy-list *modules*)))
-      (cond (pathnames
-             (unless (listp pathnames) (setf pathnames (list pathnames)))
-             (dolist (x pathnames)
-               (load x)))
-            (t
-             (let ((*readtable* (copy-readtable nil)))
-               (load-system-file (string-downcase (string module-name))))))
-      (set-difference *modules* saved-modules))))
-
 (defconstant lambda-list-keywords
   '(&optional &rest &key &aux &body &whole &allow-other-keys &environment))
 
+(load-system-file "require")
 (load-system-file "restart")
 (load-system-file "late-setf")
 (load-system-file "debug")
