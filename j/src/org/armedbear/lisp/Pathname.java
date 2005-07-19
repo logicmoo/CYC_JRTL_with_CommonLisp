@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.79 2005-05-24 19:12:56 piso Exp $
+ * $Id: Pathname.java,v 1.80 2005-07-19 17:35:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -579,7 +579,7 @@ public class Pathname extends LispObject
             String namestring = pathname.getNamestring();
             if (namestring == null)
                 signal(new SimpleError("Pathname has no namestring: " +
-                                       pathname.writeToString() + "."));
+                                       pathname.writeToString()));
             return new SimpleString(namestring);
         }
     };
