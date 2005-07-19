@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.58 2005-07-18 13:42:06 piso Exp $
+;;; $Id: compile-system.lisp,v 1.59 2005-07-19 00:31:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -224,6 +224,7 @@
                                  "remove-duplicates.lisp"
                                  "remove.lisp"
                                  "replace.lisp"
+                                 "require.lisp"
                                  "restart.lisp"
                                  "revappend.lisp"
                                  "rotatef.lisp"
