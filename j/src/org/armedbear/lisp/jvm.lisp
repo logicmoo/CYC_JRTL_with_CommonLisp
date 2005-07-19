@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.536 2005-07-18 13:43:41 piso Exp $
+;;; $Id: jvm.lisp,v 1.537 2005-07-19 00:27:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3398,6 +3398,25 @@
         (t
          form)))
 
+(define-source-transform mapcar (&whole form function &rest lists)
+  (cond ((or (> *debug* *speed*)
+             (> *space* *speed*))
+         form)
+        ((= (length lists) 1)
+         (let ((list (gensym))
+               (result (gensym))
+               (temp (gensym)))
+           `(let* ((,list ,(car lists))
+                   (,result (list nil))
+                   (,temp ,result))
+              (loop
+                (when (null ,list)
+                  (return (cdr ,result)))
+                (rplacd ,temp (setf ,temp (list (funcall ,function (car ,list)))))
+                (setf ,list (cdr ,list))))))
+        (t
+         form)))
+
 ;; (define-source-transform min (&whole form &rest args)
 ;;   (cond ((= (length args) 2)
 ;;          (let* ((arg1 (%car args))
@@ -4483,10 +4502,10 @@
                  (error "COMPILE-TAGBODY: tag not found: ~S~%" subform))
                (label (tag-label tag))))
             (t
-             (when (and (null (cdr rest)) ;; Last subform.
-                        (consp subform)
-                        (eq (%car subform) 'GO))
-               (maybe-generate-interrupt-check))
+;;              (when (and (null (cdr rest)) ;; Last subform.
+;;                         (consp subform)
+;;                         (eq (%car subform) 'GO))
+;;                (maybe-generate-interrupt-check))
              (compile-form subform :target nil)
              (unless must-clear-values
                (unless (single-valued-p subform)
