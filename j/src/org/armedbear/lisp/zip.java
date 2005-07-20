@@ -2,7 +2,7 @@
  * zip.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: zip.java,v 1.1 2005-07-20 18:24:32 piso Exp $
+ * $Id: zip.java,v 1.2 2005-07-20 18:29:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class zip extends Primitive
 {
     private zip()
     {
-        super("zip", "pathname pathnames");
+        super("zip", PACKAGE_SYS, true, "pathname pathnames");
     }
 
     public LispObject execute(LispObject first, LispObject second)
