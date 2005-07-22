@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.190 2005-07-16 18:05:59 piso Exp $
+;;; $Id: autoloads.lisp,v 1.191 2005-07-22 15:46:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -128,12 +128,6 @@
 (autoload-macro 'rotatef)
 (autoload-macro 'shiftf)
 
-(autoload '(find-restart invoke-restart restart-name compute-restarts
-            abort continue muffle-warning store-value use-value warn cerror)
-          "restart")
-(autoload-macro '(with-simple-restart restart-bind restart-case
-                  with-condition-restarts)
-                "restart")
 (autoload-macro 'do-all-symbols)
 (autoload-macro '(trace untrace) "trace")
 (autoload '(sys::list-traced-functions sys::trace-1 sys::untrace-1 sys::untrace-all) "trace")
@@ -283,7 +277,8 @@
 (autoload-macro 'collect)
 (export 'with-mutex)
 (autoload-macro 'with-mutex)
-(autoload 'style-warn "restart")
+(export 'compile-file-if-needed)
+(autoload 'compile-file-if-needed "compile-file")
 
 ;; JVM compiler.
 (in-package "JVM")
