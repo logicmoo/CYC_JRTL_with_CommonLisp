@@ -286,7 +286,7 @@
           (format t "~A returned ~S~%" command status))
         status))))
 
-(defun do-compile-system ()
+(defun do-compile-system (&key (zip t))
   (terpri)
   (finish-output)
   (let* ((java-namestring (safe-namestring *java*))
@@ -300,7 +300,11 @@
              (write-string " -cp " stream)
              (princ "src" stream)
              (write-char #\space stream)
-             (write-string "org.armedbear.lisp.Main --eval \"(compile-system :quit t)\"" stream)
+             (write-string
+              (if zip
+                 "org.armedbear.lisp.Main --eval \"(compile-system :zip t :quit t)\""
+                 "org.armedbear.lisp.Main --eval \"(compile-system :zip nil :quit t)\"")
+              stream)
              (terpri stream))
            (setf status
                  (run-shell-command "compile-system.bat"
@@ -312,8 +316,11 @@
                     (write-string " -cp " s)
                     (princ "src" s)
                     (write-char #\space s)
-                    (write-string "org.armedbear.lisp.Main --eval \"(compile-system :quit t)\"" s)
-                    )))
+                    (write-string
+                     (if zip
+                         "org.armedbear.lisp.Main --eval \"(compile-system :zip t :quit t)\""
+                         "org.armedbear.lisp.Main --eval \"(compile-system :zip nil :quit t)\"")
+                     s))))
              (setf status
                    (run-shell-command cmdline
                                       :directory *build-root*)))))
@@ -445,7 +452,8 @@
       (return-from build-abcl nil))
     ;; COMPILE-SYSTEM
     (when (or full compile-system)
-      (let ((status (do-compile-system)))
+      (let* ((zip    (if (or full jar) nil t))
+             (status (do-compile-system :zip zip)))
         (unless (zerop status)
           (format t "Build failed.~%")
           (return-from build-abcl nil))))
