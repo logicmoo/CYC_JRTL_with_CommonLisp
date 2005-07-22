@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.111 2005-07-18 17:25:08 piso Exp $
+ * $Id: Load.java,v 1.112 2005-07-22 15:42:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 public final class Load extends Lisp
 {
@@ -87,21 +90,43 @@ public final class Load extends Lisp
             else
                 return NIL;
         }
+        ZipFile zipfile = null;
+        try {
+            zipfile = new ZipFile(file);
+        }
+        catch (Throwable t) {
+            // Fall through.
+        }
         String truename = filename;
         InputStream in = null;
-        try {
-            in = new FileInputStream(file);
-            truename = file.getCanonicalPath();
-        }
-        catch (FileNotFoundException e) {
-            if (ifDoesNotExist)
-                return signal(new FileError("File not found: " + filename,
-                                            pathname));
-            else
-                return NIL;
-        }
-        catch (IOException e) {
-            return signal(new LispError(e.getMessage()));
+        if (zipfile != null) {
+            String name = file.getName();
+            if (name.endsWith(".zip"))
+                name = name.substring(0, name.length() - 4);
+            ZipEntry entry = zipfile.getEntry(name);
+            if (entry != null) {
+                try {
+                    in = zipfile.getInputStream(entry);
+                }
+                catch (IOException e) {
+                    return signal(new LispError(e.getMessage()));
+                }
+            }
+        } else {
+            try {
+                in = new FileInputStream(file);
+                truename = file.getCanonicalPath();
+            }
+            catch (FileNotFoundException e) {
+                if (ifDoesNotExist)
+                    return signal(new FileError("File not found: " + filename,
+                                                pathname));
+                else
+                    return NIL;
+            }
+            catch (IOException e) {
+                return signal(new LispError(e.getMessage()));
+            }
         }
         try {
             return loadFileFromStream(null, truename,
@@ -167,7 +192,7 @@ public final class Load extends Lisp
     {
         final int ARRAY_SIZE = 2;
         String[] candidates = new String[ARRAY_SIZE];
-        String extension = getExtension(filename);
+        final String extension = getExtension(filename);
         if (extension == null) {
             // No extension specified.
             candidates[0] = filename + '.' + COMPILE_FILE_TYPE;
@@ -189,12 +214,38 @@ public final class Load extends Lisp
             if (dir != null) {
                 File file = new File(dir, s);
                 if (file.isFile()) {
-                    try {
-                        in = new FileInputStream(file);
-                        truename = file.getCanonicalPath();
+                    // File exists. For system files, we know the extension
+                    // will be .abcl if it's a compiled file.
+                    String ext = getExtension(s);
+                    if (ext.equalsIgnoreCase(".abcl")) {
+                        try {
+                            ZipFile zipfile = new ZipFile(file);
+                            String name = file.getName();
+                            if (name.endsWith(".zip"))
+                                name = name.substring(0, name.length() - 4);
+                            ZipEntry entry = zipfile.getEntry(name);
+                            if (entry != null) {
+                                in = zipfile.getInputStream(entry);
+                                truename = file.getCanonicalPath();
+                            }
+                        }
+                        catch (ZipException e) {
+                            // Fall through.
+                        }
+                        catch (Throwable t) {
+                            Debug.trace(t);
+                            in = null;
+                            // Fall through.
+                        }
                     }
-                    catch (IOException e) {
-                        in = null;
+                    if (in == null) {
+                        try {
+                            in = new FileInputStream(file);
+                            truename = file.getCanonicalPath();
+                        }
+                        catch (IOException e) {
+                            in = null;
+                        }
                     }
                 }
             } else {

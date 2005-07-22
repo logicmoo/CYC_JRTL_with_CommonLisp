@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.105 2005-07-19 00:32:03 piso Exp $
+;;; $Id: compile-file.lisp,v 1.106 2005-07-22 15:45:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -413,8 +413,48 @@
                  (setf warnings-p nil failure-p nil))
                 ((zerop (+ jvm::*errors* jvm::*warnings*))
                  (setf failure-p nil))))
-        (setf elapsed (/ (- (get-internal-real-time) start) 1000.0))
         (rename-file temp-file output-file)
+
+        (when *compile-file-zip*
+          (let ((zipfile (concatenate 'string (namestring output-file) ".zip"))
+                (pathnames ()))
+            (dotimes (i *class-number*)
+              (let* ((file-namestring (%format nil "~A-~D.cls"
+                                               (pathname-name output-file)
+                                               (1+ i)))
+                     (pathname (merge-pathnames file-namestring output-file)))
+                (when (probe-file pathname)
+                  (push pathname pathnames))))
+            (setf pathnames (nreverse pathnames))
+            (push output-file pathnames)
+            (zip zipfile pathnames)
+            (dolist (pathname pathnames)
+              (let ((truename (probe-file pathname)))
+                (when truename
+                  (delete-file truename))))
+            (rename-file zipfile output-file)))
+
+        (setf elapsed (/ (- (get-internal-real-time) start) 1000.0))
         (when *compile-verbose*
           (format t "~&; Wrote ~A (~A seconds)~%" (namestring output-file) elapsed))))
     (values (truename output-file) warnings-p failure-p)))
+
+(defun compile-file-if-needed (input-file &rest allargs &key force-compile)
+  (setf input-file (truename input-file))
+  (cond (force-compile
+         (format t "allargs = ~S~%" allargs)
+         (remf allargs :force-compile)
+         (format t "allargs = ~S~%" allargs)
+         (apply 'compile-file input-file allargs))
+        (t
+         (let* ((source-write-time (file-write-date input-file))
+                (output-file       (or (getf allargs :output-file)
+                                       (compile-file-pathname input-file)))
+                (target-write-time (and (probe-file output-file)
+                                        (file-write-date output-file))))
+           (if (or (null target-write-time)
+                   (<= target-write-time source-write-time))
+               (apply 'compile-file input-file allargs)
+               output-file)))))
+
+(provide 'compile-file)
