@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SimpleVector.java,v 1.21 2005-07-23 15:57:26 piso Exp $
+ * $Id: SimpleVector.java,v 1.22 2005-07-23 17:10:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,6 +175,16 @@ public final class SimpleVector extends AbstractVector
         }
     }
 
+    public void svset(int index, LispObject newValue) throws ConditionThrowable
+    {
+        try {
+            elements[index] = newValue;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, capacity);
+        }
+    }
+
     public LispObject subseq(int start, int end) throws ConditionThrowable
     {
         SimpleVector v = new SimpleVector(end - start);
@@ -291,10 +301,9 @@ public final class SimpleVector extends AbstractVector
         }
     };
 
-    // ### %svset
-    // %svset simple-vector index new-value => new-value
-    private static final Primitive _SVSET =
-        new Primitive("%svset", PACKAGE_SYS, false, "simple-vector index new-value")
+    // ### svset simple-vector index new-value => new-value
+    private static final Primitive SVSET =
+        new Primitive("svset", PACKAGE_SYS, true, "simple-vector index new-value")
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
