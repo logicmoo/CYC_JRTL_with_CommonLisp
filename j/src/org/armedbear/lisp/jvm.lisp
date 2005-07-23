@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.537 2005-07-19 00:27:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.538 2005-07-23 15:58:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6055,26 +6055,18 @@
   (emit-move-from-stack target))
 
 (defun p2-svref (form &key (target :stack) representation)
-  (unless (check-arg-count form 2)
-    (compile-function-call form target representation)
-    (return-from p2-svref))
-  (let ((vector-derived-type t))
-    (when (symbolp (second form))
-      (let ((variable (find-visible-variable (second form))))
-        (when variable
-          (setf vector-derived-type (derive-type variable)))))
-    (unless (subtypep vector-derived-type 'simple-vector)
-      (compile-function-call form target representation)
-      (return-from p2-svref))
-    (compile-form (second form) :target :stack)
-    (compile-form (third form) :target :stack :representation :unboxed-fixnum)
-    (unless (and (single-valued-p (second form))
-                 (single-valued-p (third form)))
-      (emit-clear-values))
-    (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
-    (when (eq representation :unboxed-fixnum)
-      (emit-unbox-fixnum))
-    (emit-move-from-stack target representation)))
+  (cond ((check-arg-count form 2)
+         (let ((arg1 (%cadr form))
+               (arg2 (%caddr form)))
+           (compile-form arg1 :target :stack) ; vector
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum) ; index
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokevirtual +lisp-object-class+ "SVREF" '("I") +lisp-object+)
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
+           (emit-move-from-stack target representation)))
+        (t
+         (compile-function-call form target representation))))
 
 (defun p2-elt (form &key (target :stack) representation)
   (cond ((and (check-arg-count form 2)
