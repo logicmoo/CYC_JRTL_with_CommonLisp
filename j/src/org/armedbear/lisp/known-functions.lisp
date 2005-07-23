@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.20 2005-07-15 16:13:48 piso Exp $
+;;; $Id: known-functions.lisp,v 1.21 2005-07-23 17:12:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,7 +64,6 @@
         %stream-write-char
         %structure-ref
         %structure-set
-        %svset
         alphanumericp
         array-has-fill-pointer-p
         aset
@@ -154,6 +153,8 @@
         subst
         subst-if
         subst-if-not
+        svref
+        svset
         upper-case-p
         truename
         vector
