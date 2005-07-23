@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.539 2005-07-23 17:13:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.540 2005-07-23 19:00:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1115,6 +1115,7 @@
     instruction))
 
 (defun label (symbol)
+  (declare (type symbol symbol))
   (declare (optimize speed))
   (emit 'label symbol)
   (setf (symbol-value symbol) nil))
@@ -1884,7 +1885,7 @@
 ;;     198 ; IFNULL
 ;;     ))
 
-(declaim (ftype (function (t) t) branch-opcode))
+(declaim (ftype (function (t) t) branch-opcode-p))
 (defun branch-opcode-p (opcode)
   (declare (optimize speed))
   (declare (type fixnum opcode))
@@ -3120,6 +3121,15 @@
            (emit-invokevirtual +lisp-object-class+ "EQL"
                                (list +lisp-object+) +lisp-object+)
            (emit-move-from-stack target)))))
+
+(defun p2-gensym (form &key (target :stack) representation)
+  (cond ((and (null representation) (null (cdr form)))
+         (emit-push-current-thread)
+         (emit-invokestatic +lisp-class+ "gensym"
+                            (list +lisp-thread+) +lisp-symbol+)
+         (emit-move-from-stack target))
+        (t
+         (compile-function-call form target representation))))
 
 ;; get symbol indicator &optional default => value
 (defun p2-get (form &key (target :stack) representation)
@@ -6314,6 +6324,22 @@
           (list 'LET (list (list sym expr)) (list 'SETQ (%cadr form) sym)))
         form)))
 
+(defun p2-set (form &key (target :stack) representation)
+  (cond ((and (check-arg-count form 2)
+              (eq (derive-type (%cadr form)) 'SYMBOL))
+         (emit-push-current-thread)
+         (compile-form (%cadr form) :target :stack)
+         (emit 'checkcast +lisp-symbol-class+)
+         (compile-form (%caddr form) :target :stack)
+         (maybe-emit-clear-values (%cadr form) (%caddr form))
+         (emit-invokevirtual +lisp-thread-class+ "setSpecialVariable"
+                             (list +lisp-symbol+ +lisp-object+) +lisp-object+)
+         (when (eq representation :unboxed-fixnum)
+           (emit-unbox-fixnum))
+         (emit-move-from-stack target representation))
+        (t
+         (compile-function-call form target representation))))
+
 (defun p2-setq (form &key (target :stack) representation)
   (unless (= (length form) 3)
     (return-from p2-setq (compile-form (precompiler::precompile-setq form)
@@ -7563,6 +7589,7 @@
   (install-p2-handler 'flet               'p2-flet)
   (install-p2-handler 'funcall            'p2-funcall)
   (install-p2-handler 'function           'p2-function)
+  (install-p2-handler 'gensym             'p2-gensym)
   (install-p2-handler 'get                'p2-get)
   (install-p2-handler 'gethash            'p2-gethash)
   (install-p2-handler 'gethash-2op-1ret   'p2-gethash)
@@ -7587,6 +7614,7 @@
   (install-p2-handler 'return-from        'p2-return-from)
   (install-p2-handler 'rplacd             'p2-rplacd)
   (install-p2-handler 'schar              'p2-schar)
+  (install-p2-handler 'set                'p2-set)
   (install-p2-handler 'set-car            'p2-set-car/cdr)
   (install-p2-handler 'set-cdr            'p2-set-car/cdr)
   (install-p2-handler 'setq               'p2-setq)
