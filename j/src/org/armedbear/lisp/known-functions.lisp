@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.21 2005-07-23 17:12:35 piso Exp $
+;;; $Id: known-functions.lisp,v 1.22 2005-07-23 19:44:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -173,6 +173,8 @@
         array-dimension
         %dpb
         ))
+
+(declaim (ftype (function (t) (integer 0 2147483647)) sxhash))
 
 (declaim (ftype (function (character) (unsigned-byte 16)) char-code))
 
