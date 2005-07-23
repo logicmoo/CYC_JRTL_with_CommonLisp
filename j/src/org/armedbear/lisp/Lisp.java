@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.377 2005-07-22 15:40:48 piso Exp $
+ * $Id: Lisp.java,v 1.378 2005-07-23 18:58:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -713,6 +713,47 @@ public abstract class Lisp
             // Not reached.
             return null;
         }
+    }
+
+    // ### *gensym-counter*
+    private static final Symbol _GENSYM_COUNTER_ =
+        exportSpecial("*GENSYM-COUNTER*", PACKAGE_CL, Fixnum.ZERO);
+
+    public static final Symbol gensym(LispThread thread)
+        throws ConditionThrowable
+    {
+        return gensym("G", thread);
+    }
+
+    public static final Symbol gensym(String prefix, LispThread thread)
+        throws ConditionThrowable
+    {
+        FastStringBuffer sb = new FastStringBuffer(prefix);
+        SpecialBinding binding = thread.getSpecialBinding(_GENSYM_COUNTER_);
+        final LispObject oldValue;
+        if (binding != null)
+            oldValue = binding.value;
+        else
+            oldValue = _GENSYM_COUNTER_.getSymbolValue();
+        // Decimal representation.
+        if (oldValue instanceof Fixnum)
+            sb.append(((Fixnum)oldValue).value);
+        else if (oldValue instanceof Bignum)
+            sb.append(((Bignum)oldValue).value.toString());
+        else {
+            // Restore sanity.
+            if (binding != null)
+                binding.value = Fixnum.ZERO;
+            else
+                _GENSYM_COUNTER_.setSymbolValue(Fixnum.ZERO);
+            signal(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: " +
+                                 oldValue.writeToString() + " New value: 0"));
+        }
+        if (binding != null)
+            binding.value = oldValue.incr();
+        else
+            _GENSYM_COUNTER_.setSymbolValue(oldValue.incr());
+        return new Symbol(new SimpleString(sb));
     }
 
     public static final String javaString(LispObject arg) throws ConditionThrowable
