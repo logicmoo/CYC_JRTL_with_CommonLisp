@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.107 2005-07-23 14:21:36 piso Exp $
+;;; $Id: compile-file.lisp,v 1.108 2005-07-23 14:22:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -445,9 +445,7 @@
 (defun compile-file-if-needed (input-file &rest allargs &key force-compile)
   (setf input-file (truename input-file))
   (cond (force-compile
-         (format t "allargs = ~S~%" allargs)
          (remf allargs :force-compile)
-         (format t "allargs = ~S~%" allargs)
          (apply 'compile-file input-file allargs))
         (t
          (let* ((source-write-time (file-write-date input-file))
