@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.137 2005-07-13 18:27:15 piso Exp $
+ * $Id: LispObject.java,v 1.138 2005-07-23 15:57:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -453,6 +453,11 @@ public class LispObject extends Lisp
         catch (ClassCastException e) {
             signalTypeError(index, Symbol.FIXNUM);
         }
+    }
+
+    public LispObject SVREF(int index) throws ConditionThrowable
+    {
+        return signalTypeError(this, Symbol.SIMPLE_VECTOR);
     }
 
     public LispObject[] copyToArray() throws ConditionThrowable

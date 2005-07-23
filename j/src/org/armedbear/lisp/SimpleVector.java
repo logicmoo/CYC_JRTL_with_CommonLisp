@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SimpleVector.java,v 1.20 2005-03-25 03:19:22 piso Exp $
+ * $Id: SimpleVector.java,v 1.21 2005-07-23 15:57:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,7 +129,6 @@ public final class SimpleVector extends AbstractVector
         }
     }
 
-    // Ignores fill pointer.
     public LispObject AREF(int index) throws ConditionThrowable
     {
         try {
@@ -141,7 +140,6 @@ public final class SimpleVector extends AbstractVector
         }
     }
 
-    // Ignores fill pointer.
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         try {
@@ -151,7 +149,7 @@ public final class SimpleVector extends AbstractVector
             return signal(new TypeError(index, Symbol.FIXNUM));
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(Fixnum.getValue(index), elements.length);
+            badIndex(((Fixnum)index).value, elements.length);
             return NIL; // Not reached.
         }
     }
@@ -163,6 +161,17 @@ public final class SimpleVector extends AbstractVector
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
+        }
+    }
+
+    public LispObject SVREF(int index) throws ConditionThrowable
+    {
+        try {
+            return elements[index];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, elements.length);
+            return NIL; // Not reached.
         }
     }
 
