@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.538 2005-07-23 15:58:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.539 2005-07-23 17:13:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6068,6 +6068,27 @@
         (t
          (compile-function-call form target representation))))
 
+(defun p2-svset (form &key (target :stack) representation)
+  (cond ((check-arg-count form 3)
+         (let* ((arg1 (%cadr form))
+                (arg2 (%caddr form))
+                (arg3 (fourth form))
+                (*register* *register*)
+                (value-register (when target (allocate-register))))
+           (compile-form arg1 :target :stack) ;; vector
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum) ;; index
+           (compile-form arg3 :target :stack) ;; new value
+           (when value-register
+             (emit 'dup)
+             (emit-move-from-stack value-register nil))
+           (maybe-emit-clear-values arg1 arg2 arg3)
+           (emit-invokevirtual +lisp-object-class+ "svset" (list "I" +lisp-object+) nil)
+           (when value-register
+             (emit 'aload value-register)
+             (emit-move-from-stack target nil))))
+        (t
+         (compile-function-call form target representation))))
+
 (defun p2-elt (form &key (target :stack) representation)
   (cond ((and (check-arg-count form 2)
               (subtypep (derive-type (third form)) 'fixnum))
@@ -7572,6 +7593,7 @@
   (install-p2-handler 'simple-vector-p    'p2-simple-vector-p)
   (install-p2-handler 'stringp            'p2-stringp)
   (install-p2-handler 'svref              'p2-svref)
+  (install-p2-handler 'svset              'p2-svset)
   (install-p2-handler 'symbol-name        'p2-symbol-name)
   (install-p2-handler 'symbol-value       'p2-symbol-value)
   (install-p2-handler 'symbolp            'p2-symbolp)
