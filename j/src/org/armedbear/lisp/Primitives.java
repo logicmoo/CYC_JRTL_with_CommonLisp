@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.815 2005-07-18 17:24:22 piso Exp $
+ * $Id: Primitives.java,v 1.816 2005-07-23 18:58:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1611,8 +1611,9 @@ public final class Primitives extends Lisp
             LispObject block = new Cons(Symbol.BLOCK, new Cons(symbol, body));
             LispObject toBeApplied =
                 list2(Symbol.FUNCTION, list3(Symbol.LAMBDA, lambdaList, block));
-            LispObject formArg = gensym("FORM-");
-            LispObject envArg = gensym("ENV-"); // Ignored.
+            final LispThread thread = LispThread.currentThread();
+            LispObject formArg = gensym("FORM-", thread);
+            LispObject envArg = gensym("ENV-", thread); // Ignored.
             LispObject expander =
                 list3(Symbol.LAMBDA, list2(formArg, envArg),
                       list3(Symbol.APPLY, toBeApplied,
@@ -1625,7 +1626,7 @@ public final class Primitives extends Lisp
             else
                 symbol.setSymbolFunction(macroObject);
 	    macroObject.setLambdaList(lambdaList);
-            LispThread.currentThread().clearValues();
+            thread._values = null;
             return symbol;
         }
     };
@@ -2675,17 +2676,13 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### *gensym-counter*
-    private static final Symbol _GENSYM_COUNTER_ =
-        exportSpecial("*GENSYM-COUNTER*", PACKAGE_CL, Fixnum.ZERO);
-
     // ### gensym
     private static final Primitive GENSYM =
         new Primitive("gensym", "&optional x")
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return gensym("G");
+            return gensym("G", LispThread.currentThread());
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2704,44 +2701,13 @@ public final class Primitives extends Lisp
                     return new Symbol(new SimpleString(sb));
                 }
             } else if (arg instanceof AbstractString)
-                return gensym(arg.getStringValue());
-            return signal(new TypeError(arg,
-                                        list3(Symbol.OR,
-                                              Symbol.STRING,
-                                              Symbol.UNSIGNED_BYTE)));
+                return gensym(arg.getStringValue(), LispThread.currentThread());
+            return signalTypeError(arg,
+                                   list3(Symbol.OR,
+                                         Symbol.STRING,
+                                         Symbol.UNSIGNED_BYTE));
         }
     };
-
-    private static final Symbol gensym(String prefix) throws ConditionThrowable
-    {
-        FastStringBuffer sb = new FastStringBuffer(prefix);
-        SpecialBinding binding =
-            LispThread.currentThread().getSpecialBinding(_GENSYM_COUNTER_);
-        final LispObject oldValue;
-        if (binding != null)
-            oldValue = binding.value;
-        else
-            oldValue = _GENSYM_COUNTER_.getSymbolValue();
-        // Decimal representation.
-        if (oldValue instanceof Fixnum)
-            sb.append(((Fixnum)oldValue).value);
-        else if (oldValue instanceof Bignum)
-            sb.append(((Bignum)oldValue).value.toString());
-        else {
-            // Restore sanity.
-            if (binding != null)
-                binding.value = Fixnum.ZERO;
-            else
-                _GENSYM_COUNTER_.setSymbolValue(Fixnum.ZERO);
-            signal(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: " +
-                                 oldValue.writeToString() + " New value: 0"));
-        }
-        if (binding != null)
-            binding.value = oldValue.incr();
-        else
-            _GENSYM_COUNTER_.setSymbolValue(oldValue.incr());
-        return new Symbol(new SimpleString(sb));
-    }
 
     // ### string
     private static final Primitive STRING = new Primitive("string", "x")
@@ -3201,8 +3167,9 @@ public final class Primitives extends Lisp
                 new Cons(Symbol.BLOCK, new Cons(symbol, body));
             LispObject toBeApplied =
                 list3(Symbol.LAMBDA, lambdaList, block);
-            LispObject formArg = gensym("WHOLE-");
-            LispObject envArg = gensym("ENVIRONMENT-"); // Ignored.
+            final LispThread thread = LispThread.currentThread();
+            LispObject formArg = gensym("WHOLE-", thread);
+            LispObject envArg = gensym("ENVIRONMENT-", thread); // Ignored.
             LispObject expander =
                 list3(Symbol.LAMBDA, list2(formArg, envArg),
                       list3(Symbol.APPLY, toBeApplied,
