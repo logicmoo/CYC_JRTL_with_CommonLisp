@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.112 2005-07-22 15:42:40 piso Exp $
+ * $Id: Load.java,v 1.113 2005-07-23 14:21:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,8 +101,9 @@ public final class Load extends Lisp
         InputStream in = null;
         if (zipfile != null) {
             String name = file.getName();
-            if (name.endsWith(".zip"))
-                name = name.substring(0, name.length() - 4);
+            int index = name.lastIndexOf('.');
+            Debug.assertTrue(index >= 0);
+            name = name.substring(0, index).concat("._");
             ZipEntry entry = zipfile.getEntry(name);
             if (entry != null) {
                 try {
@@ -221,8 +222,9 @@ public final class Load extends Lisp
                         try {
                             ZipFile zipfile = new ZipFile(file);
                             String name = file.getName();
-                            if (name.endsWith(".zip"))
-                                name = name.substring(0, name.length() - 4);
+			    int index = name.lastIndexOf('.');
+			    Debug.assertTrue(index >= 0);
+			    name = name.substring(0, index).concat("._");
                             ZipEntry entry = zipfile.getEntry(name);
                             if (entry != null) {
                                 in = zipfile.getInputStream(entry);

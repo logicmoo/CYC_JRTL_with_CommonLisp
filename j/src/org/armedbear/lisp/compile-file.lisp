@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.106 2005-07-22 15:45:24 piso Exp $
+;;; $Id: compile-file.lisp,v 1.107 2005-07-23 14:21:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -426,7 +426,10 @@
                 (when (probe-file pathname)
                   (push pathname pathnames))))
             (setf pathnames (nreverse pathnames))
-            (push output-file pathnames)
+            (let ((load-file (merge-pathnames (make-pathname :type "_")
+                                              output-file)))
+              (rename-file output-file load-file)
+              (push load-file pathnames))
             (zip zipfile pathnames)
             (dolist (pathname pathnames)
               (let ((truename (probe-file pathname)))
