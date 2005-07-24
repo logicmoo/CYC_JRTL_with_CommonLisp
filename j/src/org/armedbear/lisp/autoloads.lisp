@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.191 2005-07-22 15:46:51 piso Exp $
+;;; $Id: autoloads.lisp,v 1.192 2005-07-24 19:36:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -104,12 +104,6 @@
 (autoload 'upgraded-complex-part-type)
 
 (autoload '(tpl::top-level-loop) "top-level")
-
-(autoload '(make-defstruct-description defstruct-default-constructor
-            %compiler-defstruct)
-          "defstruct")
-
-(autoload-macro 'defstruct)
 
 (autoload 'hash-table-iterator-function "with-hash-table-iterator")
 (autoload-macro 'with-hash-table-iterator)
