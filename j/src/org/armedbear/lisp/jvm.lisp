@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.541 2005-07-24 00:25:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.542 2005-07-24 01:44:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6420,6 +6420,21 @@
                (emit-unbox-fixnum))
              (emit-move-from-stack target representation))))))
 
+(defun p2-sxhash (form &key (target :stack) representation)
+  (cond ((check-arg-count form 1)
+         (let ((arg (%cadr form)))
+           (unless (eq representation :unboxed-fixnum)
+             (emit 'new +lisp-fixnum-class+)
+             (emit 'dup))
+           (compile-form arg :target :stack)
+           (maybe-emit-clear-values arg)
+           (emit-invokevirtual +lisp-object-class+ "sxhash" nil "I")
+           (unless (eq representation :unboxed-fixnum)
+             (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+           (emit-move-from-stack target representation)))
+        (t
+         (compile-function-call form target representation))))
+
 (defun p2-symbol-name (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -7602,6 +7617,7 @@
   (install-p2-handler 'stringp            'p2-stringp)
   (install-p2-handler 'svref              'p2-svref)
   (install-p2-handler 'svset              'p2-svset)
+  (install-p2-handler 'sxhash             'p2-sxhash)
   (install-p2-handler 'symbol-name        'p2-symbol-name)
   (install-p2-handler 'symbol-value       'p2-symbol-value)
   (install-p2-handler 'symbolp            'p2-symbolp)
