@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.233 2005-07-19 00:30:40 piso Exp $
+;;; $Id: boot.lisp,v 1.234 2005-07-24 19:35:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -291,6 +291,7 @@
   '(&optional &rest &key &aux &body &whole &allow-other-keys &environment))
 
 (load-system-file "require")
+(load-system-file "defstruct")
 (load-system-file "restart")
 (load-system-file "late-setf")
 (load-system-file "debug")
