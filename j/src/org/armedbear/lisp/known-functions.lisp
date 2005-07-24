@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.22 2005-07-23 19:44:20 piso Exp $
+;;; $Id: known-functions.lisp,v 1.23 2005-07-24 00:25:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -92,14 +92,18 @@
         conjugate
         delete-file
         directory-namestring
+        eighth
         enough-namestring
         every
+        fifth
         file-directory-p
         file-namestring
         file-position
         fill
+        first
         float
         fmakunbound
+        fourth
         fset
         ftype-result-type
         get-internal-real-time
@@ -119,6 +123,7 @@
         namestring
         neq
         nintersection
+        ninth
         normalize-type
         nsubst
         nsubst-if
@@ -136,13 +141,17 @@
         read-sequence
         reduce
         replace
+        rest
         scale-float
+        second
         set
         setf-function-name-p
+        seventh
         simple-condition-format-arguments
         simple-condition-format-control
         simple-search
         simple-typep
+        sixth
         some
         sort
         stable-sort
@@ -156,6 +165,8 @@
         svref
         svset
         upper-case-p
+        tenth
+        third
         truename
         vector
         vectorp
