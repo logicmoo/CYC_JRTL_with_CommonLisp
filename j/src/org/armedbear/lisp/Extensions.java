@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Extensions.java,v 1.40 2005-07-25 17:01:08 piso Exp $
+ * $Id: Extensions.java,v 1.41 2005-07-25 17:54:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class Extensions extends Lisp
 
     // ### truly-the value-type form => result*
     private static final SpecialOperator TRULY_THE =
-        new SpecialOperator("truly-the", "type value")
+        new SpecialOperator("truly-the", PACKAGE_EXT, true, "type value")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
