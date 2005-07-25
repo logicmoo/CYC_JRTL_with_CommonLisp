@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.108 2005-07-23 14:22:23 piso Exp $
+;;; $Id: compile-file.lisp,v 1.109 2005-07-25 00:34:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -239,6 +239,8 @@
                      (return-from process-toplevel-form)
                      )
                     ((eq operator '%PUT)
+                     (setf form (precompile-form form nil)))
+                    ((eq operator 'COMPILER-DEFSTRUCT)
                      (setf form (precompile-form form nil)))
                     ((eq operator 'PROCLAIM)
                      (setf form (precompile-form form nil)))
