@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.545 2005-07-25 17:56:46 piso Exp $
+;;; $Id: jvm.lisp,v 1.546 2005-07-25 18:30:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -915,7 +915,7 @@
   (cond ((symbolp form)
          (incf *p1-size*)
          (cond ((constantp form) ; a DEFCONSTANT
-                (let ((value (symbol-value (the symbol form))))
+                (let ((value (symbol-value (truly-the symbol form))))
                   (if (numberp value)
                       value
                       form)))
@@ -1633,7 +1633,7 @@
          (args (cdr form))
          (ok (= (length args) n)))
     (unless ok
-      (funcall (if (eq (symbol-package op) sys:+cl-package+)
+      (funcall (if (eq (symbol-package op) +cl-package+)
                    #'compiler-warn ; See above!
                    #'compiler-style-warn)
                "Wrong number of arguments for ~A (expected ~D, but received ~D)."
@@ -1647,7 +1647,7 @@
          (args (cdr form))
          (ok (>= (length args) n)))
     (unless ok
-      (funcall (if (eq (symbol-package op) sys:+cl-package+)
+      (funcall (if (eq (symbol-package op) +cl-package+)
                    #'compiler-warn ; See above!
                    #'compiler-style-warn)
                "Wrong number of arguments for ~A (expected at least ~D, but received ~D)."
@@ -2422,9 +2422,9 @@
   handlers)
 
 (defun emit-constructor-lambda-name (lambda-name)
-  (cond ((and lambda-name (symbolp lambda-name) (symbol-package lambda-name))
-         (emit 'ldc (pool-string (symbol-name (the symbol lambda-name))))
-         (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
+  (cond ((and lambda-name (symbolp lambda-name) (symbol-package (truly-the symbol lambda-name)))
+         (emit 'ldc (pool-string (symbol-name (truly-the symbol lambda-name))))
+         (emit 'ldc (pool-string (package-name (symbol-package (truly-the symbol lambda-name)))))
          (emit-invokestatic +lisp-class+ "internInPackage"
                             (list +java-string+ +java-string+) +lisp-symbol+))
         (t
@@ -3338,8 +3338,9 @@
 (defun compile-function-call (form target representation)
   (let ((op (car form))
         (args (cdr form)))
-    (unless (symbolp op)
-      (error "COMPILE-FUNCTION-CALL ~S is not a symbol" op))
+;;     (unless (symbolp op)
+;;       (error "COMPILE-FUNCTION-CALL ~S is not a symbol" op))
+    (declare (type symbol op))
     (when (find-local-function op)
       (return-from compile-function-call
                    (compile-local-function-call form target representation)))
@@ -3408,7 +3409,7 @@
               (eq (%car fun) 'QUOTE))
          (let ((sym (cadr fun)))
            (if (and (symbolp sym)
-                    (eq (symbol-package sym) (find-package "CL"))
+                    (eq (symbol-package (truly-the symbol sym)) +cl-package+)
                     (not (special-operator-p sym))
                     (not (macro-function sym)))
                `(,(cadr fun) ,@args)
@@ -4928,7 +4929,7 @@
              (emit-push-nil)
              (emit-move-from-stack target)))
           ((symbolp obj)
-           (if (symbol-package obj)
+           (if (symbol-package (truly-the symbol obj))
                (let ((g (declare-symbol obj)))
                  (emit 'getstatic *this-class* g +lisp-symbol+))
                ;; An uninterned symbol.
