@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Extensions.java,v 1.39 2005-07-09 18:23:32 piso Exp $
+ * $Id: Extensions.java,v 1.40 2005-07-25 17:01:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,19 @@ public final class Extensions extends Lisp
     public static final Symbol _ED_FUNCTIONS_ =
         exportSpecial("*ED-FUNCTIONS*", PACKAGE_EXT,
                       list1(intern("DEFAULT-ED-FUNCTION", PACKAGE_SYS)));
+
+    // ### truly-the value-type form => result*
+    private static final SpecialOperator TRULY_THE =
+        new SpecialOperator("truly-the", "type value")
+    {
+        public LispObject execute(LispObject args, Environment env)
+            throws ConditionThrowable
+        {
+            if (args.length() != 2)
+                return signal(new WrongNumberOfArgumentsException(this));
+            return eval(args.cadr(), env, LispThread.currentThread());
+        }
+    };
 
     // ### neq
     private static final Primitive NEQ =
