@@ -1,7 +1,7 @@
 ;;; source-transform.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: source-transform.lisp,v 1.6 2005-07-16 05:06:48 piso Exp $
+;;; $Id: source-transform.lisp,v 1.7 2005-07-25 00:35:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,8 +24,10 @@
 (defun source-transform (name)
   (get-function-info-value name :source-transform))
 
-(defun (setf source-transform) (transform name)
+(defun set-source-transform (name transform)
   (set-function-info-value name :source-transform transform))
+
+(defsetf source-transform set-source-transform)
 
 (defmacro define-source-transform (name lambda-list &rest body)
   (let* ((form (gensym))

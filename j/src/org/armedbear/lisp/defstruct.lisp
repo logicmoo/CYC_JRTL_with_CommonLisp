@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.70 2005-06-14 00:53:56 piso Exp $
+;;; $Id: defstruct.lisp,v 1.71 2005-07-25 00:33:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
+
+(export 'compiler-defstruct)
 
 (require :source-transform)
 
@@ -426,20 +428,20 @@
             (t
              (error "Unrecognized DEFSTRUCT option: ~S." option))))))
 
-(defun %compiler-defstruct (name &key
-                                 conc-name
-                                 default-constructor
-                                 constructors
-                                 copier
-                                 include
-                                 type
-                                 named
-                                 initial-offset
-                                 predicate
-                                 print-function
-                                 print-object
-                                 direct-slots
-                                 slots)
+(defun compiler-defstruct (name &key
+                                conc-name
+                                default-constructor
+                                constructors
+                                copier
+                                include
+                                type
+                                named
+                                initial-offset
+                                predicate
+                                print-function
+                                print-object
+                                direct-slots
+                                slots)
   (setf (get name 'structure-definition)
         (make-defstruct-description :name name
                                     :conc-name conc-name
@@ -456,7 +458,9 @@
                                     :direct-slots direct-slots
                                     :slots slots))
   (when (or (null type) named)
-    (make-structure-class name direct-slots slots (car include))))
+    (make-structure-class name direct-slots slots (car include)))
+  (when default-constructor
+    (proclaim `(ftype (function * t) ,default-constructor))))
 
 (defmacro defstruct (name-and-options &rest slots)
   (let ((*dd-name* nil)
@@ -546,20 +550,20 @@
     (setf *dd-slots* (nreverse *dd-slots*))
     `(progn
        (eval-when (:compile-toplevel :load-toplevel :execute)
-         (%compiler-defstruct ',*dd-name*
-                              :conc-name ',*dd-conc-name*
-                              :default-constructor ',*dd-default-constructor*
-                              :constructors ',*dd-constructors*
-                              :copier ',*dd-copier*
-                              :include ',*dd-include*
-                              :type ',*dd-type*
-                              :named ,*dd-named*
-                              :initial-offset ,*dd-initial-offset*
-                              :predicate ',*dd-predicate*
-                              :print-function ',*dd-print-function*
-                              :print-object ',*dd-print-object*
-                              :direct-slots ',*dd-direct-slots*
-                              :slots ',*dd-slots*))
+         (compiler-defstruct ',*dd-name*
+                             :conc-name ',*dd-conc-name*
+                             :default-constructor ',*dd-default-constructor*
+                             ,@(if *dd-constructors* `(:constructors ',*dd-constructors*))
+                             :copier ',*dd-copier*
+                             ,@(if *dd-include* `(:include ',*dd-include*))
+                             ,@(if *dd-type* `(:type ',*dd-type*))
+                             ,@(if *dd-named* `(:named ,*dd-named*))
+                             ,@(if *dd-initial-offset* `(:initial-offset ,*dd-initial-offset*))
+                             :predicate ',*dd-predicate*
+                             ,@(if *dd-print-function* `(:print-function ',*dd-print-function*))
+                             ,@(if *dd-print-object* `(:print-object ',*dd-print-object*))
+                             :direct-slots ',*dd-direct-slots*
+                             :slots ',*dd-slots*))
        ,@(define-constructors)
        ,@(define-predicate)
        ,@(define-access-functions)
