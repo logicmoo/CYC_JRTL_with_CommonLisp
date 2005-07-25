@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SpecialOperator.java,v 1.18 2005-06-09 11:49:06 piso Exp $
+ * $Id: SpecialOperator.java,v 1.19 2005-07-25 17:00:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,16 +23,11 @@ package org.armedbear.lisp;
 
 public class SpecialOperator extends Operator
 {
-    private final String name;
-    private final int index;
-
     private int callCount;
 
     public SpecialOperator(String name)
     {
-        this.name = name.toUpperCase();
-        this.index = 0;
-        setLambdaName(Symbol.addFunction(this.name, this));
+        setLambdaName(Symbol.addFunction(name.toUpperCase(), this));
     }
 
     public SpecialOperator(String name, String arglist)
@@ -41,9 +36,22 @@ public class SpecialOperator extends Operator
         setLambdaList(new SimpleString(arglist));
     }
 
-    public final String getName()
+    public SpecialOperator(String name, Package pkg, boolean exported,
+                           String arglist)
     {
-        return name;
+        try {
+            Symbol symbol;
+            if (exported)
+                symbol = pkg.internAndExport(name.toUpperCase());
+            else
+                symbol = pkg.intern(name.toUpperCase());
+            symbol.setSymbolFunction(this);
+            setLambdaName(symbol);
+            setLambdaList(new SimpleString(arglist));
+        }
+        catch (ConditionThrowable t) {
+            Debug.assertTrue(false);
+        }
     }
 
     public LispObject execute() throws ConditionThrowable
@@ -115,10 +123,10 @@ public class SpecialOperator extends Operator
         return signal(new UndefinedFunction(getLambdaName()));
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer("#<SPECIAL-OPERATOR ");
-        sb.append(name);
+        sb.append(lambdaName.writeToString());
         sb.append(">");
         return sb.toString();
     }
