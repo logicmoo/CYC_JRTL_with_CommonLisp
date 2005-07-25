@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.71 2005-07-25 00:33:09 piso Exp $
+;;; $Id: defstruct.lisp,v 1.72 2005-07-25 01:53:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -312,14 +312,18 @@
                                                 (symbol-name *dd-conc-name*)
                                                 (symbol-name (dsd-name slot))))
                            (dsd-name slot)))
-        (index (dsd-index slot)))
+        (index (dsd-index slot))
+        (type (dsd-type slot)))
     (cond ((eq *dd-type* 'list)
-           `((defun ,accessor-name (instance) (elt instance ,index))))
+           `((declaim (ftype (function * ,type) ,accessor-name))
+             (defun ,accessor-name (instance) (elt instance ,index))))
           ((or (eq *dd-type* 'vector)
                (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
-           `((defun ,accessor-name (instance) (aref instance ,index))))
+           `((declaim (ftype (function * ,type) ,accessor-name))
+             (defun ,accessor-name (instance) (aref instance ,index))))
           (t
-           `((defun ,accessor-name (instance) (%structure-ref instance ,index))
+           `((declaim (ftype (function * ,type) ,accessor-name))
+             (defun ,accessor-name (instance) (%structure-ref instance ,index))
              (define-source-transform ,accessor-name (instance)
                `(%structure-ref ,instance ,,index)))))))
 
