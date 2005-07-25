@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.234 2005-07-24 19:35:53 piso Exp $
+;;; $Id: boot.lisp,v 1.235 2005-07-25 17:56:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -60,10 +60,10 @@
 (export '(%car %cdr %cadr %caddr))
 
 (defmacro %car (x)
-  (list 'car (list 'the 'cons x)))
+  (list 'car (list 'truly-the 'cons x)))
 
 (defmacro %cdr (x)
-  (list 'cdr (list 'the 'cons x)))
+  (list 'cdr (list 'truly-the 'cons x)))
 
 (defmacro %cadr (x)
   (list '%car (list '%cdr x)))
