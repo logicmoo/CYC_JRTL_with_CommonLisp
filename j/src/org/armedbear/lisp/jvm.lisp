@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.544 2005-07-25 16:13:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.545 2005-07-25 17:56:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -795,6 +795,13 @@
           (t
            (list 'THE type (p1 expr))))))
 
+(defun p1-truly-the (form)
+  (unless (= (length form) 3)
+    (compiler-error "Wrong number of arguments for special operator ~A (expected 2, but received ~D)."
+                    'TRULY-THE
+                    (1- (length form))))
+  (list 'TRULY-THE (%cadr form) (p1 (%caddr form))))
+
 (declaim (ftype (function (t) t) p1-body))
 (defun p1-body (body)
   (declare (optimize speed))
@@ -993,6 +1000,7 @@
                   (TAGBODY              p1-tagbody)
                   (THE                  p1-the)
                   (THROW                p1-throw)
+                  (TRULY-THE            p1-truly-the)
                   (UNWIND-PROTECT       p1-unwind-protect)))
     (install-p1-handler (%car pair) (%cadr pair))))
 
@@ -5546,7 +5554,7 @@
               (derive-type-plus (list (%cadr form) 1)))
              ((MIN MAX)
               (derive-type-min/max (%cdr form)))
-             (THE
+             ((THE TRULY-THE)
               (second form))
              (t
               (let ((type (ftype-result-type (proclaimed-ftype op))))
@@ -6539,6 +6547,9 @@
            (emit-move-from-stack target representation))
           (t
            (compile-form value-form :target target :representation representation)))))
+
+(defun p2-truly-the (form &key (target :stack) representation)
+  (compile-form (third form) :target target :representation representation))
 
 (defun p2-char-code (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
@@ -7679,6 +7690,7 @@
   (install-p2-handler 'symbolp            'p2-symbolp)
   (install-p2-handler 'the                'p2-the)
   (install-p2-handler 'throw              'p2-throw)
+  (install-p2-handler 'truly-the          'p2-truly-the)
   (install-p2-handler 'values             'p2-values)
   (install-p2-handler 'vectorp            'p2-vectorp)
   (install-p2-handler 'write-8-bits       'p2-write-8-bits)
