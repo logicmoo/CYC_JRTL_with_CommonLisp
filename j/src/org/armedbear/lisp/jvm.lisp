@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.542 2005-07-24 01:44:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.543 2005-07-25 11:23:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6203,14 +6203,14 @@
              (emit 'label `,label2)))))
   (emit-move-from-stack target))
 
-(defun compile-values (form &key (target :stack) representation)
-  (let ((args (cdr form)))
-    (case (length args)
+(defun p2-values (form &key (target :stack) representation)
+  (let* ((args (cdr form))
+         (len (length args)))
+    (case len
       (1
        (let ((arg (%car args)))
          (compile-form arg :target target :representation representation)
-         (unless (single-valued-p arg)
-           (emit-clear-values))))
+         (maybe-emit-clear-values arg)))
       (2
        (emit-push-current-thread)
        (let ((arg1 (%car args))
@@ -6228,16 +6228,16 @@
                 (compile-form arg2 :target :stack))))
        (emit-invokevirtual +lisp-thread-class+
                            "setValues"
-                           (list +lisp-object+ +lisp-object+)
+                           (lisp-object-arg-types len)
                            +lisp-object+)
        (emit-move-from-stack target))
-      (3
+      ((3 4)
        (emit-push-current-thread)
        (dolist (arg args)
          (compile-form arg :target :stack))
        (emit-invokevirtual +lisp-thread-class+
                            "setValues"
-                           (list +lisp-object+ +lisp-object+ +lisp-object+)
+                           (lisp-object-arg-types len)
                            +lisp-object+)
        (emit-move-from-stack target))
       (t
@@ -7552,8 +7552,7 @@
                                multiple-value-list
                                multiple-value-prog1
                                nth
-                               progn
-                               values))
+                               progn))
   (install-p2-handler '%call-internal     'p2-%call-internal)
   (install-p2-handler '*                  'p2-times)
   (install-p2-handler '+                  'p2-plus)
@@ -7623,6 +7622,7 @@
   (install-p2-handler 'symbolp            'p2-symbolp)
   (install-p2-handler 'the                'p2-the)
   (install-p2-handler 'throw              'p2-throw)
+  (install-p2-handler 'values             'p2-values)
   (install-p2-handler 'vectorp            'p2-vectorp)
   (install-p2-handler 'write-8-bits       'p2-write-8-bits)
   (install-p2-handler 'zerop              'p2-zerop)
