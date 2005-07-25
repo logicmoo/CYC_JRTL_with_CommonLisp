@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.543 2005-07-25 11:23:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.544 2005-07-25 16:13:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -777,23 +777,23 @@
     (list 'SETQ arg1 (p1 arg2))))
 
 (defun p1-the (form)
-  (dformat t "p1-the form = ~S~%" form)
-  (let ((type (second form))
-        (expr (third form)))
+  (unless (= (length form) 3)
+    (compiler-error "Wrong number of arguments for special operator ~A (expected 2, but received ~D)."
+                    'THE
+                    (1- (length form))))
+  (let ((type (%cadr form))
+        (expr (%caddr form)))
     (cond ((and (listp type) (eq (car type) 'VALUES))
            ;; FIXME
            (p1 expr))
           ((= *safety* 3)
-           (dformat t "p1-the expr = ~S~%" expr)
            (let* ((sym (gensym))
-                  (new-expr
-                   `(let ((,sym ,expr))
-                      (sys::require-type ,sym ',type)
-                      ,sym)))
-             (dformat t "p1-the new-expr = ~S~%" new-expr)
+                  (new-expr `(let ((,sym ,expr))
+                               (require-type ,sym ',type)
+                               ,sym)))
              (p1 new-expr)))
           (t
-               (list 'THE type (p1 expr))))))
+           (list 'THE type (p1 expr))))))
 
 (declaim (ftype (function (t) t) p1-body))
 (defun p1-body (body)
@@ -1236,8 +1236,8 @@
   (ensure-thread-var-initialized)
   (emit 'aload *thread*))
 
-(declaim (ftype (function (t t) t) generate-instanceof-type-check))
-(defun generate-instanceof-type-check (variable expected-type)
+(declaim (ftype (function (t t) t) generate-instanceof-type-check-for-variable))
+(defun generate-instanceof-type-check-for-variable (variable expected-type)
   (declare (type symbol expected-type))
   (let ((instanceof-class (ecase expected-type
                             (SYMBOL     +lisp-symbol-class+)
@@ -1271,7 +1271,7 @@
              (emit-push-constant-int index)
              (emit 'aaload))) ; datum
           (t
-           (return-from generate-instanceof-type-check)))
+           (return-from generate-instanceof-type-check-for-variable)))
     (emit 'getstatic +lisp-symbol-class+ expected-type-java-symbol-name +lisp-symbol+)
     (emit-invokestatic +lisp-class+ "signalTypeError"
                        (lisp-object-arg-types 2) +lisp-object+)
@@ -1279,24 +1279,24 @@
     (label LABEL1))
   t)
 
-(declaim (ftype (function (t) t) generate-type-check))
-(defun generate-type-check (variable)
+(declaim (ftype (function (t) t) generate-type-check-for-variable))
+(defun generate-type-check-for-variable (variable)
   (let ((declared-type (variable-declared-type variable)))
     (cond ((eq declared-type :none)) ; Nothing to do.
           ((eq declared-type 'SYMBOL)
-           (generate-instanceof-type-check variable 'SYMBOL))
+           (generate-instanceof-type-check-for-variable variable 'SYMBOL))
           ((eq declared-type 'CHARACTER)
-           (generate-instanceof-type-check variable 'CHARACTER))
+           (generate-instanceof-type-check-for-variable variable 'CHARACTER))
           ((eq declared-type 'CONS)
-           (generate-instanceof-type-check variable 'CONS))
+           (generate-instanceof-type-check-for-variable variable 'CONS))
           ((eq declared-type 'HASH-TABLE)
-           (generate-instanceof-type-check variable 'HASH-TABLE))
+           (generate-instanceof-type-check-for-variable variable 'HASH-TABLE))
           ((subtypep declared-type 'FIXNUM)
-           (generate-instanceof-type-check variable 'FIXNUM))
+           (generate-instanceof-type-check-for-variable variable 'FIXNUM))
           ((subtypep declared-type 'STRING)
-           (generate-instanceof-type-check variable 'STRING))
+           (generate-instanceof-type-check-for-variable variable 'STRING))
           ((subtypep declared-type 'VECTOR)
-           (generate-instanceof-type-check variable 'VECTOR))
+           (generate-instanceof-type-check-for-variable variable 'VECTOR))
           (t
            nil))))
 
@@ -1308,14 +1308,14 @@
     (let ((declared-type (variable-declared-type variable)))
       (unless (eq declared-type :none)
         (unless (subtypep (derive-type (variable-initform variable)) declared-type)
-          (generate-type-check variable))))))
+          (generate-type-check-for-variable variable))))))
 
-(declaim (ftype (function (list) t) generate-type-checks))
-(defun generate-type-checks (variables)
+(declaim (ftype (function (list) t) generate-type-checks-for-variables))
+(defun generate-type-checks-for-variables (variables)
   (unless (zerop *safety*)
     (dolist (variable variables)
       (unless (variable-special-p variable)
-        (generate-type-check variable)))
+        (generate-type-check-for-variable variable)))
     t))
 
 (defun generate-arg-count-check (arity)
@@ -6440,11 +6440,26 @@
     (compile-function-call form target representation)
     (return-from p2-symbol-name))
   (let ((arg (%cadr form)))
-    (cond ((and (eq (derive-type arg) 'symbol) (< *safety* 3))
+    (cond ((and (eq (derive-type arg) 'SYMBOL) (< *safety* 3))
            (compile-form arg)
            (maybe-emit-clear-values arg)
            (emit 'checkcast +lisp-symbol-class+)
            (emit 'getfield  +lisp-symbol-class+ "name" +lisp-simple-string+)
+           (emit-move-from-stack target representation))
+          (t
+           (compile-function-call form target representation)))))
+
+(defun p2-symbol-package (form &key (target :stack) representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-symbol-package))
+  (let ((arg (%cadr form)))
+    (cond ((and (eq (derive-type arg) 'SYMBOL) (< *safety* 3))
+           (compile-form arg)
+           (maybe-emit-clear-values arg)
+           (emit 'checkcast +lisp-symbol-class+)
+           (emit-invokevirtual +lisp-symbol-class+ "getPackage"
+                               nil +lisp-object+)
            (emit-move-from-stack target representation))
           (t
            (compile-function-call form target representation)))))
@@ -6466,23 +6481,64 @@
   ;; Otherwise...
   (compile-function-call form target representation))
 
-(defun p2-the (form &key (target :stack) representation)
-;;   (compile-form (third form) :target target :representation representation)
-  (dformat t "p2-the ~S ~S ~S~%" form target representation)
-  (cond ((and (eq representation :unboxed-fixnum) (subtypep (second form) 'FIXNUM))
-         (compile-form (third form) :target :stack :representation :unboxed-fixnum)
-         (emit-move-from-stack target representation))
-;;         ((subtypep (second form) 'FIXNUM)
-;;          (dformat t "p2-the fixnum case~%")
-;;          (unless (eq representation :unboxed-fixnum)
-;;            (emit 'new +lisp-fixnum-class+)
-;;            (emit 'dup))
-;;          (compile-form (third form) :target :stack :representation :unboxed-fixnum)
-;;          (unless (eq representation :unboxed-fixnum)
-;;            (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
-;;          (emit-move-from-stack target representation))
+(declaim (ftype (function (t) t) generate-instanceof-type-check-for-value))
+(defun generate-instanceof-type-check-for-value (expected-type)
+  ;; The value to be checked is on the stack.
+  (declare (type symbol expected-type))
+  (let ((instanceof-class (ecase expected-type
+                            (SYMBOL     +lisp-symbol-class+)
+                            (CHARACTER  +lisp-character-class+)
+                            (CONS       +lisp-cons-class+)
+                            (HASH-TABLE +lisp-hash-table-class+)
+                            (FIXNUM     +lisp-fixnum-class+)
+                            (STRING     +lisp-abstract-string-class+)
+                            (VECTOR     +lisp-abstract-vector-class+)))
+        (expected-type-java-symbol-name (case expected-type
+                                          (HASH-TABLE "HASH_TABLE")
+                                          (t
+                                           (symbol-name expected-type))))
+        (LABEL1 (gensym)))
+    (emit 'dup)
+    (emit 'instanceof instanceof-class)
+    (emit 'ifne LABEL1)
+    (emit 'getstatic +lisp-symbol-class+ expected-type-java-symbol-name +lisp-symbol+)
+    (emit-invokestatic +lisp-class+ "signalTypeError"
+                       (lisp-object-arg-types 2) +lisp-object+)
+    (label LABEL1))
+  t)
+
+(declaim (ftype (function (t) t) generate-type-check-for-value))
+(defun generate-type-check-for-value (declared-type)
+  (cond ((eq declared-type 'SYMBOL)
+         (generate-instanceof-type-check-for-value 'SYMBOL))
+        ((eq declared-type 'CHARACTER)
+         (generate-instanceof-type-check-for-value 'CHARACTER))
+        ((eq declared-type 'CONS)
+         (generate-instanceof-type-check-for-value 'CONS))
+        ((eq declared-type 'HASH-TABLE)
+         (generate-instanceof-type-check-for-value 'HASH-TABLE))
+        ((subtypep declared-type 'FIXNUM)
+         (generate-instanceof-type-check-for-value 'FIXNUM))
+        ((subtypep declared-type 'STRING)
+         (generate-instanceof-type-check-for-value 'STRING))
+        ((subtypep declared-type 'VECTOR)
+         (generate-instanceof-type-check-for-value 'VECTOR))
         (t
-         (compile-form (third form) :target target :representation representation))))
+         nil)))
+
+(defun p2-the (form &key (target :stack) representation)
+  (let ((type-form (second form))
+        (value-form (third form)))
+    (cond ((and (> *safety* 0)
+                (not (subtypep (derive-type value-form) type-form)))
+           (compile-form value-form :target :stack)
+           (generate-type-check-for-value type-form)
+           ;; The value is left on the stack here if the type check succeeded.
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
+           (emit-move-from-stack target representation))
+          (t
+           (compile-form value-form :target target :representation representation)))))
 
 (defun p2-char-code (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
@@ -7258,7 +7314,7 @@
             (setf (variable-register variable) (variable-reserved-register variable))
             (setf (variable-index variable) nil)))))
 
-    (generate-type-checks (reverse parameters))
+    (generate-type-checks-for-variables (reverse parameters))
 
     ;; Unbox variables.
 ;;     (dolist (variable (compiland-arg-vars compiland))
@@ -7618,6 +7674,7 @@
   (install-p2-handler 'svset              'p2-svset)
   (install-p2-handler 'sxhash             'p2-sxhash)
   (install-p2-handler 'symbol-name        'p2-symbol-name)
+  (install-p2-handler 'symbol-package     'p2-symbol-package)
   (install-p2-handler 'symbol-value       'p2-symbol-value)
   (install-p2-handler 'symbolp            'p2-symbolp)
   (install-p2-handler 'the                'p2-the)
