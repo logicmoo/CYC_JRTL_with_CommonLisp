@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.124 2005-07-25 17:55:26 piso Exp $
+;;; $Id: precompiler.lisp,v 1.125 2005-07-26 19:54:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -688,9 +688,7 @@
       (precompile-cons form)))
 
 (defun precompile-or (form)
-  (if *in-jvm-compile*
-      (precompile1 (macroexpand form))
-      (precompile-cons form)))
+  (precompile-cons form))
 
 ;; MULTIPLE-VALUE-BIND is handled explicitly by the JVM compiler.
 (defun precompile-multiple-value-bind (form)
