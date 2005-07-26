@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.546 2005-07-25 18:30:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.547 2005-07-26 04:49:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3393,10 +3393,13 @@
            (process-args args)
            (emit-call-execute numargs))
           (t
-           (emit-push-current-thread)
+           (unless (> *speed* *debug*)
+             (emit-push-current-thread))
            (emit 'swap) ; Stack: thread function
            (process-args args)
-           (emit-call-thread-execute numargs)))))
+           (if (> *speed* *debug*)
+               (emit-call-execute numargs)
+               (emit-call-thread-execute numargs))))))
 
 (define-source-transform funcall (&whole form fun &rest args)
   (cond ((> *debug* *speed*)
