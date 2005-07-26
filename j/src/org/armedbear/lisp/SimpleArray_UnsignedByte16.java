@@ -2,7 +2,7 @@
  * SimpleArray_UnsignedByte16.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleArray_UnsignedByte16.java,v 1.1 2005-07-09 04:05:27 piso Exp $
+ * $Id: SimpleArray_UnsignedByte16.java,v 1.2 2005-07-26 04:49:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,6 +165,18 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
     public boolean isAdjustable()
     {
         return false;
+    }
+
+    public int aref(int index) throws ConditionThrowable
+    {
+        try {
+            return data[index];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            signal(new TypeError("Bad row major index " + index + "."));
+            // Not reached.
+            return 0;
+        }
     }
 
     public LispObject AREF(int index) throws ConditionThrowable
