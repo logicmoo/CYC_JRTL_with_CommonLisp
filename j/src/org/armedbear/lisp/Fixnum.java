@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.119 2005-07-12 09:17:51 piso Exp $
+ * $Id: Fixnum.java,v 1.120 2005-07-27 02:31:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -734,6 +734,13 @@ public final class Fixnum extends LispObject
             return number(n1.and(n2));
         }
         return signalTypeError(obj, Symbol.INTEGER);
+    }
+
+    public LispObject LDB(int size, int position)
+    {
+        int n = value >> position;
+        int mask = (1 << size) - 1;
+        return new Fixnum(n & mask);
     }
 
     public int hashCode()

@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Bignum.java,v 1.67 2005-05-09 17:27:20 piso Exp $
+ * $Id: Bignum.java,v 1.68 2005-07-27 02:32:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -549,6 +549,13 @@ public final class Bignum extends LispObject
         else
             return signal(new TypeError(obj, Symbol.INTEGER));
         return number(value.and(n));
+    }
+
+    public LispObject LDB(int size, int position)
+    {
+        BigInteger n = value.shiftRight(position);
+        BigInteger mask = BigInteger.ONE.shiftLeft(size).subtract(BigInteger.ONE);
+        return number(n.and(mask));
     }
 
     public int hashCode()
