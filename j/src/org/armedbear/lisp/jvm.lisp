@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.548 2005-07-26 19:55:36 piso Exp $
+;;; $Id: jvm.lisp,v 1.549 2005-07-27 00:30:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -972,7 +972,8 @@
   (setf (get symbol 'p1-handler) handler))
 
 (defun initialize-p1-handlers ()
-  (dolist (pair '((BLOCK                p1-block)
+  (dolist (pair '((AND                  p1-default)
+                  (BLOCK                p1-block)
                   (CATCH                p1-default)
                   (DECLARE              identity)
                   (EVAL-WHEN            p1-eval-when)
@@ -6198,27 +6199,53 @@
            (compile-form (second arg) :target :stack)
            (maybe-emit-clear-values (second arg))
            (emit-push-nil)
-           (let ((label1 (gensym))
-                 (label2 (gensym)))
-             (emit 'if_acmpeq `,label1)
+           (let ((LABEL1 (gensym))
+                 (LABEL2 (gensym)))
+             (emit 'if_acmpeq LABEL1)
              (emit-push-t)
-             (emit 'goto `,label2)
-             (emit 'label `,label1)
+             (emit 'goto LABEL2)
+             (emit 'label LABEL1)
              (emit-push-nil)
-             (emit 'label `,label2)))
+             (emit 'label LABEL2)))
           (t
            (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
            (emit-push-nil)
-           (let ((label1 (gensym))
-                 (label2 (gensym)))
-             (emit 'if_acmpeq `,label1)
+           (let ((LABEL1 (gensym))
+                 (LABEL2 (gensym)))
+             (emit 'if_acmpeq LABEL1)
              (emit-push-nil)
-             (emit 'goto `,label2)
-             (emit 'label `,label1)
+             (emit 'goto LABEL2)
+             (emit 'label LABEL1)
              (emit-push-t)
-             (emit 'label `,label2)))))
+             (emit 'label LABEL2)))))
   (emit-move-from-stack target))
+
+(defun p2-and (form &key (target :stack) representation)
+  (let ((args (cdr form)))
+    (case (length args)
+      (0
+       (emit-push-t)
+       (emit-move-from-stack target))
+      (1
+       (compile-form (%car args) :target target :representation representation))
+      (2
+       (let ((arg1 (%car args))
+             (arg2 (%cadr args))
+             (LABEL1 (gensym)))
+         (compile-form arg1 :target :stack)
+         (maybe-emit-clear-values arg1)
+         (emit 'dup)
+         (emit-push-nil)
+         (emit 'if_acmpeq LABEL1)
+         (emit 'pop)
+         (compile-form arg2 :target :stack :representation representation)
+         (emit 'label LABEL1)
+         (emit-move-from-stack target representation)))
+      (t
+       ;; (and a b c d e f) => (and a (and b c d e f))
+       (let ((new-form `(and ,(%car args) (and ,@(%cdr args)))))
+         (p2-and new-form :target target :representation representation))))))
 
 (defun p2-or (form &key (target :stack) representation)
   (let ((args (cdr form)))
@@ -7673,6 +7700,7 @@
   (install-p2-handler '=                  'p2-numeric-comparison)
   (install-p2-handler '>                  'p2-numeric-comparison)
   (install-p2-handler '>=                 'p2-numeric-comparison)
+  (install-p2-handler 'and                'p2-and)
   (install-p2-handler 'aref               'p2-aref)
   (install-p2-handler 'aset               'p2-aset)
   (install-p2-handler 'ash                'p2-ash)
