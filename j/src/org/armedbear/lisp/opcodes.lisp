@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: opcodes.lisp,v 1.21 2005-04-22 21:27:32 piso Exp $
+;;; $Id: opcodes.lisp,v 1.22 2005-07-27 20:00:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "JVM")
+(in-package #:jvm)
 
 (defparameter *opcode-table* (make-array 256))
 
@@ -25,15 +25,19 @@
 
 (defstruct jvm-opcode name number size stack-effect)
 
-(defmacro define-opcode (name number size stack-effect)
-  `(let* ((name (string ',name))
-          (opcode (make-jvm-opcode :name name
-                                   :number ,number
-                                   :size ,size
-                                   :stack-effect ,stack-effect)))
-     (setf (svref *opcode-table* ,number) opcode)
+(defun %define-opcode (name number size stack-effect)
+  (declare (type fixnum number size))
+  (let* ((name (string name))
+         (opcode (make-jvm-opcode :name name
+                                  :number number
+                                  :size size
+                                  :stack-effect stack-effect)))
+     (setf (svref *opcode-table* number) opcode)
      (setf (gethash name *opcodes*) opcode)
-     (setf (gethash ,number *opcodes*) opcode)))
+     (setf (gethash number *opcodes*) opcode)))
+
+(defmacro define-opcode (name number size stack-effect)
+  `(%define-opcode ',name ,number ,size ,stack-effect))
 
 ;; name number size stack-effect (nil if unknown)
 (define-opcode nop 0 1 0)
@@ -241,9 +245,9 @@
 (define-opcode label 202 0 0)
 ;; (define-opcode push-value 203 nil 1)
 ;; (define-opcode store-value 204 nil -1)
-(define-opcode clear-values 205 nil 0)
-(define-opcode var-ref 206 nil nil)
-(define-opcode var-set 207 nil nil)
+(define-opcode clear-values 205 0 0)
+(define-opcode var-ref 206 0 0)
+(define-opcode var-set 207 0 0)
 
 (defparameter *last-opcode* 207)
 
@@ -252,15 +256,18 @@
   (let ((opcode (gethash opcode-number *opcodes*)))
     (and opcode (jvm-opcode-name opcode))))
 
-(declaim (ftype (function (t) t) opcode-number))
+(declaim (ftype (function (t) (integer 0 255)) opcode-number))
 (defun opcode-number (opcode-name)
   (declare (optimize speed))
   (let ((opcode (gethash (string opcode-name) *opcodes*)))
-    (and opcode (jvm-opcode-number opcode))))
+    (if opcode
+        (jvm-opcode-number opcode)
+        (error "Unknown opcode ~S." opcode-name))))
 
-(declaim (ftype (function (t) t) opcode-size))
+(declaim (ftype (function (t) fixnum) opcode-size))
 (defun opcode-size (opcode-number)
   (declare (optimize speed))
+  (declare (type (integer 0 255) opcode-number))
   (jvm-opcode-size (svref *opcode-table* opcode-number)))
 
 (declaim (ftype (function (t) t) opcode-stack-effect))

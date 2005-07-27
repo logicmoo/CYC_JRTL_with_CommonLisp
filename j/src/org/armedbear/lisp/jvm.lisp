@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.550 2005-07-27 02:34:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.551 2005-07-27 20:01:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1097,7 +1097,7 @@
 (locally (declare (optimize speed))
   (defstruct (instruction
               (:constructor make-instruction (opcode args)))
-    opcode
+    (opcode 0 :type (integer 0 255))
     args
     stack
     depth))
@@ -1114,6 +1114,7 @@
   (let ((opcode (if (fixnump instr)
                     instr
                     (opcode-number instr))))
+    (declare (type fixnum opcode-number))
     (unless (listp args)
       (setf args (list args)))
     (make-instruction opcode args)))
@@ -1447,7 +1448,6 @@
                 precompiler::precompile1
                 declare
                 go
-                sys::%structure-ref
                 inst
                 emit
                 label
@@ -1486,7 +1486,7 @@
                   (every #'single-valued-p (cdr form)))
                  ((eq op 'RETURN-FROM)
                   (single-valued-p (third form)))
-                 ((eq op 'THE)
+                 ((memq op '(THE TRULY-THE))
                   (dformat t "single-valued-p THE ~S~%" form)
                   (single-valued-p (third form)))
                  ((setf ftype (proclaimed-ftype op))
@@ -1898,7 +1898,7 @@
 (declaim (ftype (function (t) t) branch-opcode-p))
 (defun branch-opcode-p (opcode)
   (declare (optimize speed))
-  (declare (type fixnum opcode))
+  (declare (type '(integer 0 255) opcode))
   (or (<= 153 opcode 168)
       (= opcode 198)))
 
@@ -2273,14 +2273,14 @@
   (let ((length 0))
     (declare (type fixnum length))
     ;; Pass 1: calculate label offsets and overall length.
-    (dotimes (i (the fixnum (length code)))
+    (dotimes (i (length code))
       (declare (type fixnum i))
       (let* ((instruction (aref code i))
              (opcode (instruction-opcode instruction)))
         (if (= opcode 202) ; LABEL
             (let ((label (car (instruction-args instruction))))
               (set label length))
-            (incf length (the fixnum (opcode-size opcode))))))
+            (incf length (opcode-size opcode)))))
     ;; Pass 2: replace labels with calculated offsets.
     (let ((index 0))
       (declare (type fixnum index))
@@ -3028,17 +3028,18 @@
                (emit 'label `,label2))
              (emit-move-from-stack target))
            t)
-          (SYS::%STRUCTURE-REF
+          (STRUCTURE-REF
            (let ((first (first args))
                  (second (second args)))
              (when (fixnump second)
                (compile-form first :target :stack)
                (maybe-emit-clear-values first)
                (emit 'sipush second)
-               (emit-invokevirtual +lisp-object-class+ "getSlotValue"
-                                   '("I") +lisp-object+)
-               (when (eq representation :unboxed-fixnum)
-                 (emit-unbox-fixnum))
+               (if (eq representation :unboxed-fixnum)
+                   (emit-invokevirtual +lisp-object-class+ "getFixnumSlotValue"
+                                       '("I") "I")
+                   (emit-invokevirtual +lisp-object-class+ "getSlotValue"
+                                       '("I") +lisp-object+))
                (emit-move-from-stack target representation)
                t)))
           (t
@@ -3209,7 +3210,7 @@
 (declaim (ftype (function (t t t t) t) compile-function-call-3))
 (defun compile-function-call-3 (op args target)
   (case op
-    (SYS::%STRUCTURE-SET
+    (STRUCTURE-SET
      (when (fixnump (second args))
        (compile-form (first args) :target :stack)
        (maybe-emit-clear-values (first args))
@@ -4429,15 +4430,17 @@
                      ((and (null (variable-closure-index variable))
                            (not (variable-special-p variable))
                            (eql (variable-writes variable) 0))
+;;                       (let ((*print-structure* nil))
+;;                         (format t "initform = ~S~%" initform))
                       (let ((type (derive-type initform)))
+;;                         (format t "p2-let*-bindings ~S type = ~S~%" (variable-name variable) type)
                         (setf (variable-derived-type variable) type)
                         (cond ((subtypep type 'FIXNUM)
                                (setf (variable-representation variable) :unboxed-fixnum)
+                               (setf (variable-register variable) (allocate-register))
                                (compile-form initform
                                              :target :stack
-                                             :representation
-                                             (variable-representation variable))
-                               (setf (variable-register variable) (allocate-register))
+                                             :representation :unboxed-fixnum)
                                (emit 'istore (variable-register variable))
                                (setf boundp t))
                               (t
@@ -5277,28 +5280,46 @@
          (arg2 (%cadr args))
          (var1 (unboxed-fixnum-variable arg1))
          (var2 (unboxed-fixnum-variable arg2))
-         (type1 t))
-    (setf type1 (derive-type arg1))
-    (dformat t "type1 = ~S~%" type1)
+;;          (type1 t))
+;;     (setf type1 (derive-type arg1))
+         (type1 (derive-type arg1))
+         (type2 (derive-type arg2)))
+;;     (format t "type1 = ~S type2 = ~S~%" type1 type2)
     (cond ((and (numberp arg1) (numberp arg2))
-           (dformat t "p2-ash case 1~%")
+;;            (dformat t "p2-ash case 1~%")
            (compile-constant (ash arg1 arg2)
                              :target target
                              :representation representation))
-          ((and var1 (fixnump arg2) (< 0 arg2 32))
-           (dformat t "p2-ash case 2~%")
+;;           ((and var1 (fixnump arg2) (< 0 arg2 32))
+;;            (dformat t "p2-ash case 2~%")
+;;            (case representation
+;;              (:unboxed-fixnum
+;;               (emit-push-int var1)
+;;               (emit-push-constant-int arg2)
+;;               (emit 'ishl))
+;;              (t
+;;               (emit-push-int var1)
+;;               (emit 'i2l)
+;;               (emit-push-constant-int arg2)
+;;               (emit 'lshl)
+;;               (emit-box-long)))
+;;            (emit-move-from-stack target representation))
+          ((and (subtypep type1 'FIXNUM)
+                (subtypep type2 '(INTEGER 0 31)))
+;;            (format t "p2-ash case 2~%")
            (case representation
              (:unboxed-fixnum
-              (emit-push-int var1)
-              (emit-push-constant-int arg2)
+              (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+              (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+              (maybe-emit-clear-values arg1 arg2)
               (emit 'ishl))
              (t
-              (emit-push-int var1)
+              (compile-form arg1 :target :stack :representation :unboxed-fixnum)
               (emit 'i2l)
-              (emit-push-constant-int arg2)
+              (compile-form arg2 :target :stack :representation :unboxed-fixnum)
               (emit 'lshl)
-              (emit-box-long)))
-           (emit-move-from-stack target representation))
+              (maybe-emit-clear-values arg1 arg2)
+              (emit-box-long))))
           ((and (subtypep type1 'FIXNUM) (fixnump arg2) (< 0 arg2 32))
            (dformat t "p2-ash case 2a~%")
            (compile-form arg1 :target :stack :representation :unboxed-fixnum)
@@ -5692,13 +5713,20 @@
 (defun derive-type-minus (args)
   (case (length args)
     (1
-     (if (subtypep (derive-type (%car args)) 'fixnum)
-         'fixnum
-         t))
+     (let ((type (derive-type (%car args))))
+       (cond ((subtypep type '(integer 0 31))
+              '(integer -31 0))
+             ((subtypep type 'fixnum)
+              'fixnum)
+             (t
+               t))))
     (2
      (let ((type1 (derive-type (%car args)))
            (type2 (derive-type (%cadr args))))
-       (cond ((and (subtypep type1 '(integer 0 #.most-positive-fixnum))
+       (cond ((and (subtypep type1 '(integer 0 31))
+                   (subtypep type1 '(integer 0 31)))
+              '(integer -31 31))
+             ((and (subtypep type1 '(integer 0 #.most-positive-fixnum))
                    (subtypep type2 '(integer 0 #.most-positive-fixnum)))
               'fixnum)
              (t
