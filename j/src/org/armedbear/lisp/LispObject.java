@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.140 2005-07-27 02:32:00 piso Exp $
+ * $Id: LispObject.java,v 1.141 2005-07-27 19:55:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -944,6 +944,13 @@ public class LispObject extends Lisp
     public LispObject getSlotValue(int index) throws ConditionThrowable
     {
         return signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+    }
+
+    public int getFixnumSlotValue(int index) throws ConditionThrowable
+    {
+        signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+        // Not reached.
+        return 0;
     }
 
     public LispObject setSlotValue(int index, LispObject value)
