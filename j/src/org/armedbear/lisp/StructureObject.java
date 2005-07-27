@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.51 2005-07-16 17:36:35 piso Exp $
+ * $Id: StructureObject.java,v 1.52 2005-07-27 19:56:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,6 +111,24 @@ public final class StructureObject extends LispObject
         }
     }
 
+    public int getFixnumSlotValue(int index) throws ConditionThrowable
+    {
+        try {
+            return ((Fixnum)slots[index]).value;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            signal(new LispError("Invalid slot index " + index + "  for "
+                                 + writeToString()));
+            // Not reached.
+            return 0;
+        }
+        catch (ClassCastException e) {
+            signalTypeError(slots[index], Symbol.FIXNUM);
+            // Not reached.
+            return 0;
+        }
+    }
+
     public LispObject setSlotValue(int index, LispObject value)
         throws ConditionThrowable
     {
@@ -215,10 +233,9 @@ public final class StructureObject extends LispObject
         }
     };
 
-    // ### %structure-ref
-    // %structure-ref instance index => value
+    // ### structure-ref instance index => value
     private static final Primitive _STRUCTURE_REF =
-        new Primitive("%structure-ref", PACKAGE_SYS, false)
+        new Primitive("structure-ref", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -228,9 +245,9 @@ public final class StructureObject extends LispObject
             }
             catch (ClassCastException e) {
                 if (first instanceof StructureObject)
-                    return signal(new TypeError(second, Symbol.FIXNUM));
+                    return signalTypeError(second, Symbol.FIXNUM);
                 else
-                    return signal(new TypeError(first, Symbol.STRUCTURE_OBJECT));
+                    return signalTypeError(first, Symbol.STRUCTURE_OBJECT);
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
@@ -239,10 +256,9 @@ public final class StructureObject extends LispObject
         }
     };
 
-    // ### %structure-set
-    // %structure-set instance index new-value => new-value
+    // ### structure-set instance index new-value => new-value
     private static final Primitive _STRUCTURE_SET =
-        new Primitive("%structure-set", PACKAGE_SYS, false)
+        new Primitive("structure-set", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -253,7 +269,10 @@ public final class StructureObject extends LispObject
                 return third;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError());
+                if (first instanceof StructureObject)
+                    return signalTypeError(second, Symbol.FIXNUM);
+                else
+                    return signalTypeError(first, Symbol.STRUCTURE_OBJECT);
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
