@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.23 2005-07-24 00:25:29 piso Exp $
+;;; $Id: known-functions.lisp,v 1.24 2005-07-27 19:58:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,8 +62,6 @@
         %set-std-slot-value
         %stream-terpri
         %stream-write-char
-        %structure-ref
-        %structure-set
         alphanumericp
         array-has-fill-pointer-p
         aset
@@ -159,15 +157,17 @@
         stream-element-type
         stream-line-number
         string<=
+        structure-ref
+        structure-set
         subst
         subst-if
         subst-if-not
         svref
         svset
-        upper-case-p
         tenth
         third
         truename
+        upper-case-p
         vector
         vectorp
         write-byte

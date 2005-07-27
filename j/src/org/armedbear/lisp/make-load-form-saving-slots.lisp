@@ -1,7 +1,7 @@
 ;;; make-load-form-saving-slots.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: make-load-form-saving-slots.lisp,v 1.6 2005-06-18 23:15:08 piso Exp $
+;;; $Id: make-load-form-saving-slots.lisp,v 1.7 2005-07-27 19:59:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,8 +32,8 @@
                (let ((slot-name (dsd-name slot)))
                  (when (or (memq slot-name slot-names)
                            (null slot-names))
-                   (let ((value (%structure-ref object index)))
-                     (push `(%structure-set ,instance ,index ',value) inits))))
+                   (let ((value (structure-ref object index)))
+                     (push `(structure-set ,instance ,index ',value) inits))))
                (incf index))))
           ((typep object 'standard-object)
            (dolist (slot (class-slots class))

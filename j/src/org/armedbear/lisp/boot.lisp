@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.235 2005-07-25 17:56:15 piso Exp $
+;;; $Id: boot.lisp,v 1.236 2005-07-27 19:59:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -160,10 +160,10 @@
            (do ((i 0 (1+ i))
                 (end (structure-length tree)))
                ((= i end))
-             (let* ((old (%structure-ref tree i))
+             (let* ((old (structure-ref tree i))
                     (new (circle-subst old-new-alist old)))
                (unless (eq old new)
-                 (%structure-set tree i new)))))
+                 (structure-set tree i new)))))
 ;;           ((typep tree 'standard-object)
 ;;            (do ((i 1 (1+ i))
 ;;                 (end (%instance-length tree)))

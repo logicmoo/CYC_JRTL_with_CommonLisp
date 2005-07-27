@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.72 2005-07-25 01:53:12 piso Exp $
+;;; $Id: defstruct.lisp,v 1.73 2005-07-27 19:57:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -323,9 +323,9 @@
              (defun ,accessor-name (instance) (aref instance ,index))))
           (t
            `((declaim (ftype (function * ,type) ,accessor-name))
-             (defun ,accessor-name (instance) (%structure-ref instance ,index))
+             (defun ,accessor-name (instance) (structure-ref instance ,index))
              (define-source-transform ,accessor-name (instance)
-               `(%structure-ref ,instance ,,index)))))))
+               `(structure-ref ,instance ,,index)))))))
 
 (defun define-writer (slot)
   (let ((accessor-name (if *dd-conc-name*
@@ -343,9 +343,9 @@
                (aset instance ,index value))))
           (t
            `((defun (setf ,accessor-name) (value instance)
-               (%structure-set instance ,index value))
+               (structure-set instance ,index value))
              (define-source-transform (setf ,accessor-name) (value instance)
-               `(%structure-set ,instance ,,index ,value)))))))
+               `(structure-set ,instance ,,index ,value)))))))
 
 (defun define-access-functions ()
   (let ((result ()))
