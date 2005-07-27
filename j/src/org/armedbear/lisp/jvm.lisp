@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.549 2005-07-27 00:30:34 piso Exp $
+;;; $Id: jvm.lisp,v 1.550 2005-07-27 02:34:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5473,6 +5473,45 @@
   (dformat t "p2-logxor default case~%")
   (compile-function-call form target representation))
 
+;; %ldb size position integer => byte
+(defun p2-%ldb (form &key (target :stack) representation)
+  (unless (check-arg-count form 3)
+    (compile-function-call form target representation)
+    (return-from p2-%ldb))
+  (let* ((args (cdr form))
+         (arg1 (%car args))
+         (arg2 (%cadr args))
+         (arg3 (%caddr args))
+         (type1 (derive-type arg1))
+         (type2 (derive-type arg2)))
+    ;; FIXME Inline the case where all args are of fixnum type.
+    ;; FIXME Add LispObject.ldb(), returning a Java int, for the case where we
+    ;; need an unboxed fixnum result.
+    (cond ((and (fixnump arg1) (fixnump arg2))
+           ;; Order of evaluation doesn't matter.
+           (compile-form arg3 :target :stack)
+           (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+           (maybe-emit-clear-values arg1 arg2 arg3)
+           (emit-invokevirtual +lisp-object-class+ "LDB" '("I" "I") +lisp-object+)
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
+           (emit-move-from-stack target representation))
+          ((and (subtypep type1 'FIXNUM)
+                (subtypep type2 'FIXNUM))
+           (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+           (compile-form arg3 :target :stack)
+           (maybe-emit-clear-values arg1 arg2 arg3)
+           (emit 'dup_x2)
+           (emit 'pop)
+           (emit-invokevirtual +lisp-object-class+ "LDB" '("I" "I") +lisp-object+)
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
+           (emit-move-from-stack target representation))
+          (t
+           (compile-function-call form target representation)))))
+
 (defun p2-mod (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
@@ -7692,6 +7731,7 @@
                                nth
                                progn))
   (install-p2-handler '%call-internal     'p2-%call-internal)
+  (install-p2-handler '%ldb               'p2-%ldb)
   (install-p2-handler '*                  'p2-times)
   (install-p2-handler '+                  'p2-plus)
   (install-p2-handler '-                  'p2-minus)
