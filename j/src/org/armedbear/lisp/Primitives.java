@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.816 2005-07-23 18:58:50 piso Exp $
+ * $Id: Primitives.java,v 1.817 2005-07-29 13:53:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1495,10 +1495,9 @@ public final class Primitives extends Lisp
         }
     }
 
-    // ### %defun name definition &optional environment => name
+    // ### %defun name definition => name
     private static final Primitive _DEFUN =
-        new Primitive("%defun", PACKAGE_SYS, false,
-                      "name definition &optional environment")
+        new Primitive("%defun", PACKAGE_SYS, true, "name definition")
     {
         public LispObject execute(LispObject name, LispObject definition)
             throws ConditionThrowable
@@ -1510,21 +1509,14 @@ public final class Primitives extends Lisp
                         symbol.getName() + " is a special operator and may not be redefined.";
                     return signal(new ProgramError(message));
                 }
-            } else if (name instanceof Cons && ((Cons)name).car == Symbol.SETF &&
-                       name.cadr() instanceof Symbol)
-            {
-                // OK.
-            } else
-                // FIXME FUNCTION_NAME
-                return signal(new TypeError("The value " +
-                                            name.writeToString() +
-                                            " is not a valid function name."));
+            } else if (!isValidSetfFunctionName(name))
+                return signalTypeError(name, FUNCTION_NAME);
             if (definition instanceof Function) {
                 Symbol.FSET.execute(name, definition, NIL,
                                     ((Function)definition).getLambdaList());
                 return name;
-            } else
-                return signal(new TypeError(definition, Symbol.FUNCTION));
+            }
+            return signalTypeError(definition, Symbol.FUNCTION);
         }
     };
 
