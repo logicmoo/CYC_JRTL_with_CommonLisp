@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.236 2005-07-27 19:59:51 piso Exp $
+;;; $Id: boot.lisp,v 1.237 2005-07-29 13:56:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -265,6 +265,7 @@
 (load-system-file "subtypep")
 (load-system-file "typep")
 (load-system-file "compiler-error")
+(load-system-file "source-transform")
 (load-system-file "precompiler")
 
 (precompile-package "PRECOMPILER")
