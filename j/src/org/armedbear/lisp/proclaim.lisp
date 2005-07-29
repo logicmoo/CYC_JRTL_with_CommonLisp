@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: proclaim.lisp,v 1.5 2005-07-12 02:34:35 piso Exp $
+;;; $Id: proclaim.lisp,v 1.6 2005-07-29 13:58:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,11 +62,13 @@
                     (<= 0 val 3))
            (case quantity
              (SPEED
-              (setf jvm::*speed* val))
+              (setf *speed* val))
+             (SPACE
+              (setf *space* val))
              (SAFETY
-              (setf jvm::*safety* val))
+              (setf *safety* val))
              (DEBUG
-              (setf jvm::*debug* val)))))))
+              (setf *debug* val)))))))
     (FTYPE
      (unless (cdr declaration-specifier)
        (error "No type specified in FTYPE declaration: ~S" declaration-specifier))
