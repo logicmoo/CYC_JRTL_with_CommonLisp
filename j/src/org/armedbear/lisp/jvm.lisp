@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.551 2005-07-27 20:01:08 piso Exp $
+;;; $Id: jvm.lisp,v 1.552 2005-07-29 14:02:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,12 +29,9 @@
   (require '#:format)
   (require '#:clos)
   (require '#:print-object)
-  (require '#:source-transform)
   (require '#:opcodes)
   (require '#:known-functions)
   (require '#:dump-form))
-
-(defvar *inline-declarations* nil)
 
 (defvar *closure-variables* nil)
 
@@ -48,21 +45,31 @@
 (defmacro dformat (&rest ignored)
   (declare (ignore ignored)))
 
-(defun inline-expansion (name)
-  (get-function-info-value name :inline-expansion))
-
-(defun (setf inline-expansion) (expansion name)
-  (set-function-info-value name :inline-expansion expansion))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun generate-inline-expansion (block-name lambda-list body)
+    (cond ((intersection lambda-list '(&optional &rest &key &allow-other-keys &aux) :test 'eq)
+           nil)
+          (t
+           (setf body (copy-tree body))
+           (let ((gensyms '()))
+             (dolist (symbol lambda-list)
+               (let ((gensym (gensym)))
+                 (push gensym gensyms)
+                 (setf body (nsubst gensym symbol body :test 'eq))))
+             (setf lambda-list (nreverse gensyms))
+             (precompile-form (list 'LAMBDA lambda-list (list* 'BLOCK block-name body)) t)))))
+  ) ; EVAL-WHEN
 
 ;; Just an experiment...
 (defmacro defsubst (name lambda-list &rest body)
-  (let ((block-name (sys:fdefinition-block-name name)))
+  (let* ((block-name (fdefinition-block-name name))
+         (expansion (generate-inline-expansion block-name lambda-list body)))
+;;     (format t "expansion = ~S~%" expansion)
     `(progn
-       (sys::%defun ',name (lambda ,lambda-list (block ,block-name ,@body)))
+       (%defun ',name (lambda ,lambda-list (block ,block-name ,@body)))
        (precompile ',name)
        (eval-when (:compile-toplevel :load-toplevel :execute)
-         (setf (inline-expansion ',name)
-               (precompile-form (list* 'LAMBDA ',lambda-list ',body) t)))
+         (setf (inline-expansion ',name) ',expansion))
        ',name)))
 
 #+nil
@@ -467,11 +474,14 @@
     (aver (or (eq op 'LET) (eq op 'LET*)))
     (when (eq op 'LET)
       ;; Convert to LET* if possible.
-      (dolist (varspec varlist (setf op 'LET*))
-        (or (atom varspec)
-            (constantp (cadr varspec))
-            (eq (car varspec) (cadr varspec))
-            (return nil))))
+      (if (null (cdr varlist))
+          (setf op 'LET*)
+          (dolist (varspec varlist (setf op 'LET*))
+            (or (atom varspec)
+                (constantp (cadr varspec))
+                (eq (car varspec) (cadr varspec))
+                ;;             (return nil)
+                (return)))))
     (let ((vars (if (eq op 'LET) (p1-let-vars varlist) (p1-let*-vars varlist))))
       ;; Check for globally declared specials.
       (dolist (variable vars)
@@ -484,7 +494,6 @@
     block))
 
 (defun p1-m-v-b (form)
-;;   (dformat t "p1-multiple-value-bind~%")
   (when (= (length (cadr form)) 1)
     (let ((new-form `(let ((,(caadr form) ,(caddr form))) ,@(cdddr form))))
       (dformat t "old form = ~S~%" form)
@@ -851,19 +860,6 @@
           (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
         form)))
 
-(defun expand-inline (form expansion)
-  (let ((args (cdr form))
-        (vars (cadr expansion))
-        (varlist ())
-        new-form)
-    (do ((vars vars (cdr vars))
-         (args args (cdr args)))
-        ((null vars))
-      (push (list (car vars) (car args)) varlist))
-    (setf varlist (nreverse varlist))
-    (setf new-form (list* 'LET varlist (cddr expansion)))
-    new-form))
-
 (defun p1-function-call (form)
   (let ((op (car form)))
     (let ((new-form (rewrite-function-call form)))
@@ -871,14 +867,6 @@
         (dformat t "old form = ~S~%" form)
         (dformat t "new form = ~S~%" new-form)
         (return-from p1-function-call (p1 new-form))))
-    (let ((source-transform (source-transform op)))
-      (when source-transform
-        (let ((new-form (expand-source-transform form)))
-          (when (neq new-form form)
-            (return-from p1-function-call (p1 new-form))))))
-    (let ((expansion (inline-expansion op)))
-      (when expansion
-        (return-from p1-function-call (p1 (expand-inline form expansion)))))
     (let ((local-function (find-local-function op)))
       (cond (local-function
              (dformat t "p1 local call to ~S~%" op)
@@ -901,14 +889,6 @@
 ;;                (sys::%format t "not single-valued op = ~S~%" op)
                (setf (compiland-single-valued-p *current-compiland*) nil)))))
     (p1-default form)))
-
-(declaim (ftype (function (t) t) notinline-p))
-(defun notinline-p (name)
-  (declare (optimize speed))
-  (let ((entry (assoc name *inline-declarations*)))
-    (if entry
-        (eq (cdr entry) 'NOTINLINE)
-        (eq (get name '%inline) 'NOTINLINE))))
 
 (declaim (ftype (function (t) t) p1))
 (defun p1 (form)
@@ -7839,43 +7819,6 @@
   t)
 
 (initialize-p2-handlers)
-
-(defun process-optimization-declarations (forms)
-  (dolist (form forms)
-    (unless (and (consp form) (eq (%car form) 'declare))
-      (return))
-    (dolist (decl (%cdr form))
-      (case (car decl)
-        (OPTIMIZE
-         (dolist (spec (%cdr decl))
-           (let ((val 3)
-                 (quality spec))
-             (when (consp spec)
-               (setf quality (%car spec)
-                     val (cadr spec)))
-             (when (and (fixnump val)
-                        (<= 0 val 3))
-               (case quality
-                 (speed
-                  (setf *speed* val)
-                  )
-                 (safety
-                  (setf *safety* val)
-                  )
-                 (debug
-                  (setf *debug* val)
-                  )
-                 (space
-                  (setf *space* val)
-                  )
-                 (compilation-speed ;; Ignored.
-                  )
-                 (t
-                  (compiler-warn "Ignoring unknown optimization quality ~S in ~S." quality decl)))))))
-        ((INLINE NOTINLINE)
-         (dolist (symbol (%cdr decl))
-           (push (cons symbol (%car decl)) *inline-declarations*)))
-        ))))
 
 (defun compile (name &optional definition)
   (jvm-compile name definition))

@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.109 2005-07-25 00:34:34 piso Exp $
+;;; $Id: compile-file.lisp,v 1.110 2005-07-29 13:59:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -122,9 +122,10 @@
                      (block-name (fdefinition-block-name name))
                      (lambda-list (third form))
                      (body (nthcdr 3 form))
-                     (jvm::*speed* jvm::*speed*)
-                     (jvm::*safety* jvm::*safety*)
-                     (jvm::*debug* jvm::*debug*))
+                     (*speed* *speed*)
+                     (*space* *space*)
+                     (*safety* *safety*)
+                     (*debug* *debug*))
                 (multiple-value-bind (body decls) (parse-body body)
                   (let* ((expr `(lambda ,lambda-list ,@decls (block ,block-name ,@body)))
                          (classfile-name (next-classfile-name))
@@ -149,7 +150,11 @@
                                           ,*source-position*
                                           ',lambda-list)))
                            (when compile-time-too
-                             (eval form))))))
+                             (eval form)))))
+                  (when (and (symbolp name) (eq (get name 'jvm::%inline) 'INLINE))
+                    ;; FIXME Need to support SETF functions too!
+                    (setf (inline-expansion name)
+                          (jvm::generate-inline-expansion block-name lambda-list body))))
                 (push name jvm::*functions-defined-in-current-file*)
                 (jvm::note-name-defined name)
                 ;; If NAME is not fbound, provide a dummy definition so that
@@ -206,12 +211,14 @@
                 (return-from process-toplevel-form)))
              (LOCALLY
               ;; FIXME Need to handle special declarations too!
-              (let ((jvm:*speed*  jvm:*speed*)
-                    (jvm:*safety* jvm:*safety*)
-                    (jvm:*debug*  jvm:*debug*))
+              (let ((*speed* *speed*)
+                    (*safety* *safety*)
+                    (*debug* *debug*)
+                    (*space* *space*)
+                    (*inline-declarations* *inline-declarations*))
                 (multiple-value-bind (forms decls)
                     (parse-body (cdr form) nil)
-                  (jvm::process-optimization-declarations decls)
+                  (process-optimization-declarations decls)
                   (process-toplevel-progn forms stream compile-time-too)
                   (return-from process-toplevel-form))))
              (PROGN
@@ -294,9 +301,10 @@
     (when (and function-form (consp function-form)
                (eq (%car function-form) 'FUNCTION))
       (let ((lambda-expression (cadr function-form)))
-        (let* ((jvm::*speed* jvm::*speed*)
-               (jvm::*safety* jvm::*safety*)
-               (jvm::*debug* jvm::*debug*))
+        (let* ((*speed* *speed*)
+               (*space* *space*)
+               (*safety* *safety*)
+               (*debug* *debug*))
           (let* ((classfile-name (next-classfile-name))
                  (classfile (report-error
                              (jvm:compile-defun nil lambda-expression nil classfile-name)))
@@ -389,9 +397,10 @@
           (with-open-file (out temp-file :direction :output :if-exists :supersede)
             (let ((*readtable* *readtable*)
                   (*package* *package*)
-                  (jvm:*speed* jvm:*speed*)
-                  (jvm:*safety* jvm:*safety*)
-                  (jvm:*debug* jvm:*debug*)
+                  (*speed* *speed*)
+                  (*space* *space*)
+                  (*safety* *safety*)
+                  (*debug* *debug*)
                   (jvm::*functions-defined-in-current-file* '())
                   (*fbound-names* '()))
               (write "; -*- Mode: Lisp -*-" :escape nil :stream out)

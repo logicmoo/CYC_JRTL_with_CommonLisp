@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.127 2005-07-27 02:33:34 piso Exp $
+;;; $Id: precompiler.lisp,v 1.128 2005-07-29 14:03:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,77 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package #:system)
+
+(export '(*inline-declarations* process-optimization-declarations
+          notinline-p inline-expansion expand-inline))
+
+(defvar *inline-declarations* nil)
+
+(declaim (ftype (function (t) t) process-optimization-declarations))
+(defun process-optimization-declarations (forms)
+  (dolist (form forms)
+    (unless (and (consp form) (eq (%car form) 'DECLARE))
+      (return))
+    (dolist (decl (%cdr form))
+      (case (car decl)
+        (OPTIMIZE
+         (dolist (spec (%cdr decl))
+           (let ((val 3)
+                 (quality spec))
+             (when (consp spec)
+               (setf quality (%car spec)
+                     val (cadr spec)))
+             (when (and (fixnump val)
+                        (<= 0 val 3))
+               (case quality
+                 (speed
+                  (setf *speed* val))
+                 (safety
+                  (setf *safety* val))
+                 (debug
+                  (setf *debug* val))
+                 (space
+                  (setf *space* val))
+                 (compilation-speed ;; Ignored.
+                  )
+                 (t
+                  (compiler-warn "Ignoring unknown optimization quality ~S in ~S." quality decl)))))))
+        ((INLINE NOTINLINE)
+         (dolist (symbol (%cdr decl))
+           (push (cons symbol (%car decl)) *inline-declarations*))))))
+  t)
+
+(declaim (ftype (function (t) t) notinline-p))
+(defun notinline-p (name)
+  (declare (optimize speed))
+  (let ((entry (assoc name *inline-declarations*)))
+    (if entry
+        (eq (cdr entry) 'NOTINLINE)
+        (and (symbolp name) (eq (get name '%inline) 'NOTINLINE)))))
+
+(defun inline-expansion (name)
+  (get-function-info-value name :inline-expansion))
+
+(defun set-inline-expansion (name expansion)
+  (set-function-info-value name :inline-expansion expansion))
+
+(defsetf inline-expansion set-inline-expansion)
+
+(defun expand-inline (form expansion)
+;;   (format t "expand-inline form = ~S~%" form)
+;;   (format t "expand-inline expansion = ~S~%" expansion)
+  (let ((args (cdr form))
+        (vars (cadr expansion))
+        (varlist ())
+        new-form)
+    (do ((vars vars (cdr vars))
+         (args args (cdr args)))
+        ((null vars))
+      (push (list (car vars) (car args)) varlist))
+    (setf varlist (nreverse varlist))
+    (setf new-form (list* 'LET varlist (copy-tree (cddr expansion))))
+;;     (format t "expand-inline new form = ~S~%" new-form)
+    new-form))
 
 (define-compiler-macro assoc (&whole form &rest args)
   (cond ((and (= (length args) 4)
@@ -97,7 +168,7 @@
 
 (define-compiler-macro funcall (&whole form &rest args)
   (let ((callee (car args)))
-    (if (and (>= jvm:*speed* jvm:*debug*)
+    (if (and (>= *speed* *debug*)
              (consp callee)
              (eq (%car callee) 'function)
              (symbolp (cadr callee))
@@ -192,7 +263,7 @@
                     (return-from precompile1 (precompile1 (expand-macro form))))
                    ((special-operator-p op)
                     (error "PRECOMPILE1: unsupported special operator ~S." op))))
-           (precompile-cons form)))))
+           (precompile-function-call form)))))
 
 (defun precompile-identity (form)
   (declare (optimize speed))
@@ -201,6 +272,27 @@
 (declaim (ftype (function (t t) t) precompile-cons))
 (defun precompile-cons (form)
   (cons (car form) (mapcar #'precompile1 (cdr form))))
+
+(declaim (ftype (function (t t) t) precompile-function-call))
+(defun precompile-function-call (form)
+  (let ((op (car form)))
+    (when (or (not *in-jvm-compile*) (notinline-p op))
+      (return-from precompile-function-call (precompile-cons form)))
+    (let ((transform (source-transform op)))
+      (when transform
+        (let ((new-form (expand-source-transform form)))
+;;           (format t "transform old form = ~S~%transform new form = ~S~%" form new-form)
+          (when (neq new-form form)
+            (return-from precompile-function-call (precompile1 new-form))))))
+    (let ((expansion (inline-expansion op)))
+      (when expansion
+        (return-from precompile-function-call (precompile1 (expand-inline form expansion)))))
+    (cons op (mapcar #'precompile1 (cdr form)))))
+
+(defun precompile-locally (form)
+  (let ((*inline-declarations* *inline-declarations*))
+    (process-optimization-declarations (cdr form))
+  (cons 'LOCALLY (mapcar #'precompile1 (cdr form)))))
 
 (defun precompile-block (form)
   (let ((args (cdr form)))
@@ -744,6 +836,7 @@
 (declaim (ftype (function (t t) t) precompile-form))
 (defun precompile-form (form in-jvm-compile)
   (let ((*in-jvm-compile* in-jvm-compile)
+        (*inline-declarations* *inline-declarations*)
         (*local-functions-and-macros* ()))
     (precompile1 form)))
 
@@ -791,7 +884,6 @@
                   (OR                   precompile-cons)
 
                   (CATCH                precompile-cons)
-                  (LOCALLY              precompile-cons)
                   (MULTIPLE-VALUE-CALL  precompile-cons)
                   (MULTIPLE-VALUE-PROG1 precompile-cons)
 
@@ -800,6 +892,8 @@
 
                   (LET                  precompile-let)
                   (LET*                 precompile-let*)
+
+                  (LOCALLY              precompile-locally)
 
                   (FLET                 precompile-flet/labels)
                   (LABELS               precompile-flet/labels)
