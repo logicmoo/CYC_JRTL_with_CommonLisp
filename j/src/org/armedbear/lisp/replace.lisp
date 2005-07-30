@@ -1,7 +1,7 @@
 ;;; replace.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: replace.lisp,v 1.4 2005-05-15 14:32:03 piso Exp $
+;;; $Id: replace.lisp,v 1.5 2005-07-30 17:52:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 (in-package #:system)
 
-(eval-when (:compile-toplevel)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defmacro seq-dispatch (sequence list-form array-form)
     `(if (listp ,sequence)
          ,list-form
