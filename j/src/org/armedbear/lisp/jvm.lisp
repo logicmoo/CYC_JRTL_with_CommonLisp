@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.553 2005-07-30 19:14:34 piso Exp $
+;;; $Id: jvm.lisp,v 1.554 2005-07-31 14:28:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -231,6 +231,7 @@
   reserved-register
   (reads 0)
   (writes 0)
+  references
   used-non-locally-p
   (compiland *current-compiland*))
 
@@ -424,6 +425,24 @@
     (compiler-error "The name of the variable ~S is already in use to name a constant." name))
   name)
 
+(declaim (ftype (function (t) t) p1-body))
+(defun p1-body (body)
+  (declare (optimize speed))
+  (let ((tail body))
+    (loop
+      (when (endp tail)
+        (return))
+      (setf (car tail) (p1 (%car tail)))
+      (setf tail (%cdr tail))))
+  body)
+
+(declaim (ftype (function (t) t) p1-default))
+(declaim (inline p1-default))
+(defun p1-default (form)
+  (setf (cdr form) (p1-body (cdr form)))
+  form)
+
+(declaim (ftype (function (t) t) p1-let-vars))
 (defun p1-let-vars (varlist)
   (let ((vars ()))
     (dolist (varspec varlist)
@@ -443,6 +462,7 @@
       (push variable *all-variables*))
     vars))
 
+(declaim (ftype (function (t) t) p1-let*-vars))
 (defun p1-let*-vars (varlist)
   (let ((vars ()))
     (dolist (varspec varlist)
@@ -844,22 +864,6 @@
                     (1- (length form))))
   (list 'TRULY-THE (%cadr form) (p1 (%caddr form))))
 
-(declaim (ftype (function (t) t) p1-body))
-(defun p1-body (body)
-  (declare (optimize speed))
-  (let ((tail body))
-    (loop
-      (when (endp tail)
-        (return))
-      (setf (car tail) (p1 (%car tail)))
-      (setf tail (%cdr tail))))
-  body)
-
-(declaim (ftype (function (t) t) p1-default))
-(defun p1-default (form)
-  (setf (cdr form) (p1-body (cdr form)))
-  form)
-
 (defun p1-throw (form)
   (let ((new-form (rewrite-throw form)))
     (when (neq new-form form)
@@ -936,13 +940,12 @@
                (t
                 (let ((variable (find-visible-variable form)))
                   (when variable
-                    (let (
-                          (ref (make-var-ref :variable variable))
-                          )
+                    (let ((ref (make-var-ref :variable variable)))
                       (when (variable-ignore-p variable)
                         (compiler-style-warn
                          "Variable ~S is read even though it was declared to be ignored."
                          (variable-name variable)))
+                      (push ref (variable-references variable))
                       (incf (variable-reads variable))
                       (cond
                        ((eq (variable-compiland variable) *current-compiland*)
@@ -1057,11 +1060,13 @@
     index))
 
 (declaim (ftype (function (string) fixnum) pool-name))
+(declaim (inline pool-name))
 (defun pool-name (name)
   (declare (optimize speed))
   (pool-get (list 1 (length name) name)))
 
 (declaim (ftype (function (string string) fixnum) pool-name-and-type))
+(declaim (inline pool-name-and-type))
 (defun pool-name-and-type (name type)
   (declare (optimize speed))
   (pool-get (list 12
@@ -1071,12 +1076,14 @@
 ;; Assumes CLASS-NAME is already in the correct form ("org/armedbear/lisp/Lisp"
 ;; as opposed to "org.armedbear.lisp.Lisp").
 (declaim (ftype (function (string) fixnum) pool-class))
+(declaim (inline pool-class))
 (defun pool-class (class-name)
   (declare (optimize speed))
   (pool-get (list 7 (pool-name class-name))))
 
 ;; (tag class-index name-and-type-index)
 (declaim (ftype (function (string string string) fixnum) pool-field))
+(declaim (inline pool-field))
 (defun pool-field (class-name field-name type-name)
   (declare (optimize speed))
   (pool-get (list 9
@@ -1085,6 +1092,7 @@
 
 ;; (tag class-index name-and-type-index)
 (declaim (ftype (function (string string string) fixnum) pool-method))
+(declaim (inline pool-method))
 (defun pool-method (class-name method-name type-name)
   (declare (optimize speed))
   (pool-get (list 10
@@ -1189,6 +1197,7 @@
       (emit 'sipush n)
       (emit 'ldc (pool-int n))))
 
+(declaim (ftype (function (t t) cons) make-descriptor-info))
 (defun make-descriptor-info (arg-types return-type)
   (let ((descriptor (with-output-to-string (s)
                       (princ #\( s)
@@ -1205,7 +1214,7 @@
 
 (defparameter *descriptors* (make-hash-table :test #'equal))
 
-(declaim (ftype (function * t) get-descriptor-info))
+(declaim (ftype (function (t t) cons) get-descriptor-info))
 (defun get-descriptor-info (arg-types return-type)
   (let* ((key (list arg-types return-type))
          (ht *descriptors*)
@@ -1865,6 +1874,7 @@
          (n (second args)))
     (inst 132 (list register (logand n #xff)))))
 
+(declaim (ftype (function (t) t) resolve-instruction))
 (defun resolve-instruction (instruction)
   (declare (optimize speed))
   (let ((resolver (gethash-2op-1ret (instruction-opcode instruction)
@@ -1912,6 +1922,7 @@
 ;;     ))
 
 (declaim (ftype (function (t) t) branch-opcode-p))
+(declaim (inline branch-opcode-p))
 (defun branch-opcode-p (opcode)
   (declare (optimize speed))
   (declare (type '(integer 0 255) opcode))
@@ -1953,6 +1964,7 @@
 
 (declaim (ftype (function () t) analyze-stack))
 (defun analyze-stack ()
+  (declaim (optimize speed))
   (let* ((code *code*)
          (code-length (length code)))
     (declare (type vector code))
@@ -2084,14 +2096,16 @@
                  (opcode-name (instruction-opcode instruction))
                  (instruction-args instruction)))))))
 
+(declaim (ftype (function (t) boolean) label-p))
 (defun label-p (instruction)
 ;;   (declare (optimize safety))
 ;;   (declare (type instruction instruction))
   (and instruction
        (= (the fixnum (instruction-opcode (the instruction instruction))) 202)))
 
+(declaim (ftype (function (t) t) instruction-label))
 (defun instruction-label (instruction)
-  (declare (optimize safety))
+;;   (declare (optimize safety))
   (and instruction
        (= (instruction-opcode (the instruction instruction)) 202)
        (car (instruction-args instruction))))
@@ -2326,14 +2340,14 @@
 
 (defsubst write-u1 (n stream)
   (declare (optimize speed))
-  (sys:write-8-bits n stream))
+  (write-8-bits n stream))
 
 (declaim (ftype (function (t t) t) write-u2))
 (defun write-u2 (n stream)
   (declare (optimize speed))
   (declare (type (unsigned-byte 16) n))
-  (sys:write-8-bits (ash n -8) stream)
-  (sys:write-8-bits (logand n #xFF) stream))
+  (write-8-bits (ash n -8) stream)
+  (write-8-bits (logand n #xFF) stream))
 
 (declaim (ftype (function (t t) t) write-u4))
 (defun write-u4 (n stream)
@@ -4188,6 +4202,14 @@
                            (list +lisp-object-array+) +lisp-object+)
        (emit-move-from-stack target)))))
 
+(declaim (ftype (function (t) t) unused-variable))
+(defun unused-variable (variable)
+  (unless (or (variable-ignore-p variable)
+              (variable-ignorable-p variable))
+    (compiler-style-warn "The variable ~S is defined but never used."
+                         (variable-name variable))))
+
+(declaim (ftype (function (t) t) check-for-unused-variables))
 (defun check-for-unused-variables (list)
   (dolist (variable list)
     (when (and (not (variable-special-p variable))
@@ -4216,6 +4238,30 @@
          (emit 'aastore))
         (t
          (aver nil))))
+
+(declaim (ftype (function (t t) t) compile-progn-body))
+(defun compile-progn-body (body target)
+  (cond ((null body)
+         (when target
+           (emit-push-nil)
+           (emit-move-from-stack target)))
+        (t
+         (let ((must-clear-values nil))
+           (do* ((forms body (cdr forms))
+                 (form (car forms) (car forms)))
+                ((null forms))
+             (when (null (cdr forms))
+               ;; Last form.
+               (when must-clear-values
+                 (emit-clear-values)))
+             (compile-form form :target (if (cdr forms) nil target))
+             (unless (null (cdr forms))
+               (unless must-clear-values
+                 (unless (single-valued-p form)
+;;                    (let ((*print-structure* nil))
+;;                      (format t "not single-valued: ~S~%" form))
+                   (setf must-clear-values t))))))))
+  t)
 
 (defun p2-m-v-b-node (block target)
   (let* ((*blocks* (cons block *blocks*))
@@ -4302,48 +4348,39 @@
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
 
-(defun p2-let/let*-node (block target)
-  (let* ((*blocks* (cons block *blocks*))
-         (*register* *register*)
-         (form (block-form block))
-         (*visible-variables* *visible-variables*)
-         (specialp nil))
-    ;; Are we going to bind any special variables?
-    (dolist (variable (block-vars block))
-      (when (variable-special-p variable)
-        (setf specialp t)
-        (return)))
-    ;; If so...
-    (when specialp
-      (dformat t "p2-let/let*-node lastSpecialBinding~%")
-      ;; Save current dynamic environment.
-      (setf (block-environment-register block) (allocate-register))
-      (emit-push-current-thread)
-      (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+)
-      (emit 'astore (block-environment-register block)))
-    (ecase (car form)
-      (LET
-       (p2-let-bindings block))
-      (LET*
-       (p2-let*-bindings block)))
-    ;; Make declarations of free specials visible.
-    (dolist (variable (block-free-specials block))
-      (push variable *visible-variables*))
-    ;; Body of LET/LET*.
-    (let ((*speed*  *speed*)
-          (*space*  *space*)
-          (*safety* *safety*)
-          (*debug*  *debug*)
-          (*inline-declarations* *inline-declarations*))
-      (process-optimization-declarations (cddr form))
-      (compile-progn-body (cddr form) target))
-    (when specialp
-      ;; Restore dynamic environment.
-      (emit 'aload *thread*)
-      (emit 'aload (block-environment-register block))
-      (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
+(export '*propagate-enable*)
+(defvar *propagate-enable* nil)
 
+(declaim (ftype (function (t) t) p2-let-bindings))
 (defun p2-let-bindings (block)
+
+  (when *propagate-enable*
+    (let ((removed '()))
+      (dolist (variable (block-vars block))
+        (unless (or (variable-special-p variable)
+                    (variable-closure-index variable))
+          (when (eql (variable-writes variable) 0)
+            (let ((initform (variable-initform variable)))
+              (when (var-ref-p initform)
+                (let ((source-var (var-ref-variable initform)))
+;;                   (format t "LET initform for ~S is a reference to ~S~%"
+;;                           (variable-name variable)
+;;                           (variable-name source-var))
+                  (unless (variable-special-p source-var)
+                    (when (eql (variable-writes source-var) 0)
+;;                       (format t "LET no writes to ~S~%" (variable-name source-var))
+                      ;; We can eliminate the variable.
+;;                       (format t "LET eliminating ~S~%" (variable-name variable))
+                      ;; FIXME This will no longer be true when we start tracking writes.
+                      (aver (= (variable-reads variable) (length (variable-references variable))))
+                      (dolist (ref (variable-references variable))
+                        (aver (eq (var-ref-variable ref) variable))
+                        (setf (var-ref-variable ref) source-var))
+                      (push variable removed)))))))))
+      (when removed
+        (dolist (variable removed)
+          (setf (block-vars block) (remove variable (block-vars block)))))))
+
   (dolist (variable (block-vars block))
     (unless (variable-special-p variable)
       (unless (variable-closure-index variable)
@@ -4406,9 +4443,12 @@
         (compile-binding variable))))
   ;; Now make the variables visible.
   (dolist (variable (block-vars block))
-    (push variable *visible-variables*)))
+    (push variable *visible-variables*))
+  t)
 
+(declaim (ftype (function (t) t) p2-let*-bindings))
 (defun p2-let*-bindings (block)
+;;   (format t "p2-let*-bindings~%")
   (let ((must-clear-values nil))
     ;; Generate code to evaluate initforms and bind variables.
     (dolist (variable (block-vars block))
@@ -4430,7 +4470,9 @@
                                    (list +lisp-symbol+)
                                    nil)
                (setf boundp t))
-              (initform
+              ((null initform)
+               (emit-push-nil))
+              (t
                (cond (unused-p
                       (compile-form initform :target nil)
                       (setf boundp t))
@@ -4446,28 +4488,49 @@
                      ((and (null (variable-closure-index variable))
                            (not (variable-special-p variable))
                            (eql (variable-writes variable) 0))
+;;                       (format t "no writes case~%")
 ;;                       (let ((*print-structure* nil))
 ;;                         (format t "initform = ~S~%" initform))
-                      (let ((type (derive-type initform)))
-;;                         (format t "p2-let*-bindings ~S type = ~S~%" (variable-name variable) type)
-                        (setf (variable-derived-type variable) type)
-                        (cond ((subtypep type 'FIXNUM)
-                               (setf (variable-representation variable) :unboxed-fixnum)
-                               (setf (variable-register variable) (allocate-register))
-                               (compile-form initform
-                                             :target :stack
-                                             :representation :unboxed-fixnum)
-                               (emit 'istore (variable-register variable))
-                               (setf boundp t))
-                              (t
-                               (compile-form initform :target :stack)))))
+                      (when (var-ref-p initform)
+;;                         (format t "LET* initform for ~S is a reference to ~S~%"
+;;                                 (variable-name variable)
+;;                                 (variable-name (var-ref-variable initform)))
+                        (let ((source-var (var-ref-variable initform)))
+                          (unless (variable-special-p source-var)
+                            (when (eql (variable-writes source-var) 0)
+;;                               (format t "LET* no writes to ~S~%"
+;;                                       (variable-name source-var))
+
+                              (when *propagate-enable*
+                                ;; We can eliminate the variable.
+;;                                 (format t "LET* eliminating ~S~%" (variable-name variable))
+                                ;; FIXME This will no longer be true when we start tracking writes.
+                                (aver (= (variable-reads variable) (length (variable-references variable))))
+                                (dolist (ref (variable-references variable))
+                                  (aver (eq (var-ref-variable ref) variable))
+                                  (setf (var-ref-variable ref) source-var))
+                                (setf boundp t))))))
+                      (unless boundp
+                        (let ((type (derive-type initform)))
+                          (setf (variable-derived-type variable) type)
+                          (cond ((subtypep type 'FIXNUM)
+                                 (setf (variable-representation variable) :unboxed-fixnum)
+                                 (setf (variable-register variable) (allocate-register))
+                                 (compile-form initform
+                                               :target :stack
+                                               :representation :unboxed-fixnum)
+                                 (emit 'istore (variable-register variable))
+                                 (setf boundp t))
+                                (t
+                                 (compile-form initform :target :stack))))))
                      (t
                       (compile-form initform :target :stack)))
                (unless must-clear-values
                  (unless (single-valued-p initform)
                    (setf must-clear-values t))))
-              (t
-               (emit-push-nil)))
+;;               (t
+;;                (emit-push-nil))
+              )
         (unless (variable-special-p variable)
           (unless (or (variable-closure-index variable) (variable-register variable))
             (setf (variable-register variable) (allocate-register))))
@@ -4476,13 +4539,49 @@
           (compile-binding variable))
         (maybe-generate-type-check variable)))
     (when must-clear-values
-      (emit-clear-values))))
+      (emit-clear-values)))
+  t)
 
-(defun unused-variable (variable)
-  (unless (or (variable-ignore-p variable)
-              (variable-ignorable-p variable))
-    (compiler-style-warn "The variable ~S is defined but never used."
-                         (variable-name variable))))
+(defun p2-let/let*-node (block target)
+  (let* ((*blocks* (cons block *blocks*))
+         (*register* *register*)
+         (form (block-form block))
+         (*visible-variables* *visible-variables*)
+         (specialp nil))
+    ;; Are we going to bind any special variables?
+    (dolist (variable (block-vars block))
+      (when (variable-special-p variable)
+        (setf specialp t)
+        (return)))
+    ;; If so...
+    (when specialp
+      (dformat t "p2-let/let*-node lastSpecialBinding~%")
+      ;; Save current dynamic environment.
+      (setf (block-environment-register block) (allocate-register))
+      (emit-push-current-thread)
+      (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+)
+      (emit 'astore (block-environment-register block)))
+    (ecase (car form)
+      (LET
+       (p2-let-bindings block))
+      (LET*
+       (p2-let*-bindings block)))
+    ;; Make declarations of free specials visible.
+    (dolist (variable (block-free-specials block))
+      (push variable *visible-variables*))
+    ;; Body of LET/LET*.
+    (let ((*speed*  *speed*)
+          (*space*  *space*)
+          (*safety* *safety*)
+          (*debug*  *debug*)
+          (*inline-declarations* *inline-declarations*))
+      (process-optimization-declarations (cddr form))
+      (compile-progn-body (cddr form) target))
+    (when specialp
+      ;; Restore dynamic environment.
+      (emit 'aload *thread*)
+      (emit 'aload (block-environment-register block))
+      (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
 
 (defun p2-locally (form &key (target :stack) representation)
   ;; FIXME What if we're called with a non-NIL representation?
@@ -4871,28 +4970,6 @@
   (process-args (cdr form))
   (emit-invokespecial-init +lisp-cons-class+ (list +lisp-object+ +lisp-object+))
   (emit-move-from-stack target))
-
-(defun compile-progn-body (body target)
-  (cond ((null body)
-         (when target
-           (emit-push-nil)
-           (emit-move-from-stack target)))
-        (t
-         (let ((must-clear-values nil))
-           (do* ((forms body (cdr forms))
-                 (form (car forms) (car forms)))
-                ((null forms))
-             (when (null (cdr forms))
-               ;; Last form.
-               (when must-clear-values
-                 (emit-clear-values)))
-             (compile-form form :target (if (cdr forms) nil target))
-             (unless (null (cdr forms))
-               (unless must-clear-values
-                 (unless (single-valued-p form)
-;;                    (let ((*print-structure* nil))
-;;                      (format t "not single-valued: ~S~%" form))
-                   (setf must-clear-values t)))))))))
 
 (defun compile-progn (form &key (target :stack) representation)
   (compile-progn-body (cdr form) target)
@@ -5547,9 +5624,9 @@
              (1-
               (derive-type-minus (list (%cadr form) 1)))
              (+
-              (derive-type-plus (%cdr form)))
+              (derive-type-plus form))
              (1+
-              (derive-type-plus (list (%cadr form) 1)))
+              (derive-type-plus (list '+ (%cadr form) 1)))
              ((MIN MAX)
               (derive-type-min/max (%cdr form)))
              ((THE TRULY-THE)
@@ -5650,8 +5727,29 @@
     (dformat t "logand-derive-type returning ~S~%" result-type)
     result-type))
 
+(defstruct (integer-type (:constructor %make-integer-type))
+  low
+  high)
+
+(declaim (ftype (function (t) t) make-integer-type))
+(defun make-integer-type (type)
+  (setf type (normalize-type type))
+  (when (and (consp type) (eq (%car type) 'INTEGER))
+    (let ((low (second type))
+          (high (third type)))
+      (cond ((null low)
+             (setf low '* high '*))
+            ((null high)
+             (setf high '*)))
+      (when (and (consp low) (integerp (%car low)))
+        (setq low (1+ (%car low))))
+      (when (and (consp high) (integerp (%car high)))
+        (setq high (1- (%car high))))
+      (%make-integer-type :low low :high high))))
+
 (declaim (ftype (function (t) t) derive-type-minus))
 (defun derive-type-minus (args)
+  ;; FIXME
   (case (length args)
     (1
      (let ((type (derive-type (%car args))))
@@ -5676,31 +5774,28 @@
      t)))
 
 (declaim (ftype (function (t) t) derive-type-plus))
-(defun derive-type-plus (args)
-  (case (length args)
-    (2
-     (let ((type1 (normalize-type (derive-type (%car args))))
-           (type2 (normalize-type (derive-type (%cadr args)))))
-       (when (and (subtypep type1 'FIXNUM) (subtypep type2 'FIXNUM))
-         (aver (consp type1))
-         (aver (consp type2))
-         (when (and (eq (first type1) 'INTEGER) (eq (first type2) 'INTEGER))
-           (let ((low1 (second type1))
-                 (high1 (third type1))
-                 (low2 (second type2))
-                 (high2 (third type2)))
-             (let ((low (+ low1 low2))
-                   (high (+ high1 high2)))
-               (return-from derive-type-plus (list 'INTEGER low high))))))
-
-       ;; FIXME
-       (cond ((and (subtypep type1 '(unsigned-byte 16))
-                   (subtypep type2 '(unsigned-byte 16)))
-              'fixnum)
-             (t
-              t))))
-    (t
-     t)))
+(defun derive-type-plus (form)
+  (let ((args (cdr form)))
+    (when (= (length args) 2)
+      (let ((type1 (make-integer-type (derive-type (%car args))))
+            type2)
+        (when type1
+          (setf type2 (make-integer-type (derive-type (%cadr args))))
+          (when type2
+            ;; Both integer types.
+            (let ((low1 (integer-type-low type1))
+                  (high1 (integer-type-high type1))
+                  (low2 (integer-type-low type2))
+                  (high2 (integer-type-high type2))
+                  low high)
+              (setf low (if (and (integerp low1) (integerp low2))
+                            (+ low1 low2)
+                            '*)
+                    high (if (and (integerp high1) (integerp high2))
+                             (+ high1 high2)
+                             '*))
+              (return-from derive-type-plus (list 'INTEGER low high)))))))
+    t))
 
 (defun derive-type-min/max (args)
   (dolist (arg args 'fixnum)
