@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.128 2005-07-29 14:03:18 piso Exp $
+;;; $Id: precompiler.lisp,v 1.129 2005-07-31 14:19:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -233,6 +233,7 @@
 
 (defvar *local-variables* ())
 
+(declaim (ftype (function (t) t) find-varspec))
 (defun find-varspec (sym)
   (dolist (varspec *local-variables*)
     (when (eq sym (car varspec))
@@ -255,11 +256,10 @@
                     (return-from precompile1 (funcall handler form)))
                    ((local-macro-function op)
                     (let ((result (expand-local-macro (precompile-cons form))))
-                      (return-from precompile1
-                                   (if (equal result form)
-                                       result
-                                       (precompile1 result)))))
-                   ((macro-function op sys:*compile-file-environment*)
+                      (return-from precompile1 (if (equal result form)
+                                                   result
+                                                   (precompile1 result)))))
+                   ((macro-function op *compile-file-environment*)
                     (return-from precompile1 (precompile1 (expand-macro form))))
                    ((special-operator-p op)
                     (error "PRECOMPILE1: unsupported special operator ~S." op))))
@@ -269,7 +269,7 @@
   (declare (optimize speed))
   form)
 
-(declaim (ftype (function (t t) t) precompile-cons))
+(declaim (ftype (function (t) cons) precompile-cons))
 (defun precompile-cons (form)
   (cons (car form) (mapcar #'precompile1 (cdr form))))
 
@@ -525,7 +525,7 @@
                                     :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body)))
          (compiled-expander (sys::%compile nil expander)))
-    (sys:coerce-to-function (or compiled-expander expander))))
+    (coerce-to-function (or compiled-expander expander))))
 
 (defvar *local-functions-and-macros* ())
 
@@ -537,7 +537,7 @@
     ;; If the expansion turns out to be a bare symbol, wrap it with PROGN so it
     ;; won't be mistaken for a tag in an enclosing TAGBODY.
     (if (symbolp expansion)
-        (list 'progn expansion)
+        (list 'PROGN expansion)
         expansion)))
 
 (defun precompile-macrolet (form)
@@ -632,7 +632,7 @@
 (defun maybe-fold-let* (form)
   (if (and (= (length form) 3)
            (consp (%caddr form))
-           (eq (%car (%caddr form)) 'let*))
+           (eq (%car (%caddr form)) 'LET*))
       (let ((third (maybe-fold-let* (%caddr form))))
         (list* 'LET* (append (%cadr form) (cadr third)) (cddr third)))
       form))
