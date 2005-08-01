@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.52 2005-07-27 19:56:44 piso Exp $
+ * $Id: StructureObject.java,v 1.53 2005-08-01 16:43:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -281,8 +281,7 @@ public final class StructureObject extends LispObject
         }
     };
 
-    // ### %make-structure
-    // %make-structure name slot-values => object
+    // ### %make-structure name slot-values => object
     private static final Primitive _MAKE_STRUCTURE =
         new Primitive("%make-structure", PACKAGE_SYS, true)
     {
@@ -293,7 +292,7 @@ public final class StructureObject extends LispObject
                 return new StructureObject(((Symbol)first), second);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SYMBOL));
+                return signalTypeError(first, Symbol.SYMBOL);
             }
         }
     };
