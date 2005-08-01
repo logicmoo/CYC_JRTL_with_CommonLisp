@@ -1,7 +1,7 @@
 ;;; dump-form.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dump-form.lisp,v 1.1 2005-07-18 13:41:41 piso Exp $
+;;; $Id: dump-form.lisp,v 1.2 2005-08-01 12:46:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,16 +21,16 @@
 
 (export 'dump-form)
 
-(declaim (ftype (function (t stream) t) dump-list))
-(defun dump-list (object stream)
+(declaim (ftype (function (cons stream) t) dump-cons))
+(defun dump-cons (object stream)
   (cond ((and (eq (car object) 'QUOTE) (null (cddr object)))
          (%stream-write-char #\' stream)
          (dump-object (%cadr object) stream))
         (t
          (%stream-write-char #\( stream)
          (loop
-           (dump-object (car object) stream)
-           (setf object (cdr object))
+           (dump-object (%car object) stream)
+           (setf object (%cdr object))
            (when (null object)
              (return))
            (when (> (charpos stream) 80)
@@ -49,6 +49,7 @@
   (let ((length (length object)))
     (when (> length 0)
       (dotimes (i (1- length))
+        (declare (type index i))
         (dump-object (aref object i) stream)
         (when (> (charpos stream) 80)
           (%stream-terpri stream))
@@ -79,17 +80,17 @@
 (declaim (ftype (function (t stream) t) dump-object))
 (defun dump-object (object stream)
   (cond ((consp object)
-         (dump-list object stream))
+         (dump-cons object stream))
         ((stringp object)
-         (write object :stream stream))
+         (%stream-output-object object stream))
         ((bit-vector-p object)
-         (write object :stream stream))
+         (%stream-output-object object stream))
         ((vectorp object)
          (dump-vector object stream))
         ((structure-object-p object)
          (dump-structure object stream))
         (t
-         (write object :stream stream))))
+         (%stream-output-object object stream))))
 
 (declaim (ftype (function (t stream) t) dump-form))
 (defun dump-form (form stream)

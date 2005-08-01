@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.129 2005-07-31 14:19:38 piso Exp $
+;;; $Id: precompiler.lisp,v 1.130 2005-08-01 12:49:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,9 @@
 
 (in-package #:system)
 
-(export '(*inline-declarations* process-optimization-declarations
+(export '(*inline-declarations*
+          process-optimization-declarations
+          process-special-declarations
           notinline-p inline-expansion expand-inline))
 
 (defvar *inline-declarations* nil)
@@ -57,6 +59,19 @@
          (dolist (symbol (%cdr decl))
            (push (cons symbol (%car decl)) *inline-declarations*))))))
   t)
+
+;; Returns list of declared specials.
+(declaim (ftype (function (list) list) process-special-declarations))
+(defun process-special-declarations (forms)
+  (let ((specials ()))
+    (dolist (form forms)
+      (unless (and (consp form) (eq (%car form) 'DECLARE))
+        (return))
+      (let ((decls (%cdr form)))
+        (dolist (decl decls)
+          (when (eq (car decl) 'special)
+            (setf specials (append (cdr decl) specials))))))
+    specials))
 
 (declaim (ftype (function (t) t) notinline-p))
 (defun notinline-p (name)
@@ -435,18 +450,6 @@
              :format-arguments (list var))))
   ;; Delegate to PRECOMPILE-PSETF so symbol macros are handled correctly.
   (precompile-psetf form))
-
-;; Returns list of declared specials.
-(defun process-special-declarations (forms)
-  (let ((specials ()))
-    (dolist (form forms)
-      (unless (and (consp form) (eq (%car form) 'declare))
-        (return))
-      (let ((decls (%cdr form)))
-        (dolist (decl decls)
-          (when (eq (car decl) 'special)
-            (setf specials (append (cdr decl) specials))))))
-    specials))
 
 (defun maybe-rewrite-lambda (form)
   (let* ((args (cdr form))

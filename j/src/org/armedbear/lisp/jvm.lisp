@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.554 2005-07-31 14:28:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.555 2005-08-01 12:50:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -509,10 +509,22 @@
         (when (special-variable-p (variable-name variable))
           (setf (variable-special-p variable) t)))
       (setf (block-free-specials block) (process-declarations-for-vars body vars))
-      (setf (block-vars block) vars))
+      (setf (block-vars block) vars)
+      ;; Make free specials visible.
+      (dolist (variable (block-free-specials block))
+        (push variable *visible-variables*)))
     (setf body (p1-body body))
     (setf (block-form block) (list* op varlist body))
     block))
+
+(defun p1-locally (form)
+  (let ((*visible-variables* *visible-variables*)
+        (specials (process-special-declarations (cdr form))))
+    (dolist (name specials)
+;;       (format t "p1-locally ~S is special~%" name)
+      (push (make-variable :name name :special-p t) *visible-variables*))
+    (setf (cdr form) (p1-body (cdr form)))
+    form))
 
 (defun p1-m-v-b (form)
   (when (= (length (cadr form)) 1)
@@ -1004,7 +1016,7 @@
                   (LET                  p1-let/let*)
                   (LET*                 p1-let/let*)
                   (LOAD-TIME-VALUE      identity)
-                  (LOCALLY              p1-default)
+                  (LOCALLY              p1-locally)
                   (MULTIPLE-VALUE-BIND  p1-m-v-b)
                   (MULTIPLE-VALUE-CALL  p1-default)
                   (MULTIPLE-VALUE-LIST  p1-default)
@@ -1886,7 +1898,7 @@
 (defun resolve-instructions (code)
   (let ((vector (make-array 512 :fill-pointer 0 :adjustable t)))
     (dotimes (index (length code) vector)
-      (declare (type fixnum index))
+      (declare (type (unsigned-byte 16) index))
       (let ((instruction (svref code index)))
         (case (instruction-opcode instruction)
           (205 ; CLEAR-VALUES
@@ -1969,7 +1981,7 @@
          (code-length (length code)))
     (declare (type vector code))
     (dotimes (i code-length)
-      (declare (type fixnum i))
+      (declare (type (unsigned-byte 16) i))
       (let* ((instruction (aref code i))
              (opcode (instruction-opcode instruction)))
         (when (eql opcode 202) ; LABEL
@@ -1993,7 +2005,7 @@
     (let ((max-stack 0))
       (declare (type fixnum max-stack))
       (dotimes (i code-length)
-        (declare (type fixnum i))
+        (declare (type (unsigned-byte 16) i))
         (let* ((instruction (aref code i))
                (instruction-depth (instruction-depth instruction)))
           (when instruction-depth
@@ -2301,10 +2313,10 @@
 
 (defun code-bytes (code)
   (let ((length 0))
-    (declare (type fixnum length))
+    (declare (type (unsigned-byte 16) length))
     ;; Pass 1: calculate label offsets and overall length.
     (dotimes (i (length code))
-      (declare (type fixnum i))
+      (declare (type (unsigned-byte 16) i))
       (let* ((instruction (aref code i))
              (opcode (instruction-opcode instruction)))
         (if (= opcode 202) ; LABEL
@@ -2313,22 +2325,22 @@
             (incf length (opcode-size opcode)))))
     ;; Pass 2: replace labels with calculated offsets.
     (let ((index 0))
-      (declare (type fixnum index))
+      (declare (type (unsigned-byte 16) index))
       (dotimes (i (length code))
-        (declare (type fixnum i))
+        (declare (type (unsigned-byte 16) i))
         (let ((instruction (aref code i)))
           (when (branch-opcode-p (instruction-opcode instruction))
             (let* ((label (car (instruction-args instruction)))
-                   (offset (- (symbol-value (the symbol label)) index)))
+                   (offset (- (the (unsigned-byte 16) (symbol-value (the symbol label))) index)))
               (setf (instruction-args instruction) (u2 offset))))
           (unless (= (instruction-opcode instruction) 202) ; LABEL
             (incf index (opcode-size (instruction-opcode instruction)))))))
     ;; Expand instructions into bytes, skipping LABEL pseudo-instructions.
     (let ((bytes (make-array length))
           (index 0))
-      (declare (type fixnum index))
+      (declare (type (unsigned-byte 16) index))
       (dotimes (i (length code))
-        (declare (type fixnum i))
+        (declare (type (unsigned-byte 16) i))
         (let ((instruction (aref code i)))
           (unless (= (instruction-opcode instruction) 202) ; LABEL
             (setf (svref bytes index) (instruction-opcode instruction))
@@ -2367,11 +2379,11 @@
 
 (declaim (ftype (function (t t t) t) write-ascii))
 (defun write-ascii (string length stream)
-  (declare (type fixnum length))
+  (declare (type (unsigned-byte 16) length))
   (write-u2 length stream)
   (dotimes (i length)
-    (declare (type fixnum i))
-    (sys:write-8-bits (char-code (schar string i)) stream)))
+    (declare (type (unsigned-byte 16) i))
+    (write-8-bits (char-code (schar string i)) stream)))
 
 (declaim (ftype (function (t t) t) write-utf8))
 (defun write-utf8 (string stream)
@@ -3939,28 +3951,34 @@
 (defun p2-test-equality (form)
 ;;   (format t "p2-test-equality ~S~%" (%car form))
   (when (check-arg-count form 2)
-    (let ((op (%car form))
-          (arg1 (%cadr form))
-          (arg2 (%caddr form)))
+    (let* ((op (%car form))
+           (translated-op (ecase op
+                            (EQL    "eql")
+                            (EQUAL  "equal")
+                            (EQUALP "equalp")))
+           (arg1 (%cadr form))
+           (arg2 (%caddr form)))
       (cond ((subtypep (derive-type arg2) 'fixnum)
              (compile-form arg1 :target :stack)
              (compile-form arg2 :target :stack :representation :unboxed-fixnum)
              (maybe-emit-clear-values arg1 arg2)
              (emit-invokevirtual +lisp-object-class+
-                                 (ecase op
-                                   (EQL    "eql")
-                                   (EQUAL  "equal")
-                                   (EQUALP "equalp"))
+;;                                  (ecase op
+;;                                    (EQL    "eql")
+;;                                    (EQUAL  "equal")
+;;                                    (EQUALP "equalp"))
+                                 translated-op
                                  '("I") "Z"))
             (t
              (compile-form arg1 :target :stack)
              (compile-form arg2 :target :stack)
              (maybe-emit-clear-values arg1 arg2)
              (emit-invokevirtual +lisp-object-class+
-                                 (ecase op
-                                   (EQL    "eql")
-                                   (EQUAL  "equal")
-                                   (EQUALP "equalp"))
+;;                                  (ecase op
+;;                                    (EQL    "eql")
+;;                                    (EQUAL  "equal")
+;;                                    (EQUALP "equalp"))
+                                 translated-op
                                  (lisp-object-arg-types 1) "Z")))
       'ifeq)))
 
@@ -4353,7 +4371,7 @@
 
 (declaim (ftype (function (t) t) p2-let-bindings))
 (defun p2-let-bindings (block)
-
+;;   (format t "p2-let-bindings~%")
   (when *propagate-enable*
     (let ((removed '()))
       (dolist (variable (block-vars block))
@@ -4366,6 +4384,8 @@
 ;;                   (format t "LET initform for ~S is a reference to ~S~%"
 ;;                           (variable-name variable)
 ;;                           (variable-name source-var))
+;;                   (when (variable-special-p source-var)
+;;                     (format t "source var ~S is special~%" (variable-name source-var)))
                   (unless (variable-special-p source-var)
                     (when (eql (variable-writes source-var) 0)
 ;;                       (format t "LET no writes to ~S~%" (variable-name source-var))
@@ -4449,9 +4469,12 @@
 (declaim (ftype (function (t) t) p2-let*-bindings))
 (defun p2-let*-bindings (block)
 ;;   (format t "p2-let*-bindings~%")
-  (let ((must-clear-values nil))
+  (let ((must-clear-values nil)
+;;         (*print-structure* nil) ;; FIXME
+        )
     ;; Generate code to evaluate initforms and bind variables.
     (dolist (variable (block-vars block))
+;;       (format t "variable = ~S ~S special = ~S~%" (variable-name variable) variable (variable-special-p variable))
       (let* ((initform (variable-initform variable))
              (unused-p (and (not (variable-special-p variable))
                             (zerop (variable-reads variable))
@@ -4488,26 +4511,29 @@
                      ((and (null (variable-closure-index variable))
                            (not (variable-special-p variable))
                            (eql (variable-writes variable) 0))
-;;                       (format t "no writes case~%")
+;;                       (format t "no writes to ~S~%" variable)
 ;;                       (let ((*print-structure* nil))
 ;;                         (format t "initform = ~S~%" initform))
                       (when (var-ref-p initform)
 ;;                         (format t "LET* initform for ~S is a reference to ~S~%"
-;;                                 (variable-name variable)
+;;                                 variable
 ;;                                 (variable-name (var-ref-variable initform)))
                         (let ((source-var (var-ref-variable initform)))
+;;                           (when (variable-special-p source-var)
+;;                             (format t "source var ~S is special~%" (variable-name source-var)))
                           (unless (variable-special-p source-var)
                             (when (eql (variable-writes source-var) 0)
-;;                               (format t "LET* no writes to ~S~%"
-;;                                       (variable-name source-var))
+;;                               (format t "LET* no writes to source var ~S~%"
+;;                                       source-var)
 
                               (when *propagate-enable*
                                 ;; We can eliminate the variable.
-;;                                 (format t "LET* eliminating ~S~%" (variable-name variable))
+;;                                 (format t "LET* eliminating ~S~%" variable)
                                 ;; FIXME This will no longer be true when we start tracking writes.
                                 (aver (= (variable-reads variable) (length (variable-references variable))))
                                 (dolist (ref (variable-references variable))
                                   (aver (eq (var-ref-variable ref) variable))
+;;                                   (format t "changing ~S to refer to ~S~%" ref source-var)
                                   (setf (var-ref-variable ref) source-var))
                                 (setf boundp t))))))
                       (unless boundp
@@ -4584,6 +4610,7 @@
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
 
 (defun p2-locally (form &key (target :stack) representation)
+;;   (format t "p2-locally~%")
   ;; FIXME What if we're called with a non-NIL representation?
   (declare (ignore representation))
   (let ((*speed*  *speed*)
@@ -4592,10 +4619,11 @@
         (*debug*  *debug*)
         (*inline-declarations* *inline-declarations*))
     (process-optimization-declarations (cdr form))
-    (let ((*visible-variables* *visible-variables*)
-          (specials (precompiler::process-special-declarations (cdr form))))
-      (dolist (var specials)
-        (push (make-variable :name var :special-p t) *visible-variables*))
+;;     (let ((*visible-variables* *visible-variables*)
+;;           (specials (process-special-declarations (cdr form))))
+;;       (dolist (var specials)
+;;         (format t "~S is special~%" var)
+;;         (push (make-variable :name var :special-p t) *visible-variables*))
       (cond ((null (cdr form))
              (when target
                (emit-push-nil)
@@ -4603,7 +4631,9 @@
             (t
              (do ((forms (cdr form) (cdr forms)))
                  ((null forms))
-               (compile-form (car forms) :target (if (cdr forms) nil target))))))))
+               (compile-form (car forms) :target (if (cdr forms) nil target)))))
+;;       )
+    ))
 
 (defun find-tag (name)
   (dolist (tag *visible-tags*)
@@ -5614,15 +5644,15 @@
              (AREF
               (aref-derive-type (%cdr form)))
              (LENGTH
-              '(INTEGER 0 #.most-positive-fixnum))
+              '(INTEGER 0 #.(1- most-positive-fixnum)))
              (LOGAND
               (logand-derive-type (%cdr form)))
              (LOGXOR
               (logxor-derive-type (%cdr form)))
              (-
-              (derive-type-minus (%cdr form)))
+              (derive-type-minus form))
              (1-
-              (derive-type-minus (list (%cadr form) 1)))
+              (derive-type-minus (list '- (%cadr form) 1)))
              (+
               (derive-type-plus form))
              (1+
@@ -5748,30 +5778,37 @@
       (%make-integer-type :low low :high high))))
 
 (declaim (ftype (function (t) t) derive-type-minus))
-(defun derive-type-minus (args)
-  ;; FIXME
-  (case (length args)
-    (1
-     (let ((type (derive-type (%car args))))
-       (cond ((subtypep type '(integer 0 31))
-              '(integer -31 0))
-             ((subtypep type 'fixnum)
-              'fixnum)
-             (t
-               t))))
-    (2
-     (let ((type1 (derive-type (%car args)))
-           (type2 (derive-type (%cadr args))))
-       (cond ((and (subtypep type1 '(integer 0 31))
-                   (subtypep type1 '(integer 0 31)))
-              '(integer -31 31))
-             ((and (subtypep type1 '(integer 0 #.most-positive-fixnum))
-                   (subtypep type2 '(integer 0 #.most-positive-fixnum)))
-              'fixnum)
-             (t
-              t))))
-    (t
-     t)))
+(defun derive-type-minus (form)
+  (let ((args (cdr form))
+        (result-type t))
+    (case (length args)
+      (1
+       (let ((type (make-integer-type (derive-type (%car args)))))
+         (when type
+           (let* ((low (integer-type-low type))
+                  (high (integer-type-high type))
+                  (result-low (if (integerp high) (- high) '*))
+                  (result-high (if (integerp low) (- low) '*)))
+             (setf result-type (list 'INTEGER result-low result-high))))))
+      (2
+       (let ((type1 (make-integer-type (derive-type (%car args)))))
+         (when type1
+           (let ((type2 (make-integer-type (derive-type (%cadr args)))))
+             (when type2
+               ;; Both integer types.
+               (let ((low1 (integer-type-low type1))
+                     (high1 (integer-type-high type1))
+                     (low2 (integer-type-low type2))
+                     (high2 (integer-type-high type2))
+                     low high)
+                 (setf low (if (and (integerp low1) (integerp high2))
+                               (- low1 high2)
+                               '*)
+                       high (if (and (integerp high1) (integerp low2))
+                                (- high1 low2)
+                                '*))
+                 (setf result-type (list 'INTEGER low high)))))))))
+    result-type))
 
 (declaim (ftype (function (t) t) derive-type-plus))
 (defun derive-type-plus (form)
@@ -6397,6 +6434,8 @@
   (declare (type symbol name))
   (unless (null target)
     (let ((variable (find-visible-variable name)))
+;;       (let ((*print-structure* nil))
+;;         (format t "compile-variable-reference variable = ~S~%" variable))
       (cond ((null variable)
              (when (and (special-variable-p name)
                         (constantp name))
@@ -6434,8 +6473,25 @@
 
 (declaim (ftype (function (t t t) t) compile-var-ref))
 (defun compile-var-ref (ref target representation)
-  (compile-variable-reference (variable-name (var-ref-variable ref))
-                              target representation))
+;;   (let ((*print-structure* nil))
+;;     (format t "compile-var-ref variable = ~S~%" (var-ref-variable ref)))
+;;   (compile-variable-reference (variable-name (var-ref-variable ref))
+;;                               target representation))
+  (when target
+    (let ((variable (var-ref-variable ref)))
+      (cond ((eq (variable-representation variable) :unboxed-fixnum)
+             (cond ((eq representation :unboxed-fixnum)
+                    (aver (variable-register variable))
+                    (emit 'iload (variable-register variable)))
+                   (t
+                    (emit 'new +lisp-fixnum-class+)
+                    (emit 'dup)
+                    (aver (variable-register variable))
+                    (emit 'iload (variable-register variable))
+                    (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+             (emit-move-from-stack target representation))
+            (t
+             (emit 'var-ref variable target representation))))))
 
 (defun p2-set (form &key (target :stack) representation)
   (cond ((and (check-arg-count form 2)
@@ -7362,7 +7418,7 @@
                  (incf register)
                  (incf index))))))
 
-    (let ((specials (precompiler::process-special-declarations body)))
+    (let ((specials (process-special-declarations body)))
       (dolist (name specials)
         (dformat t "recognizing ~S as special~%" name)
         (let ((variable (find-visible-variable name)))
