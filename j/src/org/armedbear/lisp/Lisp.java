@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.380 2005-08-01 12:39:56 piso Exp $
+ * $Id: Lisp.java,v 1.381 2005-08-01 15:34:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -808,6 +808,30 @@ public abstract class Lisp
             return new Fixnum(n.intValue());
         else
             return new Bignum(n);
+    }
+
+    public static final int mod(int number, int divisor)
+        throws ConditionThrowable
+    {
+        final int r;
+        try {
+            r = number % divisor;
+        }
+        catch (ArithmeticException e) {
+            signal(new ArithmeticError("Division by zero."));
+            // Not reached.
+            return 0;
+        }
+        if (r == 0)
+            return r;
+        if (divisor < 0) {
+            if (number > 0)
+                return r + divisor;
+        } else {
+            if (number < 0)
+                return r + divisor;
+        }
+        return r;
     }
 
     // Adapted from SBCL.
