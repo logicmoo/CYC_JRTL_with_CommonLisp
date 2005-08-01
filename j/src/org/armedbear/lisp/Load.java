@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.113 2005-07-23 14:21:30 piso Exp $
+ * $Id: Load.java,v 1.114 2005-08-01 12:41:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -428,7 +428,7 @@ public final class Load extends Lisp
         Stream in = (Stream) _LOAD_STREAM_.symbolValue(thread);
         final Environment env = new Environment();
         while (true) {
-            LispObject obj = in.faslRead(false, EOF, true);
+            LispObject obj = in.faslRead(false, EOF, true, thread);
             if (obj == EOF)
                 break;
             LispObject result = eval(obj, env, thread);
