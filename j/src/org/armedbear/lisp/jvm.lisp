@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.556 2005-08-01 13:44:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.557 2005-08-01 15:35:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5576,23 +5576,35 @@
     (compile-function-call form target representation)
     (return-from p2-mod))
   (let* ((args (cdr form))
-         (arg1 (car args))
-         (arg2 (cadr args)))
-    (cond ((fixnump arg2)
+         (arg1 (%car args))
+         (arg2 (%cadr args))
+         (type1 (derive-type arg1))
+         (type2 (derive-type arg2)))
+    (cond ((and (eq representation :unboxed-fixnum)
+                (subtypep type1 'FIXNUM)
+                (subtypep type2 'FIXNUM))
+           (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokestatic +lisp-class+ "mod" '("I" "I") "I")
+           (emit-move-from-stack target representation))
+          ((subtypep type2 'FIXNUM)
            (compile-form arg1 :target :stack)
-           (maybe-emit-clear-values arg1)
-           (emit-push-constant-int arg2)
-           (emit-invokevirtual +lisp-object-class+ "MOD" '("I") +lisp-object+))
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokevirtual +lisp-object-class+ "MOD" '("I") +lisp-object+)
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
+           (emit-move-from-stack target representation))
           (t
            (compile-form arg1 :target :stack)
            (compile-form arg2 :target :stack)
-           (unless (and (single-valued-p arg1)
-                        (single-valued-p arg2))
-             (emit-clear-values))
-           (emit-invokevirtual +lisp-object-class+ "MOD" (list +lisp-object+) +lisp-object+)))
-    (when (eq representation :unboxed-fixnum)
-      (emit-unbox-fixnum))
-    (emit-move-from-stack target representation)))
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokevirtual +lisp-object-class+ "MOD"
+                               (lisp-object-arg-types 1) +lisp-object+)
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
+           (emit-move-from-stack target representation)))))
 
 (defun p2-zerop (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
