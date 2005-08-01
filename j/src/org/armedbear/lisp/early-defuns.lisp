@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.36 2005-07-26 19:54:28 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.37 2005-08-01 12:47:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -235,7 +235,7 @@
                     (return nil))))
                (t
                 (dotimes (i (length sequence) t)
-                  (declare (type fixnum i))
+                  (declare (type index i))
                   (unless (funcall predicate (elt sequence i))
                     (return nil))))))
         (t
