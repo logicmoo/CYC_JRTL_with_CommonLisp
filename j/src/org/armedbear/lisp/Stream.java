@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.133 2005-07-16 17:38:20 piso Exp $
+ * $Id: Stream.java,v 1.134 2005-08-01 12:35:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -293,7 +293,14 @@ public class Stream extends LispObject
                                boolean recursive)
         throws ConditionThrowable
     {
-        final LispThread thread = LispThread.currentThread();
+        return faslRead(eofError, eofValue, recursive,
+                        LispThread.currentThread());
+    }
+
+    public LispObject faslRead(boolean eofError, LispObject eofValue,
+                               boolean recursive, LispThread thread)
+        throws ConditionThrowable
+    {
         LispObject result = faslReadPreservingWhitespace(eofError, eofValue,
                                                          recursive, thread);
         if (result != eofValue && !recursive) {
@@ -435,7 +442,7 @@ public class Stream extends LispObject
     public LispObject faslReadStructure() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        LispObject obj = faslRead(true, NIL, false);
+        LispObject obj = faslRead(true, NIL, false, thread);
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         if (obj.listp()) {
