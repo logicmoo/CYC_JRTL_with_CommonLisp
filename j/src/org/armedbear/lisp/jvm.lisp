@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.555 2005-08-01 12:50:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.556 2005-08-01 13:44:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4367,12 +4367,12 @@
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
 
 (export '*propagate-enable*)
-(defvar *propagate-enable* nil)
+(defvar *propagate-enable* t)
 
 (declaim (ftype (function (t) t) p2-let-bindings))
 (defun p2-let-bindings (block)
-;;   (format t "p2-let-bindings~%")
   (when *propagate-enable*
+;;     (format t "p2-let-bindings *propagate-enable* = ~S~%" *propagate-enable*)
     (let ((removed '()))
       (dolist (variable (block-vars block))
         (unless (or (variable-special-p variable)
@@ -4386,7 +4386,8 @@
 ;;                           (variable-name source-var))
 ;;                   (when (variable-special-p source-var)
 ;;                     (format t "source var ~S is special~%" (variable-name source-var)))
-                  (unless (variable-special-p source-var)
+                  (unless (or (variable-special-p source-var)
+                              (variable-used-non-locally-p source-var))
                     (when (eql (variable-writes source-var) 0)
 ;;                       (format t "LET no writes to ~S~%" (variable-name source-var))
                       ;; We can eliminate the variable.
@@ -4521,7 +4522,10 @@
                         (let ((source-var (var-ref-variable initform)))
 ;;                           (when (variable-special-p source-var)
 ;;                             (format t "source var ~S is special~%" (variable-name source-var)))
-                          (unless (variable-special-p source-var)
+;;                           (when (variable-used-non-locally-p source-var)
+;;                             (format t "source var ~S is used non-locally~%" (variable-name source-var)))
+                          (unless (or (variable-special-p source-var)
+                                      (variable-used-non-locally-p source-var))
                             (when (eql (variable-writes source-var) 0)
 ;;                               (format t "LET* no writes to source var ~S~%"
 ;;                                       source-var)
@@ -4553,10 +4557,7 @@
                       (compile-form initform :target :stack)))
                (unless must-clear-values
                  (unless (single-valued-p initform)
-                   (setf must-clear-values t))))
-;;               (t
-;;                (emit-push-nil))
-              )
+                   (setf must-clear-values t)))))
         (unless (variable-special-p variable)
           (unless (or (variable-closure-index variable) (variable-register variable))
             (setf (variable-register variable) (allocate-register))))
