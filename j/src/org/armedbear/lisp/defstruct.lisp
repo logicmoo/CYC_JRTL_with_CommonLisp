@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.74 2005-07-29 13:56:01 piso Exp $
+;;; $Id: defstruct.lisp,v 1.75 2005-08-01 18:24:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -138,7 +138,7 @@
                              :initial-contents (list ,@values))))))
           (t
            `((defun ,constructor-name ,keys
-               (%make-structure ',*dd-name* (list ,@values))))))))
+               (%make-structure (truly-the symbol ',*dd-name*) (list ,@values))))))))
 
 (defun find-dsd (name)
   (dolist (dsd *dd-slots*)
@@ -253,8 +253,9 @@
                                    :element-type ',element-type
                                    :initial-contents (list ,@values))))))
                 (t
-                 `((defun ,constructor-name ,arglist
-                     (%make-structure ',*dd-name* (list ,@values)))))))))))
+                 `((declaim (inline ,constructor-name))
+                   (defun ,constructor-name ,arglist
+                     (%make-structure (truly-the symbol ',*dd-name*) (list ,@values)))))))))))
 
 (defun default-constructor-name ()
   (intern (concatenate 'string "MAKE-" (symbol-name *dd-name*))))
@@ -417,7 +418,7 @@
      (setf *dd-type* (cadr option)))))
 
 (defun parse-name-and-options (name-and-options)
-  (setf *dd-name* (car name-and-options))
+  (setf *dd-name* (the symbol (car name-and-options)))
   (setf *dd-conc-name* (make-symbol (concatenate 'string (symbol-name *dd-name*) "-")))
   (setf *dd-copier* (intern (concatenate 'string "COPY-" (symbol-name *dd-name*))))
   (setf *dd-predicate* (concatenate 'string (symbol-name *dd-name*) "-P"))

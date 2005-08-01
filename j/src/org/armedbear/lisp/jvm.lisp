@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.557 2005-08-01 15:35:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.558 2005-08-01 18:25:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1128,13 +1128,12 @@
   (list (logand (ash n -8) #xff)
         (logand n #xff)))
 
-(locally (declare (optimize speed))
-  (defstruct (instruction
-              (:constructor make-instruction (opcode args)))
-    (opcode 0 :type (integer 0 255))
-    args
-    stack
-    depth))
+(defstruct (instruction
+            (:constructor make-instruction (opcode args)))
+  (opcode 0 :type (integer 0 255))
+  args
+  stack
+  depth)
 
 (defun print-instruction (instruction)
   (sys::%format nil "~A ~A stack = ~S depth = ~S"
@@ -1173,6 +1172,7 @@
 (defconstant +lisp-object-array+ "[Lorg/armedbear/lisp/LispObject;")
 (defconstant +lisp-symbol-class+ "org/armedbear/lisp/Symbol")
 (defconstant +lisp-symbol+ "Lorg/armedbear/lisp/Symbol;")
+(defconstant +lisp-structure-object-class+ "org/armedbear/lisp/StructureObject")
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
 (defconstant +lisp-thread+ "Lorg/armedbear/lisp/LispThread;")
 (defconstant +lisp-cons-class+ "org/armedbear/lisp/Cons")
@@ -4999,7 +4999,7 @@
   (emit 'new +lisp-cons-class+)
   (emit 'dup)
   (process-args (cdr form))
-  (emit-invokespecial-init +lisp-cons-class+ (list +lisp-object+ +lisp-object+))
+  (emit-invokespecial-init +lisp-cons-class+ (lisp-object-arg-types 2))
   (emit-move-from-stack target))
 
 (defun compile-progn (form &key (target :stack) representation)
@@ -5627,6 +5627,21 @@
            (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
            (emit-invoke-method "ZEROP" target representation)))))
+
+(defun p2-%make-structure (form &key (target :stack) representation)
+  (cond ((and (check-arg-count form 2)
+              (eq (derive-type (%cadr form)) 'SYMBOL))
+         (emit 'new +lisp-structure-object-class+)
+         (emit 'dup)
+         (compile-form (%cadr form) :target :stack)
+         (emit 'checkcast +lisp-symbol-class+)
+         (compile-form (%caddr form) :target :stack)
+         (maybe-emit-clear-values (%cadr form) (%caddr form))
+         (emit-invokespecial-init +lisp-structure-object-class+
+                                  (list +lisp-symbol+ +lisp-object+))
+         (emit-move-from-stack target representation))
+        (t
+         (compile-function-call form target representation))))
 
 (defun p2-write-8-bits (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
@@ -6777,7 +6792,13 @@
 (defun p2-the (form &key (target :stack) representation)
   (let ((type-form (second form))
         (value-form (third form)))
-    (cond ((and (> *safety* 0)
+    (cond ((and (subtypep type-form 'FIXNUM)
+                (consp value-form)
+                (eq (car value-form) 'structure-ref))
+           ;; Special case for structure slot references: getFixnumSlotValue()
+           ;; signals an error if the slot's value is not a fixnum.
+           (compile-form value-form :target target :representation representation))
+          ((and (> *safety* 0)
                 (not (subtypep (derive-type value-form) type-form)))
            (compile-form value-form :target :stack)
            (generate-type-check-for-value type-form)
@@ -7861,6 +7882,7 @@
                                progn))
   (install-p2-handler '%call-internal     'p2-%call-internal)
   (install-p2-handler '%ldb               'p2-%ldb)
+  (install-p2-handler '%make-structure    'p2-%make-structure)
   (install-p2-handler '*                  'p2-times)
   (install-p2-handler '+                  'p2-plus)
   (install-p2-handler '-                  'p2-minus)
