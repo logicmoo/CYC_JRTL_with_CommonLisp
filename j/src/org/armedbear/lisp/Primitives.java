@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.817 2005-07-29 13:53:06 piso Exp $
+ * $Id: Primitives.java,v 1.818 2005-08-01 12:43:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -685,9 +685,26 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### %stream-output-object object stream => object
+    private static final Primitive _STREAM_OUTPUT_OBJECT =
+        new Primitive("%stream-output-object", PACKAGE_SYS, true)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((Stream)second)._writeString(first.writeToString());
+                return first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.STREAM);
+            }
+        }
+    };
+
     // ### %output-object object stream => object
     private static final Primitive _OUTPUT_OBJECT =
-        new Primitive("%output-object", PACKAGE_SYS, false)
+        new Primitive("%output-object", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -718,7 +735,7 @@ public final class Primitives extends Lisp
                 return NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STREAM));
+                return signalTypeError(arg, Symbol.STREAM);
             }
         }
     };
@@ -3626,9 +3643,9 @@ public final class Primitives extends Lisp
             }
             catch (ClassCastException e) {
                 if (second instanceof Stream)
-                    return signal(new TypeError(first, Symbol.CHARACTER));
+                    return signalTypeError(first, Symbol.CHARACTER);
                 else
-                    return signal(new TypeError(second, Symbol.STREAM));
+                    return signalTypeError(second, Symbol.STREAM);
             }
             return first;
         }
