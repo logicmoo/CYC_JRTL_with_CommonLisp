@@ -2,7 +2,7 @@
  * FaslReader.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: FaslReader.java,v 1.4 2005-06-30 17:33:18 piso Exp $
+ * $Id: FaslReader.java,v 1.5 2005-08-01 12:38:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,7 +244,7 @@ public final class FaslReader extends Lisp
                 return signal(new ReaderError("Can't read #. when *READ-EVAL* is NIL.",
                                               stream));
             else
-                return eval(stream.faslRead(true, NIL, true),
+                return eval(stream.faslRead(true, NIL, true, thread),
                             new Environment(), thread);
         }
     };
