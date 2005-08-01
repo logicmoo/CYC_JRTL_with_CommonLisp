@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: coerce.lisp,v 1.7 2005-03-17 14:59:03 piso Exp $
+;;; $Id: coerce.lisp,v 1.8 2005-08-01 12:44:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
   (let* ((length (length list))
          (result (make-sequence result-type length)))
     (dotimes (i length)
+      (declare (type index i))
       (setf (aref result i) (pop list)))
     result))
 
