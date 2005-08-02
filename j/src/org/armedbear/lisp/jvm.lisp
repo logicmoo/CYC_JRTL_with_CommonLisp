@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.559 2005-08-02 04:44:56 piso Exp $
+;;; $Id: jvm.lisp,v 1.560 2005-08-02 18:43:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -369,7 +369,6 @@
   (when (memq declaration '(IGNORE IGNORABLE))
     (let ((what (if (eq declaration 'IGNORE) "ignored" "ignorable")))
       (dolist (name names)
-;;         (let ((variable (find name variables :key #'variable-name)))
         (let ((variable (find-variable name variables)))
           (cond ((null variable)
                  (compiler-style-warn "Declaring unknown variable ~S to be ~A."
@@ -508,7 +507,10 @@
       (dolist (variable vars)
         (when (special-variable-p (variable-name variable))
           (setf (variable-special-p variable) t)))
-      (setf (block-free-specials block) (process-declarations-for-vars body vars))
+      ;; Note that in processing declarations we want to walk the variable list
+      ;; from last to first, since declarations apply to the last-defined
+      ;; variable with the specified name.
+      (setf (block-free-specials block) (process-declarations-for-vars body (reverse vars)))
       (setf (block-vars block) vars)
       ;; Make free specials visible.
       (dolist (variable (block-free-specials block))

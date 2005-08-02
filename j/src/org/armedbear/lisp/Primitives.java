@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.819 2005-08-02 04:43:23 piso Exp $
+ * $Id: Primitives.java,v 1.820 2005-08-02 18:47:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2727,24 +2727,32 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### intern
-    // intern string &optional package => symbol, status
-    // status is one of :INHERITED, :EXTERNAL, :INTERNAL or NIL.
+    // ### intern string &optional package => symbol, status
+    // STATUS is one of :INHERITED, :EXTERNAL, :INTERNAL or NIL.
+    // "It is implementation-dependent whether the string that becomes the new
+    // symbol's name is the given string or a copy of it."
     private static final Primitive INTERN =
         new Primitive("intern", "string &optional package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String s = arg.getStringValue();
+            final SimpleString s;
+            if (arg instanceof SimpleString)
+                s = (SimpleString) arg;
+            else
+                s = new SimpleString(arg.getStringValue());
             final LispThread thread = LispThread.currentThread();
-            Package pkg = (Package) _PACKAGE_.symbolValueNoThrow(thread);
+            Package pkg = (Package) _PACKAGE_.symbolValue(thread);
             return pkg.intern(s, thread);
         }
-
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            String s = first.getStringValue();
+            final SimpleString s;
+            if (first instanceof SimpleString)
+                s = (SimpleString) first;
+            else
+                s = new SimpleString(first.getStringValue());
             Package pkg = coerceToPackage(second);
             return pkg.intern(s, LispThread.currentThread());
         }
@@ -5017,37 +5025,48 @@ public final class Primitives extends Lisp
                 return arg;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
+                return signalTypeError(arg, Symbol.SYMBOL);
             }
         }
     };
 
-    // ### find-class
-    // find-class symbol &optional errorp environment => class
+    // ### find-class symbol &optional errorp environment => class
     private static final Primitive FIND_CLASS =
         new Primitive("find-class", "symbol &optional errorp environment")
     {
-        public LispObject execute(LispObject symbol) throws ConditionThrowable
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            LispObject c = LispClass.findClass(checkSymbol(symbol));
+            final LispObject c;
+            try {
+                c = LispClass.findClass((Symbol)arg);
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.SYMBOL);
+            }
             if (c == null) {
                 FastStringBuffer sb =
                     new FastStringBuffer("There is no class named ");
-                sb.append(symbol.writeToString());
+                sb.append(arg.writeToString());
                 sb.append('.');
                 return signal(new LispError(sb.toString()));
             }
             return c;
         }
-        public LispObject execute(LispObject symbol, LispObject errorp)
+        public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            LispObject c = LispClass.findClass(checkSymbol(symbol));
+            final LispObject c;
+            try {
+                c = LispClass.findClass((Symbol)first);
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.SYMBOL);
+            }
             if (c == null) {
-                if (errorp != NIL) {
+                if (second != NIL) {
                     FastStringBuffer sb =
                         new FastStringBuffer("There is no class named ");
-                    sb.append(symbol.writeToString());
+                    sb.append(first.writeToString());
                     sb.append('.');
                     return signal(new LispError(sb.toString()));
                 }
@@ -5055,12 +5074,12 @@ public final class Primitives extends Lisp
             }
             return c;
         }
-        public LispObject execute(LispObject symbol, LispObject errorp,
-                                  LispObject environment)
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
             throws ConditionThrowable
         {
             // FIXME Ignore environment.
-            return execute(symbol, errorp);
+            return execute(first, second);
         }
     };
 

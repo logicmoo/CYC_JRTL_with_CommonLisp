@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.134 2005-08-01 12:35:40 piso Exp $
+ * $Id: Stream.java,v 1.135 2005-08-02 18:46:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -873,17 +873,18 @@ public class Stream extends LispObject
             }
             index = findUnescapedSingleColon(token, flags);
             if (index > 0) {
-                String packageName = token.substring(0, index);
-                String symbolName = token.substring(index + 1);
+                final String packageName = token.substring(0, index);
                 Package pkg = Packages.findPackage(packageName);
                 if (pkg == null)
                     return signal(new PackageError("Package \"" + packageName +
                                                    "\" not found."));
-                Symbol symbol = pkg.findExternalSymbol(symbolName);
+                final String symbolName = token.substring(index + 1);
+                final SimpleString s = new SimpleString(symbolName);
+                Symbol symbol = pkg.findExternalSymbol(s);
                 if (symbol != null)
                     return symbol;
                 // Error!
-                if (pkg.findInternalSymbol(symbolName) != null)
+                if (pkg.findInternalSymbol(s) != null)
                     return signal(new ReaderError("The symbol \"" + symbolName +
                                                   "\" is not external in package " +
                                                   packageName + '.',
@@ -896,7 +897,7 @@ public class Stream extends LispObject
             }
         }
         // Intern token in current package.
-        return ((Package)_PACKAGE_.symbolValue(thread)).intern(token);
+        return ((Package)_PACKAGE_.symbolValue(thread)).intern(new SimpleString(token));
     }
 
     private final BitSet _readToken(FastStringBuffer sb, Readtable rt)

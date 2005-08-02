@@ -1,8 +1,8 @@
 /*
  * SymbolHashTable.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: SymbolHashTable.java,v 1.1 2004-11-28 15:41:04 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: SymbolHashTable.java,v 1.2 2005-08-02 18:45:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,14 +38,9 @@ public final class SymbolHashTable
         threshold = (int) (size * LOAD_FACTOR);
     }
 
-    public LispObject get(String key)
+    public Symbol get(SimpleString key)
     {
-        return get(new SimpleString(key));
-    }
-
-    public LispObject get(LispObject key)
-    {
-        int index = hash(key);
+        int index = key.sxhash() % buckets.length;
         HashEntry e = buckets[index];
         while (e != null) {
             try {
@@ -53,14 +48,14 @@ public final class SymbolHashTable
                     return e.symbol; // Return the symbol.
             }
             catch (Throwable t) {
-                Debug.trace(t); // FIXME
+                Debug.trace(t); // Shouldn't happen.
             }
             e = e.next;
         }
         return null;
     }
-    
-    public LispObject get(LispObject key, int hash)
+
+    public Symbol get(SimpleString key, int hash)
     {
         int index = hash % buckets.length;
         HashEntry e = buckets[index];
@@ -70,21 +65,16 @@ public final class SymbolHashTable
                     return e.symbol; // Return the symbol.
             }
             catch (Throwable t) {
-                Debug.trace(t); // FIXME
+                Debug.trace(t); // Shouldn't happen.
             }
             e = e.next;
         }
         return null;
     }
-    
-    public void put(String key, Symbol value)
-    {
-        put(new SimpleString(key), value);
-    }
 
-    public void put(LispObject key, Symbol symbol)
+    public void put(final SimpleString key, final Symbol symbol)
     {
-        int index = hash(key);
+        int index = key.sxhash() % buckets.length;
         HashEntry e = buckets[index];
         while (e != null) {
             try {
@@ -107,13 +97,13 @@ public final class SymbolHashTable
         if (++count > threshold) {
             rehash();
             // We need a new index for the bigger table.
-            index = hash(key);
+            index = key.sxhash() % buckets.length;
         }
         e = new HashEntry(symbol);
         e.next = buckets[index];
         buckets[index] = e;
     }
-    
+
     public void put(Symbol symbol)
     {
         int index = symbol.sxhash() % buckets.length;
@@ -142,26 +132,21 @@ public final class SymbolHashTable
         }
         e = new HashEntry(symbol);
         e.next = buckets[index];
-        buckets[index] = e;        
-    }
-    
-    public LispObject remove(String key)
-    {
-        return remove(new SimpleString(key));
+        buckets[index] = e;
     }
 
     public LispObject remove(LispObject key) //throws ConditionThrowable
     {
         if (key instanceof Symbol)
             key = ((Symbol)key).name;
-        int idx = hash(key);
-        HashEntry e = buckets[idx];
+        int index = key.sxhash() % buckets.length;
+        HashEntry e = buckets[index];
         HashEntry last = null;
         while (e != null) {
             try {
                 if (key.equal(e.symbol.name)) {
                     if (last == null)
-                        buckets[idx] = e.next;
+                        buckets[index] = e.next;
                     else
                         last.next = e.next;
                     --count;
@@ -176,11 +161,11 @@ public final class SymbolHashTable
         }
         return null;
     }
-    
-    private int hash(LispObject key)
-    {
-        return (key.sxhash() % buckets.length);
-    }
+
+//     private int hash(LispObject key)
+//     {
+//         return (key.sxhash() % buckets.length);
+//     }
 
     private void rehash()
     {
@@ -191,21 +176,21 @@ public final class SymbolHashTable
         for (int i = oldBuckets.length; i-- > 0;) {
             HashEntry e = oldBuckets[i];
             while (e != null) {
-                int idx = hash(e.symbol);
-                HashEntry dest = buckets[idx];
+                int index = e.symbol.sxhash() % buckets.length;
+                HashEntry dest = buckets[index];
                 if (dest != null) {
                     while (dest.next != null)
                         dest = dest.next;
                     dest.next = e;
                 } else
-                    buckets[idx] = e;
+                    buckets[index] = e;
                 HashEntry next = e.next;
                 e.next = null;
                 e = next;
             }
         }
     }
-    
+
     public List getSymbols()
     {
         ArrayList list = new ArrayList();
@@ -218,7 +203,7 @@ public final class SymbolHashTable
         }
         return list;
     }
-    
+
     private static class HashEntry
     {
         Symbol symbol;
