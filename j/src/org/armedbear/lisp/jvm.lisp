@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.558 2005-08-01 18:25:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.559 2005-08-02 04:44:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2792,9 +2792,9 @@
     (setf *static-code* *code*)
     g))
 
-(defun declare-structure (obj)
+(defun declare-instance (obj)
   (aver (not (null *compile-file-truename*)))
-  (aver (structure-object-p obj))
+  (aver (or (structure-object-p obj) (standard-object-p obj)))
   (let* ((g (symbol-name (gensym)))
          (s (with-output-to-string (stream)
               (dump-form obj stream)))
@@ -2936,9 +2936,10 @@
                       (declare-package form)
                       (declare-object form))))
            (emit 'getstatic *this-class* g +lisp-object+)))
-        ((structure-object-p form)
+        ((or (structure-object-p form)
+             (standard-object-p form))
          (let ((g (if *compile-file-truename*
-                      (declare-structure form)
+                      (declare-instance form)
                       (declare-object form))))
            (emit 'getstatic *this-class* g +lisp-object+)))
         (t
