@@ -1,7 +1,7 @@
 ;;; dump-form.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dump-form.lisp,v 1.2 2005-08-01 12:46:43 piso Exp $
+;;; $Id: dump-form.lisp,v 1.3 2005-08-02 04:44:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -57,8 +57,8 @@
       (dump-object (aref object (1- length)) stream))
     (%stream-write-char #\) stream)))
 
-(declaim (ftype (function (t stream) t) dump-structure))
-(defun dump-structure (object stream)
+(declaim (ftype (function (t stream) t) dump-instance))
+(defun dump-instance (object stream)
   (multiple-value-bind (creation-form initialization-form)
       (make-load-form object)
     (write-string "#." stream)
@@ -87,8 +87,9 @@
          (%stream-output-object object stream))
         ((vectorp object)
          (dump-vector object stream))
-        ((structure-object-p object)
-         (dump-structure object stream))
+        ((or (structure-object-p object) ;; FIXME instance-p
+             (standard-object-p object))
+         (dump-instance object stream))
         (t
          (%stream-output-object object stream))))
 
