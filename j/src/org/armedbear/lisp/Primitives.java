@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.818 2005-08-01 12:43:38 piso Exp $
+ * $Id: Primitives.java,v 1.819 2005-08-02 04:43:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5517,6 +5517,16 @@ public final class Primitives extends Lisp
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.SYMBOL));
             }
+        }
+    };
+
+    // ### standard-object-p object => generalized-boolean
+    private static final Primitive STANDARD_OBJECT_P =
+        new Primitive("standard-object-p", PACKAGE_SYS, true, "object")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return (arg instanceof StandardObject) ? T : NIL;
         }
     };
 
