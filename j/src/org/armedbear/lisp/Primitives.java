@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.821 2005-08-03 01:12:44 piso Exp $
+ * $Id: Primitives.java,v 1.822 2005-08-03 13:56:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4411,6 +4411,34 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### delete-eq item sequence => result-sequence
+    private static final Primitive DELETE_EQ =
+        new Primitive("delete-eq", PACKAGE_SYS, true, "item sequence")
+    {
+        public LispObject execute(LispObject item, LispObject sequence)
+            throws ConditionThrowable
+        {
+            if (sequence instanceof AbstractVector)
+                return ((AbstractVector)sequence).deleteEq(item);
+            else
+                return LIST_DELETE_EQ.execute(item, sequence);
+        }
+    };
+
+    // ### delete-eql item seqluence => result-seqluence
+    private static final Primitive DELETE_EQL =
+        new Primitive("delete-eql", PACKAGE_SYS, true, "item sequence")
+    {
+        public LispObject execute(LispObject item, LispObject sequence)
+            throws ConditionThrowable
+        {
+            if (sequence instanceof AbstractVector)
+                return ((AbstractVector)sequence).deleteEql(item);
+            else
+                return LIST_DELETE_EQL.execute(item, sequence);
+        }
+    };
+
     // ### list-delete-eq item list => result-list
     private static final Primitive LIST_DELETE_EQ =
         new Primitive("list-delete-eq", PACKAGE_SYS, true, "item list")
@@ -4448,6 +4476,80 @@ public final class Primitives extends Lisp
                 return list;
             else
                 return signalTypeError(list, Symbol.LIST);
+        }
+    };
+
+    // ### list-delete-eq item list => result-list
+    private static final Primitive LIST_DELETE_EQL =
+        new Primitive("list-delete-eql", PACKAGE_SYS, true, "item list")
+    {
+        public LispObject execute(LispObject item, LispObject list)
+            throws ConditionThrowable
+        {
+            if (list instanceof Cons) {
+                LispObject tail = list;
+                LispObject splice = list;
+                while (tail instanceof Cons) {
+                    LispObject car = tail.car();
+                    if (car.eql(item)) {
+                        if (tail.cdr() != NIL) {
+                            LispObject temp = tail;
+                            tail.setCar(temp.cadr());
+                            tail.setCdr(temp.cddr());
+                        } else {
+                            // Last item.
+                            if (tail == list)
+                                return NIL;
+                            splice.setCdr(NIL);
+                            return list;
+                        }
+                    } else {
+                        splice = tail;
+                        tail = tail.cdr();
+                    }
+                }
+                if (tail == NIL)
+                    return list;
+                else
+                    return signalTypeError(tail, Symbol.LIST);
+            } else if (list == NIL)
+                return list;
+            else
+                return signalTypeError(list, Symbol.LIST);
+        }
+    };
+
+    // ### vector-delete-eq item vector => result-vector
+    private static final Primitive VECTOR_DELETE_EQ =
+        new Primitive("vector-delete-eq", PACKAGE_SYS, true, "item vector")
+    {
+        public LispObject execute(LispObject item, LispObject vector)
+            throws ConditionThrowable
+        {
+            try {
+                ((AbstractVector)vector).deleteEq(item);
+                return vector;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(vector, Symbol.VECTOR);
+            }
+        }
+    };
+
+    // ### vector-delete-eql item vector => result-vector
+    private static final Primitive VECTOR_DELETE_EQL =
+        new Primitive("vector-delete-eql", PACKAGE_SYS, true, "item vector")
+    {
+        public LispObject execute(LispObject item, LispObject vector)
+            throws ConditionThrowable
+        {
+            try {
+                ((AbstractVector)vector).deleteEql(item);
+                return vector;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(vector, Symbol.VECTOR);
+            }
         }
     };
 
