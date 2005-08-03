@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.822 2005-08-03 13:56:57 piso Exp $
+ * $Id: Primitives.java,v 1.823 2005-08-03 17:51:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -509,15 +509,16 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            final Symbol symbol = checkSymbol(arg);
-            LispObject value =
-                LispThread.currentThread().lookupSpecial(symbol);
-            if (value == null) {
-                value = symbol.symbolValue();
-                if (value instanceof SymbolMacro)
-                    signal(new LispError(arg.writeToString() +
-                                         " has no dynamic value."));
+            final LispObject value;
+            try {
+                value = ((Symbol)arg).symbolValue();
             }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.SYMBOL);
+            }
+            if (value instanceof SymbolMacro)
+                return signal(new LispError(arg.writeToString() +
+                                            " has no dynamic value."));
             return value;
         }
     };
@@ -766,9 +767,15 @@ public final class Primitives extends Lisp
     // any lexical bindings are ignored.
     private static final Primitive BOUNDP = new Primitive("boundp", "symbol")
     {
-        public LispObject execute(LispObject obj) throws ConditionThrowable
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Symbol symbol = checkSymbol(obj);
+            final Symbol symbol;
+            try {
+                symbol = (Symbol) arg;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.SYMBOL);
+            }
             // PROGV: "If too few values are supplied, the remaining symbols
             // are bound and then made to have no value." So BOUNDP must
             // explicitly check for a binding with no value.
@@ -792,7 +799,7 @@ public final class Primitives extends Lisp
                 LispObject f = get(arg.cadr(), Symbol.SETF_FUNCTION, null);
                 return f != null ? T : NIL;
             }
-            return signal(new TypeError(arg, FUNCTION_NAME));
+            return signalTypeError(arg, FUNCTION_NAME);
         }
     };
 
@@ -3806,7 +3813,7 @@ public final class Primitives extends Lisp
                 return ((Stream)arg).close(NIL);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STREAM));
+                return signalTypeError(arg, Symbol.STREAM);
             }
         }
         public LispObject execute(LispObject first, LispObject second,
@@ -3818,7 +3825,7 @@ public final class Primitives extends Lisp
                 stream = (Stream) first;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STREAM));
+                return signalTypeError(first, Symbol.STREAM);
             }
             if (second == Keyword.ABORT)
                 return stream.close(third);

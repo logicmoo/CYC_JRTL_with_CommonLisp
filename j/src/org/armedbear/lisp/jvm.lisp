@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.563 2005-08-03 13:59:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.564 2005-08-03 17:51:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2707,6 +2707,7 @@
     (declare (type hash-table ht))
     (unless f
       (let ((symbol (cadr name)))
+        (declare (type symbol symbol))
         (setf f (symbol-name (gensym)))
         (let ((s (sanitize symbol)))
           (when s
@@ -5465,7 +5466,6 @@
     (compile-function-call form target representation)))
 
 (defun p2-logior (form &key (target :stack) representation)
-  (dformat t "p2-logior form = ~S rep = ~S~%" form representation) (finish-output)
   (let* ((args (cdr form))
          (len (length args)))
     (cond ((= len 2)
@@ -5473,7 +5473,7 @@
                   (arg2 (second args))
                   (type1 (derive-type arg1))
                   (type2 (derive-type arg2)))
-             (dformat t "type1 = ~S type2 = ~S~%" type1 type2)
+             (dformat t "p2-logior type1 = ~S type2 = ~S~%" type1 type2)
              (cond ((and (integerp arg1) (integerp arg2))
                     (compile-constant (logior arg1 arg2) :target target :representation representation)
                     (return-from p2-logior t))
@@ -5484,9 +5484,10 @@
                       (emit 'dup))
                     (compile-form arg1 :target :stack :representation :unboxed-fixnum)
                     (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-                    (unless (and (single-valued-p arg1)
-                                 (single-valued-p arg2))
-                      (emit-clear-values))
+;;                     (unless (and (single-valued-p arg1)
+;;                                  (single-valued-p arg2))
+;;                       (emit-clear-values))
+                    (maybe-emit-clear-values arg1 arg2)
                     (emit 'ior)
                     (unless (eq representation :unboxed-fixnum)
                       (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
@@ -5504,7 +5505,6 @@
   (compile-function-call form target representation))
 
 (defun p2-logxor (form &key (target :stack) representation)
-  (dformat t "p2-logxor form = ~S rep = ~S~%" form representation) (finish-output)
   (let* ((args (cdr form))
          (len (length args)))
     (cond ((= len 2)
@@ -5512,7 +5512,7 @@
                   (arg2 (second args))
                   (type1 (derive-type arg1))
                   (type2 (derive-type arg2)))
-             (dformat t "type1 = ~S type2 = ~S~%" type1 type2)
+             (dformat t "p2-logxor type1 = ~S type2 = ~S~%" type1 type2)
              (cond ((and (integerp arg1) (integerp arg2))
                     (compile-constant (logxor arg1 arg2) :target target :representation representation)
                     (return-from p2-logxor t))
@@ -5672,81 +5672,20 @@
         (t
          (compile-function-call form target representation)))))
 
-(declaim (ftype (function (t) t) derive-type))
-(defun derive-type (form)
-  (cond ((consp form)
-         (let ((op (%car form)))
-           (case op
-             (ASH
-              (ash-derive-type (second form) (third form)))
-             (AREF
-              (aref-derive-type (%cdr form)))
-             (COERCE
-              (derive-type-coerce form))
-             (LENGTH
-              '(INTEGER 0 #.(1- most-positive-fixnum)))
-             (LOGAND
-              (logand-derive-type (%cdr form)))
-             (LOGXOR
-              (logxor-derive-type (%cdr form)))
-             (-
-              (derive-type-minus form))
-             (1-
-              (derive-type-minus (list '- (%cadr form) 1)))
-             (+
-              (derive-type-plus form))
-             (1+
-              (derive-type-plus (list '+ (%cadr form) 1)))
-             ((MIN MAX)
-              (derive-type-min/max (%cdr form)))
-             ((THE TRULY-THE)
-              (second form))
-             (t
-              (let ((type (ftype-result-type (proclaimed-ftype op))))
-                (if (eq type '*) t type))))))
-        ((null form)
-         'NULL)
-        ((integerp form)
-         (list 'INTEGER form form))
-        ((characterp form)
-         'CHARACTER)
-        ((stringp form)
-         'STRING)
-        ((variable-p form)
-         (cond ((neq (variable-declared-type form) :none)
-                (variable-declared-type form))
-               ((neq (variable-derived-type form) :none)
-                (variable-derived-type form))
-               (t
-                t)))
-        ((var-ref-p form)
-         (let ((variable (var-ref-variable form)))
-           (cond ((neq (variable-declared-type variable) :none)
-                  (variable-declared-type variable))
-                 ((neq (variable-derived-type variable) :none)
-                  (variable-derived-type variable))
-                 (t
-                  t))))
-        ((symbolp form)
-         (let ((variable (find-visible-variable form)))
-           (if variable
-               (derive-type variable)
-               t)))
-        (t
-         t)))
-
-(defun aref-derive-type (args)
-  (let* ((array-arg (car args))
+(declaim (ftype (function (t) t) derive-type-aref))
+(defun derive-type-aref (form)
+  (let* ((args (cdr form))
+         (array-arg (car args))
          (array-type (normalize-type (derive-type array-arg)))
          (result-type t))
-    (dformat t "aref-derive-type array-arg = ~S~%" array-arg)
-    (dformat t "aref-derive-type array-type = ~S~%" array-type)
-    (when (and (consp array-type)
-               (memq (%car array-type) '(ARRAY SIMPLE-ARRAY VECTOR)))
-      (let ((element-type (second array-type)))
-        (dformat t "element-type = ~S~%" element-type)
-        (unless (eq element-type '*)
-          (setf result-type element-type))))
+    (cond ((and (consp array-type)
+                (memq (%car array-type) '(ARRAY SIMPLE-ARRAY VECTOR)))
+           (let ((element-type (second array-type)))
+             (unless (eq element-type '*)
+               (setf result-type element-type))))
+          ((and (consp array-type)
+                (memq (%car array-type) '(STRING SIMPLE-STRING)))
+           (setf result-type 'CHARACTER)))
     result-type))
 
 (defun logxor-derive-type (args)
@@ -5798,6 +5737,20 @@
                (dformat t "logand-derive-type unsupported type ~S~%" type)))))
     (dformat t "logand-derive-type returning ~S~%" result-type)
     result-type))
+
+;; mod number divisor
+(declaim (ftype (function (t) t) derive-type-mod))
+(defun derive-type-mod (form)
+  (if (= (length form) 3)
+      (let* ((arg1 (%cadr form))
+             (arg2 (%caddr form))
+             (type1 (normalize-type (derive-type arg1)))
+             (type2 (normalize-type (derive-type arg2))))
+        (cond ((and (subtypep type1 'INTEGER) (subtypep type2 'FIXNUM))
+               'FIXNUM)
+              (t
+               t)))
+      t))
 
 (declaim (ftype (function (t) t) derive-type-coerce))
 (defun derive-type-coerce (form)
@@ -5912,6 +5865,71 @@
                  ;; Shift right.
                  (setf result-type 'FIXNUM))))))
     result-type))
+
+(declaim (ftype (function (t) t) derive-type))
+(defun derive-type (form)
+  (cond ((consp form)
+         (let ((op (%car form)))
+           (case op
+             (ASH
+              (ash-derive-type (second form) (third form)))
+             (AREF
+              (derive-type-aref form))
+             (COERCE
+              (derive-type-coerce form))
+             (LENGTH
+              '(INTEGER 0 #.(1- most-positive-fixnum)))
+             (LOGAND
+              (logand-derive-type (%cdr form)))
+             (LOGXOR
+              (logxor-derive-type (%cdr form)))
+             (MOD
+              (derive-type-mod form))
+             (-
+              (derive-type-minus form))
+             (1-
+              (derive-type-minus (list '- (%cadr form) 1)))
+             (+
+              (derive-type-plus form))
+             (1+
+              (derive-type-plus (list '+ (%cadr form) 1)))
+             ((MIN MAX)
+              (derive-type-min/max (%cdr form)))
+             ((THE TRULY-THE)
+              (second form))
+             (t
+              (let ((type (ftype-result-type (proclaimed-ftype op))))
+                (if (eq type '*) t type))))))
+        ((null form)
+         'NULL)
+        ((integerp form)
+         (list 'INTEGER form form))
+        ((characterp form)
+         'CHARACTER)
+        ((stringp form)
+         'STRING)
+        ((variable-p form)
+         (cond ((neq (variable-declared-type form) :none)
+                (variable-declared-type form))
+               ((neq (variable-derived-type form) :none)
+                (variable-derived-type form))
+               (t
+                t)))
+        ((var-ref-p form)
+         (let ((variable (var-ref-variable form)))
+           (cond ((neq (variable-declared-type variable) :none)
+                  (variable-declared-type variable))
+                 ((neq (variable-derived-type variable) :none)
+                  (variable-derived-type variable))
+                 (t
+                  t))))
+        ((symbolp form)
+         (let ((variable (find-visible-variable form)))
+           (if variable
+               (derive-type variable)
+               t)))
+        (t
+         t)))
 
 ;; delete item sequence &key from-end test test-not start end count key
 (defun p2-delete (form &key (target :stack) representation)
@@ -6161,20 +6179,22 @@
      (compile-function-call form target representation))))
 
 (defun p2-minus (form &key (target :stack) representation)
+  (dformat t "p2-minus~%")
   (case (length form)
     (2
-     (let* ((arg (cadr form))
-            (var (unboxed-fixnum-variable arg)))
-       (cond (var
+     (let* ((arg (%cadr form))
+            (type (normalize-type (derive-type arg))))
+       (cond ((subtypep type 'FIXNUM)
               (unless (eq representation :unboxed-fixnum)
                 (emit 'new +lisp-fixnum-class+)
                 (emit 'dup))
-              (emit 'iload (variable-register var))
+              (compile-form arg :target :stack :representation :unboxed-fixnum)
               (emit 'ineg)
               (unless (eq representation :unboxed-fixnum)
                 (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
               (emit-move-from-stack target representation))
              (t
+              (dformat t "p2-minus giving up 1~%")
               (compile-function-call form target representation)))))
     (3
      (let* ((args (cdr form))
@@ -6182,6 +6202,7 @@
             (arg2 (second args))
             (type1 (normalize-type (derive-type arg1)))
             (type2 (normalize-type (derive-type arg2))))
+       (dformat t "p2-minus type1 = ~S type2 = ~S~%" type1 type2)
        (cond ((and (numberp arg1) (numberp arg2))
               (compile-constant (- arg1 arg2)
                                 :target target
@@ -6217,6 +6238,7 @@
      (let ((new-form `(- (- ,(second form) ,(third form)) ,(fourth form))))
        (p2-minus new-form :target target :representation representation)))
     (t
+     (dformat t "p2-minus giving up 2~%")
      (compile-function-call form target representation))))
 
 (defun p2-schar (form &key (target :stack) representation)
