@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.823 2005-08-03 17:51:03 piso Exp $
+ * $Id: Primitives.java,v 1.824 2005-08-03 19:04:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3918,16 +3918,16 @@ public final class Primitives extends Lisp
                 n = ((Fixnum)first).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.FIXNUM));
+                return signalTypeError(first, Symbol.FIXNUM);
             }
             if (n < 0 || n > 255)
-                return signal(new TypeError(first, UNSIGNED_BYTE_8));
+                return signalTypeError(first, UNSIGNED_BYTE_8);
             try {
                 ((Stream)second)._writeByte(n);
                 return NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(second, Symbol.STREAM));
+                return signalTypeError(second, Symbol.STREAM);
             }
         }
     };

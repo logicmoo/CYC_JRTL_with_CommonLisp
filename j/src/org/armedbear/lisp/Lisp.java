@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.381 2005-08-01 15:34:27 piso Exp $
+ * $Id: Lisp.java,v 1.382 2005-08-03 19:04:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1345,12 +1345,12 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         if (n < 0 || n > 255)
-            signal(new TypeError(new Fixnum(n), UNSIGNED_BYTE_8));
+            signalTypeError(new Fixnum(n), UNSIGNED_BYTE_8);
         try {
             ((Stream)obj)._writeByte(n);
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.STREAM));
+            signalTypeError(obj, Symbol.STREAM);
         }
     }
 
@@ -1363,7 +1363,7 @@ public abstract class Lisp
             return (Readtable) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.READTABLE));
+            signalTypeError(obj, Symbol.READTABLE);
             // Not reached.
             return null;
         }
@@ -1378,7 +1378,7 @@ public abstract class Lisp
             return (Environment) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.ENVIRONMENT));
+            signalTypeError(obj, Symbol.ENVIRONMENT);
             // Not reached.
             return null;
         }
