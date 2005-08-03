@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.561 2005-08-03 01:08:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.562 2005-08-03 01:40:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3409,9 +3409,9 @@
         (3
          (when (compile-function-call-3 op args target)
            (return-from compile-function-call))))
-      (let ((package (symbol-package op)))
-        (when (eq package +cl-package+)
-          (format t "compile-function-call ~S~%" op)))
+;;       (let ((package (symbol-package op)))
+;;         (when (eq package +cl-package+)
+;;           (format t "compile-function-call ~S~%" op)))
       (unless (> *speed* *debug*)
         (emit-push-current-thread))
       (cond ((eq op (compiland-name *current-compiland*)) ; recursive call
@@ -5702,6 +5702,8 @@
              (t
               (let ((type (ftype-result-type (proclaimed-ftype op))))
                 (if (eq type '*) t type))))))
+        ((null form)
+         'NULL)
         ((integerp form)
          (list 'INTEGER form form))
         ((characterp form)
@@ -5899,6 +5901,21 @@
                  ;; Shift right.
                  (setf result-type 'FIXNUM))))))
     result-type))
+
+;; delete item sequence &key from-end test test-not start end count key
+(defun p2-delete (form &key (target :stack) representation)
+  (when (= (length form) 3)
+    ;; No keyword arguments.
+    (let* ((args (cdr form))
+           (arg1 (%car args))
+           (arg2 (%cadr args))
+           (type1 (derive-type arg1))
+           (type2 (derive-type arg2)))
+      (when (eq type2 'LIST)
+        (when (or (eq type1 'SYMBOL)
+                  (eq type1 'NULL))
+          (setf (car form) 'list-delete-eq)))))
+  (compile-function-call form target representation))
 
 (defun p2-length (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
@@ -7917,6 +7934,7 @@
   (install-p2-handler 'coerce-to-function 'p2-coerce-to-function)
   (install-p2-handler 'cons               'p2-cons)
   (install-p2-handler 'consp              'p2-consp)
+  (install-p2-handler 'delete             'p2-delete)
   (install-p2-handler 'elt                'p2-elt)
   (install-p2-handler 'eql                'p2-eql)
   (install-p2-handler 'eval-when          'p2-eval-when)
