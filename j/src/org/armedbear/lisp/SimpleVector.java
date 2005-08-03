@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SimpleVector.java,v 1.22 2005-07-23 17:10:32 piso Exp $
+ * $Id: SimpleVector.java,v 1.23 2005-08-03 13:54:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,33 +27,33 @@ package org.armedbear.lisp;
 public final class SimpleVector extends AbstractVector
 {
     private int capacity;
-    private LispObject[] elements;
+    private LispObject[] data;
 
     public SimpleVector(int capacity)
     {
-        elements = new LispObject[capacity];
+        data = new LispObject[capacity];
         for (int i = capacity; i-- > 0;)
-            elements[i] = NIL;
+            data[i] = NIL;
         this.capacity = capacity;
     }
 
     public SimpleVector(LispObject obj) throws ConditionThrowable
     {
         if (obj.listp()) {
-            elements = obj.copyToArray();
-            capacity = elements.length;
+            data = obj.copyToArray();
+            capacity = data.length;
         } else if (obj instanceof AbstractVector) {
             capacity = obj.length();
-            elements = new LispObject[capacity];
+            data = new LispObject[capacity];
             for (int i = 0; i < capacity; i++)
-                elements[i] = obj.elt(i);
+                data[i] = obj.elt(i);
         } else
             Debug.assertTrue(false);
     }
 
     public SimpleVector(LispObject[] array)
     {
-        elements = array;
+        data = array;
         capacity = array.length;
     }
 
@@ -121,7 +121,7 @@ public final class SimpleVector extends AbstractVector
     public LispObject elt(int index) throws ConditionThrowable
     {
         try {
-            return elements[index];
+            return data[index];
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
@@ -132,10 +132,10 @@ public final class SimpleVector extends AbstractVector
     public LispObject AREF(int index) throws ConditionThrowable
     {
         try {
-            return elements[index];
+            return data[index];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, elements.length);
+            badIndex(index, data.length);
             return NIL; // Not reached.
         }
     }
@@ -143,13 +143,13 @@ public final class SimpleVector extends AbstractVector
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         try {
-            return elements[((Fixnum)index).value];
+            return data[((Fixnum)index).value];
         }
         catch (ClassCastException e) {
             return signal(new TypeError(index, Symbol.FIXNUM));
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(((Fixnum)index).value, elements.length);
+            badIndex(((Fixnum)index).value, data.length);
             return NIL; // Not reached.
         }
     }
@@ -157,7 +157,7 @@ public final class SimpleVector extends AbstractVector
     public void aset(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
-            elements[index] = newValue;
+            data[index] = newValue;
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
@@ -167,10 +167,10 @@ public final class SimpleVector extends AbstractVector
     public LispObject SVREF(int index) throws ConditionThrowable
     {
         try {
-            return elements[index];
+            return data[index];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, elements.length);
+            badIndex(index, data.length);
             return NIL; // Not reached.
         }
     }
@@ -178,7 +178,7 @@ public final class SimpleVector extends AbstractVector
     public void svset(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
-            elements[index] = newValue;
+            data[index] = newValue;
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
@@ -191,7 +191,7 @@ public final class SimpleVector extends AbstractVector
         int i = start, j = 0;
         try {
             while (i < end)
-                v.elements[j++] = elements[i++];
+                v.data[j++] = data[i++];
             return v;
         }
         catch (ArrayIndexOutOfBoundsException e) {
@@ -202,15 +202,45 @@ public final class SimpleVector extends AbstractVector
     public void fill(LispObject obj) throws ConditionThrowable
     {
         for (int i = capacity; i-- > 0;)
-            elements[i] = obj;
+            data[i] = obj;
+    }
+
+    public LispObject deleteEq(LispObject item) throws ConditionThrowable
+    {
+        final int limit = capacity;
+        int i = 0;
+        int j = 0;
+        while (i < limit) {
+            LispObject obj = data[i++];
+            if (obj != item)
+                data[j++] = obj;
+        }
+        if (j < limit)
+            shrink(j);
+        return this;
+    }
+
+    public LispObject deleteEql(LispObject item) throws ConditionThrowable
+    {
+        final int limit = capacity;
+        int i = 0;
+        int j = 0;
+        while (i < limit) {
+            LispObject obj = data[i++];
+            if (!obj.eql(item))
+                data[j++] = obj;
+        }
+        if (j < limit)
+            shrink(j);
+        return this;
     }
 
     public void shrink(int n) throws ConditionThrowable
     {
         if (n < capacity) {
-            LispObject[] newArray = new LispObject[n];
-            System.arraycopy(elements, 0, newArray, 0, n);
-            elements = newArray;
+            LispObject[] newData = new LispObject[n];
+            System.arraycopy(data, 0, newData, 0, n);
+            data = newData;
             capacity = n;
             return;
         }
@@ -224,7 +254,7 @@ public final class SimpleVector extends AbstractVector
         SimpleVector result = new SimpleVector(capacity);
         int i, j;
         for (i = 0, j = capacity - 1; i < capacity; i++, j--)
-            result.elements[i] = elements[j];
+            result.data[i] = data[j];
         return result;
     }
 
@@ -233,9 +263,9 @@ public final class SimpleVector extends AbstractVector
         int i = 0;
         int j = capacity - 1;
         while (i < j) {
-            LispObject temp = elements[i];
-            elements[i] = elements[j];
-            elements[j] = temp;
+            LispObject temp = data[i];
+            data[i] = data[j];
+            data[j] = temp;
             ++i;
             --j;
         }
@@ -248,27 +278,27 @@ public final class SimpleVector extends AbstractVector
         throws ConditionThrowable
     {
         if (initialContents != NIL) {
-            LispObject[] newElements = new LispObject[newCapacity];
+            LispObject[] newData = new LispObject[newCapacity];
             if (initialContents.listp()) {
                 LispObject list = initialContents;
                 for (int i = 0; i < newCapacity; i++) {
-                    newElements[i] = list.car();
+                    newData[i] = list.car();
                     list = list.cdr();
                 }
             } else if (initialContents.vectorp()) {
                 for (int i = 0; i < newCapacity; i++)
-                    newElements[i] = initialContents.elt(i);
+                    newData[i] = initialContents.elt(i);
             } else
                 signal(new TypeError(initialContents, Symbol.SEQUENCE));
-            return new SimpleVector(newElements);
+            return new SimpleVector(newData);
         }
         if (capacity != newCapacity) {
-            LispObject[] newElements = new LispObject[newCapacity];
-            System.arraycopy(elements, 0, newElements, 0,
+            LispObject[] newData = new LispObject[newCapacity];
+            System.arraycopy(data, 0, newData, 0,
                              Math.min(capacity, newCapacity));
             for (int i = capacity; i < newCapacity; i++)
-                newElements[i] = initialElement;
-            return new SimpleVector(newElements);
+                newData[i] = initialElement;
+            return new SimpleVector(newData);
         }
         // No change.
         return this;
@@ -290,7 +320,7 @@ public final class SimpleVector extends AbstractVector
             throws ConditionThrowable
         {
             try {
-                return ((SimpleVector)first).elements[((Fixnum)second).value];
+                return ((SimpleVector)first).data[((Fixnum)second).value];
             }
             catch (ClassCastException e) {
                 if (first instanceof SimpleVector)
@@ -310,7 +340,7 @@ public final class SimpleVector extends AbstractVector
             throws ConditionThrowable
         {
             try {
-                ((SimpleVector)first).elements[((Fixnum)second).value] = third;
+                ((SimpleVector)first).data[((Fixnum)second).value] = third;
                 return third;
             }
             catch (ClassCastException e) {

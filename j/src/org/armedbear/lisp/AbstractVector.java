@@ -88,6 +88,38 @@ public abstract class AbstractVector extends AbstractArray
 
     public abstract LispObject subseq(int start, int end) throws ConditionThrowable;
 
+    public LispObject deleteEq(LispObject item) throws ConditionThrowable
+    {
+        final int limit = length();
+        int i = 0;
+        int j = 0;
+        while (i < limit) {
+            LispObject obj = AREF(i++);
+            if (obj != item)
+                aset(j++, obj);
+        }
+        final int newLength = j;
+        if (newLength < capacity())
+            shrink(newLength);
+        return this;
+    }
+
+    public LispObject deleteEql(LispObject item) throws ConditionThrowable
+    {
+        final int limit = length();
+        int i = 0;
+        int j = 0;
+        while (i < limit) {
+            LispObject obj = AREF(i++);
+            if (!obj.eql(item))
+                aset(j++, obj);
+        }
+        final int newLength = j;
+        if (newLength < capacity())
+            shrink(newLength);
+        return this;
+    }
+
     public abstract void shrink(int n) throws ConditionThrowable;
 
     public int checkIndex(int index) throws ConditionThrowable
