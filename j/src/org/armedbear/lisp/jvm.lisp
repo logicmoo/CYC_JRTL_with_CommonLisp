@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.560 2005-08-02 18:43:34 piso Exp $
+;;; $Id: jvm.lisp,v 1.561 2005-08-03 01:08:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2092,11 +2092,11 @@
   (dotimes (i (length *code*))
     (let ((instruction (elt *code* i)))
       (sys::%format t "~D ~A ~S ~S ~S~%"
-               i
-               (opcode-name (instruction-opcode instruction))
-               (instruction-args instruction)
-               (instruction-stack instruction)
-               (instruction-depth instruction)))))
+                    i
+                    (opcode-name (instruction-opcode instruction))
+                    (instruction-args instruction)
+                    (instruction-stack instruction)
+                    (instruction-depth instruction)))))
 
 (defun print-code2 (code)
   (dotimes (i (length code))
@@ -3409,6 +3409,9 @@
         (3
          (when (compile-function-call-3 op args target)
            (return-from compile-function-call))))
+      (let ((package (symbol-package op)))
+        (when (eq package +cl-package+)
+          (format t "compile-function-call ~S~%" op)))
       (unless (> *speed* *debug*)
         (emit-push-current-thread))
       (cond ((eq op (compiland-name *current-compiland*)) ; recursive call
@@ -4795,27 +4798,7 @@
     (label LABEL2)
     (emit-move-from-stack target)))
 
-(defun p2-symbolp (form &key (target :stack) representation)
-  (p2-instanceof-predicate form target representation +lisp-symbol-class+))
-
-(defun p2-characterp (form &key (target :stack) representation)
-  (p2-instanceof-predicate form target representation +lisp-character-class+))
-
-(defun p2-classp (form &key (target :stack) representation)
-  (p2-instanceof-predicate form target representation +lisp-class-class+))
-
-(defun p2-fixnump (form &key (target :stack) representation)
-  (p2-instanceof-predicate form target representation +lisp-fixnum-class+))
-
-(defun p2-stringp (form &key (target :stack) representation)
-  (p2-instanceof-predicate form target representation +lisp-abstract-string-class+))
-
-(defun p2-vectorp (form &key (target :stack) representation)
-  (p2-instanceof-predicate form target representation +lisp-abstract-vector-class+))
-
-(defun p2-simple-vector-p (form &key (target :stack) representation)
-  (p2-instanceof-predicate form target representation +lisp-simple-vector-class+))
-
+(declaim (ftype (function (t t t t) t) p2-instanceof-predicate))
 (defun p2-instanceof-predicate (form target representation java-class)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -4832,6 +4815,30 @@
     (emit-push-nil)
     (label LABEL2)
     (emit-move-from-stack target)))
+
+(defun p2-characterp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-character-class+))
+
+(defun p2-classp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-class-class+))
+
+(defun p2-consp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-cons-class+))
+
+(defun p2-fixnump (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-fixnum-class+))
+
+(defun p2-simple-vector-p (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-simple-vector-class+))
+
+(defun p2-stringp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-abstract-string-class+))
+
+(defun p2-symbolp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-symbol-class+))
+
+(defun p2-vectorp (form &key (target :stack) representation)
+  (p2-instanceof-predicate form target representation +lisp-abstract-vector-class+))
 
 (defun p2-coerce-to-function (form &key (target :stack) representation)
   (unless (check-arg-count form 1)
@@ -7909,6 +7916,7 @@
   (install-p2-handler 'classp             'p2-classp)
   (install-p2-handler 'coerce-to-function 'p2-coerce-to-function)
   (install-p2-handler 'cons               'p2-cons)
+  (install-p2-handler 'consp              'p2-consp)
   (install-p2-handler 'elt                'p2-elt)
   (install-p2-handler 'eql                'p2-eql)
   (install-p2-handler 'eval-when          'p2-eval-when)
