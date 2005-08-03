@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.110 2005-07-29 13:59:35 piso Exp $
+;;; $Id: compile-file.lisp,v 1.111 2005-08-03 13:58:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -151,7 +151,7 @@
                                           ',lambda-list)))
                            (when compile-time-too
                              (eval form)))))
-                  (when (and (symbolp name) (eq (get name 'jvm::%inline) 'INLINE))
+                  (when (and (symbolp name) (eq (get name '%inline) 'INLINE))
                     ;; FIXME Need to support SETF functions too!
                     (setf (inline-expansion name)
                           (jvm::generate-inline-expansion block-name lambda-list body))))

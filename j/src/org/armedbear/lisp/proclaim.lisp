@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: proclaim.lisp,v 1.6 2005-07-29 13:58:06 piso Exp $
+;;; $Id: proclaim.lisp,v 1.7 2005-08-03 13:57:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@
     ((INLINE NOTINLINE)
      (dolist (name (cdr declaration-specifier))
        (when (symbolp name) ; FIXME Need to support non-symbol function names.
-         (setf (get name 'jvm::%inline) (car declaration-specifier)))))
+         (setf (get name '%inline) (car declaration-specifier)))))
     (DECLARATION
      (dolist (name (cdr declaration-specifier))
        (when (or (get name 'deftype-definition)
