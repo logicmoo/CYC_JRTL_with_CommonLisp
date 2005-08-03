@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.820 2005-08-02 18:47:47 piso Exp $
+ * $Id: Primitives.java,v 1.821 2005-08-03 01:12:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4392,12 +4392,12 @@ public final class Primitives extends Lisp
                 } else if (list3 == NIL) {
                     list.setCdr(obj);
                 } else
-                    signal(new TypeError(list3, Symbol.LIST));
+                    signalTypeError(list3, Symbol.LIST);
                 return list;
             } else if (list == NIL)
                 return obj;
             else
-                return signal(new TypeError(list, Symbol.LIST));
+                return signalTypeError(list, Symbol.LIST);
         }
     };
 
@@ -4408,6 +4408,46 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.reverse();
+        }
+    };
+
+    // ### list-delete-eq item list => result-list
+    private static final Primitive LIST_DELETE_EQ =
+        new Primitive("list-delete-eq", PACKAGE_SYS, true, "item list")
+    {
+        public LispObject execute(LispObject item, LispObject list)
+            throws ConditionThrowable
+        {
+            if (list instanceof Cons) {
+                LispObject tail = list;
+                LispObject splice = list;
+                while (tail instanceof Cons) {
+                    LispObject car = tail.car();
+                    if (car == item) {
+                        if (tail.cdr() != NIL) {
+                            LispObject temp = tail;
+                            tail.setCar(temp.cadr());
+                            tail.setCdr(temp.cddr());
+                        } else {
+                            // Last item.
+                            if (tail == list)
+                                return NIL;
+                            splice.setCdr(NIL);
+                            return list;
+                        }
+                    } else {
+                        splice = tail;
+                        tail = tail.cdr();
+                    }
+                }
+                if (tail == NIL)
+                    return list;
+                else
+                    return signalTypeError(tail, Symbol.LIST);
+            } else if (list == NIL)
+                return list;
+            else
+                return signalTypeError(list, Symbol.LIST);
         }
     };
 
