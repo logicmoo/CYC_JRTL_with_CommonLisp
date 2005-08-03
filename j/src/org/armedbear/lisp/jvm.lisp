@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.564 2005-08-03 17:51:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.565 2005-08-03 19:47:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1198,6 +1198,7 @@
 (defconstant +lisp-primitive-class+ "org/armedbear/lisp/Primitive")
 (defconstant +lisp-hash-table-class+ "org/armedbear/lisp/HashTable")
 (defconstant +lisp-package-class+ "org/armedbear/lisp/Package")
+(defconstant +lisp-stream-class+ "org/armedbear/lisp/Stream")
 
 (defsubst emit-push-nil ()
   (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
@@ -1293,6 +1294,7 @@
                             (CONS       +lisp-cons-class+)
                             (HASH-TABLE +lisp-hash-table-class+)
                             (FIXNUM     +lisp-fixnum-class+)
+                            (STREAM     +lisp-stream-class+)
                             (STRING     +lisp-abstract-string-class+)
                             (VECTOR     +lisp-abstract-vector-class+)))
         (expected-type-java-symbol-name (case expected-type
@@ -1345,6 +1347,8 @@
            (generate-instanceof-type-check-for-variable variable 'STRING))
           ((subtypep declared-type 'VECTOR)
            (generate-instanceof-type-check-for-variable variable 'VECTOR))
+          ((eq declared-type 'STREAM)
+           (generate-instanceof-type-check-for-variable variable 'STREAM))
           (t
            nil))))
 
@@ -2352,14 +2356,18 @@
               (incf index)))))
       bytes)))
 
-(defsubst write-u1 (n stream)
+(declaim (inline write-u1))
+(defun write-u1 (n stream)
   (declare (optimize speed))
+  (declare (type (unsigned-byte 8) n))
+  (declare (type stream stream))
   (write-8-bits n stream))
 
 (declaim (ftype (function (t t) t) write-u2))
 (defun write-u2 (n stream)
   (declare (optimize speed))
   (declare (type (unsigned-byte 16) n))
+  (declare (type stream stream))
   (write-8-bits (ash n -8) stream)
   (write-8-bits (logand n #xFF) stream))
 
@@ -2382,6 +2390,7 @@
 (declaim (ftype (function (t t t) t) write-ascii))
 (defun write-ascii (string length stream)
   (declare (type (unsigned-byte 16) length))
+  (declare (type stream stream))
   (write-u2 length stream)
   (dotimes (i length)
     (declare (type (unsigned-byte 16) i))
@@ -2390,6 +2399,7 @@
 (declaim (ftype (function (t t) t) write-utf8))
 (defun write-utf8 (string stream)
   (declare (optimize speed))
+  (declare (type stream stream))
   (let ((length (length string))
         (must-convert nil))
     (declare (type fixnum length))
@@ -2403,6 +2413,7 @@
                                   :element-type '(unsigned-byte 8)
                                   :adjustable t
                                   :fill-pointer 0)))
+          (declare (type (vector (unsigned-byte 8)) octets))
           (dotimes (i length)
             (declare (type fixnum i))
             (let* ((c (schar string i))
@@ -2419,13 +2430,14 @@
           (write-u2 (length octets) stream)
           (dotimes (i (length octets))
             (declare (type fixnum i))
-            (sys:write-8-bits (aref octets i) stream)))
+            (write-8-bits (aref octets i) stream)))
         (write-ascii string length stream))))
 
 (declaim (ftype (function (t t) t) write-constant-pool-entry))
 (defun write-constant-pool-entry (entry stream)
   (declare (optimize speed))
   (let ((tag (first entry)))
+    (declare (type (integer 1 12) tag))
     (write-u1 tag stream)
     (case tag
       (1 ; UTF8
@@ -2567,6 +2579,7 @@
 
 (defun write-code-attr (method stream)
   (declare (optimize speed))
+  (declare (type stream stream))
   (let* ((name-index (pool-name "Code"))
          (code (method-code method))
          (code-length (length code))
@@ -2583,8 +2596,8 @@
     (write-u2 max-locals stream)
     (write-u4 code-length stream)
     (dotimes (i code-length)
-      (declare (type fixnum i))
-      (write-u1 (svref code i) stream))
+      (declare (type index i))
+      (write-u1 (the (unsigned-byte 8) (svref code i)) stream))
     (write-exception-table method stream)
     (cond (line-number-available-p
            ; attributes count
@@ -5657,20 +5670,36 @@
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
     (return-from p2-write-8-bits))
-  (let ((arg1 (%cadr form))
-        (arg2 (%caddr form)))
-  (cond ((subtypep (derive-type arg1) 'fixnum)
-         (compile-form arg1 :target :stack :representation :unboxed-fixnum)
-         (maybe-emit-clear-values arg1)
-         (compile-form arg2 :target :stack)
-         (maybe-emit-clear-values arg2)
-         (emit-invokestatic +lisp-class+ "writeByte"
-                            (list "I" +lisp-object+) nil)
-         (when target
-           (emit-push-nil)
-           (emit-move-from-stack target)))
-        (t
-         (compile-function-call form target representation)))))
+  (let* ((arg1 (%cadr form))
+         (arg2 (%caddr form))
+         (type1 (normalize-type (derive-type arg1)))
+         (type2 (normalize-type (derive-type arg2))))
+    (dformat t "p2-write-8-bits type1 = ~S type2 = ~S~%" type1 type2)
+    (cond ((and (subtypep type1 '(UNSIGNED-BYTE 8))
+                (subtypep type2 'STREAM))
+           (dformat t "p2-write-8-bits case 1~%")
+           (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+           (compile-form arg2 :target :stack)
+           (emit 'checkcast +lisp-stream-class+)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit 'swap)
+           (emit-invokevirtual +lisp-stream-class+ "_writeByte" '("I") nil)
+           (when target
+             (emit-push-nil)
+             (emit-move-from-stack target)))
+          ((subtypep type1 'FIXNUM)
+           (dformat t "p2-write-8-bits case 2~%")
+           (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+           (compile-form arg2 :target :stack)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokestatic +lisp-class+ "writeByte"
+                              (list "I" +lisp-object+) nil)
+           (when target
+             (emit-push-nil)
+             (emit-move-from-stack target)))
+          (t
+           (dformat t "p2-write-8-bits giving up~%")
+           (compile-function-call form target representation)))))
 
 (declaim (ftype (function (t) t) derive-type-aref))
 (defun derive-type-aref (form)
@@ -5718,11 +5747,13 @@
                (setf result-type 'INTEGER)))))
     result-type))
 
-(defun logand-derive-type (args)
-  (let ((result-type 'INTEGER))
+(defun derive-type-logand (form)
+  (let ((args (cdr form))
+        (result-type 'INTEGER))
     (dolist (arg args)
       (let ((type (derive-type arg)))
-        (dformat t "logand-derive-type arg = ~S type = ~S~%" arg type)
+        (let ((*print-structure* nil))
+          (dformat t "derive-type-logand arg = ~S type = ~S~%" arg type))
         (cond ((subtypep type '(UNSIGNED-BYTE 8))
                (unless (subtypep result-type '(UNSIGNED-BYTE 8))
                  (setf result-type '(UNSIGNED-BYTE 8))))
@@ -5734,8 +5765,8 @@
                  (setf result-type '(UNSIGNED-BYTE 24))))
               ((eq type 'T))
               (t
-               (dformat t "logand-derive-type unsupported type ~S~%" type)))))
-    (dformat t "logand-derive-type returning ~S~%" result-type)
+               (dformat t "derive-type-logand unsupported type ~S~%" type)))))
+    (dformat t "derive-type-logand returning ~S~%" result-type)
     result-type))
 
 ;; mod number divisor
@@ -5880,7 +5911,7 @@
              (LENGTH
               '(INTEGER 0 #.(1- most-positive-fixnum)))
              (LOGAND
-              (logand-derive-type (%cdr form)))
+              (derive-type-logand form))
              (LOGXOR
               (logxor-derive-type (%cdr form)))
              (MOD
