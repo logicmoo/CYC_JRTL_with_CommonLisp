@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.562 2005-08-03 01:40:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.563 2005-08-03 13:59:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5681,6 +5681,8 @@
               (ash-derive-type (second form) (third form)))
              (AREF
               (aref-derive-type (%cdr form)))
+             (COERCE
+              (derive-type-coerce form))
              (LENGTH
               '(INTEGER 0 #.(1- most-positive-fixnum)))
              (LOGAND
@@ -5797,6 +5799,15 @@
     (dformat t "logand-derive-type returning ~S~%" result-type)
     result-type))
 
+(declaim (ftype (function (t) t) derive-type-coerce))
+(defun derive-type-coerce (form)
+  (if (= (length form) 3)
+      (let ((type-form (%caddr form)))
+        (if (and (consp type-form) (eq (%car type-form) 'QUOTE) (= (length type-form) 2))
+            (%cadr type-form)
+            t))
+      t))
+
 (defstruct (integer-type (:constructor %make-integer-type))
   low
   high)
@@ -5904,17 +5915,28 @@
 
 ;; delete item sequence &key from-end test test-not start end count key
 (defun p2-delete (form &key (target :stack) representation)
-  (when (= (length form) 3)
-    ;; No keyword arguments.
-    (let* ((args (cdr form))
-           (arg1 (%car args))
-           (arg2 (%cadr args))
-           (type1 (derive-type arg1))
-           (type2 (derive-type arg2)))
-      (when (eq type2 'LIST)
-        (when (or (eq type1 'SYMBOL)
-                  (eq type1 'NULL))
-          (setf (car form) 'list-delete-eq)))))
+  (unless (notinline-p 'delete)
+    (when (= (length form) 3)
+      ;; No keyword arguments.
+      (let* ((args (cdr form))
+             (arg1 (%car args))
+             (arg2 (%cadr args))
+             (type1 (derive-type arg1))
+             (type2 (derive-type arg2))
+             (test (if (memq type1 '(SYMBOL NULL)) 'eq 'eql)))
+        (cond ((subtypep type2 'VECTOR)
+               (compile-form arg1 :target :stack)
+               (compile-form arg2 :target :stack)
+               (emit 'checkcast +lisp-abstract-vector-class+)
+               (maybe-emit-clear-values arg1 arg2)
+               (emit 'swap)
+               (emit-invokevirtual +lisp-abstract-vector-class+
+                                   (if (eq test 'eq) "deleteEq" "deleteEql")
+                                   (lisp-object-arg-types 1) +lisp-object+)
+               (emit-move-from-stack target)
+               (return-from p2-delete t))
+              (t
+               (setf (car form) (if (eq test 'eq) 'delete-eq 'delete-eql)))))))
   (compile-function-call form target representation))
 
 (defun p2-length (form &key (target :stack) representation)
