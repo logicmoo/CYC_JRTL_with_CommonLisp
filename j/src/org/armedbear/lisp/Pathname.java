@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.80 2005-07-19 17:35:48 piso Exp $
+ * $Id: Pathname.java,v 1.81 2005-08-04 14:32:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -385,8 +385,9 @@ public class Pathname extends LispObject
     public String writeToString() throws ConditionThrowable
     {
         try {
-            StringBuffer sb = new StringBuffer("#P");
-            boolean printReadably = (_PRINT_READABLY_.symbolValue() != NIL);
+            final LispThread thread = LispThread.currentThread();
+            boolean printReadably = (_PRINT_READABLY_.symbolValue(thread) != NIL);
+            boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
             boolean useNamestring;
             String s = null;
             try {
@@ -407,10 +408,21 @@ public class Pathname extends LispObject
                 }
             } else
                 useNamestring = false;
+            FastStringBuffer sb = new FastStringBuffer();
             if (useNamestring) {
-                sb.append(quoteEscape(s));
+                if (printReadably || printEscape)
+                    sb.append("#P\"");
+                final int limit = s.length();
+                for (int i = 0; i < limit; i++) {
+                    char c = s.charAt(i);
+                    if (c == '\"' || c == '\\')
+                        sb.append('\\');
+                    sb.append(c);
+                }
+                if (printReadably || printEscape)
+                    sb.append('"');
             } else {
-                sb.append('(');
+                sb.append("#P(");
                 if (host != NIL) {
                     sb.append(":HOST ");
                     sb.append(host.writeToString());
@@ -450,21 +462,6 @@ public class Pathname extends LispObject
         catch (ConditionThrowable t) {
             return unreadableString("PATHNAME");
         }
-    }
-
-    private static final String quoteEscape(String s) throws ConditionThrowable
-    {
-        StringBuffer sb = new StringBuffer();
-        sb.append('"');
-        final int limit = s.length();
-        for (int i = 0; i < limit; i++) {
-            char c = s.charAt(i);
-            if (c == '\"' || c == '\\')
-                sb.append('\\');
-            sb.append(c);
-        }
-        sb.append('"');
-        return sb.toString();
     }
 
     public static Pathname parseNamestring(String namestring)
