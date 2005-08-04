@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.566 2005-08-04 01:06:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.567 2005-08-04 16:23:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2384,8 +2384,6 @@
          (write-u4 (1+ (logxor (- n) #xFFFFFFFF)) stream))
         (t
          (write-u4 n stream))))
-
-(declaim (ftype (function (simple-string fixnum) character) schar))
 
 (declaim (ftype (function (t t t) t) write-ascii))
 (defun write-ascii (string length stream)
