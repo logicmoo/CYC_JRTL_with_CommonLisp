@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.24 2005-07-27 19:58:21 piso Exp $
+;;; $Id: known-functions.lisp,v 1.25 2005-08-04 16:22:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -189,7 +189,9 @@
 
 (declaim (ftype (function (character) (unsigned-byte 16)) char-code))
 
-(declaim (ftype (function * character) char schar write-char))
+(declaim (ftype (function (simple-string index) character) schar))
+
+(declaim (ftype (function * character) char write-char))
 
 (declaim
  (ftype (function * t)
