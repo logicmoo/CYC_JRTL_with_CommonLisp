@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SimpleString.java,v 1.30 2005-07-09 03:57:34 piso Exp $
+ * $Id: SimpleString.java,v 1.31 2005-08-04 16:28:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,51 +271,6 @@ public final class SimpleString extends AbstractString
         return this;
     }
 
-    public LispObject AREF(int index) throws ConditionThrowable
-    {
-        try {
-            return LispCharacter.getInstance(chars[index]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, capacity);
-            return NIL; // Not reached.
-        }
-    }
-
-    public void aset(int index, LispObject obj) throws ConditionThrowable
-    {
-        try {
-            chars[index] = ((LispCharacter)obj).value;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, capacity);
-        }
-        catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.CHARACTER));
-        }
-    }
-
-    public char charAt(int index) throws ConditionThrowable
-    {
-        try {
-            return chars[index];
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, capacity);
-            return 0; // Not reached.
-        }
-    }
-
-    public void setCharAt(int index, char c) throws ConditionThrowable
-    {
-        try {
-            chars[index] = c;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, capacity);
-        }
-    }
-
     public String getStringValue()
     {
         return new String(chars);
@@ -341,14 +296,24 @@ public final class SimpleString extends AbstractString
         return capacity;
     }
 
-    public LispObject SCHAR(int index) throws ConditionThrowable
+    public char charAt(int index) throws ConditionThrowable
     {
         try {
-            return LispCharacter.getInstance(chars[index]);
+            return chars[index];
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
-            return NIL; // Not reached.
+            return 0; // Not reached.
+        }
+    }
+
+    public void setCharAt(int index, char c) throws ConditionThrowable
+    {
+        try {
+            chars[index] = c;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, capacity);
         }
     }
 
@@ -363,18 +328,52 @@ public final class SimpleString extends AbstractString
         }
     }
 
-    // Ignores fill pointer.
+    public LispObject SCHAR(int index) throws ConditionThrowable
+    {
+        try {
+            return LispCharacter.getInstance(chars[index]);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, capacity);
+            return NIL; // Not reached.
+        }
+    }
+
+    public LispObject AREF(int index) throws ConditionThrowable
+    {
+        try {
+            return LispCharacter.getInstance(chars[index]);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, capacity);
+            return NIL; // Not reached.
+        }
+    }
+
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         try {
             return LispCharacter.getInstance(chars[((Fixnum)index).value]);
         }
         catch (ClassCastException e) {
-            return signal(new TypeError(index, Symbol.FIXNUM));
+            return signalTypeError(index, Symbol.FIXNUM);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(((Fixnum)index).value, capacity);
             return NIL; // Not reached.
+        }
+    }
+
+    public void aset(int index, LispObject obj) throws ConditionThrowable
+    {
+        try {
+            chars[index] = ((LispCharacter)obj).value;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, capacity);
+        }
+        catch (ClassCastException e) {
+            signalTypeError(obj, Symbol.CHARACTER);
         }
     }
 
@@ -424,7 +423,7 @@ public final class SimpleString extends AbstractString
                 for (int i = 0; i < newCapacity; i++)
                     newChars[i] = LispCharacter.getValue(initialContents.elt(i));
             } else
-                signal(new TypeError(initialContents, Symbol.SEQUENCE));
+                signalTypeError(initialContents, Symbol.SEQUENCE);
             return new SimpleString(newChars);
         }
         if (capacity != newCapacity) {
