@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.565 2005-08-03 19:47:52 piso Exp $
+;;; $Id: jvm.lisp,v 1.566 2005-08-04 01:06:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7900,7 +7900,7 @@
       definition-designator
       (multiple-value-bind (lambda-expression environment)
           (function-lambda-expression definition-designator)
-	(unless lambda-expression
+        (unless lambda-expression
           (error "Can't find a definition for ~S." definition-designator))
         (values lambda-expression environment))))
 
@@ -7910,7 +7910,8 @@
     (setf definition (fdefinition name)))
   (when (compiled-function-p definition)
     (return-from %jvm-compile (values name nil nil)))
-  (multiple-value-bind (expr env) (get-lambda-to-compile definition)
+  (multiple-value-bind (expr env)
+      (get-lambda-to-compile definition)
     (let* ((*package* (if (and name (symbol-package name))
                           (symbol-package name)
                           *package*))
