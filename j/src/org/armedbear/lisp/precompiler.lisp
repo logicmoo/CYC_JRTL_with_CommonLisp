@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.130 2005-08-01 12:49:28 piso Exp $
+;;; $Id: precompiler.lisp,v 1.131 2005-08-04 04:58:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -259,7 +259,7 @@
   (cond ((symbolp form)
          (let ((varspec (find-varspec form)))
            (if (and varspec (eq (second varspec) :symbol-macro))
-               (third varspec)
+               (copy-tree (third varspec))
                form)))
         ((atom form)
          form)
@@ -405,7 +405,7 @@
           ((symbolp place)
            (let ((varspec (find-varspec place)))
              (if (and varspec (eq (second varspec) :symbol-macro))
-                 (precompile1 (list* 'SETF (third varspec) (cddr form)))
+                 (precompile1 (list* 'SETF (copy-tree (third varspec)) (cddr form)))
                  (precompile1 (expand-macro form)))))
           (t
            (precompile1 (expand-macro form))))))
@@ -421,7 +421,7 @@
                (val (%cadr args))
                (varspec (find-varspec sym)))
           (if (and varspec (eq (second varspec) :symbol-macro))
-              (precompile1 (list 'SETF (third varspec) val))
+              (precompile1 (list 'SETF (copy-tree (third varspec)) val))
               (list 'SETQ sym (precompile1 val))))
         (let ((result ()))
           (loop
@@ -576,7 +576,8 @@
                  :format-control "Attempt to bind the special variable ~S with SYMBOL-MACROLET."
                  :format-arguments (list sym)))
         (push (list sym :symbol-macro expansion) *local-variables*)))
-    (multiple-value-bind (body decls) (sys::parse-body (cddr form) nil)
+    (multiple-value-bind (body decls)
+        (parse-body (cddr form) nil)
       (when decls
         (let ((specials ()))
           (dolist (decl decls)
