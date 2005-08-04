@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SimpleString.java,v 1.31 2005-08-04 16:28:34 piso Exp $
+ * $Id: SimpleString.java,v 1.32 2005-08-04 18:10:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,12 +78,6 @@ public final class SimpleString extends AbstractString
     public char[] getStringChars()
     {
         return chars;
-    }
-
-    // Used by jvm compiler.
-    public static SimpleString getInstance(String s)
-    {
-        return new SimpleString(s);
     }
 
     public LispObject typeOf()
@@ -318,6 +312,17 @@ public final class SimpleString extends AbstractString
     }
 
     public LispObject elt(int index) throws ConditionThrowable
+    {
+        try {
+            return LispCharacter.getInstance(chars[index]);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, capacity);
+            return NIL; // Not reached.
+        }
+    }
+
+    public LispObject CHAR(int index) throws ConditionThrowable
     {
         try {
             return LispCharacter.getInstance(chars[index]);
