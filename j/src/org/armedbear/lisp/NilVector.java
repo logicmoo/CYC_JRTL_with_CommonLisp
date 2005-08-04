@@ -1,8 +1,8 @@
 /*
  * NilVector.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.17 2005-03-25 03:19:21 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: NilVector.java,v 1.18 2005-08-04 18:08:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,6 +130,16 @@ public final class NilVector extends AbstractString
     public LispObject getElementType()
     {
         return NIL;
+    }
+
+    public LispObject CHAR(int index) throws ConditionThrowable
+    {
+        return accessError();
+    }
+
+    public LispObject SCHAR(int index) throws ConditionThrowable
+    {
+        return accessError();
     }
 
     public LispObject AREF(int index) throws ConditionThrowable
