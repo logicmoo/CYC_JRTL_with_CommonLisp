@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.567 2005-08-04 16:23:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.568 2005-08-04 18:12:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2392,7 +2392,7 @@
   (write-u2 length stream)
   (dotimes (i length)
     (declare (type (unsigned-byte 16) i))
-    (write-8-bits (char-code (schar string i)) stream)))
+    (write-8-bits (char-code (char string i)) stream)))
 
 (declaim (ftype (function (t t) t) write-utf8))
 (defun write-utf8 (string stream)
@@ -2403,7 +2403,7 @@
     (declare (type fixnum length))
     (dotimes (i length)
       (declare (type fixnum i))
-      (unless (< 0 (char-code (schar string i)) #x80)
+      (unless (< 0 (char-code (char string i)) #x80)
         (setf must-convert t)
         (return)))
     (if must-convert
@@ -2414,7 +2414,7 @@
           (declare (type (vector (unsigned-byte 8)) octets))
           (dotimes (i length)
             (declare (type fixnum i))
-            (let* ((c (schar string i))
+            (let* ((c (char string i))
                    (n (char-code c)))
               (cond ((zerop n)
                      (vector-push-extend #xC0 octets)
@@ -6270,20 +6270,25 @@
      (dformat t "p2-minus giving up 2~%")
      (compile-function-call form target representation))))
 
-(defun p2-schar (form &key (target :stack) representation)
+;; char/schar string index => character
+(defun p2-char/schar (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
-    (return-from p2-schar))
-  (unless (subtypep (derive-type (third form)) 'fixnum)
-    (compile-function-call form target representation)
-    (return-from p2-schar))
-  (compile-form (second form) :target :stack)
-  (compile-form (third form) :target :stack :representation :unboxed-fixnum)
-  (unless (and (single-valued-p (second form))
-               (single-valued-p (third form)))
-    (emit-clear-values))
-  (emit-invokevirtual +lisp-object-class+ "SCHAR" '("I") +lisp-object+)
-  (emit-move-from-stack target))
+    (return-from p2-char/schar))
+  (let* ((op (car form))
+         (args (cdr form))
+         (arg1 (%car args))
+         (arg2 (%cadr args)))
+    (cond ((subtypep (derive-type arg2) 'FIXNUM)
+           (compile-form arg1 :target :stack)
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokevirtual +lisp-object-class+
+                               (symbol-name op) ;; "CHAR" or "SCHAR"
+                               '("I") +lisp-object+)
+           (emit-move-from-stack target representation))
+          (t
+           (compile-function-call form target representation)))))
 
 (defun p2-svref (form &key (target :stack) representation)
   (cond ((check-arg-count form 2)
@@ -6331,22 +6336,6 @@
          (emit-move-from-stack target representation))
         (t
          (compile-function-call form target representation))))
-
-(defun p2-char (form &key (target :stack) representation)
-  (unless (check-arg-count form 2)
-    (compile-function-call form target representation)
-    (return-from p2-char))
-  (let ((arg1 (%cadr form))
-        (arg2 (%caddr form)))
-    (cond ((and (subtypep (derive-type arg1) 'string)
-                (subtypep (derive-type arg2) 'fixnum))
-           (compile-form arg1 :target :stack)
-           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-           (maybe-emit-clear-values arg1 arg2)
-           (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
-           (emit-move-from-stack target representation))
-          (t
-           (compile-function-call form target representation)))))
 
 (defun p2-aref (form &key (target :stack) representation)
   ;; We only optimize the 2-arg case.
@@ -8000,7 +7989,7 @@
   (install-p2-handler 'car                'p2-car)
   (install-p2-handler 'catch              'p2-catch)
   (install-p2-handler 'cdr                'p2-cdr)
-  (install-p2-handler 'char               'p2-char)
+  (install-p2-handler 'char               'p2-char/schar)
   (install-p2-handler 'char-code          'p2-char-code)
   (install-p2-handler 'char=              'p2-char=)
   (install-p2-handler 'characterp         'p2-characterp)
@@ -8041,7 +8030,7 @@
   (install-p2-handler 'quote              'p2-quote)
   (install-p2-handler 'return-from        'p2-return-from)
   (install-p2-handler 'rplacd             'p2-rplacd)
-  (install-p2-handler 'schar              'p2-schar)
+  (install-p2-handler 'schar              'p2-char/schar)
   (install-p2-handler 'set                'p2-set)
   (install-p2-handler 'set-car            'p2-set-car/cdr)
   (install-p2-handler 'set-cdr            'p2-set-car/cdr)
