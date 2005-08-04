@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StringFunctions.java,v 1.36 2005-07-10 15:19:55 piso Exp $
+ * $Id: StringFunctions.java,v 1.37 2005-08-04 16:39:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class StringFunctions extends Lisp
                 start1 = ((Fixnum)third).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(third, Symbol.FIXNUM));
+                return signalTypeError(third, Symbol.FIXNUM);
             }
             if (fourth == NIL) {
                 end1 = array1.length;
@@ -49,14 +49,14 @@ public final class StringFunctions extends Lisp
                     end1 = ((Fixnum)fourth).value;
                 }
                 catch (ClassCastException e) {
-                    return signal(new TypeError(fourth, Symbol.FIXNUM));
+                    return signalTypeError(fourth, Symbol.FIXNUM);
                 }
             }
             try {
                 start2 = ((Fixnum)fifth).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(fifth, Symbol.FIXNUM));
+                return signalTypeError(fifth, Symbol.FIXNUM);
             }
             if (sixth == NIL) {
                 end2 = array2.length;
@@ -65,7 +65,7 @@ public final class StringFunctions extends Lisp
                     end2 = ((Fixnum)sixth).value;
                 }
                 catch (ClassCastException e) {
-                    return signal(new TypeError(sixth, Symbol.FIXNUM));
+                    return signalTypeError(sixth, Symbol.FIXNUM);
                 }
             }
             if ((end1 - start1) != (end2 - start2))
@@ -684,7 +684,7 @@ public final class StringFunctions extends Lisp
                 string = (AbstractString) first;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STRING));
+                return signalTypeError(first, Symbol.STRING);
             }
             final int length = string.length();
             int start = (int) Fixnum.getValue(second);
@@ -718,7 +718,7 @@ public final class StringFunctions extends Lisp
                 string = (AbstractString) first;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STRING));
+                return signalTypeError(first, Symbol.STRING);
             }
             final int length = string.length();
             int start = (int) Fixnum.getValue(second);
@@ -752,7 +752,7 @@ public final class StringFunctions extends Lisp
                 string = (AbstractString) first;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STRING));
+                return signalTypeError(first, Symbol.STRING);
             }
             final int length = string.length();
             int start = (int) Fixnum.getValue(second);
@@ -819,7 +819,7 @@ public final class StringFunctions extends Lisp
                 n = ((Fixnum)size).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(size, Symbol.FIXNUM));
+                return signalTypeError(size, Symbol.FIXNUM);
             }
             if (n < 0 || n >= ARRAY_DIMENSION_MAX) {
                 StringBuffer sb = new StringBuffer();
@@ -856,9 +856,24 @@ public final class StringFunctions extends Lisp
             }
             catch (ClassCastException e) {
                 if (first instanceof AbstractString)
-                    return signal(new TypeError(second, Symbol.FIXNUM));
+                    return signalTypeError(second, Symbol.FIXNUM);
                 else
-                    return signal(new TypeError(first, Symbol.STRING));
+                    return signalTypeError(first, Symbol.STRING);
+            }
+        }
+    };
+
+    // ### schar
+    private static final Primitive SCHAR = new Primitive("schar", "string index")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                return first.SCHAR(((Fixnum)second).value);
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.FIXNUM);
             }
         }
     };
@@ -878,11 +893,38 @@ public final class StringFunctions extends Lisp
             }
             catch (ClassCastException e) {
                 if (!(first instanceof AbstractString))
-                    return signal(new TypeError(first, Symbol.STRING));
+                    return signalTypeError(first, Symbol.STRING);
                 else if (!(second instanceof Fixnum))
-                    return signal(new TypeError(second, Symbol.FIXNUM));
+                    return signalTypeError(second, Symbol.FIXNUM);
                 else
-                    return signal(new TypeError(third, Symbol.CHARACTER));
+                    return signalTypeError(third, Symbol.CHARACTER);
+            }
+        }
+    };
+
+    // ### %set-schar
+    private static final Primitive _SET_SCHAR =
+        new Primitive("%set-schar", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            try {
+                ((SimpleString)first).setCharAt(((Fixnum)second).value,
+                                                ((LispCharacter)third).value);
+                return third;
+            }
+            catch (ClassCastException e) {
+                if (!(first instanceof SimpleString))
+                    return signalTypeError(first, Symbol.SIMPLE_STRING);
+                if (!(second instanceof Fixnum))
+                    return signalTypeError(second, Symbol.FIXNUM);
+                return signalTypeError(third, Symbol.CHARACTER);
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                return signal(new TypeError("Array index out of bounds: " +
+                                            ((Fixnum)second).value));
             }
         }
     };
@@ -900,7 +942,7 @@ public final class StringFunctions extends Lisp
             if (second instanceof AbstractString)
                 string = (AbstractString) second;
             else
-                return signal(new TypeError(second, Symbol.STRING));
+                return signalTypeError(second, Symbol.STRING);
             int start = Fixnum.getValue(third);
             for (int i = start, limit = string.length(); i < limit; i++) {
                 if (string.charAt(i) == c)
@@ -937,49 +979,7 @@ public final class StringFunctions extends Lisp
                 return first;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SIMPLE_STRING));
-            }
-        }
-    };
-
-    // ### schar
-    private static final Primitive SCHAR = new Primitive("schar", "string index")
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            try {
-                return first.SCHAR(((Fixnum)second).value);
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(second, Symbol.FIXNUM));
-            }
-        }
-    };
-
-    // ### %set-schar
-    private static final Primitive _SET_SCHAR =
-        new Primitive("%set-schar", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            try {
-                ((SimpleString)first).setCharAt(((Fixnum)second).value,
-                                              ((LispCharacter)third).value);
-                return third;
-            }
-            catch (ClassCastException e) {
-                if (!(first instanceof SimpleString))
-                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
-                if (!(second instanceof Fixnum))
-                    return signal(new TypeError(second, Symbol.FIXNUM));
-                return signal(new TypeError(third, Symbol.CHARACTER));
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                return signal(new TypeError("Array index out of bounds: " +
-                                            ((Fixnum)second).value));
+                return signalTypeError(first, Symbol.SIMPLE_STRING);
             }
         }
     };
