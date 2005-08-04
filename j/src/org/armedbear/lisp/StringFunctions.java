@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StringFunctions.java,v 1.37 2005-08-04 16:39:37 piso Exp $
+ * $Id: StringFunctions.java,v 1.38 2005-08-04 18:11:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -852,13 +852,10 @@ public final class StringFunctions extends Lisp
             throws ConditionThrowable
         {
             try {
-                return ((AbstractString)first).AREF(((Fixnum)second).value);
+                return first.CHAR(((Fixnum)second).value);
             }
             catch (ClassCastException e) {
-                if (first instanceof AbstractString)
-                    return signalTypeError(second, Symbol.FIXNUM);
-                else
-                    return signalTypeError(first, Symbol.STRING);
+                return signalTypeError(second, Symbol.FIXNUM);
             }
         }
     };
