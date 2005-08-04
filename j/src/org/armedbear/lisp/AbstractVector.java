@@ -129,17 +129,9 @@ public abstract class AbstractVector extends AbstractArray
         return index;
     }
 
-    public int checkIndex(LispObject index) throws ConditionThrowable
-    {
-        int i = Fixnum.getValue(index);
-        if (i < 0 || i >= capacity())
-            badIndex(i, capacity());
-        return i;
-    }
-
     protected void badIndex(int index, int limit) throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer("Invalid array index ");
+        FastStringBuffer sb = new FastStringBuffer("Invalid array index ");
         sb.append(index);
         sb.append(" for ");
         sb.append(writeToString());
