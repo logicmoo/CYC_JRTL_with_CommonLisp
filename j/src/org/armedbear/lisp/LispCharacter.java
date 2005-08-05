@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.62 2005-06-30 17:33:56 piso Exp $
+ * $Id: LispCharacter.java,v 1.63 2005-08-05 19:49:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,10 +142,10 @@ public final class LispCharacter extends LispObject
     public static char getValue(LispObject obj) throws ConditionThrowable
     {
         try {
-            return ((LispCharacter)obj).getValue();
+            return ((LispCharacter)obj).value;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.CHARACTER));
+            signalTypeError(obj, Symbol.CHARACTER);
             // Not reached.
             return 0;
         }
@@ -250,7 +250,7 @@ public final class LispCharacter extends LispObject
                 return Character.isWhitespace(((LispCharacter)arg).value) ? T : NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
+                return signalTypeError(arg, Symbol.CHARACTER);
             }
         }
     };
@@ -264,7 +264,7 @@ public final class LispCharacter extends LispObject
                 return new Fixnum(((LispCharacter)arg).value);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
+                return signalTypeError(arg, Symbol.CHARACTER);
             }
         }
     };
@@ -278,7 +278,7 @@ public final class LispCharacter extends LispObject
                 return new Fixnum(((LispCharacter)arg).value);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
+                return signalTypeError(arg, Symbol.CHARACTER);
             }
         }
     };
@@ -376,7 +376,7 @@ public final class LispCharacter extends LispObject
             catch (ClassCastException e) {
                 if (arg instanceof Bignum)
                     return NIL;
-                return signal(new TypeError(arg, Symbol.INTEGER));
+                return signalTypeError(arg, Symbol.INTEGER);
             }
             if (weight < 10)
                 return characters['0' + weight];
@@ -394,9 +394,9 @@ public final class LispCharacter extends LispObject
                 radix = -1;
             }
             if (radix < 2 || radix > 36)
-                return signal(new TypeError(second,
-                                            list3(Symbol.INTEGER, Fixnum.TWO,
-                                                  new Fixnum(36))));
+                return signalTypeError(second,
+                                       list3(Symbol.INTEGER, Fixnum.TWO,
+                                             new Fixnum(36)));
             int weight;
             try {
                 weight = ((Fixnum)first).value;
@@ -404,7 +404,7 @@ public final class LispCharacter extends LispObject
             catch (ClassCastException e) {
                 if (first instanceof Bignum)
                     return NIL;
-                return signal(new TypeError(first, Symbol.INTEGER));
+                return signalTypeError(first, Symbol.INTEGER);
             }
             if (weight >= radix)
                 return NIL;
@@ -425,7 +425,7 @@ public final class LispCharacter extends LispObject
                 return n < 0 ? NIL : new Fixnum(n);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
+                return signalTypeError(arg, Symbol.CHARACTER);
             }
         }
 
@@ -437,7 +437,7 @@ public final class LispCharacter extends LispObject
                 c = ((LispCharacter)first).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.CHARACTER));
+                return signalTypeError(first, Symbol.CHARACTER);
             }
             try {
                 int radix = ((Fixnum)second).value;
@@ -447,9 +447,9 @@ public final class LispCharacter extends LispObject
                 }
             }
             catch (ClassCastException e) {}
-            return signal(new TypeError(second,
-                                        list3(Symbol.INTEGER, Fixnum.TWO,
-                                              new Fixnum(36))));
+            return signalTypeError(second,
+                                   list3(Symbol.INTEGER, Fixnum.TWO,
+                                         new Fixnum(36)));
         }
     };
 
@@ -463,7 +463,7 @@ public final class LispCharacter extends LispObject
                 return ((LispCharacter)arg).isStandardChar() ? T : NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
+                return signalTypeError(arg, Symbol.CHARACTER);
             }
         }
     };
@@ -481,7 +481,7 @@ public final class LispCharacter extends LispObject
                 return Character.isISOControl(c) ? NIL : T;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
+                return signalTypeError(arg, Symbol.CHARACTER);
             }
         }
     };
@@ -496,7 +496,7 @@ public final class LispCharacter extends LispObject
                 return Character.isLetter(((LispCharacter)arg).value) ? T : NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
+                return signalTypeError(arg, Symbol.CHARACTER);
             }
         }
     };
@@ -511,7 +511,7 @@ public final class LispCharacter extends LispObject
                 return Character.isLetterOrDigit(((LispCharacter)arg).value) ? T : NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
+                return signalTypeError(arg, Symbol.CHARACTER);
             }
         }
     };
