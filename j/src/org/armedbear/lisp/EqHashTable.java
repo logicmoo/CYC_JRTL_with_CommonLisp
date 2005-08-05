@@ -2,7 +2,7 @@
  * EqHashTable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: EqHashTable.java,v 1.5 2005-08-05 14:43:31 piso Exp $
+ * $Id: EqHashTable.java,v 1.6 2005-08-05 17:16:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,9 @@ package org.armedbear.lisp;
 
 public final class EqHashTable extends HashTable
 {
+    private LispObject cachedKey;
+    private int cachedIndex;
+
     public EqHashTable(int size, LispObject rehashSize,
                        LispObject rehashThreshold)
     {
@@ -43,7 +46,14 @@ public final class EqHashTable extends HashTable
 
     public LispObject get(LispObject key)
     {
-        int index = key.sxhash() % buckets.length;
+        final int index;
+        if (key == cachedKey) {
+            index = cachedIndex;
+        } else {
+            index = key.sxhash() % buckets.length;
+            cachedKey = key;
+            cachedIndex = index;
+        }
         HashEntry e = buckets[index];
         while (e != null) {
             if (key == e.key)
@@ -55,7 +65,14 @@ public final class EqHashTable extends HashTable
 
     public void put(LispObject key, LispObject value) throws ConditionThrowable
     {
-        int index = key.sxhash() % buckets.length;
+        int index;
+        if (key == cachedKey) {
+            index = cachedIndex;
+        } else {
+            index = key.sxhash() % buckets.length;
+            cachedKey = key;
+            cachedIndex = index;
+        }
         HashEntry e = buckets[index];
         while (e != null) {
             if (key == e.key) {
@@ -69,6 +86,8 @@ public final class EqHashTable extends HashTable
             rehash();
             // Need a new hash value to suit the bigger table.
             index = key.sxhash() % buckets.length;
+            cachedKey = key;
+            cachedIndex = index;
         }
         e = new HashEntry(key, value);
         e.next = buckets[index];
@@ -77,7 +96,14 @@ public final class EqHashTable extends HashTable
 
     public LispObject remove(LispObject key) throws ConditionThrowable
     {
-        int index = key.sxhash() % buckets.length;
+        final int index;
+        if (key == cachedKey) {
+            index = cachedIndex;
+        } else {
+            index = key.sxhash() % buckets.length;
+            cachedKey = key;
+            cachedIndex = index;
+        }
         HashEntry e = buckets[index];
         HashEntry last = null;
         while (e != null) {
@@ -97,6 +123,7 @@ public final class EqHashTable extends HashTable
 
     protected void rehash()
     {
+        cachedKey = null; // Invalidate the cache!
         HashEntry[] oldBuckets = buckets;
         int newCapacity = buckets.length * 2 + 1;
         threshold = (int) (newCapacity * loadFactor);
