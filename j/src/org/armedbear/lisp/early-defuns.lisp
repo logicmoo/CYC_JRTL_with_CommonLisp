@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.37 2005-08-01 12:47:45 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.38 2005-08-05 05:52:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -98,7 +98,11 @@
                           type)))
         ((and (consp type)
               (memq (%car type) '(and or not eql member satisfies mod values)))
-         (return-from normalize-type type)))
+         (cond ((or (equal type '(and fixnum unsigned-byte))
+                    (equal type '(and unsigned-byte fixnum)))
+                (return-from normalize-type '(integer 0 #.most-positive-fixnum)))
+               (t
+                (return-from normalize-type type)))))
   ;; Fall through...
   (let (tp i)
     (loop
