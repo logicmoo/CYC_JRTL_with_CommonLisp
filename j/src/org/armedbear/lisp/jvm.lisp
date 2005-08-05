@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.568 2005-08-04 18:12:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.569 2005-08-05 02:50:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,6 +36,8 @@
 (defvar *closure-variables* nil)
 
 (defvar *enable-dformat* nil)
+
+(defvar *enable-unboxed-characters* nil)
 
 #+nil
 (defun dformat (destination control-string &rest args)
@@ -1144,6 +1146,7 @@
           (instruction-stack instruction)
           (instruction-depth instruction)))
 
+(declaim (ftype (function * t) inst))
 (defun inst (instr &optional args)
   (declare (optimize speed))
   (let ((opcode (if (fixnump instr)
@@ -1154,12 +1157,14 @@
       (setf args (list args)))
     (make-instruction opcode args)))
 
+(declaim (ftype (function * t) emit))
 (defun emit (instr &rest args)
   (declare (optimize speed))
   (let ((instruction (inst instr args)))
     (push instruction *code*)
     instruction))
 
+(declaim (ftype (function label (symbol) t) label))
 (defun label (symbol)
   (declare (type symbol symbol))
   (declare (optimize speed))
@@ -1580,10 +1585,14 @@
          (emit 'checkcast +lisp-fixnum-class+)
          (emit 'getfield +lisp-fixnum-class+ "value" "I"))))
 
-(declaim (ftype (function () t) emit-box-long))
-(defun emit-box-long ()
-  (declare (optimize speed))
-  (emit-invokestatic +lisp-class+ "number" (list "J") +lisp-object+))
+(declaim (ftype (function () t) emit-unbox-character))
+(defun emit-unbox-character ()
+  (cond ((= *safety* 3)
+         (emit-invokestatic +lisp-character-class+ "getValue"
+                            (lisp-object-arg-types 1) "C"))
+        (t
+         (emit 'checkcast +lisp-character-class+)
+         (emit 'getfield +lisp-character-class+ "value" "C"))))
 
 (declaim (ftype (function () t) emit-unbox-boolean))
 (defun emit-unbox-boolean ()
@@ -1597,6 +1606,11 @@
     (emit 'iconst_0)
     (label LABEL2)))
 
+(declaim (ftype (function () t) emit-box-long))
+(defun emit-box-long ()
+  (declare (optimize speed))
+  (emit-invokestatic +lisp-class+ "number" (list "J") +lisp-object+))
+
 (declaim (ftype (function (t &optional t) t) emit-move-from-stack))
 (defun emit-move-from-stack (target &optional representation)
   (declare (optimize speed))
@@ -1606,7 +1620,7 @@
         ((fixnump target)
          (emit
           (case representation
-            ((:unboxed-fixnum :java-boolean)
+            ((:unboxed-fixnum :java-boolean :unboxed-character)
              'istore)
             (t
              'astore))
@@ -2387,6 +2401,7 @@
 
 (declaim (ftype (function (t t t) t) write-ascii))
 (defun write-ascii (string length stream)
+  (declare (type string string))
   (declare (type (unsigned-byte 16) length))
   (declare (type stream stream))
   (write-u2 length stream)
@@ -2397,6 +2412,7 @@
 (declaim (ftype (function (t t) t) write-utf8))
 (defun write-utf8 (string stream)
   (declare (optimize speed))
+  (declare (type string string))
   (declare (type stream stream))
   (let ((length (length string))
         (must-convert nil))
@@ -3446,6 +3462,8 @@
       (case representation
         (:unboxed-fixnum
          (emit-unbox-fixnum))
+        (:unboxed-character
+         (emit-unbox-character))
         (:java-boolean
          (emit-unbox-boolean)))
       (emit-move-from-stack target))))
@@ -5417,9 +5435,13 @@
              (emit 'new +lisp-fixnum-class+)
              (emit 'dup))
            (compile-form arg1 :target :stack :representation :unboxed-fixnum)
-           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-           (maybe-emit-clear-values arg1 arg2)
-           (emit 'ineg)
+           (cond ((fixnump arg2)
+                  (maybe-emit-clear-values arg1)
+                  (emit-push-constant-int (- arg2)))
+                 (t
+                  (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+                  (maybe-emit-clear-values arg1 arg2)
+                  (emit 'ineg)))
            (emit 'ishr)
            (unless (eq representation :unboxed-fixnum)
              (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
@@ -5867,32 +5889,56 @@
               (return-from derive-type-plus (list 'INTEGER low high)))))))
     t))
 
-(defun derive-type-min/max (args)
-  (dolist (arg args 'fixnum)
-    (unless (subtypep (derive-type arg) 'fixnum)
+(declaim (ftype (function (t) t) derive-type-max))
+(defun derive-type-max (form)
+  (dolist (arg (cdr form) 'FIXNUM)
+    (unless (subtypep (derive-type arg) 'FIXNUM)
       (return t))))
 
-(defun ash-derive-type (arg1 arg2)
-  (let* ((type1 (normalize-type (derive-type arg1)))
+(declaim (ftype (function (t) t) derive-type-min))
+(defun derive-type-min (form)
+  (let ((args (cdr form))
+        (result-type t))
+    (when (= (length form) 3)
+      (let* ((type1 (make-integer-type (derive-type (%car args))))
+             type2)
+        (when type1
+          (setf type2 (make-integer-type (derive-type (%cadr args))))
+          (when type2
+            ;; Both integer types.
+            (let ((low1 (integer-type-low type1))
+                  (high1 (integer-type-high type1))
+                  (low2 (integer-type-low type2))
+                  (high2 (integer-type-high type2))
+                  low high)
+              (setf low (if (and (integerp low1) (integerp low2))
+                            (min low1 low2)
+                            '*)
+                    high (if (and (integerp high1) (integerp high2))
+                             (min high1 high2)
+                             '*))
+              (setf result-type (list 'INTEGER low high)))))))
+    result-type))
+
+;; ash integer count => shifted-integer
+(declaim (ftype (function (t) t) derive-type-ash))
+(defun derive-type-ash (form)
+  (let* ((args (cdr form))
+         (arg1 (car args))
+         (arg2 (cadr args))
+         (type1 (normalize-type (derive-type arg1)))
          (result-type 'INTEGER))
-    (when (subtypep type1 'fixnum)
-      (let ((low most-negative-fixnum)
-            (high most-positive-fixnum))
-        (when (and (consp type1) (eq (%car type1) 'INTEGER))
-          (let ((second (second type1))
-                (third (third type1)))
-            (when second
-              (setf low (if (atom second) second (1+ (%car second)))))
-            (when third
-              (setf high (if (atom third) third (1- (%car third)))))))
-        (when (fixnump arg2)
-          (cond ((= arg2 0)
-                 (setf result-type type1))
-                ((<= 1 arg2 32)
+    (when (subtypep type1 'FIXNUM)
+      (let* ((integer-type (make-integer-type type1))
+             (low (integer-type-low integer-type))
+             (high (integer-type-high integer-type)))
+        (when (and (fixnump arg2) (integerp low) (integerp high))
+          (cond ((<= -32 arg2 32)
                  (setf result-type (list 'INTEGER (ash low arg2) (ash high arg2))))
                 ((minusp arg2)
-                 ;; Shift right.
-                 (setf result-type 'FIXNUM))))))
+                 (setf result-type (list 'INTEGER
+                                         (if (minusp low) -1 0)
+                                         (if (minusp high) -1 0))))))))
     result-type))
 
 (declaim (ftype (function (t) t) derive-type))
@@ -5901,7 +5947,7 @@
          (let ((op (%car form)))
            (case op
              (ASH
-              (ash-derive-type (second form) (third form)))
+              (derive-type-ash form))
              (AREF
               (derive-type-aref form))
              (COERCE
@@ -5922,8 +5968,10 @@
               (derive-type-plus form))
              (1+
               (derive-type-plus (list '+ (%cadr form) 1)))
-             ((MIN MAX)
-              (derive-type-min/max (%cdr form)))
+             (MAX
+              (derive-type-max form))
+             (MIN
+              (derive-type-min form))
              ((THE TRULY-THE)
               (second form))
              (t
@@ -6278,14 +6326,28 @@
   (let* ((op (car form))
          (args (cdr form))
          (arg1 (%car args))
-         (arg2 (%cadr args)))
-    (cond ((subtypep (derive-type arg2) 'FIXNUM)
+         (arg2 (%cadr args))
+         (type1 (derive-type arg1))
+         (type2 (derive-type arg2)))
+    (cond ((and (eq representation :unboxed-character)
+                (eq op 'CHAR) (subtypep type1 'STRING) (subtypep type2 'FIXNUM))
+           (compile-form arg1 :target :stack)
+           (emit 'checkcast +lisp-abstract-string-class+)
+           (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokevirtual +lisp-abstract-string-class+ "charAt"
+                               '("I") "C")
+           (emit-move-from-stack target representation))
+          ((subtypep type2 'FIXNUM)
            (compile-form arg1 :target :stack)
            (compile-form arg2 :target :stack :representation :unboxed-fixnum)
            (maybe-emit-clear-values arg1 arg2)
            (emit-invokevirtual +lisp-object-class+
                                (symbol-name op) ;; "CHAR" or "SCHAR"
                                '("I") +lisp-object+)
+           (when (eq representation :unboxed-character)
+             (format t "p2-char/schar calling emit-unbox-character~%")
+             (emit-unbox-character))
            (emit-move-from-stack target representation))
           (t
            (compile-function-call form target representation)))))
@@ -6913,10 +6975,13 @@
            (unless (eq representation :unboxed-fixnum)
              (emit 'new +lisp-fixnum-class+)
              (emit 'dup))
-           (compile-form arg :target :stack)
-           (maybe-emit-clear-values arg)
-           (emit 'checkcast +lisp-character-class+)
-           (emit 'getfield +lisp-character-class+ "value" "C")
+           (cond ((and *enable-unboxed-characters* (consp arg) (eq (car arg) 'CHAR))
+                  (compile-form arg :target :stack :representation :unboxed-character))
+                 (t
+                  (compile-form arg :target :stack)
+                  (maybe-emit-clear-values arg)
+                  (emit 'checkcast +lisp-character-class+)
+                  (emit 'getfield +lisp-character-class+ "value" "C")))
            (unless (eq representation :unboxed-fixnum)
              (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
            (emit-move-from-stack target representation))
