@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.569 2005-08-05 02:50:39 piso Exp $
+;;; $Id: jvm.lisp,v 1.570 2005-08-05 05:53:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5929,16 +5929,17 @@
          (type1 (normalize-type (derive-type arg1)))
          (result-type 'INTEGER))
     (when (subtypep type1 'FIXNUM)
-      (let* ((integer-type (make-integer-type type1))
-             (low (integer-type-low integer-type))
-             (high (integer-type-high integer-type)))
-        (when (and (fixnump arg2) (integerp low) (integerp high))
-          (cond ((<= -32 arg2 32)
-                 (setf result-type (list 'INTEGER (ash low arg2) (ash high arg2))))
-                ((minusp arg2)
-                 (setf result-type (list 'INTEGER
-                                         (if (minusp low) -1 0)
-                                         (if (minusp high) -1 0))))))))
+      (let* ((integer-type (make-integer-type type1)))
+        (when integer-type
+          (let ((low (integer-type-low integer-type))
+                (high (integer-type-high integer-type)))
+            (when (and (fixnump arg2) (integerp low) (integerp high))
+              (cond ((<= -32 arg2 32)
+                     (setf result-type (list 'INTEGER (ash low arg2) (ash high arg2))))
+                    ((minusp arg2)
+                     (setf result-type (list 'INTEGER
+                                             (if (minusp low) -1 0)
+                                             (if (minusp high) -1 0))))))))))
     result-type))
 
 (declaim (ftype (function (t) t) derive-type))
