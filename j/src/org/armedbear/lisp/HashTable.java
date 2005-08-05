@@ -1,8 +1,8 @@
 /*
  * HashTable.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.48 2005-04-30 18:31:34 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: HashTable.java,v 1.49 2005-08-05 14:42:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public abstract class HashTable extends LispObject
     // of elements exceeds the threshold, the implementation calls rehash().
     protected int threshold;
 
-    private static final float loadFactor = 0.75f;
+    protected static final float loadFactor = 0.75f;
 
     // Array containing the actual key-value mappings.
     protected HashEntry[] buckets;
@@ -66,6 +66,11 @@ public abstract class HashTable extends LispObject
     {
         return count;
     }
+
+    public abstract Symbol getTest();
+
+    protected abstract boolean equals(LispObject o1, LispObject o2)
+        throws ConditionThrowable;
 
     public LispObject typeOf()
     {
@@ -198,8 +203,8 @@ public abstract class HashTable extends LispObject
 
     public LispObject get(LispObject key)
     {
-        int idx = hash(key);
-        HashEntry e = buckets[idx];
+        int index = hash(key);
+        HashEntry e = buckets[index];
         while (e != null) {
             try {
                 if (equals(key, e.key))
@@ -215,8 +220,8 @@ public abstract class HashTable extends LispObject
 
     public void put(LispObject key, LispObject value) throws ConditionThrowable
     {
-        int idx = hash(key);
-        HashEntry e = buckets[idx];
+        int index = hash(key);
+        HashEntry e = buckets[index];
         while (e != null) {
             if (equals(key, e.key)) {
                 e.value = value;
@@ -228,22 +233,22 @@ public abstract class HashTable extends LispObject
         if (++count > threshold) {
             rehash();
             // Need a new hash value to suit the bigger table.
-            idx = hash(key);
+            index = hash(key);
         }
         e = new HashEntry(key, value);
-        e.next = buckets[idx];
-        buckets[idx] = e;
+        e.next = buckets[index];
+        buckets[index] = e;
     }
 
     public LispObject remove(LispObject key) throws ConditionThrowable
     {
-        int idx = hash(key);
-        HashEntry e = buckets[idx];
+        int index = hash(key);
+        HashEntry e = buckets[index];
         HashEntry last = null;
         while (e != null) {
             if (equals(key, e.key)) {
                 if (last == null)
-                    buckets[idx] = e.next;
+                    buckets[index] = e.next;
                 else
                     last.next = e.next;
                 --count;
@@ -260,9 +265,6 @@ public abstract class HashTable extends LispObject
         return (key.sxhash() % buckets.length);
     }
 
-    protected abstract boolean equals(LispObject o1, LispObject o2)
-        throws ConditionThrowable;
-
     protected void rehash()
     {
         HashEntry[] oldBuckets = buckets;
@@ -272,14 +274,14 @@ public abstract class HashTable extends LispObject
         for (int i = oldBuckets.length; i-- > 0;) {
             HashEntry e = oldBuckets[i];
             while (e != null) {
-                int idx = hash(e.key);
-                HashEntry dest = buckets[idx];
+                int index = hash(e.key);
+                HashEntry dest = buckets[index];
                 if (dest != null) {
                     while (dest.next != null)
                         dest = dest.next;
                     dest.next = e;
                 } else
-                    buckets[idx] = e;
+                    buckets[index] = e;
                 HashEntry next = e.next;
                 e.next = null;
                 e = next;
@@ -300,8 +302,6 @@ public abstract class HashTable extends LispObject
         }
         return list;
     }
-
-    public abstract Symbol getTest();
 
     protected static class HashEntry
     {
