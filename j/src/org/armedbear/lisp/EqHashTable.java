@@ -2,7 +2,7 @@
  * EqHashTable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: EqHashTable.java,v 1.6 2005-08-05 17:16:23 piso Exp $
+ * $Id: EqHashTable.java,v 1.7 2005-08-05 19:51:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,13 +37,6 @@ public final class EqHashTable extends HashTable
         return Symbol.EQ;
     }
 
-    // Not used.
-    protected final boolean equals(LispObject o1, LispObject o2)
-    {
-        Debug.assertTrue(false);
-        return o1 == o2;
-    }
-
     public LispObject get(LispObject key)
     {
         final int index;
@@ -63,7 +56,7 @@ public final class EqHashTable extends HashTable
         return null;
     }
 
-    public void put(LispObject key, LispObject value) throws ConditionThrowable
+    public void put(LispObject key, LispObject value)
     {
         int index;
         if (key == cachedKey) {
@@ -94,7 +87,7 @@ public final class EqHashTable extends HashTable
         buckets[index] = e;
     }
 
-    public LispObject remove(LispObject key) throws ConditionThrowable
+    public LispObject remove(LispObject key)
     {
         final int index;
         if (key == cachedKey) {
@@ -131,7 +124,7 @@ public final class EqHashTable extends HashTable
         for (int i = oldBuckets.length; i-- > 0;) {
             HashEntry e = oldBuckets[i];
             while (e != null) {
-                int index = e.key.sxhash() % buckets.length;
+                final int index = e.key.sxhash() % buckets.length;
                 HashEntry dest = buckets[index];
                 if (dest != null) {
                     while (dest.next != null)
