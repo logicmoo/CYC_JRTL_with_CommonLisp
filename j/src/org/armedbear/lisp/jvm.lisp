@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.570 2005-08-05 05:53:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.571 2005-08-06 04:50:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1260,6 +1260,7 @@
          (descriptor (car info))
          (stack-effect (cdr info))
          (instruction (emit 'invokevirtual class-name method-name descriptor)))
+    (declare (type (signed-byte 8) stack-effect))
     (setf (instruction-stack instruction) (1- stack-effect))))
 
 (declaim (ftype (function * t) emit-invokespecial-init))
@@ -1268,6 +1269,7 @@
          (descriptor (car info))
          (stack-effect (cdr info))
          (instruction (emit 'invokespecial class-name "<init>" descriptor)))
+    (declare (type (signed-byte 8) stack-effect))
     (setf (instruction-stack instruction) (1- stack-effect))))
 
 ;; Index of local variable used to hold the current thread.
@@ -6279,27 +6281,32 @@
             (arg1 (first args))
             (arg2 (second args))
             (type1 (normalize-type (derive-type arg1)))
-            (type2 (normalize-type (derive-type arg2))))
-       (dformat t "p2-minus type1 = ~S type2 = ~S~%" type1 type2)
+            (type2 (normalize-type (derive-type arg2)))
+            (result-type (derive-type-minus form)))
        (cond ((and (numberp arg1) (numberp arg2))
               (compile-constant (- arg1 arg2)
                                 :target target
                                 :representation representation))
              ((and (subtypep type1 'FIXNUM) (subtypep type2 'FIXNUM))
-              (case representation
-                (:unboxed-fixnum
-                 (compile-form arg1 :target :stack :representation :unboxed-fixnum)
-                 (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-                 (maybe-emit-clear-values arg1 arg2)
-                 (emit 'isub))
-                (t
-                 (compile-form arg1 :target :stack :representation :unboxed-fixnum)
-                 (emit 'i2l)
-                 (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-                 (emit 'i2l)
-                 (maybe-emit-clear-values arg1 arg2)
-                 (emit 'lsub)
-                 (emit-box-long)))
+              (cond ((or (eq representation :unboxed-fixnum)
+                         (subtypep result-type 'FIXNUM))
+                     (unless (eq representation :unboxed-fixnum)
+                       (emit 'new +lisp-fixnum-class+)
+                       (emit 'dup))
+                     (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+                     (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+                     (maybe-emit-clear-values arg1 arg2)
+                     (emit 'isub)
+                     (unless (eq representation :unboxed-fixnum)
+                       (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+                    (t
+                     (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+                     (emit 'i2l)
+                     (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+                     (emit 'i2l)
+                     (maybe-emit-clear-values arg1 arg2)
+                     (emit 'lsub)
+                     (emit-box-long)))
               (emit-move-from-stack target representation))
              ((subtypep type2 'FIXNUM)
               (compile-form arg1 :target :stack)
