@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.571 2005-08-06 04:50:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.572 2005-08-06 18:34:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4404,42 +4404,31 @@
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
 
-(export '*propagate-enable*)
-(defvar *propagate-enable* t)
+(defun propagate-vars (block)
+  (let ((removed '()))
+    (dolist (variable (block-vars block))
+      (unless (or (variable-special-p variable)
+                  (variable-closure-index variable))
+        (when (eql (variable-writes variable) 0)
+          (let ((initform (variable-initform variable)))
+            (when (var-ref-p initform)
+              (let ((source-var (var-ref-variable initform)))
+                (unless (or (variable-special-p source-var)
+                            (variable-used-non-locally-p source-var))
+                  (when (eql (variable-writes source-var) 0)
+                    ;; We can eliminate the variable.
+                    ;; FIXME This may no longer be true when we start tracking writes!
+                    (aver (= (variable-reads variable) (length (variable-references variable))))
+                    (dolist (ref (variable-references variable))
+                      (aver (eq (var-ref-variable ref) variable))
+                      (setf (var-ref-variable ref) source-var))
+                    (push variable removed)))))))))
+    (when removed
+      (dolist (variable removed)
+        (setf (block-vars block) (remove variable (block-vars block)))))))
 
 (declaim (ftype (function (t) t) p2-let-bindings))
 (defun p2-let-bindings (block)
-  (when *propagate-enable*
-;;     (format t "p2-let-bindings *propagate-enable* = ~S~%" *propagate-enable*)
-    (let ((removed '()))
-      (dolist (variable (block-vars block))
-        (unless (or (variable-special-p variable)
-                    (variable-closure-index variable))
-          (when (eql (variable-writes variable) 0)
-            (let ((initform (variable-initform variable)))
-              (when (var-ref-p initform)
-                (let ((source-var (var-ref-variable initform)))
-;;                   (format t "LET initform for ~S is a reference to ~S~%"
-;;                           (variable-name variable)
-;;                           (variable-name source-var))
-;;                   (when (variable-special-p source-var)
-;;                     (format t "source var ~S is special~%" (variable-name source-var)))
-                  (unless (or (variable-special-p source-var)
-                              (variable-used-non-locally-p source-var))
-                    (when (eql (variable-writes source-var) 0)
-;;                       (format t "LET no writes to ~S~%" (variable-name source-var))
-                      ;; We can eliminate the variable.
-;;                       (format t "LET eliminating ~S~%" (variable-name variable))
-                      ;; FIXME This will no longer be true when we start tracking writes.
-                      (aver (= (variable-reads variable) (length (variable-references variable))))
-                      (dolist (ref (variable-references variable))
-                        (aver (eq (var-ref-variable ref) variable))
-                        (setf (var-ref-variable ref) source-var))
-                      (push variable removed)))))))))
-      (when removed
-        (dolist (variable removed)
-          (setf (block-vars block) (remove variable (block-vars block)))))))
-
   (dolist (variable (block-vars block))
     (unless (variable-special-p variable)
       (unless (variable-closure-index variable)
@@ -4508,6 +4497,7 @@
 (declaim (ftype (function (t) t) p2-let*-bindings))
 (defun p2-let*-bindings (block)
 ;;   (format t "p2-let*-bindings~%")
+
   (let ((must-clear-values nil)
 ;;         (*print-structure* nil) ;; FIXME
         )
@@ -4553,31 +4543,31 @@
 ;;                       (format t "no writes to ~S~%" variable)
 ;;                       (let ((*print-structure* nil))
 ;;                         (format t "initform = ~S~%" initform))
-                      (when (var-ref-p initform)
-;;                         (format t "LET* initform for ~S is a reference to ~S~%"
-;;                                 variable
-;;                                 (variable-name (var-ref-variable initform)))
-                        (let ((source-var (var-ref-variable initform)))
-;;                           (when (variable-special-p source-var)
-;;                             (format t "source var ~S is special~%" (variable-name source-var)))
-;;                           (when (variable-used-non-locally-p source-var)
-;;                             (format t "source var ~S is used non-locally~%" (variable-name source-var)))
-                          (unless (or (variable-special-p source-var)
-                                      (variable-used-non-locally-p source-var))
-                            (when (eql (variable-writes source-var) 0)
-;;                               (format t "LET* no writes to source var ~S~%"
-;;                                       source-var)
+;;                       (when (var-ref-p initform)
+;; ;;                         (format t "LET* initform for ~S is a reference to ~S~%"
+;; ;;                                 variable
+;; ;;                                 (variable-name (var-ref-variable initform)))
+;;                         (let ((source-var (var-ref-variable initform)))
+;; ;;                           (when (variable-special-p source-var)
+;; ;;                             (format t "source var ~S is special~%" (variable-name source-var)))
+;; ;;                           (when (variable-used-non-locally-p source-var)
+;; ;;                             (format t "source var ~S is used non-locally~%" (variable-name source-var)))
+;;                           (unless (or (variable-special-p source-var)
+;;                                       (variable-used-non-locally-p source-var))
+;;                             (when (eql (variable-writes source-var) 0)
+;; ;;                               (format t "LET* no writes to source var ~S~%"
+;; ;;                                       source-var)
 
-                              (when *propagate-enable*
-                                ;; We can eliminate the variable.
-;;                                 (format t "LET* eliminating ~S~%" variable)
-                                ;; FIXME This will no longer be true when we start tracking writes.
-                                (aver (= (variable-reads variable) (length (variable-references variable))))
-                                (dolist (ref (variable-references variable))
-                                  (aver (eq (var-ref-variable ref) variable))
-;;                                   (format t "changing ~S to refer to ~S~%" ref source-var)
-                                  (setf (var-ref-variable ref) source-var))
-                                (setf boundp t))))))
+;;                               (when *propagate-enable*
+;;                                 ;; We can eliminate the variable.
+;; ;;                                 (format t "LET* eliminating ~S~%" variable)
+;;                                 ;; FIXME This will no longer be true when we start tracking writes.
+;;                                 (aver (= (variable-reads variable) (length (variable-references variable))))
+;;                                 (dolist (ref (variable-references variable))
+;;                                   (aver (eq (var-ref-variable ref) variable))
+;; ;;                                   (format t "changing ~S to refer to ~S~%" ref source-var)
+;;                                   (setf (var-ref-variable ref) source-var))
+;;                                 (setf boundp t))))))
                       (unless boundp
                         (let ((type (derive-type initform)))
                           (setf (variable-derived-type variable) type)
@@ -4626,6 +4616,7 @@
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+)
       (emit 'astore (block-environment-register block)))
+    (propagate-vars block)
     (ecase (car form)
       (LET
        (p2-let-bindings block))
