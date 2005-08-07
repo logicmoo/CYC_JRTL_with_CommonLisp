@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.572 2005-08-06 18:34:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.573 2005-08-07 04:46:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2257,10 +2257,9 @@
                 (176 ; ARETURN
                  (setf (instruction-opcode instruction) 176
                        (instruction-args instruction) nil
-                       changed t))
-                ))))))
+                       changed t))))))))
     (when changed
-      (setf *code* (delete nil code))
+      (setf *code* code)
       t)))
 
 ;; CLEAR-VALUES CLEAR-VALUES => CLEAR-VALUES
