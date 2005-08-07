@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.574 2005-08-07 14:32:55 piso Exp $
+;;; $Id: jvm.lisp,v 1.575 2005-08-07 15:59:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5852,6 +5852,19 @@
         (setq high (1- (%car high))))
       (%make-integer-type :low low :high high))))
 
+(declaim (ftype (function (t) t) derive-type-integer-length))
+(defun derive-type-integer-length (form)
+  (when (= (length form) 2)
+    (let ((type (make-integer-type (derive-type (%cadr form)))))
+      (when type
+        (let ((low (integer-type-low type))
+              (high (integer-type-high type)))
+          (when (and (integerp low) (integerp high))
+            (return-from derive-type-integer-length
+                         (list 'INTEGER 0
+                               (max (integer-length low) (integer-length high)))))))))
+  (list 'INTEGER 0 '*))
+
 (declaim (ftype (function (t) t) derive-type-minus))
 (defun derive-type-minus (form)
   (let ((args (cdr form))
@@ -6035,6 +6048,8 @@
               (derive-type-aref form))
              (COERCE
               (derive-type-coerce form))
+             (INTEGER-LENGTH
+              (derive-type-integer-length form))
              (LENGTH
               '(INTEGER 0 #.(1- most-positive-fixnum)))
              (LOGAND
