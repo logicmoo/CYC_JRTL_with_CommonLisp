@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.573 2005-08-07 04:46:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.574 2005-08-07 14:32:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -238,8 +238,13 @@
   (compiland *current-compiland*))
 
 (defstruct var-ref
+  ;; The variable this reference refers to. Will be NIL if the VAR-REF has been
+  ;; rewritten to reference a constant value.
   variable
-  write-p)
+  ;; True if the VAR-REF has been rewritten to reference a constant value.
+  constant-p
+  ;; The constant value of this VAR-REF.
+  constant-value)
 
 ;; obj can be a symbol or variable
 ;; returns variable or nil
@@ -1755,6 +1760,8 @@
                  97 ; LADD
                  100 ; ISUB
                  101 ; LSUB
+                 104 ; IMUL
+                 105 ; LMUL
                  116 ; INEG
                  120 ; ISHL
                  121 ; LSHL
@@ -2921,7 +2928,7 @@
   (when (eq representation :unboxed-fixnum)
     (cond ((fixnump form)
            (emit-push-constant-int form)
-           (emit-move-from-stack target)
+           (emit-move-from-stack target representation)
            (return-from compile-constant))
           (t
            (assert nil))))
@@ -3072,9 +3079,10 @@
 (defun compile-binary-operation (op args target representation)
   (compile-form (first args) :target :stack)
   (compile-form (second args) :target :stack)
-  (unless (and (single-valued-p (first args))
-               (single-valued-p (second args)))
-    (emit-clear-values))
+;;   (unless (and (single-valued-p (first args))
+;;                (single-valued-p (second args)))
+;;     (emit-clear-values))
+  (maybe-emit-clear-values (first args) (second args))
   (emit-invokevirtual +lisp-object-class+ op (list +lisp-object+) +lisp-object+)
   (when (eq representation :unboxed-fixnum)
     (emit-unbox-fixnum))
@@ -4409,19 +4417,42 @@
       (unless (or (variable-special-p variable)
                   (variable-closure-index variable))
         (when (eql (variable-writes variable) 0)
+          ;; There are no writes to the variable.
           (let ((initform (variable-initform variable)))
-            (when (var-ref-p initform)
-              (let ((source-var (var-ref-variable initform)))
-                (unless (or (variable-special-p source-var)
-                            (variable-used-non-locally-p source-var))
-                  (when (eql (variable-writes source-var) 0)
-                    ;; We can eliminate the variable.
-                    ;; FIXME This may no longer be true when we start tracking writes!
-                    (aver (= (variable-reads variable) (length (variable-references variable))))
-                    (dolist (ref (variable-references variable))
-                      (aver (eq (var-ref-variable ref) variable))
-                      (setf (var-ref-variable ref) source-var))
-                    (push variable removed)))))))))
+            (cond ((var-ref-p initform)
+                   (let ((source-var (var-ref-variable initform)))
+                     (cond ((null source-var)
+                            (aver (var-ref-constant-p initform))
+                            (let ((value (var-ref-constant-value initform)))
+                              (dolist (ref (variable-references variable))
+                                (aver (eq (var-ref-variable ref) variable))
+                                (setf (var-ref-variable ref) nil
+                                      (var-ref-constant-p ref) t
+                                      (var-ref-constant-value ref) value))))
+                           (t
+                            (unless (or (variable-special-p source-var)
+                                        (variable-used-non-locally-p source-var))
+                              (when (eql (variable-writes source-var) 0)
+                                ;; We can eliminate the variable.
+                                ;; FIXME This may no longer be true when we start tracking writes!
+                                (aver (= (variable-reads variable) (length (variable-references variable))))
+                                (dolist (ref (variable-references variable))
+                                  (aver (eq (var-ref-variable ref) variable))
+                                  (setf (var-ref-variable ref) source-var))
+                                (push variable removed)))))))
+                  ((fixnump initform)
+;;                    (format t "propagate-vars fixnump initform case~%")
+                   (dolist (ref (variable-references variable))
+                     (aver (eq (var-ref-variable ref) variable))
+                     (setf (var-ref-variable ref) nil
+                           (var-ref-constant-p ref) t
+                           (var-ref-constant-value ref) initform)
+;;                      (setf (variable-references variable)
+;;                            (remove ref (variable-references variable)))
+                     )
+                   (push variable removed)
+                   ))
+            ))))
     (when removed
       (dolist (variable removed)
         (setf (block-vars block) (remove variable (block-vars block)))))))
@@ -5509,9 +5540,6 @@
                       (emit 'dup))
                     (compile-form arg1 :target :stack :representation :unboxed-fixnum)
                     (compile-form arg2 :target :stack :representation :unboxed-fixnum)
-;;                     (unless (and (single-valued-p arg1)
-;;                                  (single-valued-p arg2))
-;;                       (emit-clear-values))
                     (maybe-emit-clear-values arg1 arg2)
                     (emit 'ior)
                     (unless (eq representation :unboxed-fixnum)
@@ -5881,6 +5909,68 @@
               (return-from derive-type-plus (list 'INTEGER low high)))))))
     t))
 
+;; (defoptimizer (* derive-type) ((x y))
+;;   (derive-integer-type
+;;    x y
+;;    #'(lambda (x y)
+;;       (let ((x-low (numeric-type-low x))
+;;             (x-high (numeric-type-high x))
+;;             (y-low (numeric-type-low y))
+;;             (y-high (numeric-type-high y)))
+;;         (cond ((not (and x-low y-low))
+;;                (values nil nil))
+;;               ((or (minusp x-low) (minusp y-low))
+;;                (if (and x-high y-high)
+;;                    (let ((max (* (max (abs x-low) (abs x-high))
+;;                                  (max (abs y-low) (abs y-high)))))
+;;                      (values (- max) max))
+;;                    (values nil nil)))
+;;               (t
+;;                (values (* x-low y-low)
+;;                        (if (and x-high y-high)
+;;                            (* x-high y-high)
+;;                            nil))))))))
+
+(defun derive-type-times (form)
+  (let ((args (cdr form)))
+    (when (= (length args) 2)
+      (let ((arg1 (%car args))
+            (arg2 (%cadr args)))
+      (when (and (integerp arg1) (integerp arg2))
+        (let ((n (* arg1 arg2)))
+          (return-from derive-type-times (list 'INTEGER n n))))
+      (let ((type1 (make-integer-type (derive-type arg1)))
+            type2)
+        (when type1
+          (setf type2 (make-integer-type (derive-type arg2)))
+          (when type2
+            ;; Both integer types.
+            (let ((low1 (integer-type-low type1))
+                  (high1 (integer-type-high type1))
+                  (low2 (integer-type-low type2))
+                  (high2 (integer-type-high type2))
+                  low high)
+;;               (format t "derive-type-times low1 = ~S high1 = ~S~%" low1 high1)
+;;               (format t "derive-type-times low2 = ~S high2 = ~S~%" low2 high2)
+              (cond ((not (and (integerp low1) (integerp low2)))
+;;                      (format t "derive-type-times case 1~%")
+                     (setf low '* high '*))
+                    ((or (minusp low1) (minusp low2))
+;;                      (format t "derive-type-times case 2~%")
+                     (if (and (integerp high1) (integerp high2))
+                         (let ((max (* (max (abs low1) (abs high1))
+                                       (max (abs low2) (abs high2)))))
+                           (setf low (- max) high max))
+                         (setf low '* high '*)))
+                    (t
+;;                      (format t "derive-type-times case 3~%")
+                     (setf low (* low1 low2)
+                           high (if (and (integerp high1) (integerp high2))
+                                    (* high1 high2)
+                                    '*))))
+              (return-from derive-type-times (list 'INTEGER low high)))))))))
+  t)
+
 (declaim (ftype (function (t) t) derive-type-max))
 (defun derive-type-max (form)
   (dolist (arg (cdr form) 'FIXNUM)
@@ -5961,6 +6051,8 @@
               (derive-type-plus form))
              (1+
               (derive-type-plus (list '+ (%cadr form) 1)))
+             (*
+              (derive-type-times form))
              (MAX
               (derive-type-max form))
              (MIN
@@ -5986,13 +6078,15 @@
                (t
                 t)))
         ((var-ref-p form)
-         (let ((variable (var-ref-variable form)))
-           (cond ((neq (variable-declared-type variable) :none)
-                  (variable-declared-type variable))
-                 ((neq (variable-derived-type variable) :none)
-                  (variable-derived-type variable))
-                 (t
-                  t))))
+         (if (var-ref-constant-p form)
+             (derive-type (var-ref-constant-value form))
+             (let ((variable (var-ref-variable form)))
+               (cond ((neq (variable-declared-type variable) :none)
+                      (variable-declared-type variable))
+                     ((neq (variable-derived-type variable) :none)
+                      (variable-derived-type variable))
+                     (t
+                      t)))))
         ((symbolp form)
          (let ((variable (find-visible-variable form)))
            (if variable
@@ -6102,16 +6196,36 @@
   (case (length form)
     (3
      (let* ((args (cdr form))
-            (arg1 (first args))
-            (arg2 (second args)))
-       (dformat t "p2-times form = ~S~%" form)
+            (arg1 (%car args))
+            (arg2 (%cadr args))
+            type1 type2 result-type)
        (when (fixnump arg1)
-         (dformat t "p2-times arg1 is a fixnum, swapping...~%")
-         (rotatef arg1 arg2)
-         (dformat t "arg1 => ~S~%" arg1)
-         (dformat t "arg2 => ~S~%" arg2))
-       (cond ((fixnump arg2)
-              (dformat t "p2-times case 1~%")
+         (rotatef arg1 arg2))
+       (setf type1 (derive-type arg1)
+             type2 (derive-type arg2)
+             result-type (derive-type form))
+;;        (format t "p2-times result-type = ~S~%" result-type)
+       (cond ((and (numberp arg1) (numberp arg2))
+;;               (format t "p2-times case 1~%")
+              (compile-constant (* arg1 arg2)
+                                :target target
+                                :representation representation))
+             ((and (subtypep type1 'FIXNUM)
+                   (subtypep type2 'FIXNUM)
+                   (subtypep result-type 'FIXNUM))
+;;               (format t "p2-times case 2~%")
+              (unless (eq representation :unboxed-fixnum)
+                (emit 'new +lisp-fixnum-class+)
+                (emit 'dup))
+              (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+              (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+              (maybe-emit-clear-values arg1 arg2)
+              (emit 'imul)
+              (unless (eq representation :unboxed-fixnum)
+                (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+              (emit-move-from-stack target representation))
+             ((fixnump arg2)
+;;               (format t "p2-times case 3~%")
               (compile-form arg1 :target :stack)
               (maybe-emit-clear-values arg1)
               (emit-push-int arg2)
@@ -6120,9 +6234,10 @@
                 (emit-unbox-fixnum))
               (emit-move-from-stack target representation))
              (t
-              (dformat t "p2-times default case~%")
+;;               (format t "p2-times case 4~%")
               (compile-binary-operation "multiplyBy" args target representation)))))
     (t
+;;      (format t "p2-times case 5~%")
      (compile-function-call form target representation))))
 
 (defun p2-min/max (form &key (target :stack) representation)
@@ -6655,20 +6770,23 @@
 ;;   (compile-variable-reference (variable-name (var-ref-variable ref))
 ;;                               target representation))
   (when target
-    (let ((variable (var-ref-variable ref)))
-      (cond ((eq (variable-representation variable) :unboxed-fixnum)
-             (cond ((eq representation :unboxed-fixnum)
-                    (aver (variable-register variable))
-                    (emit 'iload (variable-register variable)))
-                   (t
-                    (emit 'new +lisp-fixnum-class+)
-                    (emit 'dup)
-                    (aver (variable-register variable))
-                    (emit 'iload (variable-register variable))
-                    (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
-             (emit-move-from-stack target representation))
-            (t
-             (emit 'var-ref variable target representation))))))
+    (if (var-ref-constant-p ref)
+        (compile-constant (var-ref-constant-value ref)
+                          :target target :representation representation)
+        (let ((variable (var-ref-variable ref)))
+          (cond ((eq (variable-representation variable) :unboxed-fixnum)
+                 (cond ((eq representation :unboxed-fixnum)
+                        (aver (variable-register variable))
+                        (emit 'iload (variable-register variable)))
+                       (t
+                        (emit 'new +lisp-fixnum-class+)
+                        (emit 'dup)
+                        (aver (variable-register variable))
+                        (emit 'iload (variable-register variable))
+                        (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+                 (emit-move-from-stack target representation))
+                (t
+                 (emit 'var-ref variable target representation)))))))
 
 (defun p2-set (form &key (target :stack) representation)
   (cond ((and (check-arg-count form 2)
