@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.575 2005-08-07 15:59:21 piso Exp $
+;;; $Id: jvm.lisp,v 1.576 2005-08-07 21:07:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1133,7 +1133,7 @@
 (declaim (ftype (function (fixnum) cons) u2))
 (defun u2 (n)
   (declare (optimize speed))
-  (declare (type fixnum n))
+  (declare (type (unsigned-byte 16) n))
   (list (logand (ash n -8) #xff)
         (logand n #xff)))
 
@@ -5435,6 +5435,7 @@
          (arg2 (%cadr args))
          (type1 (derive-type arg1))
          (type2 (derive-type arg2)))
+    (dformat t "p2-ash type1 = ~S type2 = ~S~%" type1 type2)
     (cond ((and (numberp arg1) (numberp arg2))
            (compile-constant (ash arg1 arg2)
                              :target target
@@ -5525,15 +5526,23 @@
   (let* ((args (cdr form))
          (len (length args)))
     (cond ((= len 2)
-           (let* ((arg1 (first args))
-                  (arg2 (second args))
-                  (type1 (derive-type arg1))
-                  (type2 (derive-type arg2)))
+           (let* ((arg1 (%car args))
+                  (arg2 (%cadr args))
+                  (type1 (make-integer-type (derive-type arg1)))
+                  (type2 (make-integer-type (derive-type arg2))))
              (dformat t "p2-logior type1 = ~S type2 = ~S~%" type1 type2)
              (cond ((and (integerp arg1) (integerp arg2))
                     (compile-constant (logior arg1 arg2) :target target :representation representation)
                     (return-from p2-logior t))
-                   ((and (subtypep type1 'fixnum) (subtypep type2 'fixnum))
+                   ((and (fixnum-type-p type1) (fixnum-type-p type2))
+                    (when (and (constant-fixnum-value type1)
+                               (constant-fixnum-value type2))
+                      (dformat t "p2-logior case 3~%")
+                      (compile-constant (logior (constant-fixnum-value type1)
+                                                (constant-fixnum-value type2))
+                                        :target target
+                                        :representation representation)
+                      (return-from p2-logior t))
                     (dformat t "p2-logior case 4~%")
                     (unless (eq representation :unboxed-fixnum)
                       (emit 'new +lisp-fixnum-class+)
@@ -5852,6 +5861,25 @@
         (setq high (1- (%car high))))
       (%make-integer-type :low low :high high))))
 
+
+(declaim (ftype (function (t) t) fixnum-type-p))
+(defun fixnum-type-p (integer-type)
+  (when integer-type
+    (aver (integer-type-p integer-type)) ;; FIXME
+    (and (fixnump (integer-type-low integer-type))
+         (fixnump (integer-type-high integer-type)))))
+
+(declaim (ftype (function (t) t) constant-fixnum-value))
+(defun constant-fixnum-value (integer-type)
+  (when integer-type
+    (aver (integer-type-p integer-type)) ;; FIXME
+    (let ((low (integer-type-low integer-type))
+          high)
+      (when (fixnump low)
+        (setf high (integer-type-high integer-type))
+        (when (and (fixnump high) (= high low))
+          high)))))
+
 (declaim (ftype (function (t) t) derive-type-integer-length))
 (defun derive-type-integer-length (form)
   (when (= (length form) 2)
@@ -5922,28 +5950,6 @@
               (return-from derive-type-plus (list 'INTEGER low high)))))))
     t))
 
-;; (defoptimizer (* derive-type) ((x y))
-;;   (derive-integer-type
-;;    x y
-;;    #'(lambda (x y)
-;;       (let ((x-low (numeric-type-low x))
-;;             (x-high (numeric-type-high x))
-;;             (y-low (numeric-type-low y))
-;;             (y-high (numeric-type-high y)))
-;;         (cond ((not (and x-low y-low))
-;;                (values nil nil))
-;;               ((or (minusp x-low) (minusp y-low))
-;;                (if (and x-high y-high)
-;;                    (let ((max (* (max (abs x-low) (abs x-high))
-;;                                  (max (abs y-low) (abs y-high)))))
-;;                      (values (- max) max))
-;;                    (values nil nil)))
-;;               (t
-;;                (values (* x-low y-low)
-;;                        (if (and x-high y-high)
-;;                            (* x-high y-high)
-;;                            nil))))))))
-
 (defun derive-type-times (form)
   (let ((args (cdr form)))
     (when (= (length args) 2)
@@ -5963,20 +5969,15 @@
                   (low2 (integer-type-low type2))
                   (high2 (integer-type-high type2))
                   low high)
-;;               (format t "derive-type-times low1 = ~S high1 = ~S~%" low1 high1)
-;;               (format t "derive-type-times low2 = ~S high2 = ~S~%" low2 high2)
               (cond ((not (and (integerp low1) (integerp low2)))
-;;                      (format t "derive-type-times case 1~%")
                      (setf low '* high '*))
                     ((or (minusp low1) (minusp low2))
-;;                      (format t "derive-type-times case 2~%")
                      (if (and (integerp high1) (integerp high2))
                          (let ((max (* (max (abs low1) (abs high1))
                                        (max (abs low2) (abs high2)))))
                            (setf low (- max) high max))
                          (setf low '* high '*)))
                     (t
-;;                      (format t "derive-type-times case 3~%")
                      (setf low (* low1 low2)
                            high (if (and (integerp high1) (integerp high2))
                                     (* high1 high2)
@@ -6213,22 +6214,28 @@
      (let* ((args (cdr form))
             (arg1 (%car args))
             (arg2 (%cadr args))
-            type1 type2 result-type)
+            type1 type2 result-type value)
        (when (fixnump arg1)
          (rotatef arg1 arg2))
-       (setf type1 (derive-type arg1)
-             type2 (derive-type arg2)
-             result-type (derive-type form))
-;;        (format t "p2-times result-type = ~S~%" result-type)
+       (setf type1 (make-integer-type (derive-type arg1))
+             type2 (make-integer-type (derive-type arg2))
+             result-type (make-integer-type (derive-type form)))
+       (dformat t "p2-times type1 = ~S type2 = ~S~%" type1 type2)
+       (dformat t "p2-times result-type = ~S~%" result-type)
        (cond ((and (numberp arg1) (numberp arg2))
-;;               (format t "p2-times case 1~%")
+              (dformat t "p2-times case 1~%")
               (compile-constant (* arg1 arg2)
                                 :target target
                                 :representation representation))
-             ((and (subtypep type1 'FIXNUM)
-                   (subtypep type2 'FIXNUM)
-                   (subtypep result-type 'FIXNUM))
-;;               (format t "p2-times case 2~%")
+             ((setf value (constant-fixnum-value result-type))
+              (dformat t "p2-times case 1a~%")
+              (compile-constant value
+                                :target target
+                                :representation representation))
+             ((and (fixnum-type-p type1)
+                   (fixnum-type-p type2)
+                   (fixnum-type-p result-type))
+              (dformat t "p2-times case 2~%")
               (unless (eq representation :unboxed-fixnum)
                 (emit 'new +lisp-fixnum-class+)
                 (emit 'dup))
@@ -6240,7 +6247,7 @@
                 (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
               (emit-move-from-stack target representation))
              ((fixnump arg2)
-;;               (format t "p2-times case 3~%")
+              (dformat t "p2-times case 3~%")
               (compile-form arg1 :target :stack)
               (maybe-emit-clear-values arg1)
               (emit-push-int arg2)
@@ -6249,10 +6256,10 @@
                 (emit-unbox-fixnum))
               (emit-move-from-stack target representation))
              (t
-;;               (format t "p2-times case 4~%")
+              (dformat t "p2-times case 4~%")
               (compile-binary-operation "multiplyBy" args target representation)))))
     (t
-;;      (format t "p2-times case 5~%")
+     (dformat t "p2-times case 5~%")
      (compile-function-call form target representation))))
 
 (defun p2-min/max (form &key (target :stack) representation)
