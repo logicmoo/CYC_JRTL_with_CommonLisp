@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.576 2005-08-07 21:07:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.577 2005-08-08 01:22:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
   (require '#:clos)
   (require '#:print-object)
   (require '#:opcodes)
+  (require '#:compiler-types)
   (require '#:known-functions)
   (require '#:dump-form))
 
@@ -5840,45 +5841,6 @@
             (%cadr type-form)
             t))
       t))
-
-(defstruct (integer-type (:constructor %make-integer-type))
-  low
-  high)
-
-(declaim (ftype (function (t) t) make-integer-type))
-(defun make-integer-type (type)
-  (setf type (normalize-type type))
-  (when (and (consp type) (eq (%car type) 'INTEGER))
-    (let ((low (second type))
-          (high (third type)))
-      (cond ((null low)
-             (setf low '* high '*))
-            ((null high)
-             (setf high '*)))
-      (when (and (consp low) (integerp (%car low)))
-        (setq low (1+ (%car low))))
-      (when (and (consp high) (integerp (%car high)))
-        (setq high (1- (%car high))))
-      (%make-integer-type :low low :high high))))
-
-
-(declaim (ftype (function (t) t) fixnum-type-p))
-(defun fixnum-type-p (integer-type)
-  (when integer-type
-    (aver (integer-type-p integer-type)) ;; FIXME
-    (and (fixnump (integer-type-low integer-type))
-         (fixnump (integer-type-high integer-type)))))
-
-(declaim (ftype (function (t) t) constant-fixnum-value))
-(defun constant-fixnum-value (integer-type)
-  (when integer-type
-    (aver (integer-type-p integer-type)) ;; FIXME
-    (let ((low (integer-type-low integer-type))
-          high)
-      (when (fixnump low)
-        (setf high (integer-type-high integer-type))
-        (when (and (fixnump high) (= high low))
-          high)))))
 
 (declaim (ftype (function (t) t) derive-type-integer-length))
 (defun derive-type-integer-length (form)
