@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.1 2005-08-08 01:21:03 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.2 2005-08-08 02:57:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,26 +30,21 @@
           function-result-type
           defknown))
 
-(defstruct (integer-type (:constructor %make-integer-type))
+(defstruct (integer-type (:constructor %make-integer-type (low high)))
   low
   high)
 
 (declaim (ftype (function (t) t) make-integer-type))
 (defun make-integer-type (type)
-  (setf type (normalize-type type)) ;; FIXME
+  (setf type (normalize-type type))
   (when (and (consp type) (eq (%car type) 'INTEGER))
     (let ((low (second type))
           (high (third type)))
-      (cond ((null low)
-             (setf low '* high '*))
-            ((null high)
-             (setf high '*)))
       (when (and (consp low) (integerp (%car low)))
         (setq low (1+ (%car low))))
       (when (and (consp high) (integerp (%car high)))
         (setq high (1- (%car high))))
-      (%make-integer-type :low low :high high))))
-
+      (%make-integer-type low high))))
 
 (declaim (ftype (function (t) t) fixnum-type-p))
 (defun fixnum-type-p (integer-type)
@@ -73,8 +68,12 @@
   (let ((type (normalize-type typespec)))
     (cond ((consp type)
            (case (%car type)
-             ('INTEGER
-              (make-integer-type type)))))))
+             (INTEGER
+              (make-integer-type type))))
+          ((memq type '(SYMBOL))
+           type)
+          (t
+           t))))
 
 (defvar *function-result-types* (make-hash-table :test 'equal))
 
