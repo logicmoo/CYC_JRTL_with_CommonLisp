@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.2 2005-08-08 02:57:58 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.3 2005-08-08 15:15:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
           fixnum-type-p
           constant-fixnum-value
           make-compiler-type
+          compiler-subtypep
           function-result-type
           defknown))
 
@@ -40,18 +41,21 @@
   (when (and (consp type) (eq (%car type) 'INTEGER))
     (let ((low (second type))
           (high (third type)))
-      (when (and (consp low) (integerp (%car low)))
-        (setq low (1+ (%car low))))
-      (when (and (consp high) (integerp (%car high)))
-        (setq high (1- (%car high))))
+      (if (eq low '*)
+          (setf low nil)
+          (when (and (consp low) (integerp (%car low)))
+            (setf low (1+ (%car low)))))
+      (if (eq high '*)
+          (setf high nil)
+          (when (and (consp high) (integerp (%car high)))
+            (setf high (1- (%car high)))))
       (%make-integer-type low high))))
 
 (declaim (ftype (function (t) t) fixnum-type-p))
-(defun fixnum-type-p (integer-type)
-  (when integer-type
-    (aver (integer-type-p integer-type)) ;; FIXME
-    (and (fixnump (integer-type-low integer-type))
-         (fixnump (integer-type-high integer-type)))))
+(defun fixnum-type-p (compiler-type)
+  (and (integer-type-p compiler-type)
+       (fixnump (integer-type-low compiler-type))
+       (fixnump (integer-type-high compiler-type))))
 
 (declaim (ftype (function (t) t) constant-fixnum-value))
 (defun constant-fixnum-value (integer-type)
@@ -65,15 +69,47 @@
           high)))))
 
 (defun make-compiler-type (typespec)
-  (let ((type (normalize-type typespec)))
-    (cond ((consp type)
-           (case (%car type)
-             (INTEGER
-              (make-integer-type type))))
-          ((memq type '(SYMBOL))
-           type)
-          (t
-           t))))
+  (if (integer-type-p typespec)
+      typespec
+      (let ((type (normalize-type typespec)))
+        (cond ((consp type)
+               (case (%car type)
+                 (INTEGER
+                  (make-integer-type type))
+                 (t
+                  t)))
+              ((memq type '(SYMBOL))
+               type)
+              (t
+               t)))))
+
+(defun integer-type-subtypep (type1 typespec)
+  (if (eq typespec 'INTEGER)
+      t
+      (let ((type2 (make-integer-type typespec)))
+        (when type2
+          (let ((low1 (integer-type-low type1))
+                (high1 (integer-type-high type1))
+                (low2 (integer-type-low type2))
+                (high2 (integer-type-high type2)))
+            (cond ((and low1 low2 high1 high2)
+                   (and (>= low1 low2) (<= high1 high2)))
+                  ((and low1 low2 (< low1 low2))
+                   nil)
+                  ((and high1 high2) (> high1 high2)
+                   nil)
+                  ((and (null low1) low2)
+                   nil)
+                  ((and (null high1) high2)
+                   nil)
+                  (t
+                   t)))))))
+
+(defun compiler-subtypep (compiler-type typespec)
+  (cond ((eq typespec t)
+         t)
+        ((integer-type-p compiler-type)
+         (integer-type-subtypep compiler-type typespec))))
 
 (defvar *function-result-types* (make-hash-table :test 'equal))
 
