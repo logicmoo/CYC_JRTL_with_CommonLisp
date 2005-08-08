@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.577 2005-08-08 01:22:07 piso Exp $
+;;; $Id: jvm.lisp,v 1.578 2005-08-08 02:58:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6073,6 +6073,9 @@
         (t
          t)))
 
+(defun derive-compiler-type (form)
+  (make-compiler-type (derive-type form)))
+
 ;; delete item sequence &key from-end test test-not start end count key
 (defun p2-delete (form &key (target :stack) representation)
   (unless (notinline-p 'delete)
@@ -6954,7 +6957,7 @@
     (compile-function-call form target representation)
     (return-from p2-symbol-name))
   (let ((arg (%cadr form)))
-    (cond ((and (eq (derive-type arg) 'SYMBOL) (< *safety* 3))
+    (cond ((and (eq (derive-compiler-type arg) 'SYMBOL) (< *safety* 3))
            (compile-form arg)
            (maybe-emit-clear-values arg)
            (emit 'checkcast +lisp-symbol-class+)
@@ -6968,8 +6971,8 @@
     (compile-function-call form target representation)
     (return-from p2-symbol-package))
   (let ((arg (%cadr form)))
-    (cond ((and (eq (derive-type arg) 'SYMBOL) (< *safety* 3))
-           (compile-form arg)
+    (cond ((and (eq (derive-compiler-type arg) 'SYMBOL) (< *safety* 3))
+           (compile-form arg :target :stack)
            (maybe-emit-clear-values arg)
            (emit 'checkcast +lisp-symbol-class+)
            (emit-invokevirtual +lisp-symbol-class+ "getPackage"
@@ -6981,8 +6984,8 @@
 (defun p2-symbol-value (form &key (target :stack) representation)
   (when (check-arg-count form 1)
     (let ((arg (%cadr form)))
-      (when (eq (derive-type arg) 'SYMBOL)
-        (compile-form arg)
+      (when (eq (derive-compiler-type arg) 'SYMBOL)
+        (compile-form arg :target :stack)
         (maybe-emit-clear-values arg)
         (emit 'checkcast +lisp-symbol-class+)
         (emit-push-current-thread)
