@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.3 2005-08-08 15:15:51 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.4 2005-08-09 10:52:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 
 (export '(integer-type-low
           integer-type-high
+          integer-type-p
           make-integer-type
           fixnum-type-p
           constant-fixnum-value
@@ -37,6 +38,8 @@
 
 (declaim (ftype (function (t) t) make-integer-type))
 (defun make-integer-type (type)
+  (when (eq type 'INTEGER)
+    (return-from make-integer-type (%make-integer-type nil nil)))
   (setf type (normalize-type type))
   (when (and (consp type) (eq (%car type) 'INTEGER))
     (let ((low (second type))
