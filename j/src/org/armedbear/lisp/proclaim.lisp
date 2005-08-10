@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: proclaim.lisp,v 1.7 2005-08-03 13:57:59 piso Exp $
+;;; $Id: proclaim.lisp,v 1.8 2005-08-10 11:11:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,13 +54,13 @@
     (OPTIMIZE
      (dolist (spec (cdr declaration-specifier))
        (let ((val 3)
-             (quantity spec))
+             (quality spec))
          (when (consp spec)
-           (setf quantity (%car spec)
+           (setf quality (%car spec)
                  val (cadr spec)))
          (when (and (fixnump val)
                     (<= 0 val 3))
-           (case quantity
+           (case quality
              (SPEED
               (setf *speed* val))
              (SPACE
@@ -82,7 +82,20 @@
        (when (or (get name 'deftype-definition)
                  (find-class name nil))
          (declaration-error name))
-       (setf (gethash name (the hash-table *declaration-types*)) name)))))
+       (setf (gethash name (the hash-table *declaration-types*)) name)))
+    (:explain
+     (dolist (spec (cdr declaration-specifier))
+       (let ((val t)
+             (quality spec))
+         (when (consp spec)
+           (setf quality (%car spec))
+           (when (= (length spec) 2)
+             (setf val (%cadr spec))))
+         (case quality
+           (:calls
+            (if val
+                (pushnew :calls *explain*)
+                (setf *explain* (remove :calls *explain*))))))))))
 
 (defvar *proclaimed-ftypes* (make-hash-table :test 'equal))
 
