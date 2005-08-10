@@ -1,8 +1,8 @@
 /*
  * logxor.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: logxor.java,v 1.5 2004-02-28 17:44:46 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: logxor.java,v 1.6 2005-08-10 13:27:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,7 @@
 
 package org.armedbear.lisp;
 
-import java.math.BigInteger;
-
-// ### logxor
-// logxor &rest integers => result-integer
-// exclusive or
+// ### logxor &rest integers => result-integer
 public final class logxor extends Primitive
 {
     private logxor()
@@ -42,59 +38,21 @@ public final class logxor extends Primitive
     {
         if (arg instanceof Fixnum || arg instanceof Bignum)
             return arg;
-        return signal(new TypeError(arg, Symbol.INTEGER));
+        return signalTypeError(arg, Symbol.INTEGER);
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        if (first instanceof Fixnum && second instanceof Fixnum)
-            return new Fixnum(((Fixnum)first).value ^ ((Fixnum)second).value);
-        BigInteger n1, n2;
-        if (first instanceof Fixnum)
-            n1 = ((Fixnum)first).getBigInteger();
-        else if (first instanceof Bignum)
-            n1 = ((Bignum)first).value;
-        else
-            return signal(new TypeError(first, Symbol.INTEGER));
-        if (second instanceof Fixnum)
-            n2 = ((Fixnum)second).getBigInteger();
-        else if (second instanceof Bignum)
-            n2 = ((Bignum)second).value;
-        else
-            return signal(new TypeError(second, Symbol.INTEGER));
-        return number(n1.xor(n2));
+        return first.LOGXOR(second);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        final int limit = args.length;
-        int i = 0;
-        // Maybe all the arguments are fixnums.
-        int r = 0;
-        do {
-            if (args[i] instanceof Fixnum) {
-                r ^= ((Fixnum)args[i]).value;
-                ++i;
-            } else
-                break;
-        } while (i < limit);
-        if (i == limit)
-            return number(r);
-        // Not all fixnums.
-        BigInteger result = BigInteger.valueOf(r);
-        while (i < limit) {
-            BigInteger n;
-            if (args[i] instanceof Fixnum)
-                n = ((Fixnum)args[i]).getBigInteger();
-            else if (args[i] instanceof Bignum)
-                n = ((Bignum)args[i]).value;
-            else
-                return signal(new TypeError(args[i], Symbol.INTEGER));
-            result = result.xor(n);
-            ++i;
-        }
-        return number(result);
+        LispObject result = Fixnum.ZERO;
+        for (int i = 0; i < args.length; i++)
+            result = result.LOGXOR(args[i]);
+        return result;
     }
 
     private static final Primitive LOGXOR = new logxor();
