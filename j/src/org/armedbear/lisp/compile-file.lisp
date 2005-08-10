@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.111 2005-08-03 13:58:30 piso Exp $
+;;; $Id: compile-file.lisp,v 1.112 2005-08-10 20:16:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -401,6 +401,7 @@
                   (*space* *space*)
                   (*safety* *safety*)
                   (*debug* *debug*)
+                  (*explain* *explain*)
                   (jvm::*functions-defined-in-current-file* '())
                   (*fbound-names* '()))
               (write "; -*- Mode: Lisp -*-" :escape nil :stream out)
