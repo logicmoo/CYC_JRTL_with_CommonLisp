@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: proclaim.lisp,v 1.8 2005-08-10 11:11:44 piso Exp $
+;;; $Id: proclaim.lisp,v 1.9 2005-08-10 20:16:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -91,11 +91,9 @@
            (setf quality (%car spec))
            (when (= (length spec) 2)
              (setf val (%cadr spec))))
-         (case quality
-           (:calls
-            (if val
-                (pushnew :calls *explain*)
-                (setf *explain* (remove :calls *explain*))))))))))
+         (if val
+             (pushnew quality *explain*)
+             (setf *explain* (remove quality *explain*))))))))
 
 (defvar *proclaimed-ftypes* (make-hash-table :test 'equal))
 
