@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.582 2005-08-10 13:30:23 piso Exp $
+;;; $Id: jvm.lisp,v 1.583 2005-08-10 17:37:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5528,7 +5528,8 @@
                     (maybe-emit-clear-values arg1 arg2)
                     (emit-invokevirtual +lisp-object-class+ "logand"
                                         (lisp-object-arg-types 1) +lisp-object+)
-                    (maybe-emit-clear-values arg1 arg2)
+                    (when (eq representation 'unboxed-fixnum)
+                      (emit-unbox-fixnum))
                     (emit-move-from-stack target representation)))))
           (t
            (compile-function-call form target representation)))))
@@ -5589,7 +5590,8 @@
                     (maybe-emit-clear-values arg1 arg2)
                     (emit-invokevirtual +lisp-object-class+ "LOGIOR"
                                         (lisp-object-arg-types 1) +lisp-object+)
-                    (maybe-emit-clear-values arg1 arg2)
+                    (when (eq representation 'unboxed-fixnum)
+                      (emit-unbox-fixnum))
                     (emit-move-from-stack target representation)))))
           ((= len 3)
            ;; (logior a b c) => (logior (logior a b) c)
@@ -5644,7 +5646,8 @@
                     (maybe-emit-clear-values arg1 arg2)
                     (emit-invokevirtual +lisp-object-class+ "LOGXOR"
                                         (lisp-object-arg-types 1) +lisp-object+)
-                    (maybe-emit-clear-values arg1 arg2)
+                    (when (eq representation 'unboxed-fixnum)
+                      (emit-unbox-fixnum))
                     (emit-move-from-stack target representation)
                     (return-from p2-logxor)))
              (dformat t "p2-logxor full call type1 = ~S type2 = ~S~%" type1 type2)))
