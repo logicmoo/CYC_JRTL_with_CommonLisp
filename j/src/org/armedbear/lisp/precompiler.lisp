@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.131 2005-08-04 04:58:59 piso Exp $
+;;; $Id: precompiler.lisp,v 1.132 2005-08-10 11:16:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -51,13 +51,25 @@
                   (setf *debug* val))
                  (space
                   (setf *space* val))
-                 (compilation-speed ;; Ignored.
-                  )
+                 (compilation-speed) ;; Ignored.
                  (t
                   (compiler-warn "Ignoring unknown optimization quality ~S in ~S." quality decl)))))))
         ((INLINE NOTINLINE)
          (dolist (symbol (%cdr decl))
-           (push (cons symbol (%car decl)) *inline-declarations*))))))
+           (push (cons symbol (%car decl)) *inline-declarations*)))
+        (:explain
+         (dolist (spec (%cdr decl))
+           (let ((val t)
+                 (quality spec))
+             (when (consp spec)
+               (setf quality (%car spec))
+               (when (= (length spec) 2)
+                 (setf val (%cadr spec))))
+             (case quality
+               (:calls
+                (if val
+                    (pushnew :calls *explain*)
+                    (setf *explain* (remove :calls *explain*)))))))))))
   t)
 
 ;; Returns list of declared specials.
