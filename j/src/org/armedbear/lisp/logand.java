@@ -1,8 +1,8 @@
 /*
  * logand.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: logand.java,v 1.11 2004-12-16 17:30:28 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: logand.java,v 1.12 2005-08-10 13:23:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,7 @@ package org.armedbear.lisp;
 
 import java.math.BigInteger;
 
-// ### logand
-// logand &rest integers => result-integer
+// ### logand &rest integers => result-integer
 public final class logand extends Primitive
 {
     private logand()
@@ -35,6 +34,13 @@ public final class logand extends Primitive
     public LispObject execute()
     {
         return Fixnum.MINUS_ONE;
+    }
+
+    public LispObject execute(LispObject arg) throws ConditionThrowable
+    {
+        if (arg instanceof Fixnum || arg instanceof Bignum)
+            return arg;
+        return signalTypeError(arg, Symbol.INTEGER);
     }
 
     public LispObject execute(LispObject first, LispObject second)
