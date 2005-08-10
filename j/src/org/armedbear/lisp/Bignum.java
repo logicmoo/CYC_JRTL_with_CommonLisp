@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Bignum.java,v 1.68 2005-07-27 02:32:14 piso Exp $
+ * $Id: Bignum.java,v 1.69 2005-08-10 13:24:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -547,8 +547,42 @@ public final class Bignum extends LispObject
         else if (obj instanceof Bignum)
             n = ((Bignum)obj).value;
         else
-            return signal(new TypeError(obj, Symbol.INTEGER));
+            return signalTypeError(obj, Symbol.INTEGER);
         return number(value.and(n));
+    }
+
+    public LispObject LOGIOR(int n) throws ConditionThrowable
+    {
+        return number(value.or(BigInteger.valueOf(n)));
+    }
+
+    public LispObject LOGIOR(LispObject obj) throws ConditionThrowable
+    {
+        final BigInteger n;
+        if (obj instanceof Fixnum)
+            n = ((Fixnum)obj).getBigInteger();
+        else if (obj instanceof Bignum)
+            n = ((Bignum)obj).value;
+        else
+            return signalTypeError(obj, Symbol.INTEGER);
+        return number(value.or(n));
+    }
+
+    public LispObject LOGXOR(int n) throws ConditionThrowable
+    {
+        return number(value.xor(BigInteger.valueOf(n)));
+    }
+
+    public LispObject LOGXOR(LispObject obj) throws ConditionThrowable
+    {
+        final BigInteger n;
+        if (obj instanceof Fixnum)
+            n = ((Fixnum)obj).getBigInteger();
+        else if (obj instanceof Bignum)
+            n = ((Bignum)obj).value;
+        else
+            return signalTypeError(obj, Symbol.INTEGER);
+        return number(value.xor(n));
     }
 
     public LispObject LDB(int size, int position)

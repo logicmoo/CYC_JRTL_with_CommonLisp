@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.120 2005-07-27 02:31:35 piso Exp $
+ * $Id: Fixnum.java,v 1.121 2005-08-10 13:25:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -736,6 +736,40 @@ public final class Fixnum extends LispObject
         return signalTypeError(obj, Symbol.INTEGER);
     }
 
+    public LispObject LOGIOR(int n) throws ConditionThrowable
+    {
+        return new Fixnum(value | n);
+    }
+
+    public LispObject LOGIOR(LispObject obj) throws ConditionThrowable
+    {
+        if (obj instanceof Fixnum)
+            return new Fixnum(value | ((Fixnum)obj).value);
+        if (obj instanceof Bignum) {
+            BigInteger n1 = getBigInteger();
+            BigInteger n2 = ((Bignum)obj).value;
+            return number(n1.or(n2));
+        }
+        return signalTypeError(obj, Symbol.INTEGER);
+    }
+
+    public LispObject LOGXOR(int n) throws ConditionThrowable
+    {
+        return new Fixnum(value ^ n);
+    }
+
+    public LispObject LOGXOR(LispObject obj) throws ConditionThrowable
+    {
+        if (obj instanceof Fixnum)
+            return new Fixnum(value ^ ((Fixnum)obj).value);
+        if (obj instanceof Bignum) {
+            BigInteger n1 = getBigInteger();
+            BigInteger n2 = ((Bignum)obj).value;
+            return number(n1.xor(n2));
+        }
+        return signalTypeError(obj, Symbol.INTEGER);
+    }
+
     public LispObject LDB(int size, int position)
     {
         int n = value >> position;
@@ -754,7 +788,7 @@ public final class Fixnum extends LispObject
         int base = Fixnum.getValue(_PRINT_BASE_.symbolValue(thread));
         String s = Integer.toString(value, base).toUpperCase();
         if (_PRINT_RADIX_.symbolValue(thread) != NIL) {
-            StringBuffer sb = new StringBuffer();
+            FastStringBuffer sb = new FastStringBuffer();
             switch (base) {
                 case 2:
                     sb.append("#b");

@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.142 2005-08-04 18:07:51 piso Exp $
+ * $Id: LispObject.java,v 1.143 2005-08-10 13:25:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -900,6 +900,26 @@ public class LispObject extends Lisp
     }
 
     public LispObject logand(LispObject obj) throws ConditionThrowable
+    {
+        return signalTypeError(this, Symbol.INTEGER);
+    }
+
+    public LispObject LOGIOR(int n) throws ConditionThrowable
+    {
+        return LOGIOR(new Fixnum(n));
+    }
+
+    public LispObject LOGIOR(LispObject obj) throws ConditionThrowable
+    {
+        return signalTypeError(this, Symbol.INTEGER);
+    }
+
+    public LispObject LOGXOR(int n) throws ConditionThrowable
+    {
+        return LOGXOR(new Fixnum(n));
+    }
+
+    public LispObject LOGXOR(LispObject obj) throws ConditionThrowable
     {
         return signalTypeError(this, Symbol.INTEGER);
     }
