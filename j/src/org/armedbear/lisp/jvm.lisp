@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.585 2005-08-10 20:40:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.586 2005-08-10 21:09:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5544,6 +5544,17 @@
                     (when (eq representation 'unboxed-fixnum)
                       (emit-unbox-fixnum))
                     (emit-move-from-stack target representation))
+                   ((fixnum-type-p type1)
+                    ;; arg1 is of fixnum type, but arg2 is not
+                    (compile-form arg1 'stack 'unboxed-fixnum)
+                    (compile-form arg2 'stack 'nil)
+                    (maybe-emit-clear-values arg1 arg2)
+                    ;; swap args
+                    (emit 'swap)
+                    (emit-invokevirtual +lisp-object-class+ "LOGAND" '("I") +lisp-object+)
+                    (when (eq representation 'unboxed-fixnum)
+                      (emit-unbox-fixnum))
+                    (emit-move-from-stack target representation))
                    (t
                     (compile-form arg1 'stack nil)
                     (compile-form arg2 'stack nil)
@@ -5598,6 +5609,17 @@
                     (compile-form arg1 'stack nil)
                     (compile-form arg2 'stack 'unboxed-fixnum)
                     (maybe-emit-clear-values arg1 arg2)
+                    (emit-invokevirtual +lisp-object-class+ "LOGIOR" '("I") +lisp-object+)
+                    (when (eq representation 'unboxed-fixnum)
+                      (emit-unbox-fixnum))
+                    (emit-move-from-stack target representation))
+                   ((fixnum-type-p type1)
+                    ;; arg1 is of fixnum type, but arg2 is not
+                    (compile-form arg1 'stack 'unboxed-fixnum)
+                    (compile-form arg2 'stack 'nil)
+                    (maybe-emit-clear-values arg1 arg2)
+                    ;; swap args
+                    (emit 'swap)
                     (emit-invokevirtual +lisp-object-class+ "LOGIOR" '("I") +lisp-object+)
                     (when (eq representation 'unboxed-fixnum)
                       (emit-unbox-fixnum))
