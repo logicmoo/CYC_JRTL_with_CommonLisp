@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.4 2005-08-09 10:52:39 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.5 2005-08-10 11:17:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
           integer-type-p
           make-integer-type
           fixnum-type-p
-          constant-fixnum-value
+          fixnum-constant-value
           make-compiler-type
           compiler-subtypep
           function-result-type
@@ -60,14 +60,13 @@
        (fixnump (integer-type-low compiler-type))
        (fixnump (integer-type-high compiler-type))))
 
-(declaim (ftype (function (t) t) constant-fixnum-value))
-(defun constant-fixnum-value (integer-type)
-  (when integer-type
-    (aver (integer-type-p integer-type)) ;; FIXME
-    (let ((low (integer-type-low integer-type))
+(declaim (ftype (function (t) t) fixnum-constant-value))
+(defun fixnum-constant-value (compiler-type)
+  (when (and compiler-type (integer-type-p compiler-type))
+    (let ((low (integer-type-low compiler-type))
           high)
       (when (fixnump low)
-        (setf high (integer-type-high integer-type))
+        (setf high (integer-type-high compiler-type))
         (when (and (fixnump high) (= high low))
           high)))))
 

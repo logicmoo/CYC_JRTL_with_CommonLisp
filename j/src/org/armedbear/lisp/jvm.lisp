@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.580 2005-08-09 10:53:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.581 2005-08-10 11:18:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1071,6 +1071,7 @@
 (declaim (ftype (function (t) (integer 1 65535)) pool-get))
 (defun pool-get (entry)
   (declare (optimize speed))
+  (declare (:explain :calls))
   (let* ((ht *pool-entries*)
          (index (gethash-2op-1ret entry ht)))
     (declare (type hash-table ht))
@@ -1266,6 +1267,10 @@
          (stack-effect (cdr info))
          (instruction (emit 'invokevirtual class-name method-name descriptor)))
     (declare (type (signed-byte 8) stack-effect))
+;;     (let ((explain *explain*))
+;;       (when (and explain (memq :calls explain))
+;;         (unless (string= method-name "execute")
+;;           (format t "; Generating a Java call to ~A()~%" method-name))))
     (setf (instruction-stack instruction) (1- stack-effect))))
 
 (declaim (ftype (function * t) emit-invokespecial-init))
@@ -3443,9 +3448,11 @@
         (3
          (when (compile-function-call-3 op args target)
            (return-from compile-function-call))))
-;;       (let ((package (symbol-package op)))
-;;         (when (or (eq package +cl-package+) (eq package (find-package "SYSTEM")))
-;;           (format t "compile-function-call ~S~%" op)))
+      (let ((explain *explain*))
+        (when (and explain (memq :calls explain))
+          (let ((package (symbol-package op)))
+            (when (or (eq package +cl-package+))
+              (format t "; Generating a full call to ~S~%" op)))))
       (unless (> *speed* *debug*)
         (emit-push-current-thread))
       (cond ((eq op (compiland-name *current-compiland*)) ; recursive call
@@ -4654,6 +4661,7 @@
           (*space*  *space*)
           (*safety* *safety*)
           (*debug*  *debug*)
+          (*explain* *explain*)
           (*inline-declarations* *inline-declarations*))
       (process-optimization-declarations (cddr form))
       (compile-progn-body (cddr form) target))
@@ -4671,6 +4679,7 @@
         (*space*  *space*)
         (*safety* *safety*)
         (*debug*  *debug*)
+        (*explain* *explain*)
         (*inline-declarations* *inline-declarations*))
     (process-optimization-declarations (cdr form))
 ;;     (let ((*visible-variables* *visible-variables*)
@@ -5186,7 +5195,8 @@
                (let ((*current-compiland* compiland)
                      (*speed* *speed*)
                      (*safety* *safety*)
-                     (*debug* *debug*))
+                     (*debug* *debug*)
+                     (*explain* *explain*))
                  (p2-compiland compiland)
                  (write-class-file (compiland-class-file compiland))))
              ;; Verify that the class file is loadable.
@@ -5207,7 +5217,8 @@
                      (let ((*current-compiland* compiland)
                            (*speed* *speed*)
                            (*safety* *safety*)
-                           (*debug* *debug*))
+                           (*debug* *debug*)
+                           (*explain* *explain*))
                        (p2-compiland compiland)
                        (write-class-file (compiland-class-file compiland))))
                    (push (make-local-function :name (compiland-name compiland)
@@ -5239,7 +5250,8 @@
                (let ((*current-compiland* compiland)
                      (*speed* *speed*)
                      (*safety* *safety*)
-                     (*debug* *debug*))
+                     (*debug* *debug*)
+                     (*explain* *explain*))
                  (p2-compiland compiland)
                  (write-class-file (compiland-class-file compiland))))
              ;; Verify that the class file is loadable.
@@ -5261,7 +5273,8 @@
                      (let ((*current-compiland* compiland)
                            (*speed* *speed*)
                            (*safety* *safety*)
-                           (*debug* *debug*))
+                           (*debug* *debug*)
+                           (*explain* *explain*))
                        (p2-compiland compiland)
                        (write-class-file (compiland-class-file compiland))))
                    (setf (local-function-class-file local-function) class-file)
@@ -5302,7 +5315,8 @@
              (let ((*current-compiland* compiland)
                    (*speed* *speed*)
                    (*safety* *safety*)
-                   (*debug* *debug*))
+                   (*debug* *debug*)
+                   (*explain* *explain*))
                (p2-compiland compiland)
                (write-class-file (compiland-class-file compiland))))
            (let ((class-file (compiland-class-file compiland)))
@@ -5320,7 +5334,8 @@
                      (let ((*current-compiland* compiland)
                            (*speed* *speed*)
                            (*safety* *safety*)
-                           (*debug* *debug*))
+                           (*debug* *debug*)
+                           (*explain* *explain*))
                        (p2-compiland compiland)
                        (write-class-file (compiland-class-file compiland))))
                    (emit 'getstatic *this-class*
@@ -5525,11 +5540,11 @@
                     (compile-constant (logior arg1 arg2) target representation)
                     (return-from p2-logior t))
                    ((and (fixnum-type-p type1) (fixnum-type-p type2))
-                    (when (and (constant-fixnum-value type1)
-                               (constant-fixnum-value type2))
+                    (when (and (fixnum-constant-value type1)
+                               (fixnum-constant-value type2))
                       (dformat t "p2-logior case 3~%")
-                      (compile-constant (logior (constant-fixnum-value type1)
-                                                (constant-fixnum-value type2))
+                      (compile-constant (logior (fixnum-constant-value type1)
+                                                (fixnum-constant-value type2))
                                         target representation)
                       (return-from p2-logior t))
                     (dformat t "p2-logior case 4~%")
@@ -5543,7 +5558,20 @@
                     (unless (eq representation 'unboxed-fixnum)
                       (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
                     (emit-move-from-stack target representation)
-                    (return-from p2-logior t)))))
+                    (return-from p2-logior t))
+                   ((and (fixnum-type-p type1) (eql (fixnum-constant-value type1) 0))
+                    (dformat t "p2-logior arg1 is zero~%")
+                    (compile-form arg1 nil nil) ; for effect
+                    (compile-form arg2 target representation)
+                    (maybe-emit-clear-values arg1 arg2)
+                    (return-from p2-logior t))
+                   ((and (fixnum-type-p type2) (eql (fixnum-constant-value type2) 0))
+                    (dformat t "p2-logior arg2 is zero~%")
+                    (compile-form arg1 target representation)
+                    (compile-form arg2 nil nil) ; for effect
+                    (maybe-emit-clear-values arg1 arg2)
+                    (return-from p2-logior t)))
+             (dformat t "p2-logior full call type1 = ~S type2 = ~S~%" type1 type2)))
           ((= len 3)
            (dformat t "p2-logior case 5~%")
            ;; (logior a b c) => (logior (logior a b) c)
@@ -5581,7 +5609,8 @@
                     (unless (eq representation 'unboxed-fixnum)
                       (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
                     (emit-move-from-stack target representation)
-                    (return-from p2-logxor t)))))
+                    (return-from p2-logxor t)))
+             (dformat t "p2-logxor full call type1 = ~S type2 = ~S~%" type1 type2)))
           ((= len 3)
            (dformat t "p2-logxor case 5~%")
            ;; (logxor a b c) => (logxor (logxor a b) c)
@@ -5590,7 +5619,6 @@
              (dformat t "new-form = ~S~%" new-form)
              (p2-logxor new-form target representation))
            (return-from p2-logxor t))))
-  (dformat t "p2-logxor default case~%")
   (compile-function-call form target representation))
 
 ;; %ldb size position integer => byte
@@ -6208,7 +6236,7 @@
        (cond ((and (numberp arg1) (numberp arg2))
               (dformat t "p2-times case 1~%")
               (compile-constant (* arg1 arg2) target representation))
-             ((setf value (constant-fixnum-value result-type))
+             ((setf value (fixnum-constant-value result-type))
               (dformat t "p2-times case 1a~%")
               (compile-constant value target representation))
              ((and (fixnum-type-p type1)
@@ -6649,6 +6677,10 @@
   (let* ((args (cdr form))
          (len (length args)))
     (case len
+      (0
+       (emit-push-current-thread)
+       (emit-invokevirtual +lisp-thread-class+ "setValues" nil +lisp-object+)
+       (emit-move-from-stack target))
       (1
        (let ((arg (%car args)))
          (compile-form arg target representation)
@@ -7948,6 +7980,7 @@
         (*speed* *speed*)
         (*safety* *safety*)
         (*debug* *debug*)
+        (*explain* *explain*)
         (*inline-declarations* *inline-declarations*))
     ;; Pass 1.
     (p1-compiland compiland)
