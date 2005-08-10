@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.583 2005-08-10 17:37:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.584 2005-08-10 20:18:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1260,6 +1260,24 @@
          (instruction (emit 'invokestatic class-name method-name descriptor)))
     (setf (instruction-stack instruction) stack-effect)))
 
+(declaim (ftype (function t string) pretty-java-type))
+(defun pretty-java-type (type)
+  (cond ((equal type +lisp-object+)
+         "LispObject")
+        ((equal type "I")
+         "int")
+        ((equal type "Z")
+         "boolean")
+        (t
+         "unknown")))
+
+(declaim (ftype (function t string) pretty-java-class))
+(defun pretty-java-class (class)
+  (cond ((equal class +lisp-object-class+)
+         "LispObject")
+        (t
+         "unknown")))
+
 (declaim (ftype (function * t) emit-invokevirtual))
 (defun emit-invokevirtual (class-name method-name arg-types return-type)
   (let* ((info (get-descriptor-info arg-types return-type))
@@ -1267,10 +1285,14 @@
          (stack-effect (cdr info))
          (instruction (emit 'invokevirtual class-name method-name descriptor)))
     (declare (type (signed-byte 8) stack-effect))
-;;     (let ((explain *explain*))
-;;       (when (and explain (memq :calls explain))
-;;         (unless (string= method-name "execute")
-;;           (format t "; Generating a Java call to ~A()~%" method-name))))
+    (let ((explain *explain*))
+      (when (and explain (memq :java-calls explain))
+        (unless (string= method-name "execute")
+          (format t ";   Emitting call to ~A ~A.~A(~{~A~^,~})~%"
+                  (pretty-java-type return-type)
+                  (pretty-java-class class-name)
+                  method-name
+                  (mapcar 'pretty-java-type arg-types)))))
     (setf (instruction-stack instruction) (1- stack-effect))))
 
 (declaim (ftype (function * t) emit-invokespecial-init))
@@ -3452,7 +3474,7 @@
         (when (and explain (memq :calls explain))
           (let ((package (symbol-package op)))
             (when (or (eq package +cl-package+))
-              (format t "; Generating a full call to ~S~%" op)))))
+              (format t ";   Generating full call to ~S~%" op)))))
       (unless (> *speed* *debug*)
         (emit-push-current-thread))
       (cond ((eq op (compiland-name *current-compiland*)) ; recursive call
@@ -5549,13 +5571,11 @@
                      arg2 (%car args)))
              (setf type1 (derive-compiler-type arg1)
                    type2 (derive-compiler-type arg2))
-             (dformat t "p2-logior type1 = ~S type2 = ~S~%" type1 type2)
              (cond ((and (fixnum-constant-value type1) (fixnum-constant-value type2))
                     (compile-constant (logior (fixnum-constant-value type1)
                                               (fixnum-constant-value type2))
                                       target representation))
                    ((and (fixnum-type-p type1) (fixnum-type-p type2))
-                    (dformat t "p2-logior case 4~%")
                     (unless (eq representation 'unboxed-fixnum)
                       (emit 'new +lisp-fixnum-class+)
                       (emit 'dup))
@@ -5567,12 +5587,10 @@
                       (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
                     (emit-move-from-stack target representation))
                    ((and (eql (fixnum-constant-value type1) 0) (< *safety* 3))
-                    (format t "p2-logior arg1 is zero~%")
                     (compile-form arg1 nil nil) ; for effect
                     (compile-form arg2 target representation)
                     (maybe-emit-clear-values arg1 arg2))
                    ((and (eql (fixnum-constant-value type2) 0) (< *safety* 3))
-                    (format t "p2-logior arg2 is zero~%")
                     (compile-form arg1 target representation)
                     (compile-form arg2 nil nil) ; for effect
                     (maybe-emit-clear-values arg1 arg2))
