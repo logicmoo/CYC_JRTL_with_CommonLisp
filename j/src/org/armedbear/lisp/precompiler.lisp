@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.132 2005-08-10 11:16:44 piso Exp $
+;;; $Id: precompiler.lisp,v 1.133 2005-08-10 20:17:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,11 +65,9 @@
                (setf quality (%car spec))
                (when (= (length spec) 2)
                  (setf val (%cadr spec))))
-             (case quality
-               (:calls
-                (if val
-                    (pushnew :calls *explain*)
-                    (setf *explain* (remove :calls *explain*)))))))))))
+             (if val
+                 (pushnew quality *explain*)
+                 (setf *explain* (remove quality *explain*)))))))))
   t)
 
 ;; Returns list of declared specials.
