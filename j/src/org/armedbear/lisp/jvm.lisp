@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.584 2005-08-10 20:18:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.585 2005-08-10 20:40:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3093,7 +3093,7 @@
                     ( =           "IS_E")
                     (/=           "IS_NE")
                     (ASH          "ash")
-                    (LOGAND       "logand")
+;;                     (LOGAND       "logand")
                     (AREF         "AREF")
                     (SIMPLE-TYPEP "typep")
                     (RPLACA       "RPLACA")
@@ -5540,7 +5540,7 @@
                     (compile-form arg1 'stack nil)
                     (compile-form arg2 'stack 'unboxed-fixnum)
                     (maybe-emit-clear-values arg1 arg2)
-                    (emit-invokevirtual +lisp-object-class+ "logand" '("I") +lisp-object+)
+                    (emit-invokevirtual +lisp-object-class+ "LOGAND" '("I") +lisp-object+)
                     (when (eq representation 'unboxed-fixnum)
                       (emit-unbox-fixnum))
                     (emit-move-from-stack target representation))
@@ -5548,7 +5548,7 @@
                     (compile-form arg1 'stack nil)
                     (compile-form arg2 'stack nil)
                     (maybe-emit-clear-values arg1 arg2)
-                    (emit-invokevirtual +lisp-object-class+ "logand"
+                    (emit-invokevirtual +lisp-object-class+ "LOGAND"
                                         (lisp-object-arg-types 1) +lisp-object+)
                     (when (eq representation 'unboxed-fixnum)
                       (emit-unbox-fixnum))

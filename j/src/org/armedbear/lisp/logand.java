@@ -2,7 +2,7 @@
  * logand.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: logand.java,v 1.12 2005-08-10 13:23:57 piso Exp $
+ * $Id: logand.java,v 1.13 2005-08-10 20:39:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,14 +46,14 @@ public final class logand extends Primitive
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        return first.logand(second);
+        return first.LOGAND(second);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         LispObject result = Fixnum.MINUS_ONE;
         for (int i = 0; i < args.length; i++)
-            result = result.logand(args[i]);
+            result = result.LOGAND(args[i]);
         return result;
     }
 

@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.143 2005-08-10 13:25:53 piso Exp $
+ * $Id: LispObject.java,v 1.144 2005-08-10 20:38:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -894,12 +894,12 @@ public class LispObject extends Lisp
         return signalTypeError(this, Symbol.INTEGER);
     }
 
-    public LispObject logand(int n) throws ConditionThrowable
+    public LispObject LOGAND(int n) throws ConditionThrowable
     {
-        return logand(new Fixnum(n));
+        return LOGAND(new Fixnum(n));
     }
 
-    public LispObject logand(LispObject obj) throws ConditionThrowable
+    public LispObject LOGAND(LispObject obj) throws ConditionThrowable
     {
         return signalTypeError(this, Symbol.INTEGER);
     }
