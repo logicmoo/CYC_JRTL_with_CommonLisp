@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.588 2005-08-11 11:44:11 piso Exp $
+;;; $Id: jvm.lisp,v 1.589 2005-08-11 18:12:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1262,21 +1262,38 @@
 
 (declaim (ftype (function t string) pretty-java-type))
 (defun pretty-java-type (type)
-  (cond ((equal type +lisp-object+)
-         "LispObject")
-        ((equal type "I")
-         "int")
-        ((equal type "Z")
-         "boolean")
-        (t
-         "unknown")))
+  (let ((arrayp nil)
+        (pretty-string nil))
+    (when (and (stringp type)
+               (> (length type) 0)
+               (char= (char type 0) #\[))
+      (setf arrayp t
+            type (subseq type 1)))
+    (setf pretty-string
+          (cond ((equal type +lisp-object+)
+                 "LispObject")
+                ((equal type +lisp-thread+)
+                 "LispThread")
+                ((equal type "I")
+                 "int")
+                ((equal type "Z")
+                 "boolean")
+                ((null type)
+                 "void")
+                (t
+                 type)))
+    (when arrayp
+      (setf pretty-string (concatenate 'string pretty-string "[]")))
+    pretty-string))
 
 (declaim (ftype (function t string) pretty-java-class))
 (defun pretty-java-class (class)
   (cond ((equal class +lisp-object-class+)
          "LispObject")
+        ((equal class +lisp-thread-class+)
+         "LispThread")
         (t
-         "unknown")))
+         class)))
 
 (declaim (ftype (function * t) emit-invokevirtual))
 (defun emit-invokevirtual (class-name method-name arg-types return-type)
@@ -1288,7 +1305,7 @@
     (let ((explain *explain*))
       (when (and explain (memq :java-calls explain))
         (unless (string= method-name "execute")
-          (format t ";   Emitting call to ~A ~A.~A(~{~A~^,~})~%"
+          (format t ";   call to ~A ~A.~A(~{~A~^,~})~%"
                   (pretty-java-type return-type)
                   (pretty-java-class class-name)
                   method-name
@@ -3474,7 +3491,7 @@
         (when (and explain (memq :calls explain))
           (let ((package (symbol-package op)))
             (when (or (eq package +cl-package+))
-              (format t ";   Generating full call to ~S~%" op)))))
+              (format t ";   full call to ~S~%" op)))))
       (unless (> *speed* *debug*)
         (emit-push-current-thread))
       (cond ((eq op (compiland-name *current-compiland*)) ; recursive call
