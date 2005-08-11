@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.122 2005-08-10 20:39:10 piso Exp $
+ * $Id: Fixnum.java,v 1.123 2005-08-11 11:41:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -729,9 +729,14 @@ public final class Fixnum extends LispObject
         if (obj instanceof Fixnum)
             return new Fixnum(value & ((Fixnum)obj).value);
         if (obj instanceof Bignum) {
-            BigInteger n1 = getBigInteger();
-            BigInteger n2 = ((Bignum)obj).value;
-            return number(n1.and(n2));
+            if (value >= 0) {
+                int n2 = (((Bignum)obj).value).intValue();
+                return new Fixnum(value & n2);
+            } else {
+                BigInteger n1 = getBigInteger();
+                BigInteger n2 = ((Bignum)obj).value;
+                return number(n1.and(n2));
+            }
         }
         return signalTypeError(obj, Symbol.INTEGER);
     }
@@ -772,9 +777,9 @@ public final class Fixnum extends LispObject
 
     public LispObject LDB(int size, int position)
     {
-        int n = value >> position;
-        int mask = (1 << size) - 1;
-        return new Fixnum(n & mask);
+        long n = (long) value >> position;
+        long mask = (1L << size) - 1;
+        return number(n & mask);
     }
 
     public int hashCode()
