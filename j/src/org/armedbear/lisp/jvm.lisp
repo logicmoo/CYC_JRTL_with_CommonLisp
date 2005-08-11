@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.586 2005-08-10 21:09:07 piso Exp $
+;;; $Id: jvm.lisp,v 1.587 2005-08-11 10:00:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5480,7 +5480,8 @@
               (compile-form arg2 'stack 'unboxed-fixnum)
               (emit 'lshl)
               (maybe-emit-clear-values arg1 arg2)
-              (emit-box-long))))
+              (emit-box-long)))
+           (emit-move-from-stack target representation))
           ((and (fixnum-type-p type1) (compiler-subtypep type2 '(INTEGER -31 -1)))
            (unless (eq representation 'unboxed-fixnum)
              (emit 'new +lisp-fixnum-class+)
