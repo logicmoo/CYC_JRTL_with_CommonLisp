@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Bignum.java,v 1.71 2005-08-11 11:43:29 piso Exp $
+ * $Id: Bignum.java,v 1.72 2005-08-11 12:04:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -561,14 +561,14 @@ public final class Bignum extends LispObject
 
     public LispObject LOGIOR(int n) throws ConditionThrowable
     {
-        return new Bignum(value.or(BigInteger.valueOf(n)));
+        return number(value.or(BigInteger.valueOf(n)));
     }
 
     public LispObject LOGIOR(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
             final BigInteger n = ((Fixnum)obj).getBigInteger();
-            return new Bignum(value.or(n));
+            return number(value.or(n));
         } else if (obj instanceof Bignum) {
             final BigInteger n = ((Bignum)obj).value;
             return number(value.or(n));
