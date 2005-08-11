@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.587 2005-08-11 10:00:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.588 2005-08-11 11:44:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3996,12 +3996,16 @@
         ('if_acmpne  'if_acmpeq)
         ('ifeq       'ifne)
         ('ifne       'ifeq)
-        ('if_icmpne  'if_icmpeq)
-        ('if_icmpeq  'if_icmpne)
         ('iflt       'ifge)
         ('ifge       'iflt)
         ('ifgt       'ifle)
         ('ifle       'ifgt)
+        ('if_icmpeq  'if_icmpne)
+        ('if_icmpne  'if_icmpeq)
+        ('if_icmplt  'if_icmpge)
+        ('if_icmpge  'if_icmplt)
+        ('if_icmpgt  'if_icmple)
+        ('if_icmple  'if_icmpgt)
         (:alternate  :consequent)
         (:consequent :alternate)))))
 
