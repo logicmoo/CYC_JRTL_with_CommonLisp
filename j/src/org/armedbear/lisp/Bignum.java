@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Bignum.java,v 1.70 2005-08-10 20:39:22 piso Exp $
+ * $Id: Bignum.java,v 1.71 2005-08-11 11:43:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -536,36 +536,44 @@ public final class Bignum extends LispObject
 
     public LispObject LOGAND(int n) throws ConditionThrowable
     {
-        return number(value.and(BigInteger.valueOf(n)));
+        if (n >= 0) {
+            return new Fixnum(value.intValue() & n);
+        } else {
+            return number(value.and(BigInteger.valueOf(n)));
+        }
     }
 
     public LispObject LOGAND(LispObject obj) throws ConditionThrowable
     {
-        final BigInteger n;
-        if (obj instanceof Fixnum)
-            n = ((Fixnum)obj).getBigInteger();
-        else if (obj instanceof Bignum)
-            n = ((Bignum)obj).value;
-        else
+        if (obj instanceof Fixnum) {
+            int n = ((Fixnum)obj).value;
+            if (n >= 0) {
+                return new Fixnum(value.intValue() & n);
+            } else {
+                return number(value.and(BigInteger.valueOf(n)));
+            }
+        } else if (obj instanceof Bignum) {
+            final BigInteger n = ((Bignum)obj).value;
+            return number(value.and(n));
+        } else
             return signalTypeError(obj, Symbol.INTEGER);
-        return number(value.and(n));
     }
 
     public LispObject LOGIOR(int n) throws ConditionThrowable
     {
-        return number(value.or(BigInteger.valueOf(n)));
+        return new Bignum(value.or(BigInteger.valueOf(n)));
     }
 
     public LispObject LOGIOR(LispObject obj) throws ConditionThrowable
     {
-        final BigInteger n;
-        if (obj instanceof Fixnum)
-            n = ((Fixnum)obj).getBigInteger();
-        else if (obj instanceof Bignum)
-            n = ((Bignum)obj).value;
-        else
+        if (obj instanceof Fixnum) {
+            final BigInteger n = ((Fixnum)obj).getBigInteger();
+            return new Bignum(value.or(n));
+        } else if (obj instanceof Bignum) {
+            final BigInteger n = ((Bignum)obj).value;
+            return number(value.or(n));
+        } else
             return signalTypeError(obj, Symbol.INTEGER);
-        return number(value.or(n));
     }
 
     public LispObject LOGXOR(int n) throws ConditionThrowable
