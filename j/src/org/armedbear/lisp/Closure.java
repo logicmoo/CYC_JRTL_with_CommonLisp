@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.106 2005-07-15 11:29:06 piso Exp $
+ * $Id: Closure.java,v 1.107 2005-08-11 18:11:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -821,7 +821,7 @@ public class Closure extends Function
             // Fixed arity.
             if (argsLength != arity)
                 signal(new WrongNumberOfArgumentsException(this));
-                return args;
+            return args;
         }
         // Not fixed arity.
         if (argsLength < minArgs)
