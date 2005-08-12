@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.824 2005-08-03 19:04:35 piso Exp $
+ * $Id: Primitives.java,v 1.825 2005-08-12 11:41:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -414,7 +414,8 @@ public final class Primitives extends Lisp
     };
 
     // ### functionp
-    private static final Primitive FUNCTIONP = new Primitive("functionp","object")
+    private static final Primitive FUNCTIONP =
+        new Primitive("functionp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -424,7 +425,7 @@ public final class Primitives extends Lisp
 
     // ### special-operator-p
     private static final Primitive SPECIAL_OPERATOR_P =
-        new Primitive("special-operator-p","symbol")
+        new Primitive("special-operator-p", "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
