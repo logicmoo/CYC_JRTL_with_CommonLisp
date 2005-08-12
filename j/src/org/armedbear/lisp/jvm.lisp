@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.590 2005-08-12 13:33:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.591 2005-08-12 16:44:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3846,6 +3846,7 @@
                     (>                  p2-test-numeric-comparison)
                     (>=                 p2-test-numeric-comparison)
                     (ATOM               p2-test-atom)
+                    (CHAR=              p2-test-char=)
                     (CHARACTERP         p2-test-characterp)
                     (CLASSP             p2-test-classp)
                     (CONSP              p2-test-consp)
@@ -4025,6 +4026,25 @@
         ('if_icmple  'if_icmpgt)
         (:alternate  :consequent)
         (:consequent :alternate)))))
+
+(defun p2-test-char= (form)
+  (when (check-arg-count form 2)
+    (let* ((arg1 (%cadr form))
+           (arg2 (%caddr form))
+           (type1 (derive-compiler-type arg1))
+           (type2 (derive-compiler-type arg2)))
+;;       (let ((*print-structure* nil))
+;;         (format t "p2-test-char= arg1 = ~S arg2 = ~S~%" arg1 arg2))
+;;       (format t "p2-test-char= type1 = ~S type2 = ~S~%" type1 type2)
+      (when (and (eq type1 'CHARACTER) (eq type2 'CHARACTER))
+        (compile-form arg1 'stack nil)
+        (emit-unbox-character)
+        (cond ((characterp arg2)
+               (emit-push-constant-int (char-code arg2)))
+              (t
+               (compile-form arg2 'stack nil)
+               (emit-unbox-character)))
+        'if_icmpne))))
 
 (defun p2-test-eq (form)
   (when (check-arg-count form 2)
@@ -4616,34 +4636,7 @@
                      ((and (null (variable-closure-index variable))
                            (not (variable-special-p variable))
                            (eql (variable-writes variable) 0))
-;;                       (format t "no writes to ~S~%" variable)
-;;                       (let ((*print-structure* nil))
-;;                         (format t "initform = ~S~%" initform))
-;;                       (when (var-ref-p initform)
-;; ;;                         (format t "LET* initform for ~S is a reference to ~S~%"
-;; ;;                                 variable
-;; ;;                                 (variable-name (var-ref-variable initform)))
-;;                         (let ((source-var (var-ref-variable initform)))
-;; ;;                           (when (variable-special-p source-var)
-;; ;;                             (format t "source var ~S is special~%" (variable-name source-var)))
-;; ;;                           (when (variable-used-non-locally-p source-var)
-;; ;;                             (format t "source var ~S is used non-locally~%" (variable-name source-var)))
-;;                           (unless (or (variable-special-p source-var)
-;;                                       (variable-used-non-locally-p source-var))
-;;                             (when (eql (variable-writes source-var) 0)
-;; ;;                               (format t "LET* no writes to source var ~S~%"
-;; ;;                                       source-var)
-
-;;                               (when *propagate-enable*
-;;                                 ;; We can eliminate the variable.
-;; ;;                                 (format t "LET* eliminating ~S~%" variable)
-;;                                 ;; FIXME This will no longer be true when we start tracking writes.
-;;                                 (aver (= (variable-reads variable) (length (variable-references variable))))
-;;                                 (dolist (ref (variable-references variable))
-;;                                   (aver (eq (var-ref-variable ref) variable))
-;; ;;                                   (format t "changing ~S to refer to ~S~%" ref source-var)
-;;                                   (setf (var-ref-variable ref) source-var))
-;;                                 (setf boundp t))))))
+                      (aver (not boundp))
                       (unless boundp
                         (let ((type (derive-type initform)))
                           (setf (variable-derived-type variable) type)
@@ -6128,6 +6121,13 @@
               (setf result-type (list 'INTEGER low high)))))))
     result-type))
 
+;; read-char &optional input-stream eof-error-p eof-value recursive-p => char
+(declaim (ftype (function (t) t) derive-type-read-char))
+(defun derive-type-read-char (form)
+  (if (< (length form) 3) ; no EOF-ERROR-P arg
+      'CHARACTER
+      t))
+
 ;; ash integer count => shifted-integer
 (declaim (ftype (function (t) t) derive-type-ash))
 (defun derive-type-ash (form)
@@ -6183,6 +6183,8 @@
               (derive-type-max form))
              (MIN
               (derive-type-min form))
+             (READ-CHAR
+              (derive-type-read-char form))
              ((THE TRULY-THE)
               (second form))
              (t
