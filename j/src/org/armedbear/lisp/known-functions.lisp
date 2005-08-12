@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.25 2005-08-04 16:22:17 piso Exp $
+;;; $Id: known-functions.lisp,v 1.26 2005-08-12 16:43:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -136,6 +136,7 @@
         proclaimed-ftype
         random
         read
+        read-char
         read-sequence
         reduce
         replace
