@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.65 2005-07-07 05:26:20 piso Exp $
+ * $Id: Cons.java,v 1.66 2005-08-12 13:33:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,21 +59,26 @@ public final class Cons extends LispObject
 
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
-        if (typeSpecifier == Symbol.LIST)
-            return T;
-        if (typeSpecifier == Symbol.CONS)
-            return T;
-        if (typeSpecifier == Symbol.SEQUENCE)
-            return T;
-        if (typeSpecifier == BuiltInClass.LIST)
-            return T;
-        if (typeSpecifier == BuiltInClass.CONS)
-            return T;
-        if (typeSpecifier == BuiltInClass.SEQUENCE)
-            return T;
-        if (typeSpecifier == Symbol.ATOM)
-            return NIL;
-        return super.typep(typeSpecifier);
+        if (typeSpecifier instanceof Symbol) {
+            if (typeSpecifier == Symbol.LIST)
+                return T;
+            if (typeSpecifier == Symbol.CONS)
+                return T;
+            if (typeSpecifier == Symbol.SEQUENCE)
+                return T;
+            if (typeSpecifier == T)
+                return T;
+        } else if (typeSpecifier instanceof BuiltInClass) {
+            if (typeSpecifier == BuiltInClass.LIST)
+                return T;
+            if (typeSpecifier == BuiltInClass.CONS)
+                return T;
+            if (typeSpecifier == BuiltInClass.SEQUENCE)
+                return T;
+            if (typeSpecifier == BuiltInClass.CLASS_T)
+                return T;
+        }
+        return NIL;
     }
 
     public final boolean constantp()
@@ -137,7 +142,7 @@ public final class Cons extends LispObject
     {
         return cdr.cdr();
     }
-    
+
     public final LispObject caddr() throws ConditionThrowable
     {
         return cdr.cadr();
