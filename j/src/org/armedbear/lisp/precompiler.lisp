@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.134 2005-08-12 13:32:16 piso Exp $
+;;; $Id: precompiler.lisp,v 1.135 2005-08-12 21:04:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -295,9 +295,15 @@
 (defun precompile1 (form)
   (cond ((symbolp form)
          (let ((varspec (find-varspec form)))
-           (if (and varspec (eq (second varspec) :symbol-macro))
-               (copy-tree (third varspec))
-               form)))
+           (cond ((and varspec (eq (second varspec) :symbol-macro))
+                  (copy-tree (third varspec)))
+                 ((null varspec)
+                  (let ((expansion (expand-macro form)))
+                    (if (eq expansion form)
+                        form
+                        (precompile1 expansion))))
+                 (t
+                  form))))
         ((atom form)
          form)
         (t
@@ -333,7 +339,6 @@
     (let ((transform (source-transform op)))
       (when transform
         (let ((new-form (expand-source-transform form)))
-;;           (format t "transform old form = ~S~%transform new form = ~S~%" form new-form)
           (when (neq new-form form)
             (return-from precompile-function-call (precompile1 new-form))))))
     (let ((expansion (inline-expansion op)))
@@ -869,7 +874,7 @@
                  (special-operator-p (%car form)))
         (return-from expand-macro form)))
     (multiple-value-bind (result expanded)
-        (macroexpand-1 form sys:*compile-file-environment*)
+        (macroexpand-1 form *compile-file-environment*)
       (unless expanded
         (return-from expand-macro result))
       (setf form result))))

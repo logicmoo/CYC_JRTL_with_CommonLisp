@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.591 2005-08-12 16:44:25 piso Exp $
+;;; $Id: jvm.lisp,v 1.592 2005-08-12 21:06:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4636,8 +4636,6 @@
                      ((and (null (variable-closure-index variable))
                            (not (variable-special-p variable))
                            (eql (variable-writes variable) 0))
-                      (aver (not boundp))
-                      (unless boundp
                         (let ((type (derive-type initform)))
                           (setf (variable-derived-type variable) type)
                           (cond ((subtypep type 'FIXNUM)
@@ -4646,8 +4644,15 @@
                                  (compile-form initform 'stack 'unboxed-fixnum)
                                  (emit 'istore (variable-register variable))
                                  (setf boundp t))
+                                ((and *enable-unboxed-characters*
+                                      (eq type 'CHARACTER))
+                                 (setf (variable-representation variable) 'unboxed-character)
+                                 (setf (variable-register variable) (allocate-register))
+                                 (compile-form initform 'stack 'unboxed-character)
+                                 (emit 'istore (variable-register variable))
+                                 (setf boundp t))
                                 (t
-                                 (compile-form initform 'stack nil))))))
+                                 (compile-form initform 'stack nil)))))
                      (t
                       (compile-form initform 'stack nil)))
                (unless must-clear-values
@@ -6549,8 +6554,8 @@
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
     (return-from p2-char/schar))
-  (let* ((op (car form))
-         (args (cdr form))
+  (let* ((op (%car form))
+         (args (%cdr form))
          (arg1 (%car args))
          (arg2 (%cadr args))
          (type1 (derive-type arg1))
@@ -6900,6 +6905,17 @@
                         (emit 'iload (variable-register variable))
                         (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
                  (emit-move-from-stack target representation))
+                ((eq (variable-representation variable) 'unboxed-character)
+                 (cond ((eq representation 'unboxed-character)
+                        (aver (variable-register variable))
+                        (emit 'iload (variable-register variable)))
+                       (t
+                        (emit 'new +lisp-character-class+)
+                        (emit 'dup)
+                        (aver (variable-register variable))
+                        (emit 'iload (variable-register variable))
+                        (emit-invokespecial-init +lisp-fixnum-class+ '("C"))))
+                 (emit-move-from-stack target representation))
                 (t
                  (emit 'var-ref variable target representation)))))))
 
@@ -6933,7 +6949,7 @@
                                        target representation)))
   (let ((expansion (macroexpand (%cadr form) *compile-file-environment*)))
     (unless (eq expansion (%cadr form))
-      (compile-form (list 'SETF expansion (%caddr form)))
+      (compile-form (list 'SETF expansion (%caddr form)) target representation)
       (return-from p2-setq)))
   (let* ((name (%cadr form))
          (variable (find-visible-variable name))
@@ -7423,8 +7439,8 @@
            (cond ((symbolp op)
                   (cond ((setf handler (get op 'p2-handler))
                          (funcall handler form target representation))
-                        ((macro-function op sys:*compile-file-environment*)
-                         (compile-form (macroexpand form sys:*compile-file-environment*)
+                        ((macro-function op *compile-file-environment*)
+                         (compile-form (macroexpand form *compile-file-environment*)
                                        target representation))
                         ((special-operator-p op)
                          (dformat t "form = ~S~%" form)
@@ -7449,11 +7465,17 @@
                 (emit 'getstatic *this-class* (declare-keyword form) +lisp-symbol+)
                 (emit-move-from-stack target))
                (t
+;;                 (aver nil)
                 ;; Maybe it's a symbol macro...
+;;                 (format t "compile-form checking for symbol macro ~S...~%" form)
+
+                ;; There shouldn't be any unexpanded symbol macros at this point.
                 (let ((expansion (macroexpand form *compile-file-environment*)))
                   (if (eq expansion form)
                       (compile-variable-reference form target representation)
-                      (compile-form expansion target representation))))))
+                      (progn
+                        (aver nil)
+                        (compile-form expansion target representation)))))))
         ((var-ref-p form)
          (compile-var-ref form target representation))
         ((block-node-p form)
