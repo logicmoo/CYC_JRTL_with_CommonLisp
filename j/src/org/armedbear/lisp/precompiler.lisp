@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.133 2005-08-10 20:17:25 piso Exp $
+;;; $Id: precompiler.lisp,v 1.134 2005-08-12 13:32:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -174,16 +174,43 @@
             (cons op (cdr arg))
             form))))
 
+(defun predicate-for-type (type)
+  (cdr (assq type '((ARRAY             . arrayp)
+                    (ATOM              . atom)
+                    (BIT-VECTOR        . bit-vector-p)
+                    (CHARACTER         . characterp)
+                    (COMPLEX           . complexp)
+                    (CONS              . consp)
+                    (FIXNUM            . fixnump)
+                    (FLOAT             . floatp)
+                    (FUNCTION          . functionp)
+                    (HASH-TABLE        . hash-table-p)
+                    (INTEGER           . integerp)
+                    (LIST              . listp)
+                    (NULL              . null)
+                    (NUMBER            . numberp)
+                    (NUMBER            . numberp)
+                    (PACKAGE           . packagep)
+                    (RATIONA           . rationalp)
+                    (REAL              . realp)
+                    (SIMPLE-BIT-VECTOR . simple-bit-vector-p)
+                    (SIMPLE-STRING     . simple-string-p)
+                    (SIMPLE-VECTOR     . simple-vector-p)
+                    (STREAM            . streamp)
+                    (STRING            . stringp)
+                    (SYMBOL            . symbolp)))))
+
 (define-compiler-macro typep (&whole form &rest args)
-  (if (= (length args) 2)
-      (let ((object (%car args))
-            (type-specifier (%cadr args)))
-        (cond ((equal type-specifier '(QUOTE SYMBOL))
-               `(symbolp ,object))
-              ((equal type-specifier '(QUOTE CONS))
-               `(consp ,object))
-              (t
-               `(%typep ,@args))))
+  (if (= (length args) 2) ; no environment arg
+      (let* ((object (%car args))
+             (type-specifier (%cadr args))
+             (type (and (consp type-specifier)
+                        (eq (%car type-specifier) 'QUOTE)
+                        (%cadr type-specifier)))
+             (predicate (and type (predicate-for-type type))))
+        (if predicate
+            `(,predicate ,object)
+            `(%typep ,@args)))
       form))
 
 (define-compiler-macro subtypep (&whole form &rest args)
