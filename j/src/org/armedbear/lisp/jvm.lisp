@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.589 2005-08-11 18:12:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.590 2005-08-12 13:33:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3490,7 +3490,7 @@
       (let ((explain *explain*))
         (when (and explain (memq :calls explain))
           (let ((package (symbol-package op)))
-            (when (or (eq package +cl-package+))
+            (when (or (eq package +cl-package+) (eq package (find-package "SYSTEM")))
               (format t ";   full call to ~S~%" op)))))
       (unless (> *speed* *debug*)
         (emit-push-current-thread))
