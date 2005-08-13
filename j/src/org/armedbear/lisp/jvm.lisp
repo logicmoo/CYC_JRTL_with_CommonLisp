@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.592 2005-08-12 21:06:56 piso Exp $
+;;; $Id: jvm.lisp,v 1.593 2005-08-13 04:46:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@
 
 (defvar *enable-dformat* nil)
 
-(defvar *enable-unboxed-characters* nil)
+(defvar *enable-unboxed-characters* t)
 
 #+nil
 (defun dformat (destination control-string &rest args)
@@ -2126,9 +2126,9 @@
                  (t
                   (dformat t "VAR-REF unhandled case variable = ~S~%" (variable-name variable))
                   (aver (progn 'unhandled-case nil))))
-           (when (eq representation 'unboxed-fixnum)
-             (dformat t "resolve-variables calling emit-unbox-fixnum~%")
-             (emit-unbox-fixnum))))
+           (case representation
+             (unboxed-fixnum (emit-unbox-fixnum))
+             (unboxed-character (emit-unbox-character)))))
         (207 ; VAR-SET
          (let ((variable (car (instruction-args instruction))))
            (dformat t "var-set variable = ~S " (variable-name variable))
@@ -2976,6 +2976,13 @@
            (return-from compile-constant))
           (t
            (assert nil))))
+  (when (eq representation 'unboxed-character)
+    (cond ((characterp form)
+           (emit-push-constant-int (char-code form))
+           (emit-move-from-stack target representation)
+           (return-from compile-constant))
+          (t
+           (assert nil))))
   (cond ((numberp form)
          (if (fixnump form)
              (let* ((n form)
@@ -3125,8 +3132,9 @@
   (compile-form (second args) 'stack nil)
   (maybe-emit-clear-values (first args) (second args))
   (emit-invokevirtual +lisp-object-class+ op (list +lisp-object+) +lisp-object+)
-  (when (eq representation 'unboxed-fixnum)
-    (emit-unbox-fixnum))
+  (case representation
+    (unboxed-fixnum (emit-unbox-fixnum))
+    (unboxed-character (emit-unbox-character)))
   (emit-move-from-stack target))
 
 (declaim (ftype (function (t t t t) t) compile-function-call-2))
@@ -3163,6 +3171,8 @@
                                        '("I") "I")
                    (emit-invokevirtual +lisp-object-class+ "getSlotValue"
                                        '("I") +lisp-object+))
+               (when (eq representation 'unboxed-character)
+                 (emit-unbox-character))
                (emit-move-from-stack target representation)
                t)))
           (t
@@ -3512,12 +3522,9 @@
           (emit-call-execute numargs)
           (emit-call-thread-execute numargs))
       (case representation
-        (unboxed-fixnum
-         (emit-unbox-fixnum))
-        (unboxed-character
-         (emit-unbox-character))
-        (java-boolean
-         (emit-unbox-boolean)))
+        (unboxed-fixnum (emit-unbox-fixnum))
+        (unboxed-character (emit-unbox-character))
+        (java-boolean (emit-unbox-boolean)))
       (emit-move-from-stack target))))
 
 (defun compile-call (args)
@@ -3854,7 +3861,7 @@
                     (ENDP               p2-test-endp)
                     (EQ                 p2-test-eq)
                     (NEQ                p2-test-neq)
-                    (EQL                p2-test-equality)
+                    (EQL                p2-test-eql)
                     (EQUAL              p2-test-equality)
                     (EQUALP             p2-test-equality)
                     (EVENP              p2-test-evenp)
@@ -4037,14 +4044,19 @@
 ;;         (format t "p2-test-char= arg1 = ~S arg2 = ~S~%" arg1 arg2))
 ;;       (format t "p2-test-char= type1 = ~S type2 = ~S~%" type1 type2)
       (when (and (eq type1 'CHARACTER) (eq type2 'CHARACTER))
-        (compile-form arg1 'stack nil)
-        (emit-unbox-character)
-        (cond ((characterp arg2)
-               (emit-push-constant-int (char-code arg2)))
+        (cond (*enable-unboxed-characters*
+               (compile-form arg1 'stack 'unboxed-character)
+               (compile-form arg2 'stack 'unboxed-character)
+               'if_icmpne)
               (t
-               (compile-form arg2 'stack nil)
-               (emit-unbox-character)))
-        'if_icmpne))))
+               (compile-form arg1 'stack nil)
+               (emit-unbox-character)
+               (cond ((characterp arg2)
+                      (emit-push-constant-int (char-code arg2)))
+                     (t
+                      (compile-form arg2 'stack nil)
+                      (emit-unbox-character)))
+               'if_icmpne))))))
 
 (defun p2-test-eq (form)
   (when (check-arg-count form 2)
@@ -4059,12 +4071,38 @@
   (p2-test-eq form)
   'if_acmpeq)
 
+(defun p2-test-eql (form)
+  (when (check-arg-count form 2)
+    (let* ((arg1 (%cadr form))
+           (arg2 (%caddr form))
+           (type1 (derive-compiler-type arg1))
+           (type2 (derive-compiler-type arg2)))
+      (cond ((and (fixnum-type-p type1) (fixnum-type-p type2))
+;;              (format t "p2-test-eql unboxed case~%")
+             (compile-form arg1 'stack 'unboxed-fixnum)
+             (compile-form arg2 'stack 'unboxed-fixnum)
+             (maybe-emit-clear-values arg1 arg2)
+             'if_icmpne)
+            ((fixnum-type-p type2)
+             (compile-form arg1 'stack nil)
+             (compile-form arg2 'stack 'unboxed-fixnum)
+             (maybe-emit-clear-values arg1 arg2)
+             (emit-invokevirtual +lisp-object-class+ "eql" '("I") "Z")
+             'ifeq)
+            (t
+             (compile-form arg1 'stack nil)
+             (compile-form arg2 'stack nil)
+             (maybe-emit-clear-values arg1 arg2)
+             (emit-invokevirtual +lisp-object-class+ "eql"
+                                 (lisp-object-arg-types 1) "Z")
+             'ifeq)))))
+
 (defun p2-test-equality (form)
 ;;   (format t "p2-test-equality ~S~%" (%car form))
   (when (check-arg-count form 2)
     (let* ((op (%car form))
            (translated-op (ecase op
-                            (EQL    "eql")
+;;                             (EQL    "eql")
                             (EQUAL  "equal")
                             (EQUALP "equalp")))
            (arg1 (%cadr form))
@@ -4074,10 +4112,6 @@
              (compile-form arg2 'stack 'unboxed-fixnum)
              (maybe-emit-clear-values arg1 arg2)
              (emit-invokevirtual +lisp-object-class+
-;;                                  (ecase op
-;;                                    (EQL    "eql")
-;;                                    (EQUAL  "equal")
-;;                                    (EQUALP "equalp"))
                                  translated-op
                                  '("I") "Z"))
             (t
@@ -4085,10 +4119,6 @@
              (compile-form arg2 'stack nil)
              (maybe-emit-clear-values arg1 arg2)
              (emit-invokevirtual +lisp-object-class+
-;;                                  (ecase op
-;;                                    (EQL    "eql")
-;;                                    (EQUAL  "equal")
-;;                                    (EQUALP "equalp"))
                                  translated-op
                                  (lisp-object-arg-types 1) "Z")))
       'ifeq)))
@@ -6577,22 +6607,24 @@
                                (symbol-name op) ;; "CHAR" or "SCHAR"
                                '("I") +lisp-object+)
            (when (eq representation 'unboxed-character)
-             (format t "p2-char/schar calling emit-unbox-character~%")
+;;              (format t "p2-char/schar calling emit-unbox-character~%")
              (emit-unbox-character))
            (emit-move-from-stack target representation))
           (t
            (compile-function-call form target representation)))))
 
 (defun p2-svref (form target representation)
-  (cond ((check-arg-count form 2)
+  (cond ((and (check-arg-count form 2)
+              (neq representation 'unboxed-character)) ; FIXME
          (let ((arg1 (%cadr form))
                (arg2 (%caddr form)))
            (compile-form arg1 'stack nil) ; vector
            (compile-form arg2 'stack 'unboxed-fixnum) ; index
            (maybe-emit-clear-values arg1 arg2)
            (emit-invokevirtual +lisp-object-class+ "SVREF" '("I") +lisp-object+)
-           (when (eq representation 'unboxed-fixnum)
-             (emit-unbox-fixnum))
+           (case representation
+             (unboxed-fixnum (emit-unbox-fixnum))
+             (unboxed-character (emit-unbox-character)))
            (emit-move-from-stack target representation)))
         (t
          (compile-function-call form target representation))))
@@ -6620,7 +6652,8 @@
 
 (defun p2-elt (form target representation)
   (cond ((and (check-arg-count form 2)
-              (subtypep (derive-type (third form)) 'fixnum))
+              (subtypep (derive-type (third form)) 'fixnum)
+              (neq representation 'unboxed-character)) ; FIXME
          (compile-form (second form) 'stack nil)
          (compile-form (third form) 'stack 'unboxed-fixnum)
          (emit-invokevirtual +lisp-object-class+ "elt" '("I") +lisp-object+)
@@ -6632,9 +6665,14 @@
 
 (defun p2-aref (form target representation)
   ;; We only optimize the 2-arg case.
-  (cond ((= (length form) 3)
+;;   (format t "p2-aref representation = ~S~%" representation)
+  (cond ((and (= (length form) 3) (neq representation 'unboxed-character)) ; FIXME
+;;          (format t "p2-aref case 1~%")
          (let ((arg1 (%cadr form))
                (arg2 (%caddr form)))
+;;            (let ((*print-structure* nil))
+;;              (format t "p2-aref arg1 = ~S~%" arg1)
+;;              (format t "p2-aref arg2 = ~S~%" arg2))
            (compile-form arg1 'stack nil) ; array
            (compile-form arg2 'stack 'unboxed-fixnum) ; index
            (maybe-emit-clear-values arg1 arg2)
@@ -6643,6 +6681,7 @@
                (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+))
            (emit-move-from-stack target representation)))
         (t
+;;          (format t "p2-aref case 2~%")
          (compile-function-call form target representation))))
 
 (defun p2-aset (form target representation)
@@ -6914,7 +6953,7 @@
                         (emit 'dup)
                         (aver (variable-register variable))
                         (emit 'iload (variable-register variable))
-                        (emit-invokespecial-init +lisp-fixnum-class+ '("C"))))
+                        (emit-invokespecial-init +lisp-character-class+ '("C"))))
                  (emit-move-from-stack target representation))
                 (t
                  (emit 'var-ref variable target representation)))))))
@@ -7190,6 +7229,8 @@
 (defun p2-the (form target representation)
   (let ((type-form (second form))
         (value-form (third form)))
+;;     (let ((*print-structure* nil))
+;;       (format t "p2-the type-form = ~S value-form = ~S~%" type-form value-form))
     (cond ((and (subtypep type-form 'FIXNUM)
                 (consp value-form)
                 (eq (car value-form) 'structure-ref))
@@ -7201,8 +7242,11 @@
            (compile-form value-form 'stack nil)
            (generate-type-check-for-value type-form)
            ;; The value is left on the stack here if the type check succeeded.
-           (when (eq representation 'unboxed-fixnum)
-             (emit-unbox-fixnum))
+;;            (when (eq representation 'unboxed-fixnum)
+;;              (emit-unbox-fixnum))
+           (case representation
+             (unboxed-fixnum (emit-unbox-fixnum))
+             (unboxed-character (emit-unbox-character)))
            (emit-move-from-stack target representation))
           (t
            (compile-form value-form target representation)))))
@@ -7215,14 +7259,16 @@
     (compile-function-call form target representation)
     (return-from p2-char-code))
   (let* ((arg (second form))
-         (type (derive-type arg)))
+         (type (derive-compiler-type arg)))
+;;     (format t "p2-char-code type = ~S~%" type)
     (cond ((characterp arg)
            (compile-constant (char-code arg) target representation))
           ((and (eq type 'character) (< *safety* 3))
            (unless (eq representation 'unboxed-fixnum)
              (emit 'new +lisp-fixnum-class+)
              (emit 'dup))
-           (cond ((and *enable-unboxed-characters* (consp arg) (eq (car arg) 'CHAR))
+           (cond (;;(and *enable-unboxed-characters* (consp arg) (eq (car arg) 'CHAR))
+                  *enable-unboxed-characters*
                   (compile-form arg 'stack 'unboxed-character))
                  (t
                   (compile-form arg 'stack nil)
@@ -7259,8 +7305,8 @@
                    (emit-push-nil))))
         (emit-move-from-stack target representation)
         (return-from p2-char=))
-      (let ((type1 (derive-type arg1))
-            (type2 (derive-type arg2)))
+      (let ((type1 (derive-compiler-type arg1))
+            (type2 (derive-compiler-type arg2)))
 ;;         (format t "p2-char= type1 = ~S type2 = ~S~%" type1 type2)
         (unless (and (eq type1 'character) (eq type2 'character))
           (compile-function-call form target representation)
@@ -7278,6 +7324,10 @@
                (emit 'getfield +lisp-character-class+ "value" "C")
                (maybe-emit-clear-values arg1)
                (emit-push-constant-int (char-code arg2)))
+              (*enable-unboxed-characters*
+                (compile-form arg1 'stack 'unboxed-character)
+                (compile-form arg2 'stack 'unboxed-character)
+                (maybe-emit-clear-values arg1 arg2))
               (t
                (compile-form arg1 'stack nil)
                (emit 'checkcast +lisp-character-class+)
