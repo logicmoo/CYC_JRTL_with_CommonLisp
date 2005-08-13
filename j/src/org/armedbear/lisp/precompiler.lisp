@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.135 2005-08-12 21:04:29 piso Exp $
+;;; $Id: precompiler.lisp,v 1.136 2005-08-13 17:33:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -151,14 +151,14 @@
       form))
 
 (defun quoted-form-p (form)
-  (and (consp form) (eq (%car form) 'quote) (= (length form) 2)))
+  (and (consp form) (eq (%car form) 'QUOTE) (= (length form) 2)))
 
 (define-compiler-macro eql (&whole form &rest args)
   (let ((first (car args))
         (second (cadr args)))
-    (if (or (and (sys::quoted-form-p first) (symbolp (cadr first)))
-            (and (sys::quoted-form-p second) (symbolp (cadr second))))
-        `(eq ,(car args) ,(cadr args))
+    (if (or (and (quoted-form-p first) (symbolp (cadr first)))
+            (and (quoted-form-p second) (symbolp (cadr second))))
+        `(eq ,first ,second)
         form)))
 
 (define-compiler-macro not (&whole form arg)
