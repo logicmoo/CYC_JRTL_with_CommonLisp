@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.383 2005-08-09 11:18:49 piso Exp $
+ * $Id: Lisp.java,v 1.384 2005-08-13 23:51:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1129,23 +1129,25 @@ public abstract class Lisp
                     lower = lower.car().incr();
                 if (upper instanceof Cons)
                     upper = upper.car().decr();
-                if (lower instanceof Fixnum && upper instanceof Fixnum) {
-                    int l = ((Fixnum)lower).value;
-                    if (l >= 0) {
-                        int u = ((Fixnum)upper).value;
-                        if (u <= 1)
-                            return Symbol.BIT;
-                        if (u <= 255)
-                            return UNSIGNED_BYTE_8;
-                        if (u <= 65535)
-                            return UNSIGNED_BYTE_16;
-                        return UNSIGNED_BYTE_32;
-                    }
-                }
-                if (lower.isGreaterThanOrEqualTo(Fixnum.ZERO)) {
-                    if (lower.isLessThan(UNSIGNED_BYTE_32_MAX_VALUE)) {
-                        if (upper.isLessThan(UNSIGNED_BYTE_32_MAX_VALUE))
+                if (lower.integerp() && upper.integerp()) {
+                    if (lower instanceof Fixnum && upper instanceof Fixnum) {
+                        int l = ((Fixnum)lower).value;
+                        if (l >= 0) {
+                            int u = ((Fixnum)upper).value;
+                            if (u <= 1)
+                                return Symbol.BIT;
+                            if (u <= 255)
+                                return UNSIGNED_BYTE_8;
+                            if (u <= 65535)
+                                return UNSIGNED_BYTE_16;
                             return UNSIGNED_BYTE_32;
+                        }
+                    }
+                    if (lower.isGreaterThanOrEqualTo(Fixnum.ZERO)) {
+                        if (lower.isLessThan(UNSIGNED_BYTE_32_MAX_VALUE)) {
+                            if (upper.isLessThan(UNSIGNED_BYTE_32_MAX_VALUE))
+                                return UNSIGNED_BYTE_32;
+                        }
                     }
                 }
             } else if (car == Symbol.EQL) {
