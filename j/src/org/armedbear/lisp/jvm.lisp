@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.593 2005-08-13 04:46:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.594 2005-08-13 17:38:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -835,9 +835,10 @@
     (compiler-error "Wrong number of arguments for special operator ~A (expected 1, but received ~D)."
                     'QUOTE
                     (1- (length form))))
-  (if (numberp (%cadr form))
-      (%cadr form)
-      form))
+  (let ((arg (%cadr form)))
+    (if (or (numberp arg) (characterp arg))
+        arg
+        form)))
 
 (defun p1-setq (form)
   (unless (= (length form) 3)
@@ -1193,6 +1194,7 @@
 (defconstant +lisp-fixnum-class+ "org/armedbear/lisp/Fixnum")
 (defconstant +lisp-fixnum+ "Lorg/armedbear/lisp/Fixnum;")
 (defconstant +lisp-character-class+ "org/armedbear/lisp/LispCharacter")
+(defconstant +lisp-character+ "Lorg/armedbear/lisp/LispCharacter;")
 (defconstant +lisp-abstract-vector-class+ "org/armedbear/lisp/AbstractVector")
 (defconstant +lisp-abstract-string-class+ "org/armedbear/lisp/AbstractString")
 (defconstant +lisp-simple-vector-class+ "org/armedbear/lisp/SimpleVector")
@@ -2845,6 +2847,19 @@
         (setf (gethash n ht) g)))
     g))
 
+(declaim (ftype (function (t) string) declare-character))
+(defun declare-character (c)
+  (let* ((g (symbol-name (gensym)))
+         (*code* *static-code*))
+    (declare-field g +lisp-character+)
+    (emit 'new +lisp-character-class+)
+    (emit 'dup)
+    (emit-push-constant-int (char-code c))
+    (emit-invokespecial-init +lisp-character-class+ '("C"))
+    (emit 'putstatic *this-class* g +lisp-character+)
+    (setf *static-code* *code*)
+    g))
+
 (declaim (ftype (function (t) string) declare-object-as-string))
 (defun declare-object-as-string (obj)
   (let* ((g (symbol-name (gensym)))
@@ -3011,7 +3026,7 @@
                    (declare-object form) +lisp-object+)))
         ((characterp form)
          (emit 'getstatic *this-class*
-               (declare-object-as-string form) +lisp-object+))
+               (declare-character form) +lisp-character+))
         ((or (classp form) (hash-table-p form) (typep form 'generic-function))
          (emit 'getstatic *this-class*
                (declare-object form) +lisp-object+))
@@ -4078,15 +4093,26 @@
            (type1 (derive-compiler-type arg1))
            (type2 (derive-compiler-type arg2)))
       (cond ((and (fixnum-type-p type1) (fixnum-type-p type2))
-;;              (format t "p2-test-eql unboxed case~%")
              (compile-form arg1 'stack 'unboxed-fixnum)
              (compile-form arg2 'stack 'unboxed-fixnum)
+             (maybe-emit-clear-values arg1 arg2)
+             'if_icmpne)
+            ((and (eq type1 'CHARACTER) (eq type2 'CHARACTER))
+             (compile-form arg1 'stack 'unboxed-character)
+             (compile-form arg2 'stack 'unboxed-character)
              (maybe-emit-clear-values arg1 arg2)
              'if_icmpne)
             ((fixnum-type-p type2)
              (compile-form arg1 'stack nil)
              (compile-form arg2 'stack 'unboxed-fixnum)
              (maybe-emit-clear-values arg1 arg2)
+             (emit-invokevirtual +lisp-object-class+ "eql" '("I") "Z")
+             'ifeq)
+            ((fixnum-type-p type1)
+             (compile-form arg1 'stack 'unboxed-fixnum)
+             (compile-form arg2 'stack nil)
+             (maybe-emit-clear-values arg1 arg2)
+             (emit 'swap)
              (emit-invokevirtual +lisp-object-class+ "eql" '("I") "Z")
              'ifeq)
             (t
@@ -4622,14 +4648,9 @@
 
 (declaim (ftype (function (t) t) p2-let*-bindings))
 (defun p2-let*-bindings (block)
-;;   (format t "p2-let*-bindings~%")
-
-  (let ((must-clear-values nil)
-;;         (*print-structure* nil) ;; FIXME
-        )
+  (let ((must-clear-values nil))
     ;; Generate code to evaluate initforms and bind variables.
     (dolist (variable (block-vars block))
-;;       (format t "variable = ~S ~S special = ~S~%" (variable-name variable) variable (variable-special-p variable))
       (let* ((initform (variable-initform variable))
              (unused-p (and (not (variable-special-p variable))
                             (zerop (variable-reads variable))
@@ -7929,9 +7950,11 @@
                             (plusp (compiland-children *current-compiland*)))
                      (when (and (variable-register variable)
                                 (not (variable-special-p variable))
-                                (not (variable-used-non-locally-p variable))
-                                (subtypep (variable-declared-type variable) 'FIXNUM))
-                       (setf (variable-representation variable) 'unboxed-fixnum)))))))
+                                (not (variable-used-non-locally-p variable)))
+                       (cond ((subtypep (variable-declared-type variable) 'FIXNUM)
+                              (setf (variable-representation variable) 'unboxed-fixnum))
+                             ((subtypep (variable-declared-type variable) 'CHARACTER)
+                              (setf (variable-representation variable) 'unboxed-character)))))))))
             ((IGNORE IGNORABLE)
              (process-ignore/ignorable (%car decl) (%cdr decl) *visible-variables*))
             ((DYNAMIC-EXTENT FTYPE INLINE NOTINLINE OPTIMIZE SPECIAL)
@@ -7946,9 +7969,11 @@
                             (plusp (compiland-children *current-compiland*)))
                      (when (and (variable-register variable)
                                 (not (variable-special-p variable))
-                                (not (variable-used-non-locally-p variable))
-                                (subtypep (variable-declared-type variable) 'FIXNUM))
-                       (setf (variable-representation variable) 'unboxed-fixnum)))))))))))
+                                (not (variable-used-non-locally-p variable)))
+                       (cond ((subtypep (variable-declared-type variable) 'FIXNUM)
+                              (setf (variable-representation variable) 'unboxed-fixnum))
+                             ((subtypep (variable-declared-type variable) 'CHARACTER)
+                              (setf (variable-representation variable) 'unboxed-character)))))))))))))
 
     (allocate-register) ;; register 0: "this" pointer
     (when (and *closure-variables* *child-p*)
@@ -8038,17 +8063,20 @@
     (generate-type-checks-for-variables (reverse parameters))
 
     ;; Unbox variables.
-;;     (dolist (variable (compiland-arg-vars compiland))
     (dolist (variable (reverse parameters))
       (when (and (variable-register variable)
                  (not (variable-special-p variable))
-                 (not (variable-used-non-locally-p variable))
-                 (subtypep (variable-declared-type variable) 'FIXNUM))
-;;         (format t "unboxing ~S~%" (variable-name variable))
-        (emit 'aload (variable-register variable))
-        (emit-unbox-fixnum)
-        (emit 'istore (variable-register variable))
-        (setf (variable-representation variable) 'unboxed-fixnum)))
+                 (not (variable-used-non-locally-p variable)))
+        (cond ((subtypep (variable-declared-type variable) 'FIXNUM)
+               (emit 'aload (variable-register variable))
+               (emit-unbox-fixnum)
+               (emit 'istore (variable-register variable))
+               (setf (variable-representation variable) 'unboxed-fixnum))
+              ((subtypep (variable-declared-type variable) 'CHARACTER)
+               (emit 'aload (variable-register variable))
+               (emit-unbox-character)
+               (emit 'istore (variable-register variable))
+               (setf (variable-representation variable) 'unboxed-character)))))
 
     ;; Establish dynamic bindings for any variables declared special.
     (dolist (variable parameters)
