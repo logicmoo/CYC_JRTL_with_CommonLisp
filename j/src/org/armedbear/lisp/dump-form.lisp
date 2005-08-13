@@ -1,7 +1,7 @@
 ;;; dump-form.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dump-form.lisp,v 1.3 2005-08-02 04:44:14 piso Exp $
+;;; $Id: dump-form.lisp,v 1.4 2005-08-13 17:34:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -100,7 +100,6 @@
         (*print-length* nil)
         (*print-circle* nil)
         (*print-structure* t))
-    (dump-object form stream)
-    (%stream-terpri stream)))
+    (dump-object form stream)))
 
 (provide 'dump-form)
