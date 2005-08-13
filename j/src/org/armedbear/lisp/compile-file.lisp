@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.112 2005-08-10 20:16:17 piso Exp $
+;;; $Id: compile-file.lisp,v 1.113 2005-08-13 17:34:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -69,7 +69,8 @@
              (make-load-form (third form))
            (dump-form (list 'DEFCONSTANT (second form) creation-form) stream)))
         (t
-         (dump-form form stream))))
+         (dump-form form stream)))
+  (%stream-terpri stream))
 
 (declaim (ftype (function (t) t) note-toplevel-form))
 (defun note-toplevel-form (form)
@@ -100,6 +101,7 @@
               ;; Force package prefix to be used when dumping form.
               (let ((*package* +keyword-package+))
                 (dump-form form stream))
+              (%stream-terpri stream)
               (return-from process-toplevel-form))
              ((DEFVAR DEFPARAMETER)
               (note-toplevel-form form)
@@ -261,6 +263,7 @@
                      ;; Make sure package prefix is printed when symbols are imported.
                      (let ((*package* +keyword-package+))
                        (dump-form form stream))
+                     (%stream-terpri stream)
                      (return-from process-toplevel-form))
                     ((and (eq operator '%SET-FDEFINITION)
                           (eq (car (second form)) 'QUOTE)
@@ -286,7 +289,8 @@
                      (setf form (convert-toplevel-form form))
                      )))))))
   (when (consp form)
-    (dump-form form stream)))
+    (dump-form form stream)
+    (%stream-terpri stream)))
 
 (declaim (ftype (function (t) t) convert-ensure-method))
 (defun convert-ensure-method (form)
