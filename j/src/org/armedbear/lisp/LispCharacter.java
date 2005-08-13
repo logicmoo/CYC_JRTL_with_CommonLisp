@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.63 2005-08-05 19:49:36 piso Exp $
+ * $Id: LispCharacter.java,v 1.64 2005-08-13 00:21:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,8 @@ public final class LispCharacter extends LispObject
         }
     }
 
-    private LispCharacter(char c)
+    // This needs to be public for the compiler.
+    public LispCharacter(char c)
     {
         this.value = c;
     }
