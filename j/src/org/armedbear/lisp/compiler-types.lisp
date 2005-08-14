@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.6 2005-08-12 16:45:36 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.7 2005-08-14 19:10:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@
           integer-type-high
           integer-type-p
           make-integer-type
+          +fixnum-type+
+          +integer-type+
           fixnum-type-p
           fixnum-constant-value
           make-compiler-type
@@ -36,23 +38,30 @@
   low
   high)
 
+(defconstant +fixnum-type+ (%make-integer-type most-negative-fixnum most-positive-fixnum))
+(defconstant +integer-type+ (%make-integer-type nil nil))
+
 (declaim (ftype (function (t) t) make-integer-type))
 (defun make-integer-type (type)
-  (when (eq type 'INTEGER)
-    (return-from make-integer-type (%make-integer-type nil nil)))
-  (setf type (normalize-type type))
-  (when (and (consp type) (eq (%car type) 'INTEGER))
-    (let ((low (second type))
-          (high (third type)))
-      (if (eq low '*)
-          (setf low nil)
-          (when (and (consp low) (integerp (%car low)))
-            (setf low (1+ (%car low)))))
-      (if (eq high '*)
-          (setf high nil)
-          (when (and (consp high) (integerp (%car high)))
-            (setf high (1- (%car high)))))
-      (%make-integer-type low high))))
+  (if (integer-type-p type)
+      type
+      (case type
+        (FIXNUM +fixnum-type+)
+        (INTEGER +integer-type+)
+        (t
+         (setf type (normalize-type type))
+         (when (and (consp type) (eq (%car type) 'INTEGER))
+           (let ((low (second type))
+                 (high (third type)))
+             (if (eq low '*)
+                 (setf low nil)
+                 (when (and (consp low) (integerp (%car low)))
+                   (setf low (1+ (%car low)))))
+             (if (eq high '*)
+                 (setf high nil)
+                 (when (and (consp high) (integerp (%car high)))
+                   (setf high (1- (%car high)))))
+             (%make-integer-type low high)))))))
 
 (declaim (ftype (function (t) t) fixnum-type-p))
 (defun fixnum-type-p (compiler-type)
