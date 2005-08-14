@@ -1,8 +1,8 @@
 /*
  * lognot.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: lognot.java,v 1.5 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: lognot.java,v 1.6 2005-08-14 16:29:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,17 +28,17 @@ public final class lognot extends Primitive
 {
     private lognot(String name, String arglist)
     {
-        super(name,arglist);
+        super(name, arglist);
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         if (arg instanceof Fixnum)
-            return new Fixnum(~((Fixnum)arg).getValue());
+            return new Fixnum(~((Fixnum)arg).value);
         if (arg instanceof Bignum)
-            return number(((Bignum)arg).getValue().not());
-        return signal(new TypeError(arg, "integer"));
+            return number(((Bignum)arg).value.not());
+        return signalTypeError(arg, Symbol.INTEGER);
     }
 
-    private static final lognot LOGNOT = new lognot("lognot","integer");
+    private static final Primitive LOGNOT = new lognot("lognot", "integer");
 }
