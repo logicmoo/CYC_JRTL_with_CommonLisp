@@ -121,6 +121,23 @@
 (defun run-shell-command (command &key directory (output *standard-output*))
   (excl:run-shell-command command :directory directory :input nil :output output))
 
+#+openmcl
+(defun run-shell-command (command &key directory (output *standard-output*))
+  (when directory
+    (setf command (concatenate 'string
+                               "\\cd \""
+                               (namestring (pathname directory))
+                               "\" && "
+                               command)))
+  (multiple-value-bind (status exitcode)
+      (ccl:external-process-status
+       (ccl:run-program
+        "/bin/sh"
+        (list  "-c" command)
+        :wait t :input nil :output output))
+    (declare (ignore status))
+    exitcode))
+
 #+(or sbcl cmu lispworks)
 (defun probe-directory (pathspec)
   (let* ((truename (probe-file pathspec)) ; TRUENAME is a pathname.
