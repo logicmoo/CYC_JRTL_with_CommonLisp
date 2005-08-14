@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.8 2005-08-14 20:54:40 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.9 2005-08-14 23:21:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -87,9 +87,11 @@
                (case (%car type)
                  (INTEGER
                   (make-integer-type type))
+                 (STRING
+                  'STRING)
                  (t
                   t)))
-              ((memq type '(SYMBOL CHARACTER STREAM))
+              ((memq type '(CHARACTER STREAM SYMBOL))
                type)
               (t
                t)))))
@@ -119,6 +121,8 @@
 (defun compiler-subtypep (compiler-type typespec)
   (cond ((eq typespec t)
          t)
+        ((eq typespec 'STRING)
+         (memq compiler-type '(STRING SIMPLE-STRING)))
         ((integer-type-p compiler-type)
          (integer-type-subtypep compiler-type typespec))))
 
