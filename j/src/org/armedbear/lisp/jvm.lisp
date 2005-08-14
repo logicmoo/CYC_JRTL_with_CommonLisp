@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.594 2005-08-13 17:38:55 piso Exp $
+;;; $Id: jvm.lisp,v 1.595 2005-08-14 04:34:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3640,6 +3640,9 @@
   (compile-form (cadr form) 'stack nil)
   (maybe-emit-clear-values (cadr form))
   (compile-call (cddr form))
+  (case representation
+    (unboxed-fixnum (emit-unbox-fixnum))
+    (unboxed-character (emit-unbox-character)))
   (emit-move-from-stack target))
 
 (defun save-variables (variables)
