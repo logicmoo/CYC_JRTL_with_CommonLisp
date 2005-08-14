@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.596 2005-08-14 16:34:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.597 2005-08-14 19:11:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5769,6 +5769,23 @@
            (return-from p2-logxor))))
   (compile-function-call form target representation))
 
+(defun p2-lognot (form target representation)
+  (cond ((and (check-arg-count form 1)
+              (fixnum-type-p (derive-compiler-type form)))
+         (let ((arg (%cadr form)))
+           (unless (eq representation 'unboxed-fixnum)
+             (emit 'new +lisp-fixnum-class+)
+             (emit 'dup))
+           (compile-form arg 'stack 'unboxed-fixnum)
+           (maybe-emit-clear-values arg)
+           (emit 'iconst_m1)
+           (emit 'ixor)
+           (unless (eq representation 'unboxed-fixnum)
+             (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+           (emit-move-from-stack target representation)))
+        (t
+         (compile-function-call form target representation))))
+
 ;; %ldb size position integer => byte
 (defun p2-%ldb (form target representation)
   (unless (check-arg-count form 3)
@@ -5961,6 +5978,7 @@
                (setf result-type 'INTEGER)))))
     result-type))
 
+(declaim (ftype (function (t) t) derive-type-logand))
 (defun derive-type-logand (form)
   (let ((args (cdr form)))
     (case (length args)
@@ -6014,6 +6032,18 @@
          result-type))
       (t
        (make-integer-type 'INTEGER)))))
+
+(declaim (ftype (function (t) t) derive-type-lognot))
+(defun derive-type-lognot (form)
+  (let (arg-type)
+    (if (and (= (length form) 2)
+             (fixnum-type-p (setf arg-type (derive-compiler-type (%cadr form)))))
+        (let* ((arg-low (integer-type-low arg-type))
+               (arg-high (integer-type-high arg-type))
+               (result-low (if arg-high (lognot arg-high) nil))
+               (result-high (if arg-low (lognot arg-low) nil)))
+          (make-integer-type (list 'INTEGER result-low result-high)))
+        +integer-type+)))
 
 ;; mod number divisor
 (declaim (ftype (function (t) t) derive-type-mod))
@@ -6218,6 +6248,8 @@
               '(INTEGER 0 #.(1- most-positive-fixnum)))
              (LOGAND
               (derive-type-logand form))
+             (LOGNOT
+              (derive-type-lognot form))
              (LOGXOR
               (logxor-derive-type (%cdr form)))
              (MOD
@@ -8405,6 +8437,7 @@
   (install-p2-handler 'locally            'p2-locally)
   (install-p2-handler 'logand             'p2-logand)
   (install-p2-handler 'logior             'p2-logior)
+  (install-p2-handler 'lognot             'p2-lognot)
   (install-p2-handler 'logxor             'p2-logxor)
   (install-p2-handler 'max                'p2-min/max)
   (install-p2-handler 'min                'p2-min/max)
