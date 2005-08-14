@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.136 2005-08-13 17:33:12 piso Exp $
+;;; $Id: precompiler.lisp,v 1.137 2005-08-14 19:09:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -246,7 +246,7 @@
            (= (length bytespec) 3))
       (let ((size (%cadr bytespec))
             (position (%caddr bytespec)))
-        `(sys:%ldb ,size ,position ,integer))
+        `(%ldb ,size ,position ,integer))
       form))
 
 (define-compiler-macro catch (&whole form tag &rest args)
