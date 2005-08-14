@@ -34,7 +34,7 @@ INSTALLATION
 ------------
 
 To build ABCL, you'll need a 1.4 or 1.5 JDK and a supported Common Lisp
-implementation (SBCL, CMUCL, Allegro, LispWorks, or CLISP).
+implementation (SBCL, CMUCL, OpenMCL, Allegro, LispWorks, or CLISP).
 
 Edit the file customizations.lisp, in the directory containing this README
 file, to suit your situation, paying attention to the comments in the file.
