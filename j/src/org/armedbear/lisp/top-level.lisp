@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.48 2005-06-30 00:29:18 piso Exp $
+;;; $Id: top-level.lisp,v 1.49 2005-08-14 16:30:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -97,7 +97,8 @@
     (with-standard-io-syntax
       (let ((*print-pretty* t)
             (*print-readably* nil)
-            (*print-structure* nil))
+            (*print-structure* nil)
+            (*print-array* nil))
         (dolist (frame *saved-backtrace*)
           (fresh-line *debug-io*)
           (let ((prefix (format nil "~3D: (" n)))
