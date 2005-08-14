@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.595 2005-08-14 04:34:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.596 2005-08-14 16:34:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,13 +54,7 @@
            nil)
           (t
            (setf body (copy-tree body))
-           (let ((gensyms '()))
-             (dolist (symbol lambda-list)
-               (let ((gensym (gensym)))
-                 (push gensym gensyms)
-                 (setf body (nsubst gensym symbol body :test 'eq))))
-             (setf lambda-list (nreverse gensyms))
-             (precompile-form (list 'LAMBDA lambda-list (list* 'BLOCK block-name body)) t)))))
+           (list 'LAMBDA lambda-list (list* 'BLOCK block-name (precompile-form body t))))))
   ) ; EVAL-WHEN
 
 ;; Just an experiment...
