@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.7 2005-08-14 19:10:18 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.8 2005-08-14 20:54:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@
                   (make-integer-type type))
                  (t
                   t)))
-              ((memq type '(SYMBOL CHARACTER))
+              ((memq type '(SYMBOL CHARACTER STREAM))
                type)
               (t
                t)))))
