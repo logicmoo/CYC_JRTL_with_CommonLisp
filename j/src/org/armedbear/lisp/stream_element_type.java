@@ -1,8 +1,8 @@
 /*
  * stream_element_type.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: stream_element_type.java,v 1.3 2004-11-03 15:39:02 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: stream_element_type.java,v 1.4 2005-08-14 20:55:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class stream_element_type extends Primitive
             return ((Stream)arg).getElementType();
         }
         catch (ClassCastException e) {
-            return signal(new TypeError(arg, Symbol.STREAM));
+            return signalTypeError(arg, Symbol.STREAM);
         }
     }
 
