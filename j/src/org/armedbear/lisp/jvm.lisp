@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.598 2005-08-14 23:22:25 piso Exp $
+;;; $Id: jvm.lisp,v 1.599 2005-08-15 04:55:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6704,6 +6704,27 @@
         (t
          (compile-function-call form target representation))))
 
+(defun p2-truncate (form target representation)
+  (let ((args (cdr form))
+        arg1
+        arg2)
+    (case (length args)
+      (1
+       (setf arg1 (%car args)
+             arg2 1))
+      (2
+       (setf arg1 (%car args)
+             arg2 (%cadr args)))
+      (t
+       (compiler-warn "Wrong number of arguments for ~A (expected 1 or 2, but received ~D)."
+                      'truncate (length args))
+       (compile-function-call form target representation)
+       (return-from p2-truncate)))
+    (compile-form arg1 'stack nil)
+    (compile-form arg2 'stack nil)
+    (emit-invokevirtual +lisp-object-class+ "truncate" (lisp-object-arg-types 1) +lisp-object+)
+    (emit-move-from-stack target representation)))
+
 (defun p2-elt (form target representation)
   (cond ((and (check-arg-count form 2)
               (subtypep (derive-type (third form)) 'fixnum)
@@ -7374,9 +7395,9 @@
                (maybe-emit-clear-values arg1)
                (emit-push-constant-int (char-code arg2)))
               (t
-                (compile-form arg1 'stack 'unboxed-character)
-                (compile-form arg2 'stack 'unboxed-character)
-                (maybe-emit-clear-values arg1 arg2)))
+               (compile-form arg1 'stack 'unboxed-character)
+               (compile-form arg2 'stack 'unboxed-character)
+               (maybe-emit-clear-values arg1 arg2)))
         (let ((LABEL1 (gensym))
               (LABEL2 (gensym)))
           (emit 'if_icmpeq LABEL1)
@@ -8458,6 +8479,7 @@
   (install-p2-handler 'the                'p2-the)
   (install-p2-handler 'throw              'p2-throw)
   (install-p2-handler 'truly-the          'p2-truly-the)
+  (install-p2-handler 'truncate           'p2-truncate)
   (install-p2-handler 'values             'p2-values)
   (install-p2-handler 'vectorp            'p2-vectorp)
   (install-p2-handler 'write-8-bits       'p2-write-8-bits)
