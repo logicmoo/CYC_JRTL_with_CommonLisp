@@ -1,7 +1,7 @@
 ;;; read-sequence.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: read-sequence.lisp,v 1.5 2005-07-15 20:22:48 piso Exp $
+;;; $Id: read-sequence.lisp,v 1.6 2005-08-15 23:33:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 (in-package #:system)
 
 (defun read-sequence (sequence stream &key (start 0) end)
+  (declare (type stream stream))
   (require-type start '(integer 0))
   (if end
       (require-type end '(integer 0))
