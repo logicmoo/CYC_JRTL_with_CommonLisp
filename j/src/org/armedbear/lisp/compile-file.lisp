@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.113 2005-08-13 17:34:59 piso Exp $
+;;; $Id: compile-file.lisp,v 1.114 2005-08-15 23:31:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -156,7 +156,9 @@
                   (when (and (symbolp name) (eq (get name '%inline) 'INLINE))
                     ;; FIXME Need to support SETF functions too!
                     (setf (inline-expansion name)
-                          (jvm::generate-inline-expansion block-name lambda-list body))))
+                          (jvm::generate-inline-expansion block-name lambda-list body))
+                    (dump-form `(setf (inline-expansion ',name) ',(inline-expansion name))
+                               stream)))
                 (push name jvm::*functions-defined-in-current-file*)
                 (jvm::note-name-defined name)
                 ;; If NAME is not fbound, provide a dummy definition so that
