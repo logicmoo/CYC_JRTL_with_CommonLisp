@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.123 2005-08-11 11:41:52 piso Exp $
+ * $Id: Fixnum.java,v 1.124 2005-08-15 04:56:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -603,11 +603,11 @@ public final class Fixnum extends LispObject
         final LispObject value1, value2;
 	try {
             if (obj instanceof Fixnum) {
-                long divisor = ((Fixnum)obj).value;
-                long quotient = value / divisor;
-                long remainder = value % divisor;
-                value1 = number(quotient);
-                value2 = remainder == 0 ? Fixnum.ZERO : number(remainder);
+                int divisor = ((Fixnum)obj).value;
+                int quotient = value / divisor;
+                int remainder = value % divisor;
+                value1 = new Fixnum(quotient);
+                value2 = remainder == 0 ? Fixnum.ZERO : new Fixnum(remainder);
             } else if (obj instanceof Bignum) {
                 BigInteger val = getBigInteger();
                 BigInteger divisor = ((Bignum)obj).value;
