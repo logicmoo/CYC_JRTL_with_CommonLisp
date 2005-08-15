@@ -1,7 +1,7 @@
 ;;; byte-io.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: byte-io.lisp,v 1.7 2005-08-03 19:05:24 piso Exp $
+;;; $Id: byte-io.lisp,v 1.8 2005-08-15 23:29:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
     byte))
 
 (defun read-byte (stream &optional (eof-error-p t) eof-value)
+  (declare (type stream stream))
   (let* ((element-type (stream-element-type stream)))
     (unless element-type
       (if eof-error-p
