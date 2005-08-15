@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.60 2005-07-22 15:49:24 piso Exp $
+;;; $Id: compile-system.lisp,v 1.61 2005-08-15 23:32:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,6 +94,7 @@
     (load (compile-file-if-needed "coerce.lisp"))
     (load (compile-file-if-needed "concatenate.lisp"))
     (load (compile-file-if-needed "make-sequence.lisp"))
+    (load (compile-file-if-needed "ldb.lisp"))
     ;; But not for these.
     (mapc #'compile-file-if-needed '("adjoin.lisp"
                                      "and.lisp"
@@ -167,7 +168,7 @@
                                      "known-functions.lisp"
                                      "late-setf.lisp"
                                      "lcm.lisp"
-                                     "ldb.lisp"
+                                     ;;"ldb.lisp"
                                      "ldiff.lisp"
                                      "list-length.lisp"
                                      "list.lisp"
