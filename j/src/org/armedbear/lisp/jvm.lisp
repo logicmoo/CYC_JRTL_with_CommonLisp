@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.600 2005-08-15 23:35:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.601 2005-08-16 00:54:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -509,9 +509,9 @@
       (dolist (variable vars)
         (when (special-variable-p (variable-name variable))
           (setf (variable-special-p variable) t)))
-      ;; Note that in processing declarations we want to walk the variable list
-      ;; from last to first, since declarations apply to the last-defined
-      ;; variable with the specified name.
+      ;; For processing declarations, we want to walk the variable list from
+      ;; last to first, since declarations apply to the last-defined variable
+      ;; with the specified name.
       (setf (block-free-specials block) (process-declarations-for-vars body (reverse vars)))
       (setf (block-vars block) vars)
       ;; Make free specials visible.
@@ -532,9 +532,7 @@
 
 (defun p1-m-v-b (form)
   (when (= (length (cadr form)) 1)
-    (let ((new-form `(let ((,(caadr form) ,(caddr form))) ,@(cdddr form))))
-      (dformat t "old form = ~S~%" form)
-      (dformat t "new-form = ~S~%" new-form)
+    (let ((new-form `(let* ((,(caadr form) ,(caddr form))) ,@(cdddr form))))
       (return-from p1-m-v-b (p1-let/let* new-form))))
   (let* ((*visible-variables* *visible-variables*)
          (block (make-block-node '(MULTIPLE-VALUE-BIND)))
@@ -4672,7 +4670,7 @@
                (emit-push-nil))
               (t
                (cond (unused-p
-                      (compile-form initform nil nil)
+                      (compile-form initform nil nil) ; for effect
                       (setf boundp t))
                      ((and (null (variable-closure-index variable))
                            (not (variable-special-p variable))
@@ -4708,7 +4706,7 @@
                (unless must-clear-values
                  (unless (single-valued-p initform)
                    (setf must-clear-values t)))))
-        (unless (variable-special-p variable)
+        (unless (or boundp (variable-special-p variable))
           (unless (or (variable-closure-index variable) (variable-register variable))
             (setf (variable-register variable) (allocate-register))))
         (push variable *visible-variables*)
@@ -5595,24 +5593,16 @@
              (when (integerp arg1)
                (setf arg1 (%cadr args)
                      arg2 (%car args)))
-;;              (let ((*print-structure* nil))
-;;                (format t "p2-logand arg1 = ~S~%" arg1)
-;;                (format t "p2-logand arg2 = ~S~%" arg2))
              (setf type1 (derive-compiler-type arg1)
                    type2 (derive-compiler-type arg2))
-;;              (format t "p2-logand type1 = ~S type2 = ~S~%" type1 type2)
              (cond ((and (integer-type-p type1) (eql arg2 0))
                     (compile-constant 0 target representation))
                    ((eql (fixnum-constant-value type1) -1)
-;;                     (format t "p2-logand arg1 is constant -1~%")
                     (compile-form arg2 target representation)
-                    (maybe-emit-clear-values arg2)
-                    (emit-move-from-stack target representation))
+                    (maybe-emit-clear-values arg2))
                    ((eql (fixnum-constant-value type2) -1)
-;;                     (format t "p2-logand arg2 is constant -1~%")
                     (compile-form arg1 target representation)
-                    (maybe-emit-clear-values arg1)
-                    (emit-move-from-stack target representation))
+                    (maybe-emit-clear-values arg1))
                    ((and (fixnum-type-p type1) (fixnum-type-p type2))
                     (unless (eq representation 'unboxed-fixnum)
                       (emit 'new +lisp-fixnum-class+)
