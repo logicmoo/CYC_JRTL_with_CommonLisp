@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.825 2005-08-12 11:41:10 piso Exp $
+ * $Id: Primitives.java,v 1.826 2005-08-16 19:57:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1553,14 +1553,9 @@ public final class Primitives extends Lisp
         {
             if (arg instanceof Symbol)
                 return arg;
-            // FIXME isValidSetfFunctionName
-            if (arg instanceof Cons && arg.car() == Symbol.SETF) {
-                LispObject blockName = arg.cadr();
-                if (blockName instanceof Symbol)
-                    return blockName;
-            }
-            return signal(new TypeError("The value " + arg.writeToString() +
-                                        " is not a valid function name."));
+            if (isValidSetfFunctionName(arg))
+                return arg.cadr();
+            return signalTypeError(arg, FUNCTION_NAME);
         }
     };
 
@@ -5066,7 +5061,7 @@ public final class Primitives extends Lisp
                 return ((Symbol)arg).name;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
+                return signalTypeError(arg, Symbol.SYMBOL);
             }
         }
     };
@@ -5081,7 +5076,7 @@ public final class Primitives extends Lisp
                 return ((Symbol)arg).getPackage();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
+                return signalTypeError(arg, Symbol.SYMBOL);
             }
         }
     };
@@ -5099,7 +5094,7 @@ public final class Primitives extends Lisp
                 return signal(new UndefinedFunction(arg));
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
+                return signalTypeError(arg, Symbol.SYMBOL);
             }
         }
     };
@@ -5116,7 +5111,7 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SYMBOL));
+                return signalTypeError(first, Symbol.SYMBOL);
             }
         }
     };
@@ -5131,7 +5126,7 @@ public final class Primitives extends Lisp
                 return ((Symbol)arg).getPropertyList();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
+                return signalTypeError(arg, Symbol.SYMBOL);
             }
         }
     };
@@ -5160,7 +5155,7 @@ public final class Primitives extends Lisp
             // Not a simple string.
             if (arg instanceof AbstractString)
                 return new Symbol(arg.getStringValue());
-            return signal(new TypeError(arg, Symbol.STRING));
+            return signalTypeError(arg, Symbol.STRING);
         }
     };
 
