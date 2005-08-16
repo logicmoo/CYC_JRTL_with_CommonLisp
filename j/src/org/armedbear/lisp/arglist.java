@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: arglist.java,v 1.19 2005-07-09 18:27:39 piso Exp $
+ * $Id: arglist.java,v 1.20 2005-08-16 17:39:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,16 @@ public final class arglist extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            coerceToFunctional(first).setLambdaList(second);
+            Operator operator = null;
+            if (first instanceof Operator) {
+                operator = (Operator) first;
+            } else if (first instanceof Symbol) {
+                LispObject function = first.getSymbolFunction();
+                if (function instanceof Operator)
+                    operator = (Operator) function;
+            }
+            if (operator != null)
+                operator.setLambdaList(second);
             return second;
         }
     };
