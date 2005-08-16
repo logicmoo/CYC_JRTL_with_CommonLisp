@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: numbers.lisp,v 1.35 2005-03-17 15:04:23 piso Exp $
+;;; $Id: numbers.lisp,v 1.36 2005-08-16 20:00:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; From CMUCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun signum (number)
   "If NUMBER is zero, return NUMBER, else return (/ NUMBER (ABS NUMBER))."
@@ -117,9 +117,18 @@
 	      (return init-value))
 	    (setq init-value iterated-value))))))
 
+;; FIXME Need to add support for denormalized floats!
 (defun float-precision (float)
   (if (floatp float)
-      (if (zerop float) 0 53)
+      (cond ((zerop float)
+             0)
+            ((typep float 'single-float)
+             24)
+            ((typep float 'double-float)
+             53)
+            (t
+             ;; Shouldn't get here!
+             (aver nil)))
       (error 'simple-type-error
              :format-control "~S is not of type FLOAT."
              :format-arguments (list float))))
