@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: coerce.lisp,v 1.8 2005-08-01 12:44:54 piso Exp $
+;;; $Id: coerce.lisp,v 1.9 2005-08-16 19:58:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 
 (in-package #:system)
 
+(declaim (ftype (function (t t) t) coerce-list-to-vector))
 (defun coerce-list-to-vector (list result-type)
   (let* ((length (length list))
          (result (make-sequence result-type length)))
@@ -32,6 +33,20 @@
          :datum object
          :format-control "~S cannot be converted to type ~S."
          :format-arguments (list object result-type)))
+
+;; FIXME This is a special case for LOOP code, which does things like
+;; (AND SINGLE-FLOAT REAL) and (AND SINGLE-FLOAT (REAL (0))).
+(declaim (ftype (function (t t) t) coerce-to-and-type))
+(defun coerce-object-to-and-type (object result-type)
+  (when (and (consp result-type)
+             (eq (%car result-type) 'AND)
+             (= (length result-type) 3))
+    (let* ((type1 (%cadr result-type))
+           (type2 (%caddr result-type))
+           (result (coerce object type1)))
+      (when (typep object type2)
+        (return-from coerce-object-to-and-type result))))
+  (coerce-error object result-type))
 
 (defun coerce (object result-type)
   (cond ((eq result-type t)
@@ -58,14 +73,17 @@
                 object)
                (t
                 (coerce-error object result-type))))
+        ((eq result-type 'function)
+         (coerce-to-function object))
         ((and (consp result-type)
-              (eq (car result-type) 'complex))
-         (if (memq (cadr result-type)
+              (eq (%car result-type) 'complex))
+         (if (memq (%cadr result-type)
                    '(float single-float double-float short-float long-float))
              (complex object 0.0)
              object))
-        ((eq result-type 'function)
-         (coerce-to-function object))
+        ((and (consp result-type)
+              (eq (%car result-type) 'AND))
+         (coerce-object-to-and-type object result-type))
         ((and (listp object)
               (eq result-type 'vector))
          (coerce-list-to-vector object result-type))
