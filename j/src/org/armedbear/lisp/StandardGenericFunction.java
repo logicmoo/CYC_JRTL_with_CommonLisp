@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.7 2005-06-23 19:07:37 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.8 2005-08-16 18:18:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -218,7 +218,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).slots[StandardGenericFunctionClass.SLOT_INDEX_NAME];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -235,7 +235,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -250,7 +250,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).slots[StandardGenericFunctionClass.SLOT_INDEX_LAMBDA_LIST];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -267,7 +267,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -284,7 +284,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).function;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -303,7 +303,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -318,7 +318,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).slots[StandardGenericFunctionClass.SLOT_INDEX_REQUIRED_ARGS];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -335,7 +335,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -350,7 +350,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).slots[StandardGenericFunctionClass.SLOT_INDEX_INITIAL_METHODS];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -367,7 +367,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -382,7 +382,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).slots[StandardGenericFunctionClass.SLOT_INDEX_METHODS];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -399,7 +399,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -414,7 +414,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).slots[StandardGenericFunctionClass.SLOT_INDEX_METHOD_CLASS];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -431,7 +431,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -446,7 +446,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).slots[StandardGenericFunctionClass.SLOT_INDEX_METHOD_COMBINATION];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -463,7 +463,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -478,7 +478,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).slots[StandardGenericFunctionClass.SLOT_INDEX_ARGUMENT_PRECEDENCE_ORDER];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -495,7 +495,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -510,7 +510,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).slots[StandardGenericFunctionClass.SLOT_INDEX_CLASSES_TO_EMF_TABLE];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -527,7 +527,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -542,7 +542,7 @@ public final class StandardGenericFunction extends StandardObject
                 return ((StandardGenericFunction)arg).slots[StandardGenericFunctionClass.SLOT_INDEX_DOCUMENTATION];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
@@ -559,7 +559,7 @@ public final class StandardGenericFunction extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_GENERIC_FUNCTION));
+                return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
             }
         }
     };
