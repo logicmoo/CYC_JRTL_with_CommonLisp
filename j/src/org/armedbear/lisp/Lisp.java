@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.384 2005-08-13 23:51:34 piso Exp $
+ * $Id: Lisp.java,v 1.385 2005-08-16 17:40:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1412,22 +1412,6 @@ public abstract class Lisp
             LispObject fun = obj.getSymbolFunction();
             if (fun instanceof Function)
                 return (Function) fun;
-        } else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
-            return new Closure(obj, new Environment());
-        signal(new UndefinedFunction(obj));
-        // Not reached.
-        return null;
-    }
-
-    public static final Operator coerceToFunctional(LispObject obj)
-        throws ConditionThrowable
-    {
-        if (obj instanceof Operator)
-            return (Operator) obj;
-        if (obj instanceof Symbol) {
-            LispObject fun = obj.getSymbolFunction();
-            if (fun instanceof Operator)
-                return (Operator) fun;
         } else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
             return new Closure(obj, new Environment());
         signal(new UndefinedFunction(obj));
