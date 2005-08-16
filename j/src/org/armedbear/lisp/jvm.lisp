@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.601 2005-08-16 00:54:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.602 2005-08-16 20:02:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3588,41 +3588,29 @@
         (t
          form)))
 
-;; (define-source-transform min (&whole form &rest args)
-;;   (cond ((= (length args) 2)
-;;          (let* ((arg1 (%car args))
-;;                 (arg2 (%cadr args))
-;;                 (sym1 (if (consp arg1) (gensym) arg1))
-;;                 (sym2 (if (consp arg2) (gensym) arg2))
-;;                 (lets '()))
-;;            (when (consp arg1)
-;;              (push `(,sym1 ,arg1) lets))
-;;            (when (consp arg2)
-;;              (push `(,sym2 ,arg2) lets))
-;;            (if lets
-;;                `(let (,@(nreverse lets))
-;;                   (if (<= ,sym1 ,sym2) ,sym1 ,sym2))
-;;                `(if (<= ,sym1 ,sym2) ,sym1 ,sym2))))
-;;         (t
-;;          form)))
+(define-source-transform min (&whole form &rest args)
+  (cond ((= (length args) 2)
+         (let* ((arg1 (%car args))
+                (arg2 (%cadr args))
+                (sym1 (gensym))
+                (sym2 (gensym)))
+           `(let ((,sym1 ,arg1)
+                  (,sym2 ,arg2))
+              (if (<= ,sym1 ,sym2) ,sym1 ,sym2))))
+        (t
+         form)))
 
-;; (define-source-transform max (&whole form &rest args)
-;;   (cond ((= (length args) 2)
-;;          (let* ((arg1 (%car args))
-;;                 (arg2 (%cadr args))
-;;                 (sym1 (if (consp arg1) (gensym) arg1))
-;;                 (sym2 (if (consp arg2) (gensym) arg2))
-;;                 (lets '()))
-;;            (when (consp arg1)
-;;              (push `(,sym1 ,arg1) lets))
-;;            (when (consp arg2)
-;;              (push `(,sym2 ,arg2) lets))
-;;            (if lets
-;;                `(let (,@(nreverse lets))
-;;                   (if (>= ,sym1 ,sym2) ,sym1 ,sym2))
-;;                `(if (>= ,sym1 ,sym2) ,sym1 ,sym2))))
-;;         (t
-;;          form)))
+(define-source-transform max (&whole form &rest args)
+  (cond ((= (length args) 2)
+         (let* ((arg1 (%car args))
+                (arg2 (%cadr args))
+                (sym1 (gensym))
+                (sym2 (gensym)))
+           `(let ((,sym1 ,arg1)
+                  (,sym2 ,arg2))
+              (if (>= ,sym1 ,sym2) ,sym1 ,sym2))))
+        (t
+         form)))
 
 (defun p2-funcall (form target representation)
   (unless (> (length form) 1)
@@ -4562,18 +4550,12 @@
                                   (setf (var-ref-variable ref) source-var))
                                 (push variable removed)))))))
                   ((fixnump initform)
-;;                    (format t "propagate-vars fixnump initform case~%")
                    (dolist (ref (variable-references variable))
                      (aver (eq (var-ref-variable ref) variable))
                      (setf (var-ref-variable ref) nil
                            (var-ref-constant-p ref) t
-                           (var-ref-constant-value ref) initform)
-;;                      (setf (variable-references variable)
-;;                            (remove ref (variable-references variable)))
-                     )
-                   (push variable removed)
-                   ))
-            ))))
+                           (var-ref-constant-value ref) initform))
+                   (push variable removed)))))))
     (when removed
       (dolist (variable removed)
         (setf (block-vars block) (remove variable (block-vars block)))))))
@@ -6502,12 +6484,14 @@
 
 (defun p2-min/max (form target representation)
   (cond ((= (length form) 3)
-         (let* ((args (%cdr form))
+         (let* ((op (%car form))
+                (args (%cdr form))
                 (arg1 (%car args))
                 (arg2 (%cadr args))
                 (type1 (derive-compiler-type arg1))
                 (type2 (derive-compiler-type arg2)))
-           (cond ((and (fixnum-type-p type1) (fixnum-type-p type2))
+           (cond ((and (not (notinline-p op))
+                       (fixnum-type-p type1) (fixnum-type-p type2))
                   (cond (target
                           (unless (eq representation 'unboxed-fixnum)
                             (emit 'new +lisp-fixnum-class+)
@@ -6516,7 +6500,7 @@
                           (compile-form arg2 'stack 'unboxed-fixnum)
                           (maybe-emit-clear-values arg1 arg2)
                           (emit-invokestatic "java/lang/Math"
-                                             (if (eq (%car form) 'min) "min" "max")
+                                             (if (eq op 'min) "min" "max")
                                              '("I" "I") "I")
                           (unless (eq representation 'unboxed-fixnum)
                             (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
@@ -8360,14 +8344,16 @@
                   (format *error-output* ";     ~S~%" name)))
               (terpri *error-output*)))))))
 
-(defun get-lambda-to-compile (definition-designator)
-  (if (and (consp definition-designator)
-           (eq (%car definition-designator) 'LAMBDA))
-      definition-designator
+(defun get-lambda-to-compile (thing)
+  (if (and (consp thing)
+           (eq (%car thing) 'LAMBDA))
+      thing
       (multiple-value-bind (lambda-expression environment)
-          (function-lambda-expression definition-designator)
+          (function-lambda-expression (if (typep thing 'standard-generic-function)
+                                          (mop::funcallable-instance-function thing)
+                                          thing))
         (unless lambda-expression
-          (error "Can't find a definition for ~S." definition-designator))
+          (error "Can't find a definition for ~S." thing))
         (values lambda-expression environment))))
 
 (defun %jvm-compile (name definition)
@@ -8381,29 +8367,32 @@
     (let* ((*package* (if (and name (symbol-package name))
                           (symbol-package name)
                           *package*))
-           compiled-definition
+           compiled-function
            (warnings-p t)
            (failure-p t))
       (with-compilation-unit ()
         (let* ((tempfile (make-temp-file)))
           (unwind-protect
-              (setf compiled-definition
+              (setf compiled-function
                     (load-compiled-function (compile-defun name expr env tempfile)))
             (delete-file tempfile)))
-        (when (and name (functionp compiled-definition))
-          (sys::%set-lambda-name compiled-definition name)
-          (sys:set-call-count compiled-definition (sys:call-count definition))
-          (sys::%set-arglist compiled-definition (sys::arglist definition))
+        (when (and name (functionp compiled-function))
+          (sys::%set-lambda-name compiled-function name)
+          (sys:set-call-count compiled-function (sys:call-count definition))
+          (sys::%set-arglist compiled-function (sys::arglist definition))
           (let ((*warn-on-redefinition* nil))
-            (setf (fdefinition name)
-                  (if (macro-function name)
-                      (make-macro name compiled-definition)
-                      compiled-definition))))
+            (cond ((typep definition 'standard-generic-function)
+                   (mop:set-funcallable-instance-function definition compiled-function))
+                  (t
+                   (setf (fdefinition name)
+                         (if (macro-function name)
+                             (make-macro name compiled-function)
+                             compiled-function))))))
         (cond ((zerop (+ *errors* *warnings* *style-warnings*))
                (setf warnings-p nil failure-p nil))
               ((zerop (+ *errors* *warnings*))
                (setf failure-p nil))))
-      (values (or name compiled-definition) warnings-p failure-p))))
+      (values (or name compiled-function) warnings-p failure-p))))
 
 (defun jvm-compile (name &optional definition)
   (if *catch-errors*
