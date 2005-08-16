@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: GenericFunction.java,v 1.24 2005-06-23 19:07:13 piso Exp $
+ * $Id: GenericFunction.java,v 1.25 2005-08-16 18:19:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class GenericFunction extends StandardObject
+public abstract class GenericFunction extends StandardObject
 {
     protected GenericFunction(LispClass cls, int length)
     {
