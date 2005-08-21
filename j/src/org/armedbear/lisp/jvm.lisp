@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.602 2005-08-16 20:02:34 piso Exp $
+;;; $Id: jvm.lisp,v 1.603 2005-08-21 20:21:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -768,10 +768,8 @@
            (dformat t "p1-function local function ~S~%" (cadr form))
            (let ((variable (local-function-variable local-function)))
              (when variable
-               (unless (or (eq (variable-compiland variable) *current-compiland*)
-                           (eq (local-function-compiland local-function) *current-compiland*))
                  (dformat t "p1-function ~S used non-locally~%" (variable-name variable))
-                 (setf (variable-used-non-locally-p variable) t))))
+                 (setf (variable-used-non-locally-p variable) t)))
            form)
           (t
            form))))
@@ -927,13 +925,10 @@
              (dformat t "local function assumed not single-valued~%")
              (setf (compiland-single-valued-p *current-compiland*) nil)
 
-             (unless (eq (local-function-compiland local-function)
-                         *current-compiland*)
-               (let ((variable (local-function-variable local-function)))
-                 (when variable
-                   (unless (eq (variable-compiland variable) *current-compiland*)
-                     (dformat t "p1 ~S used non-locally~%" (variable-name variable))
-                     (setf (variable-used-non-locally-p variable) t))))))
+             (let ((variable (local-function-variable local-function)))
+               (when variable
+                 (dformat t "p1 ~S used non-locally~%" (variable-name variable))
+                 (setf (variable-used-non-locally-p variable) t))))
             (t
              ;; Not a local function call.
              (dformat t "p1 non-local call to ~S~%" op)
@@ -3656,14 +3651,9 @@
          (local-function (find-local-function op))
          (*register* *register*)
          (saved-vars '()))
-    (cond ((eq (local-function-compiland local-function) compiland)
-           ;; Recursive call.
-           (dformat t "compile-local-function-call recursive case~%")
-           (setf saved-vars
-                 (save-variables (compiland-arg-vars (local-function-compiland local-function))))
-           (emit 'aload_0))
-          ((local-function-variable local-function)
+    (cond ((local-function-variable local-function)
            ;; LABELS
+           (dformat t "compile-local-function-call LABELS case~%")
            (unless (null (compiland-parent compiland))
              (setf saved-vars
                    (save-variables (intersection
@@ -3675,15 +3665,13 @@
            (let* ((g (if *compile-file-truename*
                          (declare-local-function local-function)
                          (declare-object (local-function-function local-function)))))
-             (emit 'getstatic *this-class* g +lisp-object+)))) ; Stack: template-function
-
-    (when *closure-variables*
-      (emit 'checkcast +lisp-ctf-class+))
-
-    (when *closure-variables*
-      ;; First arg is closure variable array.
-      (aver (not (null (compiland-closure-register compiland))))
-      (emit 'aload (compiland-closure-register compiland)))
+             (emit 'getstatic *this-class* g +lisp-object+) ; Stack: template-function
+             (when *closure-variables*
+               (emit 'checkcast +lisp-ctf-class+)
+               (emit 'aload (compiland-closure-register compiland))
+               (emit-invokestatic +lisp-class+ "makeCompiledClosure"
+                                  (list +lisp-object+ +lisp-object-array+)
+                                  +lisp-object+)))))
     (let ((must-clear-values nil))
       (cond ((> (length args) call-registers-limit)
              (emit-push-constant-int (length args))
@@ -3707,21 +3695,12 @@
       (when must-clear-values
         (emit-clear-values)))
 
-    (if *closure-variables*
-        (let* ((arg-count (length args))
-               (arg-types (if (<= arg-count call-registers-limit)
-                              (list* +lisp-object-array+
-                                     (lisp-object-arg-types arg-count))
-                              (list +lisp-object-array+ +lisp-object-array+))) ;; FIXME
-               (result-type +lisp-object+))
-          (emit-invokevirtual +lisp-ctf-class+ "execute" arg-types result-type))
-        ;; No closure variables.
-        (let* ((arg-count (length args))
-               (arg-types (if (<= arg-count call-registers-limit)
-                              (lisp-object-arg-types arg-count)
-                              (list +lisp-object-array+))) ;; FIXME
-               (result-type +lisp-object+))
-          (emit-invokevirtual +lisp-object-class+ "execute" arg-types result-type)))
+    (let* ((arg-count (length args))
+           (arg-types (if (<= arg-count call-registers-limit)
+                          (lisp-object-arg-types arg-count)
+                          (list +lisp-object-array+))) ;; FIXME
+           (result-type +lisp-object+))
+      (emit-invokevirtual +lisp-object-class+ "execute" arg-types result-type))
 
     (when (eq representation 'unboxed-fixnum)
       (emit-unbox-fixnum))
@@ -5332,6 +5311,18 @@
              (setf (local-function-class-file local-function) class-file)
              (let ((g (declare-local-function local-function)))
                (emit 'getstatic *this-class* g +lisp-object+)
+
+               (let ((parent (compiland-parent compiland)))
+                 (when (compiland-closure-register parent)
+                   (dformat t "(compiland-closure-register parent) = ~S~%"
+                            (compiland-closure-register parent))
+                   (emit 'checkcast +lisp-ctf-class+)
+                   (emit 'aload (compiland-closure-register parent))
+                   (emit-invokestatic +lisp-class+ "makeCompiledClosure"
+                                      (list +lisp-object+ +lisp-object-array+)
+                                      +lisp-object+)))
+
+
                (emit 'var-set (local-function-variable local-function)))))
           (t
            (let* ((pathname (make-temp-file))
@@ -5349,8 +5340,19 @@
                        (p2-compiland compiland)
                        (write-class-file (compiland-class-file compiland))))
                    (setf (local-function-class-file local-function) class-file)
-                   (let ((g (declare-object (sys:load-compiled-function pathname))))
+                   (let ((g (declare-object (load-compiled-function pathname))))
                      (emit 'getstatic *this-class* g +lisp-object+)
+
+                     (let ((parent (compiland-parent compiland)))
+                       (when (compiland-closure-register parent)
+                         (dformat t "(compiland-closure-register parent) = ~S~%"
+                                  (compiland-closure-register parent))
+                         (emit 'checkcast +lisp-ctf-class+)
+                         (emit 'aload (compiland-closure-register parent))
+                         (emit-invokestatic +lisp-class+ "makeCompiledClosure"
+                                            (list +lisp-object+ +lisp-object-array+)
+                                            +lisp-object+)))
+
                      (emit 'var-set (local-function-variable local-function))))
                (delete-file pathname)))))))
 
@@ -5410,7 +5412,7 @@
                        (p2-compiland compiland)
                        (write-class-file (compiland-class-file compiland))))
                    (emit 'getstatic *this-class*
-                         (declare-object (sys:load-compiled-function pathname))
+                         (declare-object (load-compiled-function pathname))
                          +lisp-object+))
                (delete-file pathname)))))
     (cond ((null *closure-variables*)) ; Nothing to do.
@@ -5430,30 +5432,24 @@
   (let ((name (second form))
         local-function)
     (cond ((symbolp name)
+           (dformat t "p2-function case 1~%")
            (cond ((setf local-function (find-local-function name))
                   (dformat t "p2-function 1~%")
-                  (when (eq (local-function-compiland local-function) *current-compiland*)
-                    (emit 'aload 0) ; this
-                    (emit-move-from-stack target)
-                    (return-from p2-function))
                   (cond ((local-function-variable local-function)
-                         (dformat t "p2-function 2~%")
+                         (dformat t "p2-function 2 emitting var-ref~%")
                          (emit 'var-ref (local-function-variable local-function) 'stack))
                         (t
                          (let ((g (if *compile-file-truename*
                                       (declare-local-function local-function)
                                       (declare-object (local-function-function local-function)))))
-                           (emit 'getstatic *this-class*
-                                 g +lisp-object+)))) ; Stack: template-function
-                  (cond ((null *closure-variables*)) ; Nothing to do.
-                        ((compiland-closure-register *current-compiland*)
-                         (dformat t "p2-function 3~%")
-                         (emit 'aload (compiland-closure-register *current-compiland*))
-                         (emit-invokestatic +lisp-class+ "makeCompiledClosure"
-                                            (list +lisp-object+ +lisp-object-array+)
-                                            +lisp-object+)) ; Stack: compiled-closure
-                        (t
-                         (aver (progn 'unexpected nil))))
+                           (emit 'getstatic *this-class* g +lisp-object+) ; Stack: template-function
+
+                           (when (compiland-closure-register *current-compiland*)
+                             (emit 'checkcast +lisp-ctf-class+)
+                             (emit 'aload (compiland-closure-register *current-compiland*))
+                             (emit-invokestatic +lisp-class+ "makeCompiledClosure"
+                                                (list +lisp-object+ +lisp-object-array+)
+                                                +lisp-object+)))))
                   (emit-move-from-stack target))
                  ((inline-ok name)
                   (emit 'getstatic *this-class*
@@ -5466,6 +5462,7 @@
                                       nil +lisp-object+)
                   (emit-move-from-stack target))))
           ((and (consp name) (eq (%car name) 'SETF))
+           (dformat t "p2-function case 2~%")
            ; FIXME Need to check for NOTINLINE declaration!
            (cond ((setf local-function (find-local-function name))
                   (dformat t "p2-function 1~%")
@@ -5500,6 +5497,7 @@
                                       nil +lisp-object+)
                   (emit-move-from-stack target))))
           ((compiland-p name)
+           (dformat t "p2-function case 3~%")
            (p2-lambda name target))
           (t
            (compiler-unsupported "p2-function: unsupported case: ~S" form)))))
