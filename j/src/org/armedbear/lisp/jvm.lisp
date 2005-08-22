@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.606 2005-08-22 05:29:54 piso Exp $
+;;; $Id: jvm.lisp,v 1.607 2005-08-22 13:14:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -641,6 +641,22 @@
              (setf (block-non-local-go-p tag-block) t)))))
   form)
 
+(defun validate-name-and-lambda-list (name lambda-list context)
+  (unless (or (symbolp name) (setf-function-name-p name))
+    (compiler-error "~S is not a valid function name." name))
+  (when (or (memq '&optional lambda-list)
+            (memq '&key lambda-list))
+    (let ((state nil))
+      (dolist (arg lambda-list)
+        (cond ((memq arg lambda-list-keywords)
+               (setf state arg))
+              ((memq state '(&optional &key))
+               (when (and (consp arg) (not (constantp (second arg))))
+                 (compiler-unsupported
+                  "~A: can't handle ~A argument with non-constant initform."
+                  context
+                  (if (eq state '&optional) "optional" "keyword")))))))))
+
 (defun p1-flet (form)
   (incf (compiland-children *current-compiland*) (length (cadr form)))
   (let ((*visible-variables* *visible-variables*)
@@ -650,25 +666,14 @@
     (dolist (definition (cadr form))
       (let ((name (car definition))
             (lambda-list (cadr definition)))
-        (unless (or (symbolp name) (setf-function-name-p name))
-          (compiler-error "~S is not a valid function name." name))
-        (when (or (memq '&optional lambda-list)
-                  (memq '&key lambda-list))
-          (let ((state nil))
-            (dolist (arg lambda-list)
-              (cond ((memq arg lambda-list-keywords)
-                     (setf state arg))
-                    ((memq state '(&optional &key))
-                     (when (and (consp arg) (not (constantp (second arg))))
-                       (compiler-unsupported "P1-FLET: can't handle optional argument with non-constant initform.")))))))
+        (validate-name-and-lambda-list name lambda-list 'FLET)
         (let* ((body (cddr definition))
                (compiland (make-compiland :name name
                                           :parent *current-compiland*))
                (variable (make-variable :name (gensym)))
                (local-function (make-local-function :name name
                                                     :compiland compiland
-                                                    :variable variable
-                                                    )))
+                                                    :variable variable)))
           (multiple-value-bind (body decls) (parse-body body)
             (setf (compiland-lambda-expression compiland)
                   `(lambda ,lambda-list ,@decls (block ,name ,@body)))
@@ -676,18 +681,14 @@
                   (*local-functions* *local-functions*)
                   (*current-compiland* compiland))
               (p1-compiland compiland)))
-;;           (push compiland compilands)
           (push variable *all-variables*)
-          (push local-function local-functions)
-          )))
-;;     (list* (car form) (nreverse compilands) (p1-body (cddr form)))
+          (push local-function local-functions))))
     (setf local-functions (nreverse local-functions))
     ;; Make the local functions visible.
     (dolist (local-function local-functions)
       (push local-function *local-functions*)
       (push (local-function-variable local-function) *visible-variables*))
-    (list* (car form) local-functions (p1-body (cddr form)))
-    ))
+    (list* (car form) local-functions (p1-body (cddr form)))))
 
 (defun p1-labels (form)
   (incf (compiland-children *current-compiland*) (length (cadr form)))
@@ -698,17 +699,7 @@
     (dolist (definition (cadr form))
       (let ((name (car definition))
             (lambda-list (cadr definition)))
-        (unless (or (symbolp name) (setf-function-name-p name))
-          (compiler-error "~S is not a valid function name." name))
-        (when (or (memq '&optional lambda-list)
-                  (memq '&key lambda-list))
-          (let ((state nil))
-            (dolist (arg lambda-list)
-              (cond ((memq arg lambda-list-keywords)
-                     (setf state arg))
-                    ((memq state '(&optional &key))
-                     (when (and (consp arg) (not (constantp (second arg))))
-                       (compiler-unsupported "P1-LABELS: can't handle optional argument with non-constant initform.")))))))
+        (validate-name-and-lambda-list name lambda-list 'LABELS)
         (let* ((body (cddr definition))
                (compiland (make-compiland :name name
                                           :parent *current-compiland*))
