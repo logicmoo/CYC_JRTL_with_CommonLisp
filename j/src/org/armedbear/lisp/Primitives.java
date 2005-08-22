@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.826 2005-08-16 19:57:45 piso Exp $
+ * $Id: Primitives.java,v 1.827 2005-08-22 16:50:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1306,9 +1306,16 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            final int index = Fixnum.getValue(first);
+            final int index;
+            try {
+                index = ((Fixnum)first).value;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.FIXNUM);
+            }
             if (index < 0)
-                signal(new TypeError("NTHCDR: invalid index " + index + "."));
+                return signalTypeError(first,
+                                       list2(Symbol.INTEGER, Fixnum.ZERO));
             for (int i = 0; i < index; i++) {
                 second = second.cdr();
                 if (second == NIL)
