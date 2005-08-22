@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.604 2005-08-22 00:12:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.605 2005-08-22 01:20:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -645,7 +645,7 @@
   (incf (compiland-children *current-compiland*) (length (cadr form)))
   (let ((*current-compiland* *current-compiland*)
         (*local-functions* *local-functions*)
-        (compilands '()))
+        (local-functions '()))
     (dolist (definition (cadr form))
       (let ((name (car definition))
             (lambda-list (cadr definition)))
@@ -658,12 +658,16 @@
               (cond ((memq arg lambda-list-keywords)
                      (setf state arg))
                     ((memq state '(&optional &key))
-                     (when (and (consp arg)
-                                (not (constantp (second arg))))
+                     (when (and (consp arg) (not (constantp (second arg))))
                        (compiler-unsupported "P1-FLET: can't handle optional argument with non-constant initform.")))))))
         (let* ((body (cddr definition))
                (compiland (make-compiland :name name
-                                          :parent *current-compiland*)))
+                                          :parent *current-compiland*))
+;;                (variable (make-variable :name (gensym)))
+               (local-function (make-local-function :name name
+                                                    :compiland compiland
+;;                                                     :variable variable
+                                                    )))
           (multiple-value-bind (body decls) (parse-body body)
             (setf (compiland-lambda-expression compiland)
                   `(lambda ,lambda-list ,@decls (block ,name ,@body)))
@@ -671,8 +675,13 @@
                   (*local-functions* *local-functions*)
                   (*current-compiland* compiland))
               (p1-compiland compiland)))
-          (push compiland compilands))))
-  (list* (car form) (nreverse compilands) (p1-body (cddr form)))))
+;;           (push compiland compilands)
+          (push local-function local-functions)
+          )))
+;;     (list* (car form) (nreverse compilands) (p1-body (cddr form)))
+    (setf local-functions (nreverse local-functions))
+    (list* (car form) local-functions (p1-body (cddr form)))
+    ))
 
 (defun p1-labels (form)
   (incf (compiland-children *current-compiland*) (length (cadr form)))
@@ -692,8 +701,7 @@
               (cond ((memq arg lambda-list-keywords)
                      (setf state arg))
                     ((memq state '(&optional &key))
-                     (when (and (consp arg)
-                                (not (constantp (second arg))))
+                     (when (and (consp arg) (not (constantp (second arg))))
                        (compiler-unsupported "P1-LABELS: can't handle optional argument with non-constant initform.")))))))
         (let* ((body (cddr definition))
                (compiland (make-compiland :name name
@@ -716,7 +724,7 @@
       (let ((*visible-variables* *visible-variables*)
             (*current-compiland* (local-function-compiland local-function)))
         (p1-compiland (local-function-compiland local-function))))
-    (list* (car form) local-functions (mapcar #'p1 (cddr form)))))
+    (list* (car form) local-functions (p1-body (cddr form)))))
 
 (defun p1-funcall (form)
   (unless (> (length form) 1)
@@ -5233,8 +5241,9 @@
     (emit-push-nil)
     (emit-move-from-stack target)))
 
-(defun p2-flet-process-compiland (compiland)
-  (let ((lambda-list (cadr (compiland-lambda-expression compiland))))
+(defun p2-flet-process-compiland (local-function)
+  (let* ((compiland (local-function-compiland local-function))
+         (lambda-list (cadr (compiland-lambda-expression compiland))))
     (cond (*compile-file-truename*
            (let* ((pathname (sys::next-classfile-name))
                   (class-file (make-class-file :pathname pathname
@@ -5252,9 +5261,7 @@
              (let ((*load-truename* (pathname pathname)))
                (unless (ignore-errors (load-compiled-function pathname))
                  (error "Unable to load ~S." pathname)))
-             (push (make-local-function :name (compiland-name compiland)
-                                        :class-file class-file)
-                   *local-functions*)))
+             (setf (local-function-class-file local-function) class-file)))
           (t
            (let* ((pathname (make-temp-file))
                   (class-file (make-class-file :pathname pathname
@@ -5270,26 +5277,13 @@
                            (*explain* *explain*))
                        (p2-compiland compiland)
                        (write-class-file (compiland-class-file compiland))))
-                   (push (make-local-function :name (compiland-name compiland)
-                                              :function (sys:load-compiled-function pathname)
-                                              :class-file class-file)
-                         *local-functions*))
+                   (setf (local-function-class-file local-function) class-file)
+                   (setf (local-function-function local-function) (load-compiled-function pathname)))
                (delete-file pathname)))))))
 
-(defun p2-flet (form target representation)
-  ;; FIXME What if we're called with a non-NIL representation?
-  (declare (ignore representation))
-  (let ((*local-functions* *local-functions*)
-        (compilands (cadr form))
-        (body (cddr form)))
-    (dolist (compiland compilands)
-      (p2-flet-process-compiland compiland))
-    (do ((forms body (cdr forms)))
-        ((null forms))
-      (compile-form (car forms) (if (cdr forms) nil target) nil))))
-
-(defun p2-labels-process-compiland (compiland local-function)
-  (let ((lambda-list (cadr (compiland-lambda-expression compiland))))
+(defun p2-labels-process-compiland (local-function)
+  (let* ((compiland (local-function-compiland local-function))
+         (lambda-list (cadr (compiland-lambda-expression compiland))))
     (cond (*compile-file-truename*
            (let* ((pathname (sys::next-classfile-name))
                   (class-file (make-class-file :pathname pathname
@@ -5355,6 +5349,20 @@
                      (emit 'var-set (local-function-variable local-function))))
                (delete-file pathname)))))))
 
+(defun p2-flet (form target representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
+  (let ((*local-functions* *local-functions*)
+        (local-functions (cadr form))
+        (body (cddr form)))
+    (dolist (local-function local-functions)
+      (p2-flet-process-compiland local-function))
+    (dolist (local-function local-functions)
+      (push local-function *local-functions*))
+    (do ((forms body (cdr forms)))
+        ((null forms))
+      (compile-form (car forms) (if (cdr forms) nil target) nil))))
+
 (defun p2-labels (form target representation)
   ;; FIXME What if we're called with a non-NIL representation?
   (declare (ignore representation))
@@ -5370,8 +5378,7 @@
         (unless (variable-closure-index variable)
           (setf (variable-register variable) (allocate-register)))))
     (dolist (local-function local-functions)
-      (p2-labels-process-compiland (local-function-compiland local-function)
-                                   local-function))
+      (p2-labels-process-compiland local-function))
     (do ((forms body (cdr forms)))
         ((null forms))
       (compile-form (car forms) (if (cdr forms) nil target) nil))))
