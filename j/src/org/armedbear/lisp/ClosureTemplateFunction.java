@@ -2,7 +2,7 @@
  * ClosureTemplateFunction.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ClosureTemplateFunction.java,v 1.9 2005-06-09 11:49:06 piso Exp $
+ * $Id: ClosureTemplateFunction.java,v 1.10 2005-08-22 00:13:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,9 +93,9 @@ public abstract class ClosureTemplateFunction extends Closure
         return notImplemented();
     }
 
-    private static final LispObject notImplemented() throws ConditionThrowable
+    private final LispObject notImplemented() throws ConditionThrowable
     {
-        return signal(new LispError("Not implemented."));
+        return signal(new WrongNumberOfArgumentsException(this));
     }
 
     // Zero args.
