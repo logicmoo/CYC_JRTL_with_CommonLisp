@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.603 2005-08-21 20:21:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.604 2005-08-22 00:12:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -307,6 +307,7 @@
 
 (defvar *local-functions* ())
 
+(declaim (ftype (function (t) t) find-local-function))
 (defun find-local-function (name)
 ;;   (find name *local-functions* :key #'local-function-name :test #'equal)
   (dolist (local-function *local-functions* nil)
@@ -648,8 +649,7 @@
     (dolist (definition (cadr form))
       (let ((name (car definition))
             (lambda-list (cadr definition)))
-        (unless (or (symbolp name)
-                    (and (consp name) (setf-function-name-p name)))
+        (unless (or (symbolp name) (setf-function-name-p name))
           (compiler-error "~S is not a valid function name." name))
         (when (or (memq '&optional lambda-list)
                   (memq '&key lambda-list))
@@ -683,9 +683,8 @@
     (dolist (definition (cadr form))
       (let ((name (car definition))
             (lambda-list (cadr definition)))
-        ;; FIXME
-        (when (and (consp name) (eq (%car name) 'SETF))
-          (compiler-unsupported "P1-LABELS: can't handle ~S." name))
+        (unless (or (symbolp name) (setf-function-name-p name))
+          (compiler-error "~S is not a valid function name." name))
         (when (or (memq '&optional lambda-list)
                   (memq '&key lambda-list))
           (let ((state nil))
@@ -699,7 +698,7 @@
         (let* ((body (cddr definition))
                (compiland (make-compiland :name name
                                           :parent *current-compiland*))
-               (variable (make-variable :name (copy-symbol name)))
+               (variable (make-variable :name (gensym)))
                (local-function (make-local-function :name name
                                                     :compiland compiland
                                                     :variable variable)))
