@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.607 2005-08-22 13:14:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.608 2005-08-22 16:29:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -670,10 +670,8 @@
         (let* ((body (cddr definition))
                (compiland (make-compiland :name name
                                           :parent *current-compiland*))
-               (variable (make-variable :name (gensym)))
                (local-function (make-local-function :name name
-                                                    :compiland compiland
-                                                    :variable variable)))
+                                                    :compiland compiland)))
           (multiple-value-bind (body decls) (parse-body body)
             (setf (compiland-lambda-expression compiland)
                   `(lambda ,lambda-list ,@decls (block ,name ,@body)))
@@ -681,13 +679,18 @@
                   (*local-functions* *local-functions*)
                   (*current-compiland* compiland))
               (p1-compiland compiland)))
-          (push variable *all-variables*)
+          (when *closure-variables*
+            (let ((variable (make-variable :name (gensym))))
+              (setf (local-function-variable local-function) variable)
+              (push variable *all-variables*)))
           (push local-function local-functions))))
     (setf local-functions (nreverse local-functions))
     ;; Make the local functions visible.
     (dolist (local-function local-functions)
       (push local-function *local-functions*)
-      (push (local-function-variable local-function) *visible-variables*))
+      (let ((variable (local-function-variable local-function)))
+        (when variable
+          (push variable *visible-variables*))))
     (list* (car form) local-functions (p1-body (cddr form)))))
 
 (defun p1-labels (form)
@@ -2095,7 +2098,6 @@
                 (target (second instruction-args))
                 (representation (third instruction-args)))
            (aver (variable-p variable))
-           (dformat t "var-ref variable = ~S " (variable-name variable))
            (cond ((variable-register variable)
                   (dformat t "register = ~S~%" (variable-register variable))
                   (emit 'aload (variable-register variable))
@@ -2125,7 +2127,6 @@
              (unboxed-character (emit-unbox-character)))))
         (207 ; VAR-SET
          (let ((variable (car (instruction-args instruction))))
-           (dformat t "var-set variable = ~S " (variable-name variable))
            (aver (variable-p variable))
            (aver (not (variable-special-p variable)))
            (cond ((variable-register variable)
@@ -5261,23 +5262,22 @@
                  (error "Unable to load ~S." pathname)))
              (setf (local-function-class-file local-function) class-file))
 
-           (let ((g (declare-local-function local-function)))
-             (emit 'getstatic *this-class* g +lisp-object+)
+           (when (local-function-variable local-function)
+             (let ((g (declare-local-function local-function)))
+               (emit 'getstatic *this-class* g +lisp-object+)
 
-             (let ((parent (compiland-parent compiland)))
-               (when (compiland-closure-register parent)
-                 (dformat t "(compiland-closure-register parent) = ~S~%"
-                          (compiland-closure-register parent))
-                 (emit 'checkcast +lisp-ctf-class+)
-                 (emit 'aload (compiland-closure-register parent))
-                 (emit-invokestatic +lisp-class+ "makeCompiledClosure"
-                                    (list +lisp-object+ +lisp-object-array+)
-                                    +lisp-object+)))
+               (let ((parent (compiland-parent compiland)))
+                 (when (compiland-closure-register parent)
+                   (dformat t "(compiland-closure-register parent) = ~S~%"
+                            (compiland-closure-register parent))
+                   (emit 'checkcast +lisp-ctf-class+)
+                   (emit 'aload (compiland-closure-register parent))
+                   (emit-invokestatic +lisp-class+ "makeCompiledClosure"
+                                      (list +lisp-object+ +lisp-object-array+)
+                                      +lisp-object+)))
 
-             (dformat t "p2-flet-process-compiland var-set ~S~%" (variable-name (local-function-variable local-function)))
-             (emit 'var-set (local-function-variable local-function)))
-
-           )
+               (dformat t "p2-flet-process-compiland var-set ~S~%" (variable-name (local-function-variable local-function)))
+               (emit 'var-set (local-function-variable local-function)))))
           (t
            (let* ((pathname (make-temp-file))
                   (class-file (make-class-file :pathname pathname
@@ -5294,22 +5294,23 @@
                        (p2-compiland compiland)
                        (write-class-file (compiland-class-file compiland))))
                    (setf (local-function-class-file local-function) class-file)
-;;                    (setf (local-function-function local-function) (load-compiled-function pathname))
-                   (let ((g (declare-object (load-compiled-function pathname))))
-                     (emit 'getstatic *this-class* g +lisp-object+)
+                   (setf (local-function-function local-function) (load-compiled-function pathname))
 
-                     (let ((parent (compiland-parent compiland)))
-                       (when (compiland-closure-register parent)
-                         (dformat t "(compiland-closure-register parent) = ~S~%"
-                                  (compiland-closure-register parent))
-                         (emit 'checkcast +lisp-ctf-class+)
-                         (emit 'aload (compiland-closure-register parent))
-                         (emit-invokestatic +lisp-class+ "makeCompiledClosure"
-                                            (list +lisp-object+ +lisp-object-array+)
-                                            +lisp-object+)))
+                   (when (local-function-variable local-function)
+                     (let ((g (declare-object (load-compiled-function pathname))))
+                       (emit 'getstatic *this-class* g +lisp-object+)
 
-                     (emit 'var-set (local-function-variable local-function)))
-                   )
+                       (let ((parent (compiland-parent compiland)))
+                         (when (compiland-closure-register parent)
+                           (dformat t "(compiland-closure-register parent) = ~S~%"
+                                    (compiland-closure-register parent))
+                           (emit 'checkcast +lisp-ctf-class+)
+                           (emit 'aload (compiland-closure-register parent))
+                           (emit-invokestatic +lisp-class+ "makeCompiledClosure"
+                                              (list +lisp-object+ +lisp-object-array+)
+                                              +lisp-object+)))
+
+                       (emit 'var-set (local-function-variable local-function)))))
                (delete-file pathname)))))))
 
 (defun p2-labels-process-compiland (local-function)
@@ -5389,14 +5390,17 @@
         (body (cddr form)))
     (dolist (local-function local-functions)
       (let ((variable (local-function-variable local-function)))
-        (aver (null (variable-register variable)))
-        (unless (variable-closure-index variable)
-          (setf (variable-register variable) (allocate-register)))))
+        (when variable
+          (aver (null (variable-register variable)))
+          (unless (variable-closure-index variable)
+            (setf (variable-register variable) (allocate-register))))))
     (dolist (local-function local-functions)
       (p2-flet-process-compiland local-function))
     (dolist (local-function local-functions)
       (push local-function *local-functions*)
-      (push (local-function-variable local-function) *visible-variables*))
+      (let ((variable (local-function-variable local-function)))
+        (when variable
+          (push variable *visible-variables*))))
     (do ((forms body (cdr forms)))
         ((null forms))
       (compile-form (car forms) (if (cdr forms) nil target) nil))))
