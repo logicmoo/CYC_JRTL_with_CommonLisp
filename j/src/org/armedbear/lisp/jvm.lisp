@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.605 2005-08-22 01:20:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.606 2005-08-22 05:29:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -643,8 +643,9 @@
 
 (defun p1-flet (form)
   (incf (compiland-children *current-compiland*) (length (cadr form)))
-  (let ((*current-compiland* *current-compiland*)
+  (let ((*visible-variables* *visible-variables*)
         (*local-functions* *local-functions*)
+        (*current-compiland* *current-compiland*)
         (local-functions '()))
     (dolist (definition (cadr form))
       (let ((name (car definition))
@@ -663,10 +664,10 @@
         (let* ((body (cddr definition))
                (compiland (make-compiland :name name
                                           :parent *current-compiland*))
-;;                (variable (make-variable :name (gensym)))
+               (variable (make-variable :name (gensym)))
                (local-function (make-local-function :name name
                                                     :compiland compiland
-;;                                                     :variable variable
+                                                    :variable variable
                                                     )))
           (multiple-value-bind (body decls) (parse-body body)
             (setf (compiland-lambda-expression compiland)
@@ -676,10 +677,15 @@
                   (*current-compiland* compiland))
               (p1-compiland compiland)))
 ;;           (push compiland compilands)
+          (push variable *all-variables*)
           (push local-function local-functions)
           )))
 ;;     (list* (car form) (nreverse compilands) (p1-body (cddr form)))
     (setf local-functions (nreverse local-functions))
+    ;; Make the local functions visible.
+    (dolist (local-function local-functions)
+      (push local-function *local-functions*)
+      (push (local-function-variable local-function) *visible-variables*))
     (list* (car form) local-functions (p1-body (cddr form)))
     ))
 
@@ -3660,7 +3666,8 @@
          (saved-vars '()))
     (cond ((local-function-variable local-function)
            ;; LABELS
-           (dformat t "compile-local-function-call LABELS case~%")
+           (dformat t "compile-local-function-call LABELS case variable = ~S~%"
+                   (variable-name (local-function-variable local-function)))
            (unless (null (compiland-parent compiland))
              (setf saved-vars
                    (save-variables (intersection
@@ -3682,7 +3689,7 @@
     (let ((must-clear-values nil))
       (cond ((> (length args) call-registers-limit)
              (emit-push-constant-int (length args))
-             (emit 'anewarray "org/armedbear/lisp/LispObject")
+             (emit 'anewarray +lisp-object-class+)
              (let ((i 0))
                (dolist (arg args)
                  (emit 'dup)
@@ -5261,7 +5268,25 @@
              (let ((*load-truename* (pathname pathname)))
                (unless (ignore-errors (load-compiled-function pathname))
                  (error "Unable to load ~S." pathname)))
-             (setf (local-function-class-file local-function) class-file)))
+             (setf (local-function-class-file local-function) class-file))
+
+           (let ((g (declare-local-function local-function)))
+             (emit 'getstatic *this-class* g +lisp-object+)
+
+             (let ((parent (compiland-parent compiland)))
+               (when (compiland-closure-register parent)
+                 (dformat t "(compiland-closure-register parent) = ~S~%"
+                          (compiland-closure-register parent))
+                 (emit 'checkcast +lisp-ctf-class+)
+                 (emit 'aload (compiland-closure-register parent))
+                 (emit-invokestatic +lisp-class+ "makeCompiledClosure"
+                                    (list +lisp-object+ +lisp-object-array+)
+                                    +lisp-object+)))
+
+             (dformat t "p2-flet-process-compiland var-set ~S~%" (variable-name (local-function-variable local-function)))
+             (emit 'var-set (local-function-variable local-function)))
+
+           )
           (t
            (let* ((pathname (make-temp-file))
                   (class-file (make-class-file :pathname pathname
@@ -5278,7 +5303,22 @@
                        (p2-compiland compiland)
                        (write-class-file (compiland-class-file compiland))))
                    (setf (local-function-class-file local-function) class-file)
-                   (setf (local-function-function local-function) (load-compiled-function pathname)))
+;;                    (setf (local-function-function local-function) (load-compiled-function pathname))
+                   (let ((g (declare-object (load-compiled-function pathname))))
+                     (emit 'getstatic *this-class* g +lisp-object+)
+
+                     (let ((parent (compiland-parent compiland)))
+                       (when (compiland-closure-register parent)
+                         (dformat t "(compiland-closure-register parent) = ~S~%"
+                                  (compiland-closure-register parent))
+                         (emit 'checkcast +lisp-ctf-class+)
+                         (emit 'aload (compiland-closure-register parent))
+                         (emit-invokestatic +lisp-class+ "makeCompiledClosure"
+                                            (list +lisp-object+ +lisp-object-array+)
+                                            +lisp-object+)))
+
+                     (emit 'var-set (local-function-variable local-function)))
+                   )
                (delete-file pathname)))))))
 
 (defun p2-labels-process-compiland (local-function)
@@ -5353,12 +5393,19 @@
   ;; FIXME What if we're called with a non-NIL representation?
   (declare (ignore representation))
   (let ((*local-functions* *local-functions*)
+        (*visible-variables* *visible-variables*)
         (local-functions (cadr form))
         (body (cddr form)))
     (dolist (local-function local-functions)
+      (let ((variable (local-function-variable local-function)))
+        (aver (null (variable-register variable)))
+        (unless (variable-closure-index variable)
+          (setf (variable-register variable) (allocate-register)))))
+    (dolist (local-function local-functions)
       (p2-flet-process-compiland local-function))
     (dolist (local-function local-functions)
-      (push local-function *local-functions*))
+      (push local-function *local-functions*)
+      (push (local-function-variable local-function) *visible-variables*))
     (do ((forms body (cdr forms)))
         ((null forms))
       (compile-form (car forms) (if (cdr forms) nil target) nil))))
@@ -5367,6 +5414,7 @@
   ;; FIXME What if we're called with a non-NIL representation?
   (declare (ignore representation))
   (let ((*local-functions* *local-functions*)
+        (*visible-variables* *visible-variables*)
         (local-functions (cadr form))
         (body (cddr form)))
     (dolist (local-function local-functions)
@@ -8055,7 +8103,7 @@
     (allocate-register) ;; register 0: "this" pointer
     (when (and *closure-variables* *child-p*)
       (setf (compiland-closure-register compiland) (allocate-register)) ;; register 1
-      (dformat t "closure register = ~S~%" (compiland-closure-register compiland)))
+      (dformat t "p2-compiland 1 closure register = ~S~%" (compiland-closure-register compiland)))
     (cond (*using-arg-array*
            ;; One slot for arg array.
            (setf (compiland-argument-register compiland) (allocate-register))
@@ -8074,7 +8122,7 @@
              (allocate-register))))
     (when (and *closure-variables* (not *child-p*))
       (setf (compiland-closure-register compiland) (allocate-register))
-       (dformat t "closure register = ~S~%" (compiland-closure-register compiland)))
+       (dformat t "p2-compiland 2 closure register = ~S~%" (compiland-closure-register compiland)))
     ;; Reserve the next available slot for the thread register.
     (setf *thread* (allocate-register))
 
@@ -8130,7 +8178,7 @@
         (dolist (variable (reverse parameters))
           (when (variable-reserved-register variable)
             (aver (not (variable-special-p variable)))
-            (emit 'aload 1)
+            (emit 'aload (compiland-argument-register compiland))
             (emit 'bipush (variable-index variable))
             (emit 'aaload)
             (emit 'astore (variable-reserved-register variable))
@@ -8171,7 +8219,7 @@
                (emit-push-current-thread)
                (emit 'getstatic *this-class*
                      (declare-symbol (variable-name variable)) +lisp-symbol+)
-               (emit 'aload 1)
+               (emit 'aload (compiland-argument-register compiland))
                (emit 'bipush (variable-index variable))
                (emit 'aaload)
                (emit-invokevirtual +lisp-thread-class+ "bindSpecial"
