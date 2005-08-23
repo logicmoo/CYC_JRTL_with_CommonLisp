@@ -2,7 +2,7 @@
  * FloatFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: FloatFunctions.java,v 1.6 2005-08-23 20:50:21 piso Exp $
+ * $Id: FloatFunctions.java,v 1.7 2005-08-23 20:51:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -326,7 +326,7 @@ public final class FloatFunctions extends Lisp
             else if (arg instanceof DoubleFloat)
                 s1 = String.valueOf(((DoubleFloat)arg).value);
             else
-                return signal(new TypeError(arg, Symbol.FLOAT));
+                return signalTypeError(arg, Symbol.FLOAT);
             int i = s1.indexOf('E');
             if (i < 0)
                 return new SimpleString(s1);
