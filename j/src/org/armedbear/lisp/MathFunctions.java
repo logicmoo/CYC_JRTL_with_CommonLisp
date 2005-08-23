@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.21 2005-08-23 12:19:19 piso Exp $
+ * $Id: MathFunctions.java,v 1.22 2005-08-23 20:49:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,14 +180,54 @@ public final class MathFunctions extends Lisp
                 return atan(arg);
             return signal(new TypeError(arg, Symbol.NUMBER));
         }
-
+        // "If both number1 and number2 are supplied for atan, the result is
+        // the arc tangent of number1/number2."
+        // y = +0     x = +0       +0
+        // y = -0     x = +0       -0
+        // y = +0     x = -0       +<PI>
+        // y = -0     x = -0       -<PI>
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             if (!first.realp())
-                return signal(new TypeError(first, Symbol.REAL));
+                return signalTypeError(first, Symbol.REAL);
             if (!second.realp())
-                return signal(new TypeError(second, Symbol.REAL));
+                return signalTypeError(second, Symbol.REAL);
+            if (first.floatp() && second.floatp()) {
+                if (first.zerop() && second.zerop()) {
+                    int sign1, sign2;
+                    if (first instanceof SingleFloat) {
+                        int bits = Float.floatToRawIntBits(((SingleFloat)first).value);
+                        sign1 = ((bits & 0x80000000) == 0) ? 1 : -1;
+                    } else {
+                        long bits = Double.doubleToRawLongBits(((DoubleFloat)first).value);
+                        sign1 = ((bits & 0x8000000000000000L) == 0) ? 1 : -1;
+                    }
+                    if (second instanceof SingleFloat) {
+                        int bits = Float.floatToRawIntBits(((SingleFloat)second).value);
+                        sign2 = ((bits & 0x80000000) == 0) ? 1 : -1;
+                    } else {
+                        long bits = Double.doubleToRawLongBits(((DoubleFloat)second).value);
+                        sign2 = ((bits & 0x8000000000000000L) == 0) ? 1 : -1;
+                    }
+                    double result;
+                    if (sign1 > 0) {
+                        if (sign2 > 0)
+                            result = 0.0;
+                        else
+                            result = -0.0;
+                    } else {
+                        if (sign2 < 0)
+                            result = - Math.PI;
+                        else
+                            result = Math.PI;
+                    }
+                    if (first instanceof DoubleFloat || second instanceof DoubleFloat)
+                        return new DoubleFloat(result);
+                    else
+                        return new SingleFloat((float)result);
+                }
+            }
             return atan(first.divideBy(second));
         }
     };
