@@ -2,7 +2,7 @@
  * DoubleFloat.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: DoubleFloat.java,v 1.2 2005-06-09 19:17:37 piso Exp $
+ * $Id: DoubleFloat.java,v 1.3 2005-08-23 00:45:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -430,9 +430,12 @@ public final class DoubleFloat extends LispObject
             return thread.setValues(result, remainder);
         }
         if (obj instanceof DoubleFloat) {
+//             Debug.trace("value = " + value);
             final LispThread thread = LispThread.currentThread();
             double divisor = ((DoubleFloat)obj).value;
+//             Debug.trace("divisor = " + divisor);
             double quotient = value / divisor;
+//             Debug.trace("quotient = " + quotient);
             if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
                 int q = (int) quotient;
                 return thread.setValues(new Fixnum(q),
@@ -448,18 +451,30 @@ public final class DoubleFloat extends LispObject
             else
                 m = (bits & 0xfffffffffffffL) | 0x10000000000000L;
             LispObject significand = number(m);
+//             Debug.trace("significand = " + significand.writeToString());
             Fixnum exponent = new Fixnum(e - 1075);
+//             Debug.trace("exponent = " + exponent.writeToString());
             Fixnum sign = new Fixnum(s);
+//             Debug.trace("sign = " + sign.writeToString());
             LispObject result = significand;
+//             Debug.trace("result = " + result.writeToString());
             result =
                 result.multiplyBy(MathFunctions.EXPT.execute(Fixnum.TWO, exponent));
+//             Debug.trace("result = " + result.writeToString());
+
+
+            result = result.truncate(Fixnum.ONE);
+            LispObject remainder = coerceToFloat(thread._values[1]);
+
             result = result.multiplyBy(sign);
-            // Calculate remainder.
-            LispObject product = result.multiplyBy(obj);
-            LispObject remainder = subtract(product);
+//             Debug.trace("result = " + result.writeToString());
+//             // Calculate remainder.
+//             LispObject product = result.multiplyBy(obj);
+//             Debug.trace("product = " + product.writeToString());
+//             LispObject remainder = subtract(product);
             return thread.setValues(result, remainder);
         }
-        return signal(new TypeError(obj, Symbol.REAL));
+        return signalTypeError(obj, Symbol.REAL);
     }
 
     public int hashCode()
