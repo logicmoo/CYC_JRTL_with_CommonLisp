@@ -1,8 +1,8 @@
 /*
- * Math.java
+ * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.22 2005-08-23 20:49:00 piso Exp $
+ * $Id: MathFunctions.java,v 1.23 2005-08-23 20:53:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public final class MathFunctions extends Lisp
             return result.divideBy(Fixnum.TWO.multiplyBy(Complex.getInstance(Fixnum.ZERO,
                                                                              Fixnum.ONE)));
         }
-        return signal(new TypeError(arg, Symbol.NUMBER));
+        return signalTypeError(arg, Symbol.NUMBER);
     }
 
     // ### cos
@@ -79,7 +79,7 @@ public final class MathFunctions extends Lisp
             result = result.add(exp(n.multiplyBy(Fixnum.MINUS_ONE)));
             return result.divideBy(Fixnum.TWO);
         }
-        return signal(new TypeError(arg, "number"));
+        return signalTypeError(arg, Symbol.NUMBER);
     }
 
     // ### tan
@@ -178,7 +178,7 @@ public final class MathFunctions extends Lisp
         {
             if (arg.numberp())
                 return atan(arg);
-            return signal(new TypeError(arg, Symbol.NUMBER));
+            return signalTypeError(arg, Symbol.NUMBER);
         }
         // "If both number1 and number2 are supplied for atan, the result is
         // the arc tangent of number1/number2."
@@ -572,7 +572,7 @@ public final class MathFunctions extends Lisp
     {
         if (arg.realp())
             return Complex.getInstance(cos(arg), sin(arg));
-        return signal(new TypeError(arg, Symbol.REAL));
+        return signalTypeError(arg, Symbol.REAL);
     }
 
     // ### exp
@@ -594,7 +594,7 @@ public final class MathFunctions extends Lisp
             Complex c = (Complex) arg;
             return exp(c.getRealPart()).multiplyBy(cis(c.getImaginaryPart()));
         }
-        return signal(new TypeError(arg, Symbol.NUMBER));
+        return signalTypeError(arg, Symbol.NUMBER);
     }
 
     // ### sqrt
@@ -622,7 +622,7 @@ public final class MathFunctions extends Lisp
         }
         if (obj instanceof Complex)
             return exp(log(obj).divideBy(Fixnum.TWO));
-        return signal(new TypeError(obj, Symbol.NUMBER));
+        return signalTypeError(obj, Symbol.NUMBER);
     }
 
     // ### log
@@ -684,7 +684,7 @@ public final class MathFunctions extends Lisp
                 }
             }
         }
-        signal(new TypeError(obj, Symbol.NUMBER));
+        signalTypeError(obj, Symbol.NUMBER);
         return NIL;
     }
 
