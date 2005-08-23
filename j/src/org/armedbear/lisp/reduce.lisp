@@ -1,7 +1,7 @@
 ;;; reduce.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: reduce.lisp,v 1.2 2003-06-11 01:02:28 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: reduce.lisp,v 1.3 2005-08-23 12:21:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,11 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
+;;; Adapted from OpenMCL.
 
-(export 'reduce)
-
-;;; From OpenMCL.
+(in-package #:system)
 
 (defmacro list-reduce (function sequence start end initial-value ivp key)
   (let ((what `(if ,key (funcall ,key (car sequence)) (car sequence))))
@@ -60,12 +58,12 @@
                  (terminus (if from-end (1- start) end))
                  (value (if ivp initial-value
                             (let ((elt (aref sequence index)))
-                              (setq index (+ index disp))
+                              (setf index (+ index disp))
                               (if key (funcall key elt) elt))))
                  (element nil))
             (do* ()
                  ((= index terminus) value)
-              (setq element (aref sequence index)
+              (setf element (aref sequence index)
                     index (+ index disp)
                     element (if key (funcall key element) element)
                     value (funcall function
