@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.20 2005-06-09 21:37:14 piso Exp $
+ * $Id: MathFunctions.java,v 1.21 2005-08-23 12:19:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -648,8 +648,7 @@ public final class MathFunctions extends Lisp
         return NIL;
     }
 
-    // ### expt
-    // expt base-number power-number => result
+    // ### expt base-number power-number => result
     public static final Primitive EXPT =
         new Primitive("expt", "base-number power-number")
     {
@@ -715,7 +714,8 @@ public final class MathFunctions extends Lisp
             else if (base instanceof DoubleFloat)
                 x = ((DoubleFloat)base).value;
             else
-                return signal(new LispError("EXPT: unsupported case"));
+                return signal(new LispError("EXPT: unsupported case: base is of type " +
+                                            base.typeOf().writeToString()));
             if (power instanceof Ratio)
                 y = ((Ratio)power).doubleValue();
             else if (power instanceof SingleFloat)
@@ -723,26 +723,26 @@ public final class MathFunctions extends Lisp
             else if (power instanceof DoubleFloat)
                 y = ((DoubleFloat)power).value;
             else
-                return signal(new LispError("EXPT: unsupported case"));
+                return signal(new LispError("EXPT: unsupported case: power is of type " +
+                                            power.typeOf().writeToString()));
             double r = Math.pow(x, y);
-            if (!Double.isNaN(r)) {
-                if (base instanceof DoubleFloat || power instanceof DoubleFloat)
-                    return new DoubleFloat(r);
-                else
-                    return new SingleFloat((float)r);
+            if (Double.isNaN(r)) {
+                if (x < 0) {
+                    r = Math.pow(-x, y);
+                    double realPart = r * Math.cos(y * Math.PI);
+                    double imagPart = r * Math.sin(y * Math.PI);
+                    if (base instanceof DoubleFloat || power instanceof DoubleFloat)
+                        return Complex.getInstance(new DoubleFloat(realPart),
+                                                   new DoubleFloat(imagPart));
+                    else
+                        return Complex.getInstance(new SingleFloat((float)realPart),
+                                                   new SingleFloat((float)imagPart));
+                }
             }
-            if (x < 0) {
-                r = Math.pow(-x, y);
-                double realPart = r * Math.cos(y * Math.PI);
-                double imagPart = r * Math.sin(y * Math.PI);
-                if (base instanceof DoubleFloat || power instanceof DoubleFloat)
-                    return Complex.getInstance(new DoubleFloat(realPart),
-                                               new DoubleFloat(imagPart));
-                else
-                    return Complex.getInstance(new SingleFloat((float)realPart),
-                                               new SingleFloat((float)imagPart));
-            }
-            return signal(new LispError("EXPT: unsupported case"));
+            if (base instanceof DoubleFloat || power instanceof DoubleFloat)
+                return new DoubleFloat(r);
+            else
+                return new SingleFloat((float)r);
         }
     };
 
