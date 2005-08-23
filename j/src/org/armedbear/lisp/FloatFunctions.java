@@ -2,7 +2,7 @@
  * FloatFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: FloatFunctions.java,v 1.5 2005-08-16 18:17:44 piso Exp $
+ * $Id: FloatFunctions.java,v 1.6 2005-08-23 20:50:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,9 +204,23 @@ public final class FloatFunctions extends Lisp
         }
     };
 
+    // ### single-float-bits
+    private static final Primitive SINGLE_FLOAT_BITS =
+        new Primitive("single-float-bits", PACKAGE_SYS, true, "float")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof SingleFloat) {
+                SingleFloat f = (SingleFloat) arg;
+                return new Fixnum(Float.floatToIntBits(f.value));
+            }
+            return signalTypeError(arg, Symbol.FLOAT);
+        }
+    };
+
     // ### double-float-high-bits
     private static final Primitive DOUBLE_FLOAT_HIGH_BITS =
-        new Primitive("double-float-high-bits", PACKAGE_SYS, false, "float")
+        new Primitive("double-float-high-bits", PACKAGE_SYS, true, "float")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -214,13 +228,13 @@ public final class FloatFunctions extends Lisp
                 DoubleFloat f = (DoubleFloat) arg;
                 return number(Double.doubleToLongBits(f.value) >>> 32);
             }
-            return signalTypeError(arg, Symbol.FLOAT);
+            return signalTypeError(arg, Symbol.DOUBLE_FLOAT);
         }
     };
 
     // ### double-float-low-bits
     private static final Primitive DOUBLE_FLOAT_LOW_BITS =
-        new Primitive("double-float-low-bits", PACKAGE_SYS, false, "float")
+        new Primitive("double-float-low-bits", PACKAGE_SYS, true, "float")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -228,13 +242,32 @@ public final class FloatFunctions extends Lisp
                 DoubleFloat f = (DoubleFloat) arg;
                 return number(Double.doubleToLongBits(f.value) & 0xffffffffL);
             }
-            return signalTypeError(arg, Symbol.FLOAT);
+            return signalTypeError(arg, Symbol.DOUBLE_FLOAT);
+        }
+    };
+
+    // ### make-single-float bits => float
+    private static final Primitive MAKE_SINGLE_FLOAT =
+        new Primitive("make-single-float", PACKAGE_SYS, true, "bits")
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            if (arg instanceof Fixnum) {
+                int bits = ((Fixnum)arg).value;
+                return new SingleFloat(Float.intBitsToFloat(bits));
+            }
+            if (arg instanceof Bignum) {
+                long bits = ((Bignum)arg).value.longValue();
+                return new SingleFloat(Float.intBitsToFloat((int)bits));
+            }
+            return signalTypeError(arg, Symbol.INTEGER);
         }
     };
 
     // ### make-double-float bits => float
     private static final Primitive MAKE_DOUBLE_FLOAT =
-        new Primitive("make-double-float", PACKAGE_SYS, false, "bits")
+        new Primitive("make-double-float", PACKAGE_SYS, true, "bits")
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -247,7 +280,7 @@ public final class FloatFunctions extends Lisp
                 long bits = ((Bignum)arg).value.longValue();
                 return new DoubleFloat(Double.longBitsToDouble(bits));
             }
-            return signal(new TypeError());
+            return signalTypeError(arg, Symbol.INTEGER);
         }
     };
 
