@@ -2,7 +2,7 @@
  * ftruncate.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ftruncate.java,v 1.6 2005-08-23 12:20:34 piso Exp $
+ * $Id: ftruncate.java,v 1.7 2005-08-23 20:47:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,11 +52,11 @@ public final class ftruncate extends Primitive
         if (arg instanceof DoubleFloat) {
             double d = ((DoubleFloat)arg).value;
             if (Double.isInfinite(d) || Double.isNaN(d))
-                return arg;
+                return thread.setValues(arg, new DoubleFloat(Double.NaN));
         } else if (arg instanceof SingleFloat) {
             float f = ((SingleFloat)arg).value;
             if (Float.isInfinite(f) || Float.isNaN(f))
-                return arg;
+                return thread.setValues(arg, new SingleFloat(Float.NaN));
         }
         LispObject q = arg.truncate(Fixnum.ONE); // an integer
         if (arg instanceof DoubleFloat) {
@@ -99,12 +99,12 @@ public final class ftruncate extends Primitive
         }
         if (first instanceof DoubleFloat) {
             double d1 = ((DoubleFloat)first).value;
-            if (Double.isNaN(d1))
-                return first;
+            if (Double.isInfinite(d1) || Double.isNaN(d1))
+                return thread.setValues(first, new DoubleFloat(Double.NaN));
         } else if (first instanceof SingleFloat) {
             float f1 = ((SingleFloat)first).value;
-            if (Float.isNaN(f1))
-                return first;
+            if (Float.isInfinite(f1) || Float.isNaN(f1))
+                return thread.setValues(first, new SingleFloat(Float.NaN));
         }
         LispObject q = first.truncate(second); // an integer
         if (first instanceof DoubleFloat || second instanceof DoubleFloat) {
