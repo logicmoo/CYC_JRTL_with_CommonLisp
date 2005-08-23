@@ -2,7 +2,7 @@
  * DoubleFloat.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: DoubleFloat.java,v 1.3 2005-08-23 00:45:18 piso Exp $
+ * $Id: DoubleFloat.java,v 1.4 2005-08-23 12:20:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +175,7 @@ public final class DoubleFloat extends LispObject
             return ((DoubleFloat)obj).value;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.FLOAT));
+            signalTypeError(obj, Symbol.FLOAT);
             // Not reached.
             return 0;
         }
@@ -225,7 +225,7 @@ public final class DoubleFloat extends LispObject
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
-        return signal(new TypeError(obj, Symbol.NUMBER));
+        return signalTypeError(obj, Symbol.NUMBER);
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
@@ -245,7 +245,7 @@ public final class DoubleFloat extends LispObject
             return Complex.getInstance(subtract(c.getRealPart()),
                                        ZERO.subtract(c.getImaginaryPart()));
         }
-        return signal(new TypeError(obj, Symbol.NUMBER));
+        return signalTypeError(obj, Symbol.NUMBER);
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
@@ -265,7 +265,7 @@ public final class DoubleFloat extends LispObject
             return Complex.getInstance(multiplyBy(c.getRealPart()),
                                        multiplyBy(c.getImaginaryPart()));
         }
-        return signal(new TypeError(obj, Symbol.NUMBER));
+        return signalTypeError(obj, Symbol.NUMBER);
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -290,7 +290,7 @@ public final class DoubleFloat extends LispObject
                 multiplyBy(Fixnum.MINUS_ONE).multiplyBy(im).divideBy(denom);
             return Complex.getInstance(resX, resY);
         }
-        return signal(new TypeError(obj, Symbol.NUMBER));
+        return signalTypeError(obj, Symbol.NUMBER);
     }
 
     public boolean isEqualTo(LispObject obj) throws ConditionThrowable
@@ -307,7 +307,7 @@ public final class DoubleFloat extends LispObject
             return rational().isEqualTo(obj);
         if (obj instanceof Complex)
             return obj.isEqualTo(this);
-        signal(new TypeError(obj, Symbol.NUMBER));
+        signalTypeError(obj, Symbol.NUMBER);
         // Not reached.
         return false;
     }
@@ -329,7 +329,7 @@ public final class DoubleFloat extends LispObject
             return rational().isLessThan(obj);
         if (obj instanceof Ratio)
             return rational().isLessThan(obj);
-        signal(new TypeError(obj, Symbol.REAL));
+        signalTypeError(obj, Symbol.REAL);
         // Not reached.
         return false;
     }
@@ -346,7 +346,7 @@ public final class DoubleFloat extends LispObject
             return rational().isGreaterThan(obj);
         if (obj instanceof Ratio)
             return rational().isGreaterThan(obj);
-        signal(new TypeError(obj, Symbol.REAL));
+        signalTypeError(obj, Symbol.REAL);
         // Not reached.
         return false;
     }
@@ -363,7 +363,7 @@ public final class DoubleFloat extends LispObject
             return rational().isLessThanOrEqualTo(obj);
         if (obj instanceof Ratio)
             return rational().isLessThanOrEqualTo(obj);
-        signal(new TypeError(obj, Symbol.REAL));
+        signalTypeError(obj, Symbol.REAL);
         // Not reached.
         return false;
     }
@@ -380,7 +380,7 @@ public final class DoubleFloat extends LispObject
             return rational().isGreaterThanOrEqualTo(obj);
         if (obj instanceof Ratio)
             return rational().isGreaterThanOrEqualTo(obj);
-        signal(new TypeError(obj, Symbol.REAL));
+        signalTypeError(obj, Symbol.REAL);
         // Not reached.
         return false;
     }
@@ -494,12 +494,12 @@ public final class DoubleFloat extends LispObject
     public String writeToString() throws ConditionThrowable
     {
         if (value == Double.POSITIVE_INFINITY) {
-            StringBuffer sb = new StringBuffer("#.");
+            FastStringBuffer sb = new FastStringBuffer("#.");
             sb.append(Symbol.DOUBLE_FLOAT_POSITIVE_INFINITY.writeToString());
             return sb.toString();
         }
         if (value == Double.NEGATIVE_INFINITY) {
-            StringBuffer sb = new StringBuffer("#.");
+            FastStringBuffer sb = new FastStringBuffer("#.");
             sb.append(Symbol.DOUBLE_FLOAT_NEGATIVE_INFINITY.writeToString());
             return sb.toString();
         }
@@ -548,14 +548,14 @@ public final class DoubleFloat extends LispObject
 
     public static DoubleFloat coerceToFloat(LispObject obj) throws ConditionThrowable
     {
-        if (obj instanceof Fixnum)
-            return new DoubleFloat(((Fixnum)obj).value);
-        if (obj instanceof SingleFloat)
-            return new DoubleFloat(((SingleFloat)obj).value);
         if (obj instanceof DoubleFloat)
             return (DoubleFloat) obj;
+        if (obj instanceof Fixnum)
+            return new DoubleFloat(((Fixnum)obj).value);
         if (obj instanceof Bignum)
             return new DoubleFloat(((Bignum)obj).doubleValue());
+        if (obj instanceof SingleFloat)
+            return new DoubleFloat(((SingleFloat)obj).value);
         if (obj instanceof Ratio)
             return new DoubleFloat(((Ratio)obj).doubleValue());
         signal(new TypeError("The value " + obj.writeToString() +
