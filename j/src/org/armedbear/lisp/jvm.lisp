@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.608 2005-08-22 16:29:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.609 2005-08-24 18:13:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6802,6 +6802,8 @@
     (compile-form arg1 'stack nil)
     (compile-form arg2 'stack nil)
     (emit-invokevirtual +lisp-object-class+ "truncate" (lisp-object-arg-types 1) +lisp-object+)
+    (when (eq representation 'unboxed-fixnum)
+      (emit-unbox-fixnum))
     (emit-move-from-stack target representation)))
 
 (defun p2-elt (form target representation)
