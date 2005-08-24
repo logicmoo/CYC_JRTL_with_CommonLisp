@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.385 2005-08-16 17:40:33 piso Exp $
+ * $Id: Lisp.java,v 1.386 2005-08-24 16:22:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,11 @@ import java.util.zip.ZipFile;
 
 public abstract class Lisp
 {
+    protected static final boolean isJava15;
+    static {
+        isJava15 = System.getProperty("java.version").startsWith("1.5");
+    }
+
     public static final boolean debug = true;
 
     public static boolean cold = true;
