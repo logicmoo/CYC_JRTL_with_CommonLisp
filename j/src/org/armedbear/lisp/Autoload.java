@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.237 2005-07-20 18:30:07 piso Exp $
+ * $Id: Autoload.java,v 1.238 2005-08-24 16:30:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -574,8 +574,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "create-new-file", "create_new_file");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
         autoload(PACKAGE_SYS, "disassemble-class-bytes", "disassemble_class_bytes", true);
-        autoload(PACKAGE_SYS, "double-float-high-bits", "FloatFunctions");
-        autoload(PACKAGE_SYS, "double-float-low-bits", "FloatFunctions");
+        autoload(PACKAGE_SYS, "double-float-high-bits", "FloatFunctions", true);
+        autoload(PACKAGE_SYS, "double-float-low-bits", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "float-infinity-p", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "float-nan-p", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "float-string", "FloatFunctions", true);
@@ -596,11 +596,12 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "layout-slot-index", "Layout", true);
         autoload(PACKAGE_SYS, "layout-slot-location", "Layout", true);
         autoload(PACKAGE_SYS, "make-case-frob-stream", "CaseFrobStream");
-        autoload(PACKAGE_SYS, "make-double-float", "FloatFunctions");
+        autoload(PACKAGE_SYS, "make-double-float", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "make-file-stream", "FileStream");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
         autoload(PACKAGE_SYS, "make-forward-referenced-class", "ForwardReferencedClass", true);
         autoload(PACKAGE_SYS, "make-layout", "Layout", true);
+        autoload(PACKAGE_SYS, "make-single-float", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "make-slot-definition", "SlotDefinition", true);
         autoload(PACKAGE_SYS, "make-structure-class", "StructureClass");
         autoload(PACKAGE_SYS, "make-symbol-macro", "SymbolMacro");
@@ -630,6 +631,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "set-slot-definition-readers", "SlotDefinition", true);
         autoload(PACKAGE_SYS, "set-slot-definition-writers", "SlotDefinition", true);
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
+        autoload(PACKAGE_SYS, "single-float-bits", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "zip", "zip", true);
     }
 }
