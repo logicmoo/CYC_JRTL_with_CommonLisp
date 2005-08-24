@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Complex.java,v 1.33 2005-03-17 14:48:59 piso Exp $
+ * $Id: Complex.java,v 1.34 2005-08-24 16:39:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
  */
 
 package org.armedbear.lisp;
+
+import java.lang.reflect.Method;
 
 public final class Complex extends LispObject
 {
@@ -252,17 +254,44 @@ public final class Complex extends LispObject
         return !isEqualTo(obj);
     }
 
+    private static Method hypotMethod = null;
+
     public LispObject ABS() throws ConditionThrowable
     {
-        if (realpart instanceof DoubleFloat) {
-            double real = DoubleFloat.coerceToFloat(realpart).value;
-            double imag = DoubleFloat.coerceToFloat(imagpart).value;
-            return new DoubleFloat(Math.sqrt(real * real + imag * imag));
-        } else {
-            float real = SingleFloat.coerceToFloat(realpart).value;
-            float imag = SingleFloat.coerceToFloat(imagpart).value;
-            return new SingleFloat((float)Math.sqrt(real * real + imag * imag));
+        if (realpart.zerop())
+            return imagpart.ABS();
+        double real = DoubleFloat.coerceToFloat(realpart).value;
+        double imag = DoubleFloat.coerceToFloat(imagpart).value;
+        if (isJava15) {
+            try {
+                if (hypotMethod == null) {
+                    Class c = Class.forName("java.lang.Math");
+                    Class[] parameterTypes = new Class[2];
+                    parameterTypes[0] = parameterTypes[1] = Double.TYPE;
+                    hypotMethod = c.getMethod("hypot", parameterTypes);
+                }
+                if (hypotMethod != null) {
+                    Object[] args;
+                    args = new Object[2];
+                    args[0] = new Double(real);
+                    args[1] = new Double(imag);
+                    Double d = (Double) hypotMethod.invoke(null, args);
+                    if (realpart instanceof DoubleFloat)
+                        return new DoubleFloat(d.doubleValue());
+                    else
+                        return new SingleFloat((float)d.doubleValue());
+                }
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+                // Fall through...
+            }
         }
+        double result = Math.sqrt(real * real + imag * imag);
+        if (realpart instanceof DoubleFloat)
+            return new DoubleFloat(result);
+        else
+            return new SingleFloat((float)result);
     }
 
     public boolean zerop() throws ConditionThrowable
