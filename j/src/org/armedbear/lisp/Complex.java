@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Complex.java,v 1.34 2005-08-24 16:39:30 piso Exp $
+ * $Id: Complex.java,v 1.35 2005-08-24 17:26:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,7 +262,7 @@ public final class Complex extends LispObject
             return imagpart.ABS();
         double real = DoubleFloat.coerceToFloat(realpart).value;
         double imag = DoubleFloat.coerceToFloat(imagpart).value;
-        if (isJava15) {
+        if (isJava15OrLater) {
             try {
                 if (hypotMethod == null) {
                     Class c = Class.forName("java.lang.Math");

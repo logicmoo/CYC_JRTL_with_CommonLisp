@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.26 2005-08-24 16:57:24 piso Exp $
+ * $Id: MathFunctions.java,v 1.27 2005-08-24 17:26:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,7 +252,7 @@ public final class MathFunctions extends Lisp
                 return Complex.getInstance(sinh(((Complex)arg).getRealPart()),
                                            im);
         }
-        if (isJava15) {
+        if (isJava15OrLater) {
             if (arg instanceof SingleFloat) {
                 try {
                     if (sinhMethod == null) {
@@ -327,7 +327,7 @@ public final class MathFunctions extends Lisp
                 return Complex.getInstance(cosh(((Complex)arg).getRealPart()),
                                            im);
         }
-        if (isJava15) {
+        if (isJava15OrLater) {
             if (arg instanceof SingleFloat) {
                 try {
                     if (coshMethod == null) {
@@ -390,7 +390,7 @@ public final class MathFunctions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (isJava15) {
+            if (isJava15OrLater) {
                 if (arg instanceof SingleFloat) {
                     try {
                         if (tanhMethod == null) {
@@ -615,7 +615,7 @@ public final class MathFunctions extends Lisp
         public LispObject execute(LispObject number, LispObject base)
             throws ConditionThrowable
         {
-            if (isJava15) {
+            if (isJava15OrLater) {
                 if (number.realp() && !number.minusp() && base.isEqualTo(new Fixnum(10))) {
                     double d = DoubleFloat.coerceToFloat(number).value;
                     try {
