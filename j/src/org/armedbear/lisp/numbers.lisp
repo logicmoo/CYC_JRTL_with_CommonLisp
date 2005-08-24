@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: numbers.lisp,v 1.36 2005-08-16 20:00:57 piso Exp $
+;;; $Id: numbers.lisp,v 1.37 2005-08-24 17:36:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; From CMUCL.
+;;; Adapted from CMUCL/SBCL.
 
 (in-package #:system)
 
@@ -118,6 +118,13 @@
 	    (setq init-value iterated-value))))))
 
 ;; FIXME Need to add support for denormalized floats!
+
+;; "FLOAT-PRECISION returns the number of significant radix b digits present in
+;; FLOAT; if FLOAT is a float zero, then the result is an integer zero."
+
+;; "For normalized floats, the results of FLOAT-DIGITS and FLOAT-PRECISION are
+;; the same, but the precision is less than the number of representation digits
+;; for a denormalized or zero number.
 (defun float-precision (float)
   (if (floatp float)
       (cond ((zerop float)
@@ -134,7 +141,8 @@
              :format-arguments (list float))))
 
 (defun decode-float (float)
-  (multiple-value-bind (significand exponent sign) (integer-decode-float float)
+  (multiple-value-bind (significand exponent sign)
+      (integer-decode-float float)
     (values (coerce (/ significand (expt 2 53)) 'float)
             (+ exponent 53)
             (if (minusp sign) -1.0 1.0))))
