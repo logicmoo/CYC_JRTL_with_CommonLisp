@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.24 2005-08-24 13:14:24 piso Exp $
+ * $Id: MathFunctions.java,v 1.25 2005-08-24 16:23:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +25,6 @@ import java.lang.reflect.Method;
 
 public final class MathFunctions extends Lisp
 {
-    // Java 1.5 provides native implementations of sinh and tanh.
-    private static final boolean isJava15;
-    static {
-        isJava15 = System.getProperty("java.version").startsWith("1.5");
-    }
-
     // ### sin
     private static final Primitive SIN = new Primitive("sin", "radians")
     {
@@ -196,34 +190,20 @@ public final class MathFunctions extends Lisp
             if (!x.realp())
                 return signalTypeError(x, Symbol.REAL);
             if (y.floatp() && x.floatp()) {
-                int sign_y, sign_x;
-                if (y instanceof SingleFloat) {
-                    int bits = Float.floatToRawIntBits(((SingleFloat)y).value);
-                    sign_y = ((bits & 0x80000000) == 0) ? 1 : -1;
-                } else {
-                    long bits = Double.doubleToRawLongBits(((DoubleFloat)y).value);
-                    sign_y = ((bits & 0x8000000000000000L) == 0) ? 1 : -1;
-                }
-                if (x instanceof SingleFloat) {
-                    int bits = Float.floatToRawIntBits(((SingleFloat)x).value);
-                    sign_x = ((bits & 0x80000000) == 0) ? 1 : -1;
-                } else {
-                    long bits = Double.doubleToRawLongBits(((DoubleFloat)x).value);
-                    sign_x = ((bits & 0x8000000000000000L) == 0) ? 1 : -1;
-                }
-                double result;
-                if (y.zerop() && x.zerop()) {
-                    if (sign_x > 0)
-                        return y;
-                    if (sign_y > 0)
-                        result = Math.PI;
-                    else
-                        result = - Math.PI;
-                    if (y instanceof DoubleFloat || x instanceof DoubleFloat)
-                        return new DoubleFloat(result);
-                    else
-                        return new SingleFloat((float)result);
-                }
+                double d1, d2;
+                if (y instanceof SingleFloat)
+                    d1 = ((SingleFloat)y).value;
+                else
+                    d1 = ((DoubleFloat)y).value;
+                if (x instanceof SingleFloat)
+                    d2 = ((SingleFloat)x).value;
+                else
+                    d2 = ((DoubleFloat)x).value;
+                double result = Math.atan2(d1, d2);
+                if (y instanceof DoubleFloat || x instanceof DoubleFloat)
+                    return new DoubleFloat(result);
+                else
+                    return new SingleFloat((float)result);
             }
             return atan(y.divideBy(x));
         }
@@ -639,7 +619,8 @@ public final class MathFunctions extends Lisp
 
     private static final LispObject log(LispObject obj) throws ConditionThrowable
     {
-        if (obj.realp() && !obj.minusp()) {  // real value
+        if (obj.realp() && !obj.minusp()) {
+            // Result is real.
             if (obj instanceof Fixnum)
                 return new SingleFloat((float)Math.log(((Fixnum)obj).value));
             if (obj instanceof Bignum)
@@ -650,7 +631,8 @@ public final class MathFunctions extends Lisp
                 return new SingleFloat((float)Math.log(((SingleFloat)obj).value));
             if (obj instanceof DoubleFloat)
                 return new DoubleFloat(Math.log(((DoubleFloat)obj).value));
-        } else { // returning Complex
+        } else {
+            // Result is complex.
             if (obj.realp() && obj.minusp()) {
                 if (obj instanceof DoubleFloat) {
                     DoubleFloat re = DoubleFloat.coerceToFloat(obj);
