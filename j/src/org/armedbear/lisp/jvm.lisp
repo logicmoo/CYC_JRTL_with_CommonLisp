@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.609 2005-08-24 18:13:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.610 2005-08-24 20:38:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@
            nil)
           (t
            (setf body (copy-tree body))
-           (list 'LAMBDA lambda-list (list* 'BLOCK block-name (precompile-form body t))))))
+           (list 'LAMBDA lambda-list (precompile-form (list* 'BLOCK block-name body) t)))))
   ) ; EVAL-WHEN
 
 ;; Just an experiment...
