@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.25 2005-08-24 16:23:15 piso Exp $
+ * $Id: MathFunctions.java,v 1.26 2005-08-24 16:57:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -602,6 +602,8 @@ public final class MathFunctions extends Lisp
         return signalTypeError(obj, Symbol.NUMBER);
     }
 
+    private static Method log10Method = null;
+
     // ### log
     private static final Primitive LOG =
         new Primitive("log", "number &optional base")
@@ -613,6 +615,33 @@ public final class MathFunctions extends Lisp
         public LispObject execute(LispObject number, LispObject base)
             throws ConditionThrowable
         {
+            if (isJava15) {
+                if (number.realp() && !number.minusp() && base.isEqualTo(new Fixnum(10))) {
+                    double d = DoubleFloat.coerceToFloat(number).value;
+                    try {
+                        if (log10Method == null) {
+                            Class c = Class.forName("java.lang.Math");
+                            Class[] parameterTypes = new Class[1];
+                            parameterTypes[0] = Double.TYPE;
+                            log10Method = c.getMethod("log10", parameterTypes);
+                        }
+                        if (log10Method != null) {
+                            Object[] args;
+                            args = new Object[1];
+                            args[0] = new Double(d);
+                            Double result = (Double) log10Method.invoke(null, args);
+                            if (number instanceof DoubleFloat || base instanceof DoubleFloat)
+                                return new DoubleFloat(result.doubleValue());
+                            else
+                                return new SingleFloat((float)result.doubleValue());
+                        }
+                    }
+                    catch (Throwable t) {
+                        Debug.trace(t);
+                        // Fall through...
+                    }
+                }
+            }
             return log(number).divideBy(log(base));
         }
     };
