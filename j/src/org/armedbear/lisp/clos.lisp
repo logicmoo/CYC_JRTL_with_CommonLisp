@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.185 2005-06-24 00:14:48 piso Exp $
+;;; $Id: clos.lisp,v 1.186 2005-08-25 17:53:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -159,8 +159,8 @@
           ,@other-options))))
 
 (defun maybe-note-name-defined (name)
-  (when (fboundp 'jvm::note-name-defined)
-    (jvm::note-name-defined name)))
+  (when (fboundp 'note-name-defined)
+    (note-name-defined name)))
 
 (defun canonicalize-direct-superclasses (direct-superclasses)
   (let ((classes '()))

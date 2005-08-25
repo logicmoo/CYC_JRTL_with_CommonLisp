@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.114 2005-08-15 23:31:23 piso Exp $
+;;; $Id: compile-file.lisp,v 1.115 2005-08-25 17:51:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -160,7 +160,7 @@
                     (dump-form `(setf (inline-expansion ',name) ',(inline-expansion name))
                                stream)))
                 (push name jvm::*functions-defined-in-current-file*)
-                (jvm::note-name-defined name)
+                (note-name-defined name)
                 ;; If NAME is not fbound, provide a dummy definition so that
                 ;; getSymbolFunctionOrDie() will succeed when we try to verify that
                 ;; functions defined later in the same file can be loaded correctly.
@@ -169,7 +169,7 @@
                   (push name *fbound-names*))))
              ((DEFGENERIC DEFMETHOD)
               (note-toplevel-form form)
-              (jvm::note-name-defined (second form))
+              (note-name-defined (second form))
               (let ((*compile-print* nil))
                 (process-toplevel-form (macroexpand-1 form *compile-file-environment*)
                                        stream compile-time-too))
@@ -326,8 +326,7 @@
 (defun convert-toplevel-form (form)
   (let* ((expr `(lambda () ,form))
          (classfile-name (next-classfile-name))
-         (classfile (report-error
-                     (jvm:compile-defun nil expr nil classfile-name)))
+         (classfile (report-error (jvm:compile-defun nil expr nil classfile-name)))
          (compiled-function (verify-load classfile)))
     (setf form
           (if compiled-function
