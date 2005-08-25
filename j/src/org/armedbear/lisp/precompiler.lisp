@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.138 2005-08-15 23:34:48 piso Exp $
+;;; $Id: precompiler.lisp,v 1.139 2005-08-25 17:49:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,7 +22,8 @@
 (export '(*inline-declarations*
           process-optimization-declarations
           process-special-declarations
-          notinline-p inline-expansion expand-inline))
+          notinline-p inline-expansion expand-inline
+          *defined-functions* *undefined-functions* note-name-defined))
 
 (defvar *inline-declarations* nil)
 
@@ -1038,9 +1039,21 @@
   (fset 'defmacro (get 'defmacro 'macroexpand-macro))
   (remprop 'defmacro 'macroexpand-macro))
 
+(defvar *defined-functions*)
+
+(defvar *undefined-functions*)
+
+(defun note-name-defined (name)
+  (when (boundp '*defined-functions*)
+    (push name *defined-functions*))
+  (when (and (boundp '*undefined-functions*) (not (null *undefined-functions*)))
+    (setf *undefined-functions* (remove name *undefined-functions*))))
+
 ;; Redefine DEFUN to precompile the definition on the fly.
 (defmacro defun (name lambda-list &body body &environment env)
-  (multiple-value-bind (body decls doc) (parse-body body)
+  (note-name-defined name)
+  (multiple-value-bind (body decls doc)
+      (parse-body body)
     (let* ((block-name (fdefinition-block-name name))
            (lambda-expression `(lambda ,lambda-list ,@decls (block ,block-name ,@body))))
       (cond (*compile-file-truename*
