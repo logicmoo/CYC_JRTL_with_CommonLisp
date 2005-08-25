@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.27 2005-08-24 17:26:38 piso Exp $
+ * $Id: MathFunctions.java,v 1.28 2005-08-25 05:59:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -680,14 +680,14 @@ public final class MathFunctions extends Lisp
                     DoubleFloat im = DoubleFloat.coerceToFloat(((Complex)obj).getImaginaryPart());
                     DoubleFloat phase =
                         new DoubleFloat(Math.atan2(im.getValue(), re.getValue()));  // atan(y/x)
-                    DoubleFloat abs = (DoubleFloat)((Complex)obj).ABS();
+                    DoubleFloat abs = DoubleFloat.coerceToFloat(obj.ABS());
                     return Complex.getInstance(new DoubleFloat(Math.log(abs.getValue())), phase);
                 } else {
                     SingleFloat re = SingleFloat.coerceToFloat(((Complex)obj).getRealPart());
                     SingleFloat im = SingleFloat.coerceToFloat(((Complex)obj).getImaginaryPart());
                     SingleFloat phase =
                         new SingleFloat((float)Math.atan2(im.value, re.value));  // atan(y/x)
-                    SingleFloat abs = (SingleFloat)((Complex)obj).ABS();
+                    SingleFloat abs = SingleFloat.coerceToFloat(obj.ABS());
                     return Complex.getInstance(new SingleFloat((float)Math.log(abs.value)), phase);
                 }
             }
