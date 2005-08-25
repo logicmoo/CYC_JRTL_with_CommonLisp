@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.610 2005-08-24 20:38:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.611 2005-08-25 17:53:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3365,16 +3365,6 @@
        t))
     (t
      nil)))
-
-(defvar *defined-functions*)
-
-(defvar *undefined-functions*)
-
-(defun note-name-defined (name)
-  (when (boundp '*defined-functions*)
-    (push name *defined-functions*))
-  (when (boundp '*undefined-functions*)
-    (setf *undefined-functions* (remove name *undefined-functions*))))
 
 (defvar *functions-defined-in-current-file* nil)
 
