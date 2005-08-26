@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.611 2005-08-25 17:53:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.612 2005-08-26 12:20:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1066,7 +1066,6 @@
 (declaim (ftype (function (t) (integer 1 65535)) pool-get))
 (defun pool-get (entry)
   (declare (optimize speed))
-  (declare (:explain :calls))
   (let* ((ht *pool-entries*)
          (index (gethash-2op-1ret entry ht)))
     (declare (type hash-table ht))
@@ -7255,6 +7254,22 @@
                (emit 'swap)                    ; stack: new-fixnum new-fixnum int
                (emit-invokespecial-init +lisp-fixnum-class+ '("I")) ; stack: fixnum
              (emit-move-from-stack target representation))))
+          ((eq (variable-representation variable) 'unboxed-character)
+           (dformat t "p2-setq unboxed-character case~%")
+           (compile-form value-form 'stack 'unboxed-character)
+           (maybe-emit-clear-values value-form)
+           (when target
+             (emit 'dup))
+           (emit 'istore (variable-register variable))
+           (when target
+             ;; char on stack here
+             (when (null representation)
+               ;; need to box char
+               (emit 'new +lisp-character-class+) ; stack: char new-character
+               (emit 'dup_x1)                  ; stack: new-character char new-character
+               (emit 'swap)                    ; stack: new-character new-character char
+               (emit-invokespecial-init +lisp-character-class+ '("C")) ; stack: character
+               (emit-move-from-stack target representation))))
           (t
            (compile-form value-form 'stack nil)
            (maybe-emit-clear-values value-form)
