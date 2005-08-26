@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.139 2005-08-25 17:49:30 piso Exp $
+;;; $Id: precompiler.lisp,v 1.140 2005-08-26 12:21:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -344,6 +344,9 @@
             (return-from precompile-function-call (precompile1 new-form))))))
     (let ((expansion (inline-expansion op)))
       (when expansion
+        (let ((explain *explain*))
+          (when (and explain (memq :calls explain))
+            (format t ";   inlining call to ~S~%" op)))
         (return-from precompile-function-call (precompile1 (expand-inline form expansion)))))
     (cons op (mapcar #'precompile1 (cdr form)))))
 
