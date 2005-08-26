@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.66 2005-08-12 13:33:14 piso Exp $
+ * $Id: Cons.java,v 1.67 2005-08-26 00:33:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,7 +226,7 @@ public final class Cons extends LispObject
             }
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.LIST));
+            signalTypeError(obj, Symbol.LIST);
         }
         return length;
     }
@@ -234,8 +234,7 @@ public final class Cons extends LispObject
     public LispObject NTH(int index) throws ConditionThrowable
     {
         if (index < 0)
-            signal(new TypeError(String.valueOf(index) +
-                                 " is not of type UNSIGNED-BYTE."));
+            signalTypeError(new Fixnum(index), Symbol.UNSIGNED_BYTE);
         int i = 0;
         LispObject obj = this;
         while (true) {
@@ -258,13 +257,13 @@ public final class Cons extends LispObject
             if (arg instanceof Bignum) {
                 // FIXME (when machines have enough memory for it to matter)
                 if (arg.minusp())
-                    return signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+                    return signalTypeError(arg, Symbol.UNSIGNED_BYTE);
                 return NIL;
             }
-            return signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+            return signalTypeError(arg, Symbol.UNSIGNED_BYTE);
         }
         if (index < 0)
-            signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+            signalTypeError(arg, Symbol.UNSIGNED_BYTE);
         int i = 0;
         LispObject obj = this;
         while (true) {
@@ -279,10 +278,8 @@ public final class Cons extends LispObject
 
     public LispObject elt(int index) throws ConditionThrowable
     {
-        if (index < 0) {
-            signal(new TypeError("ELT: invalid index " + index + " for " +
-                                 writeToString()));
-        }
+        if (index < 0)
+            signalTypeError(new Fixnum(index), Symbol.UNSIGNED_BYTE);
         int i = 0;
         Cons cons = this;
         try {
@@ -313,7 +310,7 @@ public final class Cons extends LispObject
             result = new Cons(cons.car, result);
         }
         if (cons.cdr != NIL)
-            return signal(new TypeError(cons.cdr, Symbol.LIST));
+            return signalTypeError(cons.cdr, Symbol.LIST);
         return result;
     }
 
@@ -331,16 +328,16 @@ public final class Cons extends LispObject
                     cons = temp;
                 } while (cons.cdr instanceof Cons);
                 if (cons.cdr != NIL)
-                    return signal(new TypeError(cons.cdr, Symbol.LIST));
+                    return signalTypeError(cons.cdr, Symbol.LIST);
                 cdr = list;
                 cons1.cdr = cons;
             } else if (cons.cdr != NIL)
-                return signal(new TypeError(cons.cdr, Symbol.LIST));
+                return signalTypeError(cons.cdr, Symbol.LIST);
             LispObject temp = car;
             car = cons.car;
             cons.car = temp;
         } else if (cdr != NIL)
-            return signal(new TypeError(cdr, Symbol.LIST));
+            return signalTypeError(cdr, Symbol.LIST);
         return this;
     }
 
@@ -489,8 +486,8 @@ public final class Cons extends LispObject
 
     private final LispObject signalExecutionError() throws ConditionThrowable
     {
-        return signal(new TypeError(this, list3(Symbol.OR, Symbol.FUNCTION,
-                                                Symbol.SYMBOL)));
+        return signalTypeError(this, list3(Symbol.OR, Symbol.FUNCTION,
+                                           Symbol.SYMBOL));
     }
 
     public String writeToString() throws ConditionThrowable
