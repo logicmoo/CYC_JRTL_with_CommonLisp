@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2005 Peter Graves
-# $Id: Makefile.in,v 1.28 2005-07-22 15:51:35 piso Exp $
+# $Id: Makefile.in,v 1.29 2005-08-26 00:47:32 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -87,12 +87,9 @@ j.jar: classes.stamp fasls
 	  $(JAR) uf ../j.jar org/armedbear/j/mail/*.keywords && \
 	  $(JAR) uf ../j.jar org/armedbear/lisp/*.class && \
 	  $(JAR) uf ../j.jar org/armedbear/lisp/java/awt/*.class && \
-	  $(JAR) uf ../j.jar org/armedbear/lisp/*.lisp org/armedbear/lisp/LICENSE org/armedbear/lisp/build
-	if [ -f src/org/armedbear/lisp/jvm.abcl ]; then \
-	    cd src && \
-	    $(JAR) uf ../j.jar org/armedbear/lisp/*.abcl && \
-	    $(JAR) uf ../j.jar org/armedbear/lisp/*.cls; \
-	fi
+	  $(JAR) uf ../j.jar org/armedbear/lisp/*.lisp org/armedbear/lisp/LICENSE org/armedbear/lisp/build && \
+	  find . -name '*.abcl' | xargs $(JAR) uf ../j.jar && \
+	  find . -name '*.cls' | xargs $(JAR) uf ../j.jar
 
 classes.stamp: classes
 	test -f classes.stamp || touch classes.stamp
