@@ -3,7 +3,6 @@ cd src
 @JAR@ cmf manifest-abcl ../abcl.jar org/armedbear/lisp/*.class
 @JAR@ uf ../abcl.jar org/armedbear/lisp/java/awt/*.class
 @JAR@ uf ../abcl.jar org/armedbear/lisp/LICENSE
-for i in org/armedbear/lisp/*.lisp;
-do
-    @JAR@ uf ../abcl.jar `dirname $i`/`basename $i ".lisp"`*;
-done
+@JAR@ uf ../abcl.jar org/armedbear/lisp/*.lisp
+@JAR@ uf ../abcl.jar org/armedbear/lisp/*.abcl
+find . -name '*.cls' | xargs @JAR@ uf ../abcl.jar
