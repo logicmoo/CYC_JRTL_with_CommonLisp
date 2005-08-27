@@ -1,8 +1,8 @@
 /*
  * EchoStream.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.13 2004-11-03 15:38:52 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: EchoStream.java,v 1.14 2005-08-27 11:34:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,14 +207,15 @@ public final class EchoStream extends Stream
     // ### make-echo-stream
     // input-stream output-stream => echo-stream
     private static final Primitive MAKE_ECHO_STREAM =
-        new Primitive("make-echo-stream","input-stream output-stream") {
+        new Primitive("make-echo-stream", "input-stream output-stream")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             if (!(first instanceof Stream))
-                return signal(new TypeError(first, Symbol.STREAM));
+                return signalTypeError(first, Symbol.STREAM);
             if (!(second instanceof Stream))
-                return signal(new TypeError(second, Symbol.STREAM));
+                return signalTypeError(second, Symbol.STREAM);
             return new EchoStream((Stream) first, (Stream) second);
         }
     };
@@ -222,24 +223,26 @@ public final class EchoStream extends Stream
     // ### echo-stream-input-stream
     // echo-stream => input-stream
     private static final Primitive ECHO_STREAM_INPUT_STREAM =
-        new Primitive("echo-stream-input-stream","echo-stream") {
+        new Primitive("echo-stream-input-stream", "echo-stream")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof EchoStream)
                 return ((EchoStream)arg).getInputStream();
-            return signal(new TypeError(arg, Symbol.ECHO_STREAM));
+            return signalTypeError(arg, Symbol.ECHO_STREAM);
         }
     };
 
     // ### echo-stream-output-stream
     // echo-stream => output-stream
     private static final Primitive ECHO_STREAM_OUTPUT_STREAM =
-        new Primitive("echo-stream-output-stream","echo-stream") {
+        new Primitive("echo-stream-output-stream", "echo-stream")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof EchoStream)
                 return ((EchoStream)arg).getOutputStream();
-            return signal(new TypeError(arg, Symbol.ECHO_STREAM));
+            return signalTypeError(arg, Symbol.ECHO_STREAM);
         }
     };
 }
