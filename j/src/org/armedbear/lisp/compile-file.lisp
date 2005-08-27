@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.115 2005-08-25 17:51:57 piso Exp $
+;;; $Id: compile-file.lisp,v 1.116 2005-08-27 13:36:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -158,7 +158,8 @@
                     (setf (inline-expansion name)
                           (jvm::generate-inline-expansion block-name lambda-list body))
                     (dump-form `(setf (inline-expansion ',name) ',(inline-expansion name))
-                               stream)))
+                               stream)
+                    (%stream-terpri stream)))
                 (push name jvm::*functions-defined-in-current-file*)
                 (note-name-defined name)
                 ;; If NAME is not fbound, provide a dummy definition so that
@@ -288,6 +289,7 @@
                      (setf form (precompile-form form nil)))
                     (t
 ;;                      (setf form (precompile-form form nil))
+                     (note-toplevel-form form)
                      (setf form (convert-toplevel-form form))
                      )))))))
   (when (consp form)
