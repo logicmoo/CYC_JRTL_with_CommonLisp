@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.237 2005-07-29 13:56:58 piso Exp $
+;;; $Id: boot.lisp,v 1.238 2005-08-28 14:59:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,6 +27,9 @@
 
 (defmacro lambda (lambda-list &rest body)
   (list 'function (list* 'lambda lambda-list body)))
+
+(defmacro named-lambda (name lambda-list &rest body)
+  (list 'function (list* 'named-lambda name lambda-list body)))
 
 (defmacro when (pred &rest body)
   (list 'if pred (if (> (length body) 1)
