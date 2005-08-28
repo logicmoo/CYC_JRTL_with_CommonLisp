@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.827 2005-08-22 16:50:32 piso Exp $
+ * $Id: Primitives.java,v 1.828 2005-08-28 19:25:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4913,7 +4913,7 @@ public final class Primitives extends Lisp
 
     // ### identity-hash-code
     private static final Primitive IDENTITY_HASH_CODE =
-        new Primitive("identity-hash-code", PACKAGE_SYS, false)
+        new Primitive("identity-hash-code", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
