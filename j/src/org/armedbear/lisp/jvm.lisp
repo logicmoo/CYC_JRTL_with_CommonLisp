@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.612 2005-08-26 12:20:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.613 2005-08-28 15:15:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -763,6 +763,30 @@
                   (compiland (make-compiland :name (gensym "ANONYMOUS-LAMBDA-")
                                              :lambda-expression lambda-form
                                              :parent *current-compiland*)))
+             (multiple-value-bind (body decls)
+                 (parse-body body)
+               (setf (compiland-lambda-expression compiland)
+                     `(lambda ,lambda-list ,@decls (block nil ,@body)))
+               (let ((*visible-variables* *visible-variables*)
+                     (*current-compiland* compiland))
+                 (p1-compiland compiland)))
+             (list 'FUNCTION compiland)))
+          ((and (consp (cadr form)) (eq (caadr form) 'NAMED-LAMBDA))
+           (when *current-compiland*
+             (incf (compiland-children *current-compiland*)))
+           (let* ((*current-compiland* *current-compiland*)
+;;                   (lambda-form (cadr form))
+                  (named-lambda-form (cadr form))
+                  (name (cadr named-lambda-form))
+                  (lambda-form (cons 'LAMBDA (cddr named-lambda-form)))
+                  (lambda-list (cadr lambda-form))
+                  (body (cddr lambda-form))
+                  (compiland (make-compiland :name name
+                                             :lambda-expression lambda-form
+                                             :parent *current-compiland*)))
+;;              (format t "p1-function named-lambda-form = ~S~%" named-lambda-form)
+;;              (format t "p1-function name = ~S~%" name)
+;;              (format t "p1-function lambda-form = ~S~%" lambda-form)
              (multiple-value-bind (body decls)
                  (parse-body body)
                (setf (compiland-lambda-expression compiland)
@@ -3471,7 +3495,8 @@
 (declaim (ftype (function (t t t) t) compile-function-call))
 (defun compile-function-call (form target representation)
   (let ((op (car form))
-        (args (cdr form)))
+        (args (cdr form))
+        (saved-vars nil))
 ;;     (unless (symbolp op)
 ;;       (error "COMPILE-FUNCTION-CALL ~S is not a symbol" op))
     (declare (type symbol op))
@@ -3514,6 +3539,19 @@
                           (declare-object op))))
                (emit 'getstatic *this-class* g +lisp-object+)))
             (t
+;;              (let (;;(save-variables-p nil)
+;;                    (compiland *current-compiland*))
+;;                (loop
+;;                  (cond ((null compiland)
+;;                         (return))
+;;                        ((eq op (compiland-name compiland))
+;; ;;                         (setf save-variables-p t)
+;;                         (return))
+;;                        (t
+;;                         (setf compiland (compiland-parent compiland)))))
+;;                (when compiland
+;;                  (format t "saving variables...~%")
+;;                  (setf saved-vars (save-variables (compiland-arg-vars compiland)))))
              (emit 'getstatic *this-class* (declare-symbol op) +lisp-symbol+)))
       (process-args args)
       (if (> *speed* *debug*)
@@ -3523,7 +3561,10 @@
         (unboxed-fixnum (emit-unbox-fixnum))
         (unboxed-character (emit-unbox-character))
         (java-boolean (emit-unbox-boolean)))
-      (emit-move-from-stack target))))
+      (emit-move-from-stack target representation)
+      (when saved-vars
+        (restore-variables saved-vars))
+      )))
 
 (defun compile-call (args)
   (let ((numargs (length args)))
@@ -7836,6 +7877,7 @@
       (p2-compiland xep))))
 
 (defun p1-compiland (compiland)
+;;   (format t "p1-compiland name = ~S~%" (compiland-name compiland))
   (let ((form (compiland-lambda-expression compiland)))
     (aver (eq (car form) 'LAMBDA))
     (process-optimization-declarations (cddr form))
@@ -7943,6 +7985,7 @@
     (emit-move-from-stack target representation)))
 
 (defun p2-compiland (compiland)
+;;   (format t "p2-compiland name = ~S~%" (compiland-name compiland))
   (let* ((p1-result (compiland-p1-result compiland))
          (class-file (compiland-class-file compiland))
          (*this-class* (class-file-class class-file))

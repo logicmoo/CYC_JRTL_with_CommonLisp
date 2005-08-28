@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.140 2005-08-26 12:21:00 piso Exp $
+;;; $Id: precompiler.lisp,v 1.141 2005-08-28 15:14:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -562,6 +562,11 @@
   (setf form (maybe-rewrite-lambda form))
   (list* 'LAMBDA (cadr form) (mapcar #'precompile1 (cddr form))))
 
+(defun precompile-named-lambda (form)
+  (let ((lambda-form (list* 'LAMBDA (caddr form) (cdddr form))))
+    (setf lambda-form (maybe-rewrite-lambda lambda-form))
+    (list* 'NAMED-LAMBDA (cadr form) (cadr lambda-form) (mapcar #'precompile1 (cddr lambda-form)))))
+
 (defun precompile-defun (form)
   (if *in-jvm-compile*
       (precompile1 (expand-macro form))
@@ -912,6 +917,7 @@
                               MACROLET
                               MULTIPLE-VALUE-BIND
                               MULTIPLE-VALUE-LIST
+                              NAMED-LAMBDA
                               NTH-VALUE
                               PROGN
                               PROGV
@@ -1058,7 +1064,7 @@
   (multiple-value-bind (body decls doc)
       (parse-body body)
     (let* ((block-name (fdefinition-block-name name))
-           (lambda-expression `(lambda ,lambda-list ,@decls (block ,block-name ,@body))))
+           (lambda-expression `(named-lambda ,name ,lambda-list ,@decls (block ,block-name ,@body))))
       (cond (*compile-file-truename*
              `(fset ',name ,lambda-expression))
             (t
