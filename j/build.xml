@@ -67,7 +67,7 @@
       destdir="${basedir}"
       classpath="${basedir}:${jdk}/jre/lib/rt.jar:${extensions}"
       includeAntRuntime="no"
-      excludes="org/armedbear/lisp/**/*, org/armedbear/j/jdb/**/*"
+      excludes="org/armedbear/j/_darcs/**/*,org/armedbear/lisp/**/*, org/armedbear/j/jdb/**/*"
       debug="${debug}"
     />
   </target>
@@ -92,7 +92,7 @@
       classpath="${basedir}:${jdk}/jre/lib/rt.jar:${junit}"
       includeAntRuntime="no"
       includes="org/armedbear/lisp/**/*"
-      excludes="org/armedbear/lisp/Test*"
+      excludes="org/armedbear/lisp/_darcs/**/*"
       debug="${debug}"
     />
     <echo message="${build}&#10;" file="${basedir}/org/armedbear/lisp/build"/>
