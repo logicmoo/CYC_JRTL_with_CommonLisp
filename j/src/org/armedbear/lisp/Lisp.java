@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.389 2005-08-26 00:40:39 piso Exp $
+ * $Id: Lisp.java,v 1.390 2005-09-08 18:29:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -898,41 +898,46 @@ public abstract class Lisp
                                 }
                             }
                             ZipFile zipFile = new ZipFile(zipFileName);
-                            ZipEntry entry = zipFile.getEntry(entryName);
-                            if (entry != null) {
-                                long size = entry.getSize();
-                                InputStream in = zipFile.getInputStream(entry);
-                                byte[] bytes = new byte[(int)size];
-                                int bytesRemaining = (int) size;
-                                int bytesRead = 0;
-                                while (bytesRemaining > 0) {
-                                    int n;
-                                    if (bytesRemaining >= 4096)
-                                        n = in.read(bytes, bytesRead, 4096);
-                                    else
-                                        n = in.read(bytes, bytesRead, bytesRemaining);
-                                    if (n < 0)
-                                        break;
-                                    bytesRead += n;
-                                    bytesRemaining -= n;
+                            try {
+                                ZipEntry entry = zipFile.getEntry(entryName);
+                                if (entry != null) {
+                                    long size = entry.getSize();
+                                    InputStream in = zipFile.getInputStream(entry);
+                                    byte[] bytes = new byte[(int)size];
+                                    int bytesRemaining = (int) size;
+                                    int bytesRead = 0;
+                                    while (bytesRemaining > 0) {
+                                        int n;
+                                        if (bytesRemaining >= 4096)
+                                            n = in.read(bytes, bytesRead, 4096);
+                                        else
+                                            n = in.read(bytes, bytesRead, bytesRemaining);
+                                        if (n < 0)
+                                            break;
+                                        bytesRead += n;
+                                        bytesRemaining -= n;
+                                    }
+                                    in.close();
+                                    if (bytesRemaining > 0)
+                                        Debug.trace("bytesRemaining = " + bytesRemaining);
+                                    JavaClassLoader loader = new JavaClassLoader();
+                                    Class c =
+                                        loader.loadClassFromByteArray(null, bytes, 0, bytes.length);
+                                    if (c != null) {
+                                        Class[] parameterTypes = new Class[0];
+                                        Constructor constructor =
+                                            c.getConstructor(parameterTypes);
+                                        Object[] initargs = new Object[0];
+                                        LispObject obj =
+                                            (LispObject) constructor.newInstance(initargs);
+                                        if (obj instanceof Function)
+                                            ((Function)obj).setClassBytes(bytes);
+                                        return obj != null ? obj : NIL;
+                                    }
                                 }
-                                in.close();
-                                if (bytesRemaining > 0)
-                                    Debug.trace("bytesRemaining = " + bytesRemaining);
-                                JavaClassLoader loader = new JavaClassLoader();
-                                Class c =
-                                    loader.loadClassFromByteArray(null, bytes, 0, bytes.length);
-                                if (c != null) {
-                                    Class[] parameterTypes = new Class[0];
-                                    Constructor constructor =
-                                        c.getConstructor(parameterTypes);
-                                    Object[] initargs = new Object[0];
-                                    LispObject obj =
-                                        (LispObject) constructor.newInstance(initargs);
-                                    if (obj instanceof Function)
-                                        ((Function)obj).setClassBytes(bytes);
-                                    return obj != null ? obj : NIL;
-                                }
+                            }
+                            finally {
+                                zipFile.close();
                             }
                         }
                     }
@@ -981,17 +986,20 @@ public abstract class Lisp
             LispObject loadTruename = _LOAD_TRUENAME_.symbolValue(thread);
             String zipFileName = ((Pathname)loadTruename).getNamestring();
             ZipFile zipFile = new ZipFile(zipFileName);
-            ZipEntry entry = zipFile.getEntry(namestring);
-            if (entry != null) {
-                LispObject obj = loadCompiledFunction(zipFile.getInputStream(entry),
-                                                      (int) entry.getSize());
+            try {
+                ZipEntry entry = zipFile.getEntry(namestring);
+                if (entry != null) {
+                    LispObject obj = loadCompiledFunction(zipFile.getInputStream(entry),
+                                                          (int) entry.getSize());
+                    if (obj != null)
+                        return obj;
+                    Debug.trace("Unable to load " + namestring);
+                    return signal(new LispError("Unable to load " + namestring));
+                }
+            }
+            finally {
                 zipFile.close();
-                if (obj != null)
-                    return obj;
-                Debug.trace("Unable to load " + namestring);
-                return signal(new LispError("Unable to load " + namestring));
-            } else
-                zipFile.close();
+            }
         }
         catch (Throwable t) {
             Debug.trace(t);

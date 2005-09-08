@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.115 2005-08-10 19:21:51 piso Exp $
+ * $Id: Load.java,v 1.116 2005-09-08 18:30:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,7 +135,8 @@ public final class Load extends Lisp
                                       verbose, print, false);
         }
         catch (FaslVersionMismatch e) {
-            StringBuffer sb = new StringBuffer("Incorrect fasl version: ");
+            FastStringBuffer sb =
+                new FastStringBuffer("Incorrect fasl version: ");
             sb.append(truename);
             return signal(new SimpleError(sb.toString()));
         }
@@ -145,6 +146,14 @@ public final class Load extends Lisp
             }
             catch (IOException e) {
                 return signal(new LispError(e.getMessage()));
+            }
+            if (zipfile != null) {
+                try {
+                    zipfile.close();
+                }
+                catch (IOException e) {
+                    return signal(new LispError(e.getMessage()));
+                }
             }
         }
     }
@@ -211,78 +220,91 @@ public final class Load extends Lisp
             String s = candidates[i];
             if (s == null)
                 break;
+            ZipFile zipfile = null;
             final String dir = Site.getLispHome();
-            if (dir != null) {
-                File file = new File(dir, s);
-                if (file.isFile()) {
-                    // File exists. For system files, we know the extension
-                    // will be .abcl if it's a compiled file.
-                    String ext = getExtension(s);
-                    if (ext.equalsIgnoreCase(".abcl")) {
-                        try {
-                            ZipFile zipfile = new ZipFile(file);
-                            String name = file.getName();
-			    int index = name.lastIndexOf('.');
-			    Debug.assertTrue(index >= 0);
-			    name = name.substring(0, index).concat("._");
-                            ZipEntry entry = zipfile.getEntry(name);
-                            if (entry != null) {
-                                in = zipfile.getInputStream(entry);
-                                truename = file.getCanonicalPath();
+            try {
+                if (dir != null) {
+                    File file = new File(dir, s);
+                    if (file.isFile()) {
+                        // File exists. For system files, we know the extension
+                        // will be .abcl if it is a compiled file.
+                        String ext = getExtension(s);
+                        if (ext.equalsIgnoreCase(".abcl")) {
+                            try {
+                                zipfile = new ZipFile(file);
+                                String name = file.getName();
+                                int index = name.lastIndexOf('.');
+                                Debug.assertTrue(index >= 0);
+                                name = name.substring(0, index).concat("._");
+                                ZipEntry entry = zipfile.getEntry(name);
+                                if (entry != null) {
+                                    in = zipfile.getInputStream(entry);
+                                    truename = file.getCanonicalPath();
+                                }
+                            }
+                            catch (ZipException e) {
+                                // Fall through.
+                            }
+                            catch (Throwable t) {
+                                Debug.trace(t);
+                                in = null;
+                                // Fall through.
                             }
                         }
-                        catch (ZipException e) {
-                            // Fall through.
-                        }
-                        catch (Throwable t) {
-                            Debug.trace(t);
-                            in = null;
-                            // Fall through.
+                        if (in == null) {
+                            try {
+                                in = new FileInputStream(file);
+                                truename = file.getCanonicalPath();
+                            }
+                            catch (IOException e) {
+                                in = null;
+                            }
                         }
                     }
-                    if (in == null) {
+                } else {
+                    URL url = Lisp.class.getResource(s);
+                    if (url != null) {
                         try {
-                            in = new FileInputStream(file);
-                            truename = file.getCanonicalPath();
+                            in = url.openStream();
+                            if ("jar".equals(url.getProtocol()))
+                                pathname = new Pathname(url);
+                            truename = getPath(url);
                         }
                         catch (IOException e) {
                             in = null;
                         }
                     }
                 }
-            } else {
-                URL url = Lisp.class.getResource(s);
-                if (url != null) {
+                if (in != null) {
+                    final LispThread thread = LispThread.currentThread();
+                    final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+                    thread.bindSpecial(_WARN_ON_REDEFINITION_, NIL);
                     try {
-                        in = url.openStream();
-                        if ("jar".equals(url.getProtocol()))
-                            pathname = new Pathname(url);
-                        truename = getPath(url);
+                        return loadFileFromStream(pathname, truename,
+                                                  new Stream(in, Symbol.CHARACTER),
+                                                  verbose, print, auto);
                     }
-                    catch (IOException e) {
-                        in = null;
+                    catch (FaslVersionMismatch e) {
+                        StringBuffer sb =
+                            new StringBuffer("; Incorrect fasl version: ");
+                        sb.append(truename);
+                        System.err.println(sb.toString());
+                    }
+                    finally {
+                        thread.lastSpecialBinding = lastSpecialBinding;
+                        try {
+                            in.close();
+                        }
+                        catch (IOException e) {
+                            return signal(new LispError(e.getMessage()));
+                        }
                     }
                 }
             }
-            if (in != null) {
-                final LispThread thread = LispThread.currentThread();
-                final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-                thread.bindSpecial(_WARN_ON_REDEFINITION_, NIL);
-                try {
-                    return loadFileFromStream(pathname, truename,
-                                              new Stream(in, Symbol.CHARACTER),
-                                              verbose, print, auto);
-                }
-                catch (FaslVersionMismatch e) {
-                    StringBuffer sb =
-                        new StringBuffer("; Incorrect fasl version: ");
-                    sb.append(truename);
-                    System.err.println(sb.toString());
-                }
-                finally {
-                    thread.lastSpecialBinding = lastSpecialBinding;
+            finally {
+                if (zipfile != null) {
                     try {
-                        in.close();
+                        zipfile.close();
                     }
                     catch (IOException e) {
                         return signal(new LispError(e.getMessage()));
