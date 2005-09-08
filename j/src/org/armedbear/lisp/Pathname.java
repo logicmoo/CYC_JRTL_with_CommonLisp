@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.83 2005-09-08 18:31:25 piso Exp $
+ * $Id: Pathname.java,v 1.84 2005-09-08 23:31:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -485,7 +485,7 @@ public class Pathname extends LispObject
         return new Pathname(s);
     }
 
-    private static Pathname parseNamestring(AbstractString namestring)
+    public static Pathname parseNamestring(AbstractString namestring)
         throws ConditionThrowable
     {
         // Check for a logical pathname host.
@@ -779,14 +779,12 @@ public class Pathname extends LispObject
         {
             Pathname pathname = coerceToPathname(first);
             Pathname wildcard = coerceToPathname(second);
-            if (pathname instanceof LogicalPathname || wildcard instanceof LogicalPathname)
-                signal(new LispError("Bad place for a logical pathname."));
             return pathname.matches(wildcard) ? T : NIL;
         }
     };
 
     // ""Missing components of wildcard default to :WILD."
-    private boolean matches(Pathname wildcard) throws ConditionThrowable
+    protected boolean matches(Pathname wildcard) throws ConditionThrowable
     {
         if (Utilities.isPlatformWindows()) {
             if (wildcard.device != Keyword.WILD && wildcard.device != NIL) {
@@ -880,7 +878,7 @@ public class Pathname extends LispObject
 
     // ### %wild-pathname-p
     private static final Primitive _WILD_PATHNAME_P =
-        new Primitive("%wild-pathname-p", PACKAGE_SYS, false)
+        new Primitive("%wild-pathname-p", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
