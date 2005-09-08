@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.8 2005-09-08 16:03:01 piso Exp $
+ * $Id: LogicalPathname.java,v 1.9 2005-09-08 18:33:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.lisp;
 
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 public final class LogicalPathname extends Pathname
 {
@@ -37,7 +38,9 @@ public final class LogicalPathname extends Pathname
 
         int semi = rest.lastIndexOf(';');
         if (semi >= 0) {
-            // FIXME directory
+            // Directory.
+            String d = rest.substring(0, semi + 1);
+            directory = parseDirectory(d);
             rest = rest.substring(semi + 1);
         }
 
@@ -80,6 +83,36 @@ public final class LogicalPathname extends Pathname
         }
     }
 
+    private static final LispObject parseDirectory(String d)
+        throws ConditionThrowable
+    {
+        LispObject result;
+        if (d.charAt(0) == ';') {
+            result = new Cons(Keyword.RELATIVE);
+            d = d.substring(1);
+        } else
+            result = new Cons(Keyword.ABSOLUTE);
+        StringTokenizer st = new StringTokenizer(d, ";");
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken();
+            LispObject obj;
+            if (token.equals("*"))
+                obj = Keyword.WILD;
+            else if (token.equals("**"))
+                obj = Keyword.WILD_INFERIORS;
+            else if (token.equals("..")) {
+                if (result.car() instanceof AbstractString) {
+                    result = result.cdr();
+                    continue;
+                }
+                obj= Keyword.UP;
+            } else
+                obj = new SimpleString(token.toUpperCase());
+            result = new Cons(obj, result);
+        }
+        return result.nreverse();
+    }
+
     public LispObject typeOf()
     {
         return Symbol.LOGICAL_PATHNAME;
@@ -99,6 +132,42 @@ public final class LogicalPathname extends Pathname
         return super.typep(type);
     }
 
+    protected String getDirectoryNamestring() throws ConditionThrowable
+    {
+        FastStringBuffer sb = new FastStringBuffer();
+        // "If a pathname is converted to a namestring, the symbols NIL and
+        // :UNSPECIFIC cause the field to be treated as if it were empty. That
+        // is, both NIL and :UNSPECIFIC cause the component not to appear in
+        // the namestring." 19.2.2.2.3.1
+        if (directory != NIL) {
+            LispObject temp = directory;
+            LispObject part = temp.car();
+            if (part == Keyword.ABSOLUTE)
+                ;
+            else if (part == Keyword.RELATIVE)
+                sb.append(';');
+            else
+                signal(new FileError("Unsupported directory component " + part.writeToString() + ".",
+                                     this));
+            temp = temp.cdr();
+            while (temp != NIL) {
+                part = temp.car();
+                if (part instanceof AbstractString)
+                    sb.append(part.getStringValue());
+                else if (part == Keyword.WILD)
+                    sb.append('*');
+                else if (part == Keyword.UP)
+                    sb.append("..");
+                else
+                    signal(new FileError("Unsupported directory component " + part.writeToString() + ".",
+                                         this));
+                sb.append(';');
+                temp = temp.cdr();
+            }
+        }
+        return sb.toString();
+    }
+
     public String writeToString() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
@@ -109,7 +178,8 @@ public final class LogicalPathname extends Pathname
             sb.append("#P\"");
         sb.append(host.getStringValue());
         sb.append(':');
-        // FIXME directory
+        if (directory != NIL)
+            sb.append(getDirectoryNamestring());
         sb.append(name.getStringValue());
         if (type != NIL) {
             sb.append('.');

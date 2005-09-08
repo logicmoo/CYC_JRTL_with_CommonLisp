@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.82 2005-09-08 16:02:29 piso Exp $
+ * $Id: Pathname.java,v 1.83 2005-09-08 18:31:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -177,7 +177,7 @@ public class Pathname extends LispObject
         }
     }
 
-    protected static final LispObject parseDirectory(String d)
+    private static final LispObject parseDirectory(String d)
         throws ConditionThrowable
     {
         if (d.equals("/") || (Utilities.isPlatformWindows() && d.equals("\\")))
@@ -279,9 +279,9 @@ public class Pathname extends LispObject
         return namestring = sb.toString();
     }
 
-    private String getDirectoryNamestring() throws ConditionThrowable
+    protected String getDirectoryNamestring() throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         // "If a pathname is converted to a namestring, the symbols NIL and
         // :UNSPECIFIC cause the field to be treated as if it were empty. That
         // is, both NIL and :UNSPECIFIC cause the component not to appear in
@@ -319,7 +319,7 @@ public class Pathname extends LispObject
                 if (part instanceof AbstractString)
                     sb.append(part.getStringValue());
                 else if (part == Keyword.WILD)
-                    sb.append("*");
+                    sb.append('*');
                 else if (part == Keyword.UP)
                     sb.append("..");
                 else
@@ -721,7 +721,7 @@ public class Pathname extends LispObject
                 LispObject second = temp.car();
                 if (second == Keyword.UP || second == Keyword.BACK) {
                     if (signalError) {
-                        StringBuffer sb = new StringBuffer();
+                        FastStringBuffer sb = new FastStringBuffer();
                         sb.append(first.writeToString());
                         sb.append(" may not be followed immediately by ");
                         sb.append(second.writeToString());
@@ -825,7 +825,7 @@ public class Pathname extends LispObject
 
     // ### list-directory
     private static final Primitive LIST_DIRECTORY =
-        new Primitive("list-directory", PACKAGE_SYS, false)
+        new Primitive("list-directory", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
