@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.61 2005-08-15 23:32:17 piso Exp $
+;;; $Id: compile-system.lisp,v 1.62 2005-09-08 16:08:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -195,7 +195,6 @@
                                      "or.lisp"
                                      "parse-integer.lisp"
                                      "parse-lambda-list.lisp"
-                                     "parse-namestring.lisp"
                                      "pathnames.lisp"
                                      ;;"print.lisp"
                                      ;;"print-object.lisp"
@@ -239,7 +238,6 @@
                                      "time.lisp"
                                      "top-level.lisp"
                                      "trace.lisp"
-                                     "translate-logical-pathname.lisp"
                                      "tree-equal.lisp"
                                      ;;"typep.lisp"
                                      "upgraded-complex-part-type.lisp"
