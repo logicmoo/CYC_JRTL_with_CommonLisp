@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.81 2005-08-04 14:32:41 piso Exp $
+ * $Id: Pathname.java,v 1.82 2005-09-08 16:02:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public class Pathname extends LispObject
     protected LispObject directory = NIL;
     protected LispObject name = NIL;
 
-    // A string, NIL, :wild or :unspecific.
+    // A string, NIL, :WILD or :UNSPECIFIC.
     protected LispObject type = NIL;
 
     // A positive integer, or NIL, :WILD, :UNSPECIFIC, or :NEWEST.
@@ -177,7 +177,7 @@ public class Pathname extends LispObject
         }
     }
 
-    private static final LispObject parseDirectory(String d)
+    protected static final LispObject parseDirectory(String d)
         throws ConditionThrowable
     {
         if (d.equals("/") || (Utilities.isPlatformWindows() && d.equals("\\")))
@@ -256,7 +256,13 @@ public class Pathname extends LispObject
             Debug.assertTrue(false);
         if (!validateDirectory(directory, false))
             return null;
-        StringBuffer sb = new StringBuffer(getDirectoryNamestring());
+        FastStringBuffer sb = new FastStringBuffer();
+        if (host != NIL) {
+            Debug.assertTrue(host instanceof AbstractString);
+            sb.append(host.getStringValue());
+            sb.append(':');
+        }
+        sb.append(getDirectoryNamestring());
         if (name instanceof AbstractString)
             sb.append(name.getStringValue());
         else if (name == Keyword.WILD)
@@ -464,25 +470,55 @@ public class Pathname extends LispObject
         }
     }
 
-    public static Pathname parseNamestring(String namestring)
+    // A logical host is represented as the string that names it.
+    // (defvar *logical-pathname-translations* (make-hash-table :test 'equal))
+    public static EqualHashTable LOGICAL_PATHNAME_TRANSLATIONS =
+        new EqualHashTable(64, NIL, NIL);
+
+    private static final Symbol _LOGICAL_PATHNAME_TRANSLATIONS_ =
+        exportSpecial("*LOGICAL-PATHNAME-TRANSLATIONS*", PACKAGE_SYS,
+                      LOGICAL_PATHNAME_TRANSLATIONS);
+
+    public static Pathname parseNamestring(String s)
         throws ConditionThrowable
     {
-        return new Pathname(namestring);
+        return new Pathname(s);
+    }
+
+    private static Pathname parseNamestring(AbstractString namestring)
+        throws ConditionThrowable
+    {
+        // Check for a logical pathname host.
+        String s = namestring.getStringValue();
+        String h = getHostString(s);
+        if (h != null && LOGICAL_PATHNAME_TRANSLATIONS.get(new SimpleString(h)) != null) {
+            // A defined logical pathname host.
+            return new LogicalPathname(h, s.substring(s.indexOf(':') + 1));
+        }
+        return new Pathname(s);
+    }
+
+    // "one or more uppercase letters, digits, and hyphens"
+    protected static String getHostString(String s)
+    {
+        int colon = s.indexOf(':');
+        if (colon >= 0)
+            return s.substring(0, colon).toUpperCase();
+        else
+            return null;
     }
 
     public static Pathname coerceToPathname(LispObject arg)
         throws ConditionThrowable
     {
-        if (arg instanceof LogicalPathname)
-            signal(new LispError("Bad place for a logical pathname."));
         if (arg instanceof Pathname)
             return (Pathname) arg;
         if (arg instanceof AbstractString)
-            return new Pathname(arg.getStringValue());
+            return parseNamestring((AbstractString)arg);
         if (arg instanceof FileStream)
             return ((FileStream)arg).getPathname();
-        signal(new TypeError(arg, list4(Symbol.OR, Symbol.PATHNAME,
-                                        Symbol.STRING, Symbol.FILE_STREAM)));
+        signalTypeError(arg, list4(Symbol.OR, Symbol.PATHNAME,
+                                   Symbol.STRING, Symbol.FILE_STREAM));
         // Not reached.
         return null;
     }
@@ -491,8 +527,8 @@ public class Pathname extends LispObject
         throws ConditionThrowable
     {
         if (arg != Keyword.COMMON && arg != Keyword.LOCAL)
-            signal(new TypeError(arg, list3(Symbol.MEMBER, Keyword.COMMON,
-                                            Keyword.LOCAL)));
+            signalTypeError(arg, list3(Symbol.MEMBER, Keyword.COMMON,
+                                       Keyword.LOCAL));
     }
 
     // ### %pathname-host
@@ -592,8 +628,7 @@ public class Pathname extends LispObject
         }
     };
 
-    // ### pathname
-    // pathname pathspec => pathname
+    // ### pathname pathspec => pathname
     private static final Primitive PATHNAME =
         new Primitive("pathname", "pathspec")
     {
@@ -615,6 +650,7 @@ public class Pathname extends LispObject
         }
     };
 
+    // Used by the #p reader.
     public static final Pathname makePathname(LispObject args)
         throws ConditionThrowable
     {
@@ -842,6 +878,7 @@ public class Pathname extends LispObject
         return false;
     }
 
+    // ### %wild-pathname-p
     private static final Primitive _WILD_PATHNAME_P =
         new Primitive("%wild-pathname-p", PACKAGE_SYS, false)
     {

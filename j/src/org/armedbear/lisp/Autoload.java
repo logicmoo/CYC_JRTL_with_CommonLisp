@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.238 2005-08-24 16:30:14 piso Exp $
+ * $Id: Autoload.java,v 1.239 2005-09-08 16:10:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -377,7 +377,6 @@ public class Autoload extends Function
         autoload("lisp-implementation-version", "lisp_implementation_version");
         autoload("list-all-packages", "PackageFunctions");
         autoload("listen", "listen");
-        autoload("load-logical-pathname-translations", "LogicalPathname");
         autoload("log", "MathFunctions");
         autoload("logand", "logand");
         autoload("logandc1", "logandc1");
@@ -385,8 +384,6 @@ public class Autoload extends Function
         autoload("logbitp", "logbitp");
         autoload("logcount", "logcount");
         autoload("logeqv", "logeqv");
-        autoload("logical-pathname", "LogicalPathname");
-        autoload("logical-pathname-translations", "LogicalPathname");
         autoload("logior", "logior");
         autoload("lognand", "lognand");
         autoload("lognor", "lognor");
@@ -499,6 +496,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%make-condition", "make_condition", true);
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTableFunctions");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTableFunctions");
+        autoload(PACKAGE_SYS, "%make-logical-pathname", "LogicalPathname", true);
         autoload(PACKAGE_SYS, "%make-server-socket", "make_server_socket");
         autoload(PACKAGE_SYS, "%make-socket", "make_socket");
         autoload(PACKAGE_SYS, "%make-string", "StringFunctions");
@@ -520,7 +518,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-generic-function-lambda-list", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%set-generic-function-name", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%set-gf-required-args", "StandardGenericFunction", true);
-        autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
         autoload(PACKAGE_SYS, "%set-method-fast-function", "StandardMethod", true);
         autoload(PACKAGE_SYS, "%set-method-function", "StandardMethod", true);
         autoload(PACKAGE_SYS, "%set-method-generic-function", "StandardMethod", true);

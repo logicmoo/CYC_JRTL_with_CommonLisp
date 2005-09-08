@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.9 2005-06-17 15:41:06 piso Exp $
+;;; $Id: pathnames.lisp,v 1.10 2005-09-08 16:05:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,3 +40,70 @@
 (defun translate-pathname (&rest args)
   (declare (ignore args)) ; FIXME
   (error "TRANSLATE-PATHNAME is not implemented."))
+
+(defun canonicalize-logical-hostname (host)
+  (string-upcase host))
+
+(defun logical-pathname-translations (host)
+  (gethash-2op-1ret (canonicalize-logical-hostname host)
+                    *logical-pathname-translations*))
+
+(defun %set-logical-pathname-translations (host new-translations)
+  (setf (gethash (canonicalize-logical-hostname host)
+                 *logical-pathname-translations*)
+        new-translations))
+
+(defsetf logical-pathname-translations %set-logical-pathname-translations)
+
+(defun translate-logical-pathname (pathname &key)
+  (typecase pathname
+    (logical-pathname
+     ;; FIXME
+     nil)
+    (pathname pathname)
+    (t (translate-logical-pathname (pathname pathname)))))
+
+(defun load-logical-pathname-translations (host)
+  (declare (type string host))
+  (multiple-value-bind (ignore found)
+      (gethash (canonicalize-logical-hostname host)
+               *logical-pathname-translations*)
+    (declare (ignore ignore))
+    (unless found
+      (error "The logical host ~S was not found." host))))
+
+(defun logical-pathname (pathspec)
+  (typecase pathspec
+    (logical-pathname pathspec)
+    (string
+     (%make-logical-pathname pathspec))
+    (stream
+     (let ((result (pathname pathspec)))
+       (if (typep result 'logical-pathname)
+           result
+           (error 'simple-type-error
+                  :datum result
+                  :expected-type 'logical-pathname))))
+    (t
+     (error 'type-error
+            :datum pathspec
+            :expected-type '(or logical-pathname string stream)))))
+
+(defun parse-namestring (thing
+                         &optional host default-pathname
+                         &key (start 0) end junk-allowed)
+  (declare (ignore host default-pathname junk-allowed)) ; FIXME
+  (typecase thing
+    (stream
+     (values (pathname thing) start))
+    (pathname
+     (values thing start))
+    (string
+     (unless end
+       (setf end (length thing)))
+     (values (pathname (subseq thing start end))
+             end))
+    (t
+     (error 'type-error
+            :format-control "~S cannot be converted to a pathname."
+            :format-arguments (list thing)))))

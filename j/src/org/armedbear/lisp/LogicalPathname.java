@@ -1,8 +1,8 @@
 /*
  * LogicalPathname.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: LogicalPathname.java,v 1.7 2005-05-06 20:13:25 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: LogicalPathname.java,v 1.8 2005-09-08 16:03:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,11 +27,57 @@ public final class LogicalPathname extends Pathname
 {
     private static final HashMap map = new HashMap();
 
-    private LogicalPathname()
+    public LogicalPathname(String host, String rest) throws ConditionThrowable
     {
-        // "The device component of a logical pathname is always :unspecific;
-        // no other component of a logical pathname can be :unspecific."
+        this.host = new SimpleString(host);
+
+        // "The device component of a logical pathname is always :UNSPECIFIC;
+        // no other component of a logical pathname can be :UNSPECIFIC."
         device = Keyword.UNSPECIFIC;
+
+        int semi = rest.lastIndexOf(';');
+        if (semi >= 0) {
+            // FIXME directory
+            rest = rest.substring(semi + 1);
+        }
+
+        int dot = rest.indexOf('.');
+        if (dot >= 0) {
+            String n = rest.substring(0, dot);
+            if (n.equals("*"))
+                name = Keyword.WILD;
+            else
+                name = new SimpleString(n.toUpperCase());
+            rest = rest.substring(dot + 1);
+            dot = rest.indexOf('.');
+            if (dot >= 0) {
+                String t = rest.substring(0, dot);
+                if (t.equals("*"))
+                    type = Keyword.WILD;
+                else
+                    type = new SimpleString(t.toUpperCase());
+                // What's left is the version.
+                String v = rest.substring(dot + 1);
+                if (v.equals("*"))
+                    version = Keyword.WILD;
+                else if (v.equals("NEWEST") || v.equals("newest"))
+                    version = Keyword.NEWEST;
+                else
+                    version = PACKAGE_CL.intern("PARSE-INTEGER").execute(new SimpleString(v));
+            } else {
+                String t = rest;
+                if (t.equals("*"))
+                    type = Keyword.WILD;
+                else
+                    type = new SimpleString(t.toUpperCase());
+            }
+        } else {
+            String n = rest;
+            if (n.equals("*"))
+                name = Keyword.WILD;
+            else
+                name = new SimpleString(n.toUpperCase());
+        }
     }
 
     public LispObject typeOf()
@@ -53,68 +99,56 @@ public final class LogicalPathname extends Pathname
         return super.typep(type);
     }
 
-    // ### %set-logical-pathname-translations
-    // %set-logical-pathname-translations host new-translations => newval
-    private static final Primitive _SET_LOGICAL_PATHNAME_TRANSLATIONS =
-        new Primitive("%set-logical-pathname-translations", PACKAGE_SYS, false,
-                       "host new-translations")
+    public String writeToString() throws ConditionThrowable
     {
-        public LispObject execute(LispObject first, LispObject second)
+        final LispThread thread = LispThread.currentThread();
+        boolean printReadably = (_PRINT_READABLY_.symbolValue(thread) != NIL);
+        boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
+        FastStringBuffer sb = new FastStringBuffer();
+        if (printReadably || printEscape)
+            sb.append("#P\"");
+        sb.append(host.getStringValue());
+        sb.append(':');
+        // FIXME directory
+        sb.append(name.getStringValue());
+        if (type != NIL) {
+            sb.append('.');
+            if (type == Keyword.WILD)
+                sb.append('*');
+            else
+                sb.append(type.getStringValue());
+        }
+        if (version.integerp()) {
+            sb.append('.');
+            int base = Fixnum.getValue(_PRINT_BASE_.symbolValue(thread));
+            if (version instanceof Fixnum)
+                sb.append(Integer.toString(((Fixnum)version).value, base).toUpperCase());
+            else if (version instanceof Bignum)
+                sb.append(((Bignum)version).value.toString(base).toUpperCase());
+        } else if (version == Keyword.WILD) {
+            sb.append('*');
+        }
+        if (printReadably || printEscape)
+            sb.append('"');
+        return sb.toString();
+    }
+
+    // ### %make-logical-pathname namestring => logical-pathname
+    private static final Primitive _MAKE_LOGICAL_PATHNAME =
+        new Primitive("%make-logical-pathname", PACKAGE_SYS, true,
+                      "namestring")
+    {
+        public LispObject execute(LispObject arg)
             throws ConditionThrowable
         {
-            String host = first.getStringValue().toUpperCase();
-            map.put(host, NIL); // FIXME
-            return NIL;
-        }
-    };
-
-    // ### logical-pathname-translations host => translations
-    private static final Primitive LOGICAL_PATHNAME_TRANSLATIONS =
-        new Primitive("logical-pathname-translations", "host")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            return NIL;
-        }
-    };
-
-    // ### load-logical-pathname-translations host => just-loaded
-    private static final Primitive LOAD_LOGICAL_PATHNAME_TRANSLATIONS =
-        new Primitive("load-logical-pathname-translations", "host")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            String host = arg.getStringValue().toUpperCase();
-            if (map.get(host) != null)
-                return NIL;
-            return signal(new LispError("LOAD-LOGICAL-PATHNAME-TRANSLATIONS is not implemented."));
-        }
-    };
-
-    // ### logical-pathname pathspec => logical-pathname
-    private static final Primitive LOGICAL_PATHNAME =
-        new Primitive("logical-pathname", "pathspec")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            if (arg instanceof LogicalPathname)
-                return arg;
-            if (arg instanceof AbstractString) {
-                String s = arg.getStringValue();
-                int index = s.indexOf(':');
-                if (index >= 0) {
-                    String host = s.substring(0, index).toUpperCase();
-                    LogicalPathname p = new LogicalPathname();
-                    p.host = new SimpleString(host);
-                    return p;
-                }
-                return NIL;
+            // Check for a logical pathname host.
+            String s = arg.getStringValue();
+            String h = getHostString(s);
+            if (h != null && Pathname.LOGICAL_PATHNAME_TRANSLATIONS.get(new SimpleString(h)) != null) {
+                // A defined logical pathname host.
+                return new LogicalPathname(h, s.substring(s.indexOf(':') + 1));
             }
-            if (arg instanceof Stream)
-                return NIL;
-            return signal(new TypeError(arg,
-                                        list4(Symbol.OR, Symbol.LOGICAL_PATHNAME,
-                                              Symbol.STRING, Symbol.STREAM)));
+            return signal(new TypeError("Logical namestring does not specify a host: \"" + s + '"'));
         }
     };
 }

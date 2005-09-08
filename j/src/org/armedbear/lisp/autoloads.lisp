@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.193 2005-07-27 02:33:09 piso Exp $
+;;; $Id: autoloads.lisp,v 1.194 2005-09-08 16:09:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -70,9 +70,6 @@
 (autoload '(count count-if count-if-not) "count")
 (autoload '(mismatch search))
 (autoload 'make-string)
-(autoload '(pathname-host pathname-device pathname-directory pathname-name
-            pathname-type wild-pathname-p translate-pathname)
-          "pathnames")
 (autoload 'directory "directory")
 (autoload '(signum round ffloor fceiling fround rationalize gcd isqrt
             float-precision decode-float conjugate phase)
@@ -154,8 +151,12 @@
 
 (autoload '(write-byte read-byte) "byte-io")
 (autoload-macro 'with-open-file)
-(autoload 'translate-logical-pathname)
-(autoload 'parse-namestring)
+(autoload '(pathname-host pathname-device pathname-directory pathname-name
+            pathname-type wild-pathname-p translate-pathname
+            logical-pathname-translations translate-logical-pathname
+            load-logical-pathname-translations logical-pathname
+            parse-namestring)
+          "pathnames")
 (autoload 'make-string-output-stream)
 (autoload 'find-all-symbols)
 (autoload 'dribble)
