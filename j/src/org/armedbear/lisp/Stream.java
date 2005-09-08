@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.135 2005-08-02 18:46:25 piso Exp $
+ * $Id: Stream.java,v 1.136 2005-09-08 23:30:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -364,7 +364,7 @@ public class Stream extends LispObject
     {
         LispObject obj = read(true, NIL, false);
         if (obj instanceof AbstractString)
-            return new Pathname(obj.getStringValue());
+            return Pathname.parseNamestring((AbstractString)obj);
         if (obj.listp())
             return Pathname.makePathname(obj);
         return signal(new TypeError("#p requires a string or list argument."));
@@ -374,7 +374,7 @@ public class Stream extends LispObject
     {
         LispObject obj = faslRead(true, NIL, false);
         if (obj instanceof AbstractString)
-            return new Pathname(obj.getStringValue());
+            return Pathname.parseNamestring((AbstractString)obj);
         if (obj.listp())
             return Pathname.makePathname(obj);
         return signal(new TypeError("#p requires a string or list argument."));
