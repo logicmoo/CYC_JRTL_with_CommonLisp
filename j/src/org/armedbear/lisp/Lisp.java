@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.390 2005-09-08 18:29:40 piso Exp $
+ * $Id: Lisp.java,v 1.391 2005-09-09 16:25:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -885,7 +885,7 @@ public abstract class Lisp
                                 int i = zipFileName.indexOf("%20");
                                 if (i >= 0) {
                                     int begin = 0;
-                                    StringBuffer sb = new StringBuffer();
+                                    FastStringBuffer sb = new FastStringBuffer();
                                     while (i >= 0) {
                                         sb.append(zipFileName.substring(begin, i));
                                         sb.append(' ');
