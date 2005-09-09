@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.10 2005-09-08 16:05:46 piso Exp $
+;;; $Id: pathnames.lisp,v 1.11 2005-09-09 02:40:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,9 +37,55 @@
 (defun wild-pathname-p (pathname &optional field-key)
   (%wild-pathname-p pathname field-key))
 
-(defun translate-pathname (&rest args)
-  (declare (ignore args)) ; FIXME
-  (error "TRANSLATE-PATHNAME is not implemented."))
+(defun wild-p (component)
+  (or (eq component :wild)
+      (and (stringp component)
+           (position #\* component))))
+
+(defun translate-component (source from to)
+  (cond ((or (eq to :wild) (null to))
+         ;; "If the piece in TO-WILDCARD is :WILD or NIL, the piece in source
+         ;; is copied into the result."
+         source)
+        ((and to (not (wild-p to)))
+        ;; "If the piece in TO-WILDCARD is present and not wild, it is copied
+        ;; into the result."
+         to)
+        (t
+         ;; "Otherwise, the piece in TO-WILDCARD might be a complex wildcard
+         ;; such as "foo*bar" and the piece in FROM-WILDCARD should be wild;
+         ;; the portion of the piece in SOURCE that matches the wildcard
+         ;; portion of the piece in FROM-WILDCARD replaces the wildcard portion
+         ;; of the piece in TO-WILDCARD and the value produced is used in the
+         ;; result."
+         ;; FIXME
+         (error "Unsupported TO-WILDCARD pattern: ~S" to))))
+
+;; "The resulting pathname is TO-WILDCARD with each wildcard or missing field
+;; replaced by a portion of SOURCE."
+(defun translate-pathname (source from-wildcard to-wildcard &key)
+  (let ((source (pathname source))
+        (from   (pathname from-wildcard))
+        (to     (pathname to-wildcard)))
+    (make-pathname :host     (or (pathname-host to)
+                                 (pathname-host source))
+                   :device   (translate-component (pathname-device source)
+                                                  (pathname-device from)
+                                                  (pathname-device to))
+                   ;; FIXME directory
+                   :name     (translate-component (pathname-name source)
+                                                  (pathname-name from)
+                                                  (pathname-name to))
+                   :type     (translate-component (pathname-type source)
+                                                  (pathname-type from)
+                                                  (pathname-type to))
+                   :version  (if (null (pathname-host from))
+                                 (if (eq (pathname-version to) :wild)
+                                     (pathname-version from)
+                                     (pathname-version to))
+                                 (translate-component (pathname-version source)
+                                                      (pathname-version from)
+                                                      (pathname-version to))))))
 
 (defun canonicalize-logical-hostname (host)
   (string-upcase host))
