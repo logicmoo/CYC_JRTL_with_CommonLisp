@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.10 2005-09-08 23:31:28 piso Exp $
+ * $Id: LogicalPathname.java,v 1.11 2005-09-09 19:36:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,28 +201,6 @@ public final class LogicalPathname extends Pathname
         if (printReadably || printEscape)
             sb.append('"');
         return sb.toString();
-    }
-
-    // ""Missing components of wildcard default to :WILD."
-    protected boolean matches(Pathname wildcard) throws ConditionThrowable
-    {
-        if (wildcard.host != Keyword.WILD && wildcard.name != NIL) {
-            if (!host.equalp(wildcard.host))
-                return false;
-        }
-        if (wildcard.name != Keyword.WILD && wildcard.name != NIL) {
-            if (!name.equalp(wildcard.name))
-                return false;
-        }
-        if (wildcard.directory != Keyword.WILD && wildcard.directory != NIL) {
-            if (!directory.equalp(wildcard.directory))
-                return false;
-        }
-        if (wildcard.type != Keyword.WILD && wildcard.type != NIL) {
-            if (!type.equalp(wildcard.type))
-                return false;
-        }
-        return true;
     }
 
     // ### %make-logical-pathname namestring => logical-pathname

@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.84 2005-09-08 23:31:00 piso Exp $
+ * $Id: Pathname.java,v 1.85 2005-09-09 19:36:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -769,57 +769,6 @@ public class Pathname extends LispObject
             }
         }
     };
-
-    // ### pathname-match-p pathname wildcard => generalized-boolean
-    private static final Primitive PATHNAME_MATCH_P =
-        new Primitive("pathname-match-p", "pathname wildcard")
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            Pathname pathname = coerceToPathname(first);
-            Pathname wildcard = coerceToPathname(second);
-            return pathname.matches(wildcard) ? T : NIL;
-        }
-    };
-
-    // ""Missing components of wildcard default to :WILD."
-    protected boolean matches(Pathname wildcard) throws ConditionThrowable
-    {
-        if (Utilities.isPlatformWindows()) {
-            if (wildcard.device != Keyword.WILD && wildcard.device != NIL) {
-                if (!device.equalp(wildcard.device))
-                    return false;
-            }
-            if (wildcard.name != Keyword.WILD && wildcard.name != NIL) {
-                if (!name.equalp(wildcard.name))
-                    return false;
-            }
-            if (wildcard.directory != Keyword.WILD && wildcard.directory != NIL) {
-                if (!directory.equalp(wildcard.directory))
-                    return false;
-            }
-            if (wildcard.type != Keyword.WILD && wildcard.type != NIL) {
-                if (!type.equalp(wildcard.type))
-                    return false;
-            }
-        } else {
-            // Unix.
-            if (wildcard.name != Keyword.WILD && wildcard.name != NIL) {
-                if (!name.equal(wildcard.name))
-                    return false;
-            }
-            if (wildcard.directory != Keyword.WILD && wildcard.directory != NIL) {
-                if (!directory.equal(wildcard.directory))
-                    return false;
-            }
-            if (wildcard.type != Keyword.WILD && wildcard.type != NIL) {
-                if (!type.equal(wildcard.type))
-                    return false;
-            }
-        }
-        return true;
-    }
 
     // ### list-directory
     private static final Primitive LIST_DIRECTORY =

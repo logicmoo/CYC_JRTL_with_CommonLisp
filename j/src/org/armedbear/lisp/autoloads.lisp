@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.194 2005-09-08 16:09:05 piso Exp $
+;;; $Id: autoloads.lisp,v 1.195 2005-09-09 19:37:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,7 +152,7 @@
 (autoload '(write-byte read-byte) "byte-io")
 (autoload-macro 'with-open-file)
 (autoload '(pathname-host pathname-device pathname-directory pathname-name
-            pathname-type wild-pathname-p translate-pathname
+            pathname-type wild-pathname-p pathname-match-p translate-pathname
             logical-pathname-translations translate-logical-pathname
             load-logical-pathname-translations logical-pathname
             parse-namestring)
