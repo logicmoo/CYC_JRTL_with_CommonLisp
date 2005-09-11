@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.12 2005-09-09 19:36:55 piso Exp $
+;;; $Id: pathnames.lisp,v 1.13 2005-09-11 20:51:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -49,16 +49,18 @@
 
 (defun directory-match-components (thing wild ignore-case)
   (loop
+    (cond ((endp thing)
+           (return (endp wild)))
+          ((endp wild)
+           (return nil)))
     (let ((x (car thing))
           (y (car wild)))
+      (when (eq y :wild-inferiors)
+        (return t))
       (unless (component-match-p x y ignore-case)
         (return nil))
       (setf thing (cdr thing)
-            wild  (cdr wild))
-      (cond ((endp thing)
-             (return (endp wild)))
-            ((endp wild)
-             (return nil))))))
+            wild  (cdr wild)))))
 
 (defun directory-match-p (thing wild ignore-case)
   (cond ((eq wild :wild)
@@ -70,7 +72,9 @@
         ((equal thing wild)
          t)
         ((and (consp thing) (consp wild))
-         (directory-match-components thing wild ignore-case))
+         (if (eq (%car thing) (%car wild))
+             (directory-match-components (%cdr thing) (%cdr wild) ignore-case)
+             nil))
         (t
          nil)))
 
@@ -125,6 +129,13 @@
          ;; FIXME
          (error "Unsupported TO-WILDCARD pattern: ~S" to))))
 
+(defun translate-directory (source from to)
+  ;; FIXME The IGNORE-CASE argument to DIRECTORY-MATCH-P should not be nil on
+  ;; Windows or if the source pathname is a logical pathname.
+  (unless (directory-match-p source from nil)
+    (error "~S and ~S do not match." source from))
+  (translate-component source from to))
+
 ;; "The resulting pathname is TO-WILDCARD with each wildcard or missing field
 ;; replaced by a portion of SOURCE."
 (defun translate-pathname (source from-wildcard to-wildcard &key)
@@ -136,9 +147,9 @@
                    :device    (translate-component (pathname-device source)
                                                    (pathname-device from)
                                                    (pathname-device to))
-                   :directory (translate-component (pathname-device source)
-                                                   (pathname-device from)
-                                                   (pathname-device to))
+                   :directory (translate-directory (pathname-directory source)
+                                                   (pathname-directory from)
+                                                   (pathname-directory to))
                    :name      (translate-component (pathname-name source)
                                                    (pathname-name from)
                                                    (pathname-name to))
