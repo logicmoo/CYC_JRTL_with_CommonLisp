@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.32 2005-09-12 12:31:42 piso Exp $
+ * $Id: MathFunctions.java,v 1.33 2005-09-12 17:17:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -212,9 +212,9 @@ public final class MathFunctions extends Lisp
     private static LispObject atan(LispObject arg) throws ConditionThrowable
     {
         if (arg instanceof Complex) {
-            LispObject im = ((Complex)arg).getImaginaryPart();
+            LispObject im = ((Complex)arg).imagpart;
             if (im.zerop())
-                return Complex.getInstance(atan(((Complex)arg).getRealPart()),
+                return Complex.getInstance(atan(((Complex)arg).realpart),
                                            im);
             LispObject result = arg.multiplyBy(arg);
             result = result.add(Fixnum.ONE);
@@ -600,21 +600,23 @@ public final class MathFunctions extends Lisp
     {
         if (obj instanceof DoubleFloat) {
             if (obj.minusp())
-                return Complex.getInstance(new DoubleFloat(0),
-                                           sqrt(Fixnum.ZERO.subtract(obj)));
+                return Complex.getInstance(new DoubleFloat(0), sqrt(obj.negate()));
             return new DoubleFloat(Math.sqrt(DoubleFloat.coerceToFloat(obj).value));
         }
         if (obj.realp()) {
             if (obj.minusp())
-                return Complex.getInstance(new SingleFloat(0),
-                                           sqrt(Fixnum.ZERO.subtract(obj)));
+                return Complex.getInstance(new SingleFloat(0), sqrt(obj.negate()));
             return new SingleFloat((float)Math.sqrt(SingleFloat.coerceToFloat(obj).value));
         }
         if (obj instanceof Complex) {
             LispObject imagpart = ((Complex)obj).imagpart;
-            if (imagpart.zerop())
-                return Complex.getInstance(sqrt(((Complex)obj).realpart),
-                                           imagpart);
+            if (imagpart.zerop()) {
+                LispObject realpart = ((Complex)obj).realpart;
+                if (realpart.minusp())
+                    return Complex.getInstance(imagpart, sqrt(realpart.negate()));
+                else
+                    return Complex.getInstance(sqrt(realpart), imagpart);
+            }
             return exp(log(obj).divideBy(Fixnum.TWO));
         }
         return signalTypeError(obj, Symbol.NUMBER);
