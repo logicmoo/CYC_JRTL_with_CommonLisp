@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Complex.java,v 1.35 2005-08-24 17:26:32 piso Exp $
+ * $Id: Complex.java,v 1.36 2005-09-12 10:52:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,8 @@ import java.lang.reflect.Method;
 
 public final class Complex extends LispObject
 {
-    private final LispObject realpart;
-    private final LispObject imagpart;
+    public final LispObject realpart;
+    public final LispObject imagpart;
 
     private Complex(LispObject realpart, LispObject imagpart)
     {
