@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.29 2005-09-12 01:15:13 piso Exp $
+ * $Id: MathFunctions.java,v 1.30 2005-09-12 01:53:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -755,6 +755,18 @@ public final class MathFunctions extends Lisp
                 } else if (pow < 0) {
                     for (int i = -pow; i-- > 0;)
                         result = result.divideBy(base);
+                }
+                if (TRAP_OVERFLOW) {
+                    if (result instanceof SingleFloat)
+                        if (Float.isInfinite(((SingleFloat)result).value))
+                            return signal(new FloatingPointOverflow(NIL));
+                    if (result instanceof DoubleFloat)
+                        if (Double.isInfinite(((DoubleFloat)result).value))
+                            return signal(new FloatingPointOverflow(NIL));
+                }
+                if (TRAP_UNDERFLOW) {
+                    if (result.zerop())
+                        return signal(new FloatingPointUnderflow(NIL));
                 }
                 return result;
             }
