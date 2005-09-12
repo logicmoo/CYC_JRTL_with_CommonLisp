@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Keyword.java,v 1.41 2005-03-19 14:29:34 piso Exp $
+ * $Id: Keyword.java,v 1.42 2005-09-12 01:12:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,6 +85,7 @@ public final class Keyword extends Lisp
         OPERANDS            = internKeyword("OPERANDS"),
         OPERATION           = internKeyword("OPERATION"),
         OUTPUT              = internKeyword("OUTPUT"),
+        OVERFLOW            = internKeyword("OVERFLOW"),
         OVERWRITE           = internKeyword("OVERWRITE"),
         PACKAGE             = internKeyword("PACKAGE"),
         PATHNAME            = internKeyword("PATHNAME"),
@@ -99,7 +100,9 @@ public final class Keyword extends Lisp
         SUPERSEDE           = internKeyword("SUPERSEDE"),
         TIME                = internKeyword("TIME"),
         TOP_LEVEL           = internKeyword("TOP-LEVEL"),
+        TRAPS               = internKeyword("TRAPS"),
         TYPE                = internKeyword("TYPE"),
+        UNDERFLOW           = internKeyword("UNDERFLOW"),
         UNIX                = internKeyword("UNIX"),
         UNSPECIFIC          = internKeyword("UNSPECIFIC"),
         UP                  = internKeyword("UP"),
