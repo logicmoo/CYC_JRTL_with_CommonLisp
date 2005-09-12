@@ -2,7 +2,7 @@
  * FloatFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: FloatFunctions.java,v 1.7 2005-08-23 20:51:24 piso Exp $
+ * $Id: FloatFunctions.java,v 1.8 2005-09-12 01:13:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,56 @@ package org.armedbear.lisp;
 
 public final class FloatFunctions extends Lisp
 {
+    // ### set-floating-point-modes &key traps => <no values>
+    private static final Primitive SET_FLOATING_POINT_MODES =
+        new Primitive("set-floating-point-modes", PACKAGE_EXT, true,
+                      "&key traps")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length % 2 != 0)
+                signal(new ProgramError("Odd number of keyword arguments."));
+            for (int i = 0; i < args.length; i += 2) {
+                LispObject key = checkSymbol(args[i]);
+                LispObject value = args[i+1];
+                if (key == Keyword.TRAPS) {
+                    boolean trap_overflow  = false;
+                    boolean trap_underflow = false;
+                    while (value != NIL) {
+                        LispObject car = value.car();
+                        if (car == Keyword.OVERFLOW)
+                            trap_overflow = true;
+                        else if (car == Keyword.UNDERFLOW)
+                            trap_underflow = true;
+                        else
+                            signal(new LispError("Unsupported floating point trap: " +
+                                                 car.writeToString()));
+                        value = value.cdr();
+                    }
+                    TRAP_OVERFLOW  = trap_overflow;
+                    TRAP_UNDERFLOW = trap_underflow;
+                } else
+                    signal(new LispError("Unrecognized keyword: " + key.writeToString()));
+            }
+            return LispThread.currentThread().nothing();
+        }
+    };
+
+    // ### get-floating-point-modes => modes
+    private static final Primitive GET_FLOATING_POINT_MODES =
+        new Primitive("get-floating-point-modes", PACKAGE_EXT, true, "")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            LispObject traps = NIL;
+            if (TRAP_UNDERFLOW)
+                traps = traps.push(Keyword.UNDERFLOW);
+            if (TRAP_OVERFLOW)
+                traps = traps.push(Keyword.OVERFLOW);
+            return list2(Keyword.TRAPS, traps);
+        }
+    };
+
     // ### integer-decode-float
     // integer-decode-float float => significand, exponent, integer-sign
     private static final Primitive INTEGER_DECODE_FLOAT =
