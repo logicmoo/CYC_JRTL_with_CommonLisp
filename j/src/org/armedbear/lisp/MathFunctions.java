@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.28 2005-08-25 05:59:39 piso Exp $
+ * $Id: MathFunctions.java,v 1.29 2005-09-12 01:15:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -563,10 +563,23 @@ public final class MathFunctions extends Lisp
 
     private static LispObject exp(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof DoubleFloat)
-            return new DoubleFloat(Math.pow(Math.E, ((DoubleFloat)arg).value));
-        if (arg.realp())
-            return new SingleFloat((float)Math.pow(Math.E, SingleFloat.coerceToFloat(arg).value));
+        if (arg.realp()) {
+            if (arg instanceof DoubleFloat) {
+                double d = Math.pow(Math.E, ((DoubleFloat)arg).value);
+                if (TRAP_OVERFLOW && Double.isInfinite(d))
+                    return signal(new FloatingPointOverflow(NIL));
+                if (d == 0 && TRAP_UNDERFLOW)
+                    return signal(new FloatingPointUnderflow(NIL));
+                return new DoubleFloat(d);
+            } else {
+                float f = (float) Math.pow(Math.E, SingleFloat.coerceToFloat(arg).value);
+                if (TRAP_OVERFLOW && Float.isInfinite(f))
+                    return signal(new FloatingPointOverflow(NIL));
+                if (f == 0 && TRAP_UNDERFLOW)
+                    return signal(new FloatingPointUnderflow(NIL));
+                return new SingleFloat(f);
+            }
+        }
         if (arg instanceof Complex) {
             Complex c = (Complex) arg;
             return exp(c.getRealPart()).multiplyBy(cis(c.getImaginaryPart()));
