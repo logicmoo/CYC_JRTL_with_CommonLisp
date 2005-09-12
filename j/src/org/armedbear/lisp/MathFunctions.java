@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.30 2005-09-12 01:53:18 piso Exp $
+ * $Id: MathFunctions.java,v 1.31 2005-09-12 10:51:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -610,8 +610,13 @@ public final class MathFunctions extends Lisp
                                            sqrt(Fixnum.ZERO.subtract(obj)));
             return new SingleFloat((float)Math.sqrt(SingleFloat.coerceToFloat(obj).value));
         }
-        if (obj instanceof Complex)
+        if (obj instanceof Complex) {
+            LispObject imagpart = ((Complex)obj).imagpart;
+            if (imagpart.zerop())
+                return Complex.getInstance(sqrt(((Complex)obj).realpart),
+                                           imagpart);
             return exp(log(obj).divideBy(Fixnum.TWO));
+        }
         return signalTypeError(obj, Symbol.NUMBER);
     }
 
