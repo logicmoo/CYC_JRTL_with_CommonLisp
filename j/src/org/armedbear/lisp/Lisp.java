@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.391 2005-09-09 16:25:16 piso Exp $
+ * $Id: Lisp.java,v 1.392 2005-09-12 01:12:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2357,6 +2357,10 @@ public abstract class Lisp
     // ### *traced-names*
     public static final Symbol _TRACED_NAMES_ =
         exportSpecial("*TRACED-NAMES*", PACKAGE_SYS, NIL);
+
+    // Floating point traps.
+    protected static boolean TRAP_OVERFLOW  = true;
+    protected static boolean TRAP_UNDERFLOW = true;
 
     private static final void loadClass(String className)
     {
