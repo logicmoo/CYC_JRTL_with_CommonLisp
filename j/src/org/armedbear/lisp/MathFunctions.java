@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.31 2005-09-12 10:51:40 piso Exp $
+ * $Id: MathFunctions.java,v 1.32 2005-09-12 12:31:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -728,10 +728,10 @@ public final class MathFunctions extends Lisp
                     if (base instanceof DoubleFloat)
                         return DoubleFloat.ONE;
                     if (base instanceof Complex) {
-                        if (((Complex)base).getRealPart() instanceof SingleFloat)
+                        if (((Complex)base).realpart instanceof SingleFloat)
                             return Complex.getInstance(SingleFloat.ONE,
                                                        SingleFloat.ZERO);
-                        if (((Complex)base).getRealPart() instanceof DoubleFloat)
+                        if (((Complex)base).realpart instanceof DoubleFloat)
                             return Complex.getInstance(DoubleFloat.ONE,
                                                        DoubleFloat.ZERO);
                     }
@@ -752,6 +752,7 @@ public final class MathFunctions extends Lisp
                 else if (base instanceof DoubleFloat)
                     result = DoubleFloat.ONE;
                 else
+                    // base is complex
                     result = Fixnum.ONE;
                 int pow = ((Fixnum)power).value;
                 if (pow > 0) {
@@ -776,7 +777,7 @@ public final class MathFunctions extends Lisp
                 return result;
             }
             if (base instanceof Complex || power instanceof Complex) {
-                if (base.zerop() && ((Complex)power).getRealPart().plusp()) {
+                if (base.zerop() && ((Complex)power).realpart.plusp()) {
                     return base.multiplyBy(power);
                 }
                 return exp(power.multiplyBy(log(base)));
