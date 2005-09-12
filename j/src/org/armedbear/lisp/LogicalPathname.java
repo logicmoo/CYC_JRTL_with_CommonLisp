@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.11 2005-09-09 19:36:38 piso Exp $
+ * $Id: LogicalPathname.java,v 1.12 2005-09-12 23:30:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,6 +156,8 @@ public final class LogicalPathname extends Pathname
                     sb.append(part.getStringValue());
                 else if (part == Keyword.WILD)
                     sb.append('*');
+                else if (part == Keyword.WILD_INFERIORS)
+                    sb.append("**");
                 else if (part == Keyword.UP)
                     sb.append("..");
                 else
@@ -180,7 +182,12 @@ public final class LogicalPathname extends Pathname
         sb.append(':');
         if (directory != NIL)
             sb.append(getDirectoryNamestring());
-        sb.append(name.getStringValue());
+        if (name != NIL) {
+            if (name == Keyword.WILD)
+                sb.append('*');
+            else
+                sb.append(name.getStringValue());
+        }
         if (type != NIL) {
             sb.append('.');
             if (type == Keyword.WILD)
@@ -196,7 +203,7 @@ public final class LogicalPathname extends Pathname
             else if (version instanceof Bignum)
                 sb.append(((Bignum)version).value.toString(base).toUpperCase());
         } else if (version == Keyword.WILD) {
-            sb.append('*');
+            sb.append(".*");
         }
         if (printReadably || printEscape)
             sb.append('"');

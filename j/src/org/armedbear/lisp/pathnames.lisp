@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.13 2005-09-11 20:51:20 piso Exp $
+;;; $Id: pathnames.lisp,v 1.14 2005-09-12 23:31:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -176,15 +176,33 @@
                  *logical-pathname-translations*)
         new-translations))
 
+(defun logical-host-p (host)
+  (multiple-value-bind (translations present)
+      (gethash (canonicalize-logical-hostname host)
+               *logical-pathname-translations*)
+    (declare (ignore translations))
+    present))
+
 (defsetf logical-pathname-translations %set-logical-pathname-translations)
 
 (defun translate-logical-pathname (pathname &key)
   (typecase pathname
     (logical-pathname
-     ;; FIXME
-     nil)
+     (let* ((host (pathname-host pathname))
+            (translations (logical-pathname-translations host)))
+       (dolist (translation translations
+                            (error 'file-error
+                                   :pathname pathname
+                                   :format-control "No translation for ~S"
+                                   :format-arguments (list pathname)))
+         (let ((from-wildcard (car translation))
+               (to-wildcard (cadr translation)))
+           (when (pathname-match-p pathname from-wildcard)
+             (return (translate-logical-pathname
+                      (translate-pathname pathname from-wildcard to-wildcard))))))))
     (pathname pathname)
-    (t (translate-logical-pathname (pathname pathname)))))
+    (t
+     (translate-logical-pathname (pathname pathname)))))
 
 (defun load-logical-pathname-translations (host)
   (declare (type string host))
@@ -215,7 +233,9 @@
 (defun parse-namestring (thing
                          &optional host default-pathname
                          &key (start 0) end junk-allowed)
-  (declare (ignore host default-pathname junk-allowed)) ; FIXME
+  (declare (ignore default-pathname junk-allowed)) ; FIXME
+  (when host
+    (setf host (canonicalize-logical-hostname host)))
   (typecase thing
     (stream
      (values (pathname thing) start))
@@ -224,7 +244,7 @@
     (string
      (unless end
        (setf end (length thing)))
-     (values (pathname (subseq thing start end))
+     (values (coerce-to-pathname thing host)
              end))
     (t
      (error 'type-error

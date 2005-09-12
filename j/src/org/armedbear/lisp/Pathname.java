@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.85 2005-09-09 19:36:31 piso Exp $
+ * $Id: Pathname.java,v 1.86 2005-09-12 23:30:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,6 +276,18 @@ public class Pathname extends LispObject
             else
                 Debug.assertTrue(false);
         }
+        if (this instanceof LogicalPathname) {
+            if (version.integerp()) {
+                sb.append('.');
+                int base = Fixnum.getValue(_PRINT_BASE_.symbolValue());
+                if (version instanceof Fixnum)
+                    sb.append(Integer.toString(((Fixnum)version).value, base).toUpperCase());
+                else if (version instanceof Bignum)
+                    sb.append(((Bignum)version).value.toString(base).toUpperCase());
+            } else if (version == Keyword.WILD) {
+                sb.append(".*");
+            }
+        }
         return namestring = sb.toString();
     }
 
@@ -320,6 +332,8 @@ public class Pathname extends LispObject
                     sb.append(part.getStringValue());
                 else if (part == Keyword.WILD)
                     sb.append('*');
+                else if (part == Keyword.WILD_INFERIORS)
+                    sb.append("**");
                 else if (part == Keyword.UP)
                     sb.append("..");
                 else
@@ -498,6 +512,33 @@ public class Pathname extends LispObject
         return new Pathname(s);
     }
 
+    public static Pathname parseNamestring(AbstractString namestring,
+                                           AbstractString host)
+        throws ConditionThrowable
+    {
+        // Look for a logical pathname host in the namestring.
+        String s = namestring.getStringValue();
+        String h = getHostString(s);
+        if (h != null) {
+            if (!h.equals(host.getStringValue())) {
+                signal(new LispError("Host in " + s +
+                                     " does not match requested host " +
+                                     host.getStringValue()));
+                // Not reached.
+                return null;
+            }
+            // Remove host prefix from namestring.
+            s = s.substring(s.indexOf(':') + 1);
+        }
+        if (LOGICAL_PATHNAME_TRANSLATIONS.get(host) != null) {
+            // A defined logical pathname host.
+            return new LogicalPathname(host.getStringValue(), s);
+        }
+        signal(new LispError(host.writeToString() + " is not defined as a logical pathname host."));
+        // Not reached.
+        return null;
+    }
+
     // "one or more uppercase letters, digits, and hyphens"
     protected static String getHostString(String s)
     {
@@ -635,6 +676,37 @@ public class Pathname extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPathname(arg);
+        }
+    };
+
+    // ### coerce-to-pathname thing &optional host => pathname
+    private static final Primitive COERCE_TO_PATHNAME =
+        new Primitive("coerce-to-pathname", PACKAGE_SYS, true,
+                      "thing &optional host")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return coerceToPathname(arg);
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (second == NIL)
+                return coerceToPathname(first);
+            // FIXME Support other types for first argument (and verify that
+            // hosts match).
+            if (first instanceof AbstractString) {
+                AbstractString namestring = (AbstractString) first;
+                final AbstractString host;
+                try {
+                    host = (AbstractString) second;
+                }
+                catch (ClassCastException e) {
+                    return signalTypeError(second, Symbol.STRING);
+                }
+                return parseNamestring(namestring, host);
+            }
+            return signal(new LispError("COERCE-TO-PATHNAME: unsupported case."));
         }
     };
 
