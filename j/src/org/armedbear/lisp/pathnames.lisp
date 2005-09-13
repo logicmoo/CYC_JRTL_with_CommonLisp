@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.16 2005-09-13 14:52:22 piso Exp $
+;;; $Id: pathnames.lisp,v 1.17 2005-09-13 17:21:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -71,6 +71,8 @@
          t)
         ((equal thing wild)
          t)
+        ((and (null thing) (equal wild '(:absolute :wild-inferiors)))
+         t)
         ((and (consp thing) (consp wild))
          (if (eq (%car thing) (%car wild))
              (directory-match-components (%cdr thing) (%cdr wild) ignore-case)
@@ -134,8 +136,7 @@
   ;; Windows or if the source pathname is a logical pathname.
   ;; FIXME We can canonicalize logical pathnames to upper case, so we only need
   ;; IGNORE-CASE for Windows.
-  (cond ((and (null source)
-              (null from))
+  (cond ((null source)
          to)
         (t
          (mapcar 'translate-component source from to))))
@@ -170,21 +171,20 @@
                                                        (pathname-version from)
                                                        (pathname-version to))))))
 
-(defun canonicalize-logical-hostname (host)
+(defun canonicalize-logical-host (host)
   (string-upcase host))
 
 (defun logical-pathname-translations (host)
-  (gethash-2op-1ret (canonicalize-logical-hostname host)
+  (gethash-2op-1ret (canonicalize-logical-host host)
                     *logical-pathname-translations*))
 
+(defun logical-host-p (canonical-host)
+  (multiple-value-bind (translations present)
+      (gethash canonical-host *logical-pathname-translations*)
+    (declare (ignore translations))
+    present))
+
 (defun canonicalize-logical-pathname-translations (translations host)
-;;   (mapcar (lambda (translation)
-;;             (destructuring-bind (from to) translation
-;;                                 (list (if (typep from 'logical-pathname)
-;;                                           from
-;;                                           (parse-namestring from host))
-;;                                       (pathname to))))
-;;           translation-list))
   (let (result)
     (dolist (translation translations (nreverse result))
       (let ((from (car translation))
@@ -196,17 +196,12 @@
               result)))))
 
 (defun %set-logical-pathname-translations (host translations)
-  (setf (gethash (canonicalize-logical-hostname host)
-                 *logical-pathname-translations*)
-;;         (canonicalize-logical-pathname-translations translations host)))
-        translations))
-
-(defun logical-host-p (host)
-  (multiple-value-bind (translations present)
-      (gethash (canonicalize-logical-hostname host)
-               *logical-pathname-translations*)
-    (declare (ignore translations))
-    present))
+  (setf host (canonicalize-logical-host host))
+  ;; Avoid undefined host error in CANONICALIZE-LOGICAL-PATHNAME-TRANSLATIONS.
+  (unless (logical-host-p host)
+    (setf (gethash host *logical-pathname-translations*) nil))
+  (setf (gethash host *logical-pathname-translations*)
+        (canonicalize-logical-pathname-translations translations host)))
 
 (defsetf logical-pathname-translations %set-logical-pathname-translations)
 
@@ -232,7 +227,7 @@
 (defun load-logical-pathname-translations (host)
   (declare (type string host))
   (multiple-value-bind (ignore found)
-      (gethash (canonicalize-logical-hostname host)
+      (gethash (canonicalize-logical-host host)
                *logical-pathname-translations*)
     (declare (ignore ignore))
     (unless found
@@ -260,7 +255,7 @@
                          &key (start 0) end junk-allowed)
   (declare (ignore default-pathname junk-allowed)) ; FIXME
   (when host
-    (setf host (canonicalize-logical-hostname host)))
+    (setf host (canonicalize-logical-host host)))
   (typecase thing
     (stream
      (values (pathname thing) start))
