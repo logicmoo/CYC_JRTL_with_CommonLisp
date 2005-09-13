@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.86 2005-09-12 23:30:03 piso Exp $
+ * $Id: Pathname.java,v 1.87 2005-09-13 00:09:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -254,8 +254,6 @@ public class Pathname extends LispObject
         }
         if (directory instanceof AbstractString)
             Debug.assertTrue(false);
-        if (!validateDirectory(directory, false))
-            return null;
         FastStringBuffer sb = new FastStringBuffer();
         if (host != NIL) {
             Debug.assertTrue(host instanceof AbstractString);
@@ -293,6 +291,7 @@ public class Pathname extends LispObject
 
     protected String getDirectoryNamestring() throws ConditionThrowable
     {
+        validateDirectory(true);
         FastStringBuffer sb = new FastStringBuffer();
         // "If a pathname is converted to a namestring, the symbols NIL and
         // :UNSPECIFIC cause the field to be treated as if it were empty. That
@@ -781,11 +780,10 @@ public class Pathname extends LispObject
         return p;
     }
 
-    private static final boolean validateDirectory(LispObject obj,
-                                                   boolean signalError)
+    private final boolean validateDirectory(boolean signalError)
         throws ConditionThrowable
     {
-        LispObject temp = obj;
+        LispObject temp = directory;
         while (temp != NIL) {
             LispObject first = temp.car();
             temp = temp.cdr();
@@ -798,7 +796,7 @@ public class Pathname extends LispObject
                         sb.append(" may not be followed immediately by ");
                         sb.append(second.writeToString());
                         sb.append('.');
-                        signal(new FileError(sb.toString()));
+                        signal(new FileError(sb.toString(), this));
                     }
                     return false;
                 }
