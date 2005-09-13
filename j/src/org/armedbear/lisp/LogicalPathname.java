@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.12 2005-09-12 23:30:28 piso Exp $
+ * $Id: LogicalPathname.java,v 1.13 2005-09-13 04:26:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,11 @@ public final class LogicalPathname extends Pathname
             String d = rest.substring(0, semi + 1);
             directory = parseDirectory(d);
             rest = rest.substring(semi + 1);
+        } else {
+            // "If a relative-directory-marker precedes the directories, the
+            // directory component parsed is as relative; otherwise, the
+            // directory component is parsed as absolute."
+            directory = new Cons(Keyword.ABSOLUTE);
         }
 
         int dot = rest.indexOf('.');

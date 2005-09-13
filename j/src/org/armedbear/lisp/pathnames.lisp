@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.14 2005-09-12 23:31:34 piso Exp $
+;;; $Id: pathnames.lisp,v 1.15 2005-09-13 04:27:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@
 (defun directory-match-components (thing wild ignore-case)
   (loop
     (cond ((endp thing)
-           (return (endp wild)))
+           (return (or (endp wild) (equal wild '(:wild-inferiors)))))
           ((endp wild)
            (return nil)))
     (let ((x (car thing))
@@ -132,6 +132,10 @@
 (defun translate-directory (source from to)
   ;; FIXME The IGNORE-CASE argument to DIRECTORY-MATCH-P should not be nil on
   ;; Windows or if the source pathname is a logical pathname.
+  ;; FIXME We can canonicalize logical pathnames to upper case, so we only need
+  ;; IGNORE-CASE for Windows.
+
+  ;; FIXME We already know they match, so we don't need this here.
   (unless (directory-match-p source from nil)
     (error "~S and ~S do not match." source from))
   (translate-component source from to))
@@ -139,6 +143,8 @@
 ;; "The resulting pathname is TO-WILDCARD with each wildcard or missing field
 ;; replaced by a portion of SOURCE."
 (defun translate-pathname (source from-wildcard to-wildcard &key)
+  (unless (pathname-match-p source from-wildcard)
+    (error "~S and ~S do not match." source from-wildcard))
   (let ((source (pathname source))
         (from   (pathname from-wildcard))
         (to     (pathname to-wildcard)))
@@ -171,10 +177,29 @@
   (gethash-2op-1ret (canonicalize-logical-hostname host)
                     *logical-pathname-translations*))
 
-(defun %set-logical-pathname-translations (host new-translations)
+(defun canonicalize-logical-pathname-translations (translations host)
+;;   (mapcar (lambda (translation)
+;;             (destructuring-bind (from to) translation
+;;                                 (list (if (typep from 'logical-pathname)
+;;                                           from
+;;                                           (parse-namestring from host))
+;;                                       (pathname to))))
+;;           translation-list))
+  (let (result)
+    (dolist (translation translations (nreverse result))
+      (let ((from (car translation))
+            (to (cadr translation)))
+        (push (list (if (typep from 'logical-pathname)
+                        from
+                        (parse-namestring from host))
+                    (pathname to))
+              result)))))
+
+(defun %set-logical-pathname-translations (host translations)
   (setf (gethash (canonicalize-logical-hostname host)
                  *logical-pathname-translations*)
-        new-translations))
+;;         (canonicalize-logical-pathname-translations translations host)))
+        translations))
 
 (defun logical-host-p (host)
   (multiple-value-bind (translations present)
