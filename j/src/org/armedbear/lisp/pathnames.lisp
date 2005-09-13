@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.15 2005-09-13 04:27:14 piso Exp $
+;;; $Id: pathnames.lisp,v 1.16 2005-09-13 14:52:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -134,11 +134,11 @@
   ;; Windows or if the source pathname is a logical pathname.
   ;; FIXME We can canonicalize logical pathnames to upper case, so we only need
   ;; IGNORE-CASE for Windows.
-
-  ;; FIXME We already know they match, so we don't need this here.
-  (unless (directory-match-p source from nil)
-    (error "~S and ~S do not match." source from))
-  (translate-component source from to))
+  (cond ((and (null source)
+              (null from))
+         to)
+        (t
+         (mapcar 'translate-component source from to))))
 
 ;; "The resulting pathname is TO-WILDCARD with each wildcard or missing field
 ;; replaced by a portion of SOURCE."
