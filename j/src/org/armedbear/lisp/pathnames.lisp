@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.17 2005-09-13 17:21:23 piso Exp $
+;;; $Id: pathnames.lisp,v 1.18 2005-09-13 21:36:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -112,11 +112,19 @@
       (and (stringp component)
            (position #\* component))))
 
-(defun translate-component (source from to)
+(defun casify (thing case)
+  (if (stringp thing)
+      (case case
+        (:upcase (string-upcase thing))
+        (:downcase (string-downcase thing))
+        (t thing))
+      thing))
+
+(defun translate-component (source from to &optional case)
   (cond ((or (eq to :wild) (null to))
          ;; "If the piece in TO-WILDCARD is :WILD or NIL, the piece in source
          ;; is copied into the result."
-         source)
+         (casify source case))
         ((and to (not (wild-p to)))
         ;; "If the piece in TO-WILDCARD is present and not wild, it is copied
         ;; into the result."
@@ -131,15 +139,19 @@
          ;; FIXME
          (error "Unsupported TO-WILDCARD pattern: ~S" to))))
 
-(defun translate-directory (source from to)
+(defun translate-directory (source from to case)
   ;; FIXME The IGNORE-CASE argument to DIRECTORY-MATCH-P should not be nil on
   ;; Windows or if the source pathname is a logical pathname.
   ;; FIXME We can canonicalize logical pathnames to upper case, so we only need
   ;; IGNORE-CASE for Windows.
   (cond ((null source)
          to)
+        ((equal source '(:absolute))
+         (remove :wild-inferiors to))
         (t
-         (mapcar 'translate-component source from to))))
+         (mapcar #'(lambda (source from to)
+                    (translate-component source from to case))
+                 source from to))))
 
 ;; "The resulting pathname is TO-WILDCARD with each wildcard or missing field
 ;; replaced by a portion of SOURCE."
@@ -148,21 +160,26 @@
     (error "~S and ~S do not match." source from-wildcard))
   (let ((source (pathname source))
         (from   (pathname from-wildcard))
-        (to     (pathname to-wildcard)))
-    (make-pathname :host      (or (pathname-host to)
-                                  (pathname-host source))
+        (to     (pathname to-wildcard))
+        (case   (and (typep source 'logical-pathname)
+                     (featurep :unix)
+                     :downcase)))
+    (make-pathname :host      (pathname-host to)
                    :device    (translate-component (pathname-device source)
                                                    (pathname-device from)
                                                    (pathname-device to))
                    :directory (translate-directory (pathname-directory source)
                                                    (pathname-directory from)
-                                                   (pathname-directory to))
+                                                   (pathname-directory to)
+                                                   case)
                    :name      (translate-component (pathname-name source)
                                                    (pathname-name from)
-                                                   (pathname-name to))
+                                                   (pathname-name to)
+                                                   case)
                    :type      (translate-component (pathname-type source)
                                                    (pathname-type from)
-                                                   (pathname-type to))
+                                                   (pathname-type to)
+                                                   case)
                    :version   (if (null (pathname-host from))
                                   (if (eq (pathname-version to) :wild)
                                       (pathname-version from)
