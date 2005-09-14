@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: open.lisp,v 1.25 2005-06-17 15:43:16 piso Exp $
+;;; $Id: open.lisp,v 1.26 2005-09-14 13:42:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -103,6 +103,8 @@
                        (t
                         (upgraded-element-type element-type))))
   (let ((pathname (merge-pathnames filename)))
+    (when (typep pathname 'logical-pathname)
+      (setf pathname (translate-logical-pathname pathname)))
     (when (memq direction '(:output :io))
       (unless if-exists-given
         (setf if-exists
