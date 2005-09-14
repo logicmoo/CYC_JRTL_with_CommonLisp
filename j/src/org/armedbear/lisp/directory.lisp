@@ -1,7 +1,7 @@
 ;;; directory.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: directory.lisp,v 1.3 2005-09-08 16:14:55 piso Exp $
+;;; $Id: directory.lisp,v 1.4 2005-09-14 19:59:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,9 +20,9 @@
 (in-package #:system)
 
 (defun directory (pathname &key)
-  (when (typep pathname 'logical-pathname)
-    (error "Bad place for a logical pathname."))
   (let ((merged-pathname (merge-pathnames pathname)))
+    (when (typep merged-pathname 'logical-pathname)
+      (setf merged-pathname (translate-logical-pathname merged-pathname)))
     (if (wild-pathname-p merged-pathname)
         (let ((namestring (directory-namestring merged-pathname)))
           (when (and namestring (length namestring))

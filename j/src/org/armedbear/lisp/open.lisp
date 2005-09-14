@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: open.lisp,v 1.26 2005-09-14 13:42:06 piso Exp $
+;;; $Id: open.lisp,v 1.27 2005-09-14 19:58:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -102,9 +102,10 @@
                         '(unsigned-byte 8))
                        (t
                         (upgraded-element-type element-type))))
-  (let ((pathname (merge-pathnames filename)))
-    (when (typep pathname 'logical-pathname)
-      (setf pathname (translate-logical-pathname pathname)))
+  (let* ((pathname (merge-pathnames filename))
+         (namestring (namestring (if (typep pathname 'logical-pathname)
+                                     (translate-logical-pathname pathname)
+                                     pathname))))
     (when (memq direction '(:output :io))
       (unless if-exists-given
         (setf if-exists
@@ -129,8 +130,8 @@
             (error 'file-error
                    :pathname pathname
                    :format-control "The file ~S does not exist."
-                   :format-arguments (list (namestring pathname))))))
-       (make-file-stream pathname element-type :input nil))
+                   :format-arguments (list namestring)))))
+       (make-file-stream pathname namestring element-type :input nil))
       (:probe
        (case if-does-not-exist
          (:error
@@ -138,11 +139,11 @@
             (error 'file-error
                    :pathname pathname
                    :format-control "The file ~S does not exist."
-                   :format-arguments (list (namestring pathname)))))
+                   :format-arguments (list namestring))))
          (:create
           (unless (probe-file pathname)
             (create-new-file pathname))))
-       (let ((stream (make-file-stream pathname element-type :input nil)))
+       (let ((stream (make-file-stream pathname namestring element-type :input nil)))
          (when stream
            (close stream))
          stream))
@@ -153,7 +154,7 @@
             (error 'file-error
                    :pathname pathname
                    :format-control "The file ~S does not exist."
-                   :format-arguments (list (namestring pathname)))))
+                   :format-arguments (list namestring))))
          ((nil)
           (unless (probe-file pathname)
             (return-from open nil))))
@@ -163,7 +164,7 @@
             (error 'file-error
                    :pathname pathname
                    :format-control "The file ~S already exists."
-                   :format-arguments (list (namestring pathname)))))
+                   :format-arguments (list namestring))))
          ((nil)
           (when (probe-file pathname)
             (return-from open nil)))
@@ -174,14 +175,14 @@
               (error 'file-error
                      :pathname pathname
                      :format-control "The file ~S is a directory."
-                     :format-arguments (list (namestring pathname))))
-            (let ((backup-name (concatenate 'string (namestring pathname) ".bak")))
+                     :format-arguments (list namestring)))
+            (let ((backup-name (concatenate 'string namestring ".bak")))
               (when (probe-file backup-name)
                 (when (probe-directory backup-name)
                   (error 'file-error
                          :pathname pathname
                          :format-control "Unable to rename ~S."
-                         :format-arguments (list (namestring pathname))))
+                         :format-arguments (list namestring)))
                 (delete-file backup-name))
               (rename-file pathname backup-name))))
          ((:new-version :supersede :overwrite :append)) ; OK to proceed.
@@ -189,12 +190,12 @@
           (error 'simple-error
                  :format-control "Option not supported: ~S."
                  :format-arguments (list if-exists))))
-       (let ((stream (make-file-stream pathname element-type direction if-exists)))
+       (let ((stream (make-file-stream pathname namestring element-type direction if-exists)))
          (unless stream
            (error 'file-error
                   :pathname pathname
                   :format-control "Unable to open ~S."
-                  :format-arguments (list (namestring pathname))))
+                  :format-arguments (list namestring)))
          stream))
       (t
        (error 'simple-error
