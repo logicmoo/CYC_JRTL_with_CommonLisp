@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.13 2005-09-13 04:26:44 piso Exp $
+ * $Id: LogicalPathname.java,v 1.14 2005-09-14 13:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,10 @@ import java.util.StringTokenizer;
 public final class LogicalPathname extends Pathname
 {
     private static final HashMap map = new HashMap();
+
+    public LogicalPathname()
+    {
+    }
 
     public LogicalPathname(String host, String rest) throws ConditionThrowable
     {
@@ -209,6 +213,8 @@ public final class LogicalPathname extends Pathname
                 sb.append(((Bignum)version).value.toString(base).toUpperCase());
         } else if (version == Keyword.WILD) {
             sb.append(".*");
+        } else if (version == Keyword.NEWEST) {
+            sb.append(".NEWEST");
         }
         if (printReadably || printEscape)
             sb.append('"');
