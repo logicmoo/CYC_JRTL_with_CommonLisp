@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.210 2005-08-28 14:58:03 piso Exp $
+ * $Id: Symbol.java,v 1.211 2005-09-14 18:51:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +61,7 @@ public class Symbol extends LispObject
     public static final Symbol SLOT_UNBOUND                        = PACKAGE_CL.addExternalSymbol("SLOT-UNBOUND");
     public static final Symbol SLOT_VALUE                          = PACKAGE_CL.addExternalSymbol("SLOT-VALUE");
     public static final Symbol SPECIAL                             = PACKAGE_CL.addExternalSymbol("SPECIAL");
+    public static final Symbol TRANSLATE_LOGICAL_PATHNAME          = PACKAGE_CL.addExternalSymbol("TRANSLATE-LOGICAL-PATHNAME");
     public static final Symbol UPDATE_INSTANCE_FOR_REDEFINED_CLASS = PACKAGE_CL.addExternalSymbol("UPDATE-INSTANCE-FOR-REDEFINED-CLASS");
     public static final Symbol VARIABLE                            = PACKAGE_CL.addExternalSymbol("VARIABLE");
 
