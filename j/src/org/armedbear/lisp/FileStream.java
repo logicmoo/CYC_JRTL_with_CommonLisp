@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FileStream.java,v 1.25 2005-06-27 20:08:45 piso Exp $
+ * $Id: FileStream.java,v 1.26 2005-09-14 19:55:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -517,26 +517,37 @@ public final class FileStream extends Stream
 
     // ### make-file-stream pathname element-type direction if-exists => stream
     private static final Primitive MAKE_FILE_STREAM =
-        new Primitive("make-file-stream", PACKAGE_SYS, false,
-                      "pathname element-type direction if-exists")
+        new Primitive("make-file-stream", PACKAGE_SYS, true,
+                      "pathname namestring element-type direction if-exists")
     {
         public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third, LispObject fourth)
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth)
             throws ConditionThrowable
         {
-            Pathname pathname = Pathname.coerceToPathname(first);
-            LispObject elementType = second;
-            LispObject direction = third;
-            LispObject ifExists = fourth;
+            final Pathname pathname;
+            try {
+                pathname = (Pathname) first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.PATHNAME);
+            }
+            final LispObject namestring;
+            try {
+                namestring = (AbstractString) second;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.STRING);
+            }
+            LispObject elementType = third;
+            LispObject direction = fourth;
+            LispObject ifExists = fifth;
             if (direction != Keyword.INPUT && direction != Keyword.OUTPUT &&
                 direction != Keyword.IO)
                 signal(new LispError("Direction must be :INPUT, :OUTPUT, or :IO."));
-            String namestring = pathname.getNamestring();
-            if (namestring == null)
-                return NIL;
             try {
-                return new FileStream(pathname, namestring, elementType,
-                                      direction, ifExists);
+                return new FileStream(pathname, namestring.getStringValue(),
+                                      elementType, direction, ifExists);
             }
             catch (FileNotFoundException e) {
                 return NIL;
