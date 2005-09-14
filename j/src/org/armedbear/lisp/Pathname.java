@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.88 2005-09-14 13:41:34 piso Exp $
+ * $Id: Pathname.java,v 1.89 2005-09-14 19:58:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -733,7 +733,12 @@ public class Pathname extends LispObject
     {
         if (args.length % 2 != 0)
             signal(new ProgramError("Odd number of keyword arguments."));
-        Pathname p = new Pathname();
+        LispObject host = NIL;
+        LispObject device = NIL;
+        LispObject directory = NIL;
+        LispObject name = NIL;
+        LispObject type = NIL;
+        LispObject version = NIL;
         Pathname defaults = null;
         boolean deviceSupplied = false;
         boolean nameSupplied = false;
@@ -742,25 +747,25 @@ public class Pathname extends LispObject
             LispObject key = args[i];
             LispObject value = args[i+1];
             if (key == Keyword.HOST) {
-                p.host = value;
+                host = value;
             } else if (key == Keyword.DEVICE) {
-                p.device = value;
+                device = value;
                 deviceSupplied = true;
             } else if (key == Keyword.DIRECTORY) {
                 if (value instanceof AbstractString)
-                    p.directory = list2(Keyword.ABSOLUTE, value);
+                    directory = list2(Keyword.ABSOLUTE, value);
                 else if (value == Keyword.WILD)
-                    p.directory = list2(Keyword.ABSOLUTE, Keyword.WILD);
+                    directory = list2(Keyword.ABSOLUTE, Keyword.WILD);
                 else
-                    p.directory = value;
+                    directory = value;
             } else if (key == Keyword.NAME) {
-                p.name = value;
+                name = value;
                 nameSupplied = true;
             } else if (key == Keyword.TYPE) {
-                p.type = value;
+                type = value;
                 typeSupplied = true;
             } else if (key == Keyword.VERSION) {
-                p.version = value;
+                version = value;
             } else if (key == Keyword.DEFAULTS) {
                 defaults = coerceToPathname(value);
             } else if (key == Keyword.CASE) {
@@ -769,14 +774,62 @@ public class Pathname extends LispObject
         }
         if (defaults != null) {
             // Ignore host.
-            p.directory = mergeDirectories(p.directory, defaults.directory);
+            directory = mergeDirectories(directory, defaults.directory);
             if (!deviceSupplied)
-                p.device = defaults.device;
+                device = defaults.device;
             if (!nameSupplied)
-                p.name = defaults.name;
+                name = defaults.name;
             if (!typeSupplied)
-                p.type = defaults.type;
+                type = defaults.type;
         }
+        final Pathname p;
+        final boolean logical;
+        if (host != NIL) {
+            if (LOGICAL_PATHNAME_TRANSLATIONS.get(host) == null) {
+                // Not a defined logical pathname host.
+                signal(new LispError(host.writeToString() + " is not defined as a logical pathname host."));
+            }
+            p = new LogicalPathname();
+            logical = true;
+            p.host = host;
+        } else {
+            p = new Pathname();
+            logical = false;
+        }
+        if (device != NIL) {
+            if (logical && device instanceof AbstractString)
+                p.device = new SimpleString(device.getStringValue().toUpperCase());
+            else
+                p.device = device;
+        }
+        if (directory != NIL) {
+            if (logical && directory.listp()) {
+                LispObject d = NIL;
+                while (d != NIL) {
+                    LispObject component = directory.car();
+                    if (component instanceof AbstractString)
+                        d = d.push(new SimpleString(component.getStringValue().toUpperCase()));
+                    else
+                        d = d.push(component);
+                    directory = directory.cdr();
+                }
+                p.directory = d.nreverse();
+            } else
+                p.directory = directory;
+        }
+        if (name != NIL) {
+            if (logical && name instanceof AbstractString)
+                p.name = new SimpleString(name.getStringValue().toUpperCase());
+            else
+                p.name = name;
+        }
+        if (type != NIL) {
+            if (logical && type instanceof AbstractString)
+                p.type = new SimpleString(type.getStringValue().toUpperCase());
+            else
+                p.type = type;
+        }
+        p.version = version;
         return p;
     }
 
@@ -847,6 +900,14 @@ public class Pathname extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Pathname pathname = Pathname.coerceToPathname(arg);
+            if (pathname instanceof LogicalPathname) {
+                try {
+                    pathname = (Pathname) Symbol.TRANSLATE_LOGICAL_PATHNAME.execute(pathname);
+                }
+                catch (ClassCastException e) {
+                    return signalTypeError(pathname, Symbol.PATHNAME);
+                }
+            }
             LispObject result = NIL;
             String s = pathname.getNamestring();
             if (s != null) {
@@ -1050,7 +1111,15 @@ public class Pathname extends LispObject
                                             boolean errorIfDoesNotExist)
         throws ConditionThrowable
     {
-        final Pathname pathname = Pathname.coerceToPathname(arg);
+        Pathname pathname = Pathname.coerceToPathname(arg);
+        if (pathname instanceof LogicalPathname) {
+            try {
+                pathname = (Pathname) Symbol.TRANSLATE_LOGICAL_PATHNAME.execute(pathname);
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(pathname, Symbol.PATHNAME);
+            }
+        }
         if (pathname.isWild())
             return signal(new FileError("Bad place for a wild pathname.",
                                         pathname));
