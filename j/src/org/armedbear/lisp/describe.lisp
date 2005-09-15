@@ -1,7 +1,7 @@
 ;;; describe.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: describe.lisp,v 1.3 2005-05-22 20:38:17 piso Exp $
+;;; $Id: describe.lisp,v 1.4 2005-09-15 10:47:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -88,6 +88,15 @@
       (t
        (%describe-object object stream))))
   (values))
+
+(defmethod describe-object ((object pathname) stream)
+  (format stream "~S is an object of type ~S:~%" object (type-of object))
+  (format stream " HOST         ~S~%" (pathname-host object))
+  (format stream " DEVICE       ~S~%" (pathname-device object))
+  (format stream " DIRECTORY    ~S~%" (pathname-directory object))
+  (format stream " NAME         ~S~%" (pathname-name object))
+  (format stream " TYPE         ~S~%" (pathname-type object))
+  (format stream " VERSION      ~S~%" (pathname-version object)))
 
 (defmethod describe-object ((object standard-object) stream)
   (%describe-object object stream)
