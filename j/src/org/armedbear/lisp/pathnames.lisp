@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.18 2005-09-13 21:36:23 piso Exp $
+;;; $Id: pathnames.lisp,v 1.19 2005-09-17 19:48:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -113,12 +113,37 @@
            (position #\* component))))
 
 (defun casify (thing case)
-  (if (stringp thing)
-      (case case
-        (:upcase (string-upcase thing))
-        (:downcase (string-downcase thing))
-        (t thing))
-      thing))
+  (typecase thing
+    (string
+     (case case
+       (:upcase (string-upcase thing))
+       (:downcase (string-downcase thing))
+       (t thing)))
+    (list
+     (let (result)
+       (dolist (component thing (nreverse result))
+         (push (casify component case) result))))
+    (t
+     thing)))
+
+(defun split-directory-components (directory)
+  (declare (optimize safety))
+  (declare (type list directory))
+  (unless (memq (car directory) '(:absolute :relative))
+    (error "Ill-formed directory list: ~S" directory))
+  (let (result sublist)
+    (push (car directory) result)
+    (dolist (component (cdr directory))
+      (cond ((memq component '(:wild :wild-inferiors))
+             (when sublist
+               (push (nreverse sublist) result)
+               (setf sublist nil))
+             (push component result))
+            (t
+             (push component sublist))))
+    (when sublist
+      (push (nreverse sublist) result))
+    (nreverse result)))
 
 (defun translate-component (source from to &optional case)
   (cond ((or (eq to :wild) (null to))
@@ -139,6 +164,34 @@
          ;; FIXME
          (error "Unsupported TO-WILDCARD pattern: ~S" to))))
 
+(defun translate-directory-components (source from to case)
+  (cond ((null to)
+         nil
+         )
+        ((memq (car to) '(:absolute :relative))
+         (cons (car to)
+               (translate-directory-components (cdr source) (cdr from) (cdr to) case))
+         )
+        ((eq (car to) :wild)
+         (if (eq (car from) :wild)
+             ;; Grab the next chunk from SOURCE.
+             (append (casify (car source) case)
+                     (translate-directory-components (cdr source) (cdr from) (cdr to) case))
+             (error "Unsupported case 1: ~S ~S ~S" source from to))
+         )
+        ((eq (car to) :wild-inferiors)
+         ;; Grab the next chunk from SOURCE.
+         (append (casify (car source) case)
+                 (translate-directory-components (cdr source) (cdr from) (cdr to) case))
+         )
+        (t
+         ;; "If the piece in TO-WILDCARD is present and not wild, it is copied
+         ;; into the result."
+         (append (casify (car to) case)
+                 (translate-directory-components source from (cdr to) case))
+         )
+        ))
+
 (defun translate-directory (source from to case)
   ;; FIXME The IGNORE-CASE argument to DIRECTORY-MATCH-P should not be nil on
   ;; Windows or if the source pathname is a logical pathname.
@@ -149,9 +202,10 @@
         ((equal source '(:absolute))
          (remove :wild-inferiors to))
         (t
-         (mapcar #'(lambda (source from to)
-                    (translate-component source from to case))
-                 source from to))))
+         (translate-directory-components (split-directory-components source)
+                                         (split-directory-components from)
+                                         (split-directory-components to)
+                                         case))))
 
 ;; "The resulting pathname is TO-WILDCARD with each wildcard or missing field
 ;; replaced by a portion of SOURCE."
