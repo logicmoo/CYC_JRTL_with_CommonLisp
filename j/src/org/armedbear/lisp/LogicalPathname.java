@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.14 2005-09-14 13:39:01 piso Exp $
+ * $Id: LogicalPathname.java,v 1.15 2005-09-17 19:47:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,9 @@ import java.util.StringTokenizer;
 
 public final class LogicalPathname extends Pathname
 {
+    private static final String LOGICAL_PATHNAME_CHARS =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-;*.";
+
     private static final HashMap map = new HashMap();
 
     public LogicalPathname()
@@ -34,6 +37,15 @@ public final class LogicalPathname extends Pathname
 
     public LogicalPathname(String host, String rest) throws ConditionThrowable
     {
+        final int limit = rest.length();
+        for (int i = 0; i < limit; i++) {
+            char c = rest.charAt(i);
+            if (LOGICAL_PATHNAME_CHARS.indexOf(c) < 0) {
+                signal(new ParseError("The character #\\" + c + " is not valid in a logical pathname."));
+                return;
+            }
+        }
+
         this.host = new SimpleString(host);
 
         // "The device component of a logical pathname is always :UNSPECIFIC;
@@ -92,16 +104,16 @@ public final class LogicalPathname extends Pathname
         }
     }
 
-    private static final LispObject parseDirectory(String d)
+    private static final LispObject parseDirectory(String s)
         throws ConditionThrowable
     {
         LispObject result;
-        if (d.charAt(0) == ';') {
+        if (s.charAt(0) == ';') {
             result = new Cons(Keyword.RELATIVE);
-            d = d.substring(1);
+            s = s.substring(1);
         } else
             result = new Cons(Keyword.ABSOLUTE);
-        StringTokenizer st = new StringTokenizer(d, ";");
+        StringTokenizer st = new StringTokenizer(s, ";");
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
             LispObject obj;
