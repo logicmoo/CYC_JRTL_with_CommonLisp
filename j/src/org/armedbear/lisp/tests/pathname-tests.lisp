@@ -56,6 +56,15 @@
               expected-host expected-directory expected-name expected-type
               expected-version))))
 
+(defun check-translate-pathname (args expected)
+  (declare (optimize safety))
+  (declare (type list args))
+  (declare (type string expected))
+  (let ((result (namestring (apply 'translate-pathname args))))
+    (unless (equal result expected)
+      (format t "(translate-pathname ~S ~S ~S) => ~S; expected ~S~%"
+              (first args) (second args) (third args) result expected))))
+
 (check-physical-pathname #p"/" '(:absolute) nil nil)
 (check-physical-pathname #p"/foo" '(:absolute) "foo" nil)
 (check-physical-pathname #p"/foo." '(:absolute) "foo" "")
@@ -144,6 +153,11 @@
 ;; Even though "effluvia" is defined as a logical host, "bop" is not a valid
 ;; logical pathname version, so this can't be a logical pathname.
 (check-physical-pathname #p"effluvia:bar.baz.bop" nil "effluvia:bar.baz" "bop")
+
+;; Parse error.
+(expect (signals-error (logical-pathname "effluvia::foo.bar")
+                       #-allegro 'parse-error
+                       #+allegro 'type-error))
 
 #-allegro
 (progn
@@ -243,6 +257,8 @@
 (expect (pathname-match-p "foo.bar" "/**/*.*"))
 (expect (pathname-match-p "/usr/local/bin/foo.bar" "/**/foo.bar"))
 (expect (not (pathname-match-p "/usr/local/bin/foo.bar" "**/foo.bar")))
+(expect (pathname-match-p "/foo/bar.txt" "/**/*.*"))
+(expect (not (pathname-match-p "/foo/bar.txt" "**/*.*")))
 (expect (pathname-match-p #p"effluvia:foo.bar" #p"effluvia:**;*.*.*"))
 
 ;; TRANSLATE-PATHNAME
@@ -262,8 +278,35 @@
 (expect (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz"))
 (expect (string= (namestring (translate-pathname "foo.bar" "*.*" "/usr/local/*.*"))
                  "/usr/local/foo.bar"))
-(expect (equal (translate-pathname "foo.bar" "*.*" "/usr/local/*.*") #p"/usr/local/foo.bar"))
+(expect (equal (translate-pathname "foo.bar" "*.*" "/usr/local/*.*")
+               #p"/usr/local/foo.bar"))
 
+;; (expect (equal (translate-pathname "/foo/" "/*/" "/usr/local/*/") #p"/usr/local/foo/"))
+(check-translate-pathname '("/foo/" "/*/" "/usr/local/*/") "/usr/local/foo/")
+(check-translate-pathname '("/foo/baz/bar.txt" "/**/*.*" "/usr/local/**/*.*")
+                          "/usr/local/foo/baz/bar.txt")
+
+(expect (equal (translate-pathname "/foo/" "/*/" "/usr/local/*/bar/") #p"/usr/local/foo/bar/"))
+
+(expect (equal (translate-pathname "/foo/bar.txt" "/*/*.*" "/usr/local/*/*.*")
+               #P"/usr/local/foo/bar.txt"))
+
+;; "TRANSLATE-PATHNAME translates SOURCE (that matches FROM-WILDCARD)..."
+(expect (not (pathname-match-p "/foo/bar.txt" "**/*.*")))
+;; Since (pathname-match-p "/foo/bar.txt" "**/*.*" ) => NIL...
+#+(or clisp allegro abcl)
+;; This seems to be the correct behavior.
+(expect (signals-error (translate-pathname "/foo/bar.txt" "**/*.*" "/usr/local/**/*.*") 'error))
+#+(or sbcl cmu)
+;; This appears to be a bug, since SOURCE doesn't match FROM-WILDCARD.
+(expect (equal (translate-pathname "/foo/bar.txt" "**/*.*" "/usr/local/**/*.*")
+               #p"/usr/local/foo/bar.txt"))
+
+(expect (pathname-match-p "/foo/bar.txt" "/**/*.*"))
+(expect (equal (translate-pathname "/foo/bar.txt" "/**/*.*" "/usr/local/**/*.*")
+               #p"/usr/local/foo/bar.txt"))
+
+;; TRANSLATE-LOGICAL-PATHNAME
 #-clisp
 (expect (equal (translate-pathname "foo.bar" "/**/*.*" "/usr/local/") #p"/usr/local/foo.bar"))
 
@@ -274,8 +317,14 @@
 (progn
   (expect (eq (pathname-device (translate-logical-pathname "effluvia:foo.bar")) :unspecific))
   (expect (eq (pathname-device #p"/usr/local/foo/bar") nil)))
-(check-physical-pathname (translate-logical-pathname "effluvia:foo.bar")
-                         '(:absolute "usr" "local") "foo" "bar")
+;; (check-physical-pathname (translate-logical-pathname "effluvia:foo.bar")
+;;                          '(:absolute "usr" "local") "foo" "bar")
+(expect (string= (namestring (translate-logical-pathname "effluvia:foo.bar"))
+                 "/usr/local/foo.bar"))
+;; (check-physical-pathname (translate-logical-pathname "effluvia:foo;bar.txt")
+;;                          '(:absolute "usr" "local" "foo") "bar" "txt")
+(expect (string= (namestring (translate-logical-pathname "effluvia:foo;bar.txt"))
+                 "/usr/local/foo/bar.txt"))
 
 #-allegro
 (check-logical-pathname #p"effluvia:Foo.Bar" "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
