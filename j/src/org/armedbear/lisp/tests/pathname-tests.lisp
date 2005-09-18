@@ -8,9 +8,10 @@
      (format t "Expected ~S~%" ',test-form)))
 
 (defmacro signals-error (form error-name)
-  `(handler-case ,form
+  `(locally (declare (optimize safety))
+     (handler-case ,form
      (error (c) (typep c ,error-name))
-     (:no-error (&rest ignored) (declare (ignore ignored)) nil)))
+     (:no-error (&rest ignored) (declare (ignore ignored)) nil))))
 
 (defun check-physical-pathname (pathname expected-directory expected-name expected-type)
   (let* ((directory (pathname-directory pathname))
@@ -156,8 +157,8 @@
 
 ;; Parse error.
 (expect (signals-error (logical-pathname "effluvia::foo.bar")
-                       #-allegro 'parse-error
-                       #+allegro 'type-error))
+                       #-(or allegro clisp) 'parse-error
+                       #+(or allegro clisp) 'type-error))
 
 #-allegro
 (progn
@@ -254,6 +255,8 @@
 
 ;; PATHNAME-MATCH-P
 (expect (pathname-match-p "/foo/bar/baz" "/*/*/baz"))
+(expect (pathname-match-p "/foo/bar/baz" "/**/baz"))
+(expect (pathname-match-p "/foo/bar/quux/baz" "/**/baz"))
 (expect (pathname-match-p "foo.bar" "/**/*.*"))
 (expect (pathname-match-p "/usr/local/bin/foo.bar" "/**/foo.bar"))
 (expect (not (pathname-match-p "/usr/local/bin/foo.bar" "**/foo.bar")))
@@ -348,3 +351,50 @@
 ;; Allegro's MERGE-PATHNAMES apparently calls TRANSLATE-LOGICAL-PATHNAME.
 (check-physical-pathname (merge-pathnames "effluvia:foo.bar")
                          '(:absolute "usr" "local") "foo" "bar")
+
+;; The following tests are adapted from SBCL's pathnames.impure.lisp.
+(setf (logical-pathname-translations "demo0")
+      '(("**;*.*.*" "/tmp/")))
+(expect (not (pathname-match-p "demo0:file.lisp"
+                               (logical-pathname "demo0:tmp;**;*.*.*"))))
+#-clisp
+(expect (equal (namestring (translate-logical-pathname "demo0:file.lisp"))
+               "/tmp/file.lisp"))
+
+(setf (logical-pathname-translations "demo1")
+      '(("**;*.*.*" "/tmp/**/*.*") (";**;*.*.*" "/tmp/rel/**/*.*")))
+;; Remove "**" from the resulting pathname when the source directory is NIL.
+(expect (not (equal (namestring (translate-logical-pathname "demo1:foo.lisp"))
+                    "/tmp/**/foo.lisp")))
+(expect (equal (namestring (translate-logical-pathname "demo1:foo.lisp"))
+               "/tmp/foo.lisp"))
+;;; Check for absolute/relative path confusion.
+(expect (not (pathname-match-p "demo1:;foo.lisp" "**;*.*.*")))
+#-(or sbcl cmu allegro abcl)
+;; BUG Pathnames should match if the following translation is to work.
+(expect (pathname-match-p "demo:;foo.lisp" "demo:;**;*.*.*"))
+#+clisp
+(expect (pathname-match-p "demo1:;foo.lisp" ";**;*.*.*"))
+(expect (equal (namestring (translate-logical-pathname "demo1:;foo.lisp"))
+               #-allegro "/tmp/rel/foo.lisp"
+               #+allegro "/tmp/foo.lisp"))
+
+(setf (logical-pathname-translations "demo2")
+      '(("test;**;*.*" "/tmp/demo2/test")))
+(expect (equal (enough-namestring "demo2:test;foo.lisp")
+               #+sbcl "DEMO2:;TEST;FOO.LISP"
+               #+cmu #p"DEMO2:TEST;FOO.LISP" ;; BUG (must be string or NIL)
+               #+clisp "TEST;FOO.LISP"
+               #+allegro "/test/foo.lisp" ;; BUG
+               #+abcl "/TEST/FOO.LISP" ;; BUG
+               ))
+
+#-(or allegro clisp cmu)
+(expect (signals-error (make-pathname :host "EFFLUVIA" :directory "!bla" :name "bar")
+                       'error))
+#-(or allegro cmu)
+(expect (signals-error (make-pathname :host "EFFLUVIA" :directory "bla" :name "!bar")
+                       'error))
+#-(or allegro cmu)
+(expect (signals-error (make-pathname :host "EFFLUVIA" :directory "bla" :name "bar" :type "&baz")
+                       'error))
