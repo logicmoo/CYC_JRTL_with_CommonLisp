@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.89 2005-09-14 19:58:25 piso Exp $
+ * $Id: Pathname.java,v 1.90 2005-09-18 17:52:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -797,35 +797,42 @@ public class Pathname extends LispObject
             logical = false;
         }
         if (device != NIL) {
-            if (logical && device instanceof AbstractString)
-                p.device = new SimpleString(device.getStringValue().toUpperCase());
-            else
+            if (logical) {
+                // "The device component of a logical pathname is always :UNSPECIFIC."
+                if (device != Keyword.UNSPECIFIC)
+                    signal(new LispError("The device component of a logical pathname must be :UNSPECIFIC."));
+            } else
                 p.device = device;
         }
         if (directory != NIL) {
-            if (logical && directory.listp()) {
-                LispObject d = NIL;
-                while (d != NIL) {
-                    LispObject component = directory.car();
-                    if (component instanceof AbstractString)
-                        d = d.push(new SimpleString(component.getStringValue().toUpperCase()));
-                    else
-                        d = d.push(component);
-                    directory = directory.cdr();
-                }
-                p.directory = d.nreverse();
+            if (logical) {
+                if (directory.listp()) {
+                    LispObject d = NIL;
+                    while (directory != NIL) {
+                        LispObject component = directory.car();
+                        if (component instanceof AbstractString)
+                            d = d.push(LogicalPathname.canonicalizeStringComponent((AbstractString)component));
+                        else
+                            d = d.push(component);
+                        directory = directory.cdr();
+                    }
+                    p.directory = d.nreverse();
+                } else if (directory == Keyword.WILD || directory == Keyword.WILD_INFERIORS)
+                    p.directory = directory;
+                else
+                    signal(new LispError("Invalid directory component for logical pathname: " + directory.writeToString()));
             } else
                 p.directory = directory;
         }
         if (name != NIL) {
             if (logical && name instanceof AbstractString)
-                p.name = new SimpleString(name.getStringValue().toUpperCase());
+                p.name = LogicalPathname.canonicalizeStringComponent((AbstractString)name);
             else
                 p.name = name;
         }
         if (type != NIL) {
             if (logical && type instanceof AbstractString)
-                p.type = new SimpleString(type.getStringValue().toUpperCase());
+                p.type = LogicalPathname.canonicalizeStringComponent((AbstractString)type);
             else
                 p.type = type;
         }
