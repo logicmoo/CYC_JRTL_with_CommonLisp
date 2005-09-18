@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.15 2005-09-17 19:47:21 piso Exp $
+ * $Id: LogicalPathname.java,v 1.16 2005-09-18 17:51:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,6 +102,26 @@ public final class LogicalPathname extends Pathname
             else
                 name = new SimpleString(n.toUpperCase());
         }
+    }
+
+    private static final String LOGICAL_PATHNAME_COMPONENT_CHARS =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-";
+
+    public static final SimpleString canonicalizeStringComponent(AbstractString s)
+        throws ConditionThrowable
+    {
+        final int limit = s.length();
+        for (int i = 0; i < limit; i++) {
+            char c = s.charAt(i);
+            if (LOGICAL_PATHNAME_COMPONENT_CHARS.indexOf(c) < 0) {
+                signal(new ParseError("Invalid character #\\" + c +
+                                      " in logical pathname component \"" + s +
+                                      '"'));
+                // Not reached.
+                return null;
+            }
+        }
+        return new SimpleString(s.getStringValue().toUpperCase());
     }
 
     private static final LispObject parseDirectory(String s)
