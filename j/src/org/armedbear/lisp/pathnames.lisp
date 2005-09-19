@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.20 2005-09-19 14:04:07 piso Exp $
+;;; $Id: pathnames.lisp,v 1.21 2005-09-19 15:37:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package #:system)
+
+(export '(logical-host-p))
 
 (defun pathname-host (pathname &key (case :local))
   (%pathname-host pathname case))
@@ -245,15 +247,20 @@
 (defun canonicalize-logical-host (host)
   (string-upcase host))
 
-(defun logical-pathname-translations (host)
-  (gethash-2op-1ret (canonicalize-logical-host host)
-                    *logical-pathname-translations*))
-
 (defun logical-host-p (canonical-host)
   (multiple-value-bind (translations present)
       (gethash canonical-host *logical-pathname-translations*)
     (declare (ignore translations))
     present))
+
+(defun logical-pathname-translations (host)
+  (multiple-value-bind (translations present)
+      (gethash (canonicalize-logical-host host) *logical-pathname-translations*)
+    (unless present
+      (error 'type-error
+             :datum host
+             :expected-type '(and string (satisfies logical-host-p))))
+    translations))
 
 (defun canonicalize-logical-pathname-translations (translations host)
   (let (result)
