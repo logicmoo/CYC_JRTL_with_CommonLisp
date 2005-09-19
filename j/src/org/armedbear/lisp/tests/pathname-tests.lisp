@@ -372,7 +372,7 @@
 (expect (not (pathname-match-p "demo1:;foo.lisp" "**;*.*.*")))
 #-(or sbcl cmu allegro abcl)
 ;; BUG Pathnames should match if the following translation is to work.
-(expect (pathname-match-p "demo:;foo.lisp" "demo:;**;*.*.*"))
+(expect (pathname-match-p "demo1:;foo.lisp" "demo1:;**;*.*.*"))
 #+clisp
 (expect (pathname-match-p "demo1:;foo.lisp" ";**;*.*.*"))
 (expect (equal (namestring (translate-logical-pathname "demo1:;foo.lisp"))
@@ -408,3 +408,36 @@
 ;; PARSE-NAMESTRING is specified to be "a valid pathname host, a logical host,
 ;; or NIL".
 (expect (signals-error (parse-namestring "" :unspecific) 'type-error))
+
+(expect (equal (namestring (parse-namestring ""
+                                             (pathname-host
+                                              (translate-logical-pathname
+                                               "EFFLUVIA:"))))
+               ""))
+
+;; PARSE-NAMESTRING host mismatch: "If HOST is supplied and not NIL, and THING
+;; contains a manifest host name, an error of type ERROR is signaled if the
+;; hosts do not match."
+(expect (signals-error (parse-namestring "effluvia:foo.bar" "demo2") 'error))
+
+(setf (logical-pathname-translations "bazooka")
+      '(("todemo;*.*.*" "demo0:*.*.*")))
+#+allegro ;; BUG
+(expect (equal (namestring (translate-logical-pathname "bazooka:todemo;x.y")) "/tmp/todemo/x.y"))
+#+clisp ;; BUG
+(expect (signals-error (translate-logical-pathname "bazooka:todemo;x.y") 'error))
+#-(or allegro clisp)
+(expect (equal (namestring (translate-logical-pathname "bazooka:todemo;x.y")) "/tmp/x.y"))
+#+clisp ;; BUG
+(expect (signals-error (translate-logical-pathname "demo0:x.y") 'error))
+#-clisp
+(expect (equal (namestring (translate-logical-pathname "demo0:x.y")) "/tmp/x.y"))
+#-(or allegro clisp)
+(expect (equal (namestring (translate-logical-pathname "bazooka:todemo;x.y"))
+               (namestring (translate-logical-pathname "demo0:x.y"))))
+
+;; "If HOST is incorrectly supplied, an error of type TYPE-ERROR is signaled."
+(expect (signals-error (logical-pathname-translations "unregistered-host")
+                       #+clisp 'error ;; BUG
+                       #+cmu 'file-error ;; BUG
+                       #-(or clisp cmu) 'type-error))
