@@ -386,7 +386,7 @@
                #+cmu #p"DEMO2:TEST;FOO.LISP" ;; BUG (must be string or NIL)
                #+clisp "TEST;FOO.LISP"
                #+allegro "/test/foo.lisp" ;; BUG
-               #+abcl "/TEST/FOO.LISP" ;; BUG
+               #+abcl "DEMO2:TEST;FOO.LISP"
                ))
 
 #-(or allegro clisp cmu)
@@ -441,3 +441,30 @@
                        #+clisp 'error ;; BUG
                        #+cmu 'file-error ;; BUG
                        #-(or clisp cmu) 'type-error))
+
+(expect (not (string-equal (host-namestring (parse-namestring "OTHER-HOST:ILLEGAL/LPN")) "OTHER-HOST")))
+(expect (string= (pathname-name (parse-namestring "OTHER-HOST:ILLEGAL/LPN")) "LPN"))
+
+(setf (logical-pathname-translations "test0")
+      '(("**;*.*.*"              "/library/foo/**/")))
+(expect (equal (namestring (translate-logical-pathname
+                            "test0:foo;bar;baz;mum.quux"))
+               "/library/foo/foo/bar/baz/mum.quux"))
+(setf (logical-pathname-translations "prog")
+      '(("RELEASED;*.*.*"        "MY-UNIX:/sys/bin/my-prog/")
+        ("RELEASED;*;*.*.*"      "MY-UNIX:/sys/bin/my-prog/*/")
+        ("EXPERIMENTAL;*.*.*"    "MY-UNIX:/usr/Joe/development/prog/")
+        ("EXPERIMENTAL;*;*.*.*"  "MY-UNIX:/usr/Joe/development/prog/*/")))
+(setf (logical-pathname-translations "prog")
+      '(("CODE;*.*.*"             "/lib/prog/")))
+#-allegro
+(expect (equal (namestring (translate-logical-pathname
+                            "prog:code;documentation.lisp"))
+               "/lib/prog/documentation.lisp"))
+(setf (logical-pathname-translations "prog")
+      '(("CODE;DOCUMENTATION.*.*" "/lib/prog/docum.*")
+        ("CODE;*.*.*"             "/lib/prog/")))
+#-allegro
+(expect (equal (namestring (translate-logical-pathname
+                            "prog:code;documentation.lisp"))
+               "/lib/prog/docum.lisp"))
