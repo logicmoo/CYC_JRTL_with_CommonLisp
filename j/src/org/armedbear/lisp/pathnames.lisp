@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.19 2005-09-17 19:48:03 piso Exp $
+;;; $Id: pathnames.lisp,v 1.20 2005-09-19 14:04:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -325,8 +325,10 @@
                          &optional host default-pathname
                          &key (start 0) end junk-allowed)
   (declare (ignore default-pathname junk-allowed)) ; FIXME
-  (when host
-    (setf host (canonicalize-logical-host host)))
+  (cond ((eq host :unspecific)
+         (setf host nil))
+        (host
+         (setf host (canonicalize-logical-host host))))
   (typecase thing
     (stream
      (values (pathname thing) start))
