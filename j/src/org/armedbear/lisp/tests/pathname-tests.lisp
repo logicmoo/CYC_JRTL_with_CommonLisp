@@ -398,3 +398,13 @@
 #-(or allegro cmu)
 (expect (signals-error (make-pathname :host "EFFLUVIA" :directory "bla" :name "bar" :type "&baz")
                        'error))
+
+(expect (equal (namestring (parse-namestring "" "EFFLUVIA")) "EFFLUVIA:"))
+
+#-cmu
+(expect (equal (namestring (parse-namestring "" :unspecific)) ""))
+#+cmu
+;; It seems reasonable to signal an error here, since the HOST argument to
+;; PARSE-NAMESTRING is specified to be "a valid pathname host, a logical host,
+;; or NIL".
+(expect (signals-error (parse-namestring "" :unspecific) 'type-error))
