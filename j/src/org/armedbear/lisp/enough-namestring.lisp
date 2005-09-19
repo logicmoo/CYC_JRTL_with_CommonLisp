@@ -1,7 +1,7 @@
 ;;; enough-namestring.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: enough-namestring.lisp,v 1.2 2004-09-27 00:09:19 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: enough-namestring.lisp,v 1.3 2005-09-19 16:54:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,6 +28,8 @@
 (defun enough-namestring (pathname
                           &optional
                           (defaults *default-pathname-defaults*))
+  (unless (equal (pathname-host pathname) (pathname-host defaults))
+    (return-from enough-namestring (namestring pathname)))
   (let ((pathname-directory (pathname-directory pathname)))
     (if pathname-directory
         (let* ((defaults-directory (pathname-directory defaults))
