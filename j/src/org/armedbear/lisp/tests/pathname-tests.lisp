@@ -66,6 +66,9 @@
       (format t "(translate-pathname ~S ~S ~S) => ~S; expected ~S~%"
               (first args) (second args) (third args) result expected))))
 
+(defmacro check-readable (pathname)
+  `(expect (equal ,pathname (read-from-string (write-to-string ,pathname :readably t)))))
+
 (check-physical-pathname #p"/" '(:absolute) nil nil)
 (check-physical-pathname #p"/foo" '(:absolute) "foo" nil)
 (check-physical-pathname #p"/foo." '(:absolute) "foo" "")
@@ -88,6 +91,13 @@
 (check-physical-pathname #p".lisprc" nil ".lisprc" nil)
 (check-physical-pathname #p"x.lisprc" nil "x" "lisprc")
 
+#-allegro
+(check-physical-pathname (make-pathname :name ".") nil "." nil)
+#+allegro
+(check-physical-pathname (make-pathname :name ".") '(:relative) nil nil)
+
+(check-readable (make-pathname :name "."))
+
 ;; #p"."
 #+(or allegro abcl cmu)
 (check-physical-pathname #p"." '(:relative) nil nil)
@@ -102,6 +112,12 @@
 #+(or sbcl)
 ;; Is this more exact?
 (check-physical-pathname #p"./" '(:relative ".") nil nil)
+
+#-allegro
+(check-physical-pathname (make-pathname :name "..") nil ".." nil)
+#+allegro
+(check-physical-pathname (make-pathname :name "..") '(:relative :back) nil nil)
+
 
 ;; #p".."
 #+(or allegro)
@@ -126,7 +142,22 @@
 
 #+(or allegro abcl cmu)
 (check-physical-pathname #p"..." nil "..." nil)
+#+(or allegro abcl cmu)
+(check-physical-pathname #p"......" nil "......" nil)
 (check-physical-pathname #p"foo.*" nil "foo" :wild)
+
+#-(or sbcl allegro)
+(expect (string= (namestring (make-pathname :name "..")) ".."))
+#+allegro
+(expect (string= (namestring (make-pathname :name "..")) "../"))
+
+(expect (string= (namestring (make-pathname :directory '(:relative :up))) "../"))
+
+;; Silly names.
+#+clisp
+(expect (signals-error (make-pathname :name "abc/def") 'error))
+#-(or allegro clisp sbcl)
+(check-readable (make-pathname :name "abc/def"))
 
 ;; If the prefix isn't a defined logical host, it's not a logical pathname.
 #+allegro

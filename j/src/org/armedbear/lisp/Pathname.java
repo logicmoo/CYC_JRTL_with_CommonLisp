@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.91 2005-09-21 17:35:49 piso Exp $
+ * $Id: Pathname.java,v 1.92 2005-09-21 18:51:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,7 +109,6 @@ public class Pathname extends LispObject
             else if (s.startsWith("~/"))
                 s = System.getProperty("user.home").concat(s.substring(1));
         }
-        namestring = s;
         if (s.equals(".") || s.equals("./")) {
             directory = new Cons(Keyword.RELATIVE);
             return;
@@ -118,6 +117,7 @@ public class Pathname extends LispObject
             directory = list2(Keyword.RELATIVE, Keyword.UP);
             return;
         }
+        namestring = s;
         if (Utilities.isPlatformWindows()) {
             if (s.length() >= 2 && s.charAt(1) == ':') {
                 device = new SimpleString(s.charAt(0));
@@ -261,9 +261,14 @@ public class Pathname extends LispObject
             sb.append(':');
         }
         sb.append(getDirectoryNamestring());
-        if (name instanceof AbstractString)
-            sb.append(name.getStringValue());
-        else if (name == Keyword.WILD)
+        if (name instanceof AbstractString) {
+            String n = name.getStringValue();
+            if (n.indexOf(File.separatorChar) >= 0) {
+                Debug.assertTrue(namestring == null);
+                return null;
+            }
+            sb.append(n);
+        } else if (name == Keyword.WILD)
             sb.append('*');
         if (type != NIL) {
             sb.append('.');
@@ -416,12 +421,15 @@ public class Pathname extends LispObject
             if (s != null) {
                 useNamestring = true;
                 if (printReadably) {
-                    // We have a namestring. Check for non-NIL values of pathname
-                    // components that can't be read from the namestring.
+                    // We have a namestring. Check for pathname components that
+                    // can't be read from the namestring.
                     if (host != NIL || version != NIL) {
                         useNamestring = false;
-                    } else if (Utilities.isPlatformWindows()) {
-                        if (version != NIL)
+                    } else if (name instanceof AbstractString) {
+                        String n = name.getStringValue();
+                        if (n.equals(".") || n.equals(".."))
+                            useNamestring = false;
+                        else if (n.indexOf(File.separatorChar) >= 0)
                             useNamestring = false;
                     }
                 }
