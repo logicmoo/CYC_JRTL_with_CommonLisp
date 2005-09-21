@@ -89,41 +89,42 @@
 (check-physical-pathname #p"x.lisprc" nil "x" "lisprc")
 
 ;; #p"."
-#+(or allegro abcl)
+#+(or allegro abcl cmu)
 (check-physical-pathname #p"." '(:relative) nil nil)
-#+(or sbcl cmu clisp)
+#+(or sbcl clisp)
 ;; No trailing separator character means it's a file.
 (check-physical-pathname #p"." nil "." nil)
 
 ;; #p"./"
 ;; Trailing separator character means it's a directory.
-#+(or allegro abcl clisp)
+#+(or allegro abcl clisp cmu)
 (check-physical-pathname #p"./" '(:relative) nil nil)
-#+(or sbcl cmu)
+#+(or sbcl)
 ;; Is this more exact?
 (check-physical-pathname #p"./" '(:relative ".") nil nil)
 
 ;; #p".."
-#+(or allegro abcl)
-;; Allegro parses this as a directory, even though it lacks a trailing separator.
+#+(or allegro)
 (check-physical-pathname #p".." '(:relative :back) nil nil)
+#+(or abcl cmu)
+(check-physical-pathname #p".." '(:relative :up) nil nil)
 ;; Other implementations think it's a file.
 #+(or)
 ;; If it's a file, to a human its name would be "..". No implementation gets
 ;; this right.
 (check-physical-pathname #p".." nil ".." nil)
-#+(or sbcl cmu clisp)
+#+(or sbcl clisp)
 ;; These implementations parse ".." as the name "." followed by another dot and
 ;; the type string "", which no human would do.
 (check-physical-pathname #p".." nil "." "")
 
 ;; #p"../"
-#+(or allegro abcl)
+#+allegro
 (check-physical-pathname #p"../" '(:relative :back) nil nil)
-#+(or sbcl cmu clisp)
+#+(or abcl sbcl cmu clisp)
 (check-physical-pathname #p"../" '(:relative :up) nil nil)
 
-#+allegro
+#+(or allegro abcl cmu)
 (check-physical-pathname #p"..." nil "..." nil)
 (check-physical-pathname #p"foo.*" nil "foo" :wild)
 
@@ -297,10 +298,10 @@
 ;; "TRANSLATE-PATHNAME translates SOURCE (that matches FROM-WILDCARD)..."
 (expect (not (pathname-match-p "/foo/bar.txt" "**/*.*")))
 ;; Since (pathname-match-p "/foo/bar.txt" "**/*.*" ) => NIL...
-#+(or clisp allegro abcl)
+#+(or clisp allegro abcl cmu)
 ;; This seems to be the correct behavior.
 (expect (signals-error (translate-pathname "/foo/bar.txt" "**/*.*" "/usr/local/**/*.*") 'error))
-#+(or sbcl cmu)
+#+(or sbcl)
 ;; This appears to be a bug, since SOURCE doesn't match FROM-WILDCARD.
 (expect (equal (translate-pathname "/foo/bar.txt" "**/*.*" "/usr/local/**/*.*")
                #p"/usr/local/foo/bar.txt"))
@@ -468,3 +469,100 @@
 (expect (equal (namestring (translate-logical-pathname
                             "prog:code;documentation.lisp"))
                "/lib/prog/docum.lisp"))
+
+;; "ANSI section 19.3.1.1.5 specifies that translation to a filesystem which
+;; doesn't have versions should ignore the version slot. CMU CL didn't ignore
+;; this as it should, but we [i.e. SBCL] do."
+(expect (equal (namestring (translate-logical-pathname
+                            "test0:foo;bar;baz;mum.quux.3"))
+               "/library/foo/foo/bar/baz/mum.quux"))
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (setf (logical-pathname-translations "scratch")
+        '(("**;*.*.*" "/usr/local/doc/**/*"))))
+
+#-(or allegro clisp)
+;; FIXME Figure out why CLISP and Allegro don't like this test!
+(loop for (expected-result . params) in
+  `(;; trivial merge
+        (#P"/usr/local/doc/foo" #p"foo" #p"/usr/local/doc/")
+        ;; If pathname does not specify a host, device, directory,
+        ;; name, or type, each such component is copied from
+        ;; default-pathname.
+        ;; 1) no name, no type
+        (#p"/supplied-dir/name.type" #p"/supplied-dir/" #p"/dir/name.type")
+        ;; 2) no directory, no type
+        (#p"/dir/supplied-name.type" #p"supplied-name" #p"/dir/name.type")
+        ;; 3) no name, no dir (must use make-pathname as ".foo" is parsed
+        ;; as a name)
+        (#p"/dir/name.supplied-type"
+         ,(make-pathname :type "supplied-type")
+         #p"/dir/name.type")
+        ;; If (pathname-directory pathname) is a list whose car is
+        ;; :relative, and (pathname-directory default-pathname) is a
+        ;; list, then the merged directory is [...]
+        (#p"/aaa/bbb/ccc/ddd/qqq/www" #p"qqq/www" #p"/aaa/bbb/ccc/ddd/eee")
+        ;; except that if the resulting list contains a string or
+        ;; :wild immediately followed by :back, both of them are
+        ;; removed.
+        (#P"/aaa/bbb/ccc/blah/eee"
+         ;; "../" in a namestring is parsed as :up not :back, so make-pathname
+         ,(make-pathname :directory '(:relative :back "blah"))
+         #p"/aaa/bbb/ccc/ddd/eee")
+        ;; If (pathname-directory default-pathname) is not a list or
+        ;; (pathname-directory pathname) is not a list whose car is
+        ;; :relative, the merged directory is (or (pathname-directory
+        ;; pathname) (pathname-directory default-pathname))
+        (#P"/absolute/path/name.type"
+         #p"/absolute/path/name"
+         #p"/dir/default-name.type")
+        ;; === logical pathnames ===
+        ;; recognizes a logical pathname namestring when
+        ;; default-pathname is a logical pathname
+        ;; FIXME: 0.6.12.23 fails this one.
+        ;;
+        ;; And, as it happens, it's right to fail it. Because
+        ;; #p"name1" is read in with the ambient *d-p-d* value, which
+        ;; has a physical (Unix) host; therefore, the host of the
+        ;; default-pathname argument to merge-pathnames is
+        ;; irrelevant. The result is (correctly) different if
+        ;; '#p"name1"' is replaced by "name1", below, though it's
+        ;; still not what one might expect... -- CSR, 2002-05-09
+        #+nil (#P"scratch:foo;name1" #p"name1" #p"scratch:foo;")
+        ;; or when the namestring begins with the name of a defined
+        ;; logical host followed by a colon [I assume that refers to pathname
+        ;; rather than default-pathname]
+        (#p"SCRATCH:FOO;NAME2" #p"scratch:;name2" #p"scratch:foo;")
+        ;; conduct the previous set of tests again, with a lpn first argument
+        (#P"SCRATCH:USR;LOCAL;DOC;FOO" #p"scratch:;foo" #p"/usr/local/doc/")
+        (#p"SCRATCH:SUPPLIED-DIR;NAME.TYPE"
+         #p"scratch:supplied-dir;"
+         #p"/dir/name.type")
+        (#p"SCRATCH:DIR;SUPPLIED-NAME.TYPE"
+         #p"scratch:;supplied-name"
+         #p"/dir/name.type")
+        (#p"SCRATCH:DIR;NAME.SUPPLIED-TYPE"
+         ,(make-pathname :host "scratch" :type "supplied-type")
+         #p"/dir/name.type")
+        (#p"SCRATCH:AAA;BBB;CCC;DDD;FOO;BAR"
+         ,(make-pathname :host "scratch"
+                         :directory '(:relative "foo")
+                         :name "bar")
+         #p"/aaa/bbb/ccc/ddd/eee")
+        (#p"SCRATCH:AAA;BBB;CCC;FOO;BAR"
+         ,(make-pathname :host "scratch"
+                         :directory '(:relative :back "foo")
+                         :name "bar")
+         #p"/aaa/bbb/ccc/ddd/eee")
+        (#p"SCRATCH:ABSOLUTE;PATH;NAME.TYPE"
+         #p"scratch:absolute;path;name" #p"/dir/default-name.type")
+
+        ;; FIXME: test version handling in LPNs
+        )
+  do (let ((result (apply #'merge-pathnames params)))
+       (macrolet ((frob (op)
+                    `(expect (equal (,op result) (,op expected-result)))))
+         (frob pathname-host)
+         (frob pathname-directory)
+         (frob pathname-name)
+         (frob pathname-type))))
