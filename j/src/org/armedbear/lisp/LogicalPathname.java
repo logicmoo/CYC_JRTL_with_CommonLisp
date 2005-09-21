@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.16 2005-09-18 17:51:23 piso Exp $
+ * $Id: LogicalPathname.java,v 1.17 2005-09-21 17:36:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@ public final class LogicalPathname extends Pathname
             String n = rest;
             if (n.equals("*"))
                 name = Keyword.WILD;
-            else
+            else if (n.length() > 0)
                 name = new SimpleString(n.toUpperCase());
         }
     }

@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.90 2005-09-18 17:52:06 piso Exp $
+ * $Id: Pathname.java,v 1.91 2005-09-21 17:35:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,7 +115,7 @@ public class Pathname extends LispObject
             return;
         }
         if (s.equals("..") || s.equals("../")) {
-            directory = list2(Keyword.RELATIVE, Keyword.BACK);
+            directory = list2(Keyword.RELATIVE, Keyword.UP);
             return;
         }
         if (Utilities.isPlatformWindows()) {
@@ -785,6 +785,8 @@ public class Pathname extends LispObject
         final Pathname p;
         final boolean logical;
         if (host != NIL) {
+            if (host instanceof AbstractString)
+                host = LogicalPathname.canonicalizeStringComponent((AbstractString)host);
             if (LOGICAL_PATHNAME_TRANSLATIONS.get(host) == null) {
                 // Not a defined logical pathname host.
                 signal(new LispError(host.writeToString() + " is not defined as a logical pathname host."));
@@ -1042,8 +1044,6 @@ public class Pathname extends LispObject
                                                 LispObject defaultVersion)
         throws ConditionThrowable
     {
-//         if (pathname instanceof LogicalPathname || defaultPathname instanceof LogicalPathname)
-//             signal(new LispError("Bad place for a logical pathname."));
         Pathname p;
         if (pathname instanceof LogicalPathname)
             p = new LogicalPathname();
@@ -1075,6 +1075,26 @@ public class Pathname extends LispObject
             p.version = defaultPathname.version;
         else
             p.version = defaultVersion;
+        if (p instanceof LogicalPathname) {
+            // When we're returning a logical
+            p.device = Keyword.UNSPECIFIC;
+            if (p.directory.listp()) {
+                LispObject original = p.directory;
+                LispObject canonical = NIL;
+                while (original != NIL) {
+                    LispObject component = original.car();
+                    if (component instanceof AbstractString)
+                        component = LogicalPathname.canonicalizeStringComponent((AbstractString)component);
+                    canonical = canonical.push(component);
+                    original = original.cdr();
+                }
+                p.directory = canonical.nreverse();
+            }
+            if (p.name instanceof AbstractString)
+                p.name = LogicalPathname.canonicalizeStringComponent((AbstractString)p.name);
+            if (p.type instanceof AbstractString)
+                p.type = LogicalPathname.canonicalizeStringComponent((AbstractString)p.type);
+        }
         return p;
     }
 
