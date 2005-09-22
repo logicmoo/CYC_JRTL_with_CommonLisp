@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.116 2005-09-08 18:30:30 piso Exp $
+ * $Id: Load.java,v 1.117 2005-09-22 00:23:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -516,6 +516,8 @@ public final class Load extends Lisp
                 // If stream is closed, fall through...
             }
             Pathname pathname = Pathname.coerceToPathname(filespec);
+            if (pathname instanceof LogicalPathname)
+                pathname = LogicalPathname.translateLogicalPathname((LogicalPathname)pathname);
             return load(pathname,
                         pathname.getNamestring(),
                         verbose != NIL,
