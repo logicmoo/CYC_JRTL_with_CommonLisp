@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StringFunctions.java,v 1.38 2005-08-04 18:11:23 piso Exp $
+ * $Id: StringFunctions.java,v 1.39 2005-09-22 00:25:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -576,7 +576,7 @@ public final class StringFunctions extends Lisp
                 return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
                 return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
-            StringBuffer sb = new StringBuffer(length);
+            FastStringBuffer sb = new FastStringBuffer(length);
             char[] array = s.getStringChars();
             int i;
             for (i = 0; i < start; i++)
@@ -611,7 +611,7 @@ public final class StringFunctions extends Lisp
                 return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
                 return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
-            StringBuffer sb = new StringBuffer(length);
+            FastStringBuffer sb = new FastStringBuffer(length);
             char[] array = s.getStringChars();
             int i;
             for (i = 0; i < start; i++)
@@ -646,7 +646,7 @@ public final class StringFunctions extends Lisp
                 return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
                 return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
-            StringBuffer sb = new StringBuffer(length);
+            FastStringBuffer sb = new FastStringBuffer(length);
             char[] array = s.getStringChars();
             boolean lastCharWasAlphanumeric = false;
             int i;
@@ -822,7 +822,7 @@ public final class StringFunctions extends Lisp
                 return signalTypeError(size, Symbol.FIXNUM);
             }
             if (n < 0 || n >= ARRAY_DIMENSION_MAX) {
-                StringBuffer sb = new StringBuffer();
+                FastStringBuffer sb = new FastStringBuffer();
                 sb.append("The size specified for this string (");
                 sb.append(n);
                 sb.append(')');
