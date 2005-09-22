@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.240 2005-09-12 01:14:18 piso Exp $
+ * $Id: Autoload.java,v 1.241 2005-09-22 00:23:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -565,6 +565,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
         autoload(PACKAGE_SYS, "%time", "Time");
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObjectFunctions", true);
+        autoload(PACKAGE_SYS, "canonicalize-logical-host", "LogicalPathname", true);
         autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
         autoload(PACKAGE_SYS, "class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "coerce-to-double-float", "FloatFunctions");
