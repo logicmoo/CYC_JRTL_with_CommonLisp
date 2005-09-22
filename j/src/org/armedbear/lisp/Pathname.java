@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.92 2005-09-21 18:51:17 piso Exp $
+ * $Id: Pathname.java,v 1.93 2005-09-22 00:26:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -917,14 +917,8 @@ public class Pathname extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Pathname pathname = Pathname.coerceToPathname(arg);
-            if (pathname instanceof LogicalPathname) {
-                try {
-                    pathname = (Pathname) Symbol.TRANSLATE_LOGICAL_PATHNAME.execute(pathname);
-                }
-                catch (ClassCastException e) {
-                    return signalTypeError(pathname, Symbol.PATHNAME);
-                }
-            }
+            if (pathname instanceof LogicalPathname)
+                pathname = LogicalPathname.translateLogicalPathname((LogicalPathname)pathname);
             LispObject result = NIL;
             String s = pathname.getNamestring();
             if (s != null) {
@@ -1147,14 +1141,8 @@ public class Pathname extends LispObject
         throws ConditionThrowable
     {
         Pathname pathname = Pathname.coerceToPathname(arg);
-        if (pathname instanceof LogicalPathname) {
-            try {
-                pathname = (Pathname) Symbol.TRANSLATE_LOGICAL_PATHNAME.execute(pathname);
-            }
-            catch (ClassCastException e) {
-                return signalTypeError(pathname, Symbol.PATHNAME);
-            }
-        }
+        if (pathname instanceof LogicalPathname)
+            pathname = LogicalPathname.translateLogicalPathname((LogicalPathname)pathname);
         if (pathname.isWild())
             return signal(new FileError("Bad place for a wild pathname.",
                                         pathname));
@@ -1261,9 +1249,10 @@ public class Pathname extends LispObject
     private static final Primitive HOST_NAMESTRING =
         new Primitive("host-namestring", "pathname")
     {
-        public LispObject execute(LispObject arg)
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return NIL;
+            Pathname p = coerceToPathname(arg);
+            return p.host;
         }
     };
 
