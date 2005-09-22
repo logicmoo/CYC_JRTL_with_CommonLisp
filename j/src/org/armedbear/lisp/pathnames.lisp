@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.23 2005-09-22 00:24:42 piso Exp $
+;;; $Id: pathnames.lisp,v 1.24 2005-09-22 23:26:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -218,12 +218,14 @@
         (from   (pathname from-wildcard))
         (to     (pathname to-wildcard))
         (case   (and (typep source 'logical-pathname)
-                     (featurep :unix)
+                     (or (featurep :unix) (featurep :windows))
                      :downcase)))
     (make-pathname :host      (pathname-host to)
-                   :device    (translate-component (pathname-device source)
-                                                   (pathname-device from)
-                                                   (pathname-device to))
+                   :device    (if (typep to 'logical-pathname)
+                                  :unspecific
+                                  (translate-component (pathname-device source)
+                                                       (pathname-device from)
+                                                       (pathname-device to)))
                    :directory (translate-directory (pathname-directory source)
                                                    (pathname-directory from)
                                                    (pathname-directory to)
