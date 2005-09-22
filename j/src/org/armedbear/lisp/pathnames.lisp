@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.21 2005-09-19 15:37:22 piso Exp $
+;;; $Id: pathnames.lisp,v 1.22 2005-09-22 00:24:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -244,8 +244,8 @@
                                                        (pathname-version from)
                                                        (pathname-version to))))))
 
-(defun canonicalize-logical-host (host)
-  (string-upcase host))
+;; (defun canonicalize-logical-host (host)
+;;   (string-upcase host))
 
 (defun logical-host-p (canonical-host)
   (multiple-value-bind (translations present)
