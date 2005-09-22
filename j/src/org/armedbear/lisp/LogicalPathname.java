@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.17 2005-09-21 17:36:15 piso Exp $
+ * $Id: LogicalPathname.java,v 1.18 2005-09-22 00:17:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,6 +122,12 @@ public final class LogicalPathname extends Pathname
             }
         }
         return new SimpleString(s.getStringValue().toUpperCase());
+    }
+
+    public static Pathname translateLogicalPathname(LogicalPathname pathname)
+        throws ConditionThrowable
+    {
+        return (Pathname) Symbol.TRANSLATE_LOGICAL_PATHNAME.execute(pathname);
     }
 
     private static final LispObject parseDirectory(String s)
@@ -253,10 +259,29 @@ public final class LogicalPathname extends Pathname
         return sb.toString();
     }
 
+    // ### canonicalize-logical-host host => canonical-host
+    private static final Primitive CANONICALIZE_LOGICAL_HOST =
+        new Primitive("canonicalize-logical-host", PACKAGE_SYS, true, "host")
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            try {
+                AbstractString s = (AbstractString) arg;
+                if (s.length() == 0)
+                    return signal(new LispError("Invalid logical host name: \"" +
+                                                s.getStringValue() + '"'));
+                return canonicalizeStringComponent(s);
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.STRING);
+            }
+        }
+    };
+
     // ### %make-logical-pathname namestring => logical-pathname
     private static final Primitive _MAKE_LOGICAL_PATHNAME =
-        new Primitive("%make-logical-pathname", PACKAGE_SYS, true,
-                      "namestring")
+        new Primitive("%make-logical-pathname", PACKAGE_SYS, true, "namestring")
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
