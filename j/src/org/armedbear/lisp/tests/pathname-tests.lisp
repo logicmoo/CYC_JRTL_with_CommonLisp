@@ -72,7 +72,7 @@
   `(expect (equal ,pathname (read-from-string (write-to-string ,pathname :readably t)))))
 
 (defmacro check-namestring (pathname namestring)
-  `(expect (string= (namestring ,pathname) 
+  `(expect (string= (namestring ,pathname)
                     #+windows (substitute #\\ #\/ ,namestring)
                     #-windows ,namestring)))
 
@@ -478,7 +478,7 @@
 #-clisp
 (expect (equal (namestring (translate-logical-pathname "demo0:x.y"))
                #-windows "/tmp/x.y"
-               #+windows "\\tmp\\x.y"))               
+               #+windows "\\tmp\\x.y"))
 #-(or allegro clisp)
 (expect (equal (namestring (translate-logical-pathname "bazooka:todemo;x.y"))
                (namestring (translate-logical-pathname "demo0:x.y"))))
@@ -516,6 +516,7 @@
 ;; "ANSI section 19.3.1.1.5 specifies that translation to a filesystem which
 ;; doesn't have versions should ignore the version slot. CMU CL didn't ignore
 ;; this as it should, but we [i.e. SBCL] do."
+#-cmucl
 (check-namestring (translate-logical-pathname "test0:foo;bar;baz;mum.quux.3")
                   "/library/foo/foo/bar/baz/mum.quux")
 
