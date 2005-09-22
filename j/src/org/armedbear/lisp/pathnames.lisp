@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.24 2005-09-22 23:26:22 piso Exp $
+;;; $Id: pathnames.lisp,v 1.25 2005-09-22 23:34:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -214,18 +214,24 @@
 (defun translate-pathname (source from-wildcard to-wildcard &key)
   (unless (pathname-match-p source from-wildcard)
     (error "~S and ~S do not match." source from-wildcard))
-  (let ((source (pathname source))
-        (from   (pathname from-wildcard))
-        (to     (pathname to-wildcard))
-        (case   (and (typep source 'logical-pathname)
-                     (or (featurep :unix) (featurep :windows))
-                     :downcase)))
+  (let* ((source (pathname source))
+         (from   (pathname from-wildcard))
+         (to     (pathname to-wildcard))
+         (device (if (typep 'to 'logical-pathname)
+                     :unspecific
+                     (translate-component (pathname-device source)
+                                          (pathname-device from)
+                                          (pathname-device to))))
+         (case   (and (typep source 'logical-pathname)
+                      (or (featurep :unix) (featurep :windows))
+                      :downcase)))
     (make-pathname :host      (pathname-host to)
-                   :device    (if (typep to 'logical-pathname)
-                                  :unspecific
-                                  (translate-component (pathname-device source)
-                                                       (pathname-device from)
-                                                       (pathname-device to)))
+                   :device    (cond ((typep to 'logical-pathname)
+                                     :unspecific)
+                                    ((eq device :unspecific)
+                                     nil)
+                                    (t
+                                     device))
                    :directory (translate-directory (pathname-directory source)
                                                    (pathname-directory from)
                                                    (pathname-directory to)
