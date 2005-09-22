@@ -62,12 +62,19 @@
   (declare (type list args))
   (declare (type string expected))
   (let ((result (namestring (apply 'translate-pathname args))))
-    (unless (equal result expected)
+    (unless (equal result
+                   #-windows expected
+                   #+windows (substitute #\\ #\/ expected))
       (format t "(translate-pathname ~S ~S ~S) => ~S; expected ~S~%"
               (first args) (second args) (third args) result expected))))
 
 (defmacro check-readable (pathname)
   `(expect (equal ,pathname (read-from-string (write-to-string ,pathname :readably t)))))
+
+(defmacro check-namestring (pathname namestring)
+  `(expect (string= (namestring ,pathname) 
+                    #+windows (substitute #\\ #\/ ,namestring)
+                    #-windows ,namestring)))
 
 (check-physical-pathname #p"/" '(:absolute) nil nil)
 (check-physical-pathname #p"/foo" '(:absolute) "foo" nil)
@@ -151,12 +158,14 @@
 #+allegro
 (expect (string= (namestring (make-pathname :name "..")) "../"))
 
-(expect (string= (namestring (make-pathname :directory '(:relative :up))) "../"))
+(expect (string= (namestring (make-pathname :directory '(:relative :up)))
+                 #+windows "..\\"
+                 #-windows "../"))
 
 ;; Silly names.
-#+clisp
+#+(or abcl clisp)
 (expect (signals-error (make-pathname :name "abc/def") 'error))
-#-(or allegro clisp sbcl)
+#-(or abcl allegro clisp sbcl)
 (check-readable (make-pathname :name "abc/def"))
 
 ;; If the prefix isn't a defined logical host, it's not a logical pathname.
@@ -308,15 +317,14 @@
 (expect (string= (namestring (translate-pathname "test.txt" "*.txt" "*.text"))
                  "test.text"))
 
-(expect (string= (namestring (translate-pathname "foo/bar" "*/bar" "*/baz"))
-                 "foo/baz"))
+(check-namestring (translate-pathname "foo/bar" "*/bar" "*/baz") "foo/baz")
 (expect (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz"))
 (expect (string= (namestring (translate-pathname "foo.bar" "*.*" "/usr/local/*.*"))
-                 "/usr/local/foo.bar"))
+                 #-windows "/usr/local/foo.bar"
+                 #+windows "\\usr\\local\\foo.bar"))
 (expect (equal (translate-pathname "foo.bar" "*.*" "/usr/local/*.*")
                #p"/usr/local/foo.bar"))
 
-;; (expect (equal (translate-pathname "/foo/" "/*/" "/usr/local/*/") #p"/usr/local/foo/"))
 (check-translate-pathname '("/foo/" "/*/" "/usr/local/*/") "/usr/local/foo/")
 (check-translate-pathname '("/foo/baz/bar.txt" "/**/*.*" "/usr/local/**/*.*")
                           "/usr/local/foo/baz/bar.txt")
@@ -355,11 +363,13 @@
 ;; (check-physical-pathname (translate-logical-pathname "effluvia:foo.bar")
 ;;                          '(:absolute "usr" "local") "foo" "bar")
 (expect (string= (namestring (translate-logical-pathname "effluvia:foo.bar"))
-                 "/usr/local/foo.bar"))
+                 #-windows "/usr/local/foo.bar"
+                 #+windows "\\usr\\local\\foo.bar"))
 ;; (check-physical-pathname (translate-logical-pathname "effluvia:foo;bar.txt")
 ;;                          '(:absolute "usr" "local" "foo") "bar" "txt")
 (expect (string= (namestring (translate-logical-pathname "effluvia:foo;bar.txt"))
-                 "/usr/local/foo/bar.txt"))
+                 #-windows "/usr/local/foo/bar.txt"
+                 #+windows "\\usr\\local\\foo\\bar.txt"))
 
 #-allegro
 (check-logical-pathname #p"effluvia:Foo.Bar" "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
@@ -390,16 +400,15 @@
 (expect (not (pathname-match-p "demo0:file.lisp"
                                (logical-pathname "demo0:tmp;**;*.*.*"))))
 #-clisp
-(expect (equal (namestring (translate-logical-pathname "demo0:file.lisp"))
-               "/tmp/file.lisp"))
+(check-namestring (translate-logical-pathname "demo0:file.lisp") "/tmp/file.lisp")
 
 (setf (logical-pathname-translations "demo1")
       '(("**;*.*.*" "/tmp/**/*.*") (";**;*.*.*" "/tmp/rel/**/*.*")))
 ;; Remove "**" from the resulting pathname when the source directory is NIL.
 (expect (not (equal (namestring (translate-logical-pathname "demo1:foo.lisp"))
-                    "/tmp/**/foo.lisp")))
-(expect (equal (namestring (translate-logical-pathname "demo1:foo.lisp"))
-               "/tmp/foo.lisp"))
+                    #-windows "/tmp/**/foo.lisp"
+                    #+windows "\\tmp\\**\\foo.lisp")))
+(check-namestring (translate-logical-pathname "demo1:foo.lisp") "/tmp/foo.lisp")
 ;;; Check for absolute/relative path confusion.
 (expect (not (pathname-match-p "demo1:;foo.lisp" "**;*.*.*")))
 #-(or sbcl cmu allegro abcl)
@@ -408,7 +417,9 @@
 #+clisp
 (expect (pathname-match-p "demo1:;foo.lisp" ";**;*.*.*"))
 (expect (equal (namestring (translate-logical-pathname "demo1:;foo.lisp"))
-               #-allegro "/tmp/rel/foo.lisp"
+               #+(and abcl windows) "\\tmp\\rel\\foo.lisp"
+               #+(and abcl unix) "/tmp/rel/foo.lisp"
+               #-(or allegro abcl) "/tmp/rel/foo.lisp"
                #+allegro "/tmp/foo.lisp"))
 
 (setf (logical-pathname-translations "demo2")
@@ -459,11 +470,15 @@
 #+clisp ;; BUG
 (expect (signals-error (translate-logical-pathname "bazooka:todemo;x.y") 'error))
 #-(or allegro clisp)
-(expect (equal (namestring (translate-logical-pathname "bazooka:todemo;x.y")) "/tmp/x.y"))
+(expect (equal (namestring (translate-logical-pathname "bazooka:todemo;x.y"))
+               #-windows "/tmp/x.y"
+               #+windows "\\tmp\\x.y"))
 #+clisp ;; BUG
 (expect (signals-error (translate-logical-pathname "demo0:x.y") 'error))
 #-clisp
-(expect (equal (namestring (translate-logical-pathname "demo0:x.y")) "/tmp/x.y"))
+(expect (equal (namestring (translate-logical-pathname "demo0:x.y"))
+               #-windows "/tmp/x.y"
+               #+windows "\\tmp\\x.y"))               
 #-(or allegro clisp)
 (expect (equal (namestring (translate-logical-pathname "bazooka:todemo;x.y"))
                (namestring (translate-logical-pathname "demo0:x.y"))))
@@ -479,9 +494,8 @@
 
 (setf (logical-pathname-translations "test0")
       '(("**;*.*.*"              "/library/foo/**/")))
-(expect (equal (namestring (translate-logical-pathname
-                            "test0:foo;bar;baz;mum.quux"))
-               "/library/foo/foo/bar/baz/mum.quux"))
+(check-namestring (translate-logical-pathname "test0:foo;bar;baz;mum.quux")
+                  "/library/foo/foo/bar/baz/mum.quux")
 (setf (logical-pathname-translations "prog")
       '(("RELEASED;*.*.*"        "MY-UNIX:/sys/bin/my-prog/")
         ("RELEASED;*;*.*.*"      "MY-UNIX:/sys/bin/my-prog/*/")
@@ -490,23 +504,20 @@
 (setf (logical-pathname-translations "prog")
       '(("CODE;*.*.*"             "/lib/prog/")))
 #-allegro
-(expect (equal (namestring (translate-logical-pathname
-                            "prog:code;documentation.lisp"))
-               "/lib/prog/documentation.lisp"))
+(check-namestring (translate-logical-pathname "prog:code;documentation.lisp")
+                  "/lib/prog/documentation.lisp")
 (setf (logical-pathname-translations "prog")
       '(("CODE;DOCUMENTATION.*.*" "/lib/prog/docum.*")
         ("CODE;*.*.*"             "/lib/prog/")))
 #-allegro
-(expect (equal (namestring (translate-logical-pathname
-                            "prog:code;documentation.lisp"))
-               "/lib/prog/docum.lisp"))
+(check-namestring (translate-logical-pathname "prog:code;documentation.lisp")
+                  "/lib/prog/docum.lisp")
 
 ;; "ANSI section 19.3.1.1.5 specifies that translation to a filesystem which
 ;; doesn't have versions should ignore the version slot. CMU CL didn't ignore
 ;; this as it should, but we [i.e. SBCL] do."
-(expect (equal (namestring (translate-logical-pathname
-                            "test0:foo;bar;baz;mum.quux.3"))
-               "/library/foo/foo/bar/baz/mum.quux"))
+(check-namestring (translate-logical-pathname "test0:foo;bar;baz;mum.quux.3")
+                  "/library/foo/foo/bar/baz/mum.quux")
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (setf (logical-pathname-translations "scratch")
@@ -598,9 +609,7 @@
          (frob pathname-name)
          (frob pathname-type))))
 
-(expect (string=
-         (namestring (parse-namestring "/foo" (host-namestring #p"/bar")))
-         "/foo"))
+(check-namestring (parse-namestring "/foo" (host-namestring #p"/bar")) "/foo")
 (expect (string=
          (namestring (parse-namestring "FOO" (host-namestring #p"SCRATCH:BAR")))
          "SCRATCH:FOO"))
