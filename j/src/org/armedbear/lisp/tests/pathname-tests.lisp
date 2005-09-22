@@ -597,3 +597,15 @@
          (frob pathname-directory)
          (frob pathname-name)
          (frob pathname-type))))
+
+(expect (string=
+         (namestring (parse-namestring "/foo" (host-namestring #p"/bar")))
+         "/foo"))
+(expect (string=
+         (namestring (parse-namestring "FOO" (host-namestring #p"SCRATCH:BAR")))
+         "SCRATCH:FOO"))
+#-(or allegro clisp cmu)
+(expect (signals-error
+         (setf (logical-pathname-translations "")
+               (list '("**;*.*.*" "/**/*.*")))
+         'error))
