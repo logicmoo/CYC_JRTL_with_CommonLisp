@@ -3,12 +3,17 @@
 ;;; This software is in the public domain and is provided with absolutely no
 ;;; warranty.
 
-(defvar *ansi-tests-translations*
-  ;; Your path may vary!
-  '(("*.*.*" #-windows "/home/peter/gcl/ansi-tests/*.*"
-             #+windows "c:/cygwin/home/peter/gcl/ansi-tests/*.*")))
+;;; Define a reasonable value for this in ~/.abclrc.
+(defvar *ansi-tests-translations*)
 
 (unless (member "RT" *modules* :test #'string=)
+  (unless (boundp '*ansi-tests-translations*)
+    (setf *ansi-tests-translations*
+          '(("*.*.*" #-windows "/home/peter/gcl/ansi-tests/*.*"
+                     #+windows "c:/cygwin/home/peter/gcl/ansi-tests/*.*")))
+    (warn "~S is not defined; using ~S"
+          '*ansi-tests-translations*
+          *ansi-tests-translations*))
   (setf (logical-pathname-translations "ansi-tests") *ansi-tests-translations*)
   (load "ansi-tests:rt-package.lsp")
   (load #+abcl (compile-file-if-needed "ansi-tests:rt.lsp")
