@@ -214,6 +214,7 @@
   (check-physical-pathname (make-pathname :name "..") '(:relative :back) nil nil)
   t)
 
+#-(or clisp sbcl)
 (deftest physical.24
   (check-readable (make-pathname :name ".."))
   t)
@@ -308,7 +309,7 @@
 (deftest logical-pathname-translations.1
   #+(or sbcl cmu)
   (equal (logical-pathname-translations "effluvia")
-                 '(("**;*.*.*" "/usr/local/**/*.*")))
+         '(("**;*.*.*" "/usr/local/**/*.*")))
   #+clisp
   (equal (logical-pathname-translations "effluvia")
          '((#p"EFFLUVIA:**;*.*.*" "/usr/local/**/*.*")))
@@ -352,8 +353,9 @@
            "#p\"effluvia:bar.baz\"")
   t)
 
-;; (setf *pathname* (parse-namestring "**;*.*.*" "effluvia"))
-(expect (typep (parse-namestring "**;*.*.*" "effluvia") 'logical-pathname))
+(deftest logical.6
+  (typep (parse-namestring "**;*.*.*" "effluvia") 'logical-pathname)
+  t)
 #-allegro
 (expect (string= (namestring (parse-namestring "**;*.*.*" "effluvia")) "EFFLUVIA:**;*.*.*"))
 #+allegro
@@ -593,7 +595,7 @@
 (deftest sbcl.5
   (pathname-match-p "demo1:;foo.lisp" "**;*.*.*")
   nil)
-#-(or sbcl cmu allegro abcl)
+#+(or sbcl cmu allegro abcl)
 ;; BUG Pathnames should match if the following translation is to work.
 (deftest sbcl.6
   (pathname-match-p "demo1:;foo.lisp" "demo1:;**;*.*.*")
@@ -845,6 +847,8 @@
   t)
 #-(or allegro clisp cmu)
 (deftest sbcl.29
+  ;; "The null string, "", is not a valid value for any component of a logical
+  ;; pathname." 19.3.2.2
   (signals-error (setf (logical-pathname-translations "")
                        (list '("**;*.*.*" "/**/*.*")))
                  'error)

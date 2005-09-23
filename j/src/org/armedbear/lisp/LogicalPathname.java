@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.18 2005-09-22 00:17:38 piso Exp $
+ * $Id: LogicalPathname.java,v 1.19 2005-09-23 19:35:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,9 +268,12 @@ public final class LogicalPathname extends Pathname
         {
             try {
                 AbstractString s = (AbstractString) arg;
-                if (s.length() == 0)
+                if (s.length() == 0) {
+                    // "The null string, "", is not a valid value for any
+                    // component of a logical pathname." 19.3.2.2
                     return signal(new LispError("Invalid logical host name: \"" +
                                                 s.getStringValue() + '"'));
+                }
                 return canonicalizeStringComponent(s);
             }
             catch (ClassCastException e) {
