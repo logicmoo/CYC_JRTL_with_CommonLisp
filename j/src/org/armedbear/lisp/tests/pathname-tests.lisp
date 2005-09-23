@@ -71,13 +71,13 @@
                #+allegro 'equalp)
          (ok t))
     (unless (typep pathname 'logical-pathname)
-      (format t "~&~S => ~S; expected ~S~%" pathname (type-of pathname) 'logical-pathname)
+;;       (format t "~&~S => ~S; expected ~S~%" pathname (type-of pathname) 'logical-pathname)
       (setf ok nil))
     ;; "The device component of a logical pathname is always :UNSPECIFIC..." 19.3.2.1
     #-allegro ;; Except on Allegro, where it's NIL.
     (unless (eq (pathname-device pathname) :unspecific)
-      (format t "~S => device is ~S, not ~S~%"
-              pathname (pathname-device pathname) :unspecific)
+;;       (format t "~S => device is ~S, not ~S~%"
+;;               pathname (pathname-device pathname) :unspecific)
       (setf ok nil))
     (unless (and (or (not (stringp host))
                      (funcall test host expected-host))
@@ -85,11 +85,11 @@
                  (funcall test name expected-name)
                  (funcall test type expected-type)
                  (eql version expected-version))
-      (format t "~&~S => ~S ~S ~S ~S ~S; expected ~S ~S ~S ~S ~S~%"
-              pathname
-              host directory name type version
-              expected-host expected-directory expected-name expected-type
-              expected-version)
+;;       (format t "~&~S => ~S ~S ~S ~S ~S; expected ~S ~S ~S ~S ~S~%"
+;;               pathname
+;;               host directory name type version
+;;               expected-host expected-directory expected-name expected-type
+;;               expected-version)
       (setf ok nil))
     ok))
 
@@ -332,17 +332,25 @@
   t)
 
 #-allegro
-(progn
+(deftest logical.2
   (check-logical-pathname #p"effluvia:bar.baz.42" "EFFLUVIA" '(:absolute) "BAR" "BAZ" 42)
-  (expect (string= (write-to-string #p"effluvia:bar.baz.42" :escape t)
-                   "#P\"EFFLUVIA:BAR.BAZ.42\"")))
+  t)
+#-allegro
+(deftest logical.3
+  (string= (write-to-string #p"effluvia:bar.baz.42" :escape t)
+           "#P\"EFFLUVIA:BAR.BAZ.42\"")
+  t)
 #+allegro
 ;; Allegro returns NIL for the device and directory and drops the version
 ;; entirely (even from the namestring).
-(progn
+(deftest logical.4
   (check-logical-pathname #p"effluvia:bar.baz.42" "effluvia" nil "bar" "baz" nil)
-  (expect (string= (write-to-string #p"effluvia:bar.baz" :escape t)
-                   "#p\"effluvia:bar.baz\"")))
+  t)
+#+allegro
+(deftest logical.5
+  (string= (write-to-string #p"effluvia:bar.baz" :escape t)
+           "#p\"effluvia:bar.baz\"")
+  t)
 
 ;; (setf *pathname* (parse-namestring "**;*.*.*" "effluvia"))
 (expect (typep (parse-namestring "**;*.*.*" "effluvia") 'logical-pathname))
