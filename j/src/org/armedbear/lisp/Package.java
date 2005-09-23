@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Package.java,v 1.68 2005-08-02 18:47:07 piso Exp $
+ * $Id: Package.java,v 1.69 2005-09-23 11:56:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ public final class Package extends LispObject
     public LispObject getDescription()
     {
         if (name != null) {
-            StringBuffer sb = new StringBuffer("The ");
+            FastStringBuffer sb = new FastStringBuffer("The ");
             sb.append(name);
             sb.append(" package");
             return new SimpleString(sb);
@@ -477,7 +477,7 @@ public final class Package extends LispObject
             return; // Nothing to do.
         Symbol sym = findAccessibleSymbol(symbol.name);
         if (sym != null && sym != symbol) {
-            StringBuffer sb = new StringBuffer("The symbol ");
+            FastStringBuffer sb = new FastStringBuffer("The symbol ");
             sb.append(sym.getQualifiedName());
             sb.append(" is already accessible in package ");
             sb.append(name);
@@ -495,20 +495,10 @@ public final class Package extends LispObject
         boolean added = false;
         if (symbol.getPackage() != this) {
             Symbol sym = findAccessibleSymbol(symbol.name);
-            if (sym == null) {
-                StringBuffer sb = new StringBuffer("The symbol ");
+            if (sym != symbol) {
+                FastStringBuffer sb = new FastStringBuffer("The symbol ");
                 sb.append(symbol.getQualifiedName());
                 sb.append(" is not accessible in package ");
-                sb.append(name);
-                sb.append('.');
-                signal(new PackageError(sb.toString()));
-                return;
-            }
-            if (sym != symbol) {
-                // Conflict.
-                StringBuffer sb = new StringBuffer("The symbol ");
-                sb.append(sym.getQualifiedName());
-                sb.append(" is already accessible in package ");
                 sb.append(name);
                 sb.append('.');
                 signal(new PackageError(sb.toString()));
@@ -527,7 +517,7 @@ public final class Package extends LispObject
                             pkg.shadowingSymbols.get(symbolName) == sym) {
                             ; // OK.
                         } else {
-                            StringBuffer sb = new StringBuffer("The symbol ");
+                            FastStringBuffer sb = new FastStringBuffer("The symbol ");
                             sb.append(sym.getQualifiedName());
                             sb.append(" is already accessible in package ");
                             sb.append(pkg.getName());
@@ -885,12 +875,12 @@ public final class Package extends LispObject
     public String writeToString() throws ConditionThrowable
     {
         if (_PRINT_FASL_.symbolValue() != NIL && name != null) {
-            StringBuffer sb = new StringBuffer("#.(FIND-PACKAGE \"");
+            FastStringBuffer sb = new FastStringBuffer("#.(FIND-PACKAGE \"");
             sb.append(name);
             sb.append("\")");
             return sb.toString();
         } else if (name != null) {
-            StringBuffer sb = new StringBuffer("#<PACKAGE \"");
+            FastStringBuffer sb = new FastStringBuffer("#<PACKAGE \"");
             sb.append(name);
             sb.append("\">");
             return sb.toString();
