@@ -47,13 +47,13 @@
          (ok t))
     (unless (and (pathnamep pathname)
                  (not (typep pathname 'logical-pathname)))
-      (format t "~&~S => ~S; expected ~S~%" pathname (type-of pathname) 'pathname)
+;;       (format t "~&~S => ~S; expected ~S~%" pathname (type-of pathname) 'pathname)
       (setf ok nil))
     (unless (and (equal directory expected-directory)
                  (equal name      expected-name)
                  (equal type      expected-type))
-      (format t "~&~S => ~S ~S ~S; expected ~S ~S ~S~%"
-              pathname directory name type expected-directory expected-name expected-type)
+;;       (format t "~&~S => ~S ~S ~S; expected ~S ~S ~S~%"
+;;               pathname directory name type expected-directory expected-name expected-type)
       (setf ok nil))
     ok))
 
@@ -98,11 +98,14 @@
   (declare (type list args))
   (declare (type string expected))
   (let ((result (namestring (apply 'translate-pathname args))))
-    (unless (equal result
-                   #-windows expected
-                   #+windows (substitute #\\ #\/ expected))
-      (format t "(translate-pathname ~S ~S ~S) => ~S; expected ~S~%"
-              (first args) (second args) (third args) result expected))))
+;;     (unless (equal result
+;;                    #-windows expected
+;;                    #+windows (substitute #\\ #\/ expected))
+;;       (format t "(translate-pathname ~S ~S ~S) => ~S; expected ~S~%"
+;;               (first args) (second args) (third args) result expected))))
+    (equal result
+           #-windows expected
+           #+windows (substitute #\\ #\/ expected))))
 
 (defmacro check-readable (pathname)
   `(equal ,pathname (read-from-string (write-to-string ,pathname :readably t))))
@@ -211,8 +214,12 @@
   (check-physical-pathname (make-pathname :name "..") '(:relative :back) nil nil)
   t)
 
-;; #p".."
 (deftest physical.24
+  (check-readable (make-pathname :name "."))
+  t)
+
+;; #p".."
+(deftest physical.25
   #+(or allegro)
   (check-physical-pathname #p".." '(:relative :back) nil nil)
   #+(or abcl cmu)
@@ -228,10 +235,10 @@
   (check-physical-pathname #p".." nil "." "")
   t)
 #+cmu
-(pushnew 'physical.24 rt:*expected-failures*)
+(pushnew 'physical.25 rt:*expected-failures*)
 
 ;; #p"../"
-(deftest physical.25
+(deftest physical.26
   #+allegro
   (check-physical-pathname #p"../" '(:relative :back) nil nil)
   #+(or abcl sbcl cmu clisp)
@@ -252,19 +259,19 @@
 #+cmu
 (pushnew 'lots-of-dots.2 rt:*expected-failures*)
 
-(deftest physical.26
+(deftest physical.27
   (check-physical-pathname #p"foo.*" nil "foo" :wild)
   t)
 
 #-sbcl
-(deftest physical.27
+(deftest physical.28
   #-allegro
   (string= (namestring (make-pathname :name "..")) "..")
   #+allegro
   (string= (namestring (make-pathname :name "..")) "../")
   t)
 
-(deftest physical.28
+(deftest physical.29
   (string= (namestring (make-pathname :directory '(:relative :up)))
            #+windows "..\\"
            #-windows "../")
@@ -311,7 +318,7 @@
   t)
 
 #+sbcl
-(deftest physical.29
+(deftest physical.30
   ;; Even though "effluvia" is defined as a logical host, "bop" is not a valid
   ;; logical pathname version, so this can't be a logical pathname.
   (check-physical-pathname #p"effluvia:bar.baz.bop" nil "effluvia:bar.baz" "bop")
@@ -451,41 +458,65 @@
 (deftest translate-pathname.5
   (check-namestring (translate-pathname "foo/bar" "*/bar" "*/baz") "foo/baz")
   t)
-(expect (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz"))
-(expect (string= (namestring (translate-pathname "foo.bar" "*.*" "/usr/local/*.*"))
-                 #-windows "/usr/local/foo.bar"
-                 #+windows "\\usr\\local\\foo.bar"))
-(expect (equal (translate-pathname "foo.bar" "*.*" "/usr/local/*.*")
-               #p"/usr/local/foo.bar"))
+(deftest translate-pathname.6
+  (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz")
+  t)
+(deftest translate-pathname.7
+  (string= (namestring (translate-pathname "foo.bar" "*.*" "/usr/local/*.*"))
+           #-windows "/usr/local/foo.bar"
+           #+windows "\\usr\\local\\foo.bar")
+  t)
+(deftest translate-pathname.8
+  (equal (translate-pathname "foo.bar" "*.*" "/usr/local/*.*")
+         #p"/usr/local/foo.bar")
+  t)
 
-(check-translate-pathname '("/foo/" "/*/" "/usr/local/*/") "/usr/local/foo/")
-(check-translate-pathname '("/foo/baz/bar.txt" "/**/*.*" "/usr/local/**/*.*")
-                          "/usr/local/foo/baz/bar.txt")
+(deftest translate-pathname.9
+  (check-translate-pathname '("/foo/" "/*/" "/usr/local/*/") "/usr/local/foo/")
+  t)
+(deftest translate-pathname.10
+  (check-translate-pathname '("/foo/baz/bar.txt" "/**/*.*" "/usr/local/**/*.*")
+                            "/usr/local/foo/baz/bar.txt")
+  t)
 
-(expect (equal (translate-pathname "/foo/" "/*/" "/usr/local/*/bar/") #p"/usr/local/foo/bar/"))
+(deftest translate-pathname.11
+  (equal (translate-pathname "/foo/" "/*/" "/usr/local/*/bar/") #p"/usr/local/foo/bar/")
+  t)
 
-(expect (equal (translate-pathname "/foo/bar.txt" "/*/*.*" "/usr/local/*/*.*")
-               #P"/usr/local/foo/bar.txt"))
+(deftest translate-pathname.12
+  (equal (translate-pathname "/foo/bar.txt" "/*/*.*" "/usr/local/*/*.*")
+         #P"/usr/local/foo/bar.txt")
+  t)
 
 ;; "TRANSLATE-PATHNAME translates SOURCE (that matches FROM-WILDCARD)..."
-(expect (not (pathname-match-p "/foo/bar.txt" "**/*.*")))
+(deftest pathname-match-p.1
+  (pathname-match-p "/foo/bar.txt" "**/*.*")
+  nil)
 ;; Since (pathname-match-p "/foo/bar.txt" "**/*.*" ) => NIL...
-#+(or clisp allegro abcl cmu)
-;; This seems to be the correct behavior.
-(expect (signals-error (translate-pathname "/foo/bar.txt" "**/*.*" "/usr/local/**/*.*") 'error))
-#+(or sbcl)
-;; This appears to be a bug, since SOURCE doesn't match FROM-WILDCARD.
-(expect (equal (translate-pathname "/foo/bar.txt" "**/*.*" "/usr/local/**/*.*")
-               #p"/usr/local/foo/bar.txt"))
+(deftest translate-pathname.13
+  #+(or clisp allegro abcl cmu)
+  ;; This seems to be the correct behavior.
+  (signals-error (translate-pathname "/foo/bar.txt" "**/*.*" "/usr/local/**/*.*") 'error)
+  #+sbcl
+  ;; This appears to be a bug, since SOURCE doesn't match FROM-WILDCARD.
+  (equal (translate-pathname "/foo/bar.txt" "**/*.*" "/usr/local/**/*.*")
+         #p"/usr/local/foo/bar.txt")
+  t)
 
-(expect (pathname-match-p "/foo/bar.txt" "/**/*.*"))
-(expect (equal (translate-pathname "/foo/bar.txt" "/**/*.*" "/usr/local/**/*.*")
-               #p"/usr/local/foo/bar.txt"))
+(deftest pathname-match-p.2
+  (pathname-match-p "/foo/bar.txt" "/**/*.*")
+  t)
+(deftest translate-pathname.14
+  (equal (translate-pathname "/foo/bar.txt" "/**/*.*" "/usr/local/**/*.*")
+         #p"/usr/local/foo/bar.txt")
+  t)
+
+#-clisp
+(deftest translate-pathname.15
+  (equal (translate-pathname "foo.bar" "/**/*.*" "/usr/local/") #p"/usr/local/foo.bar")
+  t)
 
 ;; TRANSLATE-LOGICAL-PATHNAME
-#-clisp
-(expect (equal (translate-pathname "foo.bar" "/**/*.*" "/usr/local/") #p"/usr/local/foo.bar"))
-
 #+clisp
 (expect (equal (translate-logical-pathname "effluvia:foo.bar") #p"/usr/local/foo.bar"))
 #+(or sbcl cmu)
