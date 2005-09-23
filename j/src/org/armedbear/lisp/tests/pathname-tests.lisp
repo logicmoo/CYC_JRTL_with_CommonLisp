@@ -356,94 +356,141 @@
 (deftest logical.6
   (typep (parse-namestring "**;*.*.*" "effluvia") 'logical-pathname)
   t)
-#-allegro
-(expect (string= (namestring (parse-namestring "**;*.*.*" "effluvia")) "EFFLUVIA:**;*.*.*"))
-#+allegro
-;; Allegro preserves case and drops the version component.
-(expect (string= (namestring (parse-namestring "**;*.*.*" "effluvia")) "effluvia:**;*.*"))
+(deftest logical.7
+  (check-namestring (parse-namestring "**;*.*.*" "effluvia")
+                    #-allegro "EFFLUVIA:**;*.*.*"
+                    ;; Allegro preserves case and drops the version component.
+                    #+allegro "effluvia:**;*.*")
+  t)
 
-;; The version can be a bignum.
-;; (setf *pathname* (pathname "effluvia:bar.baz.2147483648"))
 #-allegro
-(check-logical-pathname #p"effluvia:bar.baz.2147483648" "EFFLUVIA" '(:absolute) "BAR" "BAZ" 2147483648)
-;;(expect (= (pathname-version #p"effluvia:bar.baz.2147483648") 2147483648))
+;; The version can be a bignum.
+(deftest logical.8
+  (check-logical-pathname #p"effluvia:bar.baz.2147483648" "EFFLUVIA" '(:absolute) "BAR" "BAZ" 2147483648)
+  t)
 #-(or sbcl allegro)
 ;; SBCL has a bug when the version is a bignum.
-(expect (string= (namestring #p"effluvia:bar.baz.2147483648")
-                 "EFFLUVIA:BAR.BAZ.2147483648"))
+(deftest logical.9
+  (check-namestring #p"effluvia:bar.baz.2147483648" "EFFLUVIA:BAR.BAZ.2147483648")
+  t)
 
-#-allegro
-(check-logical-pathname #p"effluvia:foo.*" "EFFLUVIA" '(:absolute) "FOO" :wild nil)
-#+allegro
-(check-logical-pathname #p"effluvia:foo.*" "effluvia" nil "foo" :wild nil)
+(deftest logical.10
+  #-allegro
+  (check-logical-pathname #p"effluvia:foo.*" "EFFLUVIA" '(:absolute) "FOO" :wild nil)
+  #+allegro
+  (check-logical-pathname #p"effluvia:foo.*" "effluvia" nil "foo" :wild nil)
+  t)
 
-#-allegro
-(check-logical-pathname #p"effluvia:*.lisp" "EFFLUVIA" '(:absolute) :wild "LISP" nil)
-#+allegro
-(check-logical-pathname #p"effluvia:*.lisp" "effluvia" nil :wild "lisp" nil)
+(deftest logical.11
+  #-allegro
+  (check-logical-pathname #p"effluvia:*.lisp" "EFFLUVIA" '(:absolute) :wild "LISP" nil)
+  #+allegro
+  (check-logical-pathname #p"effluvia:*.lisp" "effluvia" nil :wild "lisp" nil)
+  t)
 
-#-allegro
-(check-logical-pathname #p"effluvia:bar.baz.newest" "EFFLUVIA" '(:absolute) "BAR" "BAZ" :newest)
-#+allegro
-(check-logical-pathname #p"effluvia:bar.baz.newest" "effluvia" nil "bar" "baz" nil)
+(deftest logical.12
+  #-allegro
+  (check-logical-pathname #p"effluvia:bar.baz.newest" "EFFLUVIA" '(:absolute) "BAR" "BAZ" :newest)
+  #+allegro
+  (check-logical-pathname #p"effluvia:bar.baz.newest" "effluvia" nil "bar" "baz" nil)
+  t)
 
-#-allegro
-(check-logical-pathname #p"EFFLUVIA:BAR.BAZ.NEWEST" "EFFLUVIA" '(:absolute) "BAR" "BAZ" :newest)
-#+allegro
-(check-logical-pathname #p"EFFLUVIA:BAR.BAZ.NEWEST" "EFFLUVIA" nil "BAR" "BAZ" nil)
+(deftest logical.13
+  #-allegro
+  (check-logical-pathname #p"EFFLUVIA:BAR.BAZ.NEWEST" "EFFLUVIA" '(:absolute) "BAR" "BAZ" :newest)
+  #+allegro
+  (check-logical-pathname #p"EFFLUVIA:BAR.BAZ.NEWEST" "EFFLUVIA" nil "BAR" "BAZ" nil)
+  t)
 
 ;; The directory component.
-(check-logical-pathname #p"effluvia:foo;bar.baz" "EFFLUVIA" '(:absolute "FOO") "BAR" "BAZ" nil)
-#-allegro
-(expect (string= (namestring #p"effluvia:foo;bar.baz") "EFFLUVIA:FOO;BAR.BAZ"))
-#+allegro
-(expect (string= (namestring #p"effluvia:foo;bar.baz") "effluvia:foo;bar.baz"))
+(deftest logical.14
+  (check-logical-pathname #p"effluvia:foo;bar.baz" "EFFLUVIA" '(:absolute "FOO") "BAR" "BAZ" nil)
+  t)
 
-#-allegro
-(progn
+(deftest logical.15
+  (check-namestring #p"effluvia:foo;bar.baz"
+                    #-allegro "EFFLUVIA:FOO;BAR.BAZ"
+                    #+allegro "effluvia:foo;bar.baz")
+  t)
+
+(deftest logical.16
+  #-allegro
   (check-logical-pathname #p"effluvia:;bar.baz" "EFFLUVIA" '(:relative) "BAR" "BAZ" nil)
-  (expect (string= (namestring #p"effluvia:;bar.baz") "EFFLUVIA:;BAR.BAZ")))
-#+allegro
-;; Allegro drops the directory component and removes the semicolon from the
-;; namestring.
-(progn
+  #+allegro
+  ;; Allegro drops the directory component and removes the semicolon from the
+  ;; namestring.
   (check-logical-pathname #p"effluvia:;bar.baz" "EFFLUVIA" nil "BAR" "BAZ" nil)
-  (expect (string= (namestring #p"effluvia:;bar.baz") "effluvia:bar.baz")))
+  t)
+(deftest logical.17
+  (check-namestring #p"effluvia:;bar.baz"
+                    #+allegro "effluvia:bar.baz"
+                    #-allegro "EFFLUVIA:;BAR.BAZ")
+  t)
 
 ;; "If a relative-directory-marker precedes the directories, the directory
 ;; component parsed is as relative; otherwise, the directory component is
 ;; parsed as absolute."
-#-allegro
-(expect (equal (pathname-directory #p"effluvia:foo.baz") '(:absolute)))
-#+allegro
-(expect (equal (pathname-directory #p"effluvia:foo.baz") nil))
+(deftest logical.18
+  (equal (pathname-directory #p"effluvia:foo.baz")
+         #-allegro '(:absolute)
+         #+allegro nil)
+  t)
 
-(expect (typep  #p"effluvia:" 'logical-pathname))
-#-allegro
-(expect (equal (pathname-directory #p"effluvia:") '(:absolute)))
-#+allegro
-(expect (equal (pathname-directory #p"effluvia:") nil))
+(deftest logical.19
+  (typep  #p"effluvia:" 'logical-pathname)
+  t)
+
+(deftest logical.20
+  (equal (pathname-directory #p"effluvia:")
+         #-allegro '(:absolute)
+         #+allegro nil)
+  t)
 
 ;; PARSE-NAMESTRING
-(expect (typep (parse-namestring "foo.bar" "effluvia") 'logical-pathname))
-#-allegro
-(expect (string= (namestring (parse-namestring "foo.bar" "effluvia")) "EFFLUVIA:FOO.BAR"))
-#+allegro
-(expect (string= (namestring (parse-namestring "foo.bar" "effluvia")) "effluvia:foo.bar"))
+(deftest parse-namestring.1
+  (typep (parse-namestring "foo.bar" "effluvia") 'logical-pathname)
+  t)
+
+(deftest parse-namestring.2
+  (check-namestring (parse-namestring "foo.bar" "effluvia")
+                    #-allegro "EFFLUVIA:FOO.BAR"
+                    #+allegro "effluvia:foo.bar")
+  t)
 
 ;; WILD-PATHNAME-P
-(expect (wild-pathname-p #p"effluvia:;*.baz"))
+(deftest wild-pathname-p.1
+  (wild-pathname-p #p"effluvia:;*.baz")
+  #+(or cmu sbcl) (:wild :wild-inferiors)
+  #-(or cmu sbcl) t)
 
 ;; PATHNAME-MATCH-P
-(expect (pathname-match-p "/foo/bar/baz" "/*/*/baz"))
-(expect (pathname-match-p "/foo/bar/baz" "/**/baz"))
-(expect (pathname-match-p "/foo/bar/quux/baz" "/**/baz"))
-(expect (pathname-match-p "foo.bar" "/**/*.*"))
-(expect (pathname-match-p "/usr/local/bin/foo.bar" "/**/foo.bar"))
-(expect (not (pathname-match-p "/usr/local/bin/foo.bar" "**/foo.bar")))
-(expect (pathname-match-p "/foo/bar.txt" "/**/*.*"))
-(expect (not (pathname-match-p "/foo/bar.txt" "**/*.*")))
-(expect (pathname-match-p #p"effluvia:foo.bar" #p"effluvia:**;*.*.*"))
+(deftest pathname-match-p.1
+  (pathname-match-p "/foo/bar/baz" "/*/*/baz")
+  t)
+(deftest pathname-match-p.2
+  (pathname-match-p "/foo/bar/baz" "/**/baz")
+  t)
+(deftest pathname-match-p.3
+  (pathname-match-p "/foo/bar/quux/baz" "/**/baz")
+  t)
+(deftest pathname-match-p.4
+  (pathname-match-p "foo.bar" "/**/*.*")
+  t)
+(deftest pathname-match-p.5
+  (pathname-match-p "/usr/local/bin/foo.bar" "/**/foo.bar")
+  t)
+(deftest pathname-match-p.6
+  (pathname-match-p "/usr/local/bin/foo.bar" "**/foo.bar")
+  nil)
+(deftest pathname-match-p.7
+  (pathname-match-p "/foo/bar.txt" "/**/*.*")
+  t)
+(deftest pathname-match-p.8
+  (pathname-match-p "/foo/bar.txt" "**/*.*")
+  nil)
+(deftest pathname-match-p.9
+  (pathname-match-p #p"effluvia:foo.bar" #p"effluvia:**;*.*.*")
+  t)
 
 ;; TRANSLATE-PATHNAME
 #-clisp
@@ -499,7 +546,7 @@
   t)
 
 ;; "TRANSLATE-PATHNAME translates SOURCE (that matches FROM-WILDCARD)..."
-(deftest pathname-match-p.1
+(deftest pathname-match-p.10
   (pathname-match-p "/foo/bar.txt" "**/*.*")
   nil)
 ;; Since (pathname-match-p "/foo/bar.txt" "**/*.*" ) => NIL...
@@ -513,7 +560,7 @@
          #p"/usr/local/foo/bar.txt")
   t)
 
-(deftest pathname-match-p.2
+(deftest pathname-match-p.11
   (pathname-match-p "/foo/bar.txt" "/**/*.*")
   t)
 (deftest translate-pathname.14
