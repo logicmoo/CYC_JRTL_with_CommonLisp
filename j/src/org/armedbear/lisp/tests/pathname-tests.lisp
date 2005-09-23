@@ -215,7 +215,7 @@
   t)
 
 (deftest physical.24
-  (check-readable (make-pathname :name "."))
+  (check-readable (make-pathname :name ".."))
   t)
 
 ;; #p".."
