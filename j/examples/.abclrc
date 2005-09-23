@@ -1,0 +1,32 @@
+;;; -*- Mode: Lisp -*-
+
+;;; See also:
+;;;   .clinit.cl         (Allegro)
+;;;   .cmucl-init.lisp   (CMUCL)
+;;;   .sbclrc            (SBCL)
+;;;   .clisprc.lisp      (CLISP)
+
+(setf (logical-pathname-translations "ansi-tests")
+      '(("*.*.*" #-windows "/home/peter/gcl/ansi-tests/*.*"
+                 #+windows "c:/cygwin/home/peter/gcl/ansi-tests/*.*")))
+
+(defun run-ansi-tests (&optional (compile-tests t))
+  (format t "COMPILE-TESTS is ~A~%" compile-tests)
+  (let ((*default-pathname-defaults* #p"/home/peter/gcl/ansi-tests/"))
+    (time (load (if compile-tests "compileit.lsp" "doit.lsp")))))
+
+#+abcl
+(autoload 'do-tests "rt.lisp")
+
+#+allegro
+(top-level:alias "ap" (arg) (apropos arg nil nil t))
+#+allegro
+(top-level:alias "de" (arg) (describe (eval arg)))
+
+#+cmu
+(setf *gc-verbose* nil)
+
+#+sbcl
+(require 'asdf)
+#+sbcl
+(require 'sb-aclrepl)
