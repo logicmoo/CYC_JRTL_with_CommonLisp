@@ -2,29 +2,28 @@
 ;;;
 ;;; This software is in the public domain and is provided with absolutely no
 ;;; warranty.
-
-;;; Define a reasonable value for this in ~/.abclrc.
-(defvar *ansi-tests-translations*)
+;;;
+;;; Before loading this file, define "ansi-tests" as a logical pathname host
+;;; (your path may vary):
+;;;
+;;;   (setf (logical-pathname-translations "ansi-tests")
+;;;         '(("*.*.*" "/home/peter/gcl/ansi-tests/*.*")))
 
 (unless (member "RT" *modules* :test #'string=)
-  (unless (boundp '*ansi-tests-translations*)
-    (setf *ansi-tests-translations*
-          '(("*.*.*" #-windows "/home/peter/gcl/ansi-tests/*.*"
-                     #+windows "c:/cygwin/home/peter/gcl/ansi-tests/*.*")))
-    (warn "~S is not defined; using ~S"
-          '*ansi-tests-translations*
-          *ansi-tests-translations*))
-  (setf (logical-pathname-translations "ansi-tests") *ansi-tests-translations*)
+  (unless (ignore-errors (logical-pathname-translations "ansi-tests"))
+    (error "~S is not defined as a logical pathname host." "ansi-tests"))
   (load "ansi-tests:rt-package.lsp")
   (load #+abcl (compile-file-if-needed "ansi-tests:rt.lsp")
         ;; Force compilation to avoid fasl name conflict between SBCL and
         ;; Allegro.
         #-abcl (compile-file "ansi-tests:rt.lsp"))
-  (let ((*package* (find-package '#:rt)))
-    (export (find-symbol (string '#:*expected-failures*))))
   (provide "RT"))
 
 (rt:rem-all-tests)
+
+(let ((*package* (find-package '#:rt)))
+  (export (find-symbol (string '#:*expected-failures*))))
+
 (setf rt:*expected-failures* nil)
 
 (defpackage #:pathname-tests (:use #:cl #:regression-test))
