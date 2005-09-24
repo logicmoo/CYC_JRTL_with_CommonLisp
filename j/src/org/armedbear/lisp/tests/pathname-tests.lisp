@@ -30,10 +30,6 @@
 
 (in-package #:pathname-tests)
 
-(defmacro expect (test-form)
-  `(unless (ignore-errors ,test-form)
-     (format t "Expected ~S~%" ',test-form)))
-
 (defmacro signals-error (form error-name)
   `(locally (declare (optimize safety))
      (handler-case ,form
@@ -47,13 +43,10 @@
          (ok t))
     (unless (and (pathnamep pathname)
                  (not (typep pathname 'logical-pathname)))
-;;       (format t "~&~S => ~S; expected ~S~%" pathname (type-of pathname) 'pathname)
       (setf ok nil))
     (unless (and (equal directory expected-directory)
                  (equal name      expected-name)
                  (equal type      expected-type))
-;;       (format t "~&~S => ~S ~S ~S; expected ~S ~S ~S~%"
-;;               pathname directory name type expected-directory expected-name expected-type)
       (setf ok nil))
     ok))
 
@@ -71,13 +64,10 @@
                #+allegro 'equalp)
          (ok t))
     (unless (typep pathname 'logical-pathname)
-;;       (format t "~&~S => ~S; expected ~S~%" pathname (type-of pathname) 'logical-pathname)
       (setf ok nil))
     ;; "The device component of a logical pathname is always :UNSPECIFIC..." 19.3.2.1
     #-allegro ;; Except on Allegro, where it's NIL.
     (unless (eq (pathname-device pathname) :unspecific)
-;;       (format t "~S => device is ~S, not ~S~%"
-;;               pathname (pathname-device pathname) :unspecific)
       (setf ok nil))
     (unless (and (or (not (stringp host))
                      (funcall test host expected-host))
@@ -85,24 +75,25 @@
                  (funcall test name expected-name)
                  (funcall test type expected-type)
                  (eql version expected-version))
-;;       (format t "~&~S => ~S ~S ~S ~S ~S; expected ~S ~S ~S ~S ~S~%"
-;;               pathname
-;;               host directory name type version
-;;               expected-host expected-directory expected-name expected-type
-;;               expected-version)
       (setf ok nil))
     ok))
+
+(defun check-merge-pathnames (pathname default-pathname expected-result)
+  (let* ((result (merge-pathnames pathname default-pathname))
+         (test #-allegro 'equal
+               #+allegro (if (typep result 'logical-pathname)
+                             'equalp
+                             'equal)))
+    (and (funcall test (pathname-host result) (pathname-host expected-result))
+         (funcall test (pathname-directory result) (pathname-directory expected-result))
+         (funcall test (pathname-name result) (pathname-name expected-result))
+         (funcall test (pathname-type result) (pathname-type expected-result)))))
 
 (defun check-translate-pathname (args expected)
   (declare (optimize safety))
   (declare (type list args))
   (declare (type string expected))
   (let ((result (namestring (apply 'translate-pathname args))))
-;;     (unless (equal result
-;;                    #-windows expected
-;;                    #+windows (substitute #\\ #\/ expected))
-;;       (format t "(translate-pathname ~S ~S ~S) => ~S; expected ~S~%"
-;;               (first args) (second args) (third args) result expected))))
     (equal result
            #-windows expected
            #+windows (substitute #\\ #\/ expected))))
@@ -574,28 +565,41 @@
   t)
 
 ;; TRANSLATE-LOGICAL-PATHNAME
-#+clisp
-(expect (equal (translate-logical-pathname "effluvia:foo.bar") #p"/usr/local/foo.bar"))
-#+(or sbcl cmu)
-;; Device mismatch.
-(progn
-  (expect (eq (pathname-device (translate-logical-pathname "effluvia:foo.bar")) :unspecific))
-  (expect (eq (pathname-device #p"/usr/local/foo/bar") nil)))
-(expect (string= (namestring (translate-logical-pathname "effluvia:foo.bar"))
-                 #-windows "/usr/local/foo.bar"
-                 #+windows "\\usr\\local\\foo.bar"))
-(expect (string= (namestring (translate-logical-pathname "effluvia:foo;bar.txt"))
-                 #-windows "/usr/local/foo/bar.txt"
-                 #+windows "\\usr\\local\\foo\\bar.txt"))
+#+(or abcl clisp)
+(deftest translate-logical-pathname.1
+  (equal (translate-logical-pathname "effluvia:foo.bar") #p"/usr/local/foo.bar")
+  t)
 
-#-allegro
-(check-logical-pathname #p"effluvia:Foo.Bar" "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
-#+allegro
-(check-logical-pathname #p"effluvia:Foo.Bar" "effluvia" nil "Foo" "Bar" nil)
+#+(or sbcl cmu)
+(deftest translate-logical-pathname.2
+  ;; Device mismatch.
+  (and (eq (pathname-device (translate-logical-pathname "effluvia:foo.bar"))
+           :unspecific)
+       (eq (pathname-device #p"/usr/local/foo/bar")
+           nil))
+  t)
+
+(deftest translate-logical-pathname.3
+  (check-namestring (translate-logical-pathname "effluvia:foo.bar")
+                    "/usr/local/foo.bar")
+  t)
+
+(deftest translate-logical-pathname.4
+  (check-namestring (translate-logical-pathname "effluvia:foo;bar.txt")
+                    "/usr/local/foo/bar.txt")
+  t)
+
+(deftest translate-logical-pathname.5
+  #-allegro
+  (check-logical-pathname #p"effluvia:Foo.Bar" "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
+  #+allegro
+  ;; Allegro preserves case.
+  (check-logical-pathname #p"effluvia:Foo.Bar" "effluvia" nil "Foo" "Bar" nil)
+  t)
 
 ;; "TRANSLATE-PATHNAME [and thus also TRANSLATE-LOGICAL-PATHNAME] maps
 ;; customary case in SOURCE into customary case in the output pathname."
-(deftest translate-logical-pathname.1
+(deftest translate-logical-pathname.6
   #-allegro
   (check-physical-pathname (translate-logical-pathname #p"effluvia:Foo.Bar")
                            '(:absolute "usr" "local") "foo" "bar")
@@ -664,7 +668,7 @@
 (deftest sbcl.9
   (equal (enough-namestring "demo2:test;foo.lisp")
          #+sbcl "DEMO2:;TEST;FOO.LISP"
-         #+cmu #p"DEMO2:TEST;FOO.LISP" ;; BUG (must be string or NIL)
+         #+cmu "DEMO2:TEST;FOO.LISP"
          #+clisp "TEST;FOO.LISP"
          #+allegro "/test/foo.lisp" ;; BUG
          #+abcl "DEMO2:TEST;FOO.LISP"
@@ -794,106 +798,161 @@
                     "/library/foo/foo/bar/baz/mum.quux")
   t)
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
   (setf (logical-pathname-translations "scratch")
-        '(("**;*.*.*" "/usr/local/doc/**/*"))))
+        '(("**;*.*.*" "/usr/local/doc/**/*")))
+;;   )
 
-#-(or allegro clisp)
-;; FIXME Figure out why CLISP and Allegro don't like this test!
-;; FIXME Figure out how to wrap this in DEFTEST!
-(loop for (expected-result . params) in
-  `(;; trivial merge
-        (#P"/usr/local/doc/foo" #p"foo" #p"/usr/local/doc/")
-        ;; If pathname does not specify a host, device, directory,
-        ;; name, or type, each such component is copied from
-        ;; default-pathname.
-        ;; 1) no name, no type
-        (#p"/supplied-dir/name.type" #p"/supplied-dir/" #p"/dir/name.type")
-        ;; 2) no directory, no type
-        (#p"/dir/supplied-name.type" #p"supplied-name" #p"/dir/name.type")
-        ;; 3) no name, no dir (must use make-pathname as ".foo" is parsed
-        ;; as a name)
-        (#p"/dir/name.supplied-type"
-         ,(make-pathname :type "supplied-type")
-         #p"/dir/name.type")
-        ;; If (pathname-directory pathname) is a list whose car is
-        ;; :relative, and (pathname-directory default-pathname) is a
-        ;; list, then the merged directory is [...]
-        (#p"/aaa/bbb/ccc/ddd/qqq/www" #p"qqq/www" #p"/aaa/bbb/ccc/ddd/eee")
-        ;; except that if the resulting list contains a string or
-        ;; :wild immediately followed by :back, both of them are
-        ;; removed.
-        (#P"/aaa/bbb/ccc/blah/eee"
-         ;; "../" in a namestring is parsed as :up not :back, so make-pathname
-         ,(make-pathname :directory '(:relative :back "blah"))
-         #p"/aaa/bbb/ccc/ddd/eee")
-        ;; If (pathname-directory default-pathname) is not a list or
-        ;; (pathname-directory pathname) is not a list whose car is
-        ;; :relative, the merged directory is (or (pathname-directory
-        ;; pathname) (pathname-directory default-pathname))
-        (#P"/absolute/path/name.type"
-         #p"/absolute/path/name"
-         #p"/dir/default-name.type")
-        ;; === logical pathnames ===
-        ;; recognizes a logical pathname namestring when
-        ;; default-pathname is a logical pathname
-        ;; FIXME: 0.6.12.23 fails this one.
-        ;;
-        ;; And, as it happens, it's right to fail it. Because
-        ;; #p"name1" is read in with the ambient *d-p-d* value, which
-        ;; has a physical (Unix) host; therefore, the host of the
-        ;; default-pathname argument to merge-pathnames is
-        ;; irrelevant. The result is (correctly) different if
-        ;; '#p"name1"' is replaced by "name1", below, though it's
-        ;; still not what one might expect... -- CSR, 2002-05-09
-        #+nil (#P"scratch:foo;name1" #p"name1" #p"scratch:foo;")
-        ;; or when the namestring begins with the name of a defined
-        ;; logical host followed by a colon [I assume that refers to pathname
-        ;; rather than default-pathname]
-        (#p"SCRATCH:FOO;NAME2" #p"scratch:;name2" #p"scratch:foo;")
-        ;; conduct the previous set of tests again, with a lpn first argument
-        (#P"SCRATCH:USR;LOCAL;DOC;FOO" #p"scratch:;foo" #p"/usr/local/doc/")
-        (#p"SCRATCH:SUPPLIED-DIR;NAME.TYPE"
-         #p"scratch:supplied-dir;"
-         #p"/dir/name.type")
-        (#p"SCRATCH:DIR;SUPPLIED-NAME.TYPE"
-         #p"scratch:;supplied-name"
-         #p"/dir/name.type")
-        (#p"SCRATCH:DIR;NAME.SUPPLIED-TYPE"
-         ,(make-pathname :host "scratch" :type "supplied-type")
-         #p"/dir/name.type")
-        (#p"SCRATCH:AAA;BBB;CCC;DDD;FOO;BAR"
-         ,(make-pathname :host "scratch"
-                         :directory '(:relative "foo")
-                         :name "bar")
-         #p"/aaa/bbb/ccc/ddd/eee")
-        (#p"SCRATCH:AAA;BBB;CCC;FOO;BAR"
-         ,(make-pathname :host "scratch"
-                         :directory '(:relative :back "foo")
-                         :name "bar")
-         #p"/aaa/bbb/ccc/ddd/eee")
-        (#p"SCRATCH:ABSOLUTE;PATH;NAME.TYPE"
-         #p"scratch:absolute;path;name" #p"/dir/default-name.type")
-
-        ;; FIXME: test version handling in LPNs
-        )
-  do (let ((result (apply #'merge-pathnames params)))
-       (macrolet ((frob (op)
-                    `(expect (equal (,op result) (,op expected-result)))))
-         (frob pathname-host)
-         (frob pathname-directory)
-         (frob pathname-name)
-         (frob pathname-type))))
-
+;; Trivial merge.
 (deftest sbcl.27
+  (check-merge-pathnames #p"foo" #p"/usr/local/doc/" #p"/usr/local/doc/foo")
+  t)
+
+;; If pathname does not specify a host, device, directory, name, or type, each
+;; such component is copied from default-pathname.
+;; 1) no name, no type
+(deftest sbcl.28
+  (check-merge-pathnames #p"/supplied-dir/" #p"/dir/name.type"
+                         #p"/supplied-dir/name.type")
+  t)
+;; 2) no directory, no type
+(deftest sbcl.29
+  (check-merge-pathnames #p"supplied-name" #p"/dir/name.type"
+                         #p"/dir/supplied-name.type")
+  t)
+;; 3) no name, no dir (must use make-pathname as ".foo" is parsed
+;; as a name)
+(deftest sbcl.30
+  (check-merge-pathnames (make-pathname :type "supplied-type")
+                         #p"/dir/name.type"
+                         #p"/dir/name.supplied-type")
+  t)
+;; If (pathname-directory pathname) is a list whose car is
+;; :relative, and (pathname-directory default-pathname) is a
+;; list, then the merged directory is [...]
+(deftest sbcl.31
+  (check-merge-pathnames #p"qqq/www" #p"/aaa/bbb/ccc/ddd/eee"
+                         #p"/aaa/bbb/ccc/ddd/qqq/www")
+  t)
+;; except that if the resulting list contains a string or
+;; :wild immediately followed by :back, both of them are
+;; removed.
+(deftest sbcl.32
+  (check-merge-pathnames
+   ;; "../" in a namestring is parsed as :up not :back, so MAKE-PATHNAME.
+   (make-pathname :directory '(:relative :back "blah"))
+   #p"/aaa/bbb/ccc/ddd/eee" #P"/aaa/bbb/ccc/blah/eee")
+  t)
+;; If (pathname-directory default-pathname) is not a list or
+;; (pathname-directory pathname) is not a list whose car is
+;; :relative, the merged directory is (or (pathname-directory
+;; pathname) (pathname-directory default-pathname))
+(deftest sbcl.33
+  (check-merge-pathnames #p"/absolute/path/name" #p"/dir/default-name.type"
+                         #P"/absolute/path/name.type")
+  t)
+(deftest sbcl.34
+  (check-merge-pathnames #p"scratch:;name2" #p"scratch:foo;"
+                         #p"SCRATCH:FOO;NAME2")
+  t)
+(deftest sbcl.35
+  (check-merge-pathnames #p"scratch:;foo" #p"/usr/local/doc/"
+                         #-(or allegro clisp) #P"SCRATCH:USR;LOCAL;DOC;FOO"
+                         #+allegro #p"/usr/local/doc/foo"
+                         #+clisp #p"SCRATCH:;FOO")
+  t)
+(deftest sbcl.36
+  (check-merge-pathnames #p"scratch:supplied-dir;" #p"/dir/name.type"
+                         #-clisp #p"SCRATCH:SUPPLIED-DIR;NAME.TYPE"
+                         #+clisp
+                         ;; #p"SCRATCH:SUPPLIED-DIR;name.type.NEWEST"
+                         (make-pathname :host "SCRATCH"
+                                        :directory '(:absolute "SUPPLIED-DIR")
+                                        :name "name"
+                                        :type "type"))
+  t)
+(deftest sbcl.37
+  (check-merge-pathnames #p"scratch:;supplied-name" #p"/dir/name.type"
+                         #-(or allegro clisp) #p"SCRATCH:DIR;SUPPLIED-NAME.TYPE"
+                         #+allegro #p"/usr/local/doc/supplied-name.type"
+                         #+clisp
+                         ;; #P"SCRATCH:;SUPPLIED-NAME.type.NEWEST"
+                         (make-pathname :host "SCRATCH"
+                                        :directory '(:relative)
+                                        :name "SUPPLIED-NAME"
+                                        :type "type"))
+  t)
+(deftest sbcl.38
+  (check-merge-pathnames (make-pathname :host "scratch" :type "supplied-type")
+                         #p"/dir/name.type"
+                         #-(or allegro clisp) #p"SCRATCH:DIR;NAME.SUPPLIED-TYPE"
+                         #+allegro #p"/usr/local/doc/name.supplied-type"
+                         #+clisp
+                         ;; #P"SCRATCH:dir;name.supplied-type.NEWEST"
+                         (make-pathname :host "SCRATCH"
+                                        :directory '(:absolute "dir")
+                                        :name "name"
+                                        :type "supplied-type"))
+  t)
+(deftest sbcl.39
+  #-allegro
+  (check-merge-pathnames (make-pathname :host "scratch"
+                                        :directory '(:relative "foo")
+                                        :name "bar")
+                         #p"/aaa/bbb/ccc/ddd/eee"
+                         #-clisp #p"SCRATCH:AAA;BBB;CCC;DDD;FOO;BAR"
+                         #+clisp
+                         ;; #P"SCRATCH:;foo;bar"
+                         (make-pathname :host "SCRATCH"
+                                        :directory '(:relative "foo")
+                                        :name "bar"))
+  #+allegro
+  (signals-error (merge-pathnames (make-pathname :host "scratch"
+                                                 :directory '(:relative "foo")
+                                                 :name "bar")
+                                  #p"/aaa/bbb/ccc/ddd/eee")
+                 'error)
+  t)
+(deftest sbcl.40
+  #-allegro
+  (check-merge-pathnames (make-pathname :host "scratch"
+                                        :directory '(:relative :back "foo")
+                                        :name "bar")
+                         #p"/aaa/bbb/ccc/ddd/eee"
+                         #-clisp #p"SCRATCH:AAA;BBB;CCC;FOO;BAR"
+                         #+clisp
+                         ;; #P"SCRATCH:;..;foo;bar.NEWEST"
+                         (make-pathname :host "SCRATCH"
+                                        :directory '(:relative :back "foo")
+                                        :name "bar"))
+  #+allegro
+  (signals-error (merge-pathnames (make-pathname :host "scratch"
+                                                 :directory '(:relative :back "foo")
+                                                 :name "bar")
+                         #p"/aaa/bbb/ccc/ddd/eee")
+                 'error)
+  t)
+(deftest sbcl.41
+  (check-merge-pathnames #p"scratch:absolute;path;name"
+                         #p"/dir/default-name.type"
+                         #-clisp #p"SCRATCH:ABSOLUTE;PATH;NAME.TYPE"
+                         #+clisp
+                         ;; #P"SCRATCH:ABSOLUTE;PATH;NAME.type.NEWEST"
+                         (make-pathname :host "SCRATCH"
+                                        :directory '(:absolute "ABSOLUTE" "PATH")
+                                        :name "NAME"
+                                        :type "type"))
+  t)
+
+(deftest sbcl.42
   (check-namestring (parse-namestring "/foo" (host-namestring #p"/bar")) "/foo")
   t)
-(deftest sbcl.28
+(deftest sbcl.43
   (string= (namestring (parse-namestring "FOO" (host-namestring #p"SCRATCH:BAR")))
            "SCRATCH:FOO")
   t)
 #-(or allegro clisp cmu)
-(deftest sbcl.29
+(deftest sbcl.44
   ;; "The null string, "", is not a valid value for any component of a logical
   ;; pathname." 19.3.2.2
   (signals-error (setf (logical-pathname-translations "")
@@ -901,4 +960,4 @@
                  'error)
   t)
 
-(rt:do-tests)
+(do-tests)
