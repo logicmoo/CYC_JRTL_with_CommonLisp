@@ -101,6 +101,11 @@
 (defmacro check-readable (pathname)
   `(equal ,pathname (read-from-string (write-to-string ,pathname :readably t))))
 
+(defun check-readable-or-signals-error (pathname)
+  (handler-case
+      (equal pathname (read-from-string (write-to-string pathname :readably t)))
+    (print-not-readable () t)))
+
 (defmacro check-namestring (pathname namestring)
   `(string= (namestring ,pathname)
             #+windows (substitute #\\ #\/ ,namestring)
@@ -565,13 +570,20 @@
   t)
 
 ;; TRANSLATE-LOGICAL-PATHNAME
-#+(or abcl clisp)
+
+;; "PATHNAME is first coerced to a pathname. If the coerced pathname is a
+;; physical pathname, it is returned."
 (deftest translate-logical-pathname.1
+  (equal (translate-logical-pathname #p"/") #p"/")
+  t)
+
+#+(or abcl clisp)
+(deftest translate-logical-pathname.2
   (equal (translate-logical-pathname "effluvia:foo.bar") #p"/usr/local/foo.bar")
   t)
 
 #+(or sbcl cmu)
-(deftest translate-logical-pathname.2
+(deftest translate-logical-pathname.3
   ;; Device mismatch.
   (and (eq (pathname-device (translate-logical-pathname "effluvia:foo.bar"))
            :unspecific)
@@ -579,17 +591,17 @@
            nil))
   t)
 
-(deftest translate-logical-pathname.3
+(deftest translate-logical-pathname.4
   (check-namestring (translate-logical-pathname "effluvia:foo.bar")
                     "/usr/local/foo.bar")
   t)
 
-(deftest translate-logical-pathname.4
+(deftest translate-logical-pathname.5
   (check-namestring (translate-logical-pathname "effluvia:foo;bar.txt")
                     "/usr/local/foo/bar.txt")
   t)
 
-(deftest translate-logical-pathname.5
+(deftest translate-logical-pathname.6
   #-allegro
   (check-logical-pathname #p"effluvia:Foo.Bar" "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
   #+allegro
@@ -599,7 +611,7 @@
 
 ;; "TRANSLATE-PATHNAME [and thus also TRANSLATE-LOGICAL-PATHNAME] maps
 ;; customary case in SOURCE into customary case in the output pathname."
-(deftest translate-logical-pathname.6
+(deftest translate-logical-pathname.7
   #-allegro
   (check-physical-pathname (translate-logical-pathname #p"effluvia:Foo.Bar")
                            '(:absolute "usr" "local") "foo" "bar")
@@ -958,6 +970,93 @@
   (signals-error (setf (logical-pathname-translations "")
                        (list '("**;*.*.*" "/**/*.*")))
                  'error)
+  t)
+
+#-clisp
+(deftest sbcl.45
+  (check-namestring (translate-logical-pathname "/") "/")
+  t)
+
+(deftest sbcl.46
+  (signals-error (pathname (make-string-input-stream "FOO"))
+                 #-allegro 'type-error
+                 #+allegro 'stream-error)
+  t)
+
+(deftest sbcl.47
+  (signals-error (merge-pathnames (make-string-output-stream))
+                 #-allegro 'type-error
+                 #+allegro 'stream-error)
+  t)
+
+(deftest sbcl.48
+  (check-readable-or-signals-error (make-pathname :name "foo" :type "txt" :version :newest))
+  t)
+(deftest sbcl.49
+  (check-readable-or-signals-error (make-pathname :name "foo" :type "txt" :version 1))
+  t)
+(deftest sbcl.50
+  (check-readable-or-signals-error (make-pathname :name "foo" :type ".txt"))
+  t)
+(deftest sbcl.51
+  (check-readable-or-signals-error (make-pathname :name "foo." :type "txt"))
+  t)
+(deftest sbcl.52
+  (check-readable-or-signals-error (parse-namestring "SCRATCH:FOO.TXT.1"))
+  t)
+(deftest sbcl.53
+  (check-readable-or-signals-error (parse-namestring "SCRATCH:FOO.TXT.NEWEST"))
+  t)
+(deftest sbcl.54
+  (check-readable-or-signals-error (parse-namestring "SCRATCH:FOO.TXT"))
+  t)
+
+(deftest sbcl.55
+  (equal (parse-namestring "foo" nil "/")
+         (parse-namestring "foo" nil #p"/"))
+  t)
+
+(deftest sbcl.56
+  (let ((test "parse-namestring-test.tmp"))
+    (unwind-protect
+        (with-open-file (f test :direction :output)
+          ;; FIXME: This test is a bit flaky, since we only check that
+          ;; no error is signalled. The dilemma here is "what is the
+          ;; correct result when defaults is a _file_, not a
+          ;; directory". Currently (0.8.10.73) we get #P"foo" here (as
+          ;; opposed to eg. #P"/path/to/current/foo"), which is
+          ;; possibly mildly surprising but probably conformant.
+          (equal (parse-namestring "foo" nil f) #p"foo"))
+      (when (probe-file test)
+        (delete-file test))))
+  t)
+
+;;; ENOUGH-NAMESTRING should probably not fail when the namestring in
+;;; question has a :RELATIVE pathname.
+(deftest sbcl.57
+  (equal (enough-namestring #p"foo" #p"./") "foo")
+  t)
+
+;;; bug reported by Artem V. Andreev: :WILD not handled in unparsing
+;;; directory lists.
+(deftest sbcl.58
+  (equal (namestring #p"/tmp/*/") "/tmp/*/")
+  t)
+
+(deftest sbcl.59
+  (string= (with-standard-io-syntax (write-to-string #p"/foo")) "#P\"/foo\"")
+  t)
+(deftest sbcl.60
+  (string= (with-standard-io-syntax (write-to-string #p"/foo" :readably nil))
+           "#P\"/foo\"")
+  t)
+(deftest sbcl.61
+  (string= (with-standard-io-syntax (write-to-string #p"/foo" :escape nil))
+           "#P\"/foo\"")
+  t)
+(deftest sbcl.62
+  (string= (with-standard-io-syntax (write-to-string #p"/foo" :readably nil :escape nil))
+           "/foo")
   t)
 
 (do-tests)
