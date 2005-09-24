@@ -497,46 +497,72 @@
   (equal (translate-pathname "foo" "*" "*")   #p"foo")
   t)
 
-#-abcl
 ;; ABCL doesn't implement this translation.
 (deftest translate-pathname.3
+  #-abcl
   (string= (pathname-name (translate-pathname "foobar" "*" "foo*")) "foofoobar")
+  #+abcl
+  (signals-error (translate-pathname "foobar" "*" "foo*") 'error)
   t)
 
+;; ABCL doesn't implement this translation.
 (deftest translate-pathname.4
+  #-abcl
+  (equal (translate-pathname "foobar" "foo*" "*baz") #p"barbaz")
+  #+abcl
+  (signals-error (translate-pathname "foobar" "foo*" "*baz") 'error)
+  t)
+
+(deftest translate-pathname.5
+  (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz")
+  t)
+
+(deftest translate-pathname.6
+  (equal (translate-pathname "bar/foo" "bar/*" "baz/*") #p"baz/foo")
+  t)
+
+(deftest translate-pathname.7
+  (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz")
+  t)
+
+(deftest translate-pathname.8
   (string= (namestring (translate-pathname "test.txt" "*.txt" "*.text"))
            "test.text")
   t)
 
-(deftest translate-pathname.5
-  (check-namestring (translate-pathname "foo/bar" "*/bar" "*/baz") "foo/baz")
+(deftest translate-pathname.9
+  (equal (translate-pathname "foo" "foo.*" "bar") #p"bar")
   t)
-(deftest translate-pathname.6
-  (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz")
+
+(deftest translate-pathname.10
+  (equal (translate-pathname "foo" "foo.*" "bar.*") #p"bar")
   t)
-(deftest translate-pathname.7
+
+(deftest translate-pathname.11
   (string= (namestring (translate-pathname "foo.bar" "*.*" "/usr/local/*.*"))
            #-windows "/usr/local/foo.bar"
            #+windows "\\usr\\local\\foo.bar")
   t)
-(deftest translate-pathname.8
+
+(deftest translate-pathname.12
   (equal (translate-pathname "foo.bar" "*.*" "/usr/local/*.*")
          #p"/usr/local/foo.bar")
   t)
 
-(deftest translate-pathname.9
+(deftest translate-pathname.13
   (check-translate-pathname '("/foo/" "/*/" "/usr/local/*/") "/usr/local/foo/")
   t)
-(deftest translate-pathname.10
+
+(deftest translate-pathname.14
   (check-translate-pathname '("/foo/baz/bar.txt" "/**/*.*" "/usr/local/**/*.*")
                             "/usr/local/foo/baz/bar.txt")
   t)
 
-(deftest translate-pathname.11
+(deftest translate-pathname.15
   (equal (translate-pathname "/foo/" "/*/" "/usr/local/*/bar/") #p"/usr/local/foo/bar/")
   t)
 
-(deftest translate-pathname.12
+(deftest translate-pathname.16
   (equal (translate-pathname "/foo/bar.txt" "/*/*.*" "/usr/local/*/*.*")
          #P"/usr/local/foo/bar.txt")
   t)
@@ -546,7 +572,7 @@
   (pathname-match-p "/foo/bar.txt" "**/*.*")
   nil)
 ;; Since (pathname-match-p "/foo/bar.txt" "**/*.*" ) => NIL...
-(deftest translate-pathname.13
+(deftest translate-pathname.17
   #+(or clisp allegro abcl cmu)
   ;; This seems to be the correct behavior.
   (signals-error (translate-pathname "/foo/bar.txt" "**/*.*" "/usr/local/**/*.*") 'error)
@@ -559,13 +585,13 @@
 (deftest pathname-match-p.11
   (pathname-match-p "/foo/bar.txt" "/**/*.*")
   t)
-(deftest translate-pathname.14
+(deftest translate-pathname.18
   (equal (translate-pathname "/foo/bar.txt" "/**/*.*" "/usr/local/**/*.*")
          #p"/usr/local/foo/bar.txt")
   t)
 
 #-clisp
-(deftest translate-pathname.15
+(deftest translate-pathname.19
   (equal (translate-pathname "foo.bar" "/**/*.*" "/usr/local/") #p"/usr/local/foo.bar")
   t)
 
@@ -655,10 +681,11 @@
   (check-namestring (translate-logical-pathname "demo1:foo.lisp") "/tmp/foo.lisp")
   t)
 ;;; Check for absolute/relative path confusion.
+#-allegro
 (deftest sbcl.5
-  (pathname-match-p "demo1:;foo.lisp" "**;*.*.*")
+  (pathname-match-p "demo1:;foo.lisp" "demo1:**;*.*.*")
   nil)
-#+(or sbcl cmu allegro abcl)
+#+(or sbcl cmu)
 ;; BUG Pathnames should match if the following translation is to work.
 (deftest sbcl.6
   (pathname-match-p "demo1:;foo.lisp" "demo1:;**;*.*.*")
@@ -992,9 +1019,11 @@
 (deftest sbcl.48
   (check-readable-or-signals-error (make-pathname :name "foo" :type "txt" :version :newest))
   t)
+#-allegro
 (deftest sbcl.49
   (check-readable-or-signals-error (make-pathname :name "foo" :type "txt" :version 1))
   t)
+#-allegro
 (deftest sbcl.50
   #-clisp
   (check-readable-or-signals-error (make-pathname :name "foo" :type ".txt"))
@@ -1019,6 +1048,7 @@
          (parse-namestring "foo" nil #p"/"))
   t)
 
+#-allegro
 (deftest sbcl.56
   (let ((test "parse-namestring-test.tmp"))
     (unwind-protect
@@ -1046,17 +1076,23 @@
   (equal (namestring #p"/tmp/*/") "/tmp/*/")
   t)
 
+#-allegro
 (deftest sbcl.59
   (string= (with-standard-io-syntax (write-to-string #p"/foo")) "#P\"/foo\"")
   t)
+
+#-allegro
 (deftest sbcl.60
   (string= (with-standard-io-syntax (write-to-string #p"/foo" :readably nil))
            "#P\"/foo\"")
   t)
+
+#-allegro
 (deftest sbcl.61
   (string= (with-standard-io-syntax (write-to-string #p"/foo" :escape nil))
            "#P\"/foo\"")
   t)
+
 (deftest sbcl.62
   (string= (with-standard-io-syntax (write-to-string #p"/foo" :readably nil :escape nil))
            "/foo")

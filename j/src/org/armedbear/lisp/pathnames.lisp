@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.25 2005-09-22 23:34:42 piso Exp $
+;;; $Id: pathnames.lisp,v 1.26 2005-09-24 18:04:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,6 +44,8 @@
          t)
         ((null wild)
          t)
+        ((and (stringp wild) (position #\* wild))
+         (error "Unsupported wildcard pattern: ~S" wild))
         (ignore-case
          (equalp thing wild))
         (t
@@ -164,7 +166,7 @@
          ;; of the piece in TO-WILDCARD and the value produced is used in the
          ;; result."
          ;; FIXME
-         (error "Unsupported TO-WILDCARD pattern: ~S" to))))
+         (error "Unsupported wildcard pattern: ~S" to))))
 
 (defun translate-directory-components (source from to case)
   (cond ((null to)
