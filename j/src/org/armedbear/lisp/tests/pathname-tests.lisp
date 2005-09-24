@@ -996,7 +996,10 @@
   (check-readable-or-signals-error (make-pathname :name "foo" :type "txt" :version 1))
   t)
 (deftest sbcl.50
+  #-clisp
   (check-readable-or-signals-error (make-pathname :name "foo" :type ".txt"))
+  #+clisp
+  (signals-error (make-pathname :name "foo" :type ".txt") 'error)
   t)
 (deftest sbcl.51
   (check-readable-or-signals-error (make-pathname :name "foo." :type "txt"))
