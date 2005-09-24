@@ -1,13 +1,27 @@
 ;;; pathname-tests.lisp
 ;;;
-;;; This software is in the public domain and is provided with absolutely no
-;;; warranty.
+;;; Copyright (C) 2005 Peter Graves
+;;; $Id: pathname-tests.lisp,v 1.25 2005-09-24 19:04:36 piso Exp $
 ;;;
-;;; Before loading this file, define "ansi-tests" as a logical pathname host
-;;; (your path may vary):
+;;; This program is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU General Public License
+;;; as published by the Free Software Foundation; either version 2
+;;; of the License, or (at your option) any later version.
 ;;;
-;;;   (setf (logical-pathname-translations "ansi-tests")
-;;;         '(("*.*.*" "/home/peter/gcl/ansi-tests/*.*")))
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+;; Before loading this file, define "ansi-tests" as a logical pathname host
+;; (your path may vary):
+;;
+;;   (setf (logical-pathname-translations "ansi-tests")
+;;         '(("*.*.*" "/home/peter/gcl/ansi-tests/*.*")))
 
 (unless (member "RT" *modules* :test #'string=)
   (unless (ignore-errors (logical-pathname-translations "ansi-tests"))
@@ -1073,29 +1087,34 @@
 ;;; bug reported by Artem V. Andreev: :WILD not handled in unparsing
 ;;; directory lists.
 (deftest sbcl.58
-  (equal (namestring #p"/tmp/*/") "/tmp/*/")
+  (check-namestring #p"/tmp/*/" "/tmp/*/")
   t)
 
 #-allegro
 (deftest sbcl.59
-  (string= (with-standard-io-syntax (write-to-string #p"/foo")) "#P\"/foo\"")
+  (string= (with-standard-io-syntax (write-to-string #p"/foo"))
+           #-windows "#P\"/foo\""
+           #+windows "#P\"\\\\foo\"")
   t)
 
 #-allegro
 (deftest sbcl.60
   (string= (with-standard-io-syntax (write-to-string #p"/foo" :readably nil))
-           "#P\"/foo\"")
+           #-windows "#P\"/foo\""
+           #+windows "#P\"\\\\foo\"")
   t)
 
 #-allegro
 (deftest sbcl.61
   (string= (with-standard-io-syntax (write-to-string #p"/foo" :escape nil))
-           "#P\"/foo\"")
+           #-windows "#P\"/foo\""
+           #+windows "#P\"\\\\foo\"")
   t)
 
 (deftest sbcl.62
   (string= (with-standard-io-syntax (write-to-string #p"/foo" :readably nil :escape nil))
-           "/foo")
+           #-windows "/foo"
+           #+windows "\\\\foo")
   t)
 
 (do-tests)
