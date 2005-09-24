@@ -1,8 +1,8 @@
 /*
  * SlimeOutputStream.java
  *
- * Copyright (C) 2004-2005 András Simon, Peter Graves
- * $Id: SlimeOutputStream.java,v 1.8 2005-04-11 15:23:08 piso Exp $
+ * Copyright (C) 2004-2005 Andras Simon, Peter Graves
+ * $Id: SlimeOutputStream.java,v 1.9 2005-09-24 19:39:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
