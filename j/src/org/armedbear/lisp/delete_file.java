@@ -2,7 +2,7 @@
  * delete_file.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: delete_file.java,v 1.8 2005-09-25 20:47:59 piso Exp $
+ * $Id: delete_file.java,v 1.9 2005-09-25 20:48:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,8 @@ public final class delete_file extends Primitive
     // ### delete-file filespec => t
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        // Don't dereference symlinks!
+        // Don't follow symlinks! We want to delete the symlink itself, not
+        // the linked-to file.
         Pathname pathname = Pathname.coerceToPathname(arg);
         if (arg instanceof Stream)
             ((Stream)arg)._close();
