@@ -2,7 +2,7 @@
  * FillPointerOutputStream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: FillPointerOutputStream.java,v 1.13 2005-04-11 14:07:23 piso Exp $
+ * $Id: FillPointerOutputStream.java,v 1.14 2005-09-25 14:58:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,10 +36,10 @@ public final class FillPointerOutputStream extends Stream
         setWriter(new Writer());
     }
 
-    // ### make-fill-pointer-output-stream
-    // make-fill-pointer-output-stream string => string-stream
+    // ### make-fill-pointer-output-stream string => string-stream
     private static final Primitive MAKE_FILL_POINTER_OUTPUT_STREAM =
-        new Primitive("make-fill-pointer-output-stream", PACKAGE_SYS, false) {
+        new Primitive("make-fill-pointer-output-stream", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof ComplexString) {
@@ -47,8 +47,9 @@ public final class FillPointerOutputStream extends Stream
                 if (string.getFillPointer() >= 0)
                     return new FillPointerOutputStream(string);
             }
-            return signal(new TypeError(arg.writeToString() +
-                                        " is not a string with a fill pointer."));
+            return signalTypeError(arg, list3(Symbol.AND, Symbol.STRING,
+                                              list2(Symbol.SATISFIES,
+                                                    Symbol.ARRAY_HAS_FILL_POINTER_P)));
         }
     };
 
