@@ -500,7 +500,7 @@
          (cmdline (with-output-to-string (s)
                     (princ "gcj -O2 " s)
                     (dolist (source-file source-files)
-                      (unless (string= (pathname-name source-file) "ControlC")
+                      (unless (string= (pathname-name source-file) "Native")
                         (princ (pathname-name source-file) s)
                         (princ ".java" s)
                         (princ #\space s)))
