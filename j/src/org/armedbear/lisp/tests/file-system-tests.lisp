@@ -194,8 +194,7 @@
         (delete-file tmp1))))
   t t)
 #+allegro
-;; Allegro's PROBE-FILE doesn't follow the symlink, which is a
-;; bug.
+;; Allegro's PROBE-FILE doesn't follow the symlink, which is a bug.
 (pushnew 'symlink.1 *expected-failures*)
 
 (do-tests)
