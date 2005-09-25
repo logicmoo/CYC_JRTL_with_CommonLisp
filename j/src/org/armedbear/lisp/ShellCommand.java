@@ -2,7 +2,7 @@
  * ShellCommand.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: ShellCommand.java,v 1.5 2005-06-07 21:33:09 piso Exp $
+ * $Id: ShellCommand.java,v 1.6 2005-09-25 15:00:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ public final class ShellCommand extends Lisp implements Runnable
             if (command != null) {
                 if (Utilities.isPlatformUnix()) {
                     if (directory != null) {
-                        StringBuffer sb = new StringBuffer("\\cd \"");
+                        FastStringBuffer sb = new FastStringBuffer("\\cd \"");
                         sb.append(directory);
                         sb.append("\" && ");
                         sb.append(command);
@@ -86,7 +86,7 @@ public final class ShellCommand extends Lisp implements Runnable
                     list.add("cmd.exe");
                     list.add("/c");
                     if (directory != null) {
-                        StringBuffer sb = new StringBuffer("cd /d \"");
+                        FastStringBuffer sb = new FastStringBuffer("cd /d \"");
                         sb.append(directory);
                         sb.append("\" && ");
                         sb.append(command);
