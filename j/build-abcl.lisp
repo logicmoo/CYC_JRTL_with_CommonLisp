@@ -65,7 +65,7 @@
                                (namestring (pathname directory))
                                "\" && "
                                command)))
-  (sb-impl::process-exit-code
+  (sb-ext:process-exit-code
    (sb-ext:run-program
     "/bin/sh"
     (list  "-c" command)
