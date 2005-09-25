@@ -180,8 +180,6 @@
                (and
                 ;; Copy this file.
                 (zerop (run-shell-command command1 :directory *this-directory*))
-                ;; Allegro's PROBE-FILE doesn't follow the symlink, which is a
-                ;; bug.
                 (pathnames-equal-p (probe-file tmp1) tmp1)
                 ;; Create a symlink to the copy.
                 (zerop (run-shell-command command2 :directory *this-directory*))
@@ -196,6 +194,8 @@
         (delete-file tmp1))))
   t t)
 #+allegro
+;; Allegro's PROBE-FILE doesn't follow the symlink, which is a
+;; bug.
 (pushnew 'symlink.1 *expected-failures*)
 
 (do-tests)
