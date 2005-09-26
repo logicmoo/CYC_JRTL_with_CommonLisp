@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.95 2005-09-24 16:54:24 piso Exp $
+ * $Id: Pathname.java,v 1.96 2005-09-26 10:55:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -407,8 +407,7 @@ public class Pathname extends LispObject
                  device.sxhash() ^
                  directory.sxhash() ^
                  name.sxhash() ^
-                 type.sxhash() ^
-                 version.sxhash()) & 0x7fffffff);
+                 type.sxhash()) & 0x7fffffff);
     }
 
     public String writeToString() throws ConditionThrowable
