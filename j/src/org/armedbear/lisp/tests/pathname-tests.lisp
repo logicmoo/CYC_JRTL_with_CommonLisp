@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.28 2005-09-26 11:02:13 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.29 2005-09-26 17:08:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1070,10 +1070,12 @@
 (deftest sbcl.48
   (check-readable-or-signals-error (make-pathname :name "foo" :type "txt" :version :newest))
   t)
+
 #-allegro
 (deftest sbcl.49
   (check-readable-or-signals-error (make-pathname :name "foo" :type "txt" :version 1))
   t)
+
 #-allegro
 (deftest sbcl.50
   #-clisp
@@ -1081,18 +1083,19 @@
   #+clisp
   (signals-error (make-pathname :name "foo" :type ".txt") 'error)
   t)
+
 (deftest sbcl.51
   (check-readable-or-signals-error (make-pathname :name "foo." :type "txt"))
   t)
-#-cmu
+
 (deftest sbcl.52
   (check-readable-or-signals-error (parse-namestring "SCRATCH:FOO.TXT.1"))
   t)
-#-cmu
+
 (deftest sbcl.53
   (check-readable-or-signals-error (parse-namestring "SCRATCH:FOO.TXT.NEWEST"))
   t)
-#-cmu
+
 (deftest sbcl.54
   (check-readable-or-signals-error (parse-namestring "SCRATCH:FOO.TXT"))
   t)
