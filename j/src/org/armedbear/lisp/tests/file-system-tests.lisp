@@ -59,7 +59,7 @@
                  :directory (pathname-directory *load-truename*)))
 
 (defun pathnames-equal-p (pathname1 pathname2)
-  #-(or allegro cmu)
+  #-(or allegro cmu lispworks)
   (equal pathname1 pathname2)
   #+(or allegro cmu)
   (and (pathnamep pathname1)
@@ -72,7 +72,9 @@
        (or (equal (pathname-version pathname1) (pathname-version pathname2))
            (and (member (pathname-version pathname1) '(:newest nil))
                 (member (pathname-version pathname2) '(:newest nil))
-                t))))
+                t)))
+  #+lispworks
+  (string= (namestring pathname1) (namestring pathname2)))
 
 #+allegro
 (defun run-shell-command (command &key directory (output *standard-output*))
@@ -124,6 +126,20 @@
     (list  "-c" command)
     :input nil :output output)))
 
+#+lispworks
+(defun run-shell-command (command &key directory (output *standard-output*))
+  (when directory
+    #+unix
+    (setf command (concatenate 'string
+                               "\\cd \""
+                               (namestring (pathname directory))
+                               "\" && "
+                               command)))
+  (system:call-system-showing-output
+   command
+   :shell-type "/bin/sh"
+   :output-stream output))
+
 (defun copy-file (from to)
   (let* ((from-namestring (namestring (pathname from)))
          (to-namestring (namestring (pathname to)))
@@ -147,7 +163,7 @@
         (return-from make-temporary-filename pathname))))
    (error "Unable to create a temporary filename in ~S~%" directory))
 
-#-(or allegro clisp windows)
+#-(or allegro clisp lispworks windows)
 (deftest run-shell-command.1
   (let* ((raw-string
           (with-output-to-string (s) (run-shell-command "pwd"
@@ -162,7 +178,7 @@
     (string= string (directory-namestring *this-directory*)))
   t)
 
-#-(or allegro clisp windows)
+#-(or allegro clisp lispworks windows)
 (deftest run-shell-command.2
   (let* ((directory
           (probe-file (merge-pathnames "../" *this-directory*)))
@@ -278,7 +294,10 @@
        #+clisp
        (when (ext:probe-directory directory-namestring)
          (ext:delete-dir directory-namestring))
-       #-(or allegro clisp)
+       #+lispworks
+       (when (probe-file directory-namestring)
+         (lw:delete-directory directory-namestring))
+       #-(or allegro clisp lispworks)
        (when (probe-file directory-namestring)
          #-(or cmu sbcl) (delete-file directory-namestring)
          #+cmu (unix:unix-rmdir directory-namestring)
