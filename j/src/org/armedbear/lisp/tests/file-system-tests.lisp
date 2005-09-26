@@ -39,10 +39,13 @@
 
 (setf rt:*expected-failures* nil)
 
-(defpackage #:file-system-tests (:use #:cl #:regression-test
-                                        #+abcl #:ext))
+(unless (find-package '#:test)
+  (defpackage #:test (:use #:cl #:regression-test
+                           #+abcl #:extensions)))
 
-(in-package #:file-system-tests)
+(in-package #:test)
+
+(export '(pathnames-equal-p run-shell-command copy-file make-symbolic-link))
 
 (defparameter *this-file*
   (merge-pathnames (make-pathname :type "lisp")
@@ -119,6 +122,18 @@
     (list  "-c" command)
     :input nil :output output)))
 
+(defun copy-file (from to)
+  (let* ((from-namestring (namestring (pathname from)))
+         (to-namestring (namestring (pathname to)))
+         (command (concatenate 'string "cp " from-namestring " " to-namestring)))
+    (zerop (run-shell-command command))))
+
+(defun make-symbolic-link (from to)
+  (let* ((from-namestring (namestring (pathname from)))
+         (to-namestring (namestring (pathname to)))
+         (command (concatenate 'string "ln -s " from-namestring " " to-namestring)))
+    (zerop (run-shell-command command))))
+
 ;; This approach is race-prone, but it should be adequate for our limited
 ;; purposes here.
 (defun make-temporary-filename (directory)
@@ -162,39 +177,75 @@
     (string= string (directory-namestring directory)))
   t)
 
+(deftest probe-file.1
+  (pathnames-equal-p (probe-file *this-file*) *this-file*)
+  t)
+
+(deftest truename.1
+  (pathnames-equal-p (truename *this-file*) *this-file*)
+  t)
+
+(deftest directory.1
+  (let ((list (directory *this-file*)))
+    (and
+     (= (length list) 1)
+     (pathnames-equal-p (car list) *this-file*)))
+  t)
+
 #-windows
 (deftest symlink.1
   (let* ((tmp1 (make-temporary-filename *this-directory*))
-         (command1 (concatenate 'string "cp "
-                                (namestring *this-file*)
-                                " "
-                                (namestring tmp1))))
+         (tmp2 (make-temporary-filename *this-directory*)))
     (unwind-protect
-        (let* ((tmp2 (make-temporary-filename *this-directory*))
-               (command2 (concatenate 'string "ln -sf "
-                                      (namestring tmp1)
-                                      " "
-                                      (namestring tmp2))))
-          (values
-           (unwind-protect
-               (and
-                ;; Copy this file.
-                (zerop (run-shell-command command1 :directory *this-directory*))
-                (pathnames-equal-p (probe-file tmp1) tmp1)
-                ;; Create a symlink to the copy.
-                (zerop (run-shell-command command2 :directory *this-directory*))
-                ;; Verify that the symlink exists and points to the copy.
-                (pathnames-equal-p (probe-file tmp2) tmp1)
-                (pathnames-equal-p (truename tmp2) tmp1))
-             (when (probe-file tmp2)
-               (delete-file tmp2)))
-           ;; Copy should still exist after symlink is deleted.
-           (pathnames-equal-p (probe-file tmp1) tmp1)))
+        (values
+         (unwind-protect
+             (and
+              ;; Copy this file to tmp1.
+              (copy-file *this-file* tmp1)
+              (pathnames-equal-p (probe-file tmp1) tmp1)
+              ;; Create tmp2 as a symlink to tmp1.
+              (make-symbolic-link tmp1 tmp2)
+              ;; Verify that the symlink exists and points to the copy.
+              (pathnames-equal-p (probe-file tmp2) tmp1)
+              (pathnames-equal-p (truename tmp2) tmp1))
+           ;; Delete the symlink.
+           (when (probe-file tmp2)
+             (delete-file tmp2)))
+         ;; Copy should still exist after symlink is deleted.
+         (pathnames-equal-p (probe-file tmp1) tmp1))
       (when (probe-file tmp1)
         (delete-file tmp1))))
   t t)
 #+allegro
-;; Allegro's PROBE-FILE doesn't follow the symlink, which is a bug.
+;; Allegro's PROBE-FILE doesn't follow the symlink.
 (pushnew 'symlink.1 *expected-failures*)
+
+#-windows
+(deftest symlink.2
+  (let* ((copy (make-temporary-filename *this-directory*))
+         (link (make-temporary-filename *this-directory*))
+         directory)
+    (unwind-protect
+        (and
+         ;; Copy this file to copy.
+         (copy-file *this-file* copy)
+         ;; Verify that copy exists.
+         (pathnames-equal-p (probe-file copy) copy)
+         ;; Create link as a symlink to copy.
+         (make-symbolic-link copy link)
+         ;; Verify that the symlink appears in the directory listing.
+         (setf directory (directory link))
+         (= (length directory) 1)
+         ;; The directory listing should contain the truename of the symlink.
+         (pathnames-equal-p (car directory) (truename link)))
+      (progn
+        ;; Clean up.
+        (when (probe-file link)
+          (delete-file link))
+        (when (probe-file copy)
+          (delete-file copy)))))
+  t)
+#+allegro
+(pushnew 'symlink.2 *expected-failures*)
 
 (do-tests)

@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.26 2005-09-25 18:49:38 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.27 2005-09-26 01:15:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,9 +40,11 @@
 
 (setf rt:*expected-failures* nil)
 
-(defpackage #:pathname-tests (:use #:cl #:regression-test))
+(unless (find-package '#:test)
+  (defpackage #:pathname-tests (:use #:cl #:regression-test
+                                     #+abcl #:extensions)))
 
-(in-package #:pathname-tests)
+(in-package #:test)
 
 (defmacro signals-error (form error-name)
   `(locally (declare (optimize safety))
