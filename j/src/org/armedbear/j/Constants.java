@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Constants.java,v 1.16 2004-08-08 00:54:04 piso Exp $
+ * $Id: Constants.java,v 1.17 2005-09-26 01:17:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,6 +99,7 @@ public interface Constants
     int TAG_STRUCT               = 14;
     int TAG_TYPE                 = 15;
     int TAG_VAR                  = 16;
+    int TAG_TEST                 = 17;
 
     // Visibility values (stored in LocalTag flags field).
     int TAG_PUBLIC               = 0x0001;
@@ -110,6 +111,7 @@ public interface Constants
     // Version control.
     int VC_CVS                   = 1;
     int VC_P4                    = 2;
+    int VC_DARCS                 = 3;
 
     String CHECK_SAVE_PROMPT  = "Buffer is modified; save it first?";
 
