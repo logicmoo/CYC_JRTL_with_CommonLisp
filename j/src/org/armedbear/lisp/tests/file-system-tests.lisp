@@ -283,7 +283,7 @@
          #-(or cmu sbcl) (delete-file directory-namestring)
          #+cmu (unix:unix-rmdir directory-namestring)
          #+sbcl (zerop (sb-posix:rmdir directory-namestring)))
-       ;; 5. Verify that it's no longer there.
+       ;; 5. Verify that the directory is no longer there.
        #-clisp
        (probe-file directory-namestring)
        #+clisp
