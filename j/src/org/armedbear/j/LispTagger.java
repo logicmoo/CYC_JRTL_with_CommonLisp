@@ -2,7 +2,7 @@
  * LispTagger.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispTagger.java,v 1.16 2005-03-14 17:54:24 piso Exp $
+ * $Id: LispTagger.java,v 1.17 2005-09-26 01:17:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -172,6 +172,8 @@ public final class LispTagger extends Tagger
             type = TAG_DEFUN;
         else if (definer.equals("defvar"))
             type = TAG_VAR;
+        else if (definer.equals("deftest"))
+            type = TAG_TEST;
         else
             Debug.bug();
         tags.add(new LispTag(name, pos, type));
