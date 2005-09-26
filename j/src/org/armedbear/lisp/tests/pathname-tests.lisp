@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.27 2005-09-26 01:15:39 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.28 2005-09-26 11:02:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,16 +33,16 @@
         #-abcl (compile-file "ansi-tests:rt.lsp"))
   (provide "RT"))
 
-(rt:rem-all-tests)
+(regression-test:rem-all-tests)
 
-(let ((*package* (find-package '#:rt)))
+(let ((*package* (find-package '#:regression-test)))
   (export (find-symbol (string '#:*expected-failures*))))
 
-(setf rt:*expected-failures* nil)
+(setf regression-test:*expected-failures* nil)
 
 (unless (find-package '#:test)
-  (defpackage #:pathname-tests (:use #:cl #:regression-test
-                                     #+abcl #:extensions)))
+  (defpackage #:test (:use #:cl #:regression-test
+                           #+abcl #:extensions)))
 
 (in-package #:test)
 
@@ -127,6 +127,40 @@
             #+windows (substitute #\\ #\/ ,namestring)
             #-windows ,namestring))
 
+(deftest equal.1
+  (equal (make-pathname :name "foo" :type "bar")
+         (make-pathname :name "foo" :type "bar"))
+  t)
+
+(deftest equal.2
+  (equal (make-pathname :name "foo" :type "bar" :version nil)
+         (make-pathname :name "foo" :type "bar" :version :newest))
+  #+(or clisp cmu) nil
+  #-(or clisp cmu) t)
+
+(deftest sxhash.1
+  (let* ((p (make-pathname :name "foo" :type "bar" :version nil))
+         (s (sxhash p)))
+    (values (typep s 'fixnum)
+            (>= s 0)))
+  t t)
+
+;; "(equal x y) implies (= (sxhash x) (sxhash y))"
+(deftest sxhash.2
+  (let ((p1 (make-pathname :name "foo" :type "bar" :version nil))
+        (p2 (make-pathname :name "foo" :type "bar" :version :newest)))
+    (if (equal p1 p2)
+        (= (sxhash p1) (sxhash p2))
+        t))
+  t)
+
+;; It's suboptimal if all pathnames return the same SXHASH, but that happens
+;; with CMUCL and SBCL.
+(deftest sxhash.3
+  (= (sxhash #p"/usr/local/bin/sbcl") (sxhash #p"") (sxhash #p"foo.bar"))
+  #+(or cmu sbcl) t
+  #-(or cmu sbcl) nil)
+
 (deftest physical.1
   (check-physical-pathname #p"/" '(:absolute) nil nil)
   t)
@@ -205,7 +239,7 @@
   (check-physical-pathname #p"." nil "." nil)
   t)
 #+cmu
-(pushnew 'physical.21 rt:*expected-failures*)
+(pushnew 'physical.21 *expected-failures*)
 
 ;; #p"./"
 ;; Trailing separator character means it's a directory.
@@ -217,7 +251,7 @@
   (check-physical-pathname #p"./" '(:relative ".") nil nil)
   t)
 #+cmu
-(pushnew 'physical.22 rt:*expected-failures*)
+(pushnew 'physical.22 *expected-failures*)
 
 (deftest physical.23
   #-allegro
@@ -248,7 +282,7 @@
   (check-physical-pathname #p".." nil "." "")
   t)
 #+cmu
-(pushnew 'physical.25 rt:*expected-failures*)
+(pushnew 'physical.25 *expected-failures*)
 
 ;; #p"../"
 (deftest physical.26
@@ -264,13 +298,13 @@
   (check-physical-pathname #p"..." nil "..." nil)
   t)
 #+cmu
-(pushnew 'lots-of-dots.1 rt:*expected-failures*)
+(pushnew 'lots-of-dots.1 *expected-failures*)
 #+(or allegro abcl cmu)
 (deftest lots-of-dots.2
   (check-physical-pathname #p"......" nil "......" nil)
   t)
 #+cmu
-(pushnew 'lots-of-dots.2 rt:*expected-failures*)
+(pushnew 'lots-of-dots.2 *expected-failures*)
 
 (deftest physical.27
   (check-physical-pathname #p"foo.*" nil "foo" :wild)
@@ -299,7 +333,7 @@
   (check-readable (make-pathname :name "abc/def"))
   t)
 #+cmu
-(pushnew 'silly.1 rt:*expected-failures*)
+(pushnew 'silly.1 *expected-failures*)
 
 ;; If the prefix isn't a defined logical host, it's not a logical pathname.
 #-cmu

@@ -32,12 +32,12 @@
         #-abcl (compile-file "ansi-tests:rt.lsp"))
   (provide "RT"))
 
-(rt:rem-all-tests)
+(regression-test:rem-all-tests)
 
 (let ((*package* (find-package '#:rt)))
   (export (find-symbol (string '#:*expected-failures*))))
 
-(setf rt:*expected-failures* nil)
+(setf regression-test:*expected-failures* nil)
 
 (unless (find-package '#:test)
   (defpackage #:test (:use #:cl #:regression-test
