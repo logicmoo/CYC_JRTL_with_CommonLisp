@@ -22,6 +22,8 @@
 ;;   (setf (logical-pathname-translations "ansi-tests")
 ;;         '(("*.*.*" "/home/peter/gcl/ansi-tests/*.*")))
 
+#+:sbcl (require '#:sb-posix)
+
 (unless (member "RT" *modules* :test #'string=)
   (unless (ignore-errors (logical-pathname-translations "ansi-tests"))
     (error "~S is not defined as a logical pathname host." "ansi-tests"))
@@ -247,5 +249,45 @@
   t)
 #+allegro
 (pushnew 'symlink.2 *expected-failures*)
+
+(deftest ensure-directories-exist.1
+  (let* ((tmp (make-temporary-filename *this-directory*))
+         (directory-namestring (concatenate 'string (namestring tmp) "/"))
+         (file-namestring (concatenate 'string directory-namestring "foo.bar")))
+    (multiple-value-bind (path created)
+        (ensure-directories-exist file-namestring)
+      (values
+       ;; 1. "The primary value is the given pathspec..."
+       #+(or allegro clisp)
+       (eq path file-namestring)
+       #-(or allegro clisp)
+       (pathnames-equal-p (pathname path) (pathname file-namestring))
+       ;; 2. Verify that the directory was created.
+       created
+       ;; 3. Verify that the directory exists.
+       #+clisp
+       ;; CLISP's PROBE-DIRECTORY just returns T.
+       (ext:probe-directory directory-namestring)
+       #-clisp
+       (pathnames-equal-p (probe-file directory-namestring)
+                          (pathname directory-namestring))
+       ;; 4. Delete the directory.
+       #+allegro
+       (when (excl:probe-directory directory-namestring)
+         (excl:delete-directory directory-namestring))
+       #+clisp
+       (when (ext:probe-directory directory-namestring)
+         (ext:delete-dir directory-namestring))
+       #-(or allegro clisp)
+       (when (probe-file directory-namestring)
+         #-(or cmu sbcl) (delete-file directory-namestring)
+         #+cmu (unix:unix-rmdir directory-namestring)
+         #+sbcl (zerop (sb-posix:rmdir directory-namestring)))
+       ;; 5. Verify that it's no longer there.
+       #-clisp
+       (probe-file directory-namestring)
+       #+clisp
+       (ext:probe-directory directory-namestring))))
+  t t t t nil)
 
 (do-tests)
