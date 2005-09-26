@@ -5,6 +5,7 @@
 ;;;   .cmucl-init.lisp   (CMUCL)
 ;;;   .sbclrc            (SBCL)
 ;;;   .clisprc.lisp      (CLISP)
+;;;   .lispworks         (LispWorks)
 
 (setf (logical-pathname-translations "ansi-tests")
       '(("*.*.*" #-windows "/home/peter/gcl/ansi-tests/*.*"
@@ -12,7 +13,8 @@
 
 (defun run-ansi-tests (&optional (compile-tests t))
   (format t "COMPILE-TESTS is ~A~%" compile-tests)
-  (let ((*default-pathname-defaults* #p"/home/peter/gcl/ansi-tests/"))
+  (let ((*default-pathname-defaults* #-windows #p"/home/peter/gcl/ansi-tests/"
+                                     #+windows #p"c:\\cygwin\\home\\peter\\gcl\\ansi-tests\\"))
     (time (load (if compile-tests "compileit.lsp" "doit.lsp")))))
 
 #+abcl
@@ -27,6 +29,6 @@
 (setf *gc-verbose* nil)
 
 #+sbcl
-(require 'asdf)
+(require '#:asdf)
 #+sbcl
-(require 'sb-aclrepl)
+(require '#:sb-aclrepl)
