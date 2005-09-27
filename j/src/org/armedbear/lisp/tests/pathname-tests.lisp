@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.30 2005-09-26 19:32:53 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.31 2005-09-27 18:27:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -41,8 +41,7 @@
 (setf regression-test:*expected-failures* nil)
 
 (unless (find-package '#:test)
-  (defpackage #:test (:use #:cl #:regression-test
-                           #+abcl #:extensions)))
+  (defpackage #:test (:use #:cl #:regression-test)))
 
 (in-package #:test)
 
@@ -155,11 +154,11 @@
   t)
 
 ;; It's suboptimal if all pathnames return the same SXHASH, but that happens
-;; with CMUCL and SBCL.
+;; with SBCL.
 (deftest sxhash.3
   (= (sxhash #p"/usr/local/bin/sbcl") (sxhash #p"") (sxhash #p"foo.bar"))
-  #+(or cmu sbcl) t
-  #-(or cmu sbcl) nil)
+  #+sbcl t
+  #-sbcl nil)
 
 (deftest physical.1
   (check-physical-pathname #p"/" '(:absolute) nil nil)
@@ -415,21 +414,25 @@
   (string= (write-to-string #p"effluvia:bar.baz.42" :escape t)
            "#P\"EFFLUVIA:BAR.BAZ.42\"")
   t)
+
 #+allegro
 ;; Allegro returns NIL for the device and directory and drops the version
 ;; entirely (even from the namestring).
 (deftest logical.4
   (check-logical-pathname #p"effluvia:bar.baz.42" "effluvia" nil "bar" "baz" nil)
   t)
+
 #+allegro
 (deftest logical.5
   (string= (write-to-string #p"effluvia:bar.baz" :escape t)
-           "#p\"effluvia:bar.baz\"")
+           #+allegro-v6.2 "#p\"effluvia:bar.baz\""
+           #+allegro-v7.0 "#P\"effluvia:bar.baz\"")
   t)
 
 (deftest logical.6
   (typep (parse-namestring "**;*.*.*" "effluvia") 'logical-pathname)
   t)
+
 (deftest logical.7
   (check-namestring (parse-namestring "**;*.*.*" "effluvia")
                     #-(or allegro lispworks)
@@ -583,7 +586,9 @@
 ;; ABCL doesn't implement this translation.
 (deftest translate-pathname.3
   #-abcl
-  (string= (pathname-name (translate-pathname "foobar" "*" "foo*")) "foofoobar")
+  (string= (pathname-name (translate-pathname "foobar" "*" "foo*"))
+           #-allegro-v7.0 "foofoobar"
+           #+allegro-v7.0 "foo*")
   #+abcl
   (signals-error (translate-pathname "foobar" "*" "foo*") 'error)
   t)
@@ -591,9 +596,21 @@
 ;; ABCL doesn't implement this translation.
 (deftest translate-pathname.4
   #-abcl
-  (equal (translate-pathname "foobar" "foo*" "*baz") #p"barbaz")
+  (equal (translate-pathname "foobar" "foo*" "*baz")
+         #-allegro-v7.0 #p"barbaz"
+         #+allegro-v7.0 #p"*baz")
   #+abcl
   (signals-error (translate-pathname "foobar" "foo*" "*baz") 'error)
+  t)
+
+;; ABCL doesn't implement this translation.
+(deftest translate-pathname.5a
+  #-abcl
+  (equal (translate-pathname "foobar" "foo*" "")
+         #+(or allegro clisp) #p"bar"
+         #+sbcl #p"foobar")
+  #+abcl
+  (signals-error (translate-pathname "foobar" "foo*" "") 'error)
   t)
 
 (deftest translate-pathname.5
