@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.31 2005-09-27 18:27:57 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.32 2005-09-27 18:45:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -807,11 +807,10 @@
 (deftest sbcl.9
   (equal (enough-namestring "demo2:test;foo.lisp")
          #+sbcl "DEMO2:;TEST;FOO.LISP"
-         #+(or cmu lispworks) "DEMO2:TEST;FOO.LISP"
-         #+clisp "TEST;FOO.LISP"
-         #+allegro "/test/foo.lisp" ;; BUG
-         #+abcl "DEMO2:TEST;FOO.LISP"
-         )
+         #+(or abcl cmu lispworks) "DEMO2:TEST;FOO.LISP"
+         #+allegro-v7.0 "demo2:test;foo.lisp"
+         #+allegro-v6.2 "/test/foo.lisp" ;; BUG
+         #+clisp "TEST;FOO.LISP")
   t)
 
 #-(or allegro clisp cmu)
@@ -1142,15 +1141,15 @@
 
 (deftest sbcl.46
   (signals-error (pathname (make-string-input-stream "FOO"))
-                 #-(or allegro cmu) 'type-error
-                 #+allegro          'stream-error
+                 #-(or allegro-v6.2 cmu) 'type-error
+                 #+allegro-v6.2     'stream-error
                  #+cmu              'error)
   t)
 
 (deftest sbcl.47
   (signals-error (merge-pathnames (make-string-output-stream))
-                 #-allegro 'type-error
-                 #+allegro 'stream-error)
+                 #-allegro-v6.2 'type-error
+                 #+allegro-v6.2 'stream-error)
   t)
 
 (deftest sbcl.48
