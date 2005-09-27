@@ -42,8 +42,7 @@
 (setf regression-test:*expected-failures* nil)
 
 (unless (find-package '#:test)
-  (defpackage #:test (:use #:cl #:regression-test
-                           #+abcl #:extensions)))
+  (defpackage #:test (:use #:cl #:regression-test)))
 
 (in-package #:test)
 
@@ -75,6 +74,10 @@
                 t)))
   #+lispworks
   (string= (namestring pathname1) (namestring pathname2)))
+
+#+abcl
+(defun run-shell-command (command &key directory (output *standard-output*))
+  (ext:run-shell-command command :directory directory :output output))
 
 #+allegro
 (defun run-shell-command (command &key directory (output *standard-output*))
@@ -162,6 +165,22 @@
       (unless (probe-file pathname)
         (return-from make-temporary-filename pathname))))
    (error "Unable to create a temporary filename in ~S~%" directory))
+
+(defun probe-directory (pathname)
+  #+abcl (ext:probe-directory pathname)
+  #+allegro (excl:probe-directory pathname)
+  #+clisp (ext:probe-directory pathname)
+  #+cmu (probe-file pathname) ; FIXME
+  #+sbcl (probe-file pathname) ; FIXME
+  )
+
+(defun delete-directory (pathname)
+  #+abcl (delete-file pathname)
+  #+allegro (excl:delete-directory pathname)
+  #+clisp (ext:delete-dir (namestring pathname))
+  #+cmu (unix:unix-rmdir (namestring pathname))
+  #+sbcl (zerop (sb-posix:rmdir (namestring pathname)))
+  )
 
 #-(or allegro clisp lispworks windows)
 (deftest run-shell-command.1
@@ -288,25 +307,11 @@
        (pathnames-equal-p (probe-file directory-namestring)
                           (pathname directory-namestring))
        ;; 4. Delete the directory.
-       #+allegro
-       (when (excl:probe-directory directory-namestring)
-         (excl:delete-directory directory-namestring))
-       #+clisp
-       (when (ext:probe-directory directory-namestring)
-         (ext:delete-dir directory-namestring))
-       #+lispworks
-       (when (probe-file directory-namestring)
-         (lw:delete-directory directory-namestring))
-       #-(or allegro clisp lispworks)
-       (when (probe-file directory-namestring)
-         #-(or cmu sbcl) (delete-file directory-namestring)
-         #+cmu (unix:unix-rmdir directory-namestring)
-         #+sbcl (zerop (sb-posix:rmdir directory-namestring)))
+       (when (probe-directory directory-namestring)
+         (delete-directory directory-namestring))
        ;; 5. Verify that the directory is no longer there.
-       #-clisp
-       (probe-file directory-namestring)
-       #+clisp
-       (ext:probe-directory directory-namestring))))
+       (probe-directory directory-namestring))
+       ))
   t t t t nil)
 
 (do-tests)
