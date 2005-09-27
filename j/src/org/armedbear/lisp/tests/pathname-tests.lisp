@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.32 2005-09-27 18:45:44 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.33 2005-09-27 18:56:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -251,15 +251,15 @@
 #+(or cmu lispworks)
 (pushnew 'physical.21 *expected-failures*)
 
-(deftest physical.21a
+(deftest physical.22
   (equal #p"." #p"")
   nil)
 #+lispworks
-(pushnew 'physical.21a *expected-failures*)
+(pushnew 'physical.22 *expected-failures*)
 
 ;; #p"./"
 ;; Trailing separator character means it's a directory.
-(deftest physical.22
+(deftest physical.23
   #+(or allegro abcl clisp cmu)
   (check-physical-pathname #p"./" '(:relative) nil nil)
   #+(or sbcl)
@@ -267,16 +267,16 @@
   (check-physical-pathname #p"./" '(:relative ".") nil nil)
   t)
 #+(or cmu lispworks)
-(pushnew 'physical.22 *expected-failures*)
+(pushnew 'physical.23 *expected-failures*)
 
-(deftest physical.22a
+(deftest physical.24
   (equal #p"./" #p"")
   nil)
 #+lispworks
-(pushnew 'physical.22a *expected-failures*)
+(pushnew 'physical.24 *expected-failures*)
 
 
-(deftest physical.23
+(deftest physical.25
   #-allegro
   (check-physical-pathname (make-pathname :name "..") nil ".." nil)
   #+allegro
@@ -284,14 +284,14 @@
   t)
 
 #-(or sbcl)
-(deftest physical.24
+(deftest physical.26
   (check-readable (make-pathname :name ".."))
   t)
 #+(or clisp lispworks)
-(pushnew 'physical.24 *expected-failures*)
+(pushnew 'physical.26 *expected-failures*)
 
 ;; #p".."
-(deftest physical.25
+(deftest physical.27
   #+(or allegro)
   (check-physical-pathname #p".." '(:relative :back) nil nil)
   #+(or abcl cmu lispworks)
@@ -307,10 +307,10 @@
   (check-physical-pathname #p".." nil "." "")
   t)
 #+cmu
-(pushnew 'physical.25 *expected-failures*)
+(pushnew 'physical.27 *expected-failures*)
 
 ;; #p"../"
-(deftest physical.26
+(deftest physical.28
   #+allegro
   (check-physical-pathname #p"../" '(:relative :back) nil nil)
   #+(or abcl sbcl cmu clisp lispworks)
@@ -331,19 +331,19 @@
 #+cmu
 (pushnew 'lots-of-dots.2 *expected-failures*)
 
-(deftest physical.27
+(deftest physical.29
   (check-physical-pathname #p"foo.*" nil "foo" :wild)
   t)
 
 #-sbcl
-(deftest physical.28
+(deftest physical.30
   #-allegro
   (string= (namestring (make-pathname :name "..")) "..")
   #+allegro
   (string= (namestring (make-pathname :name "..")) "../")
   t)
 
-(deftest physical.29
+(deftest physical.31
   (string= (namestring (make-pathname :directory '(:relative :up)))
            #+windows "..\\"
            #-windows "../")
@@ -604,7 +604,7 @@
   t)
 
 ;; ABCL doesn't implement this translation.
-(deftest translate-pathname.5a
+(deftest translate-pathname.5
   #-abcl
   (equal (translate-pathname "foobar" "foo*" "")
          #+(or allegro clisp) #p"bar"
@@ -613,56 +613,56 @@
   (signals-error (translate-pathname "foobar" "foo*" "") 'error)
   t)
 
-(deftest translate-pathname.5
-  (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz")
-  t)
-
 (deftest translate-pathname.6
-  (equal (translate-pathname "bar/foo" "bar/*" "baz/*") #p"baz/foo")
+  (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz")
   t)
 
 (deftest translate-pathname.7
-  (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz")
+  (equal (translate-pathname "bar/foo" "bar/*" "baz/*") #p"baz/foo")
   t)
 
 (deftest translate-pathname.8
+  (equal (translate-pathname "foo/bar" "*/bar" "*/baz") #p"foo/baz")
+  t)
+
+(deftest translate-pathname.9
   (string= (namestring (translate-pathname "test.txt" "*.txt" "*.text"))
            "test.text")
   t)
 
-(deftest translate-pathname.9
+(deftest translate-pathname.10
   (equal (translate-pathname "foo" "foo.*" "bar") #p"bar")
   t)
 
-(deftest translate-pathname.10
+(deftest translate-pathname.11
   (equal (translate-pathname "foo" "foo.*" "bar.*") #p"bar")
   t)
 
-(deftest translate-pathname.11
+(deftest translate-pathname.12
   (string= (namestring (translate-pathname "foo.bar" "*.*" "/usr/local/*.*"))
            #-windows "/usr/local/foo.bar"
            #+windows "\\usr\\local\\foo.bar")
   t)
 
-(deftest translate-pathname.12
+(deftest translate-pathname.13
   (equal (translate-pathname "foo.bar" "*.*" "/usr/local/*.*")
          #p"/usr/local/foo.bar")
   t)
 
-(deftest translate-pathname.13
+(deftest translate-pathname.14
   (check-translate-pathname '("/foo/" "/*/" "/usr/local/*/") "/usr/local/foo/")
   t)
 
-(deftest translate-pathname.14
+(deftest translate-pathname.15
   (check-translate-pathname '("/foo/baz/bar.txt" "/**/*.*" "/usr/local/**/*.*")
                             "/usr/local/foo/baz/bar.txt")
   t)
 
-(deftest translate-pathname.15
+(deftest translate-pathname.16
   (equal (translate-pathname "/foo/" "/*/" "/usr/local/*/bar/") #p"/usr/local/foo/bar/")
   t)
 
-(deftest translate-pathname.16
+(deftest translate-pathname.17
   (equal (translate-pathname "/foo/bar.txt" "/*/*.*" "/usr/local/*/*.*")
          #P"/usr/local/foo/bar.txt")
   t)
@@ -672,7 +672,7 @@
   (pathname-match-p "/foo/bar.txt" "**/*.*")
   nil)
 ;; Since (pathname-match-p "/foo/bar.txt" "**/*.*" ) => NIL...
-(deftest translate-pathname.17
+(deftest translate-pathname.18
   #+(or clisp allegro abcl cmu lispworks)
   ;; This seems to be the correct behavior.
   (signals-error (translate-pathname "/foo/bar.txt" "**/*.*" "/usr/local/**/*.*") 'error)
@@ -685,13 +685,13 @@
 (deftest pathname-match-p.11
   (pathname-match-p "/foo/bar.txt" "/**/*.*")
   t)
-(deftest translate-pathname.18
+(deftest translate-pathname.19
   (equal (translate-pathname "/foo/bar.txt" "/**/*.*" "/usr/local/**/*.*")
          #p"/usr/local/foo/bar.txt")
   t)
 
 #-clisp
-(deftest translate-pathname.19
+(deftest translate-pathname.20
   (equal (translate-pathname "foo.bar" "/**/*.*" "/usr/local/") #p"/usr/local/foo.bar")
   t)
 
