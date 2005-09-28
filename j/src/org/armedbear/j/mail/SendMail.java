@@ -1,8 +1,8 @@
 /*
  * SendMail.java
  *
- * Copyright (C) 2000-2004 Peter Graves
- * $Id: SendMail.java,v 1.10 2004-12-03 12:49:45 piso Exp $
+ * Copyright (C) 2000-2005 Peter Graves
+ * $Id: SendMail.java,v 1.11 2005-09-28 15:04:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1583,7 +1583,7 @@ public final class SendMail extends Buffer
     private static final RE dateRE =
         new UncheckedRE("[A-Za-z]+, [0-9][0-9]? [A-Za-z]+ [0-9][0-9][0-9][0-9]");
     private static final RE timeRE =
-        new UncheckedRE("[0-9:]+ [+-][0-9][0-9][0-9][0-9]");
+        new UncheckedRE("[0-9:]+ ([+-][0-9][0-9][0-9][0-9]|[A-Z][A-Z][A-Z]+)");
 
     private static String getAttribution(MessageBuffer messageBuffer)
     {
@@ -1606,6 +1606,7 @@ public final class SendMail extends Buffer
                 c = template.charAt(i);
                 switch (c) {
                     case 'd': {
+                        RFC822Date date = entry.getDate();
                         // Date/time in sender's time zone.
                         Message message = messageBuffer.getMessage();
                         if (message == null)
@@ -1642,7 +1643,7 @@ public final class SendMail extends Buffer
                     }
                     default:
                         Log.error("invalid format sequence \"%" + c + '"' +
-                            " in attribution");
+                                  " in attribution");
                         return null;
                 }
             } else
