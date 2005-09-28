@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.97 2005-09-28 17:48:57 piso Exp $
+ * $Id: Pathname.java,v 1.98 2005-09-28 18:48:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -294,6 +294,8 @@ public class Pathname extends LispObject
                     sb.append(((Bignum)version).value.toString(base).toUpperCase());
             } else if (version == Keyword.WILD) {
                 sb.append(".*");
+            } else if (version == Keyword.NEWEST) {
+                sb.append(".NEWEST");
             }
         }
         return namestring = sb.toString();
