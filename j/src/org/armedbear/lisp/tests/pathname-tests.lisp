@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.34 2005-09-28 15:30:39 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.35 2005-09-28 18:55:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -126,6 +126,10 @@
             #+windows (substitute #\\ #\/ ,namestring)
             #-windows ,namestring))
 
+;; Define a logical host.
+(setf (logical-pathname-translations "effluvia")
+      '(("**;*.*.*" "/usr/local/**/*.*")))
+
 (deftest equal.1
   (equal (make-pathname :name "foo" :type "bar")
          (make-pathname :name "foo" :type "bar"))
@@ -160,91 +164,97 @@
   #+sbcl t
   #-sbcl nil)
 
+;; "Parsing a null string always succeeds, producing a pathname with all
+;; components (except the host) equal to nil."
 (deftest physical.1
+  (check-physical-pathname #p"" nil nil nil)
+  t)
+
+(deftest physical.2
   (check-physical-pathname #p"/" '(:absolute) nil nil)
   t)
-(deftest physical.2
+(deftest physical.3
   (check-physical-pathname #p"/foo" '(:absolute) "foo" nil)
   t)
-(deftest physical.3
+(deftest physical.4
   #-lispworks
   (check-physical-pathname #p"/foo." '(:absolute) "foo" "")
   #+lispworks
   (check-physical-pathname #p"/foo." '(:absolute) "foo." nil)
   t)
-(deftest physical.4
-  (check-physical-pathname #p"/foo.b" '(:absolute) "foo" "b")
-  t)
 (deftest physical.5
+  (check-physical-pathname #p"/foo.bar" '(:absolute) "foo" "bar")
+  t)
+(deftest physical.6
   #-lispworks
   (check-physical-pathname #p"/foo.bar." '(:absolute) "foo.bar" "")
   #+lispworks
   (check-physical-pathname #p"/foo.bar." '(:absolute) "foo.bar." nil)
   t)
-(deftest physical.6
+(deftest physical.7
   (check-physical-pathname #p"/foo.bar.baz" '(:absolute) "foo.bar" "baz")
   t)
-(deftest physical.7
+(deftest physical.8
   (check-physical-pathname #p"/foo/bar" '(:absolute "foo") "bar" nil)
   t)
-(deftest physical.8
+(deftest physical.9
   (check-physical-pathname #p"/foo..bar" '(:absolute) "foo." "bar")
   t)
-(deftest physical.9
+(deftest physical.10
   (check-physical-pathname #p"foo.bar" nil "foo" "bar")
   t)
-(deftest physical.10
+(deftest physical.11
   (check-physical-pathname #p"foo.bar.baz" nil "foo.bar" "baz")
   t)
-(deftest physical.11
+(deftest physical.12
   (check-physical-pathname #p"foo/" '(:relative "foo") nil nil)
   t)
-(deftest physical.12
+(deftest physical.13
   (check-physical-pathname #p"foo/bar" '(:relative "foo") "bar" nil)
   t)
-(deftest physical.13
+(deftest physical.14
   (check-physical-pathname #p"foo/bar/baz" '(:relative "foo" "bar") "baz" nil)
   t)
-(deftest physical.14
+(deftest physical.15
   (check-physical-pathname #p"foo/bar/" '(:relative "foo" "bar") nil nil)
   t)
 #+allegro
-(deftest physical.15
+(deftest physical.16
   ;; This reduction is wrong.
   (check-physical-pathname #p"foo/bar/.." '(:relative "foo") nil nil)
   t)
 #+allegro
-(deftest physical.16
+(deftest physical.17
   (check-physical-pathname #p"/foo/../" '(:absolute) nil nil)
   t)
-(deftest physical.17
+(deftest physical.18
   #-lispworks
   (check-physical-pathname #p".lisprc" nil ".lisprc" nil)
   #+lispworks
   (check-physical-pathname #p".lisprc" nil "" "lisprc")
   t)
-(deftest physical.18
+(deftest physical.19
   (check-physical-pathname #p"x.lisprc" nil "x" "lisprc")
   t)
 
-(deftest physical.19
+(deftest physical.20
   #-allegro
   (check-physical-pathname (make-pathname :name ".") nil "." nil)
   #+allegro
   (check-physical-pathname (make-pathname :name ".") '(:relative) nil nil)
   t)
 
-(deftest physical.20
+(deftest physical.21
   #-cmu
   (check-readable (make-pathname :name "."))
   #+cmu
   (check-readable-or-signals-error (make-pathname :name "."))
   t)
 #+lispworks
-(pushnew 'physical.20 *expected-failures*)
+(pushnew 'physical.21 *expected-failures*)
 
 ;; #p"."
-(deftest physical.21
+(deftest physical.22
   #+(or allegro abcl cmu)
   (check-physical-pathname #p"." '(:relative) nil nil)
   #+(or sbcl clisp)
@@ -252,17 +262,17 @@
   (check-physical-pathname #p"." nil "." nil)
   t)
 #+(or cmu lispworks)
-(pushnew 'physical.21 *expected-failures*)
+(pushnew 'physical.22 *expected-failures*)
 
-(deftest physical.22
+(deftest physical.23
   (equal #p"." #p"")
   nil)
 #+lispworks
-(pushnew 'physical.22 *expected-failures*)
+(pushnew 'physical.23 *expected-failures*)
 
 ;; #p"./"
 ;; Trailing separator character means it's a directory.
-(deftest physical.23
+(deftest physical.24
   #+(or allegro abcl clisp cmu)
   (check-physical-pathname #p"./" '(:relative) nil nil)
   #+(or sbcl)
@@ -270,16 +280,16 @@
   (check-physical-pathname #p"./" '(:relative ".") nil nil)
   t)
 #+(or cmu lispworks)
-(pushnew 'physical.23 *expected-failures*)
+(pushnew 'physical.24 *expected-failures*)
 
-(deftest physical.24
+(deftest physical.25
   (equal #p"./" #p"")
   nil)
 #+lispworks
-(pushnew 'physical.24 *expected-failures*)
+(pushnew 'physical.25 *expected-failures*)
 
 
-(deftest physical.25
+(deftest physical.26
   #-allegro
   (check-physical-pathname (make-pathname :name "..") nil ".." nil)
   #+allegro
@@ -287,17 +297,17 @@
   t)
 
 #-(or sbcl)
-(deftest physical.26
+(deftest physical.27
   #-cmu
   (check-readable (make-pathname :name ".."))
   #+cmu
   (check-readable-or-signals-error (make-pathname :name ".."))
   t)
 #+(or clisp lispworks)
-(pushnew 'physical.26 *expected-failures*)
+(pushnew 'physical.27 *expected-failures*)
 
 ;; #p".."
-(deftest physical.27
+(deftest physical.28
   #+(or allegro)
   (check-physical-pathname #p".." '(:relative :back) nil nil)
   #+(or abcl cmu lispworks)
@@ -313,32 +323,14 @@
   (check-physical-pathname #p".." nil "." "")
   t)
 #+cmu
-(pushnew 'physical.27 *expected-failures*)
+(pushnew 'physical.28 *expected-failures*)
 
 ;; #p"../"
-(deftest physical.28
+(deftest physical.29
   #+allegro
   (check-physical-pathname #p"../" '(:relative :back) nil nil)
   #+(or abcl sbcl cmu clisp lispworks)
   (check-physical-pathname #p"../" '(:relative :up) nil nil)
-  t)
-
-;; Lots of dots.
-#+(or allegro abcl cmu)
-(deftest lots-of-dots.1
-  (check-physical-pathname #p"..." nil "..." nil)
-  t)
-#+cmu
-(pushnew 'lots-of-dots.1 *expected-failures*)
-#+(or allegro abcl cmu)
-(deftest lots-of-dots.2
-  (check-physical-pathname #p"......" nil "......" nil)
-  t)
-#+cmu
-(pushnew 'lots-of-dots.2 *expected-failures*)
-
-(deftest physical.29
-  (check-physical-pathname #p"foo.*" nil "foo" :wild)
   t)
 
 #-sbcl
@@ -356,6 +348,28 @@
            #-windows "../")
   t)
 
+(deftest wild.1
+  (check-physical-pathname #p"foo.*" nil "foo" :wild)
+  t)
+
+(deftest wild.2
+  (check-physical-pathname #p"*.*" nil :wild :wild)
+  t)
+
+;; Lots of dots.
+#+(or allegro abcl cmu)
+(deftest lots-of-dots.1
+  (check-physical-pathname #p"..." nil "..." nil)
+  t)
+#+cmu
+(pushnew 'lots-of-dots.1 *expected-failures*)
+#+(or allegro abcl cmu)
+(deftest lots-of-dots.2
+  (check-physical-pathname #p"......" nil "......" nil)
+  t)
+#+cmu
+(pushnew 'lots-of-dots.2 *expected-failures*)
+
 ;; Silly names.
 #-(or allegro sbcl)
 (deftest silly.1
@@ -366,23 +380,6 @@
   t)
 #+(or cmu lispworks)
 (pushnew 'silly.1 *expected-failures*)
-
-;; If the prefix isn't a defined logical host, it's not a logical pathname.
-#-cmu
-;; CMUCL parses this as (:ABSOLUTE #<SEARCH-LIST foo>) "bar.baz" "42".
-(deftest logical.1
-  #+allegro
-  ;; Except in Allegro.
-  (check-logical-pathname #p"foo:bar.baz.42" "foo" nil "bar" "baz" nil)
-  #-allegro
-  (check-physical-pathname #p"foo:bar.baz.42" nil "foo:bar.baz" "42")
-  t)
-#+lispworks
-(pushnew 'logical.1 *expected-failures*)
-
-;; Define a logical host.
-(setf (logical-pathname-translations "effluvia")
-      '(("**;*.*.*" "/usr/local/**/*.*")))
 
 ;; LOGICAL-PATHNAME-TRANSLATIONS
 #-allegro
@@ -398,26 +395,57 @@
          '((#p"EFFLUVIA:**;*.*.*" #p"/usr/local/**/*.*")))
   t)
 
-#+sbcl
-(deftest physical.32
-  ;; Even though "effluvia" is defined as a logical host, "bop" is not a valid
-  ;; logical pathname version, so this can't be a logical pathname.
-  (check-physical-pathname #p"effluvia:bar.baz.bop" nil "effluvia:bar.baz" "bop")
+;; "The null string, "", is not a valid value for any component of a logical
+;; pathname." 19.3.2.2
+(deftest logical-pathname.1
+  #-clisp
+  (signals-error (logical-pathname ":") 'error)
+  #+clisp
+  (check-logical-pathname (logical-pathname ":") "" '(:absolute) nil nil nil)
   t)
 
 ;; Parse error.
-(deftest logical-pathname.1
+(deftest logical-pathname.2
   (signals-error (logical-pathname "effluvia::foo.bar")
                  #-(or allegro clisp) 'parse-error
                  #+(or allegro clisp) 'type-error)
   t)
 
-#-allegro
+;; If the prefix isn't a defined logical host, it's not a logical pathname.
+#-cmu
+;; CMUCL parses this as (:ABSOLUTE #<SEARCH-LIST foo>) "bar.baz" "42".
+(deftest logical.1
+  #+allegro
+  ;; Except in Allegro.
+  (check-logical-pathname #p"foo:bar.baz.42" "foo" nil "bar" "baz" nil)
+  #-allegro
+  (check-physical-pathname #p"foo:bar.baz.42" nil "foo:bar.baz" "42")
+  t)
+#+lispworks
+(pushnew 'logical.1 *expected-failures*)
+
+#+sbcl
 (deftest logical.2
+  ;; Even though "effluvia" is defined as a logical host, "bop" is not a valid
+  ;; logical pathname version, so this can't be a logical pathname.
+  (check-physical-pathname #p"effluvia:bar.baz.bop" nil "effluvia:bar.baz" "bop")
+  t)
+
+(deftest logical.3
+  #-allegro
+  (check-logical-pathname (make-pathname :defaults "effluvia:foo.lisp")
+                          "EFFLUVIA" '(:absolute) "FOO" "LISP" nil)
+  #+allegro
+  (check-logical-pathname (make-pathname :defaults "effluvia:foo.lisp")
+                          "effluvia" nil "foo" "lisp" nil)
+  t)
+
+#-allegro
+(deftest logical.4
   (check-logical-pathname #p"effluvia:bar.baz.42" "EFFLUVIA" '(:absolute) "BAR" "BAZ" 42)
   t)
 #-allegro
-(deftest logical.3
+(deftest logical.5
   (string= (write-to-string #p"effluvia:bar.baz.42" :escape t)
            "#P\"EFFLUVIA:BAR.BAZ.42\"")
   t)
@@ -425,22 +453,22 @@
 #+allegro
 ;; Allegro returns NIL for the device and directory and drops the version
 ;; entirely (even from the namestring).
-(deftest logical.4
+(deftest logical.6
   (check-logical-pathname #p"effluvia:bar.baz.42" "effluvia" nil "bar" "baz" nil)
   t)
 
 #+allegro
-(deftest logical.5
+(deftest logical.7
   (string= (write-to-string #p"effluvia:bar.baz" :escape t)
            #+allegro-v6.2 "#p\"effluvia:bar.baz\""
            #+allegro-v7.0 "#P\"effluvia:bar.baz\"")
   t)
 
-(deftest logical.6
+(deftest logical.8
   (typep (parse-namestring "**;*.*.*" "effluvia") 'logical-pathname)
   t)
 
-(deftest logical.7
+(deftest logical.9
   (check-namestring (parse-namestring "**;*.*.*" "effluvia")
                     #-(or allegro lispworks)
                     "EFFLUVIA:**;*.*.*"
@@ -453,37 +481,47 @@
 
 #-allegro
 ;; The version can be a bignum.
-(deftest logical.8
+(deftest logical.10
   (check-logical-pathname #p"effluvia:bar.baz.2147483648" "EFFLUVIA" '(:absolute) "BAR" "BAZ" 2147483648)
   t)
-#-(or sbcl allegro)
-;; SBCL has a bug when the version is a bignum.
-(deftest logical.9
+
+#-allegro
+(deftest logical.11
   (check-namestring #p"effluvia:bar.baz.2147483648" "EFFLUVIA:BAR.BAZ.2147483648")
   t)
+#+sbcl
+;; SBCL has a bug when the version is a bignum.
+(pushnew 'logical.11 *expected-failures*)
 
-(deftest logical.10
+(deftest logical.12
+  (check-namestring #p"effluvia:foo.bar.newest"
+                    #-(or allegro cmu) "EFFLUVIA:FOO.BAR.NEWEST"
+                    #+allegro "effluvia:foo.bar"
+                    #+cmu "EFFLUVIA:FOO.BAR")
+  t)
+
+(deftest logical.13
   #-allegro
   (check-logical-pathname #p"effluvia:foo.*" "EFFLUVIA" '(:absolute) "FOO" :wild nil)
   #+allegro
   (check-logical-pathname #p"effluvia:foo.*" "effluvia" nil "foo" :wild nil)
   t)
 
-(deftest logical.11
+(deftest logical.14
   #-allegro
   (check-logical-pathname #p"effluvia:*.lisp" "EFFLUVIA" '(:absolute) :wild "LISP" nil)
   #+allegro
   (check-logical-pathname #p"effluvia:*.lisp" "effluvia" nil :wild "lisp" nil)
   t)
 
-(deftest logical.12
+(deftest logical.15
   #-allegro
   (check-logical-pathname #p"effluvia:bar.baz.newest" "EFFLUVIA" '(:absolute) "BAR" "BAZ" :newest)
   #+allegro
   (check-logical-pathname #p"effluvia:bar.baz.newest" "effluvia" nil "bar" "baz" nil)
   t)
 
-(deftest logical.13
+(deftest logical.16
   #-allegro
   (check-logical-pathname #p"EFFLUVIA:BAR.BAZ.NEWEST" "EFFLUVIA" '(:absolute) "BAR" "BAZ" :newest)
   #+allegro
@@ -491,17 +529,17 @@
   t)
 
 ;; The directory component.
-(deftest logical.14
+(deftest logical.17
   (check-logical-pathname #p"effluvia:foo;bar.baz" "EFFLUVIA" '(:absolute "FOO") "BAR" "BAZ" nil)
   t)
 
-(deftest logical.15
+(deftest logical.18
   (check-namestring #p"effluvia:foo;bar.baz"
                     #-allegro "EFFLUVIA:FOO;BAR.BAZ"
                     #+allegro "effluvia:foo;bar.baz")
   t)
 
-(deftest logical.16
+(deftest logical.19
   #-allegro
   (check-logical-pathname #p"effluvia:;bar.baz" "EFFLUVIA" '(:relative) "BAR" "BAZ" nil)
   #+allegro
@@ -509,7 +547,7 @@
   ;; namestring.
   (check-logical-pathname #p"effluvia:;bar.baz" "EFFLUVIA" nil "BAR" "BAZ" nil)
   t)
-(deftest logical.17
+(deftest logical.20
   (check-namestring #p"effluvia:;bar.baz"
                     #+allegro "effluvia:bar.baz"
                     #-allegro "EFFLUVIA:;BAR.BAZ")
@@ -518,17 +556,17 @@
 ;; "If a relative-directory-marker precedes the directories, the directory
 ;; component parsed is as relative; otherwise, the directory component is
 ;; parsed as absolute."
-(deftest logical.18
+(deftest logical.21
   (equal (pathname-directory #p"effluvia:foo.baz")
          #-allegro '(:absolute)
          #+allegro nil)
   t)
 
-(deftest logical.19
+(deftest logical.22
   (typep  #p"effluvia:" 'logical-pathname)
   t)
 
-(deftest logical.20
+(deftest logical.23
   (equal (pathname-directory #p"effluvia:")
          #-allegro '(:absolute)
          #+allegro nil)
@@ -764,6 +802,42 @@
                            '(:absolute "usr" "local") "foo" "bar")
   t)
 
+(deftest merge-pathnames.2
+  (equal (merge-pathnames (logical-pathname "effluvia:;foo;bar;")
+                          (logical-pathname "effluvia:baz;quux.lisp.3"))
+         #-allegro
+         (make-pathname :host "EFFLUVIA"
+                        :device :unspecific
+                        :directory '(:absolute "BAZ" "FOO" "BAR")
+                        :name "QUUX"
+                        :type "LISP"
+                        :version 3)
+         #+allegro
+         (make-pathname :host "effluvia"
+                        :device nil
+                        :directory '(:absolute "baz" "foo" "bar")
+                        :name "quux"
+                        :type "lisp"
+                        :version nil)
+         )
+  t)
+
+(deftest compile-file-pathname.1
+  (equal (compile-file-pathname "effluvia:foo.lisp")
+         #+abcl
+         ;; Is this a bug? (Should version be :NEWEST?)
+         #p"EFFLUVIA:FOO.ABCL"
+         #+allegro #p"effluvia:foo.fasl"
+         #+(or cmu sbcl) #p"EFFLUVIA:FOO.FASL.NEWEST"
+         #+clisp
+         ;; Is this a bug?
+         ;; #p"EFFLUVIA:FOO.fas.NEWEST"
+         (make-pathname :host "EFFLUVIA" :directory '(:absolute)
+                        :name "FOO" :type "fas" :version :newest)
+         #+lispworks #p"EFFLUVIA:FOO.USFL.NEWEST"
+         )
+  t)
+
 ;; The following tests are adapted from SBCL's pathnames.impure.lisp.
 (setf (logical-pathname-translations "demo0")
       '(("**;*.*.*" "/tmp/")))
@@ -915,11 +989,7 @@
   (check-namestring (translate-logical-pathname "test0:foo;bar;baz;mum.quux")
                     "/library/foo/foo/bar/baz/mum.quux")
   t)
-;; (setf (logical-pathname-translations "prog")
-;;       '(("RELEASED;*.*.*"        "MY-UNIX:/sys/bin/my-prog/")
-;;         ("RELEASED;*;*.*.*"      "MY-UNIX:/sys/bin/my-prog/*/")
-;;         ("EXPERIMENTAL;*.*.*"    "MY-UNIX:/usr/Joe/development/prog/")
-;;         ("EXPERIMENTAL;*;*.*.*"  "MY-UNIX:/usr/Joe/development/prog/*/")))
+
 (setf (logical-pathname-translations "prog")
       '(("CODE;*.*.*"             "/lib/prog/")))
 #-allegro
