@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.96 2005-09-26 10:55:01 piso Exp $
+ * $Id: Pathname.java,v 1.97 2005-09-28 17:48:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -785,7 +785,8 @@ public class Pathname extends LispObject
             }
         }
         if (defaults != null) {
-            // Ignore host.
+            if (host == NIL)
+                host = defaults.host;
             directory = mergeDirectories(directory, defaults.directory);
             if (!deviceSupplied)
                 device = defaults.device;
