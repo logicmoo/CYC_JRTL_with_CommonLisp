@@ -1,8 +1,8 @@
 /*
  * Main.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Main.java,v 1.5 2004-09-12 01:44:06 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: Main.java,v 1.6 2005-09-28 15:05:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,8 @@ public final class Main
 
     public static void main(String[] args)
     {
-        Interpreter interpreter = Interpreter.createInstance();
+        Interpreter interpreter = Interpreter.createDefaultInstance(args);
         if (interpreter != null)
-            interpreter.run(args);
+            interpreter.run();
     }
 }

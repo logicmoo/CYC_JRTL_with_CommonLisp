@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: JLisp.java,v 1.23 2005-02-01 03:23:46 piso Exp $
+ * $Id: JLisp.java,v 1.24 2005-09-28 15:00:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@ public final class JLisp extends LispShell
                     startServer();
                     if (interpreter != null) {
                         Editor.setLispInitialized(true);
-                        interpreter.run(null);
+                        interpreter.run();
                     }
                 }
                 catch (Exception e) {
@@ -134,14 +134,10 @@ public final class JLisp extends LispShell
             }
             Socket socket = serverSocket.accept(); // Blocks.
             interpreter =
-                Interpreter.createInstance(socket.getInputStream(),
-                                           socket.getOutputStream(),
-                                           initialDir.canonicalPath());
-            if (interpreter != null) {
-                // Print j version banner.
-                interpreter.getStandardOutput()._writeLine(
-                    Version.getLongVersionString());
-            }
+                Interpreter.createJLispInstance(socket.getInputStream(),
+                                                socket.getOutputStream(),
+                                                initialDir.canonicalPath(),
+                                                Version.getLongVersionString());
         }
         catch (Throwable t) {
             Log.error(t);
@@ -212,7 +208,7 @@ public final class JLisp extends LispShell
     public static void runStartupScript(File file) throws ConditionThrowable
     {
         if (!Editor.isLispInitialized()) {
-            Interpreter.initializeLisp(true);
+            Interpreter.initializeJLisp();
             Editor.setLispInitialized(true);
         }
         FastStringBuffer sb = new FastStringBuffer("(load \"");
@@ -235,7 +231,7 @@ public final class JLisp extends LispShell
         throws ConditionThrowable
     {
         if (!Editor.isLispInitialized()) {
-            Interpreter.initializeLisp(true);
+            Interpreter.initializeJLisp();
             Editor.setLispInitialized(true);
         }
         return Interpreter.evaluate(command);
