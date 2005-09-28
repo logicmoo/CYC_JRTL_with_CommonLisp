@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.33 2005-09-27 18:56:21 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.34 2005-09-28 15:30:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -235,7 +235,10 @@
   t)
 
 (deftest physical.20
+  #-cmu
   (check-readable (make-pathname :name "."))
+  #+cmu
+  (check-readable-or-signals-error (make-pathname :name "."))
   t)
 #+lispworks
 (pushnew 'physical.20 *expected-failures*)
@@ -285,7 +288,10 @@
 
 #-(or sbcl)
 (deftest physical.26
+  #-cmu
   (check-readable (make-pathname :name ".."))
+  #+cmu
+  (check-readable-or-signals-error (make-pathname :name ".."))
   t)
 #+(or clisp lispworks)
 (pushnew 'physical.26 *expected-failures*)
@@ -337,10 +343,11 @@
 
 #-sbcl
 (deftest physical.30
-  #-allegro
+  #-(or allegro cmu)
   (string= (namestring (make-pathname :name "..")) "..")
   #+allegro
   (string= (namestring (make-pathname :name "..")) "../")
+  #+cmu (signals-error (namestring (make-pathname :name "..")) 'error)
   t)
 
 (deftest physical.31
@@ -392,7 +399,7 @@
   t)
 
 #+sbcl
-(deftest physical.30
+(deftest physical.32
   ;; Even though "effluvia" is defined as a logical host, "bop" is not a valid
   ;; logical pathname version, so this can't be a logical pathname.
   (check-physical-pathname #p"effluvia:bar.baz.bop" nil "effluvia:bar.baz" "bop")
@@ -608,7 +615,7 @@
   #-abcl
   (equal (translate-pathname "foobar" "foo*" "")
          #+(or allegro clisp) #p"bar"
-         #+sbcl #p"foobar")
+         #+(or cmu sbcl lispworks) #p"foobar")
   #+abcl
   (signals-error (translate-pathname "foobar" "foo*" "") 'error)
   t)
