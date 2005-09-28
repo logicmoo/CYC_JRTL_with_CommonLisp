@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.87 2005-06-22 15:30:50 piso Exp $
+ * $Id: Interpreter.java,v 1.88 2005-09-28 15:00:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,17 +34,19 @@ public final class Interpreter extends Lisp
     // There can only be one interpreter.
     public static Interpreter interpreter;
 
-    private static int commandNumber;
-
     private final boolean jlisp;
     private final InputStream inputStream;
     private final OutputStream outputStream;
+
+    private static boolean noinit;
+    private static boolean noinform;
 
     public static synchronized Interpreter getInstance()
     {
         return interpreter;
     }
 
+    // Interface.
     public static synchronized Interpreter createInstance()
     {
         if (interpreter != null)
@@ -52,15 +54,73 @@ public final class Interpreter extends Lisp
         return interpreter = new Interpreter();
     }
 
-    public static synchronized Interpreter createInstance(InputStream in,
-        OutputStream out, String initialDirectory)
+    public static synchronized Interpreter createDefaultInstance(String[] args)
     {
         if (interpreter != null)
             return null;
-        return interpreter = new Interpreter(in, out, initialDirectory);
+        interpreter = new Interpreter();
+        try {
+            if (args != null)
+                preprocessCommandLineArguments(args);
+            if (!noinform) {
+                Stream out = getStandardOutput();
+                out._writeString(banner());
+                out._finishOutput();
+            }
+            if (Utilities.isPlatformUnix()) {
+                try {
+                    System.loadLibrary("abcl");
+                    Class c = Class.forName("org.armedbear.lisp.Native");
+                    Method m = c.getMethod("initialize", (Class[]) null);
+                    m.invoke((Object) null, (Object[]) null);
+                    if (!noinform)
+                        getStandardOutput()._writeString("Control-C handler installed.\n");
+                }
+                catch (Throwable t) {}
+            }
+            if (noinform)
+                _NOINFORM_.setSymbolValue(T);
+            else {
+                double uptime = (System.currentTimeMillis() - Main.startTimeMillis) / 1000.0;
+                getStandardOutput()._writeString("Low-level initialization completed in " +
+                                                 uptime + " seconds.\n");
+            }
+            initializeLisp();
+            initializeTopLevel();
+            if (!noinit)
+                processInitializationFile();
+            if (args != null)
+                postprocessCommandLineArguments(args);
+        }
+        catch (Throwable t) {
+            t.printStackTrace();
+        }
+        return interpreter;
     }
 
-    private final Environment environment = new Environment();
+    public static synchronized Interpreter createJLispInstance(
+        InputStream in,
+        OutputStream out,
+        String initialDirectory,
+        String version)
+    {
+        if (interpreter != null)
+            return null;
+        interpreter = new Interpreter(in, out, initialDirectory);
+        try {
+            Stream stdout = getStandardOutput();
+            stdout._writeLine(version);
+            stdout._writeString(banner());
+            stdout._finishOutput();
+        }
+        catch (Throwable t) {
+            t.printStackTrace();
+        }
+        initializeJLisp();
+        initializeTopLevel();
+        processInitializationFile();
+        return interpreter;
+    }
 
     private Interpreter()
     {
@@ -87,19 +147,31 @@ public final class Interpreter extends Lisp
         }
     }
 
-    public static synchronized void initializeLisp(boolean jlisp)
+    public static synchronized void initializeLisp()
     {
         if (!initialized) {
             try {
-                if (jlisp) {
-                    _FEATURES_.setSymbolValue(new Cons(Keyword.J,
-                                                       _FEATURES_.getSymbolValue()));
-                }
                 Load.loadSystemFile("boot.lisp", false, false, false);
-                if (jlisp) {
-                    Class.forName("org.armedbear.j.LispAPI");
-                    Load.loadSystemFile("j.lisp");
-                }
+            }
+            catch (ConditionThrowable c) {
+                reportError(c, LispThread.currentThread());
+            }
+            catch (Throwable t) {
+                t.printStackTrace();
+            }
+            initialized = true;
+        }
+    }
+
+    public static synchronized void initializeJLisp()
+    {
+        if (!initialized) {
+            try {
+                _FEATURES_.setSymbolValue(new Cons(Keyword.J,
+                                                   _FEATURES_.getSymbolValue()));
+                Load.loadSystemFile("boot.lisp", false, false, false);
+                Class.forName("org.armedbear.j.LispAPI");
+                Load.loadSystemFile("j.lisp");
             }
             catch (ConditionThrowable c) {
                 reportError(c, LispThread.currentThread());
@@ -170,11 +242,9 @@ public final class Interpreter extends Lisp
         }
     }
 
-    private static boolean noinit;
-
     // Check for --noinit; verify that arguments are supplied for --load and
     // --eval options.
-    private void preprocessCommandLineArguments(String[] args)
+    private static void preprocessCommandLineArguments(String[] args)
         throws ConditionThrowable
     {
         if (args != null) {
@@ -182,10 +252,10 @@ public final class Interpreter extends Lisp
                 String arg = args[i];
                 if (arg.equals("--noinit")) {
                     noinit = true;
+                } else if (arg.equals("--noinform")) {
+                    noinform = true;
                 } else if (arg.equals("--batch")) {
                     _BATCH_MODE_.setSymbolValue(T);
-                } else if (arg.equals("--preload")) {
-                    _PRELOAD_.setSymbolValue(T);
                 } else if (arg.equals("--eval")) {
                     if (i + 1 < args.length) {
                         ++i;
@@ -207,7 +277,7 @@ public final class Interpreter extends Lisp
     }
 
     // Do the --load and --eval actions.
-    private void postprocessCommandLineArguments(String[] args)
+    private static void postprocessCommandLineArguments(String[] args)
         throws ConditionThrowable
     {
         if (args != null) {
@@ -222,12 +292,12 @@ public final class Interpreter extends Lisp
                         catch (ConditionThrowable c) {
                             final String separator =
                                 System.getProperty("line.separator");
-                            StringBuffer sb = new StringBuffer();
+                            FastStringBuffer sb = new FastStringBuffer();
                             sb.append(separator);
                             sb.append("Caught ");
                             sb.append(c.getCondition().typeOf().writeToString());
                             sb.append(" while processing --eval option \"" +
-                                               args[i + 1] + "\":");
+                                      args[i + 1] + "\":");
                             sb.append(separator);
                             sb.append("  ");
                             final LispThread thread = LispThread.currentThread();
@@ -272,70 +342,32 @@ public final class Interpreter extends Lisp
         }
     }
 
-    public void run(String[] args)
+    public void run()
     {
         final LispThread thread = LispThread.currentThread();
-        commandNumber = 0;
         try {
-            Stream out = getStandardOutput();
-            out._writeString(banner());
-            out._finishOutput();
-            if (Utilities.isPlatformUnix()) {
-                try {
-                    System.loadLibrary("abcl");
-                    Class c = Class.forName("org.armedbear.lisp.Native");
-                    Method m = c.getMethod("initialize", (Class[]) null);
-                    m.invoke((Object) null, (Object[]) null);
-                    out._writeString("Control-C handler installed.\n");
-                }
-                catch (Throwable t) {}
-            }
-            if (!jlisp) {
-                double uptime = (System.currentTimeMillis() - Main.startTimeMillis) / 1000.0;
-                System.out.println("Low-level initialization completed in " +
-                                   uptime + " seconds.");
-            }
-            initializeLisp(jlisp);
-            initializeTopLevel();
-            if (jlisp) {
-                Debug.assertTrue(args == null);
-                processInitializationFile();
-            } else {
-                if (args != null)
-                    preprocessCommandLineArguments(args);
-                if (_PRELOAD_.getSymbolValue() != NIL) {
-                    thread.execute(PACKAGE_SYS.intern("PRELOAD-PACKAGE"),
-                                   PACKAGE_CL);
-                    thread.execute(PACKAGE_CL.intern("REQUIRE"),
-                                   new SimpleString("LOOP"));
-                    thread.execute(PACKAGE_SYS.intern("PRELOAD-PACKAGE"),
-                                   PACKAGE_SYS);
-                }
-                if (!noinit)
-                    processInitializationFile();
-                if (args != null)
-                    postprocessCommandLineArguments(args);
-            }
             Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
             LispObject tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
             if (tplFun instanceof Function) {
                 thread.execute(tplFun);
                 return;
             }
+            // We only arrive here if something went wrong and we weren't able
+            // to load top-level.lisp and run the normal top-level loop.
+            Stream out = getStandardOutput();
             while (true) {
                 try {
                     thread.resetStack();
                     thread.lastSpecialBinding = null;
-                    ++commandNumber;
                     out._writeString(prompt());
                     out._finishOutput();
-                    LispObject
-                        object = getStandardInput().read(false, EOF, false); // Top level read.
+                    LispObject object =
+                        getStandardInput().read(false, EOF, false);
                     if (object == EOF)
                         break;
                     out.setCharPos(0);
                     Symbol.MINUS.setSymbolValue(object);
-                    LispObject result = eval(object, environment, thread);
+                    LispObject result = eval(object, new Environment(), thread);
                     Debug.assertTrue(result != null);
                     Symbol.STAR_STAR_STAR.setSymbolValue(Symbol.STAR_STAR.getSymbolValue());
                     Symbol.STAR_STAR.setSymbolValue(Symbol.STAR.getSymbolValue());
@@ -474,10 +506,21 @@ public final class Interpreter extends Lisp
         }
     };
 
+    public static final LispObject readFromString(String s)
+    {
+        try {
+            return new StringInputStream(s).read(true, NIL, false);
+        }
+        catch (Throwable t) {
+            return null;
+        }
+    }
+
+    // For j.
     public static LispObject evaluate(String s) throws ConditionThrowable
     {
         if (!initialized)
-            initializeLisp(true);
+            initializeJLisp();
         StringInputStream stream = new StringInputStream(s);
         LispObject obj = stream.read(false, EOF, false);
         if (obj == EOF)
@@ -513,7 +556,7 @@ public final class Interpreter extends Lisp
     private static String banner()
     {
         final String sep = System.getProperty("line.separator");
-        StringBuffer sb = new StringBuffer("Armed Bear Common Lisp ");
+        FastStringBuffer sb = new FastStringBuffer("Armed Bear Common Lisp ");
         sb.append(Version.getVersion());
         if (build != null) {
             sb.append(" (built ");
@@ -540,11 +583,8 @@ public final class Interpreter extends Lisp
         String pkgName = pkg.getNickname();
         if (pkgName == null)
             pkgName = pkg.getName();
-        StringBuffer sb = new StringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         sb.append(pkgName);
-        sb.append('(');
-        sb.append(commandNumber);
-        sb.append(")> ");
         return sb.toString();
     }
 }
