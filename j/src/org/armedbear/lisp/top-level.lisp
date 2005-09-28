@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.49 2005-08-14 16:30:47 piso Exp $
+;;; $Id: top-level.lisp,v 1.50 2005-09-28 14:39:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -391,7 +391,7 @@
 (defun repl (&optional (in *standard-input*) (out *standard-output*))
   (loop
     (let* ((form (funcall *repl-read-form-fun* in out))
-           (results (multiple-value-list (sys::interactive-eval form)))
+           (results (multiple-value-list (sys:interactive-eval form)))
            (*print-length* 10))
       (dolist (result results)
         (fresh-line out)
@@ -399,7 +399,8 @@
 
 (defun top-level-loop ()
   (fresh-line)
-  (%format t "Type ~AHELP for a list of available commands.~%" *command-char*)
+  (unless sys:*noinform*
+    (%format t "Type ~AHELP for a list of available commands.~%" *command-char*))
   (loop
     (setf *inspected-object* nil
           *inspected-object-stack* nil
