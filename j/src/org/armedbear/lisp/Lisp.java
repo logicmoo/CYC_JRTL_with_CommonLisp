@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.392 2005-09-12 01:12:47 piso Exp $
+ * $Id: Lisp.java,v 1.393 2005-09-28 14:36:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -251,7 +251,7 @@ public abstract class Lisp
 
     // ### interactive-eval
     private static final Primitive INTERACTIVE_EVAL =
-        new Primitive("interactive-eval", PACKAGE_SYS, false)
+        new Primitive("interactive-eval", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject object) throws ConditionThrowable
         {
@@ -339,7 +339,7 @@ public abstract class Lisp
         setInterrupted(false);
     }
 
-    // Used by JVM compiler.
+    // Used by the compiler.
     public static final LispObject loadTimeValue(LispObject obj)
         throws ConditionThrowable
     {
@@ -348,6 +348,19 @@ public abstract class Lisp
             return eval(obj, new Environment(), thread);
         else
             return NIL;
+    }
+
+    // Interface.
+    public static final LispObject eval(String s)
+        throws ConditionThrowable
+    {
+        return eval(new StringInputStream(s).read(true, NIL, false));
+    }
+
+    public static final LispObject eval(LispObject obj)
+        throws ConditionThrowable
+    {
+        return eval(obj, new Environment(), LispThread.currentThread());
     }
 
     public static final LispObject eval(final LispObject obj,
@@ -606,7 +619,7 @@ public abstract class Lisp
                                                                                        new Cons(obj9)))))))));
     }
 
-    // Used by JVM compiler.
+    // Used by the compiler.
     public static final LispObject multipleValueList(LispObject result)
         throws ConditionThrowable
     {
@@ -621,7 +634,7 @@ public abstract class Lisp
         return list;
     }
 
-    // Used by JVM compiler for MULTIPLE-VALUE-CALLs with a single values form.
+    // Used by the compiler for MULTIPLE-VALUE-CALLs with a single values form.
     public static final LispObject multipleValueCall1(LispObject result,
                                                       LispObject function,
                                                       LispThread thread)
@@ -833,6 +846,7 @@ public abstract class Lisp
         return (int) (536870911L & (441516657L ^ xy ^ (xy >> 5)));
     }
 
+    // Used by the compiler.
     public static final LispObject readObjectFromString(String s)
     {
         try {
@@ -1656,7 +1670,7 @@ public abstract class Lisp
         return pkg.intern(name);
     }
 
-    // Used by jvm compiler.
+    // Used by the compiler.
     public static final Symbol internInPackage(String name, String packageName)
         throws ConditionThrowable
     {
@@ -1666,7 +1680,7 @@ public abstract class Lisp
         return pkg.intern(name);
     }
 
-    // The jvm compiler's object table.
+    // The compiler's object table.
     private static final Hashtable objectTable = new Hashtable();
 
     public static final LispObject recall(SimpleString key)
@@ -2289,9 +2303,9 @@ public abstract class Lisp
     public static final Symbol _BATCH_MODE_ =
         exportSpecial("*BATCH-MODE*", PACKAGE_EXT, NIL);
 
-    // ### *preload*
-    public static final Symbol _PRELOAD_ =
-        internSpecial("*PRELOAD*", PACKAGE_SYS, NIL);
+    // ### *noinform*
+    public static final Symbol _NOINFORM_ =
+        exportSpecial("*NOINFORM*", PACKAGE_SYS, NIL);
 
     // ### *disassembler*
     public static final Symbol _DISASSEMBLER_ =
