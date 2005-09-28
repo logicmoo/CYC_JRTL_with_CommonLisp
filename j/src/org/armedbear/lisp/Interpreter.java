@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.88 2005-09-28 15:00:10 piso Exp $
+ * $Id: Interpreter.java,v 1.89 2005-09-28 18:26:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,10 @@ public final class Interpreter extends Lisp
     {
         if (interpreter != null)
             return null;
-        return interpreter = new Interpreter();
+        interpreter = new Interpreter();
+        _NOINFORM_.setSymbolValue(T);
+        initializeLisp();
+        return interpreter;
     }
 
     public static synchronized Interpreter createDefaultInstance(String[] args)
