@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.89 2005-09-28 18:26:26 piso Exp $
+ * $Id: Interpreter.java,v 1.90 2005-09-29 18:32:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,6 +148,12 @@ public final class Interpreter extends Lisp
         catch (Throwable t) {
             Debug.trace(t);
         }
+    }
+
+    // Interface.
+    public LispObject eval(String s) throws ConditionThrowable
+    {
+        return eval(new StringInputStream(s).read(true, NIL, false));
     }
 
     public static synchronized void initializeLisp()
