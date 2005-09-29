@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.35 2005-09-28 18:55:23 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.36 2005-09-29 01:22:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -84,8 +84,9 @@
     #-allegro ;; Except on Allegro, where it's NIL.
     (unless (eq (pathname-device pathname) :unspecific)
       (setf ok nil))
-    (unless (and (or (not (stringp host))
-                     (funcall test host expected-host))
+    (unless (and (funcall test (if (stringp host) host
+                                    (host-namestring pathname))
+                          expected-host)
                  (funcall test directory expected-directory)
                  (funcall test name expected-name)
                  (funcall test type expected-type)
@@ -574,14 +575,80 @@
 
 ;; PARSE-NAMESTRING
 (deftest parse-namestring.1
-  (typep (parse-namestring "foo.bar" "effluvia") 'logical-pathname)
+  #-allegro
+  (check-logical-pathname (parse-namestring "effluvia:foo.bar")
+                          "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
+  #+allegro
+  (check-logical-pathname (parse-namestring "effluvia:foo.bar")
+                          "effluvia" nil "foo" "bar" nil)
   t)
 
 (deftest parse-namestring.2
-  (check-namestring (parse-namestring "foo.bar" "effluvia")
-                    #-(or allegro lispworks) "EFFLUVIA:FOO.BAR"
-                    #+allegro "effluvia:foo.bar"
-                    #+lispworks "effluvia:FOO.BAR")
+  #-allegro
+  (check-logical-pathname (parse-namestring "foo.bar" "effluvia")
+                          "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
+  #+allegro
+  (check-logical-pathname (parse-namestring "foo.bar" "effluvia")
+                          "effluvia" nil "foo" "bar" nil)
+  t)
+
+(deftest parse-namestring.3
+  #-allegro
+  (check-logical-pathname (parse-namestring "foo;bar;baz.fas.3" "effluvia")
+                          "EFFLUVIA" '(:absolute "FOO" "BAR") "BAZ" "FAS" 3)
+  #+allegro
+  (check-logical-pathname (parse-namestring "foo;bar;baz.fas.3" "effluvia")
+                          "effluvia" '(:absolute "foo" "bar") "baz" "fas" nil)
+  t)
+
+#-cmu ;; Search list.
+(deftest parse-namestring.4
+  #-(or abcl clisp)
+  (check-physical-pathname (parse-namestring "effluvia:foo.bar" "")
+                           nil "effluvia:foo" "bar")
+  #+abcl
+  ;; Invalid logical host name: ""
+  (signals-error (parse-namestring "effluvia:foo.bar" "") 'error)
+  #+clisp
+  ;; Host mismatch.
+  (signals-error (parse-namestring "effluvia:foo.bar" "") 'error)
+  t)
+
+;; "If host is nil and thing is a syntactically valid logical pathname
+;; namestring containing an explicit host, then it is parsed as a logical
+;; pathname namestring."
+(deftest parse-namestring.5
+  #-allegro
+  (check-logical-pathname (parse-namestring "effluvia:foo.bar" nil)
+                          "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
+  #+allegro
+  (check-logical-pathname (parse-namestring "effluvia:foo.bar" nil)
+                          "effluvia" nil "foo" "bar" nil)
+  t)
+
+;; "If host is nil, default-pathname is a logical pathname, and thing is a
+;; syntactically valid logical pathname namestring without an explicit host,
+;; then it is parsed as a logical pathname namestring on the host that is the
+;; host component of default-pathname."
+(deftest parse-namestring.6
+  #-allegro
+  (check-logical-pathname (parse-namestring "foo" nil #p"effluvia:bar")
+                          "EFFLUVIA" '(:absolute) "FOO" nil nil)
+  #+allegro
+  (check-logical-pathname (parse-namestring "foo" nil #p"effluvia:bar")
+                          "effluvia" nil "foo" nil nil)
+  t)
+
+;; This amounts to the same thing as PARSE-NAMESTRING.6, since DEFAULT-PATHNAME
+;; defaults to the value of *DEFAULT-PATHNAME-DEFAULTS*.
+(deftest parse-namestring.7
+  (let ((*default-pathname-defaults* #p"effluvia:bar"))
+    #-allegro
+    (check-logical-pathname (parse-namestring "foo" nil)
+                            "EFFLUVIA" '(:absolute) "FOO" nil nil)
+    #+allegro
+    (check-logical-pathname (parse-namestring "foo" nil #p"effluvia:bar")
+                            "effluvia" nil "foo" nil nil))
   t)
 
 ;; WILD-PATHNAME-P
