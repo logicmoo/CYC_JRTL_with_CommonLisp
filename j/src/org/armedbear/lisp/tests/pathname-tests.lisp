@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.36 2005-09-29 01:22:03 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.37 2005-09-29 13:03:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -355,6 +355,27 @@
 
 (deftest wild.2
   (check-physical-pathname #p"*.*" nil :wild :wild)
+  t)
+
+(deftest wild.3
+  #-(or cmu sbcl)
+  (check-physical-pathname #p"abc*" nil "abc*" nil)
+  #+(or cmu sbcl)
+  (wild-pathname-p #p"abc*")
+  t)
+
+(deftest wild.4
+  #-(or cmu sbcl)
+  (check-physical-pathname #p"abc?" nil "abc?" nil)
+  #+(or cmu sbcl)
+  (wild-pathname-p #p"abc?")
+  t)
+
+(deftest wild.5
+  #-(or cmu sbcl)
+  (check-physical-pathname #p"abc[d-h]" nil "abc[d-h]" nil)
+  #+(or cmu sbcl)
+  (wild-pathname-p #p"abc[d-h]")
   t)
 
 ;; Lots of dots.

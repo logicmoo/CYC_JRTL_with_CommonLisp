@@ -57,6 +57,12 @@
                  :device (pathname-device *load-truename*)
                  :directory (pathname-directory *load-truename*)))
 
+(defmacro signals-error (form error-name)
+  `(locally (declare (optimize safety))
+     (handler-case ,form
+       (error (c) (typep c ,error-name))
+       (:no-error (&rest ignored) (declare (ignore ignored)) nil))))
+
 (defun pathnames-equal-p (pathname1 pathname2)
   #-(or allegro cmu lispworks)
   (equal pathname1 pathname2)
@@ -216,6 +222,24 @@
 
 (deftest probe-file.1
   (pathnames-equal-p (probe-file *this-file*) *this-file*)
+  t)
+
+(deftest probe-file.2
+  (let ((pathname #p"."))
+    #-clisp
+    (pathnames-equal-p (probe-file pathname) (truename pathname))
+    #+clisp
+    ;; "." names a directory, not a file.
+    (signals-error (probe-file pathname) 'file-error))
+  t)
+
+(deftest probe-file.3
+  (let ((pathname #p".."))
+    #-clisp
+    (pathnames-equal-p (probe-file pathname) (truename pathname))
+    #+clisp
+    ;; ".." names a directory, not a file.
+    (signals-error (probe-file pathname) 'file-error))
   t)
 
 (deftest truename.1
