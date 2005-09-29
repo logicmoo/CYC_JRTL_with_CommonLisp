@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.37 2005-09-29 13:03:44 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.38 2005-09-29 17:18:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -139,8 +139,8 @@
 (deftest equal.2
   (equal (make-pathname :name "foo" :type "bar" :version nil)
          (make-pathname :name "foo" :type "bar" :version :newest))
-  #+(or clisp cmu lispworks) nil
-  #-(or clisp cmu lispworks) t)
+  #+(or clisp lispworks) nil
+  #-(or clisp lispworks) t)
 
 (deftest sxhash.1
   (let* ((p (make-pathname :name "foo" :type "bar" :version nil))
@@ -517,9 +517,8 @@
 
 (deftest logical.12
   (check-namestring #p"effluvia:foo.bar.newest"
-                    #-(or allegro cmu) "EFFLUVIA:FOO.BAR.NEWEST"
-                    #+allegro "effluvia:foo.bar"
-                    #+cmu "EFFLUVIA:FOO.BAR")
+                    #-allegro "EFFLUVIA:FOO.BAR.NEWEST"
+                    #+allegro "effluvia:foo.bar")
   t)
 
 (deftest logical.13
@@ -660,16 +659,22 @@
                           "effluvia" nil "foo" nil nil)
   t)
 
-;; This amounts to the same thing as PARSE-NAMESTRING.6, since DEFAULT-PATHNAME
-;; defaults to the value of *DEFAULT-PATHNAME-DEFAULTS*.
 (deftest parse-namestring.7
-  (let ((*default-pathname-defaults* #p"effluvia:bar"))
+  (let* ((*default-pathname-defaults* (logical-pathname "EFFLUVIA:"))
+         (pathname (parse-namestring "foo.bar")))
     #-allegro
-    (check-logical-pathname (parse-namestring "foo" nil)
-                            "EFFLUVIA" '(:absolute) "FOO" nil nil)
+    (check-logical-pathname pathname "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
     #+allegro
-    (check-logical-pathname (parse-namestring "foo" nil #p"effluvia:bar")
-                            "effluvia" nil "foo" nil nil))
+    (check-logical-pathname pathname "effluvia" nil "foo" "bar" nil))
+  t)
+
+(deftest parse-namestring.8
+  (let* ((*default-pathname-defaults* #p"effluvia:bar")
+         (pathname (parse-namestring "foo" nil)))
+    #-allegro
+    (check-logical-pathname pathname "EFFLUVIA" '(:absolute) "FOO" nil nil)
+    #+allegro
+    (check-logical-pathname pathname "effluvia" nil "foo" nil nil))
   t)
 
 ;; WILD-PATHNAME-P
