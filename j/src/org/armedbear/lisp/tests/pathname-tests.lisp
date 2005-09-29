@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.38 2005-09-29 17:18:05 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.39 2005-09-29 17:24:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -621,9 +621,8 @@
                           "effluvia" '(:absolute "foo" "bar") "baz" "fas" nil)
   t)
 
-#-cmu ;; Search list.
 (deftest parse-namestring.4
-  #-(or abcl clisp)
+  #-(or abcl clisp cmu)
   (check-physical-pathname (parse-namestring "effluvia:foo.bar" "")
                            nil "effluvia:foo" "bar")
   #+abcl
@@ -631,6 +630,8 @@
   (signals-error (parse-namestring "effluvia:foo.bar" "") 'error)
   #+clisp
   ;; Host mismatch.
+  (signals-error (parse-namestring "effluvia:foo.bar" "") 'error)
+  #+cmu
   (signals-error (parse-namestring "effluvia:foo.bar" "") 'error)
   t)
 
