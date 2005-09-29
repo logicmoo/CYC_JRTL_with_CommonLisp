@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.393 2005-09-28 14:36:24 piso Exp $
+ * $Id: Lisp.java,v 1.394 2005-09-29 18:31:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -348,13 +348,6 @@ public abstract class Lisp
             return eval(obj, new Environment(), thread);
         else
             return NIL;
-    }
-
-    // Interface.
-    public static final LispObject eval(String s)
-        throws ConditionThrowable
-    {
-        return eval(new StringInputStream(s).read(true, NIL, false));
     }
 
     public static final LispObject eval(LispObject obj)
