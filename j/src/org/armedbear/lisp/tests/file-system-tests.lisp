@@ -180,6 +180,13 @@
   #+sbcl (probe-file pathname) ; FIXME
   )
 
+(defun make-directory (pathname)
+  #+allegro (excl:make-directory pathname)
+  #-allegro
+  (let ((namestring (directory-namestring pathname))
+        )
+    ))
+
 (defun delete-directory (pathname)
   #+abcl (delete-file pathname)
   #+allegro (excl:delete-directory pathname)
@@ -309,6 +316,29 @@
 #+allegro
 (pushnew 'symlink.2 *expected-failures*)
 
+;; user-homedir-pathname &optional host => pathname
+
+;; "USER-HOMEDIR-PATHNAME returns a pathname without any name, type, or version
+;; component (those components are all nil) for the user's home directory on
+;; HOST. If it is impossible to determine the user's home directory on HOST,
+;; then nil is returned. USER-HOMEDIR-PATHNAME never returns nil if HOST is not
+;; supplied."
+(deftest user-homedir-pathname.1
+  (let ((pathname (user-homedir-pathname)))
+    (values (pathnamep pathname)
+            (pathname-name pathname)
+            (pathname-type pathname)
+            (pathname-version pathname)))
+  t nil nil nil)
+#+allegro
+;; Allegro's version component is :UNSPECIFIC.
+(pushnew 'user-homedir-pathname.1 *expected-failures*)
+
+(deftest directory-namestring.1
+  (let ((pathname (user-homedir-pathname)))
+    (equal (namestring pathname) (directory-namestring pathname)))
+  t)
+
 (deftest ensure-directories-exist.1
   (let* ((tmp (make-temporary-filename *this-directory*))
          (directory-namestring (concatenate 'string (namestring tmp) "/"))
@@ -337,5 +367,43 @@
        (probe-directory directory-namestring))
        ))
   t t t t nil)
+
+;; What happens if you call ENSURE-DIRECTORIES-EXIST with a pathname that has
+;; no name, type, or version component?
+
+;; Case 1: the directory in question already exists.
+(deftest ensure-directories-exist.2
+  (let ((pathname
+         (make-pathname :host (pathname-host *this-directory*)
+                        :device (pathname-device *this-directory*)
+                        :directory (pathname-directory *this-directory*)
+                        :name nil :type nil :version nil)))
+    (multiple-value-bind (path created)
+        (ensure-directories-exist pathname)
+      (values
+       #+(or allegro clisp)
+       (eq path pathname)
+       #-(or allegro clisp)
+       (pathnames-equal-p (pathname path) (pathname pathname))
+       created)))
+  t nil)
+
+(deftest ensure-directories-exist.3
+  (let* ((tmp (make-temporary-filename *this-directory*))
+         (directory-namestring (concatenate 'string (namestring tmp) "/"))
+         (pathname (pathname directory-namestring)))
+    (multiple-value-bind (path created)
+        (ensure-directories-exist pathname)
+      (values
+       #+(or allegro clisp)
+       (eq path pathname)
+       #-(or allegro clisp)
+       (pathnames-equal-p (pathname path) (pathname pathname))
+       created
+       (not (null (probe-directory directory-namestring)))
+       (when (probe-directory directory-namestring)
+         (delete-directory directory-namestring))
+       )))
+  t t t t)
 
 (do-tests)
