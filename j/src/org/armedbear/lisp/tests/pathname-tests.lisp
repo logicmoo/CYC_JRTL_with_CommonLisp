@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.39 2005-09-29 17:24:58 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.40 2005-10-03 13:35:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -930,6 +930,18 @@
                         :name "FOO" :type "fas" :version :newest)
          #+lispworks #p"EFFLUVIA:FOO.USFL.NEWEST"
          )
+  t)
+
+(deftest enough-namestring.1
+  (equal (enough-namestring #p"/foo" #p"/") "foo")
+  t)
+
+(deftest enough-namestring.2
+  (equal (enough-namestring #p"foo/bar" #p"foo") "foo/bar")
+  t)
+
+(deftest enough-namestring.3
+  (equal (enough-namestring #p"foo/bar" #p"foo/") "bar")
   t)
 
 ;; The following tests are adapted from SBCL's pathnames.impure.lisp.
