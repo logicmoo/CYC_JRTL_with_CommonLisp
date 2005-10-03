@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.40 2005-10-03 13:35:12 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.41 2005-10-03 13:53:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -935,6 +935,8 @@
 (deftest enough-namestring.1
   (equal (enough-namestring #p"/foo" #p"/") "foo")
   t)
+#+sbcl
+(pushnew 'enough-namestring.1 *expected-failures*)
 
 (deftest enough-namestring.2
   (equal (enough-namestring #p"foo/bar" #p"foo") "foo/bar")
@@ -943,6 +945,8 @@
 (deftest enough-namestring.3
   (equal (enough-namestring #p"foo/bar" #p"foo/") "bar")
   t)
+#+sbcl
+(pushnew 'enough-namestring.3 *expected-failures*)
 
 ;; The following tests are adapted from SBCL's pathnames.impure.lisp.
 (setf (logical-pathname-translations "demo0")
