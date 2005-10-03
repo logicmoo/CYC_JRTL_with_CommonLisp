@@ -1,7 +1,7 @@
 ;;; enough-namestring.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: enough-namestring.lisp,v 1.3 2005-09-19 16:54:42 piso Exp $
+;;; $Id: enough-namestring.lisp,v 1.4 2005-10-03 13:20:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@
         (let* ((defaults-directory (pathname-directory defaults))
                (prefix-len (length defaults-directory))
                (result-directory
-                (cond ((and (> prefix-len 1)
+                (cond ((and (>= prefix-len 1)
                             (>= (length pathname-directory) prefix-len)
                             (equal-components-p (subseq pathname-directory 0 prefix-len)
                                                 defaults-directory))
