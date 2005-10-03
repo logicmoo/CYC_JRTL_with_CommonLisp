@@ -1,7 +1,7 @@
 ;;; enough-namestring.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: enough-namestring.lisp,v 1.4 2005-10-03 13:20:46 piso Exp $
+;;; $Id: enough-namestring.lisp,v 1.5 2005-10-03 13:33:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,9 +43,7 @@
                       ((eq (car pathname-directory) :absolute)
                        pathname-directory)
                       (t
-                       (error "~S cannot be represented relative to ~S."
-                              pathname
-                              defaults)))))
+                       (return-from enough-namestring (namestring pathname))))))
           (concatenate 'simple-string
                        (directory-namestring (make-pathname :directory result-directory))
                        (file-namestring pathname)))
