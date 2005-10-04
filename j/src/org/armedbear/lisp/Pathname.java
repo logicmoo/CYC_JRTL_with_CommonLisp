@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.98 2005-09-28 18:48:31 piso Exp $
+ * $Id: Pathname.java,v 1.99 2005-10-04 15:35:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -912,8 +912,7 @@ public class Pathname extends LispObject
         }
     };
 
-    // ### user-homedir-pathname
-    // user-homedir-pathname &optional host => pathname
+    // ### user-homedir-pathname &optional host => pathname
     private static final Primitive USER_HOMEDIR_PATHNAME =
         new Primitive("user-homedir-pathname", "&optional host")
     {
@@ -922,9 +921,6 @@ public class Pathname extends LispObject
             switch (args.length) {
                 case 0: {
                     String s = System.getProperty("user.home");
-                    // For compatibility with SBCL and ACL (and maybe other
-                    // Lisps), we want the namestring of a directory to end
-                    // with a file separator character.
                     if (!s.endsWith(File.separator))
                         s = s.concat(File.separator);
                     return new Pathname(s);
