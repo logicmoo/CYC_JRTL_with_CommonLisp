@@ -1,7 +1,7 @@
 ;;; directory.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: directory.lisp,v 1.4 2005-09-14 19:59:19 piso Exp $
+;;; $Id: directory.lisp,v 1.5 2005-10-04 16:17:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,21 +19,33 @@
 
 (in-package #:system)
 
-(defun directory (pathname &key)
-  (let ((merged-pathname (merge-pathnames pathname)))
-    (when (typep merged-pathname 'logical-pathname)
-      (setf merged-pathname (translate-logical-pathname merged-pathname)))
-    (if (wild-pathname-p merged-pathname)
-        (let ((namestring (directory-namestring merged-pathname)))
+(defun pathname-as-file (pathname)
+  (let ((directory (pathname-directory pathname)))
+    (make-pathname :host nil
+                   :device (pathname-device pathname)
+                   :directory (butlast directory)
+                   :name (car (last directory))
+                   :type nil
+                   :version nil)))
+
+(defun directory (pathspec &key)
+  (let ((pathname (merge-pathnames pathspec)))
+    (when (logical-pathname-p pathname)
+      (setf pathname (translate-logical-pathname pathname)))
+    (if (wild-pathname-p pathname)
+        (let ((namestring (directory-namestring pathname)))
           (when (and namestring (length namestring))
-            (let ((all-files (list-directory namestring))
-                  (matching-files ()))
-              (dolist (file all-files)
-                (when (pathname-match-p file merged-pathname)
-                  (push file matching-files)))
-              matching-files)))
+            (let ((entries (list-directory namestring))
+                  (matching-entries ()))
+              (dolist (entry entries)
+                (cond ((file-directory-p entry)
+                       (when (pathname-match-p (pathname-as-file entry) pathname)
+                         (push entry matching-entries)))
+                      ((pathname-match-p entry pathname)
+                       (push entry matching-entries))))
+              matching-entries)))
         ;; Not wild.
-        (let ((truename (probe-file merged-pathname)))
+        (let ((truename (probe-file pathname)))
           (if truename
               (list (pathname truename))
               nil)))))
