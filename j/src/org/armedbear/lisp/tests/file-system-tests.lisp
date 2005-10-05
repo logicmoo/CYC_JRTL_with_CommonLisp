@@ -46,7 +46,8 @@
 
 (in-package #:test)
 
-(export '(pathnames-equal-p run-shell-command copy-file make-symbolic-link))
+(export '(pathnames-equal-p run-shell-command copy-file make-symbolic-link
+          touch delete-directory-and-files))
 
 (defparameter *this-file*
   (merge-pathnames (make-pathname :type "lisp")
@@ -172,6 +173,9 @@
         (return-from make-temporary-filename pathname))))
    (error "Unable to create a temporary filename in ~S~%" directory))
 
+(defun touch (filespec)
+  (with-open-file (stream filespec :direction :output :if-exists :error)))
+
 (defun probe-directory (pathname)
   #+abcl (ext:probe-directory pathname)
   #+allegro (excl:probe-directory pathname)
@@ -180,12 +184,20 @@
   #+sbcl (probe-file pathname) ; FIXME
   )
 
+(defun file-directory-p (pathname)
+  #+abcl (ext:file-directory-p pathname)
+  #+allegro (excl:file-directory-p pathname)
+  #-(or abcl allegro)
+  (let* ((namestring (namestring pathname))
+         (len (length namestring))
+         (last-char (and (> len 0) (char namestring (1- len)))))
+    (eql last-char #+windows #\\ #-windows #\/)))
+
 (defun make-directory (pathname)
-  #+allegro (excl:make-directory pathname)
+  #+allegro
+  (excl:make-directory pathname)
   #-allegro
-  (let ((namestring (directory-namestring pathname))
-        )
-    ))
+  (and (ensure-directories-exist pathname) t))
 
 (defun delete-directory (pathname)
   #+abcl (delete-file pathname)
@@ -194,6 +206,35 @@
   #+cmu (unix:unix-rmdir (namestring pathname))
   #+sbcl (zerop (sb-posix:rmdir (namestring pathname)))
   )
+
+(defun delete-directory-and-files (pathspec &key (quiet t))
+  #+(or clisp lispworks)
+  (error "DELETE-DIRECTORY-AND-FILES doesn't work on CLISP or LispWorks yet!")
+  (let* ((namestring (namestring pathspec))
+         (len (length namestring))
+         (last-char (and (> len 0) (char namestring (1- len)))))
+    (unless (eql last-char #+windows #\\ #-windows #\/)
+      (setf namestring (concatenate 'string namestring #+windows "\\" #-windows "/")))
+    (let ((pathname (pathname namestring)))
+      (unless (probe-directory pathname)
+        (error "Directory does not exist: ~S" pathname))
+      (unless quiet
+        (format t "processing directory ~S~%" pathname))
+      (let ((list (directory (make-pathname :name :wild
+                                            :type :wild
+                                            :defaults pathname))))
+        (dolist (x list)
+          (cond ((file-directory-p x)
+                 (delete-directory-and-files x :quiet quiet))
+                (t
+                 (delete-file x)
+                 (unless quiet
+                   (format t "deleting file ~S~%" x))
+                 )))
+        (unless quiet
+          (format t "deleting directory ~S~%" pathname))
+        (delete-directory pathname)
+        ))))
 
 #-(or allegro clisp lispworks windows)
 (deftest run-shell-command.1
@@ -258,6 +299,21 @@
     (and
      (= (length list) 1)
      (pathnames-equal-p (car list) *this-file*)))
+  t)
+
+(deftest directory.2
+  (let* ((tmp (make-temporary-filename *this-directory*))
+         (directory-namestring (concatenate 'string (namestring tmp) "/"))
+         (directory-pathname (pathname directory-namestring)))
+    (unwind-protect
+        (progn
+          (make-directory directory-pathname)
+          (let ((file-pathname (make-pathname :name "foo" :defaults directory-pathname)))
+            (touch file-pathname)
+            (equal
+             (directory (make-pathname :name :wild :defaults directory-pathname))
+             (list file-pathname))))
+      (delete-directory-and-files directory-pathname)))
   t)
 
 #-windows
@@ -388,6 +444,7 @@
        created)))
   t nil)
 
+;; Case 2: the directory in question does not exist.
 (deftest ensure-directories-exist.3
   (let* ((tmp (make-temporary-filename *this-directory*))
          (directory-namestring (concatenate 'string (namestring tmp) "/"))
