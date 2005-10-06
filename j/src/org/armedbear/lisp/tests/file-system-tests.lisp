@@ -65,9 +65,9 @@
        (:no-error (&rest ignored) (declare (ignore ignored)) nil))))
 
 (defun pathnames-equal-p (pathname1 pathname2)
-  #-(or allegro cmu lispworks)
+  #-(or allegro clisp cmu lispworks)
   (equal pathname1 pathname2)
-  #+(or allegro cmu)
+  #+(or allegro clisp cmu)
   (and (pathnamep pathname1)
        (pathnamep pathname2)
        (equal (pathname-host pathname1) (pathname-host pathname2))
@@ -207,9 +207,9 @@
   #+sbcl (zerop (sb-posix:rmdir (namestring pathname)))
   )
 
-(defun delete-directory-and-files (pathspec &key (quiet t))
-  #+(or clisp lispworks)
-  (error "DELETE-DIRECTORY-AND-FILES doesn't work on CLISP or LispWorks yet!")
+(defun delete-directory-and-files (pathspec &key (quiet t) (dry-run nil))
+  #+(or lispworks)
+  (error "DELETE-DIRECTORY-AND-FILES not implemented")
   (let* ((namestring (namestring pathspec))
          (len (length namestring))
          (last-char (and (> len 0) (char namestring (1- len)))))
@@ -219,22 +219,22 @@
       (unless (probe-directory pathname)
         (error "Directory does not exist: ~S" pathname))
       (unless quiet
-        (format t "processing directory ~S~%" pathname))
+        (format t "~&processing directory ~S~%" pathname))
       (let ((list (directory (make-pathname :name :wild
-                                            :type :wild
+                                            :type #-clisp :wild #+clisp nil
                                             :defaults pathname))))
         (dolist (x list)
           (cond ((file-directory-p x)
                  (delete-directory-and-files x :quiet quiet))
                 (t
-                 (delete-file x)
                  (unless quiet
-                   (format t "deleting file ~S~%" x))
-                 )))
+                   (format t "~&deleting file ~S~%" x))
+                 (unless dry-run
+                   (delete-file x)))))
         (unless quiet
-          (format t "deleting directory ~S~%" pathname))
-        (delete-directory pathname)
-        ))))
+          (format t "~&deleting directory ~S~%" pathname))
+        (unless dry-run
+          (delete-directory pathname))))))
 
 #-(or allegro clisp lispworks windows)
 (deftest run-shell-command.1
@@ -282,6 +282,15 @@
   t)
 
 (deftest probe-file.3
+  (let ((pathname #p"./"))
+    #-clisp
+    (pathnames-equal-p (probe-file pathname) *this-directory*)
+    #+clisp
+    ;; "no file name given"
+    (signals-error (probe-file pathname) 'file-error))
+  t)
+
+(deftest probe-file.4
   (let ((pathname #p".."))
     #-clisp
     (pathnames-equal-p (probe-file pathname) (truename pathname))
@@ -294,6 +303,10 @@
   (pathnames-equal-p (truename *this-file*) *this-file*)
   t)
 
+(deftest truename.2
+  (pathnames-equal-p (truename #p"./") *this-directory*)
+  t)
+
 (deftest directory.1
   (let ((list (directory *this-file*)))
     (and
@@ -301,7 +314,19 @@
      (pathnames-equal-p (car list) *this-file*)))
   t)
 
+;; Verify that DIRECTORY returns nil if the directory is empty.
 (deftest directory.2
+  (let* ((tmp (make-temporary-filename *this-directory*))
+         (directory-namestring (concatenate 'string (namestring tmp) "/"))
+         (directory-pathname (pathname directory-namestring)))
+    (unwind-protect
+        (progn
+          (make-directory directory-pathname)
+          (directory (make-pathname :name :wild :defaults directory-pathname)))
+      (delete-directory-and-files directory-pathname)))
+  nil)
+
+(deftest directory.3
   (let* ((tmp (make-temporary-filename *this-directory*))
          (directory-namestring (concatenate 'string (namestring tmp) "/"))
          (directory-pathname (pathname directory-namestring)))
