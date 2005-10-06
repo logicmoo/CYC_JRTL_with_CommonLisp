@@ -1,8 +1,8 @@
 /*
  * LispShellMode.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShellMode.java,v 1.16 2004-10-25 01:44:19 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: LispShellMode.java,v 1.17 2005-10-06 12:28:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,7 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
         km.mapKey(KeyEvent.VK_M, CTRL_MASK, "lispFindMatchingChar");
         km.mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "lispSelectSyntax");
+        km.mapKey(KeyEvent.VK_D, CTRL_MASK | ALT_MASK, "describe");
     }
 
     public void populateModeMenu(Editor editor, Menu menu)
@@ -136,9 +137,91 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         }
         if (buffer instanceof LispShell)
             ((LispShell)buffer).resetLisp();
-        else if (buffer instanceof JLisp)
-            ;
         else
             Debug.bug();
+    }
+
+    public static void describe()
+    {
+        describe(null);
+    }
+
+    public static void describe(String s)
+    {
+        final Editor editor = Editor.currentEditor();
+
+        final Buffer buffer = editor.getBuffer();
+        if (buffer.getMode() != mode) {
+            Debug.bug();
+            return;
+        }
+        if (!(buffer instanceof LispShell)) {
+            Debug.bug();
+            return;
+        }
+        if (s == null) {
+            if (editor.getDot() == null)
+                return;
+            s = editor.getSelectionOnCurrentLine();
+            if (s == null) {
+                s = getArgumentForDescribe(editor.getDot());
+                if (s == null) {
+                    if (editor.getDot().equals(buffer.getEnd()))
+                        s = "*";
+                }
+            }
+        }
+        if (s == null || s.length() == 0)
+            return;
+        ((LispShell)buffer).describe(s);
+    }
+
+    public static String getArgumentForDescribe(Position pos)
+    {
+        final Line line = pos.getLine();
+        int offset = pos.getOffset();
+        final int limit = line.length();
+        if (limit == 0)
+            return null;
+        if (offset == limit)
+            --offset;
+        while (line.charAt(offset) == ' ') {
+            if (offset > 0)
+                --offset;
+            else
+                break;
+        }
+        char c = line.charAt(offset);
+        if (c == '(' || c == ')')
+            return null;
+        if (c != ' ') {
+            // Backtrack to find start of token.
+            while (offset > 0) {
+                --offset;
+                c = line.charAt(offset);
+                if (c == '(' || c == ')')
+                    return null;
+                if (c == ' ') {
+                    ++offset;
+                    break;
+                }
+            }
+        }
+        // Now we're looking at the first character of the token, if there
+        // is one.
+        c = line.charAt(offset);
+        if (c == ' ')
+            return null;
+        FastStringBuffer sb = new FastStringBuffer(c);
+        while (++offset < limit) {
+            c = line.charAt(offset);
+            if (c == '(' || c == ')')
+                return null;
+            if (c != ' ')
+                sb.append(c);
+            else
+                break;
+        }
+        return sb.toString();
     }
 }
