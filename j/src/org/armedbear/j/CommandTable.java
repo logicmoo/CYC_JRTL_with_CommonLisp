@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: CommandTable.java,v 1.60 2005-10-06 10:34:48 piso Exp $
+ * $Id: CommandTable.java,v 1.61 2005-10-06 12:29:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -238,6 +238,7 @@ public class CommandTable
             addCommand("darcs", "Darcs");
             addCommand("decodeRegion", "RegionCommands");
             addCommand("defaultKeyMaps", "KeyMap");
+            addCommand("describe", "LispShellMode");
             addCommand("describeBindings", "Help");
             addCommand("describeKey", "DescribeKeyDialog");
             addCommand("detabRegion", "RegionCommands");
