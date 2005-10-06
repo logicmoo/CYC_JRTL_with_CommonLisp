@@ -36,7 +36,7 @@
 
 (regression-test:rem-all-tests)
 
-(let ((*package* (find-package '#:rt)))
+(let ((*package* (find-package '#:regression-test)))
   (export (find-symbol (string '#:*expected-failures*))))
 
 (setf regression-test:*expected-failures* nil)
@@ -179,9 +179,10 @@
 (defun probe-directory (pathname)
   #+abcl (ext:probe-directory pathname)
   #+allegro (excl:probe-directory pathname)
-  #+clisp (ext:probe-directory pathname)
+  #+clisp (ignore-errors (ext:probe-directory pathname))
   #+cmu (probe-file pathname) ; FIXME
   #+sbcl (probe-file pathname) ; FIXME
+  #+lispworks (probe-file pathname)
   )
 
 (defun file-directory-p (pathname)
@@ -205,11 +206,10 @@
   #+clisp (ext:delete-dir (namestring pathname))
   #+cmu (unix:unix-rmdir (namestring pathname))
   #+sbcl (zerop (sb-posix:rmdir (namestring pathname)))
+  #+lispworks (lw:delete-directory pathname)
   )
 
 (defun delete-directory-and-files (pathspec &key (quiet t) (dry-run nil))
-  #+(or lispworks)
-  (error "DELETE-DIRECTORY-AND-FILES not implemented")
   (let* ((namestring (namestring pathspec))
          (len (length namestring))
          (last-char (and (> len 0) (char namestring (1- len)))))
@@ -299,6 +299,15 @@
     (signals-error (probe-file pathname) 'file-error))
   t)
 
+(deftest probe-file.5
+  (or
+   ;; It might not exist. That's OK.
+   (null (probe-directory #p"/home/"))
+   (pathnames-equal-p (probe-file #p"/home") (probe-file #p"/home/")))
+  t)
+#+(or allegro clisp)
+(pushnew 'probe-file.5 *expected-failures*)
+
 (deftest truename.1
   (pathnames-equal-p (truename *this-file*) *this-file*)
   t)
@@ -326,6 +335,7 @@
       (delete-directory-and-files directory-pathname)))
   nil)
 
+;; A directory with a one file named "foo".
 (deftest directory.3
   (let* ((tmp (make-temporary-filename *this-directory*))
          (directory-namestring (concatenate 'string (namestring tmp) "/"))
@@ -335,11 +345,35 @@
           (make-directory directory-pathname)
           (let ((file-pathname (make-pathname :name "foo" :defaults directory-pathname)))
             (touch file-pathname)
-            (equal
-             (directory (make-pathname :name :wild :defaults directory-pathname))
-             (list file-pathname))))
+            (let ((directory (directory (make-pathname :name :wild
+                                                       :defaults directory-pathname))))
+              (and (listp directory)
+                   (= (length directory) 1)
+                   (pathnames-equal-p (car directory) file-pathname)))))
       (delete-directory-and-files directory-pathname)))
   t)
+
+;; Same as DIRECTORY.3, but use :type :wild for the wildcard.
+(deftest directory.4
+  (let* ((tmp (make-temporary-filename *this-directory*))
+         (directory-namestring (concatenate 'string (namestring tmp) "/"))
+         (directory-pathname (pathname directory-namestring)))
+    (unwind-protect
+        (progn
+          (make-directory directory-pathname)
+          (let ((file-pathname (make-pathname :name "foo" :defaults directory-pathname)))
+            (touch file-pathname)
+            (let ((directory (directory (make-pathname :name :wild
+                                                       :type :wild
+                                                       :defaults directory-pathname))))
+              (and (listp directory)
+                   (= (length directory) 1)
+                   (pathnames-equal-p (car directory) file-pathname)))))
+      (delete-directory-and-files directory-pathname)))
+  t)
+#+clisp
+;; A pathname with type nil does not match a wildcard with type :WILD.
+(pushnew 'directory.4 *expected-failures*)
 
 #-windows
 (deftest symlink.1
