@@ -2,7 +2,7 @@
  * DiffMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: DiffMode.java,v 1.13 2005-03-03 19:30:31 piso Exp $
+ * $Id: DiffMode.java,v 1.14 2005-10-06 10:35:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,11 +178,14 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         DiffOutputBuffer diffOutputBuffer = (DiffOutputBuffer) buffer;
         int vcType = diffOutputBuffer.getVCType();
         switch (vcType) {
+            case VC_CVS:
+                cvsGotoFile(editor, diffOutputBuffer);
+                break;
             case VC_P4:
                 p4GotoFile(editor, diffOutputBuffer);
                 break;
-            case VC_CVS:
-                cvsGotoFile(editor, diffOutputBuffer);
+            case VC_DARCS:
+                darcsGotoFile(editor, diffOutputBuffer);
                 break;
             default:
                 localGotoFile(editor, diffOutputBuffer);
@@ -190,15 +193,16 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         }
     }
 
-    private static void cvsGotoFile(Editor editor, DiffOutputBuffer diffOutputBuffer)
+    private static void cvsGotoFile(Editor editor,
+                                    DiffOutputBuffer diffOutputBuffer)
     {
         final Line dotLine = editor.getDotLine();
         final int dotOffset = editor.getDotOffset();
         final String text = dotLine.getText();
         if (text.startsWith("? ") || text.startsWith("Index: ")) {
-            String filename = text.substring(text.indexOf(' ')+1);
+            String filename = text.substring(text.indexOf(' ') + 1);
             File file = File.getInstance(diffOutputBuffer.getDirectory(),
-                filename);
+                                         filename);
             Buffer buf = editor.getBuffer(file);
             if (buf != null) {
                 if (editor.getOtherEditor() != null) {
@@ -257,7 +261,7 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
     }
 
     private static void p4GotoFile(Editor editor,
-        DiffOutputBuffer diffOutputBuffer)
+                                   DiffOutputBuffer diffOutputBuffer)
     {
         final Line dotLine = editor.getDotLine();
         final int dotOffset = editor.getDotOffset();
@@ -296,16 +300,63 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
             return;
         int index = line.getText().lastIndexOf(" - ");
         if (index >= 0) {
-            String filename = line.getText().substring(index+3);
+            String filename = line.getText().substring(index + 3);
             if (filename.endsWith(" ===="))
-                filename = filename.substring(0, filename.length()-5);
+                filename = filename.substring(0, filename.length() - 5);
             File file = File.getInstance(dir, filename);
             if (file != null && file.isFile()) {
                 Buffer buf = editor.getBuffer(file);
                 if (buf != null)
                     gotoLocation(editor, buf, lineNumber,
-                        dotOffset > 0 ? dotOffset-1 : 0);
+                                 dotOffset > 0 ? dotOffset - 1 : 0);
             }
+        }
+    }
+
+    private static void darcsGotoFile(Editor editor,
+                                      DiffOutputBuffer diffOutputBuffer)
+    {
+        final Line dotLine = editor.getDotLine();
+        final int dotOffset = editor.getDotOffset();
+        int lineNumber = 0;
+        int context = 0;
+        int added = 0;
+        Line line = dotLine;
+        final File dir;
+        Buffer parentBuffer = diffOutputBuffer.getParentBuffer();
+        if (parentBuffer != null)
+            dir = parentBuffer.getCurrentDirectory();
+        else
+            dir = diffOutputBuffer.getDirectory();
+        while (line != null && !line.getText().startsWith("hunk ")) {
+            if (line != dotLine && line.getText().startsWith("+"))
+                ++added;
+            else if (!line.getText().startsWith("-"))
+                ++context;
+            line = line.previous();
+        }
+        if (line == null)
+            return;
+        Debug.assertTrue(line.getText().startsWith("hunk "));
+        String text = line.getText();
+        int index = text.lastIndexOf(' ');
+        try {
+            lineNumber = Utilities.parseInt(text.substring(index + 1));
+        }
+        catch (NumberFormatException e) {
+            Log.error(e);
+            return;
+        }
+        Log.debug("lineNumber = " + lineNumber);
+        // Our line numbers are zero-based.
+        if (--lineNumber < 0)
+            return;
+        String filename = text.substring(5, index);
+        File file = File.getInstance(dir, filename);
+        if (file != null && file.isFile()) {
+            Buffer buf = editor.getBuffer(file);
+            if (buf != null)
+                gotoLocation(editor, buf, lineNumber + added, 0);
         }
     }
 
@@ -451,7 +502,7 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         if (index < 0)
             return 0;
         try {
-            return Utilities.parseInt(s.substring(index+1));
+            return Utilities.parseInt(s.substring(index + 1));
         }
         catch (NumberFormatException e) {
             Log.error(e);
