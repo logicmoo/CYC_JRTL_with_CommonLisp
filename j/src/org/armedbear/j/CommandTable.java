@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: CommandTable.java,v 1.59 2005-07-06 04:13:16 piso Exp $
+ * $Id: CommandTable.java,v 1.60 2005-10-06 10:34:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -235,6 +235,7 @@ public class CommandTable
             addCommand("cvsDiff", "CVS", "diff");
             addCommand("cvsDiffDir", "CVS", "diffDir");
             addCommand("cvsLog", "CVS", "log");
+            addCommand("darcs", "Darcs");
             addCommand("decodeRegion", "RegionCommands");
             addCommand("defaultKeyMaps", "KeyMap");
             addCommand("describeBindings", "Help");
