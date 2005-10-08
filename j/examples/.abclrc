@@ -8,13 +8,17 @@
 ;;;   .lispworks         (LispWorks)
 
 (setf (logical-pathname-translations "ansi-tests")
-      '(("*.*.*" #-windows "/home/peter/gcl/ansi-tests/*.*"
-                 #+windows "c:/cygwin/home/peter/gcl/ansi-tests/*.*")))
+      '(("*.*.*" #-(or windows mswindows win32)
+                 "/home/peter/gcl/ansi-tests/*.*"
+                 #+(or windows mswindows win32)
+                 "c:/cygwin/home/peter/gcl/ansi-tests/*.*")))
 
 (defun run-ansi-tests (&optional (compile-tests t))
   (format t "COMPILE-TESTS is ~A~%" compile-tests)
-  (let ((*default-pathname-defaults* #-windows #p"/home/peter/gcl/ansi-tests/"
-                                     #+windows #p"c:\\cygwin\\home\\peter\\gcl\\ansi-tests\\"))
+  (let ((*default-pathname-defaults* #-(or windows mswindows win32)
+                                     #p"/home/peter/gcl/ansi-tests/"
+                                     #+(or windows mswindows win32)
+                                     #p"c:\\cygwin\\home\\peter\\gcl\\ansi-tests\\"))
     (time (load (if compile-tests "compileit.lsp" "doit.lsp")))))
 
 #+abcl
