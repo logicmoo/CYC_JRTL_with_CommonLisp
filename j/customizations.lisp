@@ -26,8 +26,9 @@
 ;; *PLATFORM* will be either :WINDOWS, :DARWIN, :LINUX, or :UNKNOWN.
 (case *platform*
   (:windows
-   (setf *jdk*           "C:\\Program Files\\Java\\jdk1.5.0_02\\")
-   (setf *java-compiler* "jikes"))
+   (setf *jdk*           "C:\\Program Files\\Java\\jdk1.5.0_05\\")
+   #+(or) (setf *java-compiler* "jikes")
+   )
   (:darwin
    (setf *jdk*           "/usr/")
    (setf *java-compiler* "jikes")
