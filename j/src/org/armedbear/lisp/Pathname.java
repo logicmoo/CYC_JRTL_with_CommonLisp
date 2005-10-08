@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.100 2005-10-04 16:16:37 piso Exp $
+ * $Id: Pathname.java,v 1.101 2005-10-08 03:36:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,8 @@ public class Pathname extends LispObject
     {
         if (s == null)
             return;
-        if (s.equals(".") || s.equals("./")) {
+        if (s.equals(".") || s.equals("./") ||
+            (Utilities.isPlatformWindows && s.equals(".\\"))) {
             directory = new Cons(Keyword.RELATIVE);
             return;
         }
@@ -448,8 +449,10 @@ public class Pathname extends LispObject
                 final int limit = s.length();
                 for (int i = 0; i < limit; i++) {
                     char c = s.charAt(i);
-                    if (c == '\"' || c == '\\')
-                        sb.append('\\');
+                    if (printReadably || printEscape) {
+                        if (c == '\"' || c == '\\')
+                            sb.append('\\');
+                    }
                     sb.append(c);
                 }
                 if (printReadably || printEscape)

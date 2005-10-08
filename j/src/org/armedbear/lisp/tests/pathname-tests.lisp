@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.41 2005-10-03 13:53:16 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.42 2005-10-08 03:36:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,14 +23,21 @@
 ;;   (setf (logical-pathname-translations "ansi-tests")
 ;;         '(("*.*.*" "/home/peter/gcl/ansi-tests/*.*")))
 
+#+(and allegro mswindows)
+(pushnew :windows *features*)
+#+(and clisp win32)
+(pushnew :windows *features*)
+#+(and lispworks win32)
+(pushnew :windows *features*)
+
 (unless (member "RT" *modules* :test #'string=)
   (unless (ignore-errors (logical-pathname-translations "ansi-tests"))
     (error "~S is not defined as a logical pathname host." "ansi-tests"))
-  (load "ansi-tests:rt-package.lsp")
+  (load (translate-logical-pathname "ansi-tests:rt-package.lsp"))
   (load #+abcl (compile-file-if-needed "ansi-tests:rt.lsp")
         ;; Force compilation to avoid fasl name conflict between SBCL and
         ;; Allegro.
-        #-abcl (compile-file "ansi-tests:rt.lsp"))
+        #-abcl (compile-file (translate-logical-pathname "ansi-tests:rt.lsp")))
   (provide "RT"))
 
 (regression-test:rem-all-tests)
@@ -60,8 +67,28 @@
                  (not (typep pathname 'logical-pathname)))
       (setf ok nil))
     (unless (and (equal directory expected-directory)
-                 (equal name      expected-name)
-                 (equal type      expected-type))
+                 (equal name expected-name)
+                 (equal type expected-type))
+      (setf ok nil))
+    ok))
+
+(defun check-windows-pathname (pathname expected-host expected-device 
+                                        expected-directory expected-name
+                                        expected-type)
+  (let* ((host (pathname-host pathname))
+         (device (pathname-device pathname))
+         (directory (pathname-directory pathname))
+         (name (pathname-name pathname))
+         (type (pathname-type pathname))
+         (ok t))
+    (unless (and (pathnamep pathname)
+                 (not (typep pathname 'logical-pathname)))
+      (setf ok nil))
+    (unless (and (equal host expected-host)
+                 (equal device expected-device)
+                 (equal directory expected-directory)
+                 (equal name expected-name)
+                 (equal type expected-type))
       (setf ok nil))
     ok))
 
@@ -251,7 +278,7 @@
   #+cmu
   (check-readable-or-signals-error (make-pathname :name "."))
   t)
-#+lispworks
+#+(or lispworks (and allegro windows))
 (pushnew 'physical.21 *expected-failures*)
 
 ;; #p"."
@@ -274,21 +301,24 @@
 ;; #p"./"
 ;; Trailing separator character means it's a directory.
 (deftest physical.24
-  #+(or allegro abcl clisp cmu)
-  (check-physical-pathname #p"./" '(:relative) nil nil)
-  #+(or sbcl)
-  ;; Is this more exact?
-  (check-physical-pathname #p"./" '(:relative ".") nil nil)
+  (let ((pathname #-windows #p"./"
+                  #+windows #p".\\"))
+    #+(or allegro abcl clisp cmu)
+    (check-physical-pathname pathname '(:relative) nil nil)
+    #+(or sbcl)
+    ;; Is this more exact?
+    (check-physical-pathname pathname '(:relative ".") nil nil))
   t)
-#+(or cmu lispworks)
+#+(or cmu lispworks (and allegro windows))
 (pushnew 'physical.24 *expected-failures*)
 
 (deftest physical.25
-  (equal #p"./" #p"")
+  (equal #-windows #p"./"
+         #+windows #p".\\"
+         #p"")
   nil)
-#+lispworks
+#+(or lispworks (and allegro windows))
 (pushnew 'physical.25 *expected-failures*)
-
 
 (deftest physical.26
   #-allegro
@@ -309,9 +339,9 @@
 
 ;; #p".."
 (deftest physical.28
-  #+(or allegro)
+  #+(or allegro (and lispworks windows))
   (check-physical-pathname #p".." '(:relative :back) nil nil)
-  #+(or abcl cmu lispworks)
+  #+(or abcl cmu (and lispworks unix))
   (check-physical-pathname #p".." '(:relative :up) nil nil)
   ;; Other implementations think it's a file.
   #+(or)
@@ -328,10 +358,12 @@
 
 ;; #p"../"
 (deftest physical.29
-  #+allegro
-  (check-physical-pathname #p"../" '(:relative :back) nil nil)
-  #+(or abcl sbcl cmu clisp lispworks)
-  (check-physical-pathname #p"../" '(:relative :up) nil nil)
+  (let ((pathname #-windows #p"../"
+                  #+windows #p"..\\"))
+    #+(or allegro (and lispworks windows))
+    (check-physical-pathname pathname '(:relative :back) nil nil)
+    #+(or abcl sbcl cmu clisp (and lispworks unix))
+    (check-physical-pathname pathname '(:relative :up) nil nil))
   t)
 
 #-sbcl
@@ -339,7 +371,9 @@
   #-(or allegro cmu)
   (string= (namestring (make-pathname :name "..")) "..")
   #+allegro
-  (string= (namestring (make-pathname :name "..")) "../")
+  (string= (namestring (make-pathname :name ".."))
+           #-windows "../"
+           #+windows "..\\")
   #+cmu (signals-error (namestring (make-pathname :name "..")) 'error)
   t)
 
@@ -347,6 +381,17 @@
   (string= (namestring (make-pathname :directory '(:relative :up)))
            #+windows "..\\"
            #-windows "../")
+  t)
+
+#+windows
+(deftest windows.1
+  (let ((pathname #p"c:\\foo.bar"))
+    #+(or abcl allegro)
+    (check-windows-pathname #p"c:\\foo.bar" nil "c" '(:absolute) "foo" "bar")
+    #+clisp
+    (check-windows-pathname #p"c:\\foo.bar" nil "C" '(:absolute) "foo" "bar")
+    #+lispworks
+    (check-windows-pathname #p"c:\\foo.bar" "c" nil '(:absolute) "foo" "bar"))
   t)
 
 (deftest wild.1
@@ -434,14 +479,16 @@
   t)
 
 ;; If the prefix isn't a defined logical host, it's not a logical pathname.
-#-cmu
+#-(or cmu (and clisp windows))
 ;; CMUCL parses this as (:ABSOLUTE #<SEARCH-LIST foo>) "bar.baz" "42".
+;; CLISP signals a parse error reading #p"foo:bar.baz.42".
 (deftest logical.1
-  #+allegro
-  ;; Except in Allegro.
-  (check-logical-pathname #p"foo:bar.baz.42" "foo" nil "bar" "baz" nil)
-  #-allegro
-  (check-physical-pathname #p"foo:bar.baz.42" nil "foo:bar.baz" "42")
+  (let ((pathname #p"foo:bar.baz.42"))
+    #+allegro
+    ;; Except in Allegro.
+    (check-logical-pathname pathname "foo" nil "bar" "baz" nil)
+    #-allegro
+    (check-physical-pathname pathname nil "foo:bar.baz" "42"))
   t)
 #+lispworks
 (pushnew 'logical.1 *expected-failures*)
@@ -604,35 +651,42 @@
   t)
 
 (deftest parse-namestring.2
-  #-allegro
-  (check-logical-pathname (parse-namestring "foo.bar" "effluvia")
-                          "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
-  #+allegro
-  (check-logical-pathname (parse-namestring "foo.bar" "effluvia")
-                          "effluvia" nil "foo" "bar" nil)
+  (let ((pathname (parse-namestring "foo.bar" "effluvia")))
+    #-(or allegro lispworks)
+    (check-logical-pathname pathname "EFFLUVIA" '(:absolute) "FOO" "BAR" nil)
+    #+allegro
+    (check-logical-pathname pathname "effluvia" nil "foo" "bar" nil)
+    #+lispworks
+    (check-logical-pathname pathname "effluvia" '(:absolute) "FOO" "BAR" nil))
   t)
 
 (deftest parse-namestring.3
-  #-allegro
-  (check-logical-pathname (parse-namestring "foo;bar;baz.fas.3" "effluvia")
-                          "EFFLUVIA" '(:absolute "FOO" "BAR") "BAZ" "FAS" 3)
-  #+allegro
-  (check-logical-pathname (parse-namestring "foo;bar;baz.fas.3" "effluvia")
-                          "effluvia" '(:absolute "foo" "bar") "baz" "fas" nil)
+  (let ((pathname (parse-namestring "foo;bar;baz.fas.3" "effluvia")))
+    #-(or allegro lispworks)
+    (check-logical-pathname pathname "EFFLUVIA" '(:absolute "FOO" "BAR") "BAZ" "FAS" 3)
+    #+allegro
+    (check-logical-pathname pathname "effluvia" '(:absolute "foo" "bar") "baz" "fas" nil)
+    #+lispworks
+    (check-logical-pathname pathname "effluvia" '(:absolute "FOO" "BAR") "BAZ" "FAS" 3)
+    )
   t)
 
 (deftest parse-namestring.4
-  #-(or abcl clisp cmu)
+  #-(or abcl clisp cmu lispworks (and allegro windows))
   (check-physical-pathname (parse-namestring "effluvia:foo.bar" "")
                            nil "effluvia:foo" "bar")
   #+abcl
   ;; Invalid logical host name: ""
   (signals-error (parse-namestring "effluvia:foo.bar" "") 'error)
-  #+clisp
+  #+(or clisp lispworks)
   ;; Host mismatch.
   (signals-error (parse-namestring "effluvia:foo.bar" "") 'error)
   #+cmu
   (signals-error (parse-namestring "effluvia:foo.bar" "") 'error)
+  #+(and allegro windows)
+  ;; "effluvia" is the device
+  (check-physical-pathname (parse-namestring "effluvia:foo.bar" "")
+                           nil "foo" "bar")
   t)
 
 ;; "If host is nil and thing is a syntactically valid logical pathname
@@ -928,8 +982,8 @@
          ;; #p"EFFLUVIA:FOO.fas.NEWEST"
          (make-pathname :host "EFFLUVIA" :directory '(:absolute)
                         :name "FOO" :type "fas" :version :newest)
-         #+lispworks #p"EFFLUVIA:FOO.USFL.NEWEST"
-         )
+         #+(and lispworks unix) #p"EFFLUVIA:FOO.USFL.NEWEST"
+         #+(and lispworks windows) #p"EFFLUVIA:FOO.FSL.NEWEST")
   t)
 
 (deftest enough-namestring.1
@@ -939,7 +993,10 @@
 (pushnew 'enough-namestring.1 *expected-failures*)
 
 (deftest enough-namestring.2
+  #-windows
   (equal (enough-namestring #p"foo/bar" #p"foo") "foo/bar")
+  #+windows
+  (equal (enough-namestring #p"foo\\bar" #p"foo") "foo\\bar")
   t)
 
 (deftest enough-namestring.3
@@ -968,40 +1025,52 @@
          #-windows "/tmp/**/foo.lisp"
          #+windows "\\tmp\\**\\foo.lisp")
   nil)
+
 (deftest sbcl.4
   (check-namestring (translate-logical-pathname "demo1:foo.lisp") "/tmp/foo.lisp")
   t)
+
 ;;; Check for absolute/relative path confusion.
 #-allegro
 (deftest sbcl.5
   (pathname-match-p "demo1:;foo.lisp" "demo1:**;*.*.*")
   nil)
+
 #+(or sbcl cmu)
 ;; BUG Pathnames should match if the following translation is to work.
 (deftest sbcl.6
   (pathname-match-p "demo1:;foo.lisp" "demo1:;**;*.*.*")
   t)
+
 #+clisp
 (deftest sbcl.7
   (pathname-match-p "demo1:;foo.lisp" ";**;*.*.*")
   t)
+
 (deftest sbcl.8
-  (equal (namestring (translate-logical-pathname "demo1:;foo.lisp"))
-         #+(and abcl windows) "\\tmp\\rel\\foo.lisp"
-         #+(and abcl unix) "/tmp/rel/foo.lisp"
-         #-(or allegro abcl) "/tmp/rel/foo.lisp"
-         #+allegro "/tmp/foo.lisp")
+  (check-namestring (translate-logical-pathname "demo1:;foo.lisp")
+;;                     #+(and abcl windows) "\\tmp\\rel\\foo.lisp"
+;;                     #+(and abcl unix) "/tmp/rel/foo.lisp"
+;;                     #+(and allegro unix) "/tmp/foo.lisp"
+;;                     #+(and allegro windows) "\\tmp\\foo.lisp"
+;;                     #-(or allegro abcl) "/tmp/rel/foo.lisp"
+                    #+abcl "/tmp/rel/foo.lisp"
+                    #+allegro "/tmp/foo.lisp"
+                    #-(or allegro abcl) "/tmp/rel/foo.lisp"
+                    )
   t)
 
 (setf (logical-pathname-translations "demo2")
       '(("test;**;*.*" "/tmp/demo2/test")))
+
 (deftest sbcl.9
   (equal (enough-namestring "demo2:test;foo.lisp")
          #+sbcl "DEMO2:;TEST;FOO.LISP"
          #+(or abcl cmu lispworks) "DEMO2:TEST;FOO.LISP"
          #+allegro-v7.0 "demo2:test;foo.lisp"
          #+allegro-v6.2 "/test/foo.lisp" ;; BUG
-         #+clisp "TEST;FOO.LISP")
+         #+(and clisp unix) "TEST;FOO.LISP"
+         #+(and clisp windows) "DEMO2:TEST;FOO.LISP")
   t)
 
 #-(or allegro clisp cmu)
@@ -1053,14 +1122,13 @@
       '(("todemo;*.*.*" "demo0:*.*.*")))
 (deftest sbcl.17
   #+allegro ;; BUG
-  (equal (namestring (translate-logical-pathname "bazooka:todemo;x.y")) "/tmp/todemo/x.y")
+  (check-namestring (translate-logical-pathname "bazooka:todemo;x.y") "/tmp/todemo/x.y")
   #+clisp ;; BUG
   (signals-error (translate-logical-pathname "bazooka:todemo;x.y") 'error)
   #-(or allegro clisp)
-  (equal (namestring (translate-logical-pathname "bazooka:todemo;x.y"))
-         #-windows "/tmp/x.y"
-         #+windows "\\tmp\\x.y")
+  (check-namestring (translate-logical-pathname "bazooka:todemo;x.y") "/tmp/x.y")
   t)
+
 (deftest sbcl.18
   #+clisp ;; BUG
   (signals-error (translate-logical-pathname "demo0:x.y") 'error)
@@ -1086,12 +1154,14 @@
 (deftest sbcl.21
   (string-equal (host-namestring (parse-namestring "OTHER-HOST:ILLEGAL/LPN")) "OTHER-HOST")
   nil)
-#+lispworks
+#+(or lispworks (and clisp windows))
 (pushnew 'sbcl.21 *expected-failures*)
 
 (deftest sbcl.22
   (string= (pathname-name (parse-namestring "OTHER-HOST:ILLEGAL/LPN")) "LPN")
   t)
+#+(and clisp windows)
+(pushnew 'sbcl.22 *expected-failures*)
 
 (setf (logical-pathname-translations "test0")
       '(("**;*.*.*"              "/library/foo/**/")))
@@ -1189,7 +1259,8 @@
 (deftest sbcl.35
   (check-merge-pathnames #p"scratch:;foo" #p"/usr/local/doc/"
                          #-(or allegro clisp lispworks) #P"SCRATCH:USR;LOCAL;DOC;FOO"
-                         #+allegro #p"/usr/local/doc/foo"
+                         #+(and allegro unix) #p"/usr/local/doc/foo"
+                         #+(and allegro windows) #p"scratch:usr;local;doc;foo"
                          #+clisp #p"SCRATCH:;FOO"
                          #+lispworks #p"SCRATCH:FOO")
   t)
@@ -1209,8 +1280,10 @@
   (check-merge-pathnames #p"scratch:;supplied-name" #p"/dir/name.type"
                          #-(or allegro clisp lispworks)
                          #p"SCRATCH:DIR;SUPPLIED-NAME.TYPE"
-                         #+allegro
+                         #+(and allegro unix)
                          #p"/usr/local/doc/supplied-name.type"
+                         #+(and allegro windows)
+                         #P"scratch:dir;supplied-name.type"
                          #+clisp
                          ;; #P"SCRATCH:;SUPPLIED-NAME.type.NEWEST"
                          (make-pathname :host "SCRATCH"
@@ -1230,8 +1303,10 @@
                          #p"/dir/name.type"
                          #-(or allegro clisp lispworks)
                          #p"SCRATCH:DIR;NAME.SUPPLIED-TYPE"
-                         #+allegro
+                         #+(and allegro unix)
                          #p"/usr/local/doc/name.supplied-type"
+                         #+(and allegro windows)
+                         #P"scratch:dir;name.supplied-type"
                          #+clisp
                          ;; #P"SCRATCH:dir;name.supplied-type.NEWEST"
                          (make-pathname :host "SCRATCH"
@@ -1247,45 +1322,55 @@
   t)
 
 (deftest sbcl.39
-  #-allegro
-  (check-merge-pathnames (make-pathname :host "scratch"
+  (let ((pathname (make-pathname :host "scratch"
                                         :directory '(:relative "foo")
-                                        :name "bar")
-                         #p"/aaa/bbb/ccc/ddd/eee"
-                         #-(or clisp lispworks)
-                         #p"SCRATCH:AAA;BBB;CCC;DDD;FOO;BAR"
-                         #+clisp
-                         ;; #P"SCRATCH:;foo;bar"
-                         (make-pathname :host "SCRATCH"
-                                        :directory '(:relative "foo")
-                                        :name "bar")
-                         #+lispworks
-                         #p"SCRATCH:FOO;BAR")
-  #+allegro
-  (signals-error (merge-pathnames (make-pathname :host "scratch"
-                                                 :directory '(:relative "foo")
-                                                 :name "bar")
-                                  #p"/aaa/bbb/ccc/ddd/eee")
-                 'error)
+                                        :name "bar"))
+        (default-pathname #p"/aaa/bbb/ccc/ddd/eee")) 
+    #-allegro
+    (check-merge-pathnames pathname default-pathname
+                           #-(or clisp lispworks)
+                           #p"SCRATCH:AAA;BBB;CCC;DDD;FOO;BAR"
+                           #+clisp
+                           ;; #P"SCRATCH:;foo;bar"
+                           (make-pathname :host "SCRATCH"
+                                          :directory '(:relative "foo")
+                                          :name "bar")
+                           #+lispworks
+                           #p"SCRATCH:FOO;BAR")
+    #+(and allegro unix)
+    (signals-error (merge-pathnames pathname default-pathname) 'error)
+    #+(and allegro windows)
+    (check-merge-pathnames pathname default-pathname
+                           #P"scratch:aaa;bbb;ccc;ddd;foo;bar"))
   t)
 
+#-(and lispworks windows)
 (deftest sbcl.40
-  #-(or allegro lispworks)
-  (check-merge-pathnames (make-pathname :host "scratch"
-                                        :directory '(:relative :back "foo")
-                                        :name "bar")
-                         #p"/aaa/bbb/ccc/ddd/eee"
-                         #-clisp #p"SCRATCH:AAA;BBB;CCC;FOO;BAR"
-                         #+clisp
-                         ;; #P"SCRATCH:;..;foo;bar.NEWEST"
-                         (make-pathname :host "SCRATCH"
-                                        :directory '(:relative :back "foo")
-                                        :name "bar"))
-  #+(or allegro lispworks)
-  (signals-error (merge-pathnames (make-pathname :host "scratch"
-                                                 :directory '(:relative :back "foo")
-                                                 :name "bar")
-                         #p"/aaa/bbb/ccc/ddd/eee")
+  (let ((pathname (make-pathname :host "scratch"
+                                 :directory '(:relative :back "foo")
+                                 :name "bar"))
+        (default-pathname #p"/aaa/bbb/ccc/ddd/eee"))
+    #-(or allegro lispworks)
+    (check-merge-pathnames pathname default-pathname
+                           #-clisp #p"SCRATCH:AAA;BBB;CCC;FOO;BAR"
+                           #+clisp
+                           ;; #P"SCRATCH:;..;foo;bar.NEWEST"
+                           (make-pathname :host "SCRATCH"
+                                          :directory '(:relative :back "foo")
+                                          :name "bar"))
+    #+(or (and allegro unix) lispworks)
+    (signals-error (merge-pathnames pathname default-pathname) 'error)
+    #+(and allegro windows)
+    (check-merge-pathnames pathname default-pathname
+                           #P"scratch:aaa;bbb;ccc;foo;bar"))
+  t)
+
+#+(and lispworks windows)
+;; "Illegal logical pathname directory component: :BACK."
+(deftest sbcl.40
+  (signals-error (make-pathname :host "scratch"
+                                :directory '(:relative :back "foo")
+                                :name "bar")
                  'error)
   t)
 
@@ -1414,27 +1499,30 @@
 (deftest sbcl.59
   (string= (with-standard-io-syntax (write-to-string #p"/foo"))
            #-windows "#P\"/foo\""
-           #+windows "#P\"\\\\foo\"")
+           #+(and windows (not lispworks)) "#P\"\\\\foo\""
+           #+(and windows lispworks) "#P\"/foo\"")
   t)
 
 #-allegro
 (deftest sbcl.60
   (string= (with-standard-io-syntax (write-to-string #p"/foo" :readably nil))
            #-windows "#P\"/foo\""
-           #+windows "#P\"\\\\foo\"")
+           #+(and windows (not lispworks)) "#P\"\\\\foo\""
+           #+(and windows lispworks) "#P\"/foo\"")
   t)
 
 #-allegro
 (deftest sbcl.61
   (string= (with-standard-io-syntax (write-to-string #p"/foo" :escape nil))
            #-windows "#P\"/foo\""
-           #+windows "#P\"\\\\foo\"")
+           #+(and windows (not lispworks)) "#P\"\\\\foo\""
+           #+(and windows lispworks) "#P\"/foo\"")
   t)
 
 (deftest sbcl.62
   (string= (with-standard-io-syntax (write-to-string #p"/foo" :readably nil :escape nil))
            #-windows "/foo"
-           #+windows "\\\\foo")
+           #+windows "\\foo")
   t)
 
 (do-tests)
