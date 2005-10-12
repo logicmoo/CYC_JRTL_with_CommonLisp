@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.42 2005-10-08 03:36:03 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.43 2005-10-12 15:10:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,7 +72,7 @@
       (setf ok nil))
     ok))
 
-(defun check-windows-pathname (pathname expected-host expected-device 
+(defun check-windows-pathname (pathname expected-host expected-device
                                         expected-directory expected-name
                                         expected-type)
   (let* ((host (pathname-host pathname))
@@ -278,7 +278,7 @@
   #+cmu
   (check-readable-or-signals-error (make-pathname :name "."))
   t)
-#+(or lispworks (and allegro windows))
+#+(or cmu lispworks (and allegro windows))
 (pushnew 'physical.21 *expected-failures*)
 
 ;; #p"."
@@ -334,7 +334,7 @@
   #+cmu
   (check-readable-or-signals-error (make-pathname :name ".."))
   t)
-#+(or clisp lispworks)
+#+(or clisp cmu lispworks)
 (pushnew 'physical.27 *expected-failures*)
 
 ;; #p".."
@@ -368,13 +368,12 @@
 
 #-sbcl
 (deftest physical.30
-  #-(or allegro cmu)
+  #-(or allegro)
   (string= (namestring (make-pathname :name "..")) "..")
   #+allegro
   (string= (namestring (make-pathname :name ".."))
            #-windows "../"
            #+windows "..\\")
-  #+cmu (signals-error (namestring (make-pathname :name "..")) 'error)
   t)
 
 (deftest physical.31
@@ -1325,7 +1324,7 @@
   (let ((pathname (make-pathname :host "scratch"
                                         :directory '(:relative "foo")
                                         :name "bar"))
-        (default-pathname #p"/aaa/bbb/ccc/ddd/eee")) 
+        (default-pathname #p"/aaa/bbb/ccc/ddd/eee"))
     #-allegro
     (check-merge-pathnames pathname default-pathname
                            #-(or clisp lispworks)
@@ -1443,7 +1442,7 @@
   #+clisp
   (signals-error (make-pathname :name "foo" :type ".txt") 'error)
   t)
-#+(or allegro lispworks)
+#+(or allegro cmu lispworks)
 (pushnew 'sbcl.50 *expected-failures*)
 
 (deftest sbcl.51
