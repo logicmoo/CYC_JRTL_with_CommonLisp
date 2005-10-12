@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShellMode.java,v 1.17 2005-10-06 12:28:37 piso Exp $
+ * $Id: LispShellMode.java,v 1.18 2005-10-12 14:49:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,8 @@
 
 package org.armedbear.j;
 
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
 import java.awt.event.KeyEvent;
 
 public final class LispShellMode extends LispMode implements Constants, Mode
@@ -159,12 +161,13 @@ public final class LispShellMode extends LispMode implements Constants, Mode
             Debug.bug();
             return;
         }
+        LispShell lisp = (LispShell) buffer;
         if (s == null) {
             if (editor.getDot() == null)
                 return;
             s = editor.getSelectionOnCurrentLine();
             if (s == null) {
-                s = getArgumentForDescribe(editor.getDot());
+                s = getArgumentForDescribe(lisp, editor.getDot());
                 if (s == null) {
                     if (editor.getDot().equals(buffer.getEnd()))
                         s = "*";
@@ -173,32 +176,44 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         }
         if (s == null || s.length() == 0)
             return;
-        ((LispShell)buffer).describe(s);
+        lisp.describe(s);
     }
 
-    public static String getArgumentForDescribe(Position pos)
+    public static String getArgumentForDescribe(LispShell lisp, Position pos)
     {
         final Line line = pos.getLine();
         int offset = pos.getOffset();
-        final int limit = line.length();
+        String s = line.getText();
+        RE promptRE = lisp.getPromptRE();
+        if (promptRE != null) {
+            REMatch match = promptRE.getMatch(s);
+            if (match != null) {
+                int end = match.getEndIndex();
+                s = s.substring(end);
+                offset -= end;
+                if (offset < 0)
+                    return null;
+            }
+        }
+        final int limit = s.length();
         if (limit == 0)
             return null;
         if (offset == limit)
             --offset;
-        while (line.charAt(offset) == ' ') {
+        while (s.charAt(offset) == ' ') {
             if (offset > 0)
                 --offset;
             else
                 break;
         }
-        char c = line.charAt(offset);
+        char c = s.charAt(offset);
         if (c == '(' || c == ')')
             return null;
         if (c != ' ') {
             // Backtrack to find start of token.
             while (offset > 0) {
                 --offset;
-                c = line.charAt(offset);
+                c = s.charAt(offset);
                 if (c == '(' || c == ')')
                     return null;
                 if (c == ' ') {
@@ -209,12 +224,12 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         }
         // Now we're looking at the first character of the token, if there
         // is one.
-        c = line.charAt(offset);
+        c = s.charAt(offset);
         if (c == ' ')
             return null;
         FastStringBuffer sb = new FastStringBuffer(c);
         while (++offset < limit) {
-            c = line.charAt(offset);
+            c = s.charAt(offset);
             if (c == '(' || c == ')')
                 return null;
             if (c != ' ')
