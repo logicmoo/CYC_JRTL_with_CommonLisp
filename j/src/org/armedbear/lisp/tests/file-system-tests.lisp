@@ -305,7 +305,7 @@
    (null (probe-directory #p"/home/"))
    (pathnames-equal-p (probe-file #p"/home") (probe-file #p"/home/")))
   t)
-#+(or allegro clisp)
+#+(or allegro cmu clisp)
 (pushnew 'probe-file.5 *expected-failures*)
 
 (deftest truename.1
