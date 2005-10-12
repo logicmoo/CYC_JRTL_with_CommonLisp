@@ -24,6 +24,13 @@
 
 #+:sbcl (require '#:sb-posix)
 
+#+(and allegro mswindows)
+(pushnew :windows *features*)
+#+(and clisp win32)
+(pushnew :windows *features*)
+#+(and lispworks win32)
+(pushnew :windows *features*)
+
 (unless (member "RT" *modules* :test #'string=)
   (unless (ignore-errors (logical-pathname-translations "ansi-tests"))
     (error "~S is not defined as a logical pathname host." "ansi-tests"))
@@ -280,6 +287,8 @@
     ;; "." names a directory, not a file.
     (signals-error (probe-file pathname) 'file-error))
   t)
+#+(and clisp windows)
+(pushnew 'probe-file.2 *expected-failures*)
 
 (deftest probe-file.3
   (let ((pathname #p"./"))
@@ -298,6 +307,8 @@
     ;; ".." names a directory, not a file.
     (signals-error (probe-file pathname) 'file-error))
   t)
+#+(and clisp windows)
+(pushnew 'probe-file.4 *expected-failures*)
 
 (deftest probe-file.5
   (or
@@ -452,7 +463,21 @@
 (deftest directory-namestring.1
   (let ((pathname (user-homedir-pathname)))
     (equal (namestring pathname) (directory-namestring pathname)))
+  #-windows
+  t
+  #+windows
+  ;; The drive prefix ("C:\\") is not part of the directory namestring.
+  nil)
+#+clisp
+(pushnew 'directory-namestring.1 *expected-failures*)
+
+(deftest directory-namestring.2
+  (let ((pathname (user-homedir-pathname)))
+    (equal (directory-namestring pathname)
+           (namestring (make-pathname :directory (pathname-directory pathname)))))
   t)
+#+clisp
+(pushnew 'directory-namestring.2 *expected-failures*)
 
 (deftest ensure-directories-exist.1
   (let* ((tmp (make-temporary-filename *this-directory*))

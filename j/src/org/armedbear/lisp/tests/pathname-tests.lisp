@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.44 2005-10-12 15:52:56 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.45 2005-10-12 18:40:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -384,13 +384,35 @@
 
 #+windows
 (deftest windows.1
+  (equal #p"/foo/bar/baz" #p"\\foo\\bar\\baz")
+  t)
+
+#+windows
+(deftest windows.2
+  (let ((pathname #p"foo.bar"))
+    (check-windows-pathname pathname nil nil nil "foo" "bar"))
+  t)
+
+#+windows
+(deftest windows.3
+  (let ((pathname #p"\\foo.bar"))
+    (check-windows-pathname pathname nil nil '(:absolute) "foo" "bar"))
+  t)
+
+#+windows
+(deftest windows.4
   (let ((pathname #p"c:\\foo.bar"))
     #+(or abcl allegro)
-    (check-windows-pathname #p"c:\\foo.bar" nil "c" '(:absolute) "foo" "bar")
+    (check-windows-pathname pathname nil "c" '(:absolute) "foo" "bar")
     #+clisp
-    (check-windows-pathname #p"c:\\foo.bar" nil "C" '(:absolute) "foo" "bar")
+    (check-windows-pathname pathname nil "C" '(:absolute) "foo" "bar")
     #+lispworks
-    (check-windows-pathname #p"c:\\foo.bar" "c" nil '(:absolute) "foo" "bar"))
+    (check-windows-pathname pathname "c" nil '(:absolute) "foo" "bar"))
+  t)
+
+#+windows
+(deftest windows.5
+  (equal #p"c:\\foo.bar" #p"C:\\FOO.BAR")
   t)
 
 (deftest wild.1
