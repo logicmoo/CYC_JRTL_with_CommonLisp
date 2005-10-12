@@ -1,8 +1,8 @@
 /*
  * SchemeMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: SchemeMode.java,v 1.1.1.1 2002-09-24 16:09:19 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: SchemeMode.java,v 1.2 2005-10-12 14:50:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,8 @@ public final class SchemeMode extends AbstractMode implements Constants, Mode
     {
         super(SCHEME_MODE, SCHEME_MODE_NAME);
         keywords = new Keywords(this);
+        setProperty(Property.INDENT_SIZE, 2);
+        setProperty(Property.HIGHLIGHT_BRACKETS, true);
     }
 
     public static final SchemeMode getMode()
