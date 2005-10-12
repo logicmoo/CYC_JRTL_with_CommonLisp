@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.43 2005-10-12 15:10:25 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.44 2005-10-12 15:52:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -285,7 +285,7 @@
 (deftest physical.22
   #+(or allegro abcl cmu)
   (check-physical-pathname #p"." '(:relative) nil nil)
-  #+(or sbcl clisp)
+  #-(or allegro abcl cmu)
   ;; No trailing separator character means it's a file.
   (check-physical-pathname #p"." nil "." nil)
   t)
@@ -303,7 +303,7 @@
 (deftest physical.24
   (let ((pathname #-windows #p"./"
                   #+windows #p".\\"))
-    #+(or allegro abcl clisp cmu)
+    #-(or sbcl)
     (check-physical-pathname pathname '(:relative) nil nil)
     #+(or sbcl)
     ;; Is this more exact?
@@ -981,7 +981,7 @@
          ;; #p"EFFLUVIA:FOO.fas.NEWEST"
          (make-pathname :host "EFFLUVIA" :directory '(:absolute)
                         :name "FOO" :type "fas" :version :newest)
-         #+(and lispworks unix) #p"EFFLUVIA:FOO.USFL.NEWEST"
+         #+(and lispworks unix) #p"EFFLUVIA:FOO.UFSL.NEWEST"
          #+(and lispworks windows) #p"EFFLUVIA:FOO.FSL.NEWEST")
   t)
 
@@ -1343,13 +1343,13 @@
                            #P"scratch:aaa;bbb;ccc;ddd;foo;bar"))
   t)
 
-#-(and lispworks windows)
+#-lispworks
 (deftest sbcl.40
   (let ((pathname (make-pathname :host "scratch"
                                  :directory '(:relative :back "foo")
                                  :name "bar"))
         (default-pathname #p"/aaa/bbb/ccc/ddd/eee"))
-    #-(or allegro lispworks)
+    #-allegro
     (check-merge-pathnames pathname default-pathname
                            #-clisp #p"SCRATCH:AAA;BBB;CCC;FOO;BAR"
                            #+clisp
@@ -1357,14 +1357,14 @@
                            (make-pathname :host "SCRATCH"
                                           :directory '(:relative :back "foo")
                                           :name "bar"))
-    #+(or (and allegro unix) lispworks)
+    #+(and allegro unix)
     (signals-error (merge-pathnames pathname default-pathname) 'error)
     #+(and allegro windows)
     (check-merge-pathnames pathname default-pathname
                            #P"scratch:aaa;bbb;ccc;foo;bar"))
   t)
 
-#+(and lispworks windows)
+#+lispworks
 ;; "Illegal logical pathname directory component: :BACK."
 (deftest sbcl.40
   (signals-error (make-pathname :host "scratch"
