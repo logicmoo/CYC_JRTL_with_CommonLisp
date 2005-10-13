@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.45 2005-10-12 18:40:22 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.46 2005-10-13 16:59:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -201,66 +201,83 @@
 (deftest physical.2
   (check-physical-pathname #p"/" '(:absolute) nil nil)
   t)
+
 (deftest physical.3
   (check-physical-pathname #p"/foo" '(:absolute) "foo" nil)
   t)
+
 (deftest physical.4
   #-lispworks
   (check-physical-pathname #p"/foo." '(:absolute) "foo" "")
   #+lispworks
   (check-physical-pathname #p"/foo." '(:absolute) "foo." nil)
   t)
+
 (deftest physical.5
   (check-physical-pathname #p"/foo.bar" '(:absolute) "foo" "bar")
   t)
+
 (deftest physical.6
   #-lispworks
   (check-physical-pathname #p"/foo.bar." '(:absolute) "foo.bar" "")
   #+lispworks
   (check-physical-pathname #p"/foo.bar." '(:absolute) "foo.bar." nil)
   t)
+
 (deftest physical.7
   (check-physical-pathname #p"/foo.bar.baz" '(:absolute) "foo.bar" "baz")
   t)
+
 (deftest physical.8
   (check-physical-pathname #p"/foo/bar" '(:absolute "foo") "bar" nil)
   t)
+
 (deftest physical.9
   (check-physical-pathname #p"/foo..bar" '(:absolute) "foo." "bar")
   t)
+
 (deftest physical.10
   (check-physical-pathname #p"foo.bar" nil "foo" "bar")
   t)
+
 (deftest physical.11
   (check-physical-pathname #p"foo.bar.baz" nil "foo.bar" "baz")
   t)
+
 (deftest physical.12
   (check-physical-pathname #p"foo/" '(:relative "foo") nil nil)
   t)
+
 (deftest physical.13
   (check-physical-pathname #p"foo/bar" '(:relative "foo") "bar" nil)
   t)
+
 (deftest physical.14
   (check-physical-pathname #p"foo/bar/baz" '(:relative "foo" "bar") "baz" nil)
   t)
+
 (deftest physical.15
   (check-physical-pathname #p"foo/bar/" '(:relative "foo" "bar") nil nil)
   t)
+
 #+allegro
 (deftest physical.16
   ;; This reduction is wrong.
   (check-physical-pathname #p"foo/bar/.." '(:relative "foo") nil nil)
   t)
+
 #+allegro
 (deftest physical.17
   (check-physical-pathname #p"/foo/../" '(:absolute) nil nil)
   t)
+
 (deftest physical.18
   #-lispworks
   (check-physical-pathname #p".lisprc" nil ".lisprc" nil)
   #+lispworks
   (check-physical-pathname #p".lisprc" nil "" "lisprc")
   t)
+
 (deftest physical.19
   (check-physical-pathname #p"x.lisprc" nil "x" "lisprc")
   t)
@@ -451,6 +468,7 @@
   t)
 #+cmu
 (pushnew 'lots-of-dots.1 *expected-failures*)
+
 #+(or allegro abcl cmu)
 (deftest lots-of-dots.2
   (check-physical-pathname #p"......" nil "......" nil)
@@ -534,6 +552,7 @@
 (deftest logical.4
   (check-logical-pathname #p"effluvia:bar.baz.42" "EFFLUVIA" '(:absolute) "BAR" "BAZ" 42)
   t)
+
 #-allegro
 (deftest logical.5
   (string= (write-to-string #p"effluvia:bar.baz.42" :escape t)
@@ -636,6 +655,7 @@
   ;; namestring.
   (check-logical-pathname #p"effluvia:;bar.baz" "EFFLUVIA" nil "BAR" "BAZ" nil)
   t)
+
 (deftest logical.20
   (check-namestring #p"effluvia:;bar.baz"
                     #+allegro "effluvia:bar.baz"
@@ -763,67 +783,82 @@
 (deftest pathname-match-p.1
   (pathname-match-p "/foo/bar/baz" "/*/*/baz")
   t)
+
 (deftest pathname-match-p.2
   (pathname-match-p "/foo/bar/baz" "/**/baz")
   t)
+
 (deftest pathname-match-p.3
   (pathname-match-p "/foo/bar/quux/baz" "/**/baz")
   t)
+
 (deftest pathname-match-p.4
   (pathname-match-p "foo.bar" "/**/*.*")
   t)
+
 (deftest pathname-match-p.5
   (pathname-match-p "/usr/local/bin/foo.bar" "/**/foo.bar")
   t)
+
 (deftest pathname-match-p.6
   (pathname-match-p "/usr/local/bin/foo.bar" "**/foo.bar")
   nil)
+
 (deftest pathname-match-p.7
   (pathname-match-p "/foo/bar.txt" "/**/*.*")
   t)
+
 (deftest pathname-match-p.8
   (pathname-match-p "/foo/bar.txt" "**/*.*")
   nil)
+
 (deftest pathname-match-p.9
   (pathname-match-p #p"effluvia:foo.bar" #p"effluvia:**;*.*.*")
   t)
 
-;; TRANSLATE-PATHNAME
-#-clisp
-(deftest translate-pathname.1
-  (equal (translate-pathname "foo" "*" "bar") #p"bar")
+(deftest pathname-match-p.10
+  (pathname-match-p "foo" "foo.*")
   t)
+
+;; TRANSLATE-PATHNAME
+(deftest translate-pathname.1
+  #-clisp
+  (equal (translate-pathname "foo" "*" "bar") #p"bar")
+  #+clisp
+  (signals-error (translate-pathname "foo" "*" "bar") 'error)
+  t)
+
 (deftest translate-pathname.2
   (equal (translate-pathname "foo" "*" "*")   #p"foo")
   t)
 
-;; ABCL doesn't implement this translation.
 (deftest translate-pathname.3
   #-abcl
   (string= (pathname-name (translate-pathname "foobar" "*" "foo*"))
            #-allegro-v7.0 "foofoobar"
            #+allegro-v7.0 "foo*")
   #+abcl
+  ;; ABCL doesn't implement this translation. Verify that it signals an error.
   (signals-error (translate-pathname "foobar" "*" "foo*") 'error)
   t)
 
-;; ABCL doesn't implement this translation.
 (deftest translate-pathname.4
   #-abcl
   (equal (translate-pathname "foobar" "foo*" "*baz")
          #-allegro-v7.0 #p"barbaz"
          #+allegro-v7.0 #p"*baz")
   #+abcl
+  ;; ABCL doesn't implement this translation. Verify that it signals an error.
   (signals-error (translate-pathname "foobar" "foo*" "*baz") 'error)
   t)
 
-;; ABCL doesn't implement this translation.
 (deftest translate-pathname.5
   #-abcl
   (equal (translate-pathname "foobar" "foo*" "")
          #+(or allegro clisp) #p"bar"
          #+(or cmu sbcl lispworks) #p"foobar")
   #+abcl
+  ;; ABCL doesn't implement this translation. Verify that it signals an error.
   (signals-error (translate-pathname "foobar" "foo*" "") 'error)
   t)
 
@@ -885,6 +920,7 @@
 (deftest pathname-match-p.10
   (pathname-match-p "/foo/bar.txt" "**/*.*")
   nil)
+
 ;; Since (pathname-match-p "/foo/bar.txt" "**/*.*" ) => NIL...
 (deftest translate-pathname.18
   #+(or clisp allegro abcl cmu lispworks)
@@ -899,6 +935,7 @@
 (deftest pathname-match-p.11
   (pathname-match-p "/foo/bar.txt" "/**/*.*")
   t)
+
 (deftest translate-pathname.19
   (equal (translate-pathname "/foo/bar.txt" "/**/*.*" "/usr/local/**/*.*")
          #p"/usr/local/foo/bar.txt")
@@ -1007,6 +1044,41 @@
          #+(and lispworks windows) #p"EFFLUVIA:FOO.FSL.NEWEST")
   t)
 
+(deftest file-namestring.1
+  (equal (file-namestring #p"")
+         #+(or abcl allegro cmu)
+         nil
+         #+(or clisp lispworks sbcl)
+         "")
+  t)
+
+(deftest file-namestring.2
+  (equal (file-namestring #p"foo") "foo")
+  t)
+
+(deftest file-namestring.3
+  (let ((pathname (make-pathname :type "foo")))
+    #+abcl
+    (equal (file-namestring pathname) nil)
+    #+allegro
+    (equal (file-namestring pathname) "NIL.foo") ;; bug
+    #+(or clisp lispworks)
+    (equal (file-namestring pathname) ".foo")
+    #+(or cmu sbcl)
+    (signals-error (file-namestring pathname) 'error))
+  t)
+
+;; A variant of FILE-NAMESTRING.3 that detects Allegro's bug as a bug.
+(deftest file-namestring.4
+  (let ((pathname (make-pathname :type "foo")))
+    #-(or cmu sbcl)
+    (not (equal (file-namestring pathname) "NIL.foo"))
+    #+(or cmu sbcl)
+    (signals-error (file-namestring pathname) 'error))
+  t)
+#+allegro
+(pushnew 'file-namestring.4 *expected-failures*)
+
 (deftest enough-namestring.1
   (equal (enough-namestring #p"/foo" #p"/") "foo")
   t)
@@ -1070,15 +1142,9 @@
 
 (deftest sbcl.8
   (check-namestring (translate-logical-pathname "demo1:;foo.lisp")
-;;                     #+(and abcl windows) "\\tmp\\rel\\foo.lisp"
-;;                     #+(and abcl unix) "/tmp/rel/foo.lisp"
-;;                     #+(and allegro unix) "/tmp/foo.lisp"
-;;                     #+(and allegro windows) "\\tmp\\foo.lisp"
-;;                     #-(or allegro abcl) "/tmp/rel/foo.lisp"
                     #+abcl "/tmp/rel/foo.lisp"
                     #+allegro "/tmp/foo.lisp"
-                    #-(or allegro abcl) "/tmp/rel/foo.lisp"
-                    )
+                    #-(or allegro abcl) "/tmp/rel/foo.lisp")
   t)
 
 (setf (logical-pathname-translations "demo2")
@@ -1141,6 +1207,7 @@
 
 (setf (logical-pathname-translations "bazooka")
       '(("todemo;*.*.*" "demo0:*.*.*")))
+
 (deftest sbcl.17
   #+allegro ;; BUG
   (check-namestring (translate-logical-pathname "bazooka:todemo;x.y") "/tmp/todemo/x.y")
@@ -1158,6 +1225,7 @@
          #-windows "/tmp/x.y"
          #+windows "\\tmp\\x.y")
   t)
+
 #-(or allegro clisp)
 (deftest sbcl.19
   (equal (namestring (translate-logical-pathname "bazooka:todemo;x.y"))
@@ -1186,6 +1254,7 @@
 
 (setf (logical-pathname-translations "test0")
       '(("**;*.*.*"              "/library/foo/**/")))
+
 (deftest sbcl.23
   (check-namestring (translate-logical-pathname "test0:foo;bar;baz;mum.quux")
                     "/library/foo/foo/bar/baz/mum.quux")
@@ -1193,14 +1262,17 @@
 
 (setf (logical-pathname-translations "prog")
       '(("CODE;*.*.*"             "/lib/prog/")))
+
 #-allegro
 (deftest sbcl.24
   (check-namestring (translate-logical-pathname "prog:code;documentation.lisp")
                     "/lib/prog/documentation.lisp")
   t)
+
 (setf (logical-pathname-translations "prog1")
       '(("CODE;DOCUMENTATION.*.*" "/lib/prog/docum.*")
         ("CODE;*.*.*"             "/lib/prog/")))
+
 #-allegro
 (deftest sbcl.25
   (check-namestring (translate-logical-pathname "prog1:code;documentation.lisp")
@@ -1236,11 +1308,13 @@
   (check-merge-pathnames #p"/supplied-dir/" #p"/dir/name.type"
                          #p"/supplied-dir/name.type")
   t)
+
 ;; 2) no directory, no type
 (deftest sbcl.29
   (check-merge-pathnames #p"supplied-name" #p"/dir/name.type"
                          #p"/dir/supplied-name.type")
   t)
+
 ;; 3) no name, no dir (must use make-pathname as ".foo" is parsed
 ;; as a name)
 (deftest sbcl.30
@@ -1248,6 +1322,7 @@
                          #p"/dir/name.type"
                          #p"/dir/name.supplied-type")
   t)
+
 ;; If (pathname-directory pathname) is a list whose car is
 ;; :relative, and (pathname-directory default-pathname) is a
 ;; list, then the merged directory is [...]
@@ -1255,6 +1330,7 @@
   (check-merge-pathnames #p"qqq/www" #p"/aaa/bbb/ccc/ddd/eee"
                          #p"/aaa/bbb/ccc/ddd/qqq/www")
   t)
+
 ;; except that if the resulting list contains a string or
 ;; :wild immediately followed by :back, both of them are
 ;; removed.
@@ -1264,6 +1340,7 @@
    (make-pathname :directory '(:relative :back "blah"))
    #p"/aaa/bbb/ccc/ddd/eee" #P"/aaa/bbb/ccc/blah/eee")
   t)
+
 ;; If (pathname-directory default-pathname) is not a list or
 ;; (pathname-directory pathname) is not a list whose car is
 ;; :relative, the merged directory is (or (pathname-directory
@@ -1272,6 +1349,7 @@
   (check-merge-pathnames #p"/absolute/path/name" #p"/dir/default-name.type"
                          #P"/absolute/path/name.type")
   t)
+
 (deftest sbcl.34
   (check-merge-pathnames #p"scratch:;name2" #p"scratch:foo;"
                          #p"SCRATCH:FOO;NAME2")
