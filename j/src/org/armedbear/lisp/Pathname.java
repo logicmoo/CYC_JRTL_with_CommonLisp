@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.102 2005-10-12 18:38:38 piso Exp $
+ * $Id: Pathname.java,v 1.103 2005-10-13 16:58:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1282,8 +1282,7 @@ public class Pathname extends LispObject
             else if (p.name == Keyword.WILD)
                 sb.append('*');
             else
-                signal(new SimpleError("Pathname has no name component: " +
-                                       p.writeToString() + "."));
+                return NIL;
             if (p.type instanceof AbstractString) {
                 sb.append('.');
                 sb.append(p.type.getStringValue());
