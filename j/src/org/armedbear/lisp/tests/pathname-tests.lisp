@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.47 2005-10-14 16:18:53 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.48 2005-10-14 16:58:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -351,6 +351,8 @@
          #-windows "./"
          #+windows ".\\")
   t)
+#+lispworks
+(pushnew 'directory-namestring.1 *expected-failures*)
 
 (deftest physical.25
   (equal #-windows #p"./"
