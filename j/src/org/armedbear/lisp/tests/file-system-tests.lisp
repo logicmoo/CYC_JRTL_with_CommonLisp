@@ -54,7 +54,7 @@
 (in-package #:test)
 
 (export '(pathnames-equal-p run-shell-command copy-file make-symbolic-link
-          touch delete-directory-and-files))
+          touch make-temporary-directory delete-directory-and-files))
 
 (defparameter *this-file*
   (merge-pathnames (make-pathname :type "lisp")
@@ -169,20 +169,6 @@
          (command (concatenate 'string "ln -s " from-namestring " " to-namestring)))
     (zerop (run-shell-command command))))
 
-;; This approach is race-prone, but it should be adequate for our limited
-;; purposes here.
-(defun make-temporary-filename (directory)
-  (dotimes (i 10)
-    (let ((pathname (merge-pathnames (make-pathname :name (symbol-name (gensym))
-                                                    :type nil)
-                                     directory)))
-      (unless (probe-file pathname)
-        (return-from make-temporary-filename pathname))))
-   (error "Unable to create a temporary filename in ~S~%" directory))
-
-(defun touch (filespec)
-  (with-open-file (stream filespec :direction :output :if-exists :error)))
-
 (defun probe-directory (pathname)
   #+abcl (ext:probe-directory pathname)
   #+allegro (excl:probe-directory pathname)
@@ -215,6 +201,29 @@
   #+sbcl (zerop (sb-posix:rmdir (namestring pathname)))
   #+lispworks (lw:delete-directory pathname)
   )
+
+;; This approach is race-prone, but it should be adequate for our limited
+;; purposes here.
+(defun make-temporary-filename (directory)
+  (unless (probe-directory directory)
+    (error "The directory ~S does not exist." directory))
+  (dotimes (i 10)
+    (let ((pathname (merge-pathnames (make-pathname :name (symbol-name (gensym))
+                                                    :type nil)
+                                     directory)))
+      (unless (probe-file pathname)
+        (return-from make-temporary-filename pathname))))
+  (error "Unable to create a temporary filename in ~S" directory))
+
+(defun touch (filespec)
+  (with-open-file (stream filespec :direction :output :if-exists :error)))
+
+(defun make-temporary-directory (parent-directory)
+  (let* ((tmp (make-temporary-filename parent-directory))
+         (directory-namestring (concatenate 'string (namestring tmp) "/"))
+         (directory-pathname (pathname directory-namestring)))
+    (make-directory directory-pathname)
+    directory-pathname))
 
 (defun delete-directory-and-files (pathspec &key (quiet t) (dry-run nil))
   (let* ((namestring (namestring pathspec))
@@ -336,50 +345,38 @@
 
 ;; Verify that DIRECTORY returns nil if the directory is empty.
 (deftest directory.2
-  (let* ((tmp (make-temporary-filename *this-directory*))
-         (directory-namestring (concatenate 'string (namestring tmp) "/"))
-         (directory-pathname (pathname directory-namestring)))
+  (let ((directory-pathname (make-temporary-directory *this-directory*)))
     (unwind-protect
-        (progn
-          (make-directory directory-pathname)
-          (directory (make-pathname :name :wild :defaults directory-pathname)))
+        (directory (make-pathname :name :wild :defaults directory-pathname))
       (delete-directory-and-files directory-pathname)))
   nil)
 
 ;; A directory with a one file named "foo".
 (deftest directory.3
-  (let* ((tmp (make-temporary-filename *this-directory*))
-         (directory-namestring (concatenate 'string (namestring tmp) "/"))
-         (directory-pathname (pathname directory-namestring)))
+  (let ((directory-pathname (make-temporary-directory *this-directory*)))
     (unwind-protect
-        (progn
-          (make-directory directory-pathname)
-          (let ((file-pathname (make-pathname :name "foo" :defaults directory-pathname)))
-            (touch file-pathname)
-            (let ((directory (directory (make-pathname :name :wild
-                                                       :defaults directory-pathname))))
-              (and (listp directory)
-                   (= (length directory) 1)
-                   (pathnames-equal-p (car directory) file-pathname)))))
+        (let ((file-pathname (make-pathname :name "foo" :defaults directory-pathname)))
+          (touch file-pathname)
+          (let ((directory (directory (make-pathname :name :wild
+                                                     :defaults directory-pathname))))
+            (and (listp directory)
+                 (= (length directory) 1)
+                 (pathnames-equal-p (car directory) file-pathname))))
       (delete-directory-and-files directory-pathname)))
   t)
 
 ;; Same as DIRECTORY.3, but use :type :wild for the wildcard.
 (deftest directory.4
-  (let* ((tmp (make-temporary-filename *this-directory*))
-         (directory-namestring (concatenate 'string (namestring tmp) "/"))
-         (directory-pathname (pathname directory-namestring)))
+  (let ((directory-pathname (make-temporary-directory *this-directory*)))
     (unwind-protect
-        (progn
-          (make-directory directory-pathname)
-          (let ((file-pathname (make-pathname :name "foo" :defaults directory-pathname)))
-            (touch file-pathname)
-            (let ((directory (directory (make-pathname :name :wild
-                                                       :type :wild
-                                                       :defaults directory-pathname))))
-              (and (listp directory)
-                   (= (length directory) 1)
-                   (pathnames-equal-p (car directory) file-pathname)))))
+        (let ((file-pathname (make-pathname :name "foo" :defaults directory-pathname)))
+          (touch file-pathname)
+          (let ((directory (directory (make-pathname :name :wild
+                                                     :type :wild
+                                                     :defaults directory-pathname))))
+            (and (listp directory)
+                 (= (length directory) 1)
+                 (pathnames-equal-p (car directory) file-pathname))))
       (delete-directory-and-files directory-pathname)))
   t)
 #+clisp
