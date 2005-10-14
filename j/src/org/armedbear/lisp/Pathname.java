@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.103 2005-10-13 16:58:55 piso Exp $
+ * $Id: Pathname.java,v 1.104 2005-10-14 16:14:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -334,14 +334,21 @@ public class Pathname extends LispObject
                 separatorChar = File.separatorChar;
             LispObject temp = directory;
             LispObject part = temp.car();
-            if (part == Keyword.ABSOLUTE)
-                sb.append(separatorChar);
-            else if (part == Keyword.RELATIVE)
-                ;
-            else
-                signal(new FileError("Unsupported directory component " + part.writeToString() + ".",
-                                     this));
             temp = temp.cdr();
+            if (part == Keyword.ABSOLUTE) {
+                sb.append(separatorChar);
+            } else if (part == Keyword.RELATIVE) {
+                if (temp == NIL) {
+                    // #p"./"
+                    sb.append('.');
+                    sb.append(separatorChar);
+                } else
+                    ; // Nothing to do.
+            } else {
+                signal(new FileError("Unsupported directory component " +
+                                     part.writeToString() + ".",
+                                     this));
+            }
             while (temp != NIL) {
                 part = temp.car();
                 if (part instanceof AbstractString)
