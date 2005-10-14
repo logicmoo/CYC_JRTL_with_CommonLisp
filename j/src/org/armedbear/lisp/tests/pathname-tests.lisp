@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.46 2005-10-13 16:59:16 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.47 2005-10-14 16:18:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -306,8 +306,16 @@
   ;; No trailing separator character means it's a file.
   (check-physical-pathname #p"." nil "." nil)
   t)
-#+(or cmu lispworks)
+#+lispworks
 (pushnew 'physical.22 *expected-failures*)
+
+(deftest namestring.1
+  (check-namestring #p"."
+                    #+(or abcl allegro cmu) "./"
+                    #-(or abcl allegro cmu) ".")
+  t)
+#+lispworks
+(pushnew 'namestring.1 *expected-failures*)
 
 (deftest physical.23
   (equal #p"." #p"")
@@ -326,8 +334,23 @@
     ;; Is this more exact?
     (check-physical-pathname pathname '(:relative ".") nil nil))
   t)
-#+(or cmu lispworks (and allegro windows))
+#+(or lispworks (and allegro windows))
 (pushnew 'physical.24 *expected-failures*)
+
+(deftest namestring.2
+  (check-namestring #-windows #p"./"
+                    #+windows #p".\\"
+                    "./")
+  t)
+#+lispworks
+(pushnew 'namestring.2 *expected-failures*)
+
+(deftest directory-namestring.1
+  (equal (directory-namestring #-windows #p"./"
+                               #+windows #p".\\")
+         #-windows "./"
+         #+windows ".\\")
+  t)
 
 (deftest physical.25
   (equal #-windows #p"./"
@@ -373,6 +396,12 @@
 #+cmu
 (pushnew 'physical.28 *expected-failures*)
 
+(deftest namestring.3
+  (check-namestring #p".."
+                    #+(or abcl allegro cmu lispworks) "../"
+                    #-(or abcl allegro cmu lispworks) "..")
+  t)
+
 ;; #p"../"
 (deftest physical.29
   (let ((pathname #-windows #p"../"
@@ -381,6 +410,19 @@
     (check-physical-pathname pathname '(:relative :back) nil nil)
     #+(or abcl sbcl cmu clisp (and lispworks unix))
     (check-physical-pathname pathname '(:relative :up) nil nil))
+  t)
+
+(deftest namestring.4
+  (check-namestring #-windows #p"../"
+                    #+windows #p"..\\"
+                    "../")
+  t)
+
+(deftest directory-namestring.2
+  (equal (directory-namestring #-windows #p"../"
+                               #+windows #p"..\\")
+         #-windows "../"
+         #+windows "..\\")
   t)
 
 #-sbcl
@@ -917,7 +959,7 @@
   t)
 
 ;; "TRANSLATE-PATHNAME translates SOURCE (that matches FROM-WILDCARD)..."
-(deftest pathname-match-p.10
+(deftest pathname-match-p.11
   (pathname-match-p "/foo/bar.txt" "**/*.*")
   nil)
 
@@ -932,7 +974,7 @@
          #p"/usr/local/foo/bar.txt")
   t)
 
-(deftest pathname-match-p.11
+(deftest pathname-match-p.12
   (pathname-match-p "/foo/bar.txt" "/**/*.*")
   t)
 

@@ -1,7 +1,7 @@
 ;;; enough-namestring.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: enough-namestring.lisp,v 1.5 2005-10-03 13:33:34 piso Exp $
+;;; $Id: enough-namestring.lisp,v 1.6 2005-10-14 16:17:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,9 +21,10 @@
 
 (in-package #:system)
 
-(defun equal-components-p (this that)
-  #+win32 (equalp this that)
-  #-win32 (equal this that))
+(declaim (inline equal-components-p))
+(defun equal-components-p (component1 component2)
+  #+win32 (equalp component1 component2)
+  #-win32 (equal component1 component2))
 
 (defun enough-namestring (pathname
                           &optional
@@ -44,7 +45,9 @@
                        pathname-directory)
                       (t
                        (return-from enough-namestring (namestring pathname))))))
-          (concatenate 'simple-string
-                       (directory-namestring (make-pathname :directory result-directory))
-                       (file-namestring pathname)))
+          (if (equal result-directory '(:relative))
+              (file-namestring pathname)
+              (concatenate 'simple-string
+                           (directory-namestring (make-pathname :directory result-directory))
+                           (file-namestring pathname))))
         (file-namestring pathname))))
