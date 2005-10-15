@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.394 2005-09-29 18:31:34 piso Exp $
+ * $Id: Lisp.java,v 1.395 2005-10-15 15:47:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -403,7 +403,6 @@ public abstract class Lisp
                 return evalCall(fun, ((Cons)obj).cdr, env, thread);
             } else {
                 if (first.car() == Symbol.LAMBDA) {
-                    LispObject rest = first.cdr();
                     Closure closure = new Closure(first, env);
                     return evalCall(closure, ((Cons)obj).cdr, env, thread);
                 } else
