@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexString.java,v 1.28 2005-08-04 18:09:12 piso Exp $
+ * $Id: ComplexString.java,v 1.29 2005-10-15 15:45:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -448,7 +448,7 @@ public final class ComplexString extends AbstractString
     {
         int hashCode = 0;
         final int limit = length();
-        for (int i = 0; i < capacity; i++) {
+        for (int i = 0; i < limit; i++) {
             try {
                 hashCode += Character.toUpperCase(charAt(i));
             }
