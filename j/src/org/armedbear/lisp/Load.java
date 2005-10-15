@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.117 2005-09-22 00:23:04 piso Exp $
+ * $Id: Load.java,v 1.118 2005-10-15 15:49:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -454,7 +454,7 @@ public final class Load extends Lisp
             LispObject obj = in.faslRead(false, EOF, true, thread);
             if (obj == EOF)
                 break;
-            LispObject result = eval(obj, env, thread);
+            eval(obj, env, thread);
         }
         return T;
     }
