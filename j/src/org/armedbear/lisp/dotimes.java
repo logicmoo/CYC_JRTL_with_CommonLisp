@@ -1,8 +1,8 @@
 /*
  * dotimes.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: dotimes.java,v 1.14 2005-02-28 02:50:05 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: dotimes.java,v 1.15 2005-10-15 16:02:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,7 +168,6 @@ public final class dotimes extends SpecialOperator
                                 eval(current, ext, thread);
                             }
                             catch (Go go) {
-                                LispObject code = null;
                                 LispObject tag = go.getTag();
                                 if (memql(tag, localTags)) {
                                     Binding b = ext.getTagBinding(tag);
