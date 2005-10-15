@@ -243,7 +243,7 @@ public abstract class AbstractVector extends AbstractArray
             final int length = length();
             final int limit = length < 4 ? length : 4;
             long result = 48920713; // Chosen at random.
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < limit; i++)
                 result = mix(result, AREF(i).psxhash());
             return (int) (result & 0x7fffffff);
         }
