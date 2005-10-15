@@ -2,7 +2,7 @@
  * JavaClassLoader.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: JavaClassLoader.java,v 1.12 2005-05-11 19:20:27 piso Exp $
+ * $Id: JavaClassLoader.java,v 1.13 2005-10-15 16:13:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@
 
 package org.armedbear.lisp;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

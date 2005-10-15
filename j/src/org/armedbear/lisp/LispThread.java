@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispThread.java,v 1.83 2005-06-09 11:49:06 piso Exp $
+ * $Id: LispThread.java,v 1.84 2005-10-15 16:16:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@ package org.armedbear.lisp;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Stack;
 
 public final class LispThread extends LispObject
 {
