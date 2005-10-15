@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.828 2005-08-28 19:25:23 piso Exp $
+ * $Id: Primitives.java,v 1.829 2005-10-15 20:08:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -711,7 +711,19 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            outSynonymOf(second)._writeString(first.writeToString());
+            final Stream out;
+            try {
+                if (second == T)
+                    out = (Stream) _TERMINAL_IO_.symbolValue();
+                else if (second == NIL)
+                    out = (Stream) _STANDARD_OUTPUT_.symbolValue();
+                else
+                    out = (Stream) second;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.STREAM);
+            }
+            out._writeString(first.writeToString());
             return first;
         }
     };
@@ -3687,8 +3699,7 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %write-string
-    // write-string string output-stream start end => string
+    // ### %write-string string output-stream start end => string
     private static final Primitive _WRITE_STRING =
         new Primitive("%write-string", PACKAGE_SYS, false,
                       "string output-stream start end")
@@ -3697,21 +3708,44 @@ public final class Primitives extends Lisp
                                   LispObject third, LispObject fourth)
             throws ConditionThrowable
         {
-            AbstractString s;
+            final AbstractString s;
             try {
                 s = (AbstractString) first;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STRING));
+                return signalTypeError(first, Symbol.STRING);
             }
             char[] chars = s.chars();
-            Stream out = outSynonymOf(second);
-            int start = Fixnum.getValue(third);
-            int end;
+            final Stream out;
+            try {
+                if (second == T)
+                    out = (Stream) _TERMINAL_IO_.symbolValue();
+                else if (second == NIL)
+                    out = (Stream) _STANDARD_OUTPUT_.symbolValue();
+                else
+                    out = (Stream) second;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.STREAM);
+            }
+            final int start;
+            try {
+                start = ((Fixnum)third).value;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(third, Symbol.FIXNUM);
+            }
+            final int end;
             if (fourth == NIL)
                 end = chars.length;
-            else
-                end = Fixnum.getValue(fourth);
+            else {
+                try {
+                    end = ((Fixnum)fourth).value;
+                }
+                catch (ClassCastException e) {
+                    return signalTypeError(fourth, Symbol.FIXNUM);
+                }
+            }
             checkBounds(start, end, chars.length);
             out._writeChars(chars, start, end);
             return first;
@@ -3741,22 +3775,18 @@ public final class Primitives extends Lisp
     private static final LispObject finishOutput(LispObject arg)
         throws ConditionThrowable
     {
-        Stream out = null;
-        if (arg == T)
-            out = checkCharacterOutputStream(_TERMINAL_IO_.symbolValue());
-        else if (arg == NIL)
-            out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
-        else if (arg instanceof Stream) {
-            Stream stream = (Stream) arg;
-            if (stream instanceof TwoWayStream)
-                out = ((TwoWayStream)arg).getOutputStream();
-            else if (stream.isOutputStream())
-                out = stream;
-        } else
-            return signal(new TypeError(arg, Symbol.STREAM));
-        if (out == null)
-            signal(new TypeError("The value " + arg.writeToString() +
-                                 " is not an output stream."));
+        final Stream out;
+        try {
+            if (arg == T)
+                out = (Stream) _TERMINAL_IO_.symbolValue();
+            else if (arg == NIL)
+                out = (Stream) _STANDARD_OUTPUT_.symbolValue();
+            else
+                out = (Stream) arg;
+        }
+        catch (ClassCastException e) {
+            return signalTypeError(arg, Symbol.STREAM);
+        }
         return out.finishOutput();
     }
 
