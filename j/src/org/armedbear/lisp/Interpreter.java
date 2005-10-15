@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.90 2005-09-29 18:32:03 piso Exp $
+ * $Id: Interpreter.java,v 1.91 2005-10-15 16:12:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -294,9 +294,8 @@ public final class Interpreter extends Lisp
                 String arg = args[i];
                 if (arg.equals("--eval")) {
                     if (i + 1 < args.length) {
-                        LispObject result = null;
                         try {
-                            result = evaluate(args[i + 1]);
+                            evaluate(args[i + 1]);
                         }
                         catch (ConditionThrowable c) {
                             final String separator =
