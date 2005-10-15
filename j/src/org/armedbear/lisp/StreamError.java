@@ -2,7 +2,7 @@
  * StreamError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: StreamError.java,v 1.20 2005-07-16 14:44:03 piso Exp $
+ * $Id: StreamError.java,v 1.21 2005-10-15 16:01:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,7 +66,6 @@ public class StreamError extends LispError
     protected void initialize(LispObject initArgs) throws ConditionThrowable
     {
         super.initialize(initArgs);
-        LispObject stream = NIL;
         while (initArgs != NIL) {
             LispObject first = initArgs.car();
             initArgs = initArgs.cdr();
