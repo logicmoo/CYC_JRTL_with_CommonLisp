@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.107 2005-08-11 18:11:56 piso Exp $
+ * $Id: Closure.java,v 1.108 2005-10-15 15:41:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -900,7 +900,6 @@ public class Closure extends Function
                 // Bind all keyword parameters to their defaults.
                 for (int k = 0; k < keywordParameters.length; k++) {
                     Parameter parameter = keywordParameters[k];
-                    LispObject initForm = parameter.initForm;
                     LispObject value;
                     if (parameter.initVal != null)
                         value = parameter.initVal;
@@ -1058,7 +1057,6 @@ public class Closure extends Function
                 array[index++] = args[i];
             }
         }
-        int i = minArgs;
         int argsUsed = minArgs;
         // &rest parameter.
         if (restVar != null) {
