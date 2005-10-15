@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: AbstractArray.java,v 1.42 2005-10-15 16:45:40 piso Exp $
+ * $Id: AbstractArray.java,v 1.43 2005-10-15 17:04:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,7 +125,8 @@ public abstract class AbstractArray extends LispObject
     {
         final int rank = getRank();
         if (rank != subscripts.length) {
-            StringBuffer sb = new StringBuffer("Wrong number of subscripts (");
+            FastStringBuffer sb =
+                new FastStringBuffer("Wrong number of subscripts (");
             sb.append(subscripts.length);
             sb.append(") for array of rank ");
             sb.append(rank);
@@ -135,12 +136,12 @@ public abstract class AbstractArray extends LispObject
         int sum = 0;
         int size = 1;
         for (int i = rank; i-- > 0;) {
-            int dim = getDimension(i);
-            int lastSize = size;
+            final int dim = getDimension(i);
+            final int lastSize = size;
             size *= dim;
-            int n = subscripts[i];
-            if (n < 0 || n >= getDimension(i)) {
-                StringBuffer sb = new StringBuffer("Invalid index ");
+            final int n = subscripts[i];
+            if (n < 0 || n >= dim) {
+                FastStringBuffer sb = new FastStringBuffer("Invalid index ");
                 sb.append(n);
                 sb.append(" for array ");
                 sb.append(writeToString());
