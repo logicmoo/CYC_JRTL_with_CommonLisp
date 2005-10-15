@@ -1,8 +1,8 @@
 /*
  * ComplexBitVector.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.12 2005-05-28 04:02:06 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: ComplexBitVector.java,v 1.13 2005-10-15 17:06:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,7 +162,7 @@ public final class ComplexBitVector extends AbstractBitVector
         catch (ClassCastException e) {
             // Fall through...
         }
-        signal(new TypeError(newValue, Symbol.BIT));
+        signalTypeError(newValue, Symbol.BIT);
     }
 
     protected void setBit(int index) throws ConditionThrowable
@@ -310,6 +310,7 @@ public final class ComplexBitVector extends AbstractBitVector
                 ++size;
             if (initialContents != NIL) {
                 bits = new long[size];
+                capacity = newCapacity;
                 if (initialContents.listp()) {
                     LispObject list = initialContents;
                     for (int i = 0; i < newCapacity; i++) {
@@ -320,7 +321,7 @@ public final class ComplexBitVector extends AbstractBitVector
                     for (int i = 0; i < newCapacity; i++)
                         aset(i, initialContents.elt(i));
                 } else
-                    signal(new TypeError(initialContents, Symbol.SEQUENCE));
+                    signalTypeError(initialContents, Symbol.SEQUENCE);
             } else {
                 long[] newBits = new long[size];
                 System.arraycopy(bits, 0, newBits, 0,
