@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.396 2005-10-15 16:14:23 piso Exp $
+ * $Id: Lisp.java,v 1.397 2005-10-15 17:20:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -880,7 +880,7 @@ public abstract class Lisp
                         if (index >= 0) {
                             zipFileName = s.substring(0, index);
                             entryName = s.substring(index + 1);
-                            if (entryName.startsWith("/"))
+                            if (entryName.length() > 0 && entryName.charAt(0) == '/')
                                 entryName = entryName.substring(1);
                             if (Utilities.isPlatformWindows) {
                                 // "/C:/Documents%20and%20Settings/peter/Desktop/j.jar"
