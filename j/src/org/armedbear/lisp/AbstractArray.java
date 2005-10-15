@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: AbstractArray.java,v 1.41 2005-06-22 18:18:43 piso Exp $
+ * $Id: AbstractArray.java,v 1.42 2005-10-15 16:45:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,9 +75,9 @@ public abstract class AbstractArray extends LispObject
 
     public final LispObject noFillPointer() throws ConditionThrowable
     {
-        return signal(new TypeError(this, list3(Symbol.AND, Symbol.VECTOR,
-                                                list2(Symbol.SATISFIES,
-                                                      Symbol.ARRAY_HAS_FILL_POINTER_P))));
+        return signalTypeError(this, list3(Symbol.AND, Symbol.VECTOR,
+                                           list2(Symbol.SATISFIES,
+                                                 Symbol.ARRAY_HAS_FILL_POINTER_P)));
     }
 
     public boolean isAdjustable()
@@ -116,7 +116,7 @@ public abstract class AbstractArray extends LispObject
             if (subscript instanceof Fixnum)
                 subs[i] = ((Fixnum)subscript).value;
             else
-                signal(new TypeError(subscript, Symbol.FIXNUM));
+                signalTypeError(subscript, Symbol.FIXNUM);
         }
         return getRowMajorIndex(subs);
     }
