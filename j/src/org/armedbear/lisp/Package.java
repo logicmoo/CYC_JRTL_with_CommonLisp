@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Package.java,v 1.69 2005-09-23 11:56:31 piso Exp $
+ * $Id: Package.java,v 1.70 2005-10-15 15:50:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -547,7 +547,6 @@ public final class Package extends LispObject
     public synchronized void unexport(final Symbol symbol)
         throws ConditionThrowable
     {
-        final String symbolName = symbol.getName();
         if (symbol.getPackage() == this) {
             if (externalSymbols.get(symbol.name) == symbol) {
                 externalSymbols.remove(symbol.name);
