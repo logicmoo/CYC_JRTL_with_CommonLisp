@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: AbstractArray.java,v 1.43 2005-10-15 17:04:44 piso Exp $
+ * $Id: AbstractArray.java,v 1.44 2005-10-15 17:10:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,7 +168,7 @@ public abstract class AbstractArray extends LispObject
 
     public String writeToString(int[] dimv) throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         LispThread thread = LispThread.currentThread();
         LispObject printReadably = _PRINT_READABLY_.symbolValue(thread);
         if (printReadably != NIL || _PRINT_ARRAY_.symbolValue(thread) != NIL) {
@@ -215,7 +215,7 @@ public abstract class AbstractArray extends LispObject
     }
 
     // Helper for writeToString().
-    private void appendContents(int[] dimensions, int index, StringBuffer sb,
+    private void appendContents(int[] dimensions, int index, FastStringBuffer sb,
                                 LispThread thread)
         throws ConditionThrowable
     {
