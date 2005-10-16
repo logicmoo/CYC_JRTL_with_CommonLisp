@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.829 2005-10-15 20:08:49 piso Exp $
+ * $Id: Primitives.java,v 1.830 2005-10-16 11:54:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3990,13 +3990,24 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### read-line
-    // read-line &optional input-stream eof-error-p eof-value recursive-p
+    // ### read-line &optional input-stream eof-error-p eof-value recursive-p
     // => line, missing-newline-p
     private static final Primitive READ_LINE =
         new Primitive("read-line",
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            final LispObject obj = _STANDARD_INPUT_.symbolValue();
+            final Stream stream;
+            try {
+                stream = (Stream) obj;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(obj, Symbol.STREAM);
+            }
+            return stream.readLine(true, NIL);
+        }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return inSynonymOf(arg).readLine(true, NIL);
@@ -4012,17 +4023,12 @@ public final class Primitives extends Lisp
         {
             return inSynonymOf(first).readLine(second != NIL, third);
         }
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
         {
-            int length = args.length;
-            if (length > 4)
-                signal(new WrongNumberOfArgumentsException(this));
-            Stream stream =
-                length > 0 ? inSynonymOf(args[0]) : getStandardInput();
-            boolean eofError = length > 1 ? (args[1] != NIL) : true;
-            LispObject eofValue = length > 2 ? args[2] : NIL;
-            boolean recursive = length > 3 ? (args[3] != NIL) : false;
-            return stream.readLine(eofError, eofValue);
+            // recursive-p is ignored
+            return inSynonymOf(first).readLine(second != NIL, third);
         }
     };
 
