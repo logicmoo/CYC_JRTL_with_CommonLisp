@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: PackageFunctions.java,v 1.31 2005-10-16 11:31:51 piso Exp $
+ * $Id: PackageFunctions.java,v 1.32 2005-10-16 11:34:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,7 +261,8 @@ public final class PackageFunctions extends Lisp
             LispObject imports = checkList(args[6]);
             LispObject interns = checkList(args[7]);
             LispObject exports = checkList(args[8]);
-            LispObject docString = args[9];
+            // FIXME docString is ignored
+            // LispObject docString = args[9];
             Package pkg = Packages.findPackage(packageName);
             if (pkg != null)
                 return pkg;
@@ -341,7 +342,6 @@ public final class PackageFunctions extends Lisp
                 interns = interns.cdr();
             }
             while (exports != NIL) {
-                LispObject obj = exports.car();
                 String symbolName = exports.car().getStringValue();
                 pkg.export(pkg.intern(symbolName));
                 exports = exports.cdr();
