@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.64 2005-08-13 00:21:19 piso Exp $
+ * $Id: LispCharacter.java,v 1.65 2005-10-16 01:13:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -350,7 +350,18 @@ public final class LispCharacter extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return getInstance(Utilities.toLowerCase(getValue(arg)));
+            char c;
+            try {
+                c = ((LispCharacter)arg).value;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.CHARACTER);
+            }
+            c = Utilities.toLowerCase(c);
+            if (c < CHAR_MAX)
+                return characters[c];
+            else
+                return new LispCharacter(c);
         }
     };
 
@@ -360,7 +371,18 @@ public final class LispCharacter extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return getInstance(Utilities.toUpperCase(getValue(arg)));
+            char c;
+            try {
+                c = ((LispCharacter)arg).value;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.CHARACTER);
+            }
+            c = Utilities.toUpperCase(c);
+            if (c < CHAR_MAX)
+                return characters[c];
+            else
+                return new LispCharacter(c);
         }
     };
 
