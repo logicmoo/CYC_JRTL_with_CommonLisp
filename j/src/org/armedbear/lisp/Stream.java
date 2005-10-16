@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.136 2005-09-08 23:30:01 piso Exp $
+ * $Id: Stream.java,v 1.137 2005-10-16 02:03:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -928,9 +928,9 @@ public class Stream extends LispObject
             } else if (rt.isInvalid(c)) {
                 rt.checkInvalid(c, this); // Signals a reader-error.
             } else if (readtableCase == Keyword.UPCASE) {
-                sb.setCharAt(0, Utilities.toUpperCase(c));
+                sb.setCharAt(0, LispCharacter.toUpperCase(c));
             } else if (readtableCase == Keyword.DOWNCASE) {
-                sb.setCharAt(0, Utilities.toLowerCase(c));
+                sb.setCharAt(0, LispCharacter.toLowerCase(c));
             }
         }
         while (true) {
@@ -969,9 +969,9 @@ public class Stream extends LispObject
                 continue;
             }
             if (readtableCase == Keyword.UPCASE)
-                c = Utilities.toUpperCase(c);
+                c = LispCharacter.toUpperCase(c);
             else if (readtableCase == Keyword.DOWNCASE)
-                c = Utilities.toLowerCase(c);
+                c = LispCharacter.toLowerCase(c);
             sb.append(c);
         }
         return flags;
@@ -1141,7 +1141,7 @@ public class Stream extends LispObject
             if ("esfdlESFDL".indexOf(c) >= 0) {
                 // Exponent marker.
                 maybe = true;
-                marker = Utilities.toUpperCase(c);
+                marker = LispCharacter.toUpperCase(c);
                 if (marker == 'S')
                     marker = 'F';
                 else if (marker == 'L')

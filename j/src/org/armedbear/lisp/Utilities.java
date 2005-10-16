@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Utilities.java,v 1.11 2005-05-10 17:57:33 piso Exp $
+ * $Id: Utilities.java,v 1.12 2005-10-16 02:03:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,33 +110,5 @@ public final class Utilities extends Lisp
             // Not reached.
             return null;
         }
-    }
-
-    public static final char toUpperCase(char c)
-    {
-        if (c < 128)
-            return UPPER_CASE_CHARS[c];
-        return Character.toUpperCase(c);
-    }
-
-    private static final char[] UPPER_CASE_CHARS = new char[128];
-
-    static {
-        for (int i = UPPER_CASE_CHARS.length; i-- > 0;)
-            UPPER_CASE_CHARS[i] = Character.toUpperCase((char)i);
-    }
-
-    public static final char toLowerCase(char c)
-    {
-        if (c < 128)
-            return LOWER_CASE_CHARS[c];
-        return Character.toLowerCase(c);
-    }
-
-    private static final char[] LOWER_CASE_CHARS = new char[128];
-
-    static {
-        for (int i = LOWER_CASE_CHARS.length; i-- > 0;)
-            LOWER_CASE_CHARS[i] = Character.toLowerCase((char)i);
     }
 }

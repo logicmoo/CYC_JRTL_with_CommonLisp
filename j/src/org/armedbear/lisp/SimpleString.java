@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SimpleString.java,v 1.32 2005-08-04 18:10:33 piso Exp $
+ * $Id: SimpleString.java,v 1.33 2005-10-16 02:03:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,7 +165,7 @@ public final class SimpleString extends AbstractString
                 return false;
             for (int i = capacity; i-- > 0;) {
                 if (string.chars[i] != chars[i]) {
-                    if (Utilities.toLowerCase(string.chars[i]) != Utilities.toLowerCase(chars[i]))
+                    if (LispCharacter.toLowerCase(string.chars[i]) != LispCharacter.toLowerCase(chars[i]))
                         return false;
                 }
             }
@@ -177,7 +177,7 @@ public final class SimpleString extends AbstractString
                 return false;
             for (int i = length(); i-- > 0;) {
                 if (string.charAt(i) != chars[i]) {
-                    if (Utilities.toLowerCase(string.charAt(i)) != Utilities.toLowerCase(chars[i]))
+                    if (LispCharacter.toLowerCase(string.charAt(i)) != LispCharacter.toLowerCase(chars[i]))
                         return false;
                 }
             }

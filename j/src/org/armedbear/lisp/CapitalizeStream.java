@@ -1,8 +1,8 @@
 /*
  * CapitalizeStream.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: CapitalizeStream.java,v 1.1 2004-06-08 23:03:45 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: CapitalizeStream.java,v 1.2 2005-10-16 02:03:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class CapitalizeStream extends CaseFrobStream
     {
         if (inWord) {
             if (Character.isUpperCase(c)) {
-                c = Utilities.toLowerCase(c);
+                c = LispCharacter.toLowerCase(c);
             } else if (!Character.isLowerCase(c) && !Character.isDigit(c)) {
                 inWord = false;
             }
@@ -43,7 +43,7 @@ public final class CapitalizeStream extends CaseFrobStream
             if (Character.isUpperCase(c)) {
                 inWord = true;
             } else if (Character.isLowerCase(c)) {
-                c = Utilities.toUpperCase(c);
+                c = LispCharacter.toUpperCase(c);
                 inWord = true;
             } else if (Character.isDigit(c)) {
                 inWord = true;

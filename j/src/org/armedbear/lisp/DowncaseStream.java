@@ -1,8 +1,8 @@
 /*
  * DowncaseStream.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: DowncaseStream.java,v 1.1 2004-06-08 22:58:13 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: DowncaseStream.java,v 1.2 2005-10-16 02:03:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class DowncaseStream extends CaseFrobStream
 
     public void _writeChar(char c) throws ConditionThrowable
     {
-        target._writeChar(Utilities.toLowerCase(c));
+        target._writeChar(LispCharacter.toLowerCase(c));
     }
 
     public void _writeString(String s) throws ConditionThrowable

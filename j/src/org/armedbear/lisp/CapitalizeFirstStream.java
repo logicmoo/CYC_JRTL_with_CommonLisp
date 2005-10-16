@@ -1,8 +1,8 @@
 /*
  * CapitalizeFirstStream.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: CapitalizeFirstStream.java,v 1.2 2004-10-19 02:03:31 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: CapitalizeFirstStream.java,v 1.3 2005-10-16 02:03:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,11 +34,11 @@ public final class CapitalizeFirstStream extends CaseFrobStream
     {
         if (virgin) {
             if (Character.isLetterOrDigit(c)) {
-                c = Utilities.toUpperCase(c);
+                c = LispCharacter.toUpperCase(c);
                 virgin = false;
             }
         } else
-            c = Utilities.toLowerCase(c);
+            c = LispCharacter.toLowerCase(c);
         target._writeChar(c);
     }
 

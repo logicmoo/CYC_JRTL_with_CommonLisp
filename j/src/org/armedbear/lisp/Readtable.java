@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Readtable.java,v 1.43 2005-06-25 19:37:39 piso Exp $
+ * $Id: Readtable.java,v 1.44 2005-10-16 02:03:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,7 +262,7 @@ public class Readtable extends LispObject
                                         " is not a dispatch character."));
         }
         LispObject function =
-            dispatchTable.functions[Utilities.toUpperCase(subChar)];
+            dispatchTable.functions[LispCharacter.toUpperCase(subChar)];
         return (function != null) ? function : NIL;
     }
 
@@ -276,7 +276,7 @@ public class Readtable extends LispObject
             signal(new LispError(c.writeToString() +
                                  " is not a dispatch character."));
         }
-        dispatchTable.functions[Utilities.toUpperCase(subChar)] = function;
+        dispatchTable.functions[LispCharacter.toUpperCase(subChar)] = function;
     }
 
     protected static class DispatchTable

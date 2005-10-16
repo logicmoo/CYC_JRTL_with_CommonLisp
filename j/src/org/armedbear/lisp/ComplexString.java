@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexString.java,v 1.29 2005-10-15 15:45:24 piso Exp $
+ * $Id: ComplexString.java,v 1.30 2005-10-16 02:03:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,7 +162,7 @@ public final class ComplexString extends AbstractString
                 return false;
             for (int i = length(); i-- > 0;) {
                 if (string.charAt(i) != charAt(i)) {
-                    if (Utilities.toLowerCase(string.charAt(i)) != Utilities.toLowerCase(charAt(i)))
+                    if (LispCharacter.toLowerCase(string.charAt(i)) != LispCharacter.toLowerCase(charAt(i)))
                         return false;
                 }
             }

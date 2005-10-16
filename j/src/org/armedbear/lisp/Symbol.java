@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.211 2005-09-14 18:51:18 piso Exp $
+ * $Id: Symbol.java,v 1.212 2005-10-16 02:03:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -801,11 +801,11 @@ public class Symbol extends LispObject
                 if (readtableCase == Keyword.UPCASE)
                     sb.append(c);
                 else // DOWNCASE
-                    sb.append(lastCharWasAlphanumeric ? c : Utilities.toUpperCase(c));
+                    sb.append(lastCharWasAlphanumeric ? c : LispCharacter.toUpperCase(c));
                 lastCharWasAlphanumeric = true;
             } else if (Character.isUpperCase(c)) {
                 if (readtableCase == Keyword.UPCASE)
-                    sb.append(lastCharWasAlphanumeric ? Utilities.toLowerCase(c) : c);
+                    sb.append(lastCharWasAlphanumeric ? LispCharacter.toLowerCase(c) : c);
                 else // DOWNCASE
                     sb.append(c);
                 lastCharWasAlphanumeric = true;
