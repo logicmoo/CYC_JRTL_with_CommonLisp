@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: PackageFunctions.java,v 1.30 2005-05-24 19:11:11 piso Exp $
+ * $Id: PackageFunctions.java,v 1.31 2005-10-16 11:31:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -242,9 +242,8 @@ public final class PackageFunctions extends Lisp
         }
     };
 
-    // ### %defpackage
-    // %defpackage name nicknames size shadows shadowing-imports use imports
-    // interns exports doc-string => package
+    // ### %defpackage name nicknames size shadows shadowing-imports use
+    // imports interns exports doc-string => package
     private static final Primitive _DEFPACKAGE =
         new Primitive("%defpackage", PACKAGE_SYS, false)
     {
@@ -254,7 +253,8 @@ public final class PackageFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             final String packageName = args[0].getStringValue();
             LispObject nicknames = checkList(args[1]);
-            LispObject size = args[2];
+            // FIXME size is ignored
+            // LispObject size = args[2];
             LispObject shadows = checkList(args[3]);
             LispObject shadowingImports = checkList(args[4]);
             LispObject use = checkList(args[5]);
