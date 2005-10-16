@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.65 2005-10-16 01:13:19 piso Exp $
+ * $Id: LispCharacter.java,v 1.66 2005-10-16 02:00:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,7 +135,7 @@ public final class LispCharacter extends LispObject
         if (obj instanceof LispCharacter) {
             if (value == ((LispCharacter)obj).value)
                 return true;
-            return Utilities.toLowerCase(value) == Utilities.toLowerCase(((LispCharacter)obj).value);
+            return LispCharacter.toLowerCase(value) == LispCharacter.toLowerCase(((LispCharacter)obj).value);
         }
         return false;
     }
@@ -357,11 +357,9 @@ public final class LispCharacter extends LispObject
             catch (ClassCastException e) {
                 return signalTypeError(arg, Symbol.CHARACTER);
             }
-            c = Utilities.toLowerCase(c);
-            if (c < CHAR_MAX)
-                return characters[c];
-            else
-                return new LispCharacter(c);
+            if (c < 128)
+                return characters[LOWER_CASE_CHARS[c]];
+            return getInstance(toLowerCase(c));
         }
     };
 
@@ -378,11 +376,9 @@ public final class LispCharacter extends LispObject
             catch (ClassCastException e) {
                 return signalTypeError(arg, Symbol.CHARACTER);
             }
-            c = Utilities.toUpperCase(c);
-            if (c < CHAR_MAX)
-                return characters[c];
-            else
-                return new LispCharacter(c);
+            if (c < 128)
+                return characters[UPPER_CASE_CHARS[c]];
+            return getInstance(toUpperCase(c));
         }
     };
 
@@ -609,4 +605,32 @@ public final class LispCharacter extends LispObject
             return name != null ? new SimpleString(name) : NIL;
         }
     };
+
+    public static final char toUpperCase(char c)
+    {
+        if (c < 128)
+            return UPPER_CASE_CHARS[c];
+        return Character.toUpperCase(c);
+    }
+
+    private static final char[] UPPER_CASE_CHARS = new char[128];
+
+    static {
+        for (int i = UPPER_CASE_CHARS.length; i-- > 0;)
+            UPPER_CASE_CHARS[i] = Character.toUpperCase((char)i);
+    }
+
+    public static final char toLowerCase(char c)
+    {
+        if (c < 128)
+            return LOWER_CASE_CHARS[c];
+        return Character.toLowerCase(c);
+    }
+
+    private static final char[] LOWER_CASE_CHARS = new char[128];
+
+    static {
+        for (int i = LOWER_CASE_CHARS.length; i-- > 0;)
+            LOWER_CASE_CHARS[i] = Character.toLowerCase((char)i);
+    }
 }
