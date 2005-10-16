@@ -1,8 +1,8 @@
 /*
  * read_char_no_hang.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: read_char_no_hang.java,v 1.3 2004-03-11 10:55:37 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: read_char_no_hang.java,v 1.4 2005-10-16 12:38:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,8 @@
 
 package org.armedbear.lisp;
 
-// ### read-char-no-hang
-// read-char-no-hang &optional input-stream eof-error-p eof-value recursive-p => char
+// ### read-char-no-hang &optional input-stream eof-error-p eof-value
+// recursive-p => char
 public final class read_char_no_hang extends Primitive
 {
     private read_char_no_hang()
@@ -40,7 +40,8 @@ public final class read_char_no_hang extends Primitive
             length > 0 ? inSynonymOf(args[0]) : getStandardInput();
         boolean eofError = length > 1 ? (args[1] != NIL) : true;
         LispObject eofValue = length > 2 ? args[2] : NIL;
-        boolean recursive = length > 3 ? (args[3] != NIL) : false;
+        // recursive-p is ignored
+        // boolean recursive = length > 3 ? (args[3] != NIL) : false;
         return stream.readCharNoHang(eofError, eofValue);
     }
 
