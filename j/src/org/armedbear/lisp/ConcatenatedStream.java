@@ -1,8 +1,8 @@
 /*
  * ConcatenatedStream.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: ConcatenatedStream.java,v 1.6 2004-11-03 15:38:52 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: ConcatenatedStream.java,v 1.7 2005-10-16 11:27:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +99,6 @@ public final class ConcatenatedStream extends Stream
             return T;
         if (streams == NIL)
             return NIL;
-        Stream stream = (Stream) streams.car();
         LispObject obj = readCharNoHang(false, this);
         if (obj == this)
             return NIL;
