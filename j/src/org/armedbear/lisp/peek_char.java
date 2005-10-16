@@ -1,8 +1,8 @@
 /*
  * peek_char.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: peek_char.java,v 1.4 2004-03-12 18:48:03 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: peek_char.java,v 1.5 2005-10-16 12:35:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,14 +39,29 @@ public final class peek_char extends Primitive
         Stream stream = length > 1 ? inSynonymOf(args[1]) : getStandardInput();
         boolean eofError = length > 2 ? (args[2] != NIL) : true;
         LispObject eofValue = length > 3 ? args[3] : NIL;
-        boolean recursive = length > 4 ? (args[4] != NIL) : false;
+        // recursive-p is ignored
+        // boolean recursive = length > 4 ? (args[4] != NIL) : false;
         if (peekType == NIL) {
-            LispObject result = stream.readChar(eofError, eofValue);
+            // "If PEEK-TYPE is not supplied or NIL, PEEK-CHAR returns the next
+            // character to be read from INPUT-STREAM, without actually
+            // removing it from INPUT-STREAM."
+            final Stream in;
+            if (stream instanceof EchoStream)
+                // "When INPUT-STREAM is an echo stream, characters that are
+                // only peeked at are not echoed." Read from the echo stream's
+                // input stream to bypass the echo.
+                in = ((EchoStream)stream).getInputStream();
+            else
+                in = stream;
+            final LispObject result = in.readChar(eofError, eofValue);
             if (result instanceof LispCharacter)
-                stream.unreadChar((LispCharacter)result);
+                in.unreadChar((LispCharacter)result);
             return result;
         }
         if (peekType == T) {
+            // "If PEEK-TYPE is T, then PEEK-CHAR skips over whitespace[2]
+            // characters, but not comments, and then performs the peeking
+            // operation on the next character."
             Readtable rt = currentReadtable();
             while (true) {
                 LispObject result = stream.readChar(eofError, eofValue);
@@ -61,6 +76,9 @@ public final class peek_char extends Primitive
             }
         }
         if (peekType instanceof LispCharacter) {
+            // "If PEEK-TYPE is a character, then PEEK-CHAR skips over input
+            // characters until a character that is CHAR= to that character is
+            // found; that character is left in INPUT-STREAM."
             char c = ((LispCharacter)peekType).value;
             while (true) {
                 LispObject result = stream.readChar(eofError, eofValue);
