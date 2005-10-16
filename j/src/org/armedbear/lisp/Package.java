@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Package.java,v 1.70 2005-10-15 15:50:38 piso Exp $
+ * $Id: Package.java,v 1.71 2005-10-16 13:06:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -576,7 +576,6 @@ public final class Package extends LispObject
     {
         if (shadowingSymbols == null)
             shadowingSymbols = new HashMap();
-
         final SimpleString s = new SimpleString(symbolName);
         Symbol symbol = externalSymbols.get(s);
         if (symbol != null) {
@@ -588,12 +587,8 @@ public final class Package extends LispObject
             shadowingSymbols.put(symbolName, symbol);
             return;
         }
-//         if (shadowingSymbols != null) {
-            if (shadowingSymbols.get(symbolName) != null)
-                return;
-//         } else
-//             shadowingSymbols = new HashMap();
-
+        if (shadowingSymbols.get(symbolName) != null)
+            return;
         symbol = new Symbol(s, this);
         internalSymbols.put(s, symbol);
         shadowingSymbols.put(symbolName, symbol);
