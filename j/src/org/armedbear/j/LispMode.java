@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.100 2005-09-26 01:17:58 piso Exp $
+ * $Id: LispMode.java,v 1.101 2005-10-17 22:25:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -371,7 +371,6 @@ public class LispMode extends AbstractMode implements Constants, Mode
 
     private static int findLastUnescapedQuote(Line line)
     {
-        int index = -1;
         for (int i = line.length(); i-- > 0;) {
             if (line.charAt(i) == '"') {
                 if (i == 0 || line.charAt(i - 1) != '\\')
