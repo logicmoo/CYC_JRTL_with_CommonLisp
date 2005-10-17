@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.832 2005-10-17 15:44:44 piso Exp $
+ * $Id: Primitives.java,v 1.833 2005-10-17 16:30:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4108,33 +4108,84 @@ public final class Primitives extends Lisp
         public LispObject execute() throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            return checkCharacterInputStream(_STANDARD_INPUT_.symbolValue(thread)).read(true, NIL, false, thread);
+            final Stream stream;
+            try {
+                stream = (Stream) _STANDARD_INPUT_.symbolValue(thread);
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(_STANDARD_INPUT_.symbolValue(thread),
+                                       Symbol.STREAM);
+            }
+            return stream.read(true, NIL, false, thread);
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            return inSynonymOf(arg).read(true, NIL, false, thread);
+            if (arg == T)
+                arg = _TERMINAL_IO_.symbolValue(thread);
+            else if (arg == NIL)
+                arg = _STANDARD_INPUT_.symbolValue(thread);
+            final Stream stream;
+            try {
+                stream = (Stream) arg;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.STREAM);
+            }
+            return stream.read(true, NIL, false, thread);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            return inSynonymOf(first).read(second != NIL, NIL, false, thread);
+            if (first == T)
+                first = _TERMINAL_IO_.symbolValue(thread);
+            else if (first == NIL)
+                first = _STANDARD_INPUT_.symbolValue(thread);
+            final Stream stream;
+            try {
+                stream = (Stream) first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.STREAM);
+            }
+            return stream.read(second != NIL, NIL, false, thread);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            return inSynonymOf(first).read(second != NIL, third, false, thread);
+            if (first == T)
+                first = _TERMINAL_IO_.symbolValue(thread);
+            else if (first == NIL)
+                first = _STANDARD_INPUT_.symbolValue(thread);
+            final Stream stream;
+            try {
+                stream = (Stream) first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.STREAM);
+            }
+            return stream.read(second != NIL, third, false, thread);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            return inSynonymOf(first).read(second != NIL, third, fourth != NIL,
-                                           thread);
+            if (first == T)
+                first = _TERMINAL_IO_.symbolValue(thread);
+            else if (first == NIL)
+                first = _STANDARD_INPUT_.symbolValue(thread);
+            final Stream stream;
+            try {
+                stream = (Stream) first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.STREAM);
+            }
+            return stream.read(second != NIL, third, fourth != NIL, thread);
         }
     };
 
