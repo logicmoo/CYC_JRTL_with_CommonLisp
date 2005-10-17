@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShell.java,v 1.86 2005-10-06 12:29:06 piso Exp $
+ * $Id: LispShell.java,v 1.87 2005-10-17 22:27:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -299,7 +299,6 @@ public class LispShell extends Shell
             return;
         if (needsRenumbering)
             renumber();
-        final Line dotLine = dot.getLine();
         final Position endOfOutput = getEndOfOutput();
         if (endOfOutput == null)
             return;
