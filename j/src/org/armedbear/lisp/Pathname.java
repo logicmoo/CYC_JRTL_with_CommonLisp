@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.105 2005-10-17 16:45:19 piso Exp $
+ * $Id: Pathname.java,v 1.106 2005-10-17 18:52:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -706,34 +706,47 @@ public class Pathname extends LispObject
         }
     };
 
-    // ### coerce-to-pathname thing &optional host => pathname
-    private static final Primitive COERCE_TO_PATHNAME =
-        new Primitive("coerce-to-pathname", PACKAGE_SYS, true,
-                      "thing &optional host")
+    // ### %parse-namestring string host default-pathname => pathname, position
+    private static final Primitive _PARSE_NAMESTRING =
+        new Primitive("%parse-namestring", PACKAGE_SYS, false,
+                      "namestring host default-pathname")
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            return coerceToPathname(arg);
-        }
-        public LispObject execute(LispObject first, LispObject second)
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
             throws ConditionThrowable
         {
-            if (second == NIL)
-                return coerceToPathname(first);
-            // FIXME Support other types for first argument (and verify that
-            // hosts match).
-            if (first instanceof AbstractString) {
-                AbstractString namestring = (AbstractString) first;
-                final AbstractString host;
-                try {
-                    host = (AbstractString) second;
-                }
-                catch (ClassCastException e) {
-                    return signalTypeError(second, Symbol.STRING);
-                }
-                return parseNamestring(namestring, host);
+            final LispThread thread = LispThread.currentThread();
+            final AbstractString namestring;
+            try {
+                namestring = (AbstractString) first;
             }
-            return signal(new LispError("COERCE-TO-PATHNAME: unsupported case."));
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.STRING);
+            }
+            // The HOST parameter must be a string or NIL.
+            if (second == NIL) {
+                // "If HOST is NIL, DEFAULT-PATHNAME is a logical pathname, and
+                // THING is a syntactically valid logical pathname namestring
+                // without an explicit host, then it is parsed as a logical
+                // pathname namestring on the host that is the host component
+                // of DEFAULT-PATHNAME."
+                third = coerceToPathname(third);
+                if (third instanceof LogicalPathname)
+                    second = ((LogicalPathname)third).host;
+                else
+                    return thread.setValues(parseNamestring(namestring),
+                                            namestring.LENGTH());
+            }
+            Debug.assertTrue(second != NIL);
+            final AbstractString host;
+            try {
+                host = (AbstractString) second;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.STRING);
+            }
+            return thread.setValues(parseNamestring(namestring, host),
+                                    namestring.LENGTH());
         }
     };
 
