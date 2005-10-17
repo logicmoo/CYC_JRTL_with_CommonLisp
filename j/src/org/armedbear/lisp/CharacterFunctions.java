@@ -2,7 +2,7 @@
  * CharacterFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: CharacterFunctions.java,v 1.13 2005-10-16 02:03:28 piso Exp $
+ * $Id: CharacterFunctions.java,v 1.14 2005-10-17 18:07:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class CharacterFunctions extends Lisp
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signal(new TypeError(arg, Symbol.CHARACTER));
+            return signalTypeError(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -49,7 +49,7 @@ public final class CharacterFunctions extends Lisp
                     datum = second;
                 else
                     datum = first;
-                return signal(new TypeError(datum, Symbol.CHARACTER));
+                return signalTypeError(datum, Symbol.CHARACTER);
             }
         }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
@@ -76,13 +76,24 @@ public final class CharacterFunctions extends Lisp
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signal(new TypeError(arg, Symbol.CHARACTER));
+            return signalTypeError(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            char c1 = LispCharacter.getValue(first);
-            char c2 = LispCharacter.getValue(second);
+            final char c1, c2;
+            try {
+                c1 = ((LispCharacter)first).value;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.CHARACTER);
+            }
+            try {
+                c2 = ((LispCharacter)second).value;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.CHARACTER);
+            }
             if (c1 == c2)
                 return T;
             if (LispCharacter.toUpperCase(c1) == LispCharacter.toUpperCase(c2))
@@ -121,7 +132,7 @@ public final class CharacterFunctions extends Lisp
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signal(new TypeError(arg, Symbol.CHARACTER));
+            return signalTypeError(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -156,7 +167,7 @@ public final class CharacterFunctions extends Lisp
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signal(new TypeError(arg, Symbol.CHARACTER));
+            return signalTypeError(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -191,7 +202,7 @@ public final class CharacterFunctions extends Lisp
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signal(new TypeError(arg, Symbol.CHARACTER));
+            return signalTypeError(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -205,7 +216,7 @@ public final class CharacterFunctions extends Lisp
                     datum = second;
                 else
                     datum = first;
-                return signal(new TypeError(datum, Symbol.CHARACTER));
+                return signalTypeError(datum, Symbol.CHARACTER);
             }
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -217,7 +228,7 @@ public final class CharacterFunctions extends Lisp
                     chars[i] = ((LispCharacter)args[i]).value;
                 }
                 catch (ClassCastException e) {
-                    return signal(new TypeError(args[i], Symbol.CHARACTER));
+                    return signalTypeError(args[i], Symbol.CHARACTER);
                 }
             }
             for (int i = 1; i < length; i++) {
@@ -240,7 +251,7 @@ public final class CharacterFunctions extends Lisp
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signal(new TypeError(arg, Symbol.CHARACTER));
+            return signalTypeError(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -254,7 +265,7 @@ public final class CharacterFunctions extends Lisp
                     datum = second;
                 else
                     datum = first;
-                return signal(new TypeError(datum, Symbol.CHARACTER));
+                return signalTypeError(datum, Symbol.CHARACTER);
             }
         }
         public LispObject execute(LispObject first, LispObject second,
@@ -276,7 +287,7 @@ public final class CharacterFunctions extends Lisp
                     datum = second;
                 else
                     datum = third;
-                return signal(new TypeError(datum, Symbol.CHARACTER));
+                return signalTypeError(datum, Symbol.CHARACTER);
             }
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -288,7 +299,7 @@ public final class CharacterFunctions extends Lisp
                     chars[i] = ((LispCharacter)args[i]).value;
                 }
                 catch (ClassCastException e) {
-                    return signal(new TypeError(args[i], Symbol.CHARACTER));
+                    return signalTypeError(args[i], Symbol.CHARACTER);
                 }
             }
             for (int i = 1; i < length; i++) {
@@ -311,7 +322,7 @@ public final class CharacterFunctions extends Lisp
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signal(new TypeError(arg, Symbol.CHARACTER));
+            return signalTypeError(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -346,7 +357,7 @@ public final class CharacterFunctions extends Lisp
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signal(new TypeError(arg, Symbol.CHARACTER));
+            return signalTypeError(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
