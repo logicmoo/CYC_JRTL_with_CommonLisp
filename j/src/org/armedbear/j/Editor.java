@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.152 2005-07-06 23:35:16 piso Exp $
+ * $Id: Editor.java,v 1.153 2005-10-17 22:20:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2693,12 +2693,8 @@ public final class Editor extends JPanel implements Constants,
     private void pageDownInternal()
     {
         Debug.assertTrue(buffer.needsRenumbering == false);
-
-        int topLineNumber = display.getTopLineNumber();
         Line dotLine = getDotLine();
-        int dotLineNumber = dot.lineNumber();
         int numRows = display.getRows();
-
         Line[] lines = new Line[numRows];
         Line line = getTopLine();
         int dotRow = -1;
@@ -2710,7 +2706,6 @@ public final class Editor extends JPanel implements Constants,
                 line = line.nextVisible();
         }
         Line bottomLine = lines[numRows - 1];
-
         if (bottomLine == null) {
             // We're on the last page already.
             if (dotRow >= 0) {
@@ -2725,11 +2720,9 @@ public final class Editor extends JPanel implements Constants,
             }
             return;
         }
-
         // Not on last page.
         display.setTopLine(bottomLine);
         setUpdateFlag(REPAINT);
-
         if (dotRow >= 0) {
             line = getTopLine();
             for (int i = 0; i < dotRow; i++) {
