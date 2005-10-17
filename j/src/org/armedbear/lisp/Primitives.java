@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.830 2005-10-16 11:54:44 piso Exp $
+ * $Id: Primitives.java,v 1.831 2005-10-17 03:47:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3529,6 +3529,15 @@ public final class Primitives extends Lisp
                 vars = vars.cdr();
                 var = vars.car();
                 ++i;
+            }
+            // Make sure free special declarations are visible in the body.
+            // "The scope of free declarations specifically does not include
+            // initialization forms for bindings established by the form
+            // containing the declarations." (3.3.4)
+            while (specials != NIL) {
+                Symbol symbol = (Symbol) specials.car();
+                ext.declareSpecial(symbol);
+                specials = specials.cdr();
             }
             thread._values = null;
             LispObject result = NIL;
