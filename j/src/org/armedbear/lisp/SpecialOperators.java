@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.47 2005-08-28 15:00:21 piso Exp $
+ * $Id: SpecialOperators.java,v 1.48 2005-10-17 03:57:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -183,6 +183,15 @@ public final class SpecialOperators extends Lisp
                     varList = varList.cdr();
                     ++i;
                 }
+            }
+            // Make sure free special declarations are visible in the body.
+            // "The scope of free declarations specifically does not include
+            // initialization forms for bindings established by the form
+            // containing the declarations." (3.3.4)
+            while (specials != NIL) {
+                Symbol symbol = (Symbol) specials.car();
+                ext.declareSpecial(symbol);
+                specials = specials.cdr();
             }
             while (body != NIL) {
                 result = eval(body.car(), ext, thread);
