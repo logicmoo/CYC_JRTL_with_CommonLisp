@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.831 2005-10-17 03:47:58 piso Exp $
+ * $Id: Primitives.java,v 1.832 2005-10-17 15:44:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4072,7 +4072,7 @@ public final class Primitives extends Lisp
                 result = in.readPreservingWhitespace(eofError, third, false,
                                                      thread);
             else
-                result = in.read(eofError, third, false);
+                result = in.read(eofError, third, false, thread);
             return thread.setValues(result, new Fixnum(in.getOffset()));
         }
     };
@@ -4107,28 +4107,34 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return checkCharacterInputStream(_STANDARD_INPUT_.symbolValue()).read(true, NIL, false);
+            final LispThread thread = LispThread.currentThread();
+            return checkCharacterInputStream(_STANDARD_INPUT_.symbolValue(thread)).read(true, NIL, false, thread);
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return inSynonymOf(arg).read(true, NIL, false);
+            final LispThread thread = LispThread.currentThread();
+            return inSynonymOf(arg).read(true, NIL, false, thread);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return inSynonymOf(first).read(second != NIL, NIL, false);
+            final LispThread thread = LispThread.currentThread();
+            return inSynonymOf(first).read(second != NIL, NIL, false, thread);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            return inSynonymOf(first).read(second != NIL, third, false);
+            final LispThread thread = LispThread.currentThread();
+            return inSynonymOf(first).read(second != NIL, third, false, thread);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
             throws ConditionThrowable
         {
-            return inSynonymOf(first).read(second != NIL, third, fourth != NIL);
+            final LispThread thread = LispThread.currentThread();
+            return inSynonymOf(first).read(second != NIL, third, fourth != NIL,
+                                           thread);
         }
     };
 

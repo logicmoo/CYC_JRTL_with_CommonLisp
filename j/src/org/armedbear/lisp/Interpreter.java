@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.91 2005-10-15 16:12:16 piso Exp $
+ * $Id: Interpreter.java,v 1.92 2005-10-17 15:44:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,7 +153,8 @@ public final class Interpreter extends Lisp
     // Interface.
     public LispObject eval(String s) throws ConditionThrowable
     {
-        return eval(new StringInputStream(s).read(true, NIL, false));
+        return eval(new StringInputStream(s).read(true, NIL, false,
+                                                  LispThread.currentThread()));
     }
 
     public static synchronized void initializeLisp()
@@ -370,7 +371,7 @@ public final class Interpreter extends Lisp
                     out._writeString(prompt());
                     out._finishOutput();
                     LispObject object =
-                        getStandardInput().read(false, EOF, false);
+                        getStandardInput().read(false, EOF, false, thread);
                     if (object == EOF)
                         break;
                     out.setCharPos(0);
@@ -517,7 +518,8 @@ public final class Interpreter extends Lisp
     public static final LispObject readFromString(String s)
     {
         try {
-            return new StringInputStream(s).read(true, NIL, false);
+            return new StringInputStream(s).read(true, NIL, false,
+                                                 LispThread.currentThread());
         }
         catch (Throwable t) {
             return null;
@@ -530,10 +532,10 @@ public final class Interpreter extends Lisp
         if (!initialized)
             initializeJLisp();
         StringInputStream stream = new StringInputStream(s);
-        LispObject obj = stream.read(false, EOF, false);
+        final LispThread thread = LispThread.currentThread();
+        LispObject obj = stream.read(false, EOF, false, thread);
         if (obj == EOF)
             return signal(new EndOfFile(stream));
-        final LispThread thread = LispThread.currentThread();
         final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_DEBUGGER_HOOK_, _DEBUGGER_HOOK_FUNCTION);
         try {

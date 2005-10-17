@@ -2,7 +2,7 @@
  * FaslReader.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: FaslReader.java,v 1.5 2005-08-01 12:38:17 piso Exp $
+ * $Id: FaslReader.java,v 1.6 2005-10-17 15:44:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,7 +130,8 @@ public final class FaslReader extends Lisp
             throws ConditionThrowable
         {
             return new Cons(Symbol.QUOTE,
-                            new Cons(stream.faslRead(true, NIL, true)));
+                            new Cons(stream.faslRead(true, NIL, true,
+                                                     LispThread.currentThread())));
         }
     };
 
@@ -375,7 +376,8 @@ public final class FaslReader extends Lisp
             throws ConditionThrowable
         {
             return new Cons(Symbol.FUNCTION,
-                            new Cons(stream.faslRead(true, NIL, true)));
+                            new Cons(stream.faslRead(true, NIL, true,
+                                                     LispThread.currentThread())));
         }
     };
 

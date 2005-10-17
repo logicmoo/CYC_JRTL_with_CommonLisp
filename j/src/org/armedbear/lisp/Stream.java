@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.137 2005-10-16 02:03:28 piso Exp $
+ * $Id: Stream.java,v 1.138 2005-10-17 15:44:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -232,10 +232,9 @@ public class Stream extends LispObject
     }
 
     public LispObject read(boolean eofError, LispObject eofValue,
-                           boolean recursive)
+                           boolean recursive, LispThread thread)
         throws ConditionThrowable
     {
-        final LispThread thread = LispThread.currentThread();
         LispObject result = readPreservingWhitespace(eofError, eofValue,
                                                      recursive, thread);
         if (result != eofValue && !recursive) {
@@ -287,14 +286,6 @@ public class Stream extends LispObject
             thread.bindSpecial(_SHARP_EQUAL_ALIST_, NIL);
             return readPreservingWhitespace(eofError, eofValue, true, thread);
         }
-    }
-
-    public LispObject faslRead(boolean eofError, LispObject eofValue,
-                               boolean recursive)
-        throws ConditionThrowable
-    {
-        return faslRead(eofError, eofValue, recursive,
-                        LispThread.currentThread());
     }
 
     public LispObject faslRead(boolean eofError, LispObject eofValue,
@@ -362,7 +353,7 @@ public class Stream extends LispObject
 
     public LispObject readPathname() throws ConditionThrowable
     {
-        LispObject obj = read(true, NIL, false);
+        LispObject obj = read(true, NIL, false, LispThread.currentThread());
         if (obj instanceof AbstractString)
             return Pathname.parseNamestring((AbstractString)obj);
         if (obj.listp())
@@ -372,7 +363,7 @@ public class Stream extends LispObject
 
     public LispObject faslReadPathname() throws ConditionThrowable
     {
-        LispObject obj = faslRead(true, NIL, false);
+        LispObject obj = faslRead(true, NIL, false, LispThread.currentThread());
         if (obj instanceof AbstractString)
             return Pathname.parseNamestring((AbstractString)obj);
         if (obj.listp())
@@ -399,7 +390,7 @@ public class Stream extends LispObject
     public LispObject readStructure() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        LispObject obj = read(true, NIL, false);
+        LispObject obj = read(true, NIL, false, thread);
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         if (obj.listp()) {
@@ -512,7 +503,7 @@ public class Stream extends LispObject
                                                           this));
                     }
                     _unreadChar(nextChar);
-                    LispObject obj = read(true, NIL, true);
+                    LispObject obj = read(true, NIL, true, thread);
                     if (requireProperList) {
                         if (!obj.listp())
                             signal(new ReaderError("The value " +
@@ -655,8 +646,9 @@ public class Stream extends LispObject
 
     public LispObject readArray(int rank) throws ConditionThrowable
     {
-        LispObject obj = read(true, NIL, true);
-        if (_READ_SUPPRESS_.symbolValue() != NIL)
+        final LispThread thread = LispThread.currentThread();
+        LispObject obj = read(true, NIL, true, thread);
+        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         switch (rank) {
             case -1:
@@ -676,8 +668,9 @@ public class Stream extends LispObject
 
     public LispObject faslReadArray(int rank) throws ConditionThrowable
     {
-        LispObject obj = faslRead(true, NIL, true);
-        if (_READ_SUPPRESS_.symbolValue() != NIL)
+        final LispThread thread = LispThread.currentThread();
+        LispObject obj = faslRead(true, NIL, true, thread);
+        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         switch (rank) {
             case -1:
@@ -697,8 +690,9 @@ public class Stream extends LispObject
 
     public LispObject readComplex() throws ConditionThrowable
     {
-        LispObject obj = read(true, NIL, true);
-        if (_READ_SUPPRESS_.symbolValue() != NIL)
+        final LispThread thread = LispThread.currentThread();
+        LispObject obj = read(true, NIL, true, thread);
+        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
@@ -724,8 +718,9 @@ public class Stream extends LispObject
 
     public LispObject faslReadComplex() throws ConditionThrowable
     {
-        LispObject obj = faslRead(true, NIL, true);
-        if (_READ_SUPPRESS_.symbolValue() != NIL)
+        final LispThread thread = LispThread.currentThread();
+        LispObject obj = faslRead(true, NIL, true, thread);
+        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
@@ -1734,12 +1729,26 @@ public class Stream extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return checkStream(arg).getFilePosition();
+            final Stream stream;
+            try {
+                stream = (Stream) arg;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.STREAM);
+            }
+            return stream.getFilePosition();
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return checkStream(first).setFilePosition(second);
+            final Stream stream;
+            try {
+                stream = (Stream) first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.STREAM);
+            }
+            return stream.setFilePosition(second);
         }
     };
 

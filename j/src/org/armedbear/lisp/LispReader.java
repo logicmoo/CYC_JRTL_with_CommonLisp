@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.41 2005-06-30 17:28:17 piso Exp $
+ * $Id: LispReader.java,v 1.42 2005-10-17 15:44:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,7 +131,8 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             return new Cons(Symbol.QUOTE,
-                            new Cons(stream.read(true, NIL, true)));
+                            new Cons(stream.read(true, NIL, true,
+                                                 LispThread.currentThread())));
         }
     };
 
@@ -245,7 +246,7 @@ public final class LispReader extends Lisp
                 return signal(new ReaderError("Can't read #. when *READ-EVAL* is NIL.",
                                               stream));
             else
-                return eval(stream.read(true, NIL, true),
+                return eval(stream.read(true, NIL, true, thread),
                             new Environment(), thread);
         }
     };
@@ -367,7 +368,8 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             return new Cons(Symbol.FUNCTION,
-                            new Cons(stream.read(true, NIL, true)));
+                            new Cons(stream.read(true, NIL, true,
+                                                 LispThread.currentThread())));
         }
     };
 

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.397 2005-10-15 17:20:40 piso Exp $
+ * $Id: Lisp.java,v 1.398 2005-10-17 15:44:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -841,7 +841,8 @@ public abstract class Lisp
     public static final LispObject readObjectFromString(String s)
     {
         try {
-            return new StringInputStream(s).faslRead(true, NIL, false);
+            return new StringInputStream(s).faslRead(true, NIL, false,
+                                                     LispThread.currentThread());
         }
         catch (Throwable t) {
             return null;
