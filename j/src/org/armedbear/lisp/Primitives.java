@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.834 2005-10-17 16:40:38 piso Exp $
+ * $Id: Primitives.java,v 1.835 2005-10-17 18:06:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -760,7 +760,18 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return outSynonymOf(arg).terpri();
+            if (arg == T)
+                arg = _TERMINAL_IO_.symbolValue();
+            else if (arg == NIL)
+                arg = _STANDARD_OUTPUT_.symbolValue();
+            final Stream stream;
+            try {
+                stream = (Stream) arg;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.STREAM);
+            }
+            return stream.terpri();
         }
     };
 
@@ -771,7 +782,18 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return outSynonymOf(arg).freshLine();
+            if (arg == T)
+                arg = _TERMINAL_IO_.symbolValue();
+            else if (arg == NIL)
+                arg = _STANDARD_OUTPUT_.symbolValue();
+            final Stream stream;
+            try {
+                stream = (Stream) arg;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.STREAM);
+            }
+            return stream.freshLine();
         }
     };
 
@@ -3698,12 +3720,25 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
+            final char c;
             try {
-                outSynonymOf(second)._writeChar(((LispCharacter)first).value);
+                c = ((LispCharacter)first).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.CHARACTER));
+                return signalTypeError(first, Symbol.CHARACTER);
             }
+            if (second == T)
+                second = _TERMINAL_IO_.symbolValue();
+            else if (second == NIL)
+                second = _STANDARD_OUTPUT_.symbolValue();
+            final Stream stream;
+            try {
+                stream = (Stream) second;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.STREAM);
+            }
+            stream._writeChar(c);
             return first;
         }
     };
