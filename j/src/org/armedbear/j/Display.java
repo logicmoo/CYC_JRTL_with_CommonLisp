@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Display.java,v 1.18 2005-02-10 17:54:05 piso Exp $
+ * $Id: Display.java,v 1.19 2005-10-17 22:23:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,12 +68,7 @@ public final class Display extends JComponent implements Constants,
     private static int changeMarkWidth;
 
     private static Font gutterFont;
-    private static int gutterCharAscent;
     private static int gutterCharWidth;
-
-    private static boolean showGutterBorder = true;
-
-    private static int leftMargin;
 
     private final HashMap changedLines = new HashMap();
 
@@ -146,8 +141,6 @@ public final class Display extends JComponent implements Constants,
         spaceWidth = fm.charWidth(' ');
         minCharWidth = getMinCharWidth(fm);
 
-        leftMargin = charWidth;
-
         fm = Toolkit.getDefaultToolkit().getFontMetrics(boldFont);
 
         final int boldAscent = fm.getAscent();
@@ -192,7 +185,6 @@ public final class Display extends JComponent implements Constants,
         gutterFont = new Font(gutterFontName, Font.PLAIN, gutterFontSize);
 
         fm = Toolkit.getDefaultToolkit().getFontMetrics(gutterFont);
-        gutterCharAscent = fm.getAscent();
         gutterCharWidth = fm.charWidth('0');
 
         changeMarkWidth =
@@ -1116,13 +1108,12 @@ public final class Display extends JComponent implements Constants,
     }
 
     private void handleSelection(Region r, Line line, int[] formatArray,
-        Graphics2D g2d, int y)
+                                 Graphics2D g2d, int y)
     {
         if (r == null)
             return;
 
         int maxCols = getMaxCols();
-        int fillHeight = charHeight;
         int fillWidth = 0;
         int beginCol = 0;
         int endCol = 0;
