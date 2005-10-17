@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Frame.java,v 1.15 2005-10-17 23:37:37 piso Exp $
+ * $Id: Frame.java,v 1.16 2005-10-17 23:56:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
     private AdjustPlacementRunnable adjustPlacementRunnable;
     private Rectangle rect;
     private int extendedState;
+    private final StatusBar statusBar;
 
     public Frame(Editor editor)
     {
@@ -243,8 +244,6 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
             editors[1].updateScrollBars();
         currentEditor.setFocusToDisplay();
     }
-
-    private StatusBar statusBar;
 
     public final StatusBar getStatusBar()
     {
