@@ -1,8 +1,8 @@
 /*
  * Formatter.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: Formatter.java,v 1.2 2004-04-02 03:30:05 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Formatter.java,v 1.3 2005-10-17 23:38:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,6 @@ package org.armedbear.j;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Formatter implements Constants
 {
