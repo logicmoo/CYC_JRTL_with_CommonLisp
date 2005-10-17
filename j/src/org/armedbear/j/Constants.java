@@ -1,8 +1,8 @@
 /*
  * Constants.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Constants.java,v 1.18 2005-10-17 14:05:58 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: Constants.java,v 1.19 2005-10-17 14:06:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
