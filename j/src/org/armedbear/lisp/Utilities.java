@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Utilities.java,v 1.12 2005-10-16 02:03:28 piso Exp $
+ * $Id: Utilities.java,v 1.13 2005-10-17 16:45:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,16 +37,6 @@ public final class Utilities extends Lisp
         isPlatformWindows = osName.startsWith("Windows");
     }
 
-    public static boolean isPlatformUnix()
-    {
-        return isPlatformUnix;
-    }
-
-    public static boolean isPlatformWindows()
-    {
-        return isPlatformWindows;
-    }
-
     public static boolean isFilenameAbsolute(String filename)
     {
         final int length = filename.length();
@@ -55,7 +45,7 @@ public final class Utilities extends Lisp
             if (c0 == '\\' || c0 == '/')
                 return true;
             if (length > 2) {
-                if (isPlatformWindows()) {
+                if (isPlatformWindows) {
                     // Check for drive letter.
                     char c1 = filename.charAt(1);
                     if (c1 == ':') {

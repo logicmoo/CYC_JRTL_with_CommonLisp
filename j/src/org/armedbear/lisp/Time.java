@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Time.java,v 1.28 2005-06-14 14:07:14 piso Exp $
+ * $Id: Time.java,v 1.29 2005-10-17 16:45:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@ public final class Time extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            if (Utilities.isPlatformUnix()) {
+            if (Utilities.isPlatformUnix) {
                 long userTime = -1;
                 long systemTime = -1;
                 try {

@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.92 2005-10-17 15:44:44 piso Exp $
+ * $Id: Interpreter.java,v 1.93 2005-10-17 16:45:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,7 +70,7 @@ public final class Interpreter extends Lisp
                 out._writeString(banner());
                 out._finishOutput();
             }
-            if (Utilities.isPlatformUnix()) {
+            if (Utilities.isPlatformUnix) {
                 try {
                     System.loadLibrary("abcl");
                     Class c = Class.forName("org.armedbear.lisp.Native");
@@ -223,7 +223,7 @@ public final class Interpreter extends Lisp
                 Load.load(file.getCanonicalPath());
                 return;
             }
-            if (Utilities.isPlatformWindows()) {
+            if (Utilities.isPlatformWindows) {
                 file = new File("C:\\.abclrc");
                 if (file.isFile()) {
                     Load.load(file.getCanonicalPath());

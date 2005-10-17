@@ -1,8 +1,8 @@
 /*
  * Site.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Site.java,v 1.2 2004-09-18 02:06:10 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Site.java,v 1.3 2005-10-17 16:45:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public final class Site extends Lisp
                 int index = path.lastIndexOf('/');
                 if (index >= 0) {
                     lispHome = path.substring(0, index + 1);
-                    if (Utilities.isPlatformWindows()) {
+                    if (Utilities.isPlatformWindows) {
                         if (lispHome.length() > 0 && lispHome.charAt(0) == '/')
                             lispHome = lispHome.substring(1);
                     }

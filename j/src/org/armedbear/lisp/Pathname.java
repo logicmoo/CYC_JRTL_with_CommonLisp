@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.104 2005-10-14 16:14:31 piso Exp $
+ * $Id: Pathname.java,v 1.105 2005-10-17 16:45:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,7 +112,7 @@ public class Pathname extends LispObject
                 }
             }
         }
-        if (Utilities.isPlatformUnix()) {
+        if (Utilities.isPlatformUnix) {
             if (s.equals("~"))
                 s = System.getProperty("user.home").concat("/");
             else if (s.startsWith("~/"))
