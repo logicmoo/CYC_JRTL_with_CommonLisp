@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.398 2005-10-17 15:44:44 piso Exp $
+ * $Id: Lisp.java,v 1.399 2005-10-17 18:05:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1330,20 +1330,6 @@ public abstract class Lisp
             return checkCharacterInputStream(_TERMINAL_IO_.symbolValue());
         if (obj == NIL)
             return checkCharacterInputStream(_STANDARD_INPUT_.symbolValue());
-        signalTypeError(obj, Symbol.STREAM);
-        // Not reached.
-        return null;
-    }
-
-    public static final Stream outSynonymOf(LispObject obj)
-        throws ConditionThrowable
-    {
-        if (obj instanceof Stream)
-            return (Stream) obj;
-        if (obj == T)
-            return checkCharacterOutputStream(_TERMINAL_IO_.symbolValue());
-        if (obj == NIL)
-            return checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
         signalTypeError(obj, Symbol.STREAM);
         // Not reached.
         return null;
