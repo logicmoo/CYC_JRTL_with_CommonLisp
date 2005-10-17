@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.833 2005-10-17 16:30:34 piso Exp $
+ * $Id: Primitives.java,v 1.834 2005-10-17 16:40:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4108,13 +4108,13 @@ public final class Primitives extends Lisp
         public LispObject execute() throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
+            final LispObject obj = _STANDARD_INPUT_.symbolValue(thread);
             final Stream stream;
             try {
-                stream = (Stream) _STANDARD_INPUT_.symbolValue(thread);
+                stream = (Stream) obj;
             }
             catch (ClassCastException e) {
-                return signalTypeError(_STANDARD_INPUT_.symbolValue(thread),
-                                       Symbol.STREAM);
+                return signalTypeError(obj, Symbol.STREAM);
             }
             return stream.read(true, NIL, false, thread);
         }
