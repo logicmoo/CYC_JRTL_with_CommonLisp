@@ -1,8 +1,8 @@
 /*
  * CompileDialog.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: CompileDialog.java,v 1.2 2003-07-24 15:11:39 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: CompileDialog.java,v 1.3 2005-10-17 22:29:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,6 @@ public final class CompileDialog extends JDialog implements KeyListener
     public void keyPressed(KeyEvent e)
     {
         final int keyCode = e.getKeyCode();
-        final int modifiers = e.getModifiers();
         switch (keyCode) {
             case KeyEvent.VK_ENTER: {
                 command = textField.getText();
