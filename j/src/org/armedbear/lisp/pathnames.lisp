@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.26 2005-09-24 18:04:07 piso Exp $
+;;; $Id: pathnames.lisp,v 1.27 2005-10-17 18:52:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -336,7 +336,7 @@
             :expected-type '(or logical-pathname string stream)))))
 
 (defun parse-namestring (thing
-                         &optional host default-pathname
+                         &optional host (default-pathname *default-pathname-defaults*)
                          &key (start 0) end junk-allowed)
   (declare (ignore default-pathname junk-allowed)) ; FIXME
   (cond ((eq host :unspecific)
@@ -351,8 +351,7 @@
     (string
      (unless end
        (setf end (length thing)))
-     (values (coerce-to-pathname thing host)
-             end))
+     (%parse-namestring (subseq thing start end) host default-pathname))
     (t
      (error 'type-error
             :format-control "~S cannot be converted to a pathname."
