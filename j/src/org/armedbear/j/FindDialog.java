@@ -1,8 +1,8 @@
 /*
  * FindDialog.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindDialog.java,v 1.4 2003-10-13 23:52:56 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: FindDialog.java,v 1.5 2005-10-17 23:42:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@ import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public final class FindDialog extends AbstractDialog implements ActionListener,
