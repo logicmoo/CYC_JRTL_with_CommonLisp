@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Frame.java,v 1.14 2005-04-05 01:04:08 piso Exp $
+ * $Id: Frame.java,v 1.15 2005-10-17 23:37:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
-import java.lang.reflect.Method;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
