@@ -1,8 +1,8 @@
 /*
  * Tagger.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Tagger.java,v 1.6 2003-10-11 17:26:32 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Tagger.java,v 1.7 2005-10-18 00:01:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@
 
 package org.armedbear.j;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;

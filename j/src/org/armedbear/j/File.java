@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: File.java,v 1.15 2005-07-03 16:00:16 piso Exp $
+ * $Id: File.java,v 1.16 2005-10-18 00:00:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
