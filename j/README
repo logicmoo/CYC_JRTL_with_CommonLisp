@@ -69,7 +69,7 @@ BUGS
 
 ABCL is a very young implementation. You are certain to encounter bugs.
 
-ABCL 0.0.8 fails 93 out of 21320 tests in the GCL ANSI test suite.
+ABCL 0.0.9 fails 54 out of 21344 tests in the GCL ANSI test suite.
 
 ABCL's CLOS does not handle on-the-fly redefinition of classes correctly, and
 in any event is intolerably slow. There is no support for the long form of
@@ -77,8 +77,6 @@ DEFINE-METHOD-COMBINATION, and certain other required CLOS features are also
 missing. Enough CLOS is there to run ASDF and CL-PPCRE, if you're in no hurry.
 
 There is no MOP worth mentioning.
-
-There is no support for logical pathnames.
 
 Since this is a very early public release, there might be build problems as
 well as runtime bugs.
@@ -90,4 +88,4 @@ Please report problems to the j-devel mailing list:
 Have fun!
 
 Peter Graves
-August 30, 2005
+October 18, 2005
