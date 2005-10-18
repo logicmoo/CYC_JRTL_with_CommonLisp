@@ -524,6 +524,7 @@
             (write-sequence buffer out :end end)))))))
 
 (defun copy-files (files source-dir target-dir)
+  (ensure-directories-exist target-dir)
   (dolist (file files)
     (copy-file (merge-pathnames file source-dir)
                (merge-pathnames file target-dir))))
@@ -534,8 +535,6 @@
   (let ((target-root (pathname (concatenate 'string "/var/tmp/" version-string "/"))))
     (when (probe-directory target-root)
       (error "Target directory ~S already exists." target-root))
-    (ensure-directories-exist
-     (merge-pathnames "src/org/armedbear/lisp/java/awt/" target-root))
     (let* ((source-dir *build-root*)
            (target-dir target-root)
            (files (list "README"
