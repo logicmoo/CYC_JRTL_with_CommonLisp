@@ -118,7 +118,7 @@
 
 #+allegro
 (defun run-shell-command (command &key directory (output *standard-output*))
-  (excl:run-shell-command command 
+  (excl:run-shell-command command
                           :directory directory
                           :input nil
                           :output #+ide nil #-ide output))
@@ -140,7 +140,7 @@
     (declare (ignore status))
     exitcode))
 
-#+(or sbcl cmu lispworks)
+#+(or sbcl cmu lispworks openmcl)
 (defun probe-directory (pathspec)
   (let* ((truename (probe-file pathspec)) ; TRUENAME is a pathname.
          (namestring (and truename (namestring truename)))) ; NAMESTRING is a string.
