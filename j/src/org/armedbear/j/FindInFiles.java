@@ -1,8 +1,8 @@
 /*
  * FindInFiles.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: FindInFiles.java,v 1.17 2005-03-03 03:42:49 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: FindInFiles.java,v 1.18 2005-10-18 00:01:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,6 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
-import gnu.regexp.REMatch;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
