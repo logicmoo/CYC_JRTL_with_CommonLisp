@@ -93,7 +93,7 @@
       (setf old-directory (ext:cd))
       (ext:cd directory))
     (unwind-protect
-        (setf status (ext:run-shell-command command))
+        (setf status (ext:shell command))
       (when old-directory
         (ext:cd old-directory)))
     (cond ((numberp status)
@@ -112,14 +112,16 @@
                                  (namestring (pathname directory))
                                  "\" && "
                                  command))))
-  (system:call-system-showing-output
-   command
-   :shell-type "/bin/sh"
-   :output-stream output))
+  (system:call-system-showing-output command
+                                     :shell-type "/bin/sh"
+                                     :output-stream output))
 
 #+allegro
 (defun run-shell-command (command &key directory (output *standard-output*))
-  (excl:run-shell-command command :directory directory :input nil :output output))
+  (excl:run-shell-command command 
+                          :directory directory
+                          :input nil
+                          :output #+ide nil #-ide output))
 
 #+openmcl
 (defun run-shell-command (command &key directory (output *standard-output*))
