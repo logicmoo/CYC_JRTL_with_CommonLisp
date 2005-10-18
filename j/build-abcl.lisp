@@ -563,7 +563,7 @@
     (let* ((source-dir (merge-pathnames "tests/" *abcl-dir*))
            (target-dir (merge-pathnames "src/org/armedbear/lisp/tests/" target-root))
            (*default-pathname-defaults* source-dir)
-           (files '("pathname-tests.lisp" "file-system-tests.lisp")))
+           (files '("pathname-tests.lisp" "file-system-tests.lisp" "math-tests.lisp")))
       (copy-files files source-dir target-dir))
     (let* ((source-dir (merge-pathnames "java/awt/" *abcl-dir*))
            (target-dir (merge-pathnames "src/org/armedbear/lisp/java/awt/" target-root))
