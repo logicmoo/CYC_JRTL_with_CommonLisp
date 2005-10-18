@@ -1,7 +1,7 @@
 /*
  * ReaderThread.java
  *
- * Copyright (C) 2000-2004 Peter Graves
+ * Copyright (C) 2000-2005 Peter Graves
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,8 @@ public class ReaderThread extends Thread
                 }
                 if (numChars > 0)
                     sb.append(buf, 0, numChars);
-                Thread.sleep(timeOut);
+                if (timeOut > 0)
+                    Thread.sleep(timeOut);
             }
             while (reader.ready());
         }
