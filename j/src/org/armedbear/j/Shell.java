@@ -1,8 +1,8 @@
 /*
  * Shell.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: Shell.java,v 1.33 2004-09-19 14:13:59 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Shell.java,v 1.34 2005-10-18 00:12:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,8 +54,12 @@ public class Shell extends CommandInterpreter implements Constants
     {
         this();
         this.shellCommand = shellCommand;
-        if (shellCommand != null && shellCommand.indexOf("tcsh") >= 0)
-            promptIsStderr = false;
+        if (shellCommand != null) {
+            if (shellCommand.indexOf("tcsh") >= 0)
+                promptIsStderr = false;
+            else if (shellCommand.indexOf("cmd.exe") >= 0)
+                promptIsStderr = false;
+        }
     }
 
     protected Shell(String shellCommand, Mode mode)
@@ -83,7 +87,7 @@ public class Shell extends CommandInterpreter implements Constants
             Editor.preferences().getStringProperty(Property.SHELL_FILE_NAME);
         if (s != null && s.length() > 0)
             return s;
-        return Platform.isPlatformWindows() ? "cmd.exe" : "bash -i";
+        return Platform.isPlatformWindows() ? "cmd.exe /q" : "bash -i";
     }
 
     protected void initializeHistory()
@@ -161,12 +165,17 @@ public class Shell extends CommandInterpreter implements Constants
         // so check the value of getProcess() here.
         if (getProcess() == null)
             return; // Process exited.
-        setPromptRE(Editor.preferences().getStringProperty(
-            Property.SHELL_PROMPT_PATTERN));
+        if (Platform.isPlatformWindows() &&
+            shellCommand.toLowerCase().indexOf("cmd.exe") >= 0)
+            setPromptRE(DEFAULT_CMD_EXE_PROMPT_PATTERN);
+        else
+            setPromptRE(Editor.preferences().getStringProperty(Property.SHELL_PROMPT_PATTERN));
         try {
             stdin  = new OutputStreamWriter(p.getOutputStream());
             stdoutThread = new StdoutThread(p.getInputStream());
             stderrThread = new StderrThread(p.getErrorStream());
+            stdoutThread.setTimeOut(0);
+            stderrThread.setTimeOut(0);
             stdoutThread.start();
             stderrThread.start();
             readOnly = false;
@@ -224,9 +233,11 @@ public class Shell extends CommandInterpreter implements Constants
                     arg = st.nextToken();
             }
             if (command.equals("cd")) {
-                if (arg == null)
-                    changeDirectory(Utilities.getUserHome());
-                else if (arg.equals("-")) {
+                if (arg == null) {
+                    // for cmd.exe, "cd" == "pwd"
+                    if (shellCommand.indexOf("cmd.exe") < 0)
+                        changeDirectory(Utilities.getUserHome());
+                } else if (arg.equals("-")) {
                     if (oldDir != null)
                         changeDirectory(oldDir.canonicalPath());
                 } else
@@ -384,20 +395,26 @@ public class Shell extends CommandInterpreter implements Constants
                     if (length > 0 && s.charAt(length-1) == c)
                         s = s.substring(0, length-1);
                 }
-            } else
-                s = Utilities.getUserHome();
+            } else {
+                // s.length() == 0
+                if (shellCommand.indexOf("cmd.exe") < 0)
+                    s = Utilities.getUserHome();
+            }
             if (cygnify) {
                 if (!s.startsWith(".."))
                     s = Utilities.uncygnify(s);
             }
-            File dir = File.getInstance(currentDir, s);
-            if (dir != null && dir.isDirectory()) {
-                oldDir = currentDir;
-                currentDir = dir;
-                for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-                    Editor ed = it.nextEditor();
-                    if (ed.getBuffer() == this)
-                        ed.updateLocation();
+            if (s.length() > 0) {
+                File dir = File.getInstance(currentDir, s);
+                if (dir != null && dir.isDirectory()) {
+                    if (shellCommand.indexOf("cmd.exe") < 0)
+                        oldDir = currentDir;
+                    currentDir = dir;
+                    for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+                        Editor ed = it.nextEditor();
+                        if (ed.getBuffer() == this)
+                            ed.updateLocation();
+                    }
                 }
             }
         }
@@ -527,7 +544,8 @@ public class Shell extends CommandInterpreter implements Constants
             last.setFlags(STATE_PASSWORD_PROMPT);
             return;
         }
-        if (last.flags() != STATE_INPUT)
+        final int lastFlags = last.flags();
+        if (lastFlags != STATE_INPUT && lastFlags != STATE_PROMPT)
             last.setFlags(0);
         // Look at the next-to-last line.
         final Line nextToLast = last.previous();

@@ -1,8 +1,8 @@
 /*
  * CommmandInterpreter.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandInterpreter.java,v 1.27 2004-10-17 13:33:23 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: CommandInterpreter.java,v 1.28 2005-10-18 00:09:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,17 +188,14 @@ public class CommandInterpreter extends Buffer
             // Go to end of buffer (if we're not already there) to append input.
             editor.eob();
             dotLine = editor.getDotLine();
-
             // Keep the prompt, but throw away anything after it.
             final REMatch match = promptRE.getMatch(dotLine.getText());
             if (match != null)
                 dotLine.setText(dotLine.substring(0, match.getEndIndex()));
-
             // Append s.
             dotLine.setText(dotLine.getText() + s);
         }
-        int flags = dotLine.flags();
-        if (flags == 0)
+        if (dotLine.flags() == 0)
             dotLine.setFlags(STATE_INPUT);
         editor.eol();
         editor.insertLineSeparator();
@@ -436,7 +433,7 @@ public class CommandInterpreter extends Buffer
 
     protected String stdOutFilter(String s)
     {
-        return removeEcho(s);
+        return s;
     }
 
     protected void stdOutUpdate(final String s)
@@ -454,7 +451,7 @@ public class CommandInterpreter extends Buffer
 
     protected String stdErrFilter(String s)
     {
-        return removeEcho(s);
+        return s;
     }
 
     protected void stdErrUpdate(final String s)
@@ -498,7 +495,8 @@ public class CommandInterpreter extends Buffer
 
         public void update(String s)
         {
-            stdOutUpdate(s);
+            if (s != null && s.length() > 0)
+                stdOutUpdate(s);
         }
     }
 
@@ -516,7 +514,8 @@ public class CommandInterpreter extends Buffer
 
         public void update(String s)
         {
-            stdErrUpdate(s);
+            if (s != null && s.length() > 0)
+                stdErrUpdate(s);
         }
     }
 

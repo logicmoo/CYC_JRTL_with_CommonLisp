@@ -1,8 +1,8 @@
 /*
  * ShellFormatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: ShellFormatter.java,v 1.5 2003-12-04 15:17:06 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: ShellFormatter.java,v 1.6 2005-10-18 00:12:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,23 +31,22 @@ public final class ShellFormatter extends Formatter
     private static final byte SHELL_FORMAT_PROMPT = 1;
     private static final byte SHELL_FORMAT_INPUT  = 2;
 
-    private final RE promptRE;
-
     public ShellFormatter(Buffer buffer)
     {
         this.buffer = buffer;
-        promptRE = ((Shell)buffer).getPromptRE();
     }
 
-    public LineSegmentList formatLine(Line line)
+    public LineSegmentList formatLine(final Line line)
     {
         clearSegmentList();
         if (line == null) {
             addSegment("", SHELL_FORMAT_TEXT);
             return segmentList;
         }
+        final RE promptRE = ((Shell)buffer).getPromptRE();
         final String text = getDetabbedText(line);
-        if (line.flags() == STATE_PROMPT) {
+        final int flags = line.flags();
+        if (flags == STATE_PROMPT) {
             REMatch match = promptRE.getMatch(text);
             if (match != null) {
                 final int end = match.getEndIndex();
@@ -57,16 +56,16 @@ public final class ShellFormatter extends Formatter
                 addSegment(text, SHELL_FORMAT_PROMPT);
             return segmentList;
         }
-        if (line.flags() == STATE_PASSWORD_PROMPT) {
+        if (flags == STATE_PASSWORD_PROMPT) {
             addSegment(text, SHELL_FORMAT_TEXT);
             return segmentList;
         }
-        if (line.flags() == STATE_OUTPUT) {
+        if (flags == STATE_OUTPUT) {
             addSegment(text, SHELL_FORMAT_TEXT);
             return segmentList;
         }
         if (promptRE != null) {
-            if (line.flags() == STATE_INPUT) {
+            if (flags == STATE_INPUT) {
                 REMatch match = promptRE.getMatch(text);
                 if (match != null) {
                     final int end = match.getEndIndex();
