@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShellMode.java,v 1.18 2005-10-12 14:49:41 piso Exp $
+ * $Id: LispShellMode.java,v 1.19 2005-10-20 12:21:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,10 @@ package org.armedbear.j;
 
 import gnu.regexp.RE;
 import gnu.regexp.REMatch;
+import java.awt.AWTEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import javax.swing.undo.CompoundEdit;
 
 public final class LispShellMode extends LispMode implements Constants, Mode
 {
@@ -69,6 +72,7 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_M, CTRL_MASK, "lispFindMatchingChar");
         km.mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "lispSelectSyntax");
         km.mapKey(KeyEvent.VK_D, CTRL_MASK | ALT_MASK, "describe");
+        km.mapKey(VK_MOUSE_2, 0, "mouseCopyToInput");
     }
 
     public void populateModeMenu(Editor editor, Menu menu)
@@ -151,7 +155,6 @@ public final class LispShellMode extends LispMode implements Constants, Mode
     public static void describe(String s)
     {
         final Editor editor = Editor.currentEditor();
-
         final Buffer buffer = editor.getBuffer();
         if (buffer.getMode() != mode) {
             Debug.bug();
@@ -238,5 +241,72 @@ public final class LispShellMode extends LispMode implements Constants, Mode
                 break;
         }
         return sb.toString();
+    }
+
+    public static void mouseCopyToInput()
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        if (!(buffer instanceof LispShell)) {
+            Debug.bug();
+            return;
+        }
+        final Display display = editor.getDisplay();
+        final AWTEvent e = editor.getDispatcher().getLastEvent();
+        if (e instanceof MouseEvent) {
+            MouseEvent mouseEvent = (MouseEvent) e;
+            Position pos = display.positionFromPoint(mouseEvent.getPoint());
+            if (pos != null) {
+                Line endLine = buffer.getEnd().getLine();
+                if (pos.getLine() == endLine) {
+                    SystemSelection.pastePrimarySelection();
+                } else {
+                    int offset = pos.getOffset();
+                    String s = pos.getLine().getText();
+                    final LispShell lisp = (LispShell) buffer;
+                    RE promptRE = lisp.getPromptRE();
+                    if (promptRE != null) {
+                        REMatch match = promptRE.getMatch(s);
+                        if (match != null) {
+                            final int endIndex = match.getEndIndex();
+                            s = s.substring(endIndex);
+                            offset -= endIndex;
+                        }
+                    }
+                    s = s.trim();
+                    final int length = s.length();
+                    if (length > 0) {
+                        if (s.charAt(0) == '(' && s.charAt(length - 1) == ')')
+                            ; // A list.
+                        else if (s.indexOf(' ') < 0)
+                            ; // An atom.
+                        else {
+                            // We want the whitespace-delimited string around
+                            // the location of the mouse click.
+                            if (offset >= 0) {
+                                if (offset > length)
+                                    offset = length - 1;
+                                int start = offset;
+                                int end = offset;
+                                while (start > 0 && s.charAt(start - 1) != ' ')
+                                    --start;
+                                while (end < length && s.charAt(end) != ' ')
+                                    ++end;
+                                if (start < 0)
+                                    start = 0;
+                                if (end > length)
+                                    end = length;
+                                s = s.substring(start, end);
+                            }
+                        }
+                        CompoundEdit compoundEdit = editor.beginCompoundEdit();
+                        if (editor.getDotLine() != endLine)
+                            editor.eob();
+                        editor.paste(s);
+                        editor.endCompoundEdit(compoundEdit);
+                    }
+                }
+            }
+        }
     }
 }
