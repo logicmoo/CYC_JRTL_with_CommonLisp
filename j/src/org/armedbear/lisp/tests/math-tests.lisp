@@ -1,7 +1,7 @@
 ;;; math-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: math-tests.lisp,v 1.2 2005-10-19 16:51:43 piso Exp $
+;;; $Id: math-tests.lisp,v 1.3 2005-10-20 12:49:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -248,98 +248,113 @@
 
 ;; EXPT
 (deftest expt.1
-  (expt -5f0 2)
+  (expt -5.0f0 2)
   25.0)
 
 (deftest expt.2
-  (expt -5f0 2f0)
+  (expt -5.0f0 1.9f0)
+  #c(20.241808 -6.576964))
+
+(deftest expt.3
+  (expt -5.0f0 2.0f0)
   #+(or abcl cmu sbcl) 25f0
   #+allegro            #c(25.0               -6.1230318e-15)
   #+clisp              #c(25f0               0f0)
   #+lispworks          #c(24.999999999999993 -6.123031769111885e-15))
 
-(deftest expt.3
-  (expt -5d0 2d0)
+(deftest expt.4
+  (expt -5.0f0 2.1f0)
+  #c(27.928223 9.074421))
+
+(deftest expt.5
+  (expt -5.0d0 1.9d0)
+  #+(or abcl allegro) #c(20.24180952239008d0  -6.576962601219341d0)
+  #+clisp             #c(20.241809522390078d0 -6.576962601219342d0)
+  #+(or cmu sbcl)     #c(20.241809522390078d0 -6.57696260121934d0))
+
+(deftest expt.6
+  (expt -5.0d0 2.0d0)
   #+(or abcl cmu sbcl) 25d0
   #+allegro            #c(24.999999999999996d0 -6.1230317691118855d-15)
   #+clisp              #c(25d0                 0d0))
 
-(deftest expt.4
+(deftest expt.7
+  (expt -5.0d0 2.1d0)
+  #+allegro            #c(27.92822499968966d0  9.074430383223417d0)
+  #+clisp              #c(27.928224999689668d0 9.074430383223435d0)
+  #-(or allegro clisp) #c(27.92822499968967d0  9.07443038322342d0))
+
+(deftest expt.8
   (expt -5 2)
   25)
 
-(deftest expt.5
+(deftest expt.9
   (eql (expt 5f0 3f0) (* 5.0 5.0 5.0))
   t)
 
-(deftest expt.6
+(deftest expt.10
   (expt 5f0 3f0)
   125f0)
 
-(deftest expt.7
+(deftest expt.11
   (expt 5d0 3d0)
   125d0)
 
-(deftest expt.8
+(deftest expt.12
   (expt 5 3)
   125)
 
-(deftest expt.9
+(deftest expt.13
   (expt #c(10 11) 1)
   #c(10 11))
 
-(deftest expt.10
+(deftest expt.14
   (expt 0 1/2)
   #+(or allegro clisp lispworks) 0
   #+(or abcl cmu sbcl) 0.0)
 
-(deftest expt.11
+(deftest expt.15
   (expt 1 1/2)
   #+clisp 1
   #-clisp 1.0)
 
-(deftest expt.12
+(deftest expt.16
   (expt 9 1/2)
   #+clisp 3
   #-clisp 3.0)
 
-(deftest expt.13
+(deftest expt.17
   (expt -9 1/2)
-  #+clisp
-  #c(0 3)
-  #+(or allegro sbcl cmu)
-  #c(1.8369095e-16 3.0)
-  #+abcl
-  #c(1.8369701e-16 3.0))
+  #+clisp                 #c(0             3)
+  #+(or allegro sbcl cmu) #c(1.8369095e-16 3.0)
+  #+abcl                  #c(1.8369701e-16 3.0))
 
-(deftest expt.14
+(deftest expt.18
   (expt -8 1/3)
   #c(1.0 1.7320508))
 
-(deftest expt.15
+(deftest expt.19
   (expt #c(-7 24) 1/2)
   #+clisp #c(3 4)
   #-clisp #c(3.0 4.0))
 
-(deftest expt.16
+(deftest expt.20
   (expt 729 1/6)
   #+clisp 3
   #-clisp 3.0)
 
-(deftest expt.17
+(deftest expt.21
   (expt -3 -1)
   -1/3)
 
-(deftest expt.18
+(deftest expt.22
   (expt #c(3 4) -1)
   #c(3/25 -4/25))
 
-(deftest expt.19
+(deftest expt.23
   (expt 14 #c(1.0 1.0))
-  #-(or clisp allegro)
-  #c(-12.269101 6.743085)
-  #+(or clisp allegro)
-  #c(-12.269099 6.7430854))
+  #-(or clisp allegro) #c(-12.269101 6.743085)
+  #+(or clisp allegro) #c(-12.269099 6.7430854))
 
 (deftest log.1
   (typep (log 17d0 10) 'double-float)
@@ -357,9 +372,9 @@
 
 (deftest log.4
   (log 17.0 10.0)
-  #+(or abcl cmu sbcl)   1.2304488
+  #+(or abcl cmu sbcl) 1.2304488
   #+(or allegro clisp) 1.230449
-  #+lispworks           #.(log 17d0 10d0))
+  #+lispworks          #.(log 17d0 10d0))
 
 (deftest log.5
   (log 17d0 10)
