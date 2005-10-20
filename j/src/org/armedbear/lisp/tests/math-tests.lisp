@@ -1,7 +1,7 @@
 ;;; math-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: math-tests.lisp,v 1.3 2005-10-20 12:49:09 piso Exp $
+;;; $Id: math-tests.lisp,v 1.4 2005-10-20 19:22:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,14 +20,22 @@
 ;;; Some of these tests are based on tests in the CLISP test suite.
 
 (unless (member "RT" *modules* :test #'string=)
-  (unless (ignore-errors (logical-pathname-translations "ansi-tests"))
-    (error "~S is not defined as a logical pathname host." "ansi-tests"))
-  (load "ansi-tests:rt-package.lsp")
-  (load #+abcl (compile-file-if-needed "ansi-tests:rt.lsp")
+;;   (unless (ignore-errors (logical-pathname-translations "ansi-tests"))
+;;     (error "~S is not defined as a logical pathname host." "ansi-tests"))
+;;   (load "ansi-tests:rt-package.lsp")
+  (load "rt-package.lisp")
+;;   (load #+abcl (compile-file-if-needed "ansi-tests:rt.lsp")
+;;         ;; Force compilation to avoid fasl name conflict between SBCL and
+;;         ;; Allegro.
+;;         #-abcl (compile-file "ansi-tests:rt.lsp"))
+  (load #+abcl (compile-file-if-needed "rt.lisp")
         ;; Force compilation to avoid fasl name conflict between SBCL and
         ;; Allegro.
-        #-abcl (compile-file "ansi-tests:rt.lsp"))
+        #-abcl (compile-file "rt.lisp"))
   (provide "RT"))
+
+;; FIXME
+(load "test-utilities.lisp")
 
 (regression-test:rem-all-tests)
 
@@ -199,7 +207,7 @@
   -1.0)
 
 #+(or abcl cmu lispworks sbcl)
-(deftest sqrt.13
+(deftest sqrt.14
   (float-sign (sqrt -0.0d0))
   -1.0d0)
 
@@ -389,5 +397,21 @@
 (deftest log.7
   (log 17d0 10d0)
   1.2304489213782739d0)
+
+(deftest truncate.1
+  (truncate least-positive-single-float)
+  0 #.least-positive-single-float)
+
+(deftest truncate.2
+  (truncate least-positive-double-float)
+  0 #.least-positive-double-float)
+
+(deftest truncate.3
+  (signals-error (truncate least-positive-single-float 2) 'floating-point-underflow)
+  t)
+
+(deftest truncate.4
+  (signals-error (truncate least-positive-double-float 2) 'floating-point-underflow)
+  t)
 
 (do-tests)
