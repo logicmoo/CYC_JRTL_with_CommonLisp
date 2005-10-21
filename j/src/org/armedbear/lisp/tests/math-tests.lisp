@@ -1,7 +1,7 @@
 ;;; math-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: math-tests.lisp,v 1.4 2005-10-20 19:22:48 piso Exp $
+;;; $Id: math-tests.lisp,v 1.5 2005-10-21 12:13:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -117,6 +117,16 @@
                           '(:overflow :underflow)))
     (restore-default-floating-point-modes))
   nil)
+
+(deftest single-float-epsilon.1
+  single-float-epsilon
+  #+lispworks 1.1102230246251568f-16
+  #-lispworks 5.960465f-8)
+
+(deftest single-float-negative-epsilon.1
+  single-float-negative-epsilon
+  #+lispworks 5.551115123125784f-17
+  #-lispworks 2.9802326f-8)
 
 (deftest most-positive-single-float.1
   most-positive-single-float
@@ -374,29 +384,64 @@
 
 (deftest log.3
   (log 17 10)
-  #+abcl                        1.2304488
-  #+(or allegro clisp cmu sbcl) 1.230449
-  #+lispworks                   #.(log 17d0 10d0))
+  #+(and abcl java-1.4)               1.2304488
+  #+(and abcl (or java-1.5 java-1.6)) 1.230449
+  #+(or allegro clisp cmu sbcl)       1.230449
+  #+lispworks                         #.(log 17d0 10d0))
 
 (deftest log.4
   (log 17.0 10.0)
-  #+(or abcl cmu sbcl) 1.2304488
-  #+(or allegro clisp) 1.230449
-  #+lispworks          #.(log 17d0 10d0))
+  #+(and abcl java-1.4)               1.2304488
+  #+(and abcl (or java-1.5 java 1.6)) 1.230449
+  #+(or cmu sbcl)                     1.2304488
+  #+(or allegro clisp)                1.230449
+  #+lispworks                         #.(log 17d0 10d0))
 
 (deftest log.5
   (log 17d0 10)
-  #-(or allegro clisp lispworks) 1.2304489042913307d0
-  #+(or allegro clisp lispworks) #.(log 17d0 10d0))
+  #+(and abcl java-1.4)               1.2304489042913307d0
+  #+(and abcl (or java-1.5 java-1.6)) #.(log 17d0 10d0)
+  #+(or allegro clisp lispworks)      #.(log 17d0 10d0)
+  #-(or abcl allegro clisp lispworks) 1.2304489042913307d0)
 
 (deftest log.6
   (log 17 10d0)
-  #-(or allegro clisp lispworks) 1.2304489149763256d0
-  #+(or allegro clisp lispworks) #.(log 17d0 10d0))
+  #+(and abcl java-1.4)               1.2304489149763256d0
+  #+(and abcl (or java-1.5 java-1.6)) #.(log 17d0 10d0)
+  #+(or allegro clisp lispworks)      #.(log 17d0 10d0)
+  #-(or abcl allegro clisp lispworks) 1.2304489149763256d0)
 
 (deftest log.7
   (log 17d0 10d0)
   1.2304489213782739d0)
+
+(deftest pi.1
+  pi
+  #+clisp 3.1415926535897932385l0
+  #-clisp 3.141592653589793d0)
+
+(deftest tan.1
+  (tan 1)
+  #+lispworks 1.5574077246549023
+  #-lispworks 1.5574077)
+
+(deftest tan.2
+  (tan (- (/ pi 2) 0.0001))
+  #+(or abcl allegro cmu sbcl) 10000.0002192818d0
+  #+clisp                      10000.000219287924741l0
+  #+lispworks                   9999.999966661644)
+
+(deftest tan.3
+  (tan (/ pi 2))
+  #+abcl                             1.633123935319537d16
+  #+(or allegro cmu lispworks sbcl)  1.6331778728383844d16
+  #+clisp                           -3.9867976290042641156l19)
+
+(deftest tan.4
+  (tan (+ (/ pi 2) 0.0001))
+  #+(or abcl allegro cmu sbcl) -10000.000219294045d0
+  #+clisp                      -10000.000219287919724l0
+  #+lispworks                   -9999.999966673891d0)
 
 (deftest truncate.1
   (truncate least-positive-single-float)
@@ -412,6 +457,17 @@
 
 (deftest truncate.4
   (signals-error (truncate least-positive-double-float 2) 'floating-point-underflow)
+  t)
+
+(deftest read-from-string.1
+  #+(or cmu sbcl)
+  (unwind-protect
+      (signals-error (read-from-string "1.0f-1000") 'reader-error)
+    (progn
+      (ignore-errors (set-floating-point-modes :traps '(:underflow)))
+      (restore-default-floating-point-modes)))
+  #-(or cmu sbcl)
+  (signals-error (read-from-string "1.0f-1000") 'reader-error)
   t)
 
 (do-tests)
