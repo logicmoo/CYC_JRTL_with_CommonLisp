@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.399 2005-10-17 18:05:58 piso Exp $
+ * $Id: Lisp.java,v 1.400 2005-10-21 12:03:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,10 +35,6 @@ import java.util.zip.ZipFile;
 public abstract class Lisp
 {
     protected static final boolean isJava15OrLater;
-    static {
-        String version = System.getProperty("java.version");
-        isJava15OrLater = version.startsWith("1.5") || version.startsWith("1.6");
-    }
 
     public static final boolean debug = true;
 
@@ -1888,6 +1884,23 @@ public abstract class Lisp
                                             Keyword.COMMON_LISP,
                                             Keyword.ANSI_CL));
         }
+    }
+    static {
+        final String version = System.getProperty("java.version");
+        if (version.startsWith("1.4")) {
+            _FEATURES_.setSymbolValue(new Cons(Keyword.JAVA_1_4,
+                                               _FEATURES_.getSymbolValue()));
+            isJava15OrLater = false;
+        } else if (version.startsWith("1.5")) {
+            _FEATURES_.setSymbolValue(new Cons(Keyword.JAVA_1_5,
+                                               _FEATURES_.getSymbolValue()));
+            isJava15OrLater = true;
+        } else if (version.startsWith("1.6")) {
+            _FEATURES_.setSymbolValue(new Cons(Keyword.JAVA_1_6,
+                                               _FEATURES_.getSymbolValue()));
+            isJava15OrLater = true;
+        } else
+            isJava15OrLater = false;
     }
 
     // ### *modules*
