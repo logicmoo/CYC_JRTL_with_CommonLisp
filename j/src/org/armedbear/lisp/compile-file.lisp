@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.117 2005-08-31 15:42:29 piso Exp $
+;;; $Id: compile-file.lisp,v 1.118 2005-10-22 19:33:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -128,7 +128,8 @@
                      (*space* *space*)
                      (*safety* *safety*)
                      (*debug* *debug*))
-                (multiple-value-bind (body decls) (parse-body body)
+                (multiple-value-bind (body decls doc)
+                    (parse-body body)
                   (let* ((expr `(lambda ,lambda-list ,@decls (block ,block-name ,@body)))
                          (classfile-name (next-classfile-name))
                          (classfile (report-error
@@ -139,7 +140,8 @@
                                  `(fset ',name
                                         (load-compiled-function ,(file-namestring classfile))
                                         ,*source-position*
-                                        ',lambda-list))
+                                        ',lambda-list
+                                        ,doc))
                            (when compile-time-too
                              (fset name compiled-function)))
                           (t
@@ -150,7 +152,8 @@
                                    `(fset ',name
                                           ,precompiled-function
                                           ,*source-position*
-                                          ',lambda-list)))
+                                          ',lambda-list
+                                          ,doc)))
                            (when compile-time-too
                              (eval form)))))
                   (when (and (symbolp name) (eq (get name '%inline) 'INLINE))
