@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.835 2005-10-17 18:06:41 piso Exp $
+ * $Id: Primitives.java,v 1.836 2005-10-22 19:34:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3052,25 +3052,31 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### fset name function &optional source-position arglist => function
+    // ### fset name function &optional source-position arglist documentation
+    // => function
     private static final Primitive FSET =
         new Primitive("fset", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return execute(first, second, NIL, NIL);
+            return execute(first, second, NIL, NIL, NIL);
         }
-
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            return execute(first, second, third, NIL);
+            return execute(first, second, third, NIL, NIL);
         }
-
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
+            throws ConditionThrowable
+        {
+            return execute(first, second, third, fourth, NIL);
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth)
             throws ConditionThrowable
         {
             if (first instanceof Symbol) {
@@ -3096,9 +3102,12 @@ public final class Primitives extends Lisp
             } else
                 return signal(new TypeError(first, FUNCTION_NAME));
             if (second instanceof Operator) {
-                ((Operator)second).setLambdaName(first);
+                Operator op = (Operator) second;
+                op.setLambdaName(first);
                 if (fourth != NIL)
-                    ((Operator)second).setLambdaList(fourth);
+                    op.setLambdaList(fourth);
+                if (fifth != NIL)
+                    op.setDocumentation(Symbol.FUNCTION, fifth);
             }
             return second;
         }
@@ -5767,7 +5776,15 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject object, LispObject docType)
             throws ConditionThrowable
         {
-            return object.getDocumentation(docType);
+            LispObject doc = object.getDocumentation(docType);
+            if (doc == NIL) {
+                if (docType == Symbol.FUNCTION && object instanceof Symbol) {
+                    LispObject function = object.getSymbolFunction();
+                    if (function != null)
+                        doc = function.getDocumentation(docType);
+                }
+            }
+            return doc;
         }
     };
 

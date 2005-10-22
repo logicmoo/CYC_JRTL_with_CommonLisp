@@ -1,7 +1,7 @@
 ;;; describe.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: describe.lisp,v 1.4 2005-09-15 10:47:14 piso Exp $
+;;; $Id: describe.lisp,v 1.5 2005-10-22 19:34:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,9 +65,9 @@
          (when function
            (format stream "Its function binding is ~S.~%" function)
            (describe-arglist function stream)))
-       (let ((docstring (get object '%function-documentation)))
-         (when docstring
-           (format stream "Function documentation:~%  ~A~%" docstring)))
+       (let ((doc (documentation object 'function)))
+         (when doc
+           (format stream "Function documentation:~%  ~A~%" doc)))
        (let ((plist (symbol-plist object)))
          (when plist
            (format stream "The symbol's property list contains these indicator/value pairs:~%")
