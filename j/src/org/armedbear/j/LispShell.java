@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShell.java,v 1.87 2005-10-17 22:27:04 piso Exp $
+ * $Id: LispShell.java,v 1.88 2005-10-22 19:31:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -371,7 +371,7 @@ public class LispShell extends Shell
             renumber();
         enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
         posEndOfInput = pos.copy();
-        send(command);
+        sendInputToLisp(command);
     }
 
     protected void stdOutUpdate(final String s)
