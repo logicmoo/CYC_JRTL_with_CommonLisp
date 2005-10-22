@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShellMode.java,v 1.19 2005-10-20 12:21:18 piso Exp $
+ * $Id: LispShellMode.java,v 1.20 2005-10-22 19:31:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,17 +187,20 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         final Line line = pos.getLine();
         int offset = pos.getOffset();
         String s = line.getText();
+        String prompt = null;
         RE promptRE = lisp.getPromptRE();
         if (promptRE != null) {
             REMatch match = promptRE.getMatch(s);
             if (match != null) {
                 int end = match.getEndIndex();
+                prompt = s.substring(0, end);
                 s = s.substring(end);
                 offset -= end;
                 if (offset < 0)
                     return null;
             }
         }
+        // s is now the text of the line minus the prompt (if any).
         final int limit = s.length();
         if (limit == 0)
             return null;
@@ -239,6 +242,10 @@ public final class LispShellMode extends LispMode implements Constants, Mode
                 sb.append(c);
             else
                 break;
+        }
+        if (prompt != null && line == lisp.getEnd().getLine()) {
+            // Remove the token.
+            line.setText(prompt);
         }
         return sb.toString();
     }
