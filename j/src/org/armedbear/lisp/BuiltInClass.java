@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.46 2005-06-21 18:42:13 piso Exp $
+ * $Id: BuiltInClass.java,v 1.47 2005-10-22 14:02:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,6 +88,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass FUNCTION                         = addClass(Symbol.FUNCTION);
     public static final BuiltInClass HASH_TABLE                       = addClass(Symbol.HASH_TABLE);
     public static final BuiltInClass INTEGER                          = addClass(Symbol.INTEGER);
+    public static final BuiltInClass JAVA_OBJECT                      = addClass(Symbol.JAVA_OBJECT);
     public static final BuiltInClass LIST                             = addClass(Symbol.LIST);
     public static final BuiltInClass LOGICAL_PATHNAME                 = addClass(Symbol.LOGICAL_PATHNAME);
     public static final BuiltInClass METHOD_COMBINATION               = addClass(Symbol.METHOD_COMBINATION);
@@ -168,6 +169,8 @@ public class BuiltInClass extends LispClass
         HASH_TABLE.setCPL(HASH_TABLE, CLASS_T);
         INTEGER.setDirectSuperclass(RATIONAL);
         INTEGER.setCPL(INTEGER, RATIONAL, REAL, NUMBER, CLASS_T);
+        JAVA_OBJECT.setDirectSuperclass(CLASS_T);
+        JAVA_OBJECT.setCPL(JAVA_OBJECT, CLASS_T);
         LIST.setDirectSuperclass(SEQUENCE);
         LIST.setCPL(LIST, SEQUENCE, CLASS_T);
         LOGICAL_PATHNAME.setDirectSuperclass(PATHNAME);
