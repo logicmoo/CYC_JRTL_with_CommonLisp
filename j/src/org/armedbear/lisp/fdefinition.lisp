@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.14 2005-07-10 20:22:44 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.15 2005-10-22 19:32:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,17 +58,18 @@
   (declare (ignore name))
   nil)
 
-(defun fset (name function &optional source-position arglist)
+(defun fset (name function &optional source-position arglist documentation)
   (cond ((symbolp name)
          (check-redefinition name)
          (record-source-information name nil source-position)
          (when arglist
            (%set-arglist function arglist))
+         (%set-documentation function 'function documentation)
          (%set-symbol-function name function))
         ((setf-function-name-p name)
          (check-redefinition name)
          (record-source-information name nil source-position)
-         ;; FIXME arglist
+         ;; FIXME arglist documentation
          (setf (get (%cadr name) 'setf-function) function))
         (t
          (require-type name '(or symbol (cons (eql setf) (cons symbol null))))))
