@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.212 2005-10-16 02:03:28 piso Exp $
+ * $Id: Symbol.java,v 1.213 2005-10-22 14:01:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,6 +149,8 @@ public class Symbol extends LispObject
     public static final Symbol SOCKET_STREAM                       = PACKAGE_SYS.addInternalSymbol("SOCKET-STREAM");
     public static final Symbol STRING_INPUT_STREAM                 = PACKAGE_SYS.addInternalSymbol("STRING-INPUT-STREAM");
     public static final Symbol STRING_OUTPUT_STREAM                = PACKAGE_SYS.addInternalSymbol("STRING-OUTPUT-STREAM");
+
+    public static final Symbol JAVA_OBJECT                         = PACKAGE_JAVA.addExternalSymbol("JAVA-OBJECT");
 
     public static final Symbol UNSPECIFIED                         = PACKAGE_CL.addExternalSymbol("*");
 
