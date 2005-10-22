@@ -51,7 +51,8 @@
 			       #:*catch-errors*
 			       #:*passed-tests*
 			       #:*failed-tests*
-			       #:disable-note))))))
+			       #:disable-note
+                               #:*expected-failures*))))))
 ;;  )
 
 ;; (in-package :regression-test)
