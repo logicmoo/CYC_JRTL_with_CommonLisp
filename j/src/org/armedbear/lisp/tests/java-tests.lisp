@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.1 2005-10-22 12:14:43 piso Exp $
+;;; $Id: java-tests.lisp,v 1.2 2005-10-22 14:10:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,16 +45,42 @@
 #+allegro
 (use-package '#:javatools.jlinker)
 #+allegro
+(use-package '#:javatools.jlinker '#:cl-user) ;; For convenience only.
+#+allegro
 (load "jl-config.cl")
 #+allegro
-(jlinker-init)
+(or (jlinker-query) (jlinker-init))
+
+#+abcl
+(deftest java-object.1
+  (class-name (find-class 'java-object nil))
+  java-object)
+
+(deftest jclass-name.1
+  (jclass-name (jclass "java.lang.Object"))
+  "java.lang.Object")
+
+(deftest jclass-name.2
+  (jclass-name (jclass "java.lang.Object") "java.lang.Object")
+  t
+  "java.lang.Object")
+
+(deftest jclass-name.3
+  (jclass-name (jclass "java.lang.Object") "foo")
+  nil
+  "java.lang.Object")
 
 (deftest jcall.1
   (let ((method (jmethod "java.lang.String" "length")))
     (jcall method "test"))
   4)
 
+(deftest jfield.1
+  (type-of (jfield "java.lang.Integer" "TYPE"))
+  #+abcl    java-object
+  #+allegro tran-struct)
+
 (do-tests)
 
-#+allegro
-(jlinker-end)
+;;#+allegro
+;;(jlinker-end)

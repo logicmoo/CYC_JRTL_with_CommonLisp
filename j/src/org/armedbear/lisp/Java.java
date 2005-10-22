@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Java.java,v 1.51 2005-03-25 03:19:20 piso Exp $
+ * $Id: Java.java,v 1.52 2005-10-22 14:11:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -356,7 +356,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 if (registeredExceptions.containsKey(tClass)) {
-		  signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t))); 
+		  signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
                 }
                 signal(new LispError(getMessage(t)));
             }
@@ -583,8 +583,9 @@ public final class Java extends Lisp
         }
     };
 
-    private static final Primitive JAVA_OBJECT_P = new Primitive("java-object-p", PACKAGE_JAVA, true,
-                                                                 "object")
+    // ### java-object-p
+    private static final Primitive JAVA_OBJECT_P =
+        new Primitive("java-object-p", PACKAGE_JAVA, true, "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
