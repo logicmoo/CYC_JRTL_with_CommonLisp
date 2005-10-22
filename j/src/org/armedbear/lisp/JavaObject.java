@@ -1,8 +1,8 @@
 /*
  * JavaObject.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: JavaObject.java,v 1.17 2004-10-09 13:28:18 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: JavaObject.java,v 1.18 2005-10-22 14:11:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,13 +21,32 @@
 
 package org.armedbear.lisp;
 
-public class JavaObject extends LispObject
+public final class JavaObject extends LispObject
 {
     private final Object obj;
 
     public JavaObject(Object obj)
     {
         this.obj = obj;
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.JAVA_OBJECT;
+    }
+
+    public LispObject classOf()
+    {
+        return BuiltInClass.JAVA_OBJECT;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.JAVA_OBJECT)
+            return T;
+        if (type == BuiltInClass.JAVA_OBJECT)
+            return T;
+        return super.typep(type);
     }
 
     public final Object getObject()
@@ -45,13 +64,14 @@ public class JavaObject extends LispObject
         return javaInstance();
     }
 
-    public static final Object getObject(LispObject o) throws ConditionThrowable
+    public static final Object getObject(LispObject o)
+        throws ConditionThrowable
     {
         try {
 	    return ((JavaObject)o).obj;
         }
         catch (ClassCastException e) {
-            signal (new TypeError(o, "Java object"));
+            signalTypeError(o, Symbol.JAVA_OBJECT);
             // Not reached.
             return null;
         }
@@ -80,7 +100,7 @@ public class JavaObject extends LispObject
     {
         if (obj instanceof ConditionThrowable)
             return obj.toString();
-        StringBuffer sb = new StringBuffer("JAVAOBJECT ");
+        FastStringBuffer sb = new FastStringBuffer("JAVAOBJECT ");
         sb.append(obj == null ? "null" : obj.getClass().getName());
         return unreadableString(sb.toString());
     }
