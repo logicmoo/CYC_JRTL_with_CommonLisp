@@ -1,8 +1,8 @@
 /*
  * Do.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Do.java,v 1.12 2005-02-28 02:50:03 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Do.java,v 1.13 2005-10-23 16:04:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public final class Do extends Lisp
 {
     // ### do
     private static final SpecialOperator DO =
-        new SpecialOperator("do", "varlist endlist &body body")
+        new SpecialOperator(Symbol.DO, "varlist endlist &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -35,8 +35,8 @@ public final class Do extends Lisp
     };
 
     // ### do*
-    private static final SpecialOperator DO_ =
-        new SpecialOperator("do*", "varlist endlist &body body")
+    private static final SpecialOperator DO_STAR =
+        new SpecialOperator(Symbol.DO_STAR, "varlist endlist &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable

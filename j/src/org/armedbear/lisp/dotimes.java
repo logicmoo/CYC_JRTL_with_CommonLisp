@@ -2,7 +2,7 @@
  * dotimes.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: dotimes.java,v 1.15 2005-10-15 16:02:57 piso Exp $
+ * $Id: dotimes.java,v 1.16 2005-10-23 16:04:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public final class dotimes extends SpecialOperator
 {
     private dotimes()
     {
-        super("dotimes");
+        super(Symbol.DOTIMES);
     }
 
     public LispObject execute(LispObject args, Environment env)

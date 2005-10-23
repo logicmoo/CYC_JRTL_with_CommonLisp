@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.48 2005-10-17 03:57:56 piso Exp $
+ * $Id: SpecialOperators.java,v 1.49 2005-10-23 16:05:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public final class SpecialOperators extends Lisp
 {
     // ### quote
     private static final SpecialOperator QUOTE =
-        new SpecialOperator("quote", "thing")
+        new SpecialOperator(Symbol.QUOTE, "thing")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -40,7 +40,7 @@ public final class SpecialOperators extends Lisp
 
     // ### if
     private static final SpecialOperator IF =
-        new SpecialOperator("if", "test then &optional else")
+        new SpecialOperator(Symbol.IF, "test then &optional else")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -65,7 +65,7 @@ public final class SpecialOperators extends Lisp
 
     // ### let
     private static final SpecialOperator LET =
-        new SpecialOperator("let", "bindings &body body")
+        new SpecialOperator(Symbol.LET, "bindings &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -77,8 +77,8 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### let*
-    private static final SpecialOperator LETX =
-        new SpecialOperator("let*", "bindings &body body")
+    private static final SpecialOperator LET_STAR =
+        new SpecialOperator(Symbol.LET_STAR, "bindings &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -206,7 +206,7 @@ public final class SpecialOperators extends Lisp
 
     // ### symbol-macrolet
     private static final SpecialOperator SYMBOL_MACROLET =
-        new SpecialOperator("symbol-macrolet", "macrobindings &body body")
+        new SpecialOperator(Symbol.SYMBOL_MACROLET, "macrobindings &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -258,10 +258,10 @@ public final class SpecialOperators extends Lisp
         }
     };
 
-    // ### load-time-value
-    // load-time-value form &optional read-only-p => object
+    // ### load-time-value form &optional read-only-p => object
     private static final SpecialOperator LOAD_TIME_VALUE =
-        new SpecialOperator("load-time-value", "form &optional read-only-p")
+        new SpecialOperator(Symbol.LOAD_TIME_VALUE,
+                            "form &optional read-only-p")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -279,7 +279,7 @@ public final class SpecialOperators extends Lisp
 
     // ### locally
     private static final SpecialOperator LOCALLY =
-        new SpecialOperator("locally", "&body body")
+        new SpecialOperator(Symbol.LOCALLY, "&body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -297,7 +297,8 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### progn
-    private static final SpecialOperator PROGN = new SpecialOperator("progn", "&rest forms")
+    private static final SpecialOperator PROGN =
+        new SpecialOperator(Symbol.PROGN, "&rest forms")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -314,7 +315,7 @@ public final class SpecialOperators extends Lisp
 
     // ### flet
     private static final SpecialOperator FLET =
-        new SpecialOperator("flet", "definitions &body body")
+        new SpecialOperator(Symbol.FLET, "definitions &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -325,7 +326,7 @@ public final class SpecialOperators extends Lisp
 
     // ### labels
     private static final SpecialOperator LABELS =
-        new SpecialOperator("labels", "definitions &body body")
+        new SpecialOperator(Symbol.LABELS, "definitions &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -359,7 +360,7 @@ public final class SpecialOperators extends Lisp
                 } else if (name instanceof Cons && name.car() == Symbol.SETF) {
                     symbol = checkSymbol(name.cadr());
                 } else
-                    return signal(new TypeError(name, "valid function name"));
+                    return signalTypeError(name, FUNCTION_NAME);
                 LispObject rest = def.cdr();
                 LispObject parameters = rest.car();
                 LispObject body = rest.cdr();
@@ -398,9 +399,10 @@ public final class SpecialOperators extends Lisp
         return result;
     }
 
-    // ### the
-    // the value-type form => result*
-    private static final SpecialOperator THE = new SpecialOperator("the", "type value") {
+    // ### the value-type form => result*
+    private static final SpecialOperator THE =
+        new SpecialOperator(Symbol.THE, "type value")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -412,7 +414,7 @@ public final class SpecialOperators extends Lisp
 
     // ### progv
     private static final SpecialOperator PROGV =
-        new SpecialOperator("progv", "symbols values &body body")
+        new SpecialOperator(Symbol.PROGV, "symbols values &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -443,7 +445,7 @@ public final class SpecialOperators extends Lisp
 
     // ### declare
     private static final SpecialOperator DECLARE =
-        new SpecialOperator("declare", "&rest declaration-specifiers")
+        new SpecialOperator(Symbol.DECLARE, "&rest declaration-specifiers")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -466,7 +468,7 @@ public final class SpecialOperators extends Lisp
 
     // ### function
     private static final SpecialOperator FUNCTION =
-        new SpecialOperator("function", "thing")
+        new SpecialOperator(Symbol.FUNCTION, "thing")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -517,7 +519,7 @@ public final class SpecialOperators extends Lisp
 
     // ### setq
     private static final SpecialOperator SETQ =
-        new SpecialOperator("setq", "&rest vars-and-values")
+        new SpecialOperator(Symbol.SETQ, "&rest vars-and-values")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
