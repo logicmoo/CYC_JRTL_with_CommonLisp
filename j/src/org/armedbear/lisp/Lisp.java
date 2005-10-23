@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.411 2005-10-23 18:44:50 piso Exp $
+ * $Id: Lisp.java,v 1.412 2005-10-23 19:06:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2107,7 +2107,7 @@ public abstract class Lisp
 //         exportConstant("INTERNAL-TIME-UNITS-PER-SECOND", PACKAGE_CL,
 //                        new Fixnum(1000));
     static {
-        Symbol.INTERNAL_TIME_UNITS_PER_SECOND.initializeSpecial(new Fixnum(1000));
+        Symbol.INTERNAL_TIME_UNITS_PER_SECOND.initializeConstant(new Fixnum(1000));
     }
 
     // ### call-registers-limit
