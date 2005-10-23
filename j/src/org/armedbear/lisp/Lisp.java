@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.404 2005-10-23 16:58:26 piso Exp $
+ * $Id: Lisp.java,v 1.405 2005-10-23 17:16:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2089,163 +2089,42 @@ public abstract class Lisp
         Symbol.SLASH_SLASH_SLASH.initializeSpecial(NIL);
     }
 
-//     public static final Symbol PI =
-//         exportConstant("PI", PACKAGE_CL, new DoubleFloat(Math.PI));
+    // Floating point constants.
     static {
         Symbol.PI.initializeConstant(new DoubleFloat(Math.PI));
-    }
-
-//     public static final Symbol SHORT_FLOAT_EPSILON =
-//         exportConstant("SHORT-FLOAT-EPSILON", PACKAGE_CL,
-//                        new SingleFloat((float)5.960465E-8));
-    static {
         Symbol.SHORT_FLOAT_EPSILON.initializeConstant(new SingleFloat((float)5.960465E-8));
-    }
-
-//     public static final Symbol SINGLE_FLOAT_EPSILON =
-//         exportConstant("SINGLE-FLOAT-EPSILON", PACKAGE_CL,
-//                        new SingleFloat((float)5.960465E-8));
-    static {
         Symbol.SINGLE_FLOAT_EPSILON.initializeConstant(new SingleFloat((float)5.960465E-8));
-    }
-
-//     public static final Symbol DOUBLE_FLOAT_EPSILON =
-//         exportConstant("DOUBLE-FLOAT-EPSILON", PACKAGE_CL,
-//                        new DoubleFloat((double)1.1102230246251568E-16));
-    static {
         Symbol.DOUBLE_FLOAT_EPSILON.initializeConstant(new DoubleFloat((double)1.1102230246251568E-16));
-    }
-
-//     public static final Symbol LONG_FLOAT_EPSILON =
-//         exportConstant("LONG-FLOAT-EPSILON", PACKAGE_CL,
-//                        new DoubleFloat((double)1.1102230246251568E-16));
-    static {
         Symbol.LONG_FLOAT_EPSILON.initializeConstant(new DoubleFloat((double)1.1102230246251568E-16));
-    }
-
-//     public static final Symbol SHORT_FLOAT_NEGATIVE_EPSILON =
-//         exportConstant("SHORT-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-//                        new SingleFloat(2.9802326e-8f));
-    static {
         Symbol.SHORT_FLOAT_NEGATIVE_EPSILON.initializeConstant(new SingleFloat(2.9802326e-8f));
-    }
-
-//     public static final Symbol SINGLE_FLOAT_NEGATIVE_EPSILON =
-//         exportConstant("SINGLE-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-//                        new SingleFloat(2.9802326e-8f));
-    static {
         Symbol.SINGLE_FLOAT_NEGATIVE_EPSILON.initializeConstant(new SingleFloat(2.9802326e-8f));
-    }
-
-//     public static final Symbol DOUBLE_FLOAT_NEGATIVE_EPSILON =
-//         exportConstant("DOUBLE-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-//                        new DoubleFloat((double)5.551115123125784E-17));
-    static {
         Symbol.DOUBLE_FLOAT_NEGATIVE_EPSILON.initializeConstant(new DoubleFloat((double)5.551115123125784E-17));
-    }
-
-//     public static final Symbol LONG_FLOAT_NEGATIVE_EPSILON =
-//         exportConstant("LONG-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-//                        new DoubleFloat((double)5.551115123125784E-17));
-    static {
         Symbol.LONG_FLOAT_NEGATIVE_EPSILON.initializeConstant(new DoubleFloat((double)5.551115123125784E-17));
+        Symbol.MOST_POSITIVE_SHORT_FLOAT.initializeConstant(new SingleFloat(Float.MAX_VALUE));
+        Symbol.MOST_POSITIVE_SINGLE_FLOAT.initializeConstant(new SingleFloat(Float.MAX_VALUE));
+        Symbol.MOST_POSITIVE_DOUBLE_FLOAT.initializeConstant(new DoubleFloat(Double.MAX_VALUE));
+        Symbol.MOST_POSITIVE_LONG_FLOAT.initializeConstant(new DoubleFloat(Double.MAX_VALUE));
+        Symbol.LEAST_POSITIVE_SHORT_FLOAT.initializeConstant(new SingleFloat(Float.MIN_VALUE));
+        Symbol.LEAST_POSITIVE_SINGLE_FLOAT.initializeConstant(new SingleFloat(Float.MIN_VALUE));
+        Symbol.LEAST_POSITIVE_DOUBLE_FLOAT.initializeConstant(new DoubleFloat(Double.MIN_VALUE));
+        Symbol.LEAST_POSITIVE_LONG_FLOAT.initializeConstant(new DoubleFloat(Double.MIN_VALUE));
+        Symbol.LEAST_POSITIVE_NORMALIZED_SHORT_FLOAT.initializeConstant(new SingleFloat(1.17549435e-38f));
+        Symbol.LEAST_POSITIVE_NORMALIZED_SINGLE_FLOAT.initializeConstant(new SingleFloat(1.17549435e-38f));
+        Symbol.LEAST_POSITIVE_NORMALIZED_DOUBLE_FLOAT.initializeConstant(new DoubleFloat(2.2250738585072014e-308d));
+        Symbol.LEAST_POSITIVE_NORMALIZED_LONG_FLOAT.initializeConstant(new DoubleFloat(2.2250738585072014e-308d));
+        Symbol.MOST_NEGATIVE_SHORT_FLOAT.initializeConstant(new SingleFloat(- Float.MAX_VALUE));
+        Symbol.MOST_NEGATIVE_SINGLE_FLOAT.initializeConstant(new SingleFloat(- Float.MAX_VALUE));
+        Symbol.MOST_NEGATIVE_DOUBLE_FLOAT.initializeConstant(new DoubleFloat(- Double.MAX_VALUE));
+        Symbol.MOST_NEGATIVE_LONG_FLOAT.initializeConstant(new DoubleFloat(- Double.MAX_VALUE));
+        Symbol.LEAST_NEGATIVE_SHORT_FLOAT.initializeConstant(new SingleFloat(- Float.MIN_VALUE));
+        Symbol.LEAST_NEGATIVE_SINGLE_FLOAT.initializeConstant(new SingleFloat(- Float.MIN_VALUE));
+        Symbol.LEAST_NEGATIVE_DOUBLE_FLOAT.initializeConstant(new DoubleFloat(- Double.MIN_VALUE));
+        Symbol.LEAST_NEGATIVE_LONG_FLOAT.initializeConstant(new DoubleFloat(- Double.MIN_VALUE));
+        Symbol.LEAST_NEGATIVE_NORMALIZED_SHORT_FLOAT.initializeConstant(new SingleFloat(-1.17549435e-38f));
+        Symbol.LEAST_NEGATIVE_NORMALIZED_SINGLE_FLOAT.initializeConstant(new SingleFloat(-1.17549435e-38f));
+        Symbol.LEAST_NEGATIVE_NORMALIZED_DOUBLE_FLOAT.initializeConstant(new DoubleFloat(-2.2250738585072014e-308d));
+        Symbol.LEAST_NEGATIVE_NORMALIZED_LONG_FLOAT.initializeConstant(new DoubleFloat(-2.2250738585072014e-308d));
     }
-
-    public static final Symbol MOST_POSITIVE_SHORT_FLOAT =
-        exportConstant("MOST-POSITIVE-SHORT-FLOAT", PACKAGE_CL,
-                       new SingleFloat(Float.MAX_VALUE));
-
-    public static final Symbol MOST_POSITIVE_SINGLE_FLOAT =
-        exportConstant("MOST-POSITIVE-SINGLE-FLOAT", PACKAGE_CL,
-                       new SingleFloat(Float.MAX_VALUE));
-
-    public static final Symbol MOST_POSITIVE_DOUBLE_FLOAT =
-        exportConstant("MOST-POSITIVE-DOUBLE-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(Double.MAX_VALUE));
-
-    public static final Symbol MOST_POSITIVE_LONG_FLOAT =
-        exportConstant("MOST-POSITIVE-LONG-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(Double.MAX_VALUE));
-
-    public static final Symbol LEAST_POSITIVE_SHORT_FLOAT =
-        exportConstant("LEAST-POSITIVE-SHORT-FLOAT", PACKAGE_CL,
-                       new SingleFloat(Float.MIN_VALUE));
-
-    public static final Symbol LEAST_POSITIVE_SINGLE_FLOAT =
-        exportConstant("LEAST-POSITIVE-SINGLE-FLOAT", PACKAGE_CL,
-                       new SingleFloat(Float.MIN_VALUE));
-
-    public static final Symbol LEAST_POSITIVE_DOUBLE_FLOAT =
-        exportConstant("LEAST-POSITIVE-DOUBLE-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(Double.MIN_VALUE));
-
-    public static final Symbol LEAST_POSITIVE_LONG_FLOAT =
-        exportConstant("LEAST-POSITIVE-LONG-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(Double.MIN_VALUE));
-
-    public static final Symbol LEAST_POSITIVE_NORMALIZED_SHORT_FLOAT =
-        exportConstant("LEAST-POSITIVE-NORMALIZED-SHORT-FLOAT", PACKAGE_CL,
-                       new SingleFloat(1.17549435e-38f));
-
-    public static final Symbol LEAST_POSITIVE_NORMALIZED_SINGLE_FLOAT =
-        exportConstant("LEAST-POSITIVE-NORMALIZED-SINGLE-FLOAT", PACKAGE_CL,
-                       new SingleFloat(1.17549435e-38f));
-
-    public static final Symbol LEAST_POSITIVE_NORMALIZED_DOUBLE_FLOAT =
-        exportConstant("LEAST-POSITIVE-NORMALIZED-DOUBLE-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(2.2250738585072014e-308d));
-
-    public static final Symbol LEAST_POSITIVE_NORMALIZED_LONG_FLOAT =
-        exportConstant("LEAST-POSITIVE-NORMALIZED-LONG-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(2.2250738585072014e-308d));
-
-    public static final Symbol MOST_NEGATIVE_SHORT_FLOAT =
-        exportConstant("MOST-NEGATIVE-SHORT-FLOAT", PACKAGE_CL,
-                       new SingleFloat(- Float.MAX_VALUE));
-
-    public static final Symbol MOST_NEGATIVE_SINGLE_FLOAT =
-        exportConstant("MOST-NEGATIVE-SINGLE-FLOAT", PACKAGE_CL,
-                       new SingleFloat(- Float.MAX_VALUE));
-
-    public static final Symbol MOST_NEGATIVE_DOUBLE_FLOAT =
-        exportConstant("MOST-NEGATIVE-DOUBLE-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(- Double.MAX_VALUE));
-
-    public static final Symbol MOST_NEGATIVE_LONG_FLOAT =
-        exportConstant("MOST-NEGATIVE-LONG-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(- Double.MAX_VALUE));
-
-    public static final Symbol LEAST_NEGATIVE_SHORT_FLOAT =
-        exportConstant("LEAST-NEGATIVE-SHORT-FLOAT", PACKAGE_CL,
-                       new SingleFloat(- Float.MIN_VALUE));
-
-    public static final Symbol LEAST_NEGATIVE_SINGLE_FLOAT =
-        exportConstant("LEAST-NEGATIVE-SINGLE-FLOAT", PACKAGE_CL,
-                       new SingleFloat(- Float.MIN_VALUE));
-
-    public static final Symbol LEAST_NEGATIVE_DOUBLE_FLOAT =
-        exportConstant("LEAST-NEGATIVE-DOUBLE-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(- Double.MIN_VALUE));
-
-    public static final Symbol LEAST_NEGATIVE_LONG_FLOAT =
-        exportConstant("LEAST-NEGATIVE-LONG-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(- Double.MIN_VALUE));
-
-    public static final Symbol LEAST_NEGATIVE_NORMALIZED_SHORT_FLOAT =
-        exportConstant("LEAST-NEGATIVE-NORMALIZED-SHORT-FLOAT", PACKAGE_CL,
-                       new SingleFloat(-1.17549435e-38f));
-
-    public static final Symbol LEAST_NEGATIVE_NORMALIZED_SINGLE_FLOAT =
-        exportConstant("LEAST-NEGATIVE-NORMALIZED-SINGLE-FLOAT", PACKAGE_CL,
-                       new SingleFloat(-1.17549435e-38f));
-
-    public static final Symbol LEAST_NEGATIVE_NORMALIZED_DOUBLE_FLOAT =
-        exportConstant("LEAST-NEGATIVE-NORMALIZED-DOUBLE-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(-2.2250738585072014e-308d));
-
-    public static final Symbol LEAST_NEGATIVE_NORMALIZED_LONG_FLOAT =
-        exportConstant("LEAST-NEGATIVE-NORMALIZED-LONG-FLOAT", PACKAGE_CL,
-                       new DoubleFloat(-2.2250738585072014e-308d));
 
     public static final Symbol BOOLE_CLR =
         exportConstant("BOOLE-CLR", PACKAGE_CL, Fixnum.ZERO);

@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Ratio.java,v 1.50 2005-03-17 14:56:43 piso Exp $
+ * $Id: Ratio.java,v 1.51 2005-10-23 17:17:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -513,7 +513,7 @@ public final class Ratio extends LispObject
         sb.append('/');
         sb.append(denominator.toString(base));
         String s = sb.toString().toUpperCase();
-        if (_PRINT_RADIX_.symbolValue(thread) != NIL) {
+        if (Symbol.PRINT_RADIX.symbolValue(thread) != NIL) {
             sb.setLength(0);
             switch (base) {
                 case 2:

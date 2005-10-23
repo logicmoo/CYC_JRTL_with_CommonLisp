@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.217 2005-10-23 16:39:49 piso Exp $
+ * $Id: Symbol.java,v 1.218 2005-10-23 17:17:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -869,7 +869,7 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*PRINT-PPRINT-DISPATCH*");
     public static final Symbol _PRINT_PRETTY_ =
         PACKAGE_CL.addExternalSymbol("*PRINT-PRETTY*");
-    public static final Symbol _PRINT_RADIX_ =
+    public static final Symbol PRINT_RADIX =
         PACKAGE_CL.addExternalSymbol("*PRINT-RADIX*");
     public static final Symbol PRINT_READABLY =
         PACKAGE_CL.addExternalSymbol("*PRINT-READABLY*");
