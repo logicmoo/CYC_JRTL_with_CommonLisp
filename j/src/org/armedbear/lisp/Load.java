@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.123 2005-10-23 17:38:10 piso Exp $
+ * $Id: Load.java,v 1.124 2005-10-23 17:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -372,9 +372,9 @@ public final class Load extends Lisp
         try {
             if (pathname == null && truename != null)
                 pathname = Pathname.parseNamestring(truename);
-            thread.bindSpecial(_LOAD_PATHNAME_,
+            thread.bindSpecial(Symbol.LOAD_PATHNAME,
                                pathname != null ? pathname : NIL);
-            thread.bindSpecial(_LOAD_TRUENAME_,
+            thread.bindSpecial(Symbol.LOAD_TRUENAME,
                                pathname != null ? pathname : NIL);
             thread.bindSpecial(_SOURCE_,
                                pathname != null ? pathname : NIL);

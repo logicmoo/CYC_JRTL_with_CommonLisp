@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.407 2005-10-23 17:38:10 piso Exp $
+ * $Id: Lisp.java,v 1.408 2005-10-23 17:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -332,7 +332,7 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        if (_LOAD_TRUENAME_.symbolValue(thread) != NIL)
+        if (Symbol.LOAD_TRUENAME.symbolValue(thread) != NIL)
             return eval(obj, new Environment(), thread);
         else
             return NIL;
@@ -849,7 +849,7 @@ public abstract class Lisp
             defaultPathname =
                 coerceToPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.symbolValue(thread));
         } else {
-            LispObject loadTruename = _LOAD_TRUENAME_.symbolValue(thread);
+            LispObject loadTruename = Symbol.LOAD_TRUENAME.symbolValue(thread);
             if (loadTruename instanceof Pathname) {
                 defaultPathname = (Pathname) loadTruename;
                 // We're loading a file.
@@ -981,7 +981,7 @@ public abstract class Lisp
         }
 
         try {
-            LispObject loadTruename = _LOAD_TRUENAME_.symbolValue(thread);
+            LispObject loadTruename = Symbol.LOAD_TRUENAME.symbolValue(thread);
             String zipFileName = ((Pathname)loadTruename).getNamestring();
             ZipFile zipFile = new ZipFile(zipFileName);
             try {
@@ -1911,13 +1911,19 @@ public abstract class Lisp
         Symbol.LOAD_PRINT.initializeSpecial(NIL);
     }
 
-    // ### *load-pathname*
-    public static final Symbol _LOAD_PATHNAME_ =
-        exportSpecial("*LOAD-PATHNAME*", PACKAGE_CL, NIL);
+//     // ### *load-pathname*
+//     public static final Symbol LOAD_PATHNAME =
+//         exportSpecial("*LOAD-PATHNAME*", PACKAGE_CL, NIL);
+    static {
+        Symbol.LOAD_PATHNAME.initializeSpecial(NIL);
+    }
 
-    // ### *load-truename*
-    public static final Symbol _LOAD_TRUENAME_ =
-        exportSpecial("*LOAD-TRUENAME*", PACKAGE_CL, NIL);
+//     // ### *load-truename*
+//     public static final Symbol LOAD_TRUENAME =
+//         exportSpecial("*LOAD-TRUENAME*", PACKAGE_CL, NIL);
+    static {
+        Symbol.LOAD_TRUENAME.initializeSpecial(NIL);
+    }
 
     // ### *load-depth*
     // internal symbol

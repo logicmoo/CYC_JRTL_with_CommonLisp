@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.96 2005-10-23 16:39:49 piso Exp $
+ * $Id: Interpreter.java,v 1.97 2005-10-23 17:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -487,7 +487,7 @@ public final class Interpreter extends Lisp
                 thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                 try {
                     final LispObject truename =
-                        _LOAD_TRUENAME_.symbolValue(thread);
+                        Symbol.LOAD_TRUENAME.symbolValue(thread);
                     if (truename != NIL) {
                         final LispObject stream =
                             _LOAD_STREAM_.symbolValue(thread);

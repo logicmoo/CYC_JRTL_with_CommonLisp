@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.219 2005-10-23 17:38:10 piso Exp $
+ * $Id: Symbol.java,v 1.220 2005-10-23 17:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -831,11 +831,11 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*FEATURES*");
     public static final Symbol GENSYM_COUNTER =
         PACKAGE_CL.addExternalSymbol("*GENSYM-COUNTER*");
-    public static final Symbol _LOAD_PATHNAME_ =
+    public static final Symbol LOAD_PATHNAME =
         PACKAGE_CL.addExternalSymbol("*LOAD-PATHNAME*");
     public static final Symbol LOAD_PRINT =
         PACKAGE_CL.addExternalSymbol("*LOAD-PRINT*");
-    public static final Symbol _LOAD_TRUENAME_ =
+    public static final Symbol LOAD_TRUENAME =
         PACKAGE_CL.addExternalSymbol("*LOAD-TRUENAME*");
     public static final Symbol LOAD_VERBOSE =
         PACKAGE_CL.addExternalSymbol("*LOAD-VERBOSE*");
