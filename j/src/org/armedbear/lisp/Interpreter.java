@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.93 2005-10-17 16:45:19 piso Exp $
+ * $Id: Interpreter.java,v 1.94 2005-10-23 13:05:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -537,7 +537,7 @@ public final class Interpreter extends Lisp
         if (obj == EOF)
             return signal(new EndOfFile(stream));
         final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-        thread.bindSpecial(_DEBUGGER_HOOK_, _DEBUGGER_HOOK_FUNCTION);
+        thread.bindSpecial(Symbol._DEBUGGER_HOOK_, _DEBUGGER_HOOK_FUNCTION);
         try {
             return eval(obj, new Environment(), thread);
         }
@@ -589,7 +589,7 @@ public final class Interpreter extends Lisp
 
     private static String prompt()
     {
-        Package pkg = (Package) _PACKAGE_.getSymbolValue();
+        Package pkg = (Package) Symbol._PACKAGE_.getSymbolValue();
         String pkgName = pkg.getNickname();
         if (pkgName == null)
             pkgName = pkg.getName();

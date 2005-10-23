@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.120 2005-10-17 16:45:19 piso Exp $
+ * $Id: Load.java,v 1.121 2005-10-23 13:05:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -174,9 +174,9 @@ public final class Load extends Lisp
         LispThread thread = LispThread.currentThread();
         if (auto) {
             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-            thread.bindSpecial(_READTABLE_,
+            thread.bindSpecial(Symbol._READTABLE_,
                                Readtable._STANDARD_READTABLE_.symbolValue(thread));
-            thread.bindSpecial(_PACKAGE_, PACKAGE_CL_USER);
+            thread.bindSpecial(Symbol._PACKAGE_, PACKAGE_CL_USER);
             try {
                 return loadSystemFile(filename,
                                       _AUTOLOAD_VERBOSE_.symbolValue(thread) != NIL,
@@ -358,8 +358,8 @@ public final class Load extends Lisp
         final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         // "LOAD binds *READTABLE* and *PACKAGE* to the values they held before
         // loading the file."
-        thread.bindSpecialToCurrentValue(_READTABLE_);
-        thread.bindSpecialToCurrentValue(_PACKAGE_);
+        thread.bindSpecialToCurrentValue(Symbol._READTABLE_);
+        thread.bindSpecialToCurrentValue(Symbol._PACKAGE_);
         int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue(thread));
         thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
         // Compiler policy.
@@ -433,7 +433,7 @@ public final class Load extends Lisp
                 LispObject result = eval(obj, env, thread);
                 if (print) {
                     Stream out =
-                        checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue(thread));
+                        checkCharacterOutputStream(Symbol._STANDARD_OUTPUT_.symbolValue(thread));
                     out._writeLine(result.writeToString());
                     out._finishOutput();
                 }

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.400 2005-10-21 12:03:34 piso Exp $
+ * $Id: Lisp.java,v 1.401 2005-10-23 13:02:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,6 +67,8 @@ public abstract class Lisp
         Packages.createPackage("JAVA");
 
     // ### nil
+    // Constructing NIL forces the Symbol class to be loaded (since Nil extends
+    // Symbol).
     public static final LispObject NIL = new Nil(PACKAGE_CL);
 
     // We need NIL before we can call usePackage().
@@ -101,15 +103,6 @@ public abstract class Lisp
         catch (Throwable t) {
             t.printStackTrace();
         }
-    }
-
-    // Constructing NIL forces the Symbol class to be loaded (since Nil extends
-    // Symbol). The Symbol class defines a number of named Symbol objects so
-    // they can be referred to in the Java code. addInitialExports() is careful
-    // not to touch symbols that have already been defined, so the Java names
-    // assigned in Symbol.java continue to reference the right Symbol objects.
-    static {
-        PACKAGE_CL.addInitialExports(Exports.COMMON_LISP_SYMBOL_NAMES);
     }
 
     // End-of-file marker.
@@ -1323,9 +1316,9 @@ public abstract class Lisp
         if (obj instanceof Stream)
             return (Stream) obj;
         if (obj == T)
-            return checkCharacterInputStream(_TERMINAL_IO_.symbolValue());
+            return checkCharacterInputStream(Symbol._TERMINAL_IO_.symbolValue());
         if (obj == NIL)
-            return checkCharacterInputStream(_STANDARD_INPUT_.symbolValue());
+            return checkCharacterInputStream(Symbol._STANDARD_INPUT_.symbolValue());
         signalTypeError(obj, Symbol.STREAM);
         // Not reached.
         return null;
@@ -1735,53 +1728,58 @@ public abstract class Lisp
         _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(new SimpleString(userDir));
     }
 
-    public static final Symbol _PACKAGE_ =
-        exportSpecial("*PACKAGE*", PACKAGE_CL, PACKAGE_CL_USER);
+    static {
+        Symbol._PACKAGE_.initializeSpecial(PACKAGE_CL_USER);
+    }
 
     public static final Package getCurrentPackage()
     {
-        return (Package) _PACKAGE_.symbolValueNoThrow();
+        return (Package) Symbol._PACKAGE_.symbolValueNoThrow();
     }
 
     private static Stream stdin = new Stream(System.in, Symbol.CHARACTER, true);
 
     private static Stream stdout = new Stream(System.out, Symbol.CHARACTER, true);
 
-    public static final Symbol _STANDARD_INPUT_ =
-        exportSpecial("*STANDARD-INPUT*", PACKAGE_CL, stdin);
+    static {
+        Symbol._STANDARD_INPUT_.initializeSpecial(stdin);
+    }
 
-    public static final Symbol _STANDARD_OUTPUT_ =
-        exportSpecial("*STANDARD-OUTPUT*", PACKAGE_CL, stdout);
+    static {
+        Symbol._STANDARD_OUTPUT_.initializeSpecial(stdout);
+    }
 
-    public static final Symbol _ERROR_OUTPUT_ =
-        exportSpecial("*ERROR-OUTPUT*", PACKAGE_CL, stdout);
+    static {
+        Symbol._ERROR_OUTPUT_.initializeSpecial(stdout);
+    }
 
-    public static final Symbol _TRACE_OUTPUT_ =
-        exportSpecial("*TRACE-OUTPUT*", PACKAGE_CL, stdout);
+    static {
+        Symbol._TRACE_OUTPUT_.initializeSpecial(stdout);
+    }
 
-    public static final Symbol _TERMINAL_IO_ =
-        exportSpecial("*TERMINAL-IO*", PACKAGE_CL,
-                      new TwoWayStream(stdin, stdout, true));
+    static {
+        Symbol._TERMINAL_IO_.initializeSpecial(new TwoWayStream(stdin, stdout, true));
+    }
 
-    public static final Symbol _QUERY_IO_ =
-        exportSpecial("*QUERY-IO*", PACKAGE_CL,
-                      new TwoWayStream(stdin, stdout, true));
+    static {
+        Symbol._QUERY_IO_.initializeSpecial(new TwoWayStream(stdin, stdout, true));
+    }
 
-    public static final Symbol _DEBUG_IO_ =
-        exportSpecial("*DEBUG-IO*", PACKAGE_CL,
-                      new TwoWayStream(stdin, stdout, true));
+    static {
+        Symbol._DEBUG_IO_.initializeSpecial(new TwoWayStream(stdin, stdout, true));
+    }
 
     public static final void resetIO(Stream in, Stream out)
     {
         stdin = in;
         stdout = out;
-        _STANDARD_INPUT_.setSymbolValue(stdin);
-        _STANDARD_OUTPUT_.setSymbolValue(stdout);
-        _ERROR_OUTPUT_.setSymbolValue(stdout);
-        _TRACE_OUTPUT_.setSymbolValue(stdout);
-        _TERMINAL_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
-        _QUERY_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
-        _DEBUG_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
+        Symbol._STANDARD_INPUT_.setSymbolValue(stdin);
+        Symbol._STANDARD_OUTPUT_.setSymbolValue(stdout);
+        Symbol._ERROR_OUTPUT_.setSymbolValue(stdout);
+        Symbol._TRACE_OUTPUT_.setSymbolValue(stdout);
+        Symbol._TERMINAL_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
+        Symbol._QUERY_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
+        Symbol._DEBUG_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
     }
 
     public static final void resetIO()
@@ -1792,40 +1790,43 @@ public abstract class Lisp
 
     public static final TwoWayStream getTerminalIO()
     {
-        return (TwoWayStream) _TERMINAL_IO_.symbolValueNoThrow();
+        return (TwoWayStream) Symbol._TERMINAL_IO_.symbolValueNoThrow();
     }
 
     public static final Stream getStandardInput()
     {
-        return (Stream) _STANDARD_INPUT_.symbolValueNoThrow();
+        return (Stream) Symbol._STANDARD_INPUT_.symbolValueNoThrow();
     }
 
     public static final Stream getStandardOutput() throws ConditionThrowable
     {
-        return checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
+        return checkCharacterOutputStream(Symbol._STANDARD_OUTPUT_.symbolValue());
     }
 
-    public static final Symbol _READTABLE_ =
-        exportSpecial("*READTABLE*", PACKAGE_CL, new Readtable());
+    static {
+        Symbol._READTABLE_.initializeSpecial(new Readtable());
+    }
 
     public static final Readtable currentReadtable() throws ConditionThrowable
     {
-        return (Readtable) _READTABLE_.symbolValue();
+        return (Readtable) Symbol._READTABLE_.symbolValue();
     }
 
-    public static final Symbol _READ_SUPPRESS_ =
-        exportSpecial("*READ-SUPPRESS*", PACKAGE_CL, NIL);
+    static {
+        Symbol._READ_SUPPRESS_.initializeSpecial(NIL);
+    }
 
-    public static final Symbol _DEBUGGER_HOOK_ =
-        exportSpecial("*DEBUGGER-HOOK*", PACKAGE_CL, NIL);
+    static {
+        Symbol._DEBUGGER_HOOK_.initializeSpecial(NIL);
+    }
 
-    public static final Symbol MOST_POSITIVE_FIXNUM =
-        exportConstant("MOST-POSITIVE-FIXNUM", PACKAGE_CL,
-            new Fixnum(Integer.MAX_VALUE));
+    static {
+        Symbol.MOST_POSITIVE_FIXNUM.initializeConstant(new Fixnum(Integer.MAX_VALUE));
+    }
 
-    public static final Symbol MOST_NEGATIVE_FIXNUM =
-        exportConstant("MOST-NEGATIVE-FIXNUM", PACKAGE_CL,
-            new Fixnum(Integer.MIN_VALUE));
+    static {
+        Symbol.MOST_NEGATIVE_FIXNUM.initializeConstant(new Fixnum(Integer.MIN_VALUE));
+    }
 
     public static void exit(int status)
     {
@@ -2038,8 +2039,10 @@ public abstract class Lisp
     public static final Symbol _PRINT_RADIX_ =
         exportSpecial("*PRINT-RADIX*", PACKAGE_CL, NIL);
 
-    public static final Symbol _PRINT_READABLY_ =
-        exportSpecial("*PRINT-READABLY*", PACKAGE_CL, NIL);
+    public static final Symbol _PRINT_READABLY_ = Symbol._PRINT_READABLY_;
+    static {
+        _PRINT_READABLY_.initializeSpecial(NIL);
+    }
 
     public static final Symbol _PRINT_RIGHT_MARGIN_ =
         exportSpecial("*PRINT-RIGHT-MARGIN*", PACKAGE_CL, NIL);

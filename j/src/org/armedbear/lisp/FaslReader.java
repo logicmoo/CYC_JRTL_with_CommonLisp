@@ -2,7 +2,7 @@
  * FaslReader.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: FaslReader.java,v 1.6 2005-10-17 15:44:44 piso Exp $
+ * $Id: FaslReader.java,v 1.7 2005-10-23 13:05:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -183,7 +183,8 @@ public final class FaslReader extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             final Readtable rt = FaslReadtable.getInstance();
-            final boolean suppress = _READ_SUPPRESS_.symbolValue(thread) != NIL;
+            final boolean suppress =
+                (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL);
             FastStringBuffer sb = new FastStringBuffer();
             while (true) {
                 int ch = stream._readChar();

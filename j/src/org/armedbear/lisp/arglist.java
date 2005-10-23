@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: arglist.java,v 1.20 2005-08-16 17:39:58 piso Exp $
+ * $Id: arglist.java,v 1.21 2005-10-23 13:05:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ public final class arglist extends Lisp
                 // Bind *PACKAGE* so we use the EXT package if we need
                 // to intern any symbols.
                 SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-                thread.bindSpecial(_PACKAGE_, PACKAGE_EXT);
+                thread.bindSpecial(Symbol._PACKAGE_, PACKAGE_EXT);
                 try {
                     arglist = readObjectFromString(s);
                 }
