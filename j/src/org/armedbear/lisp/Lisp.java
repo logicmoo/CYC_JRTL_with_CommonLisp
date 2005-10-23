@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.403 2005-10-23 16:39:49 piso Exp $
+ * $Id: Lisp.java,v 1.404 2005-10-23 16:58:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1622,7 +1622,7 @@ public abstract class Lisp
                             LispObject obj = args[j++];
                             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
-                            thread.bindSpecial(_PRINT_RADIX_, NIL);
+                            thread.bindSpecial(Symbol.PRINT_RADIX, NIL);
                             thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
                             sb.append(obj.writeToString());
                             thread.lastSpecialBinding = lastSpecialBinding;
@@ -1632,7 +1632,7 @@ public abstract class Lisp
                             LispObject obj = args[j++];
                             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
-                            thread.bindSpecial(_PRINT_RADIX_, NIL);
+                            thread.bindSpecial(Symbol.PRINT_RADIX, NIL);
                             thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));
                             sb.append(obj.writeToString());
                             thread.lastSpecialBinding = lastSpecialBinding;
@@ -2028,15 +2028,8 @@ public abstract class Lisp
     public static final Symbol _PRINT_CIRCLE_ =
         exportSpecial("*PRINT-CIRCLE*", PACKAGE_CL, NIL);
 
-//     public static final Symbol Symbol.PRINT_ESCAPE =
-//         exportSpecial("*PRINT-ESCAPE*", PACKAGE_CL, T);
     static {
         Symbol.PRINT_ESCAPE.initializeSpecial(T);
-    }
-
-//     public static final Symbol Symbol.PRINT_GENSYM =
-//         exportSpecial("*PRINT-GENSYM*", PACKAGE_CL, T);
-    static {
         Symbol.PRINT_GENSYM.initializeSpecial(T);
     }
 
@@ -2058,10 +2051,8 @@ public abstract class Lisp
     public static final Symbol _PRINT_PRETTY_ =
         exportSpecial("*PRINT-PRETTY*", PACKAGE_CL, NIL);
 
-    public static final Symbol _PRINT_RADIX_ =
-        exportSpecial("*PRINT-RADIX*", PACKAGE_CL, NIL);
-
     static {
+        Symbol.PRINT_RADIX.initializeSpecial(NIL);
         Symbol.PRINT_READABLY.initializeSpecial(NIL);
     }
 
@@ -2085,60 +2076,80 @@ public abstract class Lisp
     public static final Symbol _RANDOM_STATE_ =
         exportSpecial("*RANDOM-STATE*", PACKAGE_CL, new RandomState());
 
-    public static final Symbol STAR = exportSpecial("*", PACKAGE_CL, NIL);
-    public static final Symbol STAR_STAR =
-        exportSpecial("**", PACKAGE_CL, NIL);
-    public static final Symbol STAR_STAR_STAR =
-        exportSpecial("***", PACKAGE_CL, NIL);
+    static {
+        Symbol.STAR.initializeSpecial(NIL);
+        Symbol.STAR_STAR.initializeSpecial(NIL);
+        Symbol.STAR_STAR_STAR.initializeSpecial(NIL);
+        Symbol.MINUS.initializeSpecial(NIL);
+        Symbol.PLUS.initializeSpecial(NIL);
+        Symbol.PLUS_PLUS.initializeSpecial(NIL);
+        Symbol.PLUS_PLUS_PLUS.initializeSpecial(NIL);
+        Symbol.SLASH.initializeSpecial(NIL);
+        Symbol.SLASH_SLASH.initializeSpecial(NIL);
+        Symbol.SLASH_SLASH_SLASH.initializeSpecial(NIL);
+    }
 
-    public static final Symbol MINUS = exportSpecial("-", PACKAGE_CL, NIL);
+//     public static final Symbol PI =
+//         exportConstant("PI", PACKAGE_CL, new DoubleFloat(Math.PI));
+    static {
+        Symbol.PI.initializeConstant(new DoubleFloat(Math.PI));
+    }
 
-    public static final Symbol PLUS = exportSpecial("+", PACKAGE_CL, NIL);
-    public static final Symbol PLUS_PLUS =
-        exportSpecial("++", PACKAGE_CL, NIL);
-    public static final Symbol PLUS_PLUS_PLUS =
-        exportSpecial("+++", PACKAGE_CL, NIL);
+//     public static final Symbol SHORT_FLOAT_EPSILON =
+//         exportConstant("SHORT-FLOAT-EPSILON", PACKAGE_CL,
+//                        new SingleFloat((float)5.960465E-8));
+    static {
+        Symbol.SHORT_FLOAT_EPSILON.initializeConstant(new SingleFloat((float)5.960465E-8));
+    }
 
-    public static final Symbol SLASH = exportSpecial("/", PACKAGE_CL, NIL);
-    public static final Symbol SLASH_SLASH =
-        exportSpecial("//", PACKAGE_CL, NIL);
-    public static final Symbol SLASH_SLASH_SLASH =
-        exportSpecial("///", PACKAGE_CL, NIL);
+//     public static final Symbol SINGLE_FLOAT_EPSILON =
+//         exportConstant("SINGLE-FLOAT-EPSILON", PACKAGE_CL,
+//                        new SingleFloat((float)5.960465E-8));
+    static {
+        Symbol.SINGLE_FLOAT_EPSILON.initializeConstant(new SingleFloat((float)5.960465E-8));
+    }
 
-    public static final Symbol PI =
-        exportConstant("PI", PACKAGE_CL, new DoubleFloat(Math.PI));
+//     public static final Symbol DOUBLE_FLOAT_EPSILON =
+//         exportConstant("DOUBLE-FLOAT-EPSILON", PACKAGE_CL,
+//                        new DoubleFloat((double)1.1102230246251568E-16));
+    static {
+        Symbol.DOUBLE_FLOAT_EPSILON.initializeConstant(new DoubleFloat((double)1.1102230246251568E-16));
+    }
 
-    public static final Symbol SHORT_FLOAT_EPSILON =
-        exportConstant("SHORT-FLOAT-EPSILON", PACKAGE_CL,
-                       new SingleFloat((float)5.960465E-8));
+//     public static final Symbol LONG_FLOAT_EPSILON =
+//         exportConstant("LONG-FLOAT-EPSILON", PACKAGE_CL,
+//                        new DoubleFloat((double)1.1102230246251568E-16));
+    static {
+        Symbol.LONG_FLOAT_EPSILON.initializeConstant(new DoubleFloat((double)1.1102230246251568E-16));
+    }
 
-    public static final Symbol SINGLE_FLOAT_EPSILON =
-        exportConstant("SINGLE-FLOAT-EPSILON", PACKAGE_CL,
-                       new SingleFloat((float)5.960465E-8));
+//     public static final Symbol SHORT_FLOAT_NEGATIVE_EPSILON =
+//         exportConstant("SHORT-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
+//                        new SingleFloat(2.9802326e-8f));
+    static {
+        Symbol.SHORT_FLOAT_NEGATIVE_EPSILON.initializeConstant(new SingleFloat(2.9802326e-8f));
+    }
 
-    public static final Symbol DOUBLE_FLOAT_EPSILON =
-        exportConstant("DOUBLE-FLOAT-EPSILON", PACKAGE_CL,
-                       new DoubleFloat((double)1.1102230246251568E-16));
+//     public static final Symbol SINGLE_FLOAT_NEGATIVE_EPSILON =
+//         exportConstant("SINGLE-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
+//                        new SingleFloat(2.9802326e-8f));
+    static {
+        Symbol.SINGLE_FLOAT_NEGATIVE_EPSILON.initializeConstant(new SingleFloat(2.9802326e-8f));
+    }
 
-    public static final Symbol LONG_FLOAT_EPSILON =
-        exportConstant("LONG-FLOAT-EPSILON", PACKAGE_CL,
-                       new DoubleFloat((double)1.1102230246251568E-16));
+//     public static final Symbol DOUBLE_FLOAT_NEGATIVE_EPSILON =
+//         exportConstant("DOUBLE-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
+//                        new DoubleFloat((double)5.551115123125784E-17));
+    static {
+        Symbol.DOUBLE_FLOAT_NEGATIVE_EPSILON.initializeConstant(new DoubleFloat((double)5.551115123125784E-17));
+    }
 
-    public static final Symbol SHORT_FLOAT_NEGATIVE_EPSILON =
-        exportConstant("SHORT-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-                       new SingleFloat(2.9802326e-8f));
-
-    public static final Symbol SINGLE_FLOAT_NEGATIVE_EPSILON =
-        exportConstant("SINGLE-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-                       new SingleFloat(2.9802326e-8f));
-
-    public static final Symbol DOUBLE_FLOAT_NEGATIVE_EPSILON =
-        exportConstant("DOUBLE-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-                       new DoubleFloat((double)5.551115123125784E-17));
-
-    public static final Symbol LONG_FLOAT_NEGATIVE_EPSILON =
-        exportConstant("LONG-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-                       new DoubleFloat((double)5.551115123125784E-17));
+//     public static final Symbol LONG_FLOAT_NEGATIVE_EPSILON =
+//         exportConstant("LONG-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
+//                        new DoubleFloat((double)5.551115123125784E-17));
+    static {
+        Symbol.LONG_FLOAT_NEGATIVE_EPSILON.initializeConstant(new DoubleFloat((double)5.551115123125784E-17));
+    }
 
     public static final Symbol MOST_POSITIVE_SHORT_FLOAT =
         exportConstant("MOST-POSITIVE-SHORT-FLOAT", PACKAGE_CL,
