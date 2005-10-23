@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: AbstractArray.java,v 1.45 2005-10-23 16:39:48 piso Exp $
+ * $Id: AbstractArray.java,v 1.46 2005-10-23 18:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,7 +220,7 @@ public abstract class AbstractArray extends LispObject
         throws ConditionThrowable
     {
         if (dimensions.length == 0) {
-            if (_PRINT_CIRCLE_.symbolValue(thread) != NIL) {
+            if (Symbol.PRINT_CIRCLE.symbolValue(thread) != NIL) {
                 StringOutputStream stream = new StringOutputStream();
                 thread.execute(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
                                AREF(index), stream);

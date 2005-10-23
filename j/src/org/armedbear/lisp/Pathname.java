@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.108 2005-10-23 16:39:49 piso Exp $
+ * $Id: Pathname.java,v 1.109 2005-10-23 18:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,7 +304,7 @@ public class Pathname extends LispObject
         if (this instanceof LogicalPathname) {
             if (version.integerp()) {
                 sb.append('.');
-                int base = Fixnum.getValue(_PRINT_BASE_.symbolValue());
+                int base = Fixnum.getValue(Symbol.PRINT_BASE.symbolValue());
                 if (version instanceof Fixnum)
                     sb.append(Integer.toString(((Fixnum)version).value, base).toUpperCase());
                 else if (version instanceof Bignum)

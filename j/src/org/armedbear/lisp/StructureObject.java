@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.53 2005-08-01 16:43:51 piso Exp $
+ * $Id: StructureObject.java,v 1.54 2005-10-23 18:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,7 +178,7 @@ public final class StructureObject extends LispObject
                 else
                     limit = slots.length;
                 final boolean printCircle =
-                    _PRINT_CIRCLE_.symbolValue(thread) != NIL;
+                    (Symbol.PRINT_CIRCLE.symbolValue(thread) != NIL);
                 for (int i = 0; i < limit; i++) {
                     sb.append(' ');
                     SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];

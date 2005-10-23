@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.221 2005-10-23 17:51:56 piso Exp $
+ * $Id: Symbol.java,v 1.222 2005-10-23 18:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -376,7 +376,7 @@ public class Symbol extends LispObject
         final String n = name.getStringValue();
         final LispThread thread = LispThread.currentThread();
         boolean printEscape = (PRINT_ESCAPE.symbolValue(thread) != NIL);
-        LispObject printCase = _PRINT_CASE_.symbolValue(thread);
+        LispObject printCase = PRINT_CASE.symbolValue(thread);
         final LispObject readtableCase =
             ((Readtable)_READTABLE_.symbolValue(thread)).getReadtableCase();
         boolean printReadably = (PRINT_READABLY.symbolValue(thread) != NIL);
@@ -545,7 +545,7 @@ public class Symbol extends LispObject
             return true;
         int radix;
         try {
-            radix = ((Fixnum)_PRINT_BASE_.symbolValue(thread)).value;
+            radix = ((Fixnum)PRINT_BASE.symbolValue(thread)).value;
         }
         catch (ClassCastException e) {
             signal(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
@@ -813,11 +813,11 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*BREAK-ON-SIGNALS*");
     public static final Symbol _COMPILE_FILE_PATHNAME_ =
         PACKAGE_CL.addExternalSymbol("*COMPILE-FILE-PATHNAME*");
-    public static final Symbol _COMPILE_FILE_TRUENAME_ =
+    public static final Symbol COMPILE_FILE_TRUENAME =
         PACKAGE_CL.addExternalSymbol("*COMPILE-FILE-TRUENAME*");
-    public static final Symbol _COMPILE_PRINT_ =
+    public static final Symbol COMPILE_PRINT =
         PACKAGE_CL.addExternalSymbol("*COMPILE-PRINT*");
-    public static final Symbol _COMPILE_VERBOSE_ =
+    public static final Symbol COMPILE_VERBOSE =
         PACKAGE_CL.addExternalSymbol("*COMPILE-VERBOSE*");
     public static final Symbol DEBUG_IO =
         PACKAGE_CL.addExternalSymbol("*DEBUG-IO*");
@@ -839,19 +839,19 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*LOAD-TRUENAME*");
     public static final Symbol LOAD_VERBOSE =
         PACKAGE_CL.addExternalSymbol("*LOAD-VERBOSE*");
-    public static final Symbol _MACROEXPAND_HOOK_ =
+    public static final Symbol MACROEXPAND_HOOK =
         PACKAGE_CL.addExternalSymbol("*MACROEXPAND-HOOK*");
-    public static final Symbol _MODULES_ =
+    public static final Symbol MODULES =
         PACKAGE_CL.addExternalSymbol("*MODULES*");
     public static final Symbol _PACKAGE_ =
         PACKAGE_CL.addExternalSymbol("*PACKAGE*");
     public static final Symbol PRINT_ARRAY =
         PACKAGE_CL.addExternalSymbol("*PRINT-ARRAY*");
-    public static final Symbol _PRINT_BASE_ =
+    public static final Symbol PRINT_BASE =
         PACKAGE_CL.addExternalSymbol("*PRINT-BASE*");
     public static final Symbol PRINT_CASE =
         PACKAGE_CL.addExternalSymbol("*PRINT-CASE*");
-    public static final Symbol _PRINT_CIRCLE_ =
+    public static final Symbol PRINT_CIRCLE =
         PACKAGE_CL.addExternalSymbol("*PRINT-CIRCLE*");
     public static final Symbol PRINT_ESCAPE =
         PACKAGE_CL.addExternalSymbol("*PRINT-ESCAPE*");
@@ -883,7 +883,7 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*READ-BASE*");
     public static final Symbol _READ_DEFAULT_FLOAT_FORMAT_ =
         PACKAGE_CL.addExternalSymbol("*READ-DEFAULT-FLOAT-FORMAT*");
-    public static final Symbol _READ_EVAL_ =
+    public static final Symbol READ_EVAL =
         PACKAGE_CL.addExternalSymbol("*READ-EVAL*");
     public static final Symbol READ_SUPPRESS =
         PACKAGE_CL.addExternalSymbol("*READ-SUPPRESS*");

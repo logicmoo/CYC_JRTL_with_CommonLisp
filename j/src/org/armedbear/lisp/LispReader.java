@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.44 2005-10-23 17:38:10 piso Exp $
+ * $Id: LispReader.java,v 1.45 2005-10-23 18:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -242,7 +242,7 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            if (_READ_EVAL_.symbolValue(thread) == NIL)
+            if (Symbol.READ_EVAL.symbolValue(thread) == NIL)
                 return signal(new ReaderError("Can't read #. when *READ-EVAL* is NIL.",
                                               stream));
             else

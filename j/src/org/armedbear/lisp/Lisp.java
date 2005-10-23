@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.409 2005-10-23 17:51:56 piso Exp $
+ * $Id: Lisp.java,v 1.410 2005-10-23 18:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -216,7 +216,7 @@ public abstract class Lisp
                         if (!sampling)
                             expander.incrementCallCount();
                     LispObject hook =
-                        coerceToFunction(_MACROEXPAND_HOOK_.symbolValue(thread));
+                        coerceToFunction(Symbol.MACROEXPAND_HOOK.symbolValue(thread));
                     return thread.setValues(hook.execute(expander, form, env),
                                             T);
                 }
@@ -1623,7 +1623,7 @@ public abstract class Lisp
                             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                             thread.bindSpecial(Symbol.PRINT_RADIX, NIL);
-                            thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
+                            thread.bindSpecial(Symbol.PRINT_BASE, new Fixnum(10));
                             sb.append(obj.writeToString());
                             thread.lastSpecialBinding = lastSpecialBinding;
                         }
@@ -1633,7 +1633,7 @@ public abstract class Lisp
                             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                             thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                             thread.bindSpecial(Symbol.PRINT_RADIX, NIL);
-                            thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));
+                            thread.bindSpecial(Symbol.PRINT_BASE, new Fixnum(16));
                             sb.append(obj.writeToString());
                             thread.lastSpecialBinding = lastSpecialBinding;
                         }
@@ -1835,13 +1835,11 @@ public abstract class Lisp
         T.setSymbolValue(T);
     }
 
-    // ### *read-eval*
-    public static final Symbol _READ_EVAL_ =
-        exportSpecial("*READ-EVAL*", PACKAGE_CL, T);
+    static {
+        Symbol.READ_EVAL.initializeSpecial(T);
+    }
 
     // ### *features*
-//     public static final Symbol Symbol.FEATURES =
-//         exportSpecial("*FEATURES*", PACKAGE_CL, null);
     static {
         Symbol.FEATURES.initializeSpecial(NIL);
         String osName = System.getProperty("os.name");
@@ -1897,27 +1895,19 @@ public abstract class Lisp
             isJava15OrLater = false;
     }
 
-    // ### *modules*
-    public static final Symbol _MODULES_ =
-        exportSpecial("*MODULES*", PACKAGE_CL, NIL);
+    static {
+        Symbol.MODULES.initializeSpecial(NIL);
+    }
 
     static {
         Symbol.LOAD_VERBOSE.initializeSpecial(NIL);
         Symbol.LOAD_PRINT.initializeSpecial(NIL);
-    }
-
-//     // ### *load-pathname*
-//     public static final Symbol LOAD_PATHNAME =
-//         exportSpecial("*LOAD-PATHNAME*", PACKAGE_CL, NIL);
-    static {
         Symbol.LOAD_PATHNAME.initializeSpecial(NIL);
-    }
-
-//     // ### *load-truename*
-//     public static final Symbol LOAD_TRUENAME =
-//         exportSpecial("*LOAD-TRUENAME*", PACKAGE_CL, NIL);
-    static {
         Symbol.LOAD_TRUENAME.initializeSpecial(NIL);
+        Symbol.COMPILE_VERBOSE.initializeSpecial(T);
+        Symbol.COMPILE_PRINT.initializeSpecial(T);
+        Symbol._COMPILE_FILE_PATHNAME_.initializeSpecial(NIL);
+        Symbol.COMPILE_FILE_TRUENAME.initializeSpecial(NIL);
     }
 
     // ### *load-depth*
@@ -1945,22 +1935,6 @@ public abstract class Lisp
     public static final Symbol _AUTOLOAD_VERBOSE_ =
         exportSpecial("*AUTOLOAD-VERBOSE*", PACKAGE_EXT, NIL);
 
-    // ### *compile-verbose*
-    public static final Symbol _COMPILE_VERBOSE_ =
-        exportSpecial("*COMPILE-VERBOSE*", PACKAGE_CL, T);
-
-    // ### *compile-print*
-    public static final Symbol _COMPILE_PRINT_ =
-        exportSpecial("*COMPILE-PRINT*", PACKAGE_CL, T);
-
-    // ### *compile-file-pathname*
-    public static final Symbol _COMPILE_FILE_PATHNAME_ =
-        exportSpecial("*COMPILE-FILE-PATHNAME*", PACKAGE_CL, NIL);
-
-    // ### *compile-file-truename*
-    public static final Symbol _COMPILE_FILE_TRUENAME_ =
-        exportSpecial("*COMPILE-FILE-TRUENAME*", PACKAGE_CL, NIL);
-
     // ### *compile-file-type*
     public static final String COMPILE_FILE_TYPE = "abcl";
     public static final Symbol _COMPILE_FILE_TYPE_ =
@@ -1972,8 +1946,11 @@ public abstract class Lisp
         exportSpecial("*COMPILE-FILE-ZIP*", PACKAGE_SYS, T);
 
     // ### *macroexpand-hook*
-    public static final Symbol _MACROEXPAND_HOOK_ =
-        exportSpecial("*MACROEXPAND-HOOK*", PACKAGE_CL, Symbol.FUNCALL);
+//     public static final Symbol _MACROEXPAND_HOOK_ =
+//         exportSpecial("*MACROEXPAND-HOOK*", PACKAGE_CL, Symbol.FUNCALL);
+    static {
+        Symbol.MACROEXPAND_HOOK.initializeSpecial(Symbol.FUNCALL);
+    }
 
     // ### array-dimension-limit
     public static final int ARRAY_DIMENSION_MAX = 0x1000000;
@@ -1999,14 +1976,23 @@ public abstract class Lisp
     public static final Symbol _PRINT_ARRAY_ =
         exportSpecial("*PRINT-ARRAY*", PACKAGE_CL, T);
 
-    public static final Symbol _PRINT_BASE_ =
-        exportSpecial("*PRINT-BASE*", PACKAGE_CL, new Fixnum(10));
+//     public static final Symbol PRINT_BASE =
+//         exportSpecial("*PRINT-BASE*", PACKAGE_CL, new Fixnum(10));
+    static {
+        Symbol.PRINT_BASE.initializeSpecial(new Fixnum(10));
+    }
 
-    public static final Symbol _PRINT_CASE_ =
-        exportSpecial("*PRINT-CASE*", PACKAGE_CL, Keyword.UPCASE);
+//     public static final Symbol _PRINT_CASE_ =
+//         exportSpecial("*PRINT-CASE*", PACKAGE_CL, Keyword.UPCASE);
+    static {
+        Symbol.PRINT_CASE.initializeSpecial(Keyword.UPCASE);
+    }
 
-    public static final Symbol _PRINT_CIRCLE_ =
-        exportSpecial("*PRINT-CIRCLE*", PACKAGE_CL, NIL);
+//     public static final Symbol PRINT_CIRCLE =
+//         exportSpecial("*PRINT-CIRCLE*", PACKAGE_CL, NIL);
+    static {
+        Symbol.PRINT_CIRCLE.initializeSpecial(NIL);
+    }
 
     static {
         Symbol.PRINT_ESCAPE.initializeSpecial(T);

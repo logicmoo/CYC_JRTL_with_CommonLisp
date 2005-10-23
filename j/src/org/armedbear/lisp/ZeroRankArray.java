@@ -2,7 +2,7 @@
  * ZeroRankArray.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ZeroRankArray.java,v 1.12 2005-10-23 16:39:49 piso Exp $
+ * $Id: ZeroRankArray.java,v 1.13 2005-10-23 18:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ public final class ZeroRankArray extends AbstractArray
         }
         if (printReadably || _PRINT_ARRAY_.symbolValue(thread) != NIL) {
             StringBuffer sb = new StringBuffer("#0A");
-            if (data == this && _PRINT_CIRCLE_.symbolValue(thread) != NIL) {
+            if (data == this && Symbol.PRINT_CIRCLE.symbolValue(thread) != NIL) {
                 StringOutputStream stream = new StringOutputStream();
                 thread.execute(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
                                data, stream);

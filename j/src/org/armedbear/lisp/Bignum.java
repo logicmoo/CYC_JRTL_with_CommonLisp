@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Bignum.java,v 1.74 2005-10-23 17:17:00 piso Exp $
+ * $Id: Bignum.java,v 1.75 2005-10-23 18:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -613,7 +613,7 @@ public final class Bignum extends LispObject
     public String writeToString() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        final int base = Fixnum.getValue(_PRINT_BASE_.symbolValue(thread));
+        final int base = Fixnum.getValue(Symbol.PRINT_BASE.symbolValue(thread));
         String s = value.toString(base).toUpperCase();
         if (Symbol.PRINT_RADIX.symbolValue(thread) != NIL) {
             StringBuffer sb = new StringBuffer();
