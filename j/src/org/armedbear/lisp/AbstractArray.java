@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: AbstractArray.java,v 1.46 2005-10-23 18:11:10 piso Exp $
+ * $Id: AbstractArray.java,v 1.47 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,7 +186,7 @@ public abstract class AbstractArray extends LispObject
                     }
                 }
             } else {
-                LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+                LispObject printLevel = Symbol.PRINT_LEVEL.symbolValue(thread);
                 if (printLevel instanceof Fixnum)
                     maxLevel = ((Fixnum)printLevel).value;
             }
@@ -238,7 +238,7 @@ public abstract class AbstractArray extends LispObject
                 if (printLength instanceof Fixnum)
                     maxLength = ((Fixnum)printLength).value;
                 final LispObject printLevel =
-                    _PRINT_LEVEL_.symbolValue(thread);
+                    Symbol.PRINT_LEVEL.symbolValue(thread);
                 if (printLevel instanceof Fixnum)
                     maxLevel = ((Fixnum)printLevel).value;
             }

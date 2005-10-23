@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.410 2005-10-23 18:11:10 piso Exp $
+ * $Id: Lisp.java,v 1.411 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -700,9 +700,9 @@ public abstract class Lisp
         }
     }
 
-    // ### *gensym-counter*
-    private static final Symbol _GENSYM_COUNTER_ =
-        exportSpecial("*GENSYM-COUNTER*", PACKAGE_CL, Fixnum.ZERO);
+    static {
+        Symbol.GENSYM_COUNTER.initializeSpecial(Fixnum.ZERO);
+    }
 
     public static final Symbol gensym(LispThread thread)
         throws ConditionThrowable
@@ -714,12 +714,12 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         FastStringBuffer sb = new FastStringBuffer(prefix);
-        SpecialBinding binding = thread.getSpecialBinding(_GENSYM_COUNTER_);
+        SpecialBinding binding = thread.getSpecialBinding(Symbol.GENSYM_COUNTER);
         final LispObject oldValue;
         if (binding != null)
             oldValue = binding.value;
         else
-            oldValue = _GENSYM_COUNTER_.getSymbolValue();
+            oldValue = Symbol.GENSYM_COUNTER.getSymbolValue();
         // Decimal representation.
         if (oldValue instanceof Fixnum)
             sb.append(((Fixnum)oldValue).value);
@@ -730,14 +730,14 @@ public abstract class Lisp
             if (binding != null)
                 binding.value = Fixnum.ZERO;
             else
-                _GENSYM_COUNTER_.setSymbolValue(Fixnum.ZERO);
+                Symbol.GENSYM_COUNTER.setSymbolValue(Fixnum.ZERO);
             signal(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: " +
                                  oldValue.writeToString() + " New value: 0"));
         }
         if (binding != null)
             binding.value = oldValue.incr();
         else
-            _GENSYM_COUNTER_.setSymbolValue(oldValue.incr());
+            Symbol.GENSYM_COUNTER.setSymbolValue(oldValue.incr());
         return new Symbol(new SimpleString(sb));
     }
 
@@ -1812,7 +1812,7 @@ public abstract class Lisp
 
     static {
         Symbol.READ_SUPPRESS.initializeSpecial(NIL);
-        Symbol._DEBUGGER_HOOK_.initializeSpecial(NIL);
+        Symbol.DEBUGGER_HOOK.initializeSpecial(NIL);
     }
 
     static {
@@ -1830,9 +1830,11 @@ public abstract class Lisp
     // ### t
     // We can't use exportConstant() here since we need to set T's value to
     // itself.
-    public static final Symbol T = exportConstant("T", PACKAGE_CL, null);
+//     public static final Symbol T = exportConstant("T", PACKAGE_CL, null);
+    public static final Symbol T = Symbol.T;
     static {
-        T.setSymbolValue(T);
+//         T.setSymbolValue(T);
+        T.initializeConstant(T);
     }
 
     static {
@@ -1945,85 +1947,52 @@ public abstract class Lisp
     public static final Symbol _COMPILE_FILE_ZIP_ =
         exportSpecial("*COMPILE-FILE-ZIP*", PACKAGE_SYS, T);
 
-    // ### *macroexpand-hook*
-//     public static final Symbol _MACROEXPAND_HOOK_ =
-//         exportSpecial("*MACROEXPAND-HOOK*", PACKAGE_CL, Symbol.FUNCALL);
     static {
         Symbol.MACROEXPAND_HOOK.initializeSpecial(Symbol.FUNCALL);
     }
 
     // ### array-dimension-limit
     public static final int ARRAY_DIMENSION_MAX = 0x1000000;
-    public static final Symbol ARRAY_DIMENSION_LIMIT =
-        exportConstant("ARRAY-DIMENSION-LIMIT", PACKAGE_CL,
-                       new Fixnum(ARRAY_DIMENSION_MAX));
+//     public static final Symbol ARRAY_DIMENSION_LIMIT =
+//         exportConstant("ARRAY-DIMENSION-LIMIT", PACKAGE_CL,
+//                        new Fixnum(ARRAY_DIMENSION_MAX));
+    static {
+        Symbol.ARRAY_DIMENSION_LIMIT.initializeConstant(new Fixnum(ARRAY_DIMENSION_MAX));
+    }
 
     // ### char-code-limit
     // "The upper exclusive bound on the value returned by the function CHAR-CODE."
     public static final int CHAR_MAX = 256;
-    public static final Symbol CHAR_CODE_LIMIT =
-        exportConstant("CHAR-CODE-LIMIT", PACKAGE_CL, new Fixnum(CHAR_MAX));
+    static {
+        Symbol.CHAR_CODE_LIMIT.initializeConstant(new Fixnum(CHAR_MAX));
+    }
 
-    // ### *read-base*
-    public static final Symbol _READ_BASE_ =
-        exportSpecial("*READ-BASE*", PACKAGE_CL, new Fixnum(10));
+    static {
+        Symbol.READ_BASE.initializeSpecial(new Fixnum(10));
+    }
 
-    // ### *read-default-float-format*
-    public static final Symbol _READ_DEFAULT_FLOAT_FORMAT_ =
-        exportSpecial("*READ-DEFAULT-FLOAT-FORMAT*", PACKAGE_CL, Symbol.SINGLE_FLOAT);
+    static {
+        Symbol.READ_DEFAULT_FLOAT_FORMAT.initializeSpecial(Symbol.SINGLE_FLOAT);
+    }
 
     // Printer control variables.
-    public static final Symbol _PRINT_ARRAY_ =
-        exportSpecial("*PRINT-ARRAY*", PACKAGE_CL, T);
-
-//     public static final Symbol PRINT_BASE =
-//         exportSpecial("*PRINT-BASE*", PACKAGE_CL, new Fixnum(10));
     static {
+        Symbol.PRINT_ARRAY.initializeSpecial(T);
         Symbol.PRINT_BASE.initializeSpecial(new Fixnum(10));
-    }
-
-//     public static final Symbol _PRINT_CASE_ =
-//         exportSpecial("*PRINT-CASE*", PACKAGE_CL, Keyword.UPCASE);
-    static {
         Symbol.PRINT_CASE.initializeSpecial(Keyword.UPCASE);
-    }
-
-//     public static final Symbol PRINT_CIRCLE =
-//         exportSpecial("*PRINT-CIRCLE*", PACKAGE_CL, NIL);
-    static {
         Symbol.PRINT_CIRCLE.initializeSpecial(NIL);
-    }
-
-    static {
         Symbol.PRINT_ESCAPE.initializeSpecial(T);
         Symbol.PRINT_GENSYM.initializeSpecial(T);
-    }
-
-    public static final Symbol _PRINT_LENGTH_ =
-        exportSpecial("*PRINT-LENGTH*", PACKAGE_CL, NIL);
-
-    public static final Symbol _PRINT_LEVEL_ =
-        exportSpecial("*PRINT-LEVEL*", PACKAGE_CL, NIL);
-
-    public static final Symbol _PRINT_LINES_ =
-        exportSpecial("*PRINT-LINES*", PACKAGE_CL, NIL);
-
-    public static final Symbol _PRINT_MISER_WIDTH_ =
-        exportSpecial("*PRINT-MISER-WIDTH*", PACKAGE_CL, NIL);
-
-    public static final Symbol _PRINT_PPRINT_DISPATCH_ =
-        exportSpecial("*PRINT-PPRINT-DISPATCH*", PACKAGE_CL, NIL);
-
-    public static final Symbol _PRINT_PRETTY_ =
-        exportSpecial("*PRINT-PRETTY*", PACKAGE_CL, NIL);
-
-    static {
+        Symbol.PRINT_LENGTH.initializeSpecial(NIL);
+        Symbol.PRINT_LEVEL.initializeSpecial(NIL);
+        Symbol.PRINT_LINES.initializeSpecial(NIL);
+        Symbol.PRINT_MISER_WIDTH.initializeSpecial(NIL);
+        Symbol.PRINT_PPRINT_DISPATCH.initializeSpecial(NIL);
+        Symbol.PRINT_PRETTY.initializeSpecial(NIL);
         Symbol.PRINT_RADIX.initializeSpecial(NIL);
         Symbol.PRINT_READABLY.initializeSpecial(NIL);
+        Symbol.PRINT_RIGHT_MARGIN.initializeSpecial(NIL);
     }
-
-    public static final Symbol _PRINT_RIGHT_MARGIN_ =
-        exportSpecial("*PRINT-RIGHT-MARGIN*", PACKAGE_CL, NIL);
 
     public static final Symbol _PRINT_STRUCTURE_ =
         exportSpecial("*PRINT-STRUCTURE*", PACKAGE_EXT, T);
@@ -2039,8 +2008,9 @@ public abstract class Lisp
     public static final Symbol _PRINT_FASL_ =
         internSpecial("*PRINT-FASL*", PACKAGE_SYS, NIL);
 
-    public static final Symbol _RANDOM_STATE_ =
-        exportSpecial("*RANDOM-STATE*", PACKAGE_CL, new RandomState());
+    static {
+        Symbol._RANDOM_STATE_.initializeSpecial(new RandomState());
+    }
 
     static {
         Symbol.STAR.initializeSpecial(NIL);
@@ -2112,21 +2082,33 @@ public abstract class Lisp
     }
 
     // ### call-arguments-limit
-    public static final Symbol CALL_ARGUMENTS_LIMIT =
-        exportConstant("CALL-ARGUMENTS-LIMIT", PACKAGE_CL, new Fixnum(50));
+//     public static final Symbol CALL_ARGUMENTS_LIMIT =
+//         exportConstant("CALL-ARGUMENTS-LIMIT", PACKAGE_CL, new Fixnum(50));
+    static {
+        Symbol.CALL_ARGUMENTS_LIMIT.initializeConstant(new Fixnum(50));
+    }
 
     // ### lambda-parameters-limit
-    public static final Symbol LAMBDA_PARAMETERS_LIMIT =
-        exportConstant("LAMBDA-PARAMETERS-LIMIT", PACKAGE_CL, new Fixnum(50));
+//     public static final Symbol LAMBDA_PARAMETERS_LIMIT =
+//         exportConstant("LAMBDA-PARAMETERS-LIMIT", PACKAGE_CL, new Fixnum(50));
+    static {
+        Symbol.LAMBDA_PARAMETERS_LIMIT.initializeConstant(new Fixnum(50));
+    }
 
     // ### multiple-values-limit
-    public static final Symbol MULTIPLE_VALUES_LIMIT =
-        exportConstant("MULTIPLE-VALUES-LIMIT", PACKAGE_CL, new Fixnum(20));
+//     public static final Symbol MULTIPLE_VALUES_LIMIT =
+//         exportConstant("MULTIPLE-VALUES-LIMIT", PACKAGE_CL, new Fixnum(20));
+    static {
+        Symbol.MULTIPLE_VALUES_LIMIT.initializeConstant(new Fixnum(20));
+    }
 
     // ### internal-time-units-per-second
-    public static final Symbol INTERNAL_TIME_UNITS_PER_SECOND =
-        exportConstant("INTERNAL-TIME-UNITS-PER-SECOND", PACKAGE_CL,
-                       new Fixnum(1000));
+//     public static final Symbol INTERNAL_TIME_UNITS_PER_SECOND =
+//         exportConstant("INTERNAL-TIME-UNITS-PER-SECOND", PACKAGE_CL,
+//                        new Fixnum(1000));
+    static {
+        Symbol.INTERNAL_TIME_UNITS_PER_SECOND.initializeSpecial(new Fixnum(1000));
+    }
 
     // ### call-registers-limit
     public static final Symbol CALL_REGISTERS_LIMIT =
@@ -2244,9 +2226,7 @@ public abstract class Lisp
         loadClass("org.armedbear.lisp.LispClass");
         loadClass("org.armedbear.lisp.BuiltInClass");
         loadClass("org.armedbear.lisp.StructureObject");
-
         loadClass("org.armedbear.lisp.ash");
-
         cold = false;
     }
 }

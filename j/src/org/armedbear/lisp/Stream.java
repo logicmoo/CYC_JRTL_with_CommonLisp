@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.142 2005-10-23 17:38:10 piso Exp $
+ * $Id: Stream.java,v 1.143 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1017,7 +1017,7 @@ public class Stream extends LispObject
     {
         final int readBase;
         try {
-            readBase = ((Fixnum)_READ_BASE_.symbolValue(thread)).value;
+            readBase = ((Fixnum)Symbol.READ_BASE.symbolValue(thread)).value;
         }
         catch (ClassCastException e) {
             // The value of *READ-BASE* is not a Fixnum.
@@ -1142,7 +1142,7 @@ public class Stream extends LispObject
                 else if (marker == 'L')
                     marker = 'D';
                 else if (marker == 'E') {
-                    LispObject format = _READ_DEFAULT_FLOAT_FORMAT_.symbolValue();
+                    LispObject format = Symbol.READ_DEFAULT_FLOAT_FORMAT.symbolValue();
                     if (format == Symbol.SINGLE_FLOAT || format == Symbol.SHORT_FLOAT)
                         marker = 'F';
                     else
@@ -1158,7 +1158,7 @@ public class Stream extends LispObject
         sb.append(token.substring(i));
         try {
             if (marker == 0) {
-                LispObject format = _READ_DEFAULT_FLOAT_FORMAT_.symbolValue();
+                LispObject format = Symbol.READ_DEFAULT_FLOAT_FORMAT.symbolValue();
                 if (format == Symbol.SINGLE_FLOAT || format == Symbol.SHORT_FLOAT)
                     marker = 'F';
                 else

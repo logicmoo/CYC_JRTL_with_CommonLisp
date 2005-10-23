@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.67 2005-08-26 00:33:49 piso Exp $
+ * $Id: Cons.java,v 1.68 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -493,13 +493,13 @@ public final class Cons extends LispObject
     public String writeToString() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        final LispObject printLength = _PRINT_LENGTH_.symbolValue(thread);
+        final LispObject printLength = Symbol.PRINT_LENGTH.symbolValue(thread);
         final int maxLength;
         if (printLength instanceof Fixnum)
             maxLength = ((Fixnum)printLength).value;
         else
             maxLength = Integer.MAX_VALUE;
-        final LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+        final LispObject printLevel = Symbol.PRINT_LEVEL.symbolValue(thread);
         final int maxLevel;
         if (printLevel instanceof Fixnum)
             maxLevel = ((Fixnum)printLevel).value;

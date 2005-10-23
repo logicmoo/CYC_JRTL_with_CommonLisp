@@ -192,10 +192,10 @@ public abstract class AbstractVector extends AbstractArray
             }
             sb.append(')');
             return sb.toString();
-        } else if (_PRINT_ARRAY_.symbolValue(thread) != NIL) {
+        } else if (Symbol.PRINT_ARRAY.symbolValue(thread) != NIL) {
             int maxLevel = Integer.MAX_VALUE;
             final LispObject printLevel =
-                _PRINT_LEVEL_.symbolValue(thread);
+                Symbol.PRINT_LEVEL.symbolValue(thread);
             if (printLevel instanceof Fixnum)
                 maxLevel = ((Fixnum)printLevel).value;
             LispObject currentPrintLevel =
@@ -205,7 +205,7 @@ public abstract class AbstractVector extends AbstractArray
                 StringBuffer sb = new StringBuffer("#(");
                 int maxLength = Integer.MAX_VALUE;
                 final LispObject printLength =
-                    _PRINT_LENGTH_.symbolValue(thread);
+                    Symbol.PRINT_LENGTH.symbolValue(thread);
                 if (printLength instanceof Fixnum)
                     maxLength = ((Fixnum)printLength).value;
                 final int length = length();

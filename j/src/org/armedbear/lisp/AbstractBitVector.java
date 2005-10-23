@@ -2,7 +2,7 @@
  * AbstractBitVector.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: AbstractBitVector.java,v 1.12 2005-10-23 16:39:48 piso Exp $
+ * $Id: AbstractBitVector.java,v 1.13 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,15 +166,15 @@ public abstract class AbstractBitVector extends AbstractVector
         final LispThread thread = LispThread.currentThread();
         final int length = length();
         if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL ||
-            _PRINT_ARRAY_.symbolValue(thread) != NIL)
+            Symbol.PRINT_ARRAY.symbolValue(thread) != NIL)
         {
-            StringBuffer sb = new StringBuffer(length + 2);
+            FastStringBuffer sb = new FastStringBuffer(length + 2);
             sb.append("#*");
             for (int i = 0; i < length; i++)
                 sb.append(getBit(i) == 1 ? '1' : '0');
             return sb.toString();
         } else {
-            StringBuffer sb = new StringBuffer("(");
+            FastStringBuffer sb = new FastStringBuffer("(");
             if (this instanceof SimpleBitVector)
                 sb.append("SIMPLE-");
             sb.append("BIT-VECTOR ");

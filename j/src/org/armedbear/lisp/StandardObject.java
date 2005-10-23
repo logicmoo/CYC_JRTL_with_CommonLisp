@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.48 2005-06-23 14:18:49 piso Exp $
+ * $Id: StandardObject.java,v 1.49 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,7 +125,7 @@ public class StandardObject extends LispObject
     {
         final LispThread thread = LispThread.currentThread();
         int maxLevel = Integer.MAX_VALUE;
-        LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+        LispObject printLevel = Symbol.PRINT_LEVEL.symbolValue(thread);
         if (printLevel instanceof Fixnum)
             maxLevel = ((Fixnum)printLevel).value;
         LispObject currentPrintLevel =

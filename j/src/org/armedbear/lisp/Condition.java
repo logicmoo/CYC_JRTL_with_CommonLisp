@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.42 2005-10-23 16:39:49 piso Exp $
+ * $Id: Condition.java,v 1.43 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +175,7 @@ public class Condition extends StandardObject
             }
         }
         final int maxLevel;
-        LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+        LispObject printLevel = Symbol.PRINT_LEVEL.symbolValue(thread);
         if (printLevel instanceof Fixnum)
             maxLevel = ((Fixnum)printLevel).value;
         else

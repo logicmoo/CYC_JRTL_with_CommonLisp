@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.222 2005-10-23 18:11:10 piso Exp $
+ * $Id: Symbol.java,v 1.223 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -809,7 +809,7 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("**");
     public static final Symbol STAR_STAR_STAR =
         PACKAGE_CL.addExternalSymbol("***");
-    public static final Symbol _BREAK_ON_SIGNALS_ =
+    public static final Symbol BREAK_ON_SIGNALS =
         PACKAGE_CL.addExternalSymbol("*BREAK-ON-SIGNALS*");
     public static final Symbol _COMPILE_FILE_PATHNAME_ =
         PACKAGE_CL.addExternalSymbol("*COMPILE-FILE-PATHNAME*");
@@ -821,7 +821,7 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*COMPILE-VERBOSE*");
     public static final Symbol DEBUG_IO =
         PACKAGE_CL.addExternalSymbol("*DEBUG-IO*");
-    public static final Symbol _DEBUGGER_HOOK_ =
+    public static final Symbol DEBUGGER_HOOK =
         PACKAGE_CL.addExternalSymbol("*DEBUGGER-HOOK*");
     public static final Symbol DEFAULT_PATHNAME_DEFAULTS =
         PACKAGE_CL.addExternalSymbol("*DEFAULT-PATHNAME-DEFAULTS*");
@@ -859,29 +859,29 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*PRINT-GENSYM*");
     public static final Symbol PRINT_LENGTH =
         PACKAGE_CL.addExternalSymbol("*PRINT-LENGTH*");
-    public static final Symbol _PRINT_LEVEL_ =
+    public static final Symbol PRINT_LEVEL =
         PACKAGE_CL.addExternalSymbol("*PRINT-LEVEL*");
-    public static final Symbol _PRINT_LINES_ =
+    public static final Symbol PRINT_LINES =
         PACKAGE_CL.addExternalSymbol("*PRINT-LINES*");
-    public static final Symbol _PRINT_MISER_WIDTH_ =
+    public static final Symbol PRINT_MISER_WIDTH =
         PACKAGE_CL.addExternalSymbol("*PRINT-MISER-WIDTH*");
-    public static final Symbol _PRINT_PPRINT_DISPATCH_ =
+    public static final Symbol PRINT_PPRINT_DISPATCH =
         PACKAGE_CL.addExternalSymbol("*PRINT-PPRINT-DISPATCH*");
-    public static final Symbol _PRINT_PRETTY_ =
+    public static final Symbol PRINT_PRETTY =
         PACKAGE_CL.addExternalSymbol("*PRINT-PRETTY*");
     public static final Symbol PRINT_RADIX =
         PACKAGE_CL.addExternalSymbol("*PRINT-RADIX*");
     public static final Symbol PRINT_READABLY =
         PACKAGE_CL.addExternalSymbol("*PRINT-READABLY*");
-    public static final Symbol _PRINT_RIGHT_MARGIN_ =
+    public static final Symbol PRINT_RIGHT_MARGIN =
         PACKAGE_CL.addExternalSymbol("*PRINT-RIGHT-MARGIN*");
     public static final Symbol QUERY_IO =
         PACKAGE_CL.addExternalSymbol("*QUERY-IO*");
     public static final Symbol _RANDOM_STATE_ =
         PACKAGE_CL.addExternalSymbol("*RANDOM-STATE*");
-    public static final Symbol _READ_BASE_ =
+    public static final Symbol READ_BASE =
         PACKAGE_CL.addExternalSymbol("*READ-BASE*");
-    public static final Symbol _READ_DEFAULT_FLOAT_FORMAT_ =
+    public static final Symbol READ_DEFAULT_FLOAT_FORMAT =
         PACKAGE_CL.addExternalSymbol("*READ-DEFAULT-FLOAT-FORMAT*");
     public static final Symbol READ_EVAL =
         PACKAGE_CL.addExternalSymbol("*READ-EVAL*");

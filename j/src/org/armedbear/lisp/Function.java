@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.56 2005-10-23 14:12:19 piso Exp $
+ * $Id: Function.java,v 1.57 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -236,7 +236,7 @@ public abstract class Function extends Operator
             } else {
                 final LispThread thread = LispThread.currentThread();
                 SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-                thread.bindSpecial(_PRINT_LENGTH_, Fixnum.THREE);
+                thread.bindSpecial(Symbol.PRINT_LENGTH, Fixnum.THREE);
                 try {
                     sb.append(lambdaList.writeToString());
                 }

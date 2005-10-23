@@ -2,7 +2,7 @@
  * RandomState.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: RandomState.java,v 1.5 2005-03-17 14:55:44 piso Exp $
+ * $Id: RandomState.java,v 1.6 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,15 +113,14 @@ public final class RandomState extends LispObject
         return signal(new TypeError(arg, "positive integer or positive float"));
     }
 
-    // ### random
-    // random limit &optional random-state => random-number
+    // ### random limit &optional random-state => random-number
     private static final Primitive RANDOM =
         new Primitive("random", "limit &optional random-state")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             RandomState randomState =
-                (RandomState) _RANDOM_STATE_.symbolValueNoThrow();
+                (RandomState) Symbol._RANDOM_STATE_.symbolValue();
             return randomState.random(arg);
         }
         public LispObject execute(LispObject first, LispObject second)
@@ -131,7 +130,7 @@ public final class RandomState extends LispObject
                 RandomState randomState = (RandomState) second;
                 return randomState.random(first);
             }
-            return signal(new TypeError(first, Symbol.RANDOM_STATE));
+            return signalTypeError(first, Symbol.RANDOM_STATE);
         }
     };
 
@@ -141,18 +140,18 @@ public final class RandomState extends LispObject
         new Primitive("make-random-state", "&optional state") {
         public LispObject execute() throws ConditionThrowable
         {
-            return new RandomState((RandomState)_RANDOM_STATE_.symbolValueNoThrow());
+            return new RandomState((RandomState)Symbol._RANDOM_STATE_.symbolValue());
         }
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
         {
             if (arg == NIL)
-                return new RandomState((RandomState)_RANDOM_STATE_.symbolValueNoThrow());
+                return new RandomState((RandomState)Symbol._RANDOM_STATE_.symbolValue());
             if (arg == T)
                 return new RandomState();
             if (arg instanceof RandomState)
                 return new RandomState((RandomState)arg);
-            return signal(new TypeError(arg, Symbol.RANDOM_STATE));
+            return signalTypeError(arg, Symbol.RANDOM_STATE);
         }
     };
 

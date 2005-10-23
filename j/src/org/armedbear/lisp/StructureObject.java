@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.54 2005-10-23 18:11:10 piso Exp $
+ * $Id: StructureObject.java,v 1.55 2005-10-23 18:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,7 +157,7 @@ public final class StructureObject extends LispObject
             if (_PRINT_STRUCTURE_.symbolValue(thread) == NIL)
                 return unreadableString(structureClass.getSymbol().writeToString());
             int maxLevel = Integer.MAX_VALUE;
-            LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+            LispObject printLevel = Symbol.PRINT_LEVEL.symbolValue(thread);
             if (printLevel instanceof Fixnum)
                 maxLevel = ((Fixnum)printLevel).value;
             LispObject currentPrintLevel =
@@ -171,7 +171,7 @@ public final class StructureObject extends LispObject
                 LispObject effectiveSlots = structureClass.getSlotDefinitions();
                 LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
                 Debug.assertTrue(effectiveSlotsArray.length == slots.length);
-                final LispObject printLength = _PRINT_LENGTH_.symbolValue(thread);
+                final LispObject printLength = Symbol.PRINT_LENGTH.symbolValue(thread);
                 final int limit;
                 if (printLength instanceof Fixnum)
                     limit = Math.min(slots.length, ((Fixnum)printLength).value);
