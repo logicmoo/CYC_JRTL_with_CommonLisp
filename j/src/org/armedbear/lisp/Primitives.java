@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.839 2005-10-23 14:28:26 piso Exp $
+ * $Id: Primitives.java,v 1.840 2005-10-23 14:53:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2351,7 +2351,8 @@ public final class Primitives extends Lisp
     };
 
     // ### type-of
-    private static final Primitive TYPE_OF = new Primitive("type-of", "object")
+    private static final Primitive TYPE_OF =
+        new Primitive(Symbol.TYPE_OF, "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2360,7 +2361,8 @@ public final class Primitives extends Lisp
     };
 
     // ### class-of
-    private static final Primitive CLASS_OF = new Primitive("class-of", "object")
+    private static final Primitive CLASS_OF =
+        new Primitive(Symbol.CLASS_OF, "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2379,10 +2381,10 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### function-lambda-expression
-    // function-lambda-expression function => lambda-expression, closure-p, name
+    // ### function-lambda-expression function =>
+    // lambda-expression, closure-p, name
     private static final Primitive FUNCTION_LAMBDA_EXPRESSION =
-        new Primitive("function-lambda-expression", "function")
+        new Primitive(Symbol.FUNCTION_LAMBDA_EXPRESSION, "function")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2414,7 +2416,7 @@ public final class Primitives extends Lisp
                 value2 = T;
                 value3 = ((StandardGenericFunction)arg).getGenericFunctionName();
             } else
-                return signal(new TypeError(arg, Symbol.FUNCTION));
+                return signalTypeError(arg, Symbol.FUNCTION);
             return LispThread.currentThread().setValues(value1, value2, value3);
         }
     };
@@ -2422,7 +2424,7 @@ public final class Primitives extends Lisp
     // ### funcall
     // This needs to be public for LispAPI.java.
     public static final Primitive FUNCALL =
-        new Primitive("funcall", "function &rest args")
+        new Primitive(Symbol.FUNCALL, "function &rest args")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -2484,7 +2486,7 @@ public final class Primitives extends Lisp
 
     // ### apply
     public static final Primitive APPLY =
-        new Primitive("apply", "function &rest args")
+        new Primitive(Symbol.APPLY, "function &rest args")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -2537,7 +2539,7 @@ public final class Primitives extends Lisp
                 }
                 return funcall(first, funArgs, LispThread.currentThread());
             }
-            return signal(new TypeError(third, Symbol.LIST));
+            return signalTypeError(third, Symbol.LIST);
         }
         public LispObject execute(final LispObject[] args) throws ConditionThrowable
         {
@@ -2555,13 +2557,13 @@ public final class Primitives extends Lisp
                 }
                 return funcall(args[0], funArgs, LispThread.currentThread());
             }
-            return signal(new TypeError(spread, Symbol.LIST));
+            return signalTypeError(spread, Symbol.LIST);
         }
     };
 
     // ### mapcar
     private static final Primitive MAPCAR =
-        new Primitive("mapcar", "function &rest lists")
+        new Primitive(Symbol.MAPCAR, "function &rest lists")
     {
         public LispObject execute(LispObject fun, LispObject list)
             throws ConditionThrowable
@@ -2652,7 +2654,7 @@ public final class Primitives extends Lisp
 
     // ### mapc
     private static final Primitive MAPC =
-        new Primitive("mapc", "function &rest lists")
+        new Primitive(Symbol.MAPC, "function &rest lists")
     {
         public LispObject execute(LispObject fun, LispObject list)
             throws ConditionThrowable
@@ -2721,7 +2723,7 @@ public final class Primitives extends Lisp
 
     // ### macroexpand
     private static final Primitive MACROEXPAND =
-        new Primitive("macroexpand", "form &optional env")
+        new Primitive(Symbol.MACROEXPAND, "form &optional env")
     {
         public LispObject execute(LispObject form) throws ConditionThrowable
         {
@@ -2740,7 +2742,7 @@ public final class Primitives extends Lisp
 
     // ### macroexpand-1
     private static final Primitive MACROEXPAND_1 =
-        new Primitive("macroexpand-1", "form &optional env")
+        new Primitive(Symbol.MACROEXPAND_1, "form &optional env")
     {
         public LispObject execute(LispObject form) throws ConditionThrowable
         {
@@ -2759,7 +2761,7 @@ public final class Primitives extends Lisp
 
     // ### gensym
     private static final Primitive GENSYM =
-        new Primitive("gensym", "&optional x")
+        new Primitive(Symbol.GENSYM, "&optional x")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -2791,7 +2793,7 @@ public final class Primitives extends Lisp
     };
 
     // ### string
-    private static final Primitive STRING = new Primitive("string", "x")
+    private static final Primitive STRING = new Primitive(Symbol.STRING, "x")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2804,7 +2806,7 @@ public final class Primitives extends Lisp
     // "It is implementation-dependent whether the string that becomes the new
     // symbol's name is the given string or a copy of it."
     private static final Primitive INTERN =
-        new Primitive("intern", "string &optional package")
+        new Primitive(Symbol.INTERN, "string &optional package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2833,7 +2835,7 @@ public final class Primitives extends Lisp
     // ### unintern
     // unintern symbol &optional package => generalized-boolean
     private static final Primitive UNINTERN =
-        new Primitive("unintern", "symbol &optional package")
+        new Primitive(Symbol.UNINTERN, "symbol &optional package")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -2851,7 +2853,7 @@ public final class Primitives extends Lisp
 
     // ### find-package
     private static final Primitive FIND_PACKAGE =
-        new Primitive("find-package", "name")
+        new Primitive(Symbol.FIND_PACKAGE, "name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2973,7 +2975,7 @@ public final class Primitives extends Lisp
 
     // ### use-package packages-to-use &optional package => t
     private static final Primitive USE_PACKAGE =
-        new Primitive("use-package", "packages-to-use &optional package")
+        new Primitive(Symbol.USE_PACKAGE, "packages-to-use &optional package")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -3038,16 +3040,16 @@ public final class Primitives extends Lisp
 
     // ### export symbols &optional package
     private static final Primitive EXPORT =
-        new Primitive("export", "symbols &optional package")
+        new Primitive(Symbol.EXPORT, "symbols &optional package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
+            final Package pkg = (Package) Symbol._PACKAGE_.symbolValue();
             if (arg instanceof Cons) {
-                Package pkg = getCurrentPackage();
                 for (LispObject list = arg; list != NIL; list = list.cdr())
                     pkg.export(checkSymbol(list.car()));
             } else
-                getCurrentPackage().export(checkSymbol(arg));
+                pkg.export(checkSymbol(arg));
             return T;
         }
 
@@ -3066,7 +3068,7 @@ public final class Primitives extends Lisp
 
     // ### find-symbol string &optional package => symbol, status
     private static final Primitive FIND_SYMBOL =
-        new Primitive("find-symbol", "string &optional package")
+        new Primitive(Symbol.FIND_SYMBOL, "string &optional package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -3153,17 +3155,15 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### getf
-    // getf plist indicator &optional default => value
+    // ### getf plist indicator &optional default => value
     private static final Primitive GETF =
-        new Primitive("getf", "plist indicator &optional default")
+        new Primitive(Symbol.GETF, "plist indicator &optional default")
     {
         public LispObject execute(LispObject plist, LispObject indicator)
             throws ConditionThrowable
         {
             return getf(plist, indicator, NIL);
         }
-
         public LispObject execute(LispObject plist, LispObject indicator,
                                   LispObject defaultValue)
             throws ConditionThrowable
@@ -3174,14 +3174,13 @@ public final class Primitives extends Lisp
 
     // ### get symbol indicator &optional default => value
     private static final Primitive GET =
-        new Primitive("get", "symbol indicator &optional default")
+        new Primitive(Symbol.GET, "symbol indicator &optional default")
     {
         public LispObject execute(LispObject symbol, LispObject indicator)
             throws ConditionThrowable
         {
             return get(symbol, indicator, NIL);
         }
-
         public LispObject execute(LispObject symbol, LispObject indicator,
                                   LispObject defaultValue)
             throws ConditionThrowable
@@ -3190,8 +3189,7 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %put
-    // %put symbol indicator value => value
+    // ### %put symbol indicator value => value
     private static final Primitive _PUT =
         new Primitive("%put", PACKAGE_SYS, true)
     {
@@ -3203,7 +3201,7 @@ public final class Primitives extends Lisp
                 return put((Symbol)symbol, indicator, value);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(symbol, Symbol.SYMBOL));
+                return signalTypeError(symbol, Symbol.SYMBOL);
             }
         }
         public LispObject execute(LispObject symbol, LispObject indicator,
@@ -3214,14 +3212,14 @@ public final class Primitives extends Lisp
                 return put((Symbol)symbol, indicator, value);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(symbol, Symbol.SYMBOL));
+                return signalTypeError(symbol, Symbol.SYMBOL);
             }
         }
     };
 
     // ### macrolet
     private static final SpecialOperator MACROLET =
-        new SpecialOperator("macrolet", "definitions &rest body")
+        new SpecialOperator(Symbol.MACROLET, "definitions &rest body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3278,7 +3276,7 @@ public final class Primitives extends Lisp
 
     // ### tagbody
     private static final SpecialOperator TAGBODY =
-        new SpecialOperator("tagbody", "&rest statements")
+        new SpecialOperator(Symbol.TAGBODY, "&rest statements")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3339,7 +3337,8 @@ public final class Primitives extends Lisp
     };
 
     // ### go
-    private static final SpecialOperator GO = new SpecialOperator("go", "tag")
+    private static final SpecialOperator GO =
+        new SpecialOperator(Symbol.GO, "tag")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3357,7 +3356,7 @@ public final class Primitives extends Lisp
 
     // ### block
     private static final SpecialOperator BLOCK =
-        new SpecialOperator("block", "name &rest forms")
+        new SpecialOperator(Symbol.BLOCK, "name &rest forms")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3397,7 +3396,7 @@ public final class Primitives extends Lisp
 
     // ### return-from
     private static final SpecialOperator RETURN_FROM =
-        new SpecialOperator("return-from", "name &optional value")
+        new SpecialOperator(Symbol.RETURN_FROM, "name &optional value")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3429,7 +3428,8 @@ public final class Primitives extends Lisp
     };
 
     // ### catch
-    private static final SpecialOperator CATCH = new SpecialOperator("catch", "tag &body body")
+    private static final SpecialOperator CATCH =
+        new SpecialOperator(Symbol.CATCH, "tag &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3466,7 +3466,8 @@ public final class Primitives extends Lisp
     };
 
     // ### throw
-    private static final SpecialOperator THROW = new SpecialOperator("throw", "tag result")
+    private static final SpecialOperator THROW =
+        new SpecialOperator(Symbol.THROW, "tag result")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3483,7 +3484,7 @@ public final class Primitives extends Lisp
 
     // ### unwind-protect
     private static final SpecialOperator UNWIND_PROTECT =
-        new SpecialOperator("unwind-protect", "protected &body cleanup")
+        new SpecialOperator(Symbol.UNWIND_PROTECT, "protected &body cleanup")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3512,18 +3513,17 @@ public final class Primitives extends Lisp
 
     // ### eval-when
     private static final SpecialOperator EVAL_WHEN =
-        new SpecialOperator("eval-when", "situations &rest forms")
+        new SpecialOperator(Symbol.EVAL_WHEN, "situations &rest forms")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
             LispObject situations = args.car();
             if (situations != NIL) {
-                final LispThread thread = LispThread.currentThread();
                 if (memq(Keyword.EXECUTE, situations) ||
                     memq(Symbol.EVAL, situations))
                 {
-                    return progn(args.cdr(), env, thread);
+                    return progn(args.cdr(), env, LispThread.currentThread());
                 }
             }
             return NIL;
@@ -3534,7 +3534,9 @@ public final class Primitives extends Lisp
     // multiple-value-bind (var*) values-form declaration* form*
     // Should be a macro.
     private static final SpecialOperator MULTIPLE_VALUE_BIND =
-        new SpecialOperator("multiple-value-bind", "vars value-form &body body") {
+        new SpecialOperator(Symbol.MULTIPLE_VALUE_BIND,
+                            "vars value-form &body body")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3615,7 +3617,8 @@ public final class Primitives extends Lisp
 
     // ### multiple-value-prog1
     private static final SpecialOperator MULTIPLE_VALUE_PROG1 =
-        new SpecialOperator("multiple-value-prog1", "values-form &rest forms")
+        new SpecialOperator(Symbol.MULTIPLE_VALUE_PROG1,
+                            "values-form &rest forms")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3637,7 +3640,7 @@ public final class Primitives extends Lisp
 
     // ### multiple-value-call
     private static final SpecialOperator MULTIPLE_VALUE_CALL =
-        new SpecialOperator("multiple-value-call", "fun &rest args")
+        new SpecialOperator(Symbol.MULTIPLE_VALUE_CALL, "fun &rest args")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3680,7 +3683,7 @@ public final class Primitives extends Lisp
     // ### and
     // Should be a macro.
     private static final SpecialOperator AND =
-        new SpecialOperator("and", "&rest forms")
+        new SpecialOperator(Symbol.AND, "&rest forms")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3705,7 +3708,7 @@ public final class Primitives extends Lisp
     // ### or
     // Should be a macro.
     private static final SpecialOperator OR =
-        new SpecialOperator("or", "&rest forms")
+        new SpecialOperator(Symbol.OR, "&rest forms")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
