@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.408 2005-10-23 17:46:16 piso Exp $
+ * $Id: Lisp.java,v 1.409 2005-10-23 17:51:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1760,11 +1760,11 @@ public abstract class Lisp
     static {
         Symbol.STANDARD_INPUT.initializeSpecial(stdin);
         Symbol.STANDARD_OUTPUT.initializeSpecial(stdout);
-        Symbol._ERROR_OUTPUT_.initializeSpecial(stdout);
+        Symbol.ERROR_OUTPUT.initializeSpecial(stdout);
         Symbol.TRACE_OUTPUT.initializeSpecial(stdout);
         Symbol.TERMINAL_IO.initializeSpecial(new TwoWayStream(stdin, stdout, true));
         Symbol.QUERY_IO.initializeSpecial(new TwoWayStream(stdin, stdout, true));
-        Symbol._DEBUG_IO_.initializeSpecial(new TwoWayStream(stdin, stdout, true));
+        Symbol.DEBUG_IO.initializeSpecial(new TwoWayStream(stdin, stdout, true));
     }
 
     public static final void resetIO(Stream in, Stream out)
@@ -1773,11 +1773,11 @@ public abstract class Lisp
         stdout = out;
         Symbol.STANDARD_INPUT.setSymbolValue(stdin);
         Symbol.STANDARD_OUTPUT.setSymbolValue(stdout);
-        Symbol._ERROR_OUTPUT_.setSymbolValue(stdout);
+        Symbol.ERROR_OUTPUT.setSymbolValue(stdout);
         Symbol.TRACE_OUTPUT.setSymbolValue(stdout);
         Symbol.TERMINAL_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
         Symbol.QUERY_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
-        Symbol._DEBUG_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
+        Symbol.DEBUG_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
     }
 
     public static final void resetIO()
@@ -1812,17 +1812,11 @@ public abstract class Lisp
 
     static {
         Symbol.READ_SUPPRESS.initializeSpecial(NIL);
-    }
-
-    static {
         Symbol._DEBUGGER_HOOK_.initializeSpecial(NIL);
     }
 
     static {
         Symbol.MOST_POSITIVE_FIXNUM.initializeConstant(new Fixnum(Integer.MAX_VALUE));
-    }
-
-    static {
         Symbol.MOST_NEGATIVE_FIXNUM.initializeConstant(new Fixnum(Integer.MIN_VALUE));
     }
 
@@ -1846,57 +1840,58 @@ public abstract class Lisp
         exportSpecial("*READ-EVAL*", PACKAGE_CL, T);
 
     // ### *features*
-    public static final Symbol _FEATURES_ =
-        exportSpecial("*FEATURES*", PACKAGE_CL, null);
+//     public static final Symbol Symbol.FEATURES =
+//         exportSpecial("*FEATURES*", PACKAGE_CL, null);
     static {
+        Symbol.FEATURES.initializeSpecial(NIL);
         String osName = System.getProperty("os.name");
         if (osName.startsWith("Linux")) {
-            _FEATURES_.setSymbolValue(list6(Keyword.ARMEDBEAR,
-                                            Keyword.ABCL,
-                                            Keyword.COMMON_LISP,
-                                            Keyword.ANSI_CL,
-                                            Keyword.UNIX,
-                                            Keyword.LINUX));
+            Symbol.FEATURES.setSymbolValue(list6(Keyword.ARMEDBEAR,
+                                                 Keyword.ABCL,
+                                                 Keyword.COMMON_LISP,
+                                                 Keyword.ANSI_CL,
+                                                 Keyword.UNIX,
+                                                 Keyword.LINUX));
         } else if (osName.startsWith("SunOS")) {
-            _FEATURES_.setSymbolValue(list6(Keyword.ARMEDBEAR,
-                                            Keyword.ABCL,
-                                            Keyword.COMMON_LISP,
-                                            Keyword.ANSI_CL,
-                                            Keyword.UNIX,
-                                            Keyword.SUNOS));
+            Symbol.FEATURES.setSymbolValue(list6(Keyword.ARMEDBEAR,
+                                                 Keyword.ABCL,
+                                                 Keyword.COMMON_LISP,
+                                                 Keyword.ANSI_CL,
+                                                 Keyword.UNIX,
+                                                 Keyword.SUNOS));
         } else if (osName.startsWith("Mac OS X")) {
-            _FEATURES_.setSymbolValue(list6(Keyword.ARMEDBEAR,
-                                            Keyword.ABCL,
-                                            Keyword.COMMON_LISP,
-                                            Keyword.ANSI_CL,
-                                            Keyword.UNIX,
-                                            Keyword.DARWIN));
+            Symbol.FEATURES.setSymbolValue(list6(Keyword.ARMEDBEAR,
+                                                 Keyword.ABCL,
+                                                 Keyword.COMMON_LISP,
+                                                 Keyword.ANSI_CL,
+                                                 Keyword.UNIX,
+                                                 Keyword.DARWIN));
         } else if (osName.startsWith("Windows")) {
-            _FEATURES_.setSymbolValue(list5(Keyword.ARMEDBEAR,
-                                            Keyword.ABCL,
-                                            Keyword.COMMON_LISP,
-                                            Keyword.ANSI_CL,
-                                            Keyword.WINDOWS));
+            Symbol.FEATURES.setSymbolValue(list5(Keyword.ARMEDBEAR,
+                                                 Keyword.ABCL,
+                                                 Keyword.COMMON_LISP,
+                                                 Keyword.ANSI_CL,
+                                                 Keyword.WINDOWS));
         } else {
-            _FEATURES_.setSymbolValue(list4(Keyword.ARMEDBEAR,
-                                            Keyword.ABCL,
-                                            Keyword.COMMON_LISP,
-                                            Keyword.ANSI_CL));
+            Symbol.FEATURES.setSymbolValue(list4(Keyword.ARMEDBEAR,
+                                                 Keyword.ABCL,
+                                                 Keyword.COMMON_LISP,
+                                                 Keyword.ANSI_CL));
         }
     }
     static {
         final String version = System.getProperty("java.version");
         if (version.startsWith("1.4")) {
-            _FEATURES_.setSymbolValue(new Cons(Keyword.JAVA_1_4,
-                                               _FEATURES_.getSymbolValue()));
+            Symbol.FEATURES.setSymbolValue(new Cons(Keyword.JAVA_1_4,
+                                               Symbol.FEATURES.getSymbolValue()));
             isJava15OrLater = false;
         } else if (version.startsWith("1.5")) {
-            _FEATURES_.setSymbolValue(new Cons(Keyword.JAVA_1_5,
-                                               _FEATURES_.getSymbolValue()));
+            Symbol.FEATURES.setSymbolValue(new Cons(Keyword.JAVA_1_5,
+                                               Symbol.FEATURES.getSymbolValue()));
             isJava15OrLater = true;
         } else if (version.startsWith("1.6")) {
-            _FEATURES_.setSymbolValue(new Cons(Keyword.JAVA_1_6,
-                                               _FEATURES_.getSymbolValue()));
+            Symbol.FEATURES.setSymbolValue(new Cons(Keyword.JAVA_1_6,
+                                               Symbol.FEATURES.getSymbolValue()));
             isJava15OrLater = true;
         } else
             isJava15OrLater = false;
