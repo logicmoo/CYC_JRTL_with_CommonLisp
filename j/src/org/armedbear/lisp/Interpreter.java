@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.95 2005-10-23 16:22:05 piso Exp $
+ * $Id: Interpreter.java,v 1.96 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -310,7 +310,7 @@ public final class Interpreter extends Lisp
                             sb.append(separator);
                             sb.append("  ");
                             final LispThread thread = LispThread.currentThread();
-                            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                            thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                             sb.append(c.getCondition().writeToString());
                             sb.append(separator);
                             System.err.print(sb.toString());
@@ -484,7 +484,7 @@ public final class Interpreter extends Lisp
             if (interpreter == null) {
                 final LispThread thread = LispThread.currentThread();
                 final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-                thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                 try {
                     final LispObject truename =
                         _LOAD_TRUENAME_.symbolValue(thread);

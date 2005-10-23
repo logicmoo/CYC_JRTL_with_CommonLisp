@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.107 2005-10-23 16:20:20 piso Exp $
+ * $Id: Pathname.java,v 1.108 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -428,8 +428,8 @@ public class Pathname extends LispObject
     {
         try {
             final LispThread thread = LispThread.currentThread();
-            boolean printReadably = (_PRINT_READABLY_.symbolValue(thread) != NIL);
-            boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
+            boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
+            boolean printEscape = (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL);
             boolean useNamestring;
             String s = null;
             try {

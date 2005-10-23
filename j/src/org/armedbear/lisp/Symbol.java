@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.216 2005-10-23 16:20:45 piso Exp $
+ * $Id: Symbol.java,v 1.217 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@ public class Symbol extends LispObject
     {
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+        thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
         try {
             FastStringBuffer sb = new FastStringBuffer("The symbol ");
             sb.append(name.writeToString());
@@ -375,11 +375,11 @@ public class Symbol extends LispObject
     {
         final String n = name.getStringValue();
         final LispThread thread = LispThread.currentThread();
-        boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
+        boolean printEscape = (PRINT_ESCAPE.symbolValue(thread) != NIL);
         LispObject printCase = _PRINT_CASE_.symbolValue(thread);
         final LispObject readtableCase =
             ((Readtable)_READTABLE_.symbolValue(thread)).getReadtableCase();
-        boolean printReadably = (_PRINT_READABLY_.symbolValue(thread) != NIL);
+        boolean printReadably = (PRINT_READABLY.symbolValue(thread) != NIL);
         if (printReadably) {
             if (readtableCase != Keyword.UPCASE ||
                 printCase != Keyword.UPCASE)
@@ -445,7 +445,7 @@ public class Symbol extends LispObject
                 symbolName = capitalize(symbolName, readtableCase);
         }
         if (pkg == NIL) {
-            if (printReadably || _PRINT_GENSYM_.symbolValue(thread) != NIL)
+            if (printReadably || PRINT_GENSYM.symbolValue(thread) != NIL)
                 return "#:".concat(symbolName);
             else
                 return symbolName;
@@ -829,7 +829,7 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*ERROR-OUTPUT*");
     public static final Symbol _FEATURES_ =
         PACKAGE_CL.addExternalSymbol("*FEATURES*");
-    public static final Symbol _GENSYM_COUNTER_ =
+    public static final Symbol GENSYM_COUNTER =
         PACKAGE_CL.addExternalSymbol("*GENSYM-COUNTER*");
     public static final Symbol _LOAD_PATHNAME_ =
         PACKAGE_CL.addExternalSymbol("*LOAD-PATHNAME*");
@@ -845,19 +845,19 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*MODULES*");
     public static final Symbol _PACKAGE_ =
         PACKAGE_CL.addExternalSymbol("*PACKAGE*");
-    public static final Symbol _PRINT_ARRAY_ =
+    public static final Symbol PRINT_ARRAY =
         PACKAGE_CL.addExternalSymbol("*PRINT-ARRAY*");
     public static final Symbol _PRINT_BASE_ =
         PACKAGE_CL.addExternalSymbol("*PRINT-BASE*");
-    public static final Symbol _PRINT_CASE_ =
+    public static final Symbol PRINT_CASE =
         PACKAGE_CL.addExternalSymbol("*PRINT-CASE*");
     public static final Symbol _PRINT_CIRCLE_ =
         PACKAGE_CL.addExternalSymbol("*PRINT-CIRCLE*");
-    public static final Symbol _PRINT_ESCAPE_ =
+    public static final Symbol PRINT_ESCAPE =
         PACKAGE_CL.addExternalSymbol("*PRINT-ESCAPE*");
-    public static final Symbol _PRINT_GENSYM_ =
+    public static final Symbol PRINT_GENSYM =
         PACKAGE_CL.addExternalSymbol("*PRINT-GENSYM*");
-    public static final Symbol _PRINT_LENGTH_ =
+    public static final Symbol PRINT_LENGTH =
         PACKAGE_CL.addExternalSymbol("*PRINT-LENGTH*");
     public static final Symbol _PRINT_LEVEL_ =
         PACKAGE_CL.addExternalSymbol("*PRINT-LEVEL*");
@@ -871,7 +871,7 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*PRINT-PRETTY*");
     public static final Symbol _PRINT_RADIX_ =
         PACKAGE_CL.addExternalSymbol("*PRINT-RADIX*");
-    public static final Symbol _PRINT_READABLY_ =
+    public static final Symbol PRINT_READABLY =
         PACKAGE_CL.addExternalSymbol("*PRINT-READABLY*");
     public static final Symbol _PRINT_RIGHT_MARGIN_ =
         PACKAGE_CL.addExternalSymbol("*PRINT-RIGHT-MARGIN*");

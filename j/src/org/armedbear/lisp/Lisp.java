@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.402 2005-10-23 16:19:42 piso Exp $
+ * $Id: Lisp.java,v 1.403 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1604,8 +1604,8 @@ public abstract class Lisp
                         if (j < args.length) {
                             LispObject obj = args[j++];
                             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-                            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-                            thread.bindSpecial(_PRINT_READABLY_, NIL);
+                            thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
+                            thread.bindSpecial(Symbol.PRINT_READABLY, NIL);
                             sb.append(obj.writeToString());
                             thread.lastSpecialBinding = lastSpecialBinding;
                         }
@@ -1613,7 +1613,7 @@ public abstract class Lisp
                         if (j < args.length) {
                             LispObject obj = args[j++];
                             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-                            thread.bindSpecial(_PRINT_ESCAPE_, T);
+                            thread.bindSpecial(Symbol.PRINT_ESCAPE, T);
                             sb.append(obj.writeToString());
                             thread.lastSpecialBinding = lastSpecialBinding;
                         }
@@ -1621,7 +1621,7 @@ public abstract class Lisp
                         if (j < args.length) {
                             LispObject obj = args[j++];
                             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-                            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                            thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                             thread.bindSpecial(_PRINT_RADIX_, NIL);
                             thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
                             sb.append(obj.writeToString());
@@ -1631,7 +1631,7 @@ public abstract class Lisp
                         if (j < args.length) {
                             LispObject obj = args[j++];
                             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-                            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                            thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                             thread.bindSpecial(_PRINT_RADIX_, NIL);
                             thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));
                             sb.append(obj.writeToString());
@@ -2028,11 +2028,17 @@ public abstract class Lisp
     public static final Symbol _PRINT_CIRCLE_ =
         exportSpecial("*PRINT-CIRCLE*", PACKAGE_CL, NIL);
 
-    public static final Symbol _PRINT_ESCAPE_ =
-        exportSpecial("*PRINT-ESCAPE*", PACKAGE_CL, T);
+//     public static final Symbol Symbol.PRINT_ESCAPE =
+//         exportSpecial("*PRINT-ESCAPE*", PACKAGE_CL, T);
+    static {
+        Symbol.PRINT_ESCAPE.initializeSpecial(T);
+    }
 
-    public static final Symbol _PRINT_GENSYM_ =
-        exportSpecial("*PRINT-GENSYM*", PACKAGE_CL, T);
+//     public static final Symbol Symbol.PRINT_GENSYM =
+//         exportSpecial("*PRINT-GENSYM*", PACKAGE_CL, T);
+    static {
+        Symbol.PRINT_GENSYM.initializeSpecial(T);
+    }
 
     public static final Symbol _PRINT_LENGTH_ =
         exportSpecial("*PRINT-LENGTH*", PACKAGE_CL, NIL);
@@ -2055,9 +2061,8 @@ public abstract class Lisp
     public static final Symbol _PRINT_RADIX_ =
         exportSpecial("*PRINT-RADIX*", PACKAGE_CL, NIL);
 
-    public static final Symbol _PRINT_READABLY_ = Symbol._PRINT_READABLY_;
     static {
-        _PRINT_READABLY_.initializeSpecial(NIL);
+        Symbol.PRINT_READABLY.initializeSpecial(NIL);
     }
 
     public static final Symbol _PRINT_RIGHT_MARGIN_ =

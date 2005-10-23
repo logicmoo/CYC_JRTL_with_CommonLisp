@@ -2,7 +2,7 @@
  * AbstractString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractString.java,v 1.9 2005-07-10 15:20:44 piso Exp $
+ * $Id: AbstractString.java,v 1.10 2005-10-23 16:39:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,8 +75,8 @@ public abstract class AbstractString extends AbstractVector
         if (endIndex > limit)
             endIndex = limit;
         final LispThread thread = LispThread.currentThread();
-        if (_PRINT_ESCAPE_.symbolValue(thread) != NIL ||
-            _PRINT_READABLY_.symbolValue(thread) != NIL)
+        if (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL ||
+            Symbol.PRINT_READABLY.symbolValue(thread) != NIL)
         {
             FastStringBuffer sb = new FastStringBuffer('"');
             for (int i = beginIndex; i < endIndex; i++) {

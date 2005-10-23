@@ -2,7 +2,7 @@
  * PrintNotReadable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: PrintNotReadable.java,v 1.10 2005-09-24 19:58:50 piso Exp $
+ * $Id: PrintNotReadable.java,v 1.11 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,8 +67,8 @@ public class PrintNotReadable extends LispError
         if (object != NIL) {
             final LispThread thread = LispThread.currentThread();
             final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-            thread.bindSpecial(_PRINT_READABLY_, NIL);
-            thread.bindSpecial(_PRINT_ARRAY_, NIL);
+            thread.bindSpecial(Symbol.PRINT_READABLY, NIL);
+            thread.bindSpecial(Symbol.PRINT_ARRAY, NIL);
             try {
                 sb.append(object.writeToString());
             }

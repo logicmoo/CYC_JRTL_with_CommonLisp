@@ -2,7 +2,7 @@
  * ComplexArray_UnsignedByte8.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ComplexArray_UnsignedByte8.java,v 1.3 2005-03-25 03:19:20 piso Exp $
+ * $Id: ComplexArray_UnsignedByte8.java,v 1.4 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -202,7 +202,7 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
 
     public String writeToString() throws ConditionThrowable
     {
-        if (_PRINT_READABLY_.symbolValue() != NIL) {
+        if (Symbol.PRINT_READABLY.symbolValue() != NIL) {
             signal(new PrintNotReadable(list2(Keyword.OBJECT, this)));
             // Not reached.
             return null;

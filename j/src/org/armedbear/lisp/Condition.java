@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.41 2005-06-25 20:07:53 piso Exp $
+ * $Id: Condition.java,v 1.42 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,7 +157,7 @@ public class Condition extends StandardObject
     public String writeToString() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        if (_PRINT_ESCAPE_.symbolValue(thread) == NIL) {
+        if (Symbol.PRINT_ESCAPE.symbolValue(thread) == NIL) {
             String s = getMessage();
             if (s != null)
                 return s;

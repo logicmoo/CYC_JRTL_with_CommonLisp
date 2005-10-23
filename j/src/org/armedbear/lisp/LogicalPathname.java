@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.20 2005-09-28 17:50:09 piso Exp $
+ * $Id: LogicalPathname.java,v 1.21 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,8 +220,8 @@ public final class LogicalPathname extends Pathname
     public String writeToString() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        boolean printReadably = (_PRINT_READABLY_.symbolValue(thread) != NIL);
-        boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
+        boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
+        boolean printEscape = (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL);
         FastStringBuffer sb = new FastStringBuffer();
         if (printReadably || printEscape)
             sb.append("#P\"");

@@ -2,7 +2,7 @@
  * SimpleArray_UnsignedByte16.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleArray_UnsignedByte16.java,v 1.2 2005-07-26 04:49:56 piso Exp $
+ * $Id: SimpleArray_UnsignedByte16.java,v 1.3 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,7 +262,7 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
 
     public String writeToString() throws ConditionThrowable
     {
-        if (_PRINT_READABLY_.symbolValue() != NIL) {
+        if (Symbol.PRINT_READABLY.symbolValue() != NIL) {
             signal(new PrintNotReadable(list2(Keyword.OBJECT, this)));
             // Not reached.
             return null;

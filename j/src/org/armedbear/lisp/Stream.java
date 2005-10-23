@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.140 2005-10-23 13:05:24 piso Exp $
+ * $Id: Stream.java,v 1.141 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1402,7 +1402,7 @@ public class Stream extends LispObject
     {
         LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-        thread.bindSpecial(_PRINT_ESCAPE_, T);
+        thread.bindSpecial(Symbol.PRINT_ESCAPE, T);
         try {
             _writeString(obj.writeToString());
         }
@@ -1418,7 +1418,7 @@ public class Stream extends LispObject
 
     public LispObject fileLength() throws ConditionThrowable
     {
-        return signal(new TypeError(this, Symbol.FILE_STREAM));
+        return signalTypeError(this, Symbol.FILE_STREAM);
     }
 
     public LispObject fileStringLength(LispObject arg) throws ConditionThrowable

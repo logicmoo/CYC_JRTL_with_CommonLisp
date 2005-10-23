@@ -2,7 +2,7 @@
  * DoubleFloat.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: DoubleFloat.java,v 1.4 2005-08-23 12:20:08 piso Exp $
+ * $Id: DoubleFloat.java,v 1.5 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -507,7 +507,7 @@ public final class DoubleFloat extends LispObject
             return "#<DOUBLE-FLOAT NaN>";
         String s1 = String.valueOf(value);
         LispThread thread = LispThread.currentThread();
-        if (_PRINT_READABLY_.symbolValue(thread) != NIL ||
+        if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL ||
             !memq(_READ_DEFAULT_FLOAT_FORMAT_.symbolValue(thread),
                   list2(Symbol.DOUBLE_FLOAT, Symbol.LONG_FLOAT)))
         {

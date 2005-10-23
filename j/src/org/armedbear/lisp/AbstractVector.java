@@ -182,8 +182,8 @@ public abstract class AbstractVector extends AbstractArray
     public String writeToString() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        if (_PRINT_READABLY_.symbolValue(thread) != NIL) {
-            StringBuffer sb = new StringBuffer("#(");
+        if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL) {
+            FastStringBuffer sb = new FastStringBuffer("#(");
             final int limit = length();
             for (int i = 0; i < limit; i++) {
                 if (i > 0)

@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: AbstractArray.java,v 1.44 2005-10-15 17:10:02 piso Exp $
+ * $Id: AbstractArray.java,v 1.45 2005-10-23 16:39:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,8 +170,8 @@ public abstract class AbstractArray extends LispObject
     {
         FastStringBuffer sb = new FastStringBuffer();
         LispThread thread = LispThread.currentThread();
-        LispObject printReadably = _PRINT_READABLY_.symbolValue(thread);
-        if (printReadably != NIL || _PRINT_ARRAY_.symbolValue(thread) != NIL) {
+        LispObject printReadably = Symbol.PRINT_READABLY.symbolValue(thread);
+        if (printReadably != NIL || Symbol.PRINT_ARRAY.symbolValue(thread) != NIL) {
             int maxLevel = Integer.MAX_VALUE;
             if (printReadably != NIL) {
                 for (int i = 0; i < dimv.length - 1; i++) {
@@ -229,12 +229,12 @@ public abstract class AbstractArray extends LispObject
                 sb.append(AREF(index).writeToString());
         } else {
             final LispObject printReadably =
-                _PRINT_READABLY_.symbolValue(thread);
+                Symbol.PRINT_READABLY.symbolValue(thread);
             int maxLength = Integer.MAX_VALUE;
             int maxLevel = Integer.MAX_VALUE;
             if (printReadably == NIL) {
                 final LispObject printLength =
-                    _PRINT_LENGTH_.symbolValue(thread);
+                    Symbol.PRINT_LENGTH.symbolValue(thread);
                 if (printLength instanceof Fixnum)
                     maxLength = ((Fixnum)printLength).value;
                 final LispObject printLevel =

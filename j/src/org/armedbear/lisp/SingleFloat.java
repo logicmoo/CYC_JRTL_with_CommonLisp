@@ -2,7 +2,7 @@
  * SingleFloat.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SingleFloat.java,v 1.3 2005-06-16 17:22:55 piso Exp $
+ * $Id: SingleFloat.java,v 1.4 2005-10-23 16:39:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -491,7 +491,7 @@ public final class SingleFloat extends LispObject
             return "#<SINGLE-FLOAT NaN>";
         String s1 = String.valueOf(value);
         LispThread thread = LispThread.currentThread();
-        if (_PRINT_READABLY_.symbolValue(thread) != NIL ||
+        if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL ||
             !memq(_READ_DEFAULT_FLOAT_FORMAT_.symbolValue(thread),
                   list2(Symbol.SINGLE_FLOAT, Symbol.SHORT_FLOAT)))
         {
