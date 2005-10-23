@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.43 2005-10-23 13:05:23 piso Exp $
+ * $Id: LispReader.java,v 1.44 2005-10-23 17:38:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ public final class LispReader extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             final Readtable rt = (Readtable) Symbol._READTABLE_.symbolValue(thread);
-            final boolean suppress = Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL;
+            final boolean suppress = Symbol.READ_SUPPRESS.symbolValue(thread) != NIL;
             FastStringBuffer sb = new FastStringBuffer();
             while (true) {
                 int ch = stream._readChar();

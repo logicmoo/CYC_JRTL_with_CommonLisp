@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.141 2005-10-23 16:39:49 piso Exp $
+ * $Id: Stream.java,v 1.142 2005-10-23 17:38:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -248,7 +248,7 @@ public class Stream extends LispObject
                 }
             }
         }
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         else
             return result;
@@ -305,7 +305,7 @@ public class Stream extends LispObject
                 }
             }
         }
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         else
             return result;
@@ -391,7 +391,7 @@ public class Stream extends LispObject
     {
         final LispThread thread = LispThread.currentThread();
         LispObject obj = read(true, NIL, false, thread);
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         if (obj.listp()) {
             Symbol structure = checkSymbol(obj.car());
@@ -434,7 +434,7 @@ public class Stream extends LispObject
     {
         final LispThread thread = LispThread.currentThread();
         LispObject obj = faslRead(true, NIL, false, thread);
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         if (obj.listp()) {
             Symbol structure = checkSymbol(obj.car());
@@ -496,7 +496,7 @@ public class Stream extends LispObject
                 char nextChar = (char) n;
                 if (isTokenDelimiter(nextChar, rt)) {
                     if (last == null) {
-                        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+                        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
                             return NIL;
                         else
                             return signal(new ReaderError("Nothing appears before . in list.",
@@ -611,7 +611,7 @@ public class Stream extends LispObject
             }
             sb.append(c);
         }
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         if (sb.length() == 1)
             return LispCharacter.getInstance(sb.charAt(0));
@@ -648,7 +648,7 @@ public class Stream extends LispObject
     {
         final LispThread thread = LispThread.currentThread();
         LispObject obj = read(true, NIL, true, thread);
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         switch (rank) {
             case -1:
@@ -670,7 +670,7 @@ public class Stream extends LispObject
     {
         final LispThread thread = LispThread.currentThread();
         LispObject obj = faslRead(true, NIL, true, thread);
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         switch (rank) {
             case -1:
@@ -692,7 +692,7 @@ public class Stream extends LispObject
     {
         final LispThread thread = LispThread.currentThread();
         LispObject obj = read(true, NIL, true, thread);
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
@@ -720,7 +720,7 @@ public class Stream extends LispObject
     {
         final LispThread thread = LispThread.currentThread();
         LispObject obj = faslRead(true, NIL, true, thread);
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
@@ -807,7 +807,7 @@ public class Stream extends LispObject
         FastStringBuffer sb = new FastStringBuffer(c);
         final LispThread thread = LispThread.currentThread();
         BitSet flags = _readToken(sb, rt);
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         final LispObject readtableCase = rt.getReadtableCase();
         final String token;
@@ -1181,7 +1181,7 @@ public class Stream extends LispObject
         final Readtable rt =
             (Readtable) Symbol._READTABLE_.symbolValue(thread);
         boolean escaped = (_readToken(sb, rt) != null);
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         if (escaped)
             return signal(new ReaderError("Illegal syntax for number.", this));
@@ -1207,7 +1207,7 @@ public class Stream extends LispObject
         final LispThread thread = LispThread.currentThread();
         final Readtable rt = FaslReadtable.getInstance();
         boolean escaped = (_readToken(sb, rt) != null);
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         if (escaped)
             return signal(new ReaderError("Illegal syntax for number.", this));
@@ -1256,7 +1256,7 @@ public class Stream extends LispObject
             if (obj != null)
                 result = new Cons(obj, result);
         }
-        if (Symbol._READ_SUPPRESS_.symbolValue(thread) != NIL)
+        if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
         else
             return result.nreverse();

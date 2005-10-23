@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.122 2005-10-23 16:22:15 piso Exp $
+ * $Id: Load.java,v 1.123 2005-10-23 17:38:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +39,8 @@ public final class Load extends Lisp
         final LispThread thread = LispThread.currentThread();
         return load(new Pathname(filename),
                     filename,
-                    _LOAD_VERBOSE_.symbolValue(thread) != NIL,
-                    _LOAD_PRINT_.symbolValue(thread) != NIL,
+                    Symbol.LOAD_VERBOSE.symbolValue(thread) != NIL,
+                    Symbol.LOAD_PRINT.symbolValue(thread) != NIL,
                     true);
     }
 
@@ -163,8 +163,8 @@ public final class Load extends Lisp
     {
         final LispThread thread = LispThread.currentThread();
         return loadSystemFile(filename,
-                              _LOAD_VERBOSE_.symbolValue(thread) != NIL,
-                              _LOAD_PRINT_.symbolValue(thread) != NIL,
+                              Symbol.LOAD_VERBOSE.symbolValue(thread) != NIL,
+                              Symbol.LOAD_PRINT.symbolValue(thread) != NIL,
                               false);
     }
 
@@ -180,7 +180,7 @@ public final class Load extends Lisp
             try {
                 return loadSystemFile(filename,
                                       _AUTOLOAD_VERBOSE_.symbolValue(thread) != NIL,
-                                      _LOAD_PRINT_.symbolValue(thread) != NIL,
+                                      Symbol.LOAD_PRINT.symbolValue(thread) != NIL,
                                       auto);
             }
             finally {
@@ -188,8 +188,8 @@ public final class Load extends Lisp
             }
         } else {
             return loadSystemFile(filename,
-                                  _LOAD_VERBOSE_.symbolValue(thread) != NIL,
-                                  _LOAD_PRINT_.symbolValue(thread) != NIL,
+                                  Symbol.LOAD_VERBOSE.symbolValue(thread) != NIL,
+                                  Symbol.LOAD_PRINT.symbolValue(thread) != NIL,
                                   auto);
         }
     }
@@ -433,7 +433,7 @@ public final class Load extends Lisp
                 LispObject result = eval(obj, env, thread);
                 if (print) {
                     Stream out =
-                        checkCharacterOutputStream(Symbol._STANDARD_OUTPUT_.symbolValue(thread));
+                        checkCharacterOutputStream(Symbol.STANDARD_OUTPUT.symbolValue(thread));
                     out._writeLine(result.writeToString());
                     out._finishOutput();
                 }
@@ -534,8 +534,8 @@ public final class Load extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             return loadSystemFile(arg.getStringValue(),
-                                  _LOAD_VERBOSE_.symbolValue(thread) != NIL,
-                                  _LOAD_PRINT_.symbolValue(thread) != NIL,
+                                  Symbol.LOAD_VERBOSE.symbolValue(thread) != NIL,
+                                  Symbol.LOAD_PRINT.symbolValue(thread) != NIL,
                                   false);
         }
     };

@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.218 2005-10-23 17:17:00 piso Exp $
+ * $Id: Symbol.java,v 1.219 2005-10-23 17:38:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -833,11 +833,11 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*GENSYM-COUNTER*");
     public static final Symbol _LOAD_PATHNAME_ =
         PACKAGE_CL.addExternalSymbol("*LOAD-PATHNAME*");
-    public static final Symbol _LOAD_PRINT_ =
+    public static final Symbol LOAD_PRINT =
         PACKAGE_CL.addExternalSymbol("*LOAD-PRINT*");
     public static final Symbol _LOAD_TRUENAME_ =
         PACKAGE_CL.addExternalSymbol("*LOAD-TRUENAME*");
-    public static final Symbol _LOAD_VERBOSE_ =
+    public static final Symbol LOAD_VERBOSE =
         PACKAGE_CL.addExternalSymbol("*LOAD-VERBOSE*");
     public static final Symbol _MACROEXPAND_HOOK_ =
         PACKAGE_CL.addExternalSymbol("*MACROEXPAND-HOOK*");
@@ -875,7 +875,7 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*PRINT-READABLY*");
     public static final Symbol _PRINT_RIGHT_MARGIN_ =
         PACKAGE_CL.addExternalSymbol("*PRINT-RIGHT-MARGIN*");
-    public static final Symbol _QUERY_IO_ =
+    public static final Symbol QUERY_IO =
         PACKAGE_CL.addExternalSymbol("*QUERY-IO*");
     public static final Symbol _RANDOM_STATE_ =
         PACKAGE_CL.addExternalSymbol("*RANDOM-STATE*");
@@ -885,17 +885,17 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*READ-DEFAULT-FLOAT-FORMAT*");
     public static final Symbol _READ_EVAL_ =
         PACKAGE_CL.addExternalSymbol("*READ-EVAL*");
-    public static final Symbol _READ_SUPPRESS_ =
+    public static final Symbol READ_SUPPRESS =
         PACKAGE_CL.addExternalSymbol("*READ-SUPPRESS*");
     public static final Symbol _READTABLE_ =
         PACKAGE_CL.addExternalSymbol("*READTABLE*");
-    public static final Symbol _STANDARD_INPUT_ =
+    public static final Symbol STANDARD_INPUT =
         PACKAGE_CL.addExternalSymbol("*STANDARD-INPUT*");
-    public static final Symbol _STANDARD_OUTPUT_ =
+    public static final Symbol STANDARD_OUTPUT =
         PACKAGE_CL.addExternalSymbol("*STANDARD-OUTPUT*");
-    public static final Symbol _TERMINAL_IO_ =
+    public static final Symbol TERMINAL_IO =
         PACKAGE_CL.addExternalSymbol("*TERMINAL-IO*");
-    public static final Symbol _TRACE_OUTPUT_ =
+    public static final Symbol TRACE_OUTPUT =
         PACKAGE_CL.addExternalSymbol("*TRACE-OUTPUT*");
     public static final Symbol PLUS =
         PACKAGE_CL.addExternalSymbol("+");

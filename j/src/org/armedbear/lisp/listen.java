@@ -2,7 +2,7 @@
  * listen.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: listen.java,v 1.3 2005-10-23 13:05:24 piso Exp $
+ * $Id: listen.java,v 1.4 2005-10-23 17:38:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ public final class listen extends Primitive
     public LispObject execute() throws ConditionThrowable
     {
         Stream stream =
-            checkCharacterInputStream(Symbol._STANDARD_INPUT_.symbolValue());
+            checkCharacterInputStream(Symbol.STANDARD_INPUT.symbolValue());
         return stream.listen();
     }
 

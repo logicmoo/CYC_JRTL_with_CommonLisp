@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.406 2005-10-23 17:24:10 piso Exp $
+ * $Id: Lisp.java,v 1.407 2005-10-23 17:38:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1319,9 +1319,9 @@ public abstract class Lisp
         if (obj instanceof Stream)
             return (Stream) obj;
         if (obj == T)
-            return checkCharacterInputStream(Symbol._TERMINAL_IO_.symbolValue());
+            return checkCharacterInputStream(Symbol.TERMINAL_IO.symbolValue());
         if (obj == NIL)
-            return checkCharacterInputStream(Symbol._STANDARD_INPUT_.symbolValue());
+            return checkCharacterInputStream(Symbol.STANDARD_INPUT.symbolValue());
         signalTypeError(obj, Symbol.STREAM);
         // Not reached.
         return null;
@@ -1758,30 +1758,12 @@ public abstract class Lisp
     private static Stream stdout = new Stream(System.out, Symbol.CHARACTER, true);
 
     static {
-        Symbol._STANDARD_INPUT_.initializeSpecial(stdin);
-    }
-
-    static {
-        Symbol._STANDARD_OUTPUT_.initializeSpecial(stdout);
-    }
-
-    static {
+        Symbol.STANDARD_INPUT.initializeSpecial(stdin);
+        Symbol.STANDARD_OUTPUT.initializeSpecial(stdout);
         Symbol._ERROR_OUTPUT_.initializeSpecial(stdout);
-    }
-
-    static {
-        Symbol._TRACE_OUTPUT_.initializeSpecial(stdout);
-    }
-
-    static {
-        Symbol._TERMINAL_IO_.initializeSpecial(new TwoWayStream(stdin, stdout, true));
-    }
-
-    static {
-        Symbol._QUERY_IO_.initializeSpecial(new TwoWayStream(stdin, stdout, true));
-    }
-
-    static {
+        Symbol.TRACE_OUTPUT.initializeSpecial(stdout);
+        Symbol.TERMINAL_IO.initializeSpecial(new TwoWayStream(stdin, stdout, true));
+        Symbol.QUERY_IO.initializeSpecial(new TwoWayStream(stdin, stdout, true));
         Symbol._DEBUG_IO_.initializeSpecial(new TwoWayStream(stdin, stdout, true));
     }
 
@@ -1789,12 +1771,12 @@ public abstract class Lisp
     {
         stdin = in;
         stdout = out;
-        Symbol._STANDARD_INPUT_.setSymbolValue(stdin);
-        Symbol._STANDARD_OUTPUT_.setSymbolValue(stdout);
+        Symbol.STANDARD_INPUT.setSymbolValue(stdin);
+        Symbol.STANDARD_OUTPUT.setSymbolValue(stdout);
         Symbol._ERROR_OUTPUT_.setSymbolValue(stdout);
-        Symbol._TRACE_OUTPUT_.setSymbolValue(stdout);
-        Symbol._TERMINAL_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
-        Symbol._QUERY_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
+        Symbol.TRACE_OUTPUT.setSymbolValue(stdout);
+        Symbol.TERMINAL_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
+        Symbol.QUERY_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
         Symbol._DEBUG_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
     }
 
@@ -1806,17 +1788,17 @@ public abstract class Lisp
 
     public static final TwoWayStream getTerminalIO()
     {
-        return (TwoWayStream) Symbol._TERMINAL_IO_.symbolValueNoThrow();
+        return (TwoWayStream) Symbol.TERMINAL_IO.symbolValueNoThrow();
     }
 
     public static final Stream getStandardInput()
     {
-        return (Stream) Symbol._STANDARD_INPUT_.symbolValueNoThrow();
+        return (Stream) Symbol.STANDARD_INPUT.symbolValueNoThrow();
     }
 
     public static final Stream getStandardOutput() throws ConditionThrowable
     {
-        return checkCharacterOutputStream(Symbol._STANDARD_OUTPUT_.symbolValue());
+        return checkCharacterOutputStream(Symbol.STANDARD_OUTPUT.symbolValue());
     }
 
     static {
@@ -1829,7 +1811,7 @@ public abstract class Lisp
     }
 
     static {
-        Symbol._READ_SUPPRESS_.initializeSpecial(NIL);
+        Symbol.READ_SUPPRESS.initializeSpecial(NIL);
     }
 
     static {
@@ -1924,13 +1906,10 @@ public abstract class Lisp
     public static final Symbol _MODULES_ =
         exportSpecial("*MODULES*", PACKAGE_CL, NIL);
 
-    // ### *load-verbose*
-    public static final Symbol _LOAD_VERBOSE_ =
-        exportSpecial("*LOAD-VERBOSE*", PACKAGE_CL, NIL);
-
-    // ### *load-print*
-    public static final Symbol _LOAD_PRINT_ =
-        exportSpecial("*LOAD-PRINT*", PACKAGE_CL, NIL);
+    static {
+        Symbol.LOAD_VERBOSE.initializeSpecial(NIL);
+        Symbol.LOAD_PRINT.initializeSpecial(NIL);
+    }
 
     // ### *load-pathname*
     public static final Symbol _LOAD_PATHNAME_ =

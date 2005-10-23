@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.841 2005-10-23 15:51:45 piso Exp $
+ * $Id: Primitives.java,v 1.842 2005-10-23 17:38:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -733,9 +733,9 @@ public final class Primitives extends Lisp
             final Stream out;
             try {
                 if (second == T)
-                    out = (Stream) Symbol._TERMINAL_IO_.symbolValue();
+                    out = (Stream) Symbol.TERMINAL_IO.symbolValue();
                 else if (second == NIL)
-                    out = (Stream) Symbol._STANDARD_OUTPUT_.symbolValue();
+                    out = (Stream) Symbol.STANDARD_OUTPUT.symbolValue();
                 else
                     out = (Stream) second;
             }
@@ -780,9 +780,9 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg == T)
-                arg = Symbol._TERMINAL_IO_.symbolValue();
+                arg = Symbol.TERMINAL_IO.symbolValue();
             else if (arg == NIL)
-                arg = Symbol._STANDARD_OUTPUT_.symbolValue();
+                arg = Symbol.STANDARD_OUTPUT.symbolValue();
             final Stream stream;
             try {
                 stream = (Stream) arg;
@@ -802,9 +802,9 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg == T)
-                arg = Symbol._TERMINAL_IO_.symbolValue();
+                arg = Symbol.TERMINAL_IO.symbolValue();
             else if (arg == NIL)
-                arg = Symbol._STANDARD_OUTPUT_.symbolValue();
+                arg = Symbol.STANDARD_OUTPUT.symbolValue();
             final Stream stream;
             try {
                 stream = (Stream) arg;
@@ -1496,7 +1496,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (destination == T) {
-                checkCharacterOutputStream(Symbol._STANDARD_OUTPUT_.symbolValue())._writeString(s);
+                checkCharacterOutputStream(Symbol.STANDARD_OUTPUT.symbolValue())._writeString(s);
                 return NIL;
             }
             if (destination == NIL)
@@ -3768,9 +3768,9 @@ public final class Primitives extends Lisp
                 return signalTypeError(first, Symbol.CHARACTER);
             }
             if (second == T)
-                second = Symbol._TERMINAL_IO_.symbolValue();
+                second = Symbol.TERMINAL_IO.symbolValue();
             else if (second == NIL)
-                second = Symbol._STANDARD_OUTPUT_.symbolValue();
+                second = Symbol.STANDARD_OUTPUT.symbolValue();
             final Stream stream;
             try {
                 stream = (Stream) second;
@@ -3803,9 +3803,9 @@ public final class Primitives extends Lisp
             final Stream out;
             try {
                 if (second == T)
-                    out = (Stream) Symbol._TERMINAL_IO_.symbolValue();
+                    out = (Stream) Symbol.TERMINAL_IO.symbolValue();
                 else if (second == NIL)
-                    out = (Stream) Symbol._STANDARD_OUTPUT_.symbolValue();
+                    out = (Stream) Symbol.STANDARD_OUTPUT.symbolValue();
                 else
                     out = (Stream) second;
             }
@@ -3862,9 +3862,9 @@ public final class Primitives extends Lisp
         final Stream out;
         try {
             if (arg == T)
-                out = (Stream) Symbol._TERMINAL_IO_.symbolValue();
+                out = (Stream) Symbol.TERMINAL_IO.symbolValue();
             else if (arg == NIL)
-                out = (Stream) Symbol._STANDARD_OUTPUT_.symbolValue();
+                out = (Stream) Symbol.STANDARD_OUTPUT.symbolValue();
             else
                 out = (Stream) arg;
         }
@@ -3884,7 +3884,7 @@ public final class Primitives extends Lisp
                 signal(new WrongNumberOfArgumentsException(this));
             final Stream in;
             if (args.length == 0)
-                in = checkCharacterInputStream(Symbol._STANDARD_INPUT_.symbolValue());
+                in = checkCharacterInputStream(Symbol.STANDARD_INPUT.symbolValue());
             else
                 in = inSynonymOf(args[0]);
             in.clearInput();
@@ -4011,9 +4011,9 @@ public final class Primitives extends Lisp
             if (arg instanceof Stream)
                 return arg;
             if (arg == T)
-                return Symbol._TERMINAL_IO_.symbolValue();
+                return Symbol.TERMINAL_IO.symbolValue();
             if (arg == NIL)
-                return Symbol._STANDARD_OUTPUT_.symbolValue();
+                return Symbol.STANDARD_OUTPUT.symbolValue();
             return arg;
         }
     };
@@ -4078,7 +4078,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            final LispObject obj = Symbol._STANDARD_INPUT_.symbolValue();
+            final LispObject obj = Symbol.STANDARD_INPUT.symbolValue();
             final Stream stream;
             try {
                 stream = (Stream) obj;
@@ -4179,7 +4179,7 @@ public final class Primitives extends Lisp
         public LispObject execute() throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            final LispObject obj = Symbol._STANDARD_INPUT_.symbolValue(thread);
+            final LispObject obj = Symbol.STANDARD_INPUT.symbolValue(thread);
             final Stream stream;
             try {
                 stream = (Stream) obj;
@@ -4193,9 +4193,9 @@ public final class Primitives extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             if (arg == T)
-                arg = Symbol._TERMINAL_IO_.symbolValue(thread);
+                arg = Symbol.TERMINAL_IO.symbolValue(thread);
             else if (arg == NIL)
-                arg = Symbol._STANDARD_INPUT_.symbolValue(thread);
+                arg = Symbol.STANDARD_INPUT.symbolValue(thread);
             final Stream stream;
             try {
                 stream = (Stream) arg;
@@ -4210,9 +4210,9 @@ public final class Primitives extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             if (first == T)
-                first = Symbol._TERMINAL_IO_.symbolValue(thread);
+                first = Symbol.TERMINAL_IO.symbolValue(thread);
             else if (first == NIL)
-                first = Symbol._STANDARD_INPUT_.symbolValue(thread);
+                first = Symbol.STANDARD_INPUT.symbolValue(thread);
             final Stream stream;
             try {
                 stream = (Stream) first;
@@ -4228,9 +4228,9 @@ public final class Primitives extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             if (first == T)
-                first = Symbol._TERMINAL_IO_.symbolValue(thread);
+                first = Symbol.TERMINAL_IO.symbolValue(thread);
             else if (first == NIL)
-                first = Symbol._STANDARD_INPUT_.symbolValue(thread);
+                first = Symbol.STANDARD_INPUT.symbolValue(thread);
             final Stream stream;
             try {
                 stream = (Stream) first;
@@ -4246,9 +4246,9 @@ public final class Primitives extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             if (first == T)
-                first = Symbol._TERMINAL_IO_.symbolValue(thread);
+                first = Symbol.TERMINAL_IO.symbolValue(thread);
             else if (first == NIL)
-                first = Symbol._STANDARD_INPUT_.symbolValue(thread);
+                first = Symbol.STANDARD_INPUT.symbolValue(thread);
             final Stream stream;
             try {
                 stream = (Stream) first;
@@ -4290,7 +4290,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return checkCharacterInputStream(Symbol._STANDARD_INPUT_.symbolValue()).readChar();
+            return checkCharacterInputStream(Symbol.STANDARD_INPUT.symbolValue()).readChar();
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
