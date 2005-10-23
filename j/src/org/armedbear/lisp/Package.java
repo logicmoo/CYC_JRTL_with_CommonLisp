@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Package.java,v 1.71 2005-10-16 13:06:58 piso Exp $
+ * $Id: Package.java,v 1.72 2005-10-23 12:57:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -287,32 +287,16 @@ public final class Package extends LispObject
 
     public synchronized Symbol addInternalSymbol(String symbolName)
     {
-        Symbol symbol = new Symbol(symbolName, this);
+        final Symbol symbol = new Symbol(symbolName, this);
         internalSymbols.put(symbol);
         return symbol;
     }
 
     public synchronized Symbol addExternalSymbol(String symbolName)
     {
-        Symbol symbol = new Symbol(symbolName, this);
+        final Symbol symbol = new Symbol(symbolName, this);
         externalSymbols.put(symbol);
         return symbol;
-    }
-
-    public synchronized void addInitialExports(String[] names)
-    {
-        for (int i = names.length; i-- > 0;) {
-            final SimpleString s = new SimpleString(names[i]);
-            final int hash = s.sxhash();
-            // There shouldn't be any internal symbols in the COMMON-LISP
-            // package.
-            Debug.assertTrue(internalSymbols.get(s, hash) == null);
-            // The symbol in question may have been exported already. If we
-            // replace an existing symbol, we'll lose any information that
-            // might be associated with it. So we check first...
-            if (externalSymbols.get(s, hash) == null)
-                externalSymbols.put(new Symbol(s, hash, this));
-        }
     }
 
     public synchronized Symbol intern(String symbolName)
