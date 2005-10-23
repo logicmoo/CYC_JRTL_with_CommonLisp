@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2005 Peter Graves
-# $Id: Makefile.in,v 1.215 2005-07-20 18:25:04 piso Exp $
+# $Id: Makefile.in,v 1.216 2005-10-23 13:03:37 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -78,7 +78,6 @@ CLASSFILES =	AbstractArray.class \
 		EqlHashTable.class \
 		EqualHashTable.class \
 		EqualpHashTable.class \
-		Exports.class \
 		Extensions.class \
 		FaslReader.class \
 		FaslReadtable.class \
