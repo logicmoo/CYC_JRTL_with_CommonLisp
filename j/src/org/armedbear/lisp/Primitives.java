@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.840 2005-10-23 14:53:27 piso Exp $
+ * $Id: Primitives.java,v 1.841 2005-10-23 15:51:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,7 +138,7 @@ public final class Primitives extends Lisp
         {
             LispObject result = args[0];
             if (!result.realp())
-                signal(new TypeError(result, Symbol.REAL));
+                signalTypeError(result, Symbol.REAL);
             for (int i = 1; i < args.length; i++) {
                 if (args[i].isGreaterThan(result))
                     result = args[i];
@@ -1706,7 +1706,7 @@ public final class Primitives extends Lisp
             if (third instanceof AbstractString)
                 symbol.setDocumentation(Symbol.VARIABLE, third);
             else if (third != NIL)
-                signal(new TypeError(third, Symbol.STRING));
+                signalTypeError(third, Symbol.STRING);
             symbol.setSymbolValue(second);
             symbol.setSpecial(true);
             return symbol;
@@ -1746,7 +1746,7 @@ public final class Primitives extends Lisp
                 if (third instanceof AbstractString)
                     symbol.setDocumentation(Symbol.VARIABLE, third);
                 else
-                    signal(new TypeError(third, Symbol.STRING));
+                    signalTypeError(third, Symbol.STRING);
             }
             symbol.setSymbolValue(second);
             symbol.setSpecial(true);
@@ -2182,7 +2182,7 @@ public final class Primitives extends Lisp
                 array = (AbstractArray) args[0];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(args[0], Symbol.ARRAY));
+                return signalTypeError(args[0], Symbol.ARRAY);
             }
             final int nsubs = args.length - 2;
             final int[] subs = new int[nsubs];
@@ -2191,7 +2191,7 @@ public final class Primitives extends Lisp
                     subs[i] = ((Fixnum)args[i+1]).value;
                 }
                 catch (ClassCastException e) {
-                    signal(new TypeError(args[i+1], Symbol.FIXNUM));
+                    signalTypeError(args[i+1], Symbol.FIXNUM);
                 }
             }
             final LispObject newValue = args[args.length - 1];
@@ -3130,7 +3130,7 @@ public final class Primitives extends Lisp
                 Symbol symbol = checkSymbol(first.cadr());
                 put(symbol, Symbol.SETF_FUNCTION, second);
             } else
-                return signal(new TypeError(first, FUNCTION_NAME));
+                return signalTypeError(first, FUNCTION_NAME);
             if (second instanceof Operator) {
                 Operator op = (Operator) second;
                 op.setLambdaName(first);
@@ -3368,7 +3368,7 @@ public final class Primitives extends Lisp
                 tag = (Symbol) args.car();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(args.car(), Symbol.SYMBOL));
+                return signalTypeError(args.car(), Symbol.SYMBOL);
             }
             LispObject body = args.cdr();
             Environment ext = new Environment(env);
@@ -3409,7 +3409,7 @@ public final class Primitives extends Lisp
                 symbol = (Symbol) args.car();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(args.car(), Symbol.SYMBOL));
+                return signalTypeError(args.car(), Symbol.SYMBOL);
             }
             LispObject block = env.lookupBlock(symbol);
             if (block == null) {
@@ -3874,10 +3874,9 @@ public final class Primitives extends Lisp
         return out.finishOutput();
     }
 
-    // ### clear-input
-    // clear-input &optional input-stream => nil
+    // ### clear-input &optional input-stream => nil
     private static final Primitive CLEAR_INPUT =
-        new Primitive("clear-input", "&optional input-stream")
+        new Primitive(Symbol.CLEAR_INPUT, "&optional input-stream")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -3919,10 +3918,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### close
-    // close stream &key abort => result
+    // ### close stream &key abort => result
     private static final Primitive CLOSE =
-        new Primitive("close", "stream &key abort")
+        new Primitive(Symbol.CLOSE, "stream &key abort")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -3951,12 +3949,11 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### multiple-value-list
-    // multiple-value-list form => list
+    // ### multiple-value-list form => list
     // Evaluates form and creates a list of the multiple values it returns.
     // Should be a macro.
     private static final SpecialOperator MULTIPLE_VALUE_LIST =
-        new SpecialOperator("multiple-value-list", "value-form")
+        new SpecialOperator(Symbol.MULTIPLE_VALUE_LIST, "value-form")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3976,13 +3973,12 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### nth-value
-    // nth-value n form => object
+    // ### nth-value n form => object
     // Evaluates n and then form and returns the nth value returned by form, or
     // NIL if n >= number of values returned.
     // Should be a macro.
     private static final SpecialOperator NTH_VALUE =
-        new SpecialOperator("nth-value", "n form")
+        new SpecialOperator(Symbol.NTH_VALUE, "n form")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -4077,7 +4073,7 @@ public final class Primitives extends Lisp
     // ### read-line &optional input-stream eof-error-p eof-value recursive-p
     // => line, missing-newline-p
     private static final Primitive READ_LINE =
-        new Primitive("read-line",
+        new Primitive(Symbol.READ_LINE,
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
         public LispObject execute() throws ConditionThrowable
@@ -4177,7 +4173,7 @@ public final class Primitives extends Lisp
     // ### read
     // &optional input-stream eof-error-p eof-value recursive-p => object
     private static final Primitive READ =
-        new Primitive("read",
+        new Primitive(Symbol.READ,
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
         public LispObject execute() throws ConditionThrowable
@@ -4267,7 +4263,7 @@ public final class Primitives extends Lisp
     // ### read-preserving-whitespace
     // &optional input-stream eof-error-p eof-value recursive-p => object
     private static final Primitive READ_PRESERVING_WHITESPACE =
-        new Primitive("read-preserving-whitespace",
+        new Primitive(Symbol.READ_PRESERVING_WHITESPACE,
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -4286,10 +4282,10 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### read-char
-    // read-char &optional input-stream eof-error-p eof-value recursive-p => char
+    // ### read-char &optional input-stream eof-error-p eof-value recursive-p
+    // => char
     private static final Primitive READ_CHAR =
-        new Primitive("read-char",
+        new Primitive(Symbol.READ_CHAR,
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
         public LispObject execute() throws ConditionThrowable
@@ -4319,10 +4315,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### unread-char
-    // unread-char character &optional input-stream => nil
+    // ### unread-char character &optional input-stream => nil
     private static final Primitive UNREAD_CHAR =
-        new Primitive("unread-char", "character &optional input-stream")
+        new Primitive(Symbol.UNREAD_CHAR, "character &optional input-stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4348,7 +4343,7 @@ public final class Primitives extends Lisp
             if (arg instanceof StandardGenericFunction) {
                 return ((StandardGenericFunction)arg).getGenericFunctionName();
             }
-            return signal(new TypeError(arg, Symbol.FUNCTION));
+            return signalTypeError(arg, Symbol.FUNCTION);
         }
     };
 
@@ -4367,7 +4362,7 @@ public final class Primitives extends Lisp
                 ((StandardGenericFunction)first).setGenericFunctionName(second);
                 return second;
             }
-            return signal(new TypeError(first, Symbol.FUNCTION));
+            return signalTypeError(first, Symbol.FUNCTION);
         }
     };
 
@@ -4386,15 +4381,20 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### subseq
-    // subseq sequence start &optional end
+    // ### subseq sequence start &optional end
     private static final Primitive SUBSEQ =
-        new Primitive("subseq", "sequence start &optional end")
+        new Primitive(Symbol.SUBSEQ, "sequence start &optional end")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            final int start = Fixnum.getValue(second);
+            final int start;
+            try {
+                start = ((Fixnum)second).value;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.FIXNUM);
+            }
             if (start < 0) {
                 FastStringBuffer sb = new FastStringBuffer("Bad start index (");
                 sb.append(start);
@@ -4403,17 +4403,23 @@ public final class Primitives extends Lisp
             }
             if (first.listp())
                 return list_subseq(first, start, -1);
-            if (first.vectorp()) {
-                AbstractVector v = (AbstractVector) first;
+            if (first instanceof AbstractVector) {
+                final AbstractVector v = (AbstractVector) first;
                 return v.subseq(start, v.length());
             }
-            return signal(new TypeError(first, Symbol.SEQUENCE));
+            return signalTypeError(first, Symbol.SEQUENCE);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            final int start = Fixnum.getValue(second);
+            final int start;
+            try {
+                start = ((Fixnum)second).value;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.FIXNUM);
+            }
             if (start < 0) {
                 FastStringBuffer sb = new FastStringBuffer("Bad start index (");
                 sb.append(start);
@@ -4435,13 +4441,13 @@ public final class Primitives extends Lisp
                 end = -1;
             if (first.listp())
                 return list_subseq(first, start, end);
-            if (first.vectorp()) {
-                AbstractVector v = (AbstractVector) first;
+            if (first instanceof AbstractVector) {
+                final AbstractVector v = (AbstractVector) first;
                 if (end < 0)
                     end = v.length();
                 return v.subseq(start, end);
             }
-            return signal(new TypeError(first, Symbol.SEQUENCE));
+            return signalTypeError(first, Symbol.SEQUENCE);
         }
     };
 
@@ -4462,7 +4468,8 @@ public final class Primitives extends Lisp
     }
 
     // ### list
-    private static final Primitive LIST = new Primitive("list", "&rest objects")
+    private static final Primitive LIST =
+        new Primitive(Symbol.LIST, "&rest objects")
     {
         public LispObject execute()
         {
@@ -4499,8 +4506,8 @@ public final class Primitives extends Lisp
     };
 
     // ### list*
-    private static final Primitive LIST_ =
-        new Primitive("list*", "&rest objects")
+    private static final Primitive LIST_STAR =
+        new Primitive(Symbol.LIST_STAR, "&rest objects")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -4542,7 +4549,7 @@ public final class Primitives extends Lisp
 
     // ### nreverse
     public static final Primitive NREVERSE =
-        new Primitive("nreverse", "sequence")
+        new Primitive(Symbol.NREVERSE, "sequence")
     {
         public LispObject execute (LispObject arg) throws ConditionThrowable
         {
@@ -4552,7 +4559,7 @@ public final class Primitives extends Lisp
 
     // ### nreconc
     private static final Primitive NRECONC =
-        new Primitive("nreconc", "list tail")
+        new Primitive(Symbol.NRECONC, "list tail")
     {
         public LispObject execute(LispObject list, LispObject obj)
             throws ConditionThrowable
@@ -4590,7 +4597,7 @@ public final class Primitives extends Lisp
 
     // ### reverse
     private static final Primitive REVERSE =
-        new Primitive("reverse", "sequence")
+        new Primitive(Symbol.REVERSE, "sequence")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4770,7 +4777,7 @@ public final class Primitives extends Lisp
                     ++i;
                 }
             }
-            return signal(new TypeError(first, Symbol.SEQUENCE));
+            return signalTypeError(first, Symbol.SEQUENCE);
         }
     };
 
@@ -4897,7 +4904,8 @@ public final class Primitives extends Lisp
     };
 
     // ### streamp
-    private static final Primitive STREAMP = new Primitive("streamp", "object")
+    private static final Primitive STREAMP =
+        new Primitive(Symbol.STREAMP, "object")
     {
         public LispObject execute(LispObject arg)
         {
@@ -4906,7 +4914,8 @@ public final class Primitives extends Lisp
     };
 
     // ### integerp
-    private static final Primitive INTEGERP = new Primitive("integerp", "object")
+    private static final Primitive INTEGERP =
+        new Primitive(Symbol.INTEGERP, "object")
     {
         public LispObject execute(LispObject arg)
         {
@@ -4915,7 +4924,8 @@ public final class Primitives extends Lisp
     };
 
     // ### evenp
-    private static final Primitive EVENP = new Primitive("evenp", "integer")
+    private static final Primitive EVENP =
+        new Primitive(Symbol.EVENP, "integer")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4924,7 +4934,7 @@ public final class Primitives extends Lisp
     };
 
     // ### oddp
-    private static final Primitive ODDP = new Primitive("oddp", "integer")
+    private static final Primitive ODDP = new Primitive(Symbol.ODDP, "integer")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4933,7 +4943,8 @@ public final class Primitives extends Lisp
     };
 
     // ### numberp
-    private static final Primitive NUMBERP = new Primitive("numberp", "object")
+    private static final Primitive NUMBERP =
+        new Primitive(Symbol.NUMBERP, "object")
     {
         public LispObject execute(LispObject arg)
         {
@@ -4942,7 +4953,8 @@ public final class Primitives extends Lisp
     };
 
     // ### realp
-    private static final Primitive REALP = new Primitive("realp", "object")
+    private static final Primitive REALP =
+        new Primitive(Symbol.REALP, "object")
     {
         public LispObject execute(LispObject arg)
         {
@@ -4951,7 +4963,9 @@ public final class Primitives extends Lisp
     };
 
     // ### rationalp
-    private static final Primitive RATIONALP = new Primitive("rationalp","object") {
+    private static final Primitive RATIONALP =
+        new Primitive(Symbol.RATIONALP,"object")
+    {
         public LispObject execute(LispObject arg)
         {
             return arg.RATIONALP();
@@ -4960,7 +4974,7 @@ public final class Primitives extends Lisp
 
     // ### complex
     private static final Primitive COMPLEX =
-        new Primitive("complex", "realpart &optional imagpart")
+        new Primitive(Symbol.COMPLEX, "realpart &optional imagpart")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4970,8 +4984,7 @@ public final class Primitives extends Lisp
                 return Complex.getInstance(arg, DoubleFloat.ZERO);
             if (arg.realp())
                 return arg;
-            signal(new TypeError(arg, Symbol.REAL));
-            return NIL;
+            return signalTypeError(arg, Symbol.REAL);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -4982,7 +4995,7 @@ public final class Primitives extends Lisp
 
     // ### complexp
     private static final Primitive COMPLEXP =
-        new Primitive("complexp", "object")
+        new Primitive(Symbol.COMPLEXP, "object")
     {
         public LispObject execute(LispObject arg)
         {
@@ -4992,7 +5005,7 @@ public final class Primitives extends Lisp
 
     // ### numerator
     private static final Primitive NUMERATOR =
-        new Primitive("numerator", "rational")
+        new Primitive(Symbol.NUMERATOR, "rational")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5002,7 +5015,7 @@ public final class Primitives extends Lisp
 
     // ### denominator
     private static final Primitive DENOMINATOR =
-        new Primitive("denominator", "rational")
+        new Primitive(Symbol.DENOMINATOR, "rational")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5012,7 +5025,7 @@ public final class Primitives extends Lisp
 
     // ### realpart
     private static final Primitive REALPART =
-        new Primitive("realpart", "number")
+        new Primitive(Symbol.REALPART, "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5020,14 +5033,13 @@ public final class Primitives extends Lisp
                 return ((Complex)arg).getRealPart();
             if (arg.numberp())
                 return arg;
-            signal(new TypeError(arg, Symbol.NUMBER));
-            return NIL;
+            return signalTypeError(arg, Symbol.NUMBER);
         }
     };
 
     // ### imagpart
     private static final Primitive IMAGPART =
-        new Primitive("imagpart", "number")
+        new Primitive(Symbol.IMAGPART, "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5039,7 +5051,7 @@ public final class Primitives extends Lisp
 
     // ### integer-length
     private static final Primitive INTEGER_LENGTH =
-        new Primitive("integer-length", "integer")
+        new Primitive(Symbol.INTEGER_LENGTH, "integer")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5056,7 +5068,7 @@ public final class Primitives extends Lisp
             }
             if (arg instanceof Bignum)
                 return new Fixnum(((Bignum)arg).value.bitLength());
-            return signal(new TypeError(arg, Symbol.INTEGER));
+            return signalTypeError(arg, Symbol.INTEGER);
         }
     };
 
@@ -5072,18 +5084,14 @@ public final class Primitives extends Lisp
                 n1 = BigInteger.valueOf(((Fixnum)first).getValue());
             else if (first instanceof Bignum)
                 n1 = ((Bignum)first).getValue();
-            else {
-                signal(new TypeError(first, Symbol.INTEGER));
-                return NIL;
-            }
+            else
+                return signalTypeError(first, Symbol.INTEGER);
             if (second instanceof Fixnum)
                 n2 = BigInteger.valueOf(((Fixnum)second).getValue());
             else if (second instanceof Bignum)
                 n2 = ((Bignum)second).getValue();
-            else {
-                signal(new TypeError(second, Symbol.INTEGER));
-                return NIL;
-            }
+            else
+                return signalTypeError(second, Symbol.INTEGER);
             return number(n1.gcd(n2));
         }
     };
@@ -5178,7 +5186,7 @@ public final class Primitives extends Lisp
                 return ((Symbol)arg).isBuiltInFunction() ? T : NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
+                return signalTypeError(arg, Symbol.SYMBOL);
             }
         }
     };
@@ -5193,7 +5201,7 @@ public final class Primitives extends Lisp
                 return ((Symbol)arg).SINGLE_VALUED_P();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
+                return signalTypeError(arg, Symbol.SYMBOL);
             }
         }
     };
@@ -5210,7 +5218,7 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SYMBOL));
+                return signalTypeError(first, Symbol.SYMBOL);
             }
         }
     };
@@ -5237,7 +5245,7 @@ public final class Primitives extends Lisp
 
     // ### symbol-name
     public static final Primitive SYMBOL_NAME =
-        new Primitive("symbol-name", "symbol")
+        new Primitive(Symbol.SYMBOL_NAME, "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5252,7 +5260,7 @@ public final class Primitives extends Lisp
 
     // ### symbol-package
     public static final Primitive SYMBOL_PACKAGE =
-        new Primitive("symbol-package", "symbol")
+        new Primitive(Symbol.SYMBOL_PACKAGE, "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5267,7 +5275,7 @@ public final class Primitives extends Lisp
 
     // ### symbol-function
     public static final Primitive SYMBOL_FUNCTION =
-        new Primitive("symbol-function", "symbol")
+        new Primitive(Symbol.SYMBOL_FUNCTION, "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5302,7 +5310,7 @@ public final class Primitives extends Lisp
 
     // ### symbol-plist
     public static final Primitive SYMBOL_PLIST =
-        new Primitive("symbol-plist", "symbol")
+        new Primitive(Symbol.SYMBOL_PLIST, "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5316,7 +5324,8 @@ public final class Primitives extends Lisp
     };
 
     // ### keywordp
-    public static final Primitive KEYWORDP = new Primitive("keywordp", "object")
+    public static final Primitive KEYWORDP =
+        new Primitive(Symbol.KEYWORDP, "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5330,7 +5339,7 @@ public final class Primitives extends Lisp
 
     // ### make-symbol
     public static final Primitive MAKE_SYMBOL =
-        new Primitive("make-symbol", "name")
+        new Primitive(Symbol.MAKE_SYMBOL, "name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5345,7 +5354,7 @@ public final class Primitives extends Lisp
 
     // makunbound
     public static final Primitive MAKUNBOUND =
-        new Primitive("makunbound", "symbol")
+        new Primitive(Symbol.MAKUNBOUND, "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5361,7 +5370,7 @@ public final class Primitives extends Lisp
 
     // ### find-class symbol &optional errorp environment => class
     private static final Primitive FIND_CLASS =
-        new Primitive("find-class", "symbol &optional errorp environment")
+        new Primitive(Symbol.FIND_CLASS, "symbol &optional errorp environment")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5429,10 +5438,10 @@ public final class Primitives extends Lisp
                     LispClass.removeClass(symbol);
                     return second;
                 }
-                return signal(new TypeError(second, Symbol.CLASS));
+                return signalTypeError(second, Symbol.CLASS);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SYMBOL));
+                return signalTypeError(first, Symbol.SYMBOL);
             }
         }
     };
@@ -5447,7 +5456,7 @@ public final class Primitives extends Lisp
                 return ((LispClass)arg).symbol;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CLASS));
+                return signalTypeError(arg, Symbol.CLASS);
             }
         }
     };
@@ -5464,7 +5473,7 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.CLASS));
+                return signalTypeError(first, Symbol.CLASS);
             }
         }
     };
@@ -5480,7 +5489,7 @@ public final class Primitives extends Lisp
                 return layout != null ? layout : NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CLASS));
+                return signalTypeError(arg, Symbol.CLASS);
             }
         }
     };
@@ -5498,9 +5507,9 @@ public final class Primitives extends Lisp
             }
             catch (ClassCastException e) {
                 if (!(first instanceof LispClass))
-                    return signal(new TypeError(first, Symbol.CLASS));
+                    return signalTypeError(first, Symbol.CLASS);
                 if (!(second instanceof Layout))
-                    return signal(new TypeError(second, Symbol.LAYOUT));
+                    return signalTypeError(second, Symbol.LAYOUT);
                 // Not reached.
                 return NIL;
             }
@@ -5517,7 +5526,7 @@ public final class Primitives extends Lisp
                 return ((LispClass)arg).getDirectSuperclasses();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CLASS));
+                return signalTypeError(arg, Symbol.CLASS);
             }
         }
     };
@@ -5534,7 +5543,7 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.CLASS));
+                return signalTypeError(first, Symbol.CLASS);
             }
         }
     };
@@ -5549,7 +5558,7 @@ public final class Primitives extends Lisp
                 return ((LispClass)arg).getDirectSubclasses();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CLASS));
+                return signalTypeError(arg, Symbol.CLASS);
             }
         }
     };
@@ -5567,7 +5576,7 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.CLASS));
+                return signalTypeError(first, Symbol.CLASS);
             }
         }
     };
@@ -5582,7 +5591,7 @@ public final class Primitives extends Lisp
                 return ((LispClass)arg).getCPL();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CLASS));
+                return signalTypeError(arg, Symbol.CLASS);
             }
         }
     };
@@ -5599,7 +5608,7 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.CLASS));
+                return signalTypeError(first, Symbol.CLASS);
             }
         }
     };
@@ -5615,7 +5624,7 @@ public final class Primitives extends Lisp
                 return ((LispClass)arg).directMethods;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CLASS));
+                return signalTypeError(arg, Symbol.CLASS);
             }
         }
     };
@@ -5632,7 +5641,7 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.CLASS));
+                return signalTypeError(first, Symbol.CLASS);
             }
         }
     };
@@ -5648,7 +5657,7 @@ public final class Primitives extends Lisp
                 return ((LispClass)arg).documentation;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CLASS));
+                return signalTypeError(arg, Symbol.CLASS);
             }
         }
     };
@@ -5665,7 +5674,7 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.CLASS));
+                return signalTypeError(first, Symbol.CLASS);
             }
         }
     };
@@ -5680,7 +5689,7 @@ public final class Primitives extends Lisp
                 return ((LispClass)arg).isFinalized() ? T : NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CLASS));
+                return signalTypeError(arg, Symbol.CLASS);
             }
         }
     };
@@ -5697,7 +5706,7 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.CLASS));
+                return signalTypeError(first, Symbol.CLASS);
             }
         }
     };
@@ -5723,7 +5732,7 @@ public final class Primitives extends Lisp
                 c = (LispCharacter) arg;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
+                return signalTypeError(arg, Symbol.CHARACTER);
             }
             char[] chars = new char[1];
             chars[0] = c.value;
@@ -5785,8 +5794,8 @@ public final class Primitives extends Lisp
             int start = Fixnum.getValue(third);
             int end = Fixnum.getValue(fourth);
             if (!v.getElementType().equal(UNSIGNED_BYTE_8))
-                return signal(new TypeError(first, list2(Symbol.VECTOR,
-                                                         UNSIGNED_BYTE_8)));
+                return signalTypeError(first, list2(Symbol.VECTOR,
+                                                    UNSIGNED_BYTE_8));
             for (int i = start; i < end; i++) {
                 int n = stream._readByte();
                 if (n < 0) {
@@ -5856,7 +5865,7 @@ public final class Primitives extends Lisp
                 return ((Function)arg).getPropertyList();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.FUNCTION));
+                return signalTypeError(arg, Symbol.FUNCTION);
             }
         }
     };
@@ -5871,7 +5880,7 @@ public final class Primitives extends Lisp
                 return PACKAGE_KEYWORD.intern(((Symbol)arg).name);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
+                return signalTypeError(arg, Symbol.SYMBOL);
             }
         }
     };
