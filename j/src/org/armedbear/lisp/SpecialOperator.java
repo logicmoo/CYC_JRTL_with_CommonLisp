@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SpecialOperator.java,v 1.20 2005-10-23 14:11:53 piso Exp $
+ * $Id: SpecialOperator.java,v 1.21 2005-10-23 16:05:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,17 +35,6 @@ public class SpecialOperator extends Operator
     {
         symbol.setSymbolFunction(this);
         setLambdaName(symbol);
-        setLambdaList(new SimpleString(arglist));
-    }
-
-    public SpecialOperator(String name)
-    {
-        setLambdaName(Symbol.addFunction(name.toUpperCase(), this));
-    }
-
-    public SpecialOperator(String name, String arglist)
-    {
-        this(name);
         setLambdaList(new SimpleString(arglist));
     }
 
