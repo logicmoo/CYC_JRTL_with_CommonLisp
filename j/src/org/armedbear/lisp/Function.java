@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.55 2005-06-09 11:49:06 piso Exp $
+ * $Id: Function.java,v 1.56 2005-10-23 14:12:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,14 @@ public abstract class Function extends Operator
                 symbol.setBuiltInFunction(true);
             setLambdaName(symbol);
         }
+    }
+
+    public Function(Symbol symbol, String arglist)
+    {
+        symbol.setSymbolFunction(this);
+        if (cold)
+            symbol.setBuiltInFunction(true);
+        setLambdaName(symbol);
     }
 
     public Function(String name, String arglist)

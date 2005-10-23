@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.214 2005-10-23 12:56:19 piso Exp $
+ * $Id: Symbol.java,v 1.215 2005-10-23 14:11:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -917,15 +917,15 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("1+");
     public static final Symbol ONE_MINUS =
         PACKAGE_CL.addExternalSymbol("1-");
-    public static final Symbol LESS_THAN =
+    public static final Symbol LT =
         PACKAGE_CL.addExternalSymbol("<");
-    public static final Symbol LESS_THAN_OR_EQUAL =
+    public static final Symbol LE =
         PACKAGE_CL.addExternalSymbol("<=");
     public static final Symbol EQUALS =
         PACKAGE_CL.addExternalSymbol("=");
-    public static final Symbol GREATER_THAN =
+    public static final Symbol GT =
         PACKAGE_CL.addExternalSymbol(">");
-    public static final Symbol GREATER_THAN_OR_EQUAL =
+    public static final Symbol GE =
         PACKAGE_CL.addExternalSymbol(">=");
     public static final Symbol ABORT =
         PACKAGE_CL.addExternalSymbol("ABORT");

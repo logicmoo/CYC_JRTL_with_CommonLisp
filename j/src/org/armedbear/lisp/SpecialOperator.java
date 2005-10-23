@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SpecialOperator.java,v 1.19 2005-07-25 17:00:25 piso Exp $
+ * $Id: SpecialOperator.java,v 1.20 2005-10-23 14:11:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,19 @@ package org.armedbear.lisp;
 public class SpecialOperator extends Operator
 {
     private int callCount;
+
+    public SpecialOperator(Symbol symbol)
+    {
+        symbol.setSymbolFunction(this);
+        setLambdaName(symbol);
+    }
+
+    public SpecialOperator(Symbol symbol, String arglist)
+    {
+        symbol.setSymbolFunction(this);
+        setLambdaName(symbol);
+        setLambdaList(new SimpleString(arglist));
+    }
 
     public SpecialOperator(String name)
     {
