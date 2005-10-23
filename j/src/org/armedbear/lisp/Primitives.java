@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.838 2005-10-23 14:12:30 piso Exp $
+ * $Id: Primitives.java,v 1.839 2005-10-23 14:28:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2018,7 +2018,6 @@ public final class Primitives extends Lisp
         {
             if (args.length < 1)
                 signal(new WrongNumberOfArgumentsException(this));
-//             AbstractArray array = checkArray(args[0]);
             final AbstractArray array;
             try {
                 array = (AbstractArray) args[0];
@@ -2051,84 +2050,89 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %array-row-major-index
-    // %array-row-major-index array subscripts => index
+    // ### %array-row-major-index array subscripts => index
     private static final Primitive _ARRAY_ROW_MAJOR_INDEX =
         new Primitive("%array-row-major-index", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            AbstractArray array = checkArray(first);
+            final AbstractArray array;
+            try {
+                array = (AbstractArray) first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.ARRAY);
+            }
             LispObject[] subscripts = second.copyToArray();
             return number(array.getRowMajorIndex(subscripts));
         }
     };
 
-    // ### aref
-    // aref array &rest subscripts => element
+    // ### aref array &rest subscripts => element
     private static final Primitive AREF =
-        new Primitive("aref", "array &rest subscripts")
+        new Primitive(Symbol.AREF, "array &rest subscripts")
     {
         public LispObject execute() throws ConditionThrowable
         {
             return signal(new WrongNumberOfArgumentsException(this));
         }
-
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            AbstractArray array = checkArray(arg);
+            final AbstractArray array;
+            try {
+                array = (AbstractArray) arg;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.ARRAY);
+            }
             if (array.getRank() == 0)
                 return array.AREF(0);
             FastStringBuffer sb =
                 new FastStringBuffer("Wrong number of subscripts (0) for array of rank ");
             sb.append(array.getRank());
             sb.append('.');
-            signal(new ProgramError(sb.toString()));
-            return NIL;
+            return signal(new ProgramError(sb.toString()));
         }
-
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             return first.AREF(second);
         }
-
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
             final AbstractArray array;
             try {
-                array = checkArray(first);
+                array = (AbstractArray) first;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.ARRAY));
+                return signalTypeError(first, Symbol.ARRAY);
             }
             final int[] subs = new int[2];
             try {
                 subs[0] = ((Fixnum)second).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(second, Symbol.FIXNUM));
+                return signalTypeError(second, Symbol.FIXNUM);
             }
             try {
                 subs[1] = ((Fixnum)third).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(third, Symbol.FIXNUM));
+                return signalTypeError(third, Symbol.FIXNUM);
             }
             return array.get(subs);
         }
-
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final AbstractArray array;
             try {
-                array = checkArray(args[0]);
+                array = (AbstractArray) args[0];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(args[0], Symbol.ARRAY));
+                return signalTypeError(args[0], Symbol.ARRAY);
             }
             final int[] subs = new int[args.length - 1];
             for (int i = subs.length; i-- > 0;) {
@@ -2136,7 +2140,7 @@ public final class Primitives extends Lisp
                     subs[i] = ((Fixnum)args[i+1]).value;
                 }
                 catch (ClassCastException e) {
-                    return signal(new TypeError(args[i+i], Symbol.FIXNUM));
+                    return signalTypeError(args[i+i], Symbol.FIXNUM);
                 }
             }
             return array.get(subs);
@@ -2196,10 +2200,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### row-major-aref
-    // row-major-aref array index => element
+    // ### row-major-aref array index => element
     private static final Primitive ROW_MAJOR_AREF =
-        new Primitive("row-major-aref", "array index")
+        new Primitive(Symbol.ROW_MAJOR_AREF, "array index")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -2209,16 +2212,16 @@ public final class Primitives extends Lisp
             }
             catch (ClassCastException e) {
                 if (first instanceof AbstractArray)
-                    return signal(new TypeError(second, Symbol.FIXNUM));
+                    return signalTypeError(second, Symbol.FIXNUM);
                 else
-                    return signal(new TypeError(first, Symbol.ARRAY));
+                    return signalTypeError(first, Symbol.ARRAY);
             }
         }
     };
 
     // ### vector
     private static final Primitive VECTOR =
-        new Primitive("vector", "&rest objects")
+        new Primitive(Symbol.VECTOR, "&rest objects")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -2228,7 +2231,7 @@ public final class Primitives extends Lisp
 
     // ### fill-pointer
     private static final Primitive FILL_POINTER =
-        new Primitive("fill-pointer", "vector")
+        new Primitive(Symbol.FILL_POINTER, "vector")
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -2237,9 +2240,9 @@ public final class Primitives extends Lisp
                 return new Fixnum(((AbstractArray)arg).getFillPointer());
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, list3(Symbol.AND, Symbol.VECTOR,
-                                                       list2(Symbol.SATISFIES,
-                                                             Symbol.ARRAY_HAS_FILL_POINTER_P))));
+                return signalTypeError(arg, list3(Symbol.AND, Symbol.VECTOR,
+                                                  list2(Symbol.SATISFIES,
+                                                        Symbol.ARRAY_HAS_FILL_POINTER_P)));
             }
         }
     };
@@ -2260,21 +2263,27 @@ public final class Primitives extends Lisp
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, list3(Symbol.AND, Symbol.VECTOR,
-                                                         list2(Symbol.SATISFIES,
-                                                               Symbol.ARRAY_HAS_FILL_POINTER_P))));
+                return signalTypeError(first, list3(Symbol.AND, Symbol.VECTOR,
+                                                    list2(Symbol.SATISFIES,
+                                                          Symbol.ARRAY_HAS_FILL_POINTER_P)));
             }
         }
     };
 
     // ### vector-push new-element vector => index-of-new-element
     private static final Primitive VECTOR_PUSH =
-        new Primitive("vector-push","new-element vector")
+        new Primitive(Symbol.VECTOR_PUSH, "new-element vector")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            AbstractVector v = checkVector(second);
+            final AbstractVector v;
+            try {
+                v = (AbstractVector) second;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.VECTOR);
+            }
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
                 v.noFillPointer();
@@ -2289,7 +2298,7 @@ public final class Primitives extends Lisp
     // ### vector-push-extend new-element vector &optional extension
     // => index-of-new-element
     private static final Primitive VECTOR_PUSH_EXTEND =
-        new Primitive("vector-push-extend",
+        new Primitive(Symbol.VECTOR_PUSH_EXTEND,
                       "new-element vector &optional extension")
     {
         public LispObject execute(LispObject first, LispObject second)
@@ -2299,7 +2308,7 @@ public final class Primitives extends Lisp
                 return ((AbstractVector)second).vectorPushExtend(first);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(second, Symbol.VECTOR));
+                return signalTypeError(second, Symbol.VECTOR);
             }
         }
 
@@ -2311,18 +2320,24 @@ public final class Primitives extends Lisp
                 return ((AbstractVector)second).vectorPushExtend(first, third);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(second, Symbol.VECTOR));
+                return signalTypeError(second, Symbol.VECTOR);
             }
         }
     };
 
     // ### vector-pop vector => element
     private static final Primitive VECTOR_POP =
-        new Primitive("vector-pop", "vector")
+        new Primitive(Symbol.VECTOR_POP, "vector")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            AbstractVector v = checkVector(arg);
+            final AbstractVector v;
+            try {
+                v = (AbstractVector) arg;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.VECTOR);
+            }
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
                 v.noFillPointer();
