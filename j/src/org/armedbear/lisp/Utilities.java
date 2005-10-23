@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Utilities.java,v 1.13 2005-10-17 16:45:20 piso Exp $
+ * $Id: Utilities.java,v 1.14 2005-10-23 16:22:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ public final class Utilities extends Lisp
     public static File getFile(Pathname pathname) throws ConditionThrowable
     {
         return getFile(pathname,
-                       Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue()));
+                       coerceToPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.symbolValue()));
     }
 
     public static File getFile(Pathname pathname, Pathname defaultPathname)

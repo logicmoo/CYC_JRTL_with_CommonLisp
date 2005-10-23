@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: probe_file.java,v 1.15 2005-05-05 14:36:16 piso Exp $
+ * $Id: probe_file.java,v 1.16 2005-10-23 16:22:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public final class probe_file extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Pathname pathname = Pathname.coerceToPathname(arg);
+            Pathname pathname = coerceToPathname(arg);
             if (pathname.isWild())
                 signal(new FileError("Bad place for a wild pathname.", pathname));
             File file = Utilities.getFile(pathname);
@@ -69,7 +69,7 @@ public final class probe_file extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Pathname pathname = Pathname.coerceToPathname(arg);
+            Pathname pathname = coerceToPathname(arg);
             if (pathname.isWild())
                 signal(new FileError("Bad place for a wild pathname.", pathname));
             File file = Utilities.getFile(pathname);

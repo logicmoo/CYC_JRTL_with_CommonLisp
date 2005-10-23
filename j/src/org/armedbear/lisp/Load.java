@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.121 2005-10-23 13:05:23 piso Exp $
+ * $Id: Load.java,v 1.122 2005-10-23 16:22:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ public final class Load extends Lisp
         } else {
             // Filename is not absolute.
             String dir =
-                Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue()).getNamestring();
+                coerceToPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.symbolValue()).getNamestring();
             file = new File(dir, filename);
             if (file != null) {
                 isFile = file.isFile();
@@ -515,7 +515,7 @@ public final class Load extends Lisp
                 }
                 // If stream is closed, fall through...
             }
-            Pathname pathname = Pathname.coerceToPathname(filespec);
+            Pathname pathname = coerceToPathname(filespec);
             if (pathname instanceof LogicalPathname)
                 pathname = LogicalPathname.translateLogicalPathname((LogicalPathname)pathname);
             return load(pathname,

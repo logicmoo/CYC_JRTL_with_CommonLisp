@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.401 2005-10-23 13:02:13 piso Exp $
+ * $Id: Lisp.java,v 1.402 2005-10-23 16:19:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -846,15 +846,18 @@ public abstract class Lisp
         LispObject device = NIL;
         final Pathname defaultPathname;
         if (absolute) {
-            defaultPathname = Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue(thread));
+            defaultPathname =
+                coerceToPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.symbolValue(thread));
         } else {
             LispObject loadTruename = _LOAD_TRUENAME_.symbolValue(thread);
             if (loadTruename instanceof Pathname) {
                 defaultPathname = (Pathname) loadTruename;
                 // We're loading a file.
                 device = ((Pathname)loadTruename).getDevice();
-            } else
-                defaultPathname = Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue(thread));
+            } else {
+                defaultPathname =
+                    coerceToPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.symbolValue(thread));
+            }
         }
         if (device instanceof Pathname) {
             // We're loading a fasl from j.jar.
@@ -1414,6 +1417,21 @@ public abstract class Lisp
         return null;
     }
 
+    public static Pathname coerceToPathname(LispObject arg)
+        throws ConditionThrowable
+    {
+        if (arg instanceof Pathname)
+            return (Pathname) arg;
+        if (arg instanceof AbstractString)
+            return Pathname.parseNamestring((AbstractString)arg);
+        if (arg instanceof FileStream)
+            return ((FileStream)arg).getPathname();
+        signalTypeError(arg, list4(Symbol.OR, Symbol.PATHNAME,
+                                   Symbol.STRING, Symbol.FILE_STREAM));
+        // Not reached.
+        return null;
+    }
+
     public LispObject assq(LispObject item, LispObject alist)
         throws ConditionThrowable
     {
@@ -1716,8 +1734,6 @@ public abstract class Lisp
         return symbol;
     }
 
-    public static final Symbol _DEFAULT_PATHNAME_DEFAULTS_ =
-        exportSpecial("*DEFAULT-PATHNAME-DEFAULTS*", PACKAGE_CL, null);
     static {
         String userDir = System.getProperty("user.dir");
         if (userDir != null && userDir.length() > 0) {
@@ -1725,7 +1741,7 @@ public abstract class Lisp
                 userDir = userDir.concat(File.separator);
         }
         // This string will be converted to a pathname when Pathname.java is loaded.
-        _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(new SimpleString(userDir));
+        Symbol.DEFAULT_PATHNAME_DEFAULTS.initializeSpecial(new SimpleString(userDir));
     }
 
     static {

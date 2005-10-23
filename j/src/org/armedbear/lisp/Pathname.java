@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.106 2005-10-17 18:52:55 piso Exp $
+ * $Id: Pathname.java,v 1.107 2005-10-23 16:20:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -576,21 +576,6 @@ public class Pathname extends LispObject
             return null;
     }
 
-    public static Pathname coerceToPathname(LispObject arg)
-        throws ConditionThrowable
-    {
-        if (arg instanceof Pathname)
-            return (Pathname) arg;
-        if (arg instanceof AbstractString)
-            return parseNamestring((AbstractString)arg);
-        if (arg instanceof FileStream)
-            return ((FileStream)arg).getPathname();
-        signalTypeError(arg, list4(Symbol.OR, Symbol.PATHNAME,
-                                   Symbol.STRING, Symbol.FILE_STREAM));
-        // Not reached.
-        return null;
-    }
-
     private static final void checkCaseArgument(LispObject arg)
         throws ConditionThrowable
     {
@@ -976,7 +961,7 @@ public class Pathname extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Pathname pathname = Pathname.coerceToPathname(arg);
+            Pathname pathname = coerceToPathname(arg);
             if (pathname instanceof LogicalPathname)
                 pathname = LogicalPathname.translateLogicalPathname((LogicalPathname)pathname);
             LispObject result = NIL;
@@ -1034,7 +1019,7 @@ public class Pathname extends LispObject
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            Pathname pathname = Pathname.coerceToPathname(first);
+            Pathname pathname = coerceToPathname(first);
             if (second == NIL)
                 return pathname.isWild() ? T : NIL;
             if (second == Keyword.DIRECTORY) {
@@ -1076,7 +1061,7 @@ public class Pathname extends LispObject
         {
             Pathname pathname = coerceToPathname(arg);
             Pathname defaultPathname =
-                coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
+                coerceToPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.symbolValue());
             LispObject defaultVersion = Keyword.NEWEST;
             return mergePathnames(pathname, defaultPathname, defaultVersion);
         }
@@ -1200,7 +1185,7 @@ public class Pathname extends LispObject
                                             boolean errorIfDoesNotExist)
         throws ConditionThrowable
     {
-        Pathname pathname = Pathname.coerceToPathname(arg);
+        Pathname pathname = coerceToPathname(arg);
         if (pathname instanceof LogicalPathname)
             pathname = LogicalPathname.translateLogicalPathname((LogicalPathname)pathname);
         if (pathname.isWild())
@@ -1208,7 +1193,7 @@ public class Pathname extends LispObject
                                         pathname));
         final Pathname defaultedPathname =
             mergePathnames(pathname,
-                           Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue()),
+                           coerceToPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.symbolValue()),
                            NIL);
         final String namestring = defaultedPathname.getNamestring();
         if (namestring == null)
@@ -1240,12 +1225,12 @@ public class Pathname extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            final Pathname pathname = Pathname.coerceToPathname(arg);
+            final Pathname pathname = coerceToPathname(arg);
             if (pathname.isWild())
                 signal(new FileError("Bad place for a wild pathname.", pathname));
             Pathname defaultedPathname =
                 mergePathnames(pathname,
-                               Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue()),
+                               coerceToPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.symbolValue()),
                                NIL);
             File file = Utilities.getFile(defaultedPathname);
             return file.mkdir() ? T : NIL;
@@ -1324,8 +1309,8 @@ public class Pathname extends LispObject
 
     static {
         try {
-            LispObject obj = _DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue();
-            _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(coerceToPathname(obj));
+            LispObject obj = Symbol.DEFAULT_PATHNAME_DEFAULTS.getSymbolValue();
+            Symbol.DEFAULT_PATHNAME_DEFAULTS.setSymbolValue(coerceToPathname(obj));
         }
         catch (Throwable t) {
             Debug.trace(t);

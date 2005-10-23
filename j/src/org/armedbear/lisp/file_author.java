@@ -2,7 +2,7 @@
  * file_author.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: file_author.java,v 1.3 2005-05-05 14:35:02 piso Exp $
+ * $Id: file_author.java,v 1.4 2005-10-23 16:22:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class file_author extends Primitive
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        Pathname pathname = Pathname.coerceToPathname(arg);
+        Pathname pathname = coerceToPathname(arg);
         if (pathname.isWild())
             signal(new FileError("Bad place for a wild pathname.", pathname));
         return NIL;

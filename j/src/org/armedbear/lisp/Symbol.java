@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.215 2005-10-23 14:11:26 piso Exp $
+ * $Id: Symbol.java,v 1.216 2005-10-23 16:20:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -823,7 +823,7 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("*DEBUG-IO*");
     public static final Symbol _DEBUGGER_HOOK_ =
         PACKAGE_CL.addExternalSymbol("*DEBUGGER-HOOK*");
-    public static final Symbol _DEFAULT_PATHNAME_DEFAULTS_ =
+    public static final Symbol DEFAULT_PATHNAME_DEFAULTS =
         PACKAGE_CL.addExternalSymbol("*DEFAULT-PATHNAME-DEFAULTS*");
     public static final Symbol _ERROR_OUTPUT_ =
         PACKAGE_CL.addExternalSymbol("*ERROR-OUTPUT*");
