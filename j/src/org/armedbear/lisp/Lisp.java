@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.405 2005-10-23 17:16:02 piso Exp $
+ * $Id: Lisp.java,v 1.406 2005-10-23 17:24:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2126,53 +2126,24 @@ public abstract class Lisp
         Symbol.LEAST_NEGATIVE_NORMALIZED_LONG_FLOAT.initializeConstant(new DoubleFloat(-2.2250738585072014e-308d));
     }
 
-    public static final Symbol BOOLE_CLR =
-        exportConstant("BOOLE-CLR", PACKAGE_CL, Fixnum.ZERO);
-
-    public static final Symbol BOOLE_SET =
-        exportConstant("BOOLE-SET", PACKAGE_CL, Fixnum.ONE);
-
-    public static final Symbol BOOLE_1 =
-        exportConstant("BOOLE-1", PACKAGE_CL, Fixnum.TWO);
-
-    public static final Symbol BOOLE_2 =
-        exportConstant("BOOLE-2", PACKAGE_CL, new Fixnum(3));
-
-    public static final Symbol BOOLE_C1 =
-        exportConstant("BOOLE-C1", PACKAGE_CL, new Fixnum(4));
-
-    public static final Symbol BOOLE_C2 =
-        exportConstant("BOOLE-C2", PACKAGE_CL, new Fixnum(5));
-
-    public static final Symbol BOOLE_AND =
-        exportConstant("BOOLE-AND", PACKAGE_CL, new Fixnum(6));
-
-    public static final Symbol BOOLE_IOR =
-        exportConstant("BOOLE-IOR", PACKAGE_CL, new Fixnum(7));
-
-    public static final Symbol BOOLE_XOR =
-        exportConstant("BOOLE-XOR", PACKAGE_CL, new Fixnum(8));
-
-    public static final Symbol BOOLE_EQV =
-        exportConstant("BOOLE-EQV", PACKAGE_CL, new Fixnum(9));
-
-    public static final Symbol BOOLE_NAND =
-        exportConstant("BOOLE-NAND", PACKAGE_CL, new Fixnum(10));
-
-    public static final Symbol BOOLE_NOR =
-        exportConstant("BOOLE-NOR", PACKAGE_CL, new Fixnum(11));
-
-    public static final Symbol BOOLE_ANDC1 =
-        exportConstant("BOOLE-ANDC1", PACKAGE_CL, new Fixnum(12));
-
-    public static final Symbol BOOLE_ANDC2 =
-        exportConstant("BOOLE-ANDC2", PACKAGE_CL, new Fixnum(13));
-
-    public static final Symbol BOOLE_ORC1 =
-        exportConstant("BOOLE-ORC1", PACKAGE_CL, new Fixnum(14));
-
-    public static final Symbol BOOLE_ORC2 =
-        exportConstant("BOOLE-ORC2", PACKAGE_CL, new Fixnum(15));
+    static {
+        Symbol.BOOLE_CLR.initializeConstant(Fixnum.ZERO);
+        Symbol.BOOLE_SET.initializeConstant(Fixnum.ONE);
+        Symbol.BOOLE_1.initializeConstant(Fixnum.TWO);
+        Symbol.BOOLE_2.initializeConstant(new Fixnum(3));
+        Symbol.BOOLE_C1.initializeConstant(new Fixnum(4));
+        Symbol.BOOLE_C2.initializeConstant(new Fixnum(5));
+        Symbol.BOOLE_AND.initializeConstant(new Fixnum(6));
+        Symbol.BOOLE_IOR.initializeConstant(new Fixnum(7));
+        Symbol.BOOLE_XOR.initializeConstant(new Fixnum(8));
+        Symbol.BOOLE_EQV.initializeConstant(new Fixnum(9));
+        Symbol.BOOLE_NAND.initializeConstant(new Fixnum(10));
+        Symbol.BOOLE_NOR.initializeConstant(new Fixnum(11));
+        Symbol.BOOLE_ANDC1.initializeConstant(new Fixnum(12));
+        Symbol.BOOLE_ANDC2.initializeConstant(new Fixnum(13));
+        Symbol.BOOLE_ORC1.initializeConstant(new Fixnum(14));
+        Symbol.BOOLE_ORC2.initializeConstant(new Fixnum(15));
+    }
 
     // ### call-arguments-limit
     public static final Symbol CALL_ARGUMENTS_LIMIT =
