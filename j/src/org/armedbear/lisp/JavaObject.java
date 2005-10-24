@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: JavaObject.java,v 1.18 2005-10-22 14:11:08 piso Exp $
+ * $Id: JavaObject.java,v 1.19 2005-10-24 21:13:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,4 +104,75 @@ public final class JavaObject extends LispObject
         sb.append(obj == null ? "null" : obj.getClass().getName());
         return unreadableString(sb.toString());
     }
+
+    // ### describe-java-object
+    private static final Primitive DESCRIBE_JAVA_OBJECT =
+        new Primitive("describe-java-object", PACKAGE_JAVA, true)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (!(first instanceof JavaObject))
+                return signalTypeError(first, Symbol.JAVA_OBJECT);
+            final Stream stream;
+            try {
+                stream = (Stream) second;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.STREAM);
+            }
+            final JavaObject javaObject = (JavaObject) first;
+            final Object obj = javaObject.getObject();
+            final FastStringBuffer sb =
+                new FastStringBuffer(javaObject.writeToString());
+            sb.append(" is an object of type ");
+            sb.append(Symbol.JAVA_OBJECT.writeToString());
+            sb.append(".");
+            sb.append(System.getProperty("line.separator"));
+            sb.append("The wrapped Java object is an ");
+            final Class c = obj.getClass();
+            String className = c.getName();
+            if (c.isArray()) {
+                sb.append("array of ");
+                if (className.startsWith("[L") && className.endsWith(";")) {
+                    className = className.substring(1, className.length() - 1);
+                    sb.append(className);
+                    sb.append(" objects");
+                } else if (className.startsWith("[") && className.length() > 1) {
+                    char descriptor = className.charAt(1);
+                    final String type;
+                    switch (descriptor) {
+                        case 'B': type = "bytes"; break;
+                        case 'C': type = "chars"; break;
+                        case 'D': type = "doubles"; break;
+                        case 'F': type = "floats"; break;
+                        case 'I': type = "ints"; break;
+                        case 'J': type = "longs"; break;
+                        case 'S': type = "shorts"; break;
+                        case 'Z': type = "booleans"; break;
+                        default:
+                            type = "unknown type";
+                    }
+                    sb.append(type);
+                }
+                    sb.append(" with ");
+                final int length = java.lang.reflect.Array.getLength(obj);
+                sb.append(length);
+                sb.append(" element");
+                if (length != 1)
+                    sb.append('s');
+                sb.append('.');
+            } else {
+                sb.append("instance of ");
+                sb.append(className);
+                sb.append(':');
+                sb.append(System.getProperty("line.separator"));
+                sb.append("  \"");
+                sb.append(obj.toString());
+                sb.append('"');
+            }
+            stream._writeString(sb.toString());
+            return LispThread.currentThread().nothing();
+        }
+    };
 }
