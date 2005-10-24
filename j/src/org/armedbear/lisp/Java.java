@@ -1,8 +1,8 @@
 /*
  * Java.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: Java.java,v 1.52 2005-10-22 14:11:54 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves, Andras Simon
+ * $Id: Java.java,v 1.53 2005-10-24 21:13:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,13 +32,12 @@ import java.util.WeakHashMap;
 
 public final class Java extends Lisp
 {
-
     private static final Map registeredExceptions = new WeakHashMap();
 
-    // ### register-java-exception
-    // register-java-exception exception-name condition-symbol
+    // ### register-java-exception exception-name condition-symbol => T
     private static final Primitive REGISTER_JAVA_EXCEPTION =
-        new Primitive("register-java-exception", PACKAGE_JAVA, true, "exception-name condition-symbol")
+        new Primitive("register-java-exception", PACKAGE_JAVA, true,
+                      "exception-name condition-symbol")
     {
         public LispObject execute(LispObject className, LispObject symbol) throws ConditionThrowable
         {
@@ -194,10 +193,10 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jconstructor
-    // jconstructor class-ref &rest parameter-class-refs
+    // ### jconstructor class-ref &rest parameter-class-refs
     private static final Primitive JCONSTRUCTOR =
-        new Primitive("jconstructor", PACKAGE_JAVA, true, "class-ref &rest parameter-class-refs")
+        new Primitive("jconstructor", PACKAGE_JAVA, true,
+                      "class-ref &rest parameter-class-refs")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -241,8 +240,7 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jmethod
-    // jmethod class-ref name &rest parameter-class-refs
+    // ### jmethod class-ref name &rest parameter-class-refs
     private static final Primitive JMETHOD =
         new Primitive("jmethod", PACKAGE_JAVA, true,
                       "class-ref name &rest parameter-class-refs")
@@ -256,21 +254,20 @@ public final class Java extends Lisp
                 final Class c = forClassRef(args[0]);
                 int argCount = 0;
                 if (args.length == 3 && args[2] instanceof Fixnum) {
-                    argCount = Fixnum.getValue(args[2]);
+                    argCount = ((Fixnum)args[2]).value;
                 } else {
                     Class[] parameterTypes = new Class[args.length-2];
-                    for (int i = 2; i < args.length; i++) {
+                    for (int i = 2; i < args.length; i++)
                         parameterTypes[i-2] = forClassRef(args[i]);
-                    }
                     return new JavaObject(c.getMethod(methodName,
                                                       parameterTypes));
                 }
-                // Parameter types not explicitly specified.
+                // Parameter types were not explicitly specified.
                 Method[] methods = c.getMethods();
                 for (int i = 0; i < methods.length; i++) {
                     Method method = methods[i];
-                    if (method.getName().equals(methodName)
-                        && method.getParameterTypes().length == argCount)
+                    if (method.getName().equals(methodName) &&
+                        method.getParameterTypes().length == argCount)
                         return new JavaObject(method);
                 }
                 throw new NoSuchMethodException();
@@ -292,10 +289,9 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jstatic
-    // jstatic method class &rest args
-    private static final Primitive JSTATIC = new Primitive("jstatic", PACKAGE_JAVA, true,
-                                                           "method class &rest args")
+    // ### jstatic method class &rest args
+    private static final Primitive JSTATIC =
+        new Primitive("jstatic", PACKAGE_JAVA, true, "method class &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -303,11 +299,10 @@ public final class Java extends Lisp
         }
     };
 
-
-    // ### jstatic-raw
-    // jstatic-raw method class &rest args
-    private static final Primitive JSTATIC_RAW = new Primitive("jstatic-raw", PACKAGE_JAVA, true,
-                                                               "method class &rest args")
+    // ### jstatic-raw method class &rest args
+    private static final Primitive JSTATIC_RAW =
+        new Primitive("jstatic-raw", PACKAGE_JAVA, true,
+                      "method class &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -401,10 +396,10 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jnew-array
-    // jnew-array element-type &rest dimensions
-    private static final Primitive JNEW_ARRAY = new Primitive("jnew-array", PACKAGE_JAVA, true,
-                                                              "element-type &rest dimensions")
+    // ### jnew-array element-type &rest dimensions
+    private static final Primitive JNEW_ARRAY =
+        new Primitive("jnew-array", PACKAGE_JAVA, true,
+                      "element-type &rest dimensions")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -495,10 +490,10 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jcall
-    // jcall method instance &rest args
-    private static final Primitive JCALL = new Primitive("jcall", PACKAGE_JAVA, true,
-                                                         "method instance &rest args")
+    // ### jcall method instance &rest args
+    private static final Primitive JCALL =
+        new Primitive("jcall", PACKAGE_JAVA, true,
+                      "method instance &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -506,10 +501,10 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jcall-raw
-    // jcall-raw method instance &rest args
-    private static final Primitive JCALL_RAW = new Primitive("jcall-raw", PACKAGE_JAVA, true,
-                                                             "method instance &rest args")
+    // ### jcall-raw method instance &rest args
+    private static final Primitive JCALL_RAW =
+        new Primitive("jcall-raw", PACKAGE_JAVA, true,
+                      "method instance &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -518,12 +513,12 @@ public final class Java extends Lisp
             try {
                 Method method = (Method) JavaObject.getObject(args[0]);
                 Class[] argTypes = method.getParameterTypes();
-                Object instance;
+                final Object instance;
                 if (args[1] instanceof AbstractString)
                     instance = args[1].getStringValue();
                 else
                     instance = JavaObject.getObject(args[1]);
-                Object[] methodArgs = new Object[args.length-2];
+                Object[] methodArgs = new Object[args.length - 2];
                 for (int i = 2; i < args.length; i++) {
                     LispObject arg = args[i];
                     if (arg == NIL)
@@ -534,10 +529,14 @@ public final class Java extends Lisp
                 Object result = method.invoke(instance, methodArgs);
                 return new JavaObject(result);
             }
+            catch (ConditionThrowable t) {
+                throw t;
+            }
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
+                    signal((Symbol)registeredExceptions.get(tClass),
+                           new SimpleString(getMessage(t)));
                 }
                 signal(new LispError(getMessage(t)));
             }
@@ -546,10 +545,10 @@ public final class Java extends Lisp
         }
     };
 
-    // ### make-immediate-object
-    // make-immediate-object object &optional type
+    // ### make-immediate-object object &optional type
     private static final Primitive MAKE_IMMEDIATE_OBJECT =
-        new Primitive("make-immediate-object", PACKAGE_JAVA, true, "object &optional type")
+        new Primitive("make-immediate-object", PACKAGE_JAVA, true,
+                      "object &optional type")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -615,7 +614,8 @@ public final class Java extends Lisp
     }
 
     // Supports Java primitive types too.
-    private static Class forClassRef(LispObject classRef) throws ClassNotFoundException, ConditionThrowable
+    private static Class forClassRef(LispObject classRef)
+        throws ClassNotFoundException, ConditionThrowable
     {
         if (classRef instanceof AbstractString) {
             String className = classRef.getStringValue();
@@ -637,21 +637,23 @@ public final class Java extends Lisp
                 return Double.TYPE;
             // Not a primitive Java type.
             return classForName(className);
-        } else
+        } else {
             try {
                 return (Class)JavaObject.getObject(classRef);
             }
-        catch (ClassCastException e) {
-            signal(new TypeError(classRef, "Java class"));
+            catch (ClassCastException e) {
+                signal(new TypeError(classRef, "Java class"));
+            }
+            catch (ConditionThrowable e) {
+                throw new ClassNotFoundException(e.getMessage());
+            }
+            // Not reached.
+            return null;
         }
-        catch (ConditionThrowable e) {
-            throw new ClassNotFoundException(e.getMessage());
-        }
-        // Not reached.
-        return null;
     }
 
-    private static final LispObject makeLispObject(Object obj) throws ConditionThrowable
+    private static final LispObject makeLispObject(Object obj)
+        throws ConditionThrowable
     {
         if (obj == null)
             return NIL;
