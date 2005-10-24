@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.412 2005-10-23 19:06:51 piso Exp $
+ * $Id: Lisp.java,v 1.413 2005-10-24 00:24:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -701,6 +701,7 @@ public abstract class Lisp
     }
 
     static {
+        // ### *gensym-counter*
         Symbol.GENSYM_COUNTER.initializeSpecial(Fixnum.ZERO);
     }
 
@@ -1828,12 +1829,8 @@ public abstract class Lisp
     }
 
     // ### t
-    // We can't use exportConstant() here since we need to set T's value to
-    // itself.
-//     public static final Symbol T = exportConstant("T", PACKAGE_CL, null);
     public static final Symbol T = Symbol.T;
     static {
-//         T.setSymbolValue(T);
         T.initializeConstant(T);
     }
 
@@ -1951,12 +1948,9 @@ public abstract class Lisp
         Symbol.MACROEXPAND_HOOK.initializeSpecial(Symbol.FUNCALL);
     }
 
-    // ### array-dimension-limit
     public static final int ARRAY_DIMENSION_MAX = 0x1000000;
-//     public static final Symbol ARRAY_DIMENSION_LIMIT =
-//         exportConstant("ARRAY-DIMENSION-LIMIT", PACKAGE_CL,
-//                        new Fixnum(ARRAY_DIMENSION_MAX));
     static {
+        // ### array-dimension-limit
         Symbol.ARRAY_DIMENSION_LIMIT.initializeConstant(new Fixnum(ARRAY_DIMENSION_MAX));
     }
 
@@ -2081,32 +2075,23 @@ public abstract class Lisp
         Symbol.BOOLE_ORC2.initializeConstant(new Fixnum(15));
     }
 
-    // ### call-arguments-limit
-//     public static final Symbol CALL_ARGUMENTS_LIMIT =
-//         exportConstant("CALL-ARGUMENTS-LIMIT", PACKAGE_CL, new Fixnum(50));
     static {
+        // ### call-arguments-limit
         Symbol.CALL_ARGUMENTS_LIMIT.initializeConstant(new Fixnum(50));
     }
 
-    // ### lambda-parameters-limit
-//     public static final Symbol LAMBDA_PARAMETERS_LIMIT =
-//         exportConstant("LAMBDA-PARAMETERS-LIMIT", PACKAGE_CL, new Fixnum(50));
     static {
+        // ### lambda-parameters-limit
         Symbol.LAMBDA_PARAMETERS_LIMIT.initializeConstant(new Fixnum(50));
     }
 
-    // ### multiple-values-limit
-//     public static final Symbol MULTIPLE_VALUES_LIMIT =
-//         exportConstant("MULTIPLE-VALUES-LIMIT", PACKAGE_CL, new Fixnum(20));
     static {
+        // ### multiple-values-limit
         Symbol.MULTIPLE_VALUES_LIMIT.initializeConstant(new Fixnum(20));
     }
 
-    // ### internal-time-units-per-second
-//     public static final Symbol INTERNAL_TIME_UNITS_PER_SECOND =
-//         exportConstant("INTERNAL-TIME-UNITS-PER-SECOND", PACKAGE_CL,
-//                        new Fixnum(1000));
     static {
+        // ### internal-time-units-per-second
         Symbol.INTERNAL_TIME_UNITS_PER_SECOND.initializeConstant(new Fixnum(1000));
     }
 
