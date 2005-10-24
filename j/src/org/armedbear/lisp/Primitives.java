@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.842 2005-10-23 17:38:10 piso Exp $
+ * $Id: Primitives.java,v 1.843 2005-10-24 21:12:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,8 +60,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            signal(new WrongNumberOfArgumentsException(this));
-            return NIL;
+            return signal(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -87,8 +86,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            signal(new WrongNumberOfArgumentsException(this));
-            return NIL;
+            return signal(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -120,8 +118,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            signal(new WrongNumberOfArgumentsException(this));
-            return NIL;
+            return signal(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -668,7 +665,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (args == NIL)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
             if (eval(args.car(), env, thread) != NIL) {
                 args = args.cdr();
@@ -678,8 +675,8 @@ public final class Primitives extends Lisp
                     args = args.cdr();
                 }
                 return result;
-            } else
-                return thread.setValues(NIL);
+            }
+            return thread.setValues(NIL);
         }
     };
 
@@ -691,7 +688,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (args == NIL)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
             if (eval(args.car(), env, thread) == NIL) {
                 args = args.cdr();
@@ -701,8 +698,8 @@ public final class Primitives extends Lisp
                     args = args.cdr();
                 }
                 return result;
-            } else
-                return thread.setValues(NIL);
+            }
+            return thread.setValues(NIL);
         }
     };
 
@@ -1364,8 +1361,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1) {
-                signal(new WrongNumberOfArgumentsException(this));
-                return NIL;
+                return signal(new WrongNumberOfArgumentsException(this));
             }
             LispObject datum = args[0];
             if (datum instanceof Condition) {
@@ -1472,7 +1468,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             LispObject destination = args[0];
             // Copy remaining arguments.
             LispObject[] _args = new LispObject[args.length - 1];
@@ -2017,7 +2013,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final AbstractArray array;
             try {
                 array = (AbstractArray) args[0];
@@ -2622,7 +2618,7 @@ public final class Primitives extends Lisp
         {
             final int numArgs = args.length;
             if (numArgs < 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             int commonLength = -1;
             for (int i = 1; i < numArgs; i++) {
                 if (!args[i].listp())
@@ -2694,7 +2690,7 @@ public final class Primitives extends Lisp
         {
             final int numArgs = args.length;
             if (numArgs < 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             int commonLength = -1;
             for (int i = 1; i < numArgs; i++) {
                 if (!args[i].listp())
@@ -2840,7 +2836,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             Symbol symbol = checkSymbol(args[0]);
             Package pkg;
             if (args.length == 2)
@@ -2980,7 +2976,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1 || args.length > 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             Package pkg;
             if (args.length == 2)
                 pkg = coerceToPackage(args[1]);
@@ -3344,7 +3340,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (args.length() != 1)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             Binding binding = env.getTagBinding(args.car());
             if (binding == null)
                 return signal(new ControlError("No tag named " +
@@ -3362,7 +3358,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (args == NIL)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             LispObject tag;
             try {
                 tag = (Symbol) args.car();
@@ -3403,7 +3399,7 @@ public final class Primitives extends Lisp
         {
             final int length = args.length();
             if (length < 1 || length > 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             Symbol symbol;
             try {
                 symbol = (Symbol) args.car();
@@ -3435,7 +3431,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (args.length() < 1)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
             LispObject tag = eval(args.car(), env, thread);
             thread.pushCatchTag(tag);
@@ -3473,7 +3469,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (args.length() != 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
             thread.throwToTag(eval(args.car(), env, thread),
                               eval(args.cadr(), env, thread));
@@ -3624,7 +3620,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (args.length() == 0)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
             LispObject result = eval(args.car(), env, thread);
             LispObject[] values = thread.getValues();
@@ -3646,7 +3642,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (args.length() == 0)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
             LispObject function;
             LispObject obj = eval(args.car(), env, thread);
@@ -3881,7 +3877,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length > 1)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final Stream in;
             if (args.length == 0)
                 in = checkCharacterInputStream(Symbol.STANDARD_INPUT.symbolValue());
@@ -3959,7 +3955,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (args.length() != 1)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
             LispObject result = eval(args.car(), env, thread);
             LispObject[] values = thread.getValues();
@@ -3984,7 +3980,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (args.length() != 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
             int n = Fixnum.getValue(eval(args.car(), env, thread));
             if (n < 0)
@@ -4062,7 +4058,7 @@ public final class Primitives extends Lisp
         {
             int length = args.length;
             if (length < 1 || length > 3)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final Stream in = checkBinaryInputStream(args[0]);
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
@@ -4270,7 +4266,7 @@ public final class Primitives extends Lisp
         {
             int length = args.length;
             if (length > 4)
-                signal(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             Stream stream =
                 length > 0 ? inSynonymOf(args[0]) : getStandardInput();
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
@@ -4511,8 +4507,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            signal(new WrongNumberOfArgumentsException(this));
-            return NIL;
+            return signal(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
