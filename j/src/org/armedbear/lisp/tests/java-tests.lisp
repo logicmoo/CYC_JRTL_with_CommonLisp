@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.2 2005-10-22 14:10:22 piso Exp $
+;;; $Id: java-tests.lisp,v 1.3 2005-10-24 12:47:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,6 +46,8 @@
 (use-package '#:javatools.jlinker)
 #+allegro
 (use-package '#:javatools.jlinker '#:cl-user) ;; For convenience only.
+#+(and allegro mswindows)
+(use-package '#:javatools.jlinker '#:cg-user) ;; For convenience only.
 #+allegro
 (load "jl-config.cl")
 #+allegro
@@ -74,6 +76,20 @@
   (let ((method (jmethod "java.lang.String" "length")))
     (jcall method "test"))
   4)
+
+(deftest jcall.2
+  (jcall "length" "test")
+  4)
+
+(deftest jcall.3
+  (let ((method (jmethod "java.lang.String" "regionMatches" 4)))
+    (jcall method "test" 0 "this is a test" 10 4))
+  t)
+
+(deftest jcall.4
+  (let ((method (jmethod "java.lang.String" "regionMatches" 5)))
+    (jcall method "test" (make-immediate-object nil :boolean) 0 "this is a test" 10 4))
+  t)
 
 (deftest jfield.1
   (type-of (jfield "java.lang.Integer" "TYPE"))
