@@ -1,7 +1,7 @@
 ;;; describe.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: describe.lisp,v 1.5 2005-10-22 19:34:45 piso Exp $
+;;; $Id: describe.lisp,v 1.6 2005-10-24 21:12:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -101,3 +101,6 @@
 (defmethod describe-object ((object standard-object) stream)
   (%describe-object object stream)
   (values))
+
+(defmethod describe-object ((object java:java-object) stream)
+  (java:describe-java-object object stream))
