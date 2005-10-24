@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: JavaObject.java,v 1.19 2005-10-24 21:13:26 piso Exp $
+ * $Id: JavaObject.java,v 1.20 2005-10-24 21:32:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,11 +96,13 @@ public final class JavaObject extends LispObject
         return obj == null ? 0 : (obj.hashCode() & 0x7ffffff);
     }
 
-    public String writeToString()
+    public String writeToString() throws ConditionThrowable
     {
         if (obj instanceof ConditionThrowable)
             return obj.toString();
-        FastStringBuffer sb = new FastStringBuffer("JAVAOBJECT ");
+        final FastStringBuffer sb =
+            new FastStringBuffer(Symbol.JAVA_OBJECT.writeToString());
+        sb.append(' ');
         sb.append(obj == null ? "null" : obj.getClass().getName());
         return unreadableString(sb.toString());
     }
