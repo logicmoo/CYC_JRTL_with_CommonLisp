@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.223 2005-10-23 18:44:50 piso Exp $
+ * $Id: Symbol.java,v 1.224 2005-10-25 13:57:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2765,9 +2765,6 @@ public class Symbol extends LispObject
     public static final Symbol STRING_OUTPUT_STREAM =
         PACKAGE_SYS.addInternalSymbol("STRING-OUTPUT-STREAM");
 
-    public static final Symbol JAVA_OBJECT =
-        PACKAGE_JAVA.addExternalSymbol("JAVA-OBJECT");
-
     public static final Symbol COMPILER_ERROR =
         PACKAGE_EXT.addExternalSymbol("COMPILER-ERROR");
     public static final Symbol COMPILER_UNSUPPORTED_FEATURE_ERROR =
@@ -2830,4 +2827,10 @@ public class Symbol extends LispObject
 
     public static final Symbol STYLE_WARN =
         PACKAGE_EXT.addExternalSymbol("STYLE-WARN");
+
+    // Java interface
+    public static final Symbol JAVA_OBJECT =
+        PACKAGE_JAVA.addExternalSymbol("JAVA-OBJECT");
+    public static final Symbol JCLASS_OF =
+        PACKAGE_JAVA.addExternalSymbol("JCLASS-OF");
 }
