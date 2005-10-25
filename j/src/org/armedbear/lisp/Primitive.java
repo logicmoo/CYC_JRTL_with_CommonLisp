@@ -2,7 +2,7 @@
  * Primitive.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitive.java,v 1.19 2005-10-23 14:12:11 piso Exp $
+ * $Id: Primitive.java,v 1.20 2005-10-25 14:40:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,11 @@ public class Primitive extends Function
     public Primitive(Symbol symbol, String arglist)
     {
         super(symbol, arglist);
+    }
+
+    public Primitive(Symbol symbol, String arglist, String docstring)
+    {
+        super(symbol, arglist, docstring);
     }
 
     public Primitive(String name, String arglist)
