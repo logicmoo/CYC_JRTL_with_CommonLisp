@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.3 2005-10-24 12:47:35 piso Exp $
+;;; $Id: java-tests.lisp,v 1.4 2005-10-25 14:43:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,6 +72,31 @@
   nil
   "java.lang.Object")
 
+(deftest jclass-of.1
+  (jclass-of "foo")
+  "java.lang.String"
+  "java.lang.String")
+
+(deftest jclass-of.2
+  (jclass-of "foo" "java.lang.String")
+  t
+  "java.lang.String")
+
+(deftest jclass-of.3
+  (jclass-of "foo" "bar")
+  nil
+  "java.lang.String")
+
+(deftest jclass-of.4
+  (jclass-of 42)
+  nil
+  nil)
+
+(deftest jclass-of.5
+  (jclass-of 'foo)
+  nil
+  nil)
+
 (deftest jcall.1
   (let ((method (jmethod "java.lang.String" "length")))
     (jcall method "test"))
@@ -90,6 +115,12 @@
   (let ((method (jmethod "java.lang.String" "regionMatches" 5)))
     (jcall method "test" (make-immediate-object nil :boolean) 0 "this is a test" 10 4))
   t)
+
+#-abcl
+(deftest jnew.1
+  (jclass-of (jnew "java.awt.Point") "java.awt.Point")
+  t
+  "java.awt.Point")
 
 (deftest jfield.1
   (type-of (jfield "java.lang.Integer" "TYPE"))
