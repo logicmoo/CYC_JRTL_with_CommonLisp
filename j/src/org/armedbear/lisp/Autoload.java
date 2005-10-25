@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.241 2005-09-22 00:23:37 piso Exp $
+ * $Id: Autoload.java,v 1.242 2005-10-25 13:56:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,6 +74,13 @@ public class Autoload extends Function
                 Debug.assertTrue(false);
             }
         }
+        if (symbol.getSymbolFunction() == null)
+            symbol.setSymbolFunction(new Autoload(symbol, null,
+                                                  "org.armedbear.lisp.".concat(className)));
+    }
+
+    public static void autoload(Symbol symbol, String className)
+    {
         if (symbol.getSymbolFunction() == null)
             symbol.setSymbolFunction(new Autoload(symbol, null,
                                                   "org.armedbear.lisp.".concat(className)));
@@ -633,5 +640,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
         autoload(PACKAGE_SYS, "single-float-bits", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "zip", "zip", true);
+
+        autoload(Symbol.JCLASS_OF, "jclass_of");
     }
 }
