@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.53 2005-10-24 21:13:53 piso Exp $
+ * $Id: Java.java,v 1.54 2005-10-25 19:25:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -491,59 +491,97 @@ public final class Java extends Lisp
     };
 
     // ### jcall method instance &rest args
+    // Calls makeLispObject() to convert the result to an appropriate Lisp type.
     private static final Primitive JCALL =
-        new Primitive("jcall", PACKAGE_JAVA, true,
-                      "method instance &rest args")
-    {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            return makeLispObject((JCALL_RAW.execute(args)).javaInstance());
-        }
-    };
-
-    // ### jcall-raw method instance &rest args
-    private static final Primitive JCALL_RAW =
-        new Primitive("jcall-raw", PACKAGE_JAVA, true,
-                      "method instance &rest args")
+        new Primitive(Symbol.JCALL, "method-ref instance &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
                 signal(new WrongNumberOfArgumentsException(this));
-            try {
-                Method method = (Method) JavaObject.getObject(args[0]);
-                Class[] argTypes = method.getParameterTypes();
-                final Object instance;
-                if (args[1] instanceof AbstractString)
-                    instance = args[1].getStringValue();
-                else
-                    instance = JavaObject.getObject(args[1]);
-                Object[] methodArgs = new Object[args.length - 2];
-                for (int i = 2; i < args.length; i++) {
-                    LispObject arg = args[i];
-                    if (arg == NIL)
-                        methodArgs[i-2] = null;
-                    else
-                        methodArgs[i-2] = arg.javaInstance(argTypes[i-2]);
-                }
-                Object result = method.invoke(instance, methodArgs);
-                return new JavaObject(result);
-            }
-            catch (ConditionThrowable t) {
-                throw t;
-            }
-            catch (Throwable t) {
-                Class tClass = t.getClass();
-                if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass),
-                           new SimpleString(getMessage(t)));
-                }
-                signal(new LispError(getMessage(t)));
-            }
-            // Not reached.
-            return NIL;
+            return makeLispObject(jcall(args));
         }
     };
+
+    // ### jcall-raw method instance &rest args
+    // Does no type conversion. The result of the call is simply wrapped in a
+    // JavaObject.
+    private static final Primitive JCALL_RAW =
+        new Primitive(Symbol.JCALL_RAW, "method-ref instance &rest args")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 2)
+                signal(new WrongNumberOfArgumentsException(this));
+            Object result = jcall(args);
+            return (result != null) ? new JavaObject(result) : NIL;
+        }
+    };
+
+    private static Object jcall(LispObject[] args) throws ConditionThrowable
+    {
+        Debug.assertTrue(args.length >= 2); // Verified by callers.
+        final LispObject methodArg = args[0];
+        final LispObject instanceArg = args[1];
+        final Object instance;
+        if (instanceArg instanceof AbstractString)
+            instance = instanceArg.getStringValue();
+        else if (instanceArg instanceof JavaObject)
+            instance = ((JavaObject)instanceArg).getObject();
+        else {
+            signalTypeError(instanceArg,
+                            list3(Symbol.OR, Symbol.STRING, Symbol.JAVA_OBJECT));
+            // Not reached.
+            return null;
+        }
+        try {
+            final Method method;
+            if (methodArg instanceof AbstractString) {
+                String methodName = methodArg.getStringValue();
+                Class c = instance.getClass();
+                // FIXME Use the actual args, not just the count!
+                method = findMethod(c, methodName, args.length - 2);
+            } else
+                method = (Method) JavaObject.getObject(methodArg);
+            Class[] argTypes = method.getParameterTypes();
+            Object[] methodArgs = new Object[args.length - 2];
+            for (int i = 2; i < args.length; i++) {
+                LispObject arg = args[i];
+                if (arg == NIL)
+                    methodArgs[i-2] = null;
+                else
+                    methodArgs[i-2] = arg.javaInstance(argTypes[i-2]);
+            }
+            return method.invoke(instance, methodArgs);
+        }
+        catch (ConditionThrowable t) {
+            throw t;
+        }
+        catch (Throwable t) {
+            Class tClass = t.getClass();
+            if (registeredExceptions.containsKey(tClass)) {
+                signal((Symbol)registeredExceptions.get(tClass),
+                       new SimpleString(getMessage(t)));
+            }
+            signal(new LispError(getMessage(t)));
+        }
+        // Not reached.
+        return null;
+    }
+
+    // FIXME This just returns the first matching method that it finds. Allegro
+    // signals a continuable error if there are multiple matching methods.
+    private static Method findMethod(Class c, String methodName, int argCount)
+    {
+        Method[] methods = c.getMethods();
+        for (int i = methods.length; i-- > 0;) {
+            Method method = methods[i];
+            if (method.getName().equals(methodName))
+                if (method.getParameterTypes().length == argCount)
+                    return method;
+        }
+        return null;
+    }
 
     // ### make-immediate-object object &optional type
     private static final Primitive MAKE_IMMEDIATE_OBJECT =
@@ -665,8 +703,10 @@ public final class Java extends Lisp
             return new Fixnum(((Short)obj).shortValue());
         if (obj instanceof Long)
             return new Bignum(((Long)obj).longValue());
-        if (obj instanceof Double || obj instanceof Float)
-            return new DoubleFloat(((Number)obj).doubleValue());
+        if (obj instanceof Float)
+            return new SingleFloat(((Float)obj).floatValue());
+        if (obj instanceof Double)
+            return new DoubleFloat(((Double)obj).doubleValue());
         if (obj instanceof String)
             return new SimpleString((String)obj);
         if (obj instanceof Character)
