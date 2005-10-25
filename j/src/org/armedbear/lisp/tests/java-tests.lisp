@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.4 2005-10-25 14:43:49 piso Exp $
+;;; $Id: java-tests.lisp,v 1.5 2005-10-25 17:08:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,20 +58,6 @@
   (class-name (find-class 'java-object nil))
   java-object)
 
-(deftest jclass-name.1
-  (jclass-name (jclass "java.lang.Object"))
-  "java.lang.Object")
-
-(deftest jclass-name.2
-  (jclass-name (jclass "java.lang.Object") "java.lang.Object")
-  t
-  "java.lang.Object")
-
-(deftest jclass-name.3
-  (jclass-name (jclass "java.lang.Object") "foo")
-  nil
-  "java.lang.Object")
-
 (deftest jclass-of.1
   (jclass-of "foo")
   "java.lang.String"
@@ -96,6 +82,37 @@
   (jclass-of 'foo)
   nil
   nil)
+
+(deftest jclass-name.1
+  (jclass-name "java.lang.String")
+  "java.lang.String")
+
+(deftest jclass-name.2
+  (signals-error (jclass-name "foo") 'error)
+  t)
+
+(deftest jclass-name.3
+  (signals-error (jclass-name 42) 'error)
+  t)
+
+(deftest jclass-name.4
+  (jclass-name (jclass "java.lang.String"))
+  "java.lang.String")
+
+(deftest jclass-name.5
+  (jclass-name (jclass "java.lang.String") "java.lang.String")
+  t
+  "java.lang.String")
+
+(deftest jclass-name.6
+  (jclass-name (jclass "java.lang.String") "java.lang.Object")
+  nil
+  "java.lang.String")
+
+(deftest jclass-name.7
+  (jclass-name (jclass "java.lang.String") "foo")
+  nil
+  "java.lang.String")
 
 (deftest jcall.1
   (let ((method (jmethod "java.lang.String" "length")))
