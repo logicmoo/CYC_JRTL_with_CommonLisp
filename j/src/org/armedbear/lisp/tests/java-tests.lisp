@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.5 2005-10-25 17:08:53 piso Exp $
+;;; $Id: java-tests.lisp,v 1.6 2005-10-25 19:24:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -133,8 +133,13 @@
     (jcall method "test" (make-immediate-object nil :boolean) 0 "this is a test" 10 4))
   t)
 
-#-abcl
 (deftest jnew.1
+  (jclass-of (jnew (jconstructor "java.awt.Point")))
+  "java.awt.Point"
+  "java.awt.Point")
+
+#-abcl
+(deftest jnew.2
   (jclass-of (jnew "java.awt.Point") "java.awt.Point")
   t
   "java.awt.Point")
