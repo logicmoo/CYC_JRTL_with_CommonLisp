@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.57 2005-10-23 18:44:50 piso Exp $
+ * $Id: Function.java,v 1.58 2005-10-25 14:40:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,25 @@ public abstract class Function extends Operator
         if (cold)
             symbol.setBuiltInFunction(true);
         setLambdaName(symbol);
+        setLambdaList(new SimpleString(arglist));
+    }
+
+    public Function(Symbol symbol, String arglist, String docstring)
+    {
+        symbol.setSymbolFunction(this);
+        if (cold)
+            symbol.setBuiltInFunction(true);
+        setLambdaName(symbol);
+        setLambdaList(new SimpleString(arglist));
+        if (docstring != null) {
+            try {
+                symbol.setDocumentation(Symbol.FUNCTION,
+                                        new SimpleString(docstring));
+            }
+            catch (ConditionThrowable t) {
+                Debug.assertTrue(false);
+            }
+        }
     }
 
     public Function(String name, String arglist)
