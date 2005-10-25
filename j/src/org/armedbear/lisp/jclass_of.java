@@ -2,7 +2,7 @@
  * jclass_of.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: jclass_of.java,v 1.1 2005-10-25 13:58:32 piso Exp $
+ * $Id: jclass_of.java,v 1.2 2005-10-25 14:44:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,10 @@ public final class jclass_of extends Primitive
 {
     private jclass_of()
     {
-        super(Symbol.JCLASS_OF, "object &optional name");
+        super(Symbol.JCLASS_OF, "object &optional name",
+"Returns the name of the Java class of OBJECT. If the NAME argument is\n" +
+"  supplied, verifies that OBJECT is an instance of the named class. The name\n" +
+"  of the class or nil is always returned as a second value.");
     }
 
     public LispObject execute(LispObject arg)
@@ -38,8 +41,9 @@ public final class jclass_of extends Primitive
         else if (arg instanceof JavaObject)
             className = ((JavaObject)arg).getObject().getClass().getName();
         else
-            return signalTypeError(arg, Symbol.JAVA_OBJECT);
-        SimpleString value = new SimpleString(className);
+            className = null;
+        final LispObject value =
+            (className != null) ? new SimpleString(className) : NIL;
         return LispThread.currentThread().setValues(value, value);
     }
 
@@ -52,9 +56,9 @@ public final class jclass_of extends Primitive
         else if (first instanceof JavaObject)
             className = ((JavaObject)first).getObject().getClass().getName();
         else
-            return signalTypeError(first, Symbol.JAVA_OBJECT);
-        String suppliedName = javaString(second);
-        return LispThread.currentThread().setValues(className.equals(suppliedName) ? T : NIL,
+            className = null;
+        String name = javaString(second);
+        return LispThread.currentThread().setValues(name.equals(className) ? T : NIL,
                                                     new SimpleString(className));
     }
 
