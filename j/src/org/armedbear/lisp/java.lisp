@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: java.lisp,v 1.18 2005-10-25 12:20:03 asimon Exp $
+;;; $Id: java.lisp,v 1.19 2005-10-25 17:17:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,12 +58,6 @@
         (push (coerce def 'function) method-names-and-defs)
         (push method-name method-names-and-defs)))
     (apply #'%jnew-proxy interface method-names-and-defs)))
-
-(defun jclass-name (class &optional name)
-  "Returns the name of CLASS as a Lisp string, or, if NAME is given, returns T if 
-it's the name of the CLASS and NIL otherwise."
-  (let ((class-name (jcall (jmethod "java.lang.Class" "getName") class)))
-    (if name (string= name class-name) class-name)))
 
 (defun jobject-class (obj)
   "Returns the Java class that OBJ belongs to"
@@ -145,7 +139,7 @@ it's the name of the CLASS and NIL otherwise."
 
 (defun jclass-field (class field-name)
   "Returns the field named FIELD-NAME of CLASS"
-  (jcall (jmethod "java.lang.Class" "getField" "java.lang.String") 
+  (jcall (jmethod "java.lang.Class" "getField" "java.lang.String")
          (ensure-jclass class) field-name))
 
 (defun jfield-type (field)
