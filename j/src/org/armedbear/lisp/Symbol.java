@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.224 2005-10-25 13:57:44 piso Exp $
+ * $Id: Symbol.java,v 1.225 2005-10-25 17:09:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2831,6 +2831,8 @@ public class Symbol extends LispObject
     // Java interface
     public static final Symbol JAVA_OBJECT =
         PACKAGE_JAVA.addExternalSymbol("JAVA-OBJECT");
+    public static final Symbol JCLASS_NAME =
+        PACKAGE_JAVA.addExternalSymbol("JCLASS-NAME");
     public static final Symbol JCLASS_OF =
         PACKAGE_JAVA.addExternalSymbol("JCLASS-OF");
 }
