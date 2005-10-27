@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2005 Peter Graves
-# $Id: Makefile.in,v 1.218 2005-10-25 17:17:00 piso Exp $
+# $Id: Makefile.in,v 1.219 2005-10-27 23:06:14 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -232,6 +232,7 @@ CLASSFILES =	AbstractArray.class \
 		interactive_stream_p.class \
 		jclass_name.class \
 		jclass_of.class \
+		jmethod_return_type.class \
 		last.class \
 		lisp_implementation_type.class \
 		lisp_implementation_version.class \
