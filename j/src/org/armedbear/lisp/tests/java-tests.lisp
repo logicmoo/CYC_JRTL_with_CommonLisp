@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.6 2005-10-25 19:24:38 piso Exp $
+;;; $Id: java-tests.lisp,v 1.7 2005-10-27 18:34:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -57,6 +57,27 @@
 (deftest java-object.1
   (class-name (find-class 'java-object nil))
   java-object)
+
+(deftest jclass.1
+  (jcall (jmethod "java.lang.Object" "toString") (jclass "java.lang.String"))
+  "class java.lang.String")
+
+(deftest jclass.2
+  (equal (jcall (jmethod "java.lang.Object" "getClass") "foo")
+         (jclass "java.lang.String"))
+  #+abcl    t
+  #+allegro nil)
+
+(deftest jclass.3
+  (equal (jclass '|java.lang.String|) (jclass "java.lang.String"))
+  t)
+
+(deftest jclass.4
+  (let ((class1 (jcall (jmethod "java.lang.Object" "getClass") "foo"))
+        (class2 (jclass "java.lang.String")))
+    (jcall (jmethod "java.lang.Object" "equals" "java.lang.Object")
+           class1 class2))
+  t)
 
 (deftest jclass-of.1
   (jclass-of "foo")
@@ -114,6 +135,28 @@
   nil
   "java.lang.String")
 
+(deftest jconstructor.1
+  (jclass-of (jconstructor "java.lang.String" "java.lang.String"))
+  "java.lang.reflect.Constructor"
+  "java.lang.reflect.Constructor")
+
+(deftest jnew.1
+  (let ((constructor (jconstructor "java.lang.String" "java.lang.String")))
+    (jclass-of (jnew constructor "foo")))
+  "java.lang.String"
+  "java.lang.String")
+
+(deftest jnew.2
+  (jclass-of (jnew (jconstructor "java.awt.Point")))
+  "java.awt.Point"
+  "java.awt.Point")
+
+#-abcl
+(deftest jnew.3
+  (jclass-of (jnew "java.awt.Point") "java.awt.Point")
+  t
+  "java.awt.Point")
+
 (deftest jcall.1
   (let ((method (jmethod "java.lang.String" "length")))
     (jcall method "test"))
@@ -132,17 +175,6 @@
   (let ((method (jmethod "java.lang.String" "regionMatches" 5)))
     (jcall method "test" (make-immediate-object nil :boolean) 0 "this is a test" 10 4))
   t)
-
-(deftest jnew.1
-  (jclass-of (jnew (jconstructor "java.awt.Point")))
-  "java.awt.Point"
-  "java.awt.Point")
-
-#-abcl
-(deftest jnew.2
-  (jclass-of (jnew "java.awt.Point") "java.awt.Point")
-  t
-  "java.awt.Point")
 
 (deftest jfield.1
   (type-of (jfield "java.lang.Integer" "TYPE"))
