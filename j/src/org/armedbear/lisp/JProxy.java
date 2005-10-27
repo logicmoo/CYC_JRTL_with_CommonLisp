@@ -1,8 +1,8 @@
 /*
  * JProxy.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: JProxy.java,v 1.4 2004-02-23 00:05:35 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves, Andras Simon
+ * $Id: JProxy.java,v 1.5 2005-10-27 17:28:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,10 +32,10 @@ public final class JProxy extends Lisp
 {
     private static final Map table = new WeakHashMap();
 
-    // ### %jnew-proxy
-    // %jnew-proxy interface &rest method-names-and-defs
+    // ### %jnew-proxy interface &rest method-names-and-defs
     private static final Primitive _JNEW_PROXY =
-        new Primitive("%jnew-proxy", PACKAGE_JAVA, false, "interface &rest method-names-and-defs")
+        new Primitive("%jnew-proxy", PACKAGE_JAVA, false,
+                      "interface &rest method-names-and-defs")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -46,8 +46,9 @@ public final class JProxy extends Lisp
             for (int i = 1; i < length; i = i+2)
                 lispDefinedMethods.put(args[i].getStringValue(),(Function)args[i+1]);
             Class iface = (Class) args[0].javaInstance();
-            Object proxy =
-                Proxy.newProxyInstance(iface.getClassLoader(), new Class[] { iface }, new LispHandler(table));
+            Object proxy = Proxy.newProxyInstance(iface.getClassLoader(),
+                                        new Class[] { iface },
+                                        new LispHandler(table));
             table.put(proxy, new Entry(iface, lispDefinedMethods));
             return new JavaObject(proxy);
         }
