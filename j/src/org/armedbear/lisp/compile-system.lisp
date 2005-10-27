@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.62 2005-09-08 16:08:14 piso Exp $
+;;; $Id: compile-system.lisp,v 1.63 2005-10-27 17:30:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,7 +44,8 @@
             (when position
                  (let* ((name (string (read-from-string (subseq text (+ position 3)))))
                         (symbol (or (find-symbol name system-package) ; uses CL and EXT
-                                    (find-symbol name (find-package "MOP")))))
+                                    (find-symbol name (find-package "MOP"))
+                                    (find-symbol name (find-package "JAVA")))))
                    (when symbol
                      ;; Force the symbol's package prefix to be written out
                      ;; with "::" instead of ":" so there won't be a reader
