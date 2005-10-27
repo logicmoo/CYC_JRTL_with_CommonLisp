@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.227 2005-10-27 17:29:52 piso Exp $
+ * $Id: Symbol.java,v 1.228 2005-10-27 23:06:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2841,4 +2841,6 @@ public class Symbol extends LispObject
         PACKAGE_JAVA.addExternalSymbol("JCLASS-NAME");
     public static final Symbol JCLASS_OF =
         PACKAGE_JAVA.addExternalSymbol("JCLASS-OF");
+    public static final Symbol JMETHOD_RETURN_TYPE =
+        PACKAGE_JAVA.addExternalSymbol("JMETHOD-RETURN-TYPE");
 }
