@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.243 2005-10-25 17:19:09 piso Exp $
+ * $Id: Autoload.java,v 1.244 2005-10-27 23:07:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -643,5 +643,6 @@ public class Autoload extends Function
 
         autoload(Symbol.JCLASS_NAME, "jclass_name");
         autoload(Symbol.JCLASS_OF, "jclass_of");
+        autoload(Symbol.JMETHOD_RETURN_TYPE, "jmethod_return_type");
     }
 }
