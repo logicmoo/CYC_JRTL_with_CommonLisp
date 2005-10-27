@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.7 2005-10-27 18:34:07 piso Exp $
+;;; $Id: java-tests.lisp,v 1.8 2005-10-27 18:56:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -77,6 +77,16 @@
         (class2 (jclass "java.lang.String")))
     (jcall (jmethod "java.lang.Object" "equals" "java.lang.Object")
            class1 class2))
+  t)
+
+;; No such class.
+(deftest jclass.5
+  (signals-error (jclass "foo") 'error)
+  t)
+
+;; Silly argument.
+(deftest jclass.6
+  (signals-error (jclass 42) 'error)
   t)
 
 (deftest jclass-of.1
