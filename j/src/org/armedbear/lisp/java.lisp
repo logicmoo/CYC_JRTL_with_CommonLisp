@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: java.lisp,v 1.19 2005-10-25 17:17:59 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves, Andras Simon
+;;; $Id: java.lisp,v 1.20 2005-10-27 23:08:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -160,9 +160,9 @@
   "Returns a vector of parameter types (Java classes) for METHOD"
   (jcall (jmethod "java.lang.reflect.Method" "getParameterTypes") method))
 
-(defun jmethod-return-type (method)
-  "Returns the result type (Java class) of the METHOD"
-  (jcall (jmethod "java.lang.reflect.Method" "getReturnType") method))
+;; (defun jmethod-return-type (method)
+;;   "Returns the result type (Java class) of the METHOD"
+;;   (jcall (jmethod "java.lang.reflect.Method" "getReturnType") method))
 
 (defun jmethod-name (method)
   "Returns the name of METHOD as a Lisp string"

@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.196 2005-10-25 17:18:28 piso Exp $
+;;; $Id: autoloads.lisp,v 1.197 2005-10-27 23:07:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -217,8 +217,6 @@
 (autoload 'jclass-methods "java")
 (export 'jmethod-params "JAVA")
 (autoload 'jmethod-params "java")
-(export 'jmethod-return-type "JAVA")
-(autoload 'jmethod-return-type "java")
 (export 'jmethod-name "JAVA")
 (autoload 'jmethod-name "java")
 (export 'jinstance-of-p "JAVA")
