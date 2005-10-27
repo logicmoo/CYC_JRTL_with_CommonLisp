@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.54 2005-10-25 19:25:13 piso Exp $
+ * $Id: Java.java,v 1.55 2005-10-27 18:32:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,16 +53,16 @@ public final class Java extends Lisp
 
 
     // ### jclass
-    private static final Primitive JCLASS = new Primitive("jclass", PACKAGE_JAVA, true, "name")
+    private static final Primitive JCLASS = new Primitive(Symbol.JCLASS, "name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String className = arg.getStringValue();
+            String className = javaString(arg);
             try {
                 return new JavaObject(classForName(className));
             }
             catch (ClassNotFoundException e) {
-                signal(new LispError("class not found: " + className));
+                signal(new LispError("Class not found: " + className));
             }
             catch (Throwable t) {
                 signal(new LispError(getMessage(t)));
