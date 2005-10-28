@@ -1,8 +1,8 @@
 /*
  * JavaMode.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: JavaMode.java,v 1.16 2004-09-08 00:48:28 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: JavaMode.java,v 1.17 2005-10-28 13:02:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,6 +268,10 @@ public class JavaMode extends AbstractMode implements Constants, Mode
                     return buffer.getIndentation(match.getLine());
             }
             // Otherwise fall through...
+        } else if (textFirstChar == '"') {
+            // If quoted text starts in column 0, leave it alone.
+            if (line.charAt(0) == '"')
+                return 0;
         }
 
         Position paren = findEnclosingParen(new Position(line, 0));
