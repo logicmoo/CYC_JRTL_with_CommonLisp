@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.58 2005-10-28 13:01:22 piso Exp $
+ * $Id: Java.java,v 1.59 2005-10-28 16:45:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,11 +42,14 @@ public final class Java extends Lisp
         public LispObject execute(LispObject className, LispObject symbol)
             throws ConditionThrowable
         {
-            registeredExceptions.put(classForName(className.getStringValue()),symbol);
+            // FIXME Verify that EXCEPTION-NAME designates a subclass of Throwable.
+            // FIXME Verify that CONDITION-SYMBOL is a symbol that names a condition.
+            // FIXME Signal a continuable error if the exception is already registered.
+            registeredExceptions.put(classForName(className.getStringValue()),
+                                     symbol);
             return T;
         }
     };
-
 
     // ### jclass name-or-class-ref => class-ref
     private static final Primitive JCLASS =
@@ -349,8 +352,7 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jnew
-    // jnew constructor &rest args
+    // ### jnew constructor &rest args
     private static final Primitive JNEW = new Primitive("jnew", PACKAGE_JAVA, true,
                                                         "constructor &rest args")
     {
@@ -374,11 +376,11 @@ public final class Java extends Lisp
                 return new JavaObject(constructor.newInstance(initargs));
             }
             catch (Throwable t) {
-                Class tClass = t.getClass();
-                if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
+                Class throwableClass = t.getClass();
+                if (registeredExceptions.containsKey(throwableClass)) {
+                    signal((Symbol)registeredExceptions.get(throwableClass), new SimpleString(getMessage(t)));
                 }
-                signal(new LispError(getMessage(t)));
+                signal(new JavaException(t));
             }
             // Not reached.
             return NIL;
@@ -402,7 +404,7 @@ public final class Java extends Lisp
                 return new JavaObject(Array.newInstance(c, dimensions));
             }
             catch (Throwable t) {
-                signal(new LispError(getMessage(t)));
+                signal(new JavaException(t));
             }
             // Not reached.
             return NIL;
@@ -544,12 +546,12 @@ public final class Java extends Lisp
             throw t;
         }
         catch (Throwable t) {
-            Class tClass = t.getClass();
-            if (registeredExceptions.containsKey(tClass)) {
-                signal((Symbol)registeredExceptions.get(tClass),
+            Class throwableClass = t.getClass();
+            if (registeredExceptions.containsKey(throwableClass)) {
+                signal((Symbol)registeredExceptions.get(throwableClass),
                        new SimpleString(getMessage(t)));
             }
-            signal(new LispError(getMessage(t)));
+            signal(new JavaException(t));
         }
         // Not reached.
         return null;
