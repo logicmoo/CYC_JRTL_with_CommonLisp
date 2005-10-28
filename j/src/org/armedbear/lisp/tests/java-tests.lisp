@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.8 2005-10-27 18:56:36 piso Exp $
+;;; $Id: java-tests.lisp,v 1.9 2005-10-28 00:11:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -190,6 +190,40 @@
   (type-of (jfield "java.lang.Integer" "TYPE"))
   #+abcl    java-object
   #+allegro tran-struct)
+
+(deftest jmethod.1
+  (jcall (jmethod "java.lang.Object" "toString")
+         (jmethod "java.lang.String" "substring" 1))
+  "public java.lang.String java.lang.String.substring(int)")
+
+(deftest jmethod.2
+  (jcall (jmethod "java.lang.Object" "toString")
+         (jmethod "java.lang.String" "substring" 2))
+  "public java.lang.String java.lang.String.substring(int,int)")
+
+(deftest jmethod.3
+  (signals-error (jmethod "java.lang.String" "substring" 3) 'error)
+  t)
+
+#+abcl
+(deftest jmethod-return-type.1
+  (jclass-name (jmethod-return-type (jmethod "java.lang.String" "length")))
+  "int")
+
+#+abcl
+(deftest jmethod-return-type.2
+  (jclass-name (jmethod-return-type (jmethod "java.lang.String" "substring" 1)))
+  "java.lang.String")
+
+#+abcl
+(deftest jmethod-return-type.error.1
+  (signals-error (jmethod-return-type (jclass "java.lang.String")) 'error)
+  t)
+
+#+abcl
+(deftest jmethod-return-type.error.2
+  (signals-error (jmethod-return-type 42) 'error)
+  t)
 
 (do-tests)
 
