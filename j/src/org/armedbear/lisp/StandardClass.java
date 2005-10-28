@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.38 2005-07-16 14:44:03 piso Exp $
+ * $Id: StandardClass.java,v 1.39 2005-10-28 16:38:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,8 @@ public class StandardClass extends SlotClass
 
     public String writeToString() throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer(Symbol.STANDARD_CLASS.writeToString());
+        FastStringBuffer sb =
+            new FastStringBuffer(Symbol.STANDARD_CLASS.writeToString());
         if (symbol != null) {
             sb.append(' ');
             sb.append(symbol.writeToString());
@@ -188,6 +189,9 @@ public class StandardClass extends SlotClass
     public static final StandardClass UNDEFINED_FUNCTION =
         addStandardClass(Symbol.UNDEFINED_FUNCTION, list1(CELL_ERROR));
 
+    public static final StandardClass JAVA_EXCEPTION =
+        addStandardClass(Symbol.JAVA_EXCEPTION, list1(ERROR));
+
     public static final StandardClass METHOD =
         addStandardClass(Symbol.METHOD, list1(STANDARD_OBJECT));
 
@@ -272,6 +276,10 @@ public class StandardClass extends SlotClass
         GENERIC_FUNCTION.setCPL(GENERIC_FUNCTION, STANDARD_OBJECT,
                                 BuiltInClass.FUNCTION,
                                 BuiltInClass.CLASS_T);
+        JAVA_EXCEPTION.setCPL(JAVA_EXCEPTION, ERROR, SERIOUS_CONDITION, CONDITION,
+                              STANDARD_OBJECT, BuiltInClass.CLASS_T);
+        JAVA_EXCEPTION.setDirectSlotDefinitions(
+            list1(new SlotDefinition(Symbol.CAUSE, list1(Symbol.JAVA_EXCEPTION_CAUSE))));
         METHOD.setCPL(METHOD, STANDARD_OBJECT, BuiltInClass.CLASS_T);
         PACKAGE_ERROR.setCPL(PACKAGE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                              STANDARD_OBJECT, BuiltInClass.CLASS_T);
@@ -352,6 +360,7 @@ public class StandardClass extends SlotClass
         FLOATING_POINT_INVALID_OPERATION.finalizeClassLayout();
         FLOATING_POINT_OVERFLOW.finalizeClassLayout();
         FLOATING_POINT_UNDERFLOW.finalizeClassLayout();
+        JAVA_EXCEPTION.finalizeClassLayout();
         PACKAGE_ERROR.finalizeClassLayout();
         PARSE_ERROR.finalizeClassLayout();
         PRINT_NOT_READABLE.finalizeClassLayout();
