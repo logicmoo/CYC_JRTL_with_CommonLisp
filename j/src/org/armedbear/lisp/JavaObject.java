@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: JavaObject.java,v 1.20 2005-10-24 21:32:09 piso Exp $
+ * $Id: JavaObject.java,v 1.21 2005-10-28 16:42:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,47 +131,52 @@ public final class JavaObject extends LispObject
             sb.append(Symbol.JAVA_OBJECT.writeToString());
             sb.append(".");
             sb.append(System.getProperty("line.separator"));
-            sb.append("The wrapped Java object is an ");
-            final Class c = obj.getClass();
-            String className = c.getName();
-            if (c.isArray()) {
-                sb.append("array of ");
-                if (className.startsWith("[L") && className.endsWith(";")) {
-                    className = className.substring(1, className.length() - 1);
-                    sb.append(className);
-                    sb.append(" objects");
-                } else if (className.startsWith("[") && className.length() > 1) {
-                    char descriptor = className.charAt(1);
-                    final String type;
-                    switch (descriptor) {
-                        case 'B': type = "bytes"; break;
-                        case 'C': type = "chars"; break;
-                        case 'D': type = "doubles"; break;
-                        case 'F': type = "floats"; break;
-                        case 'I': type = "ints"; break;
-                        case 'J': type = "longs"; break;
-                        case 'S': type = "shorts"; break;
-                        case 'Z': type = "booleans"; break;
-                        default:
-                            type = "unknown type";
-                    }
-                    sb.append(type);
-                }
-                    sb.append(" with ");
-                final int length = java.lang.reflect.Array.getLength(obj);
-                sb.append(length);
-                sb.append(" element");
-                if (length != 1)
-                    sb.append('s');
-                sb.append('.');
+            sb.append("The wrapped Java object is ");
+            if (obj == null) {
+                sb.append("null.");
             } else {
-                sb.append("instance of ");
-                sb.append(className);
-                sb.append(':');
-                sb.append(System.getProperty("line.separator"));
-                sb.append("  \"");
-                sb.append(obj.toString());
-                sb.append('"');
+                sb.append(" an ");
+                final Class c = obj.getClass();
+                String className = c.getName();
+                if (c.isArray()) {
+                    sb.append("array of ");
+                    if (className.startsWith("[L") && className.endsWith(";")) {
+                        className = className.substring(1, className.length() - 1);
+                        sb.append(className);
+                        sb.append(" objects");
+                    } else if (className.startsWith("[") && className.length() > 1) {
+                        char descriptor = className.charAt(1);
+                        final String type;
+                        switch (descriptor) {
+                            case 'B': type = "bytes"; break;
+                            case 'C': type = "chars"; break;
+                            case 'D': type = "doubles"; break;
+                            case 'F': type = "floats"; break;
+                            case 'I': type = "ints"; break;
+                            case 'J': type = "longs"; break;
+                            case 'S': type = "shorts"; break;
+                            case 'Z': type = "booleans"; break;
+                            default:
+                                type = "unknown type";
+                        }
+                        sb.append(type);
+                    }
+                    sb.append(" with ");
+                    final int length = java.lang.reflect.Array.getLength(obj);
+                    sb.append(length);
+                    sb.append(" element");
+                    if (length != 1)
+                        sb.append('s');
+                    sb.append('.');
+                } else {
+                    sb.append("instance of ");
+                    sb.append(className);
+                    sb.append(':');
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append("  \"");
+                    sb.append(obj.toString());
+                    sb.append('"');
+                }
             }
             stream._writeString(sb.toString());
             return LispThread.currentThread().nothing();
