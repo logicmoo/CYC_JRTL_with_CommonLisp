@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShell.java,v 1.89 2005-10-28 13:12:49 piso Exp $
+ * $Id: LispShell.java,v 1.90 2005-10-28 13:21:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -552,6 +552,12 @@ public class LispShell extends Shell
             history.save();
         }
         send(input);
+        setBusy(true);
+        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+            Editor ed = it.nextEditor();
+            if (ed.getBuffer() == this)
+                ed.setWaitCursor();
+        }
     }
 
     public void dispose()
