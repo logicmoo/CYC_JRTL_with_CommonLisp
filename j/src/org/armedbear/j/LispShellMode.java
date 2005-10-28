@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShellMode.java,v 1.20 2005-10-22 19:31:01 piso Exp $
+ * $Id: LispShellMode.java,v 1.21 2005-10-28 13:13:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -179,7 +179,7 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         }
         if (s == null || s.length() == 0)
             return;
-        lisp.describe(s);
+        lisp.describe(s, editor);
     }
 
     public static String getArgumentForDescribe(LispShell lisp, Position pos)
