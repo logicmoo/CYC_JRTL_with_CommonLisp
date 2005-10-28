@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.9 2005-10-28 00:11:58 piso Exp $
+;;; $Id: java-tests.lisp,v 1.10 2005-10-28 12:19:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,13 +79,21 @@
            class1 class2))
   t)
 
-;; No such class.
 (deftest jclass.5
+  (jcall (jmethod "java.lang.Object" "toString") (jclass "int"))
+  "int")
+
+(deftest jclass.6
+  (equal (jclass '|int|) (jclass "int"))
+  t)
+
+;; No such class.
+(deftest jclass.error.1
   (signals-error (jclass "foo") 'error)
   t)
 
 ;; Silly argument.
-(deftest jclass.6
+(deftest jclass.error.2
   (signals-error (jclass 42) 'error)
   t)
 
@@ -144,6 +152,10 @@
   (jclass-name (jclass "java.lang.String") "foo")
   nil
   "java.lang.String")
+
+(deftest jclass-name.8
+  (jclass-name (jclass "int"))
+  "int")
 
 (deftest jconstructor.1
   (jclass-of (jconstructor "java.lang.String" "java.lang.String"))
