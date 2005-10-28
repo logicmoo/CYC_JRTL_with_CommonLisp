@@ -2,7 +2,7 @@
  * JavaException.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: JavaException.java,v 1.1 2005-10-28 16:39:59 piso Exp $
+ * $Id: JavaException.java,v 1.2 2005-10-28 17:20:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,11 @@ public class JavaException extends LispError
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         throwable.printStackTrace(pw);
-        return sw.toString();
+        String s = sw.toString();
+        final String separator = System.getProperty("line.separator");
+        if (s.endsWith(separator))
+            s = s.substring(0, s.length() - separator.length());
+        return s;
     }
 
     // ### java-exception-cause java-exception => cause
