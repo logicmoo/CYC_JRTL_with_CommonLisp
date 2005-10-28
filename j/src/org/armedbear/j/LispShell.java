@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShell.java,v 1.88 2005-10-22 19:31:57 piso Exp $
+ * $Id: LispShell.java,v 1.89 2005-10-28 13:12:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -356,7 +356,7 @@ public class LispShell extends Shell
         }
     }
 
-    public void describe(String s)
+    public void describe(String s, Editor editor)
     {
         if (s.equals("*"))
             ;
@@ -367,6 +367,7 @@ public class LispShell extends Shell
         String command = "(cl:describe " + s + ")\n";
         Position pos = getEnd();
         insertString(pos, command);
+        editor.moveDotTo(pos);
         if (needsRenumbering())
             renumber();
         enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
