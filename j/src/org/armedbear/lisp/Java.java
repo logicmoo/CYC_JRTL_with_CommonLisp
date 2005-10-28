@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.55 2005-10-27 18:32:56 piso Exp $
+ * $Id: Java.java,v 1.56 2005-10-28 00:13:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,14 +39,10 @@ public final class Java extends Lisp
         new Primitive("register-java-exception", PACKAGE_JAVA, true,
                       "exception-name condition-symbol")
     {
-        public LispObject execute(LispObject className, LispObject symbol) throws ConditionThrowable
+        public LispObject execute(LispObject className, LispObject symbol)
+            throws ConditionThrowable
         {
-            try {
-                registeredExceptions.put(classForName(className.getStringValue()),symbol);
-            }
-            catch (ClassNotFoundException e) {
-                signal(new LispError("exception not found: " + className));
-            }
+            registeredExceptions.put(classForName(className.getStringValue()),symbol);
             return T;
         }
     };
@@ -57,18 +53,7 @@ public final class Java extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String className = javaString(arg);
-            try {
-                return new JavaObject(classForName(className));
-            }
-            catch (ClassNotFoundException e) {
-                signal(new LispError("Class not found: " + className));
-            }
-            catch (Throwable t) {
-                signal(new LispError(getMessage(t)));
-            }
-            // Not reached.
-            return NIL;
+            return new JavaObject(classForName(javaString(arg)));
         }
     };
 
@@ -170,9 +155,6 @@ public final class Java extends Lisp
                 }
                 return new JavaObject(f.get(instance));
             }
-            catch (ClassNotFoundException e) {
-                signal(new LispError("class not found: " + e.getMessage()));
-            }
             catch (NoSuchFieldException e) {
                 signal(new LispError("no such field"));
             }
@@ -223,9 +205,6 @@ public final class Java extends Lisp
                 }
                 throw new NoSuchMethodException();
             }
-            catch (ClassNotFoundException e) {
-                signal(new LispError("class not found: " + e.getMessage()));
-            }
             catch (NoSuchMethodException e) {
                 signal(new LispError("no such constructor"));
             }
@@ -249,9 +228,9 @@ public final class Java extends Lisp
         {
             if (args.length < 2)
                 signal(new WrongNumberOfArgumentsException(this));
+            final Class c = forClassRef(args[0]);
             String methodName = args[1].getStringValue();
             try {
-                final Class c = forClassRef(args[0]);
                 int argCount = 0;
                 if (args.length == 3 && args[2] instanceof Fixnum) {
                     argCount = ((Fixnum)args[2]).value;
@@ -272,11 +251,19 @@ public final class Java extends Lisp
                 }
                 throw new NoSuchMethodException();
             }
-            catch (ClassNotFoundException e) {
-                signal(new LispError("class not found: " + e.getMessage()));
-            }
             catch (NoSuchMethodException e) {
-                signal(new LispError("no such method: " + methodName));
+                FastStringBuffer sb = new FastStringBuffer("No such method: ");
+                sb.append(c.getName());
+                sb.append('.');
+                sb.append(methodName);
+                sb.append('(');
+                for (int i = 2; i < args.length; i++) {
+                    sb.append(args[i].writeToString());
+                    if (i < args.length - 1)
+                        sb.append(',');
+                }
+                sb.append(')');
+                signal(new LispError(sb.toString()));
             }
             catch (ConditionThrowable e) {
                 throw e;
@@ -411,9 +398,6 @@ public final class Java extends Lisp
                 for (int i = 1; i < args.length; i++)
                     dimensions[i-1] = ((Integer)args[i].javaInstance()).intValue();
                 return new JavaObject(Array.newInstance(c, dimensions));
-            }
-            catch (ClassNotFoundException e) {
-                signal(new LispError("class not found: " + e.getMessage()));
             }
             catch (Throwable t) {
                 signal(new LispError(getMessage(t)));
@@ -630,8 +614,7 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jobject-lisp-value
-    // jobject-lisp-value java-object
+    // ### jobject-lisp-value java-object
     private static final Primitive JOBJECT_LISP_VALUE =
         new Primitive("jobject-lisp-value", PACKAGE_JAVA, true, "java-object")
     {
@@ -641,51 +624,63 @@ public final class Java extends Lisp
         }
     };
 
-    private static Class classForName(String className) throws ClassNotFoundException
+    private static Class classForName(String className) throws ConditionThrowable
     {
         try {
             return Class.forName(className);
         }
         catch (ClassNotFoundException e) {
-            return Class.forName(className, true, JavaClassLoader.getPersistentInstance());
+            try {
+                return Class.forName(className, true, JavaClassLoader.getPersistentInstance());
+            }
+            catch (ClassNotFoundException ex) {
+                signal(new LispError("Class not found: " + className));
+                // Not reached.
+                return null;
+            }
         }
     }
 
     // Supports Java primitive types too.
-    private static Class forClassRef(LispObject classRef)
-        throws ClassNotFoundException, ConditionThrowable
+    private static Class forClassRef(LispObject obj) throws ConditionThrowable
     {
-        if (classRef instanceof AbstractString) {
-            String className = classRef.getStringValue();
-            if (className.equals("boolean"))
+        if (obj instanceof AbstractString) {
+            String s = obj.getStringValue();
+            if (s.equals("boolean"))
                 return Boolean.TYPE;
-            if (className.equals("byte"))
+            if (s.equals("byte"))
                 return Byte.TYPE;
-            if (className.equals("char"))
+            if (s.equals("char"))
                 return Character.TYPE;
-            if (className.equals("short"))
+            if (s.equals("short"))
                 return Short.TYPE;
-            if (className.equals("int"))
+            if (s.equals("int"))
                 return Integer.TYPE;
-            if (className.equals("long"))
+            if (s.equals("long"))
                 return Long.TYPE;
-            if (className.equals("float"))
+            if (s.equals("float"))
                 return Float.TYPE;
-            if (className.equals("double"))
+            if (s.equals("double"))
                 return Double.TYPE;
             // Not a primitive Java type.
-            return classForName(className);
-        } else {
-            try {
-                return (Class)JavaObject.getObject(classRef);
-            }
-            catch (ClassCastException e) {
-                signal(new TypeError(classRef, "Java class"));
-            }
-            catch (ConditionThrowable e) {
-                throw new ClassNotFoundException(e.getMessage());
-            }
+            return classForName(s);
+        }
+        // It's not a string, so it must be a JavaObject.
+        final JavaObject javaObject;
+        try {
+            javaObject = (JavaObject) obj;
+        }
+        catch (ClassCastException e) {
+            signalTypeError(obj, list3(Symbol.OR, Symbol.STRING,
+                                       Symbol.JAVA_OBJECT));
             // Not reached.
+            return null;
+        }
+        try {
+            return (Class) javaObject.getObject();
+        }
+        catch (ClassCastException e) {
+            signal(new LispError(obj + " does not designate a Java class."));
             return null;
         }
     }
