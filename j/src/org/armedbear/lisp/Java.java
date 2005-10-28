@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.56 2005-10-28 00:13:05 piso Exp $
+ * $Id: Java.java,v 1.57 2005-10-28 12:19:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ public final class Java extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new JavaObject(classForName(javaString(arg)));
+            return new JavaObject(javaClass(arg));
         }
     };
 
@@ -113,7 +113,7 @@ public final class Java extends Lisp
                 if (args[1] instanceof AbstractString) {
                     // Cases 1-5.
                     fieldName = args[1].getStringValue();
-                    c = forClassRef(args[0]);
+                    c = javaClass(args[0]);
                 } else {
                     // Cases 6 and 7.
                     fieldName = args[0].getStringValue();
@@ -185,14 +185,14 @@ public final class Java extends Lisp
             if (args.length < 1)
                 signal(new WrongNumberOfArgumentsException(this));
             try {
-                final Class c = forClassRef(args[0]);
+                final Class c = javaClass(args[0]);
                 int argCount = 0;
                 if (args.length == 2 && args[1] instanceof Fixnum) {
                     argCount = Fixnum.getValue(args[1]);
                 } else {
                     Class[] parameterTypes = new Class[args.length-1];
                     for (int i = 1; i < args.length; i++) {
-                        parameterTypes[i-1] = forClassRef(args[i]);
+                        parameterTypes[i-1] = javaClass(args[i]);
                     }
                     return new JavaObject(c.getConstructor(parameterTypes));
                 }
@@ -228,7 +228,7 @@ public final class Java extends Lisp
         {
             if (args.length < 2)
                 signal(new WrongNumberOfArgumentsException(this));
-            final Class c = forClassRef(args[0]);
+            final Class c = javaClass(args[0]);
             String methodName = args[1].getStringValue();
             try {
                 int argCount = 0;
@@ -237,7 +237,7 @@ public final class Java extends Lisp
                 } else {
                     Class[] parameterTypes = new Class[args.length-2];
                     for (int i = 2; i < args.length; i++)
-                        parameterTypes[i-2] = forClassRef(args[i]);
+                        parameterTypes[i-2] = javaClass(args[i]);
                     return new JavaObject(c.getMethod(methodName,
                                                       parameterTypes));
                 }
@@ -303,7 +303,7 @@ public final class Java extends Lisp
                     if (obj instanceof Method)
                         m = (Method) obj;
                 } else if (methodRef instanceof AbstractString) {
-                    Class c = forClassRef(args[1]);
+                    Class c = javaClass(args[1]);
                     if (c != null) {
                         String methodName = methodRef.getStringValue();
                         Method[] methods = c.getMethods();
@@ -393,7 +393,7 @@ public final class Java extends Lisp
             if (args.length < 2)
                 signal(new WrongNumberOfArgumentsException(this));
             try {
-                Class c = forClassRef(args[0]);
+                Class c = javaClass(args[0]);
                 int[] dimensions = new int[args.length - 1];
                 for (int i = 1; i < args.length; i++)
                     dimensions[i-1] = ((Integer)args[i].javaInstance()).intValue();
@@ -642,10 +642,10 @@ public final class Java extends Lisp
     }
 
     // Supports Java primitive types too.
-    private static Class forClassRef(LispObject obj) throws ConditionThrowable
+    private static Class javaClass(LispObject obj) throws ConditionThrowable
     {
-        if (obj instanceof AbstractString) {
-            String s = obj.getStringValue();
+        if (obj instanceof AbstractString || obj instanceof Symbol) {
+            String s = javaString(obj);
             if (s.equals("boolean"))
                 return Boolean.TYPE;
             if (s.equals("byte"))
