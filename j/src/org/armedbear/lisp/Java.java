@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.57 2005-10-28 12:19:21 piso Exp $
+ * $Id: Java.java,v 1.58 2005-10-28 13:01:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,8 +48,10 @@ public final class Java extends Lisp
     };
 
 
-    // ### jclass
-    private static final Primitive JCLASS = new Primitive(Symbol.JCLASS, "name")
+    // ### jclass name-or-class-ref => class-ref
+    private static final Primitive JCLASS =
+        new Primitive(Symbol.JCLASS, "name-or-class-ref",
+"Returns a reference to the Java class designated by NAME-OR-CLASS-REF.")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -58,33 +60,33 @@ public final class Java extends Lisp
     };
 
     // ### jfield - retrieve or modify a field in a Java class or instance.
-    /*
-     * Supported argument patterns:
-     *
-     *   Case 1: class-ref  field-name:
-     *               to retrieve the value of a static field.
-     *
-     *   Case 2: class-ref  field-name  instance-ref:
-     *               to retrieve the value of a class field of the instance.
-     *
-     *   Case 3: class-ref  field-name  primitive-value:
-     *               to store primitive-value in a static field.
-     *
-     *   Case 4: class-ref  field-name  instance-ref  value:
-     *               to store value in a class field of the instance.
-     *
-     *   Case 5: class-ref  field-name  nil  value:
-     *               to store value in a static field (when value may be
-     *               confused with an instance-ref).
-     *
-     *   Case 6: field-name  instance:
-     *               to retrieve the value of a field of the instance. The
-     *               class is derived from the instance.
-     *
-     *   Case 7: field-name  instance  value:
-     *               to store value in a field of the instance. The class is
-     *               derived from the instance.
-     */
+    //
+    // Supported argument patterns:
+    //
+    //   Case 1: class-ref  field-name:
+    //               to retrieve the value of a static field.
+    //
+    //   Case 2: class-ref  field-name  instance-ref:
+    //               to retrieve the value of a class field of the instance.
+    //
+    //   Case 3: class-ref  field-name  primitive-value:
+    //               to store primitive-value in a static field.
+    //
+    //   Case 4: class-ref  field-name  instance-ref  value:
+    //               to store value in a class field of the instance.
+    //
+    //   Case 5: class-ref  field-name  nil  value:
+    //               to store value in a static field (when value may be
+    //               confused with an instance-ref).
+    //
+    //   Case 6: field-name  instance:
+    //               to retrieve the value of a field of the instance. The
+    //               class is derived from the instance.
+    //
+    //   Case 7: field-name  instance  value:
+    //               to store value in a field of the instance. The class is
+    //               derived from the instance.
+    //
     private static final Primitive JFIELD =
         new Primitive("jfield", PACKAGE_JAVA, true,
                       "class-ref-or-field field-or-instance &optional instance value")
