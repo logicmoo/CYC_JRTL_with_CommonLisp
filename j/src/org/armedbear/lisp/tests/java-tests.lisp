@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.10 2005-10-28 12:19:47 piso Exp $
+;;; $Id: java-tests.lisp,v 1.11 2005-10-28 17:14:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -178,6 +178,13 @@
   (jclass-of (jnew "java.awt.Point") "java.awt.Point")
   t
   "java.awt.Point")
+
+(deftest jnew.error.1
+  (signals-error (jnew (jconstructor "java.lang.String" "java.lang.String")
+                       (make-immediate-object nil :ref))
+                 #+abcl    'java-exception
+                 #+allegro 'jlinker-error)
+  t)
 
 (deftest jcall.1
   (let ((method (jmethod "java.lang.String" "length")))
