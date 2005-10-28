@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.146 2005-08-15 23:25:38 piso Exp $
+ * $Id: LispObject.java,v 1.147 2005-10-28 12:40:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -521,17 +521,17 @@ public class LispObject extends Lisp
         return false;
     }
 
+    private static final EqHashTable documentationHashTable =
+        new EqHashTable(11, NIL, NIL);
+
     public LispObject getDocumentation(LispObject docType)
         throws ConditionThrowable
     {
-        LispObject propertyList = getPropertyList();
-        if (propertyList != null) {
-            LispObject alist = getf(propertyList, Symbol._DOCUMENTATION, NIL);
-            if (alist != null) {
-                LispObject entry = assq(docType, alist);
-                if (entry instanceof Cons)
-                    return ((Cons)entry).cdr;
-            }
+        LispObject alist = documentationHashTable.get(this);
+        if (alist != null) {
+            LispObject entry = assq(docType, alist);
+            if (entry instanceof Cons)
+                return ((Cons)entry).cdr;
         }
         return NIL;
     }
@@ -539,18 +539,15 @@ public class LispObject extends Lisp
     public void setDocumentation(LispObject docType, LispObject documentation)
         throws ConditionThrowable
     {
-        LispObject propertyList = getPropertyList();
-        if (propertyList != null) {
-            LispObject alist = getf(propertyList, Symbol._DOCUMENTATION, NIL);
-            if (alist == null)
-                alist = NIL;
-            LispObject entry = assq(docType, alist);
-            if (entry instanceof Cons) {
-                ((Cons)entry).cdr = documentation;
-            } else {
-                alist = alist.push(new Cons(docType, documentation));
-                setPropertyList(putf(propertyList, Symbol._DOCUMENTATION, alist));
-            }
+        LispObject alist = documentationHashTable.get(this);
+        if (alist == null)
+            alist = NIL;
+        LispObject entry = assq(docType, alist);
+        if (entry instanceof Cons) {
+            ((Cons)entry).cdr = documentation;
+        } else {
+            alist = alist.push(new Cons(docType, documentation));
+            documentationHashTable.put(this, alist);
         }
     }
 
