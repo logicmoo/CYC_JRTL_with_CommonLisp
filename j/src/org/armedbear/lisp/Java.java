@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.62 2005-10-29 18:48:31 asimon Exp $
+ * $Id: Java.java,v 1.63 2005-10-29 19:04:40 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,19 @@ public final class Java extends Lisp
             registeredExceptions.put(classForName(className.getStringValue()),
                                      symbol);
             return T;
+        }
+    };
+
+    // ### unregister-java-exception exception-name => T or NIL
+    private static final Primitive UNREGISTER_JAVA_EXCEPTION =
+        new Primitive("unregister-java-exception", PACKAGE_JAVA, true,
+                      "exception-name")
+    {
+        public LispObject execute(LispObject className)
+            throws ConditionThrowable
+        {
+            // FIXME Verify that EXCEPTION-NAME designates a subclass of Throwable.
+            return registeredExceptions.remove(classForName(className.getStringValue())) == null ? NIL : T;
         }
     };
 
