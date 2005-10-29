@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SimpleString.java,v 1.33 2005-10-16 02:03:28 piso Exp $
+ * $Id: SimpleString.java,v 1.34 2005-10-29 18:21:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,8 +60,8 @@ public final class SimpleString extends AbstractString
 
     public SimpleString(FastStringBuffer sb)
     {
-        chars = new char[capacity = sb.length()];
-        sb.getChars(0, capacity, chars, 0);
+        chars = sb.toCharArray();
+        capacity = chars.length;
     }
 
     private SimpleString(char[] chars)
