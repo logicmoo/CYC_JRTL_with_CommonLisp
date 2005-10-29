@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.60 2005-10-29 13:25:45 asimon Exp $
+ * $Id: Java.java,v 1.61 2005-10-29 13:35:45 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,15 +57,15 @@ public final class Java extends Lisp
 	Class o = classForName("java.lang.Object");
 
      	for (Class c = cl ; c != o ; c = c.getSuperclass())
-                if (registeredExceptions.containsKey(c))
-		  return (Symbol)registeredExceptions.get(c);
+            if (registeredExceptions.containsKey(c))
+                return (Symbol)registeredExceptions.get(c);
         return null;
     }
 
     // ### jclass name-or-class-ref => class-ref
     private static final Primitive JCLASS =
         new Primitive(Symbol.JCLASS, "name-or-class-ref",
-"Returns a reference to the Java class designated by NAME-OR-CLASS-REF.")
+                      "Returns a reference to the Java class designated by NAME-OR-CLASS-REF.")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -354,7 +354,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 if (registeredExceptions.containsKey(tClass)) {
-		  signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
+                    signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
                 }
                 signal(new LispError(getMessage(t)));
             }
@@ -391,9 +391,9 @@ public final class Java extends Lisp
                     t = t.getCause();
                 Symbol condition = getCondition(t.getClass());
                 if (condition == null) 
-                   signal(new JavaException(t));
+                    signal(new JavaException(t));
                 else
-                   signal(condition, new SimpleString(getMessage(t)));
+                    signal(condition, new SimpleString(getMessage(t)));
             }
             // Not reached.
             return NIL;
