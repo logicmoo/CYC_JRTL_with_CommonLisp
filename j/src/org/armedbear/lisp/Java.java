@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.61 2005-10-29 13:35:45 asimon Exp $
+ * $Id: Java.java,v 1.62 2005-10-29 18:48:31 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -353,10 +353,11 @@ public final class Java extends Lisp
             }
             catch (Throwable t) {
                 Class tClass = t.getClass();
-                if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
-                }
-                signal(new LispError(getMessage(t)));
+                Symbol condition = getCondition(t.getClass());
+                if (condition == null) 
+                    signal(new JavaException(t));
+                else
+                    signal(condition, new SimpleString(getMessage(t)));
             }
             // Not reached.
             return NIL;
@@ -452,10 +453,11 @@ public final class Java extends Lisp
             }
             catch (Throwable t) {
                 Class tClass = t.getClass();
-                if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
-                }
-                signal(new LispError(getMessage(t)));
+                Symbol condition = getCondition(t.getClass());
+                if (condition == null) 
+                    signal(new JavaException(t));
+                else
+                    signal(condition, new SimpleString(getMessage(t)));
             }
             // Not reached.
             return NIL;
@@ -481,10 +483,11 @@ public final class Java extends Lisp
             }
             catch (Throwable t) {
                 Class tClass = t.getClass();
-                if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
-                }
-                signal(new LispError(getMessage(t)));
+                Symbol condition = getCondition(t.getClass());
+                if (condition == null) 
+                    signal(new JavaException(t));
+                else
+                    signal(condition, new SimpleString(getMessage(t)));
             }
             // Not reached.
             return NIL;
@@ -559,12 +562,11 @@ public final class Java extends Lisp
             throw t;
         }
         catch (Throwable t) {
-            Class throwableClass = t.getClass();
-            if (registeredExceptions.containsKey(throwableClass)) {
-                signal((Symbol)registeredExceptions.get(throwableClass),
-                       new SimpleString(getMessage(t)));
-            }
-            signal(new JavaException(t));
+            Symbol condition = getCondition(t.getClass());
+            if (condition == null) 
+                signal(new JavaException(t));
+            else
+                signal(condition, new SimpleString(getMessage(t)));
         }
         // Not reached.
         return null;
