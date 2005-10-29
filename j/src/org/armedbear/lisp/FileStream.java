@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FileStream.java,v 1.26 2005-09-14 19:55:12 piso Exp $
+ * $Id: FileStream.java,v 1.27 2005-10-29 17:57:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,6 +171,35 @@ public final class FileStream extends Stream
         // "For a binary file, the length is measured in units of the
         // element type of the stream."
         return number(length / bytesPerUnit);
+    }
+
+    public LispObject readLine(boolean eofError, LispObject eofValue)
+        throws ConditionThrowable
+    {
+        if (inputBuffer != null) {
+            final LispThread thread = LispThread.currentThread();
+            final FastStringBuffer sb = new FastStringBuffer();
+            while (true) {
+                if (inputBufferOffset >= inputBufferCount) {
+                    fillInputBuffer();
+                    if (inputBufferCount < 0) {
+                        // End of file.
+                        if (sb.length() == 0) {
+                            if (eofError)
+                                return signal(new EndOfFile(this));
+                            return thread.setValues(eofValue, T);
+                        }
+                        return thread.setValues(new SimpleString(sb), T);
+                    }
+                }
+                char c = (char) inputBuffer[inputBufferOffset++];
+                if (c == '\n')
+                    return thread.setValues(new SimpleString(sb), NIL);
+                else
+                    sb.append(c);
+            }
+        } else
+            return super.readLine(eofError, eofValue);
     }
 
     // Returns -1 at end of file.
