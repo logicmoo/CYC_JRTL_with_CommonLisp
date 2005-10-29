@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.843 2005-10-24 21:12:06 piso Exp $
+ * $Id: Primitives.java,v 1.844 2005-10-29 18:29:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4086,25 +4086,69 @@ public final class Primitives extends Lisp
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return inSynonymOf(arg).readLine(true, NIL);
+            if (arg == T)
+                arg = Symbol.TERMINAL_IO.symbolValue();
+            else if (arg == NIL)
+                arg = Symbol.STANDARD_INPUT.symbolValue();
+            final Stream stream;
+            try {
+                stream = (Stream) arg;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.STREAM);
+            }
+            return stream.readLine(true, NIL);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return inSynonymOf(first).readLine(second != NIL, NIL);
+            if (first == T)
+                first = Symbol.TERMINAL_IO.symbolValue();
+            else if (first == NIL)
+                first = Symbol.STANDARD_INPUT.symbolValue();
+            final Stream stream;
+            try {
+                stream = (Stream) first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.STREAM);
+            }
+            return stream.readLine(second != NIL, NIL);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            return inSynonymOf(first).readLine(second != NIL, third);
+            if (first == T)
+                first = Symbol.TERMINAL_IO.symbolValue();
+            else if (first == NIL)
+                first = Symbol.STANDARD_INPUT.symbolValue();
+            final Stream stream;
+            try {
+                stream = (Stream) first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.STREAM);
+            }
+            return stream.readLine(second != NIL, third);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
             throws ConditionThrowable
         {
             // recursive-p is ignored
-            return inSynonymOf(first).readLine(second != NIL, third);
+            if (first == T)
+                first = Symbol.TERMINAL_IO.symbolValue();
+            else if (first == NIL)
+                first = Symbol.STANDARD_INPUT.symbolValue();
+            final Stream stream;
+            try {
+                stream = (Stream) first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.STREAM);
+            }
+            return stream.readLine(second != NIL, third);
         }
     };
 
@@ -4166,8 +4210,7 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### read
-    // &optional input-stream eof-error-p eof-value recursive-p => object
+    // ### read &optional input-stream eof-error-p eof-value recursive-p => object
     private static final Primitive READ =
         new Primitive(Symbol.READ,
                       "&optional input-stream eof-error-p eof-value recursive-p")
