@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.124 2005-10-23 17:46:16 piso Exp $
+ * $Id: Load.java,v 1.125 2005-10-29 18:45:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -285,8 +285,8 @@ public final class Load extends Lisp
                                                   verbose, print, auto);
                     }
                     catch (FaslVersionMismatch e) {
-                        StringBuffer sb =
-                            new StringBuffer("; Incorrect fasl version: ");
+                        FastStringBuffer sb =
+                            new FastStringBuffer("; Incorrect fasl version: ");
                         sb.append(truename);
                         System.err.println(sb.toString());
                     }
@@ -386,7 +386,7 @@ public final class Load extends Lisp
                 out._writeString(truename != null ? truename : "stream");
                 out._writeLine(" ...");
                 out._finishOutput();
-                LispObject result = loadStream(in, print);
+                LispObject result = loadStream(in, print, thread);
                 long elapsed = System.currentTimeMillis() - start;
                 out.freshLine();
                 out._writeString(prefix);
@@ -398,7 +398,7 @@ public final class Load extends Lisp
                 out._finishOutput();
                 return result;
             } else
-                return loadStream(in, print);
+                return loadStream(in, print, thread);
         }
         finally {
             thread.lastSpecialBinding = lastSpecialBinding;
@@ -407,16 +407,16 @@ public final class Load extends Lisp
 
     public static String getLoadVerbosePrefix(int loadDepth)
     {
-        StringBuffer sb = new StringBuffer(";");
+        FastStringBuffer sb = new FastStringBuffer(";");
         for (int i = loadDepth - 1; i-- > 0;)
             sb.append(' ');
         return sb.toString();
     }
 
-    private static final LispObject loadStream(Stream in, boolean print)
+    private static final LispObject loadStream(Stream in, boolean print,
+                                               LispThread thread)
         throws ConditionThrowable
     {
-        final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_LOAD_STREAM_, in);
         SpecialBinding sourcePositionBinding =
