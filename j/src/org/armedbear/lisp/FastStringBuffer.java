@@ -2,7 +2,7 @@
  * FastStringBuffer.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: FastStringBuffer.java,v 1.2 2005-07-10 15:19:15 piso Exp $
+ * $Id: FastStringBuffer.java,v 1.3 2005-10-29 18:21:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,11 +77,7 @@ public final class FastStringBuffer
 
     public void getChars(int srcBegin, int srcEnd, char dst[], int dstBegin)
     {
-        if (srcBegin < 0)
-            throw new StringIndexOutOfBoundsException();
-        if (srcBegin > srcEnd)
-            throw new StringIndexOutOfBoundsException();
-        if (srcEnd > used)
+        if (srcBegin < 0 || srcBegin > srcEnd || srcEnd > used)
             throw new StringIndexOutOfBoundsException();
         System.arraycopy(buffer, srcBegin, dst, dstBegin, srcEnd - srcBegin);
     }
@@ -191,5 +187,12 @@ public final class FastStringBuffer
     public final String toString()
     {
         return new String(buffer, 0, used);
+    }
+
+    public final char[] toCharArray()
+    {
+        char[] copy = new char[used];
+        System.arraycopy(buffer, 0, copy, 0, used);
+        return copy;
     }
 }
