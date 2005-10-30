@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.11 2005-10-28 17:14:34 piso Exp $
+;;; $Id: java-tests.lisp,v 1.12 2005-10-30 09:49:40 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -242,6 +242,77 @@
 #+abcl
 (deftest jmethod-return-type.error.2
   (signals-error (jmethod-return-type 42) 'error)
+  t)
+
+
+#+abcl
+(deftest unregister-java-exception.1
+  (progn 
+    (define-condition throwable (java-exception) ())
+    (register-java-exception "java.lang.Throwable" 'throwable)
+    (unregister-java-exception "java.lang.Throwable"))
+  t)
+    
+#+abcl
+(deftest unregister-java-exception.2
+  (unregister-java-exception "java.lang.Throwable")
+  nil)
+    
+
+
+#+abcl
+(deftest register-java-exception.1
+  (progn 
+    (define-condition throwable (java-exception) ())
+    (with-registered-exception "java.lang.Throwable" 'throwable
+      (signals-error 
+       (jnew (jconstructor "java.lang.String" "java.lang.String")
+             (make-immediate-object nil :ref))
+       'throwable)))
+  t)
+
+#+abcl
+(deftest register-java-exception.2
+  (progn 
+    (define-condition throwable (java-exception) ())
+    (with-registered-exception "java.lang.Throwable" 'throwable
+      (signals-error 
+       (jnew (jconstructor "java.lang.String" "java.lang.String") 42)
+       'throwable)))
+  t)
+
+#+abcl
+(deftest register-java-exception.3
+  (progn 
+    (define-condition throwable (java-exception) ())
+    (with-registered-exception "java.lang.Throwable" 'throwable
+      (signals-error 
+       (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
+       'throwable)))
+  t)
+
+#+abcl
+(deftest register-java-exception.4
+  (progn 
+    (define-condition throwable (java-exception) ())
+    (define-condition illegal-argument-exception (java-exception) ())
+    (with-registered-exception "java.lang.Throwable" 'throwable
+      (with-registered-exception "java.lang.IllegalArgumentException" 'illegal-argument-exception
+        (signals-error 
+         (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
+         'throwable))))
+  nil)
+
+#+abcl
+(deftest register-java-exception.5
+  (progn 
+    (define-condition throwable (java-exception) ())
+    (define-condition illegal-argument-exception (java-exception) ())
+    (with-registered-exception "java.lang.Throwable" 'throwable
+      (with-registered-exception "java.lang.IllegalArgumentException" 'illegal-argument-exception
+        (signals-error 
+         (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
+         'illegal-argument-exception))))
   t)
 
 (do-tests)
