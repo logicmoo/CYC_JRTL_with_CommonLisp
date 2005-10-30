@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.613 2005-08-28 15:15:01 piso Exp $
+;;; $Id: jvm.lisp,v 1.614 2005-10-30 01:18:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6025,6 +6025,48 @@
            (dformat t "p2-write-8-bits giving up~%")
            (compile-function-call form target representation)))))
 
+(defun p2-read-line (form target representation)
+;;   (format t "p2-read-line~%")
+  (let* ((args (cdr form))
+         (len (length args)))
+    (case len
+      (1
+       (let* ((arg1 (%car args))
+              (type1 (derive-compiler-type arg1)))
+         (cond ((compiler-subtypep type1 'stream)
+;;                 (format t "p2-read-line optimized case 1~%")
+                (compile-form arg1 'stack nil)
+                (maybe-emit-clear-values arg1)
+                (emit 'checkcast +lisp-stream-class+)
+                (emit-push-constant-int 1)
+                (emit-push-nil)
+                (emit-invokevirtual +lisp-stream-class+ "readLine"
+                                    (list "Z" +lisp-object+) +lisp-object+)
+                (when target
+                  (emit-move-from-stack target)))
+               (t
+                (compile-function-call form target representation)))))
+      (2
+       (let* ((arg1 (%car args))
+              (type1 (derive-compiler-type arg1))
+              (arg2 (%cadr args)))
+         (cond ((and (compiler-subtypep type1 'stream) (null arg2))
+;;                 (format t "p2-read-line optimized case 2~%")
+                (compile-form arg1 'stack nil)
+                (maybe-emit-clear-values arg1)
+                (emit 'checkcast +lisp-stream-class+)
+                (emit-push-constant-int 0)
+                (emit-push-nil)
+                (emit-invokevirtual +lisp-stream-class+ "readLine"
+                                    (list "Z" +lisp-object+) +lisp-object+)
+                (when target
+                  (emit-move-from-stack target))
+                )
+               (t
+                (compile-function-call form target representation)))))
+      (t
+       (compile-function-call form target representation)))))
+
 (declaim (ftype (function (t) t) derive-type-aref))
 (defun derive-type-aref (form)
   (let* ((args (cdr form))
@@ -6374,7 +6416,8 @@
              ((THE TRULY-THE)
               (second form))
              (t
-              (let ((type (ftype-result-type (proclaimed-ftype op))))
+              (let ((type (or (function-result-type op)
+                              (ftype-result-type (proclaimed-ftype op)))))
                 (if (eq type '*) t type))))))
         ((null form)
          'NULL)
@@ -8594,6 +8637,7 @@
   (install-p2-handler 'progv               'p2-progv)
   (install-p2-handler 'puthash             'p2-puthash)
   (install-p2-handler 'quote               'p2-quote)
+  (install-p2-handler 'read-line           'p2-read-line)
   (install-p2-handler 'return-from         'p2-return-from)
   (install-p2-handler 'rplacd              'p2-rplacd)
   (install-p2-handler 'schar               'p2-char/schar)
