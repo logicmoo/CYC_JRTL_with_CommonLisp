@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.26 2005-08-12 16:43:25 piso Exp $
+;;; $Id: known-functions.lisp,v 1.27 2005-10-30 01:19:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package #:system)
+
+(require '#:compiler-types)
 
 (declaim (ftype (function * symbol) copy-symbol gensym))
 (declaim (ftype (function * symbol) fdefinition-block-name))
@@ -232,5 +234,9 @@
 (declaim (ftype (function (t t t) t) set-function-info-value))
 
 (declaim (ftype (function * hash-table) make-hash-table))
+
+(defknown open * (or stream null))
+
+(defknown make-string-input-stream * stream)
 
 (provide '#:known-functions)
