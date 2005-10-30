@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.48 2005-10-14 16:58:38 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.49 2005-10-30 12:38:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,46 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;; Before loading this file, define "ansi-tests" as a logical pathname host
-;; (your path may vary):
-;;
-;;   (setf (logical-pathname-translations "ansi-tests")
-;;         '(("*.*.*" "/home/peter/gcl/ansi-tests/*.*")))
-
-#+(and allegro mswindows)
-(pushnew :windows *features*)
-#+(and clisp win32)
-(pushnew :windows *features*)
-#+(and lispworks win32)
-(pushnew :windows *features*)
-
-(unless (member "RT" *modules* :test #'string=)
-  (unless (ignore-errors (logical-pathname-translations "ansi-tests"))
-    (error "~S is not defined as a logical pathname host." "ansi-tests"))
-  (load (translate-logical-pathname "ansi-tests:rt-package.lsp"))
-  (load #+abcl (compile-file-if-needed "ansi-tests:rt.lsp")
-        ;; Force compilation to avoid fasl name conflict between SBCL and
-        ;; Allegro.
-        #-abcl (compile-file (translate-logical-pathname "ansi-tests:rt.lsp")))
-  (provide "RT"))
-
-(regression-test:rem-all-tests)
-
-(let ((*package* (find-package '#:regression-test)))
-  (export (find-symbol (string '#:*expected-failures*))))
-
-(setf regression-test:*expected-failures* nil)
-
-(unless (find-package '#:test)
-  (defpackage #:test (:use #:cl #:regression-test)))
+(load "test-utilities.lisp")
 
 (in-package #:test)
-
-(defmacro signals-error (form error-name)
-  `(locally (declare (optimize safety))
-     (handler-case ,form
-     (error (c) (typep c ,error-name))
-     (:no-error (&rest ignored) (declare (ignore ignored)) nil))))
 
 (defun check-physical-pathname (pathname expected-directory expected-name expected-type)
   (let* ((directory (pathname-directory pathname))

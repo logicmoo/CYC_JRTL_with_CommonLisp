@@ -16,40 +16,10 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;; Before loading this file, define "ansi-tests" as a logical pathname host
-;; (your path may vary):
-;;
-;;   (setf (logical-pathname-translations "ansi-tests")
-;;         '(("*.*.*" "/home/peter/gcl/ansi-tests/*.*")))
+#+sbcl
+(require '#:sb-posix)
 
-#+:sbcl (require '#:sb-posix)
-
-#+(and allegro mswindows)
-(pushnew :windows *features*)
-#+(and clisp win32)
-(pushnew :windows *features*)
-#+(and lispworks win32)
-(pushnew :windows *features*)
-
-(unless (member "RT" *modules* :test #'string=)
-  (unless (ignore-errors (logical-pathname-translations "ansi-tests"))
-    (error "~S is not defined as a logical pathname host." "ansi-tests"))
-  (load "ansi-tests:rt-package.lsp")
-  (load #+abcl (compile-file-if-needed "ansi-tests:rt.lsp")
-        ;; Force compilation to avoid fasl name conflict between SBCL and
-        ;; Allegro.
-        #-abcl (compile-file "ansi-tests:rt.lsp"))
-  (provide "RT"))
-
-(regression-test:rem-all-tests)
-
-(let ((*package* (find-package '#:regression-test)))
-  (export (find-symbol (string '#:*expected-failures*))))
-
-(setf regression-test:*expected-failures* nil)
-
-(unless (find-package '#:test)
-  (defpackage #:test (:use #:cl #:regression-test)))
+(load "test-utilities.lisp")
 
 (in-package #:test)
 

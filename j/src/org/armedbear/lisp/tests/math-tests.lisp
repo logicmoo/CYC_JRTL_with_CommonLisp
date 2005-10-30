@@ -1,7 +1,7 @@
 ;;; math-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: math-tests.lisp,v 1.6 2005-10-30 11:31:13 piso Exp $
+;;; $Id: math-tests.lisp,v 1.7 2005-10-30 12:36:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,23 +19,7 @@
 
 ;;; Some of these tests are based on tests in the CLISP test suite.
 
-(unless (member "RT" *modules* :test #'string=)
-  (load "rt-package.lisp")
-  (load #+abcl (compile-file-if-needed "rt.lisp")
-        ;; Force compilation to avoid fasl name conflict between SBCL and
-        ;; Allegro.
-        #-abcl (compile-file "rt.lisp"))
-  (provide "RT"))
-
-;; FIXME
 (load "test-utilities.lisp")
-
-(regression-test:rem-all-tests)
-
-(setf regression-test:*expected-failures* nil)
-
-(unless (find-package '#:test)
-  (defpackage #:test (:use #:cl #:regression-test)))
 
 (in-package #:test)
 
