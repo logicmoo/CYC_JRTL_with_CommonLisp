@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.9 2005-08-14 23:21:57 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.10 2005-10-30 01:19:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -121,6 +121,8 @@
 (defun compiler-subtypep (compiler-type typespec)
   (cond ((eq typespec t)
          t)
+        ((eq compiler-type typespec)
+         t)
         ((eq typespec 'STRING)
          (memq compiler-type '(STRING SIMPLE-STRING)))
         ((integer-type-p compiler-type)
@@ -129,9 +131,7 @@
 (defvar *function-result-types* (make-hash-table :test 'equal))
 
 (defun function-result-type (name)
-  (if (symbolp name)
-      (get name 'function-result-type)
-      (gethash-2op-1ret name (the hash-table *function-result-types*))))
+  (gethash-2op-1ret name (the hash-table *function-result-types*)))
 
 (defun set-function-result-type (name result-type)
   (setf (gethash name (the hash-table *function-result-types*)) result-type))
