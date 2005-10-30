@@ -1,7 +1,7 @@
 ;;; test-utilities.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: test-utilities.lisp,v 1.5 2005-10-30 11:30:49 piso Exp $
+;;; $Id: test-utilities.lisp,v 1.6 2005-10-30 11:36:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 
 (in-package #:regression-test)
 
-(export '(signals-error with-registered-exception))
+(export '(signals-error))
 
 (defmacro signals-error (form error-name)
   `(locally (declare (optimize safety))
