@@ -1,7 +1,7 @@
 ;;; math-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: math-tests.lisp,v 1.5 2005-10-21 12:13:09 piso Exp $
+;;; $Id: math-tests.lisp,v 1.6 2005-10-30 11:31:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,14 +20,7 @@
 ;;; Some of these tests are based on tests in the CLISP test suite.
 
 (unless (member "RT" *modules* :test #'string=)
-;;   (unless (ignore-errors (logical-pathname-translations "ansi-tests"))
-;;     (error "~S is not defined as a logical pathname host." "ansi-tests"))
-;;   (load "ansi-tests:rt-package.lsp")
   (load "rt-package.lisp")
-;;   (load #+abcl (compile-file-if-needed "ansi-tests:rt.lsp")
-;;         ;; Force compilation to avoid fasl name conflict between SBCL and
-;;         ;; Allegro.
-;;         #-abcl (compile-file "ansi-tests:rt.lsp"))
   (load #+abcl (compile-file-if-needed "rt.lisp")
         ;; Force compilation to avoid fasl name conflict between SBCL and
         ;; Allegro.
@@ -38,9 +31,6 @@
 (load "test-utilities.lisp")
 
 (regression-test:rem-all-tests)
-
-(let ((*package* (find-package '#:regression-test)))
-  (export (find-symbol (string '#:*expected-failures*))))
 
 (setf regression-test:*expected-failures* nil)
 
@@ -392,7 +382,7 @@
 (deftest log.4
   (log 17.0 10.0)
   #+(and abcl java-1.4)               1.2304488
-  #+(and abcl (or java-1.5 java 1.6)) 1.230449
+  #+(and abcl (or java-1.5 java-1.6)) 1.230449
   #+(or cmu sbcl)                     1.2304488
   #+(or allegro clisp)                1.230449
   #+lispworks                         #.(log 17d0 10d0))
