@@ -1,7 +1,7 @@
 ;;; test-utilities.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: test-utilities.lisp,v 1.4 2005-10-30 09:47:33 asimon Exp $
+;;; $Id: test-utilities.lisp,v 1.5 2005-10-30 11:30:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,10 +30,3 @@
      (handler-case ,form
        (error (c) (typep c ,error-name))
        (:no-error (&rest ignored) (declare (ignore ignored)) nil))))
-
-(defmacro with-registered-exception (exception condition &body body)
-  `(unwind-protect
-       (progn 
-         (java:register-java-exception ,exception ,condition)
-         ,@body)
-    (java:unregister-java-exception ,exception)))

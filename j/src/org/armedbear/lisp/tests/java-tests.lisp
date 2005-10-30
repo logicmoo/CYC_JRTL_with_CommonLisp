@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.12 2005-10-30 09:49:40 asimon Exp $
+;;; $Id: java-tests.lisp,v 1.13 2005-10-30 11:30:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -52,6 +52,14 @@
 (load "jl-config.cl")
 #+allegro
 (or (jlinker-query) (jlinker-init))
+
+#+abcl
+(defmacro with-registered-exception (exception condition &body body)
+  `(unwind-protect
+       (progn
+         (java:register-java-exception ,exception ,condition)
+         ,@body)
+    (java:unregister-java-exception ,exception)))
 
 #+abcl
 (deftest java-object.1
@@ -247,25 +255,25 @@
 
 #+abcl
 (deftest unregister-java-exception.1
-  (progn 
+  (progn
     (define-condition throwable (java-exception) ())
     (register-java-exception "java.lang.Throwable" 'throwable)
     (unregister-java-exception "java.lang.Throwable"))
   t)
-    
+
 #+abcl
 (deftest unregister-java-exception.2
   (unregister-java-exception "java.lang.Throwable")
   nil)
-    
+
 
 
 #+abcl
 (deftest register-java-exception.1
-  (progn 
+  (progn
     (define-condition throwable (java-exception) ())
     (with-registered-exception "java.lang.Throwable" 'throwable
-      (signals-error 
+      (signals-error
        (jnew (jconstructor "java.lang.String" "java.lang.String")
              (make-immediate-object nil :ref))
        'throwable)))
@@ -273,44 +281,44 @@
 
 #+abcl
 (deftest register-java-exception.2
-  (progn 
+  (progn
     (define-condition throwable (java-exception) ())
     (with-registered-exception "java.lang.Throwable" 'throwable
-      (signals-error 
+      (signals-error
        (jnew (jconstructor "java.lang.String" "java.lang.String") 42)
        'throwable)))
   t)
 
 #+abcl
 (deftest register-java-exception.3
-  (progn 
+  (progn
     (define-condition throwable (java-exception) ())
     (with-registered-exception "java.lang.Throwable" 'throwable
-      (signals-error 
+      (signals-error
        (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
        'throwable)))
   t)
 
 #+abcl
 (deftest register-java-exception.4
-  (progn 
+  (progn
     (define-condition throwable (java-exception) ())
     (define-condition illegal-argument-exception (java-exception) ())
     (with-registered-exception "java.lang.Throwable" 'throwable
       (with-registered-exception "java.lang.IllegalArgumentException" 'illegal-argument-exception
-        (signals-error 
+        (signals-error
          (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
          'throwable))))
   nil)
 
 #+abcl
 (deftest register-java-exception.5
-  (progn 
+  (progn
     (define-condition throwable (java-exception) ())
     (define-condition illegal-argument-exception (java-exception) ())
     (with-registered-exception "java.lang.Throwable" 'throwable
       (with-registered-exception "java.lang.IllegalArgumentException" 'illegal-argument-exception
-        (signals-error 
+        (signals-error
          (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
          'illegal-argument-exception))))
   t)
