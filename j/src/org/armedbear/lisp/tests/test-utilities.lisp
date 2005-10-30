@@ -1,7 +1,7 @@
 ;;; test-utilities.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: test-utilities.lisp,v 1.6 2005-10-30 11:36:45 piso Exp $
+;;; $Id: test-utilities.lisp,v 1.7 2005-10-30 12:34:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,23 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (unless (find-package '#:regression-test)
-    (load "rt-package.lisp")))
+#+(and allegro mswindows)
+(pushnew :windows *features*)
+#+(and clisp win32)
+(pushnew :windows *features*)
+#+(and lispworks win32)
+(pushnew :windows *features*)
+
+(unless (member "RT" *modules* :test #'string=)
+  (load "rt-package.lisp")
+  (load #+abcl (compile-file-if-needed "rt.lisp")
+        ;; Force compilation to avoid fasl name conflict between SBCL and
+        ;; Allegro.
+        #-abcl (compile-file "rt.lisp"))
+  (provide "RT"))
+
+(unless (find-package '#:test)
+  (defpackage #:test (:use #:cl #:regression-test)))
 
 (in-package #:regression-test)
 
@@ -30,3 +44,7 @@
      (handler-case ,form
        (error (c) (typep c ,error-name))
        (:no-error (&rest ignored) (declare (ignore ignored)) nil))))
+
+(rem-all-tests)
+
+(setf *expected-failures* nil)
