@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.63 2005-10-27 17:30:40 piso Exp $
+;;; $Id: compile-system.lisp,v 1.64 2005-10-30 01:20:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
 
 (defun grovel-java-definitions-in-file (file out)
   (with-open-file (in file)
+    (declare (type stream in))
     (let ((system-package (find-package "SYSTEM"))
           (line-number 1))
       (loop
