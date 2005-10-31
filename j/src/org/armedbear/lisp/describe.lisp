@@ -1,7 +1,7 @@
 ;;; describe.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: describe.lisp,v 1.6 2005-10-24 21:12:58 piso Exp $
+;;; $Id: describe.lisp,v 1.7 2005-10-31 04:00:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -91,16 +91,51 @@
 
 (defmethod describe-object ((object pathname) stream)
   (format stream "~S is an object of type ~S:~%" object (type-of object))
-  (format stream " HOST         ~S~%" (pathname-host object))
-  (format stream " DEVICE       ~S~%" (pathname-device object))
-  (format stream " DIRECTORY    ~S~%" (pathname-directory object))
-  (format stream " NAME         ~S~%" (pathname-name object))
-  (format stream " TYPE         ~S~%" (pathname-type object))
-  (format stream " VERSION      ~S~%" (pathname-version object)))
+  (format stream "  HOST         ~S~%" (pathname-host object))
+  (format stream "  DEVICE       ~S~%" (pathname-device object))
+  (format stream "  DIRECTORY    ~S~%" (pathname-directory object))
+  (format stream "  NAME         ~S~%" (pathname-name object))
+  (format stream "  TYPE         ~S~%" (pathname-type object))
+  (format stream "  VERSION      ~S~%" (pathname-version object)))
+
+(defun slot-value-or-default (object slot-name)
+  (if (slot-boundp object slot-name)
+      (slot-value object slot-name)
+      +slot-unbound+))
 
 (defmethod describe-object ((object standard-object) stream)
-  (%describe-object object stream)
-  (values))
+  (let* ((class (class-of object))
+         (slotds (class-slots class))
+         (max-slot-name-length 0)
+         (instance-slotds ())
+         (class-slotds ()))
+    (format stream "~S is an instance of ~S.~%" object class)
+    (dolist (slotd slotds)
+      (let* ((name (%slot-definition-name slotd))
+             (length (length (symbol-name name))))
+        (when (> length max-slot-name-length)
+          (setf max-slot-name-length length)))
+      (case (%slot-definition-allocation slotd)
+        (:instance (push slotd instance-slotds))
+        (:class  (push slotd class-slotds))))
+    (setf max-slot-name-length  (min (+ max-slot-name-length 3) 30))
+    (flet ((describe-slot (name value)
+             (format stream
+                     "~&  ~A~VT  ~S"
+                     name max-slot-name-length value)))
+      (when instance-slotds
+        (format stream "The following slots have :INSTANCE allocation:~%")
+        (dolist (slotd (nreverse instance-slotds))
+          (describe-slot
+           (%slot-definition-name slotd)
+           (slot-value-or-default object (%slot-definition-name slotd)))))
+      (when class-slotds
+        (format stream "The following slots have :CLASS allocation:~%")
+        (dolist (slotd (nreverse class-slotds))
+          (describe-slot
+           (%slot-definition-name slotd)
+           (slot-value-or-default object (%slot-definition-name slotd)))))))
+    (values))
 
 (defmethod describe-object ((object java:java-object) stream)
   (java:describe-java-object object stream))
