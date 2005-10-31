@@ -2,7 +2,7 @@
  * JavaException.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: JavaException.java,v 1.2 2005-10-28 17:20:13 piso Exp $
+ * $Id: JavaException.java,v 1.3 2005-10-31 04:02:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,12 +72,12 @@ public class JavaException extends LispError
     private static final Primitive JAVA_EXCEPTION_CAUSE =
         new Primitive(Symbol.JAVA_EXCEPTION_CAUSE, "java-exception",
 "Returns the cause of JAVA-EXCEPTION. (The cause is the Java Throwable\n" +
-"object that caused JAVA-EXCEPTION to be signalled.)")
+"  object that caused JAVA-EXCEPTION to be signalled.)")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return ((JavaException)arg).getInstanceSlotValue(Symbol.FORMAT_CONTROL);
+                return ((JavaException)arg).getInstanceSlotValue(Symbol.CAUSE);
             }
             catch (ClassCastException e) {
                 return signalTypeError(arg, Symbol.JAVA_EXCEPTION);
