@@ -2,7 +2,7 @@
  * PrintNotReadable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: PrintNotReadable.java,v 1.11 2005-10-23 16:39:49 piso Exp $
+ * $Id: PrintNotReadable.java,v 1.12 2005-10-31 12:24:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,11 @@ package org.armedbear.lisp;
 
 public class PrintNotReadable extends LispError
 {
-    public final LispObject object;
-
     public PrintNotReadable(LispObject initArgs) throws ConditionThrowable
     {
-        super(initArgs);
-        LispObject object = NIL;
+        super(StandardClass.PRINT_NOT_READABLE);
+        super.initialize(initArgs);
+        LispObject object = null;
         while (initArgs != NIL) {
             LispObject first = initArgs.car();
             initArgs = initArgs.cdr();
@@ -39,7 +38,8 @@ public class PrintNotReadable extends LispError
                 break;
             }
         }
-        this.object = object;
+        if (object != null)
+            setInstanceSlotValue(Symbol.OBJECT, object);
     }
 
     public LispObject typeOf()
@@ -63,8 +63,15 @@ public class PrintNotReadable extends LispError
 
     public String getMessage()
     {
-        StringBuffer sb = new StringBuffer();
-        if (object != NIL) {
+        FastStringBuffer sb = new FastStringBuffer();
+        LispObject object = UNBOUND_VALUE;
+        try {
+            object = getInstanceSlotValue(Symbol.OBJECT);
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
+        if (object != UNBOUND_VALUE) {
             final LispThread thread = LispThread.currentThread();
             final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
             thread.bindSpecial(Symbol.PRINT_READABLY, NIL);
@@ -91,10 +98,10 @@ public class PrintNotReadable extends LispError
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return ((PrintNotReadable)arg).object;
+                return ((PrintNotReadable)arg).getInstanceSlotValue(Symbol.OBJECT);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.PRINT_NOT_READABLE));
+                return signalTypeError(arg, Symbol.PRINT_NOT_READABLE);
             }
         }
     };
