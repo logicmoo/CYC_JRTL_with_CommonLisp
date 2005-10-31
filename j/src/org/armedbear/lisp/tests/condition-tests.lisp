@@ -37,4 +37,74 @@
                #+sbcl    'sb-kernel::object)
   nil)
 
+(deftest simple-type-error.1
+  (slot-boundp (make-condition 'simple-type-error)
+               #+abcl    'system::datum
+               #+allegro 'excl::datum
+               #+sbcl    'sb-kernel::datum)
+  nil)
+
+(deftest simple-type-error.2
+  (slot-boundp (make-condition 'simple-type-error)
+               #+abcl    'system::expected-type
+               #+allegro 'excl::expected-type
+               #+sbcl    'sb-kernel::expected-type)
+  nil)
+
+(deftest simple-type-error.3
+  (slot-boundp (make-condition 'simple-type-error)
+               #+abcl    'system::format-control
+               #+allegro 'excl::format-control
+               #+sbcl    'sb-kernel:format-control)
+  nil)
+
+(deftest simple-type-error.4
+  (slot-boundp (make-condition 'simple-type-error)
+               #+abcl    'system::format-arguments
+               #+allegro 'excl::format-arguments
+               #+sbcl    'sb-kernel::format-arguments)
+  t)
+
+(deftest simple-type-error.5
+  (slot-value (make-condition 'simple-type-error)
+              #+abcl    'system::format-arguments
+              #+allegro 'excl::format-arguments
+              #+sbcl    'sb-kernel::format-arguments)
+  nil)
+
+(deftest simple-type-error.6
+  (slot-boundp (make-instance 'simple-type-error)
+               #+abcl    'system::datum
+               #+allegro 'excl::datum
+               #+sbcl    'sb-kernel::datum)
+  nil)
+
+(deftest simple-type-error.7
+  (slot-boundp (make-instance 'simple-type-error)
+               #+abcl    'system::expected-type
+               #+allegro 'excl::expected-type
+               #+sbcl    'sb-kernel::expected-type)
+  nil)
+
+(deftest simple-type-error.8
+  (slot-boundp (make-instance 'simple-type-error)
+               #+abcl    'system::format-control
+               #+allegro 'excl::format-control
+               #+sbcl    'sb-kernel:format-control)
+  nil)
+
+(deftest simple-type-error.9
+  (slot-boundp (make-instance 'simple-type-error)
+               #+abcl    'system::format-arguments
+               #+allegro 'excl::format-arguments
+               #+sbcl    'sb-kernel::format-arguments)
+  t)
+
+(deftest simple-type-error.10
+  (slot-value (make-instance 'simple-type-error)
+              #+abcl    'system::format-arguments
+              #+allegro 'excl::format-arguments
+              #+sbcl    'sb-kernel::format-arguments)
+  nil)
+
 (do-tests)
