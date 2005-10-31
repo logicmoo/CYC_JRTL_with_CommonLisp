@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleCondition.java,v 1.12 2005-06-22 17:46:58 piso Exp $
+ * $Id: SimpleCondition.java,v 1.13 2005-10-31 04:04:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,9 +71,9 @@ public class SimpleCondition extends Condition
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof Condition)
-                return ((Condition)arg).getFormatControl();
-            return signal(new TypeError(arg, Symbol.CONDITION));
+            if (arg instanceof StandardObject)
+                return ((StandardObject)arg).getInstanceSlotValue(Symbol.FORMAT_CONTROL);
+            return signalTypeError(arg, Symbol.STANDARD_OBJECT);
         }
     };
 
@@ -83,9 +83,9 @@ public class SimpleCondition extends Condition
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof Condition)
-                return ((Condition)arg).getFormatArguments();
-            return signal(new TypeError(arg, Symbol.CONDITION));
+            if (arg instanceof StandardObject)
+                return ((StandardObject)arg).getInstanceSlotValue(Symbol.FORMAT_ARGUMENTS);
+            return signalTypeError(arg, Symbol.STANDARD_OBJECT);
         }
     };
 }
