@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShell.java,v 1.90 2005-10-28 13:21:26 piso Exp $
+ * $Id: LispShell.java,v 1.91 2005-10-31 17:47:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -415,10 +415,10 @@ public class LispShell extends Shell
                                 new Position(lineBeforeLastPrompt,
                                              lineBeforeLastPrompt.length());
                         }
-                        if (isBusy())
-                            setBusy(false);
                     }
                 }
+                if (isBusy())
+                    setBusy(false);
                 updateDisplayInAllFrames();
                 resetUndo();
             }
@@ -432,6 +432,8 @@ public class LispShell extends Shell
             public void run()
             {
                 appendString(s);
+                if (isBusy())
+                    setBusy(false);
                 updateDisplayInAllFrames();
                 resetUndo();
             }
