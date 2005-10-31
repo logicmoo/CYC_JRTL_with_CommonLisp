@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: TypeError.java,v 1.31 2005-10-23 16:39:49 piso Exp $
+ * $Id: TypeError.java,v 1.32 2005-10-31 12:25:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,7 +197,7 @@ public class TypeError extends LispError
                 return ((TypeError)arg).getDatum();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.TYPE_ERROR));
+                return signalTypeError(arg, Symbol.TYPE_ERROR);
             }
         }
     };
@@ -212,7 +212,7 @@ public class TypeError extends LispError
                 return ((TypeError)arg).getExpectedType();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.TYPE_ERROR));
+                return signalTypeError(arg, Symbol.TYPE_ERROR);
             }
         }
     };
