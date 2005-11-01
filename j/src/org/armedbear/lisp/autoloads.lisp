@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.197 2005-10-27 23:07:18 piso Exp $
+;;; $Id: autoloads.lisp,v 1.198 2005-11-01 09:52:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,8 +94,7 @@
             %defgeneric
             canonicalize-direct-superclasses)
           "clos")
-(export '(ensure-class subclassp make-condition %defgeneric
-          canonicalize-direct-superclasses)
+(export '(ensure-class subclassp %defgeneric canonicalize-direct-superclasses)
         '#:system)
 (autoload '(inspect istep) "inspect")
 (autoload 'enough-namestring)
