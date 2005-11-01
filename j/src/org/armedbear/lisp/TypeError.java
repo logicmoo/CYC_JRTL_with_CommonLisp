@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: TypeError.java,v 1.32 2005-10-31 12:25:43 piso Exp $
+ * $Id: TypeError.java,v 1.33 2005-11-01 01:35:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,11 +28,9 @@ public class TypeError extends LispError
     public TypeError() throws ConditionThrowable
     {
         super(StandardClass.TYPE_ERROR);
-        setDatum(NIL);
-        setExpectedType(NIL);
     }
 
-    protected TypeError(LispClass cls)
+    protected TypeError(LispClass cls) throws ConditionThrowable
     {
         super(cls);
     }
@@ -54,22 +52,28 @@ public class TypeError extends LispError
     protected void initialize(LispObject initArgs) throws ConditionThrowable
     {
         super.initialize(initArgs);
-        LispObject datum = NIL;
-        LispObject expectedType = NIL;
+        LispObject datum = null;
+        LispObject expectedType = null;
         LispObject first, second;
         while (initArgs != NIL) {
             first = initArgs.car();
             initArgs = initArgs.cdr();
             second = initArgs.car();
             initArgs = initArgs.cdr();
-            if (first == Keyword.DATUM)
-                datum = second;
-            else if (first == Keyword.EXPECTED_TYPE)
-                expectedType = second;
+            if (first == Keyword.DATUM) {
+                if (datum == null)
+                    datum = second;
+            } else if (first == Keyword.EXPECTED_TYPE) {
+                if (expectedType == null)
+                    expectedType = second;
+            }
         }
-        setDatum(datum);
-        setExpectedType(expectedType);
-        this.typeString = expectedType.writeToString();
+        if (datum != null)
+            setDatum(datum);
+        if (expectedType != null) {
+            setExpectedType(expectedType);
+            this.typeString = expectedType.writeToString();
+        }
     }
 
     public TypeError(String message) throws ConditionThrowable

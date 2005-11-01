@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.39 2005-10-28 16:38:09 piso Exp $
+ * $Id: StandardClass.java,v 1.40 2005-11-01 01:34:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -241,9 +241,10 @@ public class StandardClass extends SlotClass
         CONDITION.setCPL(CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
         CONDITION.setDirectSlotDefinitions(
             list2(new SlotDefinition(Symbol.FORMAT_CONTROL,
-                                     list1(PACKAGE_CL.intern("SIMPLE-CONDITION-FORMAT-CONTROL"))),
+                                     list1(Symbol.SIMPLE_CONDITION_FORMAT_CONTROL)),
                   new SlotDefinition(Symbol.FORMAT_ARGUMENTS,
-                                     list1(PACKAGE_CL.intern("SIMPLE-CONDITION-FORMAT-ARGUMENTS")))));
+                                     list1(Symbol.SIMPLE_CONDITION_FORMAT_ARGUMENTS),
+                                     NIL)));
         CONTROL_ERROR.setCPL(CONTROL_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                              STANDARD_OBJECT, BuiltInClass.CLASS_T);
         DIVISION_BY_ZERO.setCPL(DIVISION_BY_ZERO, ARITHMETIC_ERROR, ERROR,

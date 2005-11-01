@@ -2,7 +2,7 @@
  * CellError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: CellError.java,v 1.7 2005-10-23 16:39:48 piso Exp $
+ * $Id: CellError.java,v 1.8 2005-11-01 01:41:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 public class CellError extends LispError
 {
-    protected CellError(LispClass cls)
+    protected CellError(LispClass cls) throws ConditionThrowable
     {
         super(cls);
     }

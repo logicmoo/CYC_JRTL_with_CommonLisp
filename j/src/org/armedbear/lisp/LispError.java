@@ -2,7 +2,7 @@
  * LispError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispError.java,v 1.14 2005-06-22 14:00:13 piso Exp $
+ * $Id: LispError.java,v 1.15 2005-11-01 01:42:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,11 @@ package org.armedbear.lisp;
 
 public class LispError extends SeriousCondition
 {
-    public LispError()
+    public LispError() throws ConditionThrowable
     {
     }
 
-    protected LispError(LispClass cls)
+    protected LispError(LispClass cls) throws ConditionThrowable
     {
         super(cls);
     }

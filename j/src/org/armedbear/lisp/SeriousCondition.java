@@ -2,7 +2,7 @@
  * SeriousCondition.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SeriousCondition.java,v 1.5 2005-06-22 13:59:39 piso Exp $
+ * $Id: SeriousCondition.java,v 1.6 2005-11-01 01:42:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,11 @@ package org.armedbear.lisp;
 
 public class SeriousCondition extends Condition
 {
-    public SeriousCondition()
+    public SeriousCondition() throws ConditionThrowable
     {
     }
 
-    protected SeriousCondition(LispClass cls)
+    protected SeriousCondition(LispClass cls) throws ConditionThrowable
     {
         super(cls);
     }

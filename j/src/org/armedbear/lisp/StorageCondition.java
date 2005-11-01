@@ -2,7 +2,7 @@
  * StorageCondition.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: StorageCondition.java,v 1.3 2005-06-21 18:42:15 piso Exp $
+ * $Id: StorageCondition.java,v 1.4 2005-11-01 01:41:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 public class StorageCondition extends SeriousCondition
 {
-    public StorageCondition()
+    public StorageCondition() throws ConditionThrowable
     {
     }
 

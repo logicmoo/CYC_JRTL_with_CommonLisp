@@ -2,7 +2,7 @@
  * WrongNumberOfArgumentsException.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: WrongNumberOfArgumentsException.java,v 1.9 2005-06-22 18:20:50 piso Exp $
+ * $Id: WrongNumberOfArgumentsException.java,v 1.10 2005-11-01 01:38:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ public final class WrongNumberOfArgumentsException extends ProgramError
     private final Operator operator;
 
     public WrongNumberOfArgumentsException(Operator operator)
+        throws ConditionThrowable
     {
         // This is really just an ordinary PROGRAM-ERROR, broken out into its
         // own Java class as a convenience for the implementation.
@@ -35,7 +36,8 @@ public final class WrongNumberOfArgumentsException extends ProgramError
 
     public String getMessage()
     {
-        StringBuffer sb = new StringBuffer("Wrong number of arguments");
+        FastStringBuffer sb =
+            new FastStringBuffer("Wrong number of arguments");
         LispObject lambdaName = operator.getLambdaName();
         if (lambdaName != null && lambdaName != NIL) {
             sb.append(" for ");

@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.43 2005-10-23 18:44:50 piso Exp $
+ * $Id: Condition.java,v 1.44 2005-11-01 01:32:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,29 +25,25 @@ public class Condition extends StandardObject
 {
     protected String message = null;
 
-    public Condition()
+    public Condition() throws ConditionThrowable
     {
         super(StandardClass.CONDITION);
         Debug.assertTrue(slots.length == 2);
-        slots[0] = NIL;
-        slots[1] = NIL;
+        setFormatArguments(NIL);
         message = null;
     }
 
-    protected Condition(LispClass cls)
+    protected Condition(LispClass cls) throws ConditionThrowable
     {
         super(cls);
         Debug.assertTrue(slots.length >= 2);
-        slots[0] = NIL;
-        slots[1] = NIL;
+        setFormatArguments(NIL);
         message = null;
     }
 
     public Condition(LispClass cls, int length)
     {
         super(cls, length);
-//         super(cls);
-//         Debug.assertTrue(length == cls.getLayoutLength());
         message = null;
     }
 
@@ -60,20 +56,26 @@ public class Condition extends StandardObject
 
     protected void initialize(LispObject initArgs) throws ConditionThrowable
     {
-        LispObject control = NIL;
-        LispObject arguments = NIL;
+        LispObject control = null;
+        LispObject arguments = null;
         LispObject first, second;
         while (initArgs instanceof Cons) {
             first = initArgs.car();
             initArgs = initArgs.cdr();
             second = initArgs.car();
             initArgs = initArgs.cdr();
-            if (first == Keyword.FORMAT_CONTROL)
-                control = second;
-            else if (first == Keyword.FORMAT_ARGUMENTS)
-                arguments = second;
+            if (first == Keyword.FORMAT_CONTROL) {
+                if (control == null)
+                    control = second;
+            } else if (first == Keyword.FORMAT_ARGUMENTS) {
+                if (arguments == null)
+                    arguments = second;
+            }
         }
-        setFormatControl(control);
+        if (control != null)
+            setFormatControl(control);
+        if (arguments == null)
+            arguments = NIL;
         setFormatArguments(arguments);
     }
 

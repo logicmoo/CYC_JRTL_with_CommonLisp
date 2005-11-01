@@ -2,7 +2,7 @@
  * Warning.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Warning.java,v 1.4 2005-06-21 18:42:15 piso Exp $
+ * $Id: Warning.java,v 1.5 2005-11-01 01:37:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 public class Warning extends Condition
 {
-    protected Warning()
+    protected Warning() throws ConditionThrowable
     {
     }
 
