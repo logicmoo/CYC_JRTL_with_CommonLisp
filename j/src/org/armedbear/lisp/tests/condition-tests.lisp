@@ -37,10 +37,19 @@
                #+sbcl    'sb-kernel::object)
   nil)
 
+(deftest type-error.1
+  (type-error-datum (make-instance 'type-error :datum 42))
+  42)
+
+(deftest type-error.2
+  (type-error-expected-type (make-instance 'type-error :expected-type 'symbol))
+  symbol)
+
 (deftest simple-type-error.1
   (slot-boundp (make-condition 'simple-type-error)
                #+abcl    'system::datum
                #+allegro 'excl::datum
+               #+clisp   'system::$datum
                #+sbcl    'sb-kernel::datum)
   nil)
 
@@ -48,6 +57,7 @@
   (slot-boundp (make-condition 'simple-type-error)
                #+abcl    'system::expected-type
                #+allegro 'excl::expected-type
+               #+clisp   'system::$expected-type
                #+sbcl    'sb-kernel::expected-type)
   nil)
 
@@ -55,13 +65,21 @@
   (slot-boundp (make-condition 'simple-type-error)
                #+abcl    'system::format-control
                #+allegro 'excl::format-control
+               #+clisp   'system::$format-control
                #+sbcl    'sb-kernel:format-control)
+  #-clisp nil
+  #+clisp t)
+
+#+clisp
+(deftest simple-type-error.3a
+  (simple-condition-format-control (make-condition 'simple-type-error))
   nil)
 
 (deftest simple-type-error.4
   (slot-boundp (make-condition 'simple-type-error)
                #+abcl    'system::format-arguments
                #+allegro 'excl::format-arguments
+               #+clisp   'system::$format-arguments
                #+sbcl    'sb-kernel::format-arguments)
   t)
 
@@ -69,6 +87,7 @@
   (slot-value (make-condition 'simple-type-error)
               #+abcl    'system::format-arguments
               #+allegro 'excl::format-arguments
+              #+clisp   'system::$format-arguments
               #+sbcl    'sb-kernel::format-arguments)
   nil)
 
@@ -76,6 +95,7 @@
   (slot-boundp (make-instance 'simple-type-error)
                #+abcl    'system::datum
                #+allegro 'excl::datum
+               #+clisp   'system::$datum
                #+sbcl    'sb-kernel::datum)
   nil)
 
@@ -83,6 +103,7 @@
   (slot-boundp (make-instance 'simple-type-error)
                #+abcl    'system::expected-type
                #+allegro 'excl::expected-type
+               #+clisp   'system::$expected-type
                #+sbcl    'sb-kernel::expected-type)
   nil)
 
@@ -90,13 +111,21 @@
   (slot-boundp (make-instance 'simple-type-error)
                #+abcl    'system::format-control
                #+allegro 'excl::format-control
+               #+clisp   'system::$format-control
                #+sbcl    'sb-kernel:format-control)
+  #-clisp nil
+  #+clisp t)
+
+#+clisp
+(deftest simple-type-error.8a
+  (simple-condition-format-control (make-instance 'simple-type-error))
   nil)
 
 (deftest simple-type-error.9
   (slot-boundp (make-instance 'simple-type-error)
                #+abcl    'system::format-arguments
                #+allegro 'excl::format-arguments
+               #+clisp   'system::$format-arguments
                #+sbcl    'sb-kernel::format-arguments)
   t)
 
@@ -104,6 +133,7 @@
   (slot-value (make-instance 'simple-type-error)
               #+abcl    'system::format-arguments
               #+allegro 'excl::format-arguments
+              #+clisp   'system::$format-arguments
               #+sbcl    'sb-kernel::format-arguments)
   nil)
 
