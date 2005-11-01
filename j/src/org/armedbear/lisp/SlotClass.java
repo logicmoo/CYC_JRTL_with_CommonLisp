@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SlotClass.java,v 1.16 2005-11-01 16:39:33 piso Exp $
+ * $Id: SlotClass.java,v 1.17 2005-11-01 17:48:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,6 +72,11 @@ public class SlotClass extends LispClass
         this.slotDefinitions = slotDefinitions;
     }
 
+    public LispObject getDirectDefaultInitargs()
+    {
+        return directDefaultInitargs;
+    }
+
     public void setDirectDefaultInitargs(LispObject directDefaultInitargs)
     {
         this.directDefaultInitargs = directDefaultInitargs;
@@ -80,6 +85,22 @@ public class SlotClass extends LispClass
     public void setDefaultInitargs(LispObject defaultInitargs)
     {
         this.defaultInitargs = defaultInitargs;
+    }
+
+    private LispObject computeDefaultInitargs() throws ConditionThrowable
+    {
+        LispObject result = NIL;
+        LispObject cpl = getCPL();
+        while (cpl != NIL) {
+            LispClass c = (LispClass) cpl.car();
+            if (c instanceof StandardClass) {
+                LispObject obj = ((StandardClass)c).getDirectDefaultInitargs();
+                if (obj != NIL)
+                    result = Symbol.APPEND.execute(result, obj);
+            }
+            cpl = cpl.cdr();
+        }
+        return result;
     }
 
     public void finalizeClassLayout()
@@ -117,6 +138,7 @@ public class SlotClass extends LispClass
                 tail = tail.cdr();
             }
             setClassLayout(new Layout(this, instanceSlotNames, NIL));
+            setDefaultInitargs(computeDefaultInitargs());
             setFinalized(true);
         }
         catch (Throwable t) {
@@ -247,6 +269,24 @@ public class SlotClass extends LispClass
                 return second;
             }
             return signal(new TypeError(first, Symbol.STANDARD_CLASS));
+        }
+    };
+
+    // ### compute-class-default-initargs
+    private static final Primitive COMPUTE_CLASS_DEFAULT_INITARGS =
+        new Primitive("compute-class-default-initargs", PACKAGE_SYS, true)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            SlotClass c;
+            try {
+                c = (SlotClass) arg;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.STANDARD_CLASS);
+            }
+            return c.computeDefaultInitargs();
         }
     };
 }

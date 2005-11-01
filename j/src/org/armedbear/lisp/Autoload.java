@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.245 2005-10-28 16:37:29 piso Exp $
+ * $Id: Autoload.java,v 1.246 2005-11-01 17:48:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -577,6 +577,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "coerce-to-double-float", "FloatFunctions");
         autoload(PACKAGE_SYS, "coerce-to-single-float", "FloatFunctions");
+        autoload(PACKAGE_SYS, "compute-class-direct-slots", "SlotClass", true);
         autoload(PACKAGE_SYS, "condition-report", "Condition");
         autoload(PACKAGE_SYS, "create-new-file", "create_new_file");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
