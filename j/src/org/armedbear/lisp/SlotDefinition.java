@@ -2,7 +2,7 @@
  * SlotDefinition.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: SlotDefinition.java,v 1.4 2005-06-23 15:47:53 piso Exp $
+ * $Id: SlotDefinition.java,v 1.5 2005-11-01 00:58:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,26 @@ public final class SlotDefinition extends StandardObject
             slots[SlotDefinitionClass.SLOT_INDEX_INITARGS] =
                 new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName()));
             slots[SlotDefinitionClass.SLOT_INDEX_READERS] = readers;
-            slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION] = PACKAGE_KEYWORD.intern("INSTANCE");
+            slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION] = Keyword.INSTANCE;
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
+    }
+
+    public SlotDefinition(LispObject name, LispObject readers,
+                          LispObject initForm)
+    {
+        this();
+        try {
+            Debug.assertTrue(name instanceof Symbol);
+            slots[SlotDefinitionClass.SLOT_INDEX_NAME] = name;
+            slots[SlotDefinitionClass.SLOT_INDEX_INITFUNCTION] = NIL;
+            slots[SlotDefinitionClass.SLOT_INDEX_INITFORM] = initForm;
+            slots[SlotDefinitionClass.SLOT_INDEX_INITARGS] =
+                new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName()));
+            slots[SlotDefinitionClass.SLOT_INDEX_READERS] = readers;
+            slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION] = Keyword.INSTANCE;
         }
         catch (Throwable t) {
             Debug.trace(t);
@@ -59,7 +78,8 @@ public final class SlotDefinition extends StandardObject
 
     public String writeToString() throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer(Symbol.SLOT_DEFINITION.writeToString());
+        FastStringBuffer sb =
+            new FastStringBuffer(Symbol.SLOT_DEFINITION.writeToString());
         LispObject name = slots[SlotDefinitionClass.SLOT_INDEX_NAME];
         if (name != null && name != NIL) {
             sb.append(' ');
@@ -89,7 +109,7 @@ public final class SlotDefinition extends StandardObject
                 return ((SlotDefinition)arg).slots[SlotDefinitionClass.SLOT_INDEX_NAME];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SLOT_DEFINITION));
+                return signalTypeError(arg, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -107,7 +127,7 @@ public final class SlotDefinition extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SLOT_DEFINITION));
+                return signalTypeError(first, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -123,7 +143,7 @@ public final class SlotDefinition extends StandardObject
                 return ((SlotDefinition)arg).slots[SlotDefinitionClass.SLOT_INDEX_INITFUNCTION];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SLOT_DEFINITION));
+                return signalTypeError(arg, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -141,7 +161,7 @@ public final class SlotDefinition extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SLOT_DEFINITION));
+                return signalTypeError(first, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -157,7 +177,7 @@ public final class SlotDefinition extends StandardObject
                 return ((SlotDefinition)arg).slots[SlotDefinitionClass.SLOT_INDEX_INITFORM];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SLOT_DEFINITION));
+                return signalTypeError(arg, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -175,7 +195,7 @@ public final class SlotDefinition extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SLOT_DEFINITION));
+                return signalTypeError(first, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -191,7 +211,7 @@ public final class SlotDefinition extends StandardObject
                 return ((SlotDefinition)arg).slots[SlotDefinitionClass.SLOT_INDEX_INITARGS];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SLOT_DEFINITION));
+                return signalTypeError(arg, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -209,7 +229,7 @@ public final class SlotDefinition extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SLOT_DEFINITION));
+                return signalTypeError(first, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -225,7 +245,7 @@ public final class SlotDefinition extends StandardObject
                 return ((SlotDefinition)arg).slots[SlotDefinitionClass.SLOT_INDEX_READERS];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SLOT_DEFINITION));
+                return signalTypeError(arg, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -243,7 +263,7 @@ public final class SlotDefinition extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SLOT_DEFINITION));
+                return signalTypeError(first, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -259,7 +279,7 @@ public final class SlotDefinition extends StandardObject
                 return ((SlotDefinition)arg).slots[SlotDefinitionClass.SLOT_INDEX_WRITERS];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SLOT_DEFINITION));
+                return signalTypeError(arg, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -277,7 +297,7 @@ public final class SlotDefinition extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SLOT_DEFINITION));
+                return signalTypeError(first, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -293,7 +313,7 @@ public final class SlotDefinition extends StandardObject
                 return ((SlotDefinition)arg).slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SLOT_DEFINITION));
+                return signalTypeError(arg, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -311,7 +331,7 @@ public final class SlotDefinition extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SLOT_DEFINITION));
+                return signalTypeError(first, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -327,7 +347,7 @@ public final class SlotDefinition extends StandardObject
                 return ((SlotDefinition)arg).slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION_CLASS];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SLOT_DEFINITION));
+                return signalTypeError(arg, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -345,7 +365,7 @@ public final class SlotDefinition extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SLOT_DEFINITION));
+                return signalTypeError(first, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -360,7 +380,7 @@ public final class SlotDefinition extends StandardObject
                 return ((SlotDefinition)arg).slots[SlotDefinitionClass.SLOT_INDEX_LOCATION];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SLOT_DEFINITION));
+                return signalTypeError(arg, Symbol.SLOT_DEFINITION);
             }
         }
     };
@@ -377,7 +397,7 @@ public final class SlotDefinition extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.SLOT_DEFINITION));
+                return signalTypeError(first, Symbol.SLOT_DEFINITION);
             }
         }
     };
