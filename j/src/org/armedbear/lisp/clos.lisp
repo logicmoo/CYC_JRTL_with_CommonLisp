@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.187 2005-11-01 16:37:23 piso Exp $
+;;; $Id: clos.lisp,v 1.188 2005-11-01 17:50:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -283,13 +283,6 @@
           (make-layout class (nreverse instance-slots) (nreverse shared-slots))))
   (setf (class-default-initargs class) (compute-class-default-initargs class))
   (setf (class-finalized-p class) t))
-
-(defun compute-class-default-initargs (class)
-  (let ((result ()))
-    (dolist (c (class-precedence-list class) result)
-      (let ((direct-default-initargs (class-direct-default-initargs c)))
-        (when direct-default-initargs
-          (setf result (append result direct-default-initargs)))))))
 
 ;;; Class precedence lists
 
