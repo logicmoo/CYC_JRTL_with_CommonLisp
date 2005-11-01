@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.186 2005-08-25 17:53:30 piso Exp $
+;;; $Id: clos.lisp,v 1.187 2005-11-01 16:37:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -285,8 +285,11 @@
   (setf (class-finalized-p class) t))
 
 (defun compute-class-default-initargs (class)
-  (mapappend #'class-direct-default-initargs
-             (class-precedence-list class)))
+  (let ((result ()))
+    (dolist (c (class-precedence-list class) result)
+      (let ((direct-default-initargs (class-direct-default-initargs c)))
+        (when direct-default-initargs
+          (setf result (append result direct-default-initargs)))))))
 
 ;;; Class precedence lists
 
