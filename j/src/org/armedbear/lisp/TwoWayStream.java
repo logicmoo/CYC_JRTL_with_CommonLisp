@@ -1,8 +1,8 @@
 /*
  * TwoWayStream.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.25 2004-11-03 15:39:02 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: TwoWayStream.java,v 1.26 2005-11-01 02:13:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ package org.armedbear.lisp;
 
 public class TwoWayStream extends Stream
 {
-    private final Stream in;
-    private final Stream out;
+    public final Stream in;
+    public final Stream out;
 
     public TwoWayStream(Stream in, Stream out)
     {
@@ -176,56 +176,69 @@ public class TwoWayStream extends Stream
         return T;
     }
 
-    public String writeToString()
+    public String writeToString() throws ConditionThrowable
     {
-        return unreadableString("TWO-WAY-STREAM");
+        return unreadableString(Symbol.TWO_WAY_STREAM);
     }
 
-    // ### make-two-way-stream
-    // input-stream output-stream => two-way-stream
+    // ### make-two-way-stream input-stream output-stream => two-way-stream
     private static final Primitive MAKE_TWO_WAY_STREAM =
-        new Primitive("make-two-way-stream", "input-stream output-stream")
+        new Primitive(Symbol.MAKE_TWO_WAY_STREAM, "input-stream output-stream")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            if (!(first instanceof Stream))
-                return signal(new TypeError(first, Symbol.STREAM));
-            if (!(second instanceof Stream))
-                return signal(new TypeError(second, Symbol.STREAM));
-            Stream in = (Stream) first;
+            final Stream in;
+            try {
+                in = (Stream) first;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(first, Symbol.STREAM);
+            }
+            final Stream out;
+            try {
+                out = (Stream) second;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.STREAM);
+            }
             if (!in.isInputStream())
-                return signal(new TypeError(in, "input stream"));
-            Stream out = (Stream) second;
+                return signalTypeError(in, list2(Symbol.SATISFIES,
+                                                 Symbol.INPUT_STREAM_P));
             if (!out.isOutputStream())
-                return signal(new TypeError(out, "output stream"));
+                return signalTypeError(out, list2(Symbol.SATISFIES,
+                                                  Symbol.OUTPUT_STREAM_P));
             return new TwoWayStream(in, out);
         }
     };
 
-    // ### two-way-stream-input-stream
-    // two-way-stream => input-stream
+    // ### two-way-stream-input-stream two-way-stream => input-stream
     private static final Primitive TWO_WAY_STREAM_INPUT_STREAM =
-        new Primitive("two-way-stream-input-stream", "two-way-stream")
+        new Primitive(Symbol.TWO_WAY_STREAM_INPUT_STREAM, "two-way-stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof TwoWayStream)
-                return ((TwoWayStream)arg).getInputStream();
-            return signal(new TypeError(arg, Symbol.TWO_WAY_STREAM));
+            try {
+                return ((TwoWayStream)arg).in;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.TWO_WAY_STREAM);
+            }
         }
     };
 
-    // ### two-way-stream-output-stream
-    // two-way-stream => output-stream
+    // ### two-way-stream-output-stream two-way-stream => output-stream
     private static final Primitive TWO_WAY_STREAM_OUTPUT_STREAM =
-        new Primitive("two-way-stream-output-stream", "two-way-stream")
+        new Primitive(Symbol.TWO_WAY_STREAM_OUTPUT_STREAM, "two-way-stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof TwoWayStream)
-                return ((TwoWayStream)arg).getOutputStream();
-            return signal(new TypeError(arg, Symbol.TWO_WAY_STREAM));
+            try {
+                return ((TwoWayStream)arg).out;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.TWO_WAY_STREAM);
+            }
         }
     };
 }
