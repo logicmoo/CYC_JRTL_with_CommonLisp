@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SlotClass.java,v 1.15 2005-07-16 14:44:03 piso Exp $
+ * $Id: SlotClass.java,v 1.16 2005-11-01 16:39:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,16 @@ public class SlotClass extends LispClass
     public void setSlotDefinitions(LispObject slotDefinitions)
     {
         this.slotDefinitions = slotDefinitions;
+    }
+
+    public void setDirectDefaultInitargs(LispObject directDefaultInitargs)
+    {
+        this.directDefaultInitargs = directDefaultInitargs;
+    }
+
+    public void setDefaultInitargs(LispObject defaultInitargs)
+    {
+        this.defaultInitargs = defaultInitargs;
     }
 
     public void finalizeClassLayout()
