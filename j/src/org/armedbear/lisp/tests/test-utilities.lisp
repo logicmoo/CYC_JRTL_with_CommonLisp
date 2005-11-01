@@ -1,7 +1,7 @@
 ;;; test-utilities.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: test-utilities.lisp,v 1.7 2005-10-30 12:34:27 piso Exp $
+;;; $Id: test-utilities.lisp,v 1.8 2005-11-01 00:56:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,11 +25,11 @@
 (pushnew :windows *features*)
 
 (unless (member "RT" *modules* :test #'string=)
-  (load "rt-package.lisp")
-  (load #+abcl (compile-file-if-needed "rt.lisp")
+  (load (merge-pathnames "rt-package.lisp" *load-truename*))
+  (load #+abcl (compile-file-if-needed (merge-pathnames "rt.lisp" *load-truename*))
         ;; Force compilation to avoid fasl name conflict between SBCL and
         ;; Allegro.
-        #-abcl (compile-file "rt.lisp"))
+        #-abcl (compile-file (merge-pathnames "rt.lisp" *load-truename*)))
   (provide "RT"))
 
 (unless (find-package '#:test)
