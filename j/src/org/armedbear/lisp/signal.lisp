@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: signal.lisp,v 1.13 2005-06-17 23:06:04 piso Exp $
+;;; $Id: signal.lisp,v 1.14 2005-11-01 16:37:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -60,10 +60,7 @@
                  (invoke-debugger condition))))))
     nil))
 
-;; COERCE-TO-CONDITION is going to be redefined in clos.lisp, so we define it
-;; in this file after SIGNAL so the call to it in SIGNAL is NOTINLINE. We could
-;; use (DECLAIM (NOTINLINE COERCE-TO-CONDITON)) to achieve the same effect more
-;; reliably if our compiler understood that kind of talk.
+;; COERCE-TO-CONDITION is redefined in clos.lisp.
 (defun coerce-to-condition (datum arguments default-type fun-name)
   (cond ((typep datum 'condition)
          (when arguments
