@@ -1,7 +1,7 @@
 ;;; boole.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boole.lisp,v 1.1 2003-09-10 18:01:56 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: boole.lisp,v 1.2 2005-11-01 01:55:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,8 +19,9 @@
 
 (defun boole (op n1 n2)
   (unless (and (integerp n1) (integerp n2))
-    (error 'type-error "BOOLE: ~s is not an integer"
-           (if (integerp n1) n2 n1)))
+    (error 'type-error
+           :datum (if (integerp n1) n2 n1)
+           :expected-type 'integer))
   (case op
     (#.boole-clr 0)
     (#.boole-set -1)
@@ -39,4 +40,6 @@
     (#.boole-orc1 (logorc1 n1 n2))
     (#.boole-orc2 (logorc2 n1 n2))
     (t
-     (error 'type-error "BOOLE: invalid logical operation specifier: ~S" op))))
+     (error 'type-error
+            :datum op
+            :expected-type (list 'integer #.boole-clr #.boole-orc2)))))
