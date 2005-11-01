@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: TypeError.java,v 1.33 2005-11-01 01:35:13 piso Exp $
+ * $Id: TypeError.java,v 1.34 2005-11-01 09:44:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -193,31 +193,35 @@ public class TypeError extends LispError
 
     // ### type-error-datum
     private static final Primitive TYPE_ERROR_DATUM =
-        new Primitive("type-error-datum", "condition")
+        new Primitive(Symbol.TYPE_ERROR_DATUM, "condition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
+            final StandardObject obj;
             try {
-                return ((TypeError)arg).getDatum();
+                obj = (StandardObject) arg;
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.TYPE_ERROR);
+                return signalTypeError(arg, Symbol.STANDARD_OBJECT);
             }
+            return obj.getInstanceSlotValue(Symbol.DATUM);
         }
     };
 
     // ### type-error-expected-type
     private static final Primitive TYPE_ERROR_EXPECTED_TYPE =
-        new Primitive("type-error-expected-type", "condition")
+        new Primitive(Symbol.TYPE_ERROR_EXPECTED_TYPE, "condition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
+            final StandardObject obj;
             try {
-                return ((TypeError)arg).getExpectedType();
+                obj = (StandardObject) arg;
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.TYPE_ERROR);
+                return signalTypeError(arg, Symbol.STANDARD_OBJECT);
             }
+            return obj.getInstanceSlotValue(Symbol.EXPECTED_TYPE);
         }
     };
 }
