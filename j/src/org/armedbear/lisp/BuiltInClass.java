@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.47 2005-10-22 14:02:22 piso Exp $
+ * $Id: BuiltInClass.java,v 1.48 2005-11-01 16:40:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,6 +250,11 @@ public class BuiltInClass extends LispClass
     }
 
     static {
-        StandardClass.initializeStandardClasses();
+        try {
+            StandardClass.initializeStandardClasses();
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
     }
 }
