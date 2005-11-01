@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.41 2005-11-01 16:42:49 piso Exp $
+ * $Id: StandardClass.java,v 1.42 2005-11-01 17:53:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -353,37 +353,37 @@ public class StandardClass extends SlotClass
         WARNING.setCPL(WARNING, CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
 
         // Condition classes.
-        ARITHMETIC_ERROR.finalizeClassLayout();
-        CELL_ERROR.finalizeClassLayout();
-        CONDITION.finalizeClassLayout();
-        CONTROL_ERROR.finalizeClassLayout();
-        DIVISION_BY_ZERO.finalizeClassLayout();
-        END_OF_FILE.finalizeClassLayout();
-        ERROR.finalizeClassLayout();
-        FILE_ERROR.finalizeClassLayout();
-        FLOATING_POINT_INEXACT.finalizeClassLayout();
-        FLOATING_POINT_INVALID_OPERATION.finalizeClassLayout();
-        FLOATING_POINT_OVERFLOW.finalizeClassLayout();
-        FLOATING_POINT_UNDERFLOW.finalizeClassLayout();
-        JAVA_EXCEPTION.finalizeClassLayout();
-        PACKAGE_ERROR.finalizeClassLayout();
-        PARSE_ERROR.finalizeClassLayout();
-        PRINT_NOT_READABLE.finalizeClassLayout();
-        PROGRAM_ERROR.finalizeClassLayout();
-        READER_ERROR.finalizeClassLayout();
-        SERIOUS_CONDITION.finalizeClassLayout();
-        SIMPLE_CONDITION.finalizeClassLayout();
-        SIMPLE_ERROR.finalizeClassLayout();
-        SIMPLE_TYPE_ERROR.finalizeClassLayout();
-        SIMPLE_WARNING.finalizeClassLayout();
-        STORAGE_CONDITION.finalizeClassLayout();
-        STREAM_ERROR.finalizeClassLayout();
-        STYLE_WARNING.finalizeClassLayout();
-        TYPE_ERROR.finalizeClassLayout();
-        UNBOUND_SLOT.finalizeClassLayout();
-        UNBOUND_VARIABLE.finalizeClassLayout();
-        UNDEFINED_FUNCTION.finalizeClassLayout();
-        WARNING.finalizeClassLayout();
+        ARITHMETIC_ERROR.finalizeClass();
+        CELL_ERROR.finalizeClass();
+        CONDITION.finalizeClass();
+        CONTROL_ERROR.finalizeClass();
+        DIVISION_BY_ZERO.finalizeClass();
+        END_OF_FILE.finalizeClass();
+        ERROR.finalizeClass();
+        FILE_ERROR.finalizeClass();
+        FLOATING_POINT_INEXACT.finalizeClass();
+        FLOATING_POINT_INVALID_OPERATION.finalizeClass();
+        FLOATING_POINT_OVERFLOW.finalizeClass();
+        FLOATING_POINT_UNDERFLOW.finalizeClass();
+        JAVA_EXCEPTION.finalizeClass();
+        PACKAGE_ERROR.finalizeClass();
+        PARSE_ERROR.finalizeClass();
+        PRINT_NOT_READABLE.finalizeClass();
+        PROGRAM_ERROR.finalizeClass();
+        READER_ERROR.finalizeClass();
+        SERIOUS_CONDITION.finalizeClass();
+        SIMPLE_CONDITION.finalizeClass();
+        SIMPLE_ERROR.finalizeClass();
+        SIMPLE_TYPE_ERROR.finalizeClass();
+        SIMPLE_WARNING.finalizeClass();
+        STORAGE_CONDITION.finalizeClass();
+        STREAM_ERROR.finalizeClass();
+        STYLE_WARNING.finalizeClass();
+        TYPE_ERROR.finalizeClass();
+        UNBOUND_SLOT.finalizeClass();
+        UNBOUND_VARIABLE.finalizeClass();
+        UNDEFINED_FUNCTION.finalizeClass();
+        WARNING.finalizeClass();
 
         // SYS:SLOT-DEFINITION is constructed and finalized in
         // SlotDefinitionClass.java, but we need to fill in a few things here.

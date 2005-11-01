@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SlotClass.java,v 1.17 2005-11-01 17:48:04 piso Exp $
+ * $Id: SlotClass.java,v 1.18 2005-11-01 17:52:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,7 +103,7 @@ public class SlotClass extends LispClass
         return result;
     }
 
-    public void finalizeClassLayout()
+    public void finalizeClass()
     {
         if (isFinalized())
             return;
