@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.44 2005-11-01 01:32:45 piso Exp $
+ * $Id: Condition.java,v 1.45 2005-11-01 02:18:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,13 @@ package org.armedbear.lisp;
 
 public class Condition extends StandardObject
 {
-    protected String message = null;
+    protected String message;
 
     public Condition() throws ConditionThrowable
     {
         super(StandardClass.CONDITION);
         Debug.assertTrue(slots.length == 2);
         setFormatArguments(NIL);
-        message = null;
     }
 
     protected Condition(LispClass cls) throws ConditionThrowable
@@ -38,13 +37,11 @@ public class Condition extends StandardObject
         super(cls);
         Debug.assertTrue(slots.length >= 2);
         setFormatArguments(NIL);
-        message = null;
     }
 
     public Condition(LispClass cls, int length)
     {
         super(cls, length);
-        message = null;
     }
 
     public Condition(LispObject initArgs) throws ConditionThrowable
