@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.68 2005-10-23 18:44:50 piso Exp $
+ * $Id: Cons.java,v 1.69 2005-11-02 17:35:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -282,22 +282,26 @@ public final class Cons extends LispObject
             signalTypeError(new Fixnum(index), Symbol.UNSIGNED_BYTE);
         int i = 0;
         Cons cons = this;
-        try {
-            while (true) {
-                if (i == index)
-                    return cons.car;
+        while (true) {
+            if (i == index)
+                return cons.car;
+            try {
                 cons = (Cons) cons.cdr;
-                ++i;
             }
-        }
-        catch (ClassCastException e) {
-            if (cons.cdr == NIL)
-                signal(new TypeError("ELT: invalid index " + index + " for " +
-                                     writeToString()));
-            else
-                signal(new TypeError(this, "proper sequence"));
-            // Not reached.
-            return NIL;
+            catch (ClassCastException e) {
+                if (cons.cdr == NIL) {
+                    // Index too large.
+                    signalTypeError(new Fixnum(index),
+                                    list3(Symbol.INTEGER, Fixnum.ZERO,
+                                          new Fixnum(length() - 1)));
+                } else {
+                    // Dotted list.
+                    signalTypeError(cons.cdr, Symbol.LIST);
+                }
+                // Not reached.
+                return NIL;
+            }
+            ++i;
         }
     }
 
