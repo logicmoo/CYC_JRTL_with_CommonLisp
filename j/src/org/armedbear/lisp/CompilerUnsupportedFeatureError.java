@@ -2,7 +2,7 @@
  * CompilerUnsupportedFeatureError.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: CompilerUnsupportedFeatureError.java,v 1.1 2005-01-31 05:50:28 piso Exp $
+ * $Id: CompilerUnsupportedFeatureError.java,v 1.2 2005-11-02 03:05:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,9 +33,16 @@ public class CompilerUnsupportedFeatureError extends Condition
         return Symbol.COMPILER_UNSUPPORTED_FEATURE_ERROR;
     }
 
+    public LispObject classOf()
+    {
+        return StandardClass.COMPILER_UNSUPPORTED_FEATURE_ERROR;
+    }
+
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.COMPILER_UNSUPPORTED_FEATURE_ERROR)
+            return T;
+        if (type == StandardClass.COMPILER_UNSUPPORTED_FEATURE_ERROR)
             return T;
         return super.typep(type);
     }

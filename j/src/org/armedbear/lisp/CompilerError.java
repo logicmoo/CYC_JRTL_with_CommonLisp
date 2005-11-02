@@ -2,7 +2,7 @@
  * CompilerError.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: CompilerError.java,v 1.1 2005-01-31 12:36:02 piso Exp $
+ * $Id: CompilerError.java,v 1.2 2005-11-02 03:05:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,9 +33,16 @@ public class CompilerError extends Condition
         return Symbol.COMPILER_ERROR;
     }
 
+    public LispObject classOf()
+    {
+        return StandardClass.COMPILER_ERROR;
+    }
+
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.COMPILER_ERROR)
+            return T;
+        if (type == StandardClass.COMPILER_ERROR)
             return T;
         return super.typep(type);
     }
