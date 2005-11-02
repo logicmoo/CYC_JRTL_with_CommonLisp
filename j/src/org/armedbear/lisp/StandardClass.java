@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.42 2005-11-01 17:53:26 piso Exp $
+ * $Id: StandardClass.java,v 1.43 2005-11-02 03:04:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,6 +189,13 @@ public class StandardClass extends SlotClass
     public static final StandardClass UNDEFINED_FUNCTION =
         addStandardClass(Symbol.UNDEFINED_FUNCTION, list1(CELL_ERROR));
 
+    public static final StandardClass COMPILER_ERROR =
+        addStandardClass(Symbol.COMPILER_ERROR, list1(CONDITION));
+
+    public static final StandardClass COMPILER_UNSUPPORTED_FEATURE_ERROR =
+        addStandardClass(Symbol.COMPILER_UNSUPPORTED_FEATURE_ERROR,
+                         list1(CONDITION));
+
     public static final StandardClass JAVA_EXCEPTION =
         addStandardClass(Symbol.JAVA_EXCEPTION, list1(ERROR));
 
@@ -236,8 +243,13 @@ public class StandardClass extends SlotClass
                           STANDARD_OBJECT, BuiltInClass.CLASS_T);
         CELL_ERROR.setDirectSlotDefinitions(
             list1(new SlotDefinition(Symbol.NAME,
-                                     list1(PACKAGE_CL.intern("CELL-ERROR-NAME")))));
+                                     list1(Symbol.CELL_ERROR_NAME))));
         CLASS.setCPL(CLASS, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+        COMPILER_ERROR.setCPL(COMPILER_ERROR, CONDITION, STANDARD_OBJECT,
+                              BuiltInClass.CLASS_T);
+        COMPILER_UNSUPPORTED_FEATURE_ERROR.setCPL(COMPILER_UNSUPPORTED_FEATURE_ERROR,
+                                                  CONDITION, STANDARD_OBJECT,
+                                                  BuiltInClass.CLASS_T);
         CONDITION.setCPL(CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
         CONDITION.setDirectSlotDefinitions(
             list2(new SlotDefinition(Symbol.FORMAT_CONTROL,
@@ -355,6 +367,8 @@ public class StandardClass extends SlotClass
         // Condition classes.
         ARITHMETIC_ERROR.finalizeClass();
         CELL_ERROR.finalizeClass();
+        COMPILER_ERROR.finalizeClass();
+        COMPILER_UNSUPPORTED_FEATURE_ERROR.finalizeClass();
         CONDITION.finalizeClass();
         CONTROL_ERROR.finalizeClass();
         DIVISION_BY_ZERO.finalizeClass();
