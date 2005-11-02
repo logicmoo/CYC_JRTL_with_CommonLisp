@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.189 2005-11-02 01:13:48 piso Exp $
+;;; $Id: clos.lisp,v 1.190 2005-11-02 03:02:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2158,8 +2158,9 @@
            ',name))))
 
 (defun make-condition (type &rest initargs)
-  (let ((class (if (symbolp type) (find-class type) type)))
-    (apply #'make-instance class initargs)))
+  (or (%make-condition type initargs)
+      (let ((class (if (symbolp type) (find-class type) type)))
+        (apply #'make-instance class initargs))))
 
 ;; Adapted from SBCL.
 ;; Originally defined in signal.lisp. Redefined here now that we have MAKE-CONDITION.
