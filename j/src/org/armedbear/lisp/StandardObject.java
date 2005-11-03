@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.49 2005-10-23 18:44:50 piso Exp $
+ * $Id: StandardObject.java,v 1.50 2005-11-03 16:59:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,6 +133,11 @@ public class StandardObject extends LispObject
         int currentLevel = Fixnum.getValue(currentPrintLevel);
         if (currentLevel >= maxLevel)
             return "#";
+        if (typep(Symbol.CONDITION) != NIL) {
+            StringOutputStream stream = new StringOutputStream();
+            Symbol.PRINT_OBJECT.execute(this, stream);
+            return stream.getString().getStringValue();
+        }
         return unreadableString(typeOf().writeToString());
     }
 
