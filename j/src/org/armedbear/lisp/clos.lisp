@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.190 2005-11-02 03:02:57 piso Exp $
+;;; $Id: clos.lisp,v 1.191 2005-11-03 23:51:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2130,32 +2130,34 @@
 
 ;;; Conditions.
 
-(defmacro define-condition (name (&rest parent-types) (&rest slot-specs)
-                                 &body options)
+(defmacro define-condition (name (&rest parent-types) (&rest slot-specs) &body options)
   (let ((parent-types (or parent-types '(condition)))
         (report nil))
     (dolist (option options)
       (when (eq (car option) :report)
-        (let ((arg (cadr option)))
-          (setf report
-                (if (stringp arg)
-                    `#'(lambda (condition stream)
-                        (declare (ignore condition))
-                        (write-string ,arg stream))
-                    `#'(lambda (condition stream)
-                        (funcall #',arg condition stream)))))))
-    (if report
-        `(progn
-           (defclass ,name ,parent-types ,slot-specs ,@options)
-           (defmethod print-object ((condition ,name) stream)
-             (if *print-escape*
-                 (call-next-method)
-                 (funcall ,report condition stream)))
-           (setf (get ',name 'sys::condition-report-function) ,report)
-           ',name)
-        `(progn
-           (defclass ,name ,parent-types ,slot-specs ,@options)
-           ',name))))
+        (setf report (cadr option))
+        (return)))
+    (typecase report
+      (null
+       `(progn
+          (defclass ,name ,parent-types ,slot-specs ,@options)
+          ',name))
+      (string
+       `(progn
+          (defclass ,name ,parent-types ,slot-specs ,@options)
+          (defmethod print-object ((condition ,name) stream)
+            (if *print-escape*
+                (call-next-method)
+                (progn (write-string ,report stream) condition)))
+          ',name))
+      (t
+       `(progn
+          (defclass ,name ,parent-types ,slot-specs ,@options)
+          (defmethod print-object ((condition ,name) stream)
+            (if *print-escape*
+                (call-next-method)
+                (funcall #',report condition stream)))
+          ',name)))))
 
 (defun make-condition (type &rest initargs)
   (or (%make-condition type initargs)
