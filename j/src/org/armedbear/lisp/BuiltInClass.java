@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.48 2005-11-01 16:40:48 piso Exp $
+ * $Id: BuiltInClass.java,v 1.49 2005-11-03 14:51:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,6 +120,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass STRING_STREAM                    = addClass(Symbol.STRING_STREAM);
     public static final BuiltInClass SYMBOL                           = addClass(Symbol.SYMBOL);
     public static final BuiltInClass SYNONYM_STREAM                   = addClass(Symbol.SYNONYM_STREAM);
+    public static final BuiltInClass THREAD                           = addClass(Symbol.THREAD);
     public static final BuiltInClass TWO_WAY_STREAM                   = addClass(Symbol.TWO_WAY_STREAM);
     public static final BuiltInClass VECTOR                           = addClass(Symbol.VECTOR);
 
@@ -243,6 +244,8 @@ public class BuiltInClass extends LispClass
         SYMBOL.setCPL(SYMBOL, CLASS_T);
         SYNONYM_STREAM.setDirectSuperclass(STREAM);
         SYNONYM_STREAM.setCPL(SYNONYM_STREAM, STREAM, CLASS_T);
+        THREAD.setDirectSuperclass(CLASS_T);
+        THREAD.setCPL(THREAD, CLASS_T);
         TWO_WAY_STREAM.setDirectSuperclass(STREAM);
         TWO_WAY_STREAM.setCPL(TWO_WAY_STREAM, STREAM, CLASS_T);
         VECTOR.setDirectSuperclasses(list2(ARRAY, SEQUENCE));
