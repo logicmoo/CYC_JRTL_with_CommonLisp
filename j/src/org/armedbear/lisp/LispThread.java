@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispThread.java,v 1.86 2005-10-23 17:38:10 piso Exp $
+ * $Id: LispThread.java,v 1.87 2005-11-03 14:52:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,6 +115,25 @@ public final class LispThread extends LispObject
         this.name = name;
         javaThread.setDaemon(true);
         javaThread.start();
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.THREAD;
+    }
+
+    public LispObject classOf()
+    {
+        return BuiltInClass.THREAD;
+    }
+
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
+    {
+        if (typeSpecifier == Symbol.THREAD)
+            return T;
+        if (typeSpecifier == BuiltInClass.THREAD)
+            return T;
+        return super.typep(typeSpecifier);
     }
 
     public final synchronized boolean isDestroyed()
@@ -972,12 +991,14 @@ public final class LispThread extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
+            final LispThread lispThread;
             try {
-                return ((LispThread)arg).javaThread.isAlive() ? T : NIL;
+                lispThread = (LispThread) arg;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "Lisp thread"));
+                return signalTypeError(arg, Symbol.THREAD);
             }
+            return lispThread.javaThread.isAlive() ? T : NIL;
         }
     };
 
@@ -991,7 +1012,7 @@ public final class LispThread extends LispObject
                 return ((LispThread)arg).name;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "Lisp thread"));
+                return signalTypeError(arg, Symbol.THREAD);
             }
         }
     };
@@ -1004,7 +1025,7 @@ public final class LispThread extends LispObject
             double d =
                 ((DoubleFloat)arg.multiplyBy(new DoubleFloat(1000))).getValue();
             if (d < 0)
-                return signal(new TypeError(arg, "non-negative real"));
+                return signalTypeError(arg, list2(Symbol.REAL, Fixnum.ZERO));
             long millis = d < Long.MAX_VALUE ? (long) d : Long.MAX_VALUE;
             try {
                 Thread.sleep(millis);
@@ -1041,12 +1062,15 @@ public final class LispThread extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof LispThread) {
-                LispThread thread = (LispThread) arg;
-                thread.setDestroyed(true);
-                return T;
-            } else
-                return signal(new TypeError(arg, "Lisp thread"));
+            final LispThread thread;
+            try {
+                thread = (LispThread) arg;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(arg, Symbol.THREAD);
+            }
+            thread.setDestroyed(true);
+            return T;
         }
     };
 
@@ -1062,16 +1086,19 @@ public final class LispThread extends LispObject
         {
             if (args.length < 2)
                 return signal(new WrongNumberOfArgumentsException(this));
-            if (args[0] instanceof LispThread) {
-                LispThread thread = (LispThread) args[0];
-                LispObject fun = args[1];
-                LispObject funArgs = NIL;
-                for (int i = args.length; i-- > 2;)
-                    funArgs = new Cons(args[i], funArgs);
-                thread.interrupt(fun, funArgs);
-                return T;
-            } else
-                return signal(new TypeError(args[0], "Lisp thread"));
+            final LispThread thread;
+            try {
+                thread = (LispThread) args[0];
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(args[0], Symbol.THREAD);
+            }
+            LispObject fun = args[1];
+            LispObject funArgs = NIL;
+            for (int i = args.length; i-- > 2;)
+                funArgs = new Cons(args[i], funArgs);
+            thread.interrupt(fun, funArgs);
+            return T;
         }
     };
 
