@@ -2,7 +2,7 @@
  * RandomState.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: RandomState.java,v 1.6 2005-10-23 18:44:50 piso Exp $
+ * $Id: RandomState.java,v 1.7 2005-11-03 14:41:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,9 +76,9 @@ public final class RandomState extends LispObject
         return super.typep(type);
     }
 
-    public String writeToString()
+    public String writeToString() throws ConditionThrowable
     {
-        return unreadableString("RANDOM-STATE");
+        return unreadableString(Symbol.RANDOM_STATE);
     }
 
     public LispObject random(LispObject arg) throws ConditionThrowable
@@ -110,12 +110,14 @@ public final class RandomState extends LispObject
                 return new DoubleFloat(rand * limit);
             }
         }
-        return signal(new TypeError(arg, "positive integer or positive float"));
+        return signalTypeError(arg, list3(Symbol.OR,
+                                          list2(Symbol.INTEGER, Fixnum.ONE),
+                                          list2(Symbol.FLOAT, list1(Fixnum.ZERO))));
     }
 
     // ### random limit &optional random-state => random-number
     private static final Primitive RANDOM =
-        new Primitive("random", "limit &optional random-state")
+        new Primitive(Symbol.RANDOM, "limit &optional random-state")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -134,10 +136,10 @@ public final class RandomState extends LispObject
         }
     };
 
-    // ### make-random-state
-    // make-random-state &optional state
+    // ### make-random-state &optional state
     private static final Primitive MAKE_RANDOM_STATE =
-        new Primitive("make-random-state", "&optional state") {
+        new Primitive(Symbol.MAKE_RANDOM_STATE, "&optional state")
+    {
         public LispObject execute() throws ConditionThrowable
         {
             return new RandomState((RandomState)Symbol._RANDOM_STATE_.symbolValue());
@@ -157,7 +159,7 @@ public final class RandomState extends LispObject
 
     // ### random-state-p
     private static final Primitive RANDOM_STATE_P =
-        new Primitive("random-state-p", "object")
+        new Primitive(Symbol.RANDOM_STATE_P, "object")
     {
         public LispObject execute(LispObject arg)
         {
