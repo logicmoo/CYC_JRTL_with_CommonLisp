@@ -25,6 +25,7 @@
                               #+abcl    'system::object
                               #+allegro 'excl::object
                               #+clisp   'system::$object
+                              #+cmu     'lisp::object
                               #+sbcl    'sb-kernel::object)
                  'error)
   nil)
@@ -34,6 +35,7 @@
                #+abcl    'system::object
                #+allegro 'excl::object
                #+clisp   'system::$object
+               #+cmu     'lisp::object
                #+sbcl    'sb-kernel::object)
   nil)
 
@@ -45,11 +47,33 @@
   (type-error-expected-type (make-instance 'type-error :expected-type 'symbol))
   symbol)
 
+#+(or abcl clisp cmu sbcl)
+(deftest type-error.3
+  (write-to-string (make-condition 'type-error :datum 42 :expected-type 'symbol)
+                   :escape nil)
+  #+clisp
+  "Condition of type TYPE-ERROR."
+  #+cmu
+  "Type-error in NIL:  42 is not of type SYMBOL"
+  #+(or abcl sbcl)
+  "The value 42 is not of type SYMBOL.")
+
+#+(or abcl clisp cmu sbcl)
+(deftest type-error.4
+  (format nil "~A" (make-condition 'type-error :datum 42 :expected-type 'symbol))
+  #+clisp
+  "Condition of type TYPE-ERROR."
+  #+cmu
+  "Type-error in NIL:  42 is not of type SYMBOL"
+  #+(or abcl sbcl)
+  "The value 42 is not of type SYMBOL.")
+
 (deftest simple-type-error.1
   (slot-boundp (make-condition 'simple-type-error)
                #+abcl    'system::datum
                #+allegro 'excl::datum
                #+clisp   'system::$datum
+               #+cmu     'conditions::datum
                #+sbcl    'sb-kernel::datum)
   nil)
 
@@ -58,6 +82,7 @@
                #+abcl    'system::expected-type
                #+allegro 'excl::expected-type
                #+clisp   'system::$expected-type
+               #+cmu     'conditions::expected-type
                #+sbcl    'sb-kernel::expected-type)
   nil)
 
@@ -66,6 +91,7 @@
                #+abcl    'system::format-control
                #+allegro 'excl::format-control
                #+clisp   'system::$format-control
+               #+cmu     'conditions::format-control
                #+sbcl    'sb-kernel:format-control)
   #-clisp nil
   #+clisp t)
@@ -80,6 +106,7 @@
                #+abcl    'system::format-arguments
                #+allegro 'excl::format-arguments
                #+clisp   'system::$format-arguments
+               #+cmu     'conditions::format-arguments
                #+sbcl    'sb-kernel::format-arguments)
   t)
 
@@ -88,6 +115,7 @@
               #+abcl    'system::format-arguments
               #+allegro 'excl::format-arguments
               #+clisp   'system::$format-arguments
+              #+cmu     'conditions::format-arguments
               #+sbcl    'sb-kernel::format-arguments)
   nil)
 
@@ -96,6 +124,7 @@
                #+abcl    'system::datum
                #+allegro 'excl::datum
                #+clisp   'system::$datum
+               #+cmu     'conditions::datum
                #+sbcl    'sb-kernel::datum)
   nil)
 
@@ -104,6 +133,7 @@
                #+abcl    'system::expected-type
                #+allegro 'excl::expected-type
                #+clisp   'system::$expected-type
+               #+cmu     'conditions::expected-type
                #+sbcl    'sb-kernel::expected-type)
   nil)
 
@@ -112,6 +142,7 @@
                #+abcl    'system::format-control
                #+allegro 'excl::format-control
                #+clisp   'system::$format-control
+               #+cmu     'conditions::format-control
                #+sbcl    'sb-kernel:format-control)
   #-clisp nil
   #+clisp t)
@@ -126,6 +157,7 @@
                #+abcl    'system::format-arguments
                #+allegro 'excl::format-arguments
                #+clisp   'system::$format-arguments
+               #+cmu     'conditions::format-arguments
                #+sbcl    'sb-kernel::format-arguments)
   t)
 
@@ -134,7 +166,49 @@
               #+abcl    'system::format-arguments
               #+allegro 'excl::format-arguments
               #+clisp   'system::$format-arguments
+              #+cmu     'conditions::format-arguments
               #+sbcl    'sb-kernel::format-arguments)
   nil)
+
+(deftest define-condition.1
+  (progn
+    (setf (find-class 'test-error) nil)
+    (define-condition test-error (type-error) ())
+    (type-error-datum (make-condition 'test-error :datum 42 :expected-type 'symbol)))
+  42)
+
+(deftest define-condition.2
+  (progn
+    (setf (find-class 'test-error) nil)
+    (define-condition test-error (type-error) ())
+    (type-error-expected-type (make-condition 'test-error :datum 42 :expected-type 'symbol)))
+  symbol)
+
+#+(or abcl clisp cmu sbcl)
+(deftest define-condition.3
+  (progn
+    (setf (find-class 'test-error) nil)
+    (define-condition test-error (type-error) ())
+    (format nil "~A" (make-condition 'test-error :datum 42 :expected-type 'symbol)))
+  #+clisp
+  "Condition of type TEST-ERROR."
+  #+cmu
+  "Type-error in NIL:  42 is not of type SYMBOL"
+  #+(or abcl sbcl)
+  "The value 42 is not of type SYMBOL.")
+
+#+(or abcl clisp cmu sbcl)
+(deftest define-condition.4
+  (progn
+    (setf (find-class 'test-error) nil)
+    (define-condition test-error (type-error) ())
+    (write-to-string (make-condition 'test-error :datum 42 :expected-type 'symbol)
+                     :escape nil))
+  #+clisp
+  "Condition of type TEST-ERROR."
+  #+cmu
+  "Type-error in NIL:  42 is not of type SYMBOL"
+  #+(or abcl sbcl)
+  "The value 42 is not of type SYMBOL.")
 
 (do-tests)
