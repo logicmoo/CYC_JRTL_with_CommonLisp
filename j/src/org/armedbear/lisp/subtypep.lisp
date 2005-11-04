@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.67 2005-07-12 02:34:03 piso Exp $
+;;; $Id: subtypep.lisp,v 1.68 2005-11-04 00:28:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -486,7 +486,7 @@
                                   type2
                                   (and (symbolp type2) (find-class type2 nil)))))
         (return-from %subtypep
-                     (values (if (member class2 (class-precedence-list class1)) t nil) t)))
+                     (values (if (member class2 (%class-precedence-list class1)) t nil) t)))
       (when (or classp-1 classp-2)
         (let ((t1 (if classp-1 (%class-name type1) type1))
               (t2 (if classp-2 (%class-name type2) type2)))

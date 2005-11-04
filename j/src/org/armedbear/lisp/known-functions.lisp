@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.27 2005-10-30 01:19:03 piso Exp $
+;;; $Id: known-functions.lisp,v 1.28 2005-11-04 00:27:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 
 (declaim (ftype (function * list)
                 backq-list backq-list* backq-append backq-nconc
-                class-precedence-list))
+                %class-precedence-list))
 
 (declaim (ftype (function * cons) backq-cons))
 
