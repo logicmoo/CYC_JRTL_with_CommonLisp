@@ -1,8 +1,8 @@
 /*
  * last.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: last.java,v 1.5 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: last.java,v 1.6 2005-11-04 13:38:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +21,12 @@
 
 package org.armedbear.lisp;
 
-// ### last
-// last list &optional n => tail
-public final class last extends Primitive {
-    public last(String name, String arglist)
+// ### last list &optional n => tail
+public final class last extends Primitive
+{
+    public last()
     {
-        super(name,arglist);
+        super("last", "list &optional n");
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -74,8 +74,8 @@ public final class last extends Primitive {
             }
             return result;
         }
-        return signal(new TypeError(second, "non-negative integer"));
+        return signalTypeError(second, Symbol.UNSIGNED_BYTE);
     }
 
-    private static final last LAST = new last("last","list &optional n");
+    private static final Primitive LAST = new last();
 }

@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: TypeError.java,v 1.34 2005-11-01 09:44:19 piso Exp $
+ * $Id: TypeError.java,v 1.35 2005-11-04 13:40:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,6 @@ package org.armedbear.lisp;
 
 public class TypeError extends LispError
 {
-    private String typeString;
-
     public TypeError() throws ConditionThrowable
     {
         super(StandardClass.TYPE_ERROR);
@@ -70,10 +68,8 @@ public class TypeError extends LispError
         }
         if (datum != null)
             setDatum(datum);
-        if (expectedType != null) {
+        if (expectedType != null)
             setExpectedType(expectedType);
-            this.typeString = expectedType.writeToString();
-        }
     }
 
     public TypeError(String message) throws ConditionThrowable
@@ -91,15 +87,6 @@ public class TypeError extends LispError
         setFormatControl(message);
         setDatum(datum);
         setExpectedType(expectedType);
-    }
-
-    public TypeError(LispObject datum, String typeString)
-        throws ConditionThrowable
-    {
-        super(StandardClass.TYPE_ERROR);
-        setDatum(datum);
-        setExpectedType(NIL);
-        this.typeString = typeString;
     }
 
     public LispObject typeOf()
@@ -137,9 +124,7 @@ public class TypeError extends LispError
                 FastStringBuffer sb = new FastStringBuffer();
                 String name = datum != null ? datum.writeToString() : null;
                 String type = null;
-                if (typeString != null)
-                    type = typeString;
-                else if (expectedType != null)
+                if (expectedType != null)
                     type = expectedType.writeToString();
                 if (type != null) {
                     if (name != null) {

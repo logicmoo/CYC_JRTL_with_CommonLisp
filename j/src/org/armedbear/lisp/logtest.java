@@ -1,8 +1,8 @@
 /*
  * logtest.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: logtest.java,v 1.4 2004-11-03 15:27:24 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: logtest.java,v 1.5 2005-11-04 13:35:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,21 +23,20 @@ package org.armedbear.lisp;
 
 import java.math.BigInteger;
 
-// ### logtest
-// logtest integer-1 integer-2 => generalized-boolean
-// (logtest x y) ==  (not (zerop (logand x y)))
+// ### logtest integer-1 integer-2 => generalized-boolean
+// (logtest x y) == (not (zerop (logand x y)))
 public final class logtest extends Primitive
 {
     private logtest()
     {
-        super("logtest","integer-1 integer-2");
+        super("logtest", "integer-1 integer-2");
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
         if (first instanceof Fixnum && second instanceof Fixnum) {
-            return (((Fixnum)first).getValue() & ((Fixnum)second).getValue()) == 0 ? NIL : T;
+            return (((Fixnum)first).value & ((Fixnum)second).value) == 0 ? NIL : T;
         } else {
             BigInteger n1, n2;
             if (first instanceof Fixnum)
@@ -45,16 +44,16 @@ public final class logtest extends Primitive
             else if (first instanceof Bignum)
                 n1 = ((Bignum)first).getValue();
             else
-                return signal(new TypeError(first, "integer"));
+                return signalTypeError(first, Symbol.INTEGER);
             if (second instanceof Fixnum)
                 n2 = ((Fixnum)second).getBigInteger();
             else if (second instanceof Bignum)
                 n2 = ((Bignum)second).getValue();
             else
-                return signal(new TypeError(second, "integer"));
+                return signalTypeError(second, Symbol.INTEGER);
             return n1.and(n2).signum() == 0 ? NIL : T;
         }
     }
 
-    private static final logtest LOGTEST = new logtest();
+    private static final Primitive LOGTEST = new logtest();
 }

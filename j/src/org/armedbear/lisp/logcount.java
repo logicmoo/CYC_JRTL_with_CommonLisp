@@ -1,8 +1,8 @@
 /*
  * logcount.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: logcount.java,v 1.4 2004-11-03 15:39:02 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: logcount.java,v 1.5 2005-11-04 13:35:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,7 @@ package org.armedbear.lisp;
 
 import java.math.BigInteger;
 
-// ### logcount
-// logcount integer => number-of-on-bits
+// ### logcount integer => number-of-on-bits
 public final class logcount extends Primitive
 {
     private logcount()
@@ -39,11 +38,11 @@ public final class logcount extends Primitive
         if (arg instanceof Fixnum)
             n = ((Fixnum)arg).getBigInteger();
         else if (arg instanceof Bignum)
-            n = ((Bignum)arg).getValue();
+            n = ((Bignum)arg).value;
         else
-            return signal(new TypeError(arg, "integer"));
+            return signalTypeError(arg, Symbol.INTEGER);
         return new Fixnum(n.bitCount());
     }
 
-    private static final logcount LOGCOUNT = new logcount();
+    private static final Primitive LOGCOUNT = new logcount();
 }

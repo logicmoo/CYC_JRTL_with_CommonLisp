@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleCondition.java,v 1.15 2005-11-04 10:59:22 piso Exp $
+ * $Id: SimpleCondition.java,v 1.16 2005-11-04 13:42:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ public class SimpleCondition extends Condition
 
     // ### simple-condition-format-control
     private static final Primitive SIMPLE_CONDITION_FORMAT_CONTROL =
-        new Primitive("simple-condition-format-control", "condition")
+        new Primitive(Symbol.SIMPLE_CONDITION_FORMAT_CONTROL, "condition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -84,7 +84,7 @@ public class SimpleCondition extends Condition
 
     // ### simple-condition-format-arguments
     private static final Primitive SIMPLE_CONDITION_FORMAT_ARGUMENTS =
-        new Primitive("simple-condition-format-arguments", "condition")
+        new Primitive(Symbol.SIMPLE_CONDITION_FORMAT_ARGUMENTS, "condition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

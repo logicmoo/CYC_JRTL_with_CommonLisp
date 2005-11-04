@@ -1,8 +1,8 @@
 /*
  * logbitp.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: logbitp.java,v 1.7 2004-11-03 15:27:24 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: logbitp.java,v 1.8 2005-11-04 13:38:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,7 @@ package org.armedbear.lisp;
 
 import java.math.BigInteger;
 
-// ### logbitp
-// logbitp index integer => generalized-boolean
+// ### logbitp index integer => generalized-boolean
 public final class logbitp extends Primitive
 {
     private logbitp()
@@ -37,22 +36,22 @@ public final class logbitp extends Primitive
     {
         int index = -1;
         if (first instanceof Fixnum) {
-            index = ((Fixnum)first).getValue();
+            index = ((Fixnum)first).value;
         } else if (first instanceof Bignum) {
             // FIXME If the number is really big, we're not checking the right
             // bit...
-            if (((Bignum)first).getValue().signum() > 0)
+            if (((Bignum)first).value.signum() > 0)
                 index = Integer.MAX_VALUE;
         }
         if (index < 0)
-            return signal(new TypeError(first, "non-negative integer"));
+            return signalTypeError(first, Symbol.UNSIGNED_BYTE);
         BigInteger n;
         if (second instanceof Fixnum)
             n = ((Fixnum)second).getBigInteger();
         else if (second instanceof Bignum)
-            n = ((Bignum)second).getValue();
+            n = ((Bignum)second).value;
         else
-            return signal(new TypeError(second, Symbol.INTEGER));
+            return signalTypeError(second, Symbol.INTEGER);
         // FIXME See above.
         if (index == Integer.MAX_VALUE)
             return n.signum() < 0 ? T : NIL;
