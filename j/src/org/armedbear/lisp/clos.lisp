@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.191 2005-11-03 23:51:22 piso Exp $
+;;; $Id: clos.lisp,v 1.192 2005-11-04 00:27:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,6 +38,8 @@
 ;;; MIT Press, 1991.
 
 (in-package #:mop)
+
+(export '(class-precedence-list))
 
 (defmacro push-on-end (value location)
   `(setf ,location (nconc ,location (list ,value))))
@@ -76,7 +78,6 @@
 (defsetf class-slots %set-class-slots)
 (defsetf class-direct-default-initargs %set-class-direct-default-initargs)
 (defsetf class-default-initargs %set-class-default-initargs)
-(defsetf class-precedence-list %set-class-precedence-list)
 (defsetf class-finalized-p %set-class-finalized-p)
 (defsetf std-instance-layout %set-std-instance-layout)
 (defsetf standard-instance-access %set-standard-instance-access)
@@ -238,12 +239,13 @@
 ;;; finalize-inheritance
 
 (defun std-finalize-inheritance (class)
-  (setf (class-precedence-list class)
-        (funcall (if (eq (class-of class) the-class-standard-class)
-                     #'std-compute-class-precedence-list
-                     #'compute-class-precedence-list)
-                 class))
-  (dolist (class (class-precedence-list class))
+  (set-class-precedence-list
+   class
+   (funcall (if (eq (class-of class) the-class-standard-class)
+                #'std-compute-class-precedence-list
+                #'compute-class-precedence-list)
+            class))
+  (dolist (class (%class-precedence-list class))
     (when (typep class 'forward-referenced-class)
       (return-from std-finalize-inheritance)))
   (setf (class-slots class)
@@ -375,7 +377,7 @@
 
 (defun std-compute-slots (class)
   (let* ((all-slots (mapappend #'class-direct-slots
-                               (class-precedence-list class)))
+                               (%class-precedence-list class)))
          (all-names (remove-duplicates
                      (mapcar #'%slot-definition-name all-slots))))
     (mapcar #'(lambda (name)
@@ -1167,7 +1169,7 @@
         method)))
 
 (defun subclassp (c1 c2)
-  (dolist (class (class-precedence-list c1) nil)
+  (dolist (class (%class-precedence-list c1) nil)
     (when (eq class c2)
       (return t))))
 
@@ -1377,7 +1379,7 @@
           emfun))))
 
 (defun sub-specializer-p (c1 c2 c-arg)
-  (find c2 (cdr (memq c1 (class-precedence-list c-arg)))))
+  (find c2 (cdr (memq c1 (%class-precedence-list c-arg)))))
 
 (defun std-method-more-specific-p (method1 method2 required-classes argument-precedence-order)
   (if argument-precedence-order
@@ -1744,6 +1746,11 @@
 
 (defmethod (setf class-name) (new-value (class class))
   (%set-class-name class new-value))
+
+(defgeneric class-precedence-list (class))
+
+(defmethod class-precedence-list ((class class))
+  (%class-precedence-list class))
 
 (defgeneric documentation (x doc-type))
 
