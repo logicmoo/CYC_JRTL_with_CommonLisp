@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.49 2005-10-30 12:38:21 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.50 2005-11-04 19:33:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(load "test-utilities.lisp")
+(load (merge-pathnames "test-utilities.lisp" *load-truename*))
 
 (in-package #:test)
 
@@ -493,6 +493,26 @@
   t)
 #+(or cmu lispworks)
 (pushnew 'silly.1 *expected-failures*)
+
+(deftest silly.2
+  (signals-error (make-pathname :name "abc/def") 'error)
+  t)
+
+(deftest silly.3
+  (check-readable-or-signals-error (make-pathname :name ".foo"))
+  t)
+
+(deftest silly.4
+  (check-readable-or-signals-error (make-pathname :type ".foo"))
+  t)
+
+(deftest silly.5
+  (check-readable-or-signals-error (make-pathname :name "abc.def"))
+  t)
+
+(deftest silly.6
+  (check-readable-or-signals-error (make-pathname :type "abc.def"))
+  t)
 
 ;; LOGICAL-PATHNAME-TRANSLATIONS
 #-allegro
