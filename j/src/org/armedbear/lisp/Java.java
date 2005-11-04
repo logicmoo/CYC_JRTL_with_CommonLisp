@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.63 2005-10-29 19:04:40 asimon Exp $
+ * $Id: Java.java,v 1.64 2005-11-04 20:06:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,11 +28,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.HashMap;
 
 public final class Java extends Lisp
 {
-    private static final Map registeredExceptions = new WeakHashMap();
+    private static final Map registeredExceptions = new HashMap();
 
     // ### register-java-exception exception-name condition-symbol => T
     private static final Primitive REGISTER_JAVA_EXCEPTION =
@@ -64,7 +64,6 @@ public final class Java extends Lisp
         }
     };
 
-
     private static Symbol getCondition(Class cl) throws ConditionThrowable
     {
 	Class o = classForName("java.lang.Object");
@@ -78,7 +77,7 @@ public final class Java extends Lisp
     // ### jclass name-or-class-ref => class-ref
     private static final Primitive JCLASS =
         new Primitive(Symbol.JCLASS, "name-or-class-ref",
-                      "Returns a reference to the Java class designated by NAME-OR-CLASS-REF.")
+"Returns a reference to the Java class designated by NAME-OR-CLASS-REF.")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -367,7 +366,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 Symbol condition = getCondition(t.getClass());
-                if (condition == null) 
+                if (condition == null)
                     signal(new JavaException(t));
                 else
                     signal(condition, new SimpleString(getMessage(t)));
@@ -378,8 +377,8 @@ public final class Java extends Lisp
     };
 
     // ### jnew constructor &rest args
-    private static final Primitive JNEW = new Primitive("jnew", PACKAGE_JAVA, true,
-                                                        "constructor &rest args")
+    private static final Primitive JNEW =
+        new Primitive("jnew", PACKAGE_JAVA, true, "constructor &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -401,10 +400,10 @@ public final class Java extends Lisp
                 return new JavaObject(constructor.newInstance(initargs));
             }
             catch (Throwable t) {
-                if (t instanceof InvocationTargetException) 
+                if (t instanceof InvocationTargetException)
                     t = t.getCause();
                 Symbol condition = getCondition(t.getClass());
-                if (condition == null) 
+                if (condition == null)
                     signal(new JavaException(t));
                 else
                     signal(condition, new SimpleString(getMessage(t)));
@@ -438,10 +437,10 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jarray-ref
-    // jarray-ref java-array &rest indices
-    private static final Primitive JARRAY_REF = new Primitive("jarray-ref", PACKAGE_JAVA, true,
-                                                              "java-array &rest indices")
+    // ### jarray-ref java-array &rest indices
+    private static final Primitive JARRAY_REF =
+        new Primitive("jarray-ref", PACKAGE_JAVA, true,
+                      "java-array &rest indices")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -449,10 +448,10 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jarray-ref-raw
-    // jarray-ref-raw java-array &rest indices
-    private static final Primitive JARRAY_REF_RAW = new Primitive("jarray-ref-raw", PACKAGE_JAVA, true,
-                                                                  "java-array &rest indices")
+    // ### jarray-ref-raw java-array &rest indices
+    private static final Primitive JARRAY_REF_RAW =
+        new Primitive("jarray-ref-raw", PACKAGE_JAVA, true,
+                      "java-array &rest indices")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -467,7 +466,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 Symbol condition = getCondition(t.getClass());
-                if (condition == null) 
+                if (condition == null)
                     signal(new JavaException(t));
                 else
                     signal(condition, new SimpleString(getMessage(t)));
@@ -477,10 +476,10 @@ public final class Java extends Lisp
         }
     };
 
-    // ### jarray-set
-    // jarray-set java-array new-value &rest indices
-    private static final Primitive JARRAY_SET = new Primitive("jarray-set", PACKAGE_JAVA, true,
-                                                              "java-array new-value &rest indices")
+    // ### jarray-set java-array new-value &rest indices
+    private static final Primitive JARRAY_SET =
+        new Primitive("jarray-set", PACKAGE_JAVA, true,
+                      "java-array new-value &rest indices")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -497,7 +496,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 Symbol condition = getCondition(t.getClass());
-                if (condition == null) 
+                if (condition == null)
                     signal(new JavaException(t));
                 else
                     signal(condition, new SimpleString(getMessage(t)));
@@ -576,7 +575,7 @@ public final class Java extends Lisp
         }
         catch (Throwable t) {
             Symbol condition = getCondition(t.getClass());
-            if (condition == null) 
+            if (condition == null)
                 signal(new JavaException(t));
             else
                 signal(condition, new SimpleString(getMessage(t)));
@@ -752,24 +751,6 @@ public final class Java extends Lisp
 
     private static final String getMessage(Throwable t)
     {
-        if (t instanceof InvocationTargetException) {
-            try {
-                Method method =
-                    Throwable.class.getMethod("getCause", new Class[0]);
-                if (method != null) {
-                    Throwable cause = (Throwable) method.invoke(t,
-                                                                new Object[0]);
-                    if (cause != null)
-                        t = cause;
-                }
-            }
-            catch (NoSuchMethodException e) {
-                Debug.trace(e);
-            }
-            catch (Exception e) {
-                Debug.trace(e);
-            }
-        }
         String message = t.getMessage();
         if (message == null || message.length() == 0)
             message = t.getClass().getName();

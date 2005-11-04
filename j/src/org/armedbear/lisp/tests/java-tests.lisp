@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.14 2005-10-30 12:37:11 piso Exp $
+;;; $Id: java-tests.lisp,v 1.15 2005-11-04 20:07:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(load "test-utilities.lisp")
+(load (merge-pathnames "test-utilities.lisp" *load-truename*))
 
 (in-package #:test)
 
@@ -33,7 +33,7 @@
 #+(and allegro mswindows)
 (use-package '#:javatools.jlinker '#:cg-user) ;; For convenience only.
 #+allegro
-(load "jl-config.cl")
+(load (merge-pathnames "jl-config.cl" *load-truename*))
 #+allegro
 (or (jlinker-query) (jlinker-init))
 
@@ -41,9 +41,9 @@
 (defmacro with-registered-exception (exception condition &body body)
   `(unwind-protect
        (progn
-         (java:register-java-exception ,exception ,condition)
+         (register-java-exception ,exception ,condition)
          ,@body)
-    (java:unregister-java-exception ,exception)))
+     (unregister-java-exception ,exception)))
 
 #+abcl
 (deftest java-object.1
@@ -250,8 +250,6 @@
   (unregister-java-exception "java.lang.Throwable")
   nil)
 
-
-
 #+abcl
 (deftest register-java-exception.1
   (progn
@@ -264,6 +262,18 @@
   t)
 
 #+abcl
+(deftest register-java-exception.1a
+  (progn
+    (define-condition throwable (java-exception) ())
+    (with-registered-exception "java.lang.Throwable" 'throwable
+      (handler-case
+          (jnew (jconstructor "java.lang.String" "java.lang.String")
+                (make-immediate-object nil :ref))
+        (condition (c) (values (type-of c) (princ-to-string c))))))
+  throwable
+  "java.lang.NullPointerException")
+
+#+abcl
 (deftest register-java-exception.2
   (progn
     (define-condition throwable (java-exception) ())
@@ -274,6 +284,24 @@
   t)
 
 #+abcl
+;; Behavior is non-deterministic.
+(deftest register-java-exception.2a
+  (progn
+    (define-condition throwable (java-exception) ())
+    (with-registered-exception "java.lang.Throwable" 'throwable
+      (handler-case
+          (jnew (jconstructor "java.lang.String" "java.lang.String") 42)
+        (condition (c) (let* ((s (princ-to-string c)))
+                         ;; The actual string returned by Throwable.getMessage()
+                         ;; is either "argument type mismatch" or something
+                         ;; like "java.lang.ClassCastException@9d0366".
+                         (or (string= s "argument type mismatch")
+                             (and (> (length s) (length "java.lang.ClassCastException"))
+                                  (string= (subseq s 0 (length "java.lang.ClassCastException"))
+                                           "java.lang.ClassCastException"))))))))
+  t)
+
+#+abcl
 (deftest register-java-exception.3
   (progn
     (define-condition throwable (java-exception) ())
@@ -281,6 +309,19 @@
       (signals-error
        (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
        'throwable)))
+  t)
+
+#+abcl
+;; Behavior is non-deterministic.
+(deftest register-java-exception.3a
+  (progn
+    (define-condition throwable (java-exception) ())
+    (with-registered-exception "java.lang.Throwable" 'throwable
+      (handler-case
+          (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
+        (condition (c) (let ((s (princ-to-string c)))
+                         (or (string= s "argument type mismatch")
+                             (string= s "java.lang.IllegalArgumentException")))))))
   t)
 
 #+abcl
