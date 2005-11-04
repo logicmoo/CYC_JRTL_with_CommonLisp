@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.192 2005-11-04 00:27:18 piso Exp $
+;;; $Id: clos.lisp,v 1.193 2005-11-04 00:38:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1746,6 +1746,9 @@
 
 (defmethod (setf class-name) (new-value (class class))
   (%set-class-name class new-value))
+
+(when (autoloadp 'class-precedence-list)
+  (fmakunbound 'class-precedence-list))
 
 (defgeneric class-precedence-list (class))
 
