@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: BuiltInClass.java,v 1.50 2005-11-04 13:07:03 piso Exp $
+ * $Id: BuiltInClass.java,v 1.51 2005-11-04 13:11:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,7 +178,7 @@ public class BuiltInClass extends LispClass
         LOGICAL_PATHNAME.setDirectSuperclass(PATHNAME);
         LOGICAL_PATHNAME.setCPL(LOGICAL_PATHNAME, PATHNAME, CLASS_T);
         MAILBOX.setDirectSuperclass(CLASS_T);
-        MAILBOX.setCPL(THREAD, CLASS_T);
+        MAILBOX.setCPL(MAILBOX, CLASS_T);
         METHOD_COMBINATION.setDirectSuperclass(CLASS_T);
         METHOD_COMBINATION.setCPL(METHOD_COMBINATION, CLASS_T);
         NIL_VECTOR.setDirectSuperclass(STRING);
