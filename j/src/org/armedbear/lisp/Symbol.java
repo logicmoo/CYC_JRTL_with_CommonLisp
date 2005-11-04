@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.230 2005-11-03 14:48:53 piso Exp $
+ * $Id: Symbol.java,v 1.231 2005-11-04 13:06:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2752,6 +2752,8 @@ public class Symbol extends LispObject
         PACKAGE_SYS.addExternalSymbol("ENVIRONMENT");
     public static final Symbol FORWARD_REFERENCED_CLASS =
         PACKAGE_SYS.addExternalSymbol("FORWARD-REFERENCED-CLASS");
+    public static final Symbol MAILBOX =
+        PACKAGE_EXT.addExternalSymbol("MAILBOX");
     public static final Symbol NIL_VECTOR =
         PACKAGE_EXT.addExternalSymbol("NIL-VECTOR");
     public static final Symbol SLIME_INPUT_STREAM =
