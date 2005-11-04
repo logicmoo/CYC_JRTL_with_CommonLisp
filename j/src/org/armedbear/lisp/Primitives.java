@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.847 2005-11-02 15:30:22 piso Exp $
+ * $Id: Primitives.java,v 1.848 2005-11-04 00:26:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5624,9 +5624,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### class-precedence-list
-    private static final Primitive CLASS_PRECEDENCE_LIST =
-        new Primitive("class-precedence-list", PACKAGE_SYS, true)
+    // ### %class-precedence-list
+    private static final Primitive _CLASS_PRECEDENCE_LIST =
+        new Primitive("%class-precedence-list", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -5639,9 +5639,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %set-class-precedence-list
-    private static final Primitive _SET_CLASS_PRECEDENCE_LIST =
-        new Primitive("%set-class-precedence-list", PACKAGE_SYS, true)
+    // ### set-class-precedence-list
+    private static final Primitive SET_CLASS_PRECEDENCE_LIST =
+        new Primitive("set-class-precedence-list", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
