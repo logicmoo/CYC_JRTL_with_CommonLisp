@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: CompiledFunction.java,v 1.36 2005-06-09 11:49:06 piso Exp $
+ * $Id: CompiledFunction.java,v 1.37 2005-11-04 13:09:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ public class CompiledFunction extends Closure
         {
             if (arg instanceof Closure)
                 return ((Closure)arg).getVariableList();
-            return signal(new TypeError(arg, "compiled function"));
+            return signalTypeError(arg, Symbol.COMPILED_FUNCTION);
         }
     };
 }
