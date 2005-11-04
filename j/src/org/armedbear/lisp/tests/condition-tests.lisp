@@ -20,6 +20,35 @@
 
 (in-package #:test)
 
+(defun filter (string)
+  "If STRING is unreadable, return \"#<>\"; otherwise return STRING unchanged."
+  (let ((len (length string)))
+    (when (> len 3)
+      (when (string= (subseq string 0 2) "#<")
+        (when (char= (char string (1- len)) #\>)
+          (setf string "#<>")))))
+  string)
+
+(deftest condition.1
+  (filter (write-to-string (make-condition 'condition) :escape t))
+  "#<>")
+
+(deftest condition.2
+  (filter (write-to-string (make-condition 'condition) :escape nil))
+  #+(or abcl allegro)
+  "#<>"
+  #+clisp
+  "Condition of type CONDITION."
+  #+(or cmu sbcl)
+  "Condition CONDITION was signalled.")
+
+#+(or abcl allegro)
+(deftest condition.3
+  (write-to-string (make-condition 'condition
+                                   :format-control "The bear is armed.")
+                   :escape nil)
+  "The bear is armed.")
+
 (deftest print-not-readable-object.1
   (signals-error (slot-boundp (make-condition 'print-not-readable)
                               #+abcl    'system::object
@@ -47,10 +76,11 @@
   (type-error-expected-type (make-instance 'type-error :expected-type 'symbol))
   symbol)
 
-#+(or abcl clisp cmu sbcl)
 (deftest type-error.3
-  (write-to-string (make-condition 'type-error :datum 42 :expected-type 'symbol)
-                   :escape nil)
+  (let ((c (make-condition 'type-error :datum 42 :expected-type 'symbol)))
+    (filter (write-to-string c :escape nil)))
+  #+allegro
+  "#<>"
   #+clisp
   "Condition of type TYPE-ERROR."
   #+cmu
@@ -58,9 +88,11 @@
   #+(or abcl sbcl)
   "The value 42 is not of type SYMBOL.")
 
-#+(or abcl clisp cmu sbcl)
 (deftest type-error.4
-  (format nil "~A" (make-condition 'type-error :datum 42 :expected-type 'symbol))
+  (let ((c (make-condition 'type-error :datum 42 :expected-type 'symbol)))
+    (filter (format nil "~A" c)))
+  #+allegro
+  "#<>"
   #+clisp
   "Condition of type TYPE-ERROR."
   #+cmu
@@ -184,12 +216,32 @@
     (type-error-expected-type (make-condition 'test-error :datum 42 :expected-type 'symbol)))
   symbol)
 
-#+(or abcl clisp cmu sbcl)
+#+(or abcl allegro)
 (deftest define-condition.3
   (progn
     (setf (find-class 'test-error) nil)
     (define-condition test-error (type-error) ())
-    (format nil "~A" (make-condition 'test-error :datum 42 :expected-type 'symbol)))
+    (slot-boundp (make-condition 'test-error)
+                 #+abcl    'system::format-control
+                 #+allegro 'excl::format-control))
+  nil)
+
+#+(or abcl allegro)
+(deftest define-condition.4
+  (progn
+    (setf (find-class 'test-error) nil)
+    (define-condition test-error (type-error) ())
+    (simple-condition-format-arguments (make-condition 'test-error)))
+  nil)
+
+(deftest define-condition.5
+  (progn
+    (setf (find-class 'test-error) nil)
+    (define-condition test-error (type-error) ())
+    (let ((c (make-condition 'test-error :datum 42 :expected-type 'symbol)))
+      (filter (format nil "~A" c))))
+  #+allegro
+  "#<>"
   #+clisp
   "Condition of type TEST-ERROR."
   #+cmu
@@ -198,17 +250,65 @@
   "The value 42 is not of type SYMBOL.")
 
 #+(or abcl clisp cmu sbcl)
-(deftest define-condition.4
+(deftest define-condition.6
   (progn
     (setf (find-class 'test-error) nil)
     (define-condition test-error (type-error) ())
-    (write-to-string (make-condition 'test-error :datum 42 :expected-type 'symbol)
-                     :escape nil))
+    (let ((c (make-condition 'test-error :datum 42 :expected-type 'symbol)))
+      (filter (write-to-string c :escape nil))))
+  #+allegro
+  "#<>"
   #+clisp
   "Condition of type TEST-ERROR."
   #+cmu
   "Type-error in NIL:  42 is not of type SYMBOL"
   #+(or abcl sbcl)
   "The value 42 is not of type SYMBOL.")
+
+#+(or abcl allegro)
+(deftest define-condition.7
+  (progn
+    (setf (find-class 'test-error) nil)
+    (define-condition test-error (type-error) ())
+    (let ((c (make-condition 'test-error
+                             :datum 42
+                             :expected-type 'symbol
+                             :format-control "The bear is armed.")))
+      (write-to-string c :escape nil)))
+  "The bear is armed.")
+
+#+(or abcl allegro)
+(deftest define-condition.8
+  (progn
+    (setf (find-class 'test-error) nil)
+    (define-condition test-error (type-error) ())
+    (let ((c (make-condition 'test-error
+                             :datum 42
+                             :expected-type 'symbol
+                             :format-control "~A is ~A."
+                             :format-arguments (list "The bear" "armed"))))
+      (write-to-string c :escape nil)))
+  "The bear is armed.")
+
+#+(or abcl allegro)
+(deftest define-condition.9
+  (progn
+    (setf (find-class 'test-error) nil)
+    (define-condition test-error (condition) ())
+    (let ((c (make-condition 'test-error
+                             :format-control "The bear is armed.")))
+      (write-to-string c :escape nil)))
+  "The bear is armed.")
+
+#+(or abcl allegro)
+(deftest define-condition.10
+  (progn
+    (setf (find-class 'test-error) nil)
+    (define-condition test-error (condition) ())
+    (let ((c (make-condition 'test-error
+                             :format-control "~A is ~A."
+                             :format-arguments (list "The bear" "armed"))))
+      (write-to-string c :escape nil)))
+  "The bear is armed.")
 
 (do-tests)
