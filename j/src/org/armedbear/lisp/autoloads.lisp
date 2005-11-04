@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.198 2005-11-01 09:52:58 piso Exp $
+;;; $Id: autoloads.lisp,v 1.199 2005-11-04 00:36:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -175,6 +175,10 @@
 (autoload 'ed)
 (autoload 'describe)
 (autoload 'disassemble)
+
+(in-package "MOP")
+(export 'class-precedence-list)
+(autoload 'class-precedence-list "clos")
 
 ;; Java interface.
 (in-package "JAVA")
