@@ -1,8 +1,8 @@
 /*
  * Mailbox.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: Mailbox.java,v 1.6 2004-11-03 15:39:01 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves, Andras Simon
+ * $Id: Mailbox.java,v 1.7 2005-11-04 13:08:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,25 @@ import java.util.NoSuchElementException;
 public final class Mailbox extends LispObject
 {
     private LinkedList box = new LinkedList();
+
+    public LispObject typeOf()
+    {
+        return Symbol.MAILBOX;
+    }
+
+    public LispObject classOf()
+    {
+        return BuiltInClass.MAILBOX;
+    }
+
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
+    {
+        if (typeSpecifier == Symbol.MAILBOX)
+            return T;
+        if (typeSpecifier == BuiltInClass.MAILBOX)
+            return T;
+        return super.typep(typeSpecifier);
+    }
 
     private void send (LispObject o)
     {
@@ -93,7 +112,7 @@ public final class Mailbox extends LispObject
                 mbox.send(second);
                 return T;
             } else
-                return signal(new TypeError(first, "MAILBOX"));
+                return signalTypeError(first, Symbol.MAILBOX);
         }
     };
 
@@ -107,7 +126,7 @@ public final class Mailbox extends LispObject
                 Mailbox mbox = (Mailbox) arg;
                 return mbox.read();
             } else
-                return signal(new TypeError(arg, "MAILBOX"));
+                return signalTypeError(arg, Symbol.MAILBOX);
         }
     };
 
@@ -121,7 +140,7 @@ public final class Mailbox extends LispObject
                 Mailbox mbox = (Mailbox) arg;
                 return mbox.peek();
             } else
-                return signal(new TypeError(arg, "MAILBOX"));
+                return signalTypeError(arg, Symbol.MAILBOX);
         }
     };
 
@@ -135,7 +154,7 @@ public final class Mailbox extends LispObject
                 Mailbox mbox = (Mailbox) arg;
                 return mbox.empty();
             } else
-                return signal(new TypeError(arg, "MAILBOX"));
+                return signalTypeError(arg, Symbol.MAILBOX);
         }
     };
 }
