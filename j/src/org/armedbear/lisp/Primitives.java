@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.848 2005-11-04 00:26:18 piso Exp $
+ * $Id: Primitives.java,v 1.849 2005-11-04 20:49:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3896,21 +3896,13 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg == T)
-                return NIL; // *TERMINAL-IO*
-            if (arg == NIL)
-                return NIL; // *STANDARD-OUTPUT*
-            if (arg instanceof Stream) {
-                Stream stream = (Stream) arg;
-                if (stream instanceof TwoWayStream) {
-                    Stream out = ((TwoWayStream)stream).getOutputStream();
-                    if (out.isOutputStream())
-                        return NIL;
-                }
-                if (stream.isOutputStream())
-                    return NIL;
-            }
-            return signal(new TypeError(arg, "output stream"));
+            if (arg == T) // *TERMINAL-IO*
+                return NIL;
+            if (arg == NIL) // *STANDARD-OUTPUT*
+                return NIL;
+            if (arg instanceof Stream)
+                return NIL;
+            return signalTypeError(arg, Symbol.STREAM);
         }
     };
 
