@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: print-object.lisp,v 1.11 2005-11-04 11:34:18 piso Exp $
+;;; $Id: print-object.lisp,v 1.12 2005-11-04 12:07:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -68,6 +68,15 @@
         (prin1 (restart-name restart) stream))
       (restart-report restart stream)))
 
+(defmethod print-object ((c condition) stream)
+  (if *print-escape*
+      (call-next-method)
+      (if (slot-boundp c 'format-control)
+          (apply #'format stream
+                 (simple-condition-format-control c)
+                 (simple-condition-format-arguments c))
+          (call-next-method))))
+
 (defmethod print-object ((c type-error) stream)
   (if *print-escape*
       (call-next-method)
@@ -78,15 +87,6 @@
           (format stream "The value ~S is not of type ~S."
                   (type-error-datum c)
                   (type-error-expected-type c)))))
-
-(defmethod print-object ((c simple-condition) stream)
-  (if *print-escape*
-      (call-next-method)
-      (let ((format-control (simple-condition-format-control c)))
-        (if format-control
-            (apply #'format stream format-control
-                   (simple-condition-format-arguments c))
-            (call-next-method)))))
 
 (defmethod print-object ((x undefined-function) stream)
   (if *print-escape*
