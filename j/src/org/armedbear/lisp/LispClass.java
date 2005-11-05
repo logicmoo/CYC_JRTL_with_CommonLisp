@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.60 2005-06-21 18:42:13 piso Exp $
+ * $Id: LispClass.java,v 1.61 2005-11-05 01:46:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import java.util.HashMap;
 
 public class LispClass extends StandardObject
 {
-    private static final HashMap map = new HashMap();
+    private static final EqHashTable map = new EqHashTable(256, NIL, NIL);
 
     public static void addClass(Symbol symbol, LispClass c)
     {
