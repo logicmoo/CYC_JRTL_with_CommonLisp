@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.28 2005-11-04 00:27:53 piso Exp $
+;;; $Id: known-functions.lisp,v 1.29 2005-11-05 01:30:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -61,7 +61,6 @@
         %put
         %set-cddr
         %set-schar
-        %set-std-slot-value
         %stream-terpri
         %stream-write-char
         alphanumericp
@@ -146,6 +145,7 @@
         scale-float
         second
         set
+        set-std-slot-value
         setf-function-name-p
         seventh
         simple-condition-format-arguments
