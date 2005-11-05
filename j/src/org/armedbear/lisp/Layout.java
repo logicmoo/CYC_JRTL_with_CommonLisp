@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.21 2005-11-05 01:20:21 piso Exp $
+ * $Id: Layout.java,v 1.22 2005-11-05 19:16:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,10 @@ public final class Layout extends LispObject
     private final LispClass cls;
     private final LispObject[] slotNames;
     private final LispObject sharedSlots;
+
+    private static final boolean useHashTable = true;
+
+    private final EqHashTable ht;
 
     public Layout(LispClass cls, LispObject instanceSlots, LispObject sharedSlots)
     {
@@ -55,6 +59,13 @@ public final class Layout extends LispObject
         }
         Debug.assertTrue(i == length);
         this.sharedSlots = sharedSlots;
+
+        if (useHashTable) {
+            ht = new EqHashTable(slotNames.length, NIL, NIL);
+            for (i = slotNames.length; i-- > 0;)
+                ht.put(slotNames[i], new Fixnum(i));
+        } else
+            ht = null;
     }
 
     public Layout(LispClass cls, LispObject[] instanceSlotNames,
@@ -63,6 +74,13 @@ public final class Layout extends LispObject
         this.cls = cls;
         this.slotNames = instanceSlotNames;
         this.sharedSlots = sharedSlots;
+
+        if (useHashTable) {
+            ht = new EqHashTable(slotNames.length, NIL, NIL);
+            for (int i = slotNames.length; i-- > 0;)
+                ht.put(slotNames[i], new Fixnum(i));
+        } else
+            ht = null;
     }
 
     // Copy constructor.
@@ -71,6 +89,13 @@ public final class Layout extends LispObject
         cls = oldLayout.cls;
         slotNames = oldLayout.slotNames;
         sharedSlots = oldLayout.sharedSlots;
+
+        if (useHashTable) {
+            ht = new EqHashTable(slotNames.length, NIL, NIL);
+            for (int i = slotNames.length; i-- > 0;)
+                ht.put(slotNames[i], new Fixnum(i));
+        } else
+            ht = null;
     }
 
     public LispObject getParts() throws ConditionThrowable
@@ -186,6 +211,12 @@ public final class Layout extends LispObject
 
     public int getSlotIndex(LispObject slotName)
     {
+        if (useHashTable) {
+            LispObject index = ht.get(slotName);
+            if (index != null)
+                return ((Fixnum)index).value;
+            return -1;
+        }
         for (int i = slotNames.length; i-- > 0;) {
             if (slotNames[i] == slotName)
                 return i;
