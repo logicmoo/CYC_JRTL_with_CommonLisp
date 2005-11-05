@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.52 2005-11-05 19:33:06 piso Exp $
+ * $Id: StandardObject.java,v 1.53 2005-11-05 20:02:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -403,7 +403,6 @@ public class StandardObject extends LispObject
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            LispObject value = null;
             final StandardObject instance;
             try {
                 instance = (StandardObject) first;
@@ -416,10 +415,11 @@ public class StandardObject extends LispObject
                 // Update instance.
                 layout = instance.updateLayout();
             }
-            int index = layout.getSlotIndex(second);
-            if (index >= 0) {
+            LispObject value;
+            LispObject index = layout.slotTable.get(second);
+            if (index != null) {
                 // Found instance slot.
-                value = instance.slots[index];
+                value = instance.slots[((Fixnum)index).value];
             } else {
                 // Check for shared slot.
                 LispObject location = layout.getSharedSlotLocation(second);
@@ -459,10 +459,10 @@ public class StandardObject extends LispObject
                 // Update instance.
                 layout = instance.updateLayout();
             }
-            int index = layout.getSlotIndex(second);
-            if (index >= 0) {
+            LispObject index = layout.slotTable.get(second);
+            if (index != null) {
                 // Found instance slot.
-                instance.slots[index] = third;
+                instance.slots[((Fixnum)index).value] = third;
                 return third;
             }
             // Check for shared slot.
