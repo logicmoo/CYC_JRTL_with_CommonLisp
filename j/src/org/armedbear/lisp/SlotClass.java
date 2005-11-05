@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SlotClass.java,v 1.18 2005-11-01 17:52:58 piso Exp $
+ * $Id: SlotClass.java,v 1.19 2005-11-05 01:32:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,7 +157,7 @@ public class SlotClass extends LispClass
                 return ((SlotClass)arg).directSlotDefinitions;
             if (arg instanceof BuiltInClass)
                 return NIL;
-            return signal(new TypeError(arg, Symbol.STANDARD_CLASS));
+            return signalTypeError(arg, Symbol.STANDARD_CLASS);
         }
     };
 
@@ -173,7 +173,7 @@ public class SlotClass extends LispClass
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_CLASS));
+                return signalTypeError(first, Symbol.STANDARD_CLASS);
             }
         }
     };
@@ -189,7 +189,7 @@ public class SlotClass extends LispClass
                 return ((SlotClass)arg).slotDefinitions;
             if (arg instanceof BuiltInClass)
                 return NIL;
-            return signal(new TypeError(arg, Symbol.STANDARD_CLASS));
+            return signalTypeError(arg, Symbol.STANDARD_CLASS);
         }
     };
 
@@ -205,7 +205,7 @@ public class SlotClass extends LispClass
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_CLASS));
+                return signalTypeError(first, Symbol.STANDARD_CLASS);
             }
         }
     };
@@ -221,7 +221,7 @@ public class SlotClass extends LispClass
                 return ((SlotClass)arg).directDefaultInitargs;
             if (arg instanceof BuiltInClass)
                 return NIL;
-            return signal(new TypeError(arg, Symbol.STANDARD_CLASS));
+            return signalTypeError(arg, Symbol.STANDARD_CLASS);
         }
     };
 
@@ -237,7 +237,7 @@ public class SlotClass extends LispClass
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.STANDARD_CLASS));
+                return signalTypeError(first, Symbol.STANDARD_CLASS);
             }
         }
     };
@@ -253,7 +253,7 @@ public class SlotClass extends LispClass
                 return ((SlotClass)arg).defaultInitargs;
             if (arg instanceof BuiltInClass)
                 return NIL;
-            return signal(new TypeError(arg, Symbol.STANDARD_CLASS));
+            return signalTypeError(arg, Symbol.STANDARD_CLASS);
         }
     };
 
@@ -268,7 +268,7 @@ public class SlotClass extends LispClass
                 ((SlotClass)first).defaultInitargs = second;
                 return second;
             }
-            return signal(new TypeError(first, Symbol.STANDARD_CLASS));
+            return signalTypeError(first, Symbol.STANDARD_CLASS);
         }
     };
 
@@ -279,7 +279,7 @@ public class SlotClass extends LispClass
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
         {
-            SlotClass c;
+            final SlotClass c;
             try {
                 c = (SlotClass) arg;
             }
