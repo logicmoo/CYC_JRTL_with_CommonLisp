@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.51 2005-11-05 01:29:20 piso Exp $
+ * $Id: StandardObject.java,v 1.52 2005-11-05 19:33:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,31 +70,31 @@ public class StandardObject extends LispObject
 
     public final LispClass getLispClass()
     {
-        return layout.getLispClass();
+        return layout.lispClass;
     }
 
     public LispObject typeOf()
     {
-        // "For objects of metaclass structure-class or standard-class, and for
-        // conditions, type-of returns the proper name of the class returned by
-        // class-of if it has a proper name, and otherwise returns the class
+        // "For objects of metaclass STRUCTURE-CLASS or STANDARD-CLASS, and for
+        // conditions, TYPE-OF returns the proper name of the class returned by
+        // CLASS-OF if it has a proper name, and otherwise returns the class
         // itself."
-        LispClass c1 = layout.getLispClass();
+        final LispClass c1 = layout.lispClass;
         // The proper name of a class is "a symbol that names the class whose
         // name is that symbol".
-        Symbol symbol = c1.getSymbol();
+        final Symbol symbol = c1.getSymbol();
         if (symbol != NIL) {
             // TYPE-OF.9
-            LispObject c2 = LispClass.findClass(symbol);
+            final LispObject c2 = LispClass.findClass(symbol);
             if (c2 == c1)
                 return symbol;
         }
-        return layout.getLispClass();
+        return c1;
     }
 
     public LispObject classOf()
     {
-        return layout.getLispClass();
+        return layout.lispClass;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
@@ -103,7 +103,7 @@ public class StandardObject extends LispObject
             return T;
         if (type == StandardClass.STANDARD_OBJECT)
             return T;
-        LispClass cls = layout != null ? layout.getLispClass() : null;
+        LispClass cls = layout != null ? layout.lispClass : null;
         if (cls != null) {
             if (type == cls)
                 return T;
@@ -145,7 +145,7 @@ public class StandardObject extends LispObject
     {
         Debug.assertTrue(layout.isInvalid());
         Layout oldLayout = layout;
-        LispClass cls = oldLayout.getLispClass();
+        LispClass cls = oldLayout.lispClass;
         Layout newLayout = cls.getClassLayout();
         Debug.assertTrue(!newLayout.isInvalid());
         StandardObject newInstance = new StandardObject(cls);
@@ -309,7 +309,7 @@ public class StandardObject extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return ((StandardObject)arg).layout.getLispClass();
+                return ((StandardObject)arg).layout.lispClass;
             }
             catch (ClassCastException e) {
                 return signalTypeError(arg, Symbol.STANDARD_OBJECT);
