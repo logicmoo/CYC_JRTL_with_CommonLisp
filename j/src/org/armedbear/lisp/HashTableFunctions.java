@@ -2,7 +2,7 @@
  * HashTableFunctions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: HashTableFunctions.java,v 1.3 2005-07-11 17:20:18 piso Exp $
+ * $Id: HashTableFunctions.java,v 1.4 2005-11-05 02:19:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,12 +40,12 @@ public final class HashTableFunctions extends Lisp
                                   LispObject rehashSize, LispObject rehashThreshold)
             throws ConditionThrowable
         {
-            int n;
+            final int n;
             try {
                 n = ((Fixnum)size).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(size, Symbol.FIXNUM));
+                return signalTypeError(size, Symbol.FIXNUM);
             }
             if (test == FUNCTION_EQL || test == NIL)
                 return new EqlHashTable(n, rehashSize, rehashThreshold);
@@ -60,10 +60,9 @@ public final class HashTableFunctions extends Lisp
         }
     };
 
-    // ### gethash
-    // gethash key hash-table &optional default => value, present-p
+    // ### gethash key hash-table &optional default => value, present-p
     private static final Primitive GETHASH =
-        new Primitive("gethash", "key hash-table &optional default")
+        new Primitive(Symbol.GETHASH, "key hash-table &optional default")
     {
         public LispObject execute(LispObject key, LispObject ht)
             throws ConditionThrowable
@@ -72,7 +71,7 @@ public final class HashTableFunctions extends Lisp
                 return ((HashTable)ht).gethash(key);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(ht, Symbol.HASH_TABLE));
+                return signalTypeError(ht, Symbol.HASH_TABLE);
             }
         }
         public LispObject execute(LispObject key, LispObject ht,
@@ -83,7 +82,7 @@ public final class HashTableFunctions extends Lisp
                 return ((HashTable)ht).gethash(key, defaultValue);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(ht, Symbol.HASH_TABLE));
+                return signalTypeError(ht, Symbol.HASH_TABLE);
             }
         }
     };
@@ -99,13 +98,12 @@ public final class HashTableFunctions extends Lisp
                 return ((HashTable)ht).gethash_2op_1ret(key);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(ht, Symbol.HASH_TABLE));
+                return signalTypeError(ht, Symbol.HASH_TABLE);
             }
         }
     };
 
-    // ### puthash
-    // puthash key hash-table new-value &optional default => value
+    // ### puthash key hash-table new-value &optional default => value
     private static final Primitive PUTHASH =
         new Primitive("puthash", PACKAGE_SYS, true)
     {
@@ -117,7 +115,7 @@ public final class HashTableFunctions extends Lisp
                 return ((HashTable)ht).puthash(key, value);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(ht, Symbol.HASH_TABLE));
+                return signalTypeError(ht, Symbol.HASH_TABLE);
             }
         }
         public LispObject execute(LispObject key, LispObject ht,
@@ -128,14 +126,14 @@ public final class HashTableFunctions extends Lisp
                 return ((HashTable)ht).puthash(key, value);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(ht, Symbol.HASH_TABLE));
+                return signalTypeError(ht, Symbol.HASH_TABLE);
             }
         }
     };
 
     // remhash key hash-table => generalized-boolean
     private static final Primitive REMHASH =
-        new Primitive("remhash", "key hash-table")
+        new Primitive(Symbol.REMHASH, "key hash-table")
     {
         public LispObject execute(LispObject key, LispObject ht)
             throws ConditionThrowable
@@ -144,15 +142,14 @@ public final class HashTableFunctions extends Lisp
                 return ((HashTable)ht).remhash(key);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(ht, Symbol.HASH_TABLE));
+                return signalTypeError(ht, Symbol.HASH_TABLE);
             }
         }
     };
 
-    // ### clrhash
-    // clrhash hash-table => hash-table
+    // ### clrhash hash-table => hash-table
     private static final Primitive CLRHASH =
-        new Primitive("clrhash", "hash-table")
+        new Primitive(Symbol.CLRHASH, "hash-table")
     {
         public LispObject execute(LispObject ht) throws ConditionThrowable
         {
@@ -161,14 +158,14 @@ public final class HashTableFunctions extends Lisp
                 return ht;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(ht, Symbol.HASH_TABLE));
+                return signalTypeError(ht, Symbol.HASH_TABLE);
             }
         }
     };
 
     // ### hash-table-count
     private static final Primitive HASH_TABLE_COUNT =
-        new Primitive("hash-table-count", "hash-table")
+        new Primitive(Symbol.HASH_TABLE_COUNT, "hash-table")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -176,14 +173,14 @@ public final class HashTableFunctions extends Lisp
                 return new Fixnum(((HashTable)arg).getCount());
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+                return signalTypeError(arg, Symbol.HASH_TABLE);
             }
         }
     };
 
-    // ### sxhash
-    // sxhash object => hash-code
-    private static final Primitive SXHASH = new Primitive("sxhash", "object")
+    // ### sxhash object => hash-code
+    private static final Primitive SXHASH =
+        new Primitive(Symbol.SXHASH, "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -191,8 +188,7 @@ public final class HashTableFunctions extends Lisp
         }
     };
 
-    // ### psxhash
-    // psxhash object => hash-code
+    // ### psxhash object => hash-code
     // For EQUALP hash tables.
     private static final Primitive PSXHASH =
         new Primitive("psxhash", PACKAGE_SYS, true, "object")
@@ -205,7 +201,7 @@ public final class HashTableFunctions extends Lisp
 
     // ### hash-table-p
     private static final Primitive HASH_TABLE_P =
-        new Primitive("hash-table-p","object")
+        new Primitive(Symbol.HASH_TABLE_P,"object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -223,14 +219,14 @@ public final class HashTableFunctions extends Lisp
                 return ((HashTable)arg).ENTRIES();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+                return signalTypeError(arg, Symbol.HASH_TABLE);
             }
         }
     };
 
     // ### hash-table-test
     private static final Primitive HASH_TABLE_TEST =
-        new Primitive("hash-table-test", "hash-table")
+        new Primitive(Symbol.HASH_TABLE_TEST, "hash-table")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -238,14 +234,14 @@ public final class HashTableFunctions extends Lisp
                 return ((HashTable)arg).getTest();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+                return signalTypeError(arg, Symbol.HASH_TABLE);
             }
         }
     };
 
     // ### hash-table-size
     private static final Primitive HASH_TABLE_SIZE =
-        new Primitive("hash-table-size", "hash-table")
+        new Primitive(Symbol.HASH_TABLE_SIZE, "hash-table")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -253,14 +249,14 @@ public final class HashTableFunctions extends Lisp
                 return new Fixnum(((HashTable)arg).getSize());
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+                return signalTypeError(arg, Symbol.HASH_TABLE);
             }
         }
     };
 
     // ### hash-table-rehash-size
     private static final Primitive HASH_TABLE_REHASH_SIZE =
-        new Primitive("hash-table-rehash-size", "hash-table")
+        new Primitive(Symbol.HASH_TABLE_REHASH_SIZE, "hash-table")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -268,14 +264,14 @@ public final class HashTableFunctions extends Lisp
                 return ((HashTable)arg).getRehashSize();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+                return signalTypeError(arg, Symbol.HASH_TABLE);
             }
         }
     };
 
     // ### hash-table-rehash-threshold
     private static final Primitive HASH_TABLE_REHASH_THRESHOLD =
-        new Primitive("hash-table-rehash-threshold", "hash-table")
+        new Primitive(Symbol.HASH_TABLE_REHASH_THRESHOLD, "hash-table")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -283,7 +279,7 @@ public final class HashTableFunctions extends Lisp
                 return ((HashTable)arg).getRehashThreshold();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+                return signalTypeError(arg, Symbol.HASH_TABLE);
             }
         }
     };
