@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.20 2005-06-23 16:27:16 piso Exp $
+ * $Id: Layout.java,v 1.21 2005-11-05 01:20:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,7 +148,7 @@ public final class Layout extends LispObject
                                   checkList(third));
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.CLASS));
+                return signalTypeError(first, Symbol.CLASS);
             }
         }
 
@@ -164,7 +164,7 @@ public final class Layout extends LispObject
                 return ((Layout)arg).cls;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.LAYOUT));
+                return signalTypeError(arg, Symbol.LAYOUT);
             }
         }
     };
@@ -179,7 +179,7 @@ public final class Layout extends LispObject
                 return new Fixnum(((Layout)arg).slotNames.length);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.LAYOUT));
+                return signalTypeError(arg, Symbol.LAYOUT);
             }
         }
     };
@@ -222,7 +222,7 @@ public final class Layout extends LispObject
                 return NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.LAYOUT));
+                return signalTypeError(first, Symbol.LAYOUT);
             }
         }
     };
@@ -252,7 +252,7 @@ public final class Layout extends LispObject
                 return NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.LAYOUT));
+                return signalTypeError(first, Symbol.LAYOUT);
             }
         }
     };
@@ -268,7 +268,7 @@ public final class Layout extends LispObject
                 cls = (LispClass) arg;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CLASS));
+                return signalTypeError(arg, Symbol.CLASS);
             }
             Layout oldLayout = cls.getClassLayout();
             Layout newLayout = new Layout(oldLayout);
