@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.22 2005-11-05 19:16:01 piso Exp $
+ * $Id: Layout.java,v 1.23 2005-11-05 19:31:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,19 +23,19 @@ package org.armedbear.lisp;
 
 public final class Layout extends LispObject
 {
-    private boolean invalid;
-
-    private final LispClass cls;
-    private final LispObject[] slotNames;
-    private final LispObject sharedSlots;
-
     private static final boolean useHashTable = true;
 
+    public final LispClass lispClass;
+
+    private final LispObject[] slotNames;
+    private final LispObject sharedSlots;
     private final EqHashTable ht;
 
-    public Layout(LispClass cls, LispObject instanceSlots, LispObject sharedSlots)
+    private boolean invalid;
+
+    public Layout(LispClass lispClass, LispObject instanceSlots, LispObject sharedSlots)
     {
-        this.cls = cls;
+        this.lispClass = lispClass;
         Debug.assertTrue(instanceSlots.listp());
         int length = 0;
         try {
@@ -68,10 +68,10 @@ public final class Layout extends LispObject
             ht = null;
     }
 
-    public Layout(LispClass cls, LispObject[] instanceSlotNames,
+    public Layout(LispClass lispClass, LispObject[] instanceSlotNames,
                   LispObject sharedSlots)
     {
-        this.cls = cls;
+        this.lispClass = lispClass;
         this.slotNames = instanceSlotNames;
         this.sharedSlots = sharedSlots;
 
@@ -86,7 +86,7 @@ public final class Layout extends LispObject
     // Copy constructor.
     private Layout(Layout oldLayout)
     {
-        cls = oldLayout.cls;
+        lispClass = oldLayout.lispClass;
         slotNames = oldLayout.slotNames;
         sharedSlots = oldLayout.sharedSlots;
 
@@ -101,7 +101,7 @@ public final class Layout extends LispObject
     public LispObject getParts() throws ConditionThrowable
     {
         LispObject result = NIL;
-        result = result.push(new Cons("class", cls));
+        result = result.push(new Cons("class", lispClass));
         for (int i = 0; i < slotNames.length; i++) {
             result = result.push(new Cons("slot " + i, slotNames[i]));
         }
@@ -117,11 +117,6 @@ public final class Layout extends LispObject
     public void invalidate()
     {
         invalid = true;
-    }
-
-    public LispClass getLispClass()
-    {
-        return cls;
     }
 
     public LispObject[] getSlotNames()
@@ -186,7 +181,7 @@ public final class Layout extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return ((Layout)arg).cls;
+                return ((Layout)arg).lispClass;
             }
             catch (ClassCastException e) {
                 return signalTypeError(arg, Symbol.LAYOUT);
@@ -294,16 +289,16 @@ public final class Layout extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            final LispClass cls;
+            final LispClass lispClass;
             try {
-                cls = (LispClass) arg;
+                lispClass = (LispClass) arg;
             }
             catch (ClassCastException e) {
                 return signalTypeError(arg, Symbol.CLASS);
             }
-            Layout oldLayout = cls.getClassLayout();
+            Layout oldLayout = lispClass.getClassLayout();
             Layout newLayout = new Layout(oldLayout);
-            cls.setClassLayout(newLayout);
+            lispClass.setClassLayout(newLayout);
             oldLayout.invalidate();
             return arg;
         }
