@@ -1,7 +1,7 @@
 ;;; make-hash-table.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: make-hash-table.lisp,v 1.5 2004-09-19 13:35:21 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: make-hash-table.lisp,v 1.6 2005-11-05 02:19:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,8 +21,8 @@
 
 (defun make-hash-table (&key (test 'eql) (size 11) (rehash-size 1.5)
 			     (rehash-threshold 0.75))
-  (setq test (coerce-to-function test))
+  (setf test (coerce-to-function test))
   (unless (and (integerp size) (>= size 0))
-    (error 'type-error "MAKE-HASH-TABLE: ~S is not a non-negative integer." size))
+    (error 'type-error :datum size :expected-type '(integer 0)))
   (let ((size (max 11 (min size array-dimension-limit))))
     (%make-hash-table test size rehash-size rehash-threshold)))
