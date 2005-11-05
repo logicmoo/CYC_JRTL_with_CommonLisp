@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.849 2005-11-04 20:49:29 piso Exp $
+ * $Id: Primitives.java,v 1.850 2005-11-05 19:18:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5382,7 +5382,7 @@ public final class Primitives extends Lisp
         }
     };
 
-    // makunbound
+    // ### makunbound
     public static final Primitive MAKUNBOUND =
         new Primitive(Symbol.MAKUNBOUND, "symbol")
     {
