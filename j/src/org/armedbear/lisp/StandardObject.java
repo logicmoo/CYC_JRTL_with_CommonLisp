@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.53 2005-11-05 20:02:01 piso Exp $
+ * $Id: StandardObject.java,v 1.54 2005-11-05 20:15:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -360,7 +360,7 @@ public class StandardObject extends LispObject
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            StandardObject instance;
+            final StandardObject instance;
             try {
                 instance = (StandardObject) first;
             }
@@ -372,24 +372,22 @@ public class StandardObject extends LispObject
                 // Update instance.
                 layout = instance.updateLayout();
             }
-            int index = layout.getSlotIndex(second);
-            if (index >= 0) {
+            final LispObject index = layout.slotTable.get(second);
+            if (index != null) {
                 // Found instance slot.
-                LispObject value = instance.slots[index];
-                return value != UNBOUND_VALUE ? T : NIL;
+                return instance.slots[((Fixnum)index).value] != UNBOUND_VALUE ? T : NIL;
             }
             // Check for shared slot.
-            LispObject location = layout.getSharedSlotLocation(second);
-            if (location != null) {
-                LispObject value = location.cdr();
-                return value != UNBOUND_VALUE ? T : NIL;
-            }
+            final LispObject location = layout.getSharedSlotLocation(second);
+            if (location != null)
+                return location.cdr() != UNBOUND_VALUE ? T : NIL;
+            // Not found.
             final LispThread thread = LispThread.currentThread();
             LispObject value =
                 thread.execute(Symbol.SLOT_MISSING, instance.getLispClass(),
                                instance, second, Symbol.SLOT_BOUNDP);
-            // "If slot-missing is invoked and returns a value, a boolean
-            // equivalent to its primary value is returned by slot-boundp."
+            // "If SLOT-MISSING is invoked and returns a value, a boolean
+            // equivalent to its primary value is returned by SLOT-BOUNDP."
             thread._values = null;
             return value != NIL ? T : NIL;
         }
@@ -416,7 +414,7 @@ public class StandardObject extends LispObject
                 layout = instance.updateLayout();
             }
             LispObject value;
-            LispObject index = layout.slotTable.get(second);
+            final LispObject index = layout.slotTable.get(second);
             if (index != null) {
                 // Found instance slot.
                 value = instance.slots[((Fixnum)index).value];
@@ -459,7 +457,7 @@ public class StandardObject extends LispObject
                 // Update instance.
                 layout = instance.updateLayout();
             }
-            LispObject index = layout.slotTable.get(second);
+            final LispObject index = layout.slotTable.get(second);
             if (index != null) {
                 // Found instance slot.
                 instance.slots[((Fixnum)index).value] = third;
