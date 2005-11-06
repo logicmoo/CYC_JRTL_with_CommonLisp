@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.64 2005-10-30 01:20:36 piso Exp $
+;;; $Id: compile-system.lisp,v 1.65 2005-11-06 12:30:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -168,6 +168,7 @@
                                      ;;"j.lisp"
                                      "java.lisp"
                                      "known-functions.lisp"
+                                     "known-symbols.lisp"
                                      "late-setf.lisp"
                                      "lcm.lisp"
                                      ;;"ldb.lisp"
