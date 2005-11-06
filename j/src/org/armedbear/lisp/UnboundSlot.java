@@ -2,7 +2,7 @@
  * UnboundSlot.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: UnboundSlot.java,v 1.7 2005-06-23 00:09:34 piso Exp $
+ * $Id: UnboundSlot.java,v 1.8 2005-11-06 20:40:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,19 +53,21 @@ public final class UnboundSlot extends CellError
         setInstanceSlotValue(Symbol.INSTANCE, instance);
     }
 
-    public String getMessage()
+    public String getMessage() throws ConditionThrowable
     {
+        final LispThread thread = LispThread.currentThread();
+        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+        thread.bindSpecial(Symbol.PRINT_ESCAPE, T);
         try {
-            StringBuffer sb = new StringBuffer("The slot ");
-            sb.append(safeWriteToString(getCellName()));
+            FastStringBuffer sb = new FastStringBuffer("The slot ");
+            sb.append(getCellName().writeToString());
             sb.append(" is unbound in the object ");
-            sb.append(safeWriteToString(getInstance()));
+            sb.append(getInstance().writeToString());
             sb.append('.');
             return sb.toString();
         }
-        catch (Throwable t) {
-            Debug.trace(t);
-            return null;
+        finally {
+            thread.lastSpecialBinding = lastSpecialBinding;
         }
     }
 
