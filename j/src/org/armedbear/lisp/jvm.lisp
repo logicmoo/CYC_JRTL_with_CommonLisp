@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.618 2005-11-06 19:08:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.619 2005-11-06 20:07:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1467,7 +1467,7 @@
       (emit-invokestatic +lisp-class+ "handleInterrupt" nil nil)
       (emit 'label `,label1))))
 
-(declaim (ftype (function (t) t) single-valued-p))
+(defknown single-valued-p (t) t)
 (defun single-valued-p (form)
   (cond ((block-node-p form)
          (if (equal (block-name form) '(TAGBODY))
@@ -1479,7 +1479,8 @@
          t)
         (t
          (let ((op (%car form))
-               result-type)
+               result-type
+               compiland)
            (cond ((eq op 'IF)
                   (and (single-valued-p (third form))
                        (single-valued-p (fourth form))))
@@ -1506,19 +1507,19 @@
                          (= (length result-type) 2))
                         (t
                          t)))
-                 ((eq op (compiland-name *current-compiland*))
-                  (dformat t "single-valued-p recursive call ~S~%" (first form))
-                  (compiland-single-valued-p *current-compiland*))
+                 ((and (setf compiland *current-compiland*)
+                       (eq op (compiland-name compiland)))
+                  (compiland-single-valued-p compiland))
                  (t
                   nil))))))
 
-(declaim (ftype (function * t) emit-clear-values))
+(defknown emit-clear-values () t)
 (defun emit-clear-values ()
 ;;   (break "EMIT-CLEAR-VALUES called~%")
   (ensure-thread-var-initialized)
   (emit 'clear-values))
 
-(declaim (ftype (function * t) maybe-emit-clear-values))
+(defknown maybe-emit-clear-values (&rest t) t)
 (defun maybe-emit-clear-values (&rest forms)
   (declare (optimize speed))
   (dolist (form forms)
@@ -1529,7 +1530,7 @@
       (emit 'clear-values)
       (return))))
 
-(declaim (ftype (function () t) emit-unbox-fixnum))
+(defknown emit-unbox-fixnum () t)
 (defun emit-unbox-fixnum ()
   (declare (optimize speed))
   (cond ((= *safety* 3)
@@ -1539,7 +1540,7 @@
          (emit 'checkcast +lisp-fixnum-class+)
          (emit 'getfield +lisp-fixnum-class+ "value" "I"))))
 
-(declaim (ftype (function () t) emit-unbox-character))
+(defknown emit-unbox-character () t)
 (defun emit-unbox-character ()
   (cond ((= *safety* 3)
          (emit-invokestatic +lisp-character-class+ "getValue"

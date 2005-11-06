@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.234 2005-11-06 19:04:24 piso Exp $
+ * $Id: Symbol.java,v 1.235 2005-11-06 20:06:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -772,7 +772,7 @@ public class Symbol extends LispObject
             function.incrementCallCount();
     }
 
-    // CL symbols
+    // External symbols in CL package.
     public static final Symbol AND_ALLOW_OTHER_KEYS =
         PACKAGE_CL.addExternalSymbol("&ALLOW-OTHER-KEYS");
     public static final Symbol AND_AUX =
@@ -2730,95 +2730,9 @@ public class Symbol extends LispObject
         PACKAGE_CL.addExternalSymbol("YES-OR-NO-P");
     public static final Symbol ZEROP =
         PACKAGE_CL.addExternalSymbol("ZEROP");
-    // end of CL symbols
+    // End of CL symbols.
 
-    public static final Symbol CASE_FROB_STREAM =
-        PACKAGE_SYS.addInternalSymbol("CASE-FROB-STREAM");
-    public static final Symbol ENVIRONMENT =
-        PACKAGE_SYS.addExternalSymbol("ENVIRONMENT");
-    public static final Symbol FORWARD_REFERENCED_CLASS =
-        PACKAGE_SYS.addExternalSymbol("FORWARD-REFERENCED-CLASS");
-    public static final Symbol MAILBOX =
-        PACKAGE_EXT.addExternalSymbol("MAILBOX");
-    public static final Symbol NIL_VECTOR =
-        PACKAGE_EXT.addExternalSymbol("NIL-VECTOR");
-    public static final Symbol SLIME_INPUT_STREAM =
-        PACKAGE_EXT.addExternalSymbol("SLIME-INPUT-STREAM");
-    public static final Symbol SLIME_OUTPUT_STREAM =
-        PACKAGE_EXT.addExternalSymbol("SLIME-OUTPUT-STREAM");
-    public static final Symbol SOCKET_STREAM =
-        PACKAGE_SYS.addInternalSymbol("SOCKET-STREAM");
-    public static final Symbol STRING_INPUT_STREAM =
-        PACKAGE_SYS.addInternalSymbol("STRING-INPUT-STREAM");
-    public static final Symbol STRING_OUTPUT_STREAM =
-        PACKAGE_SYS.addInternalSymbol("STRING-OUTPUT-STREAM");
-
-    public static final Symbol COMPILER_ERROR =
-        PACKAGE_EXT.addExternalSymbol("COMPILER-ERROR");
-    public static final Symbol COMPILER_UNSUPPORTED_FEATURE_ERROR =
-        PACKAGE_EXT.addExternalSymbol("COMPILER-UNSUPPORTED-FEATURE-ERROR");
-
-    public static final Symbol THREAD =
-        PACKAGE_EXT.addExternalSymbol("THREAD");
-
-    // Internal symbols.
-    public static final Symbol BACKQUOTE_MACRO =
-        PACKAGE_SYS.addInternalSymbol("BACKQUOTE-MACRO");
-    public static final Symbol CAUSE =
-        PACKAGE_SYS.addInternalSymbol("CAUSE");
-    public static final Symbol CLASS_BYTES =
-        PACKAGE_SYS.addExternalSymbol("CLASS-BYTES");
-    public static final Symbol _CLASS_SLOTS =
-        PACKAGE_SYS.addExternalSymbol("%CLASS-SLOTS");
-    public static final Symbol COMMA_MACRO =
-        PACKAGE_SYS.addInternalSymbol("COMMA-MACRO");
-    public static final Symbol DATUM =
-        PACKAGE_SYS.addInternalSymbol("DATUM");
-    public static final Symbol EXPECTED_TYPE =
-        PACKAGE_SYS.addInternalSymbol("EXPECTED-TYPE");
-    public static final Symbol FORMAT_ARGUMENTS =
-        PACKAGE_SYS.addInternalSymbol("FORMAT-ARGUMENTS");
-    public static final Symbol FORMAT_CONTROL =
-        PACKAGE_SYS.addInternalSymbol("FORMAT-CONTROL");
-    public static final Symbol FSET =
-        PACKAGE_SYS.addInternalSymbol("FSET");
-    public static final Symbol INSTANCE =
-        PACKAGE_SYS.addInternalSymbol("INSTANCE");
-    public static final Symbol LAYOUT =
-        PACKAGE_SYS.addExternalSymbol("LAYOUT");
-    public static final Symbol MACROEXPAND_MACRO =
-        PACKAGE_SYS.addInternalSymbol("MACROEXPAND-MACRO");
-    public static final Symbol NAME =
-        PACKAGE_SYS.addInternalSymbol("NAME");
-    public static final Symbol NAMED_LAMBDA =
-        PACKAGE_SYS.addExternalSymbol("NAMED-LAMBDA");
-    public static final Symbol OBJECT =
-        PACKAGE_SYS.addInternalSymbol("OBJECT");
-    public static final Symbol OPERANDS =
-        PACKAGE_SYS.addInternalSymbol("OPERANDS");
-    public static final Symbol OPERATION =
-        PACKAGE_SYS.addInternalSymbol("OPERATION");
-    public static final Symbol OUTPUT_OBJECT =
-        PACKAGE_SYS.addExternalSymbol("OUTPUT-OBJECT");
-    public static final Symbol SET_CLASS_SLOTS =
-        PACKAGE_SYS.addExternalSymbol("SET-CLASS-SLOTS");
-    public static final Symbol SETF_FUNCTION =
-        PACKAGE_SYS.addExternalSymbol("SETF-FUNCTION");
-    public static final Symbol SETF_INVERSE =
-        PACKAGE_SYS.addExternalSymbol("SETF-INVERSE");
-    public static final Symbol SLOT_DEFINITION =
-        PACKAGE_SYS.addExternalSymbol("SLOT-DEFINITION");
-    public static final Symbol _SLOT_DEFINITION_NAME =
-        PACKAGE_SYS.addExternalSymbol("%SLOT-DEFINITION-NAME");
-    public static final Symbol _SLOT_DEFINITION_INITARGS =
-        PACKAGE_SYS.addExternalSymbol("%SLOT-DEFINITION-INITARGS");
-    public static final Symbol _SLOT_DEFINITION_INITFUNCTION =
-        PACKAGE_SYS.addExternalSymbol("%SLOT-DEFINITION-INITFUNCTION");
-    public static final Symbol _DOCUMENTATION =
-        PACKAGE_SYS.addExternalSymbol("%DOCUMENTATION");
-    public static final Symbol _SOURCE =
-        PACKAGE_SYS.addInternalSymbol("%SOURCE");
-
+    // Extensions.
     public static final Symbol SINGLE_FLOAT_POSITIVE_INFINITY =
         PACKAGE_EXT.addExternalSymbol("SINGLE-FLOAT-POSITIVE-INFINITY");
     public static final Symbol SINGLE_FLOAT_NEGATIVE_INFINITY =
@@ -2827,16 +2741,20 @@ public class Symbol extends LispObject
         PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-POSITIVE-INFINITY");
     public static final Symbol DOUBLE_FLOAT_NEGATIVE_INFINITY =
         PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-NEGATIVE-INFINITY");
-
     public static final Symbol STYLE_WARN =
         PACKAGE_EXT.addExternalSymbol("STYLE-WARN");
-
     public static final Symbol MEMQ =
         PACKAGE_EXT.addExternalSymbol("MEMQ");
     public static final Symbol MEMQL =
         PACKAGE_EXT.addExternalSymbol("MEMQL");
+    public static final Symbol COMPILER_ERROR =
+        PACKAGE_EXT.addExternalSymbol("COMPILER-ERROR");
+    public static final Symbol COMPILER_UNSUPPORTED_FEATURE_ERROR =
+        PACKAGE_EXT.addExternalSymbol("COMPILER-UNSUPPORTED-FEATURE-ERROR");
+    public static final Symbol THREAD =
+        PACKAGE_EXT.addExternalSymbol("THREAD");
 
-    // Java interface
+    // Java interface.
     public static final Symbol JAVA_EXCEPTION =
         PACKAGE_JAVA.addExternalSymbol("JAVA-EXCEPTION");
     public static final Symbol JAVA_EXCEPTION_CAUSE =
@@ -2855,4 +2773,90 @@ public class Symbol extends LispObject
         PACKAGE_JAVA.addExternalSymbol("JCLASS-OF");
     public static final Symbol JMETHOD_RETURN_TYPE =
         PACKAGE_JAVA.addExternalSymbol("JMETHOD-RETURN-TYPE");
+
+    // External symbols in SYSTEM package.
+    public static final Symbol ENVIRONMENT =
+        PACKAGE_SYS.addExternalSymbol("ENVIRONMENT");
+    public static final Symbol FORWARD_REFERENCED_CLASS =
+        PACKAGE_SYS.addExternalSymbol("FORWARD-REFERENCED-CLASS");
+    public static final Symbol MAILBOX =
+        PACKAGE_EXT.addExternalSymbol("MAILBOX");
+    public static final Symbol NIL_VECTOR =
+        PACKAGE_EXT.addExternalSymbol("NIL-VECTOR");
+    public static final Symbol SLIME_INPUT_STREAM =
+        PACKAGE_EXT.addExternalSymbol("SLIME-INPUT-STREAM");
+    public static final Symbol SLIME_OUTPUT_STREAM =
+        PACKAGE_EXT.addExternalSymbol("SLIME-OUTPUT-STREAM");
+    public static final Symbol CLASS_BYTES =
+        PACKAGE_SYS.addExternalSymbol("CLASS-BYTES");
+    public static final Symbol _CLASS_SLOTS =
+        PACKAGE_SYS.addExternalSymbol("%CLASS-SLOTS");
+    public static final Symbol LAYOUT =
+        PACKAGE_SYS.addExternalSymbol("LAYOUT");
+    public static final Symbol NAMED_LAMBDA =
+        PACKAGE_SYS.addExternalSymbol("NAMED-LAMBDA");
+    public static final Symbol OUTPUT_OBJECT =
+        PACKAGE_SYS.addExternalSymbol("OUTPUT-OBJECT");
+    public static final Symbol SET_CLASS_SLOTS =
+        PACKAGE_SYS.addExternalSymbol("SET-CLASS-SLOTS");
+    public static final Symbol SETF_FUNCTION =
+        PACKAGE_SYS.addExternalSymbol("SETF-FUNCTION");
+    public static final Symbol SETF_INVERSE =
+        PACKAGE_SYS.addExternalSymbol("SETF-INVERSE");
+    public static final Symbol SLOT_DEFINITION =
+        PACKAGE_SYS.addExternalSymbol("SLOT-DEFINITION");
+    public static final Symbol _SLOT_DEFINITION_NAME =
+        PACKAGE_SYS.addExternalSymbol("%SLOT-DEFINITION-NAME");
+    public static final Symbol _SLOT_DEFINITION_INITARGS =
+        PACKAGE_SYS.addExternalSymbol("%SLOT-DEFINITION-INITARGS");
+    public static final Symbol _SLOT_DEFINITION_INITFUNCTION =
+        PACKAGE_SYS.addExternalSymbol("%SLOT-DEFINITION-INITFUNCTION");
+    public static final Symbol _DOCUMENTATION =
+        PACKAGE_SYS.addExternalSymbol("%DOCUMENTATION");
+    public static final Symbol STD_SLOT_BOUNDP =
+        PACKAGE_SYS.addExternalSymbol("STD-SLOT-BOUNDP");
+    public static final Symbol STD_SLOT_VALUE =
+        PACKAGE_SYS.addExternalSymbol("STD-SLOT-VALUE");
+    public static final Symbol SET_STD_SLOT_VALUE =
+        PACKAGE_SYS.addExternalSymbol("SET-STD-SLOT-VALUE");
+
+    // Internal symbols in SYSTEM package.
+    public static final Symbol BACKQUOTE_MACRO =
+        PACKAGE_SYS.addInternalSymbol("BACKQUOTE-MACRO");
+    public static final Symbol CASE_FROB_STREAM =
+        PACKAGE_SYS.addInternalSymbol("CASE-FROB-STREAM");
+    public static final Symbol CAUSE =
+        PACKAGE_SYS.addInternalSymbol("CAUSE");
+    public static final Symbol COMMA_MACRO =
+        PACKAGE_SYS.addInternalSymbol("COMMA-MACRO");
+    public static final Symbol DATUM =
+        PACKAGE_SYS.addInternalSymbol("DATUM");
+    public static final Symbol EXPECTED_TYPE =
+        PACKAGE_SYS.addInternalSymbol("EXPECTED-TYPE");
+    public static final Symbol FORMAT_ARGUMENTS =
+        PACKAGE_SYS.addInternalSymbol("FORMAT-ARGUMENTS");
+    public static final Symbol FORMAT_CONTROL =
+        PACKAGE_SYS.addInternalSymbol("FORMAT-CONTROL");
+    public static final Symbol FSET =
+        PACKAGE_SYS.addInternalSymbol("FSET");
+    public static final Symbol INSTANCE =
+        PACKAGE_SYS.addInternalSymbol("INSTANCE");
+    public static final Symbol MACROEXPAND_MACRO =
+        PACKAGE_SYS.addInternalSymbol("MACROEXPAND-MACRO");
+    public static final Symbol NAME =
+        PACKAGE_SYS.addInternalSymbol("NAME");
+    public static final Symbol OBJECT =
+        PACKAGE_SYS.addInternalSymbol("OBJECT");
+    public static final Symbol OPERANDS =
+        PACKAGE_SYS.addInternalSymbol("OPERANDS");
+    public static final Symbol OPERATION =
+        PACKAGE_SYS.addInternalSymbol("OPERATION");
+    public static final Symbol _SOURCE =
+        PACKAGE_SYS.addInternalSymbol("%SOURCE");
+    public static final Symbol SOCKET_STREAM =
+        PACKAGE_SYS.addInternalSymbol("SOCKET-STREAM");
+    public static final Symbol STRING_INPUT_STREAM =
+        PACKAGE_SYS.addInternalSymbol("STRING-INPUT-STREAM");
+    public static final Symbol STRING_OUTPUT_STREAM =
+        PACKAGE_SYS.addInternalSymbol("STRING-OUTPUT-STREAM");
 }
