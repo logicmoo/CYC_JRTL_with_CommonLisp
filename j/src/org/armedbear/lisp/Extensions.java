@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Extensions.java,v 1.41 2005-07-25 17:54:52 piso Exp $
+ * $Id: Extensions.java,v 1.42 2005-11-06 02:18:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public final class Extensions extends Lisp
 
     // ### memq item list => tail
     private static final Primitive MEMQ =
-        new Primitive("memq", PACKAGE_EXT, true, "item list")
+        new Primitive(Symbol.MEMQ, "item list")
     {
         public LispObject execute(LispObject item, LispObject list)
             throws ConditionThrowable
@@ -73,7 +73,7 @@ public final class Extensions extends Lisp
 
     // ### memql item list => tail
     private static final Primitive MEMQL =
-        new Primitive("memql", PACKAGE_EXT, true, "item list")
+        new Primitive(Symbol.MEMQL, "item list")
     {
         public LispObject execute(LispObject item, LispObject list)
             throws ConditionThrowable
