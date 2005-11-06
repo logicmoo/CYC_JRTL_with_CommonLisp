@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.64 2005-11-04 20:06:58 piso Exp $
+ * $Id: Java.java,v 1.65 2005-11-06 22:19:45 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -406,7 +406,12 @@ public final class Java extends Lisp
                 if (condition == null)
                     signal(new JavaException(t));
                 else
-                    signal(condition, new SimpleString(getMessage(t)));
+                    Symbol.SIGNAL.execute(
+                        condition,
+                        Keyword.CAUSE,
+                        new JavaObject(t),
+                        Keyword.FORMAT_CONTROL,
+                        new SimpleString(getMessage(t)));
             }
             // Not reached.
             return NIL;
