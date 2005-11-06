@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.54 2005-11-05 20:15:09 piso Exp $
+ * $Id: StandardObject.java,v 1.55 2005-11-06 20:06:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -354,8 +354,7 @@ public class StandardObject extends LispObject
 
     // ### std-slot-boundp
     private static final Primitive STD_SLOT_BOUNDP =
-        new Primitive("std-slot-boundp", PACKAGE_SYS, true,
-                      "instance slot-name")
+        new Primitive(Symbol.STD_SLOT_BOUNDP, "instance slot-name")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -395,8 +394,7 @@ public class StandardObject extends LispObject
 
     // ### std-slot-value
     private static final Primitive STD_SLOT_VALUE =
-        new Primitive("std-slot-value", PACKAGE_SYS, true,
-                      "instance slot-name")
+        new Primitive(Symbol.STD_SLOT_VALUE, "instance slot-name")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -438,8 +436,7 @@ public class StandardObject extends LispObject
 
     // ### set-std-slot-value
     private static final Primitive SET_STD_SLOT_VALUE =
-        new Primitive("set-std-slot-value", PACKAGE_SYS, true,
-                      "instance slot-name new-value")
+        new Primitive(Symbol.SET_STD_SLOT_VALUE, "instance slot-name new-value")
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
