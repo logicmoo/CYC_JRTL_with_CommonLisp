@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.617 2005-11-06 12:30:11 piso Exp $
+;;; $Id: jvm.lisp,v 1.618 2005-11-06 19:08:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1467,120 +1467,6 @@
       (emit-invokestatic +lisp-class+ "handleInterrupt" nil nil)
       (emit 'label `,label1))))
 
-(defun single-valued-p-init ()
-  (dolist (op '(+ - * /
-                1+ 1- < > <= >= = /=
-                car cdr caar cadr cdar cddr cadar caddr cdddr cddddr
-                first second third
-                eq eql equal equalp
-                length
-                constantp symbolp
-                list list*
-                macro-function
-                compiler-macro-function
-                sys::%defun
-                get
-                atom
-                compiled-function-p
-                fdefinition
-                special-operator-p keywordp functionp fboundp zerop consp listp
-                numberp integerp floatp
-                plusp minusp
-                complexp arrayp readtablep packagep
-                array-dimensions array-rank array-total-size
-                array-element-type upgraded-array-element-type
-                simple-vector-p simple-string-p bit-vector-p simple-bit-vector-p
-                stringp
-                row-major-aref
-                quote function
-                mapcar
-                find position
-                append nconc subseq adjoin
-                revappend nreconc
-                copy-seq
-                assoc assoc-if assoc-if-not acons assq assql
-                char-code code-char char-int digit-char-p
-                member ext:memq
-                remove remove-if remove-if-not delete delete-if delete-if-not
-                special-variable-p
-                gensym
-                symbol-name symbol-function
-                coerce
-                reverse nreverse
-                last
-                cons rplaca rplacd
-                sys::set-car sys::set-cdr
-                copy-list copy-tree
-                make-sequence make-list make-array make-package make-hash-table
-                make-string
-                find-package
-                pathname make-pathname pathname-name directory
-                package-used-by-list package-shadowing-symbols
-                nthcdr
-                aref elt
-                not null endp
-                concatenate
-                format sys::%format
-                prin1 princ print write
-                compute-restarts find-restart restart-name
-                string
-                string=
-                setq
-                multiple-value-list push pop
-                type-of class-of
-                typep sys::%typep
-                abs
-                ash
-                float-radix
-                logand logandc1 logandc2 logeqv logior lognand
-                lognot logorc1 logorc2 logxor
-                logbitp
-                slot-boundp slot-value slot-exists-p
-                allocate-instance
-                find-class
-                class-name
-                constantly
-                exp expt log
-                min max
-                realpart imagpart
-                integer-length
-                sqrt isqrt gcd lcm signum
-                char schar
-                open
-                svref
-                fill-pointer
-                symbol-value symbol-package package-name
-                fourth
-                vector-push vector-push-extend
-                union nunion
-                remove-duplicates delete-duplicates
-                read-byte
-                fresh-line terpri
-                lambda
-                ext:classp
-                ext:fixnump
-                ext:memql
-                sys:%generic-function-name
-                sys::puthash
-                precompiler::precompile1
-                declare
-                go
-                inst
-                emit
-                label
-                maybe-emit-clear-values
-                single-valued-p
-                sys:symbol-single-valued-p
-                sys:read-8-bits
-                sys:write-8-bits
-                sys::require-type
-                sys::arg-count-error
-                ))
-    (setf (sys:symbol-single-valued-p op) t)))
-
-(eval-when (:load-toplevel :execute)
-  (single-valued-p-init))
-
 (declaim (ftype (function (t) t) single-valued-p))
 (defun single-valued-p (form)
   (cond ((block-node-p form)
@@ -1623,8 +1509,6 @@
                  ((eq op (compiland-name *current-compiland*))
                   (dformat t "single-valued-p recursive call ~S~%" (first form))
                   (compiland-single-valued-p *current-compiland*))
-                 ((symbol-single-valued-p op)
-                  t)
                  (t
                   nil))))))
 

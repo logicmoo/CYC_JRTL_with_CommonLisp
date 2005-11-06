@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.10 2005-10-30 01:19:38 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.11 2005-11-06 19:07:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@
                   'STRING)
                  (t
                   t)))
-              ((memq type '(CHARACTER STREAM SYMBOL))
+              ((memq type '(CHARACTER HASH-TABLE STREAM SYMBOL))
                type)
               (t
                t)))))
@@ -136,14 +136,16 @@
 (defun set-function-result-type (name result-type)
   (setf (gethash name (the hash-table *function-result-types*)) result-type))
 
-(defsetf function-result-type set-function-result-type)
-
-(defun %defknown (name argument-types result-type)
+(defun %defknown (name-or-names argument-types result-type)
   (declare (ignore argument-types))
-  (setf (function-result-type name) (make-compiler-type result-type)))
+  (let ((type (make-compiler-type result-type)))
+    (if (or (symbolp name-or-names) (setf-function-name-p name-or-names))
+        (set-function-result-type name-or-names type)
+        (dolist (name name-or-names)
+          (set-function-result-type name type))))
+  name-or-names)
 
-(defmacro defknown (name argument-types result-type)
-  `(eval-when (:compile-toplevel :load-toplevel :execute)
-     (%defknown ',name ',argument-types ',result-type)))
+(defmacro defknown (name-or-names argument-types result-type)
+  `(%defknown ',name-or-names ',argument-types ',result-type))
 
 (provide '#:compiler-types)
