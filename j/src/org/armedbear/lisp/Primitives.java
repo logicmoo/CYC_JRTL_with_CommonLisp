@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.850 2005-11-05 19:18:05 piso Exp $
+ * $Id: Primitives.java,v 1.851 2005-11-06 19:05:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5217,38 +5217,6 @@ public final class Primitives extends Lisp
             }
             catch (ClassCastException e) {
                 return signalTypeError(arg, Symbol.SYMBOL);
-            }
-        }
-    };
-
-    // ### symbol-single-valued-p
-    private static final Primitive SYMBOL_SINGLE_VALUED_P =
-        new Primitive("symbol-single-valued-p", PACKAGE_SYS, true, "symbol")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return ((Symbol)arg).SINGLE_VALUED_P();
-            }
-            catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.SYMBOL);
-            }
-        }
-    };
-
-    // ### %set-symbol-single-valued-p
-    private static final Primitive _SET_SYMBOL_SINGLE_VALUED_P =
-        new Primitive("%set-symbol-single-valued-p", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            try {
-                ((Symbol)first).setSingleValued(second != NIL);
-                return second;
-            }
-            catch (ClassCastException e) {
-                return signalTypeError(first, Symbol.SYMBOL);
             }
         }
     };
