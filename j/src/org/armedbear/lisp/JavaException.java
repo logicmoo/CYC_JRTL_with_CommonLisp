@@ -2,7 +2,7 @@
  * JavaException.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: JavaException.java,v 1.3 2005-10-31 04:02:49 piso Exp $
+ * $Id: JavaException.java,v 1.4 2005-11-06 20:39:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,12 +76,7 @@ public class JavaException extends LispError
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            try {
-                return ((JavaException)arg).getInstanceSlotValue(Symbol.CAUSE);
-            }
-            catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.JAVA_EXCEPTION);
-            }
+            return Symbol.STD_SLOT_VALUE.execute(arg, Symbol.CAUSE);
         }
     };
 }
