@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Keyword.java,v 1.44 2005-11-04 20:04:34 piso Exp $
+ * $Id: Keyword.java,v 1.45 2005-11-06 22:15:45 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,7 @@ public final class Keyword extends Lisp
         CAPITALIZE          = internKeyword("CAPITALIZE"),
         CAPITALIZE_FIRST    = internKeyword("CAPITALIZE-FIRST"),
         CASE                = internKeyword("CASE"),
+        CAUSE               = internKeyword("CAUSE"),
         COMMON              = internKeyword("COMMON"),
         COMMON_LISP         = internKeyword("COMMON-LISP"),
         COMPILE_TOPLEVEL    = internKeyword("COMPILE-TOPLEVEL"),
