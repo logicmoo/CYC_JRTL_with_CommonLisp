@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.62 2005-11-05 19:16:22 piso Exp $
+ * $Id: LispClass.java,v 1.63 2005-11-06 01:13:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class LispClass extends StandardObject
+public abstract class LispClass extends StandardObject
 {
     private static final EqHashTable map = new EqHashTable(256, NIL, NIL);
 
