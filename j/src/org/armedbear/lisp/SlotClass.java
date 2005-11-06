@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SlotClass.java,v 1.19 2005-11-05 01:32:10 piso Exp $
+ * $Id: SlotClass.java,v 1.20 2005-11-06 01:10:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,9 +178,9 @@ public class SlotClass extends LispClass
         }
     };
 
-    // ### class-slots
-    private static final Primitive CLASS_SLOTS =
-        new Primitive("class-slots", PACKAGE_SYS, true)
+    // ### %class-slots
+    private static final Primitive _CLASS_SLOTS =
+        new Primitive(Symbol._CLASS_SLOTS, "class")
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -193,9 +193,9 @@ public class SlotClass extends LispClass
         }
     };
 
-    // ### %set-class-slots
-    private static final Primitive _SET_CLASS_SLOTS =
-        new Primitive("%set-class-slots", PACKAGE_SYS, true)
+    // ### set-class-slots
+    private static final Primitive SET_CLASS_SLOTS =
+        new Primitive(Symbol.SET_CLASS_SLOTS, "class slot-definitions")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

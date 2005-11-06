@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.247 2005-11-03 23:53:59 piso Exp $
+ * $Id: Autoload.java,v 1.248 2005-11-06 01:12:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -522,7 +522,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-arglist", "arglist");
         autoload(PACKAGE_SYS, "%set-char", "StringFunctions");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass", true);
-        autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass", true);
         autoload(PACKAGE_SYS, "%set-function-info", "function_info");
         autoload(PACKAGE_SYS, "%set-generic-function-lambda-list", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%set-generic-function-name", "StandardGenericFunction", true);
@@ -574,7 +573,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObjectFunctions", true);
         autoload(PACKAGE_SYS, "canonicalize-logical-host", "LogicalPathname", true);
         autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
-        autoload(PACKAGE_SYS, "class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "coerce-to-double-float", "FloatFunctions");
         autoload(PACKAGE_SYS, "coerce-to-single-float", "FloatFunctions");
         autoload(PACKAGE_SYS, "compute-class-direct-slots", "SlotClass", true);
@@ -640,6 +638,9 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
         autoload(PACKAGE_SYS, "single-float-bits", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "zip", "zip", true);
+
+        autoload(Symbol.SET_CLASS_SLOTS, "SlotClass");
+        autoload(Symbol._CLASS_SLOTS, "SlotClass");
 
         autoload(Symbol.JAVA_EXCEPTION_CAUSE, "JavaException");
         autoload(Symbol.JCLASS_NAME, "jclass_name");

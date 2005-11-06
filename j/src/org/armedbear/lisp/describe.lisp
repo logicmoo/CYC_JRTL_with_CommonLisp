@@ -1,7 +1,7 @@
 ;;; describe.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: describe.lisp,v 1.8 2005-10-31 12:26:09 piso Exp $
+;;; $Id: describe.lisp,v 1.9 2005-11-06 01:14:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@
 
 (defmethod describe-object ((object standard-object) stream)
   (let* ((class (class-of object))
-         (slotds (class-slots class))
+         (slotds (%class-slots class))
          (max-slot-name-length 0)
          (instance-slotds ())
          (class-slotds ()))

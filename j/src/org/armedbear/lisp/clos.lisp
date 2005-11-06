@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.194 2005-11-05 01:30:12 piso Exp $
+;;; $Id: clos.lisp,v 1.195 2005-11-06 01:13:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@
 (defsetf class-direct-subclasses %set-class-direct-subclasses)
 (defsetf class-direct-methods %set-class-direct-methods)
 (defsetf class-direct-slots %set-class-direct-slots)
-(defsetf class-slots %set-class-slots)
+;; (defsetf class-slots %set-class-slots)
 (defsetf class-direct-default-initargs %set-class-direct-default-initargs)
 (defsetf class-default-initargs %set-class-default-initargs)
 (defsetf class-finalized-p %set-class-finalized-p)
@@ -248,16 +248,16 @@
   (dolist (class (%class-precedence-list class))
     (when (typep class 'forward-referenced-class)
       (return-from std-finalize-inheritance)))
-  (setf (class-slots class)
-        (funcall (if (eq (class-of class) the-class-standard-class)
-                     #'std-compute-slots
-                     #'compute-slots)
-                 class))
+  (set-class-slots class
+                   (funcall (if (eq (class-of class) the-class-standard-class)
+                                #'std-compute-slots
+                                #'compute-slots)
+                            class))
   (let ((old-layout (class-layout class))
         (length 0)
         (instance-slots '())
         (shared-slots '()))
-    (dolist (slot (class-slots class))
+    (dolist (slot (%class-slots class))
       (case (%slot-definition-allocation slot)
         (:instance
          (set-slot-definition-location slot length)
@@ -277,7 +277,7 @@
         (let* ((slot-name (car location))
                (old-location (layout-slot-location old-layout slot-name)))
           (unless old-location
-            (let* ((slot-definition (find slot-name (class-slots class) :key #'%slot-definition-name))
+            (let* ((slot-definition (find slot-name (%class-slots class) :key #'%slot-definition-name))
                    (initfunction (%slot-definition-initfunction slot-definition)))
               (when initfunction
                 (setf (cdr location) (funcall initfunction))))))))
@@ -419,7 +419,7 @@
 (defvar the-class-standard-class (find-class 'standard-class))
 
 (defun find-slot-definition (class slot-name)
-  (dolist (slot (class-slots class) nil)
+  (dolist (slot (%class-slots class) nil)
     (when (eq slot-name (%slot-definition-name slot))
       (return slot))))
 
@@ -469,7 +469,7 @@
       (slot-makunbound-using-class (class-of object) object slot-name)))
 
 (defun std-slot-exists-p (instance slot-name)
-  (not (null (find slot-name (class-slots (class-of instance))
+  (not (null (find slot-name (%class-slots (class-of instance))
                    :key #'%slot-definition-name))))
 
 (defun slot-exists-p (object slot-name)
@@ -489,7 +489,7 @@
              :format-arguments (list class)))
     (unless length
       (format t "No layout length for class ~S~%." class)
-      (setf length (count-if #'instance-slot-p (class-slots class))))
+      (setf length (count-if #'instance-slot-p (%class-slots class))))
     (allocate-std-instance class)))
 
 (defun make-instance-standard-class (metaclass
@@ -1877,7 +1877,7 @@
   (std-slot-exists-p instance slot-name))
 
 (defmethod slot-exists-p-using-class ((class structure-class) instance slot-name)
-  (dolist (dsd (class-slots class))
+  (dolist (dsd (%class-slots class))
     (when (eq (sys::dsd-name dsd) slot-name)
       (return-from slot-exists-p-using-class t)))
   nil)
@@ -1914,7 +1914,7 @@
 (defmethod allocate-instance ((class structure-class) &rest initargs)
   (declare (ignore initargs))
   (%make-structure (%class-name class)
-                   (make-list (length (class-slots class))
+                   (make-list (length (%class-slots class))
                               :initial-element +slot-unbound+)))
 
 ;; "The set of valid initialization arguments for a class is the set of valid
@@ -1927,7 +1927,7 @@
     (error 'program-error
            :format-control "Odd number of keyword arguments."))
   (unless (getf initargs :allow-other-keys)
-    (let ((slots (class-slots class)))
+    (let ((slots (%class-slots class)))
       (do* ((tail initargs (cddr tail))
             (initarg (car tail) (car tail)))
            ((null tail))
@@ -1992,7 +1992,7 @@
 (defun std-shared-initialize (instance slot-names all-keys)
   (when (oddp (length all-keys))
     (error 'program-error :format-control "Odd number of keyword arguments."))
-  (dolist (slot (class-slots (class-of instance)))
+  (dolist (slot (%class-slots (class-of instance)))
     (let ((slot-name (%slot-definition-name slot)))
       (multiple-value-bind (init-key init-value foundp)
           (get-properties all-keys (%slot-definition-initargs slot))
@@ -2017,8 +2017,8 @@
 
 (defmethod change-class ((old-instance standard-object) (new-class standard-class)
                          &rest initargs)
-  (let ((old-slots (class-slots (class-of old-instance)))
-        (new-slots (class-slots new-class))
+  (let ((old-slots (%class-slots (class-of old-instance)))
+        (new-slots (%class-slots new-class))
         (new-instance (allocate-instance new-class)))
     ;; "The values of local slots specified by both the class CTO and the class
     ;; CFROM are retained. If such a local slot was unbound, it remains
@@ -2050,7 +2050,7 @@
          (remove-if #'(lambda (slot-name)
                        (slot-exists-p old slot-name))
                     (mapcar #'%slot-definition-name
-                            (class-slots (class-of new))))))
+                            (%class-slots (class-of new))))))
     (check-initargs (class-of new) initargs)
     (apply #'shared-initialize new added-slots initargs)))
 
