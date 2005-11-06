@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.233 2005-11-06 02:17:52 piso Exp $
+ * $Id: Symbol.java,v 1.234 2005-11-06 19:04:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@ public class Symbol extends LispObject
     private static final int FLAG_SPECIAL           = 0x0001;
     private static final int FLAG_CONSTANT          = 0x0002;
     private static final int FLAG_BUILT_IN_FUNCTION = 0x0004;
-    private static final int FLAG_SINGLE_VALUED_P   = 0x0008;
 
     public static final Symbol addFunction(String name, LispObject obj)
     {
@@ -226,19 +225,6 @@ public class Symbol extends LispObject
             flags |= FLAG_BUILT_IN_FUNCTION;
         else
             flags &= ~FLAG_BUILT_IN_FUNCTION;
-    }
-
-    public final LispObject SINGLE_VALUED_P()
-    {
-        return (flags & FLAG_SINGLE_VALUED_P) != 0 ? T : NIL;
-    }
-
-    public final void setSingleValued(boolean b)
-    {
-        if (b)
-            flags |= FLAG_SINGLE_VALUED_P;
-        else
-            flags &= ~FLAG_SINGLE_VALUED_P;
     }
 
     public final String getName()
