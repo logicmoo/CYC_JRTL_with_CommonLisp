@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: setf.lisp,v 1.61 2005-07-23 17:12:12 piso Exp $
+;;; $Id: setf.lisp,v 1.62 2005-11-06 19:02:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -222,4 +222,3 @@
 (defsetf readtable-case %set-readtable-case)
 
 (defsetf function-info %set-function-info)
-(defsetf symbol-single-valued-p %set-symbol-single-valued-p)
