@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.231 2005-11-04 13:06:33 piso Exp $
+ * $Id: Symbol.java,v 1.232 2005-11-06 01:09:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2782,6 +2782,8 @@ public class Symbol extends LispObject
         PACKAGE_SYS.addInternalSymbol("CAUSE");
     public static final Symbol CLASS_BYTES =
         PACKAGE_SYS.addExternalSymbol("CLASS-BYTES");
+    public static final Symbol _CLASS_SLOTS =
+        PACKAGE_SYS.addExternalSymbol("%CLASS-SLOTS");
     public static final Symbol COMMA_MACRO =
         PACKAGE_SYS.addInternalSymbol("COMMA-MACRO");
     public static final Symbol DATUM =
@@ -2812,6 +2814,8 @@ public class Symbol extends LispObject
         PACKAGE_SYS.addInternalSymbol("OPERATION");
     public static final Symbol OUTPUT_OBJECT =
         PACKAGE_SYS.addExternalSymbol("OUTPUT-OBJECT");
+    public static final Symbol SET_CLASS_SLOTS =
+        PACKAGE_SYS.addExternalSymbol("SET-CLASS-SLOTS");
     public static final Symbol SETF_FUNCTION =
         PACKAGE_SYS.addExternalSymbol("SETF-FUNCTION");
     public static final Symbol SETF_INVERSE =
