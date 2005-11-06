@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.232 2005-11-06 01:09:41 piso Exp $
+ * $Id: Symbol.java,v 1.233 2005-11-06 02:17:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2822,6 +2822,12 @@ public class Symbol extends LispObject
         PACKAGE_SYS.addExternalSymbol("SETF-INVERSE");
     public static final Symbol SLOT_DEFINITION =
         PACKAGE_SYS.addExternalSymbol("SLOT-DEFINITION");
+    public static final Symbol _SLOT_DEFINITION_NAME =
+        PACKAGE_SYS.addExternalSymbol("%SLOT-DEFINITION-NAME");
+    public static final Symbol _SLOT_DEFINITION_INITARGS =
+        PACKAGE_SYS.addExternalSymbol("%SLOT-DEFINITION-INITARGS");
+    public static final Symbol _SLOT_DEFINITION_INITFUNCTION =
+        PACKAGE_SYS.addExternalSymbol("%SLOT-DEFINITION-INITFUNCTION");
     public static final Symbol _DOCUMENTATION =
         PACKAGE_SYS.addExternalSymbol("%DOCUMENTATION");
     public static final Symbol _SOURCE =
@@ -2838,6 +2844,11 @@ public class Symbol extends LispObject
 
     public static final Symbol STYLE_WARN =
         PACKAGE_EXT.addExternalSymbol("STYLE-WARN");
+
+    public static final Symbol MEMQ =
+        PACKAGE_EXT.addExternalSymbol("MEMQ");
+    public static final Symbol MEMQL =
+        PACKAGE_EXT.addExternalSymbol("MEMQL");
 
     // Java interface
     public static final Symbol JAVA_EXCEPTION =
