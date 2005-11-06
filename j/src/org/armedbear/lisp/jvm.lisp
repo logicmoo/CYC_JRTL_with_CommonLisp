@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.615 2005-11-05 19:14:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.616 2005-11-06 03:02:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1592,7 +1592,7 @@
          t)
         (t
          (let ((op (%car form))
-               ftype)
+               result-type)
            (cond ((eq op 'IF)
                   (and (single-valued-p (third form))
                        (single-valued-p (fourth form))))
@@ -1607,19 +1607,18 @@
                  ((memq op '(THE TRULY-THE))
                   (dformat t "single-valued-p THE ~S~%" form)
                   (single-valued-p (third form)))
-                 ((setf ftype (proclaimed-ftype op))
-                  (let ((result-type (ftype-result-type ftype)))
-;;                     (and result-type (atom result-type) (neq result-type '*) t)
-                    (cond ((null result-type)
-                           nil)
-                          ((eq result-type '*)
-                           nil)
-                          ((atom result-type)
-                           t)
-                          ((eq (%car result-type) 'VALUES)
-                           (= (length result-type) 2))
-                          (t
-                           t))))
+                 ((setf result-type
+                        (or (function-result-type op)
+                            (and (proclaimed-ftype op)
+                                 (ftype-result-type (proclaimed-ftype op)))))
+                  (cond ((eq result-type '*)
+                         nil)
+                        ((atom result-type)
+                         t)
+                        ((eq (%car result-type) 'VALUES)
+                         (= (length result-type) 2))
+                        (t
+                         t)))
                  ((eq op (compiland-name *current-compiland*))
                   (dformat t "single-valued-p recursive call ~S~%" (first form))
                   (compiland-single-valued-p *current-compiland*))
@@ -2732,7 +2731,7 @@
       output)))
 
 ;;(defparameter *cl-symbol-names* (make-hash-table :test 'eq))
-(let ((cl-symbol-names (make-hash-table :test 'eq :size 1024)))
+(let ((known-symbol-names (make-hash-table :test 'eq :size 1024)))
   (defun initialize-symbol-names ()
     (dolist (entry '((&ALLOW-OTHER-KEYS "AND_ALLOW_OTHER_KEYS")
                      (&AUX "AND_AUX")
@@ -3710,15 +3709,25 @@
                      (WRITE-TO-STRING "WRITE_TO_STRING")
                      (Y-OR-N-P "Y_OR_N_P")
                      (YES-OR-NO-P "YES_OR_NO_P")
-                     (ZEROP "ZEROP")))
+                     (ZEROP "ZEROP")
+
+                     (%class-slots "_CLASS_SLOTS")
+                     (set-class-slots "SET_CLASS_SLOTS")
+                     (%slot-definition-name "_SLOT_DEFINITION_NAME")
+                     (%slot-definition-initargs "_SLOT_DEFINITION_INITARGS")
+                     (%slot-definition-initfunction "_SLOT_DEFINITION_INITFUNCTION")
+
+                     (memq "MEMQ")
+                     (memql "MEMQL")
+                     ))
       (let ((symbol (car entry))
             (name (cadr entry)))
-        (puthash symbol cl-symbol-names name))))
+        (puthash symbol known-symbol-names name))))
 
   (initialize-symbol-names)
 
-  (defun lookup-cl-symbol (symbol)
-    (gethash-2op-1ret symbol cl-symbol-names)))
+  (defun lookup-known-symbol (symbol)
+    (gethash-2op-1ret symbol known-symbol-names)))
 
 (declaim (ftype (function (symbol) string) declare-symbol))
 (defun declare-symbol (symbol)
@@ -4542,7 +4551,8 @@
 ;;                  (format t "saving variables...~%")
 ;;                  (setf saved-vars (save-variables (compiland-arg-vars compiland)))))
 
-             (let ((name (and (eq (symbol-package op) +cl-package+) (lookup-cl-symbol op))))
+;;              (let ((name (and (eq (symbol-package op) +cl-package+) (lookup-known-symbol op))))
+             (let ((name (lookup-known-symbol op)))
                (if name
                    (emit 'getstatic +lisp-symbol-class+ name +lisp-symbol+)
                    (emit 'getstatic *this-class* (declare-symbol op) +lisp-symbol+)))
