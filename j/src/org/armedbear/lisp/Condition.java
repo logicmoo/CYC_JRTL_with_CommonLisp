@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Condition.java,v 1.46 2005-11-03 23:53:27 piso Exp $
+ * $Id: Condition.java,v 1.47 2005-11-06 20:40:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ public class Condition extends StandardObject
         setInstanceSlotValue(Symbol.FORMAT_ARGUMENTS, formatArguments);
     }
 
-    public String getMessage()
+    public String getMessage() throws ConditionThrowable
     {
         return message;
     }
