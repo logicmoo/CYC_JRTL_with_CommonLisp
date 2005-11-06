@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.29 2005-11-05 01:30:45 piso Exp $
+;;; $Id: known-functions.lisp,v 1.30 2005-11-06 02:19:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -235,8 +235,15 @@
 
 (declaim (ftype (function * hash-table) make-hash-table))
 
+(defknown %class-slots (class) t)
+(defknown set-class-slots (class list) t)
+(defknown %slot-definition-name * t)
+(defknown %slot-definition-initargs * t)
+(defknown %slot-definition-initfunction * t)
+(defknown std-slot-boundp * t)
+(defknown std-slot-value * t)
+(defknown set-std-slot-value * t)
 (defknown open * (or stream null))
-
 (defknown make-string-input-stream * stream)
 
 (provide '#:known-functions)
