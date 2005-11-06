@@ -2,7 +2,7 @@
  * SlotDefinition.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: SlotDefinition.java,v 1.5 2005-11-01 00:58:02 piso Exp $
+ * $Id: SlotDefinition.java,v 1.6 2005-11-06 02:19:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,8 +100,7 @@ public final class SlotDefinition extends StandardObject
 
     // ### %slot-definition-name
     private static final Primitive _SLOT_DEFINITION_NAME =
-        new Primitive("%slot-definition-name", PACKAGE_SYS, true,
-                      "slot-definition")
+        new Primitive(Symbol._SLOT_DEFINITION_NAME, "slot-definition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -134,8 +133,7 @@ public final class SlotDefinition extends StandardObject
 
     // ### %slot-definition-initfunction
     private static final Primitive _SLOT_DEFINITION_INITFUNCTION =
-        new Primitive("%slot-definition-initfunction", PACKAGE_SYS, true,
-                      "slot-definition")
+        new Primitive(Symbol._SLOT_DEFINITION_INITFUNCTION, "slot-definition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -202,8 +200,7 @@ public final class SlotDefinition extends StandardObject
 
     // ### %slot-definition-initargs
     private static final Primitive _SLOT_DEFINITION_INITARGS =
-        new Primitive("%slot-definition-initargs", PACKAGE_SYS, true,
-                      "slot-definition")
+        new Primitive(Symbol._SLOT_DEFINITION_INITARGS, "slot-definition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
