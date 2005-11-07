@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.16 2005-11-07 01:19:33 piso Exp $
+;;; $Id: java-tests.lisp,v 1.17 2005-11-07 19:49:36 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -394,6 +394,43 @@
         (signals-error
          (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
          'illegal-argument-exception))))
+  t)
+
+
+#+abcl
+(deftest register-java-exception.6
+  (progn 
+    (define-condition foo () ())
+    (register-java-exception "java.lang.Throwable" 'foo))
+  nil)
+
+#+abcl
+(deftest register-java-exception.7
+  (progn 
+    (define-condition throwable (java-exception) ())
+    (register-java-exception "java.lang.Throwable" 'throwable))
+  t)
+
+#+abcl
+(deftest register-java-exception.8
+  (progn 
+    (define-condition throwable (java-exception) ())
+    (with-registered-exception "java.lang.Throwable" 'throwable
+      (define-condition throwable () ())
+      (signals-error
+       (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
+       'java-exception)))
+  t)
+      
+#+abcl
+(deftest register-java-exception.9
+  (progn 
+    (define-condition throwable (java-exception) ())
+    (define-condition illegal-argument-exception (throwable) ())
+    (with-registered-exception "java.lang.IllegalArgumentException" 'illegal-argument-exception
+      (signals-error
+       (jstatic (jmethod "java.lang.String" "valueOf" "int") "java.lang.String" "12")
+       'illegal-argument-exception)))
   t)
 
 (do-tests)
