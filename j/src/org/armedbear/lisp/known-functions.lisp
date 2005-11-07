@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.31 2005-11-06 19:01:25 piso Exp $
+;;; $Id: known-functions.lisp,v 1.32 2005-11-07 21:47:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -378,7 +378,9 @@
              sys:read-8-bits
              sys:write-8-bits
              sys::require-type
-             sys::arg-count-error)
+             sys::arg-count-error
+             sys:subclassp
+             ext:autoloadp)
   * t)
 
 (provide '#:known-functions)
