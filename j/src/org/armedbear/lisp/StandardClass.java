@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.43 2005-11-02 03:04:31 piso Exp $
+ * $Id: StandardClass.java,v 1.44 2005-11-07 20:34:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,19 @@ public class StandardClass extends SlotClass
         if (type == STANDARD_CLASS)
             return T;
         return super.typep(type);
+    }
+
+    public LispObject allocateInstance() throws ConditionThrowable
+    {
+        Layout layout = getClassLayout();
+        if (layout == null) {
+            Symbol.ERROR.execute(Symbol.SIMPLE_ERROR,
+                                 Keyword.FORMAT_CONTROL,
+                                 new SimpleString("No layout for class ~S."),
+                                 Keyword.FORMAT_ARGUMENTS,
+                                 list1(this));
+        }
+        return new StandardObject(this, layout.getLength());
     }
 
     public String writeToString() throws ConditionThrowable

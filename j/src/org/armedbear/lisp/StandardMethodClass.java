@@ -2,7 +2,7 @@
  * StandardMethodClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardMethodClass.java,v 1.4 2005-06-23 15:48:29 piso Exp $
+ * $Id: StandardMethodClass.java,v 1.5 2005-11-07 20:32:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,5 +46,10 @@ public final class StandardMethodClass extends StandardClass
         };
         setClassLayout(new Layout(this, instanceSlotNames, NIL));
         setFinalized(true);
+    }
+
+    public LispObject allocateInstance()
+    {
+        return new StandardMethod();
     }
 }
