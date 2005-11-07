@@ -2,7 +2,7 @@
  * SymbolHashTable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SymbolHashTable.java,v 1.2 2005-08-02 18:45:06 piso Exp $
+ * $Id: SymbolHashTable.java,v 1.3 2005-11-07 02:29:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,16 +32,26 @@ public final class SymbolHashTable
     private HashEntry[] buckets;
     private int count;
 
+    private int mask;
+
     public SymbolHashTable(int size)
     {
-        buckets = new HashEntry[size];
+        buckets = new HashEntry[calculateInitialCapacity(size)];
         threshold = (int) (size * LOAD_FACTOR);
+        mask = buckets.length - 1;
+    }
+
+    private static int calculateInitialCapacity(int size)
+    {
+        int capacity = 1;
+        while (capacity < size)
+            capacity <<= 1;
+        return capacity;
     }
 
     public Symbol get(SimpleString key)
     {
-        int index = key.sxhash() % buckets.length;
-        HashEntry e = buckets[index];
+        HashEntry e = buckets[key.sxhash() & mask];
         while (e != null) {
             try {
                 if (key.equal(e.symbol.name))
@@ -57,8 +67,7 @@ public final class SymbolHashTable
 
     public Symbol get(SimpleString key, int hash)
     {
-        int index = hash % buckets.length;
-        HashEntry e = buckets[index];
+        HashEntry e = buckets[hash & mask];
         while (e != null) {
             try {
                 if (key.equal(e.symbol.name))
@@ -74,7 +83,7 @@ public final class SymbolHashTable
 
     public void put(final SimpleString key, final Symbol symbol)
     {
-        int index = key.sxhash() % buckets.length;
+        int index = key.sxhash() & mask;
         HashEntry e = buckets[index];
         while (e != null) {
             try {
@@ -97,7 +106,7 @@ public final class SymbolHashTable
         if (++count > threshold) {
             rehash();
             // We need a new index for the bigger table.
-            index = key.sxhash() % buckets.length;
+            index = key.sxhash() & mask;
         }
         e = new HashEntry(symbol);
         e.next = buckets[index];
@@ -106,7 +115,7 @@ public final class SymbolHashTable
 
     public void put(Symbol symbol)
     {
-        int index = symbol.sxhash() % buckets.length;
+        int index = symbol.sxhash() & mask;
         HashEntry e = buckets[index];
         while (e != null) {
             try {
@@ -128,18 +137,18 @@ public final class SymbolHashTable
         if (++count > threshold) {
             rehash();
             // Need a new hash value to suit the bigger table.
-            index = symbol.sxhash() % buckets.length;
+            index = symbol.sxhash() & mask;
         }
         e = new HashEntry(symbol);
         e.next = buckets[index];
         buckets[index] = e;
     }
 
-    public LispObject remove(LispObject key) //throws ConditionThrowable
+    public LispObject remove(LispObject key)
     {
         if (key instanceof Symbol)
             key = ((Symbol)key).name;
-        int index = key.sxhash() % buckets.length;
+        int index = key.sxhash() & mask;
         HashEntry e = buckets[index];
         HashEntry last = null;
         while (e != null) {
@@ -162,21 +171,17 @@ public final class SymbolHashTable
         return null;
     }
 
-//     private int hash(LispObject key)
-//     {
-//         return (key.sxhash() % buckets.length);
-//     }
-
     private void rehash()
     {
         HashEntry[] oldBuckets = buckets;
         int newCapacity = buckets.length * 2;
         threshold = (int) (newCapacity * LOAD_FACTOR);
         buckets = new HashEntry[newCapacity];
+        mask = buckets.length - 1;
         for (int i = oldBuckets.length; i-- > 0;) {
             HashEntry e = oldBuckets[i];
             while (e != null) {
-                int index = e.symbol.sxhash() % buckets.length;
+                final int index = e.symbol.sxhash() & mask;
                 HashEntry dest = buckets[index];
                 if (dest != null) {
                     while (dest.next != null)
