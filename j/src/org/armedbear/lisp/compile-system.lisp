@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.65 2005-11-06 12:30:41 piso Exp $
+;;; $Id: compile-system.lisp,v 1.66 2005-11-07 12:36:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -184,7 +184,6 @@
                                      "map-into.lisp"
                                      "map.lisp"
                                      "map1.lisp"
-                                     "maphash.lisp"
                                      "mask-field.lisp"
                                      "member-if.lisp"
                                      "mismatch.lisp"
