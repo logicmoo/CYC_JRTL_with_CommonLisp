@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: HashTable.java,v 1.50 2005-08-05 19:51:18 piso Exp $
+ * $Id: HashTable.java,v 1.51 2005-11-07 11:44:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,6 +219,18 @@ public abstract class HashTable extends LispObject
             }
         }
         return list;
+    }
+
+    public LispObject MAPHASH(LispObject function) throws ConditionThrowable
+    {
+        for (int i = buckets.length; i-- > 0;) {
+            HashEntry e = buckets[i];
+            while (e != null) {
+                function.execute(e.key, e.value);
+                e = e.next;
+            }
+        }
+        return NIL;
     }
 
     protected static class HashEntry
