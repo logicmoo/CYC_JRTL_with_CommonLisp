@@ -2,7 +2,7 @@
  * EqualHashTable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: EqualHashTable.java,v 1.5 2005-08-05 19:51:18 piso Exp $
+ * $Id: EqualHashTable.java,v 1.6 2005-11-07 05:12:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,21 @@ package org.armedbear.lisp;
 
 public final class EqualHashTable extends HashTable
 {
+    private int mask;
+
     public EqualHashTable(int size, LispObject rehashSize,
                           LispObject rehashThreshold)
     {
-        super(size, rehashSize, rehashThreshold);
+        super(calculateInitialCapacity(size), rehashSize, rehashThreshold);
+        mask = buckets.length - 1;
+    }
+
+    private static int calculateInitialCapacity(int size)
+    {
+        int capacity = 1;
+        while (capacity < size)
+            capacity <<= 1;
+        return capacity;
     }
 
     public Symbol getTest()
@@ -36,11 +47,10 @@ public final class EqualHashTable extends HashTable
 
     public LispObject get(LispObject key)
     {
-        final int index = key.sxhash() % buckets.length;
-        HashEntry e = buckets[index];
+        HashEntry e = buckets[key.sxhash() & mask];
         while (e != null) {
             try {
-                if (key.equal(e.key))
+                if (key == e.key || key.equal(e.key))
                     return e.value;
             }
             catch (ConditionThrowable t) {
@@ -53,10 +63,10 @@ public final class EqualHashTable extends HashTable
 
     public void put(LispObject key, LispObject value) throws ConditionThrowable
     {
-        int index = key.sxhash() % buckets.length;
+        int index = key.sxhash() & mask;
         HashEntry e = buckets[index];
         while (e != null) {
-            if (key.equal(e.key)) {
+            if (key == e.key || key.equal(e.key)) {
                 e.value = value;
                 return;
             }
@@ -66,7 +76,7 @@ public final class EqualHashTable extends HashTable
         if (++count > threshold) {
             rehash();
             // Need a new hash value to suit the bigger table.
-            index = key.sxhash() % buckets.length;
+            index = key.sxhash() & mask;
         }
         e = new HashEntry(key, value);
         e.next = buckets[index];
@@ -75,11 +85,11 @@ public final class EqualHashTable extends HashTable
 
     public LispObject remove(LispObject key) throws ConditionThrowable
     {
-        final int index = key.sxhash() % buckets.length;
+        final int index = key.sxhash() & mask;
         HashEntry e = buckets[index];
         HashEntry last = null;
         while (e != null) {
-            if (key.equal(e.key)) {
+            if (key == e.key || key.equal(e.key)) {
                 if (last == null)
                     buckets[index] = e.next;
                 else
@@ -96,13 +106,14 @@ public final class EqualHashTable extends HashTable
     protected void rehash()
     {
         HashEntry[] oldBuckets = buckets;
-        int newCapacity = buckets.length * 2 + 1;
+        int newCapacity = buckets.length * 2;
         threshold = (int) (newCapacity * loadFactor);
         buckets = new HashEntry[newCapacity];
+        mask = buckets.length - 1;
         for (int i = oldBuckets.length; i-- > 0;) {
             HashEntry e = oldBuckets[i];
             while (e != null) {
-                final int index = e.key.sxhash() % buckets.length;
+                final int index = e.key.sxhash() & mask;
                 HashEntry dest = buckets[index];
                 if (dest != null) {
                     while (dest.next != null)
