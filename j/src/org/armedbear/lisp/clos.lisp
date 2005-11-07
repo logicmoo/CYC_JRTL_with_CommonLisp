@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.195 2005-11-06 01:13:56 piso Exp $
+;;; $Id: clos.lisp,v 1.196 2005-11-07 20:34:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -479,18 +479,6 @@
 
 (defun instance-slot-p (slot)
   (eq (%slot-definition-allocation slot) :instance))
-
-(defun std-allocate-instance (class)
-  (let* ((layout (class-layout class))
-         (length (and layout (layout-length layout))))
-    (unless layout
-      (error 'simple-error
-             :format-control "No layout for class ~S."
-             :format-arguments (list class)))
-    (unless length
-      (format t "No layout length for class ~S~%." class)
-      (setf length (count-if #'instance-slot-p (%class-slots class))))
-    (allocate-std-instance class)))
 
 (defun make-instance-standard-class (metaclass
                                      &key name direct-superclasses direct-slots
