@@ -2,7 +2,7 @@
  * StandardGenericFunctionClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardGenericFunctionClass.java,v 1.6 2005-11-07 20:31:44 piso Exp $
+ * $Id: StandardGenericFunctionClass.java,v 1.7 2005-11-07 20:33:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public final class StandardGenericFunctionClass extends StandardClass
         setFinalized(true);
     }
 
-    public LispObject allocateInstance() throws ConditionThrowable
+    public LispObject allocateInstance()
     {
         return new StandardGenericFunction();
     }
