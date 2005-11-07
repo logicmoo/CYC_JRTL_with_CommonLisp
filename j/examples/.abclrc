@@ -19,6 +19,8 @@
                                      #p"/home/peter/gcl/ansi-tests/"
                                      #+(or windows mswindows win32)
                                      #p"c:\\cygwin\\home\\peter\\gcl\\ansi-tests\\"))
+    #+unix
+    (run-shell-command "make clean" :directory *default-pathname-defaults*)
     (time (load (if compile-tests "compileit.lsp" "doit.lsp")))))
 
 #+abcl
