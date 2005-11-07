@@ -2,7 +2,7 @@
  * EqlHashTable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: EqlHashTable.java,v 1.4 2005-08-05 19:51:18 piso Exp $
+ * $Id: EqlHashTable.java,v 1.5 2005-11-07 16:48:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,13 @@ package org.armedbear.lisp;
 
 public final class EqlHashTable extends HashTable
 {
+    private int mask;
+
     public EqlHashTable(int size, LispObject rehashSize,
                         LispObject rehashThreshold)
     {
-        super(size, rehashSize, rehashThreshold);
+        super(calculateInitialCapacity(size), rehashSize, rehashThreshold);
+        mask = buckets.length - 1;
     }
 
     public Symbol getTest()
@@ -36,8 +39,7 @@ public final class EqlHashTable extends HashTable
 
     public LispObject get(LispObject key)
     {
-        final int index = key.sxhash() % buckets.length;
-        HashEntry e = buckets[index];
+        HashEntry e = buckets[key.sxhash() & mask];
         while (e != null) {
             if (key.eql(e.key))
                 return e.value;
@@ -48,7 +50,7 @@ public final class EqlHashTable extends HashTable
 
     public void put(LispObject key, LispObject value)
     {
-        int index = key.sxhash() % buckets.length;
+        int index = key.sxhash() & mask;
         HashEntry e = buckets[index];
         while (e != null) {
             if (key.eql(e.key)) {
@@ -61,7 +63,7 @@ public final class EqlHashTable extends HashTable
         if (++count > threshold) {
             rehash();
             // Need a new hash value to suit the bigger table.
-            index = key.sxhash() % buckets.length;
+            index = key.sxhash() & mask;
         }
         e = new HashEntry(key, value);
         e.next = buckets[index];
@@ -70,7 +72,7 @@ public final class EqlHashTable extends HashTable
 
     public LispObject remove(LispObject key)
     {
-        final int index = key.sxhash() % buckets.length;
+        final int index = key.sxhash() & mask;
         HashEntry e = buckets[index];
         HashEntry last = null;
         while (e != null) {
@@ -91,13 +93,14 @@ public final class EqlHashTable extends HashTable
     protected void rehash()
     {
         HashEntry[] oldBuckets = buckets;
-        int newCapacity = buckets.length * 2 + 1;
+        int newCapacity = buckets.length * 2;
         threshold = (int) (newCapacity * loadFactor);
         buckets = new HashEntry[newCapacity];
+        mask = buckets.length - 1;
         for (int i = oldBuckets.length; i-- > 0;) {
             HashEntry e = oldBuckets[i];
             while (e != null) {
-                final int index = e.key.sxhash() % buckets.length;
+                final int index = e.key.sxhash() & mask;
                 HashEntry dest = buckets[index];
                 if (dest != null) {
                     while (dest.next != null)
