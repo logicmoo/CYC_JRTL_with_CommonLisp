@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.200 2005-11-07 11:42:20 piso Exp $
+;;; $Id: autoloads.lisp,v 1.201 2005-11-07 21:46:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -88,7 +88,7 @@
           "bit-array-ops")
 (autoload 'deposit-field)
 (autoload 'mask-field)
-(autoload '(ensure-class ensure-generic-function subclassp make-condition
+(autoload '(ensure-class ensure-generic-function make-condition
             define-method-combination
             %defgeneric
             canonicalize-direct-superclasses)
