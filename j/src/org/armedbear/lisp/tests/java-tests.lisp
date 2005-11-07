@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: java-tests.lisp,v 1.15 2005-11-04 20:07:15 piso Exp $
+;;; $Id: java-tests.lisp,v 1.16 2005-11-07 01:19:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -236,6 +236,54 @@
   (signals-error (jmethod-return-type 42) 'error)
   t)
 
+#+abcl
+(deftest define-condition.1
+  (progn
+    (define-condition throwable (java-exception) ())
+    (let ((c (make-condition 'throwable)))
+      (signals-error (simple-condition-format-control c) 'unbound-slot)))
+  t)
+
+#+abcl
+(deftest define-condition.2
+  (progn
+    (define-condition throwable (java-exception) ())
+    (let ((c (make-condition 'throwable)))
+      (simple-condition-format-arguments c)))
+  nil)
+
+#+abcl
+(deftest define-condition.3
+  (progn
+    (define-condition throwable (java-exception) ())
+    (let ((c (make-condition 'throwable
+                             :format-control "The bear is armed.")))
+      (simple-condition-format-control c)))
+  "The bear is armed.")
+
+#+abcl
+(deftest define-condition.4
+  (progn
+    (define-condition throwable (java-exception) ())
+    (let ((c (make-condition 'throwable
+                             :format-control "The bear is armed.")))
+      (simple-condition-format-arguments c)))
+  nil)
+
+#+abcl
+(deftest java-exception-cause.1
+  (progn
+    (define-condition throwable (java-exception) ())
+    (signals-error (java-exception-cause (make-condition 'throwable))
+                   'unbound-slot))
+  t)
+
+#+abcl
+(deftest java-exception-cause.2
+  (progn
+    (define-condition throwable (java-exception) ())
+    (java-exception-cause (make-condition 'throwable :cause 42)))
+  42)
 
 #+abcl
 (deftest unregister-java-exception.1
