@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.196 2005-11-07 20:34:43 piso Exp $
+;;; $Id: clos.lisp,v 1.197 2005-11-07 21:10:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1939,8 +1939,7 @@
 
 (defmethod make-instance ((class standard-class) &rest initargs)
   (when (oddp (length initargs))
-    (error 'program-error
-           :format-control "Odd number of keyword arguments."))
+    (error 'program-error :format-control "Odd number of keyword arguments."))
   (unless (class-finalized-p class)
     (std-finalize-inheritance class))
   (let ((class-default-initargs (class-default-initargs class)))
@@ -1986,12 +1985,12 @@
           (get-properties all-keys (%slot-definition-initargs slot))
         (if foundp
             (setf (std-slot-value instance slot-name) init-value)
-            (when (and (not (std-slot-boundp instance slot-name))
-                       (%slot-definition-initfunction slot)
-                       (or (eq slot-names t)
-                           (member slot-name slot-names)))
-              (setf (std-slot-value instance slot-name)
-                    (funcall (%slot-definition-initfunction slot))))))))
+            (unless (std-slot-boundp instance slot-name)
+              (let ((initfunction (%slot-definition-initfunction slot)))
+                (when (and initfunction (or (eq slot-names t)
+                                            (memq slot-name slot-names)))
+                  (setf (std-slot-value instance slot-name)
+                        (funcall initfunction)))))))))
   instance)
 
 (defgeneric shared-initialize (instance slot-names &key))
