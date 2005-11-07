@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.66 2005-11-07 00:45:11 asimon Exp $
+ * $Id: Java.java,v 1.67 2005-11-07 17:28:34 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,20 @@ public final class Java extends Lisp
 {
     private static final Map registeredExceptions = new HashMap();
 
+    private static boolean isJavaException(LispClass lc)
+    {
+        LispClass java_exception = LispClass.findClass(Symbol.JAVA_EXCEPTION);
+        LispObject direct_sups = (LispObject)lc.getDirectSuperclasses();
+        LispClass c = null;
+        while (direct_sups != NIL) {
+            c = (LispClass) ((Cons)direct_sups).car();
+            if (c == java_exception || isJavaException(c)) 
+                return true;
+            direct_sups = ((Cons) direct_sups).cdr();
+        }
+        return false;
+    }
+
     // ### register-java-exception exception-name condition-symbol => T
     private static final Primitive REGISTER_JAVA_EXCEPTION =
         new Primitive("register-java-exception", PACKAGE_JAVA, true,
@@ -42,12 +56,14 @@ public final class Java extends Lisp
         public LispObject execute(LispObject className, LispObject symbol)
             throws ConditionThrowable
         {
-            // FIXME Verify that EXCEPTION-NAME designates a subclass of Throwable.
             // FIXME Verify that CONDITION-SYMBOL is a symbol that names a condition.
             // FIXME Signal a continuable error if the exception is already registered.
-            registeredExceptions.put(classForName(className.getStringValue()),
-                                     symbol);
-            return T;
+            if ((symbol instanceof Symbol) && isJavaException(LispClass.findClass((Symbol) symbol))) {
+                registeredExceptions.put(classForName(className.getStringValue()),
+                                         symbol);
+                return T; 
+            }
+            return NIL;
         }
     };
 
@@ -67,10 +83,12 @@ public final class Java extends Lisp
     private static Symbol getCondition(Class cl) throws ConditionThrowable
     {
 	Class o = classForName("java.lang.Object");
-
-     	for (Class c = cl ; c != o ; c = c.getSuperclass())
-            if (registeredExceptions.containsKey(c))
-                return (Symbol)registeredExceptions.get(c);
+     	for (Class c = cl ; c != o ; c = c.getSuperclass()) {
+            Object object = registeredExceptions.get(c);
+            if (object != null && isJavaException(LispClass.findClass((Symbol) object))) {
+                return (Symbol) object;
+            }
+        }
         return null;
     }
 
