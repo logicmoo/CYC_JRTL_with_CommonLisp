@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: HashTable.java,v 1.51 2005-11-07 11:44:03 piso Exp $
+ * $Id: HashTable.java,v 1.52 2005-11-07 11:48:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,14 @@ public abstract class HashTable extends LispObject
         this.rehashThreshold = rehashThreshold;
         buckets = new HashEntry[size];
         threshold = (int) (size * loadFactor);
+    }
+
+    protected static int calculateInitialCapacity(int size)
+    {
+        int capacity = 1;
+        while (capacity < size)
+            capacity <<= 1;
+        return capacity;
     }
 
     public final LispObject getRehashSize()

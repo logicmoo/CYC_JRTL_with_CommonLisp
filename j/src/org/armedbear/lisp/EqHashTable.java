@@ -2,7 +2,7 @@
  * EqHashTable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: EqHashTable.java,v 1.8 2005-11-05 19:15:07 piso Exp $
+ * $Id: EqHashTable.java,v 1.9 2005-11-07 11:48:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,14 +33,6 @@ public final class EqHashTable extends HashTable
     {
         super(calculateInitialCapacity(size), rehashSize, rehashThreshold);
         mask = buckets.length - 1;
-    }
-
-    private static int calculateInitialCapacity(int size)
-    {
-        int capacity = 1;
-        while (capacity < size)
-            capacity <<= 1;
-        return capacity;
     }
 
     public Symbol getTest()

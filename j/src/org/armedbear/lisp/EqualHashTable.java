@@ -2,7 +2,7 @@
  * EqualHashTable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: EqualHashTable.java,v 1.6 2005-11-07 05:12:49 piso Exp $
+ * $Id: EqualHashTable.java,v 1.7 2005-11-07 11:49:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,14 +30,6 @@ public final class EqualHashTable extends HashTable
     {
         super(calculateInitialCapacity(size), rehashSize, rehashThreshold);
         mask = buckets.length - 1;
-    }
-
-    private static int calculateInitialCapacity(int size)
-    {
-        int capacity = 1;
-        while (capacity < size)
-            capacity <<= 1;
-        return capacity;
     }
 
     public Symbol getTest()
