@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.249 2005-11-07 11:43:03 piso Exp $
+ * $Id: Autoload.java,v 1.250 2005-11-07 21:12:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -571,7 +571,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%string>", "StringFunctions");
         autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
         autoload(PACKAGE_SYS, "%time", "Time");
-        autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObjectFunctions", true);
         autoload(PACKAGE_SYS, "canonicalize-logical-host", "LogicalPathname", true);
         autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
         autoload(PACKAGE_SYS, "coerce-to-double-float", "FloatFunctions");
@@ -638,6 +637,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "set-slot-definition-writers", "SlotDefinition", true);
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
         autoload(PACKAGE_SYS, "single-float-bits", "FloatFunctions", true);
+        autoload(PACKAGE_SYS, "std-allocate-instance", "StandardObjectFunctions", true);
         autoload(PACKAGE_SYS, "zip", "zip", true);
 
         autoload(Symbol.SET_CLASS_SLOTS, "SlotClass");
