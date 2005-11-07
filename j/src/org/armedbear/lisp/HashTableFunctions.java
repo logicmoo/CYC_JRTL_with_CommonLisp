@@ -2,7 +2,7 @@
  * HashTableFunctions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: HashTableFunctions.java,v 1.4 2005-11-05 02:19:58 piso Exp $
+ * $Id: HashTableFunctions.java,v 1.5 2005-11-07 11:41:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -281,6 +281,24 @@ public final class HashTableFunctions extends Lisp
             catch (ClassCastException e) {
                 return signalTypeError(arg, Symbol.HASH_TABLE);
             }
+        }
+    };
+
+    // ### maphash
+    private static final Primitive MAPHASH =
+        new Primitive(Symbol.MAPHASH, "function hash-table")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            HashTable ht;
+            try {
+                ht = (HashTable) second;
+            }
+            catch (ClassCastException e) {
+                return signalTypeError(second, Symbol.HASH_TABLE);
+            }
+            return ht.MAPHASH(first);
         }
     };
 }
