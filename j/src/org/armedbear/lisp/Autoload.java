@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.248 2005-11-06 01:12:56 piso Exp $
+ * $Id: Autoload.java,v 1.249 2005-11-07 11:43:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -408,6 +408,7 @@ public class Autoload extends Function
         autoload("make-echo-stream", "EchoStream");
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-synonym-stream", "SynonymStream");
+        autoload("maphash", "HashTableFunctions");
         autoload("mod", "mod");
         autoload("open-stream-p", "open_stream_p");
         autoload("output-stream-p", "output_stream_p");
