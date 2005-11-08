@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: HashTable.java,v 1.52 2005-11-07 11:48:37 piso Exp $
+ * $Id: HashTable.java,v 1.53 2005-11-08 14:49:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,13 +167,6 @@ public abstract class HashTable extends LispObject
         } else
             presentp = T;
         return LispThread.currentThread().setValues(value, presentp);
-    }
-
-    public synchronized LispObject gethash_2op_1ret(LispObject key)
-        throws ConditionThrowable
-    {
-        LispObject value = get(key);
-        return value != null ? value : NIL;
     }
 
     public synchronized LispObject puthash(LispObject key, LispObject newValue)
