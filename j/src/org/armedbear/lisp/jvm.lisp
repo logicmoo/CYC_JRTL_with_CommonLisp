@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.619 2005-11-06 20:07:37 piso Exp $
+;;; $Id: jvm.lisp,v 1.620 2005-11-08 05:35:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -8566,6 +8566,7 @@
 
 (defun finalize-generic-functions ()
   (dolist (sym '(make-instance
+                 initialize-instance
                  shared-initialize))
     (let ((gf (and (fboundp sym) (fdefinition sym))))
       (when (typep gf 'generic-function)
