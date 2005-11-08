@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.236 2005-11-08 02:19:49 piso Exp $
+ * $Id: Symbol.java,v 1.237 2005-11-08 14:46:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2821,6 +2821,10 @@ public class Symbol extends LispObject
         PACKAGE_SYS.addExternalSymbol("SET-STD-SLOT-VALUE");
     public static final Symbol SUBCLASSP =
         PACKAGE_SYS.addExternalSymbol("SUBCLASSP");
+    public static final Symbol GETHASH1 =
+        PACKAGE_SYS.addExternalSymbol("GETHASH1");
+    public static final Symbol PUTHASH =
+        PACKAGE_SYS.addExternalSymbol("PUTHASH");
 
     // Internal symbols in SYSTEM package.
     public static final Symbol BACKQUOTE_MACRO =
