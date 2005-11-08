@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.67 2005-11-07 17:28:34 asimon Exp $
+ * $Id: Java.java,v 1.68 2005-11-08 12:21:29 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,18 +34,11 @@ public final class Java extends Lisp
 {
     private static final Map registeredExceptions = new HashMap();
 
-    private static boolean isJavaException(LispClass lc)
+    private static final LispClass java_exception = LispClass.findClass(Symbol.JAVA_EXCEPTION);
+
+    private static boolean isJavaException(LispClass lc) throws ConditionThrowable
     {
-        LispClass java_exception = LispClass.findClass(Symbol.JAVA_EXCEPTION);
-        LispObject direct_sups = (LispObject)lc.getDirectSuperclasses();
-        LispClass c = null;
-        while (direct_sups != NIL) {
-            c = (LispClass) ((Cons)direct_sups).car();
-            if (c == java_exception || isJavaException(c)) 
-                return true;
-            direct_sups = ((Cons) direct_sups).cdr();
-        }
-        return false;
+        return lc.subclassp(java_exception);
     }
 
     // ### register-java-exception exception-name condition-symbol => T
