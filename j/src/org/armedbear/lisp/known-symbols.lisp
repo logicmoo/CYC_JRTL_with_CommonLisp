@@ -1,7 +1,7 @@
 ;;; known-symbols.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-symbols.lisp,v 1.1 2005-11-06 12:00:03 piso Exp $
+;;; $Id: known-symbols.lisp,v 1.2 2005-11-08 14:58:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,6 +38,6 @@
   (initialize-known-symbols)
 
   (defun lookup-known-symbol (symbol)
-    (gethash-2op-1ret symbol ht)))
+    (gethash1 symbol ht)))
 
 (provide '#:known-symbols)

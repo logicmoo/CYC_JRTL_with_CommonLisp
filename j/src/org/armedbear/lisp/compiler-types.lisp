@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.11 2005-11-06 19:07:16 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.12 2005-11-08 14:57:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -131,7 +131,7 @@
 (defvar *function-result-types* (make-hash-table :test 'equal))
 
 (defun function-result-type (name)
-  (gethash-2op-1ret name (the hash-table *function-result-types*)))
+  (gethash1 name (the hash-table *function-result-types*)))
 
 (defun set-function-result-type (name result-type)
   (setf (gethash name (the hash-table *function-result-types*)) result-type))

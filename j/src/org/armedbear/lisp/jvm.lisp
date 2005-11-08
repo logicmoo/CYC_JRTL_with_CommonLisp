@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.620 2005-11-08 05:35:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.621 2005-11-08 14:57:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1092,7 +1092,7 @@
 (defun pool-get (entry)
   (declare (optimize speed))
   (let* ((ht *pool-entries*)
-         (index (gethash-2op-1ret entry ht)))
+         (index (gethash1 entry ht)))
     (declare (type hash-table ht))
     (unless index
       (setf index *pool-count*)
@@ -1264,7 +1264,7 @@
 (defun get-descriptor-info (arg-types return-type)
   (let* ((key (list arg-types return-type))
          (ht *descriptors*)
-         (descriptor-info (gethash-2op-1ret key ht)))
+         (descriptor-info (gethash1 key ht)))
     (declare (type hash-table ht))
     (or descriptor-info
         (setf (gethash key ht) (make-descriptor-info arg-types return-type)))))
@@ -1867,7 +1867,7 @@
 (declaim (ftype (function (t) t) resolve-instruction))
 (defun resolve-instruction (instruction)
   (declare (optimize speed))
-  (let ((resolver (gethash-2op-1ret (instruction-opcode instruction)
+  (let ((resolver (gethash1 (instruction-opcode instruction)
                                     (the hash-table *resolvers*))))
     (if resolver
         (funcall resolver instruction)
@@ -2201,7 +2201,7 @@
       (let ((instruction (aref code i)))
         (when (and instruction (= (instruction-opcode instruction) 167)) ; GOTO
           (let* ((target-label (car (instruction-args instruction)))
-                 (next-instruction (gethash-2op-1ret target-label ht)))
+                 (next-instruction (gethash1 target-label ht)))
             (when next-instruction
               (case (instruction-opcode next-instruction)
                 (167 ; GOTO
@@ -2620,7 +2620,7 @@
 (defun declare-symbol (symbol)
   (declare (type symbol symbol))
   (let* ((ht *declared-symbols*)
-         (g (gethash-2op-1ret symbol ht)))
+         (g (gethash1 symbol ht)))
     (declare (type hash-table ht))
     (unless g
       (let ((*code* *static-code*)
@@ -2642,7 +2642,7 @@
 (defun declare-keyword (symbol)
   (declare (type symbol symbol))
   (let* ((ht *declared-symbols*)
-         (g (gethash-2op-1ret symbol ht)))
+         (g (gethash1 symbol ht)))
     (declare (type hash-table ht))
     (unless g
       (let ((*code* *static-code*))
@@ -2659,7 +2659,7 @@
 (defun declare-function (symbol)
   (declare (type symbol symbol))
   (let* ((ht *declared-functions*)
-         (f (gethash-2op-1ret symbol ht)))
+         (f (gethash1 symbol ht)))
     (declare (type hash-table ht))
     (unless f
       (setf f (symbol-name (gensym)))
@@ -2667,7 +2667,7 @@
         (when s
           (setf f (concatenate 'string f "_" s))))
       (let ((*code* *static-code*)
-            (g (gethash-2op-1ret symbol (the hash-table *declared-symbols*))))
+            (g (gethash1 symbol (the hash-table *declared-symbols*))))
         (cond (g
                (emit 'getstatic *this-class* g +lisp-symbol+))
               (t
@@ -2686,7 +2686,7 @@
 
 (defun declare-setf-function (name)
   (let* ((ht *declared-functions*)
-         (f (gethash-2op-1ret name ht)))
+         (f (gethash1 name ht)))
     (declare (type hash-table ht))
     (unless f
       (let ((symbol (cadr name)))
@@ -2696,7 +2696,7 @@
           (when s
             (setf f (concatenate 'string f "_SETF_" s))))
         (let ((*code* *static-code*)
-              (g (gethash-2op-1ret symbol (the hash-table *declared-symbols*))))
+              (g (gethash1 symbol (the hash-table *declared-symbols*))))
           (cond (g
                  (emit 'getstatic *this-class* g +lisp-symbol+))
                 (t
@@ -2716,7 +2716,7 @@
 (defun declare-fixnum (n)
   (declare (type fixnum n))
   (let* ((ht *declared-fixnums*)
-         (g (gethash-2op-1ret n ht)))
+         (g (gethash1 n ht)))
     (declare (type hash-table ht))
     (unless g
       (let ((*code* *static-code*))
@@ -2868,7 +2868,7 @@
 
 (defun declare-string (string)
   (let* ((ht *declared-strings*)
-         (g (gethash-2op-1ret string ht)))
+         (g (gethash1 string ht)))
     (declare (type hash-table ht))
     (unless g
       (let ((*code* *static-code*))
@@ -3008,7 +3008,7 @@
     (when (eq op '1-)
       (p2-minus (list '- arg 1) target representation)
       (return-from compile-function-call-1 t))
-    (let ((s (gethash-2op-1ret op (the hash-table *unary-operators*))))
+    (let ((s (gethash1 op (the hash-table *unary-operators*))))
       (cond (s
              (compile-form arg 'stack nil)
              (maybe-emit-clear-values arg)
@@ -3056,7 +3056,7 @@
 
 (declaim (ftype (function (t t t t) t) compile-function-call-2))
 (defun compile-function-call-2 (op args target representation)
-  (let ((translation (gethash-2op-1ret op (the hash-table *binary-operators*))))
+  (let ((translation (gethash1 op (the hash-table *binary-operators*))))
     (if translation
         (compile-binary-operation translation args target representation)
         (case op
@@ -3216,7 +3216,7 @@
 
 ;; gethash key hash-table &optional default => value, present-p
 (defun p2-gethash (form target representation)
-  (cond ((and (eq (car form) 'GETHASH-2OP-1RET)
+  (cond ((and (eq (car form) 'GETHASH1)
               (= (length form) 3)
               (eq (derive-type (%caddr form)) 'HASH-TABLE))
          (let ((key-form (%cadr form))
@@ -3746,7 +3746,7 @@
 (defparameter *p2-test-handlers* nil)
 
 (defun p2-test-handler (op)
-  (gethash-2op-1ret op (the hash-table *p2-test-handlers*)))
+  (gethash1 op (the hash-table *p2-test-handlers*)))
 
 (defun initialize-p2-test-handlers ()
   (let ((ht (make-hash-table :test 'eq)))
@@ -8510,7 +8510,7 @@
   (install-p2-handler 'gensym              'p2-gensym)
   (install-p2-handler 'get                 'p2-get)
   (install-p2-handler 'gethash             'p2-gethash)
-  (install-p2-handler 'gethash-2op-1ret    'p2-gethash)
+  (install-p2-handler 'gethash1    'p2-gethash)
   (install-p2-handler 'go                  'p2-go)
   (install-p2-handler 'if                  'p2-if)
   (install-p2-handler 'labels              'p2-labels)

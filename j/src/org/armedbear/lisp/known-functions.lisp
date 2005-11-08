@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.32 2005-11-07 21:47:51 piso Exp $
+;;; $Id: known-functions.lisp,v 1.33 2005-11-08 14:58:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,8 +25,8 @@
 ;; (declaim (ftype (function * symbol) fdefinition-block-name))
 (defknown (copy-symbol gensym fdefinition-block-name) * symbol)
 
-;; (declaim (ftype (function (t t) t) gethash-2op-1ret))
-(defknown gethash-2op-1ret (t t) t)
+;; (declaim (ftype (function (t t) t) gethash1))
+(defknown gethash1 (t t) t)
 ;; (declaim (ftype (function (t) symbol) make-keyword))
 (defknown make-keyword (t) symbol)
 

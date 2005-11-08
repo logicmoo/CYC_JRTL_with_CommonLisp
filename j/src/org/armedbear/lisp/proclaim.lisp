@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: proclaim.lisp,v 1.9 2005-08-10 20:16:46 piso Exp $
+;;; $Id: proclaim.lisp,v 1.10 2005-11-08 14:58:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@
 ;; when the symbol has been declared as a declaration name, or vice versa,
 ;; signals an error."
 (defun check-declaration-type (name)
-  (when (gethash-2op-1ret name (the hash-table *declaration-types*))
+  (when (gethash1 name (the hash-table *declaration-types*))
     (declaration-error name)))
 
 (defun proclaim (declaration-specifier)
@@ -106,7 +106,7 @@
 (defun proclaimed-ftype (name)
   (if (symbolp name)
       (get name 'proclaimed-ftype)
-      (gethash-2op-1ret name (the hash-table *proclaimed-ftypes*))))
+      (gethash1 name (the hash-table *proclaimed-ftypes*))))
 
 (defun ftype-result-type (ftype)
   (if (atom ftype)
