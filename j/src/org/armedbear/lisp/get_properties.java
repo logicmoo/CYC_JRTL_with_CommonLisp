@@ -1,8 +1,8 @@
 /*
  * get_properties.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: get_properties.java,v 1.5 2004-11-03 15:27:24 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: get_properties.java,v 1.6 2005-11-08 16:17:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ public final class get_properties extends Primitive
 {
     private get_properties()
     {
-        super("get-properties", "plist indicator-list");
+        super(Symbol.GET_PROPERTIES, "plist indicator-list");
     }
 
     public LispObject execute(LispObject first, LispObject second)
@@ -35,23 +35,22 @@ public final class get_properties extends Primitive
         final LispThread thread = LispThread.currentThread();
         LispObject plist = first;
         while (plist != NIL) {
-            if (plist.cdr().atom())
-                return signal(new TypeError("Malformed property list: " +
-                                            first.writeToString() + "."));
-            LispObject indicator = plist.car();
-            LispObject indicators = second;
-            while (indicators instanceof Cons) {
-                if (indicator == indicators.car())
-                    return thread.setValues(indicator, plist.cadr(), plist);
-                indicators = indicators.cdr();
-            }
-            if (indicators != NIL)
-                signal(new TypeError(second.writeToString() +
-                                     " is not a proper list."));
-            plist = plist.cddr();
+            if (plist.cdr() instanceof Cons) {
+                LispObject indicator = ((Cons)plist).car;
+                LispObject indicators = second;
+                while (indicators instanceof Cons) {
+                    if (indicator == ((Cons)indicators).car)
+                        return thread.setValues(indicator, plist.cadr(), plist);
+                    indicators = ((Cons)indicators).cdr;
+                }
+                if (indicators != NIL)
+                    return signalTypeError(indicators, Symbol.LIST);
+                plist = plist.cddr();
+            } else
+                return signalTypeError(plist.cdr(), Symbol.CONS);
         }
         return thread.setValues(NIL, NIL, NIL);
     }
 
-    private static final get_properties GET_PROPERTIES = new get_properties();
+    private static final Primitive GET_PROPERTIES = new get_properties();
 }
