@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.621 2005-11-08 14:57:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.622 2005-11-08 15:18:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3225,7 +3225,7 @@
            (emit 'checkcast +lisp-hash-table-class+)
            (compile-form key-form 'stack nil)
            (maybe-emit-clear-values ht-form key-form)
-           (emit-invokevirtual +lisp-hash-table-class+ "gethash_2op_1ret"
+           (emit-invokevirtual +lisp-hash-table-class+ "gethash1"
                                (lisp-object-arg-types 1) +lisp-object+)
            (when (eq representation 'unboxed-fixnum)
              (emit-unbox-fixnum))
