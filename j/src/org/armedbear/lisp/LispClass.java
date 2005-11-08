@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.65 2005-11-08 02:20:22 piso Exp $
+ * $Id: LispClass.java,v 1.66 2005-11-08 05:34:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -260,6 +260,17 @@ public abstract class LispClass extends StandardObject
         return super.typep(type);
     }
 
+    public boolean subclassp(LispObject obj) throws ConditionThrowable
+    {
+        LispObject cpl = classPrecedenceList;
+        while (cpl != NIL) {
+            if (cpl.car() == obj)
+                return true;
+            cpl = cpl.cdr();
+        }
+        return false;
+    }
+
     // ### subclassp
     private static final Primitive SUBCLASSP =
         new Primitive(Symbol.SUBCLASSP, "class")
@@ -274,13 +285,7 @@ public abstract class LispClass extends StandardObject
             catch (ClassCastException e) {
                 return signalTypeError(first, Symbol.CLASS);
             }
-            LispObject cpl = c.getCPL();
-            while (cpl != NIL) {
-                if (cpl.car() == second)
-                    return T;
-                cpl = cpl.cdr();
-            }
-            return NIL;
+            return c.subclassp(second) ? T : NIL;
         }
     };
 }
