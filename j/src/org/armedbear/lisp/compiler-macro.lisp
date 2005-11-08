@@ -1,7 +1,7 @@
 ;;; compiler-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: compiler-macro.lisp,v 1.9 2005-07-18 13:45:21 piso Exp $
+;;; $Id: compiler-macro.lisp,v 1.10 2005-11-08 14:51:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
 
 (defun compiler-macro-function (name &optional environment)
   (declare (ignore environment))
-  (gethash-2op-1ret name (the hash-table *compiler-macros*)))
+  (gethash1 name (the hash-table *compiler-macros*)))
 
 (defun (setf compiler-macro-function) (new-function name &optional environment)
   (declare (ignore environment))

@@ -2,7 +2,7 @@
  * HashTableFunctions.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: HashTableFunctions.java,v 1.5 2005-11-07 11:41:35 piso Exp $
+ * $Id: HashTableFunctions.java,v 1.6 2005-11-08 14:48:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,25 +87,31 @@ public final class HashTableFunctions extends Lisp
         }
     };
 
-    // ### gethash-2op-1ret key hash-table => value
-    private static final Primitive GETHASH_2OP_1RET =
-        new Primitive("gethash-2op-1ret", PACKAGE_SYS, true, "key hash-table")
+    // ### gethash1 key hash-table => value
+    private static final Primitive GETHASH1 =
+        new Primitive(Symbol.GETHASH1, "key hash-table")
     {
-        public LispObject execute(LispObject key, LispObject ht)
+        public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
+            final HashTable ht;
             try {
-                return ((HashTable)ht).gethash_2op_1ret(key);
+                ht = (HashTable) second;
             }
             catch (ClassCastException e) {
-                return signalTypeError(ht, Symbol.HASH_TABLE);
+                return signalTypeError(second, Symbol.HASH_TABLE);
+            }
+            synchronized (ht) {
+                final LispObject value = ht.get(first);
+                return value != null ? value : NIL;
             }
         }
     };
 
     // ### puthash key hash-table new-value &optional default => value
     private static final Primitive PUTHASH =
-        new Primitive("puthash", PACKAGE_SYS, true)
+        new Primitive(Symbol.PUTHASH,
+                      "key hash-table new-value &optional default")
     {
         public LispObject execute(LispObject key, LispObject ht,
                                   LispObject value)

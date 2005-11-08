@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.198 2005-11-07 21:46:06 piso Exp $
+;;; $Id: clos.lisp,v 1.199 2005-11-08 14:51:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1197,7 +1197,7 @@
                               `(lambda (arg)
                                  (declare (optimize speed))
                                  (let* ((class (class-of arg))
-                                        (emfun (or (gethash-2op-1ret class ,emf-table)
+                                        (emfun (or (gethash1 class ,emf-table)
                                                    (slow-method-lookup-1 ,gf class))))
                                    (if emfun
                                        (funcall emfun (list arg))
@@ -1209,7 +1209,7 @@
                                           :format-control "Not enough arguments for generic function ~S."
                                           :format-arguments (list (%generic-function-name ,gf))))
                                  (let* ((classes (list (class-of (%car args))))
-                                        (emfun (gethash-2op-1ret classes ,emf-table)))
+                                        (emfun (gethash1 classes ,emf-table)))
                                    (if emfun
                                        (funcall emfun args)
                                        (slow-method-lookup ,gf args classes)))))
@@ -1220,7 +1220,7 @@
                                  (declare (optimize speed))
                                  (let* ((classes (list (class-of arg1)
                                                        (class-of arg2)))
-                                        (emfun (gethash-2op-1ret classes ,emf-table)))
+                                        (emfun (gethash1 classes ,emf-table)))
                                    (if emfun
                                        (funcall emfun (list arg1 arg2))
                                        (slow-method-lookup ,gf (list arg1 arg2) classes))))
@@ -1231,7 +1231,7 @@
                                           :format-control "Not enough arguments for generic function ~S."
                                           :format-arguments (list (%generic-function-name ,gf))))
                                  (let* ((classes (list (class-of (%car args)) (class-of (%cadr args))))
-                                        (emfun (gethash-2op-1ret classes ,emf-table)))
+                                        (emfun (gethash1 classes ,emf-table)))
                                    (if emfun
                                        (funcall emfun args)
                                        (slow-method-lookup ,gf args classes)))))
@@ -1243,7 +1243,7 @@
                                  (let* ((classes (list (class-of arg1)
                                                        (class-of arg2)
                                                        (class-of arg3)))
-                                        (emfun (gethash-2op-1ret classes ,emf-table)))
+                                        (emfun (gethash1 classes ,emf-table)))
                                    (if emfun
                                        (funcall emfun (list arg1 arg2 arg3))
                                        (slow-method-lookup ,gf (list arg1 arg2 arg3) classes))))
@@ -1256,7 +1256,7 @@
                                  (let* ((classes (list (class-of (%car args))
                                                        (class-of (%cadr args))
                                                        (class-of (%caddr args))))
-                                        (emfun (gethash-2op-1ret classes ,emf-table)))
+                                        (emfun (gethash1 classes ,emf-table)))
                                    (if emfun
                                        (funcall emfun args)
                                        (slow-method-lookup ,gf args classes)))))
@@ -1276,7 +1276,7 @@
                                  (when (= (incf i) ,number-required)
                                    (return)))
                                (setf classes (nreverse classes))
-                               (setf emfun (gethash-2op-1ret classes ,emf-table))
+                               (setf emfun (gethash1 classes ,emf-table))
                                (if emfun
                                    (funcall emfun args)
                                    (slow-method-lookup ,gf args classes))))))
