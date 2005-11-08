@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.64 2005-11-07 21:46:56 piso Exp $
+ * $Id: LispClass.java,v 1.65 2005-11-08 02:20:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,7 +262,7 @@ public abstract class LispClass extends StandardObject
 
     // ### subclassp
     private static final Primitive SUBCLASSP =
-        new Primitive("subclassp", PACKAGE_SYS, true, "class")
+        new Primitive(Symbol.SUBCLASSP, "class")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
