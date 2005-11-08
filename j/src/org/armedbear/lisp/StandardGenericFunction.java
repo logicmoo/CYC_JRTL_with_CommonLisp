@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.8 2005-08-16 18:18:37 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.9 2005-11-08 14:48:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,7 +199,7 @@ public final class StandardGenericFunction extends StandardObject
         ++callCount;
     }
 
-    // MOP (p. 216) specifies the following readers as generic functions:
+    // AMOP (p. 216) specifies the following readers as generic functions:
     //   generic-function-argument-precedence-order
     //   generic-function-declarations
     //   generic-function-lambda-list
