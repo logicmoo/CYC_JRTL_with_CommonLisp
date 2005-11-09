@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.622 2005-11-08 15:18:49 piso Exp $
+;;; $Id: jvm.lisp,v 1.623 2005-11-09 15:43:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2460,12 +2460,14 @@
          (emit-push-nil))))
 
 (defun emit-constructor-lambda-list (lambda-list)
-  (let* ((*print-level* nil)
-         (*print-length* nil)
-         (s (sys::%format nil "~S" lambda-list)))
-    (emit 'ldc (pool-string s))
-    (emit-invokestatic +lisp-class+ "readObjectFromString"
-                       (list +java-string+) +lisp-object+)))
+  (if lambda-list
+      (let* ((*print-level* nil)
+             (*print-length* nil)
+             (s (sys::%format nil "~S" lambda-list)))
+        (emit 'ldc (pool-string s))
+        (emit-invokestatic +lisp-class+ "readObjectFromString"
+                           (list +java-string+) +lisp-object+))
+      (emit-push-nil)))
 
 (defun make-constructor (super lambda-name args)
   (let* ((*compiler-debug* nil) ; We don't normally need to see debugging output for constructors.
