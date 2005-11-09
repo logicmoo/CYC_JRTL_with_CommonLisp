@@ -1,7 +1,7 @@
 ;;; dotimes.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dotimes.lisp,v 1.4 2005-11-09 18:13:03 piso Exp $
+;;; $Id: dotimes.lisp,v 1.5 2005-11-09 18:33:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,14 +27,14 @@
               (test (gensym "TEST-")))
           `(block nil
              (let ((,counter 0)
-                   ,var)
+                   (,var 0))
                ,@decls
                (tagbody
                 (go ,test)
                 ,top
-                (setq ,var ,counter)
                 ,@forms
                 (setq ,counter (1+ ,counter))
+                (setq ,var ,counter)
                 ,test
                 (when (< ,counter ,count)
                   (go ,top))
@@ -46,14 +46,14 @@
           `(block nil
              (let ((,limit ,count)
                    (,counter 0)
-                   ,var)
+                   (,var 0))
                ,@decls
                (tagbody
                 (go ,test)
                 ,top
-                (setq ,var ,counter)
                 ,@forms
                 (setq ,counter (1+ ,counter))
+                (setq ,var ,counter)
                 ,test
                 (when (< ,counter ,limit)
                   (go ,top))
