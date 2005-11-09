@@ -1,7 +1,7 @@
 ;;; dotimes.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: dotimes.lisp,v 1.3 2004-12-11 18:16:08 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: dotimes.lisp,v 1.4 2005-11-09 18:13:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,40 +17,44 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defmacro dotimes ((var count &optional (result nil)) &body body)
   (multiple-value-bind (forms decls) (parse-body body nil)
     (if (numberp count)
-        (let ((top (gensym "TOP-"))
+        (let ((counter (gensym "COUNTER-"))
+              (top (gensym "TOP-"))
               (test (gensym "TEST-")))
           `(block nil
-             (let ((,var 0))
+             (let ((,counter 0)
+                   ,var)
                ,@decls
                (tagbody
                 (go ,test)
                 ,top
+                (setq ,var ,counter)
                 ,@forms
-                (setq ,var (1+ ,var))
+                (setq ,counter (1+ ,counter))
                 ,test
-                (when (< ,var ,count)
+                (when (< ,counter ,count)
                   (go ,top))
-                (return-from nil (progn ,result))
-                ))))
+                (return-from nil (progn ,result))))))
         (let ((limit (gensym "LIMIT-"))
+              (counter (gensym "COUNTER-"))
               (top (gensym "TOP-"))
               (test (gensym "TEST-")))
           `(block nil
              (let ((,limit ,count)
-                   (,var 0))
+                   (,counter 0)
+                   ,var)
                ,@decls
                (tagbody
                 (go ,test)
                 ,top
+                (setq ,var ,counter)
                 ,@forms
-                (setq ,var (1+ ,var))
+                (setq ,counter (1+ ,counter))
                 ,test
-                (when (< ,var ,limit)
+                (when (< ,counter ,limit)
                   (go ,top))
-                (return-from nil (progn ,result))
-                )))))))
+                (return-from nil (progn ,result)))))))))
