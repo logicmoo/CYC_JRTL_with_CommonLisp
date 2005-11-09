@@ -1,7 +1,7 @@
 ;;; misc-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: misc-tests.lisp,v 1.1 2005-11-09 17:41:27 piso Exp $
+;;; $Id: misc-tests.lisp,v 1.2 2005-11-09 18:10:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -41,18 +41,18 @@
 (deftest dotimes.2
   (progn
     (fmakunbound 'dotimes.2)
-    (defun dotimes.2 ()
-      (let ((sum 0)) (dotimes (i 10) (incf sum (setq i (+ i i)))) sum))
-    (dotimes.2))
-  90)
+    (defun dotimes.2 (count)
+      (let ((sum 0)) (dotimes (i count) (setq i 42) (incf sum i)) sum))
+    (dotimes.2 10))
+  420)
 
 (deftest dotimes.2.compiled
   (progn
     (fmakunbound 'dotimes.2.compiled)
-    (defun dotimes.2.compiled ()
-      (let ((sum 0)) (dotimes (i 10) (incf sum (setq i (+ i i)))) sum))
+    (defun dotimes.2.compiled (count)
+      (let ((sum 0)) (dotimes (i count) (setq i 42) (incf sum i)) sum))
     (compile 'dotimes.2.compiled)
-    (dotimes.2.compiled))
-  90)
+    (dotimes.2.compiled 10))
+  420)
 
 (do-tests)
