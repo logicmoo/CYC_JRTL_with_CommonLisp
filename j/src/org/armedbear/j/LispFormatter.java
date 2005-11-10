@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispFormatter.java,v 1.37 2005-03-02 01:18:09 piso Exp $
+ * $Id: LispFormatter.java,v 1.38 2005-11-10 17:11:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,10 +152,10 @@ public final class LispFormatter extends Formatter
         final int offset,       // Offset of token in detabbed text.
         final Line line)        // Line (which may contain tab characters).
     {
-        if (offset >= 1 && text.charAt(offset-1) == '(') {
-            if (offset >= 2 && text.charAt(offset-2) == '(') {
+        if (offset >= 1 && text.charAt(offset - 1) == '(') {
+            if (offset >= 2 && text.charAt(offset - 2) == '(') {
                 // Token is preceded by "((".
-                if (countLeadingSpaces(text) == offset-2) {
+                if (countLeadingSpaces(text) == offset - 2) {
                     // First non-whitespace text on line.
                     Position pos =
                         LispMode.findContainingSexp(new Position(line, 0));
@@ -180,7 +180,7 @@ public final class LispFormatter extends Formatter
                 return false;
             }
             // Text is preceded by single '('.
-            if (countLeadingSpaces(text) == offset-1) {
+            if (countLeadingSpaces(text) == offset - 1) {
                 // First non-whitespace on line.
                 Position pos =
                     LispMode.findContainingSexp(new Position(line, 0));
@@ -209,7 +209,9 @@ public final class LispFormatter extends Formatter
                     }
                 }
             } else {
-                // Not first whitespace on line.
+                // Not first non-whitespace on line.
+                if (text.startsWith("(defknown "))
+                    return false;
                 REMatch m = dolistRE.getMatch(text);
                 if (m != null && m.getEndIndex() == offset)
                     return false;
