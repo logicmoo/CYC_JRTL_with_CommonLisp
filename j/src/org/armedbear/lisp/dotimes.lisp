@@ -1,7 +1,7 @@
 ;;; dotimes.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dotimes.lisp,v 1.5 2005-11-09 18:33:39 piso Exp $
+;;; $Id: dotimes.lisp,v 1.6 2005-11-10 13:31:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
           `(block nil
              (let ((,counter 0)
                    (,var 0))
+               (declare (type (integer 0 ,count) ,counter))
                ,@decls
                (tagbody
                 (go ,test)
