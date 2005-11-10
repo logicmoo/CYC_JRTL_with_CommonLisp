@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.623 2005-11-09 15:43:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.624 2005-11-10 13:29:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4282,14 +4282,14 @@
                            (list +lisp-object-array+) +lisp-object+)
        (emit-move-from-stack target)))))
 
-(declaim (ftype (function (t) t) unused-variable))
+(defknown unused-variable (t) t)
 (defun unused-variable (variable)
   (unless (or (variable-ignore-p variable)
               (variable-ignorable-p variable))
     (compiler-style-warn "The variable ~S is defined but never used."
                          (variable-name variable))))
 
-(declaim (ftype (function (t) t) check-for-unused-variables))
+(defknown check-for-unused-variables (list) t)
 (defun check-for-unused-variables (list)
   (dolist (variable list)
     (when (and (not (variable-special-p variable))
@@ -7250,6 +7250,16 @@
                (emit 'swap)                    ; stack: new-character new-character char
                (emit-invokespecial-init +lisp-character-class+ '("C")) ; stack: character
                (emit-move-from-stack target representation))))
+          ((zerop (variable-reads variable))
+           ;; If we never read the variable, we don't have to set it.
+           (cond (target
+                  (compile-form value-form 'stack nil)
+                  (maybe-emit-clear-values value-form)
+                  (when (eq representation 'unboxed-fixnum)
+                    (emit-unbox-fixnum))
+                  (emit-move-from-stack target representation))
+                 (t
+                  (compile-form value-form nil nil))))
           (t
            (compile-form value-form 'stack nil)
            (maybe-emit-clear-values value-form)
