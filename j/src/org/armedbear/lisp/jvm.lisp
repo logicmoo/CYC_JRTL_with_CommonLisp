@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.624 2005-11-10 13:29:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.625 2005-11-10 18:08:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1428,7 +1428,7 @@
           (t
            nil))))
 
-(declaim (ftype (function (t) t) maybe-generate-type-check))
+(defknown maybe-generate-type-check (t) t)
 (defun maybe-generate-type-check (variable)
   (unless (or (zerop *safety*)
               (variable-special-p variable)
@@ -4533,7 +4533,7 @@
     (push variable *visible-variables*))
   t)
 
-(declaim (ftype (function (t) t) p2-let*-bindings))
+(defknown p2-let*-bindings (t) t)
 (defun p2-let*-bindings (block)
   (let ((must-clear-values nil))
     ;; Generate code to evaluate initforms and bind variables.
@@ -4555,6 +4555,11 @@
                                    "bindSpecialToCurrentValue"
                                    (list +lisp-symbol+)
                                    nil)
+               (setf boundp t))
+              ((and (not (variable-special-p variable))
+                    (zerop (variable-reads variable)))
+               ;; We don't have to bind it if we never read it.
+               (compile-form initform nil nil) ; for effect
                (setf boundp t))
               ((null initform)
                (emit-push-nil))
@@ -7145,6 +7150,18 @@
       (emit-move-from-stack target representation)
       (return-from p2-setq))
 
+    (when (zerop (variable-reads variable))
+     ;; If we never read the variable, we don't have to set it.
+     (cond (target
+            (compile-form value-form 'stack nil)
+            (maybe-emit-clear-values value-form)
+            (when (eq representation 'unboxed-fixnum)
+              (emit-unbox-fixnum))
+            (emit-move-from-stack target representation))
+           (t
+            (compile-form value-form nil nil)))
+      (return-from p2-setq))
+
     ;; Optimize the (INCF X) case.
     (let ((incf-p nil))
       (when (and (eq (variable-representation variable) 'unboxed-fixnum)
@@ -7250,16 +7267,6 @@
                (emit 'swap)                    ; stack: new-character new-character char
                (emit-invokespecial-init +lisp-character-class+ '("C")) ; stack: character
                (emit-move-from-stack target representation))))
-          ((zerop (variable-reads variable))
-           ;; If we never read the variable, we don't have to set it.
-           (cond (target
-                  (compile-form value-form 'stack nil)
-                  (maybe-emit-clear-values value-form)
-                  (when (eq representation 'unboxed-fixnum)
-                    (emit-unbox-fixnum))
-                  (emit-move-from-stack target representation))
-                 (t
-                  (compile-form value-form nil nil))))
           (t
            (compile-form value-form 'stack nil)
            (maybe-emit-clear-values value-form)
