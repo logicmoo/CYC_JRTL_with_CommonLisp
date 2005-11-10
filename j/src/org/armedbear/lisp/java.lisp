@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves, Andras Simon
-;;; $Id: java.lisp,v 1.20 2005-10-27 23:08:25 piso Exp $
+;;; $Id: java.lisp,v 1.21 2005-11-10 02:24:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@
    returns nothing or null depending on whether the return type is
    void or not. This is for convenience only, and a warning is issued
    for each undefined method."
-  (let ((interface (ensure-jclass interface))
+  (let ((interface (jclass interface))
         (implemented-methods
          (loop for m in method-names-and-defs
            for i from 0
@@ -63,33 +63,27 @@
   "Returns the Java class that OBJ belongs to"
   (jcall (jmethod "java.lang.Object" "getClass") obj))
 
-(defun ensure-jclass (class-or-string)
-  "If handed a string, return a Class object."
-  (if (stringp class-or-string)
-      (jclass class-or-string)
-      class-or-string))
-
 (defun jclass-superclass (class)
   "Returns the superclass of CLASS, or NIL if it hasn't got one"
-  (jcall (jmethod "java.lang.Class" "getSuperclass") (ensure-jclass class)))
+  (jcall (jmethod "java.lang.Class" "getSuperclass") (jclass class)))
 
 (defun jclass-interfaces (class)
   "Returns the vector of interfaces of CLASS"
-  (jcall (jmethod "java.lang.Class" "getInterfaces") (ensure-jclass class)))
+  (jcall (jmethod "java.lang.Class" "getInterfaces") (jclass class)))
 
 (defun jclass-interface-p (class)
   "Returns T if CLASS is an interface"
-  (jcall (jmethod "java.lang.Class" "isInterface") (ensure-jclass class)))
+  (jcall (jmethod "java.lang.Class" "isInterface") (jclass class)))
 
 (defun jclass-superclass-p (class-1 class-2)
   "Returns T if CLASS-1 is a superclass or interface of CLASS-2"
   (jcall (jmethod "java.lang.Class" "isAssignableFrom" "java.lang.Class")
-         (ensure-jclass class-1)
-         (ensure-jclass class-2)))
+         (jclass class-1)
+         (jclass class-2)))
 
 (defun jclass-array-p (class)
   "Returns T if CLASS is an array class"
-  (jcall (jmethod "java.lang.Class" "isArray") (ensure-jclass class)))
+  (jcall (jmethod "java.lang.Class" "isArray") (jclass class)))
 
 (defun jarray-component-type (atype)
   "Returns the component type of the array type ATYPE"
@@ -125,7 +119,7 @@
 
 (defun jclass-constructors (class)
   "Returns a vector of constructors for CLASS"
-  (jcall (jmethod "java.lang.Class" "getConstructors") (ensure-jclass class)))
+  (jcall (jmethod "java.lang.Class" "getConstructors") (jclass class)))
 
 (defun jconstructor-params (constructor)
   "Returns a vector of parameter types (Java classes) for CONSTRUCTOR"
@@ -134,13 +128,13 @@
 (defun jclass-fields (class &key declared public)
   "Returns a vector of all (or just the declared/public, if DECLARED/PUBLIC is true) fields of CLASS"
   (let* ((getter (if declared "getDeclaredFields" "getFields"))
-         (fields (jcall (jmethod "java.lang.Class" getter) (ensure-jclass class))))
+         (fields (jcall (jmethod "java.lang.Class" getter) (jclass class))))
     (if public (delete-if-not #'jmember-public-p fields) fields)))
 
 (defun jclass-field (class field-name)
   "Returns the field named FIELD-NAME of CLASS"
   (jcall (jmethod "java.lang.Class" "getField" "java.lang.String")
-         (ensure-jclass class) field-name))
+         (jclass class) field-name))
 
 (defun jfield-type (field)
   "Returns the type (Java class) of FIELD"
@@ -153,7 +147,7 @@
 (defun jclass-methods (class &key declared public)
   "Return a vector of all (or just the declared/public, if DECLARED/PUBLIC is true) methods of CLASS"
   (let* ((getter (if declared "getDeclaredMethods" "getMethods"))
-         (methods (jcall (jmethod "java.lang.Class" getter) (ensure-jclass class))))
+         (methods (jcall (jmethod "java.lang.Class" getter) (jclass class))))
     (if public (delete-if-not #'jmember-public-p methods) methods)))
 
 (defun jmethod-params (method)
@@ -171,7 +165,7 @@
 (defun jinstance-of-p (obj class)
   "OBJ is an instance of CLASS (or one of its subclasses)"
   (and (java-object-p obj)
-       (jcall (jmethod "java.lang.Class" "isInstance" "java.lang.Object") (ensure-jclass class) obj)))
+       (jcall (jmethod "java.lang.Class" "isInstance" "java.lang.Object") (jclass class) obj)))
 
 (defun jmember-static-p (member)
   "MEMBER is a static member of its declaring class"
