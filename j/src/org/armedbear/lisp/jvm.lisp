@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.625 2005-11-10 18:08:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.626 2005-11-11 01:57:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2245,19 +2245,22 @@
   ;; Look for unreachable code after GOTO.
   (let* ((code (coerce *code* 'vector))
          (changed nil)
-         (after-goto nil))
+         (after-goto/areturn nil))
     (dotimes (i (length code))
       (declare (type (unsigned-byte 16) i))
-      (let ((instruction (aref code i)))
-        (cond (after-goto
-               (if (= (instruction-opcode instruction) 202) ; LABEL
-                   (setf after-goto nil)
+      (let* ((instruction (aref code i))
+             (opcode (instruction-opcode instruction)))
+        (cond (after-goto/areturn
+               (if (= opcode 202) ; LABEL
+                   (setf after-goto/areturn nil)
                    ;; Unreachable.
                    (progn
                      (setf (aref code i) nil)
                      (setf changed t))))
-              ((= (instruction-opcode instruction) 167) ; GOTO
-               (setf after-goto t)))))
+              ((= opcode 176) ; ARETURN
+               (setf after-goto/areturn t))
+              ((= opcode 167) ; GOTO
+               (setf after-goto/areturn t)))))
     (when changed
       (setf *code* (delete nil code))
       t)))
