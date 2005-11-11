@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: JavaObject.java,v 1.21 2005-10-28 16:42:19 piso Exp $
+ * $Id: JavaObject.java,v 1.22 2005-11-11 21:12:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,7 +135,7 @@ public final class JavaObject extends LispObject
             if (obj == null) {
                 sb.append("null.");
             } else {
-                sb.append(" an ");
+                sb.append("an ");
                 final Class c = obj.getClass();
                 String className = c.getName();
                 if (c.isArray()) {
