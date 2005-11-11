@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.626 2005-11-11 01:57:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.627 2005-11-11 21:11:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -445,7 +445,7 @@
   (setf (cdr form) (p1-body (cdr form)))
   form)
 
-(declaim (ftype (function (t) t) p1-let-vars))
+(defknown p1-let-vars (t) t)
 (defun p1-let-vars (varlist)
   (let ((vars ()))
     (dolist (varspec varlist)
@@ -465,7 +465,7 @@
       (push variable *all-variables*))
     vars))
 
-(declaim (ftype (function (t) t) p1-let*-vars))
+(defknown p1-let*-vars (t) t)
 (defun p1-let*-vars (varlist)
   (let ((vars ()))
     (dolist (varspec varlist)
@@ -506,7 +506,9 @@
                 (eq (car varspec) (cadr varspec))
                 ;;             (return nil)
                 (return)))))
-    (let ((vars (if (eq op 'LET) (p1-let-vars varlist) (p1-let*-vars varlist))))
+    (let ((vars (if (eq op 'LET)
+                    (p1-let-vars varlist)
+                    (p1-let*-vars varlist))))
       ;; Check for globally declared specials.
       (dolist (variable vars)
         (when (special-variable-p (variable-name variable))
@@ -4488,13 +4490,12 @@
     (dolist (variable (block-vars block))
       (let* ((initform (variable-initform variable))
              (unused-p (and (not (variable-special-p variable))
-                            (zerop (variable-reads variable))
-                            (zerop (variable-writes variable))))
+                            ;; If it's never read, we don't care about writes.
+                            (zerop (variable-reads variable))))
              (target (if unused-p nil 'stack)))
-        (when unused-p
-          (unused-variable variable))
         (cond (initform
-               (cond (unused-p ; Nothing to do.
+               (cond (unused-p
+                      ;; Nothing to do.
                       )
                      ((and (variable-register variable)
                            (neq (variable-declared-type variable) :none)
@@ -4546,8 +4547,6 @@
                             (zerop (variable-reads variable))
                             (zerop (variable-writes variable))))
              (boundp nil))
-        (when unused-p
-          (unused-variable variable))
         (cond ((and (variable-special-p variable)
                     (eq initform (variable-name variable)))
                ;; The special case of binding a special to its current value.
@@ -4621,15 +4620,15 @@
          (form (block-form block))
          (*visible-variables* *visible-variables*)
          (specialp nil))
-    ;; Are we going to bind any special variables?
+    ;; Walk the variable list looking for special bindings and unused lexicals.
     (dolist (variable (block-vars block))
-      (when (variable-special-p variable)
-        (setf specialp t)
-        (return)))
-    ;; If so...
+      (cond ((variable-special-p variable)
+             (setf specialp t))
+            ((zerop (variable-reads variable))
+             (unused-variable variable))))
+    ;; If there are any special bindings...
     (when specialp
-      (dformat t "p2-let/let*-node lastSpecialBinding~%")
-      ;; Save current dynamic environment.
+      ;; We need to save current dynamic environment.
       (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+)
