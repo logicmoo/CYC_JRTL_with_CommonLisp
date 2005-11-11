@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.68 2005-11-08 12:21:29 asimon Exp $
+ * $Id: Java.java,v 1.69 2005-11-11 21:14:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public final class Java extends Lisp
             if ((symbol instanceof Symbol) && isJavaException(LispClass.findClass((Symbol) symbol))) {
                 registeredExceptions.put(classForName(className.getStringValue()),
                                          symbol);
-                return T; 
+                return T;
             }
             return NIL;
         }
@@ -747,7 +747,7 @@ public final class Java extends Lisp
             return (Class) javaObject.getObject();
         }
         catch (ClassCastException e) {
-            signal(new LispError(obj + " does not designate a Java class."));
+            signal(new LispError(obj.writeToString() + " does not designate a Java class."));
             return null;
         }
     }
@@ -759,6 +759,8 @@ public final class Java extends Lisp
             return NIL;
         if (obj instanceof Boolean)
             return ((Boolean)obj).booleanValue() ? T : NIL;
+        if (obj instanceof Byte)
+            return new Fixnum(((Byte)obj).intValue());
         if (obj instanceof Integer)
             return new Fixnum(((Integer)obj).intValue());
         if (obj instanceof Short)
