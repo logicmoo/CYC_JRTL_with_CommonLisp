@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.629 2005-11-13 21:19:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.630 2005-11-13 21:55:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1473,7 +1473,7 @@
 (defun single-valued-p (form)
   (cond ((block-node-p form)
          (if (equal (block-name form) '(TAGBODY))
-             t
+             (not (unsafe-p (node-form form)))
              (single-valued-p (node-form form))))
         ((var-ref-p form)
          t)
