@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.627 2005-11-11 21:11:10 piso Exp $
+;;; $Id: jvm.lisp,v 1.628 2005-11-13 13:30:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4476,9 +4476,10 @@
 (declaim (ftype (function (t) t) p2-let-bindings))
 (defun p2-let-bindings (block)
   (dolist (variable (block-vars block))
-    (unless (variable-special-p variable)
-      (unless (variable-closure-index variable)
-        (setf (variable-register variable) (allocate-register)))))
+    (unless (or (variable-special-p variable)
+                (variable-closure-index variable)
+                (zerop (variable-reads variable)))
+      (setf (variable-register variable) (allocate-register))))
   (let ((*register* *register*)
         (must-clear-values nil))
     ;; Evaluate each initform. If the variable being bound is special, allocate
