@@ -1,7 +1,7 @@
 ;;; dotimes.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dotimes.lisp,v 1.6 2005-11-10 13:31:08 piso Exp $
+;;; $Id: dotimes.lisp,v 1.7 2005-11-13 21:20:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,12 +23,13 @@
   (multiple-value-bind (forms decls) (parse-body body nil)
     (if (numberp count)
         (let ((counter (gensym "COUNTER-"))
-              (top (gensym "TOP-"))
-              (test (gensym "TEST-")))
+              (top     (gensym "TOP-"))
+              (test    (gensym "TEST-")))
           `(block nil
-             (let ((,counter 0)
-                   (,var 0))
+             (let ((,var 0)
+                   (,counter 0))
                (declare (type (integer 0 ,count) ,counter))
+               (declare (ignorable ,var))
                ,@decls
                (tagbody
                 (go ,test)
@@ -40,14 +41,15 @@
                 (when (< ,counter ,count)
                   (go ,top))
                 (return-from nil (progn ,result))))))
-        (let ((limit (gensym "LIMIT-"))
+        (let ((limit   (gensym "LIMIT-"))
               (counter (gensym "COUNTER-"))
-              (top (gensym "TOP-"))
-              (test (gensym "TEST-")))
+              (top     (gensym "TOP-"))
+              (test    (gensym "TEST-")))
           `(block nil
-             (let ((,limit ,count)
-                   (,counter 0)
-                   (,var 0))
+             (let ((,var 0)
+                   (,limit ,count)
+                   (,counter 0))
+               (declare (ignorable ,var))
                ,@decls
                (tagbody
                 (go ,test)

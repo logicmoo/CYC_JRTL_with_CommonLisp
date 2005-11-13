@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.628 2005-11-13 13:30:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.629 2005-11-13 21:19:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1488,6 +1488,8 @@
                        (single-valued-p (fourth form))))
                  ((eq op 'PROGN)
                   (single-valued-p (car (last form))))
+                 ((eq op 'BLOCK)
+                  (single-valued-p (third form)))
                  ((memq op '(LET LET*))
                   (single-valued-p (car (last (cddr form)))))
                  ((memq op '(AND OR))
@@ -4724,10 +4726,6 @@
                  (error "COMPILE-TAGBODY: tag not found: ~S~%" subform))
                (label (tag-label tag))))
             (t
-;;              (when (and (null (cdr rest)) ;; Last subform.
-;;                         (consp subform)
-;;                         (eq (%car subform) 'GO))
-;;                (maybe-generate-interrupt-check))
              (compile-form subform nil nil)
              (unless must-clear-values
                (unless (single-valued-p subform)
@@ -6477,19 +6475,30 @@
               (dformat t "p2-times case 1a~%")
               (compile-constant value target representation))
              ((and (fixnum-type-p type1)
-                   (fixnum-type-p type2)
-                   (fixnum-type-p result-type))
-              (dformat t "p2-times case 2~%")
-              (unless (eq representation 'unboxed-fixnum)
-                (emit 'new +lisp-fixnum-class+)
-                (emit 'dup))
-              (compile-form arg1 'stack 'unboxed-fixnum)
-              (compile-form arg2 'stack 'unboxed-fixnum)
-              (maybe-emit-clear-values arg1 arg2)
-              (emit 'imul)
-              (unless (eq representation 'unboxed-fixnum)
-                (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
-              (emit-move-from-stack target representation))
+                   (fixnum-type-p type2))
+              (cond ((fixnum-type-p result-type)
+                     (dformat t "p2-times case 2~%")
+                     (unless (eq representation 'unboxed-fixnum)
+                       (emit 'new +lisp-fixnum-class+)
+                       (emit 'dup))
+                     (compile-form arg1 'stack 'unboxed-fixnum)
+                     (compile-form arg2 'stack 'unboxed-fixnum)
+                     (maybe-emit-clear-values arg1 arg2)
+                     (emit 'imul)
+                     (unless (eq representation 'unboxed-fixnum)
+                       (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+                     (emit-move-from-stack target representation))
+                    (t
+                     (compile-form arg1 'stack 'unboxed-fixnum)
+                     (emit 'i2l)
+                     (compile-form arg2 'stack 'unboxed-fixnum)
+                     (emit 'i2l)
+                     (maybe-emit-clear-values arg1 arg2)
+                     (emit 'lmul)
+                     (if (eq representation 'unboxed-fixnum)
+                         (emit 'l2i)
+                         (emit-box-long))
+                     (emit-move-from-stack target representation))))
              ((fixnump arg2)
               (dformat t "p2-times case 3~%")
               (compile-form arg1 'stack nil)
