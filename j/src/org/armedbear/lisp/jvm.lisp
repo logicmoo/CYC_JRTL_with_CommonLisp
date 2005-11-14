@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.631 2005-11-14 16:02:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.632 2005-11-14 20:06:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -270,13 +270,13 @@
 ;; True for local functions defined with FLET or LABELS.
 (defvar *child-p* nil)
 
-(declaim (ftype (function (symbol list) t) find-variable))
+(defknown find-variable (symbol list) t)
 (defun find-variable (name variables)
   (dolist (variable variables)
     (when (eq name (variable-name variable))
       (return variable))))
 
-(declaim (ftype (function (t) t) find-visible-variable))
+(defknown find-visible-variable (t) t)
 (defun find-visible-variable (name)
   (dolist (variable *visible-variables*)
     (when (eq name (variable-name variable))
@@ -4465,6 +4465,13 @@
                                 (dolist (ref (variable-references variable))
                                   (aver (eq (var-ref-variable ref) variable))
                                   (setf (var-ref-variable ref) source-var))
+                                ;; Check for DOTIMES limit variable.
+                                (when (get (variable-name variable) 'sys::dotimes-limit-variable-p)
+                                  (let* ((symbol (get (variable-name variable) 'sys::dotimes-index-variable-name))
+                                         (index-variable (find-variable symbol (block-vars block))))
+                                    (when index-variable
+                                      (setf (get (variable-name index-variable) 'sys::dotimes-limit-variable-name)
+                                            (variable-name source-var)))))
                                 (push variable removed)))))))
                   ((fixnump initform)
                    (dolist (ref (variable-references variable))
@@ -4477,7 +4484,7 @@
       (dolist (variable removed)
         (setf (block-vars block) (remove variable (block-vars block)))))))
 
-(declaim (ftype (function (t) t) p2-let-bindings))
+(defknown p2-let-bindings (t) t)
 (defun p2-let-bindings (block)
   (dolist (variable (block-vars block))
     (unless (or (variable-special-p variable)
@@ -4511,7 +4518,20 @@
                       (let ((type (derive-type initform)))
                         (setf (variable-derived-type variable) type)
                         (when (subtypep type 'FIXNUM)
-                          (setf (variable-representation variable) 'unboxed-fixnum)))))
+                          (setf (variable-representation variable) 'unboxed-fixnum))))
+                     ((get (variable-name variable) 'sys::dotimes-index-variable-p)
+                      ;; This is a DOTIMES index variable.
+                      (let* ((limit-variable-name (get (variable-name variable) 'sys::dotimes-limit-variable-name))
+                             (limit-variable (and limit-variable-name
+                                                  (or (find-variable limit-variable-name (block-vars block))
+                                                      (find-visible-variable limit-variable-name)))))
+                        (when limit-variable
+                          (let ((type (variable-derived-type limit-variable)))
+                            (when (eq type :none)
+                              (setf type (variable-declared-type limit-variable)))
+                            (when (subtypep type 'FIXNUM)
+                              (setf (variable-representation variable) 'unboxed-fixnum)
+                              (setf (variable-derived-type variable) 'FIXNUM)))))))
                (compile-form initform target (variable-representation variable))
                (unless must-clear-values
                  (unless (single-valued-p initform)
@@ -6153,7 +6173,7 @@
                  (setf result-type (list 'INTEGER low high)))))))))
     result-type))
 
-(declaim (ftype (function (t) t) derive-type-plus))
+(defknown derive-type-plus (t) t)
 (defun derive-type-plus (form)
   (let ((args (cdr form)))
     (when (= (length args) 2)
@@ -6472,8 +6492,6 @@
        (setf type1 (make-integer-type (derive-type arg1))
              type2 (make-integer-type (derive-type arg2))
              result-type (make-integer-type (derive-type form)))
-       (dformat t "p2-times type1 = ~S type2 = ~S~%" type1 type2)
-       (dformat t "p2-times result-type = ~S~%" result-type)
        (cond ((and (numberp arg1) (numberp arg2))
               (dformat t "p2-times case 1~%")
               (compile-constant (* arg1 arg2) target representation))
@@ -6483,7 +6501,6 @@
              ((and (fixnum-type-p type1)
                    (fixnum-type-p type2))
               (cond ((fixnum-type-p result-type)
-                     (dformat t "p2-times case 2~%")
                      (unless (eq representation 'unboxed-fixnum)
                        (emit 'new +lisp-fixnum-class+)
                        (emit 'dup))
