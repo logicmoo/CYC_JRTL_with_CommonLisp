@@ -1,7 +1,7 @@
 ;;; dotimes.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dotimes.lisp,v 1.7 2005-11-13 21:20:11 piso Exp $
+;;; $Id: dotimes.lisp,v 1.8 2005-11-14 16:03:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,21 +43,19 @@
                 (return-from nil (progn ,result))))))
         (let ((limit   (gensym "LIMIT-"))
               (counter (gensym "COUNTER-"))
-              (top     (gensym "TOP-"))
-              (test    (gensym "TEST-")))
+              (top     (gensym "TOP-")))
           `(block nil
              (let ((,var 0)
                    (,limit ,count)
                    (,counter 0))
                (declare (ignorable ,var))
                ,@decls
-               (tagbody
-                (go ,test)
-                ,top
-                ,@forms
-                (setq ,counter (1+ ,counter))
-                (setq ,var ,counter)
-                ,test
-                (when (< ,counter ,limit)
-                  (go ,top))
-                (return-from nil (progn ,result)))))))))
+               (when (> ,limit 0)
+                 (tagbody
+                  ,top
+                  ,@forms
+                  (setq ,counter (1+ ,counter))
+                  (setq ,var ,counter)
+                  (when (< ,counter ,limit)
+                    (go ,top))))
+               (return-from nil (progn ,result))))))))

@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.630 2005-11-13 21:55:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.631 2005-11-14 16:02:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4191,6 +4191,8 @@
            (compile-form alternate target representation))
           ((numberp test)
            (compile-form consequent target representation))
+          ((equal (derive-type test) '(not null))
+           (compile-form consequent target representation))
           (t
            (let ((result (compile-test-form test)))
              (case result
@@ -6287,6 +6289,10 @@
               'CHARACTER)
              (COERCE
               (derive-type-coerce form))
+             (FIXNUMP
+              (if (fixnum-type-p (derive-compiler-type (cadr form)))
+                  '(not null)
+                  t))
              (INTEGER-LENGTH
               (derive-type-integer-length form))
              (LENGTH
