@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.35 2005-06-15 20:55:39 piso Exp $
+;;; $Id: slime.lisp,v 1.36 2005-11-15 16:33:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -432,9 +432,12 @@
 
 (defun slime-compile-defun ()
   (let* ((string (defun-at-point))
-         (package (find-buffer-package)))
+         (package (find-buffer-package))
+         (pathname (buffer-pathname (current-buffer)))
+         (offset (buffer-offset (find-beginning-of-defun))))
     (slime-eval-async
-     `(swank:swank-compile-string ,string ,package) 'display-eval-result)))
+     `(swank:swank-compile-string ,string ,package ,pathname ,offset)
+     'display-eval-result)))
 
 (defun slime-load-file ()
   (let ((pathname (buffer-pathname)))
