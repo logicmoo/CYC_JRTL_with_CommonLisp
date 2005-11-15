@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: j.lisp,v 1.45 2005-06-15 20:55:10 piso Exp $
+;;; $Id: j.lisp,v 1.46 2005-11-15 16:32:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
           buffer-activated-hook
           buffer-live-p
           buffer-name
+          buffer-offset
           buffer-pathname
           buffer-stream-buffer
           buffer-string
@@ -49,6 +50,7 @@
           emacs-mode
           end-of-line
           execute-command
+          find-beginning-of-defun
           find-file-buffer
           forward-char
           forward-sexp

@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.66 2005-07-06 00:55:52 piso Exp $
+ * $Id: LispAPI.java,v 1.67 2005-11-15 16:30:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -345,8 +345,28 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### goto-char
-    // goto-char position
+    // ### buffer-offset mark &optional buffer
+    private static final Primitive BUFFER_OFFSET =
+        new Primitive("buffer-offset", PACKAGE_J, true, "mark &optional buffer")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            final Position pos = checkMark(arg);
+            final Buffer buffer = Editor.currentBuffer();
+            int offset = buffer.getAbsoluteOffset(pos);
+            return offset >= 0 ? new Fixnum(offset) : NIL;
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            final Position pos = checkMark(first);
+            final Buffer buffer = checkBuffer(second);
+            int offset = buffer.getAbsoluteOffset(pos);
+            return offset >= 0 ? new Fixnum(offset) : NIL;
+        }
+    };
+
+    // ### goto-char position
     private static final Primitive GOTO_CHAR =
         new Primitive("goto-char", PACKAGE_J, true)
     {
@@ -1150,7 +1170,8 @@ public final class LispAPI extends Lisp
                     } else if (obj instanceof AbstractString) {
                         editor.insertString(obj.getStringValue());
                     } else
-                        return signal(new TypeError(obj, "character or string"));
+                        return signalTypeError(obj,
+                                               list3(Symbol.OR, Symbol.CHARACTER, Symbol.STRING));
                 }
                 return NIL;
             }
@@ -1262,7 +1283,8 @@ public final class LispAPI extends Lisp
                 return NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "compound edit"));
+                return signal(new LispError(arg.writeToString() +
+                                            " does not designate a compound edit."));
             }
         }
     };
@@ -1392,7 +1414,8 @@ public final class LispAPI extends Lisp
         {
             if (arg instanceof BufferStream)
                 return new JavaObject(((BufferStream)arg).getBuffer());
-            return signal(new TypeError(arg, "BUFFER-STREAM"));
+            return signal(new LispError(arg.writeToString() +
+                                        "does not designate a buffer stream."));
         }
     };
 
@@ -1548,8 +1571,25 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### find-beginning-of-defun &optional mark
+    private static final Primitive FIND_BEGINNING_OF_DEFUN =
+        new Primitive("find-beginning-of-defun", PACKAGE_J, true, "&optional mark")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            Position pos =
+                LispMode.findBeginningOfDefun(Editor.currentEditor().getDot());
+            return pos != null ? new JavaObject(pos) : NIL;
+        }
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Position pos = LispMode.findBeginningOfDefun(checkMark(arg));
+            return pos != null ? new JavaObject(pos) : NIL;
+        }
+    };
+
     // ### defun-at-point => string
-    private static final Primitive CURRENT_DEFUN =
+    private static final Primitive DEFUN_AT_POINT =
         new Primitive("defun-at-point", PACKAGE_J, true, "")
     {
         public LispObject execute() throws ConditionThrowable
