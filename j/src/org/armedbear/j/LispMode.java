@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.101 2005-10-17 22:25:36 piso Exp $
+ * $Id: LispMode.java,v 1.102 2005-11-15 16:31:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -567,19 +567,6 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return sb.toString();
     }
 
-    private static Position findStartOfDefun(Position pos)
-    {
-        Line line = pos.getLine();
-        while (true) {
-            if (line.getText().startsWith("(def"))
-                return new Position(line, 0);
-            Line prev = line.previous();
-            if (prev == null)
-                return new Position(line, 0);
-            line = prev;
-        }
-    }
-
     public static Position findContainingSexp(Position start)
     {
         LispSyntaxIterator it = new LispSyntaxIterator(start);
@@ -1017,9 +1004,22 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return null;
     }
 
+    public static Position findBeginningOfDefun(Position pos)
+    {
+        Line line = pos.getLine();
+        while (true) {
+            if (line.getText().startsWith("(def"))
+                return new Position(line, 0);
+            Line prev = line.previous();
+            if (prev == null)
+                return new Position(line, 0);
+            line = prev;
+        }
+    }
+
     public static String getCurrentDefun(Editor editor)
     {
-        Position begin = findStartOfDefun(editor.getDot());
+        Position begin = findBeginningOfDefun(editor.getDot());
         if (begin != null && begin.lookingAt("(def")) {
             Position end = mode.forwardSexp(begin);
             if (end != null) {
