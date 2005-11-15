@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.15 2005-10-22 19:32:40 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.16 2005-11-15 14:08:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package #:system)
 
-(export 'untraced-function)
+(export '(record-source-information untraced-function))
 
 (defun check-redefinition (name)
   (when (and *warn-on-redefinition* (fboundp name) (not (autoloadp name)))
