@@ -1,8 +1,8 @@
 /*
  * ListOccurrences.java
  *
- * Copyright (C) 2000-2004 Peter Graves
- * $Id: ListOccurrences.java,v 1.8 2004-04-26 19:51:03 piso Exp $
+ * Copyright (C) 2000-2005 Peter Graves
+ * $Id: ListOccurrences.java,v 1.9 2005-11-16 19:52:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,15 +111,25 @@ public class ListOccurrences extends Buffer
     {
         ListOccurrences listOccurrences = null;
         Position pos = new Position(sourceBuffer.getFirstLine(), 0);
+        int count = 0;
         while ((pos = search.find(sourceBuffer.getMode(), pos)) != null) {
             if (listOccurrences == null)
                 listOccurrences = new ListOccurrences(search, sourceBuffer);
             listOccurrences.appendOccurrenceLine(pos.getLine());
+            ++count;
             Line next = pos.getNextLine();
             if (next != null)
                 pos.moveTo(next, 0);
             else
                 break;
+        }
+        if (count > 0) {
+            FastStringBuffer sb = new FastStringBuffer("Pattern found in ");
+            sb.append(count);
+            sb.append(" line");
+            if (count > 1)
+                sb.append('s');
+            listOccurrences.appendStatusLine(sb.toString());
         }
         if (listOccurrences != null) {
             listOccurrences.renumber();
@@ -238,6 +248,11 @@ public class ListOccurrences extends Buffer
         appendLine(new OccurrenceLine(s, lineNumber));
     }
 
+    public final void appendStatusLine(String s)
+    {
+        appendLine(new ListOccurrencesStatusLine(s));
+    }
+
     protected String getOptions()
     {
         FastStringBuffer sb = new FastStringBuffer(search.ignoreCase() ? "ignore case" : "case sensitive");
@@ -325,14 +340,18 @@ public class ListOccurrences extends Buffer
             editor.setDefaultCursor();
             if (buf != null) {
                 editor.makeNext(buf);
+                boolean shrink = false;
                 Editor otherEditor = editor.getOtherEditor();
                 if (otherEditor != null) {
                     buf.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
                     otherEditor.makeNext(buf);
-                } else
+                } else {
                     buf.setUnsplitOnClose(true);
+                    shrink = true;
+                }
                 Editor ed = editor.activateInOtherWindow(buf);
-
+                if (shrink)
+                    ed.shrinkWindowIfLargerThanBuffer();
                 ed.setDot(buf.getInitialDotPos(editor.getDotLine(),
                                                editor.getDotOffset()));
                 ed.moveCaretToDotCol();
