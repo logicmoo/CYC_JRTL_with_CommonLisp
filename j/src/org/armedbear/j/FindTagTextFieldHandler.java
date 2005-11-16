@@ -1,7 +1,8 @@
 /*
  * FindTagTextFieldHandler.java
  *
- * Copyright (C) 1998-2003 Peter Graves
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: FindTagTextFieldHandler.java,v 1.6 2005-11-16 19:51:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +88,10 @@ public final class FindTagTextFieldHandler extends DefaultTextFieldHandler
                 ListTagsBuffer buf =
                     new ListTagsBuffer(editor, "findTag", pattern, tags);
                 editor.makeNext(buf);
+                Editor otherEditor = editor.getOtherEditor();
                 Editor ed = editor.activateInOtherWindow(buf);
+                if (otherEditor == null)
+                    ed.shrinkWindowIfLargerThanBuffer();
                 ed.setDot(buf.getInitialDotPos());
                 ed.moveCaretToDotCol();
                 ed.updateDisplay();
@@ -96,9 +100,9 @@ public final class FindTagTextFieldHandler extends DefaultTextFieldHandler
                 Tag tag = (Tag) tags.get(0);
                 editor.pushPosition();
                 if (tag instanceof LocalTag)
-                    TagCommands.gotoLocalTag(editor, (LocalTag)tag, false);
+                    TagCommands.gotoLocalTag(editor, (LocalTag) tag, false);
                 else if (tag instanceof GlobalTag)
-                    TagCommands.gotoGlobalTag(editor, (GlobalTag)tag, false);
+                    TagCommands.gotoGlobalTag(editor, (GlobalTag) tag, false);
                 else
                     Debug.bug();
             }
