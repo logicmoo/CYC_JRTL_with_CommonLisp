@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.67 2005-11-15 16:30:35 piso Exp $
+ * $Id: LispAPI.java,v 1.68 2005-11-16 19:47:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -564,7 +564,7 @@ public final class LispAPI extends Lisp
         public LispObject execute()
         {
             Editor editor = Editor.currentEditor();
-            Position dot = Editor.currentEditor().getDot();
+            Position dot = editor.getDot();
             if (dot != null)
                 return new JavaObject(dot.getLine());
             return NIL;
@@ -1449,6 +1449,32 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### buffer-modified-p buffer => boolean
+    private static final Primitive BUFFER_MODIFIED_P =
+        new Primitive("buffer-modified-p", PACKAGE_J, true, "buffer")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return checkBuffer(arg).isModified() ? T : NIL;
+        }
+    };
+
+    // ### set-buffer-modified-p buffer flag => flag
+    private static final Primitive SET_BUFFER_MODIFIED_P =
+        new Primitive("set-buffer-modified-p", PACKAGE_J, true, "buffer flag")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            final Buffer buffer = checkBuffer(first);
+            if (second == NIL)
+                buffer.unmodified();
+            else
+                buffer.modified();
+            return second;
+        }
+    };
+
     // ### %status string &optional editor => generalized-boolean
     private static final Primitive STATUS =
         new Primitive("status", PACKAGE_J, true, "string &optional editor")
@@ -1471,9 +1497,8 @@ public final class LispAPI extends Lisp
                 SwingUtilities.invokeLater(r);
                 return T;
             }
-            return signal(new TypeError(arg, Symbol.STRING));
+            return signalTypeError(arg, Symbol.STRING);
         }
-
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -1494,7 +1519,7 @@ public final class LispAPI extends Lisp
                 SwingUtilities.invokeLater(r);
                 return T;
             }
-            return signal(new TypeError(first, Symbol.STRING));
+            return signalTypeError(first, Symbol.STRING);
         }
     };
 
