@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.154 2005-10-17 23:36:43 piso Exp $
+ * $Id: Editor.java,v 1.155 2005-11-16 19:48:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -602,6 +602,17 @@ public final class Editor extends JPanel implements Constants,
         return frame;
     }
 
+    // Returns height in lines.
+    public int getWindowHeight()
+    {
+        return getDisplay().getHeight() / Display.getCharHeight();
+    }
+
+    public void setWindowHeight(int n)
+    {
+        frame.setWindowHeight(this, n);
+    }
+
     static Vector frames = new Vector();
 
     public static int indexOf(Frame frame)
@@ -704,6 +715,11 @@ public final class Editor extends JPanel implements Constants,
     }
 
     private HorizontalScrollBar horizontalScrollBar;
+
+    public HorizontalScrollBar getHorizontalScrollBar()
+    {
+        return horizontalScrollBar;
+    }
 
     private HorizontalScrollBarListener horizontalScrollBarListener;
 
@@ -6292,15 +6308,18 @@ public final class Editor extends JPanel implements Constants,
             catch (Throwable t) {
                 String message = null;
                 if (t instanceof ConditionThrowable) {
-                    LispObject obj = ((ConditionThrowable)t).getCondition();
-                    if (obj instanceof Condition) {
-                        try {
-                            message = ((Condition)obj).getConditionReport();
-                        }
-                        catch (Throwable ignored) {
-                            // At least we tried.
+                    try {
+                        LispObject obj = ((ConditionThrowable)t).getCondition();
+                        if (obj instanceof Condition) {
+                            try {
+                                message = ((Condition)obj).getConditionReport();
+                            }
+                            catch (Throwable ignored) {
+                                // At least we tried.
+                            }
                         }
                     }
+                    catch (Throwable ignored) {}
                 }
                 if (message == null || message.length() == 0)
                     message = t.getMessage();
@@ -7361,6 +7380,24 @@ public final class Editor extends JPanel implements Constants,
                 sidebar.refreshSidebar();
             }
         }
+    }
+
+    public void enlargeWindow()
+    {
+        frame.enlargeWindow(this, 1);
+    }
+
+    public void enlargeWindow(int n)
+    {
+        frame.enlargeWindow(this, n);
+    }
+
+    public void shrinkWindowIfLargerThanBuffer()
+    {
+        final Frame frame = getFrame();
+        int n = getBuffer().getLineCount();
+        if (n < getWindowHeight())
+            frame.setWindowHeight(this, n);
     }
 
     public void fold()
