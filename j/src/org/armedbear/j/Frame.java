@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Frame.java,v 1.16 2005-10-17 23:56:56 piso Exp $
+ * $Id: Frame.java,v 1.17 2005-11-16 19:46:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -572,6 +572,40 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
             editors[0].setUpdateFlag(REFRAME | REPAINT);
             editors[1].setUpdateFlag(REFRAME | REPAINT);
             updateControls();
+        }
+    }
+
+    public void enlargeWindow(Editor editor, int n)
+    {
+        if (editorPane instanceof SplitPane) {
+            final SplitPane sp = (SplitPane) editorPane;
+            final int charHeight = Display.getCharHeight();
+            int dividerLocation = sp.getDividerLocation();
+            if (editor == editors[0])
+                dividerLocation += charHeight;
+            else
+                dividerLocation -= charHeight;
+            sp.setDividerLocation(dividerLocation);
+        }
+    }
+
+    // Set window height to N lines.
+    public void setWindowHeight(Editor editor, int n)
+    {
+        if (editorPane instanceof SplitPane) {
+            SplitPane sp = (SplitPane) editorPane;
+            int charHeight = Display.getCharHeight();
+            int locationBarHeight = editor.getLocationBar().getHeight();
+            int scrollBarHeight = editor.getHorizontalScrollBar().getHeight();
+            int minHeightForOtherWindow = locationBarHeight + charHeight * 4 + scrollBarHeight;
+            int availableHeight =
+                sp.getHeight() - minHeightForOtherWindow - sp.getDividerSize();
+            int requestedHeight = locationBarHeight + charHeight * n + scrollBarHeight;
+            int height = Math.min(requestedHeight, availableHeight);
+            if (editor == editors[0])
+                sp.setDividerLocation(height);
+            else if (editor == editors[1])
+                sp.setDividerLocation(sp.getHeight() - sp.getDividerSize() - height);
         }
     }
 
