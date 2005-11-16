@@ -2,7 +2,7 @@
  * TagCommands.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: TagCommands.java,v 1.8 2005-03-05 01:44:34 piso Exp $
+ * $Id: TagCommands.java,v 1.9 2005-11-16 19:55:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,7 +115,11 @@ public final class TagCommands implements Constants
             ListTagsBuffer buf =
                 new ListTagsBuffer(editor, "findTag", expression.getName(), tags);
             editor.makeNext(buf);
+            Editor otherEditor = editor.getOtherEditor();
+            boolean shrink = (otherEditor == null);
             Editor ed = editor.activateInOtherWindow(buf);
+            if (shrink)
+                ed.shrinkWindowIfLargerThanBuffer();
             ed.setDot(buf.getInitialDotPos());
             ed.moveCaretToDotCol();
             ed.updateDisplay();
@@ -340,7 +344,7 @@ public final class TagCommands implements Constants
     {
         final Editor editor = Editor.currentEditor();
         listMatchingTags(editor,
-            editor.getMode().getIdentifier(editor.getDot()));
+                         editor.getMode().getIdentifier(editor.getDot()));
     }
 
     private static void listMatchingTags(Editor editor, String name)
@@ -357,7 +361,11 @@ public final class TagCommands implements Constants
                 ListTagsBuffer buf =
                     new ListTagsBuffer(editor, "listMatchingTags", name, tags);
                 editor.makeNext(buf);
+                Editor otherEditor = editor.getOtherEditor();
+                boolean shrink = (otherEditor == null);
                 Editor ed = editor.activateInOtherWindow(buf);
+                if (shrink)
+                    ed.shrinkWindowIfLargerThanBuffer();
                 ed.setDot(buf.getInitialDotPos());
                 ed.moveCaretToDotCol();
                 ed.updateDisplay();
