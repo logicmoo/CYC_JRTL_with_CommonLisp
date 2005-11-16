@@ -1,8 +1,8 @@
 /*
  * BufferStream.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: BufferStream.java,v 1.1 2004-08-30 18:04:43 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: BufferStream.java,v 1.2 2005-11-16 19:43:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,7 +113,7 @@ public final class BufferStream extends Stream
             return;
         }
         try {
-            buffer.append(s);
+            buffer.insertString(buffer.getEnd(), s);
             buffer.modified();
             if (s.indexOf('\n') >= 0)
                 buffer.needsRenumbering(true);
