@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: j.lisp,v 1.46 2005-11-15 16:32:14 piso Exp $
+;;; $Id: j.lisp,v 1.47 2005-11-16 19:56:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
           beginning-of-line
           buffer-activated-hook
           buffer-live-p
+          buffer-modified-p
           buffer-name
           buffer-offset
           buffer-pathname
@@ -92,6 +93,7 @@
           save-excursion
           search-backward
           search-forward
+          set-buffer-modified-p
           set-mark
           status
           switch-to-buffer
