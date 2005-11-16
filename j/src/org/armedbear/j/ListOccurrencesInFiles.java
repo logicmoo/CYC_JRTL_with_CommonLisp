@@ -2,7 +2,7 @@
  * ListOccurrencesInFiles.java
  *
  * Copyright (C) 2000-2004 Peter Graves
- * $Id: ListOccurrencesInFiles.java,v 1.7 2004-04-02 03:29:05 piso Exp $
+ * $Id: ListOccurrencesInFiles.java,v 1.8 2005-11-16 19:53:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,11 +148,6 @@ public final class ListOccurrencesInFiles extends ListOccurrences
             }
             findOccurrenceAtDot(editor, false);
         }
-    }
-
-    public final void appendStatusLine(String s)
-    {
-        appendLine(new ListOccurrencesStatusLine(s));
     }
 
     public final void appendFileLine(File file, boolean listEachOccurrence)
