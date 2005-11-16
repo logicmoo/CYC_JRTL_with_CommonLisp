@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: CommandTable.java,v 1.62 2005-10-20 12:17:58 piso Exp $
+ * $Id: CommandTable.java,v 1.63 2005-11-16 19:50:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,6 +93,7 @@ public class CommandTable
             addCommand("electricSemi");
             addCommand("electricStar");
             addCommand("end");
+            addCommand("enlargeWindow");
             addCommand("eob");
             addCommand("eol");
             addCommand("escape");
@@ -179,6 +180,7 @@ public class CommandTable
             addCommand("selectWordLeft");
             addCommand("selectWordRight");
             addCommand("setEncoding");
+            addCommand("shrinkWindowIfLargerThanBuffer");
             addCommand("sidebarListBuffers");
             addCommand("sidebarListTags");
             addCommand("slideIn");
