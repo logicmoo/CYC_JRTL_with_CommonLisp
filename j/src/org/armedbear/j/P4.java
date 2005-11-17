@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: P4.java,v 1.17 2004-09-17 18:30:07 piso Exp $
+ * $Id: P4.java,v 1.18 2005-11-17 12:24:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,7 +155,7 @@ public class P4 implements Constants
     }
 
     private static void editCompleted(Editor editor, Buffer buffer,
-        String cmd, String output)
+                                      String cmd, String output)
     {
         // Don't bother with output buffer unless there's an error.
         if (output.trim().endsWith(" - opened for edit")) {
@@ -499,73 +499,102 @@ public class P4 implements Constants
     // arg must be a changelist number or null.
     private static void _submit(String arg)
     {
-        if (!checkP4Installed())
-            return;
-        final Editor editor = Editor.currentEditor();
-        Buffer parentBuffer = editor.getBuffer();
-        if (parentBuffer instanceof DiffOutputBuffer)
-            parentBuffer = parentBuffer.getParentBuffer();
-        FastStringBuffer sb = new FastStringBuffer("p4 submit");
-        if (arg != null) {
-            sb.append(" -c ");
-            sb.append(arg);
+      if (!checkP4Installed())
+        return;
+      final Editor editor = Editor.currentEditor();
+      final Buffer buffer = editor.getBuffer();
+      final Buffer parentBuffer;
+      if (buffer instanceof DiffOutputBuffer)
+        parentBuffer = buffer.getParentBuffer();
+      else
+        parentBuffer = buffer;
+      FastStringBuffer sb = new FastStringBuffer("p4 submit");
+      if (arg != null)
+        {
+          sb.append(" -c ");
+          sb.append(arg);
         }
-        final String title = sb.toString();
-        boolean save = false;
-        List list = getModifiedBuffers();
-        if (list != null && list.size() > 0) {
-            int response =
-                ConfirmDialog.showConfirmDialogWithCancelButton(editor,
-                    "Save modified buffers first?", title);
-            switch (response) {
-                case RESPONSE_YES:
-                    save = true;
-                    break;
-                case RESPONSE_NO:
-                    break;
-                case RESPONSE_CANCEL:
-                    return;
+      final String title = sb.toString();
+      boolean save = false;
+      List list = getModifiedBuffers();
+      if (list != null && list.size() > 0)
+        {
+          int response
+            = ConfirmDialog.showConfirmDialogWithCancelButton(editor,
+                                                              "Save modified buffers first?",
+                                                              title);
+          switch (response)
+            {
+            case RESPONSE_YES:
+              save = true;
+              break;
+            case RESPONSE_NO:
+              break;
+            case RESPONSE_CANCEL:
+              return;
             }
-            editor.repaintNow();
+          editor.repaintNow();
         }
-        if (!save || saveModifiedBuffers(editor, list)) {
-            // Look for existing checkin buffer before making a new one.
-            CheckinBuffer checkinBuffer = null;
-            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-                Buffer buf = it.nextBuffer();
-                if (buf instanceof CheckinBuffer) {
-                    if (title.equals(buf.getTitle())) {
-                        checkinBuffer = (CheckinBuffer) buf;
-                        break;
-                    }
-                }
+      if (!save || saveModifiedBuffers(editor, list))
+        {
+          // Look for existing checkin buffer before making a new one.
+          Buffer buf = null;
+          for (BufferIterator it = new BufferIterator(); it.hasNext();)
+            {
+              buf = it.nextBuffer();
+              if (buf instanceof CheckinBuffer)
+                if (title.equals(buf.getTitle()))
+                  break;
             }
-            if (checkinBuffer == null) {
-                checkinBuffer = new CheckinBuffer(parentBuffer, VC_P4);
-                checkinBuffer.setProperty(Property.USE_TABS, true);
-                checkinBuffer.setFormatter(new P4ChangelistFormatter(checkinBuffer));
-                checkinBuffer.setTitle(title);
-                sb.setText("p4 change -o");
-                if (arg != null) {
-                    sb.append(' ');
-                    sb.append(arg);
-                }
-                ShellCommand shellCommand = new ShellCommand(sb.toString());
+          if (buf instanceof CheckinBuffer)
+            {
+              editor.makeNext(buf);
+              editor.activate(buf);
+              return;
+            }
+          parentBuffer.setBusy(true);
+          final CheckinBuffer checkinBuffer
+            = new CheckinBuffer(parentBuffer, VC_P4);
+          checkinBuffer.setProperty(Property.USE_TABS, true);
+          checkinBuffer.setFormatter(new P4ChangelistFormatter(checkinBuffer));
+          checkinBuffer.setTitle(title);
+          sb.setText("p4 change -o");
+          if (arg != null)
+            {
+              sb.append(' ');
+              sb.append(arg);
+            }
+          final ShellCommand shellCommand = new ShellCommand(sb.toString());
+          Runnable commandRunnable = new Runnable()
+            {
+              public void run()
+              {
                 shellCommand.run();
-                checkinBuffer.setText(shellCommand.getOutput());
-                Position dot = findStartOfComment(checkinBuffer);
-                if (dot != null) {
-                    Position mark = findEndOfComment(checkinBuffer, dot);
-                    View view = new View();
-                    view.setDot(dot);
-                    view.setCaretCol(checkinBuffer.getCol(dot));
-                    if (mark != null)
-                        view.setMark(mark);
-                    checkinBuffer.setLastView(view);
-                }
-            }
-            editor.makeNext(checkinBuffer);
-            editor.activate(checkinBuffer);
+                Runnable completionRunnable = new Runnable()
+                  {
+                    public void run()
+                    {
+                      checkinBuffer.setText(shellCommand.getOutput());
+                      Position dot = findStartOfComment(checkinBuffer);
+                      if (dot != null)
+                        {
+                          Position mark = findEndOfComment(checkinBuffer, dot);
+                          View view = new View();
+                          view.setDot(dot);
+                          view.setCaretCol(checkinBuffer.getCol(dot));
+                          if (mark != null)
+                            view.setMark(mark);
+                          checkinBuffer.setLastView(view);
+                        }
+                      editor.makeNext(checkinBuffer);
+                      editor.activate(checkinBuffer);
+                      parentBuffer.setBusy(false);
+                    }
+                  };
+                SwingUtilities.invokeLater(completionRunnable);
+              }
+            };
+          new Thread(commandRunnable).start();
         }
     }
 
