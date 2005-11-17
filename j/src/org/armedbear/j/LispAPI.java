@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.68 2005-11-16 19:47:11 piso Exp $
+ * $Id: LispAPI.java,v 1.69 2005-11-17 19:56:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1128,22 +1128,116 @@ public final class LispAPI extends Lisp
     // ### set-global-property
     private static final Primitive SET_GLOBAL_PROPERTY =
         new Primitive("set-global-property", PACKAGE_J, true, "key value")
-    {
+      {
         public LispObject execute(LispObject first, LispObject second)
+          throws ConditionThrowable
+        {
+          String key = first.getStringValue();
+          final String value;
+          if (second == NIL)
+            value = null;
+          else if (second instanceof Fixnum)
+            value = String.valueOf(((Fixnum)second).value);
+          else
+            value = second.getStringValue();
+          Editor.setGlobalProperty(key, value);
+          return second;
+        }
+      };
+
+    // ### set-mode-property
+    private static final Primitive SET_MODE_PROPERTY =
+        new Primitive("set-mode-property", PACKAGE_J, true, "key value mode")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
 	    throws ConditionThrowable
         {
-            String key = first.getStringValue();
-            final String value;
-            if (second == NIL)
-                value = null;
-            else if (second instanceof Fixnum)
-                value = String.valueOf(((Fixnum)second).value);
-            else
-                value = second.getStringValue();
-            Editor.setGlobalProperty(key, value);
-            return second;
+          if (!(first instanceof AbstractString))
+            return signalTypeError(first, Symbol.STRING);
+          String key = first.getStringValue();
+          if (!(third instanceof AbstractString))
+            return signalTypeError(third, Symbol.STRING);
+          final Mode mode
+            = Editor.getModeList().getModeFromModeName(third.getStringValue());
+          if (mode == null)
+            return signal(new LispError(third.writeToString() +
+                                        " does not designate any mode."));
+          Property property = Property.findProperty(key);
+          if (property != null)
+            {
+              if (property.isBooleanProperty())
+                {
+                  if (second == NIL)
+                    {
+                      mode.setProperty(property, false);
+                      return second;
+                    }
+                  else
+                    {
+                      mode.setProperty(property, true);
+                      return second;
+                    }
+                }
+              else if (property.isIntegerProperty())
+                {
+                  if (second instanceof Fixnum)
+                    {
+                      mode.setProperty(property, ((Fixnum)second).value);
+                      return second;
+                    }
+                  else if (second instanceof AbstractString)
+                    {
+                      int value;
+                      try
+                        {
+                          value = Integer.parseInt(second.getStringValue());
+                        }
+                      catch (NumberFormatException e)
+                        {
+                          return signal(new LispError(second.writeToString() +
+                                                      " cannot be converted to a Java integer."));
+                        }
+                      mode.setProperty(property, value);
+                      return second;
+                    }
+                  else
+                    return signalTypeError(second,
+                                           list3(Symbol.OR, Symbol.FIXNUM, Symbol.STRING));
+                }
+              else
+                {
+                  // It's a string property.
+                  if (!(second instanceof AbstractString))
+                    return signalTypeError(second, Symbol.STRING);
+                  mode.setProperty(property, second.getStringValue());
+                  return second;
+                }
+            }
+          else
+            {
+              // Not an advertised property.
+              return signal(new LispError(first.writeToString() +
+                                          " does not designate any property."));
+            }
         }
     };
+
+//     // ### set-buffer-property
+//     private static final Primitive SET_BUFFER_PROPERTY =
+//         new Primitive("set-buffer-property", PACKAGE_J, true,
+//                       "key value &optional buffer")
+//     {
+//         public LispObject execute(LispObject first, LispObject second)
+// 	    throws ConditionThrowable
+//         {
+//         }
+//         public LispObject execute(LispObject first, LispObject second,
+//                                   LispObject third)
+//           throws ConditionThrowable
+//         {
+//         }
+//     };
 
     // ### insert
     private static final Primitive INSERT =
