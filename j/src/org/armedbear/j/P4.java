@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: P4.java,v 1.18 2005-11-17 12:24:51 piso Exp $
+ * $Id: P4.java,v 1.19 2005-11-17 12:57:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -744,83 +744,126 @@ public class P4 implements Constants
         return null;
     }
 
-    public static void finish(Editor editor, CheckinBuffer checkinBuffer)
+    public static void finish(final Editor editor,
+                              final CheckinBuffer checkinBuffer)
     {
-        final Buffer parentBuffer = checkinBuffer.getParentBuffer();
-        editor.getFrame().setWaitCursor();
-        final boolean editOnly = checkinBuffer.isEditOnly();
-        final String cmd;
-        final String title;
-        if (editOnly) {
-            cmd = "p4 change -i";
-            title = "Output from p4 change";
-        } else {
-            cmd = "p4 submit -i";
-            title = "Output from p4 submit";
+      checkinBuffer.setBusy(true);
+      final boolean editOnly = checkinBuffer.isEditOnly();
+      final String cmd;
+      final String title;
+      if (editOnly)
+        {
+          cmd = "p4 change -i";
+          title = "Output from p4 change";
         }
-        final String input = checkinBuffer.getText();
-        ShellCommand shellCommand = new ShellCommand(cmd, null, input);
-        shellCommand.run();
-        if (shellCommand.exitValue() != 0) {
-            // Error.
-            Log.error("P4.finish input = |" + input + "|");
-            Log.error("P4.finish exit value = " + shellCommand.exitValue());
-            OutputBuffer buf = null;
-            // Re-use existing output buffer if possible.
-            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-                Buffer b = it.nextBuffer();
-                if (b instanceof OutputBuffer) {
-                    if (title.equals(b.getTitle())) {
-                        buf = (OutputBuffer) b;
+      else
+        {
+          cmd = "p4 submit -i";
+          title = "Output from p4 submit";
+        }
+      final String input = checkinBuffer.getText();
+      final ShellCommand shellCommand = new ShellCommand(cmd, null, input);
+      Runnable commandRunnable = new Runnable()
+        {
+          public void run()
+          {
+            shellCommand.run();
+            if (shellCommand.exitValue() != 0)
+              {
+                Log.error("P4.finish input = |" + input + "|");
+                Log.error("P4.finish exit value = " + shellCommand.exitValue());
+              }
+            Runnable completionRunnable = new Runnable()
+              {
+                public void run()
+                {
+                  finishCompleted(editor, checkinBuffer, title, editOnly, shellCommand);
+                }
+              };
+            SwingUtilities.invokeLater(completionRunnable);
+          }
+        };
+      new Thread(commandRunnable).start();
+    }
+
+    private static void finishCompleted(Editor editor,
+                                        CheckinBuffer checkinBuffer,
+                                        String title,
+                                        boolean editOnly,
+                                        ShellCommand shellCommand)
+    {
+      final Buffer parentBuffer = checkinBuffer.getParentBuffer();
+      if (shellCommand.exitValue() != 0)
+        {
+          // Error.
+          OutputBuffer buf = null;
+          // Re-use existing output buffer if possible.
+          for (BufferIterator it = new BufferIterator(); it.hasNext();)
+            {
+              Buffer b = it.nextBuffer();
+              if (b instanceof OutputBuffer)
+                {
+                  if (title.equals(b.getTitle()))
+                    {
+                      buf = (OutputBuffer) b;
+                      break; // There should be one at most.
+                    }
+                }
+            }
+          if (buf != null)
+            buf.setText(shellCommand.getOutput());
+          else
+            buf = OutputBuffer.getOutputBuffer(shellCommand.getOutput());
+          buf.setTitle(title);
+          editor.makeNext(buf);
+          checkinBuffer.setBusy(false);
+          editor.displayInOtherWindow(buf);
+        }
+      else
+        {
+          // Success. Kill old diff and output buffers, if any: their
+          // contents are no longer correct.
+          if (!editOnly && parentBuffer != null)
+            {
+              for (BufferIterator it = new BufferIterator(); it.hasNext();)
+                {
+                  Buffer b = it.nextBuffer();
+                  if (b instanceof DiffOutputBuffer)
+                    {
+                      if (b.getParentBuffer() == parentBuffer) {
+                        Debug.assertTrue(Editor.getBufferList().contains(b));
+                        Log.debug("P4.finish killing diff output buffer");
+                        b.kill();
+                        Debug.assertFalse(Editor.getBufferList().contains(b));
+                        Debug.assertTrue(editor.getBuffer() != b);
+                        Editor otherEditor = editor.getOtherEditor();
+                        if (otherEditor != null)
+                          Debug.assertTrue(otherEditor.getBuffer() != b);
                         break; // There should be one at most.
+                      }
                     }
                 }
             }
-            if (buf != null)
-                buf.setText(shellCommand.getOutput());
-            else
-                buf = OutputBuffer.getOutputBuffer(shellCommand.getOutput());
-            buf.setTitle(title);
-            editor.makeNext(buf);
-            editor.displayInOtherWindow(buf);
-        } else {
-            // Success. Kill old diff and output buffers, if any: their
-            // contents are no longer correct.
-            if (!editOnly && parentBuffer != null) {
-                for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-                    Buffer b = it.nextBuffer();
-                    if (b instanceof DiffOutputBuffer) {
-                        if (b.getParentBuffer() == parentBuffer) {
-                            Debug.assertTrue(Editor.getBufferList().contains(b));
-                            Log.debug("P4.finish killing diff output buffer");
-                            b.kill();
-                            Debug.assertFalse(Editor.getBufferList().contains(b));
-                            Debug.assertTrue(editor.getBuffer() != b);
-                            Editor otherEditor = editor.getOtherEditor();
-                            if (otherEditor != null)
-                                Debug.assertTrue(otherEditor.getBuffer() != b);
-                            break; // There should be one at most.
-                        }
+          for (BufferIterator it = new BufferIterator(); it.hasNext();)
+            {
+              Buffer b = it.nextBuffer();
+              if (b instanceof OutputBuffer)
+                {
+                  if (title.equals(b.getTitle()))
+                    {
+                      editor.maybeKillBuffer(b);
+                      break; // One at most.
                     }
                 }
             }
-            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-                Buffer b = it.nextBuffer();
-                if (b instanceof OutputBuffer) {
-                    if (title.equals(b.getTitle())) {
-                        editor.maybeKillBuffer(b);
-                        break; // One at most.
-                    }
-                }
-            }
-            if (!editOnly)
-                // Read-only status of some buffers may have changed.
-                editor.getFrame().reactivate();
-            editor.otherWindow();
-            editor.unsplitWindow();
-            checkinBuffer.kill();
+          if (!editOnly)
+            // Read-only status of some buffers may have changed.
+            editor.getFrame().reactivate();
+          editor.otherWindow();
+          editor.unsplitWindow();
+          checkinBuffer.kill();
         }
-        editor.getFrame().setDefaultCursor();
+      editor.getFrame().setDefaultCursor();
     }
 
     public static String getStatusString(File file)
