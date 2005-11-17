@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: JavaMode.java,v 1.17 2005-10-28 13:02:18 piso Exp $
+ * $Id: JavaMode.java,v 1.18 2005-11-17 12:59:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -327,6 +327,9 @@ public class JavaMode extends AbstractMode implements Constants, Mode
             return indent;
         }
 
+        if (textFirstChar == '=')
+            return indent + indentSize;
+
         if (modelLastChar == ',') {
             if (buffer.getModeId() == CPP_MODE && modelFirstChar == ':') {
                 // Model line is start of member initialization list, current
@@ -563,6 +566,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
             if (trim.length() > 1 && trim.charAt(1) =='/')
                 return false;
         } else if (firstChar == '#')
+            return false;
+        else if (firstChar == '=')
             return false;
         String s = trimSyntacticWhitespace(line.getText());
         if (s.length() == 0)
