@@ -2,7 +2,7 @@
  * IncrementalFindTextFieldHandler.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: IncrementalFindTextFieldHandler.java,v 1.8 2005-03-05 00:46:03 piso Exp $
+ * $Id: IncrementalFindTextFieldHandler.java,v 1.9 2005-11-17 11:51:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -237,6 +237,9 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         if (keyCode == KeyEvent.VK_ENTER) {
             String pattern = textField.getText();
             if (pattern == null || pattern.length() == 0) {
+                restoreInitialState();
+                editor.ensureActive();
+                editor.setFocusToDisplay();
                 editor.updateLocation();
                 FindDialog.find(editor);
                 editor.updateDisplay();
@@ -275,7 +278,7 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         char c = e.getKeyChar();
         if (c == KeyEvent.CHAR_UNDEFINED)
             return;
-        if (c == 8) {
+        if (c == 8 || c == 10 || c == 13) {
             e.consume();
             return;
         }
