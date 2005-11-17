@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: j.lisp,v 1.48 2005-11-17 19:57:16 piso Exp $
+;;; $Id: j.lisp,v 1.49 2005-11-17 20:25:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,6 +94,7 @@
           search-backward
           search-forward
           set-buffer-modified-p
+          set-buffer-property
           set-mark
           set-mode-property
           status
