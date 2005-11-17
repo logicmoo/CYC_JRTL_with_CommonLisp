@@ -22,7 +22,8 @@
   (sb-bsd-sockets:socket-make-stream socket
                                      :output t
                                      :input t
-                                     :element-type 'base-char))
+                                     :element-type 'base-char
+                                     :external-format :ISO-8859-1))
 
 (defun accept (socket)
   "Like socket-accept, but retry on EAGAIN."
