@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.70 2005-11-17 20:24:42 piso Exp $
+ * $Id: LispAPI.java,v 1.71 2005-11-18 01:42:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1132,15 +1132,46 @@ public final class LispAPI extends Lisp
         public LispObject execute(LispObject first, LispObject second)
           throws ConditionThrowable
         {
-          String key = first.getStringValue();
-          final String value;
-          if (second == NIL)
-            value = null;
-          else if (second instanceof Fixnum)
-            value = String.valueOf(((Fixnum)second).value);
-          else
-            value = second.getStringValue();
-          Editor.setGlobalProperty(key, value);
+          String key = javaString(first);
+          Property property = Property.findProperty(key);
+          if (property == null)
+            // Not an advertised property.
+            return signal(new LispError(first.writeToString() +
+                                        " does not designate any property."));
+          if (property.isBooleanProperty())
+            {
+              preferences.setProperty(property,
+                                      (second == NIL) ? "false" : "true");
+              return second;
+            }
+          if (property.isIntegerProperty())
+            {
+              if (second instanceof Fixnum)
+                {
+                  preferences.setProperty(property,
+                                          String.valueOf(((Fixnum)second).value));
+                  return second;
+                }
+              if (second instanceof AbstractString)
+                {
+                  int value;
+                  try
+                    {
+                      value = Integer.parseInt(second.getStringValue());
+                    }
+                  catch (NumberFormatException e)
+                    {
+                      return signal(new LispError(second.writeToString() +
+                                                  " cannot be converted to a Java integer."));
+                    }
+                  preferences.setProperty(property, value);
+                  return second;
+                }
+            }
+          // It must be a string property.
+          if (!(second instanceof AbstractString))
+            return signalTypeError(second, Symbol.STRING);
+          preferences.setProperty(property, second.getStringValue());
           return second;
         }
       };
