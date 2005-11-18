@@ -2,7 +2,7 @@
  * VersionControl.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: VersionControl.java,v 1.1 2005-11-18 17:20:08 piso Exp $
+ * $Id: VersionControl.java,v 1.2 2005-11-18 18:09:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,30 +23,47 @@ package org.armedbear.j;
 
 public class VersionControl implements Constants
 {
-    protected static void diffCompleted(Editor editor, Buffer parentBuffer,
+  protected static void diffCompleted(Editor editor, Buffer parentBuffer,
                                       String title, String output, int vcType)
-    {
-        if (output.length() == 0)
-        {
-            parentBuffer.setBusy(false);
-            MessageDialog.showMessageDialog(editor,
-                                            "No changes since latest version",
-                                            parentBuffer.getFile().getName());
-        }
-        else
-        {
-            DiffOutputBuffer buf =
-                new DiffOutputBuffer(parentBuffer, output, vcType);
-            buf.setTitle(title);
-            editor.makeNext(buf);
-            editor.activateInOtherWindow(buf);
-            parentBuffer.setBusy(false);
-            for (EditorIterator it = new EditorIterator(); it.hasNext();)
-            {
-                Editor ed = it.nextEditor();
-                if (ed.getBuffer() == parentBuffer)
-                    ed.setDefaultCursor();
-            }
-        }
-    }
+  {
+    if (output.length() == 0)
+      {
+        parentBuffer.setBusy(false);
+        MessageDialog.showMessageDialog(editor,
+                                        "No changes since latest version",
+                                        parentBuffer.getFile().getName());
+      }
+    else
+      {
+        DiffOutputBuffer buf =
+          new DiffOutputBuffer(parentBuffer, output, vcType);
+        buf.setTitle(title);
+        editor.makeNext(buf);
+        editor.activateInOtherWindow(buf);
+        parentBuffer.setBusy(false);
+        for (EditorIterator it = new EditorIterator(); it.hasNext();)
+          {
+            Editor ed = it.nextEditor();
+            if (ed.getBuffer() == parentBuffer)
+              ed.setDefaultCursor();
+          }
+      }
+  }
+
+  protected static void diffDirCompleted(Buffer buffer, String output)
+  {
+    buffer.setText(output);
+    buffer.setBusy(false);
+    for (EditorIterator it = new EditorIterator(); it.hasNext();)
+      {
+        Editor ed = it.nextEditor();
+        if (ed.getBuffer() == buffer)
+          {
+            ed.setDot(buffer.getFirstLine(), 0);
+            ed.setTopLine(buffer.getFirstLine());
+            ed.setUpdateFlag(REPAINT);
+            ed.updateDisplay();
+          }
+      }
+  }
 }
