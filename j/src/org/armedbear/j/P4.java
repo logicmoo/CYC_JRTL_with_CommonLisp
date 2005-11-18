@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.28 2005-11-18 19:15:35 piso Exp $
+ * $Id: P4.java,v 1.29 2005-11-18 19:23:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -309,8 +309,10 @@ public class P4 extends VersionControl implements Constants
     boolean save = false;
     if (parentBuffer.isModified())
       {
-        int response =  ConfirmDialog.showConfirmDialogWithCancelButton(
-          editor, CHECK_SAVE_PROMPT, "P4 diff");
+        int response =
+          ConfirmDialog.showConfirmDialogWithCancelButton(editor,
+                                                          CHECK_SAVE_PROMPT,
+                                                          "P4 diff");
         switch (response)
           {
           case RESPONSE_YES:
