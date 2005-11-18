@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.22 2005-11-18 17:15:45 piso Exp $
+ * $Id: P4.java,v 1.23 2005-11-18 17:22:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 
-public class P4 implements Constants
+public class P4 extends VersionControl implements Constants
 {
   public static void p4()
   {
@@ -321,40 +321,13 @@ public class P4 implements Constants
             Runnable completionRunnable = new Runnable() {
               public void run()
               {
-                diffCompleted(editor, parentBuffer, title, output);
+                diffCompleted(editor, parentBuffer, title, output, VC_P4);
               }
             };
             SwingUtilities.invokeLater(completionRunnable);
           }
         };
         new Thread(commandRunnable).start();
-      }
-  }
-
-  private static void diffCompleted(Editor editor, Buffer parentBuffer,
-                                    String title, String output)
-  {
-    if (output.length() == 0)
-      {
-        parentBuffer.setBusy(false);
-        MessageDialog.showMessageDialog(editor,
-                                        "No changes since latest version",
-                                        parentBuffer.getFile().getName());
-      }
-    else
-      {
-        DiffOutputBuffer buf =
-          new DiffOutputBuffer(parentBuffer, output, VC_P4);
-        buf.setTitle(title);
-        editor.makeNext(buf);
-        editor.activateInOtherWindow(buf);
-        parentBuffer.setBusy(false);
-        for (EditorIterator it = new EditorIterator(); it.hasNext();)
-          {
-            Editor ed = it.nextEditor();
-            if (ed.getBuffer() == parentBuffer)
-              ed.setDefaultCursor();
-          }
       }
   }
 

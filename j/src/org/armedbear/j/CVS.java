@@ -2,7 +2,7 @@
  * CVS.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: CVS.java,v 1.7 2005-02-24 00:39:42 piso Exp $
+ * $Id: CVS.java,v 1.8 2005-11-18 17:24:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 
-public final class CVS implements Constants
+public final class CVS extends VersionControl implements Constants
 {
     public static void cvs()
     {
@@ -272,36 +272,13 @@ public final class CVS implements Constants
                         public void run()
                         {
                             diffCompleted(editor, finalParentBuffer, cmd,
-                                output);
+                                          output, VC_CVS);
                         }
                     };
                     SwingUtilities.invokeLater(completionRunnable);
                 }
             };
             new Thread(commandRunnable).start();
-        }
-    }
-
-    private static void diffCompleted(Editor editor, Buffer parentBuffer,
-        String cmd, String output)
-    {
-        if (output.length() == 0) {
-            parentBuffer.setBusy(false);
-            MessageDialog.showMessageDialog(editor,
-                "No changes since latest version",
-                parentBuffer.getFile().getName());
-        } else {
-            DiffOutputBuffer buf =
-                new DiffOutputBuffer(parentBuffer, output, VC_CVS);
-            buf.setTitle(cmd);
-            editor.makeNext(buf);
-            editor.activateInOtherWindow(buf);
-            parentBuffer.setBusy(false);
-            for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-                Editor ed = it.nextEditor();
-                if (ed.getBuffer() == parentBuffer)
-                    ed.setDefaultCursor();
-            }
         }
     }
 
