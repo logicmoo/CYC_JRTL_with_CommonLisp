@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.26 2005-11-18 18:28:16 piso Exp $
+ * $Id: P4.java,v 1.27 2005-11-18 19:06:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -509,48 +509,65 @@ public class P4 extends VersionControl implements Constants
         sb.append(arg);
       }
     final String title = sb.toString();
-    CheckinBuffer checkinBuffer = null;
+    Buffer buf = null;
     for (BufferIterator it = new BufferIterator(); it.hasNext();)
       {
-        Buffer buf = it.nextBuffer();
+        buf = it.nextBuffer();
         if (buf instanceof CheckinBuffer)
-          {
-            if (title.equals(buf.getTitle()))
-              {
-                checkinBuffer = (CheckinBuffer) buf;
-                break;
-              }
-          }
+          if (title.equals(buf.getTitle()))
+            break;
       }
-    if (checkinBuffer == null)
+    if (buf instanceof CheckinBuffer)
       {
-        checkinBuffer = new CheckinBuffer(parentBuffer, VC_P4, true);
-        checkinBuffer.setProperty(Property.USE_TABS, true);
-        checkinBuffer.setFormatter(new P4ChangelistFormatter(checkinBuffer));
-        checkinBuffer.setTitle(title);
-        sb.setText("p4 change -o");
-        if (arg != null)
-          {
-            sb.append(' ');
-            sb.append(arg);
-          }
-        ShellCommand shellCommand = new ShellCommand(sb.toString());
-        shellCommand.run();
-        checkinBuffer.setText(shellCommand.getOutput());
-        Position dot = findStartOfComment(checkinBuffer);
-        if (dot != null)
-          {
-            Position mark = findEndOfComment(checkinBuffer, dot);
-            View view = new View();
-            view.setDot(dot);
-            view.setCaretCol(checkinBuffer.getCol(dot));
-            if (mark != null)
-              view.setMark(mark);
-            checkinBuffer.setLastView(view);
-          }
+        editor.makeNext(buf);
+        editor.activate(buf);
+        return;
       }
+    final CheckinBuffer checkinBuffer = new CheckinBuffer(parentBuffer, VC_P4, true);
+    checkinBuffer.setProperty(Property.USE_TABS, true);
+    checkinBuffer.setFormatter(new P4ChangelistFormatter(checkinBuffer));
+    checkinBuffer.setTitle(title);
+    checkinBuffer.setBusy(true);
     editor.makeNext(checkinBuffer);
-    editor.activateInOtherWindow(checkinBuffer);
+    editor.activate(checkinBuffer);
+    sb.setText("p4 change -o");
+    if (arg != null)
+      {
+        sb.append(' ');
+        sb.append(arg);
+      }
+    final ShellCommand shellCommand = new ShellCommand(sb.toString());
+    Runnable commandRunnable = new Runnable()
+      {
+        public void run()
+        {
+          shellCommand.run();
+          Runnable completionRunnable = new Runnable()
+            {
+              public void run()
+              {
+                checkinBuffer.setText(shellCommand.getOutput());
+                Position dot = findStartOfComment(checkinBuffer);
+                Position mark = null;
+                if (dot != null)
+                  mark = findEndOfComment(checkinBuffer, dot);
+                checkinBuffer.setBusy(false);
+                for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+                  Editor ed = it.nextEditor();
+                  if (ed.getBuffer() == checkinBuffer) {
+                    ed.setTopLine(checkinBuffer.getFirstLine());
+                    ed.setDot(dot);
+                    ed.setMark(mark);
+                    ed.setUpdateFlag(REPAINT);
+                    ed.updateDisplay();
+                  }
+                }
+              }
+            };
+          SwingUtilities.invokeLater(completionRunnable);
+        }
+      };
+    new Thread(commandRunnable).start();
   }
 
   public static void submit(String args)
