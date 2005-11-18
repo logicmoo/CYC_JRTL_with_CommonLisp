@@ -2,7 +2,7 @@
  * CVS.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: CVS.java,v 1.8 2005-11-18 17:24:39 piso Exp $
+ * $Id: CVS.java,v 1.9 2005-11-18 18:09:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -319,21 +319,6 @@ public final class CVS extends VersionControl implements Constants
             }
         };
         new Thread(commandRunnable).start();
-    }
-
-    private static void diffDirCompleted(Buffer buffer, String output)
-    {
-        buffer.setText(output);
-        buffer.setBusy(false);
-        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-            Editor ed = it.nextEditor();
-            if (ed.getBuffer() == buffer) {
-                ed.setDot(buffer.getFirstLine(), 0);
-                ed.setTopLine(buffer.getFirstLine());
-                ed.setUpdateFlag(REPAINT);
-                ed.updateDisplay();
-            }
-        }
     }
 
     public static void replaceComment(final Editor editor, final String comment)
