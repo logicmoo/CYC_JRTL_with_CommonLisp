@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.23 2005-11-18 17:22:26 piso Exp $
+ * $Id: P4.java,v 1.24 2005-11-18 17:31:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,12 +123,26 @@ public class P4 extends VersionControl implements Constants
     FastStringBuffer sb = new FastStringBuffer("p4 add ");
     sb.append(maybeQuote(name));
     final String cmd = sb.toString();
-    final String output = command(cmd, buffer.getCurrentDirectory());
-    OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
-    buf.setTitle(cmd);
-    editor.makeNext(buf);
-    editor.activateInOtherWindow(buf);
-    editor.setDefaultCursor();
+    Runnable commandRunnable = new Runnable()
+      {
+        public void run()
+        {
+          final String output = command(cmd, buffer.getCurrentDirectory());
+          Runnable completionRunnable = new Runnable()
+            {
+              public void run()
+              {
+                OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
+                buf.setTitle(cmd);
+                editor.makeNext(buf);
+                editor.activateInOtherWindow(buf);
+                editor.setDefaultCursor();
+              }
+            };
+          SwingUtilities.invokeLater(completionRunnable);
+        }
+      };
+    new Thread(commandRunnable).start();
   }
 
   public static void edit()
