@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.33 2005-10-12 14:46:59 piso Exp $
+;;; $Id: init.lisp,v 1.34 2005-11-18 01:45:42 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -44,7 +44,7 @@
     (when (and pathname
                (string= (directory-namestring pathname)
                         "/home/peter/gcl/ansi-tests/"))
-      (setf (variable-value 'remove-trailing-whitespace :buffer) nil))))
+      (set-buffer-property "removeTrailingWhitespace" nil))))
 
 (add-hook 'open-file-hook 'my-open-file-hook)
 
@@ -62,8 +62,9 @@
       (let ((type (pathname-type pathname)))
         ;; We only care about Lisp and Java buffers.
         (cond ((string= type "el")
-               (setf (variable-value 'tag-path :buffer)
-                     "/home/peter/emacs-21.3/lisp:/home/peter/emacs-21.3/lisp/emacs-lisp"))
+               (set-buffer-property
+                "tagPath"
+                "/home/peter/emacs-21.3/lisp:/home/peter/emacs-21.3/lisp/emacs-lisp"))
               ((member type '("lisp" "lsp" "cl" "java") :test 'string=)
                (let* ((namestring (namestring pathname))
                       (tagpath
@@ -83,7 +84,7 @@
                  ;; buffer-specific value of the TAG-PATH preference for the current
                  ;; buffer.
                  (when tagpath
-                   (setf (variable-value 'tag-path :buffer) tagpath)))))))))
+                   (set-buffer-property "tagPath" tagpath)))))))))
 
 ;; Install our hook function.
 (add-hook 'buffer-activated-hook 'my-buffer-activated-hook)
@@ -126,3 +127,6 @@
             #-windows "/home/peter/depot/j/build-abcl.lisp")
 
 (map-key-for-mode ")" "electricCloseParen" "Lisp Shell")
+
+(map-key-for-mode "[" "insertParentheses" "Lisp")
+(map-key-for-mode "]" "movePastCloseAndReindent" "Lisp")
