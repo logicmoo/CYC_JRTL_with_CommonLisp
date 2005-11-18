@@ -1,8 +1,8 @@
 /*
  * Position.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Position.java,v 1.2 2002-12-26 15:40:55 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Position.java,v 1.3 2005-11-18 17:00:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -312,8 +312,8 @@ public final class Position implements Constants
             sb.append(line.lineNumber() + 1);
         else
             sb.append("is null");
-        sb.append(" col ");
-        sb.append(offset + 1);
+        sb.append(" offset ");
+        sb.append(offset);
         return sb.toString();
     }
 
