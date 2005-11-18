@@ -2,7 +2,7 @@
  * OutputBuffer.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: OutputBuffer.java,v 1.4 2003-06-06 14:58:17 piso Exp $
+ * $Id: OutputBuffer.java,v 1.5 2005-11-18 19:07:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,43 +23,45 @@ package org.armedbear.j;
 
 public final class OutputBuffer extends Buffer
 {
-    private OutputBuffer()
-    {
-        supportsUndo  = false;
-        type = TYPE_OUTPUT;
-        mode = PlainTextMode.getMode();
-        formatter = new PlainTextFormatter(this);
-        lineSeparator = System.getProperty("line.separator");
-        readOnly = true;
-        setTransient(true);
-        setProperty(Property.VERTICAL_RULE, 0);
-        setProperty(Property.SHOW_LINE_NUMBERS, false);
-        setProperty(Property.HIGHLIGHT_MATCHING_BRACKET, false);
-        setProperty(Property.HIGHLIGHT_BRACKETS, false);
-        setInitialized(true);
-    }
+  private OutputBuffer()
+  {
+    supportsUndo  = false;
+    type = TYPE_OUTPUT;
+    mode = PlainTextMode.getMode();
+    formatter = new PlainTextFormatter(this);
+    lineSeparator = System.getProperty("line.separator");
+    readOnly = true;
+    setTransient(true);
+    setProperty(Property.VERTICAL_RULE, 0);
+    setProperty(Property.SHOW_LINE_NUMBERS, false);
+    setProperty(Property.HIGHLIGHT_MATCHING_BRACKET, false);
+    setProperty(Property.HIGHLIGHT_BRACKETS, false);
+    setInitialized(true);
+  }
 
-    public static OutputBuffer getOutputBuffer(String text)
-    {
-        OutputBuffer outputBuffer = new OutputBuffer();
-        outputBuffer.setText(text);
-        return outputBuffer;
-    }
+  public static OutputBuffer getOutputBuffer(String text)
+  {
+    OutputBuffer outputBuffer = new OutputBuffer();
+    outputBuffer.setText(text);
+    return outputBuffer;
+  }
 
-    public int load()
-    {
-        if (!isLoaded()) {
-            if (getFirstLine() == null) {
-                appendLine("");
-                renumber();
-            }
-            setLoaded(true);
-        }
-        return LOAD_COMPLETED;
-    }
+  public int load()
+  {
+    if (!isLoaded())
+      {
+        if (getFirstLine() == null)
+          {
+            appendLine("");
+            renumber();
+          }
+        setLoaded(true);
+      }
+    return LOAD_COMPLETED;
+  }
 
-    public String getFileNameForDisplay()
-    {
-        return title != null ? title : "";
-    }
+  public String getFileNameForDisplay()
+  {
+    return title != null ? title : "";
+  }
 }
