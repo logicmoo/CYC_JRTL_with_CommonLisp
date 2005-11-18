@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Frame.java,v 1.17 2005-11-16 19:46:35 piso Exp $
+ * $Id: Frame.java,v 1.18 2005-11-18 15:47:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -592,20 +592,23 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
     // Set window height to N lines.
     public void setWindowHeight(Editor editor, int n)
     {
-        if (editorPane instanceof SplitPane) {
-            SplitPane sp = (SplitPane) editorPane;
-            int charHeight = Display.getCharHeight();
-            int locationBarHeight = editor.getLocationBar().getHeight();
-            int scrollBarHeight = editor.getHorizontalScrollBar().getHeight();
-            int minHeightForOtherWindow = locationBarHeight + charHeight * 4 + scrollBarHeight;
-            int availableHeight =
-                sp.getHeight() - minHeightForOtherWindow - sp.getDividerSize();
-            int requestedHeight = locationBarHeight + charHeight * n + scrollBarHeight;
-            int height = Math.min(requestedHeight, availableHeight);
-            if (editor == editors[0])
-                sp.setDividerLocation(height);
-            else if (editor == editors[1])
-                sp.setDividerLocation(sp.getHeight() - sp.getDividerSize() - height);
+      if (editorPane instanceof SplitPane)
+        {
+          SplitPane sp = (SplitPane) editorPane;
+          Editor otherEditor = (editor == editors[0]) ? editors[1] : editors[0];
+          int charHeight = Display.getCharHeight();
+          int scrollBarHeight = editor.getHorizontalScrollBar().getHeight();
+          int minHeightForOtherWindow =
+            otherEditor.getLocationBarHeight() + charHeight * 4 + scrollBarHeight;
+          int availableHeight =
+            sp.getHeight() - minHeightForOtherWindow - sp.getDividerSize();
+          int requestedHeight =
+            editor.getLocationBarHeight() + charHeight * n + scrollBarHeight;
+          int height = Math.min(requestedHeight, availableHeight);
+          if (editor == editors[0])
+            sp.setDividerLocation(height);
+          else if (editor == editors[1])
+            sp.setDividerLocation(sp.getHeight() - sp.getDividerSize() - height);
         }
     }
 
