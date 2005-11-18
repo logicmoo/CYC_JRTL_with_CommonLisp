@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.25 2005-11-18 18:11:01 piso Exp $
+ * $Id: P4.java,v 1.26 2005-11-18 18:28:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -327,20 +327,22 @@ public class P4 extends VersionControl implements Constants
           }
         final String cmd = baseCmd + maybeQuote(file.canonicalPath());
         final String output = command(cmd, null);
-        Runnable commandRunnable = new Runnable() {
-          public void run()
+        Runnable commandRunnable = new Runnable()
           {
-            final String output =
-              command(cmd, parentBuffer.getCurrentDirectory());
-            Runnable completionRunnable = new Runnable() {
-              public void run()
-              {
-                diffCompleted(editor, parentBuffer, title, output, VC_P4);
-              }
-            };
-            SwingUtilities.invokeLater(completionRunnable);
-          }
-        };
+            public void run()
+            {
+              final String output =
+                command(cmd, parentBuffer.getCurrentDirectory());
+              Runnable completionRunnable = new Runnable()
+                {
+                  public void run()
+                  {
+                    diffCompleted(editor, parentBuffer, title, output, VC_P4);
+                  }
+                };
+              SwingUtilities.invokeLater(completionRunnable);
+            }
+          };
         new Thread(commandRunnable).start();
       }
   }
@@ -373,19 +375,21 @@ public class P4 extends VersionControl implements Constants
     Editor ed = editor.activateInOtherWindow(buf);
     ed.setWaitCursor();
     buf.setBusy(true);
-    Runnable commandRunnable = new Runnable() {
-      public void run()
+    Runnable commandRunnable = new Runnable()
       {
-        final String output = command(cmd, directory);
-        Runnable completionRunnable = new Runnable() {
-          public void run()
-          {
-            diffDirCompleted(buf, output);
-          }
-        };
-        SwingUtilities.invokeLater(completionRunnable);
-      }
-    };
+        public void run()
+        {
+          final String output = command(cmd, directory);
+          Runnable completionRunnable = new Runnable()
+            {
+              public void run()
+              {
+                processCompleted(buf, output);
+              }
+            };
+          SwingUtilities.invokeLater(completionRunnable);
+        }
+      };
     new Thread(commandRunnable).start();
   }
 
@@ -436,13 +440,28 @@ public class P4 extends VersionControl implements Constants
     else
       title = sb.toString();
     final String cmd = sb.toString();
-    editor.setWaitCursor();
-    final String output = command(cmd, null);
-    OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
-    buf.setTitle(title);
-    editor.makeNext(buf);
-    editor.activateInOtherWindow(buf);
-    editor.setDefaultCursor();
+    final OutputBuffer outputBuffer = OutputBuffer.getOutputBuffer("");
+    outputBuffer.setTitle(title);
+    outputBuffer.setBusy(true);
+    editor.makeNext(outputBuffer);
+    Editor ed = editor.activateInOtherWindow(outputBuffer);
+    ed.setWaitCursor();
+    Runnable commandRunnable = new Runnable()
+      {
+        public void run()
+        {
+          final String output = command(cmd, null);
+          Runnable completionRunnable = new Runnable()
+            {
+              public void run()
+              {
+                processCompleted(outputBuffer, output);
+              }
+            };
+          SwingUtilities.invokeLater(completionRunnable);
+        }
+    };
+    new Thread(commandRunnable).start();
   }
 
   public static void change(String arg)
