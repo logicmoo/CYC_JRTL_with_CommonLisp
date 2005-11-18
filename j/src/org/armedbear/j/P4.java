@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.20 2005-11-17 13:20:44 piso Exp $
+ * $Id: P4.java,v 1.21 2005-11-18 17:01:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -239,8 +239,8 @@ public class P4 implements Constants
       return;
     if (buffer.isModified())
       {
-        String prompt
-          = "Discard changes to " + maybeQuote(file.getName()) + "?";
+        String prompt =
+          "Discard changes to " + maybeQuote(file.getName()) + "?";
         if (!editor.confirm("Revert Buffer", prompt))
           return;
       }
@@ -562,10 +562,10 @@ public class P4 implements Constants
     List list = getModifiedBuffers();
     if (list != null && list.size() > 0)
       {
-        int response
-          = ConfirmDialog.showConfirmDialogWithCancelButton(editor,
-                                                            "Save modified buffers first?",
-                                                            title);
+        int response =
+          ConfirmDialog.showConfirmDialogWithCancelButton(editor,
+                                                          "Save modified buffers first?",
+                                                          title);
         switch (response)
           {
           case RESPONSE_YES:
@@ -595,12 +595,14 @@ public class P4 implements Constants
             editor.activate(buf);
             return;
           }
-        parentBuffer.setBusy(true);
-        final CheckinBuffer checkinBuffer
-          = new CheckinBuffer(parentBuffer, VC_P4);
+        final CheckinBuffer checkinBuffer =
+          new CheckinBuffer(parentBuffer, VC_P4);
         checkinBuffer.setProperty(Property.USE_TABS, true);
         checkinBuffer.setFormatter(new P4ChangelistFormatter(checkinBuffer));
         checkinBuffer.setTitle(title);
+        checkinBuffer.setBusy(true);
+        editor.makeNext(checkinBuffer);
+        editor.activate(checkinBuffer);
         sb.setText("p4 change -o");
         if (arg != null)
           {
@@ -619,19 +621,20 @@ public class P4 implements Constants
                   {
                     checkinBuffer.setText(shellCommand.getOutput());
                     Position dot = findStartOfComment(checkinBuffer);
+                    Position mark = null;
                     if (dot != null)
-                      {
-                        Position mark = findEndOfComment(checkinBuffer, dot);
-                        View view = new View();
-                        view.setDot(dot);
-                        view.setCaretCol(checkinBuffer.getCol(dot));
-                        if (mark != null)
-                          view.setMark(mark);
-                        checkinBuffer.setLastView(view);
+                        mark = findEndOfComment(checkinBuffer, dot);
+                    checkinBuffer.setBusy(false);
+                    for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+                      Editor ed = it.nextEditor();
+                      if (ed.getBuffer() == checkinBuffer) {
+                        ed.setTopLine(checkinBuffer.getFirstLine());
+                        ed.setDot(dot);
+                        ed.setMark(mark);
+                        ed.setUpdateFlag(REPAINT);
+                        ed.updateDisplay();
                       }
-                    editor.makeNext(checkinBuffer);
-                    editor.activate(checkinBuffer);
-                    parentBuffer.setBusy(false);
+                    }
                   }
                 };
               SwingUtilities.invokeLater(completionRunnable);
