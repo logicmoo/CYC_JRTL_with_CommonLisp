@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.155 2005-11-16 19:48:47 piso Exp $
+ * $Id: Editor.java,v 1.156 2005-11-18 15:47:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -524,6 +524,14 @@ public final class Editor extends JPanel implements Constants,
     public final LocationBar getLocationBar()
     {
         return locationBar;
+    }
+
+    public final int getLocationBarHeight()
+    {
+        if (locationBar != null)
+            return locationBar.getHeight();
+        else
+            return 0;
     }
 
     public final HistoryTextField getLocationBarTextField()
