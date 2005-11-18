@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.27 2005-11-18 19:06:50 piso Exp $
+ * $Id: P4.java,v 1.28 2005-11-18 19:15:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -259,20 +259,34 @@ public class P4 extends VersionControl implements Constants
           return;
       }
     final String cmd = "p4 revert " + maybeQuote(file.canonicalPath());
-    String output = command(cmd, null);
-    if (output.trim().endsWith(" - was edit, reverted"))
-      editor.status("File reverted");
-    else
+    Runnable commandRunnable = new Runnable()
       {
-        OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
-        buf.setTitle(cmd);
-        editor.makeNext(buf);
-        editor.activateInOtherWindow(buf);
-      }
-    editor.reload(buffer);
-    // Update read-only status.
-    if (editor.reactivate(buffer))
-      Sidebar.repaintBufferListInAllFrames();
+        public void run()
+        {
+          final String output = command(cmd, null);
+          Runnable completionRunnable = new Runnable()
+            {
+              public void run()
+              {
+                if (output.trim().endsWith(" - was edit, reverted"))
+                  editor.status("File reverted");
+                else
+                  {
+                    OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
+                    buf.setTitle(cmd);
+                    editor.makeNext(buf);
+                    editor.activateInOtherWindow(buf);
+                  }
+                editor.reload(buffer);
+                // Update read-only status.
+                if (editor.reactivate(buffer))
+                  Sidebar.repaintBufferListInAllFrames();
+              }
+            };
+          SwingUtilities.invokeLater(completionRunnable);
+        }
+      };
+    new Thread(commandRunnable).start();
   }
 
   public static void diff()
@@ -326,7 +340,6 @@ public class P4 extends VersionControl implements Constants
               }
           }
         final String cmd = baseCmd + maybeQuote(file.canonicalPath());
-        final String output = command(cmd, null);
         Runnable commandRunnable = new Runnable()
           {
             public void run()
@@ -1061,10 +1074,11 @@ public class P4 extends VersionControl implements Constants
   {
     if (haveP4 > 0)
       return true;
-    if (Utilities.have("p4")) {
-      haveP4 = 1; // Cache positive result.
-      return true;
-    }
+    if (Utilities.have("p4"))
+      {
+        haveP4 = 1; // Cache positive result.
+        return true;
+      }
     return false;
   }
 
