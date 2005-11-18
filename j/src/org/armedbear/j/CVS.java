@@ -2,7 +2,7 @@
  * CVS.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: CVS.java,v 1.9 2005-11-18 18:09:57 piso Exp $
+ * $Id: CVS.java,v 1.10 2005-11-18 18:27:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -312,7 +312,7 @@ public final class CVS extends VersionControl implements Constants
                 Runnable completionRunnable = new Runnable() {
                     public void run()
                     {
-                        diffDirCompleted(buf, output);
+                        processCompleted(buf, output);
                     }
                 };
                 SwingUtilities.invokeLater(completionRunnable);

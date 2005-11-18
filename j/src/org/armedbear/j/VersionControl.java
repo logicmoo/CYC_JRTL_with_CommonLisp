@@ -2,7 +2,7 @@
  * VersionControl.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: VersionControl.java,v 1.2 2005-11-18 18:09:22 piso Exp $
+ * $Id: VersionControl.java,v 1.3 2005-11-18 18:27:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public class VersionControl implements Constants
       }
   }
 
-  protected static void diffDirCompleted(Buffer buffer, String output)
+  protected static void processCompleted(Buffer buffer, String output)
   {
     buffer.setText(output);
     buffer.setBusy(false);
