@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: Property.java,v 1.31 2005-03-07 03:30:35 piso Exp $
+ * $Id: Property.java,v 1.32 2005-11-18 01:41:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -420,9 +420,25 @@ public final class Property implements Comparable, Constants
         ht.put(key.toLowerCase(), property);
     }
 
+    private static String convertLispNameToJavaName(String name)
+    {
+      Debug.assertTrue(name != null);
+      FastStringBuffer sb = new FastStringBuffer();
+      for (int i = 0, length = name.length(); i < length; i++)
+        {
+          char c = name.charAt(i);
+          if (c != '-')
+            sb.append(Character.toLowerCase(c));
+        }
+      return sb.toString();
+    }
+
     public static Property findProperty(String key)
     {
-        return (Property) ht.get(key.toLowerCase());
+      Property property = (Property) ht.get(key.toLowerCase());
+      if (property != null)
+        return property;
+      return (Property) ht.get(convertLispNameToJavaName(key));
     }
 
     public String getDisplayName()
