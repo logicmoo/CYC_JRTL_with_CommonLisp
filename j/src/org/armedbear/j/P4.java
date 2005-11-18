@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.24 2005-11-18 17:31:31 piso Exp $
+ * $Id: P4.java,v 1.25 2005-11-18 18:11:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -362,20 +362,31 @@ public class P4 extends VersionControl implements Constants
           {
             if (directory.equals(((DiffOutputBuffer) b).getDirectory()))
               {
-                editor.maybeKillBuffer(b);
+                b.kill();
                 break; // There should be one at most.
               }
           }
       }
-    final String output = command(cmd, directory);
-    DiffOutputBuffer buf = new DiffOutputBuffer(directory, output, VC_P4);
-    if (buf != null)
+    final DiffOutputBuffer buf = new DiffOutputBuffer(directory, null, VC_P4);
+    buf.setTitle(cmd);
+    editor.makeNext(buf);
+    Editor ed = editor.activateInOtherWindow(buf);
+    ed.setWaitCursor();
+    buf.setBusy(true);
+    Runnable commandRunnable = new Runnable() {
+      public void run()
       {
-        buf.setTitle(cmd);
-        editor.makeNext(buf);
-        editor.activateInOtherWindow(buf);
+        final String output = command(cmd, directory);
+        Runnable completionRunnable = new Runnable() {
+          public void run()
+          {
+            diffDirCompleted(buf, output);
+          }
+        };
+        SwingUtilities.invokeLater(completionRunnable);
       }
-    editor.setDefaultCursor();
+    };
+    new Thread(commandRunnable).start();
   }
 
   public static void log()
