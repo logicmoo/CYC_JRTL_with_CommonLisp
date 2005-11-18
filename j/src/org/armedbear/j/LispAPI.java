@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.71 2005-11-18 01:42:46 piso Exp $
+ * $Id: LispAPI.java,v 1.72 2005-11-18 02:28:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -236,6 +236,21 @@ public final class LispAPI extends Lisp
             return name != null ? new SimpleString(name) : NIL;
         }
     };
+
+    // ### set-buffer-name
+    private static final Primitive SET_BUFFER_NAME =
+      new Primitive("set-buffer-name", PACKAGE_J, true, "buffer name")
+      {
+        public LispObject execute(LispObject first, LispObject second)
+          throws ConditionThrowable
+        {
+          Buffer buffer = checkBuffer(first);
+          if (!(second instanceof AbstractString))
+            return signalTypeError(second, Symbol.STRING);
+          buffer.setTitle(second.getStringValue());
+          return second;
+        }
+      };
 
     // ### get-buffer
     private static final Primitive GET_BUFFER =
