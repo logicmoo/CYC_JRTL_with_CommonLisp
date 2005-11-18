@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.21 2005-11-18 17:01:33 piso Exp $
+ * $Id: P4.java,v 1.22 2005-11-18 17:15:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -266,9 +266,12 @@ public class P4 implements Constants
     if (!checkP4Installed())
       return;
     final Editor editor = Editor.currentEditor();
-    Buffer parentBuffer = editor.getBuffer();
-    if (parentBuffer instanceof CheckinBuffer)
-      parentBuffer = parentBuffer.getParentBuffer();
+    final Buffer buffer = editor.getBuffer();
+    final Buffer parentBuffer;
+    if (buffer instanceof CheckinBuffer)
+      parentBuffer = buffer.getParentBuffer();
+    else
+      parentBuffer = buffer;
     final File file = parentBuffer.getFile();
     if (file == null)
       return;
@@ -310,16 +313,48 @@ public class P4 implements Constants
           }
         final String cmd = baseCmd + maybeQuote(file.canonicalPath());
         final String output = command(cmd, null);
-        DiffOutputBuffer buf = new DiffOutputBuffer(parentBuffer, output, VC_P4);
+        Runnable commandRunnable = new Runnable() {
+          public void run()
+          {
+            final String output =
+              command(cmd, parentBuffer.getCurrentDirectory());
+            Runnable completionRunnable = new Runnable() {
+              public void run()
+              {
+                diffCompleted(editor, parentBuffer, title, output);
+              }
+            };
+            SwingUtilities.invokeLater(completionRunnable);
+          }
+        };
+        new Thread(commandRunnable).start();
+      }
+  }
+
+  private static void diffCompleted(Editor editor, Buffer parentBuffer,
+                                    String title, String output)
+  {
+    if (output.length() == 0)
+      {
+        parentBuffer.setBusy(false);
+        MessageDialog.showMessageDialog(editor,
+                                        "No changes since latest version",
+                                        parentBuffer.getFile().getName());
+      }
+    else
+      {
+        DiffOutputBuffer buf =
+          new DiffOutputBuffer(parentBuffer, output, VC_P4);
         buf.setTitle(title);
-        Editor otherEditor = editor.getOtherEditor();
-        if (otherEditor != null)
-          buf.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
-        else
-          buf.setUnsplitOnClose(true);
         editor.makeNext(buf);
         editor.activateInOtherWindow(buf);
-        editor.setDefaultCursor();
+        parentBuffer.setBusy(false);
+        for (EditorIterator it = new EditorIterator(); it.hasNext();)
+          {
+            Editor ed = it.nextEditor();
+            if (ed.getBuffer() == parentBuffer)
+              ed.setDefaultCursor();
+          }
       }
   }
 
