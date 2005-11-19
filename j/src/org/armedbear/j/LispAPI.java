@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.72 2005-11-18 02:28:59 piso Exp $
+ * $Id: LispAPI.java,v 1.73 2005-11-19 17:42:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -822,152 +822,6 @@ public final class LispAPI extends Lisp
                 return NIL;
             }
             return signal(new TypeError(second, Symbol.STRING));
-        }
-    };
-
-    private static final Symbol KEYWORD_GLOBAL =
-        Keyword.internKeyword("GLOBAL");
-    private static final Symbol KEYWORD_MODE =
-        Keyword.internKeyword("MODE");
-    private static final Symbol KEYWORD_BUFFER =
-        Keyword.internKeyword("BUFFER");
-    private static final Symbol KEYWORD_CURRENT =
-        Keyword.internKeyword("CURRENT");
-
-    // ### %variable-value
-    // %variable-value symbol kind where => value
-    private static final Primitive _VARIABLE_VALUE =
-        new Primitive("%variable-value", PACKAGE_J, false)
-    {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            Symbol symbol = checkSymbol(first);
-            JVar jvar = JVar.getJVar(symbol);
-            Property property = jvar.getProperty();
-            LispObject kind = second;
-            LispObject where = third;
-            final Editor editor = Editor.currentEditor();
-            if (kind == KEYWORD_CURRENT) {
-                if (where != NIL)
-                    return signal(new LispError("Bad argument: " + where + "."));
-                final Buffer buffer = editor.getBuffer();
-                if (property.isBooleanProperty())
-                    return buffer.getBooleanProperty(property) ? T : NIL;
-                if (property.isIntegerProperty())
-                    return number(buffer.getIntegerProperty(property));
-                String value = buffer.getStringProperty(property);
-                return value != null ? new SimpleString(value) : NIL;
-            }
-            if (kind == KEYWORD_GLOBAL) {
-                if (property.isBooleanProperty())
-                    return preferences.getBooleanProperty(property) ? T : NIL;
-                if (property.isIntegerProperty())
-                    return number(preferences.getIntegerProperty(property));
-                String value = preferences.getStringProperty(property);
-                return value != null ? new SimpleString(value) : NIL;
-            }
-            if (kind == KEYWORD_MODE) {
-                final Mode mode;
-                if (where == NIL)
-                    mode = editor.getMode();
-                else {
-                    mode = Editor.getModeList().getModeFromModeName(where.getStringValue());
-                    if (mode == null)
-                        return signal(new LispError("Unknown mode: " + where + "."));
-                }
-                if (property.isBooleanProperty())
-                    return mode.getBooleanProperty(property) ? T : NIL;
-                if (property.isIntegerProperty())
-                    return number(mode.getIntegerProperty(property));
-                String value = mode.getStringProperty(property);
-                return value != null ? new SimpleString(value) : NIL;
-            }
-            if (kind == KEYWORD_BUFFER) {
-                final Buffer buffer;
-                if (where != NIL)
-                    buffer = checkBuffer(where);
-                else
-                    buffer = editor.getBuffer();
-                if (property.isBooleanProperty())
-                    return buffer.getBooleanProperty(property) ? T : NIL;
-                if (property.isIntegerProperty())
-                    return number(buffer.getIntegerProperty(property));
-                String value = buffer.getStringProperty(property);
-                return value != null ? new SimpleString(value) : NIL;
-            }
-            return signal(new LispError("Invalid parameter: " + kind + "."));
-        }
-    };
-
-    // ### %set-variable-value
-    // %set-variable-value symbol kind where new-value => new-value
-    private static final Primitive _SET_VARIABLE_VALUE =
-        new Primitive("%set-variable-value", PACKAGE_J, false)
-    {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            if (args.length != 4)
-                return signal(new WrongNumberOfArgumentsException(this));
-            Symbol symbol = checkSymbol(args[0]);
-            JVar jvar = JVar.getJVar(symbol);
-            Property property = jvar.getProperty();
-            LispObject kind = args[1];
-            LispObject where = args[2];
-            LispObject newValue = args[3];
-            if (kind == KEYWORD_GLOBAL) {
-                if (property.isBooleanProperty()) {
-                    if (newValue == NIL) {
-                        preferences.setProperty(property, "false");
-                        return NIL;
-                    } else {
-                        preferences.setProperty(property, "true");
-                        return T;
-                    }
-                } else {
-                    preferences.setProperty(property, newValue.getStringValue());
-                    return newValue;
-                }
-            }
-            final Editor editor = Editor.currentEditor();
-            if (kind == KEYWORD_MODE) {
-                final Mode mode;
-                if (where == NIL)
-                    mode = editor.getMode();
-                else
-                    mode = Editor.getModeList().getModeFromModeName(where.getStringValue());
-                if (property.isBooleanProperty()) {
-                    if (newValue == NIL) {
-                        mode.setProperty(property, false);
-                        return NIL;
-                    } else {
-                        mode.setProperty(property, true);
-                        return T;
-                    }
-                } else {
-                    mode.setProperty(property, newValue.getStringValue());
-                    return newValue;
-                }
-            }
-            if (kind == KEYWORD_BUFFER) {
-                final Buffer buffer;
-                if (where != NIL)
-                    buffer = checkBuffer(where);
-                else
-                    buffer = editor.getBuffer();
-                if (property.isBooleanProperty()) {
-                    buffer.setProperty(property, newValue != NIL);
-                    return newValue != NIL ? T : NIL;
-                }
-                if (property.isIntegerProperty()) {
-                    buffer.setProperty(property, Fixnum.getValue(newValue));
-                    return newValue;
-                }
-                buffer.setProperty(property, newValue.getStringValue());
-                return newValue;
-            }
-            return signal(new LispError("Invalid parameter: " + kind));
         }
     };
 
@@ -1817,9 +1671,4 @@ public final class LispAPI extends Lisp
             return NIL;
         }
     };
-
-    static {
-        for (Iterator it = Property.iterator(); it.hasNext();)
-            JVar.addVariableForProperty((Property)it.next());
-    }
 }
