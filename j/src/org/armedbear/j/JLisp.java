@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: JLisp.java,v 1.24 2005-09-28 15:00:53 piso Exp $
+ * $Id: JLisp.java,v 1.25 2005-11-19 00:31:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,6 +88,7 @@ public final class JLisp extends LispShell
                     public void run()
                     {
                         appendString("\nProcess exited\n");
+                        setBusy(false);
                         updateDisplayInAllFrames();
                     }
                 };
