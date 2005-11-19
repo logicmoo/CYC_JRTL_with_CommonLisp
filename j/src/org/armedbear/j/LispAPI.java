@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.73 2005-11-19 17:42:28 piso Exp $
+ * $Id: LispAPI.java,v 1.74 2005-11-19 17:45:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@
 package org.armedbear.j;
 
 import gnu.regexp.REException;
-import java.util.Iterator;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 import org.armedbear.lisp.AbstractString;
@@ -31,7 +30,6 @@ import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.Function;
 import org.armedbear.lisp.GenericFunction;
 import org.armedbear.lisp.JavaObject;
-import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispCharacter;
 import org.armedbear.lisp.LispError;
