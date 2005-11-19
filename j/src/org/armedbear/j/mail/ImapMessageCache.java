@@ -1,8 +1,8 @@
 /*
  * ImapMessageCache.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: ImapMessageCache.java,v 1.2 2005-11-19 15:05:49 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: ImapMessageCache.java,v 1.3 2005-11-19 17:12:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,8 +150,8 @@ public final class ImapMessageCache
                 return null;
             if (!file.isFile())
                 return null;
-            int size = (int) (file.length() * 1.1);
-            FastStringBuffer sb = new FastStringBuffer(size);
+            FastStringBuffer sb =
+                new FastStringBuffer((int) (file.length() * 1.1));
             try {
                 BufferedReader reader =
                     new BufferedReader(new InputStreamReader(file.getInputStream()));
