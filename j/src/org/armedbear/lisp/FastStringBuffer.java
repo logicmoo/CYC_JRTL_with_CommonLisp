@@ -2,7 +2,7 @@
  * FastStringBuffer.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: FastStringBuffer.java,v 1.4 2005-11-19 14:53:54 piso Exp $
+ * $Id: FastStringBuffer.java,v 1.5 2005-11-19 14:57:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,14 +97,15 @@ public final class FastStringBuffer
 
   public void ensureCapacity(int minimumCapacity)
   {
-    if (minimumCapacity <= 0 || buffer.length >= minimumCapacity)
-      return;
-    int newCapacity = buffer.length * 2 + 2;
-    if (newCapacity < minimumCapacity)
-      newCapacity = minimumCapacity;
-    char newBuffer[] = new char[newCapacity];
-    System.arraycopy(buffer, 0, newBuffer, 0, used);
-    buffer = newBuffer;
+    if (buffer.length < minimumCapacity)
+      {
+        int newCapacity = buffer.length * 2 + 2;
+        if (newCapacity < minimumCapacity)
+          newCapacity = minimumCapacity;
+        char newBuffer[] = new char[newCapacity];
+        System.arraycopy(buffer, 0, newBuffer, 0, used);
+        buffer = newBuffer;
+      }
   }
 
   public void setText(String s)
