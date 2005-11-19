@@ -2,7 +2,7 @@
  * ImapMessageCache.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: ImapMessageCache.java,v 1.1.1.1 2002-09-24 16:09:53 piso Exp $
+ * $Id: ImapMessageCache.java,v 1.2 2005-11-19 15:05:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,51 +143,58 @@ public final class ImapMessageCache
 
     public String getMessageText(int uid)
     {
-        File file =
-            File.getInstance(cacheDirectory, String.valueOf(uid));
-        if (file == null)
-            return null;
-        if (!file.isFile())
-            return null;
-        FastStringBuffer sb = new FastStringBuffer();
         try {
-            BufferedReader reader =
-                new BufferedReader(new InputStreamReader(file.getInputStream()));
-            String s;
-            while ((s = reader.readLine()) != null) {
-                if (s.length() == 0)
-                    break;
-                sb.append(s);
-                sb.append("\r\n");
+            File file =
+                File.getInstance(cacheDirectory, String.valueOf(uid));
+            if (file == null)
+                return null;
+            if (!file.isFile())
+                return null;
+            int size = (int) (file.length() * 1.1);
+            FastStringBuffer sb = new FastStringBuffer(size);
+            try {
+                BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(file.getInputStream()));
+                String s;
+                while ((s = reader.readLine()) != null) {
+                    if (s.length() == 0)
+                        break;
+                    sb.append(s);
+                    sb.append("\r\n");
+                }
+                reader.close();
             }
-            reader.close();
-        }
-        catch (Exception e) {
-            Log.error(e);
-        }
-        Headers headers = Headers.parse(sb.toString());
-        String charset = null;
-        String contentType = headers.getValue(Headers.CONTENT_TYPE);
-        if (contentType != null)
-            charset = Utilities.getCharsetFromContentType(contentType);
-        String encoding = Utilities.getEncodingFromCharset(charset);
-        sb.setLength(0);
-        try {
-            BufferedReader reader =
-                new BufferedReader(new InputStreamReader(file.getInputStream(), encoding));
-            String s;
-            while ((s = reader.readLine()) != null) {
-                sb.append(s);
-                sb.append("\r\n");
+            catch (Exception e) {
+                Log.error(e);
             }
-            reader.close();
+            Headers headers = Headers.parse(sb.toString());
+            String charset = null;
+            String contentType = headers.getValue(Headers.CONTENT_TYPE);
+            if (contentType != null)
+                charset = Utilities.getCharsetFromContentType(contentType);
+            String encoding = Utilities.getEncodingFromCharset(charset);
+            sb.setLength(0);
+            try {
+                BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(file.getInputStream(), encoding));
+                String s;
+                while ((s = reader.readLine()) != null) {
+                    sb.append(s);
+                    sb.append("\r\n");
+                }
+                reader.close();
+            }
+            catch (Exception e) {
+                Log.error(e);
+            }
+            if (sb.length() > 0)
+                return sb.toString();
+            return null;
         }
-        catch (Exception e) {
-            Log.error(e);
+        catch (OutOfMemoryError e) {
+            Log.debug(e);
+            return null;
         }
-        if (sb.length() > 0)
-            return sb.toString();
-        return null;
     }
 
     public void removeDeletedEntries(List mailboxEntries)
