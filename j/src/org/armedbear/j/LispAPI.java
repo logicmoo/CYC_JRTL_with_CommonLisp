@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.75 2005-11-19 18:17:55 piso Exp $
+ * $Id: LispAPI.java,v 1.76 2005-11-19 18:53:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1047,9 +1047,13 @@ public final class LispAPI extends Lisp
         String key = javaString(first);
         Property property = Property.findProperty(key);
         if (property == null)
-          // Not an advertised property.
-          return signal(new LispError(first.writeToString() +
-                                      " does not designate any property."));
+          {
+            // Not an advertised property.
+            if (!(second instanceof AbstractString))
+              return signalTypeError(second, Symbol.STRING);
+            Editor.setGlobalProperty(key, second.getStringValue());
+            return second;
+          }
         if (property.isBooleanProperty())
           {
             preferences.setProperty(property,
