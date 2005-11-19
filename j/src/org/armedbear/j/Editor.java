@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.156 2005-11-18 15:47:17 piso Exp $
+ * $Id: Editor.java,v 1.157 2005-11-19 00:49:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -528,41 +528,49 @@ public final class Editor extends JPanel implements Constants,
 
     public final int getLocationBarHeight()
     {
-        if (locationBar != null)
-            return locationBar.getHeight();
-        else
-            return 0;
+      if (locationBar != null)
+        return locationBar.getHeight();
+      else
+        return 0;
     }
 
     public final HistoryTextField getLocationBarTextField()
     {
-        return locationBar == null ? null : locationBar.getTextField();
+      return locationBar == null ? null : locationBar.getTextField();
+    }
+
+    public final void repaintLocationBar()
+    {
+      if (locationBar != null)
+        locationBar.repaint();
     }
 
     public void addLocationBar()
     {
-        if (locationBar == null) {
-            locationBar = new LocationBar(this);
-            add(locationBar, BorderLayout.NORTH);
+      if (locationBar == null)
+        {
+          locationBar = new LocationBar(this);
+          add(locationBar, BorderLayout.NORTH);
         }
     }
 
     public void removeLocationBar()
     {
-        if (locationBar != null) {
-            remove(locationBar);
-            locationBar = null;
+      if (locationBar != null)
+        {
+          remove(locationBar);
+          locationBar = null;
         }
     }
 
     public void updateLocation()
     {
-        if (locationBar != null) {
-            HistoryTextField textField = locationBar.getTextField();
-            if (textField == null || textField != frame.getFocusedComponent())
-                locationBar.update();
-        } else
-            Debug.bug();
+      if (locationBar != null)
+        {
+          HistoryTextField textField = locationBar.getTextField();
+          if (textField == null || textField != frame.getFocusedComponent())
+            locationBar.update();
+        }
     }
 
     public boolean isPrimaryEditor()
@@ -772,9 +780,9 @@ public final class Editor extends JPanel implements Constants,
         editor.getFrame().setCurrentEditor(editor);
         if (currentEditor != oldCurrentEditor) {
             if (currentEditor != null)
-                currentEditor.getLocationBar().repaint();
+                currentEditor.repaintLocationBar();
             if (oldCurrentEditor != null)
-                oldCurrentEditor.getLocationBar().repaint();
+                oldCurrentEditor.repaintLocationBar();
             if (isLispInitialized())
                 LispAPI.invokeBufferActivatedHook(currentEditor.getBuffer());
         }
@@ -4466,26 +4474,28 @@ public final class Editor extends JPanel implements Constants,
 
     public void openFileInOtherWindow()
     {
-        Debug.assertTrue(locationBar != null);
-        saveView();
-        boolean alreadySplit = (getOtherEditor() != null);
-        if (!alreadySplit)
-            splitWindow();
-        final Editor ed = getOtherEditor();
-        if (ed.getLocationBar() != null) {
-            Runnable r = new Runnable() {
-                public void run()
-                {
-                    frame.setFocus(ed.getLocationBar().getTextField());
-                }
+      saveView();
+      boolean alreadySplit = (getOtherEditor() != null);
+      if (!alreadySplit)
+        splitWindow();
+      final Editor ed = getOtherEditor();
+      if (ed.getLocationBar() != null)
+        {
+          Runnable r = new Runnable()
+            {
+              public void run()
+              {
+                frame.setFocus(ed.getLocationBar().getTextField());
+              }
             };
-            SwingUtilities.invokeLater(r);
+          SwingUtilities.invokeLater(r);
         }
-        setCurrentEditor(ed);
-        if (alreadySplit) {
-            // Current editor has changed.
-            repaint();
-            ed.repaint();
+      setCurrentEditor(ed);
+      if (alreadySplit)
+        {
+          // Current editor has changed.
+          repaint();
+          ed.repaint();
         }
     }
 
@@ -4962,16 +4972,19 @@ public final class Editor extends JPanel implements Constants,
 
     public void incrementalFind()
     {
-        if (dot == null)
-            return;
+      if (dot == null)
+        return;
 
         // Use location bar.
-        locationBar.setLabelText(LocationBar.PROMPT_PATTERN);
-        HistoryTextField textField = locationBar.getTextField();
-        textField.setHandler(new IncrementalFindTextFieldHandler(this, textField));
-        textField.setHistory(new History("incrementalFind.pattern"));
-        textField.setText("");
-        setFocusToTextField();
+      if (locationBar != null)
+        {
+          locationBar.setLabelText(LocationBar.PROMPT_PATTERN);
+          HistoryTextField textField = locationBar.getTextField();
+          textField.setHandler(new IncrementalFindTextFieldHandler(this, textField));
+          textField.setHistory(new History("incrementalFind.pattern"));
+          textField.setText("");
+          setFocusToTextField();
+        }
     }
 
     public String getCurrentText()
@@ -6276,24 +6289,27 @@ public final class Editor extends JPanel implements Constants,
 
     public void executeCommand()
     {
-        // Use location bar.
-        locationBar.setLabelText(LocationBar.PROMPT_COMMAND);
-        HistoryTextField textField = locationBar.getTextField();
-        textField.setHandler(new ExecuteCommandTextFieldHandler(this, textField));
-        textField.setHistory(new History("executeCommand.input", 30));
-        textField.recallLast();
-        textField.selectAll();
-        AWTEvent e = dispatcher.getLastEvent();
-        if (e != null && e.getSource() instanceof MenuItem) {
+      // Use location bar.
+      if (locationBar != null)
+        {
+          locationBar.setLabelText(LocationBar.PROMPT_COMMAND);
+          HistoryTextField textField = locationBar.getTextField();
+          textField.setHandler(new ExecuteCommandTextFieldHandler(this, textField));
+          textField.setHistory(new History("executeCommand.input", 30));
+          textField.recallLast();
+          textField.selectAll();
+          AWTEvent e = dispatcher.getLastEvent();
+          if (e != null && e.getSource() instanceof MenuItem) {
             Runnable r = new Runnable() {
-                public void run()
-                {
-                    setFocusToTextField();
-                }
+              public void run()
+              {
+                setFocusToTextField();
+              }
             };
             SwingUtilities.invokeLater(r);
-        } else
+          } else
             setFocusToTextField();
+        }
     }
 
     public void executeCommand(String input)
@@ -6662,6 +6678,7 @@ public final class Editor extends JPanel implements Constants,
 
     public void setFocusToTextField()
     {
+      if (locationBar != null)
         frame.setFocus(locationBar.getTextField());
     }
 
