@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: j.lisp,v 1.49 2005-11-17 20:25:23 piso Exp $
+;;; $Id: j.lisp,v 1.50 2005-11-19 18:17:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -176,25 +176,6 @@
 (defvar key-pressed-hook nil)
 
 (defvar lisp-shell-startup-hook nil)
-
-(defun variable-value (name &optional (kind :current) where)
-  (%variable-value name kind where))
-
-(defun set-variable-value (name kind &rest rest)
-  (let (where new-value)
-    (case (length rest)
-      (1
-       (setq where nil
-             new-value (car rest)))
-      (2
-       (setq where (car rest)
-             new-value (cadr rest)))
-      (t
-       (error 'program-error
-              :format-control "Wrong number of arguments.")))
-    (%set-variable-value name kind where new-value)))
-
-(defsetf variable-value set-variable-value)
 
 (defsetf current-editor %set-current-editor)
 
