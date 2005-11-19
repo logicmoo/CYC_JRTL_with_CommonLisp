@@ -1,8 +1,8 @@
 /*
  * MimePart.java
  *
- * Copyright (C) 2000-2003 Peter Graves
- * $Id: MimePart.java,v 1.2 2003-06-29 00:19:34 piso Exp $
+ * Copyright (C) 2000-2005 Peter Graves
+ * $Id: MimePart.java,v 1.3 2005-11-19 17:09:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,16 +26,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 import org.armedbear.j.Directories;
-import org.armedbear.j.Editor;
 import org.armedbear.j.File;
-import org.armedbear.j.FastStringBuffer;
 import org.armedbear.j.Headers;
 import org.armedbear.j.Log;
-import org.armedbear.j.StringPair;
 import org.armedbear.j.Utilities;
 
 public class MimePart
