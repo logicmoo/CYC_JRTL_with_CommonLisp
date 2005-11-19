@@ -2,7 +2,7 @@
  * SendMail.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: SendMail.java,v 1.11 2005-09-28 15:04:10 piso Exp $
+ * $Id: SendMail.java,v 1.12 2005-11-19 17:11:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1606,7 +1606,6 @@ public final class SendMail extends Buffer
                 c = template.charAt(i);
                 switch (c) {
                     case 'd': {
-                        RFC822Date date = entry.getDate();
                         // Date/time in sender's time zone.
                         Message message = messageBuffer.getMessage();
                         if (message == null)
