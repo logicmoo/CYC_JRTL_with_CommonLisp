@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.157 2005-11-19 00:49:04 piso Exp $
+ * $Id: Editor.java,v 1.158 2005-11-19 00:54:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4489,13 +4489,13 @@ public final class Editor extends JPanel implements Constants,
               }
             };
           SwingUtilities.invokeLater(r);
-        }
-      setCurrentEditor(ed);
-      if (alreadySplit)
-        {
-          // Current editor has changed.
-          repaint();
-          ed.repaint();
+          setCurrentEditor(ed);
+          if (alreadySplit)
+            {
+              // Current editor has changed.
+              repaint();
+              ed.repaint();
+            }
         }
     }
 
