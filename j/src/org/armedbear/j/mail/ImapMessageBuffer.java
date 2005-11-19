@@ -1,8 +1,8 @@
 /*
  * ImapMessageBuffer.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImapMessageBuffer.java,v 1.4 2002-10-11 18:28:42 piso Exp $
+ * Copyright (C) 2000-2005 Peter Graves
+ * $Id: ImapMessageBuffer.java,v 1.5 2005-11-19 17:04:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@ import javax.swing.SwingUtilities;
 import org.armedbear.j.BackgroundProcess;
 import org.armedbear.j.Debug;
 import org.armedbear.j.Editor;
-import org.armedbear.j.FastStringBuffer;
 import org.armedbear.j.Headers;
 import org.armedbear.j.Log;
 import org.armedbear.j.MessageDialog;
