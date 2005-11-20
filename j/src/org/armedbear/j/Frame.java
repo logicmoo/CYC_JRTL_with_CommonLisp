@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Frame.java,v 1.18 2005-11-18 15:47:54 piso Exp $
+ * $Id: Frame.java,v 1.19 2005-11-20 13:04:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -731,31 +731,36 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
 
     private void unsplitInternal(final Editor keep, final Editor kill)
     {
-        Editor.getSessionProperties().saveSidebarState(this);
-        if (sidebar != null) {
-            sidebarSplitPane.setRightComponent(keep);
-            int dividerLocation =
-                Editor.getSessionProperties().getSidebarWidth(this);
-            sidebarSplitPane.setDividerLocation(dividerLocation);
-        } else {
-            // No sidebar.
-            getContentPane().remove(editorPane);
-            getContentPane().add(keep, "Center");
+      Editor.getSessionProperties().saveSidebarState(this);
+      if (sidebar != null)
+        {
+          sidebarSplitPane.setRightComponent(keep);
+          int dividerLocation =
+            Editor.getSessionProperties().getSidebarWidth(this);
+          sidebarSplitPane.setDividerLocation(dividerLocation);
         }
-        validate();
-        editorPane = null;
-        Editor.removeEditor(kill);
-        editors[0] = keep;
-        editors[1] = null;
-        Buffer buffer = keep.getBuffer();
-        if (buffer.isSecondary())
-            buffer.promote();
-        Editor.setCurrentEditor(keep);
-        keep.setUpdateFlag(REFRAME);
-        keep.reframe();
-        restoreFocus();
-        statusBar.repaint();
-        updateControls();
+      else
+        {
+          // No sidebar.
+          getContentPane().remove(editorPane);
+          getContentPane().add(keep, "Center");
+        }
+      validate();
+      editorPane = null;
+      Editor.removeEditor(kill);
+      editors[0] = keep;
+      editors[1] = null;
+      Buffer buffer = keep.getBuffer();
+      if (buffer.isSecondary())
+        buffer.promote();
+      if (keep.getLocationBar() == null)
+        keep.addLocationBar();
+      Editor.setCurrentEditor(keep);
+      keep.setUpdateFlag(REFRAME);
+      keep.reframe();
+      restoreFocus();
+      statusBar.repaint();
+      updateControls();
     }
 
     public void updateControls()
