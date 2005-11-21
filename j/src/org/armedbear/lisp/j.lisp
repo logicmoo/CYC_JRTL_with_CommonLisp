@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: j.lisp,v 1.50 2005-11-19 18:17:31 piso Exp $
+;;; $Id: j.lisp,v 1.51 2005-11-21 14:13:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -56,6 +56,8 @@
           forward-char
           forward-sexp
           get-buffer
+          get-buffer-property
+          get-global-property
           get-last-event-internal-time
           global-map-key
           global-unmap-key
@@ -95,6 +97,7 @@
           search-forward
           set-buffer-modified-p
           set-buffer-property
+          set-global-property
           set-mark
           set-mode-property
           status
@@ -103,7 +106,6 @@
           unmap-key-for-mode
           update-display
           update-location-bar
-          variable-value
           with-editor
           with-other-editor
           with-single-undo))
