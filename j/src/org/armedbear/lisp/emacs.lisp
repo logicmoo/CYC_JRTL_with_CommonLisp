@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.13 2005-03-08 02:22:52 piso Exp $
+;;; $Id: emacs.lisp,v 1.14 2005-11-21 14:12:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -331,7 +331,7 @@
     ("0"                        "killWindow")
     ("o"                        "otherwindow")))
 
-(when (variable-value 'enable-experimental-features)
+(when (get-global-property 'enable-experimental-features)
   (define-key *emacs-global-map* "Alt F9" "shell"))
 
 (define-key *control-x-map* "`" "nextError")
