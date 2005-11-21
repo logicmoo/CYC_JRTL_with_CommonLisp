@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.18 2005-11-15 16:32:57 piso Exp $
+;;; $Id: swank.lisp,v 1.19 2005-11-21 13:22:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -305,5 +305,15 @@
           (when (and (consp form) (member (first form) '(defun defmacro)))
             (sys:record-source-information (second form) source-pathname source-position))))
       values)))
+
+(defun swank-describe-symbol (symbol-name package-name)
+  (let* ((package (if package-name
+                      (find-package package-name)
+                      *package*))
+         (symbol (and package (find-symbol (string-upcase symbol-name) package))))
+  (with-output-to-string (s)
+    (if symbol
+        (describe symbol s)
+        (format s "Can't find symbol ~A in package ~A" symbol-name package-name)))))
 
 (provide '#:swank)
