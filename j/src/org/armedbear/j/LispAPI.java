@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.76 2005-11-19 18:53:07 piso Exp $
+ * $Id: LispAPI.java,v 1.77 2005-11-21 14:11:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1216,6 +1216,60 @@ public final class LispAPI extends Lisp
           return signalTypeError(second, Symbol.STRING);
         buffer.setProperty(property, second.getStringValue());
         return second;
+      }
+    };
+
+  // ### get-global-property key => value
+  private static final Primitive GET_GLOBAL_PROPERTY =
+    new Primitive("get-global-property", PACKAGE_J, true, "key")
+    {
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        String key = javaString(arg);
+        Property property = Property.findProperty(key);
+        if (property == null)
+          {
+            // Not an advertised property.
+            return signal(new LispError(arg.writeToString() +
+                                        " does not designate any property."));
+          }
+        if (property.isBooleanProperty())
+          return preferences.getBooleanProperty(property) ? T : NIL;
+        if (property.isIntegerProperty())
+          return number(preferences.getIntegerProperty(property));
+        String value = preferences.getStringProperty(property);
+        return value != null ? new SimpleString(value) : NIL;
+      }
+    };
+
+  // ### get-buffer-property key &optional buffer => value
+  private static final Primitive GET_BUFFER_PROPERTY =
+    new Primitive("get-buffer-property", PACKAGE_J, true,
+                  "key &optional buffer")
+    {
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        return execute(arg,
+                       new JavaObject(Editor.currentEditor().getBuffer()));
+      }
+      public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+      {
+        String key = javaString(first);
+        Property property = Property.findProperty(key);
+        if (property == null)
+          {
+            // Not an advertised property.
+            return signal(new LispError(first.writeToString() +
+                                        " does not designate any property."));
+          }
+        final Buffer buffer = checkBuffer(second);
+        if (property.isBooleanProperty())
+          return buffer.getBooleanProperty(property) ? T : NIL;
+        if (property.isIntegerProperty())
+          return number(buffer.getIntegerProperty(property));
+        String value = buffer.getStringProperty(property);
+        return value != null ? new SimpleString(value) : NIL;
       }
     };
 
