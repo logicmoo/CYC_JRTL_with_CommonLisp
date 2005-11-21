@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2004 Peter Graves
-dnl  $Id: configure.ac,v 1.75 2005-07-03 16:11:12 piso Exp $
+dnl  $Id: configure.ac,v 1.76 2005-11-21 15:22:24 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.75 $)
+AC_REVISION($Revision: 1.76 $)
 
 BOOTFILE=./configure-options
 
@@ -31,7 +31,7 @@ AC_INIT(j.in)
 
 AC_PROG_INSTALL
 
-version=0.21.0.4
+version=0.21.0.5
 AC_SUBST(version)
 
 if test $OSTYPE = cygwin32 || test $OSTYPE = cygwin ; then
