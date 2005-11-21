@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.36 2005-11-15 16:33:30 piso Exp $
+;;; $Id: slime.lisp,v 1.37 2005-11-21 14:21:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
   (sys:load-system-file "swank-package"))
 
 (defpackage #:slime
-  (:use #:cl #:ext #:j)
+  (:use #:cl #:ext #:java #:j)
   (:export #:slime
            #:slime-complete-symbol
            #:slime-space
@@ -43,7 +43,8 @@
            #:slime-compile-defun
            #:slime-load-file
            #:slime-compile-file
-           #:slime-compile-and-load-file))
+           #:slime-compile-and-load-file
+           #:slime-describe-symbol))
 
 (in-package #:slime)
 
@@ -418,6 +419,25 @@
 (defun display-eval-result (value)
   (status value))
 
+(defun show-description (string)
+  (format t "show-description called~%")
+  (unless (stringp string)
+    (format t "not a string: ~S~%" string)
+    (return-from show-description))
+  (let ((stream (make-buffer-stream)))
+    (write-string string stream)
+    (close stream)
+    (let ((buffer (buffer-stream-buffer stream)))
+      (set-buffer-modified-p buffer nil)
+      (set-buffer-property "verticalRule" 0 buffer)
+      (set-buffer-property "showLineNumbers" nil buffer)
+      (set-buffer-property "showChangeMarks" nil buffer)
+      (jcall (jmethod "org.armedbear.j.Buffer" "setTransient" 1)
+             buffer (make-immediate-object t :boolean))
+      (pop-to-buffer buffer)
+      (jcall (jmethod "org.armedbear.j.Editor" "shrinkWindowIfLargerThanBuffer")
+             (current-editor)))))
+
 (defun slime-eval-last-expression ()
   (let* ((string (last-expression))
          (package (find-buffer-package)))
@@ -454,15 +474,22 @@
     (slime-eval-async
      `(swank:swank-compile-file ,pathname t) 'display-eval-result)))
 
+(defun slime-describe-symbol ()
+  (let ((symbol-name (symbol-name-at-mark (current-point))))
+    (when (stringp symbol-name)
+      (let ((output (slime-eval `(swank:swank-describe-symbol ,symbol-name ,(find-buffer-package)))))
+        (invoke-later (lambda () (show-description output)))))))
+
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (unless (find-package '#:emacs)
     (defpackage #:emacs
       (:use #:cl #:ext #:j))))
 
 (defun initialize-keymaps ()
-  (let ((emulation (variable-value 'emulation)))
+  (let ((emulation (get-global-property 'emulation)))
     (cond ((null emulation)
            (map-key-for-mode "Tab" "(slime:slime-complete-symbol)" "Lisp Shell")
+;;            (map-key-for-mode "Ctrl Alt D" "(slime:slime-describe-symbol)" "Lisp Shell")
            (map-key-for-mode "Ctrl Alt I" "(slime:slime-complete-symbol)" "Lisp")
            (map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
            (map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
