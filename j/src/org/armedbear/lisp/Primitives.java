@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.851 2005-11-06 19:05:56 piso Exp $
+ * $Id: Primitives.java,v 1.852 2005-11-26 00:05:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2464,14 +2464,35 @@ public final class Primitives extends Lisp
             return LispThread.currentThread().execute(first, second, third,
                                                       fourth, fifth, sixth);
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth, LispObject sixth,
+                                  LispObject seventh)
+            throws ConditionThrowable
+        {
+            return LispThread.currentThread().execute(first, second, third,
+                                                      fourth, fifth, sixth,
+                                                      seventh);
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth, LispObject sixth,
+                                  LispObject seventh, LispObject eigth)
+            throws ConditionThrowable
+        {
+            return LispThread.currentThread().execute(first, second, third,
+                                                      fourth, fifth, sixth,
+                                                      seventh, eigth);
+        }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length - 1; // Number of arguments.
-            if (length == 6) {
+            if (length == 8) {
                 return LispThread.currentThread().execute(args[0], args[1],
                                                           args[2], args[3],
                                                           args[4], args[5],
-                                                          args[6]);
+                                                          args[6], args[7],
+                                                          args[8]);
             } else {
                 LispObject[] newArgs = new LispObject[length];
                 System.arraycopy(args, 1, newArgs, 0, length);
