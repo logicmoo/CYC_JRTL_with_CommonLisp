@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.415 2005-11-08 05:32:14 piso Exp $
+ * $Id: Lisp.java,v 1.416 2005-11-26 15:42:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1819,6 +1819,8 @@ public abstract class Lisp
     static {
         Symbol.MOST_POSITIVE_FIXNUM.initializeConstant(new Fixnum(Integer.MAX_VALUE));
         Symbol.MOST_NEGATIVE_FIXNUM.initializeConstant(new Fixnum(Integer.MIN_VALUE));
+        Symbol.MOST_POSITIVE_JAVA_LONG.initializeConstant(new Bignum(Long.MAX_VALUE));
+        Symbol.MOST_NEGATIVE_JAVA_LONG.initializeConstant(new Bignum(Long.MIN_VALUE));
     }
 
     public static void exit(int status)
