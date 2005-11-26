@@ -1,7 +1,7 @@
 ;;; misc-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: misc-tests.lisp,v 1.2 2005-11-09 18:10:58 piso Exp $
+;;; $Id: misc-tests.lisp,v 1.3 2005-11-26 00:19:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,5 +54,35 @@
     (compile 'dotimes.2.compiled)
     (dotimes.2.compiled 10))
   420)
+
+(deftest funcall.1
+  (funcall
+   (compile nil (lambda (a b c d e f) (list a b c d e f)))
+   1 2 3 4 5 6)
+  (1 2 3 4 5 6))
+
+(deftest funcall.2
+  (funcall
+   (compile nil (lambda (a b c d e f g) (list a b c d e f g )))
+   1 2 3 4 5 6 7)
+  (1 2 3 4 5 6 7))
+
+(deftest funcall.3
+  (funcall
+   (compile nil (lambda (a b c d e f g h) (list a b c d e f g h)))
+   1 2 3 4 5 6 7 8)
+  (1 2 3 4 5 6 7 8))
+
+(deftest funcall.4
+  (funcall
+   (compile nil (lambda (a b c d e f g h i) (list a b c d e f g h i)))
+   1 2 3 4 5 6 7 8 9)
+  (1 2 3 4 5 6 7 8 9))
+
+(deftest funcall.5
+  (funcall
+   (compile nil (lambda (a b c d e f g h i j) (list a b c d e f g h i j)))
+   1 2 3 4 5 6 7 8 9 10)
+  (1 2 3 4 5 6 7 8 9 10))
 
 (do-tests)
