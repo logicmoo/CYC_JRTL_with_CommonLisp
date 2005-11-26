@@ -1,7 +1,7 @@
 ;;; compiler-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-tests.lisp,v 1.3 2005-11-26 00:20:54 piso Exp $
+;;; $Id: compiler-tests.lisp,v 1.4 2005-11-26 15:47:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -173,5 +173,29 @@
           (sys:integer-type-low type)
           (sys:integer-type-high type))))
   0 8589934588)
+
+(deftest ash.1
+  (progn
+    (fmakunbound 'ash.1)
+    (defun ash.1 (n shift)
+      (declare (type (integer 0 8589934588) n))
+      (declare (type (integer -31 -1) shift))
+      (ash n shift))
+    (compile 'ash.1)
+    (values
+     (ash.1 8589934588 -1)
+     (ash.1 8589934588 -2)
+     (ash.1 8589934588 -3)
+     (ash.1 8589934588 -4)
+     (ash.1 8589934588 -5)
+     (ash.1 8589934588 -6)
+     (ash.1 8589934588 -31)))
+  4294967294
+  2147483647
+  1073741823
+  536870911
+  268435455
+  134217727
+  3)
 
 (do-tests)
