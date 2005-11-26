@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.237 2005-11-08 14:46:07 piso Exp $
+ * $Id: Symbol.java,v 1.238 2005-11-26 15:41:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2733,6 +2733,10 @@ public class Symbol extends LispObject
     // End of CL symbols.
 
     // Extensions.
+    public static final Symbol MOST_POSITIVE_JAVA_LONG =
+        PACKAGE_EXT.addExternalSymbol("MOST-POSITIVE-JAVA-LONG");
+    public static final Symbol MOST_NEGATIVE_JAVA_LONG=
+        PACKAGE_EXT.addExternalSymbol("MOST-NEGATIVE-JAVA-LONG");
     public static final Symbol SINGLE_FLOAT_POSITIVE_INFINITY =
         PACKAGE_EXT.addExternalSymbol("SINGLE-FLOAT-POSITIVE-INFINITY");
     public static final Symbol SINGLE_FLOAT_NEGATIVE_INFINITY =
