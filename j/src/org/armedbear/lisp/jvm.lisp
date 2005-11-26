@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.633 2005-11-26 00:18:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.634 2005-11-26 22:10:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5514,15 +5514,18 @@
          (arg1 (%car args))
          (arg2 (%cadr args))
          (type1 (derive-compiler-type arg1))
-         (type2 (derive-compiler-type arg2)))
-;;     (format t "p2-ash type1 = ~S type2 = ~S~%" type1 type2)
+         (type2 (derive-compiler-type arg2))
+         (result-type (derive-compiler-type form)))
+;;     (format t "~&p2-ash type1 = ~S~%type2 = ~S~%result-type = ~S~%"
+;;             type1 type2 result-type)
     (cond ((and (integerp arg1) (integerp arg2))
            (compile-constant (ash arg1 arg2) target representation))
           ((and (integer-type-p type1) (eql (fixnum-constant-value type2) 0))
 ;;            (format t "p2-ash arg2 = 0~%")
            (compile-form arg1 target representation)
            (maybe-emit-clear-values arg1))
-          ((and (fixnum-type-p type1) (compiler-subtypep type2 '(INTEGER 0 31)))
+          ((and (fixnum-type-p type1)
+                (compiler-subtypep type2 '(INTEGER 0 31)))
            (case representation
              ('unboxed-fixnum
               (compile-form arg1 'stack 'unboxed-fixnum)
@@ -5537,6 +5540,34 @@
               (maybe-emit-clear-values arg1 arg2)
               (emit-box-long)))
            (emit-move-from-stack target representation))
+          ((and (integer-type-p type1)
+                (eql (integer-type-low type1) 0)
+                (integerp (integer-type-high type1))
+                (<= (integer-type-high type1) most-positive-java-long)
+                (compiler-subtypep type2 '(INTEGER -31 -1)))
+;;            (format t "Java long case~%")
+           ;; ARG1 is not a fixnum but fits in a Java long.
+           (when (fixnum-type-p result-type)
+             (unless (eq representation 'unboxed-fixnum)
+               (emit 'new +lisp-fixnum-class+)
+               (emit 'dup)))
+           (compile-form arg1 'stack nil)
+           (emit-invokevirtual +lisp-object-class+ "longValue" nil "J")
+           (cond ((fixnump arg2)
+                  (maybe-emit-clear-values arg1)
+                  (emit-push-constant-int (- arg2)))
+                 (t
+                  (compile-form arg2 'stack 'unboxed-fixnum)
+                  (maybe-emit-clear-values arg1 arg2)
+                  (emit 'ineg)))
+           (emit 'lshr)
+           (cond ((eq representation 'unboxed-fixnum)
+                  (emit 'l2i))
+                 ((fixnum-type-p result-type)
+                  (emit 'l2i)
+                  (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+                 (t
+                  (emit-box-long))))
           ((and (fixnum-type-p type1) (compiler-subtypep type2 '(INTEGER -31 -1)))
            (unless (eq representation 'unboxed-fixnum)
              (emit 'new +lisp-fixnum-class+)
