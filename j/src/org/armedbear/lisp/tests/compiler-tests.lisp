@@ -1,7 +1,7 @@
 ;;; compiler-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-tests.lisp,v 1.2 2005-11-13 21:20:54 piso Exp $
+;;; $Id: compiler-tests.lisp,v 1.3 2005-11-26 00:20:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,6 +16,9 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+#+abcl
+(require '#:jvm)
 
 (load (merge-pathnames "test-utilities.lisp" *load-truename*))
 
@@ -136,5 +139,39 @@
     (compile 'dotimes.2)
     (dotimes.2))
   10)
+
+#+abcl
+(deftest derive-type-logxor.1
+  (let ((type
+         (jvm:derive-compiler-type `(logxor (the (unsigned-byte 8) x)
+                                            (the (unsigned-byte 8) y)))))
+    (and (sys:integer-type-p type)
+         (values
+          (sys:integer-type-low type)
+          (sys:integer-type-high type))))
+  0 255)
+
+#+abcl
+(deftest derive-type-logxor.2
+  (let ((type
+         (jvm:derive-compiler-type `(logxor 441516657
+                                            (the (integer 0 8589934588) x)))))
+    (and (sys:integer-type-p type)
+         (values
+          (sys:integer-type-low type)
+          (sys:integer-type-high type))))
+  0 8589934588)
+
+#+abcl
+(deftest derive-type-logxor.3
+  (let ((type
+         (jvm:derive-compiler-type `(logxor 441516657
+                                            (the (integer 0 8589934588) x)
+                                            (ash (the (integer 0 8589934588) x) -5)))))
+    (and (sys:integer-type-p type)
+         (values
+          (sys:integer-type-low type)
+          (sys:integer-type-high type))))
+  0 8589934588)
 
 (do-tests)
