@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.632 2005-11-14 20:06:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.633 2005-11-26 00:18:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,7 +23,8 @@
 
 (in-package #:jvm)
 
-(export '(compile-defun *catch-errors* jvm-compile jvm-compile-package))
+(export '(compile-defun *catch-errors* jvm-compile jvm-compile-package
+          derive-compiler-type))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (require '#:format)
@@ -5991,7 +5992,7 @@
       (t
        (compile-function-call form target representation)))))
 
-(declaim (ftype (function (t) t) derive-type-aref))
+(defknown derive-type-aref (t) t)
 (defun derive-type-aref (form)
   (let* ((args (cdr form))
          (array-arg (car args))
@@ -6007,37 +6008,63 @@
            (setf result-type 'CHARACTER)))
     result-type))
 
-(defun logxor-derive-type (args)
-  (let ((result-type nil))
-    (dolist (arg args)
-      (let ((type (derive-type arg)))
-        (unless (subtypep type 'INTEGER)
-          (return-from logxor-derive-type 'T))
-        (cond ((null result-type)
-               (setf result-type type))
-              ((subtypep type result-type)
-               ;; No change.
-               )
-              ((and (subtypep result-type '(UNSIGNED-BYTE 8))
-                    (subtypep type '(UNSIGNED-BYTE 8)))
-               (setf result-type '(UNSIGNED-BYTE 8)))
-              ((and (subtypep result-type '(UNSIGNED-BYTE 16))
-                    (subtypep type '(UNSIGNED-BYTE 16)))
-               (setf result-type '(UNSIGNED-BYTE 16)))
-              ((and (subtypep result-type '(UNSIGNED-BYTE 24))
-                    (subtypep type '(UNSIGNED-BYTE 24)))
-               (setf result-type '(UNSIGNED-BYTE 24)))
-              ((and (subtypep result-type '(UNSIGNED-BYTE 32))
-                    (subtypep type '(UNSIGNED-BYTE 32)))
-               (setf result-type '(UNSIGNED-BYTE 32)))
-              ((and (subtypep result-type 'FIXNUM)
-                    (subtypep type 'FIXNUM))
-               (setf result-type 'FIXNUM))
-              (t
-               (setf result-type 'INTEGER)))))
+(defknown derive-type-logxor (t) t)
+(defun derive-type-logxor (form)
+  (let ((args (cdr form))
+        (result-type t))
+;;     (dolist (arg args)
+;;       (let ((type (derive-type arg)))
+;;         (unless (subtypep type 'INTEGER)
+;;           (return-from derive-type-logxor 'T))
+;;         (cond ((null result-type)
+;;                (setf result-type type))
+;;               ((subtypep type result-type)
+;;                ;; No change.
+;;                )
+;;               ((and (subtypep result-type '(UNSIGNED-BYTE 8))
+;;                     (subtypep type '(UNSIGNED-BYTE 8)))
+;;                (setf result-type '(UNSIGNED-BYTE 8)))
+;;               ((and (subtypep result-type '(UNSIGNED-BYTE 16))
+;;                     (subtypep type '(UNSIGNED-BYTE 16)))
+;;                (setf result-type '(UNSIGNED-BYTE 16)))
+;;               ((and (subtypep result-type '(UNSIGNED-BYTE 24))
+;;                     (subtypep type '(UNSIGNED-BYTE 24)))
+;;                (setf result-type '(UNSIGNED-BYTE 24)))
+;;               ((and (subtypep result-type '(UNSIGNED-BYTE 32))
+;;                     (subtypep type '(UNSIGNED-BYTE 32)))
+;;                (setf result-type '(UNSIGNED-BYTE 32)))
+;;               ((and (subtypep result-type 'FIXNUM)
+;;                     (subtypep type 'FIXNUM))
+;;                (setf result-type 'FIXNUM))
+;;               (t
+;;                (setf result-type 'INTEGER)))))
+    (case (length args)
+      (0
+       (setf result-type (make-integer-type '(INTEGER 0 0))))
+      (1
+       (setf result-type (derive-compiler-type (car args))))
+      (2
+;;        (format t "derive-type-logxor 2-arg case~%")
+       (let ((type1 (derive-compiler-type (%car args)))
+             (type2 (derive-compiler-type (%cadr args))))
+;;          (format t "derive-type-logxor type1 = ~S~%" type1)
+;;          (format t "derive-type-logxor type2 = ~S~%" type2)
+         (cond ((and (compiler-subtypep type1 'unsigned-byte)
+                     (compiler-subtypep type2 'unsigned-byte))
+                (let ((high1 (integer-type-high type1))
+                      (high2 (integer-type-high type2)))
+                  (if (and high1 high2)
+                      (setf result-type (make-compiler-type (list 'INTEGER 0 (max high1 high2))))
+                      (setf result-type (make-compiler-type 'unsigned-byte)))))
+               ((and (fixnum-type-p type1)
+                     (fixnum-type-p type2))
+                (setf result-type (make-compiler-type 'fixnum))))))
+      (t
+       (setf result-type (derive-type-logxor
+                          `(logxor ,(car args) (logxor ,@(cdr args)))))))
     result-type))
 
-(declaim (ftype (function (t) t) derive-type-logand))
+(defknown derive-type-logand (t) t)
 (defun derive-type-logand (form)
   (let ((args (cdr form)))
     (case (length args)
@@ -6271,7 +6298,7 @@
       t))
 
 ;; ash integer count => shifted-integer
-(declaim (ftype (function (t) t) derive-type-ash))
+(defknown derive-type-ash (t) t)
 (defun derive-type-ash (form)
   (let* ((args (cdr form))
          (arg1 (car args))
@@ -6281,7 +6308,7 @@
          (result-type 'INTEGER))
 ;;     (format t "derive-type-ash type1 = ~S~%" type1)
 ;;     (format t "derive-type-ash type2 = ~S~%" type2)
-    (when (fixnum-type-p type1)
+    (when (integer-type-p type1)
       (let ((low (integer-type-low type1))
             (high (integer-type-high type1)))
         (when (fixnum-constant-value type2)
@@ -6294,9 +6321,9 @@
                                          (if (minusp low) -1 0)
                                          (if (minusp high) -1 0))))))))
 ;;     (format t "derive-type-ash result-type = ~S~%" result-type)
-    result-type))
+    (make-compiler-type result-type)))
 
-(declaim (ftype (function (t) t) derive-type))
+(defknown derive-type (t) t)
 (defun derive-type (form)
   (cond ((consp form)
          (let ((op (%car form)))
@@ -6322,7 +6349,7 @@
              (LOGNOT
               (derive-type-lognot form))
              (LOGXOR
-              (logxor-derive-type (%cdr form)))
+              (derive-type-logxor form))
              (MOD
               (derive-type-mod form))
              (-
@@ -8510,7 +8537,7 @@
                 (jvm-compile sym)))))))
   t)
 
-(declaim (ftype (function * t) install-p2-handler))
+(defknown install-p2-handler * t)
 (defun install-p2-handler (symbol &optional handler)
   (declare (type symbol symbol))
   (let ((handler (or handler
