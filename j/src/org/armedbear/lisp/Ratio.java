@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Ratio.java,v 1.53 2005-11-27 21:41:54 piso Exp $
+ * $Id: Ratio.java,v 1.54 2005-11-27 21:47:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,7 +280,7 @@ public final class Ratio extends LispObject
             return number(numerator.multiply(n), denominator);
         }
         if (obj instanceof Bignum) {
-            BigInteger n = ((Bignum)obj).getValue();
+            BigInteger n = ((Bignum)obj).value;
             return number(numerator.multiply(n), denominator);
         }
         if (obj instanceof Ratio) {
@@ -309,7 +309,7 @@ public final class Ratio extends LispObject
             return number(numerator, denominator.multiply(n));
         }
         if (obj instanceof Bignum) {
-            BigInteger n = ((Bignum)obj).getValue();
+            BigInteger n = ((Bignum)obj).value;
             return number(numerator, denominator.multiply(n));
         }
         if (obj instanceof Ratio) {
@@ -371,7 +371,7 @@ public final class Ratio extends LispObject
             return numerator.compareTo(n2) < 0;
         }
         if (obj instanceof Bignum) {
-            BigInteger n = ((Bignum)obj).getValue().multiply(denominator);
+            BigInteger n = ((Bignum)obj).value.multiply(denominator);
             return numerator.compareTo(n) < 0;
         }
         if (obj instanceof Ratio) {
@@ -395,7 +395,7 @@ public final class Ratio extends LispObject
             return numerator.compareTo(n2) > 0;
         }
         if (obj instanceof Bignum) {
-            BigInteger n = ((Bignum)obj).getValue().multiply(denominator);
+            BigInteger n = ((Bignum)obj).value.multiply(denominator);
             return numerator.compareTo(n) > 0;
         }
         if (obj instanceof Ratio) {
@@ -419,7 +419,7 @@ public final class Ratio extends LispObject
             return numerator.compareTo(n2) <= 0;
         }
         if (obj instanceof Bignum) {
-            BigInteger n = ((Bignum)obj).getValue().multiply(denominator);
+            BigInteger n = ((Bignum)obj).value.multiply(denominator);
             return numerator.compareTo(n) <= 0;
         }
         if (obj instanceof Ratio) {
@@ -443,7 +443,7 @@ public final class Ratio extends LispObject
             return numerator.compareTo(n2) >= 0;
         }
         if (obj instanceof Bignum) {
-            BigInteger n = ((Bignum)obj).getValue().multiply(denominator);
+            BigInteger n = ((Bignum)obj).value.multiply(denominator);
             return numerator.compareTo(n) >= 0;
         }
         if (obj instanceof Ratio) {
@@ -475,7 +475,7 @@ public final class Ratio extends LispObject
             n = ((Fixnum)obj).getBigInteger();
             d = BigInteger.ONE;
 	  } else if (obj instanceof Bignum) {
-            n = ((Bignum)obj).getValue();
+            n = ((Bignum)obj).value;
             d = BigInteger.ONE;
 	  } else if (obj instanceof Ratio) {
             n = ((Ratio)obj).numerator();
