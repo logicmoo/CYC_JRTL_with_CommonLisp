@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Bignum.java,v 1.78 2005-11-27 15:43:23 piso Exp $
+ * $Id: Bignum.java,v 1.79 2005-11-27 21:46:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -233,11 +233,6 @@ public final class Bignum extends LispObject
             // Not reached.
             return null;
         }
-    }
-
-    public final BigInteger getValue()
-    {
-        return value;
     }
 
     public final LispObject incr()
