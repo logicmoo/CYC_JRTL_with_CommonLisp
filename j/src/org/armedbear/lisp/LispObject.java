@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.148 2005-11-26 15:42:43 piso Exp $
+ * $Id: LispObject.java,v 1.149 2005-11-27 15:43:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -704,6 +704,13 @@ public class LispObject extends Lisp
             default:
                 return signalTypeError(this, Symbol.FUNCTION);
         }
+    }
+
+    public int intValue() throws ConditionThrowable
+    {
+        signalTypeError(this, Symbol.INTEGER);
+        // Not reached.
+        return 0;
     }
 
     public long longValue() throws ConditionThrowable

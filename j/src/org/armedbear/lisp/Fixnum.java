@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.130 2005-11-26 15:47:07 piso Exp $
+ * $Id: Fixnum.java,v 1.131 2005-11-27 15:43:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -281,6 +281,11 @@ public final class Fixnum extends LispObject
     }
 
     public final int getValue()
+    {
+        return value;
+    }
+
+    public int intValue()
     {
         return value;
     }
