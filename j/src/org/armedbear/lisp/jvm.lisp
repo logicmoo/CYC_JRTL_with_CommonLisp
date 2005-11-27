@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.635 2005-11-27 18:32:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.636 2005-11-27 21:43:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2351,6 +2351,7 @@
 (declaim (ftype (function (t t) t) write-u4))
 (defun write-u4 (n stream)
   (declare (optimize speed))
+  (declare (type (unsigned-byte 32) n))
   (write-u2 (ash n -16) stream)
   (write-u2 (logand n #xFFFF) stream))
 
