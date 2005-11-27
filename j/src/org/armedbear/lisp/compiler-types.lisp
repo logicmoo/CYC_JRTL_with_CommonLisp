@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.12 2005-11-08 14:57:41 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.13 2005-11-27 15:44:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
           +integer-type+
           fixnum-type-p
           fixnum-constant-value
+          java-long-type-p
           make-compiler-type
           compiler-subtypep
           function-result-type
@@ -78,6 +79,14 @@
         (setf high (integer-type-high compiler-type))
         (when (and (fixnump high) (= high low))
           high)))))
+
+(declaim (ftype (function (t) t) java-long-type-p))
+(defun java-long-type-p (compiler-type)
+  (and (integer-type-p compiler-type)
+       (typep (integer-type-low compiler-type)
+              (list 'INTEGER most-negative-java-long most-positive-java-long))
+       (typep (integer-type-high compiler-type)
+              (list 'INTEGER most-negative-java-long most-positive-java-long))))
 
 (defun make-compiler-type (typespec)
   (if (integer-type-p typespec)
