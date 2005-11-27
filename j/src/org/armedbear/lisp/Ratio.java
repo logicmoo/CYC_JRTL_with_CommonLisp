@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Ratio.java,v 1.52 2005-10-23 18:11:10 piso Exp $
+ * $Id: Ratio.java,v 1.53 2005-11-27 21:41:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,11 +208,11 @@ public final class Ratio extends LispObject
     {
         if (obj instanceof Fixnum) {
             BigInteger n =
-                numerator.add(BigInteger.valueOf(((Fixnum)obj).getValue()).multiply(denominator));
+                numerator.add(BigInteger.valueOf(((Fixnum)obj).value).multiply(denominator));
             return number(n, denominator);
         }
         if (obj instanceof Bignum) {
-            BigInteger n = ((Bignum)obj).getValue();
+            BigInteger n = ((Bignum)obj).value;
             return number(numerator.add(n.multiply(denominator)),
                 denominator);
         }
@@ -242,11 +242,11 @@ public final class Ratio extends LispObject
     {
         if (obj instanceof Fixnum) {
             BigInteger n =
-                numerator.subtract(BigInteger.valueOf(((Fixnum)obj).getValue()).multiply(denominator));
+                numerator.subtract(BigInteger.valueOf(((Fixnum)obj).value).multiply(denominator));
             return number(n, denominator);
         }
         if (obj instanceof Bignum) {
-            BigInteger n = ((Bignum)obj).getValue();
+            BigInteger n = ((Bignum)obj).value;
             return number(numerator.subtract(n.multiply(denominator)),
                 denominator);
         }

@@ -2,7 +2,7 @@
  * RandomState.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: RandomState.java,v 1.7 2005-11-03 14:41:46 piso Exp $
+ * $Id: RandomState.java,v 1.8 2005-11-27 21:42:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,13 +84,13 @@ public final class RandomState extends LispObject
     public LispObject random(LispObject arg) throws ConditionThrowable
     {
         if (arg instanceof Fixnum) {
-            int limit = ((Fixnum)arg).getValue();
+            int limit = ((Fixnum)arg).value;
             if (limit > 0) {
                 int n = random.nextInt((int)limit);
                 return new Fixnum(n);
             }
         } else if (arg instanceof Bignum) {
-            BigInteger limit = ((Bignum)arg).getValue();
+            BigInteger limit = ((Bignum)arg).value;
             if (limit.signum() > 0) {
                 int bitLength = limit.bitLength();
                 BigInteger rand = new BigInteger(bitLength + 1, random);

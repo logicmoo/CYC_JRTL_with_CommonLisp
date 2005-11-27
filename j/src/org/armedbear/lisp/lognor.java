@@ -2,7 +2,7 @@
  * lognor.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: lognor.java,v 1.7 2005-11-04 13:35:12 piso Exp $
+ * $Id: lognor.java,v 1.8 2005-11-27 21:40:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,23 +35,23 @@ public final class lognor extends Primitive
     {
         if (first instanceof Fixnum) {
             if (second instanceof Fixnum)
-                return new Fixnum(~(((Fixnum)first).getValue() |
-                                    ((Fixnum)second).getValue()));
+                return new Fixnum(~(((Fixnum)first).value |
+                                    ((Fixnum)second).value));
             if (second instanceof Bignum) {
                 BigInteger n1 = ((Fixnum)first).getBigInteger();
-                BigInteger n2 = ((Bignum)second).getValue();
+                BigInteger n2 = ((Bignum)second).value;
                 return number(n1.or(n2).not());
             }
             return signalTypeError(second, Symbol.INTEGER);
         }
         if (first instanceof Bignum) {
-            BigInteger n1 = ((Bignum)first).getValue();
+            BigInteger n1 = ((Bignum)first).value;
             if (second instanceof Fixnum) {
                 BigInteger n2 = ((Fixnum)second).getBigInteger();
                 return number(n1.or(n2).not());
             }
             if (second instanceof Bignum) {
-                BigInteger n2 = ((Bignum)second).getValue();
+                BigInteger n2 = ((Bignum)second).value;
                 return number(n1.or(n2).not());
             }
             return signalTypeError(second, Symbol.INTEGER);

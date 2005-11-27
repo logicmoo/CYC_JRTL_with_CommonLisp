@@ -2,7 +2,7 @@
  * last.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: last.java,v 1.6 2005-11-04 13:38:40 piso Exp $
+ * $Id: last.java,v 1.7 2005-11-27 21:40:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ public final class last extends Primitive
     {
         LispObject list = checkList(first);
         if (second instanceof Fixnum) {
-            int n = ((Fixnum)second).getValue();
+            int n = ((Fixnum)second).value;
             if (n >= 0) {
                 if (list == NIL)
                     return NIL;

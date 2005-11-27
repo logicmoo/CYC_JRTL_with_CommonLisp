@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.852 2005-11-26 00:05:30 piso Exp $
+ * $Id: Primitives.java,v 1.853 2005-11-27 21:41:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2034,7 +2034,7 @@ public final class Primitives extends Lisp
             for (int i = 0; i < rank; i++) {
                 LispObject arg = args[i+1];
                 if (arg instanceof Fixnum) {
-                    int subscript = ((Fixnum)arg).getValue();
+                    int subscript = ((Fixnum)arg).value;
                     if (subscript < 0 || subscript >= array.getDimension(i))
                         return NIL;
                 } else if (arg instanceof Bignum) {
@@ -5132,15 +5132,15 @@ public final class Primitives extends Lisp
         {
             BigInteger n1, n2;
             if (first instanceof Fixnum)
-                n1 = BigInteger.valueOf(((Fixnum)first).getValue());
+                n1 = BigInteger.valueOf(((Fixnum)first).value);
             else if (first instanceof Bignum)
-                n1 = ((Bignum)first).getValue();
+                n1 = ((Bignum)first).value;
             else
                 return signalTypeError(first, Symbol.INTEGER);
             if (second instanceof Fixnum)
-                n2 = BigInteger.valueOf(((Fixnum)second).getValue());
+                n2 = BigInteger.valueOf(((Fixnum)second).value);
             else if (second instanceof Bignum)
-                n2 = ((Bignum)second).getValue();
+                n2 = ((Bignum)second).value;
             else
                 return signalTypeError(second, Symbol.INTEGER);
             return number(n1.gcd(n2));
