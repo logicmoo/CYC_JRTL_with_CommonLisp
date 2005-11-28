@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.638 2005-11-28 02:06:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.639 2005-11-28 14:58:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -975,11 +975,16 @@
 (defknown p1 (t) t)
 (defun p1 (form)
   (cond ((symbolp form)
-         (cond ((constantp form) ; a DEFCONSTANT
+         (cond #+nil
+               ((constantp form) ; a DEFCONSTANT
                 (let ((value (symbol-value (truly-the symbol form))))
                   (if (numberp value)
                       value
                       form)))
+               ((null form)
+                form)
+               ((eq form t)
+                form)
                ((keywordp form)
                 form)
                (t
@@ -7162,6 +7167,14 @@
        (compile-function-call form target representation)))))
 
 (defun compile-special-reference (name target representation)
+  (when (constantp name)
+    (let ((value (symbol-value name)))
+      (when (or (null *compile-file-truename*)
+                (stringp value)
+                (numberp value)
+                (packagep value))
+        (compile-constant value target representation)
+        (return-from compile-special-reference))))
   (emit 'getstatic *this-class* (declare-symbol name) +lisp-symbol+)
   (cond ((constantp name)
          ;; "... a reference to a symbol declared with DEFCONSTANT always
@@ -7834,14 +7847,16 @@
                 (emit 'getstatic *this-class* (declare-keyword form) +lisp-symbol+)
                 (emit-move-from-stack target))
                (t
-;;                 (aver nil)
+                (aver nil)
                 ;; Maybe it's a symbol macro...
 ;;                 (format t "compile-form checking for symbol macro ~S...~%" form)
 
                 ;; There shouldn't be any unexpanded symbol macros at this point.
 ;;                 (let ((expansion (macroexpand form *compile-file-environment*)))
 ;;                   (if (eq expansion form)
-                      (compile-variable-reference form target representation)
+
+                (format t "compile-form calling compile-variable-reference ~S~%" form)
+                (compile-variable-reference form target representation)
 ;;                       (progn
 ;;                         (aver nil)
 ;;                         (compile-form expansion target representation))))
