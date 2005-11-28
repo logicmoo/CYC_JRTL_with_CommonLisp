@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.637 2005-11-28 00:41:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.638 2005-11-28 02:06:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -972,7 +972,7 @@
                (setf (compiland-single-valued-p *current-compiland*) nil)))))
     (p1-default form)))
 
-(declaim (ftype (function (t) t) p1))
+(defknown p1 (t) t)
 (defun p1 (form)
   (cond ((symbolp form)
          (cond ((constantp form) ; a DEFCONSTANT
@@ -984,26 +984,27 @@
                 form)
                (t
                 (let ((variable (find-visible-variable form)))
-                  (when variable
-                    (let ((ref (make-var-ref variable)))
+                  (when (null variable)
+                    (setf variable (make-variable :name form :special-p t))
+                    (push variable *visible-variables*))
+                  (let ((ref (make-var-ref variable)))
+                    (unless (variable-special-p variable)
                       (when (variable-ignore-p variable)
                         (compiler-style-warn
                          "Variable ~S is read even though it was declared to be ignored."
                          (variable-name variable)))
                       (push ref (variable-references variable))
                       (incf (variable-reads variable))
-                      (cond
-                       ((eq (variable-compiland variable) *current-compiland*)
-                        (dformat t "p1: read ~S~%" form))
-                       (t
-                        (dformat t "p1: non-local read ~S variable-compiland = ~S current compiland = ~S~%"
-                                 form
-                                 (compiland-name (variable-compiland variable))
-                                 (compiland-name *current-compiland*))
-                        (setf (variable-used-non-locally-p variable) t)))
-                      (setf form ref)
-                      )))
-                form)))
+                      (cond ((eq (variable-compiland variable) *current-compiland*)
+                             (dformat t "p1: read ~S~%" form))
+                            (t
+                             (dformat t "p1: non-local read ~S variable-compiland = ~S current compiland = ~S~%"
+                                      form
+                                      (compiland-name (variable-compiland variable))
+                                      (compiland-name *current-compiland*))
+                             (setf (variable-used-non-locally-p variable) t))))
+                    (setf form ref)))
+                  form)))
         ((atom form)
          form)
         (t
