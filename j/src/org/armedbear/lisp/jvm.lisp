@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.639 2005-11-28 14:58:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.640 2005-11-28 15:43:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -975,13 +975,7 @@
 (defknown p1 (t) t)
 (defun p1 (form)
   (cond ((symbolp form)
-         (cond #+nil
-               ((constantp form) ; a DEFCONSTANT
-                (let ((value (symbol-value (truly-the symbol form))))
-                  (if (numberp value)
-                      value
-                      form)))
-               ((null form)
+         (cond ((null form)
                 form)
                ((eq form t)
                 form)
@@ -7189,62 +7183,8 @@
     (emit-unbox-fixnum))
   (emit-move-from-stack target representation))
 
-(defknown compile-variable-reference (t t t) t)
-(defun compile-variable-reference (name target representation)
-  (declare (type symbol name))
-;;   (format t "compile-variable-reference ~S~%" name)
-  (unless (null target)
-    (let ((variable (find-visible-variable name)))
-;;       (let ((*print-structure* nil))
-;;         (format t "compile-variable-reference variable = ~S~%" variable))
-      (aver (or (null variable) (variable-special-p variable)))
-      (cond ((null variable)
-
-             (when (and (special-variable-p name)
-                        (constantp name))
-               (let ((value (symbol-value name)))
-                 (when (or (null *compile-file-truename*)
-                           ;; FIXME File compilation doesn't support all constant
-                           ;; types yet.
-                           (stringp value)
-                           (numberp value)
-                           (packagep value))
-                   (compile-constant value target representation)
-                   (return-from compile-variable-reference))))
-             (unless (special-variable-p name)
-               (unless (memq name *undefined-variables*)
-                 (compiler-warn "Undefined variable ~S" name)
-                 (push name *undefined-variables*)))
-             (compile-special-reference name target representation)
-
-             )
-            ((eq (variable-representation variable) 'unboxed-fixnum)
-             (aver nil)
-             (dformat t "compile-variable-reference unboxed-fixnum case~%")
-             (cond ((eq representation 'unboxed-fixnum)
-                    (aver (variable-register variable))
-                    (emit 'iload (variable-register variable)))
-                   (t (dformat t "compile-variable-reference constructing boxed fixnum for ~S~%"
-                               name)
-                      (emit 'new +lisp-fixnum-class+)
-                      (emit 'dup)
-                      (aver (variable-register variable))
-                      (emit 'iload (variable-register variable))
-                      (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
-             (emit-move-from-stack target representation))
-            (t
-;;              (aver nil)
-             (dformat t "compile-variable-reference ~S closure index = ~S~%"
-                      name (variable-closure-index variable))
-             (emit 'var-ref variable target representation)))
-      )))
-
 (declaim (ftype (function (t t t) t) compile-var-ref))
 (defun compile-var-ref (ref target representation)
-;;   (let ((*print-structure* nil))
-;;     (format t "compile-var-ref variable = ~S~%" (var-ref-variable ref)))
-;;   (compile-variable-reference (variable-name (var-ref-variable ref))
-;;                               target representation))
   (when target
     (if (var-ref-constant-p ref)
         (compile-constant (var-ref-constant-value ref)
@@ -7847,20 +7787,8 @@
                 (emit 'getstatic *this-class* (declare-keyword form) +lisp-symbol+)
                 (emit-move-from-stack target))
                (t
-                (aver nil)
-                ;; Maybe it's a symbol macro...
-;;                 (format t "compile-form checking for symbol macro ~S...~%" form)
-
-                ;; There shouldn't be any unexpanded symbol macros at this point.
-;;                 (let ((expansion (macroexpand form *compile-file-environment*)))
-;;                   (if (eq expansion form)
-
-                (format t "compile-form calling compile-variable-reference ~S~%" form)
-                (compile-variable-reference form target representation)
-;;                       (progn
-;;                         (aver nil)
-;;                         (compile-form expansion target representation))))
-                )))
+                ;; Shouldn't happen.
+                (aver nil))))
         ((var-ref-p form)
          (compile-var-ref form target representation))
         ((block-node-p form)
