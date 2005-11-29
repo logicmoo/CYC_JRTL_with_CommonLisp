@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.13 2005-11-27 15:44:10 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.14 2005-11-29 17:09:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
           +integer-type+
           fixnum-type-p
           fixnum-constant-value
+          integer-constant-value
           java-long-type-p
           make-compiler-type
           compiler-subtypep
@@ -78,6 +79,16 @@
       (when (fixnump low)
         (setf high (integer-type-high compiler-type))
         (when (and (fixnump high) (= high low))
+          high)))))
+
+(declaim (ftype (function (t) t) integer-constant-value))
+(defun integer-constant-value (compiler-type)
+  (when (and compiler-type (integer-type-p compiler-type))
+    (let ((low (integer-type-low compiler-type))
+          high)
+      (when (integerp low)
+        (setf high (integer-type-high compiler-type))
+        (when (and (integerp high) (= high low))
           high)))))
 
 (declaim (ftype (function (t) t) java-long-type-p))
