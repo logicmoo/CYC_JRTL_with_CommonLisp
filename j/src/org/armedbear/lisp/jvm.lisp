@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.640 2005-11-28 15:43:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.641 2005-11-29 02:21:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -975,35 +975,43 @@
 (defknown p1 (t) t)
 (defun p1 (form)
   (cond ((symbolp form)
-         (cond ((null form)
-                form)
-               ((eq form t)
-                form)
-               ((keywordp form)
-                form)
-               (t
-                (let ((variable (find-visible-variable form)))
-                  (when (null variable)
-                    (setf variable (make-variable :name form :special-p t))
-                    (push variable *visible-variables*))
-                  (let ((ref (make-var-ref variable)))
-                    (unless (variable-special-p variable)
-                      (when (variable-ignore-p variable)
-                        (compiler-style-warn
-                         "Variable ~S is read even though it was declared to be ignored."
-                         (variable-name variable)))
-                      (push ref (variable-references variable))
-                      (incf (variable-reads variable))
-                      (cond ((eq (variable-compiland variable) *current-compiland*)
-                             (dformat t "p1: read ~S~%" form))
-                            (t
-                             (dformat t "p1: non-local read ~S variable-compiland = ~S current compiland = ~S~%"
-                                      form
-                                      (compiland-name (variable-compiland variable))
-                                      (compiland-name *current-compiland*))
-                             (setf (variable-used-non-locally-p variable) t))))
-                    (setf form ref)))
-                  form)))
+         (let (value)
+           (cond ((null form)
+                  form)
+                 ((eq form t)
+                  form)
+                 ((keywordp form)
+                  form)
+                 ((and (constantp form)
+                       (progn
+                         (setf value (symbol-value form))
+                         (or (numberp value)
+                             (stringp value)
+                             (pathnamep value))))
+                  (setf form value))
+                 (t
+                  (let ((variable (find-visible-variable form)))
+                    (when (null variable)
+                      (setf variable (make-variable :name form :special-p t))
+                      (push variable *visible-variables*))
+                    (let ((ref (make-var-ref variable)))
+                      (unless (variable-special-p variable)
+                        (when (variable-ignore-p variable)
+                          (compiler-style-warn
+                           "Variable ~S is read even though it was declared to be ignored."
+                           (variable-name variable)))
+                        (push ref (variable-references variable))
+                        (incf (variable-reads variable))
+                        (cond ((eq (variable-compiland variable) *current-compiland*)
+                               (dformat t "p1: read ~S~%" form))
+                              (t
+                               (dformat t "p1: non-local read ~S variable-compiland = ~S current compiland = ~S~%"
+                                        form
+                                        (compiland-name (variable-compiland variable))
+                                        (compiland-name *current-compiland*))
+                               (setf (variable-used-non-locally-p variable) t))))
+                      (setf form ref)))
+                  form))))
         ((atom form)
          form)
         (t
@@ -2012,13 +2020,18 @@
                 (representation (third args)))
            (aver (variable-p variable))
            (cond ((variable-register variable)
+                  (aver nil)
                   (dformat t "register = ~S~%" (variable-register variable))
                   (emit 'aload (variable-register variable))
                   (emit-move-from-stack target))
                  ((variable-special-p variable)
+                  (aver nil)
                   (dformat t "special~%")
                   (compile-special-reference (variable-name variable) target nil))
                  ((variable-closure-index variable)
+                  (progn
+                    (format t "resolve-variables closure index case~%")
+                    (aver nil))
                   (dformat t "closure-index = ~S~%" (variable-closure-index variable))
                   (aver (not (null (compiland-closure-register *current-compiland*))))
                   (emit 'aload (compiland-closure-register *current-compiland*))
@@ -2026,6 +2039,7 @@
                   (emit 'aaload)
                   (emit-move-from-stack target))
                  ((variable-index variable)
+                  (aver nil)
                   (dformat t "index = ~S~%" (variable-index variable))
                   (aver (not (null (compiland-argument-register *current-compiland*))))
                   (emit 'aload (compiland-argument-register *current-compiland*))
@@ -3599,7 +3613,8 @@
                    (save-variables (intersection
                                     (compiland-arg-vars (local-function-compiland local-function))
                                     *visible-variables*))))
-           (emit 'var-ref (local-function-variable local-function) 'stack))
+;;            (emit 'var-ref (local-function-variable local-function) 'stack)
+           (compile-var-ref (make-var-ref (local-function-variable local-function)) 'stack nil))
           (t
            (dformat t "compile-local-function-call default case~%")
            (let* ((g (if *compile-file-truename*
@@ -5444,7 +5459,9 @@
                   (dformat t "p2-function 1~%")
                   (cond ((local-function-variable local-function)
                          (dformat t "p2-function 2 emitting var-ref~%")
-                         (emit 'var-ref (local-function-variable local-function) 'stack))
+;;                          (emit 'var-ref (local-function-variable local-function) 'stack)
+                         (compile-var-ref (make-var-ref (local-function-variable local-function)) 'stack nil)
+                         )
                         (t
                          (let ((g (if *compile-file-truename*
                                       (declare-local-function local-function)
@@ -5479,7 +5496,9 @@
                     (return-from p2-function))
                   (cond ((local-function-variable local-function)
                          (dformat t "p2-function 2~%")
-                         (emit 'var-ref (local-function-variable local-function) 'stack))
+;;                          (emit 'var-ref (local-function-variable local-function) 'stack)
+                         (compile-var-ref (make-var-ref (local-function-variable local-function)) 'stack nil)
+                         )
                         (t
                          (let ((g (if *compile-file-truename*
                                       (declare-local-function local-function)
@@ -5608,7 +5627,9 @@
              (when (and (integerp arg1) (integerp arg2))
                (compile-constant (logand arg1 arg2) target representation)
                (return-from p2-logand t))
-             (when (integerp arg1)
+;;              (when (integerp arg1)
+             (when (constantp arg1)
+;;                (format t "p2-logand swapping args~%")
                (setf arg1 (%cadr args)
                      arg2 (%car args)))
              (setf type1 (derive-compiler-type arg1)
@@ -7183,14 +7204,16 @@
     (emit-unbox-fixnum))
   (emit-move-from-stack target representation))
 
-(declaim (ftype (function (t t t) t) compile-var-ref))
+(defknown compile-var-ref (t t t) t)
 (defun compile-var-ref (ref target representation)
   (when target
     (if (var-ref-constant-p ref)
         (compile-constant (var-ref-constant-value ref)
                           target representation)
         (let ((variable (var-ref-variable ref)))
-          (cond ((eq (variable-representation variable) 'unboxed-fixnum)
+          (cond ((variable-special-p variable)
+                 (compile-special-reference (variable-name variable) target representation))
+                ((eq (variable-representation variable) 'unboxed-fixnum)
                  (cond ((eq representation 'unboxed-fixnum)
                         (aver (variable-register variable))
                         (emit 'iload (variable-register variable)))
@@ -7212,8 +7235,45 @@
                         (emit 'iload (variable-register variable))
                         (emit-invokespecial-init +lisp-character-class+ '("C"))))
                  (emit-move-from-stack target representation))
+                ((variable-register variable)
+                 (emit 'aload (variable-register variable))
+                 (cond ((eq representation 'unboxed-fixnum)
+                        ;; FIXME Optimize for case where variable is known to be a fixnum.
+                        (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
+                       ((eq representation 'unboxed-character)
+                        (emit-unbox-character)))
+                 (emit-move-from-stack target representation))
+
+                ((variable-closure-index variable)
+                 (dformat t "closure-index = ~S~%" (variable-closure-index variable))
+                 (aver (not (null (compiland-closure-register *current-compiland*))))
+                 (emit 'aload (compiland-closure-register *current-compiland*))
+                 (emit-push-constant-int (variable-closure-index variable))
+                 (emit 'aaload)
+                 (cond ((eq representation 'unboxed-fixnum)
+                        ;; FIXME Optimize for case where variable is known to be a fixnum.
+                        (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
+                       ((eq representation 'unboxed-character)
+                        (emit-unbox-character)))
+                 (emit-move-from-stack target representation))
+
+                ((variable-index variable)
+                 (dformat t "index = ~S~%" (variable-index variable))
+                 (aver (not (null (compiland-argument-register *current-compiland*))))
+                 (emit 'aload (compiland-argument-register *current-compiland*))
+                 (emit-push-constant-int (variable-index variable))
+                 (emit 'aaload)
+                 (cond ((eq representation 'unboxed-fixnum)
+                        ;; FIXME Optimize for case where variable is known to be a fixnum.
+                        (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
+                       ((eq representation 'unboxed-character)
+                        (emit-unbox-character)))
+                 (emit-move-from-stack target representation))
+
                 (t
-                 (emit 'var-ref variable target representation)))))))
+                 (aver nil)
+                 (emit 'var-ref variable target representation))
+                )))))
 
 (defun p2-set (form target representation)
   (cond ((and (check-arg-count form 2)
