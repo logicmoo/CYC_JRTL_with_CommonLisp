@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.644 2005-11-30 03:41:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.645 2005-11-30 16:35:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5947,8 +5947,32 @@ representation, based on the derived type of the LispObject."
          (emit 'checkcast +lisp-symbol-class+)
          (compile-form (%caddr form) 'stack nil)
          (maybe-emit-clear-values (%cadr form) (%caddr form))
+         (emit-invokevirtual +lisp-object-class+ "copyToArray"
+                             nil +lisp-object-array+)
          (emit-invokespecial-init +lisp-structure-object-class+
-                                  (list +lisp-symbol+ +lisp-object+))
+                                  (list +lisp-symbol+ +lisp-object-array+))
+         (emit-move-from-stack target representation))
+        (t
+         (compile-function-call form target representation))))
+
+(defun p2-make-structure (form target representation)
+  (cond ((and (check-arg-count form 5)
+              (eq (derive-type (%cadr form)) 'SYMBOL))
+         (emit 'new +lisp-structure-object-class+)
+         (emit 'dup)
+         (compile-form (%cadr form) 'stack nil)
+         (emit 'checkcast +lisp-symbol-class+)
+;;          (compile-form (%caddr form) 'stack nil)
+;;          (compile-form (fourth form) 'stack nil)
+;;          (compile-form (fifth form) 'stack nil)
+;;          (compile-form (sixth form) 'stack nil)
+         (dolist (arg (cddr form))
+           (compile-form arg 'stack nil))
+;;          (maybe-emit-clear-values (%cadr form) (%caddr form) (fourth form) (fifth form) (sixth form))
+         (apply 'maybe-emit-clear-values (cdr form))
+         (emit-invokespecial-init +lisp-structure-object-class+
+                                  (list +lisp-symbol+ +lisp-object+
+                                        +lisp-object+ +lisp-object+ +lisp-object+))
          (emit-move-from-stack target representation))
         (t
          (compile-function-call form target representation))))
@@ -8691,6 +8715,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'logior              'p2-logior)
   (install-p2-handler 'lognot              'p2-lognot)
   (install-p2-handler 'logxor              'p2-logxor)
+  (install-p2-handler 'make-structure      'p2-make-structure)
   (install-p2-handler 'max                 'p2-min/max)
   (install-p2-handler 'min                 'p2-min/max)
   (install-p2-handler 'mod                 'p2-mod)
