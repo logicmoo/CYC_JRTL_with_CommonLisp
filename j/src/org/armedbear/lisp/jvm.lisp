@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.642 2005-11-29 19:52:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.643 2005-11-30 00:38:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2014,46 +2014,8 @@
     (dolist (instruction code)
       (case (instruction-opcode instruction)
         (206 ; VAR-REF
-         (let* ((args (instruction-args instruction))
-                (variable (first args))
-                (target (second args))
-                (representation (third args)))
-           (aver (variable-p variable))
-           (cond ((variable-register variable)
-                  (aver nil)
-                  (dformat t "register = ~S~%" (variable-register variable))
-                  (emit 'aload (variable-register variable))
-                  (emit-move-from-stack target))
-                 ((variable-special-p variable)
-                  (aver nil)
-                  (dformat t "special~%")
-                  (compile-special-reference (variable-name variable) target nil))
-                 ((variable-closure-index variable)
-                  (progn
-                    (format t "resolve-variables closure index case~%")
-                    (aver nil))
-                  (dformat t "closure-index = ~S~%" (variable-closure-index variable))
-                  (aver (not (null (compiland-closure-register *current-compiland*))))
-                  (emit 'aload (compiland-closure-register *current-compiland*))
-                  (emit-push-constant-int (variable-closure-index variable))
-                  (emit 'aaload)
-                  (emit-move-from-stack target))
-                 ((variable-index variable)
-                  (aver nil)
-                  (dformat t "index = ~S~%" (variable-index variable))
-                  (aver (not (null (compiland-argument-register *current-compiland*))))
-                  (emit 'aload (compiland-argument-register *current-compiland*))
-                  (emit-push-constant-int (variable-index variable))
-                  (emit 'aaload)
-                  (emit-move-from-stack target))
-                 (t
-                  (dformat t "VAR-REF unhandled case variable = ~S~%" (variable-name variable))
-                  (aver (progn 'unhandled-case nil))))
-           (case representation
-             (unboxed-fixnum
-              (emit-unbox-fixnum))
-             (unboxed-character
-              (emit-unbox-character)))))
+         ;; obsolete
+         (aver nil))
         (207 ; VAR-SET
          (let ((variable (car (instruction-args instruction))))
            (aver (variable-p variable))
@@ -5540,16 +5502,12 @@
          (result-type (derive-compiler-type form)))
 ;;     (format t "~&p2-ash type1 = ~S~%type2 = ~S~%result-type = ~S~%"
 ;;             type1 type2 result-type)
-    (cond ;;((fixnum-constant-value result-type)
-          ;; (compile-constant (fixnum-constant-value result-type) target representation))
-;;           ((and (integerp arg1) (integerp arg2))
-;;            (compile-constant (ash arg1 arg2) target representation))
-          ((integer-constant-value result-type)
-           (compile-constant (integer-constant-value result-type) target representation))
+    (cond ((integer-constant-value result-type)
+           (compile-constant (integer-constant-value result-type)
+                             target representation))
           ((and (eql (fixnum-constant-value type2) 0)
                 (or (integer-type-p type1)
                     (eql *safety* 0)))
-;;            (format t "p2-ash arg2 = 0~%")
            (compile-form arg1 target representation)
            (maybe-emit-clear-values arg1))
           ((and (fixnum-type-p type1)
@@ -5573,8 +5531,7 @@
                 (integerp (integer-type-high type1))
                 (<= (integer-type-high type1) most-positive-java-long)
                 (compiler-subtypep type2 '(INTEGER -31 -1)))
-;;            (format t "p2-ash Java long case~%")
-           ;; ARG1 is not a fixnum but fits in a Java long.
+           ;; arg1 is not a fixnum but fits in a Java long
            (when (fixnum-type-p result-type)
              (unless (eq representation 'unboxed-fixnum)
                (emit 'new +lisp-fixnum-class+)
@@ -5638,15 +5595,11 @@
              (when (and (integerp arg1) (integerp arg2))
                (compile-constant (logand arg1 arg2) target representation)
                (return-from p2-logand t))
-;;              (when (integerp arg1)
              (when (constantp arg1)
-;;                (format t "p2-logand swapping args~%")
                (setf arg1 (%cadr args)
                      arg2 (%car args)))
              (setf type1 (derive-compiler-type arg1)
                    type2 (derive-compiler-type arg2))
-;;              (format t "p2-logand type1 = ~S~%" type1)
-;;              (format t "p2-logand type2 = ~S~%" type2)
              (cond ((and (integer-type-p type1) (eql arg2 0))
                     (compile-constant 0 target representation))
                    ((eql (fixnum-constant-value type1) -1)
@@ -5656,7 +5609,6 @@
                     (compile-form arg1 target representation)
                     (maybe-emit-clear-values arg1))
                    ((and (fixnum-type-p type1) (fixnum-type-p type2))
-;;                     (format t "p2-logand: both args fixnum type, representation = ~S~%" representation)
                     (unless (eq representation 'unboxed-fixnum)
                       (emit 'new +lisp-fixnum-class+)
                       (emit 'dup))
@@ -5667,55 +5619,20 @@
                     (unless (eq representation 'unboxed-fixnum)
                       (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
                     (emit-move-from-stack target representation))
-
-                   (;;(and (fixnum-type-p type1) (fixnum-type-p type2))
-                    (or (and (fixnum-type-p type1)
+                   ((or (and (fixnum-type-p type1)
                              (compiler-subtypep type1 'unsigned-byte))
                         (and (fixnum-type-p type2)
                              (compiler-subtypep type2 'unsigned-byte)))
-;;                     (format t "p2-logand: unsigned-byte case, representation = ~S~%" representation)
                     (unless (eq representation 'unboxed-fixnum)
                       (emit 'new +lisp-fixnum-class+)
                       (emit 'dup))
                     (compile-form arg1 'stack 'unboxed-fixnum)
                     (compile-form arg2 'stack 'unboxed-fixnum)
                     (maybe-emit-clear-values arg1 arg2)
-;;                     (cond ((fixnum-type-p type1)
-;;                            (compile-form arg1 'stack 'unboxed-fixnum))
-;;                           (t
-;;                            (compile-form arg1 'stack nil)
-;;                            (emit-invokevirtual +lisp-object-class+ "intValue"
-;;                                                nil "I")))
-;;                     (cond ((fixnum-type-p type2)
-;;                            (compile-form arg2 'stack 'unboxed-fixnum))
-;;                           (t
-;;                            (compile-form arg2 'stack nil)
-;;                            (emit-invokevirtual +lisp-object-class+ "intValue"
-;;                                                nil "I")))
-;;                     (maybe-emit-clear-values arg1 arg2)
                     (emit 'iand)
                     (unless (eq representation 'unboxed-fixnum)
                       (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
                     (emit-move-from-stack target representation))
-
-;;                    ((and (java-long-type-p type1)
-;;                          (fixnum-type-p type2))
-;;                     (format t "p2-logand Java long case 1~%")
-;;                     (unless (eq representation 'unboxed-fixnum)
-;;                       (emit 'new +lisp-fixnum-class+)
-;;                       (emit 'dup))
-;;                     (compile-form arg1 'stack nil)
-;;                     (emit-invokevirtual +lisp-object-class+ "intValue" nil "I")
-;;                     (cond ((fixnump arg2)
-;;                            (maybe-emit-clear-values arg1)
-;;                            (emit-push-constant-int arg2))
-;;                           (t
-;;                            (compile-form arg2 'stack 'unboxed-fixnum)
-;;                            (maybe-emit-clear-values arg1 arg2)))
-;;                     (emit 'iand)
-;;                     (unless (eq representation 'unboxed-fixnum)
-;;                       (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
-
                    ((fixnum-type-p type2)
                     (compile-form arg1 'stack nil)
                     (compile-form arg2 'stack 'unboxed-fixnum)
@@ -5838,19 +5755,6 @@
 ;;              (format t "p2-logxor type1 = ~S~%" type1)
 ;;              (format t "p2-logxor type2 = ~S~%" type2)
              (cond ((eq representation 'unboxed-fixnum)
-;;                     (format t "p2-logxor unboxed-fixnum requested~%")
-;;                     (cond ((fixnum-type-p type1)
-;;                            (compile-form arg1 'stack 'unboxed-fixnum))
-;;                           (t
-;;                            (compile-form arg1 'stack nil)
-;;                            (emit-invokevirtual +lisp-object-class+ "intValue"
-;;                                                nil "I")))
-;;                     (cond ((fixnum-type-p type2)
-;;                            (compile-form arg2 'stack 'unboxed-fixnum))
-;;                           (t
-;;                            (compile-form arg2 'stack nil)
-;;                            (emit-invokevirtual +lisp-object-class+ "intValue"
-;;                                                nil "I")))
                     (compile-form arg1 'stack 'unboxed-fixnum)
                     (compile-form arg2 'stack 'unboxed-fixnum)
                     (maybe-emit-clear-values arg1 arg2)
@@ -5916,7 +5820,6 @@
              (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
            (emit-move-from-stack target representation)))
         (t
-;;          (compile-function-call form target representation)
          (let ((arg (%cadr form)))
            (compile-form arg 'stack nil)
            (maybe-emit-clear-values arg))
@@ -7262,8 +7165,7 @@
 (defun compile-var-ref (ref target representation)
   (when target
     (if (var-ref-constant-p ref)
-        (compile-constant (var-ref-constant-value ref)
-                          target representation)
+        (compile-constant (var-ref-constant-value ref) target representation)
         (let ((variable (var-ref-variable ref)))
           (cond ((variable-special-p variable)
                  (compile-special-reference (variable-name variable) target representation))
@@ -7297,7 +7199,6 @@
                        ((eq representation 'unboxed-character)
                         (emit-unbox-character)))
                  (emit-move-from-stack target representation))
-
                 ((variable-closure-index variable)
                  (dformat t "closure-index = ~S~%" (variable-closure-index variable))
                  (aver (not (null (compiland-closure-register *current-compiland*))))
@@ -7310,7 +7211,6 @@
                        ((eq representation 'unboxed-character)
                         (emit-unbox-character)))
                  (emit-move-from-stack target representation))
-
                 ((variable-index variable)
                  (dformat t "index = ~S~%" (variable-index variable))
                  (aver (not (null (compiland-argument-register *current-compiland*))))
@@ -7323,11 +7223,8 @@
                        ((eq representation 'unboxed-character)
                         (emit-unbox-character)))
                  (emit-move-from-stack target representation))
-
                 (t
-                 (aver nil)
-                 (emit 'var-ref variable target representation))
-                )))))
+                 (aver nil)))))))
 
 (defun p2-set (form target representation)
   (cond ((and (check-arg-count form 2)
