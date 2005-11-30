@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.643 2005-11-30 00:38:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.644 2005-11-30 03:41:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1573,6 +1573,21 @@
     (label LABEL1)
     (emit 'iconst_0)
     (label LABEL2)))
+
+(defknown fix-boxing (t t) t)
+(defun fix-boxing (required-representation derived-type)
+  "Generate code to convert a boxed LispObject on the stack to the specified
+representation, based on the derived type of the LispObject."
+  (cond ((null required-representation)) ; Nothing to do.
+        ((eq required-representation 'unboxed-fixnum)
+         (cond ((and (fixnum-type-p derived-type)
+                     (< *safety* 3))
+                (emit 'checkcast +lisp-fixnum-class+)
+                (emit 'getfield +lisp-fixnum-class+ "value" "I"))
+               (t
+                (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
+        ((eq required-representation 'unboxed-character)
+         (emit-unbox-character))))
 
 (declaim (ftype (function () t) emit-box-long))
 (defun emit-box-long ()
@@ -5574,13 +5589,14 @@
            (compile-form arg2 'stack 'unboxed-fixnum)
            (maybe-emit-clear-values arg1 arg2)
            (emit-invokevirtual +lisp-object-class+ "ash" '("I") +lisp-object+)
-           (when (eq representation 'unboxed-fixnum)
-             (cond ((and (fixnum-type-p result-type)
-                         (< *safety* 3))
-                    (emit 'checkcast +lisp-fixnum-class+)
-                    (emit 'getfield +lisp-fixnum-class+ "value" "I"))
-                   (t
-                    (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
+;;            (when (eq representation 'unboxed-fixnum)
+;;              (cond ((and (fixnum-type-p result-type)
+;;                          (< *safety* 3))
+;;                     (emit 'checkcast +lisp-fixnum-class+)
+;;                     (emit 'getfield +lisp-fixnum-class+ "value" "I"))
+;;                    (t
+;;                     (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
+           (fix-boxing representation result-type)
            (emit-move-from-stack target representation))
           (t
            (compile-function-call form target representation)))))
@@ -6715,26 +6731,28 @@
                      (maybe-emit-clear-values arg2)
                      (emit 'swap)))
               (emit-invokevirtual +lisp-object-class+ "add" '("I") +lisp-object+)
-              (when (eq representation 'unboxed-fixnum)
-                (cond ((and (fixnum-type-p result-type)
-                            (< *safety* 3))
-                       (emit 'checkcast +lisp-fixnum-class+)
-                       (emit 'getfield +lisp-fixnum-class+ "value" "I"))
-                      (t
-                       (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
+;;               (when (eq representation 'unboxed-fixnum)
+;;                 (cond ((and (fixnum-type-p result-type)
+;;                             (< *safety* 3))
+;;                        (emit 'checkcast +lisp-fixnum-class+)
+;;                        (emit 'getfield +lisp-fixnum-class+ "value" "I"))
+;;                       (t
+;;                        (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
+              (fix-boxing representation result-type)
               (emit-move-from-stack target representation))
              ((fixnum-type-p type2)
               (compile-form arg1 'stack nil)
               (maybe-emit-clear-values arg1)
               (compile-form arg2 'stack 'unboxed-fixnum)
               (emit-invokevirtual +lisp-object-class+ "add" '("I") +lisp-object+)
-              (when (eq representation 'unboxed-fixnum)
-                (cond ((and (fixnum-type-p result-type)
-                            (< *safety* 3))
-                       (emit 'checkcast +lisp-fixnum-class+)
-                       (emit 'getfield +lisp-fixnum-class+ "value" "I"))
-                      (t
-                       (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
+;;               (when (eq representation 'unboxed-fixnum)
+;;                 (cond ((and (fixnum-type-p result-type)
+;;                             (< *safety* 3))
+;;                        (emit 'checkcast +lisp-fixnum-class+)
+;;                        (emit 'getfield +lisp-fixnum-class+ "value" "I"))
+;;                       (t
+;;                        (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
+              (fix-boxing representation result-type)
               (emit-move-from-stack target representation))
              (t
               (compile-binary-operation "add" args target representation)))))
@@ -7193,11 +7211,12 @@
                  (emit-move-from-stack target representation))
                 ((variable-register variable)
                  (emit 'aload (variable-register variable))
-                 (cond ((eq representation 'unboxed-fixnum)
-                        ;; FIXME Optimize for case where variable is known to be a fixnum.
-                        (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
-                       ((eq representation 'unboxed-character)
-                        (emit-unbox-character)))
+;;                  (cond ((eq representation 'unboxed-fixnum)
+;;                         ;; FIXME Optimize for case where variable is known to be a fixnum.
+;;                         (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
+;;                        ((eq representation 'unboxed-character)
+;;                         (emit-unbox-character)))
+                 (fix-boxing representation (variable-derived-type variable))
                  (emit-move-from-stack target representation))
                 ((variable-closure-index variable)
                  (dformat t "closure-index = ~S~%" (variable-closure-index variable))
@@ -7205,11 +7224,12 @@
                  (emit 'aload (compiland-closure-register *current-compiland*))
                  (emit-push-constant-int (variable-closure-index variable))
                  (emit 'aaload)
-                 (cond ((eq representation 'unboxed-fixnum)
-                        ;; FIXME Optimize for case where variable is known to be a fixnum.
-                        (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
-                       ((eq representation 'unboxed-character)
-                        (emit-unbox-character)))
+;;                  (cond ((eq representation 'unboxed-fixnum)
+;;                         ;; FIXME Optimize for case where variable is known to be a fixnum.
+;;                         (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
+;;                        ((eq representation 'unboxed-character)
+;;                         (emit-unbox-character)))
+                 (fix-boxing representation (variable-derived-type variable))
                  (emit-move-from-stack target representation))
                 ((variable-index variable)
                  (dformat t "index = ~S~%" (variable-index variable))
@@ -7217,11 +7237,12 @@
                  (emit 'aload (compiland-argument-register *current-compiland*))
                  (emit-push-constant-int (variable-index variable))
                  (emit 'aaload)
-                 (cond ((eq representation 'unboxed-fixnum)
-                        ;; FIXME Optimize for case where variable is known to be a fixnum.
-                        (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
-                       ((eq representation 'unboxed-character)
-                        (emit-unbox-character)))
+;;                  (cond ((eq representation 'unboxed-fixnum)
+;;                         ;; FIXME Optimize for case where variable is known to be a fixnum.
+;;                         (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
+;;                        ((eq representation 'unboxed-character)
+;;                         (emit-unbox-character)))
+                 (fix-boxing representation (variable-derived-type variable))
                  (emit-move-from-stack target representation))
                 (t
                  (aver nil)))))))
