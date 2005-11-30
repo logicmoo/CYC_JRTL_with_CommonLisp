@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.645 2005-11-30 16:35:41 piso Exp $
+;;; $Id: jvm.lisp,v 1.646 2005-11-30 22:25:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5956,26 +5956,24 @@ representation, based on the derived type of the LispObject."
          (compile-function-call form target representation))))
 
 (defun p2-make-structure (form target representation)
-  (cond ((and (check-arg-count form 5)
-              (eq (derive-type (%cadr form)) 'SYMBOL))
-         (emit 'new +lisp-structure-object-class+)
-         (emit 'dup)
-         (compile-form (%cadr form) 'stack nil)
-         (emit 'checkcast +lisp-symbol-class+)
-;;          (compile-form (%caddr form) 'stack nil)
-;;          (compile-form (fourth form) 'stack nil)
-;;          (compile-form (fifth form) 'stack nil)
-;;          (compile-form (sixth form) 'stack nil)
-         (dolist (arg (cddr form))
-           (compile-form arg 'stack nil))
-;;          (maybe-emit-clear-values (%cadr form) (%caddr form) (fourth form) (fifth form) (sixth form))
-         (apply 'maybe-emit-clear-values (cdr form))
-         (emit-invokespecial-init +lisp-structure-object-class+
-                                  (list +lisp-symbol+ +lisp-object+
-                                        +lisp-object+ +lisp-object+ +lisp-object+))
-         (emit-move-from-stack target representation))
-        (t
-         (compile-function-call form target representation))))
+  (let* ((args (cdr form))
+         (slot-forms (cdr args))
+         (slot-count (length slot-forms)))
+    (cond ((and (<= 1 slot-count 6)
+                (eq (derive-type (%car args)) 'SYMBOL))
+           (emit 'new +lisp-structure-object-class+)
+           (emit 'dup)
+           (compile-form (%car args) 'stack nil)
+           (emit 'checkcast +lisp-symbol-class+)
+           (dolist (slot-form slot-forms)
+             (compile-form slot-form 'stack nil))
+           (apply 'maybe-emit-clear-values args)
+           (emit-invokespecial-init +lisp-structure-object-class+
+                                    (append (list +lisp-symbol+)
+                                            (make-list slot-count :initial-element +lisp-object+)))
+           (emit-move-from-stack target representation))
+          (t
+           (compile-function-call form target representation)))))
 
 (defun p2-stream-element-type (form target representation)
   (unless (check-arg-count form 1)

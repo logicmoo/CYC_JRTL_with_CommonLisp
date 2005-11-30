@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.57 2005-11-30 16:35:26 piso Exp $
+ * $Id: StructureObject.java,v 1.58 2005-11-30 22:24:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,37 @@ public final class StructureObject extends LispObject
     this.slots = slots;
   }
 
+  public StructureObject(Symbol symbol, LispObject obj0)
+    throws ConditionThrowable
+  {
+    structureClass = (StructureClass) LispClass.findClass(symbol); // Might return null.
+    LispObject[] slots = new LispObject[1];
+    slots[0] = obj0;
+    this.slots = slots;
+  }
+
+  public StructureObject(Symbol symbol, LispObject obj0, LispObject obj1)
+    throws ConditionThrowable
+  {
+    structureClass = (StructureClass) LispClass.findClass(symbol); // Might return null.
+    LispObject[] slots = new LispObject[2];
+    slots[0] = obj0;
+    slots[1] = obj1;
+    this.slots = slots;
+  }
+
+  public StructureObject(Symbol symbol, LispObject obj0, LispObject obj1,
+                         LispObject obj2)
+    throws ConditionThrowable
+  {
+    structureClass = (StructureClass) LispClass.findClass(symbol); // Might return null.
+    LispObject[] slots = new LispObject[3];
+    slots[0] = obj0;
+    slots[1] = obj1;
+    slots[2] = obj2;
+    this.slots = slots;
+  }
+
   public StructureObject(Symbol symbol, LispObject obj0, LispObject obj1,
                          LispObject obj2, LispObject obj3)
     throws ConditionThrowable
@@ -43,6 +74,36 @@ public final class StructureObject extends LispObject
     slots[1] = obj1;
     slots[2] = obj2;
     slots[3] = obj3;
+    this.slots = slots;
+  }
+
+  public StructureObject(Symbol symbol, LispObject obj0, LispObject obj1,
+                         LispObject obj2, LispObject obj3, LispObject obj4)
+    throws ConditionThrowable
+  {
+    structureClass = (StructureClass) LispClass.findClass(symbol); // Might return null.
+    LispObject[] slots = new LispObject[5];
+    slots[0] = obj0;
+    slots[1] = obj1;
+    slots[2] = obj2;
+    slots[3] = obj3;
+    slots[4] = obj4;
+    this.slots = slots;
+  }
+
+  public StructureObject(Symbol symbol, LispObject obj0, LispObject obj1,
+                         LispObject obj2, LispObject obj3, LispObject obj4,
+                         LispObject obj5)
+    throws ConditionThrowable
+  {
+    structureClass = (StructureClass) LispClass.findClass(symbol); // Might return null.
+    LispObject[] slots = new LispObject[6];
+    slots[0] = obj0;
+    slots[1] = obj1;
+    slots[2] = obj2;
+    slots[3] = obj3;
+    slots[4] = obj4;
+    slots[5] = obj5;
     this.slots = slots;
   }
 
@@ -324,6 +385,44 @@ public final class StructureObject extends LispObject
   private static final Primitive MAKE_STRUCTURE =
     new Primitive("make-structure", PACKAGE_SYS, true)
     {
+      public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+      {
+        try
+          {
+            return new StructureObject(((Symbol)first), second);
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.SYMBOL);
+          }
+      }
+      public LispObject execute(LispObject first, LispObject second,
+                                LispObject third)
+        throws ConditionThrowable
+      {
+        try
+          {
+            return new StructureObject(((Symbol)first), second, third);
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.SYMBOL);
+          }
+      }
+      public LispObject execute(LispObject first, LispObject second,
+                                LispObject third, LispObject fourth)
+        throws ConditionThrowable
+      {
+        try
+          {
+            return new StructureObject(((Symbol)first), second, third, fourth);
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.SYMBOL);
+          }
+      }
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third, LispObject fourth,
                                 LispObject fifth)
@@ -331,8 +430,39 @@ public final class StructureObject extends LispObject
       {
         try
           {
-            return new StructureObject(((Symbol)first), second, third,
-                                       fourth, fifth);
+            return new StructureObject(((Symbol)first), second, third, fourth,
+                                       fifth);
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.SYMBOL);
+          }
+      }
+      public LispObject execute(LispObject first, LispObject second,
+                                LispObject third, LispObject fourth,
+                                LispObject fifth, LispObject sixth)
+        throws ConditionThrowable
+      {
+        try
+          {
+            return new StructureObject(((Symbol)first), second, third, fourth,
+                                       fifth, sixth);
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.SYMBOL);
+          }
+      }
+      public LispObject execute(LispObject first, LispObject second,
+                                LispObject third, LispObject fourth,
+                                LispObject fifth, LispObject sixth,
+                                LispObject seventh)
+        throws ConditionThrowable
+      {
+        try
+          {
+            return new StructureObject(((Symbol)first), second, third, fourth,
+                                       fifth, sixth, seventh);
           }
         catch (ClassCastException e)
           {

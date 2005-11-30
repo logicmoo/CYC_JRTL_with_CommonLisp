@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.76 2005-11-30 16:35:32 piso Exp $
+;;; $Id: defstruct.lisp,v 1.77 2005-11-30 22:24:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -136,7 +136,7 @@
                  (make-array ,(length values)
                              :element-type ',element-type
                              :initial-contents (list ,@values))))))
-          ((= (length values) 4)
+          ((<= 1 (length values) 6)
            `((defun ,constructor-name ,keys
                (make-structure (truly-the symbol ',*dd-name*) ,@values))))
           (t
@@ -255,7 +255,7 @@
                        (make-array ,(length values)
                                    :element-type ',element-type
                                    :initial-contents (list ,@values))))))
-                ((= (length values) 4)
+                ((<= 1 (length values) 6)
                  `((declaim (inline ,constructor-name))
                    (defun ,constructor-name ,arglist
                      (make-structure (truly-the symbol ',*dd-name*) ,@values))))
