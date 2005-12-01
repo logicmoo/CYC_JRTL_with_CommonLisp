@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.853 2005-11-27 21:41:22 piso Exp $
+ * $Id: Primitives.java,v 1.854 2005-12-01 12:04:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5919,7 +5919,17 @@ public final class Primitives extends Lisp
         }
     };
 
-    static {
-        new Primitives();
-    }
+    // ### copy-tree
+    private static final Primitive COPY_TREE =
+        new Primitive(Symbol.COPY_TREE, "object")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof Cons) {
+                Cons cons = (Cons) arg;
+                return new Cons(execute(cons.car), execute(cons.cdr));
+            } else
+                return arg;
+        }
+    };
 }
