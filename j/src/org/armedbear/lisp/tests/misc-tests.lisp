@@ -1,7 +1,7 @@
 ;;; misc-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: misc-tests.lisp,v 1.3 2005-11-26 00:19:28 piso Exp $
+;;; $Id: misc-tests.lisp,v 1.4 2005-12-01 14:52:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -84,5 +84,9 @@
    (compile nil (lambda (a b c d e f g h i j) (list a b c d e f g h i j)))
    1 2 3 4 5 6 7 8 9 10)
   (1 2 3 4 5 6 7 8 9 10))
+
+(deftest copy-list.1
+  (eq (copy-list nil) nil)
+  t)
 
 (do-tests)
