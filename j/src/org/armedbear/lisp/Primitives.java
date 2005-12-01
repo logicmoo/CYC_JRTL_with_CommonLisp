@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.855 2005-12-01 13:21:03 piso Exp $
+ * $Id: Primitives.java,v 1.856 2005-12-01 14:53:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -936,7 +936,7 @@ public final class Primitives extends Lisp
             first = first.cdr();
             while (first != NIL) {
                 Cons temp = new Cons(first.car());
-                splice.cdr= temp;
+                splice.cdr = temp;
                 splice = temp;
                 first = first.cdr();
             }
