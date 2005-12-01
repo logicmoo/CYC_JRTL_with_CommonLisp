@@ -2,7 +2,7 @@
  * copy_list.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: copy_list.java,v 1.1 2005-12-01 13:03:33 piso Exp $
+ * $Id: copy_list.java,v 1.2 2005-12-01 14:52:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,8 @@ public final class copy_list extends Primitive
 
   public LispObject execute(LispObject arg) throws ConditionThrowable
   {
+    if (arg == NIL)
+      return NIL;
     Cons result = new Cons(arg.car());
     Cons splice = result;
     arg = arg.cdr();
