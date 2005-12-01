@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: list.lisp,v 1.44 2005-06-17 17:26:17 piso Exp $
+;;; $Id: list.lisp,v 1.45 2005-12-01 12:05:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,11 +34,6 @@
 
 (defun make-list (size &key initial-element)
   (%make-list size initial-element))
-
-(defun copy-tree (object)
-  (if (consp object)
-      (cons (copy-tree (%car object)) (copy-tree (%cdr object)))
-      object))
 
 (defmacro apply-key (key element)
   `(if ,key
