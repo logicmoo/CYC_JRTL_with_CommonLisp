@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.250 2005-11-07 21:12:13 piso Exp $
+ * $Id: Autoload.java,v 1.251 2005-12-01 13:05:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -639,6 +639,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "single-float-bits", "FloatFunctions", true);
         autoload(PACKAGE_SYS, "std-allocate-instance", "StandardObjectFunctions", true);
         autoload(PACKAGE_SYS, "zip", "zip", true);
+
+        autoload(Symbol.COPY_LIST, "copy_list");
 
         autoload(Symbol.SET_CLASS_SLOTS, "SlotClass");
         autoload(Symbol._CLASS_SLOTS, "SlotClass");
