@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.646 2005-11-30 22:25:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.647 2005-12-01 17:53:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1896,7 +1896,7 @@ representation, based on the derived type of the LispObject."
 (defun resolve-instruction (instruction)
   (declare (optimize speed))
   (let ((resolver (gethash1 (instruction-opcode instruction)
-                                    (the hash-table *resolvers*))))
+                            (the hash-table *resolvers*))))
     (if resolver
         (funcall resolver instruction)
         instruction)))
@@ -2333,7 +2333,7 @@ representation, based on the derived type of the LispObject."
   (declare (type stream stream))
   (write-8-bits n stream))
 
-(declaim (ftype (function (t t) t) write-u2))
+(defknown write-u2 (t t) t)
 (defun write-u2 (n stream)
   (declare (optimize speed))
   (declare (type (unsigned-byte 16) n))
@@ -2620,7 +2620,7 @@ representation, based on the derived type of the LispObject."
     (when (plusp (length output))
       output)))
 
-(declaim (ftype (function (symbol) string) declare-symbol))
+(defknown declare-symbol (symbol) string)
 (defun declare-symbol (symbol)
   (declare (type symbol symbol))
   (let* ((ht *declared-symbols*)
@@ -3826,7 +3826,7 @@ representation, based on the derived type of the LispObject."
 
 ;; constantp form &optional environment => generalized-boolean
 (defun p2-test-constantp (form)
-  (when (eq (length form) 2)
+  (when (= (length form) 2)
     (let ((arg (%cadr form)))
       (compile-form arg 'stack nil)
       (maybe-emit-clear-values arg)
@@ -5541,6 +5541,23 @@ representation, based on the derived type of the LispObject."
               (maybe-emit-clear-values arg1 arg2)
               (emit-box-long)))
            (emit-move-from-stack target representation))
+          ((and (fixnum-type-p type1)
+                (compiler-subtypep type2 '(INTEGER -31 -1)))
+           (unless (eq representation 'unboxed-fixnum)
+             (emit 'new +lisp-fixnum-class+)
+             (emit 'dup))
+           (compile-form arg1 'stack 'unboxed-fixnum)
+           (cond ((fixnump arg2)
+                  (maybe-emit-clear-values arg1)
+                  (emit-push-constant-int (- arg2)))
+                 (t
+                  (compile-form arg2 'stack 'unboxed-fixnum)
+                  (maybe-emit-clear-values arg1 arg2)
+                  (emit 'ineg)))
+           (emit 'ishr)
+           (unless (eq representation 'unboxed-fixnum)
+             (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+           (emit-move-from-stack target representation))
           ((and (integer-type-p type1)
                 (eql (integer-type-low type1) 0)
                 (integerp (integer-type-high type1))
@@ -5568,22 +5585,6 @@ representation, based on the derived type of the LispObject."
                   (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
                  (t
                   (emit-box-long))))
-          ((and (fixnum-type-p type1) (compiler-subtypep type2 '(INTEGER -31 -1)))
-           (unless (eq representation 'unboxed-fixnum)
-             (emit 'new +lisp-fixnum-class+)
-             (emit 'dup))
-           (compile-form arg1 'stack 'unboxed-fixnum)
-           (cond ((fixnump arg2)
-                  (maybe-emit-clear-values arg1)
-                  (emit-push-constant-int (- arg2)))
-                 (t
-                  (compile-form arg2 'stack 'unboxed-fixnum)
-                  (maybe-emit-clear-values arg1 arg2)
-                  (emit 'ineg)))
-           (emit 'ishr)
-           (unless (eq representation 'unboxed-fixnum)
-             (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
-           (emit-move-from-stack target representation))
           ((fixnum-type-p type2)
            (compile-form arg1 'stack nil)
            (compile-form arg2 'stack 'unboxed-fixnum)
@@ -5611,9 +5612,9 @@ representation, based on the derived type of the LispObject."
              (when (and (integerp arg1) (integerp arg2))
                (compile-constant (logand arg1 arg2) target representation)
                (return-from p2-logand t))
-             (when (constantp arg1)
-               (setf arg1 (%cadr args)
-                     arg2 (%car args)))
+;;              (when (constantp arg1)
+;;                (setf arg1 (%cadr args)
+;;                      arg2 (%car args)))
              (setf type1 (derive-compiler-type arg1)
                    type2 (derive-compiler-type arg2))
              (cond ((and (integer-type-p type1) (eql arg2 0))
@@ -5992,6 +5993,7 @@ representation, based on the derived type of the LispObject."
 ;;            (format t "p2-stream-element-type giving up~%")
            (compile-function-call form target representation)))))
 
+;; write-8-bits byte stream => nil
 (defun p2-write-8-bits (form target representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
@@ -6000,10 +6002,8 @@ representation, based on the derived type of the LispObject."
          (arg2 (%caddr form))
          (type1 (derive-compiler-type arg1))
          (type2 (derive-compiler-type arg2)))
-    (dformat t "p2-write-8-bits type1 = ~S type2 = ~S~%" type1 type2)
     (cond ((and (compiler-subtypep type1 '(UNSIGNED-BYTE 8))
                 (eq type2 'STREAM))
-           (dformat t "p2-write-8-bits case 1~%")
            (compile-form arg1 'stack 'unboxed-fixnum)
            (compile-form arg2 'stack nil)
            (emit 'checkcast +lisp-stream-class+)
@@ -6014,7 +6014,6 @@ representation, based on the derived type of the LispObject."
              (emit-push-nil)
              (emit-move-from-stack target)))
           ((fixnum-type-p type1)
-           (dformat t "p2-write-8-bits case 2~%")
            (compile-form arg1 'stack 'unboxed-fixnum)
            (compile-form arg2 'stack nil)
            (maybe-emit-clear-values arg1 arg2)
@@ -6024,7 +6023,6 @@ representation, based on the derived type of the LispObject."
              (emit-push-nil)
              (emit-move-from-stack target)))
           (t
-           (dformat t "p2-write-8-bits giving up~%")
            (compile-function-call form target representation)))))
 
 (defun p2-read-line (form target representation)
