@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.201 2005-11-07 21:46:36 piso Exp $
+;;; $Id: autoloads.lisp,v 1.202 2005-12-01 13:06:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,7 +36,6 @@
 (autoload 'tree-equal)
 (autoload 'make-hash-table)
 (autoload 'list-length)
-(autoload 'copy-list)
 (autoload 'revappend)
 (autoload '(butlast nbutlast) "butlast")
 (autoload 'ldiff)
