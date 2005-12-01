@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.854 2005-12-01 12:04:01 piso Exp $
+ * $Id: Primitives.java,v 1.855 2005-12-01 13:21:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -918,11 +918,11 @@ public final class Primitives extends Lisp
             first = first.cdr();
             while (first != NIL) {
                 Cons temp = new Cons(first.car());
-                splice.setCdr(temp);
+                splice.cdr = temp;
                 splice = temp;
                 first = first.cdr();
             }
-            splice.setCdr(second);
+            splice.cdr = second;
             return result;
         }
         public LispObject execute(LispObject first, LispObject second,
@@ -936,17 +936,17 @@ public final class Primitives extends Lisp
             first = first.cdr();
             while (first != NIL) {
                 Cons temp = new Cons(first.car());
-                splice.setCdr(temp);
+                splice.cdr= temp;
                 splice = temp;
                 first = first.cdr();
             }
             while (second != NIL) {
                 Cons temp = new Cons(second.car());
-                splice.setCdr(temp);
+                splice.cdr = temp;
                 splice = temp;
                 second = second.cdr();
             }
-            splice.setCdr(third);
+            splice.cdr = third;
             return result;
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -964,7 +964,7 @@ public final class Primitives extends Lisp
                 top = top.cdr();
                 while (top != NIL) {
                     Cons temp = new Cons(top.car());
-                    splice.setCdr(temp);
+                    splice.cdr = temp;
                     splice = temp;
                     top = top.cdr();
                 }
@@ -976,12 +976,12 @@ public final class Primitives extends Lisp
                 LispObject top = args[i];
                 while (top != NIL) {
                     Cons temp = new Cons(top.car());
-                    splice.setCdr(temp);
+                    splice.cdr = temp;
                     splice = temp;
                     top = top.cdr();
                 }
             }
-            splice.setCdr(args[i]);
+            splice.cdr = args[i];
             return result;
         }
     };
