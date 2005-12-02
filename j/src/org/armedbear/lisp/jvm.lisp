@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.647 2005-12-01 17:53:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.648 2005-12-02 05:34:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1157,7 +1157,7 @@
   (declare (optimize speed))
   (pool-get (list 8 (pool-name string))))
 
-(declaim (ftype (function (fixnum) fixnum) pool-int))
+(defknown pool-int (fixnum) fixnum)
 (defun pool-int (n)
   (declare (optimize speed))
   (pool-get (list 3 n)))
@@ -1248,7 +1248,7 @@
 (defsubst emit-push-t ()
   (emit 'getstatic +lisp-class+ "T" +lisp-symbol+))
 
-(declaim (ftype (function * t) emit-push-constant-int))
+(defknown emit-push-constant-int (integer) t)
 (defun emit-push-constant-int (n)
   (if (<= -32768 n 32767)
       (emit 'sipush n)
@@ -2717,6 +2717,7 @@ representation, based on the derived type of the LispObject."
           (setf (gethash name ht) f))))
     f))
 
+(defknown declare-fixnum (fixnum) string)
 (defun declare-fixnum (n)
   (declare (type fixnum n))
   (let* ((ht *declared-fixnums*)
@@ -2724,9 +2725,9 @@ representation, based on the derived type of the LispObject."
     (declare (type hash-table ht))
     (unless g
       (let ((*code* *static-code*))
-        (setf g (sys::%format nil "FIXNUM_~A~D"
-                         (if (minusp n) "MINUS_" "")
-                         (abs n)))
+        (setf g (format nil "FIXNUM_~A~D"
+                        (if (minusp n) "MINUS_" "")
+                        (abs n)))
         (declare-field g +lisp-fixnum+)
         (emit 'new +lisp-fixnum-class+)
         (emit 'dup)
@@ -2746,7 +2747,7 @@ representation, based on the derived type of the LispObject."
           (5
            (emit 'iconst_5))
           (t
-           (emit 'ldc (pool-int n))))
+           (emit-push-constant-int n)))
         (emit-invokespecial-init +lisp-fixnum-class+ '("I"))
         (emit 'putstatic *this-class* g +lisp-fixnum+)
         (setf *static-code* *code*)
@@ -2904,20 +2905,20 @@ representation, based on the derived type of the LispObject."
            (return-from compile-constant))
           (t
            (assert nil))))
-  (cond ((numberp form)
-         (if (fixnump form)
-             (let* ((n form)
-                    (translations '(( 0 . "ZERO")
-                                    ( 1 . "ONE")
-                                    ( 2 . "TWO")
-                                    ( 3 . "THREE")
-                                    (-1 . "MINUS_ONE")))
-                    (translation (cdr (assoc n translations))))
-               (if translation
-                   (emit 'getstatic +lisp-fixnum-class+ translation +lisp-fixnum+)
-                   (emit 'getstatic *this-class* (declare-fixnum n) +lisp-fixnum+)))
-             (emit 'getstatic *this-class*
-                   (declare-object-as-string form) +lisp-object+)))
+  (cond ((fixnump form)
+         (let ((translation (case form
+                              (0  "ZERO")
+                              (1  "ONE")
+                              (2  "TWO")
+                              (3  "THREE")
+                              (-1 "MINUS_ONE"))))
+           (if translation
+               (emit 'getstatic +lisp-fixnum-class+ translation +lisp-fixnum+)
+               (emit 'getstatic *this-class* (declare-fixnum form) +lisp-fixnum+))))
+        ((numberp form)
+         ;; A number, but not a fixnum.
+         (emit 'getstatic *this-class*
+               (declare-object-as-string form) +lisp-object+))
         ((stringp form)
          (if *compile-file-truename*
              (emit 'getstatic *this-class*
@@ -6977,7 +6978,9 @@ representation, based on the derived type of the LispObject."
 (defun p2-aref (form target representation)
   ;; We only optimize the 2-arg case.
 ;;   (format t "p2-aref representation = ~S~%" representation)
-  (cond ((and (= (length form) 3) (neq representation 'unboxed-character)) ; FIXME
+  (cond ((and (= (length form) 3)
+;;               (neq representation 'unboxed-character) ; FIXME
+              )
 ;;          (format t "p2-aref case 1~%")
          (let ((arg1 (%cadr form))
                (arg2 (%caddr form)))
@@ -6987,9 +6990,13 @@ representation, based on the derived type of the LispObject."
            (compile-form arg1 'stack nil) ; array
            (compile-form arg2 'stack 'unboxed-fixnum) ; index
            (maybe-emit-clear-values arg1 arg2)
-           (if (eq representation 'unboxed-fixnum)
-               (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I")
-               (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+))
+           (cond ((eq representation 'unboxed-fixnum)
+                  (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I"))
+                 ((eq representation 'unboxed-character)
+                  (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
+                  (emit-unbox-character))
+                 (t
+                  (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)))
            (emit-move-from-stack target representation)))
         (t
 ;;          (format t "p2-aref case 2~%")
