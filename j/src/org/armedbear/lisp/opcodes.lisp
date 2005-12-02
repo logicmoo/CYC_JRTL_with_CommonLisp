@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: opcodes.lisp,v 1.24 2005-08-15 23:26:19 piso Exp $
+;;; $Id: opcodes.lisp,v 1.25 2005-12-02 20:43:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@
 (define-opcode sipush 17 3 1)
 (define-opcode ldc 18 2 1)
 (define-opcode ldc_w 19 3 1)
-(define-opcode ldc2_w 20 3 nil)
+(define-opcode ldc2_w 20 3 2)
 (define-opcode iload 21 2 1)
 (define-opcode lload 22 2 nil)
 (define-opcode fload 23 2 nil)
